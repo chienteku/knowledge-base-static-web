@@ -452,7 +452,6 @@ export async function handleBuild(argv) {
       argv.baseDir = "/" + argv.baseDir
     }
 
-    await build(clientRefresh)
     const server = http.createServer(async (req, res) => {
       if (argv.baseDir && !req.url?.startsWith(argv.baseDir)) {
         console.log(
@@ -580,6 +579,8 @@ export async function handleBuild(argv) {
         `Started a Quartz server listening at http://localhost:${argv.port}${argv.baseDir}`,
       ),
     )
+
+    await build(clientRefresh)
   } else {
     await build(clientRefresh)
     ctx.dispose()
