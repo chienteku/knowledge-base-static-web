@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: Quartz 5
+  pageTitle: Knowledge Bases
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
@@ -12,6 +12,11 @@ configuration:
     - private
     - templates
     - .obsidian
+    - "**/_meta/*.md"
+    - fixing_malformed_links_guide.md
+    - universal_generation_prompt.md
+    - "**/missing_*_terms_ai_knowledge_base.md"
+    - fix*.js
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
