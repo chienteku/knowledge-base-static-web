@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: en-US
-  baseUrl: chienteku.github.io
+  baseUrl: chienteku.github.io/knowledge-base-static-web
   ignorePatterns:
     - private
     - templates
