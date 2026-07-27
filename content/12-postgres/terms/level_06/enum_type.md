@@ -1,0 +1,215 @@
+# `ENUM` Type
+
+> **Level 6 — Schema Design & Normalization**
+> A custom PostgreSQL User-Defined Type (UDT) that restricts a column's values to a static, predefined list of text labels, enforcing strict data validation.
+
+---
+
+## 1. Prerequisites
+- [Data Types (Overview)](../level_02/data_types.md) — The parent database typing standard.
+
+---
+
+## 2. Term Category
+- **PostgreSQL Data Type**
+
+---
+
+## 3. Environment Context
+- **PostgreSQL Specific** (A custom User-Defined Type (UDT). Standard SQL supports enums via CHECK constraints, but Postgres stores enums as highly optimized 4-byte internal binary keys).
+
+---
+
+## 4. Explanation
+
+### (1) Design Motivation — "Why did we design this?"
+In database schemas, columns often represent a fixed set of options:
+-   An order's status: `'pending'`, `'shipped'`, `'delivered'`, `'cancelled'`.
+-   A user's role: `'admin'`, `'manager'`, `'employee'`.
+
+If you store these as simple text columns (`VARCHAR`):
+-   **No validation:** A developer can write typos (e.g. `'shippped'` with three 'p's, or `'Delivered'` with a capital 'D'), which corrupts reports.
+-   **Wasted space:** Storing the string `'cancelled'` millions of times consumes significant disk sectors.
+
+You could use a lookup table (e.g. joining a `roles` table), but that requires running slow `JOIN` queries every time you load user lists.
+
+PostgreSQL designed the **`ENUM`** (Enumerated) type to solve this:
+1.  You define the list of valid choices once at the database level.
+2.  Postgres translates the strings to 4-byte integer keys on disk, saving storage space.
+3.  When querying, Postgres automatically displays the values as clean strings.
+4.  If a client tries to write a value outside the enum list, the transaction is rejected.
+
+---
+
+### (2) Volatile vs. Static Lists
+Enums are excellent, but they are **static**. 
+
+Adding a new option to an enum requires a database schema migration query (`ALTER TYPE ... ADD VALUE`). 
+
+Removing an option is extremely difficult.
+-   **Use Enums** for lists that almost never change (e.g. roles, order statuses, transaction classes).
+-   **Do NOT use Enums** for lists that grow or change frequently (e.g. product categories, country codes). Use a standard lookup table with foreign keys instead.
+
+---
+
+### (3) Reality Metaphor
+Imagine a fan speed controller switch:
+-   The switch has exactly 4 physical click notches: `[Off, Low, Medium, High]`.
+-   You cannot twist the dial to `Super Fast` because the physical slot does not exist. The mechanical notches prevent mistakes.
+-   However, if you want to add a `Turbo` speed in the future, you have to buy a new switch box and rewrite the home electrical cables (the database migration).
+
+---
+
+### (4) Code Examples
+
+#### Creating and Using ENUMs
+Creating an enum is a two-step process:
+
+```sql
+-- Step 1: Create the custom User-Defined Type (UDT)
+CREATE TYPE order_status AS ENUM ('pending', 'shipped', 'delivered');
+
+-- Step 2: Use the new type inside your table schema
+CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  amount NUMERIC(10,2),
+  status order_status NOT NULL DEFAULT 'pending' -- Enum column
+);
+```
+
+#### Typo Validation Rejection
+Let's see the type safety in action:
+
+```sql
+-- Success: matches 'shipped' exactly
+INSERT INTO orders VALUES (1, 45.00, 'shipped');
+
+-- Fails: 'SHIPPED' (uppercase) is not in the enum list!
+INSERT INTO orders VALUES (2, 20.00, 'SHIPPED');
+-- ERROR: invalid input value for enum order_status: "SHIPPED"
+```
+
+---
+
+## 5. Common Mistakes & Pitfalls
+
+### Mistake 1: Using ENUMs for volatile datasets that change frequently
+
+**The mistake:** Creating an enum for product categories: `CREATE TYPE category AS ENUM ('books', 'electronics');` and adding values as your store expands.
+
+**Why it's wrong:** Every time your company adds a product type (e.g. 'groceries'), you must run a DDL migration `ALTER TYPE category ADD VALUE 'groceries';`. 
+
+More importantly, **Postgres does not support deleting values from an enum**. 
+
+If you discontinue the 'books' category, you cannot delete the enum slot without dropping and recreating the entire database type, which is highly complex.
+
+**Fix: For lists that change regularly, use a standard parent table `categories` and link tables using foreign keys.**
+
+---
+
+
+
+### Mistake 2: Attempting to Remove Values from Custom PostgreSQL ENUM Types Directly
+
+**The mistake:** Executing `ALTER TYPE status_enum DROP VALUE 'deprecated';`.
+
+**Why it's wrong:** PostgreSQL does NOT support dropping values from custom ENUM types directly! Removing an ENUM value requires creating a new type, altering table columns, and dropping the old type.
+
+*Incorrect:*
+```sql
+ALTER TYPE status_enum DROP VALUE 'deprecated'; -- ❌ Error: dropping enum values unsupported!
+```
+
+*Fix:*
+```sql
+Use check constraints CHECK (status IN ('active', 'pending')) for dynamic status lists
+```
+
+### Mistake 3: Using ENUM Types for Frequently Changing Dynamic Domain Lists
+
+**The mistake:** Using `CREATE TYPE country_enum AS ENUM (...)` for country lists updated monthly.
+
+**Why it's wrong:** ENUM types are stored in system catalogs. Frequently altering ENUM types requires catalog lock acquisitions. Use a separate `countries` lookup table with foreign keys for dynamic lists.
+
+*Incorrect:*
+```sql
+// Using custom ENUM for monthly updated status types
+```
+
+*Fix:*
+```sql
+Use a lookup table with foreign key reference for dynamic category lists
+```
+
+## 6. Practice Exercises
+
+### Exercise 1: Role-Based Access Control Setup
+
+**Problem:** You are building a company database. Employees can only hold one of three roles: `'admin'`, `'editor'`, or `'viewer'`. Write the SQL queries to:
+1.  Create a custom enum type named `user_role`.
+2.  Create a table `company_accounts` containing an integer primary key `id`, a username text column (required), and a role column of type `user_role` (defaults to `'viewer'`).
+
+**Expected output:**
+```sql
+CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
+
+CREATE TABLE company_accounts (
+  id INT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL,
+  role user_role NOT NULL DEFAULT 'viewer'
+);
+```
+
+> [!check]- Answer
+> - Define the custom UDT type first using the `CREATE TYPE ... AS ENUM` syntax.
+> - Reference the newly created type name inside the table declaration column slot.
+
+---
+
+
+
+### Exercise 2: Creating Custom ENUM Type
+
+**Problem:** Create custom ENUM type `user_role` with values `'admin'`, `'editor'`, `'viewer'`.
+
+**Expected output:**
+```text
+CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
+```
+
+> [!check]- Answer
+> ```sql
+> CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
+> ```
+>
+> **Explanation:** `CREATE TYPE ... AS ENUM` defines static custom enumerated value types.
+
+### Exercise 3: Adding Value to Existing ENUM Type
+
+**Problem:** Add new value `'guest'` to existing `user_role` ENUM type.
+
+**Expected output:**
+```text
+ALTER TYPE user_role ADD VALUE 'guest';
+```
+
+> [!check]- Answer
+> ```sql
+> ALTER TYPE user_role ADD VALUE 'guest';
+> ```
+>
+> **Explanation:** `ALTER TYPE ... ADD VALUE` appends new values to existing custom ENUM types.
+
+## 7. Related Terms
+- [Data Types (Overview)](../level_02/data_types.md) — The parent typing system.
+- [`ALTER TABLE`](alter_table.md) — Editing schemas.
+
+---
+
+## 8. Key Takeaways
+- `ENUM` is a custom PostgreSQL data type containing a static list of text labels.
+- Enforces strict type validation, blocking database typos.
+- Stores values on disk as 4-byte keys, optimizing storage sizes.
+- Displays values automatically as clean strings, eliminating the need for lookup joins.
+- Use only for static lists; avoid enums for volatile lists that change regularly.
+- Adding enum values requires migrations; deleting enum values is not supported.

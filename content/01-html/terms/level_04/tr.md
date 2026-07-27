@@ -1,0 +1,193 @@
+# `<tr>` (Table Row)
+
+> **Level 4 — Tables**
+> Defines a horizontal row of cells in a table.
+
+---
+
+## 1. Prerequisites
+- [`<table>`](../level_04/table.md) — The parent container for all rows.
+- [Nesting](../level_01/nesting.md) — Since table rows must nest directly inside a parent table container.
+
+---
+
+## 2. Term Category
+- **Structural Tag**
+
+---
+
+## 3. Environment Context
+- **Universal Browser Support**
+
+---
+
+## 4. Explanation
+
+### (1) Design Motivation — "Why did we design this?"
+A table needs a way to organize its grid. In HTML, tables are built horizontally, row by row (not column by column). 
+The W3C designed the `<tr>` (Table Row) element to serve as the horizontal container. Every time you want to start a new line in your spreadsheet, you create a new `<tr>`. Inside that row, you will then place your individual data cells.
+
+### (2) Reality Metaphor
+Imagine a bookshelf.
+The `<table>` is the entire wooden frame of the bookshelf.
+The `<tr>` is a single horizontal wooden shelf. You can't put a book directly onto the frame; you have to put it on a shelf. The more shelves (`<tr>` tags) you add, the taller the bookshelf gets.
+
+### (3) Code Examples
+
+#### Short Snippet
+```html
+<table>
+  <!-- Row 1 -->
+  <tr>
+    <!-- Cells go here -->
+  </tr>
+  <!-- Row 2 -->
+  <tr>
+    <!-- Cells go here -->
+  </tr>
+</table>
+```
+
+---
+
+## 5. Common Mistakes & Pitfalls
+
+### Mistake 1: Putting text directly inside a `<tr>`
+
+**The mistake:** Writing text directly inside the `<tr>` tags without wrapping it in a data cell.
+
+**Why it's wrong:** A row is just a structural container (like a shelf). It cannot hold raw data. The HTML specification requires that the only valid children of a `<tr>` are `<th>` (headers) or `<td>` (data cells). If you put raw text inside a `<tr>`, the browser will usually break the table layout and render the text outside the table entirely!
+
+*Incorrect:*
+```html
+<table>
+  <tr>
+    Employee Name: John Doe <!-- WRONG! Missing cell tags -->
+  </tr>
+</table>
+```
+
+*Fix:*
+```html
+<table>
+  <tr>
+    <td>Employee Name: John Doe</td> <!-- CORRECT! Wrapped in a cell -->
+  </tr>
+</table>
+```
+
+---
+
+
+
+### Mistake 2: Placing Raw Text or Non-`<th>`/`<td>` Elements Directly Inside `<tr>` Rows
+
+**The mistake:** Writing `<tr>Direct text string</tr>` or `<tr><div>Box</div></tr>`.
+
+**Why it's wrong:** The ONLY permitted direct children of a `<tr>` element are `<th>` and `<td>` table cells. Raw text or `<div>` elements inside `<tr>` are invalid HTML.
+
+*Incorrect:*
+```html
+<tr>
+  <div>Cell Content</div> <!-- ❌ Invalid direct child inside tr! -->
+</tr>
+```
+
+*Fix:*
+```html
+<tr>
+  <td><div>Cell Content</div></td> <!-- Wrap inside td cell -->
+</tr>
+```
+
+### Mistake 3: Varying Cell Counts Across `<tr>` Rows Without Using `colspan` or `rowspan`
+
+**The mistake:** Creating Row 1 with 3 cells, and Row 2 with 2 cells without `colspan`.
+
+**Why it's wrong:** Row cell counts in a table must match across all rows. Mismatched cell counts create broken table grids with missing border cells.
+
+*Incorrect:*
+```html
+<tr><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>4</td><td>5</td></tr> <!-- ❌ Missing 3rd cell breaks grid column! -->
+```
+
+*Fix:*
+```html
+<tr><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>4</td><td colspan="2">5</td></tr> <!-- Merge remaining column -->
+```
+
+## 6. Practice Exercises
+
+### Exercise 1: Counting Rows
+
+**Problem:** Look at the following code. How many horizontal rows will this table have?
+```html
+<table>
+  <tr><td>A</td><td>B</td></tr>
+  <tr><td>C</td><td>D</td></tr>
+  <tr><td>E</td><td>F</td></tr>
+</table>
+```
+
+**Expected output:**
+```text
+3 Rows. (There are three `<tr>` elements).
+```
+
+> [!check]- Answer
+> - Just count the `<tr>` tags!
+
+---
+
+
+
+### Exercise 2: Zebra Striping Table Rows with CSS
+
+**Problem:** Write CSS pseudo-class selector to apply background `#f2f2f2` to even `<tr>` rows inside `<tbody>`.
+
+**Expected output:**
+```text
+tbody tr:nth-child(even) { background-color: #f2f2f2; }
+```
+
+> [!check]- Answer
+> ```css
+> tbody tr:nth-child(even) {
+>   background-color: #f2f2f2;
+> }
+> ```
+>
+> **Explanation:** `:nth-child(even)` targets alternating table rows for zebra-striping.
+
+### Exercise 3: Table Row Hover Effect
+
+**Problem:** Write CSS rule highlighting table row on mouse hover.
+
+**Expected output:**
+```text
+tr:hover { background-color: #e0e0e0; }
+```
+
+> [!check]- Answer
+> ```css
+> tr:hover {
+>   background-color: #e0e0e0;
+> }
+> ```
+>
+> **Explanation:** `tr:hover` highlights the active data row for visual tracking.
+
+## 7. Related Terms
+- [`<table>`](../level_04/table.md) — The parent that holds the `<tr>`.
+- [`<td>` (Table Data)](../level_04/td.md) — The data cells that go *inside* the `<tr>`.
+- [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing table rows.
+
+---
+
+## 8. Key Takeaways
+- `<tr>` stands for Table Row.
+- It is used to slice a table horizontally.
+- You cannot put text directly inside a `<tr>`; it must contain `<td>` or `<th>` cells.
+- Tables in HTML are built row-by-row, not column-by-column.

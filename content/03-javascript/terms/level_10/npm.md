@@ -1,0 +1,204 @@
+# npm
+
+> **Level 10 — Ecosystem & Tooling**
+> Node Package Manager; the default registry and manager for sharing and installing JS libraries.
+
+---
+
+## 1. Prerequisites
+- [Node.js](./node_js.md) — npm is installed automatically when you install Node.js.
+- [Modules](../level_08/modules.md) — The format these packages are written in.
+
+---
+
+## 2. Term Category
+- **Tooling / Ecosystem**
+
+---
+
+## 3. Environment Context
+- **Node.js**
+
+---
+
+## 4. Explanation
+
+### (1) Design Motivation — "Why did we design this?"
+When developers build applications, they often need to solve common problems: formatting dates, generating random IDs, or connecting to databases. Writing this code from scratch every time is a massive waste of time.
+Before npm, if you wanted to use someone else's code, you had to go to their website, download a `.zip` file, manually copy the `.js` files into your project, and hope you didn't accidentally break anything. Updating the library meant doing it all over again.
+
+**npm (Node Package Manager)** was created to solve this. It is two things:
+1. **A massive online database (Registry):** The world's largest software registry, containing millions of free code packages written by other developers.
+2. **A command-line tool:** A program on your computer that automatically downloads, installs, and updates these packages into your project with a single command.
+
+### (2) Reality Metaphor
+Without npm, adding a new feature to your app is like building a house by chopping down your own trees and forging your own nails.
+With npm, it’s like going to The Home Depot. The store (the npm registry) has millions of pre-built parts. You just walk in, ask the cashier (the npm CLI tool) for "React" or "Express", and they immediately hand you the fully built, ready-to-use part to slot straight into your house.
+
+### (3) JavaScript Code Examples
+
+#### Command Line: Using npm
+*(Note: These are Terminal commands, not JavaScript code!)*
+
+```bash
+# 1. Initialize a new project
+npm init -y
+
+# 2. Install a library from the internet (e.g., 'lodash' for utility functions)
+npm install lodash
+
+# 3. Install a tool you only need for development (e.g., 'jest' for testing)
+npm install jest --save-dev
+```
+
+#### JavaScript: Using the installed package
+```javascript
+// Once installed via npm, you can instantly import it into your code!
+const _ = require('lodash'); // Or: import _ from 'lodash';
+
+// We use a powerful function written by someone else!
+const randomNum = _.random(1, 100);
+console.log(`Your lucky number is ${randomNum}`);
+```
+
+---
+
+## 5. Common Mistakes & Pitfalls
+
+### Mistake 1: Misunderstanding Npm Scope and Variable Hoisting
+
+**The mistake:** Assuming variables or functions declared within Npm blocks behave identically regardless of `var`, `let`, or `const` keyword usage.
+
+**Why it's wrong:** `var` declarations are function-scoped and hoisted with an initial value of `undefined`. `let` and `const` are block-scoped and enter a Temporal Dead Zone (TDZ) before declaration, throwing a `ReferenceError` if accessed prematurely.
+
+*Incorrect:*
+```javascript
+console.log(value); // ❌ Throws ReferenceError due to Temporal Dead Zone!
+let value = "npm";
+```
+
+*Fix:*
+```javascript
+let value = "npm";
+console.log(value); // Correct: Variable initialized prior to reading
+```
+
+### Mistake 2: Losing Context Binding (`this`) in Npm Callbacks
+
+**The mistake:** Passing methods from Npm instances as standalone callbacks to timers or event listeners without explicitly binding `this`.
+
+**Why it's wrong:** Extracting object methods disassociates them from their target parent instance, causing `this` to resolve to `undefined` (in strict mode) or `window`/`globalThis` at runtime.
+
+*Incorrect:*
+```javascript
+const obj = {
+    name: "npm",
+    log() { console.log(this.name); }
+};
+setTimeout(obj.log, 100); // ❌ Output: undefined (loses object context)
+```
+
+*Fix:*
+```javascript
+const obj = {
+    name: "npm",
+    log() { console.log(this.name); }
+};
+setTimeout(() => obj.log(), 100); // Correct: Arrow function captures lexical context
+```
+
+### Mistake 3: Unhandled Asynchronous Failures in Npm Operations
+
+**The mistake:** Executing asynchronous operations within Npm without wrapping `await` calls in `try...catch` blocks or chaining `.catch()`.
+
+**Why it's wrong:** Unhandled promise rejections trigger `UnhandledPromiseRejectionWarning` in Node.js or unhandled rejection errors in modern browsers, leaving application state in corrupted or uncoordinated states.
+
+*Incorrect:*
+```javascript
+async function processData() {
+    const res = await fetch("/api/npm"); // ❌ Unhandled network failure crashes execution flow
+    const data = await res.json();
+    return data;
+}
+```
+
+*Fix:*
+```javascript
+async function processData() {
+    try {
+        const res = await fetch("/api/npm");
+        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+        return await res.json();
+    } catch (err) {
+        console.error(`Caught error in npm: ${err.message}`);
+        return null;
+    }
+}
+```
+
+## 6. Practice Exercises
+
+### Exercise 1: The magical `npx` command
+
+**Problem:** Sometimes you see tutorials tell you to run `npx create-react-app`. What is the difference between `npm` and `npx`?
+
+**Expected output:**
+```text
+`npm` focuses on **installing** packages permanently to your computer.
+`npx` focuses on **executing** packages. It temporarily downloads a tool, runs it once to do a job (like setting up a new project folder), and then immediately deletes the tool so it doesn't clutter your hard drive.
+```
+
+> [!check]- Answer
+> - `x` stands for eXecute!
+
+---
+
+### Exercise 2: Package Installation Commands (`dependencies` vs `devDependencies`)
+
+**Problem:** State CLI flag for production (`--save` / `-S`) vs development (`--save-dev` / `-D`).
+
+**Expected output:**
+```text
+Production: -S, Dev: -D
+```
+
+> [!check]- Answer
+> ```javascript
+> console.log("Production: -S, Dev: -D");
+> ```
+>
+> **Explanation:** `-D` marks dependencies required only for building/testing binaries.
+
+### Exercise 3: Executing Package Scripts with `npm run`
+
+**Problem:** Command to run script `"build"` defined in `package.json`.
+
+**Expected output:**
+```text
+npm run build
+```
+
+> [!check]- Answer
+> ```javascript
+> console.log("npm run build");
+> ```
+>
+> **Explanation:** `npm run <script>` executes custom commands configured in `package.json`.
+
+---
+
+---
+
+## 7. Related Terms
+- [`package.json`](./package_json.md) — The receipt/manifest file that npm uses to remember what it installed.
+- [Node.js](./node_js.md) — The runtime environment npm belongs to.
+
+---
+
+## 8. Key Takeaways
+- npm is the default package manager for Node.js.
+- It consists of an online database of open-source code, and a command-line tool to download that code.
+- Use `npm install <package-name>` to add third-party code to your project.
+- Installed code is saved in the `node_modules` folder.
+- Never upload the `node_modules` folder to version control (Git).
+```

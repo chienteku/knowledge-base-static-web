@@ -1,0 +1,216 @@
+# `UPSERT` (`ON CONFLICT`)
+
+> **Level 3 — CRUD Operations (The Four Pillars of SQL)**
+> A PostgreSQL SQL feature that performs an atomic "insert-or-update" operation, automatically executing an update or ignoring the write if a unique key conflict occurs during an insert.
+
+---
+
+## 1. Prerequisites
+- [`INSERT INTO`](insert_into.md) — The baseline write command.
+- [Unique Constraint](../level_02/unique_constraint.md) — The database rule that triggers conflict intercepts.
+
+---
+
+## 2. Term Category
+- **PostgreSQL Feature**
+
+---
+
+## 3. Environment Context
+- **PostgreSQL Core** (Introduced in PostgreSQL 9.5. Executes atomically within the storage engine, preventing race conditions (dirty reads/writes) between competing client connections).
+
+---
+
+## 4. Explanation
+
+### (1) Design Motivation — "Why did we design this?"
+In web applications, you often encounter situations where you want to write a record, but update it if it already exists:
+-   **User Signup:** A user clicks "Register." If their email is new, insert them. If their email is already in the database, update their `last_active_at` date instead of crashing with a duplicate key error.
+-   **Analytics Tracker:** You log page visits. If the page URL is new, set count to `1`. If the page URL exists, increment the count by `1`.
+
+In standard SQL, you had to write complex code:
+1.  Query the database: `SELECT * FROM stats WHERE url = '/home'`.
+2.  In your application code, write an `if/else` block.
+3.  If missing, run `INSERT`. If present, run `UPDATE`.
+
+This is an anti-pattern because it is subject to **Race Conditions**. 
+
+If two clients run the `SELECT` query at the same millisecond, both see the record is missing, both attempt to run `INSERT`, and one crashes with a duplicate key error.
+
+To solve this, PostgreSQL designed the **`ON CONFLICT`** clause (commonly known as **UPSERT**). It handles the select-check-write cycle inside the database engine in a single, atomic step.
+
+---
+
+### (2) The `ON CONFLICT` Options
+When an insert conflicts with a unique constraint, you tell Postgres to do one of two things:
+
+1.  **`DO NOTHING`**: Silently ignore the insert and exit without throwing an error.
+2.  **`DO UPDATE`**: Run a secondary update script.
+
+Inside the `DO UPDATE` clause, you can reference a special virtual table named **`EXCLUDED`**. This table contains the values you *attempted* to insert.
+
+---
+
+### (3) Reality Metaphor
+Imagine hanging coats in a theater cloakroom:
+-   **Standard Insert:** You walk to hook `15` and hang a coat. If a coat is already hanging there, you drop both coats on the floor in a panic (Duplicate key crash).
+-   **`ON CONFLICT DO NOTHING`:** You walk to hook `15`. Seeing a coat is already there, you shrug and walk away.
+-   **`ON CONFLICT DO UPDATE`:** You walk to hook `15`. Seeing a coat is already there, you leave the old coat hanging but attach a sticker to it saying: *"Last checked at 7:00 PM"* (updating metadata).
+
+---
+
+### (4) Code Examples
+
+#### 1. ON CONFLICT DO NOTHING
+Prevents script crashes when bulk importing duplicates:
+
+```sql
+CREATE TABLE email_list (
+  email VARCHAR(100) UNIQUE,
+  subscribed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- First insert succeeds
+INSERT INTO email_list (email) VALUES ('bob@example.com');
+
+-- Second insert would crash, but DO NOTHING makes it exit silently!
+INSERT INTO email_list (email) VALUES ('bob@example.com')
+ON CONFLICT (email) DO NOTHING;
+```
+
+#### 2. ON CONFLICT DO UPDATE (The Upsert)
+Increment a counter automatically:
+
+```sql
+CREATE TABLE page_views (
+  url VARCHAR(200) UNIQUE,
+  views_count INT DEFAULT 1
+);
+
+-- Insert '/home'. If it already exists, increment its count by 1!
+INSERT INTO page_views (url, views_count) 
+VALUES ('/home', 1)
+ON CONFLICT (url) 
+DO UPDATE SET views_count = page_views.views_count + 1;
+```
+
+---
+
+## 5. Common Mistakes & Pitfalls
+
+### Mistake 1: Forgetting that ON CONFLICT requires a unique index target
+
+**The mistake:** Writing `ON CONFLICT (email) DO NOTHING` when the `email` column does not have a `UNIQUE` constraint or unique index defined on it.
+
+**Why it's wrong:** Postgres cannot resolve a "conflict" unless a unique constraint triggers the block first. If the column allows duplicates, Postgres will simply insert a duplicate row, ignoring your `ON CONFLICT` clause and throwing a syntax error.
+
+**Fix: Ensure that the column targeted in the parenthesis `ON CONFLICT (column_name)` is configured as a `PRIMARY KEY` or carries a `UNIQUE` constraint.**
+
+---
+
+
+
+### Mistake 2: Using `ON CONFLICT` Target Columns Without a Matching UNIQUE Constraint or Index
+
+**The mistake:** Executing `INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email) DO UPDATE ...` when `email` lacks a unique index.
+
+**Why it's wrong:** `ON CONFLICT (target_column)` strictly REQUIRES an active UNIQUE index or constraint on `target_column`. Omitting the unique index throws error `there is no unique or exclusion constraint matching the ON CONFLICT specification`.
+
+*Incorrect:*
+```sql
+INSERT ... ON CONFLICT (email) DO UPDATE ...; -- ❌ Fails if email lacks unique index!
+```
+
+*Fix:*
+```sql
+CREATE UNIQUE INDEX idx_users_email ON users (email);
+INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name;
+```
+
+### Mistake 3: Confusing `EXCLUDED.col` Target Values with Pre-Existing Row Values inside `DO UPDATE`
+
+**The mistake:** Writing `DO UPDATE SET name = name` expecting to reference the newly proposed insert value.
+
+**Why it's wrong:** In `ON CONFLICT DO UPDATE`, column name `name` references the PRE-EXISTING row value in the database. `EXCLUDED.name` references the NEW proposed insertion tuple.
+
+*Incorrect:*
+```sql
+ON CONFLICT (id) DO UPDATE SET name = name; -- ❌ Sets name to existing value!
+```
+
+*Fix:*
+```sql
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name; -- Sets name to proposed new value
+```
+
+## 6. Practice Exercises
+
+### Exercise 1: Session Upsert
+
+**Problem:** You are building a user tracking table `active_users`. The table has columns `username` (unique) and `last_seen` (timestamp). Write an SQL statement that inserts user `'charlie'` with the current time `NOW()`. If Charlie already exists in the table, update his `last_seen` timestamp to `NOW()` instead of crashing.
+
+**Expected output:**
+```sql
+INSERT INTO active_users (username, last_seen) 
+VALUES ('charlie', NOW())
+ON CONFLICT (username) 
+DO UPDATE SET last_seen = EXCLUDED.last_seen;
+```
+
+> [!check]- Answer
+> - The target conflict column is `username`.
+> - Use the virtual table `EXCLUDED` to fetch the incoming timestamp value.
+
+---
+
+
+
+### Exercise 2: Idempotent User Upsert with `EXCLUDED`
+
+**Problem:** Insert user `email: 'a@ex.com'`, `name: 'Alice'` on conflict `(email)` update `name = EXCLUDED.name` and `updated_at = NOW()`.
+
+**Expected output:**
+```text
+INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, updated_at = NOW();
+```
+
+> [!check]- Answer
+> ```sql
+> INSERT INTO users (email, name)
+> VALUES ('a@ex.com', 'Alice')
+> ON CONFLICT (email) DO UPDATE
+>   SET name = EXCLUDED.name,
+>       updated_at = NOW();
+> ```
+>
+> **Explanation:** `EXCLUDED.column` references newly proposed insert values during conflict resolution.
+
+### Exercise 3: Conflict Resolution with `DO NOTHING`
+
+**Problem:** Insert tag `'web'` on conflict `(name)` do nothing using `ON CONFLICT DO NOTHING`.
+
+**Expected output:**
+```text
+INSERT INTO tags (name) VALUES ('web') ON CONFLICT (name) DO NOTHING;
+```
+
+> [!check]- Answer
+> ```sql
+> INSERT INTO tags (name) VALUES ('web')
+> ON CONFLICT (name) DO NOTHING;
+> ```
+>
+> **Explanation:** `ON CONFLICT DO NOTHING` silently skips duplicate key insertions idempotently.
+
+## 7. Related Terms
+- [`INSERT INTO`](insert_into.md) — The parent write statement.
+- [Unique Constraint](../level_02/unique_constraint.md) — The trigger rule for conflicts.
+
+---
+
+## 8. Key Takeaways
+- An UPSERT (insert-or-update) is written in Postgres using `ON CONFLICT`.
+- Runs atomically inside the database engine, eliminating application race conditions.
+- `ON CONFLICT DO NOTHING` bypasses writes silently if unique constraints fail.
+- `ON CONFLICT DO UPDATE` runs modifications using the virtual `EXCLUDED` values.
+- The target column in `ON CONFLICT` must carry a unique index or primary key constraint.
