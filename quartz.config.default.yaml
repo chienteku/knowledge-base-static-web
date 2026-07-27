@@ -12,7 +12,7 @@ configuration:
     - private
     - templates
     - .obsidian
-    - "**/_meta/*.md"
+    - "**/_meta/technology_context.md"
     - fixing_malformed_links_guide.md
     - universal_generation_prompt.md
     - "**/missing_*_terms_ai_knowledge_base.md"
