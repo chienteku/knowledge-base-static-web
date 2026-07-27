@@ -241,20 +241,17 @@ Semantic vs presentational markup comparison:
 ```
 
 **Expected output:**
-```html
-<p>
-  Before you proceed, you <em>must</em> click save. 
-  Otherwise, you will lose <strong>all your progress</strong>!
-</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p>
+>   Before you proceed, you <em>must</em> click save. 
+>   Otherwise, you will lose <strong>all your progress</strong>!
+> </p>
+> ```
 > - The warning "must" is an emphasis of vocal tone (`<em>`).
 > - The warning "all your progress" is critically important data loss information (`<strong>`).
 
 ---
-
-
 
 ### Exercise 2: Semantic Tag Selection Matrix
 
@@ -265,13 +262,6 @@ Semantic vs presentational markup comparison:
 4. Product keywords offset for readability (`<b>`)
 
 **Expected output:**
-```text
-1. <i>
-2. <strong>
-3. <em>
-4. <b>
-```
-
 > [!check]- Answer
 > ```text
 > 1. <i> -> Technical term / idiom
@@ -287,98 +277,6 @@ Semantic vs presentational markup comparison:
 **Problem:** How do screen readers pronounce `<strong>` vs `<b>`?
 
 **Expected output:**
-```text
-Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.
-```
-
-> [!check]- Answer
-> ```text
-> Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.
-> ```
->
-> **Explanation:** `<strong>` provides semantic emphasis; `<b>` provides visual offset.
-
-
-
-### Exercise 4: Semantic Tag Selection Matrix
-
-**Problem:** Match element to purpose:
-1. Technical term or idiom (`<i>`)
-2. Serious urgency or warning (`<strong>`)
-3. Stress emphasis changing sentence meaning (`<em>`)
-4. Product keywords offset for readability (`<b>`)
-
-**Expected output:**
-```text
-1. <i>
-2. <strong>
-3. <em>
-4. <b>
-```
-
-> [!check]- Answer
-> ```text
-> 1. <i> -> Technical term / idiom
-> 2. <strong> -> Urgent warning / high importance
-> 3. <em> -> Stress emphasis
-> 4. <b> -> Visual keyword offset
-> ```
->
-> **Explanation:** HTML semantic text tags convey explicit acoustic emphasis for screen readers.
-
-### Exercise 5: Screen Reader Acoustic Difference
-
-**Problem:** How do screen readers pronounce `<strong>` vs `<b>`?
-
-**Expected output:**
-```text
-Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.
-```
-
-> [!check]- Answer
-> ```text
-> Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.
-> ```
->
-> **Explanation:** `<strong>` provides semantic emphasis; `<b>` provides visual offset.
-
-
-
-### Exercise 6: Semantic Tag Selection Matrix
-
-**Problem:** Match element to purpose:
-1. Technical term or idiom (`<i>`)
-2. Serious urgency or warning (`<strong>`)
-3. Stress emphasis changing sentence meaning (`<em>`)
-4. Product keywords offset for readability (`<b>`)
-
-**Expected output:**
-```text
-1. <i>
-2. <strong>
-3. <em>
-4. <b>
-```
-
-> [!check]- Answer
-> ```text
-> 1. <i> -> Technical term / idiom
-> 2. <strong> -> Urgent warning / high importance
-> 3. <em> -> Stress emphasis
-> 4. <b> -> Visual keyword offset
-> ```
->
-> **Explanation:** HTML semantic text tags convey explicit acoustic emphasis for screen readers.
-
-### Exercise 7: Screen Reader Acoustic Difference
-
-**Problem:** How do screen readers pronounce `<strong>` vs `<b>`?
-
-**Expected output:**
-```text
-Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.
-```
-
 > [!check]- Answer
 > ```text
 > Screen readers change pitch/tone to emphasize <strong>; <b> is read with normal pitch without acoustic inflection.

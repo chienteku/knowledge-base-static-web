@@ -201,18 +201,15 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 **Problem:** How would you make an image clickable, so that clicking the image takes the user to `home.html`?
 
 **Expected output:**
-```html
-<a href="home.html">
-  <img src="logo.png" alt="Company Logo">
-</a>
-```
-
 > [!check]- Answer
+> ```html
+> <a href="home.html">
+>   <img src="logo.png" alt="Company Logo">
+> </a>
+> ```
 > - The `<a>` element is a container. It can wrap text, but it can also wrap other elements!
 
 ---
-
-
 
 ### Exercise 2: Email and Telephone Anchor Links
 
@@ -221,11 +218,6 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 2. Phone call link to `+15551234567`
 
 **Expected output:**
-```text
-1. <a href="mailto:support@example.com">Email Us</a>
-2. <a href="tel:+15551234567">Call Us</a>
-```
-
 > [!check]- Answer
 > ```html
 > <a href="mailto:support@example.com">Email Us</a>
@@ -239,86 +231,6 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 **Problem:** Write anchor link targeting section `<section id="features">` on the same page.
 
 **Expected output:**
-```text
-<a href="#features">Jump to Features</a>
-```
-
-> [!check]- Answer
-> ```html
-> <a href="#features">Jump to Features</a>
-> ```
->
-> **Explanation:** Hash link `#id` targets matching element ID on the current page.
-
-
-
-### Exercise 4: Email and Telephone Anchor Links
-
-**Problem:** Write HTML anchor tags for:
-1. Email link to `support@example.com`
-2. Phone call link to `+15551234567`
-
-**Expected output:**
-```text
-1. <a href="mailto:support@example.com">Email Us</a>
-2. <a href="tel:+15551234567">Call Us</a>
-```
-
-> [!check]- Answer
-> ```html
-> <a href="mailto:support@example.com">Email Us</a>
-> <a href="tel:+15551234567">Call Us</a>
-> ```
->
-> **Explanation:** `mailto:` opens email client; `tel:` initiates phone call on mobile devices.
-
-### Exercise 5: In-Page Smooth Anchor Jumping
-
-**Problem:** Write anchor link targeting section `<section id="features">` on the same page.
-
-**Expected output:**
-```text
-<a href="#features">Jump to Features</a>
-```
-
-> [!check]- Answer
-> ```html
-> <a href="#features">Jump to Features</a>
-> ```
->
-> **Explanation:** Hash link `#id` targets matching element ID on the current page.
-
-
-
-### Exercise 6: Email and Telephone Anchor Links
-
-**Problem:** Write HTML anchor tags for:
-1. Email link to `support@example.com`
-2. Phone call link to `+15551234567`
-
-**Expected output:**
-```text
-1. <a href="mailto:support@example.com">Email Us</a>
-2. <a href="tel:+15551234567">Call Us</a>
-```
-
-> [!check]- Answer
-> ```html
-> <a href="mailto:support@example.com">Email Us</a>
-> <a href="tel:+15551234567">Call Us</a>
-> ```
->
-> **Explanation:** `mailto:` opens email client; `tel:` initiates phone call on mobile devices.
-
-### Exercise 7: In-Page Smooth Anchor Jumping
-
-**Problem:** Write anchor link targeting section `<section id="features">` on the same page.
-
-**Expected output:**
-```text
-<a href="#features">Jump to Features</a>
-```
-
 > [!check]- Answer
 > ```html
 > <a href="#features">Jump to Features</a>

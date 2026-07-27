@@ -287,20 +287,17 @@ function TableBody({ rows }) {
 }
 ```
 
----
-
+**Expected output:**
 > [!check]- Answer
 > - Complete problem steps as outlined above.
+
+---
 
 ### Exercise 2: Mapping List Items with Explicit Fragment
 
 **Problem:** Map array `terms` returning `dt` and `dd` elements using `<React.Fragment key={item.id}>`.
 
 **Expected output:**
-```text
-function Glossary({ items }) { return <dl>{items.map(item => <React.Fragment key={item.id}><dt>{item.term}</dt><dd>{item.def}</dd></React.Fragment>)}</dl>; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function Glossary({ items }) {
@@ -324,62 +321,6 @@ function Glossary({ items }) { return <dl>{items.map(item => <React.Fragment key
 **Problem:** Write component returning two sibling `<p>` elements using short Fragment syntax `<> ... </>`.
 
 **Expected output:**
-```text
-function Intro() { return <> <p>First</p> <p>Second</p> <>; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function Intro() {
->   return (
->     <>
->       <p>First</p>
->       <p>Second</p>
->     </>
->   );
-> }
-> ```
->
-> **Explanation:** `<> ... </>` groups sibling elements without adding extra wrapper nodes to the DOM tree.
-
-
-
-### Exercise 4: Mapping List Items with Explicit Fragment
-
-**Problem:** Map array `terms` returning `dt` and `dd` elements using `<React.Fragment key={item.id}>`.
-
-**Expected output:**
-```text
-function Glossary({ items }) { return <dl>{items.map(item => <React.Fragment key={item.id}><dt>{item.term}</dt><dd>{item.def}</dd></React.Fragment>)}</dl>; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function Glossary({ items }) {
->   return (
->     <dl>
->       {items.map(item => (
->         <React.Fragment key={item.id}>
->           <dt>{item.term}</dt>
->           <dd>{item.def}</dd>
->         </React.Fragment>
->       ))}
->     </dl>
->   );
-> }
-> ```
->
-> **Explanation:** `React.Fragment` accepts `key` props when mapping multi-element list items.
-
-### Exercise 5: Short Fragment Syntax
-
-**Problem:** Write component returning two sibling `<p>` elements using short Fragment syntax `<> ... </>`.
-
-**Expected output:**
-```text
-function Intro() { return <> <p>First</p> <p>Second</p> <>; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function Intro() {

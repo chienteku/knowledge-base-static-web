@@ -151,32 +151,25 @@ Use surrogate id primary key alongside UNIQUE (col1, col2, col3, col4)
 **Problem:** You are designing a warehouse inventory tracker. Items are stored on shelves. A shelf is identified by a `warehouse_id`, a `room_code`, and a `shelf_number`. Write the SQL `CREATE TABLE` query for a table named `shelves` containing these three columns (all are integers/codes, required) and make them the composite primary key.
 
 **Expected output:**
-```sql
-CREATE TABLE shelves (
-  warehouse_id INT NOT NULL,
-  room_code VARCHAR(10) NOT NULL,
-  shelf_number INT NOT NULL,
-  PRIMARY KEY (warehouse_id, room_code, shelf_number)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE shelves (
+>   warehouse_id INT NOT NULL,
+>   room_code VARCHAR(10) NOT NULL,
+>   shelf_number INT NOT NULL,
+>   PRIMARY KEY (warehouse_id, room_code, shelf_number)
+> );
+> ```
 > - Declare the three columns first.
 > - Append the composite `PRIMARY KEY` parameter listing all three columns separated by commas.
 
 ---
-
-
 
 ### Exercise 2: Defining Composite Primary Key in DDL
 
 **Problem:** Create junction table `order_items` with composite primary key `(order_id, item_id)`.
 
 **Expected output:**
-```text
-CREATE TABLE order_items ( order_id INT REFERENCES orders(id), item_id INT REFERENCES items(id), quantity INT DEFAULT 1, PRIMARY KEY (order_id, item_id) );
-```
-
 > [!check]- Answer
 > ```sql
 > CREATE TABLE order_items (
@@ -194,10 +187,6 @@ CREATE TABLE order_items ( order_id INT REFERENCES orders(id), item_id INT REFER
 **Problem:** Given composite primary key `(tenant_id, user_id)`, can query `WHERE user_id = 5` use the primary key index? (No, skips leading tenant_id prefix).
 
 **Expected output:**
-```text
-No, queries skipping the leading prefix cannot utilize compound B-Tree indexes
-```
-
 > [!check]- Answer
 > ```text
 > No, queries skipping the leading prefix cannot utilize compound B-Tree indexes

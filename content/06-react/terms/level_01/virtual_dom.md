@@ -129,26 +129,19 @@ New Virtual DOM: `<div><h1>Hello</h1><p>Status: Done</p></div>`
 If React compares these two trees, how many changes will it make to the real Browser DOM?
 
 **Expected output:**
-```text
-Exactly one change. It will target the `<p>` tag and update its internal text node from "Loading" to "Done". It will not touch the `<div>` or the `<h1>`.
-```
-
 > [!check]- Answer
+> ```text
+> Exactly one change. It will target the `<p>` tag and update its internal text node from "Loading" to "Done". It will not touch the `<div>` or the `<h1>`.
+> ```
 > - What is the only piece of text that actually changed?
 
 ---
-
-
 
 ### Exercise 2: Virtual DOM Representation of JSX
 
 **Problem:** Write plain JS object tree representing `<h1 className="title">Hello</h1>` in Virtual DOM.
 
 **Expected output:**
-```text
-{ type: 'h1', props: { className: 'title', children: 'Hello' } }
-```
-
 > [!check]- Answer
 > ```javascript
 > {
@@ -167,50 +160,6 @@ Exactly one change. It will target the `<p>` tag and update its internal text no
 **Problem:** Sequence steps: 1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Virtual DOM -> 4. Batch Real DOM Mutations.
 
 **Expected output:**
-```text
-1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Tree -> 4. Batch Real DOM Mutations
-```
-
-> [!check]- Answer
-> ```text
-> 1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Tree -> 4. Batch Real DOM Mutations
-> ```
->
-> **Explanation:** Diffing Virtual DOM trees minimizes expensive real browser DOM write operations.
-
-
-
-### Exercise 4: Virtual DOM Representation of JSX
-
-**Problem:** Write plain JS object tree representing `<h1 className="title">Hello</h1>` in Virtual DOM.
-
-**Expected output:**
-```text
-{ type: 'h1', props: { className: 'title', children: 'Hello' } }
-```
-
-> [!check]- Answer
-> ```javascript
-> {
->   type: 'h1',
->   props: {
->     className: 'title',
->     children: 'Hello'
->   }
-> }
-> ```
->
-> **Explanation:** Virtual DOM nodes are lightweight JavaScript objects representing DOM element trees.
-
-### Exercise 5: Virtual DOM Render Pipeline Sequence
-
-**Problem:** Sequence steps: 1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Virtual DOM -> 4. Batch Real DOM Mutations.
-
-**Expected output:**
-```text
-1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Tree -> 4. Batch Real DOM Mutations
-```
-
 > [!check]- Answer
 > ```text
 > 1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Tree -> 4. Batch Real DOM Mutations

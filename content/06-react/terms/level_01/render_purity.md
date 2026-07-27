@@ -242,20 +242,17 @@ function SortedList({ numbers }) {
 }
 ```
 
----
-
+**Expected output:**
 > [!check]- Answer
 > - Complete problem steps as outlined above.
+
+---
 
 ### Exercise 2: Refactoring Impure Component to Pure Component
 
 **Problem:** Refactor impure component `function Clock() { const time = new Date().toLocaleTimeString(); return <div>{time}</div>; }` to receive `time` as a prop.
 
 **Expected output:**
-```text
-function Clock({ time }) { return <div>{time}</div>; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function Clock({ time }) {
@@ -270,46 +267,6 @@ function Clock({ time }) { return <div>{time}</div>; }
 **Problem:** Why does React `StrictMode` intentionally execute component render functions twice in development? (To detect and surface impure render side-effects early).
 
 **Expected output:**
-```text
-To detect and surface impure render side-effects early
-```
-
-> [!check]- Answer
-> ```text
-> To detect and surface impure render side-effects early
-> ```
->
-> **Explanation:** Double rendering in development exposes mutations and side-effects executed during render.
-
-
-
-### Exercise 4: Refactoring Impure Component to Pure Component
-
-**Problem:** Refactor impure component `function Clock() { const time = new Date().toLocaleTimeString(); return <div>{time}</div>; }` to receive `time` as a prop.
-
-**Expected output:**
-```text
-function Clock({ time }) { return <div>{time}</div>; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function Clock({ time }) {
->   return <div>{time}</div>;
-> }
-> ```
->
-> **Explanation:** Pure components derive UI strictly from input props without reading dynamic external state.
-
-### Exercise 5: Strict Mode Double Rendering
-
-**Problem:** Why does React `StrictMode` intentionally execute component render functions twice in development? (To detect and surface impure render side-effects early).
-
-**Expected output:**
-```text
-To detect and surface impure render side-effects early
-```
-
 > [!check]- Answer
 > ```text
 > To detect and surface impure render side-effects early

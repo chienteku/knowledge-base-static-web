@@ -164,35 +164,28 @@ function Cup({ guest }) {
 **Problem:** You have a `Header` component, a `Sidebar` component, and a `MainContent` component. Write a parent component called `Dashboard` that renders all three of them inside a `<div>`.
 
 **Expected output:**
-```javascript
-function Dashboard() {
-  return (
-    <div>
-      <Header />
-      <Sidebar />
-      <MainContent />
-    </div>
-  );
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> function Dashboard() {
+>   return (
+>     <div>
+>       <Header />
+>       <Sidebar />
+>       <MainContent />
+>     </div>
+>   );
+> }
+> ```
 > - Remember to return a single parent element (the `div`).
 > - Use PascalCase for the component tags.
 
 ---
-
-
 
 ### Exercise 2: Extracting Reusable Button Component
 
 **Problem:** Create a reusable `Button` component taking `label` and `onClick` props.
 
 **Expected output:**
-```text
-function Button({ label, onClick }) { return <button onClick={onClick}>{label}</button>; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function Button({ label, onClick }) {
@@ -207,46 +200,6 @@ function Button({ label, onClick }) { return <button onClick={onClick}>{label}</
 **Problem:** Why MUST React component function names begin with a capital letter? (React uses capitalization to distinguish custom React components from standard built-in HTML tags).
 
 **Expected output:**
-```text
-React uses capitalization to distinguish custom React components from standard built-in HTML tags
-```
-
-> [!check]- Answer
-> ```text
-> React uses capitalization to distinguish custom React components from standard built-in HTML tags
-> ```
->
-> **Explanation:** Lowercase tags (`<button>`) evaluate to HTML string tags; uppercase tags (`<Button>`) evaluate to component functions.
-
-
-
-### Exercise 4: Extracting Reusable Button Component
-
-**Problem:** Create a reusable `Button` component taking `label` and `onClick` props.
-
-**Expected output:**
-```text
-function Button({ label, onClick }) { return <button onClick={onClick}>{label}</button>; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function Button({ label, onClick }) {
->   return <button onClick={onClick}>{label}</button>;
-> }
-> ```
->
-> **Explanation:** Components encapsulate UI structure and behavior via props.
-
-### Exercise 5: Component Naming Capitalization
-
-**Problem:** Why MUST React component function names begin with a capital letter? (React uses capitalization to distinguish custom React components from standard built-in HTML tags).
-
-**Expected output:**
-```text
-React uses capitalization to distinguish custom React components from standard built-in HTML tags
-```
-
 > [!check]- Answer
 > ```text
 > React uses capitalization to distinguish custom React components from standard built-in HTML tags

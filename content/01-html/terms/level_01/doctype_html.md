@@ -119,26 +119,19 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 **Problem:** What happens if you completely delete the `<!DOCTYPE html>` line from an HTML document?
 
 **Expected output:**
-```text
-The browser will enter "Quirks Mode." It will intentionally emulate bugs and non-standard behavior from the late 1990s (like Netscape Navigator 4) to ensure ancient websites don't break. This will likely completely destroy modern CSS layouts.
-```
-
 > [!check]- Answer
+> ```text
+> The browser will enter "Quirks Mode." It will intentionally emulate bugs and non-standard behavior from the late 1990s (like Netscape Navigator 4) to ensure ancient websites don't break. This will likely completely destroy modern CSS layouts.
+> ```
 > - Search for the term "Quirks Mode vs Standards Mode".
 
 ---
-
-
 
 ### Exercise 2: DOCTYPE Placement Rule
 
 **Problem:** Where must `<!DOCTYPE html>` be located in an HTML document?
 
 **Expected output:**
-```text
-At the very first line of the document, before the <html> tag.
-```
-
 > [!check]- Answer
 > ```text
 > At the very first line of the document, before the <html> tag.
@@ -151,10 +144,6 @@ At the very first line of the document, before the <html> tag.
 **Problem:** Is `<!doctype html>` valid in modern HTML5? (Yes/No).
 
 **Expected output:**
-```text
-Yes. DOCTYPE is case-insensitive in HTML5.
-```
-
 > [!check]- Answer
 > ```text
 > Yes. DOCTYPE is case-insensitive in HTML5.

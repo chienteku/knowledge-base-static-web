@@ -225,17 +225,14 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 "Sulfuric acid is represented as H2SO4."
 
 **Expected output:**
-```html
-<p>Sulfuric acid is represented as H<sub>2</sub>SO<sub>4</sub>.</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p>Sulfuric acid is represented as H<sub>2</sub>SO<sub>4</sub>.</p>
+> ```
 > - Only the numbers "2" and "4" need to be shifted downwards.
 > - Wrap those specific numbers in `<sub>` and `</sub>` tags.
 
 ---
-
-
 
 ### Exercise 2: Mathematical and Chemical Notation
 
@@ -244,11 +241,6 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 2. $H_2O$
 
 **Expected output:**
-```text
-1. E = mc<sup>2</sup>
-2. H<sub>2</sub>O
-```
-
 > [!check]- Answer
 > ```html
 > <p>E = mc<sup>2</sup></p>
@@ -262,86 +254,6 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 **Problem:** Write HTML footnote link reference `[1]` pointing to `#fn1` using `<sup>`.
 
 **Expected output:**
-```text
-<sup><a href="#fn1">[1]</a></sup>
-```
-
-> [!check]- Answer
-> ```html
-> <sup><a href="#fn1">[1]</a></sup>
-> ```
->
-> **Explanation:** `<sup>` wraps footnote numbers above the baseline.
-
-
-
-### Exercise 4: Mathematical and Chemical Notation
-
-**Problem:** Write HTML for:
-1. $E = mc^2$
-2. $H_2O$
-
-**Expected output:**
-```text
-1. E = mc<sup>2</sup>
-2. H<sub>2</sub>O
-```
-
-> [!check]- Answer
-> ```html
-> <p>E = mc<sup>2</sup></p>
-> <p>H<sub>2</sub>O</p>
-> ```
->
-> **Explanation:** `<sup>` renders exponent superscript; `<sub>` renders chemical subscript.
-
-### Exercise 5: Footnote Anchor Reference
-
-**Problem:** Write HTML footnote link reference `[1]` pointing to `#fn1` using `<sup>`.
-
-**Expected output:**
-```text
-<sup><a href="#fn1">[1]</a></sup>
-```
-
-> [!check]- Answer
-> ```html
-> <sup><a href="#fn1">[1]</a></sup>
-> ```
->
-> **Explanation:** `<sup>` wraps footnote numbers above the baseline.
-
-
-
-### Exercise 6: Mathematical and Chemical Notation
-
-**Problem:** Write HTML for:
-1. $E = mc^2$
-2. $H_2O$
-
-**Expected output:**
-```text
-1. E = mc<sup>2</sup>
-2. H<sub>2</sub>O
-```
-
-> [!check]- Answer
-> ```html
-> <p>E = mc<sup>2</sup></p>
-> <p>H<sub>2</sub>O</p>
-> ```
->
-> **Explanation:** `<sup>` renders exponent superscript; `<sub>` renders chemical subscript.
-
-### Exercise 7: Footnote Anchor Reference
-
-**Problem:** Write HTML footnote link reference `[1]` pointing to `#fn1` using `<sup>`.
-
-**Expected output:**
-```text
-<sup><a href="#fn1">[1]</a></sup>
-```
-
 > [!check]- Answer
 > ```html
 > <sup><a href="#fn1">[1]</a></sup>

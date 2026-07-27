@@ -231,35 +231,24 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 **Problem:** If you were writing a recipe page for "Chocolate Chip Cookies", what heading tags would you use for: The Recipe Title, The Ingredients List, The Instructions, and The Baking Time (which is a subsection of Instructions)?
 
 **Expected output:**
-```text
-<h1>Chocolate Chip Cookies</h1>
-<h2>Ingredients</h2>
-<h2>Instructions</h2>
-<h3>Baking Time</h3>
-```
-
 > [!check]- Answer
+> ```text
+> <h1>Chocolate Chip Cookies</h1>
+> <h2>Ingredients</h2>
+> <h2>Instructions</h2>
+> <h3>Baking Time</h3>
+> ```
 > - The title is the most important.
 > - Ingredients and Instructions are equal siblings.
 > - Baking Time belongs *inside* Instructions.
 
 ---
 
-
-
 ### Exercise 2: Structuring Sequential Heading Hierarchy
 
 **Problem:** Structure heading levels for: 1 Page Title; 2 Main Sections; 2 Sub-sections under Section 1.
 
 **Expected output:**
-```text
-h1: Page Title
-  h2: Section 1
-    h3: Sub 1.1
-    h3: Sub 1.2
-  h2: Section 2
-```
-
 > [!check]- Answer
 > ```html
 > <h1>Page Title</h1>
@@ -280,102 +269,6 @@ h1: Page Title
 **Problem:** Should you change `<h2>` to `<h4>` because the font size looks too big on screen? (Yes/No). Explain.
 
 **Expected output:**
-```text
-No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.
-```
-
-> [!check]- Answer
-> ```text
-> No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.
-> ```
->
-> **Explanation:** Heading tags dictate structural hierarchy; CSS dictates visual font size.
-
-
-
-### Exercise 4: Structuring Sequential Heading Hierarchy
-
-**Problem:** Structure heading levels for: 1 Page Title; 2 Main Sections; 2 Sub-sections under Section 1.
-
-**Expected output:**
-```text
-h1: Page Title
-  h2: Section 1
-    h3: Sub 1.1
-    h3: Sub 1.2
-  h2: Section 2
-```
-
-> [!check]- Answer
-> ```html
-> <h1>Page Title</h1>
-> <section>
->   <h2>Section 1</h2>
->   <h3>Sub-section 1.1</h3>
->   <h3>Sub-section 1.2</h3>
-> </section>
-> <section>
->   <h2>Section 2</h2>
-> </section>
-> ```
->
-> **Explanation:** Heading tags construct a nested outline tree for accessibility and search engines.
-
-### Exercise 5: Styling Headings vs Heading Semantics
-
-**Problem:** Should you change `<h2>` to `<h4>` because the font size looks too big on screen? (Yes/No). Explain.
-
-**Expected output:**
-```text
-No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.
-```
-
-> [!check]- Answer
-> ```text
-> No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.
-> ```
->
-> **Explanation:** Heading tags dictate structural hierarchy; CSS dictates visual font size.
-
-
-
-### Exercise 6: Structuring Sequential Heading Hierarchy
-
-**Problem:** Structure heading levels for: 1 Page Title; 2 Main Sections; 2 Sub-sections under Section 1.
-
-**Expected output:**
-```text
-h1: Page Title
-  h2: Section 1
-    h3: Sub 1.1
-    h3: Sub 1.2
-  h2: Section 2
-```
-
-> [!check]- Answer
-> ```html
-> <h1>Page Title</h1>
-> <section>
->   <h2>Section 1</h2>
->   <h3>Sub-section 1.1</h3>
->   <h3>Sub-section 1.2</h3>
-> </section>
-> <section>
->   <h2>Section 2</h2>
-> </section>
-> ```
->
-> **Explanation:** Heading tags construct a nested outline tree for accessibility and search engines.
-
-### Exercise 7: Styling Headings vs Heading Semantics
-
-**Problem:** Should you change `<h2>` to `<h4>` because the font size looks too big on screen? (Yes/No). Explain.
-
-**Expected output:**
-```text
-No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.
-```
-
 > [!check]- Answer
 > ```text
 > No. Use CSS font-size to change visual size; keep h2 for proper semantic document hierarchy.

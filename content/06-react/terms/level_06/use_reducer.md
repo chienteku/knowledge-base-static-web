@@ -137,28 +137,21 @@ const handleFetch = async () => {
 **Problem:** You have a boolean state: `const [isOpen, setIsOpen] = useState(false)`. Should you refactor this to use `useReducer`?
 
 **Expected output:**
-```text
-Absolutely not. 
-`useReducer` requires a lot of boilerplate code (Switch statements, Action objects). It is extreme overkill for a simple boolean or string. 
-Only use `useReducer` when you have complex state objects where changing one value depends on or affects other values.
-```
-
 > [!check]- Answer
+> ```text
+> Absolutely not. 
+> `useReducer` requires a lot of boilerplate code (Switch statements, Action objects). It is extreme overkill for a simple boolean or string. 
+> Only use `useReducer` when you have complex state objects where changing one value depends on or affects other values.
+> ```
 > - Simple state = `useState`. Complex state objects = `useReducer`.
 
 ---
-
-
 
 ### Exercise 2: Counter Reducer Implementation
 
 **Problem:** Write pure reducer function supporting `'INCREMENT'`, `'DECREMENT'`, and `'RESET'` action types.
 
 **Expected output:**
-```text
-function counterReducer(state, action) { switch (action.type) { case 'INCREMENT': return { count: state.count + 1 }; case 'DECREMENT': return { count: state.count - 1 }; case 'RESET': return { count: 0 }; default: return state; } }
-```
-
 > [!check]- Answer
 > ```javascript
 > function counterReducer(state, action) {
@@ -182,10 +175,6 @@ function counterReducer(state, action) { switch (action.type) { case 'INCREMENT'
 **Problem:** What array tuple does `const [state, dispatch] = useReducer(reducer, initialState)` return? (Current state snapshot and dispatch function).
 
 **Expected output:**
-```text
-Current state snapshot and dispatch function
-```
-
 > [!check]- Answer
 > ```text
 > Current state snapshot and dispatch function

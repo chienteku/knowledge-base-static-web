@@ -136,48 +136,38 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 **Problem:** True or False: You can place as many attributes as you want inside a single opening tag, as long as they are separated by spaces.
 
 **Expected output:**
-```text
-True! You can stack attributes.
-Example: `<input type="text" placeholder="Enter name" required maxlength="10">`
-```
-
 > [!check]- Answer
+> ```text
+> True! You can stack attributes.
+> Example: `<input type="text" placeholder="Enter name" required maxlength="10">`
+> ```
 > - Look at the `<img>` example in the snippets above.
 
 ---
-
-
 
 ### Exercise 2: Identifying Attributes and Values
 
 **Problem:** Given `<a href="https://example.com" target="_blank">Link</a>`, identify the two attribute names and their corresponding values.
 
 **Expected output:**
-```text
-Attribute 1 Name: href, Value: "https://example.com"
-Attribute 2 Name: target, Value: "_blank"
-```
-
 > [!check]- Answer
 > ```text
 > Attribute 1 Name: href, Value: "https://example.com"
 > Attribute 2 Name: target, Value: "_blank"
 > ```
-> - **Explanation:** Attributes modify element behavior or provide metadata in `name="value"` format.
+> **Explanation:** Attributes modify element behavior or provide metadata in `name="value"` format.
+
 ### Exercise 3: Boolean Attribute Syntax
 
 **Problem:** Write `disabled` attribute on `<button>` using valid boolean attribute shorthand.
 
 **Expected output:**
-```text
-<button disabled>Submit</button>
-```
-
 > [!check]- Answer
 > ```html
 > <button disabled>Submit</button>
 > ```
-> - **Explanation:** Boolean attributes in HTML do not require values; presence of the attribute name evaluates to true.
+> **Explanation:** Boolean attributes are true when present, so key-only syntax (`disabled`) is sufficient.
+
 ## 7. Related Terms
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Attributes live inside the opening tag of an element.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Self-closing elements that are configured using attributes (like `<img>`).

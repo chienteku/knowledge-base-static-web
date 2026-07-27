@@ -160,26 +160,20 @@ btn.addEventListener('click', () => {
 ```
 
 **Expected output:**
-```text
-Snippet A is Imperative (step-by-step commands to the DOM).
-Snippet B is Declarative (describing what the button should look like based on the `isLoading` variable).
-```
 > [!check]- Answer
+> ```text
+> Snippet A is Imperative (step-by-step commands to the DOM).
+> Snippet B is Declarative (describing what the button should look like based on the `isLoading` variable).
+> ```
 > - Which one gives orders to the DOM, and which one uses variables to define the shape?
 
 ---
-
-
 
 ### Exercise 2: Declarative Toggle Switch
 
 **Problem:** Build declarative `Toggle` component displaying `'ON'` or `'OFF'` based on `isOn` state.
 
 **Expected output:**
-```text
-function Toggle() { const [isOn, setIsOn] = useState(false); return <button onClick={() => setIsOn(!isOn)}>{isOn ? 'ON' : 'OFF'}</button>; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function Toggle() {
@@ -199,51 +193,6 @@ function Toggle() { const [isOn, setIsOn] = useState(false); return <button onCl
 **Problem:** Compare: Imperative (Step-by-step DOM manipulation instructions); Declarative (Describing desired UI state output).
 
 **Expected output:**
-```text
-Imperative: step-by-step DOM manipulation instructions; Declarative: describing desired UI state output
-```
-
-> [!check]- Answer
-> ```text
-> Imperative: step-by-step DOM manipulation instructions; Declarative: describing desired UI state output
-> ```
->
-> **Explanation:** Declarative programming abstracts DOM updates behind state transitions.
-
-
-
-### Exercise 4: Declarative Toggle Switch
-
-**Problem:** Build declarative `Toggle` component displaying `'ON'` or `'OFF'` based on `isOn` state.
-
-**Expected output:**
-```text
-function Toggle() { const [isOn, setIsOn] = useState(false); return <button onClick={() => setIsOn(!isOn)}>{isOn ? 'ON' : 'OFF'}</button>; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function Toggle() {
->   const [isOn, setIsOn] = useState(false);
->   return (
->     <button onClick={() => setIsOn(!isOn)}>
->       {isOn ? 'ON' : 'OFF'}
->     </button>
->   );
-> }
-> ```
->
-> **Explanation:** Declarative components declare UI output based on current state values.
-
-### Exercise 5: Imperative vs Declarative Comparison
-
-**Problem:** Compare: Imperative (Step-by-step DOM manipulation instructions); Declarative (Describing desired UI state output).
-
-**Expected output:**
-```text
-Imperative: step-by-step DOM manipulation instructions; Declarative: describing desired UI state output
-```
-
 > [!check]- Answer
 > ```text
 > Imperative: step-by-step DOM manipulation instructions; Declarative: describing desired UI state output

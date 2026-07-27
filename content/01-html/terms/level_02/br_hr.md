@@ -200,26 +200,19 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 **Problem:** Why do `<br>` and `<hr>` not require a closing tag (like `</br>`)?
 
 **Expected output:**
-```text
-Because they are "void" elements. They cannot contain any text or child elements inside of them, so there is no need to define an "end" boundary.
-```
-
 > [!check]- Answer
+> ```text
+> Because they are "void" elements. They cannot contain any text or child elements inside of them, so there is no need to define an "end" boundary.
+> ```
 > - Think about the "sandwich" metaphor from the Element vs Tag document.
 
 ---
-
-
 
 ### Exercise 2: Proper Address Formatting with br
 
 **Problem:** Format multi-line mailing address using a single `<address>` block and `<br>` line breaks.
 
 **Expected output:**
-```text
-<address>Acme Corp<br>123 Main St<br>New York, NY 10001</address>
-```
-
 > [!check]- Answer
 > ```html
 > <address>
@@ -236,86 +229,6 @@ Because they are "void" elements. They cannot contain any text or child elements
 **Problem:** How is `<hr>` announced by modern screen readers?
 
 **Expected output:**
-```text
-Screen readers announce <hr> as a 'separator' or 'thematic break'.
-```
-
-> [!check]- Answer
-> ```text
-> Screen readers announce <hr> as a 'separator' or 'thematic break'.
-> ```
->
-> **Explanation:** `<hr>` conveys a structural transition between distinct topics.
-
-
-
-### Exercise 4: Proper Address Formatting with br
-
-**Problem:** Format multi-line mailing address using a single `<address>` block and `<br>` line breaks.
-
-**Expected output:**
-```text
-<address>Acme Corp<br>123 Main St<br>New York, NY 10001</address>
-```
-
-> [!check]- Answer
-> ```html
-> <address>
->   Acme Corp<br>
->   123 Main St<br>
->   New York, NY 10001
-> </address>
-> ```
->
-> **Explanation:** `<br>` creates semantic line breaks within postal addresses and poems.
-
-### Exercise 5: Thematic Break Accessibility
-
-**Problem:** How is `<hr>` announced by modern screen readers?
-
-**Expected output:**
-```text
-Screen readers announce <hr> as a 'separator' or 'thematic break'.
-```
-
-> [!check]- Answer
-> ```text
-> Screen readers announce <hr> as a 'separator' or 'thematic break'.
-> ```
->
-> **Explanation:** `<hr>` conveys a structural transition between distinct topics.
-
-
-
-### Exercise 6: Proper Address Formatting with br
-
-**Problem:** Format multi-line mailing address using a single `<address>` block and `<br>` line breaks.
-
-**Expected output:**
-```text
-<address>Acme Corp<br>123 Main St<br>New York, NY 10001</address>
-```
-
-> [!check]- Answer
-> ```html
-> <address>
->   Acme Corp<br>
->   123 Main St<br>
->   New York, NY 10001
-> </address>
-> ```
->
-> **Explanation:** `<br>` creates semantic line breaks within postal addresses and poems.
-
-### Exercise 7: Thematic Break Accessibility
-
-**Problem:** How is `<hr>` announced by modern screen readers?
-
-**Expected output:**
-```text
-Screen readers announce <hr> as a 'separator' or 'thematic break'.
-```
-
 > [!check]- Answer
 > ```text
 > Screen readers announce <hr> as a 'separator' or 'thematic break'.

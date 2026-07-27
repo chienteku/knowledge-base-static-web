@@ -195,19 +195,16 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 3. `href="mailto:hello@world.com"`
 
 **Expected output:**
-```text
-1. Relative (points to a local file)
-2. Absolute (points to a full URL on another server)
-3. Mailto (opens an email client)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Relative (points to a local file)
+> 2. Absolute (points to a full URL on another server)
+> 3. Mailto (opens an email client)
+> ```
 > - Does it have `https://`?
 > - Does it have `mailto:`?
 
 ---
-
-
 
 ### Exercise 2: Valid href Value Formats
 
@@ -218,13 +215,6 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 4. `href="tel:123456"` 
 
 **Expected output:**
-```text
-1. Root-relative page navigation
-2. In-page anchor element ID
-3. Email client prompt
-4. Telephone dialer prompt
-```
-
 > [!check]- Answer
 > ```text
 > 1. Root-relative page navigation
@@ -240,98 +230,6 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 **Problem:** Which attribute can be added to `<a href="file.pdf">` to force the browser to download the file instead of displaying it inline?
 
 **Expected output:**
-```text
-download attribute
-```
-
-> [!check]- Answer
-> ```html
-> <a href="file.pdf" download="Report.pdf">Download Report</a>
-> ```
->
-> **Explanation:** `download` attribute instructs browsers to save linked resources to disk.
-
-
-
-### Exercise 4: Valid href Value Formats
-
-**Problem:** Match `href` format to target link behavior:
-1. `href="/about"` 
-2. `href="#top"` 
-3. `href="mailto:a@b.com"` 
-4. `href="tel:123456"` 
-
-**Expected output:**
-```text
-1. Root-relative page navigation
-2. In-page anchor element ID
-3. Email client prompt
-4. Telephone dialer prompt
-```
-
-> [!check]- Answer
-> ```text
-> 1. Root-relative page navigation
-> 2. In-page anchor element ID
-> 3. Email client prompt
-> 4. Telephone dialer prompt
-> ```
->
-> **Explanation:** `href` accepts web URLs, element IDs, and URI protocol schemes.
-
-### Exercise 5: Downloading Files via href
-
-**Problem:** Which attribute can be added to `<a href="file.pdf">` to force the browser to download the file instead of displaying it inline?
-
-**Expected output:**
-```text
-download attribute
-```
-
-> [!check]- Answer
-> ```html
-> <a href="file.pdf" download="Report.pdf">Download Report</a>
-> ```
->
-> **Explanation:** `download` attribute instructs browsers to save linked resources to disk.
-
-
-
-### Exercise 6: Valid href Value Formats
-
-**Problem:** Match `href` format to target link behavior:
-1. `href="/about"` 
-2. `href="#top"` 
-3. `href="mailto:a@b.com"` 
-4. `href="tel:123456"` 
-
-**Expected output:**
-```text
-1. Root-relative page navigation
-2. In-page anchor element ID
-3. Email client prompt
-4. Telephone dialer prompt
-```
-
-> [!check]- Answer
-> ```text
-> 1. Root-relative page navigation
-> 2. In-page anchor element ID
-> 3. Email client prompt
-> 4. Telephone dialer prompt
-> ```
->
-> **Explanation:** `href` accepts web URLs, element IDs, and URI protocol schemes.
-
-### Exercise 7: Downloading Files via href
-
-**Problem:** Which attribute can be added to `<a href="file.pdf">` to force the browser to download the file instead of displaying it inline?
-
-**Expected output:**
-```text
-download attribute
-```
-
 > [!check]- Answer
 > ```html
 > <a href="file.pdf" download="Report.pdf">Download Report</a>

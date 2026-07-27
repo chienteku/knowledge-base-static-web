@@ -222,19 +222,16 @@ padding: 10px 20px 30px 40px;
 ```
 
 **Expected output:**
-```css
-.card {
-  padding: 10px 5px 20px;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .card {
+>   padding: 10px 5px 20px;
+> }
+> ```
 > - The left and right values are identical (`5px`).
 > - This maps to the 3-value shorthand syntax: `top` `left-and-right` `bottom`.
 
 ---
-
-
 
 ### Exercise 2: Shorthand Expansion Value Count Matrix
 
@@ -244,12 +241,6 @@ padding: 10px 20px 30px 40px;
 3. `margin: 10px 20px 30px;` 
 
 **Expected output:**
-```text
-1. Top/Right/Bottom/Left all 10px
-2. Top/Bottom 10px; Right/Left 20px
-3. Top 10px; Right/Left 20px; Bottom 30px
-```
-
 > [!check]- Answer
 > ```text
 > 1. 1 value: Top/Right/Bottom/Left all 10px
@@ -264,10 +255,6 @@ padding: 10px 20px 30px 40px;
 **Problem:** Write CSS `border` shorthand for 2px solid red border.
 
 **Expected output:**
-```text
-border: 2px solid red;
-```
-
 > [!check]- Answer
 > ```css
 > border: 2px solid red;

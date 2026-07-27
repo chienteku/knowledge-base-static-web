@@ -227,31 +227,24 @@ A simple nested blockquote showing visual indentation and attribution:
 "Four score and seven years ago our fathers brought forth on this continent, a new nation..."
 
 **Expected output:**
-```html
-<blockquote cite="https://www.loc.gov/resource/al0187/">
-  <p>Four score and seven years ago our fathers brought forth on this continent, a new nation...</p>
-</blockquote>
-<p>— Abraham Lincoln, <cite>The Gettysburg Address</cite></p>
-```
-
 > [!check]- Answer
+> ```html
+> <blockquote cite="https://www.loc.gov/resource/al0187/">
+>   <p>Four score and seven years ago our fathers brought forth on this continent, a new nation...</p>
+> </blockquote>
+> <p>— Abraham Lincoln, <cite>The Gettysburg Address</cite></p>
+> ```
 > - The quote itself is a block of text, so use `<blockquote>`.
 > - The source URL goes in the `cite` attribute.
 > - The title of the speech is a citation, so wrap it in `<cite>`.
 
 ---
 
-
-
 ### Exercise 2: Structuring Complete Blockquote with Cite
 
 **Problem:** Structure blockquote for quote from book '1984' including URL `cite` attribute and `<cite>` tag.
 
 **Expected output:**
-```text
-<blockquote cite="https://example.com/1984"><p>Big Brother is watching you.</p><footer>— George Orwell, <cite>1984</cite></footer></blockquote>
-```
-
 > [!check]- Answer
 > ```html
 > <blockquote cite="https://example.com/1984">
@@ -267,84 +260,6 @@ A simple nested blockquote showing visual indentation and attribution:
 **Problem:** Which tag should be used for short inline quotes embedded inside a paragraph instead of `<blockquote>`?
 
 **Expected output:**
-```text
-<q> (Inline Quote element).
-```
-
-> [!check]- Answer
-> ```html
-> <p>He said <q>Hello</q> and left.</p>
-> ```
->
-> **Explanation:** `<q>` automatically adds language-appropriate quotation marks around inline quotes.
-
-
-
-### Exercise 4: Structuring Complete Blockquote with Cite
-
-**Problem:** Structure blockquote for quote from book '1984' including URL `cite` attribute and `<cite>` tag.
-
-**Expected output:**
-```text
-<blockquote cite="https://example.com/1984"><p>Big Brother is watching you.</p><footer>— George Orwell, <cite>1984</cite></footer></blockquote>
-```
-
-> [!check]- Answer
-> ```html
-> <blockquote cite="https://example.com/1984">
->   <p>Big Brother is watching you.</p>
->   <footer>— George Orwell, <cite>1984</cite></footer>
-> </blockquote>
-> ```
->
-> **Explanation:** `cite` attribute holds source URL; `<cite>` tag holds work title inside quote attribution.
-
-### Exercise 5: q Tag for Inline Quotations
-
-**Problem:** Which tag should be used for short inline quotes embedded inside a paragraph instead of `<blockquote>`?
-
-**Expected output:**
-```text
-<q> (Inline Quote element).
-```
-
-> [!check]- Answer
-> ```html
-> <p>He said <q>Hello</q> and left.</p>
-> ```
->
-> **Explanation:** `<q>` automatically adds language-appropriate quotation marks around inline quotes.
-
-
-
-### Exercise 6: Structuring Complete Blockquote with Cite
-
-**Problem:** Structure blockquote for quote from book '1984' including URL `cite` attribute and `<cite>` tag.
-
-**Expected output:**
-```text
-<blockquote cite="https://example.com/1984"><p>Big Brother is watching you.</p><footer>— George Orwell, <cite>1984</cite></footer></blockquote>
-```
-
-> [!check]- Answer
-> ```html
-> <blockquote cite="https://example.com/1984">
->   <p>Big Brother is watching you.</p>
->   <footer>— George Orwell, <cite>1984</cite></footer>
-> </blockquote>
-> ```
->
-> **Explanation:** `cite` attribute holds source URL; `<cite>` tag holds work title inside quote attribution.
-
-### Exercise 7: q Tag for Inline Quotations
-
-**Problem:** Which tag should be used for short inline quotes embedded inside a paragraph instead of `<blockquote>`?
-
-**Expected output:**
-```text
-<q> (Inline Quote element).
-```
-
 > [!check]- Answer
 > ```html
 > <p>He said <q>Hello</q> and left.</p>

@@ -247,16 +247,13 @@ The `<p>` tag is the equivalent of the author hitting the "Return/Enter" key to 
 How many spaces will actually appear between Word1 and Word2 when viewed in the browser?
 
 **Expected output:**
-```text
-Exactly ONE space. HTML automatically collapses multiple spaces (and line breaks) into a single space.
-```
-
 > [!check]- Answer
+> ```text
+> Exactly ONE space. HTML automatically collapses multiple spaces (and line breaks) into a single space.
+> ```
 > - Think about how HTML handles raw formatting vs tagged formatting.
 
 ---
-
-
 
 ### Exercise 2: Paragraph Element Rules
 
@@ -267,10 +264,6 @@ Exactly ONE space. HTML automatically collapses multiple spaces (and line breaks
 4. `<h2>` 
 
 **Expected output:**
-```text
-1. <span> and 3. <strong>
-```
-
 > [!check]- Answer
 > ```text
 > 1. <span> and 3. <strong>
@@ -283,86 +276,6 @@ Exactly ONE space. HTML automatically collapses multiple spaces (and line breaks
 **Problem:** What default CSS top and bottom margin spacing do browsers apply to `<p>` elements?
 
 **Expected output:**
-```text
-1em (16px default font-size equivalent).
-```
-
-> [!check]- Answer
-> ```text
-> 1em (16px default font-size equivalent).
-> ```
->
-> **Explanation:** User-agent stylesheets apply `1em` top and bottom block margins to paragraphs.
-
-
-
-### Exercise 4: Paragraph Element Rules
-
-**Problem:** Which 2 of these elements can be nested inside a `<p>` tag?
-1. `<span>` 
-2. `<div>` 
-3. `<strong>` 
-4. `<h2>` 
-
-**Expected output:**
-```text
-1. <span> and 3. <strong>
-```
-
-> [!check]- Answer
-> ```text
-> 1. <span> and 3. <strong>
-> ```
->
-> **Explanation:** Paragraphs can contain inline phrasing content (`<span>`, `<strong>`, `<a>`), but cannot contain block containers (`<div>`, `<h2>`).
-
-### Exercise 5: Default Paragraph CSS Margins
-
-**Problem:** What default CSS top and bottom margin spacing do browsers apply to `<p>` elements?
-
-**Expected output:**
-```text
-1em (16px default font-size equivalent).
-```
-
-> [!check]- Answer
-> ```text
-> 1em (16px default font-size equivalent).
-> ```
->
-> **Explanation:** User-agent stylesheets apply `1em` top and bottom block margins to paragraphs.
-
-
-
-### Exercise 6: Paragraph Element Rules
-
-**Problem:** Which 2 of these elements can be nested inside a `<p>` tag?
-1. `<span>` 
-2. `<div>` 
-3. `<strong>` 
-4. `<h2>` 
-
-**Expected output:**
-```text
-1. <span> and 3. <strong>
-```
-
-> [!check]- Answer
-> ```text
-> 1. <span> and 3. <strong>
-> ```
->
-> **Explanation:** Paragraphs can contain inline phrasing content (`<span>`, `<strong>`, `<a>`), but cannot contain block containers (`<div>`, `<h2>`).
-
-### Exercise 7: Default Paragraph CSS Margins
-
-**Problem:** What default CSS top and bottom margin spacing do browsers apply to `<p>` elements?
-
-**Expected output:**
-```text
-1em (16px default font-size equivalent).
-```
-
 > [!check]- Answer
 > ```text
 > 1em (16px default font-size equivalent).

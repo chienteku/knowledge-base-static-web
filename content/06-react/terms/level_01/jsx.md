@@ -167,26 +167,19 @@ function Header() {
 ```
 
 **Expected output:**
-```javascript
-React.createElement("button", { id: "btn" }, "Click Me");
-```
-
 > [!check]- Answer
+> ```javascript
+> React.createElement("button", { id: "btn" }, "Click Me");
+> ```
 > - `React.createElement(tag, attributes, children)`
 
 ---
-
-
 
 ### Exercise 2: Embedding JavaScript Expressions in JSX
 
 **Problem:** Embed `user.name` and ternary `isOnline ? 'Online' : 'Offline'` inside JSX using curly braces `{}`.
 
 **Expected output:**
-```text
-function UserStatus({ user, isOnline }) { return <div><h1>{user.name}</h1><p>{isOnline ? 'Online' : 'Offline'}</p></div>; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function UserStatus({ user, isOnline }) {
@@ -206,51 +199,6 @@ function UserStatus({ user, isOnline }) { return <div><h1>{user.name}</h1><p>{is
 **Problem:** Apply inline background color `'blue'` and font size `16` to `<div>` using `style={{ backgroundColor: 'blue', fontSize: 16 }}`.
 
 **Expected output:**
-```text
-<div style={{ backgroundColor: 'blue', fontSize: 16 }}>Content</div>
-```
-
-> [!check]- Answer
-> ```javascript
-> <div style={{ backgroundColor: 'blue', fontSize: 16 }}>Content</div>
-> ```
->
-> **Explanation:** JSX inline styles accept camelCase JavaScript objects wrapped in double curly braces.
-
-
-
-### Exercise 4: Embedding JavaScript Expressions in JSX
-
-**Problem:** Embed `user.name` and ternary `isOnline ? 'Online' : 'Offline'` inside JSX using curly braces `{}`.
-
-**Expected output:**
-```text
-function UserStatus({ user, isOnline }) { return <div><h1>{user.name}</h1><p>{isOnline ? 'Online' : 'Offline'}</p></div>; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function UserStatus({ user, isOnline }) {
->   return (
->     <div>
->       <h1>{user.name}</h1>
->       <p>{isOnline ? 'Online' : 'Offline'}</p>
->     </div>
->   );
-> }
-> ```
->
-> **Explanation:** Curly braces `{}` embed dynamic JavaScript expressions inside JSX markup.
-
-### Exercise 5: Inline Style Object Syntax in JSX
-
-**Problem:** Apply inline background color `'blue'` and font size `16` to `<div>` using `style={{ backgroundColor: 'blue', fontSize: 16 }}`.
-
-**Expected output:**
-```text
-<div style={{ backgroundColor: 'blue', fontSize: 16 }}>Content</div>
-```
-
 > [!check]- Answer
 > ```javascript
 > <div style={{ backgroundColor: 'blue', fontSize: 16 }}>Content</div>

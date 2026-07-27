@@ -232,28 +232,21 @@ fruits.forEach((fruit) => {
 `<link rel="stylesheet" href="style.css">`
 
 **Expected output:**
-```html
-<pre><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
-```
-
 > [!check]- Answer
+> ```html
+> <pre><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
+> ```
 > - Replace `<` at the start with `&lt;`.
 > - Replace `>` at the end with `&gt;`.
 > - Wrap the entire line in `<pre><code>` to ensure monospacing.
 
 ---
 
-
-
 ### Exercise 2: Escaping Code Snippet
 
 **Problem:** Write HTML snippet displaying raw text `<h1>Title</h1>` using `<pre><code>` and HTML entities.
 
 **Expected output:**
-```text
-<pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
-```
-
 > [!check]- Answer
 > ```html
 > <pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
@@ -266,78 +259,6 @@ fruits.forEach((fruit) => {
 **Problem:** What font family type do browsers apply by default to `<pre>` and `<code>` elements?
 
 **Expected output:**
-```text
-Monospace font family (e.g. Courier, Consolas).
-```
-
-> [!check]- Answer
-> ```text
-> Monospace font family (e.g. Courier, Consolas).
-> ```
->
-> **Explanation:** Monospace fonts ensure uniform character width for code readability.
-
-
-
-### Exercise 4: Escaping Code Snippet
-
-**Problem:** Write HTML snippet displaying raw text `<h1>Title</h1>` using `<pre><code>` and HTML entities.
-
-**Expected output:**
-```text
-<pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
-```
-
-> [!check]- Answer
-> ```html
-> <pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
-> ```
->
-> **Explanation:** `&lt;` and `&gt;` escape angle brackets so code displays as text.
-
-### Exercise 5: pre Font Family Default
-
-**Problem:** What font family type do browsers apply by default to `<pre>` and `<code>` elements?
-
-**Expected output:**
-```text
-Monospace font family (e.g. Courier, Consolas).
-```
-
-> [!check]- Answer
-> ```text
-> Monospace font family (e.g. Courier, Consolas).
-> ```
->
-> **Explanation:** Monospace fonts ensure uniform character width for code readability.
-
-
-
-### Exercise 6: Escaping Code Snippet
-
-**Problem:** Write HTML snippet displaying raw text `<h1>Title</h1>` using `<pre><code>` and HTML entities.
-
-**Expected output:**
-```text
-<pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
-```
-
-> [!check]- Answer
-> ```html
-> <pre><code>&lt;h1&gt;Title&lt;/h1&gt;</code></pre>
-> ```
->
-> **Explanation:** `&lt;` and `&gt;` escape angle brackets so code displays as text.
-
-### Exercise 7: pre Font Family Default
-
-**Problem:** What font family type do browsers apply by default to `<pre>` and `<code>` elements?
-
-**Expected output:**
-```text
-Monospace font family (e.g. Courier, Consolas).
-```
-
 > [!check]- Answer
 > ```text
 > Monospace font family (e.g. Courier, Consolas).

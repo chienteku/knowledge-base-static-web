@@ -188,24 +188,18 @@ function FormApp() {
 }
 ```
 
+**Expected output:**
 > [!check]- Answer
 > - Because `InputField` is defined *inside* `FormApp`, a new `InputField` function reference is created on every render. When the state changes, React compares the old `<InputField />` to the new `<InputField />`. Because the function references differ, React treats them as different types, unmounting the old input (destroying focus) and mounting a new one from scratch.
 > - *Fix:* Move the `InputField` component definition outside the `FormApp` parent component, passing `value` and `setValue` as props.
 
-
 ---
-
-
 
 ### Exercise 2: Reconciliation Diffing Rules
 
 **Problem:** List 2 core rules of React Reconciliation algorithm (1. Different element types trigger full tree unmounting/re-building; 2. Keys identify persistent list items across re-orders).
 
 **Expected output:**
-```text
-1. Different element types trigger full tree unmounting; 2. Keys identify persistent list items
-```
-
 > [!check]- Answer
 > ```text
 > 1. Different element types trigger full tree unmounting; 2. Keys identify persistent list items
@@ -218,44 +212,6 @@ function FormApp() {
 **Problem:** How can you force a React component to completely unmount and reset state when `userId` changes? (Pass `key={userId}` to the component).
 
 **Expected output:**
-```text
-Pass key={userId} to the component tag
-```
-
-> [!check]- Answer
-> ```javascript
-> <UserProfile key={userId} userId={userId} />
-> ```
->
-> **Explanation:** Changing a component's `key` forces React reconciliation to discard the old instance and mount a fresh component state.
-
-
-
-### Exercise 4: Reconciliation Diffing Rules
-
-**Problem:** List 2 core rules of React Reconciliation algorithm (1. Different element types trigger full tree unmounting/re-building; 2. Keys identify persistent list items across re-orders).
-
-**Expected output:**
-```text
-1. Different element types trigger full tree unmounting; 2. Keys identify persistent list items
-```
-
-> [!check]- Answer
-> ```text
-> 1. Different element types trigger full tree unmounting; 2. Keys identify persistent list items
-> ```
->
-> **Explanation:** The diffing algorithm optimizes DOM mutations by comparing node types and keys.
-
-### Exercise 5: Resetting State via Key Prop Mutation
-
-**Problem:** How can you force a React component to completely unmount and reset state when `userId` changes? (Pass `key={userId}` to the component).
-
-**Expected output:**
-```text
-Pass key={userId} to the component tag
-```
-
 > [!check]- Answer
 > ```javascript
 > <UserProfile key={userId} userId={userId} />

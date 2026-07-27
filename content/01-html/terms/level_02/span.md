@@ -197,19 +197,16 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 `I love <div class="red">apples</div> and bananas.`
 
 **Expected output:**
-```text
-The word "apples" will be forced onto its own line, breaking the sentence into three separate lines:
-I love
-apples
-and bananas.
-```
-
 > [!check]- Answer
+> ```text
+> The word "apples" will be forced onto its own line, breaking the sentence into three separate lines:
+> I love
+> apples
+> and bananas.
+> ```
 > - `<div>` is a block element. `<span>` is an inline element.
 
 ---
-
-
 
 ### Exercise 2: Span vs Div Comparison
 
@@ -218,11 +215,6 @@ and bananas.
 2. Semantic meaning
 
 **Expected output:**
-```text
-1. span: inline, div: block
-2. Both are non-semantic generic containers
-```
-
 > [!check]- Answer
 > ```text
 > 1. span: inline, div: block
@@ -236,86 +228,6 @@ and bananas.
 **Problem:** Wrap word `'red'` in sentence `'The car is red.'` to color it red with CSS.
 
 **Expected output:**
-```text
-<p>The car is <span style="color: red;">red</span>.</p>
-```
-
-> [!check]- Answer
-> ```html
-> <p>The car is <span style="color: red;">red</span>.</p>
-> ```
->
-> **Explanation:** `<span>` allows targeting specific inline text substrings for CSS styling.
-
-
-
-### Exercise 4: Span vs Div Comparison
-
-**Problem:** Compare `<span>` vs `<div>` across:
-1. Default display mode
-2. Semantic meaning
-
-**Expected output:**
-```text
-1. span: inline, div: block
-2. Both are non-semantic generic containers
-```
-
-> [!check]- Answer
-> ```text
-> 1. span: inline, div: block
-> 2. Both are non-semantic generic containers
-> ```
->
-> **Explanation:** `<span>` is generic inline wrapper; `<div>` is generic block wrapper.
-
-### Exercise 5: Styling Text Substring
-
-**Problem:** Wrap word `'red'` in sentence `'The car is red.'` to color it red with CSS.
-
-**Expected output:**
-```text
-<p>The car is <span style="color: red;">red</span>.</p>
-```
-
-> [!check]- Answer
-> ```html
-> <p>The car is <span style="color: red;">red</span>.</p>
-> ```
->
-> **Explanation:** `<span>` allows targeting specific inline text substrings for CSS styling.
-
-
-
-### Exercise 6: Span vs Div Comparison
-
-**Problem:** Compare `<span>` vs `<div>` across:
-1. Default display mode
-2. Semantic meaning
-
-**Expected output:**
-```text
-1. span: inline, div: block
-2. Both are non-semantic generic containers
-```
-
-> [!check]- Answer
-> ```text
-> 1. span: inline, div: block
-> 2. Both are non-semantic generic containers
-> ```
->
-> **Explanation:** `<span>` is generic inline wrapper; `<div>` is generic block wrapper.
-
-### Exercise 7: Styling Text Substring
-
-**Problem:** Wrap word `'red'` in sentence `'The car is red.'` to color it red with CSS.
-
-**Expected output:**
-```text
-<p>The car is <span style="color: red;">red</span>.</p>
-```
-
 > [!check]- Answer
 > ```html
 > <p>The car is <span style="color: red;">red</span>.</p>

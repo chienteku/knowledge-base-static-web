@@ -188,16 +188,13 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 **Problem:** How does a screen reader (software for blind users) treat `<strong>` differently than a `<span>` styled to look bold with CSS?
 
 **Expected output:**
-```text
-The screen reader will change its vocal inflection/tone to announce the `<strong>` text with importance. It will read the `<span>` text exactly like normal, plain text, ignoring the visual CSS bolding entirely.
-```
-
 > [!check]- Answer
+> ```text
+> The screen reader will change its vocal inflection/tone to announce the `<strong>` text with importance. It will read the `<span>` text exactly like normal, plain text, ignoring the visual CSS bolding entirely.
+> ```
 > - HTML is for meaning. CSS is for eyeballs. Screen readers don't have eyeballs!
 
 ---
-
-
 
 ### Exercise 2: Contextual Semantic Selection
 
@@ -207,12 +204,6 @@ The screen reader will change its vocal inflection/tone to announce the `<strong
 3. Mandatory field (`<strong>`)
 
 **Expected output:**
-```text
-1. <strong>
-2. <em>
-3. <strong>
-```
-
 > [!check]- Answer
 > ```text
 > 1. <strong>
@@ -227,96 +218,6 @@ The screen reader will change its vocal inflection/tone to announce the `<strong
 **Problem:** Can CSS override `<strong>` font-weight from bold to normal? (Yes/No).
 
 **Expected output:**
-```text
-Yes. CSS font-weight: normal overrides visual bolding without altering semantic importance.
-```
-
-> [!check]- Answer
-> ```css
-> strong {
->   font-weight: normal;
-> }
-> ```
->
-> **Explanation:** CSS controls visual appearance while HTML tags dictate semantic meaning.
-
-
-
-### Exercise 4: Contextual Semantic Selection
-
-**Problem:** Select `<strong>` or `<em>` for:
-1. Warning: Password required (`<strong>`)
-2. I *love* coding (`<em>`)
-3. Mandatory field (`<strong>`)
-
-**Expected output:**
-```text
-1. <strong>
-2. <em>
-3. <strong>
-```
-
-> [!check]- Answer
-> ```text
-> 1. <strong>
-> 2. <em>
-> 3. <strong>
-> ```
->
-> **Explanation:** `<strong>` denotes mandatory/urgent importance; `<em>` denotes stress emphasis.
-
-### Exercise 5: CSS Styling Override
-
-**Problem:** Can CSS override `<strong>` font-weight from bold to normal? (Yes/No).
-
-**Expected output:**
-```text
-Yes. CSS font-weight: normal overrides visual bolding without altering semantic importance.
-```
-
-> [!check]- Answer
-> ```css
-> strong {
->   font-weight: normal;
-> }
-> ```
->
-> **Explanation:** CSS controls visual appearance while HTML tags dictate semantic meaning.
-
-
-
-### Exercise 6: Contextual Semantic Selection
-
-**Problem:** Select `<strong>` or `<em>` for:
-1. Warning: Password required (`<strong>`)
-2. I *love* coding (`<em>`)
-3. Mandatory field (`<strong>`)
-
-**Expected output:**
-```text
-1. <strong>
-2. <em>
-3. <strong>
-```
-
-> [!check]- Answer
-> ```text
-> 1. <strong>
-> 2. <em>
-> 3. <strong>
-> ```
->
-> **Explanation:** `<strong>` denotes mandatory/urgent importance; `<em>` denotes stress emphasis.
-
-### Exercise 7: CSS Styling Override
-
-**Problem:** Can CSS override `<strong>` font-weight from bold to normal? (Yes/No).
-
-**Expected output:**
-```text
-Yes. CSS font-weight: normal overrides visual bolding without altering semantic importance.
-```
-
 > [!check]- Answer
 > ```css
 > strong {

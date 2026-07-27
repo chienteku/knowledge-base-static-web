@@ -139,32 +139,25 @@ Write the SurrealQL query to:
 3. Calculate the count of products in each category as `total_products`.
 
 **Expected output:**
-```sql
-SELECT 
-  categories AS category, 
-  count() AS total_products 
-FROM products 
-SPLIT categories 
-GROUP BY category;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   categories AS category, 
+>   count() AS total_products 
+> FROM products 
+> SPLIT categories 
+> GROUP BY category;
+> ```
 > - Apply `SPLIT categories` before the `GROUP BY` clause.
 > - Group by the split category field.
 
 ---
-
-
 
 ### Exercise 2: Un-Nesting Array Elements with SPLIT AT
 
 **Problem:** Un-nest `tags` array on `article` table so each tag element returns as an independent record row.
 
 **Expected output:**
-```text
-SELECT * FROM article SPLIT tags;
-```
-
 > [!check]- Answer
 > ```surrealql
 > SELECT * FROM article SPLIT tags;
@@ -177,10 +170,6 @@ SELECT * FROM article SPLIT tags;
 **Problem:** Split `tags` array on `article` table and group by `tags` to count occurrences per tag.
 
 **Expected output:**
-```text
-SELECT tags AS tag, count() FROM article SPLIT tags GROUP BY tag;
-```
-
 > [!check]- Answer
 > ```surrealql
 > SELECT tags AS tag, count() FROM article SPLIT tags GROUP BY tag;

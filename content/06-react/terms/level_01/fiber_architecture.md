@@ -184,20 +184,17 @@ function Timer() {
 // - Line B (inside useEffect) runs during the Commit Phase (after changes are written to the DOM).
 ```
 
----
-
+**Expected output:**
 > [!check]- Answer
 > - Complete problem steps as outlined above.
+
+---
 
 ### Exercise 2: Fiber Work Phases
 
 **Problem:** List 2 primary phases of React Fiber architecture (1. Render/Reconciliation Phase: interruptible work; 2. Commit Phase: synchronous DOM updates).
 
 **Expected output:**
-```text
-1. Render/Reconciliation Phase (interruptible); 2. Commit Phase (synchronous DOM mutations)
-```
-
 > [!check]- Answer
 > ```text
 > 1. Render/Reconciliation Phase (interruptible); 2. Commit Phase (synchronous DOM mutations)
@@ -210,44 +207,6 @@ function Timer() {
 **Problem:** What is Double-Buffering in React Fiber? (React maintains `current` tree visible on screen and `workInProgress` tree built in memory).
 
 **Expected output:**
-```text
-React maintains current tree visible on screen and workInProgress tree built in memory
-```
-
-> [!check]- Answer
-> ```text
-> React maintains current tree visible on screen and workInProgress tree built in memory
-> ```
->
-> **Explanation:** Double-buffering prevents incomplete or flickering UI frames from being displayed to users.
-
-
-
-### Exercise 4: Fiber Work Phases
-
-**Problem:** List 2 primary phases of React Fiber architecture (1. Render/Reconciliation Phase: interruptible work; 2. Commit Phase: synchronous DOM updates).
-
-**Expected output:**
-```text
-1. Render/Reconciliation Phase (interruptible); 2. Commit Phase (synchronous DOM mutations)
-```
-
-> [!check]- Answer
-> ```text
-> 1. Render/Reconciliation Phase (interruptible); 2. Commit Phase (synchronous DOM mutations)
-> ```
->
-> **Explanation:** Fiber splits work into an interruptible calculation phase and a synchronous DOM commit phase.
-
-### Exercise 5: Fiber Tree Double-Buffering
-
-**Problem:** What is Double-Buffering in React Fiber? (React maintains `current` tree visible on screen and `workInProgress` tree built in memory).
-
-**Expected output:**
-```text
-React maintains current tree visible on screen and workInProgress tree built in memory
-```
-
 > [!check]- Answer
 > ```text
 > React maintains current tree visible on screen and workInProgress tree built in memory

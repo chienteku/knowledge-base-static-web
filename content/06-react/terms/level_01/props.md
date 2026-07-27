@@ -165,35 +165,28 @@ function Header({ title, onUpdate }) {
 **Problem:** Write a functional component called `Button` that accepts two props: `color` and `text`. It should return a `<button>` element where the text matches the prop, and the inline style matches the color prop. Use destructuring.
 
 **Expected output:**
-```javascript
-function Button({ color, text }) {
-  return (
-    <button style={{ backgroundColor: color }}>
-      {text}
-    </button>
-  );
-}
-
-// Usage: <Button color="red" text="Delete" />
-```
-
 > [!check]- Answer
+> ```javascript
+> function Button({ color, text }) {
+>   return (
+>     <button style={{ backgroundColor: color }}>
+>       {text}
+>     </button>
+>   );
+> }
+> 
+> // Usage: <Button color="red" text="Delete" />
+> ```
 > - Destructure `{ color, text }` in the arguments.
 > - Inline styles in React require double curly braces `style={{ property: value }}`.
 
 ---
-
-
 
 ### Exercise 2: Destructuring Props with Default Values
 
 **Problem:** Create `Avatar` component destructuring `src` and `size` (defaulting to `50`).
 
 **Expected output:**
-```text
-function Avatar({ src, size = 50 }) { return <img src={src} width={size} height={size} />; }
-```
-
 > [!check]- Answer
 > ```javascript
 > function Avatar({ src, size = 50 }) {
@@ -208,10 +201,6 @@ function Avatar({ src, size = 50 }) { return <img src={src} width={size} height=
 **Problem:** In React, do props flow down from Parent to Child, or up from Child to Parent? (Down from Parent to Child).
 
 **Expected output:**
-```text
-Down from Parent to Child (Unidirectional data flow)
-```
-
 > [!check]- Answer
 > ```text
 > Down from Parent to Child (Unidirectional data flow)
@@ -219,41 +208,6 @@ Down from Parent to Child (Unidirectional data flow)
 >
 > **Explanation:** Props flow top-down through component trees.
 
-
-
-### Exercise 4: Destructuring Props with Default Values
-
-**Problem:** Create `Avatar` component destructuring `src` and `size` (defaulting to `50`).
-
-**Expected output:**
-```text
-function Avatar({ src, size = 50 }) { return <img src={src} width={size} height={size} />; }
-```
-
-> [!check]- Answer
-> ```javascript
-> function Avatar({ src, size = 50 }) {
->   return <img src={src} width={size} height={size} />;
-> }
-> ```
->
-> **Explanation:** Destructuring parameters allows assigning clean fallback default prop values.
-
-### Exercise 5: Unidirectional Data Flow Prop Direction
-
-**Problem:** In React, do props flow down from Parent to Child, or up from Child to Parent? (Down from Parent to Child).
-
-**Expected output:**
-```text
-Down from Parent to Child (Unidirectional data flow)
-```
-
-> [!check]- Answer
-> ```text
-> Down from Parent to Child (Unidirectional data flow)
-> ```
->
-> **Explanation:** Props flow top-down through component trees.
 
 ## 7. Related Terms
 - [Render Purity](./render_purity.md) — Why props must remain read-only snapshots during render.

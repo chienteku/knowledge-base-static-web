@@ -196,27 +196,20 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 **Problem:** The `<canvas>` just renders raw colored pixels on the screen. Screen readers cannot "see" pixels. How can you make a canvas accessible to a blind user?
 
 **Expected output:**
-```text
-Any text or HTML placed *between* the `<canvas>` and `</canvas>` tags acts as fallback content! Screen readers will read this text, while sighted users will only see the drawn graphics.
-Example: `<canvas>A graph showing a 20% increase in sales.</canvas>`
-```
-
 > [!check]- Answer
+> ```text
+> Any text or HTML placed *between* the `<canvas>` and `</canvas>` tags acts as fallback content! Screen readers will read this text, while sighted users will only see the drawn graphics.
+> Example: `<canvas>A graph showing a 20% increase in sales.</canvas>`
+> ```
 > - Remember that `<canvas>` is not a void element; it has a closing tag. What happens if you put text inside it?
 
 ---
-
-
 
 ### Exercise 2: Drawing Rectangle on Canvas 2D Context
 
 **Problem:** Write JavaScript code getting 2D context of `<canvas id="cv">` and drawing a blue filled rectangle at (10, 10) sized 100x50.
 
 **Expected output:**
-```text
-const ctx = document.getElementById('cv').getContext('2d'); ctx.fillStyle = 'blue'; ctx.fillRect(10, 10, 100, 50);
-```
-
 > [!check]- Answer
 > ```javascript
 > const canvas = document.getElementById('cv');
@@ -232,84 +225,6 @@ const ctx = document.getElementById('cv').getContext('2d'); ctx.fillStyle = 'blu
 **Problem:** Compare Canvas vs SVG rendering modes (Raster/Bitmap vs Vector).
 
 **Expected output:**
-```text
-Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).
-```
-
-> [!check]- Answer
-> ```text
-> Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).
-> ```
->
-> **Explanation:** Canvas renders pixels procedurally; SVG manages XML vector DOM node trees.
-
-
-
-### Exercise 4: Drawing Rectangle on Canvas 2D Context
-
-**Problem:** Write JavaScript code getting 2D context of `<canvas id="cv">` and drawing a blue filled rectangle at (10, 10) sized 100x50.
-
-**Expected output:**
-```text
-const ctx = document.getElementById('cv').getContext('2d'); ctx.fillStyle = 'blue'; ctx.fillRect(10, 10, 100, 50);
-```
-
-> [!check]- Answer
-> ```javascript
-> const canvas = document.getElementById('cv');
-> const ctx = canvas.getContext('2d');
-> ctx.fillStyle = 'blue';
-> ctx.fillRect(10, 10, 100, 50);
-> ```
->
-> **Explanation:** `getContext('2d')` provides the 2D rendering API for drawing canvas shapes.
-
-### Exercise 5: Canvas vs SVG Comparison
-
-**Problem:** Compare Canvas vs SVG rendering modes (Raster/Bitmap vs Vector).
-
-**Expected output:**
-```text
-Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).
-```
-
-> [!check]- Answer
-> ```text
-> Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).
-> ```
->
-> **Explanation:** Canvas renders pixels procedurally; SVG manages XML vector DOM node trees.
-
-
-
-### Exercise 6: Drawing Rectangle on Canvas 2D Context
-
-**Problem:** Write JavaScript code getting 2D context of `<canvas id="cv">` and drawing a blue filled rectangle at (10, 10) sized 100x50.
-
-**Expected output:**
-```text
-const ctx = document.getElementById('cv').getContext('2d'); ctx.fillStyle = 'blue'; ctx.fillRect(10, 10, 100, 50);
-```
-
-> [!check]- Answer
-> ```javascript
-> const canvas = document.getElementById('cv');
-> const ctx = canvas.getContext('2d');
-> ctx.fillStyle = 'blue';
-> ctx.fillRect(10, 10, 100, 50);
-> ```
->
-> **Explanation:** `getContext('2d')` provides the 2D rendering API for drawing canvas shapes.
-
-### Exercise 7: Canvas vs SVG Comparison
-
-**Problem:** Compare Canvas vs SVG rendering modes (Raster/Bitmap vs Vector).
-
-**Expected output:**
-```text
-Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).
-```
-
 > [!check]- Answer
 > ```text
 > Canvas is Raster/Bitmap pixel-based (ideal for games/high-particle animations); SVG is Vector DOM-based (ideal for scalable resolution-independent graphics/charts).

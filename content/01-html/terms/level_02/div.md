@@ -210,26 +210,19 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 **Problem:** If you write `<div>Hello</div>` in an HTML file with no CSS, how will it look different from `<p>Hello</p>`?
 
 **Expected output:**
-```text
-To the naked eye, it will look almost identical. The only difference is that the browser automatically adds vertical spacing (margin) above and below a `<p>`, but adds absolutely no styling or spacing to a `<div>`.
-```
-
 > [!check]- Answer
+> ```text
+> To the naked eye, it will look almost identical. The only difference is that the browser automatically adds vertical spacing (margin) above and below a `<p>`, but adds absolutely no styling or spacing to a `<div>`.
+> ```
 > - Remember that `<div>` has zero semantic meaning and zero default styling (other than being a block).
 
 ---
-
-
 
 ### Exercise 2: Refactoring Divitis to Semantic HTML
 
 **Problem:** Refactor `<div class="footer"><p>Copyright 2026</p></div>` to semantic HTML.
 
 **Expected output:**
-```text
-<footer><p>Copyright 2026</p></footer>
-```
-
 > [!check]- Answer
 > ```html
 > <footer>
@@ -244,88 +237,6 @@ To the naked eye, it will look almost identical. The only difference is that the
 **Problem:** When IS a `<div>` element the correct semantic choice in HTML?
 
 **Expected output:**
-```text
-When grouping elements purely for CSS styling/layout purposes (e.g. wrapper grid container) where no semantic tag fits.
-```
-
-> [!check]- Answer
-> ```html
-> <div class="grid-wrapper">
->   <article>Post 1</article>
->   <article>Post 2</article>
-> </div>
-> ```
->
-> **Explanation:** `<div>` is the designated element for non-semantic CSS layout grouping.
-
-
-
-### Exercise 4: Refactoring Divitis to Semantic HTML
-
-**Problem:** Refactor `<div class="footer"><p>Copyright 2026</p></div>` to semantic HTML.
-
-**Expected output:**
-```text
-<footer><p>Copyright 2026</p></footer>
-```
-
-> [!check]- Answer
-> ```html
-> <footer>
->   <p>Copyright 2026</p>
-> </footer>
-> ```
->
-> **Explanation:** Replace generic `<div>` wrappers with semantic layout elements (`<header>`, `<footer>`, `<main>`).
-
-### Exercise 5: Valid Div Usage
-
-**Problem:** When IS a `<div>` element the correct semantic choice in HTML?
-
-**Expected output:**
-```text
-When grouping elements purely for CSS styling/layout purposes (e.g. wrapper grid container) where no semantic tag fits.
-```
-
-> [!check]- Answer
-> ```html
-> <div class="grid-wrapper">
->   <article>Post 1</article>
->   <article>Post 2</article>
-> </div>
-> ```
->
-> **Explanation:** `<div>` is the designated element for non-semantic CSS layout grouping.
-
-
-
-### Exercise 6: Refactoring Divitis to Semantic HTML
-
-**Problem:** Refactor `<div class="footer"><p>Copyright 2026</p></div>` to semantic HTML.
-
-**Expected output:**
-```text
-<footer><p>Copyright 2026</p></footer>
-```
-
-> [!check]- Answer
-> ```html
-> <footer>
->   <p>Copyright 2026</p>
-> </footer>
-> ```
->
-> **Explanation:** Replace generic `<div>` wrappers with semantic layout elements (`<header>`, `<footer>`, `<main>`).
-
-### Exercise 7: Valid Div Usage
-
-**Problem:** When IS a `<div>` element the correct semantic choice in HTML?
-
-**Expected output:**
-```text
-When grouping elements purely for CSS styling/layout purposes (e.g. wrapper grid container) where no semantic tag fits.
-```
-
 > [!check]- Answer
 > ```html
 > <div class="grid-wrapper">

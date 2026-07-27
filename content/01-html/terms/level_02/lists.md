@@ -245,40 +245,33 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 
 ## 6. Practice Exercises
 
-### Exercise 1: Nested Lists
+### Exercise 1: Nested Lists Syntax
 
 **Problem:** How would you write the HTML for a bulleted list of two countries (USA, Japan), where USA has a nested bulleted list of two states (Texas, California)?
 
 **Expected output:**
-```html
-<ul>
-  <li>
-    USA
-    <ul>
-      <li>Texas</li>
-      <li>California</li>
-    </ul>
-  </li>
-  <li>Japan</li>
-</ul>
-```
-
 > [!check]- Answer
+> ```html
+> <ul>
+>   <li>
+>     USA
+>     <ul>
+>       <li>Texas</li>
+>       <li>California</li>
+>     </ul>
+>   </li>
+>   <li>Japan</li>
+> </ul>
+> ```
 > - The nested `<ul>` must go *inside* the `<li>` of the parent item, not outside of it!
 
 ---
-
-
 
 ### Exercise 2: Structuring Nested Lists
 
 **Problem:** Structure an unordered list `Fruits` containing nested sub-list with `Apples` and `Bananas`.
 
 **Expected output:**
-```text
-<ul><li>Fruits<ul><li>Apples</li><li>Bananas</li></ul></li></ul>
-```
-
 > [!check]- Answer
 > ```html
 > <ul>
@@ -298,100 +291,6 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 **Problem:** Which attribute on `<ol>` reverses number ordering (e.g. 3, 2, 1)?
 
 **Expected output:**
-```text
-reversed attribute
-```
-
-> [!check]- Answer
-> ```html
-> <ol reversed>
->   <li>Top 1</li>
->   <li>Top 2</li>
->   <li>Top 3</li>
-> </ol>
-> ```
->
-> **Explanation:** `reversed` attribute counts ordered lists backwards.
-
-
-
-### Exercise 4: Structuring Nested Lists
-
-**Problem:** Structure an unordered list `Fruits` containing nested sub-list with `Apples` and `Bananas`.
-
-**Expected output:**
-```text
-<ul><li>Fruits<ul><li>Apples</li><li>Bananas</li></ul></li></ul>
-```
-
-> [!check]- Answer
-> ```html
-> <ul>
->   <li>Fruits
->     <ul>
->       <li>Apples</li>
->       <li>Bananas</li>
->     </ul>
->   </li>
-> </ul>
-> ```
->
-> **Explanation:** Nested lists must be placed inside an `<li>` element of the parent list.
-
-### Exercise 5: Reversing Ordered List Numbers
-
-**Problem:** Which attribute on `<ol>` reverses number ordering (e.g. 3, 2, 1)?
-
-**Expected output:**
-```text
-reversed attribute
-```
-
-> [!check]- Answer
-> ```html
-> <ol reversed>
->   <li>Top 1</li>
->   <li>Top 2</li>
->   <li>Top 3</li>
-> </ol>
-> ```
->
-> **Explanation:** `reversed` attribute counts ordered lists backwards.
-
-
-
-### Exercise 6: Structuring Nested Lists
-
-**Problem:** Structure an unordered list `Fruits` containing nested sub-list with `Apples` and `Bananas`.
-
-**Expected output:**
-```text
-<ul><li>Fruits<ul><li>Apples</li><li>Bananas</li></ul></li></ul>
-```
-
-> [!check]- Answer
-> ```html
-> <ul>
->   <li>Fruits
->     <ul>
->       <li>Apples</li>
->       <li>Bananas</li>
->     </ul>
->   </li>
-> </ul>
-> ```
->
-> **Explanation:** Nested lists must be placed inside an `<li>` element of the parent list.
-
-### Exercise 7: Reversing Ordered List Numbers
-
-**Problem:** Which attribute on `<ol>` reverses number ordering (e.g. 3, 2, 1)?
-
-**Expected output:**
-```text
-reversed attribute
-```
-
 > [!check]- Answer
 > ```html
 > <ol reversed>
