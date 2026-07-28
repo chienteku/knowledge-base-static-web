@@ -172,47 +172,103 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Loop Control Flow Divergence with `!`
+### Exercise 2: The Never Type Enabling Diverging `match` Arms
 
-**Problem:** Demonstrate using `continue` inside match arms where arms coerce into generic type `T` due to never type `!` divergence.
+**Problem:**
+In Rust, every arm of a `match` expression must have the same type. The Never Type (`!`) is special: it coerces into *any* type, so a diverging arm (one that panics, breaks, continues, or returns) is accepted by the compiler even if the other arms produce a concrete value.
+
+Write a `loop` that reads strings from a hard-coded list and parses each as a `u32`. Use a `match` where:
+- `Ok(n)` yields the parsed number.
+- `Err(_)` calls `continue` (skipping to the next iteration).
+- A value of `0` causes `break`.
+
+Print each successfully parsed non-zero number.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Parsed: 42
+> Parsed: 7
+> Zero encountered — stopping.
 > ```
-> Parsed num: 42
-> ```
+>
+> - **Hint 1:** `continue` and `break` both have type `!`. Inside a `match` that must produce a `u32`, the arm `Err(_) => continue` is accepted because `!` silently coerces to `u32` (the compiler knows the arm never actually produces a `u32`).
+> - **Hint 2:** The list can be a `&[&str]` array literal iterated with `.iter()`. You need a `'outer` label on the loop if you use nested loops, but a single loop suffices here.
+> - **Hint 3:** Check the parsed `u32` *after* the match: `if n == 0 { println!(...); break; }` — or handle `0` as its own arm that calls `break` directly (which also has type `!`).
+>
 > ```rust
 > fn main() {
->     let input = "42";
->     let num: u32 = match input.parse() {
->         Ok(n) => n,
->         Err(_) => continue, // Diverges as !
->     };
->     println!("Parsed num: {}", num);
+>     let inputs = ["42", "bad", "7", "also_bad", "0", "99"];
+>     let mut iter = inputs.iter();
+>
+>     loop {
+>         let Some(raw) = iter.next() else { break };
+>
+>         // Both `continue` and `break` have type `!`, so they satisfy
+>         // the u32 return type the compiler expects from every arm.
+>         let n: u32 = match raw.parse() {
+>             Ok(0)    => { println!("Zero encountered — stopping."); break }
+>             Ok(n)    => n,
+>             Err(_)   => continue, // ← type is !, coerces to u32
+>         };
+>
+>         println!("Parsed: {}", n);
+>     }
 > }
 > ```
 >
-> **Explanation:** The never type `!` coercible into any type allows `break`, `continue`, `return`, and `panic!` in match expressions.
+> **Explanation:**
+> The Never Type is why Rust allows you to put `continue`, `break`, `return`, `panic!`, or any diverging expression inside a `match` arm that is otherwise expected to produce a concrete value. The compiler's type system says: "this arm diverges — it will never actually hand back a value — so it trivially satisfies whatever type the other arms produce." Without `!`, you'd need to restructure the code into nested `if let` / `else` chains to avoid type mismatches.
 
 ---
 
-### Exercise 3: Diverging Function Signatures
+### Exercise 3: Diverging Functions as a Recovery Pattern
 
-**Problem:** Write a diverging function `fn fatal_error(msg: &str) -> !` executing `panic!()`.
+**Problem:**
+Write a `fn fatal_error(msg: &str) -> !` that panics with the given message, then use it inside a `match` as the error arm — demonstrating that `-> !` coerces into any return type.
+
+Specifically:
+1. Write `fatal_error`.
+2. Write a function `parse_port(s: &str) -> u16` that parses `s` as a `u16`. On failure, call `fatal_error("invalid port")` instead of returning an error.
+3. In `main`, call `parse_port("8080")` and print the result, then show that calling `parse_port("bad")` would diverge (comment it out with an explanation).
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Listening on port: 8080
 > ```
-> Diverging function compiled
-> ```
+>
+> - **Hint 1:** `fn fatal_error(msg: &str) -> !` is declared with `-> !` in place of the return type. The body must *never return* — `panic!(...)` satisfies this.
+> - **Hint 2:** Inside `parse_port`, the match arm `Err(_) => fatal_error("invalid port")` has type `!`. Because `!` coerces to any type — including `u16` — the compiler accepts it as a valid arm for the `Ok(n) => n` arm that produces `u16`.
+> - **Hint 3:** This pattern is common in CLI tools and startup code where a configuration error is truly unrecoverable. The `-> !` signature advertises to callers that the function is an execution terminator, not a normal function.
+>
 > ```rust
-> fn fatal_error(msg: &str) -> ! { panic!("{}", msg); }
+> // `-> !` means this function NEVER returns to its caller.
+> // The panic macro itself has type `!`, satisfying the return type.
+> fn fatal_error(msg: &str) -> ! {
+>     panic!("Fatal: {}", msg);
+> }
+>
+> fn parse_port(s: &str) -> u16 {
+>     // The `Err` arm calls `fatal_error` which has type `!`.
+>     // `!` coerces to `u16`, so both arms satisfy the expected return type.
+>     match s.parse::<u16>() {
+>         Ok(port) => port,
+>         Err(_)   => fatal_error("invalid port: expected a number 0–65535"),
+>     }
+> }
+>
 > fn main() {
->     println!("Diverging function compiled");
+>     let port = parse_port("8080");
+>     println!("Listening on port: {}", port);
+>
+>     // Uncommenting the line below would diverge (panic) instead of returning:
+>     // let _ = parse_port("bad");
 > }
 > ```
 >
-> **Explanation:** `-> !` indicates functions that never return to their caller.
+> **Explanation:**
+> A function annotated `-> !` is called a *diverging function*. It is part of the type system, not just a documentation convention. The compiler understands that any code after a call to a diverging function is unreachable and will not generate dead-code warnings for it. This is also why `loop {}` has type `!` (it never terminates) and why `std::process::exit()` returns `!`. The coercibility of `!` to any type is what makes diverging arms in `match` expressions work without special-casing them in the compiler.
 
 ---
 

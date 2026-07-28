@@ -196,22 +196,67 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Testing Division by Zero Panics
+### Exercise 3: Testing Division-by-Zero with `#[should_panic]`
 
-**Problem:** Test integer division by zero using `#[should_panic]`.
+**Problem:**
+Integer division by zero in Rust panics at runtime with the message `"attempt to divide by zero"`. Write a test that verifies this behaviour.
+
+Write a complete module (suitable for pasting into a `src/lib.rs` or `src/main.rs`) containing:
+1. A function `safe_divide(a: u32, b: u32) -> u32` that simply returns `a / b` (no guard).
+2. A passing test `test_normal_division` that verifies `safe_divide(10, 2) == 5`.
+3. A `#[should_panic]` test `test_div_by_zero` that calls `safe_divide(1, 0)`.
+4. The same test but with `#[should_panic(expected = "divide by zero")]` — show what substring of the panic message it matches.
+
+Then answer: **what is the risk of using `#[should_panic]` *without* an `expected` string?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> running 3 tests
+> test tests::test_normal_division ... ok
+> test tests::test_div_by_zero ... ok
+> test tests::test_div_by_zero_exact ... ok
+> test result: ok. 3 passed; 0 failed
 > ```
-> Div zero panic test verified
-> ```
+>
+> - **Hint 1:** Integer division by zero in Rust panics with `"attempt to divide by zero"`. The `expected` string in `#[should_panic(expected = "...")]` is a *substring check* \u2014 `"divide by zero"` matches because it appears inside `"attempt to divide by zero"`.
+> - **Hint 2:** The `#[should_panic]` attribute must be placed *after* `#[test]` (or before \u2014 order doesn't matter, but after is conventional). Both attributes must be present: `#[should_panic]` alone without `#[test]` has no effect on test execution.
+> - **Hint 3:** `safe_divide(0, 0)` also panics with the same message. Only the presence of a panic (not the specific inputs) matters for `#[should_panic]`. The `expected` string is what lets you distinguish "panicked for the right reason" from "panicked for a completely different bug".
+>
 > ```rust
-> fn main() {
->     println!("Div zero panic test verified");
+> fn safe_divide(a: u32, b: u32) -> u32 {
+>     a / b // panics if b == 0: "attempt to divide by zero"
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>
+>     #[test]
+>     fn test_normal_division() {
+>         assert_eq!(safe_divide(10, 2), 5);
+>     }
+>
+>     // Passes because safe_divide(1, 0) panics.
+>     // Fails if safe_divide somehow returns without panicking.
+>     #[test]
+>     #[should_panic]
+>     fn test_div_by_zero() {
+>         safe_divide(1, 0);
+>     }
+>
+>     // Same test, but stricter: verifies the panic message contains "divide by zero".
+>     // Full Rust panic message is "attempt to divide by zero".
+>     #[test]
+>     #[should_panic(expected = "divide by zero")]
+>     fn test_div_by_zero_exact() {
+>         safe_divide(1, 0);
+>     }
 > }
 > ```
 >
-> **Explanation:** `#[should_panic]` validates expected panic failures in bounds checks and math zero conditions.
+> **Answer to the `expected` risk question:**
+> Without `expected`, `#[should_panic]` passes for **any panic** \u2014 even a completely unrelated one. If someone refactors `safe_divide` and accidentally introduces an `unwrap()` on an unrelated `None` value, the test still passes because the function panicked. With `expected = "divide by zero"`, that accidental `unwrap` panic would produce a message that doesn't contain the expected substring, and the test would fail with: `note: panic did not contain expected string`. This makes `expected` the difference between "some panic happened" and "the right panic happened for the right reason".
 
 ---
 

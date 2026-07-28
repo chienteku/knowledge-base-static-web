@@ -179,22 +179,68 @@ fn main() {
 
 ---
 
-### Exercise 3: Standard Prelude Default Imports
+### Exercise 3: What Needs `use` and What Doesn't?
 
-**Problem:** Name 5 items automatically imported into every Rust file via standard prelude (e.g. `Option`, `Result`, `Vec`, `String`, `Box`).
+**Problem:**
+The prelude makes a small curated set of items automatically available in every Rust file. Everything else in `std` requires an explicit `use`. A common beginner mistake is assuming "it's in std, so I can use it without importing it."
+
+For each item below, predict: **does it require a `use` statement, or is it in the prelude?**
+
+| Item | Requires `use`? |
+|---|---|
+| `Option<T>` | ? |
+| `Vec<T>` | ? |
+| `HashMap<K, V>` | ? |
+| `String` | ? |
+| `BTreeMap<K, V>` | ? |
+| `Box<T>` | ? |
+| `std::cmp::Ordering` | ? |
+| `Iterator` trait | ? |
+| `Write` trait (`std::io::Write`) | ? |
+| `ToString` trait | ? |
+
+Then write a program that uses all of the following **without any `use` statement**: `Vec<i32>`, `String`, `Box<i32>`, `Option<i32>`, and `ToString::to_string`. Then add the appropriate `use` for `HashMap` and show it compiles.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> vec: [1, 2, 3], s: hello, boxed: 42, opt: Some(7), map size: 2
 > ```
-> Prelude items: Option, Result, Vec, String, Box
-> ```
+>
+> | Item | Requires `use`? |
+> |---|---|
+> | `Option<T>` | ❌ No — prelude |
+> | `Vec<T>` | ❌ No — prelude |
+> | `HashMap<K, V>` | ✅ Yes — `use std::collections::HashMap` |
+> | `String` | ❌ No — prelude |
+> | `BTreeMap<K, V>` | ✅ Yes — `use std::collections::BTreeMap` |
+> | `Box<T>` | ❌ No — prelude |
+> | `std::cmp::Ordering` | ✅ Yes |
+> | `Iterator` trait | ❌ No — prelude (the trait methods are available) |
+> | `Write` trait (`std::io::Write`) | ✅ Yes — needed to call `.write_all()` etc. |
+> | `ToString` trait | ❌ No — prelude (`.to_string()` works without importing it) |
+>
 > ```rust
+> // No `use` statement needed for Vec, String, Box, Option, ToString.
+> // All of these compile purely on the prelude.
+> use std::collections::HashMap; // HashMap is NOT in the prelude — must import.
+>
 > fn main() {
->     println!("Prelude items: Option, Result, Vec, String, Box");
+>     let v: Vec<i32> = vec![1, 2, 3];        // Vec: prelude
+>     let s: String = "hello".to_string();     // String + ToString: prelude
+>     let b: Box<i32> = Box::new(42);          // Box: prelude
+>     let o: Option<i32> = Some(7);            // Option: prelude
+>
+>     let mut map: HashMap<&str, i32> = HashMap::new(); // HashMap: explicit use
+>     map.insert("a", 1);
+>     map.insert("b", 2);
+>
+>     println!("vec: {:?}, s: {}, boxed: {}, opt: {:?}, map size: {}", v, s, b, o, map.len());
 > }
 > ```
 >
-> **Explanation:** The standard prelude automatically imports ubiquitous types into every Rust module.
+> **Explanation:**
+> The prelude contains only the most universally needed items — the ones that would be tedious and noisy to import in virtually every Rust file. `HashMap` is very common but not *universal* (many programs don't need it), so it's in `std::collections` and requires explicit import. The design choice is deliberate: items in the prelude must justify their namespace pollution across every single Rust file that ever gets written.
 
 ---
 

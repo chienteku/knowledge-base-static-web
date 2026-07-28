@@ -176,22 +176,59 @@ struct Wrapper { count: Cell<i32> }
 
 ---
 
-### Exercise 3: Raw Pointer Auto-Trait Opt-Out
+### Exercise 3: Raw Pointer Auto-Trait Opt-Out \u2014 Proving `!Send` at Compile Time
 
-**Problem:** Demonstrate that `struct RawHolder(*const i32)` does not automatically derive `Send`.
+**Problem:**
+Raw pointers (`*const T`, `*mut T`) deliberately do **not** implement `Send` \u2014 because the compiler cannot verify whether the pointed-to memory is safe to access from another thread. This `!Send` propagates structurally to any struct that holds one.
+
+Do the following:
+1. Define `struct RawHolder(*const i32)`.
+2. Write `fn assert_send<T: Send>() {}` and call `assert_send::<RawHolder>()`. Show (in a comment) the compile error this produces.
+3. Then manually promise the safety invariant by writing `unsafe impl Send for RawHolder {}` and show the call compiles and the struct can be sent across a thread.
+4. Answer: **what invariant are you personally guaranteeing when you write `unsafe impl Send`?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> RawHolder safely sent to thread: 42
 > ```
-> Raw pointer opts out of Send
-> ```
+>
+> - **Hint 1:** `assert_send::<RawHolder>()` without the `unsafe impl` produces `E0277: RawHolder cannot be sent between threads safely` \u2014 the compiler rejects it because `*const i32` is `!Send`, and the auto-trait rule propagates `!Send` to any struct holding it.
+> - **Hint 2:** `unsafe impl Send for RawHolder {}` is how you override the auto-trait. The `unsafe` keyword signals that *you*, not the compiler, are taking responsibility for correctness. The compiler cannot check whether the raw pointer invariant holds \u2014 it trusts your word.
+> - **Hint 3:** To actually send the struct across a thread with `thread::spawn`, you must use `move ||` \u2014 moving the `RawHolder` into the thread's closure. The spawn itself compiles only because `RawHolder: Send`.
+>
 > ```rust
+> use std::thread;
+>
+> struct RawHolder(*const i32);
+>
+> // assert_send::<RawHolder>(); // ❌ E0277 without the line below
+>
+> // SAFETY: We guarantee that the pointed-to i32 lives for the entire
+> // duration of the thread and is not concurrently mutated by any other thread.
+> // The compiler cannot verify this — we are taking personal responsibility.
+> unsafe impl Send for RawHolder {}
+>
+> fn assert_send<T: Send>() {}
+>
 > fn main() {
->     println!("Raw pointer opts out of Send");
+>     let value: i32 = 42;
+>     let holder = RawHolder(&raw const value);
+>
+>     // Now compiles because RawHolder: Send (via our unsafe impl).
+>     assert_send::<RawHolder>();
+>
+>     let handle = thread::spawn(move || {
+>         // SAFETY: `value` is on main's stack, main joins before value drops.
+>         let n = unsafe { *holder.0 };
+>         println!("RawHolder safely sent to thread: {}", n);
+>     });
+>     handle.join().unwrap();
 > }
 > ```
 >
-> **Explanation:** Presence of non-`Send` primitives (like raw pointers) automatically revokes auto-trait implementation.
+> **Answer to the invariant question:**
+> When you write `unsafe impl Send for RawHolder`, you are personally promising: *"I guarantee that no other thread will concurrently read or write the pointed-to memory in a way that would cause a data race, and that the memory will remain valid for the entire duration of the receiving thread's lifetime."* The compiler cannot check pointer lifetimes or aliasing across threads \u2014 `unsafe impl Send` is your signature on that contract.
 
 ---
 

@@ -171,41 +171,96 @@ rand = 0.8
 
 ---
 
-### Exercise 2: Optional Dependency Feature Gating
+### Exercise 2: Optional Dependencies — The Full Pattern
 
-**Problem:** Declare `serde = { version = "1.0", optional = true }` in `[dependencies]`.
+**Problem:**
+You are writing a serialization library. By default, you want zero dependencies. But users who want JSON support should be able to opt in to `serde` without it being forced on everyone.
 
-**Expected output:**
+Write the complete `Cargo.toml` configuration that:
+1. Declares `serde` as an optional dependency with `derive` feature.
+2. Creates a `[features]` section with a `json` feature that activates `serde`.
+3. Shows the `[dependencies]` entry for a downstream user who wants JSON support.
+4. Shows the `#[cfg(feature = "json")]` guard in `src/lib.rs` that uses `serde::Serialize`.
+
+Then answer: **if a downstream user writes `my_lib = "1.0"` with no features, does `serde` get compiled into their binary?**
+
 > [!check]- Answer
+> **Your library's `Cargo.toml`:**
+> ```toml
+> [package]
+> name = "my_lib"
+> version = "1.0.0"
+> edition = "2021"
+>
+> [features]
+> # Activating "json" pulls in the serde optional dependency.
+> json = ["dep:serde"]
+>
+> [dependencies]
+> # optional = true means serde is NOT compiled unless a feature activates it.
+> serde = { version = "1.0", features = ["derive"], optional = true }
 > ```
-> Optional dependency configured
-> ```
+>
+> **Your `src/lib.rs`:**
 > ```rust
-> fn main() {
->     println!("Optional dependency configured");
+> // Only compiled (and serde only linked) when the "json" feature is active.
+> #[cfg(feature = "json")]
+> pub use serde::Serialize;
+>
+> #[cfg(feature = "json")]
+> pub fn serialize_example() -> &'static str {
+>     "serde is available"
 > }
 > ```
 >
-> **Explanation:** Marking dependencies as `optional = true` exposes corresponding feature flags of the same name.
+> **A downstream user's `Cargo.toml` — opting IN:**
+> ```toml
+> [dependencies]
+> my_lib = { version = "1.0", features = ["json"] }
+> ```
+>
+> **Answer to the "no features" question:**
+> **No** — `serde` is not compiled at all. `optional = true` means the dependency only enters the build graph when a feature that references it is activated. A plain `my_lib = "1.0"` has zero serde overhead: no download, no compile time, no binary size increase. This is how large libraries like `chrono` and `reqwest` keep their default build lean while offering rich opt-in functionality.
 
 ---
 
-### Exercise 3: Git Dependency Specification
+### Exercise 3: Git Dependencies — When, How, and the Risks
 
-**Problem:** Specify a git dependency `rand = { git = "https://github.com/rust-random/rand", branch = "master" }`.
+**Problem:**
+You need to use a bug-fix commit in `rand` that was merged to `master` but hasn't been published to `crates.io` yet. Answer the following:
 
-**Expected output:**
+1. Write the `Cargo.toml` entry for a git dependency on `rand`'s `master` branch.
+2. Write the entry pinned to a specific commit SHA instead.
+3. You are on a team of 5 developers. What reproducibility problem does the `branch = "master"` approach introduce, and how does pinning to a `rev` solve it?
+4. When the fix is finally published as `rand = "0.8.6"` on `crates.io`, should you switch back? Why?
+
 > [!check]- Answer
-> ```
-> Git dependency declared
-> ```
-> ```rust
-> fn main() {
->     println!("Git dependency declared");
-> }
+> **1. Git dependency on a branch:**
+> ```toml
+> [dependencies]
+> rand = { git = "https://github.com/rust-random/rand", branch = "master" }
 > ```
 >
-> **Explanation:** Cargo supports fetching dependencies directly from remote git repositories.
+> **2. Git dependency pinned to a specific commit:**
+> ```toml
+> [dependencies]
+> rand = { git = "https://github.com/rust-random/rand", rev = "a1b2c3d4" }
+> ```
+> (Replace `a1b2c3d4` with the actual full or short SHA of the commit you need.)
+>
+> **3. Reproducibility problem with `branch = "master"`:**
+> If `Cargo.lock` is not committed (or if a teammate runs `cargo update`), each developer may silently resolve to a different commit on `master` — whatever happened to be the HEAD at the time of their build. Developer A might have the fix; Developer B, building an hour later after a new commit was pushed, might have a regression. With `rev = "a1b2c3d4"`, `Cargo.lock` pins the exact commit for everyone; `cargo update` cannot change it without manually editing `Cargo.toml`.
+>
+> **4. Switch back to `crates.io` when the fix is published:**
+> **Yes, always.** Git dependencies have significant downsides:
+> - They require network access to the git host at every `cargo build` on a fresh checkout.
+> - They cannot be published to `crates.io` (crates.io rejects manifests with git dependencies).
+> - They bypass the security audit and checksum verification that `crates.io` + `Cargo.lock` provides.
+>
+> Switch back as soon as the fixed version is published: `rand = "0.8.6"`.
+>
+> **Explanation:**
+> Git dependencies are a short-term escape hatch, not a long-term solution. Use `rev` (not `branch`) if you must use one, commit your `Cargo.lock`, and migrate to a published version as soon as possible.
 
 ---
 

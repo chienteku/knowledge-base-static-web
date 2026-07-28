@@ -190,22 +190,54 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Annotating Expect Panics in Doc Tests
+### Exercise 3: `should_panic` in a Doc Test Block
 
-**Problem:** Annotate a doc test block with ```` ```should_panic ````.
+**Problem:**
+Doc tests aren't limited to examples that succeed. Sometimes the most important thing to document is *what panics*. Adding ` ```should_panic ``` ` to the opening fence tells `cargo test` to expect the enclosed code to panic \u2014 the test passes if it panics, and *fails* if it runs successfully.
+
+Write the complete `///` doc comment for a `divide(a: u32, b: u32) -> u32` function that:
+1. Includes a normal working example (` ``` `) showing `divide(10, 2) == 5`.
+2. Includes a `should_panic` example showing that `divide(1, 0)` panics.
+3. Implements the function body with `assert!(b != 0, "division by zero");`.
+
+Then answer: **why is a `should_panic` doc test more valuable than just writing "panics if b is 0" in plain text?**
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Should panic doc test verified
-> ```
+> *(No runtime stdout \u2014 these are `cargo test` doc tests. Both blocks pass: the first returns 5 correctly, the second panics as expected.)*
+>
+> - **Hint 1:** The ` ```should_panic ``` ` annotation goes on the *opening* fence line of the second code block: ` ```should_panic `. The closing fence is still just ` ``` `.
+> - **Hint 2:** You can combine annotations: ` ```should_panic,no_run ``` ` marks a block as expected to panic but doesn't actually run it (useful when the panic requires an environment that isn't available in CI).
+> - **Hint 3:** The `# ` prefix trick (from Exercise 1) works inside `should_panic` blocks too. You can hide the function definition so the rendered docs only show the one-line panic call.
+>
 > ```rust
-> fn main() {
->     println!("Should panic doc test verified");
+> /// Divides `a` by `b`.
+> ///
+> /// # Examples
+> ///
+> /// Normal usage:
+> /// ```
+> /// # fn divide(a: u32, b: u32) -> u32 { if b == 0 { panic!("division by zero") } a / b }
+> /// assert_eq!(divide(10, 2), 5);
+> /// ```
+> ///
+> /// Panics when `b` is zero:
+> /// ```should_panic
+> /// # fn divide(a: u32, b: u32) -> u32 { if b == 0 { panic!("division by zero") } a / b }
+> /// divide(1, 0); // panics: "division by zero"
+> /// ```
+> ///
+> /// # Panics
+> ///
+> /// Panics if `b` is `0`.
+> pub fn divide(a: u32, b: u32) -> u32 {
+>     assert!(b != 0, "division by zero");
+>     a / b
 > }
 > ```
 >
-> **Explanation:** `should_panic` doc test annotations pass if the enclosed code example panics.
+> **Answer to the "why more valuable" question:**
+> Plain text saying "panics if b is 0" can lie \u2014 maybe the implementation changed and it no longer panics, or it panics with a different message. A `should_panic` doc test is **executable**: `cargo test` runs it every time you run tests. If the function stops panicking (e.g. someone changed the assert to a return), the doc test fails immediately, alerting you that the documentation and the code have diverged. Documentation you can't compile is documentation you can't trust.
 
 ---
 

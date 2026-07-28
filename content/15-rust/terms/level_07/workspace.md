@@ -187,42 +187,93 @@ Write the exact TOML code that must go in the root `Cargo.toml` to link these tw
 
 ---
 
-### Exercise 2: Defining Workspace Manifest Root
+### Exercise 2: Sharing Dependencies Across Workspace Members
 
-**Problem:** Write a `Cargo.toml` root workspace definition listing `members = ["crate_a", "crate_b"]`.
+**Problem:**
+A workspace with 5 member crates all depend on `serde` and `tokio`. Without shared workspace dependencies, each crate's `Cargo.toml` repeats the same version strings, and bumping `serde` from `1.0.100` to `1.0.150` requires editing 5 files. The `[workspace.dependencies]` table (Cargo 1.64+) solves this.
 
-**Expected output:**
+Write the **root** `Cargo.toml` for a workspace called `my_platform` with members `api_server` and `data_worker`, that:
+1. Declares `serde` (with `derive` feature) and `tokio` (with `full` feature) as shared workspace dependencies at specific versions.
+2. Show the `Cargo.toml` for one member crate (`api_server`) that inherits both dependencies using `workspace = true`.
+3. Answer: does `workspace = true` force `api_server` to compile ALL features listed in the root's `[workspace.dependencies]`? Or can a member crate selectively disable some?
+
 > [!check]- Answer
-> ```
+> **Root `Cargo.toml`:**
+> ```toml
 > [workspace]
-> members = ["crate_a", "crate_b"]
-> ```
-> ```rust
-> fn main() {
->     println!("[workspace]\nmembers = [\"crate_a\", \"crate_b\"]");
-> }
+> members = ["api_server", "data_worker"]
+> resolver = "2"  # Required for workspace.dependencies
+>
+> [workspace.dependencies]
+> serde  = { version = "1.0", features = ["derive"] }
+> tokio  = { version = "1.36", features = ["full"] }
 > ```
 >
-> **Explanation:** Root `[workspace]` manifests organize multiple related sub-crates under a shared `target/` directory.
+> **`api_server/Cargo.toml` (member crate):**
+> ```toml
+> [package]
+> name    = "api_server"
+> version = "0.1.0"
+> edition = "2021"
+>
+> [dependencies]
+> # `workspace = true` inherits version, features, and other fields from root.
+> serde  = { workspace = true }
+> tokio  = { workspace = true }
+>
+> # Member can also add its own non-shared dependencies:
+> axum = "0.7"
+> ```
+>
+> **Answer to the features question:**
+> A member crate that uses `{ workspace = true }` inherits the *version* from the root, but can **add** additional features using `features = ["extra"]`. It **cannot** remove or disable features declared at the workspace level — features only union, never subtract. So if the workspace declares `features = ["full"]` for tokio, a member that also specifies `{ workspace = true, features = ["rt"] }` will compile tokio with `full` + `rt` (both sets combined).
+>
+> **Explanation:**
+> `[workspace.dependencies]` is a DRY principle applied to dependency management. It acts as a single source of truth for versions across all crates in the workspace. When you upgrade `serde`, you change one line in the root `Cargo.toml` and every member crate picks up the change automatically on the next `cargo build`.
 
 ---
 
-### Exercise 3: Workspace Dependency Inheritance
+### Exercise 3: Virtual Workspaces and Shared `target/`
 
-**Problem:** Inherit a workspace dependency in a sub-crate `serde = { workspace = true }`.
+**Problem:**
+A "virtual workspace" is a workspace whose root `Cargo.toml` has a `[workspace]` section but NO `[package]` section and no `src/` folder — it's a pure container for member crates.
 
-**Expected output:**
+You are building a monorepo for a platform with three crates: `core_lib`, `api_server`, and `admin_cli`. The root should be a virtual workspace.
+
+1. Write the root `Cargo.toml` as a virtual workspace.
+2. What shared benefit do all three crates get from being in the same workspace, even if they have completely different dependencies?
+3. A team member runs `cargo build` from the root. Which crates get built? What command builds only `api_server`?
+4. What happens to `Cargo.lock` in a virtual workspace? Where does it live?
+
 > [!check]- Answer
+> **1. Root `Cargo.toml` (virtual workspace — no `[package]`, no `src/`):**
+> ```toml
+> [workspace]
+> members = [
+>     "core_lib",
+>     "api_server",
+>     "admin_cli",
+> ]
+> resolver = "2"
 > ```
-> Workspace dependency inherited
-> ```
-> ```rust
-> fn main() {
->     println!("Workspace dependency inherited");
-> }
-> ```
+> That's the entire root `Cargo.toml`. There is no `name`, `version`, or `edition` key — those belong to each member's own `Cargo.toml`.
 >
-> **Explanation:** `workspace = true` inherits central version specifications defined in root `[workspace.dependencies]`.
+> **2. Shared benefits:**
+> - **One shared `target/` directory.** If `core_lib` and `api_server` both depend on `serde`, it is compiled **once** and the `.rlib` is shared. Without a workspace, each crate in its own directory would compile `serde` independently — doubling (or tripling) build times and disk usage.
+> - **One shared `Cargo.lock`.** All three crates are resolved together. You can't accidentally have `api_server` using `serde 1.0.100` while `admin_cli` uses `serde 1.0.150` — the workspace lockfile enforces one version per package across all members.
+>
+> **3. Building from the root:**
+> `cargo build` from the root builds **all** workspace members. To build only one:
+> ```bash
+> cargo build -p api_server
+> ```
+> The `-p` (package) flag selects a specific workspace member by its `[package] name`.
+>
+> **4. `Cargo.lock` location:**
+> `Cargo.lock` lives at the **workspace root** (next to the root `Cargo.toml`), not inside each member crate. There is exactly **one** lockfile per workspace, regardless of how many members exist. This is what enforces the single resolved dependency graph.
+>
+> **Explanation:**
+> The virtual workspace pattern is the standard for monorepos: all crates benefit from shared compilation without any crate being forced to also be the "root" package. The root is a pure manifest — an organizational container with no code of its own.
 
 ---
 

@@ -164,21 +164,47 @@ fn main() {
 
 ### Exercise 2: Guiding Inference with Literal Suffixes
 
-**Problem:** Demonstrate specifying literal types using suffixes `42_u64` and `3.14_f32` so the compiler infers exact vector item types without type annotations.
+**Problem:**
+Rust's type inference defaults to `i32` for integers and `f64` for floats. Use numeric literal suffixes to override these defaults so that:
+1. A vector `integers` is inferred as `Vec<u64>` (not `Vec<i32>`).
+2. A vector `floats` is inferred as `Vec<f32>` (not `Vec<f64>`).
+
+Print both vectors. Then add a third line that shows the memory size of one element to confirm the types:
+- `u64` is 8 bytes.
+- `f32` is 4 bytes.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> integers (u64): [10, 20, 30]
+> floats (f32): [1.5, 2.5, 3.5]
+> size of u64: 8 bytes
+> size of f32: 4 bytes
 > ```
-> u64 vector created
-> ```
+>
+> - **Hint 1:** Literal suffixes are written directly after the number with no space: `10_u64`, `1.5_f32`. The `_` before the suffix is optional but conventional for readability.
+> - **Hint 2:** Once one element carries a suffix, Rust infers the suffix type for all other elements in the same `vec![]` — you only need to suffix the first element.
+> - **Hint 3:** `std::mem::size_of::<T>()` returns the byte size of any type `T` at compile time. It never allocates and works with any concrete type.
+>
 > ```rust
+> use std::mem;
+>
 > fn main() {
->     let numbers = vec![10_u64, 20_u64, 30_u64];
->     println!("u64 vector created");
+>     // Suffixing the first literal guides inference for the whole vec.
+>     let integers = vec![10_u64, 20, 30];  // all inferred as u64
+>     let floats   = vec![1.5_f32, 2.5, 3.5]; // all inferred as f32
+>
+>     println!("integers (u64): {:?}", integers);
+>     println!("floats (f32): {:?}",   floats);
+>
+>     // Verify the inferred types by checking their memory footprints.
+>     println!("size of u64: {} bytes", mem::size_of::<u64>());
+>     println!("size of f32: {} bytes", mem::size_of::<f32>());
 > }
 > ```
 >
-> **Explanation:** Literal suffixes (e.g. `_u64`) explicitly specify the primitive type of numeric constants, guiding downstream type inference throughout the function.
+> **Explanation:**
+> The compiler's type inference engine resolves types from any hint within the current scope, including literal suffixes. By writing `10_u64` as the first element, the compiler fixes the element type to `u64` and uses that constraint for every other element in the literal. Without any suffix, `vec![10, 20, 30]` infers `Vec<i32>` by default — the numeric default for integers. Suffixes are the lightest-weight way to override defaults without a full type annotation like `Vec<u64>`.
 
 ---
 

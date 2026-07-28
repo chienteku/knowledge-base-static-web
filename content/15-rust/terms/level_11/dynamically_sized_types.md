@@ -192,25 +192,58 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Opting Out of Sized Bounds with `?Sized`
+### Exercise 3: Opting Out of `Sized` with `?Sized` — Prove It's Needed
 
-**Problem:** Write a generic struct `struct RefHolder<'a, T: ?Sized> { ptr: &'a T }` holding DST targets.
+**Problem:**
+The compiler secretly adds `T: Sized` to every generic parameter by default. Your job is to prove this matters by doing the following:
+
+1. Write a generic `fn describe<T>(val: &T)` (no bounds) and explain why calling it with a `&str` already works — but why **you could not take `val: T` by value**.
+2. Write a generic struct `struct Wrapper<T>` (no explicit `?Sized`) and show the compiler error you'd get trying to store a `&str` inside it.
+3. Fix the struct with `struct Wrapper<T: ?Sized>` and demonstrate it can hold **both** `&str` and `&[i32]` — two completely different DSTs — with the same struct definition.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> str says: "hello"
+> slice says: [10, 20, 30]
 > ```
-> RefHolder with DST str verified
-> ```
+>
+> - **Hint 1:** `fn describe<T>(val: &T)` works with `&str` because `&str` is itself `Sized` (a fat pointer is a fixed-size struct). The implicit `T: Sized` constraint applies to `T` — meaning `str` is not allowed as `T`, but `&str` *is* allowed because `&str` is `Sized`. Passing by value (`val: T`) would require `T = str`, which is unsized and forbidden.
+> - **Hint 2:** `struct Wrapper<'a, T> { inner: &'a T }` fails with a compile error about missing a lifetime — add `'a`: `struct Wrapper<'a, T> { inner: &'a T }`. Then try `Wrapper::<str>` and observe `E0277: the size of type str cannot be known at compilation time`. Adding `: ?Sized` removes this restriction.
+> - **Hint 3:** Once `T: ?Sized`, the *same* `Wrapper` struct can hold `&str`, `&[i32]`, or `&dyn Trait` — any reference to a DST. The struct itself stays fixed-size because its only field is a *reference* (a fat pointer), not the DST directly.
+>
 > ```rust
-> struct RefHolder<'a, T: ?Sized> { ptr: &'a T }
+> // Step 1: a function that accepts any &T, even where T is a DST.
+> // The implicit Sized bound is on T, but we take &T — a reference is always Sized.
+> fn describe<T: ?Sized + std::fmt::Debug>(val: &T) {
+>     println!("{:?}", val);
+> }
+>
+> // Step 2 (broken): struct Wrapper<'a, T> { inner: &'a T }
+> // Compiler: `T` does not implement `Sized` when T = str — E0277.
+>
+> // Step 3 (fixed): add ?Sized to allow DST type parameters.
+> struct Wrapper<'a, T: ?Sized> {
+>     label: &'static str,
+>     inner: &'a T, // the field is a *reference*, so the struct stays Sized
+> }
+>
 > fn main() {
->     let s: &str = "hello";
->     let _h = RefHolder { ptr: s };
->     println!("RefHolder with DST str verified");
+>     // Wrap a &str DST
+>     let s = Wrapper { label: "str says", inner: "hello" };
+>     print!("{}: ", s.label);
+>     describe(s.inner);
+>
+>     // Same struct, different DST — &[i32]
+>     let arr = [10_i32, 20, 30];
+>     let sl = Wrapper { label: "slice says", inner: arr.as_slice() };
+>     print!("{}: ", sl.label);
+>     describe(sl.inner);
 > }
 > ```
 >
-> **Explanation:** `?Sized` relaxes default `Sized` bounds, permitting generic type parameters to accept DSTs.
+> **Explanation:**
+> Without `?Sized`, every generic `T` implicitly carries `T: Sized` — the compiler must be able to determine `T`'s exact byte size at compile time. DSTs like `str` and `[i32]` have no fixed size, so they fail this check when used directly as `T`. Adding `T: ?Sized` ("may or may not be Sized") lifts the restriction, allowing DSTs as the type argument. The key insight is that the struct itself stays `Sized` because its field is `&'a T` (a fat pointer with a known, fixed size), not `T` directly — you are never storing the DST on the stack, only a reference to it.
 
 ---
 

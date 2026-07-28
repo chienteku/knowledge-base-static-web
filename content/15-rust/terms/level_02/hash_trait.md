@@ -209,29 +209,75 @@ fn main() {
 
 ### Exercise 3: Custom Hash Implementation for Field Selection
 
-**Problem:** Write a manual `Hash` implementation for `User { id: u64, cache: String }` that hashes only the `id` field.
+**Problem:**
+Write a manual `Hash` implementation for `struct User { id: u64, cache: String }` that hashes **only** the `id` field (ignoring `cache`). This models the pattern where an expensive cached string should be irrelevant to identity.
+
+Requirements:
+1. Implement `PartialEq` and `Eq` for `User` — comparing by `id` only.
+2. Implement `Hash` for `User` — hashing `id` only.
+3. In `main`, insert a `User` into a `HashMap<User, &str>` as a key. Then perform a lookup using a **different** `User` instance that has the **same `id`** but a **different `cache`** string. Verify the lookup succeeds, proving both implementations agree.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Role for id=42: admin
+> Two Users with same id are equal: true
 > ```
-> Custom hash executed
-> ```
+>
+> - **Hint 1:** The `Hash` contract: if `a == b` then `hash(a) == hash(b)`. Since `PartialEq` only compares `id`, `Hash` must also only hash `id`. Breaking this (e.g. hashing `cache` but comparing only `id`) causes lookup failures that are **silent** — the compiler won't catch it.
+> - **Hint 2:** `HashMap::get` takes a key by reference: `map.get(&lookup_key)`. The lookup key doesn't need to be the exact same object inserted — it just needs to be `==` to an existing key and produce the same hash.
+> - **Hint 3:** To use `User` as a `HashMap` key, the type must implement both `Hash` and `Eq`. Without both, the compiler will refuse with a trait bound error.
+>
 > ```rust
+> use std::collections::HashMap;
 > use std::hash::{Hash, Hasher};
-> struct User { id: u64, cache: String }
-> impl PartialEq for User { fn eq(&self, other: &Self) -> bool { self.id == other.id } }
+>
+> struct User {
+>     id: u64,
+>     cache: String, // ← intentionally ignored in Hash and PartialEq
+> }
+>
+> // Compare by id only — cache is considered "hot data", not identity.
+> impl PartialEq for User {
+>     fn eq(&self, other: &Self) -> bool {
+>         self.id == other.id
+>     }
+> }
 > impl Eq for User {}
+>
+> // Hash by id only — MUST match the fields used in PartialEq.
+> // If we also hashed `cache`, two equal Users (same id, different cache)
+> // would produce different hashes, silently breaking HashMap lookups.
 > impl Hash for User {
 >     fn hash<H: Hasher>(&self, state: &mut H) {
 >         self.id.hash(state);
 >     }
 > }
+>
 > fn main() {
->     println!("Custom hash executed");
+>     let mut map: HashMap<User, &str> = HashMap::new();
+>
+>     // Insert a User with a warm cache.
+>     map.insert(User { id: 42, cache: "warm_data".to_string() }, "admin");
+>
+>     // Look up by a DIFFERENT User instance with the same id but empty cache.
+>     // Because Hash and PartialEq both use only `id`, this lookup must succeed.
+>     let lookup = User { id: 42, cache: String::new() };
+>
+>     match map.get(&lookup) {
+>         Some(role) => println!("Role for id=42: {}", role),
+>         None       => println!("ERROR: lookup failed — Hash/Eq contract broken!"),
+>     }
+>
+>     // Explicitly confirm the equality contract:
+>     let a = User { id: 42, cache: "aaa".to_string() };
+>     let b = User { id: 42, cache: "bbb".to_string() };
+>     println!("Two Users with same id are equal: {}", a == b);
 > }
 > ```
 >
-> **Explanation:** When manually implementing `Hash`, always ensure fields hashed match fields used in `PartialEq`.
+> **Explanation:**
+> The `Hash`/`Eq` contract is: **if `a == b`, then `hash(a) == hash(b)`**. This is not enforced by the compiler — breaking it is legal Rust but causes `HashMap` to silently fail lookups (because the bucket is found by hash, then confirmed by equality; if the hashes differ, the bucket is never even checked). The `cache` field is excluded from both traits here because it represents computed state, not identity — like how two `File` handles to the same path should be considered the same regardless of their read buffers.
 
 ---
 

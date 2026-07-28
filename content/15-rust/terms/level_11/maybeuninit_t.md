@@ -172,28 +172,50 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Initializing Arrays Safely with `MaybeUninit`
+### Exercise 2: Building an Array Without Double-Initialization
 
-**Problem:** Use `MaybeUninit` array buffers to construct an array of integers without double-initialization overhead.
+**Problem:**
+Safe Rust zero-initialises every value before you use it. For a large `[u8; 4096]` buffer that you immediately overwrite entirely (e.g. from a `read()` syscall), this is wasted work. `MaybeUninit` lets you skip the zeroing.
+
+Do the following:
+1. Create an uninitialised array of three `i32`s using `MaybeUninit`.
+2. Write the values `10`, `20`, `30` into slots 0, 1, 2 using `.write()`.
+3. Extract the fully-initialised array using the safe helper and print it.
+
+Then answer: **Why is calling `.assume_init()` before writing all elements Undefined Behaviour?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Initialized array: [10, 20, 30]
 > ```
-> Array initialized safely
-> ```
+>
+> - **Hint 1:** Create the array with `let mut buf: [MaybeUninit<i32>; 3] = MaybeUninit::uninit_array();` (stable since Rust 1.55). This is safe — the array slots are uninitialized but no UB occurs until you *read* from them.
+> - **Hint 2:** Write each element with `buf[i].write(value)`. `.write()` takes ownership of the value, places it in the slot, and returns a `&mut i32` reference — it is always safe to call.
+> - **Hint 3:** Extract the array with `unsafe { MaybeUninit::array_assume_init(buf) }` (stable since Rust 1.65). The `unsafe` block is *your* guarantee to the compiler that every slot has been written to. If you have missed a slot, reading it is UB — the integer bits are whatever garbage the allocator left behind, which can cause incorrect branching, optimisation miscompilation, or security exploits.
+> - **Answer to the UB question:** `assume_init()` / `array_assume_init()` tell the compiler "treat this memory as a fully-initialized `T`". If any slot was never written, the compiler may read whatever bytes happen to be in that memory location and treat them as a valid `i32`. Depending on the optimizer, it may even eliminate branches that "could never happen" based on this false assumption — producing code that silently computes wrong results.
+>
 > ```rust
 > use std::mem::MaybeUninit;
+>
 > fn main() {
->     let mut buf: [MaybeUninit<i32>; 3] = unsafe { MaybeUninit::uninit().assume_init() };
+>     // Step 1: allocate three MaybeUninit<i32> slots — no zeroing, no UB yet.
+>     let mut buf: [MaybeUninit<i32>; 3] = MaybeUninit::uninit_array();
+>
+>     // Step 2: write real values into each slot individually.
 >     buf[0].write(10);
 >     buf[1].write(20);
 >     buf[2].write(30);
->     let init: [i32; 3] = unsafe { std::mem::transmute(buf) };
->     println!("Array initialized safely: {:?}", init);
+>
+>     // Step 3: NOW we can assert all slots are initialised and extract the array.
+>     // SAFETY: every element has been written to exactly once above.
+>     let init: [i32; 3] = unsafe { MaybeUninit::array_assume_init(buf) };
+>     println!("Initialized array: {:?}", init);
 > }
 > ```
 >
-> **Explanation:** `MaybeUninit` allows incremental manual initialization of uninitialized memory buffers safely.
+> **Explanation:**
+> The `MaybeUninit<T>` wrapper is essentially a union of `T` and a byte array of the same size. The compiler refuses to make any assumptions about its contents — it will not optimise based on the value, and it disables `Drop`. The *safety contract* is simple: you may only call `assume_init()` once every byte of the wrapped value has been fully initialised by your code. The `unsafe` keyword is the language's mechanism for expressing this contract — you are taking responsibility from the compiler. In practice, `MaybeUninit` is used for large I/O buffers, FFI output parameters (`C` functions that write into a pointer you pass), and performance-critical data structures in `no_std` environments.
 
 ---
 

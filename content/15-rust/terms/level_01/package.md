@@ -199,20 +199,52 @@ Output from `main.rs` followed by "Hello from the library crate!".
 
 ### Exercise 3: Adding Multiple Binary Targets
 
-**Problem:** Explain how to add a secondary binary executable `src/bin/admin.rs` to an existing Cargo package without editing `Cargo.toml`.
+**Problem:**
+You have an existing Cargo package called `my_tools` with `src/main.rs` as its primary binary. You want to add a second binary called `admin` without editing `Cargo.toml`. Answer the following:
 
-**Expected output:**
+1. What file do you create, and where exactly does it go?
+2. Write the minimal content of that file — a `main` function that prints `"Admin tool running"`.
+3. What `cargo` command builds only the `admin` binary?
+4. What `cargo` command runs only the `admin` binary?
+5. If you run `cargo run` with no flags after adding `admin`, what happens? Why?
+
 > [!check]- Answer
+> **1. File to create:**
 > ```
-> cargo run --bin admin
+> my_tools/src/bin/admin.rs
 > ```
+> The `src/bin/` directory is the auto-discovery location for additional binary targets. Cargo discovers every `.rs` file directly inside it (non-recursive) as a separate binary named after the file stem.
+>
+> **2. Content of `src/bin/admin.rs`:**
 > ```rust
 > fn main() {
->     println!("cargo run --bin admin");
+>     println!("Admin tool running");
 > }
 > ```
+> Each file in `src/bin/` is its own independent crate with its own `fn main`. It can access the package's library crate (if `src/lib.rs` exists) just like an external dependent would.
 >
-> **Explanation:** Cargo automatically discovers any `.rs` files placed inside `src/bin/` as additional binary crate targets accessible via `cargo run --bin <name>`.
+> **3. Build only `admin`:**
+> ```bash
+> cargo build --bin admin
+> ```
+>
+> **4. Run only `admin`:**
+> ```bash
+> cargo run --bin admin
+> ```
+>
+> **5. `cargo run` with no flags — after adding `admin`:**
+> Cargo emits an **error**:
+> ```text
+> error: could not determine which binary to run.
+> Use the `--bin` option to specify which binary to run.
+>
+> available binaries: admin, my_tools
+> ```
+> When a package has more than one binary target, `cargo run` is ambiguous and refuses to guess. You must always specify `--bin <name>`. This is intentional — silently picking the "first" binary would be surprising when binary order might change.
+>
+> **Explanation:**
+> Auto-discovery via `src/bin/` is Cargo's convention-over-configuration approach: you don't need to register the binary anywhere — simply placing the file in the right directory is enough. Cargo scans the layout and infers the targets. If you need a non-standard path or to rename the binary, you can always add an explicit `[[bin]]` entry in `Cargo.toml`, but for the common case `src/bin/<name>.rs` is all you need.
 
 ---
 

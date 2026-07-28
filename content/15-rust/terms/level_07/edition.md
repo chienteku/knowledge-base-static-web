@@ -161,41 +161,78 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Edition Identifier Keyword Differences
+### Exercise 2: Edition Keyword Changes in Practice
 
-**Problem:** Name keywords added in 2018 edition (e.g. `async`, `await`, `try`).
+**Problem:**
+Rust editions can reserve new keywords, which could break code that used those words as identifiers. The 2018 edition reserved `async`, `await`, and `try`. The 2021 edition reserved nothing new (it changed import rules instead).
 
-**Expected output:**
+Consider this code written in 2015:
+```rust
+// This was valid in edition 2015!
+fn try(x: i32) -> i32 { x + 1 }
+fn main() { println!("{}", try(5)); }
+```
+
+Answer the following:
+1. What happens when you compile this with `edition = "2018"` in `Cargo.toml`?
+2. How do you fix it WITHOUT renaming the function (so the public API stays the same)?
+3. A library crate compiled under edition 2015 exposes `fn try()` as part of its public API. Your crate uses edition 2021. Can you still call it?
+
 > [!check]- Answer
+> **1. Compile error under edition 2018:**
+> ```text
+> error: expected expression, found reserved keyword `try`
 > ```
-> Keywords: async, await, try
-> ```
-> ```rust
-> fn main() {
->     println!("Keywords: async, await, try");
-> }
-> ```
+> Because `try` became a reserved keyword in edition 2018, using it as a function name is a parse error. The compiler refuses to compile the file.
 >
-> **Explanation:** New Rust editions introduce new reserved keywords without breaking older edition code.
+> **2. Fix WITHOUT renaming — use raw identifiers:**
+> ```rust
+> // `r#` prefix lets you use a keyword as an identifier in edition 2018+
+> fn r#try(x: i32) -> i32 { x + 1 }
+> fn main() { println!("{}", r#try(5)); }
+> ```
+> Raw identifiers (`r#name`) are the escape hatch for using keywords as identifiers. They are valid in edition 2018 and 2021, so this is both a fix and a forward-compatible API-preservation strategy.
+>
+> **3. Cross-edition interoperability:**
+> **Yes, you can still call it.** Each crate is compiled under its own edition — the 2015 crate compiles `fn try()` successfully. From your edition 2021 crate, you call it using the raw identifier syntax: `library::r#try(5)`. Editions only affect the *syntax* of the source file being compiled, not the compiled binary interface (symbols, types, ABI) — so cross-edition function calls work seamlessly.
+>
+> **Explanation:**
+> This is the fundamental promise of Rust editions: they never break cross-crate compatibility. New keywords in one edition don't make previously-published libraries unusable — raw identifiers bridge the gap.
 
 ---
 
-### Exercise 3: Running Edition Automated Migration
+### Exercise 3: Migrating Editions with `cargo fix --edition`
 
-**Problem:** Command to run automated edition migration.
+**Problem:**
+You have a large 2018-edition crate and want to upgrade to 2021. Answer the following:
 
-**Expected output:**
+1. What is the exact command to run the automated edition migration?
+2. What does `cargo fix --edition` actually change in your source code? Give two concrete examples.
+3. After `cargo fix --edition` runs successfully, is your code guaranteed to compile under the new edition? What must you do manually?
+4. Can `cargo fix --edition` break any existing tests or behavior?
+
 > [!check]- Answer
-> ```
+> **1. The migration command:**
+> ```bash
 > cargo fix --edition
 > ```
-> ```rust
-> fn main() {
->     println!("cargo fix --edition");
-> }
-> ```
+> Run this while your `Cargo.toml` still declares the OLD edition. After the command succeeds, manually change `edition = "2018"` to `edition = "2021"` in `Cargo.toml` and verify with `cargo build`.
 >
-> **Explanation:** `cargo fix --edition` applies automatic code fixes for seamless edition upgrades.
+> **2. What `cargo fix --edition` changes:**
+> - **Import paths (2018 → 2021):** In 2021, the `use` prelude rules changed — `use` items in submodules no longer export into scope automatically. `cargo fix` rewrites ambiguous `use` statements to be explicit.
+> - **Closure captures (2018 → 2021):** The 2021 edition tightened closure capture rules so closures only capture the specific fields they use (not the whole struct). `cargo fix` may rewrite `move || { use_field }` patterns where the old semantics required capturing more than the field.
+>
+> **3. Manual steps still required:**
+> `cargo fix --edition` cannot fix everything automatically — it only handles patterns the compiler can detect and has a known mechanical fix for. After running it:
+> 1. Change the `edition` field in `Cargo.toml` to the new edition.
+> 2. Run `cargo build` and `cargo test` to catch any remaining issues.
+> 3. Manually review any remaining compile errors (the compiler will explain each one).
+>
+> **4. Can it break behavior?**
+> Theoretically yes — if your code relied on the old closure capture semantics in a subtle way, the new narrower captures could change what gets moved into a closure. In practice this is rare and the compiler will catch type errors from it. `cargo fix --edition` is a safe starting point, not a guarantee of zero-diff semantics.
+>
+> **Explanation:**
+> Edition migrations are designed to be low-risk and incremental. The Rust team writes automated fixes for the vast majority of required changes. The recommended approach is always: run `cargo fix --edition`, then manually bump the edition key, then review with `cargo test`.
 
 ---
 

@@ -170,43 +170,123 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Stack Pinning with `std::pin::pin!`
+### Exercise 2: Stack Pinning with `tokio::pin!` — Reusing a Future Across `select!`
 
-**Problem:** Pin a value to the stack using `std::pin::pin!(val)` and inspect its `Pin` reference type.
+**Problem:**
+Each iteration of a `select!` loop needs to poll the *same* future — not create a new one. But calling an `async fn` inside `select!` each time creates a fresh future that loses all progress. The solution is to pin the future to the stack with `tokio::pin!` and reuse it.
+
+Write a `#[tokio::main]` program that:
+1. Creates a single `tokio::time::sleep(Duration::from_millis(200))` future and pins it to the stack with `tokio::pin!`.
+2. Runs a loop with a `tokio::select!` that races:
+   - The pinned sleep future against
+   - A `tokio::time::sleep(Duration::from_millis(50))` tick timer.
+3. On each tick, prints `"Tick: {n}"`. When the pinned sleep resolves, prints `"Long sleep done!"` and breaks.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Tick: 1
+> Tick: 2
+> Tick: 3
+> Tick: 4
+> Long sleep done!
 > ```
-> Stack pinned successfully
-> ```
+> *(4 ticks because 200ms / 50ms = 4)*
+>
+> - **Hint 1:** `tokio::pin!(fut)` is a macro that shadows the variable with a `Pin<&mut impl Future>` pointing to the same stack location. You can then pass `&mut fut` into `select!` across multiple iterations without recreating the future.
+> - **Hint 2:** Once a future is pinned, you cannot move it. `select!` borrows `fut` mutably each iteration — it polls it, potentially advances its state, then releases the borrow. This is why pinning is necessary: the future's internal self-references must remain valid between polls.
+> - **Hint 3:** In `select!`, reference pinned futures by name directly (they are already `Pin<&mut F>`). The timer branch needs a fresh `sleep(...)` each iteration (create it inside the `select!` arm expression).
+>
 > ```rust
-> fn main() {
->     let val = 42;
->     let _pinned = std::pin::pin!(val);
->     println!("Stack pinned successfully");
+> use tokio::time::{sleep, Duration};
+>
+> #[tokio::main]
+> async fn main() {
+>     // Create the long-running future ONCE and pin it to the stack.
+>     // tokio::pin! shadows `long_sleep` with Pin<&mut impl Future>.
+>     let long_sleep = sleep(Duration::from_millis(200));
+>     tokio::pin!(long_sleep);
+>
+>     let mut tick = 0u32;
+>     loop {
+>         tokio::select! {
+>             // Branch A: the pinned future — reused across iterations.
+>             _ = &mut long_sleep => {
+>                 println!("Long sleep done!");
+>                 break;
+>             }
+>             // Branch B: a fresh 50ms tick created each iteration.
+>             _ = sleep(Duration::from_millis(50)) => {
+>                 tick += 1;
+>                 println!("Tick: {}", tick);
+>             }
+>         }
+>     }
 > }
 > ```
 >
-> **Explanation:** `std::pin::pin!` pins values to the current stack frame safely.
+> **Explanation:**
+> Without `tokio::pin!`, writing `long_sleep` inside `select!` directly would move the future into the macro on the first iteration, making it unavailable for subsequent iterations. `pin!` creates an `in-place` pin: the future stays at its stack address, and `&mut long_sleep` gives a mutable reference to its pinned location that `select!` can borrow repeatedly. This is the canonical pattern for "race a long-running future against a ticker" in Tokio.
 
 ---
 
-### Exercise 3: Heap Pinning with `Box::pin`
+### Exercise 3: Heap Pinning with `Box::pin` — Type-Erased Future Collections
 
-**Problem:** Create a heap-pinned future using `Box::pin(async { 100 })`.
+**Problem:**
+Heap-pinning with `Box::pin` serves two purposes: (1) it moves the future to the heap where it has a stable address for its entire lifetime, and (2) combined with `dyn Future`, it erases the concrete type so heterogeneous futures can be stored together.
+
+Write a `#[tokio::main]` program that:
+1. Defines three different async fns: `async fn greet() -> String`, `async fn count() -> String`, `async fn timestamp() -> String` — each returns a different formatted string.
+2. Stores all three in a `Vec<Pin<Box<dyn Future<Output = String>>>>` using `Box::pin(greet())` etc.
+3. Iterates the Vec, `.await`s each future, and prints its result.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Hello, world!
+> Count: 42
+> Timestamp: T+0
 > ```
-> Heap pinned future created
-> ```
+>
+> - **Hint 1:** `Box::pin(some_future)` moves `some_future` to the heap and returns `Pin<Box<impl Future<Output = T>>>`. The future's address is now stable — it will never move even if the `Box` itself is moved.
+> - **Hint 2:** To store futures of *different concrete types* in the same `Vec`, you need trait objects: `Pin<Box<dyn Future<Output = String>>>`. Each `Box::pin(f)` coerces to this type automatically because `impl Future` implements `Future`.
+> - **Hint 3:** To `.await` a `Pin<Box<dyn Future<Output = String>>>` from a `Vec`, iterate and await each: `for fut in futures { let result = fut.await; }`. This works because `Pin<Box<dyn Future>>` itself implements `Future`.
+>
 > ```rust
-> fn main() {
->     println!("Heap pinned future created");
+> use std::pin::Pin;
+> use std::future::Future;
+>
+> async fn greet() -> String {
+>     String::from("Hello, world!")
+> }
+>
+> async fn count() -> String {
+>     String::from("Count: 42")
+> }
+>
+> async fn timestamp() -> String {
+>     String::from("Timestamp: T+0")
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     // Box::pin erases the concrete type: all three fns have different
+>     // anonymous Future types, but all coerce to dyn Future<Output = String>.
+>     let futures: Vec<Pin<Box<dyn Future<Output = String>>>> = vec![
+>         Box::pin(greet()),
+>         Box::pin(count()),
+>         Box::pin(timestamp()),
+>     ];
+>
+>     for fut in futures {
+>         let result = fut.await;
+>         println!("{}", result);
+>     }
 > }
 > ```
 >
-> **Explanation:** `Box::pin` moves values onto the heap and returns a stable `Pin<Box<T>>` pointer.
+> **Explanation:**
+> `Box::pin` is the primary way to heap-allocate a future when you need to: (a) store it as a field in a struct without knowing its size at compile time, (b) mix futures of different types in a collection, or (c) return a future from a function whose concrete type you want to hide (e.g. `-> Pin<Box<dyn Future<Output = T>>>`). The `Pin` wrapper ensures the heap allocation is never moved, which is necessary because `async fn` generates self-referential state machines that would be corrupted if their memory address changed mid-execution.
 
 ---
 

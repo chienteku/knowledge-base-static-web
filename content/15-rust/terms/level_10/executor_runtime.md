@@ -164,41 +164,110 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Manual Runtime Construction with `block_on`
+### Exercise 2: Building a Runtime Manually — What `#[tokio::main]` Actually Does
 
-**Problem:** Demonstrate the concept of executing top-level futures using `runtime.block_on(...)`.
+**Problem:**
+`#[tokio::main]` is a convenience macro. Under the hood it calls `tokio::runtime::Builder` to construct a runtime, then calls `runtime.block_on(your_async_main())`. Understanding this lets you customise the runtime (e.g. single-threaded, limited workers).
+
+Write a plain synchronous `fn main()` (no macro) that:
+1. Builds a **single-threaded** Tokio runtime using `Builder::new_current_thread().enable_all().build().unwrap()`.
+2. Calls `runtime.block_on(async { ... })` with an async block that prints `"Running inside block_on"` and returns `42u32`.
+3. Prints `"block_on returned: {result}"` back in synchronous `main`.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Running inside block_on
+> block_on returned: 42
 > ```
-> Runtime executed future to completion
-> ```
+>
+> - **Hint 1:** `tokio::runtime::Builder::new_current_thread()` creates a single-threaded runtime — all tasks run on the calling thread. `new_multi_thread()` creates the default multi-threaded runtime with one thread per CPU core.
+> - **Hint 2:** `enable_all()` enables Tokio's I/O driver and timer driver. Without this, `tokio::time::sleep` and network I/O won't work. `#[tokio::main]` always calls `enable_all()` for you.
+> - **Hint 3:** `block_on` drives the given `Future` to completion on the *current thread*, blocking it synchronously. This is the bridge between synchronous `fn main()` and the async world. The runtime is dropped when it goes out of scope, which shuts down all background threads.
+>
 > ```rust
+> use tokio::runtime::Builder;
+>
 > fn main() {
->     println!("Runtime executed future to completion");
+>     // Build a single-threaded runtime manually.
+>     // This is exactly what #[tokio::main(flavor = "current_thread")] generates.
+>     let runtime = Builder::new_current_thread()
+>         .enable_all()  // enables I/O and timer drivers
+>         .build()
+>         .unwrap();
+>
+>     // block_on drives the future on the current thread synchronously.
+>     // It will not return until the future resolves.
+>     let result: u32 = runtime.block_on(async {
+>         println!("Running inside block_on");
+>         42
+>     });
+>
+>     println!("block_on returned: {}", result);
+>     // runtime drops here → all background resources are cleaned up.
 > }
 > ```
 >
-> **Explanation:** Async runtimes drive top-level futures to completion by polling them on executor threads.
+> **Explanation:**
+> `block_on` is the fundamental bridge from synchronous Rust to async Rust. It blocks the calling OS thread until the given future resolves, turning an async computation into a synchronous result. The `#[tokio::main]` macro is pure syntactic sugar that generates exactly this boilerplate — knowing the expansion means you can customise it: change the number of worker threads, set thread stack sizes, or integrate with non-Tokio async code that needs its own runtime.
 
 ---
 
-### Exercise 3: Offloading Heavy Computations with `spawn_blocking`
+### Exercise 3: `spawn_blocking` — Preventing Worker Thread Starvation
 
-**Problem:** Explain why `tokio::task::spawn_blocking` offloads heavy CPU work to a dedicated blocking thread pool.
+**Problem:**
+Tokio's worker threads are precious — they run the async event loop. If you call a blocking operation (like `std::fs::read_to_string` or a CPU-intensive calculation) directly on a worker thread, that thread is stuck and cannot poll other tasks.
+
+`tokio::task::spawn_blocking` solves this by running blocking code on a *separate* dedicated thread pool, keeping the async workers free.
+
+Write a `#[tokio::main]` program that:
+1. Spawns a `tokio::task::spawn_blocking` task that performs a "heavy" synchronous calculation: `(0u64..1_000_000).sum::<u64>()`. Use `std::thread::sleep(Duration::from_millis(50))` to simulate blocking I/O.
+2. While that blocking task is running, concurrently prints `"Async task still running..."` from the async side using `tokio::time::sleep(Duration::from_millis(10)).await` in a short loop (3 iterations).
+3. Awaits the `spawn_blocking` result and prints `"Blocking result: {sum}"`.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Async task still running...
+> Async task still running...
+> Async task still running...
+> Blocking result: 499999500000
 > ```
-> Offloaded blocking CPU task
-> ```
+> *(order of prints may vary slightly)*
+>
+> - **Hint 1:** `tokio::task::spawn_blocking(|| { ... })` takes a regular (non-async) closure and runs it on the blocking thread pool. It returns a `JoinHandle<T>` that you `.await` to get the result back in async context.
+> - **Hint 2:** The blocking pool is separate from the async worker pool. The async worker that spawned the blocking task is immediately free to run other async tasks (like the `tokio::time::sleep` loop) while the blocking thread runs the synchronous code.
+> - **Hint 3:** Use `tokio::join!` or spawn the async loop as a separate task with `tokio::spawn` so it runs concurrently with the `spawn_blocking` call. If you `.await` the blocking handle first with no other tasks running, the async side won't get a chance to print.
+>
 > ```rust
-> fn main() {
->     println!("Offloaded blocking CPU task");
+> use std::time::Duration;
+>
+> #[tokio::main]
+> async fn main() {
+>     // Spawn the heavy synchronous work onto the blocking thread pool.
+>     // The current async worker thread is immediately freed.
+>     let blocking_handle = tokio::task::spawn_blocking(|| {
+>         std::thread::sleep(Duration::from_millis(50)); // simulate blocking I/O
+>         (0u64..1_000_000).sum::<u64>()  // CPU work
+>     });
+>
+>     // While the blocking thread runs, this async task keeps running.
+>     let async_side = tokio::spawn(async {
+>         for _ in 0..3 {
+>             tokio::time::sleep(Duration::from_millis(10)).await;
+>             println!("Async task still running...");
+>         }
+>     });
+>
+>     // Wait for both to finish.
+>     tokio::join!(async_side, async { () }).0.unwrap();
+>     let sum = blocking_handle.await.unwrap();
+>     println!("Blocking result: {}", sum);
 > }
 > ```
 >
-> **Explanation:** `spawn_blocking` prevents CPU-intensive or synchronous I/O operations from starving main async event loops.
+> **Explanation:**
+> Tokio's async worker threads run the event loop — they must never be blocked synchronously or all tasks scheduled on that thread will freeze. `spawn_blocking` moves the blocking call to a dedicated "blocking thread pool" (Tokio manages up to 512 by default) that is allowed to block. The async worker that called `spawn_blocking` is immediately returned to the event loop. The `JoinHandle` returned by `spawn_blocking` is a regular async `Future` — awaiting it just suspends the task until the blocking thread finishes, without blocking any worker thread.
 
 ---
 

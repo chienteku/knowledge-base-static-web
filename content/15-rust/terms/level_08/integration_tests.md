@@ -168,43 +168,99 @@ fn check_hashing() {
 
 ---
 
-### Exercise 2: Structuring Shared Test Helpers in `tests/common/mod.rs`
+### Exercise 2: `tests/common/mod.rs` — Sharing Helpers Without Creating a Test Binary
 
-**Problem:** Explain why `tests/common/mod.rs` prevents Cargo from treating helper modules as test binaries.
+**Problem:**
+You want to share a `setup()` helper function across multiple integration test files in your `tests/` directory. You create `tests/common.rs` with:
+```rust
+pub fn setup() { /* prepare test database */ }
+```
+When you run `cargo test`, you see:
+```
+running 0 tests
+test result: ok. 0 passed
+```
+for a test binary called `common`. Why is Cargo running `tests/common.rs` as its own test binary, and how do you fix it?
 
-**Expected output:**
 > [!check]- Answer
-> ```
-> tests/common/mod.rs avoids test runner overhead
-> ```
-> ```rust
-> fn main() {
->     println!("tests/common/mod.rs avoids test runner overhead");
-> }
-> ```
+> **Why it happens:**
+> Every `.rs` file directly inside `tests/` is compiled by Cargo as an **independent test binary**. Cargo sees `tests/common.rs` and creates a separate test executable for it. Since `common.rs` has no `#[test]` functions, that binary reports "0 tests". This is annoying noise in the output and also means `setup()` is compiled and linked separately rather than being shared.
 >
-> **Explanation:** Subdirectories with `mod.rs` are ignored as independent test binary targets by Cargo.
+> **The fix: use `tests/common/mod.rs`:**
+> ```
+> tests/
+>   common/
+>     mod.rs       ← helper code goes here
+>   auth_test.rs   ← uses `mod common;`
+>   billing_test.rs
+> ```
+> Subdirectories inside `tests/` are **not** automatically compiled as top-level test binaries. A file at `tests/common/mod.rs` is a module, not an entry point. Each test file that needs the helpers declares:
+> ```rust
+> mod common;  // looks for tests/common/mod.rs
+> ```
+> This causes `common/mod.rs` to be compiled as part of *that test file's binary*, not as its own binary. Cargo never sees a standalone `tests/common` executable, so no spurious "0 tests" output appears.
+>
+> **Explanation:**
+> This is a Cargo file-discovery quirk: the `tests/` directory uses the same "every top-level `.rs` file is a target" rule as `src/bin/`. The `mod.rs` convention is the standard escape hatch when you need shared helpers.
 
 ---
 
-### Exercise 3: Importing Public Library Crates in Integration Tests
+### Exercise 3: Writing a Real Integration Test
 
-**Problem:** Write an integration test function in `tests/integration_test.rs` importing `use my_crate::*;`.
+**Problem:**
+Write the two files needed for a complete, working integration test:
+1. `src/lib.rs` — a public `add(a: i32, b: i32) -> i32` function.
+2. `tests/math_test.rs` — an integration test file that imports the library and tests `add`.
+
+Then answer:
+- Why does `tests/math_test.rs` use `use my_crate::add;` rather than `mod` to access the function?
+- Why is `#[cfg(test)]` **not** needed in the integration test file?
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Integration test executed
-> ```
-> ```rust
-> #[test]
-> fn test_pub_api() {
->     println!("Integration test executed");
-> }
-> fn main() { test_pub_api(); }
+> ```text
+> running 2 tests
+> test test_add_positive ... ok
+> test test_add_negative ... ok
+> test result: ok. 2 passed; 0 failed
 > ```
 >
-> **Explanation:** Integration tests in `tests/` exercise published library APIs externally.
+> - **Hint 1:** In `tests/math_test.rs`, the crate name matches the `[package] name` in `Cargo.toml`. If your package is named `my_math`, the import is `use my_math::add;`. Cargo compiles each integration test file as a separate crate that depends on your library.
+> - **Hint 2:** No `#[cfg(test)]` is needed because the entire `tests/` directory is only compiled during `cargo test`. Cargo never includes integration test files in a normal `cargo build`.
+> - **Hint 3:** No `fn main()` is needed either. Cargo generates its own `main` harness for the test binary that discovers and runs all `#[test]` functions automatically.
+>
+> ```rust
+> // src/lib.rs
+>
+> /// Adds two integers.
+> pub fn add(a: i32, b: i32) -> i32 {
+>     a + b
+> }
+> ```
+>
+> ```rust
+> // tests/math_test.rs
+>
+> // Integration tests import the crate by name, exactly like an external user would.
+> // No `#[cfg(test)]` needed — this file is ONLY compiled during `cargo test`.
+> use my_math::add;
+>
+> #[test]
+> fn test_add_positive() {
+>     assert_eq!(add(2, 3), 5);
+> }
+>
+> #[test]
+> fn test_add_negative() {
+>     assert_eq!(add(-1, -4), -5);
+> }
+> ```
+>
+> **Answer to the `use` vs `mod` question:**
+> `mod` declares a *submodule* that Cargo looks for as a file in the same directory. `use` imports an item from a *separate crate*. Because each file in `tests/` is compiled as its own independent crate, the library is a *dependency* (Cargo adds it automatically), not a submodule. You import from it with `use`, exactly as an external user would after adding it to their `Cargo.toml`.
+>
+> **Answer to the `#[cfg(test)]` question:**
+> `#[cfg(test)]` is needed in `src/` files to gate code that should only exist during testing — because those files are also compiled during normal `cargo build`. Files in `tests/` are *never* compiled by `cargo build`. Cargo only touches them during `cargo test`, so every line in a `tests/` file is implicitly test-only — no annotation required.
 
 ---
 

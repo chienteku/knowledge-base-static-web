@@ -168,44 +168,86 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Declaring Package Metadata
+### Exercise 2: Reading and Diagnosing a `Cargo.toml`
 
-**Problem:** Write a `[package]` manifest section defining `name = "demo"`, `version = "0.1.0"`, `edition = "2021"`.
+**Problem:**
+A junior developer committed the following `Cargo.toml`. It compiles, but it has **three problems** that will cause issues for other developers or when publishing. Identify all three.
 
-**Expected output:**
+```toml
+[package]
+name = "my app"
+version = "1"
+edition = "2021"
+
+[dependencies]
+reqwest = "0"
+serde = { version = "1.0", features = ["derive"] }
+```
+
 > [!check]- Answer
-> ```
+> **Problem 1: `name = "my app"` contains a space.**
+> Crate names must use only ASCII letters, digits, `-`, and `_`. A space is illegal and will be rejected by `crates.io` publishing and may cause issues with some tools. Fix: `name = "my-app"` or `name = "my_app"`.
+>
+> **Problem 2: `version = "1"` is missing the minor and patch components.**
+> Cargo accepts this syntactically (it treats `"1"` as a semver requirement `^1`), but it's ambiguous and non-standard for a `[package]` version. Package versions must be full semver (`MAJOR.MINOR.PATCH`). Fix: `version = "1.0.0"`.
+>
+> **Problem 3: `reqwest = "0"` is an extremely loose version constraint.**
+> `"0"` matches any version in the `0.x.x` range. In semver, `0.x` versions are pre-stable and every `0.x` → `0.y` bump is permitted to be breaking. Today `reqwest` is at `0.11`; tomorrow it could resolve to `0.12` with breaking API changes. Fix: pin to the specific compatible series: `reqwest = "0.11"`.
+>
+> **Corrected `Cargo.toml`:**
+> ```toml
 > [package]
-> name = "demo"
-> version = "0.1.0"
+> name = "my-app"
+> version = "1.0.0"
 > edition = "2021"
-> ```
-> ```rust
-> fn main() {
->     println!("[package]\nname = \"demo\"\nversion = \"0.1.0\"\nedition = \"2021\"");
-> }
+>
+> [dependencies]
+> reqwest = "0.11"
+> serde = { version = "1.0", features = ["derive"] }
 > ```
 >
-> **Explanation:** `[package]` declares core crate manifest metadata.
+> **Explanation:**
+> `Cargo.toml` is both a build manifest and a publishing contract. Version constraints that are too loose (`"0"`) leave your build vulnerable to silent breaking upgrades; names with illegal characters fail at publish time; and non-standard version strings make automation tools (like `cargo semver-checks`) unreliable.
 
 ---
 
-### Exercise 3: Adding Renamed Dependencies
+### Exercise 3: Renaming Dependencies — When and Why
 
-**Problem:** Rename a dependency `my_serde = { package = "serde", version = "1.0" }` in `Cargo.toml`.
+**Problem:**
+You are building a crate that depends on both `serde` version `1.0` and a fork called `serde2` — but `serde2`'s actual crate name on `crates.io` is also `serde` (at version `2.0`). Without renaming, Cargo would see two dependencies both named `serde` and reject the manifest.
 
-**Expected output:**
+Do the following:
+1. Write the `Cargo.toml` `[dependencies]` section that pulls in both, aliasing the fork as `serde2` in your code.
+2. Show how to `use` both in `src/lib.rs`.
+3. Answer: besides version conflicts, name one other reason you might want to rename a dependency.
+
 > [!check]- Answer
-> ```
-> Dependency alias configured
-> ```
-> ```rust
-> fn main() {
->     println!("Dependency alias configured");
-> }
+> **1. `Cargo.toml`:**
+> ```toml
+> [dependencies]
+> # The real crate name on crates.io is "serde"; we use it under its normal name.
+> serde = "1.0"
+>
+> # This is also named "serde" on crates.io (a fork), but we alias it to "serde2"
+> # so it doesn't collide. The `package` key is the real crate name; the key
+> # before `=` is what Cargo calls it locally (and what you write in `use`).
+> serde2 = { package = "serde", version = "2.0" }
 > ```
 >
-> **Explanation:** `package = "..."` allows aliasing crate imports under alternative local names.
+> **2. `src/lib.rs`:**
+> ```rust
+> // Use the stable serde normally.
+> use serde::Serialize;
+>
+> // Use the forked serde under its alias.
+> use serde2::Deserialize;
+> ```
+>
+> **3. Another use case for renaming:**
+> You depend on a crate whose name is a Rust keyword or conflicts with a local module name. For example, a crate literally named `async` or `type` would cause `use async::...` to be a parse error. Aliasing it to `async_lib = { package = "async", version = "1.0" }` lets you write `use async_lib::...` instead.
+>
+> **Explanation:**
+> The `package` key in a dependency entry is the real name Cargo downloads from `crates.io`; the TOML key before `=` is the local alias — both the name you write in `use` statements and the name Cargo uses internally when building. This separation is what allows multiple versions of the same crate to coexist in one dependency graph.
 
 ---
 

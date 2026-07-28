@@ -195,22 +195,55 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Combining `cfg` Logic with `all` and `not`
+### Exercise 3: Composing `cfg` Predicates with `all`, `any`, and `not`
 
-**Problem:** Write `#[cfg(all(unix, not(target_os = "android")))]`.
+**Problem:**
+Real-world platform code often needs multi-condition compilation guards. `cfg` supports boolean combinators: `all(a, b)` (both must be true), `any(a, b)` (either must be true), and `not(a)` (must be false). These compose arbitrarily.
+
+Write a program that defines **three** platform-specific functions and calls the appropriate one based on the current platform:
+1. `fn platform() -> &'static str` returning `"desktop unix"` — compiled only on Unix systems that are **not** Android (i.e., Linux desktop, macOS, BSD).
+2. `fn platform() -> &'static str` returning `"android"` — compiled only on Android.
+3. `fn platform() -> &'static str` returning `"windows or other"` — compiled on everything else.
+
+Only one of the three must compile at a time (no duplicate function error).
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Running on: desktop unix    (on Linux/macOS)
+> Running on: android         (on Android)
+> Running on: windows or other (on Windows/wasm/etc.)
 > ```
-> Desktop Unix verified
-> ```
+> *(exact output depends on the host platform)*
+>
+> - **Hint 1:** `unix` is a cfg predicate set automatically on any Unix-like system: Linux, macOS, Android, BSD, etc. `target_os = "android"` is the Android-specific predicate. So `all(unix, not(target_os = "android"))` means: is Unix but NOT Android.
+> - **Hint 2:** `not(unix)` covers Windows, WebAssembly (`wasm32`), and other non-Unix targets. Combining with `not(target_os = "android")` isn't needed here since Android implies Unix.
+> - **Hint 3:** The three conditions must be mutually exclusive and collectively exhaustive to avoid both "duplicate function" errors (two conditions true at once) and "function not found" errors (no condition true). Adding a final catch-all with `not(all(unix, ...))` covers this.
+>
 > ```rust
+> // Compiled only on desktop Unix (Linux, macOS, BSD) — not Android.
+> #[cfg(all(unix, not(target_os = "android")))]
+> fn platform() -> &'static str { "desktop unix" }
+>
+> // Compiled only on Android (which IS unix, so we need this before the catch-all).
+> #[cfg(target_os = "android")]
+> fn platform() -> &'static str { "android" }
+>
+> // Compiled on everything else: Windows, WebAssembly, other non-unix targets.
+> #[cfg(not(unix))]
+> fn platform() -> &'static str { "windows or other" }
+>
 > fn main() {
->     println!("Desktop Unix verified");
+>     println!("Running on: {}", platform());
 > }
 > ```
 >
-> **Explanation:** `all()`, `any()`, and `not()` compose complex boolean compile conditions.
+> **Explanation:**
+> `cfg` predicates are evaluated at **compile time** using data Cargo passes to `rustc` (target triple, enabled features, etc.). The three conditions are mutually exclusive because:
+> - `all(unix, not(target_os = "android"))` — catches non-Android Unix.
+> - `target_os = "android"` — catches Android (a subset of Unix, handled before `not(unix)`).
+> - `not(unix)` — catches everything that isn't Unix at all.
+> Only one branch exists in the compiled binary; the others are deleted by the compiler before any code generation.
 
 ---
 

@@ -170,27 +170,67 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Opting Out of `Unpin` with `PhantomPinned`
+### Exercise 2: What `!Unpin` Actually Prevents \u2014 `Pin::new` vs `Box::pin`
 
-**Problem:** Create a self-referential struct containing `_pin: PhantomPinned` to make it `!Unpin`.
+**Problem:**
+If a type implements `Unpin`, you can use `Pin::new(&mut val)` and then freely move `val` out afterward \u2014 pinning has no effect on it. If a type is `!Unpin`, you *cannot* call `Pin::new` on a stack reference (the compiler blocks the safe path), and you must use `Box::pin` instead for a stable heap address.
+
+Demonstrate both cases:
+1. Create `struct Movable { val: i32 }` (auto-`Unpin`). Pin it with `Pin::new`, deref it, then move `val` out afterward \u2014 show this is fine.
+2. Create `struct Immovable { _pin: PhantomPinned }` (`!Unpin`). Explain (in a comment) why `Pin::new(&mut immovable)` would be rejected by the compiler. Pin it safely with `Box::pin` instead, and dereference through the Pin to read a field.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Movable value through Pin: 99
+> Moved val out of Movable afterward: 99
+> Immovable value through Box::pin: 42
 > ```
-> Struct is !Unpin
-> ```
+>
+> - **Hint 1:** `Pin::new(ptr)` is only available when the pointed-to type implements `Unpin`. The function signature is `Pin::new(ptr: P) -> Pin<P> where P::Target: Unpin`. For `!Unpin` types, this function simply does not exist \u2014 the compiler rejects the call at the trait bound level.
+> - **Hint 2:** `Pin::new_unchecked` is the unsafe escape hatch that bypasses the `Unpin` check. `Box::pin(val)` is the safe alternative: it allocates on the heap, which has a stable address for as long as the `Box` lives.
+> - **Hint 3:** You can read through a `Pin<Box<T>>` with `pinned_box.as_ref().get_ref().field` or by dereferencing: `(*pinned_box).field`. Writing requires `pinned_box.as_mut().get_mut().field` \u2014 but only if `T: Unpin`.
+>
 > ```rust
 > use std::marker::PhantomPinned;
-> struct Unmovable {
+> use std::pin::Pin;
+>
+> // Movable is Unpin (auto-implemented): safe to use Pin::new and then move.
+> struct Movable {
+>     val: i32,
+> }
+>
+> // Immovable is !Unpin because PhantomPinned opts out of the auto-impl.
+> struct Immovable {
 >     val: i32,
 >     _pin: PhantomPinned,
 > }
+>
 > fn main() {
->     println!("Struct is !Unpin");
+>     // Case 1: Unpin type \u2014 Pin::new works; moving out afterward is fine.
+>     let mut m = Movable { val: 99 };
+>     {
+>         let pinned = Pin::new(&mut m); // allowed: Movable: Unpin
+>         println!("Movable value through Pin: {}", pinned.val);
+>     } // pin released here; &mut m is no longer borrowed
+>     println!("Moved val out of Movable afterward: {}", m.val); // m is still usable
+>
+>     // Case 2: !Unpin type \u2014 Pin::new is NOT available; use Box::pin.
+>     // let mut i = Immovable { val: 42, _pin: PhantomPinned };
+>     // Pin::new(&mut i); // \u274c compile error: Immovable: !Unpin
+>
+>     let pinned_box: Pin<Box<Immovable>> = Box::pin(Immovable {
+>         val: 42,
+>         _pin: PhantomPinned,
+>     });
+>     // Read through the Pin by calling get_ref() (safe for any Pin).
+>     println!("Immovable value through Box::pin: {}", pinned_box.as_ref().get_ref().val);
+>     // pinned_box drops here \u2014 the heap allocation is freed.
 > }
 > ```
 >
-> **Explanation:** `PhantomPinned` marker fields remove automatic `Unpin` implementations from structs.
+> **Explanation:**
+> `Unpin` is the trait that says "I don't care if I'm moved while pinned". For such types, `Pin` is essentially a no-op wrapper \u2014 it adds no safety constraints. `!Unpin` types (like async state machines) genuinely need the location stability guarantee: once pinned, they must stay at the same address until dropped. `Box::pin` provides this by allocating on the heap and preventing the `Box` from moving (via the `Pin` wrapper). The practical takeaway: you almost never deal with `Pin` directly when writing async Rust \u2014 the `async/await` machinery handles it. You encounter it when implementing `Future` by hand or working with self-referential data structures.
 
 ---
 

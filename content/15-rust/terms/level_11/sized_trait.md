@@ -203,23 +203,57 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Checking Memory Sizes with `std::mem::size_of`
+### Exercise 3: Proving `Sized` — A Cross-Type Size Survey
 
-**Problem:** Print `size_of::<i32>()` and explain why `Sized` types have compile-time known memory layout sizes.
+**Problem:**
+The `Sized` trait isn't something you implement; the compiler grants it automatically to types whose byte size is known at compile time. Use `std::mem::size_of` and `std::mem::size_of_val` to answer these questions, then write code to verify:
+
+1. Which of these types implement `Sized`? Fill in the table before running the code.
+   | Type | `Sized`? | Size (bytes) |
+   |---|---|---|
+   | `i32` | ? | ? |
+   | `(i32, bool)` | ? | ? |
+   | `[i32; 4]` | ? | ? |
+   | `str` | ? | ? |
+   | `[i32]` | ? | ? |
+2. Why can `size_of::<i32>()` be called but `size_of::<str>()` cannot compile?
+3. How do you measure the size of a DST value at runtime? (Hint: there's a `size_of_val` function.)
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> i32           : 4 bytes
+> (i32, bool)   : 8 bytes  (4 + 1, padded to alignment of 4)
+> [i32; 4]      : 16 bytes (4 × 4)
+> "hello" (str) : 5 bytes  (runtime, via size_of_val)
+> [1,2,3] (slice): 12 bytes (runtime, via size_of_val)
 > ```
-> Size of i32: 4 bytes
-> ```
+>
+> - **Hint 1:** `size_of::<T>()` is a const generic function — it only compiles when `T: Sized`, because a non-Sized type has no fixed size to return. For DSTs like `str` and `[i32]`, the compiler rejects the call entirely at compile time (`E0277`).
+> - **Hint 2:** `size_of_val(val: &T) -> usize` where `T: ?Sized` works on DSTs because it reads the length metadata from the fat pointer at runtime and multiplies by the element size. This is how you measure a DST's actual byte footprint.
+> - **Hint 3:** The padding in `(i32, bool)` may surprise you: `bool` is 1 byte but the tuple's alignment is `max(align_of::<i32>(), align_of::<bool>()) = 4`, so the compiler inserts 3 bytes of padding after the `bool`, making the total 8.
+>
 > ```rust
-> use std::mem::size_of;
+> use std::mem::{size_of, size_of_val};
+>
 > fn main() {
->     println!("Size of i32: {} bytes", size_of::<i32>());
+>     // Sized types: size_of::<T>() works at compile time.
+>     println!("i32           : {} bytes", size_of::<i32>());
+>     println!("(i32, bool)   : {} bytes  (4 + 1, padded to alignment of 4)", size_of::<(i32, bool)>());
+>     println!("[i32; 4]      : {} bytes (4 × 4)", size_of::<[i32; 4]>());
+>
+>     // DST types: size_of::<str>() won't compile (E0277).
+>     // Instead, use size_of_val with a concrete reference at runtime.
+>     let s: &str = "hello";
+>     println!("\"hello\" (str) : {} bytes  (runtime, via size_of_val)", size_of_val(s));
+>
+>     let sl: &[i32] = &[1, 2, 3];
+>     println!("[1,2,3] (slice): {} bytes (runtime, via size_of_val)", size_of_val(sl));
 > }
 > ```
 >
-> **Explanation:** `Sized` types have known stack sizes fixed during compilation.
+> **Explanation:**
+> `Sized` is the dividing line between compile-time and runtime size knowledge. For `Sized` types, the compiler bakes the size into the binary as a constant — `size_of::<i32>()` compiles to the literal `4` with no runtime cost. For DSTs, the size depends on the actual value (how long the string is, how many elements the slice has), so it can only be computed at runtime using the fat pointer's metadata. This distinction is why DSTs must always live behind a pointer: the stack frame for a function is allocated before it starts executing, so the compiler must know the exact byte size of every local variable at compile time.
 
 ---
 

@@ -175,42 +175,111 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Iterating Over Streams with `while let Some`
+### Exercise 2: Consuming a Stream with `while let Some`
 
-**Problem:** Iterate over elements yielded by a stream concept using `while let Some(item) = stream.next().await`.
+**Problem:**
+You have a list of three event names: `["connected", "data_received", "disconnected"]`. Convert this `Vec` into an async stream using `tokio_stream::iter` and consume it with a `while let Some(...)` loop, printing each event as:
+
+```
+Event: connected
+Event: data_received
+Event: disconnected
+Stream exhausted.
+```
+
+Then answer: **why can't you use a regular `for` loop on a `Stream`?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Event: connected
+> Event: data_received
+> Event: disconnected
+> Stream exhausted.
 > ```
-> Stream item: 1
-> Stream item: 2
-> ```
+>
+> - **Hint 1:** Add `tokio-stream = "0.1"` to your `Cargo.toml`. Then bring `StreamExt` into scope with `use tokio_stream::StreamExt;` — without this trait import, the `.next()` method doesn't exist on the stream type.
+> - **Hint 2:** `tokio_stream::iter(vec![...])` wraps any `IntoIterator` into an async `Stream`. The stream must be declared `mut` because `.next()` takes `&mut self`.
+> - **Hint 3:** The loop pattern is `while let Some(item) = stream.next().await { ... }`. The `.await` is mandatory — `.next()` returns a `Future<Output = Option<Item>>`, not the item directly.
+> - **Answer to the `for` loop question:** A `for` loop desugars into calls to `Iterator::next()`, which returns `Option<T>` synchronously. A `Stream`'s `.next()` returns a `Future<Output = Option<T>>` that must be `.await`ed. The Rust `for` loop has no mechanism to insert an `.await` point, so streams require the manual `while let` pattern (until `async for` stabilises).
+>
 > ```rust
-> fn main() {
->     println!("Stream item: 1\nStream item: 2");
+> use tokio_stream::StreamExt; // ← must import; unlocks .next(), .map(), .filter(), etc.
+> use tokio_stream::iter;
+>
+> #[tokio::main]
+> async fn main() {
+>     // Convert a Vec into an async Stream. The stream is lazy — items are
+>     // only yielded one at a time as we poll it, not all at once.
+>     let mut event_stream = iter(vec!["connected", "data_received", "disconnected"]);
+>
+>     // `while let` + `.await` is the idiomatic Stream consumption loop.
+>     // Each call to .next().await suspends this task until the next item
+>     // is available, yielding control back to the executor in the meantime.
+>     while let Some(event) = event_stream.next().await {
+>         println!("Event: {}", event);
+>     }
+>
+>     // None was returned — the stream is permanently exhausted.
+>     println!("Stream exhausted.");
 > }
 > ```
 >
-> **Explanation:** `Stream` represents asynchronous iterators yielding values over time via `poll_next`.
+> **Explanation:**
+> `stream.next().await` is the fundamental building block of all stream consumption. Each call asks the stream for its next item: if one is ready, `Poll::Ready(Some(item))` resolves immediately; if not, `Poll::Pending` suspends the task until the reactor wakes it. When the stream has no more items, `Poll::Ready(None)` terminates the `while let`. The key insight is that the `.await` makes this pattern *non-blocking* — during the wait for the next item, the Tokio executor is free to run other tasks on the same thread.
 
 ---
 
-### Exercise 3: Filtering Async Streams
+### Exercise 3: Building an Async Stream Adapter Pipeline
 
-**Problem:** Filter stream numbers using `.filter(|x| ...)` adapter.
+**Problem:**
+Given a stream of integers `[1, 2, 3, 4, 5, 6]`, build a pipeline using `StreamExt` adapters that:
+
+1. **Filters** to keep only even numbers.
+2. **Maps** each surviving number by multiplying it by 10.
+3. Consumes the result with `while let Some(...)` and prints each value.
+
+Note that `StreamExt::filter` has a subtly different signature from `Iterator::filter` — its predicate must return a `Future<Output = bool>`, not a plain `bool`. This is the key challenge.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Even×10: 20
+> Even×10: 40
+> Even×10: 60
 > ```
-> Filtered stream items
-> ```
+>
+> - **Hint 1:** `StreamExt::filter` requires an *async* predicate — a closure that returns a `Future<Output = bool>`. The easiest way to wrap a synchronous boolean into a future is `futures::future::ready(bool_expr)`. Add `futures = "0.3"` to `Cargo.toml` and `use futures::future;`.
+> - **Hint 2:** The filter closure signature is `|x| future::ready(x % 2 == 0)`. Note it takes `&Item` not `Item` (mirroring `Iterator::filter`), so if your item type is `i32`, the closure receives `&i32`.
+> - **Hint 3:** Chain adapters before the `while let` loop, just like with `Iterator`. The resulting stream type is complex, so use `let mut pipeline = stream.filter(...).map(...);` and let the compiler infer the type.
+> - **Hint 4:** `StreamExt::map` (unlike filter) takes a *synchronous* closure returning the new value directly — no `future::ready` needed.
+>
 > ```rust
-> fn main() {
->     println!("Filtered stream items");
+> use futures::future;          // for future::ready()
+> use tokio_stream::StreamExt;  // for .filter(), .map(), .next()
+> use tokio_stream::iter;
+>
+> #[tokio::main]
+> async fn main() {
+>     let numbers = iter(vec![1_i32, 2, 3, 4, 5, 6]);
+>
+>     // Chain adapters to build the pipeline.
+>     // filter: async predicate — must wrap the bool in a ready Future.
+>     // map:    synchronous transform — plain closure returning the new value.
+>     let mut pipeline = numbers
+>         .filter(|x| future::ready(x % 2 == 0)) // keeps 2, 4, 6
+>         .map(|x| x * 10);                       // yields 20, 40, 60
+>
+>     while let Some(val) = pipeline.next().await {
+>         println!("Even×10: {}", val);
+>     }
 > }
 > ```
 >
-> **Explanation:** `StreamExt` supplies async stream adapters mirroring standard iterator methods.
+> **Explanation:**
+> The async-predicate requirement of `StreamExt::filter` is the most common stumbling block when coming from `Iterator`. Because `poll_next` is the fundamental async primitive, every adapter in the stream pipeline must be composable with the executor's poll loop — and that means predicates that might themselves need to `.await` something (e.g. a database lookup) must return a `Future`. For a simple synchronous boolean, `future::ready(bool)` is the minimal wrapper: it creates a `Future` that immediately resolves to the given value without ever yielding.
+>
+> The `filter` → `map` order also matters: filtering first reduces the number of items that `map` has to process, which is the same performance principle as with synchronous iterators — always filter before transforming.
 
 ---
 

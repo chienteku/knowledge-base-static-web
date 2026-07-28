@@ -172,42 +172,104 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Concurrent Future Execution with `tokio::join!`
+### Exercise 2: `tokio::join!` — Running Two Futures Concurrently
 
-**Problem:** Execute two futures `f1` and `f2` concurrently using `join!` concept and unpack results.
+**Problem:**
+`tokio::join!` polls all its futures concurrently on the *same thread* and returns a tuple of their results when *all* finish. This is fundamentally different from sequential `.await`: both futures make progress during each other's await points.
+
+Write a `#[tokio::main]` program that:
+1. Defines `async fn fetch_user() -> u32` — sleeps 80 ms, returns `10`.
+2. Defines `async fn fetch_score() -> u32` — sleeps 50 ms, returns `20`.
+3. Uses `tokio::join!` to run both concurrently and unpack the results into `(user, score)`.
+4. Prints `"Results: {user}, {score}"`.
+
+Then answer: **approximately how long does the whole program take, and why?**
 
 **Expected output:**
 > [!check]- Answer
-> ```
+> ```text
 > Results: 10, 20
 > ```
+> *(takes ~80 ms, not ~130 ms)*
+>
+> - **Hint 1:** `let (user, score) = tokio::join!(fetch_user(), fetch_score());` — `join!` returns a tuple in the same order as the listed futures. Both futures start polling immediately and make progress concurrently.
+> - **Hint 2:** The total time is approximately `max(80, 50) = 80 ms`, not `80 + 50 = 130 ms`. Both futures are sleeping at the same time — the executor polls them both, and whichever wakes first gets resumed first. The program is done when the *longest* future finishes.
+> - **Hint 3:** `join!` does **not** create separate threads. Both futures run on the same async executor thread. This concurrency is cooperative: the executor switches between them at `.await` points. This is why blocking one future (e.g. with `std::thread::sleep`) would freeze the other.
+>
 > ```rust
-> fn main() {
->     let res = (10, 20); // Conceptual join!(f1(), f2())
->     println!("Results: {}, {}", res.0, res.1);
+> use tokio::time::{sleep, Duration};
+>
+> async fn fetch_user() -> u32 {
+>     sleep(Duration::from_millis(80)).await;
+>     10
+> }
+>
+> async fn fetch_score() -> u32 {
+>     sleep(Duration::from_millis(50)).await;
+>     20
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     // Both futures start running immediately and overlap.
+>     // The tuple is returned only when BOTH are finished.
+>     let (user, score) = tokio::join!(fetch_user(), fetch_score());
+>     println!("Results: {}, {}", user, score);
 > }
 > ```
 >
-> **Explanation:** `join!` polls multiple futures concurrently on the current thread, returning tuple results when all finish.
+> **Explanation:**
+> `tokio::join!` is a macro that expands into a single state machine that polls all listed futures on each executor wake. Unlike sequential `.await` (which only starts future B after A finishes), `join!` allows A and B to make progress simultaneously — whenever one yields at a `.await`, the executor can poll the other. The result is that the total wall-clock time equals the *longest* future's duration, not their sum.
 
 ---
 
-### Exercise 3: Short-Circuiting Try Join with `try_join!`
+### Exercise 3: `tokio::try_join!` — Concurrency with Error Short-Circuiting
 
-**Problem:** Explain how `try_join!(f1(), f2())` short-circuits and returns `Err` immediately if any future fails.
+**Problem:**
+`tokio::try_join!` works like `join!` but is designed for `Result`-returning futures. If *any* future returns `Err`, `try_join!` immediately cancels the remaining futures and returns that `Err` — without waiting for the others to finish.
+
+Write a `#[tokio::main]` program that:
+1. Defines `async fn fetch_a() -> Result<u32, &'static str>` — sleeps 30 ms and returns `Ok(100)`.
+2. Defines `async fn fetch_b() -> Result<u32, &'static str>` — sleeps 10 ms and returns `Err("service B is down")`.
+3. Uses `tokio::try_join!(fetch_a(), fetch_b())` and matches the result:
+   - `Ok((a, b))` — prints `"Both succeeded: {a}, {b}"`.
+   - `Err(e)` — prints `"One failed: {e}"`.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> One failed: service B is down
 > ```
-> Try join short-circuit verified
-> ```
+>
+> - **Hint 1:** `try_join!` requires all futures to have the **same** error type. It returns `Result<(T1, T2, ...), E>` — `Ok` only if all succeed, `Err` as soon as any fails.
+> - **Hint 2:** Because `fetch_b` resolves in 10 ms (before `fetch_a`'s 30 ms), the `Err` is received first. At that point, `fetch_a`'s future is dropped — it will not be polled again, and its 30 ms sleep is cancelled. The program exits in ~10 ms, not ~30 ms.
+> - **Hint 3:** `try_join!` cancels the other futures by dropping them. This is why futures in `try_join!` must be *cancellation-safe* — dropping them mid-execution should not leave shared state in an inconsistent state.
+>
 > ```rust
-> fn main() {
->     println!("Try join short-circuit verified");
+> use tokio::time::{sleep, Duration};
+>
+> async fn fetch_a() -> Result<u32, &'static str> {
+>     sleep(Duration::from_millis(30)).await;
+>     Ok(100)
+> }
+>
+> async fn fetch_b() -> Result<u32, &'static str> {
+>     sleep(Duration::from_millis(10)).await;
+>     Err("service B is down") // returns Err after just 10 ms
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     // try_join! runs both concurrently but short-circuits on the first Err.
+>     match tokio::try_join!(fetch_a(), fetch_b()) {
+>         Ok((a, b)) => println!("Both succeeded: {}, {}", a, b),
+>         Err(e)     => println!("One failed: {}", e),
+>     }
 > }
 > ```
 >
-> **Explanation:** `try_join!` handles `Result`-returning futures, stopping execution upon encountering the first `Err`.
+> **Explanation:**
+> `try_join!` is the idiomatic way to fan out multiple fallible async operations (e.g. parallel API calls) and fail fast if any of them errors. It avoids the need to manually track which futures have finished and which to cancel. The key difference from `join!` is that `join!` always waits for all futures regardless of success/failure, while `try_join!` aborts on the first `Err`. Use `join!` when each future's result is independent; use `try_join!` when a failure in any one makes the others pointless.
 
 ---
 

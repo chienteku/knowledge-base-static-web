@@ -190,41 +190,123 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Racing Two Async Operations with `select!`
+### Exercise 2: Implementing a Timeout with `select!`
 
-**Problem:** Race a timer against a data-fetching future using `select!` concept.
+**Problem:**
+You have an async function `fetch_data()` that simulates a slow database query taking **2 seconds**. You want it to fail fast with an error message if it takes longer than **500 ms**.
+
+Write a `#[tokio::main]` program using `tokio::select!` to race `fetch_data()` against a `tokio::time::sleep(Duration::from_millis(500))` timer. Print which branch wins.
+
+Then answer: **after the timer branch wins, is `fetch_data()` still running in the background?**
 
 **Expected output:**
 > [!check]- Answer
+> *(The timer always wins because 500 ms < 2 s)*
+> ```text
+> Timeout! fetch_data took too long.
 > ```
-> First branch completed
-> ```
+>
+> - **Hint 1:** The `select!` syntax for each branch is `result_binding = future_expression => { handler_block }`. Both branches are polled concurrently on each iteration of the executor loop; whichever resolves first runs its handler and drops the other.
+> - **Hint 2:** If you don't need the value from a branch (e.g. the sleep timer returns `()`), use `_` as the binding: `_ = sleep(...) => { ... }`.
+> - **Hint 3 (cancellation answer):** No. When the timer branch wins, Tokio `drop`s the `fetch_data()` future immediately. Its memory is freed, its `.poll()` will never be called again, and the simulated database query is cancelled. This is the defining feature of `select!` and why the futures inside must be *cancellation-safe*.
+>
 > ```rust
-> fn main() {
->     println!("First branch completed");
+> use tokio::time::{sleep, Duration};
+>
+> // Simulates a slow database query: takes 2 seconds to complete.
+> async fn fetch_data() -> &'static str {
+>     sleep(Duration::from_secs(2)).await;
+>     "database result"
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     tokio::select! {
+>         // Branch A: the slow database query.
+>         data = fetch_data() => {
+>             println!("Got data: {}", data);
+>         }
+>         // Branch B: 500 ms deadline. Wins because 500 ms < 2 s.
+>         // `fetch_data()` is dropped the instant this branch resolves.
+>         _ = sleep(Duration::from_millis(500)) => {
+>             println!("Timeout! fetch_data took too long.");
+>         }
+>     }
 > }
 > ```
 >
-> **Explanation:** `select!` executes multiple futures concurrently and runs the handler code for whichever completes first.
+> **Explanation:**
+> `tokio::select!` compiles into a state machine that calls `poll()` on all listed futures on each executor wake. The first future to return `Poll::Ready` wins: its handler block runs, and all remaining futures in the `select!` are **synchronously dropped** — not cancelled via a signal, but literally deallocated. This is why the timeout takes exactly 500 ms (not 2 s): the executor never waits for the losing branch. The pattern is the idiomatic Rust replacement for callback-based timeout APIs and is far simpler than coordinating threads with `AtomicBool` cancellation flags.
 
 ---
 
-### Exercise 3: Handling Select Pattern Guards
+### Exercise 3: Combining `select!` with Pattern Guards for a Shutdown Loop
 
-**Problem:** Use pattern guards inside `select!` branch arms to filter matching completion criteria.
+**Problem:**
+Pattern guards let you make a `select!` branch *conditionally* active — the branch only "wins" if both its future resolves *and* a boolean guard expression is true. If the guard is false, `select!` skips that branch entirely, even if its future is ready.
+
+Write a `#[tokio::main]` program that:
+
+1. Creates a `tokio::sync::mpsc` channel and spawns a task that sends the integers `1, 2, 3, 99, 4` with a 50 ms gap between each.
+2. In `main`, runs a loop with a `select!` block containing **two branches**:
+   - **Message branch:** `Some(n) = rx.recv() if n != 99 =>` — prints `"Received: {n}"` for all values *except* 99.
+   - **Poison-pill branch:** `Some(n) = rx.recv() if n == 99 =>` — prints `"Poison pill received! Shutting down."` and `break`s the loop.
+3. After the loop, print `"Loop exited cleanly."`
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Received: 1
+> Received: 2
+> Received: 3
+> Poison pill received! Shutting down.
+> Loop exited cleanly.
 > ```
-> Guard branch selected
-> ```
+>
+> - **Hint 1:** Pattern guards in `select!` branches use the same `if condition` syntax as `match` arms: `Some(n) = rx.recv() if n != 99 => { ... }`. The future is polled only once per `select!` invocation; if the guard fails on the result, `select!` re-polls other branches or re-enters the next loop iteration.
+> - **Hint 2:** When two branches poll the *same* future (both call `rx.recv()`), there is a subtlety: `select!` internally uses `biased` or random branch ordering. For this exercise, Tokio's `select!` will evaluate branches in a pseudo-random order to avoid starvation, but for a single `mpsc` receiver only one branch can win per value.
+> - **Hint 3:** `mpsc::channel` returns `(Sender<T>, Receiver<T>)`. Use `tx.send(value).await` in the spawned task and `rx.recv().await` (implicitly inside `select!`) in the main loop. The channel's `recv()` returns `Option<T>` — `None` when all senders have dropped.
+> - **Hint 4:** You must `Box::pin` or use `tokio::pin!` if you want to *reuse* a single `Future` across multiple `select!` iterations. However, calling `rx.recv()` inside the `select!` expression each iteration creates a fresh `Future` per loop — which is fine for channels.
+>
 > ```rust
-> fn main() {
->     println!("Guard branch selected");
+> use tokio::sync::mpsc;
+> use tokio::time::{sleep, Duration};
+>
+> #[tokio::main]
+> async fn main() {
+>     let (tx, mut rx) = mpsc::channel::<i32>(16);
+>
+>     // Sender task: emits a sequence with a 99 "poison pill" in the middle.
+>     tokio::spawn(async move {
+>         for n in [1, 2, 3, 99, 4] {
+>             sleep(Duration::from_millis(50)).await;
+>             let _ = tx.send(n).await;
+>         }
+>     });
+>
+>     loop {
+>         tokio::select! {
+>             // Branch A: normal values — guard passes for anything that isn't 99.
+>             Some(n) = rx.recv(), if n != 99 => {
+>                 println!("Received: {}", n);
+>             }
+>             // Branch B: poison pill — guard passes only for 99.
+>             // When this wins, the branch body breaks the loop.
+>             Some(n) = rx.recv(), if n == 99 => {
+>                 println!("Poison pill received! Shutting down.");
+>                 break;
+>             }
+>         }
+>     }
+>
+>     println!("Loop exited cleanly.");
 > }
 > ```
 >
-> **Explanation:** Pattern guards in `select!` branches allow filtering which completed future results trigger execution.
+> **Explanation:**
+> Pattern guards inside `select!` are evaluated *after* the future resolves but *before* the branch handler runs. If a guard is false, `select!` treats that branch as if it had returned `Poll::Pending` — it simply doesn't run its handler and continues polling other branches. This gives you fine-grained control over *which* resolved value should win the race, not just *which future* resolved first.
+>
+> The poison-pill pattern (sending a sentinel value to signal shutdown) is a standard Rust async idiom. It avoids needing a separate shutdown channel entirely: the control signal travels through the same data channel as normal messages, making the ordering guarantee trivial — the shutdown only fires after all preceding messages have been processed.
 
 ---
 

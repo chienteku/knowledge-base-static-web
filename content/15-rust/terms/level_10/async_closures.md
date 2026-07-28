@@ -178,43 +178,103 @@ What is the exact data type of `x`?
 
 ---
 
-### Exercise 2: Executing Async Closures Concept
+### Exercise 2: Proving That `|| async {}` Returns a Future, Not a Value
 
-**Problem:** Demonstrate defining and awaiting a closure returning an async block `let f = || async { 42 };`.
+**Problem:**
+A closure that returns an `async` block is *not* an async closure — it is a regular closure whose *body* creates and returns a `Future`. This means calling it gives you a lazy state machine, not the final result.
+
+Do the following inside a `#[tokio::main] async fn main()`:
+1. Define `let greet = |name: &str| async move { format!("Hello, {}!", name) };`.
+2. Call `greet("Ferris")` and store the result in `pending`. Print the type description: *"pending is a Future, not a String"*.
+3. `.await` the result and print the actual `String`.
+4. Show what happens if you forget `.await` — use a `let _ = greet("world");` line with a comment explaining the compiler warning.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> pending is a Future, not a String
+> Hello, Ferris!
 > ```
-> Async closure result: 42
-> ```
+>
+> - **Hint 1:** The closure `|name: &str| async move { ... }` has type `impl Fn(&str) -> impl Future<Output = String>`. Calling it returns the `Future` — it does NOT run the body.
+> - **Hint 2:** You need `async move` (not just `async`) because `name: &str` is a local variable. Without `move`, the async block tries to borrow `name` from the closure's stack frame, which the state machine outlives. `move` transfers ownership of the `String` (after `.to_owned()` or `format!`) into the future.
+> - **Hint 3:** Forgetting `.await` produces a `#[must_use]` warning: `unused implementer of Future that must be used`. The closure body never executes — the `Future` is created and immediately dropped.
+>
 > ```rust
-> fn main() {
->     let f = || async { 42 };
->     // Conceptual await in async runtime context
->     println!("Async closure result: 42");
+> #[tokio::main]
+> async fn main() {
+>     // A regular closure whose body is an async block.
+>     // Calling it returns a Future<Output = String>, not a String.
+>     let greet = |name: &str| async move {
+>         format!("Hello, {}!", name) // name is moved into the state machine
+>     };
+>
+>     // Step 2: calling the closure gives a Future, not the String.
+>     let pending = greet("Ferris");
+>     println!("pending is a Future, not a String");
+>
+>     // Step 3: .await drives the state machine to completion.
+>     let result = pending.await;
+>     println!("{}", result);
+>
+>     // Step 4: forgetting .await — compiler warns "unused implementer of Future".
+>     // The closure body NEVER runs; the String is never formatted.
+>     let _ = greet("world"); // ⚠️ Future created and dropped immediately
 > }
 > ```
 >
-> **Explanation:** Closures returning `async` blocks capture environment state for async execution.
+> **Explanation:**
+> `|| async { ... }` is syntactic shorthand for "a closure that, when called, constructs and returns a new `Future` state machine". The distinction from a true `async ||` closure (unstable) is subtle but important: the stable pattern creates a *new* `Future` on every call (each call to `greet(...)` creates a fresh state machine). The `move` keyword is necessary when the async block captures variables from the enclosing scope, because the state machine's lifetime may exceed the closure's call frame.
 
 ---
 
-### Exercise 3: Higher-Ranked Async Borrowing Closures
+### Exercise 3: `async move` Captures — Using Closures as Async Task Factories
 
-**Problem:** Explain why async closures allow borrowing parameters across `.await` points safely.
+**Problem:**
+A common real-world pattern is passing a `|| async move { ... }` closure as a *factory* that generates tasks — e.g., to `tokio::spawn` in a loop. Each iteration needs its own captured data.
+
+Write a `#[tokio::main]` program that:
+1. Defines a list of names: `["Alice", "Bob", "Carol"]`.
+2. For each name, spawns a `tokio::spawn` task using `async move { ... }` that formats and returns `"Hello, {name}!"`.
+3. Collects the `JoinHandle`s and awaits them in order, printing each result.
+
+Then answer: **why does each task need its own `move` capture rather than sharing a reference to the original `names` slice?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Hello, Alice!
+> Hello, Bob!
+> Hello, Carol!
 > ```
-> HRTB async borrowing verified
-> ```
+>
+> - **Hint 1:** `tokio::spawn` requires the async block to be `'static`. A `&str` from a local slice is not `'static` — the task might outlive the `main` function's stack frame. Using `async move` moves a copy of the `&'static str` literal (which *is* `'static`) into each task.
+> - **Hint 2:** String literals like `"Alice"` have type `&'static str`, so they can be moved into a `'static` async block directly. If `name` were a `String` from a `Vec<String>`, you'd clone it before the `move`.
+> - **Hint 3:** Collect handles with `let mut handles = Vec::new()` before the loop, push each `tokio::spawn(...)` result, then iterate and `.await` each handle with `handle.await.unwrap()`.
+>
 > ```rust
-> fn main() {
->     println!("HRTB async borrowing verified");
+> #[tokio::main]
+> async fn main() {
+>     let names: &[&'static str] = &["Alice", "Bob", "Carol"];
+>     let mut handles = Vec::new();
+>
+>     for &name in names {
+>         // `async move` captures `name` (a &'static str copy) into the task.
+>         // Each iteration creates a brand-new Future — a fresh state machine.
+>         let handle = tokio::spawn(async move {
+>             format!("Hello, {}!", name)
+>         });
+>         handles.push(handle);
+>     }
+>
+>     for handle in handles {
+>         println!("{}", handle.await.unwrap());
+>     }
 > }
 > ```
 >
-> **Explanation:** Async closures decouple closure argument lifetimes from returned future lifetimes.
+> **Answer to the sharing question:**
+> `tokio::spawn` requires `'static` — the task must be self-contained and not hold any references to data on the spawning function's stack. A `&str` pointing into a local `names` slice on `main`'s stack would violate this: if `main` returned while a task was still running, the pointer would dangle. `async move` solves this by *copying* the `&'static str` pointer (which points into the binary's read-only segment, not the stack) into the task, making each task fully independent.
 
 ---
 

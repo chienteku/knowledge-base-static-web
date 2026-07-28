@@ -164,41 +164,60 @@ What two pieces of feedback should you give them?
 
 ---
 
-### Exercise 2: Updating Specific Dependencies via Cargo
+### Exercise 2: Surgical Dependency Updates
 
-**Problem:** Command line instruction to update only the `serde` package in `Cargo.lock`.
+**Problem:**
+Your team runs `cargo audit` and finds a security advisory for version `0.8.3` of `rand`. The latest patched version is `0.8.6`. You have 20 other dependencies you do NOT want to change. Answer the following:
 
-**Expected output:**
+1. What command updates **only** `rand` in `Cargo.lock` (staying within the semver range declared in `Cargo.toml`)?
+2. What if the fix is in `rand_core` (a transitive dependency you never mentioned in `Cargo.toml`)? Can you update it with the same approach?
+3. You want to update `rand` to a major version (`0.9.x`) that exceeds your current `Cargo.toml` range `rand = "0.8"`. Does `cargo update -p rand` handle this? What must you do instead?
+
 > [!check]- Answer
+> **1. Updating a single named dependency:**
+> ```bash
+> cargo update -p rand
 > ```
-> cargo update -p serde
-> ```
-> ```rust
-> fn main() {
->     println!("cargo update -p serde");
-> }
-> ```
+> Cargo re-resolves only `rand` (and its transitive deps if required) to the newest version that still satisfies the `"0.8"` semver constraint in `Cargo.toml`. All other `Cargo.lock` entries remain byte-for-byte unchanged.
 >
-> **Explanation:** `cargo update -p <pkg>` updates specified dependency entries in `Cargo.lock` to latest semver-compatible versions.
+> **2. Updating a transitive dependency:**
+> Yes — `cargo update -p rand_core` works exactly the same even if `rand_core` is not in your `Cargo.toml`. Cargo owns the full dependency graph in `Cargo.lock`, including transitive entries. You can pin, update, or inspect any node regardless of whether it's a direct or indirect dependency.
+>
+> **3. Crossing a major version boundary:**
+> `cargo update -p rand` will **not** jump from `0.8.x` to `0.9.x` because `0.9` is outside the `"0.8"` semver range in `Cargo.toml`. You must:
+> 1. Edit `Cargo.toml`: change `rand = "0.8"` to `rand = "0.9"`.
+> 2. Run `cargo update -p rand` (or just `cargo build`) — Cargo will now resolve to `0.9.x`.
+>
+> **Explanation:**
+> `cargo update` is a safe, surgical tool: it only updates what you ask for and only within the constraints you already declared. The distinction between "edit `Cargo.toml`" (change intent) and "run `cargo update`" (re-resolve within intent) is the fundamental mental model for managing Rust dependencies.
 
 ---
 
-### Exercise 3: Library vs Binary Lockfile Commit Practices
+### Exercise 3: `Cargo.lock` Commit Policy — Four Scenarios
 
-**Problem:** State whether `Cargo.lock` should be committed for libraries vs binaries.
+**Problem:**
+The rule "commit for binaries, don't commit for libraries" has important nuance. For each scenario below, decide whether `Cargo.lock` should be committed to version control, and explain why:
 
-**Expected output:**
+1. A CLI tool (`src/main.rs`) deployed to production servers.
+2. A library crate published to `crates.io` for others to depend on.
+3. A library crate that is **not** published — it's used only inside your own workspace.
+4. A library crate where you want to run CI tests against the **oldest** semver-compatible versions of every dependency.
+
 > [!check]- Answer
-> ```
-> Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.
-> ```
-> ```rust
-> fn main() {
->     println!("Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.");
-> }
-> ```
+> **1. CLI tool → Commit `Cargo.lock`.**
+> The binary is an end product. You want the exact same dependency graph in CI, staging, and production. Without a committed lockfile, `cargo build` in CI might silently pull a newer transitive dep that introduces a regression. Reproducibility is paramount.
 >
-> **Explanation:** Libraries leave version resolution to downstream applications.
+> **2. Published library → Do NOT commit `Cargo.lock`.**
+> `Cargo.lock` from a library is ignored by downstream consumers — Cargo doesn't use it when resolving that library as a dependency. Committing it creates false confidence and noise. The library's `Cargo.toml` version constraints are what matters to downstream users.
+>
+> **3. Internal workspace-only library → Commit `Cargo.lock`.**
+> Even though it's a library crate, it lives inside a workspace that has binaries or integration tests. The workspace shares one `Cargo.lock`. Committing it keeps all developers and CI on the same exact dependency graph, preventing "works on my machine" failures.
+>
+> **4. Library with minimal-version CI testing → Do NOT commit `Cargo.lock`; use `-Z minimal-versions`.**
+> Running `cargo +nightly update -Z minimal-versions` forces Cargo to resolve each dependency to the *lowest* version allowed by the semver constraint, not the latest. This catches bugs where your `Cargo.toml` says `rand = "0.8"` but your code accidentally uses an API only available in `0.8.5`. This requires nightly Cargo and a clean (or absent) `Cargo.lock`.
+>
+> **Explanation:**
+> The core principle: commit `Cargo.lock` wherever you want **reproducible, deterministic** builds; omit it wherever you need **flexibility** for downstream consumers or CI coverage of the full version range.
 
 ---
 

@@ -281,22 +281,77 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 4: Crate Root Identification
+### Exercise 4: Package Anatomy — What Gets Compiled?
 
-**Problem:** Describe the default file entry points for a library crate root and a binary crate root in a Cargo package layout.
+**Problem:**
+A Cargo package called `my_tool` has the following file layout:
 
-**Expected output:**
+```
+my_tool/
+├── Cargo.toml
+└── src/
+    ├── lib.rs      # contains: pub fn greet(name: &str) -> String { format!("Hello, {}!", name) }
+    ├── main.rs     # calls my_tool::greet and prints the result
+    └── bin/
+        └── check.rs  # a second binary; prints "check passed"
+```
+
+Answer the following without running any code:
+1. How many **crates** does `cargo build --all-targets` produce? What kind is each?
+2. What command runs the primary binary?
+3. What command runs only the `check` binary?
+4. `src/main.rs` wants to call `greet` from `src/lib.rs`. What is the correct `use` path, and what is the package name that Cargo uses as the crate name?
+5. Could `src/bin/check.rs` call `greet` from `src/lib.rs`? If yes, how?
+
 > [!check]- Answer
+> **1. Crates produced by `cargo build --all-targets`:**
+>
+> | Crate | Kind | Source file |
+> |---|---|---|
+> | `my_tool` (library) | `lib` | `src/lib.rs` |
+> | `my_tool` (binary) | `bin` | `src/main.rs` |
+> | `check` (binary) | `bin` | `src/bin/check.rs` |
+>
+> **3 crates total.** The library crate and the primary binary crate share the package name `my_tool`. The second binary is named `check` after its filename.
+>
+> **2. Run the primary binary:**
+> ```bash
+> cargo run
 > ```
-> Library: src/lib.rs, Binary: src/main.rs
+> When there is exactly one binary at `src/main.rs`, `cargo run` targets it unambiguously.
+>
+> **3. Run only `check`:**
+> ```bash
+> cargo run --bin check
 > ```
+> The `--bin` flag selects among all binary targets by their Cargo name (derived from the filename in `src/bin/`).
+>
+> **4. Calling `greet` from `src/main.rs`:**
 > ```rust
+> // src/main.rs
+> use my_tool::greet;   // the crate name = the [package] name in Cargo.toml
+>
 > fn main() {
->     println!("Library: src/lib.rs, Binary: src/main.rs");
+>     println!("{}", greet("Rust"));  // prints: Hello, Rust!
 > }
 > ```
+> The library crate's name is the `name` field from `[package]` in `Cargo.toml`. Within the same package, `src/main.rs` can reference the library as an external crate — by that same name.
 >
-> **Explanation:** By convention, Cargo compiles `src/lib.rs` into the package's primary library crate and `src/main.rs` into its primary binary crate.
+> **5. `src/bin/check.rs` calling `greet`:**
+> Yes — files in `src/bin/` can also call the library crate by the same package name:
+> ```rust
+> // src/bin/check.rs
+> use my_tool::greet;
+>
+> fn main() {
+>     println!("{}", greet("check"));  // Hello, check!
+>     println!("check passed");
+> }
+> ```
+> Every binary target in the same package can depend on the package's own library crate. Both `src/main.rs` and `src/bin/*.rs` see it as an external dependency, even though they are in the same package.
+>
+> **Explanation:**
+> `src/lib.rs` and `src/main.rs` are the **two default crate roots**. Cargo discovers them by convention — no `Cargo.toml` entry is required. Files in `src/bin/` are also auto-discovered as additional binary targets. Each crate is compiled independently starting from its root file.
 
 ---
 

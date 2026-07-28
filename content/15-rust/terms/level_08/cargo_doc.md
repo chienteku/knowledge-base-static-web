@@ -160,43 +160,82 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Intra-Doc Type Linking Syntax
+### Exercise 2: Building a Real Intra-Doc Link Web
 
-**Problem:** Link to a struct `[`Widget`]` in function doc comments using intra-doc link syntax.
+**Problem:**
+Intra-doc links let items in your documentation reference each other automatically — rustdoc resolves `[`TypeName`]` to a clickable hyperlink in the generated HTML, so readers can navigate your API without leaving the docs.
+
+Write a code snippet (suitable for `src/lib.rs`) that demonstrates:
+1. A `Config` struct with a `///` doc comment.
+2. A `Server` struct whose doc comment references `Config` using an intra-doc link: `/// Uses a [`Config`] to configure the server.`
+3. A public function `build_server(cfg: Config) -> Server` whose doc comment links to **both** [`Config`] and [`Server`].
+4. Identify: what happens at `cargo doc` time if you misspell the link as `[`Confgi`]`?
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Intra-doc link verified
-> ```
+> *(No runtime output — this is documentation code. Run `cargo doc --open` to see the linked HTML.)*
+>
+> - **Hint 1:** Intra-doc links use the backtick-bracket syntax: `` [`TypeName`] `` or `[TypeName]`. The backtick form renders the name in monospace font (preferred for types/functions); the plain form renders it in normal font.
+> - **Hint 2:** `cargo doc` resolves these links at build time. If the target item doesn't exist (or is misspelled), rustdoc emits a **warning**: `unresolved link to 'Confgi'`. This makes broken doc links detectable in CI — use `RUSTDOCFLAGS="-D warnings"` to turn them into errors.
+> - **Hint 3:** You can link to methods with `[`Config::new`]`, to enum variants with `[`MyEnum::Variant`]`, and even to items in other crates with full paths: `[`std::collections::HashMap`]`.
+>
 > ```rust
-> /// Uses [`Widget`] for rendering.
-> pub struct Widget;
-> fn main() {
->     println!("Intra-doc link verified");
+> /// Application configuration.
+> ///
+> /// Pass this to [`build_server`] to create a running [`Server`].
+> pub struct Config {
+>     pub port: u16,
+> }
+>
+> /// The main HTTP server.
+> ///
+> /// Constructed from a [`Config`] via [`build_server`].
+> pub struct Server {
+>     port: u16,
+> }
+>
+> /// Creates a [`Server`] from the provided [`Config`].
+> ///
+> /// # Example
+> /// ```
+> /// let cfg = Config { port: 8080 };
+> /// let server = build_server(cfg);
+> /// ```
+> pub fn build_server(cfg: Config) -> Server {
+>     Server { port: cfg.port }
 > }
 > ```
 >
-> **Explanation:** Intra-doc links in markdown `[`TypeName`]` automatically resolve to target item documentation.
+> **Answer to the misspell question:**
+> `cargo doc` emits: `warning: unresolved link to 'Confgi'` and renders the text as plain non-linked text. Add `#![deny(rustdoc::broken_intra_doc_links)]` at the top of `src/lib.rs` to turn this into a hard error that blocks `cargo doc` from succeeding, which is the recommended CI practice.
 
 ---
 
-### Exercise 3: Generating Docs with Private Items Included
+### Exercise 3: When to Use `--document-private-items`
 
-**Problem:** Command to build documentation including private items.
+**Problem:**
+By default, `cargo doc` only generates documentation for `pub` items — the public API that external users see. But there are situations where you need docs for private internals too.
 
-**Expected output:**
+Answer the following:
+1. A junior developer joins your team and needs to understand the internal `parse_header` helper (which is `pub(crate)`, not `pub`). What command generates docs they can browse?
+2. You are writing a binary crate (`src/main.rs`) with no `pub` items at all. Will `cargo doc` produce any output by default? What flag fixes this?
+3. Why would you typically **not** publish `--document-private-items` documentation publicly on `docs.rs`?
+
 > [!check]- Answer
-> ```
+> **1. Generating internal docs:**
+> ```bash
 > cargo doc --document-private-items --open
 > ```
-> ```rust
-> fn main() {
->     println!("cargo doc --document-private-items --open");
-> }
-> ```
+> This instructs rustdoc to document all items regardless of visibility — `pub(crate)`, `pub(super)`, and even fully private `fn`. The generated site is identical in structure to the normal docs, just with more items.
 >
-> **Explanation:** `--document-private-items` forces `cargo doc` to render documentation for non-public items.
+> **2. Binary crates:**
+> Yes — a binary crate with no `pub` items produces an essentially empty `cargo doc` site. `--document-private-items` is the flag that makes it useful for binary crates, since all their items are private by definition.
+>
+> **3. Why not publish private docs:**
+> Private items often contain implementation details, internal invariants, and assumptions that only make sense in the context of the full source code. Exposing them as a public HTML site could: (a) leak proprietary implementation strategies, (b) confuse external users who try to call internal functions that aren't actually accessible, and (c) create a maintenance burden since private APIs change freely without semver guarantees.
+>
+> **Explanation:**
+> `--document-private-items` is a developer ergonomics flag, not a publication tool. It bridges the gap between "read the source" and "read structured docs" for contributors working inside the codebase.
 
 ---
 

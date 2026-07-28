@@ -187,22 +187,47 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Executing Ignored Tests via Cargo
+### Exercise 3: `--ignored` vs `--include-ignored` \u2014 Choosing the Right Flag
 
-**Problem:** Command line flag to run only ignored tests in Cargo.
+**Problem:**
+After a week of work your CI pipeline has been skipping 5 `#[ignore]`-marked tests. You want to run them now. But there are two different flags and you need to know which one to use:
 
-**Expected output:**
+1. **What does `cargo test -- --ignored` do?**
+2. **What does `cargo test -- --include-ignored` do?**
+3. You want to run the nightly suite: all 200 normal tests *plus* the 5 ignored ones in a single command. Which flag is correct?
+4. You only want to run the ignored tests and nothing else (to check them in isolation). Which flag is correct?
+
 > [!check]- Answer
-> ```
+> **1. `cargo test -- --ignored`:**
+> ```bash
 > cargo test -- --ignored
 > ```
-> ```rust
-> fn main() {
->     println!("cargo test -- --ignored");
-> }
+> Runs **only** the ignored tests, skipping all normal (non-ignored) tests. Use this when you want to audit just the ignored suite in isolation.
+>
+> **2. `cargo test -- --include-ignored`:**
+> ```bash
+> cargo test -- --include-ignored
+> ```
+> Runs **all** tests \u2014 both normal tests and ignored tests together. Ignored tests are no longer skipped; they are included in the full run.
+>
+> **3. Run everything including ignored:**
+> ```bash
+> cargo test -- --include-ignored
 > ```
 >
-> **Explanation:** `-- --ignored` forces `cargo test` to execute only ignored tests.
+> **4. Run only the ignored tests:**
+> ```bash
+> cargo test -- --ignored
+> ```
+>
+> **Bonus:** You can combine a name filter with either flag:
+> ```bash
+> cargo test billing -- --ignored
+> ```
+> This runs only ignored tests whose name contains `"billing"`.
+>
+> **Explanation:**
+> The `--` separator is required: it tells `cargo test` that everything after it should be passed to the test runner executable, not consumed by Cargo itself. Both flags were introduced because there are two distinct workflows: **isolation** (`--ignored`, only the ignored set, often used for slow integration tests) and **completeness** (`--include-ignored`, the full suite, used in scheduled CI or release gates).
 
 ---
 

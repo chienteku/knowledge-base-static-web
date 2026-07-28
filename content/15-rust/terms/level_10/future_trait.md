@@ -220,22 +220,68 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Waker Signal Notification Pattern
+### Exercise 3: Implementing the Waker Contract — A `CountdownFuture`
 
-**Problem:** Explain how `cx.waker().wake_by_ref()` signals the executor to re-poll a pending future.
+**Problem:**
+The `Waker` inside `Context` is how a `Future` tells the executor *"I was polled, I'm not ready yet, but please poll me again when I call wake()"*. Without correctly calling `wake()`, a `Future` that returns `Poll::Pending` will be parked forever — the executor will never re-poll it.
+
+Implement `struct CountdownFuture { remaining: u32 }` that:
+1. On each call to `poll`: if `remaining > 0`, decrements `remaining`, calls `cx.waker().wake_by_ref()` to schedule an immediate re-poll, and returns `Poll::Pending`.
+2. When `remaining == 0`, returns `Poll::Ready("liftoff!")` without calling `wake`.
+3. Drives it to completion using `#[tokio::main]` and `.await`, then print the result.
+
+Then answer: **what would happen if you returned `Poll::Pending` but forgot to call `wake_by_ref()`?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Polled! remaining=2, returning Pending
+> Polled! remaining=1, returning Pending
+> Polled! remaining=0, returning Ready
+> CountdownFuture result: liftoff!
 > ```
-> Waker notification verified
-> ```
+>
+> - **Hint 1:** `cx.waker().wake_by_ref()` clones the `Waker` and immediately notifies the executor to re-poll this future. This is an artificial "always ready" signal — in real futures, `wake` is called by an I/O driver or timer when the underlying event fires.
+> - **Hint 2:** `wake_by_ref()` vs `wake()`: `wake()` consumes the `Waker` (by value), while `wake_by_ref()` borrows it. Use `wake_by_ref()` when you need to keep using the `Waker` after the call (e.g. inside a reference inside `poll`).
+> - **Hint 3:** The `poll` method signature is `fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>`. You can access and mutate `self.remaining` through the `Pin` because `CountdownFuture` has no self-references (it's `Unpin`).
+> - **Answer to the forgotten-wake question:** The executor would park the future and never re-poll it. Your `.await` would hang forever — an async deadlock. This is the most common bug in hand-written `Future` implementations.
+>
 > ```rust
-> fn main() {
->     println!("Waker notification verified");
+> use std::future::Future;
+> use std::pin::Pin;
+> use std::task::{Context, Poll};
+>
+> struct CountdownFuture {
+>     remaining: u32,
+> }
+>
+> impl Future for CountdownFuture {
+>     type Output = &'static str;
+>
+>     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+>         if self.remaining > 0 {
+>             println!("Polled! remaining={}, returning Pending", self.remaining);
+>             self.remaining -= 1;
+>             // CRITICAL: tell the executor to poll us again immediately.
+>             // Without this call, we'd return Pending and be parked forever.
+>             cx.waker().wake_by_ref();
+>             Poll::Pending
+>         } else {
+>             println!("Polled! remaining=0, returning Ready");
+>             Poll::Ready("liftoff!")
+>         }
+>     }
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     let result = CountdownFuture { remaining: 2 }.await;
+>     println!("CountdownFuture result: {}", result);
 > }
 > ```
 >
-> **Explanation:** Wakers notify event loops that asynchronous event conditions have completed.
+> **Explanation:**
+> The executor-future contract has two sides: (1) when the executor calls `poll` and gets `Poll::Pending`, it parks the future; (2) *the future* is responsible for calling `wake()` when it believes it might be ready to make progress. Only then will the executor call `poll` again. In this contrived example, we call `wake_by_ref()` immediately ("I'm always ready to try again") — but in a real I/O future, the OS kernel or a background thread would call `wake()` when the socket becomes readable or the timer fires. The `Waker` is designed to be cheap to clone and thread-safe (`Send + Sync`), so it can be passed to any background event source.
 
 ---
 

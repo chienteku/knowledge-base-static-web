@@ -155,41 +155,75 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Configuring Custom Binary Targets in `Cargo.toml`
+### Exercise 2: Configuring Multiple Binary Targets
 
-**Problem:** Write a `[[bin]]` configuration for `src/bin/cli.rs` named `"my-cli"`.
+**Problem:**
+A package can expose multiple binary executables from a single `Cargo.toml`. The auto-discovery rule is: every `.rs` file directly inside `src/bin/` becomes a binary named after the file (no path required). You use `[[bin]]` to customize names or use non-standard paths.
 
-**Expected output:**
+You are building a dev-tools package with three executables:
+- `src/bin/server.rs` — the production server (auto-discovered, no `[[bin]]` needed).
+- `src/cli/main.rs` — a CLI tool (non-standard path, needs `[[bin]]`).
+- `src/bin/migrate.rs` — a DB migration runner (auto-discovered, but you want it named `db-migrate`).
+
+Write the `Cargo.toml` fragment covering all three, then answer: if you run `cargo run` with no `--bin` flag and multiple `[[bin]]` targets exist, what happens?
+
 > [!check]- Answer
-> ```
-> [[bin]] name = "my-cli" path = "src/bin/cli.rs"
-> ```
-> ```rust
-> fn main() {
->     println!("[[bin]] name = \"my-cli\" path = \"src/bin/cli.rs\"");
-> }
+> ```toml
+> # server.rs is auto-discovered from src/bin/ — no entry needed.
+>
+> [[bin]]
+> name = "cli"
+> path = "src/cli/main.rs"   # Non-standard path: must declare explicitly.
+>
+> [[bin]]
+> name = "db-migrate"
+> path = "src/bin/migrate.rs"  # Override auto-discovered name.
 > ```
 >
-> **Explanation:** `[[bin]]` targets specify custom binary target metadata in `Cargo.toml`.
+> - **Hint 1:** Auto-discovery and explicit `[[bin]]` entries can coexist. Cargo merges them. `server` is discovered automatically; the other two are explicit.
+> - **Hint 2:** The `name` field determines the filename of the compiled binary in `target/debug/` (e.g. `db-migrate`, not `migrate`).
+> - **Hint 3:** If you want to run a specific binary: `cargo run --bin db-migrate`.
+>
+> **Answer to the ambiguous `cargo run` question:**
+> Cargo emits an **error**: `error: could not determine which binary to run`. When a package has more than one binary target, `cargo run` doesn't guess — you must specify `--bin <name>`. This is intentional: silently running the "first" binary would be surprising and fragile.
 
 ---
 
-### Exercise 3: Building Example Targets
+### Exercise 3: The `examples/` Target Kind — Workflow and Purpose
 
-**Problem:** Command to run an example file located at `examples/demo.rs`.
+**Problem:**
+The `examples/` directory is a distinct target kind from `src/bin/`. Both produce runnable binaries, but they serve different purposes and have different behaviours.
 
-**Expected output:**
+Answer the following:
+1. You have `examples/quick_start.rs`. What command runs it?
+2. Can code in `examples/` use the private (non-`pub`) functions of `src/lib.rs`?
+3. Are example binaries included when a user runs `cargo install your_crate`?
+4. What is the practical difference between putting a demo program in `src/bin/` vs `examples/`?
+
 > [!check]- Answer
+> **1. Running an example:**
+> ```bash
+> cargo run --example quick_start
 > ```
-> cargo run --example demo
-> ```
-> ```rust
-> fn main() {
->     println!("cargo run --example demo");
-> }
-> ```
+> Examples are also built with `cargo build --examples` (all of them) or `cargo build --example quick_start` (one). The binary lands in `target/debug/examples/quick_start`.
 >
-> **Explanation:** Examples in `examples/` are built and executed via `cargo run --example <name>`.
+> **2. Access to private API:**
+> **No.** Files in `examples/` are compiled as separate crates that depend on your library externally — exactly like a downstream user's code. They can only access `pub` items. This is the same restriction as integration tests in `tests/`.
+>
+> **3. `cargo install` and examples:**
+> **No.** `cargo install your_crate` only installs binaries from `src/main.rs` and `src/bin/`. Example binaries are never installed. They exist only as local developer conveniences.
+>
+> **4. `src/bin/` vs `examples/` — semantic distinction:**
+>
+> | | `src/bin/` | `examples/` |
+> |---|---|---|
+> | Purpose | Production executable shipped with the crate | Demonstration code for documentation / teaching |
+> | Installed by `cargo install` | ✅ Yes | ❌ No |
+> | Appears in `cargo doc` | No | No |
+> | Convention | Ship it to users | Show users how to use your library |
+>
+> **Explanation:**
+> `examples/` is the Rust equivalent of a "getting started" code snippet that actually compiles and runs. Many popular crates (`tokio`, `axum`, `serde`) ship dozens of examples that serve as living documentation — they are guaranteed correct because they compile against the real library.
 
 ---
 

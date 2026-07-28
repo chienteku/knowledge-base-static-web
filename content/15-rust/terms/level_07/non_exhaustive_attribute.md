@@ -191,22 +191,71 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Non-Exhaustive Struct Field Construction Constraints
+### Exercise 3: `#[non_exhaustive]` Structs — Construction Outside the Crate
 
-**Problem:** Explain why `#[non_exhaustive] struct Config { pub host: String }` cannot be constructed directly using struct literals outside its defining crate.
+**Problem:**
+When `#[non_exhaustive]` is applied to a struct, downstream crates cannot construct it with a struct literal (`Config { host: "localhost".into() }`) because the compiler treats the struct as having hidden fields. The library must provide a constructor.
+
+Write the following (as if it were `src/lib.rs` of a library crate called `my_server`):
+1. A `#[non_exhaustive] pub struct Config` with two `pub` fields: `host: String` and `port: u16`.
+2. An `impl Config` block with a `pub fn new(host: &str, port: u16) -> Self` constructor.
+3. A `fn main()` (or test) that acts as *downstream code* and constructs `Config` using the constructor, then prints the host and port.
+4. Show (as a comment) what error the downstream code would get if it tried struct-literal construction instead.
+
+Then answer: **can the `my_server` library's own `src/lib.rs` use struct literal syntax to construct `Config`?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Connecting to localhost:8080
 > ```
-> Construct via constructor method required
-> ```
+>
+> - **Hint 1:** `#[non_exhaustive]` on a struct blocks *external* crate struct literals. Code inside the defining crate (same `src/lib.rs`) still has full access and CAN use struct literal syntax — the restriction is only for downstream consumers.
+> - **Hint 2:** The standard workaround for downstream construction is a constructor (`new`) or a builder pattern. A `Default` implementation is also common when sensible defaults exist.
+> - **Hint 3:** Even if the struct currently has only two fields, `#[non_exhaustive]` signals "we may add more fields without a semver bump." The constructor absorbs new fields transparently — downstream code calling `Config::new("localhost", 8080)` doesn't break when a third field is added with a default.
+>
 > ```rust
-> fn main() { 
->     println!("Construct via constructor method required");
+> // src/lib.rs  (inside the my_server crate)
+>
+> /// Server configuration.
+> ///
+> /// This struct is non-exhaustive: new fields may be added in future
+> /// minor versions without a breaking change.
+> #[non_exhaustive]
+> pub struct Config {
+>     pub host: String,
+>     pub port: u16,
+> }
+>
+> impl Config {
+>     /// Creates a new `Config`. Use this — do NOT use struct literal syntax.
+>     pub fn new(host: &str, port: u16) -> Self {
+>         // Inside the defining crate, struct literal syntax IS allowed even
+>         // with #[non_exhaustive] — the restriction only applies externally.
+>         Config {
+>             host: host.to_string(),
+>             port,
+>         }
+>     }
+> }
+>
+> fn main() {
+>     let cfg = Config::new("localhost", 8080);
+>     println!("Connecting to {}:{}", cfg.host, cfg.port);
+>
+>     // What downstream code would see if it tried struct literal syntax:
+>     // let bad = my_server::Config { host: "localhost".into(), port: 8080 };
+>     // error[E0639]: cannot create non-exhaustive struct using struct expression
+>     //   --> src/main.rs:3:15
+>     //    |
+>     //    |     let bad = my_server::Config { host: "localhost".into(), port: 8080 };
+>     //    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     //    |               cannot create non-exhaustive struct using struct expression
 > }
 > ```
 >
-> **Explanation:** `#[non_exhaustive]` structs force external crates to use constructor methods instead of direct literal initialization.
+> **Answer to the "can the library use struct literals" question:**
+> **Yes.** `#[non_exhaustive]` only restricts *external* crates. The defining crate has full knowledge of all fields (there are no hidden fields from its own perspective), so struct literal syntax compiles normally inside `src/lib.rs`. The attribute is purely a contract about what downstream consumers may assume about the struct's completeness.
 
 ---
 

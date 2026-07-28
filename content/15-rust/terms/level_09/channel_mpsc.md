@@ -189,35 +189,64 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Multi-Producer Single-Consumer Messaging
+### Exercise 2: Multi-Producer Single-Consumer \u2014 Receiving Real Messages
 
-**Problem:** Clone `tx` sender to transmit messages from two threads into a single `mpsc::channel`.
+**Problem:**
+`mpsc::channel` is built for multiple producers feeding one consumer. Cloning `tx` hands an independent sender to each producer thread \u2014 all clones route their messages into the same channel, and `rx` receives them all.
+
+Write a program that:
+1. Creates an `mpsc::channel::<String>()`.
+2. Spawns **3 threads**, each cloning `tx` and sending `format!("hello from thread {i}")`.
+3. Drops the original `tx` in `main` so the channel closes when all clones are also dropped.
+4. Iterates `rx` (using `for msg in rx`) and prints each received message.
+
+Then answer: **why must you `drop(tx)` in `main` before iterating `rx`?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Received: hello from thread 0
+> Received: hello from thread 1
+> Received: hello from thread 2
 > ```
-> Received message
-> Received message
-> ```
+> *(order may vary \u2014 thread scheduling is non-deterministic)*
+>
+> - **Hint 1:** `tx.clone()` increments the sender reference count. The channel stays open (blocking `rx`) as long as *any* `tx` clone is alive. If you don't `drop(tx)` in main, the `for msg in rx` loop will block forever after the 3 thread-clones drop \u2014 the original `tx` in main is still alive, so `rx` keeps waiting for more messages.
+> - **Hint 2:** `for msg in rx` is idiomatic iteration over a channel: it calls `.recv()` repeatedly, yielding each message, and terminates (returns `None`) only when the last `tx` clone is dropped and the channel is empty.
+> - **Hint 3:** Join handles are not strictly required here because `for msg in rx` blocks main until all senders are dropped \u2014 by the time the loop ends, all 3 threads have completed their sends (and dropped their `tx` clones). Joining anyway is good practice.
+>
 > ```rust
 > use std::sync::mpsc;
 > use std::thread;
+>
 > fn main() {
->     let (tx, rx) = mpsc::channel();
->     for i in 0..2 {
->         let tx_clone = tx.clone();
->         thread::spawn(move || {
->             tx_clone.send(format!("msg {}", i)).unwrap();
+>     let (tx, rx) = mpsc::channel::<String>();
+>     let mut handles = vec![];
+>
+>     for i in 0..3 {
+>         let tx_clone = tx.clone(); // each thread gets its own sender clone
+>         let handle = thread::spawn(move || {
+>             tx_clone.send(format!("hello from thread {}", i)).unwrap();
+>             // tx_clone drops here, decrementing the sender count
 >         });
+>         handles.push(handle);
 >     }
+>
+>     // CRITICAL: drop the original tx so the channel closes after all
+>     // thread clones finish. Without this, `for msg in rx` blocks forever.
 >     drop(tx);
->     for _ in 0..2 {
->         println!("Received message");
+>
+>     // for..in on rx calls rx.recv() until all senders are dropped.
+>     for msg in rx {
+>         println!("Received: {}", msg);
 >     }
+>
+>     for h in handles { h.join().unwrap(); }
 > }
 > ```
 >
-> **Explanation:** `mpsc::channel` allows multiple sender handle clones (`tx.clone()`) routing to one receiver (`rx`).
+> **Explanation:**
+> The channel closes \u2014 and `rx` stops blocking \u2014 only when *every* sender clone has been dropped. This includes both the thread clones *and* the original `tx` in `main`. Forgetting `drop(tx)` is the classic `mpsc` bug: the 3 threads finish and drop their clones, but the original `tx` in `main` is still alive, so `rx.recv()` keeps waiting indefinitely. Dropping `tx` explicitly before consuming `rx` is the idiomatic fix.
 
 ---
 

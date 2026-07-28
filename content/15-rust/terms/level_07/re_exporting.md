@@ -205,20 +205,67 @@ pub mod storage {
 
 ---
 
-### Exercise 3: Re-exporting External Dependencies
+### Exercise 3: Re-Exporting External Types \u2014 The Diamond Problem
 
-**Problem:** Re-export a third-party type `pub use serde::Serialize;` from a library API.
+**Problem:**
+Re-exporting external dependency types from your library's public API solves a subtle versioning problem called the **diamond dependency conflict**.
+
+Consider this scenario:
+- Your library `my_lib v1.0` depends on `serde v1.0` and re-exports `serde::Serialize`.
+- A user's application depends on both `my_lib v1.0` and `serde v1.0`.
+- The user wants to implement `Serialize` for their struct and pass it to `my_lib`.
+
+Write:
+1. `src/lib.rs` of `my_lib` that re-exports `serde::Serialize` as part of its public API.
+2. An example showing how the downstream user `use`s the re-exported trait (not directly from serde) and implements it for their own struct.
+3. An explanation: why does using `pub use my_lib::Serialize` (the re-export) instead of `use serde::Serialize` directly prevent a compilation error in the user's code?
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Re-exported trait available
-> ```
+> *(No runtime output — this is a library API design exercise. The key insight is compile-time compatibility.)*
+>
+> - **Hint 1:** In Rust, `serde::Serialize` at version `1.0.0` and `serde::Serialize` at version `1.0.1` are the **same trait** (same `Cargo.toml` semver range). But `serde v1.0` and (hypothetically) `serde v2.0` would be **different traits** — a struct implementing `v1::Serialize` does NOT implement `v2::Serialize`, even if they look identical.
+> - **Hint 2:** If `my_lib` re-exports `serde::Serialize`, the user who writes `use my_lib::Serialize` gets exactly the same trait object as the one `my_lib` uses internally — they come from the same resolved crate, same version, same type ID. No mismatch possible.
+> - **Hint 3:** If `my_lib` does NOT re-export `Serialize`, the user must add `serde` to their own `Cargo.toml`. If they pick a different semver-incompatible version, `cargo build` may fail with `error[E0277]: the trait Serialize is not implemented` even though their struct clearly derives it — because two different versions of the trait exist simultaneously.
+>
 > ```rust
-> fn main() { println!("Re-exported trait available"); }
+> // my_lib/src/lib.rs
+>
+> // Re-export the trait we use in our public API.
+> // Users should import Serialize from HERE, not from serde directly.
+> // This guarantees they get the exact same version we compiled against.
+> pub use serde::Serialize;
+>
+> /// Serializes any `Serialize` implementor to a JSON string.
+> pub fn to_json<T: Serialize>(value: &T) -> String {
+>     // (In a real impl, this would call serde_json::to_string)
+>     format!("\"serialized: {}\"", std::any::type_name::<T>())
+> }
 > ```
 >
-> **Explanation:** Re-exporting dependency types prevents version mismatch issues for downstream consumers.
+> ```rust
+> // user_app/src/main.rs
+>
+> // Import Serialize from my_lib, not from serde directly.
+> // This guarantees version compatibility with my_lib's internal usage.
+> use my_lib::Serialize;
+>
+> #[derive(Serialize)]
+> struct User {
+>     name: String,
+>     age: u32,
+> }
+>
+> fn main() {
+>     let user = User { name: "Alice".into(), age: 30 };
+>     // This works because User::Serialize and my_lib's Serialize are the SAME trait.
+>     let json = my_lib::to_json(&user);
+>     println!("{}", json);
+> }
+> ```
+>
+> **Answer to the "why re-export prevents errors" question:**
+> When `my_lib` declares `pub use serde::Serialize`, it exposes the *exact instance* of the `Serialize` trait that it compiled against. Any user who imports `my_lib::Serialize` gets that exact same instance \u2014 they cannot accidentally import a different version. If they had imported `serde::Serialize` directly with their own `Cargo.toml` entry, Cargo might resolve a different semver-incompatible version, giving them a *different type* with the same name. Rust's type system would then correctly reject their type as "not implementing `my_lib`'s `Serialize`" \u2014 a confusing but technically correct error. Re-exporting closes this gap by making the library the single source of truth for its own dependencies' types.
 
 ---
 

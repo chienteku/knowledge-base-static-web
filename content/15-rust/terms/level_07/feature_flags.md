@@ -173,22 +173,46 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Defining Default Features
+### Exercise 2: Designing a `[features]` Section
 
-**Problem:** Configure `[features] default = ["json"] json = ["dep:serde_json"]` in `Cargo.toml`.
+**Problem:**
+You are building a crate called `http_client` with three optional capabilities: `json` (JSON body support via `serde_json`), `tls` (HTTPS via `rustls`), and `cookies` (cookie jar). You want `json` and `tls` to be on by default (most users need them), but `cookies` must be explicitly opted in.
 
-**Expected output:**
+Write the complete `[features]` section in `Cargo.toml` for this crate, then answer:
+
+1. A downstream user writes `http_client = { version = "1.0", default-features = false, features = ["json"] }`. Which capabilities are active?
+2. A user writes `http_client = "1.0"` (no features key). Which capabilities are active?
+3. What does `dep:serde_json` mean in a feature list vs just writing `serde_json`?
+
 > [!check]- Answer
-> ```
-> Default feature defined
-> ```
-> ```rust
-> fn main() {
->     println!("Default feature defined");
-> }
+> **`Cargo.toml` `[features]` section:**
+> ```toml
+> [features]
+> # "default" is the magic key: these features activate automatically.
+> default = ["json", "tls"]
+>
+> # Each feature lists which optional deps (and other features) it activates.
+> json    = ["dep:serde_json"]
+> tls     = ["dep:rustls"]
+> cookies = ["dep:cookie"]    # Must be explicitly requested — not in default.
+>
+> [dependencies]
+> serde_json = { version = "1.0", optional = true }
+> rustls     = { version = "0.21", optional = true }
+> cookie     = { version = "0.18", optional = true }
 > ```
 >
-> **Explanation:** `default` lists features enabled automatically unless `default-features = false` is passed.
+> **1. `default-features = false, features = ["json"]`:**
+> Only `json` (and therefore `serde_json`) is active. Neither `tls` nor `cookies` is compiled in. `default-features = false` disables the `default` feature before re-adding only what was explicitly listed.
+>
+> **2. `http_client = "1.0"` (no features key):**
+> `json` and `tls` are active (from `default`). `cookies` is not active. This is the out-of-the-box experience for most users.
+>
+> **3. `dep:serde_json` vs just `serde_json`:**
+> In older Cargo (before 1.60), writing `serde_json` in a feature list implicitly created a *feature* named `serde_json` in addition to activating the dependency. This caused crate API leakage \u2014 users could accidentally enable `serde_json` by activating a feature named `serde_json`. The `dep:` prefix (Cargo 1.60+) explicitly says "activate the *dependency* named `serde_json`" without creating an implicit feature by the same name. Always prefer `dep:` for new crates.
+>
+> **Explanation:**
+> Feature design is a core library authorship skill. The `default` feature controls the out-of-the-box experience; `dep:` keeps the feature namespace clean; and `default-features = false` gives downstream users the escape hatch to build a minimal version.
 
 ---
 

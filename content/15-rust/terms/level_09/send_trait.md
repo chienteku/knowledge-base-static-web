@@ -185,24 +185,28 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Raw Pointer `Send` Wrapper Implementation
+### Exercise 3: `unsafe impl Send` \u2014 When and Why You Write It
 
-**Problem:** Wrap a raw pointer in a custom struct `struct PtrWrapper(*mut i32)` and implement `unsafe impl Send for PtrWrapper`.
+**Problem:**
+`unsafe impl Send` lets you cross the thread-safety line manually \u2014 bypassing the compiler's automatic check. This is a powerful but dangerous escape hatch: you are personally guaranteeing an invariant the compiler cannot verify.
+
+The canonical use case: you've built a struct that owns a raw pointer to heap data, and you *know* your design ensures only one thread ever accesses that data at a time \u2014 but the compiler only sees `*mut T` (which is `!Send`) and refuses to trust you automatically.
+
+Write a program that:
+1. Defines `struct UniqueBuffer { ptr: *mut i32, len: usize }` that owns a heap-allocated array of `i32`.
+2. Implements `unsafe impl Send for UniqueBuffer` with a `// SAFETY:` comment explaining the invariant.
+3. Implements `new(len: usize) -> Self` (allocates with `vec![0i32; len].into_boxed_slice` and calls `Box::into_raw`), `sum(&self) -> i32`, and `Drop` (calls `Box::from_raw` to free).
+4. Spawns a thread, moves the buffer into it, calls `.sum()`, and prints the result.
+
+Then answer: **what would go wrong if you gave the same `UniqueBuffer` to two threads simultaneously?**
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Unsafe Send implemented
-> ```
-> ```rust
-> struct PtrWrapper(*mut i32);
-> unsafe impl Send for PtrWrapper {}
-> fn main() {
->     println!("Unsafe Send implemented");
-> }
+> ```text
+> Sum from thread: 15
 > ```
 >
-> **Explanation:** Implementing `Send` manually requires `unsafe impl` to guarantee pointer safety across threads.
+> - **Hint 1:** The `// SAFETY:` comment is not just a convention \u2014 it is the contract. It must state *why* sending this type across threads is sound: typically \"the pointer is the sole owner of the allocation; no other reference exists; only one thread will access it at a time\".\n> - **Hint 2:** `Box::into_raw(boxed_slice as Box<[i32]>)` gives you a `*mut [i32]`. Store it as `*mut i32` using `.as_mut_ptr()` and separately store `len`. In `Drop`, reconstruct with `std::slice::from_raw_parts_mut(self.ptr, self.len)` then `Box::from_raw(slice_ptr)`.\n> - **Hint 3:** Moving `UniqueBuffer` into `thread::spawn(move || { ... })` compiles only after `unsafe impl Send` is in place. Without it, the compiler reports `E0277: *mut i32 cannot be sent between threads safely`.\n>\n> ```rust\n> use std::thread;\n>\n> struct UniqueBuffer {\n>     ptr: *mut i32,\n>     len: usize,\n> }\n>\n> // SAFETY: UniqueBuffer is the sole owner of its heap allocation.\n> // Ownership is transferred (moved) into exactly one thread at a time.\n> // No shared references to the data exist; concurrent access is impossible\n> // because moving the struct transfers ownership rather than copying it.\n> unsafe impl Send for UniqueBuffer {}\n>\n> impl UniqueBuffer {\n>     fn new(values: &[i32]) -> Self {\n>         let mut v = values.to_vec();\n>         let ptr = v.as_mut_ptr();\n>         let len = v.len();\n>         std::mem::forget(v); // prevent Vec from freeing the memory\n>         UniqueBuffer { ptr, len }\n>     }\n>\n>     fn sum(&self) -> i32 {\n>         // SAFETY: ptr is valid for `len` elements and we have exclusive access.\n>         unsafe { std::slice::from_raw_parts(self.ptr, self.len).iter().sum() }\n>     }\n> }\n>\n> impl Drop for UniqueBuffer {\n>     fn drop(&mut self) {\n>         // SAFETY: reconstruct the Vec to free the allocation we took ownership of.\n>         unsafe {\n>             drop(Vec::from_raw_parts(self.ptr, self.len, self.len));\n>         }\n>     }\n> }\n>\n> fn main() {\n>     let buf = UniqueBuffer::new(&[1, 2, 3, 4, 5]);\n>     // `buf` is moved into the thread \u2014 main can no longer access it.\n>     let handle = thread::spawn(move || {\n>         println!(\"Sum from thread: {}\", buf.sum());\n>         // buf drops here, freeing the heap allocation\n>     });\n>     handle.join().unwrap();\n> }\n> ```\n>\n> **Answer to the \"two threads\" question:**\n> If two threads both received the same `UniqueBuffer` (e.g. by wrapping it in `Arc` without adding `Sync`), they could call `sum()` concurrently, both reading from `*ptr` at the same time \u2014 that alone is safe (reads don't race). But if either thread also *wrote* to the buffer while the other read, that would be a data race: undefined behaviour. More critically, when both threads' `Drop` impls fired, both would call `Vec::from_raw_parts` on the same pointer and free the same memory twice \u2014 a use-after-free, causing heap corruption or a crash. The `unsafe impl Send` is sound **only** because `move` semantics ensure exactly one owner ever exists at a time."
 
 ---
 

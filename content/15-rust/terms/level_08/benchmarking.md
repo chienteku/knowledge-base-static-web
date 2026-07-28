@@ -189,22 +189,40 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 3: Executing Benchmarks with Cargo
+### Exercise 3: Filtering and Reading Benchmark Output
 
-**Problem:** Command line invocation to run benchmark targets in Cargo.
+**Problem:**
+You have a benchmark suite with 10 functions. After running `cargo bench`, criterion prints a wall of results and you notice one benchmark looks unexpectedly slow. Answer the following:
 
-**Expected output:**
+1. How do you re-run **only** a benchmark named `bench_bubble_sort` without re-running all 10?
+2. Criterion prints the following line. What does each part mean?
+   ```
+   bench_bubble_sort  time:   [4.2134 ms 4.2287 ms 4.2441 ms]
+   ```
+3. If criterion prints `Performance has regressed.`, what happened and what should you investigate?
+
 > [!check]- Answer
+> **1. Filtering by name:**
+> ```bash
+> cargo bench bench_bubble_sort
 > ```
-> cargo bench
-> ```
-> ```rust
-> fn main() {
->     println!("cargo bench");
-> }
-> ```
+> Any string after `cargo bench` is treated as a substring filter — criterion only runs benchmarks whose name contains that string. You can also filter with a regex.
 >
-> **Explanation:** `cargo bench` compiles targets with release optimizations and runs benchmark harnesses.
+> **2. Reading the three-number output:**
+> ```
+> [lower_bound  estimate  upper_bound]
+> [4.2134 ms    4.2287 ms  4.2441 ms]
+> ```
+> - **Lower bound**: the fastest time the benchmark could plausibly be at 95% confidence.
+> - **Estimate**: criterion's best point estimate of the true average time per iteration.
+> - **Upper bound**: the slowest plausible time at 95% confidence.
+> A narrow range (small gap between lower and upper) means a stable, reliable measurement. A wide range means high variance — often caused by background OS activity.
+>
+> **3. "Performance has regressed":**
+> Criterion saves baseline measurements in `target/criterion/`. When you run `cargo bench` again, it compares the new measurement to the saved baseline. "Regressed" means the new estimate is **statistically significantly slower** than the baseline — not just noise. You should investigate recent code changes, check for debug assertions being left on, or verify the machine wasn't under unusual load during either run.
+>
+> **Explanation:**
+> Criterion doesn't just time one run — it runs the benchmark closure hundreds or thousands of times, applies statistical analysis to remove outliers, and produces a confidence interval. This makes it far more reliable than a single `std::time::Instant` measurement. Always wrap inputs in `black_box` so the compiler cannot constant-fold the benchmark away before criterion even starts timing.
 
 ---
 

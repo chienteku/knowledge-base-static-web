@@ -176,41 +176,100 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Async Function Transformation Concept
+### Exercise 2: `async fn` is Lazy — Prove It
 
-**Problem:** Explain how `async fn fetch() -> u32` transforms into a state machine implementing `Future<Output = u32>`.
+**Problem:**
+Calling an `async fn` does NOT run its body. It returns a `Future` state machine that only executes when driven by an executor via `.await`. Prove this laziness by:
+
+1. Write `async fn compute(x: u32) -> u32` that prints `"compute({x}) running"` and returns `x * x`.
+2. In `#[tokio::main] async fn main()`, call `compute(5)` but do **not** `.await` it immediately. Print `"Before await"` first.
+3. Then `.await` it and print the result.
+4. Observe that `"compute(5) running"` appears *after* `"Before await"` — proving the body didn't run at call time.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Before await
+> compute(5) running
+> Result: 25
 > ```
-> State machine transformation verified
-> ```
+>
+> - **Hint 1:** `let fut = compute(5);` stores the `Future` without running it. The `println!` inside `compute` has not fired yet — the state machine is paused at its start state.
+> - **Hint 2:** `let result = fut.await;` is where the executor actually starts polling the state machine. Only then does `"compute(5) running"` print.
+> - **Hint 3:** This laziness is by design — it lets you *build up* a description of work (a `Future`) and hand it to an executor, a `join!`, a `select!`, or a `spawn`, without starting the work prematurely.
+>
 > ```rust
-> fn main() {
->     println!("State machine transformation verified");
+> // Calling this function returns a Future — it does NOT run the body.
+> async fn compute(x: u32) -> u32 {
+>     println!("compute({}) running", x); // only executes when .await'd
+>     x * x
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     // The Future is created here — but its body has NOT run yet.
+>     let fut = compute(5);
+>
+>     println!("Before await"); // this prints BEFORE compute's body runs
+>
+>     // Only now does the executor poll the Future and run its body.
+>     let result = fut.await;
+>     println!("Result: {}", result);
 > }
 > ```
 >
-> **Explanation:** `async fn` syntax compiles into an anonymous state machine type implementing `Future`.
+> **Explanation:**
+> `async fn compute(x: u32) -> u32` desugars to approximately `fn compute(x: u32) -> impl Future<Output = u32>`. The returned value is an anonymous struct (the state machine) that stores `x` and implements `Future`. Its `poll` method — which contains the original function body — is only called when the executor drives it. This is the fundamental contract of async Rust: **futures are values, not running computations**.
 
 ---
 
-### Exercise 3: Async Function Parameters Across Yield Points
+### Exercise 3: The `Send` Bound — Why `Rc` Breaks Inside `tokio::spawn`
 
-**Problem:** Demonstrate holding non-`Send` data across `.await` points causing `Send` bound compile errors.
+**Problem:**
+`tokio::spawn` requires the spawned `Future` to be `Send`, because the work-stealing executor may move your task between OS threads between `.await` points. This means any data held across a `.await` must also be `Send`.
+
+Demonstrate this rule:
+1. Write an `async fn bad_task()` that creates `let counter = Rc::new(0u32)`, then calls `tokio::time::sleep(Duration::from_millis(1)).await`, then prints `*counter`. Show (in a comment) why `tokio::spawn(bad_task())` would fail to compile.
+2. Write `async fn good_task()` that uses `Arc<u32>` instead and successfully spawns and awaits it.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Arc counter: 0
 > ```
-> Send bound check acknowledged
-> ```
+>
+> - **Hint 1:** When `bad_task` hits `.await`, the state machine *pauses* — and `counter: Rc<u32>` is stored inside the state machine struct (because it is still live after the `.await`). The state machine is then `!Send` because `Rc` is `!Send`. `tokio::spawn` requires `Send`, so it rejects the future with `E0277`.
+> - **Hint 2:** `Arc<T>` (Atomically Reference Counted) is `Send + Sync` when `T: Send + Sync`. Replacing `Rc` with `Arc` makes the state machine `Send`, satisfying `tokio::spawn`.
+> - **Hint 3:** If you only need `Rc` *before* an `.await` point and drop it before yielding, the state machine does not hold it across the yield — so it remains `Send`. The key is whether the non-`Send` value is *live* at the `.await` point.
+>
 > ```rust
-> fn main() {
->     println!("Send bound check acknowledged");
+> use std::sync::Arc;
+> use tokio::time::{sleep, Duration};
+>
+> // This function would NOT compile with tokio::spawn because Rc is !Send.
+> // async fn bad_task() {
+> //     let counter = std::rc::Rc::new(0u32);
+> //     sleep(Duration::from_millis(1)).await; // Rc is live here → state machine is !Send
+> //     println!("Rc counter: {}", *counter);
+> // }
+> // tokio::spawn(bad_task()); // ❌ E0277: Rc cannot be sent between threads safely
+>
+> // Fix: replace Rc with Arc, which implements Send + Sync.
+> async fn good_task() {
+>     let counter = Arc::new(0u32);
+>     sleep(Duration::from_millis(1)).await; // Arc is live here → state machine IS Send
+>     println!("Arc counter: {}", *counter);
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     // Arc-based task compiles and runs successfully.
+>     tokio::spawn(good_task()).await.unwrap();
 > }
 > ```
 >
-> **Explanation:** Holding references across `.await` points stores those references inside the generated future state machine struct.
+> **Explanation:**
+> The state machine generated by `async fn` stores every local variable that is *live across an `.await` point* as a field in the generated struct. If any of those fields is `!Send`, the entire state machine becomes `!Send`. `tokio::spawn` has a `T: Send + 'static` bound — it must be able to hand the task to any worker thread in its pool. `Rc` is `!Send` because it uses non-atomic reference counting (not safe to share across threads). `Arc` uses atomic ops and is `Send + Sync`, making it safe to move between threads.
 
 ---
 

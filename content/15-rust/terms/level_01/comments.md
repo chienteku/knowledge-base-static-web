@@ -168,58 +168,88 @@ fn can_survive(health: i32, damage: i32) -> bool {
 
 ### Exercise 2: Module-Level Documentation
 
-**Problem:** Write a Rust file with module-level documentation describing a math utility module using inner doc comments (`//!`). Add a documented function `add` inside.
+**Problem:** Write a Rust file with module-level documentation describing a math utility module using inner doc comments (`//!`). Add a documented function `pub fn add(a: i32, b: i32) -> i32` inside. Then call `add(3, 4)` from `main` and print the result to prove it works.
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Math utility ready
+> ```text
+> 3 + 4 = 7
 > ```
 > ```rust
 > //! Math Utilities Module
 > //! Provides basic arithmetic helper functions.
 >
 > /// Adds two integers.
+> ///
+> /// # Examples
+> /// ```
+> /// assert_eq!(add(1, 2), 3);
+> /// ```
 > pub fn add(a: i32, b: i32) -> i32 {
 >     a + b
 > }
 >
 > fn main() {
->     println!("Math utility ready");
+>     // We actually call and use the documented function to prove it works.
+>     let result = add(3, 4);
+>     println!("3 + 4 = {}", result);
 > }
 > ```
 >
-> **Explanation:** `//!` documents the containing item (the module file itself), while `///` documents the item that follows it (`pub fn add`).
+> **Explanation:**
+> - `//!` (with `!`) applies to the **containing item** — used at the top of a file, it documents the entire module or crate root. It appears in the module's `cargo doc` page header.
+> - `///` (without `!`) applies to the **next item** — here it documents `pub fn add`. The `# Examples` section is compiled and run by `cargo test` as a doc test.
+> - Note: in a real binary crate you wouldn't have both `pub fn add` and `fn main` in the same file — this is a simplified single-file demonstration. In a library crate, `//!` goes in `src/lib.rs` and `main()` lives in the binary.
 
 ---
 
 ### Exercise 3: Hiding Setup Code in Doc Tests
 
-**Problem:** Write a function doc comment with a runnable code example where the `fn main()` header and imports are hidden from generated docs using `#` prefix.
+**Problem:**
+Doc test code blocks in `///` comments are compiled and run by `cargo test`. Sometimes you need setup boilerplate (imports, `fn main` wrappers) that should run but not appear in the HTML docs. Lines prefixed with `#` are included in compilation but hidden from the rendered page.
+
+Write a `pub fn square(x: i32) -> i32` with a doc comment containing:
+1. A short description.
+2. An `# Examples` section with a runnable assertion using `assert_eq!`.
+3. One line **hidden** with `#` to demonstrate the hide-from-docs syntax.
+
+Then write `fn main()` that calls `square` and prints the result — demonstrating the function actually works at runtime, not just in the test.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> square(4) = 16
+> square(0) = 0
 > ```
-> Doc example structured properly
-> ```
+>
+> - **Hint 1:** Lines prefixed with `# ` (hash + space) inside a ` ``` ` code block in a `///` comment are compiled and run as part of the doc test but are hidden from the HTML output that `cargo doc` generates. They're invisible to readers but visible to `cargo test`.
+> - **Hint 2:** The `assert_eq!` in the doc test is the real verification — it fails `cargo test` if `square(4) != 16`. This is what makes doc tests valuable: they are executable specifications, not just documentation prose.
+> - **Hint 3:** You can use `#` to hide entire blocks including `use` imports or helper function definitions that would be noise in the docs but are required for the code example to compile.
+>
 > ```rust
 > /// Computes the square of a number.
 > ///
+> /// # Examples
+> ///
 > /// ```
-> /// # fn main() {
+> /// # // This line is hidden from docs but compiled by `cargo test`:
+> /// # fn square(x: i32) -> i32 { x * x }  // re-declare for doc test scope
 > /// assert_eq!(square(4), 16);
-> /// # }
+> /// assert_eq!(square(0), 0);
 > /// ```
 > pub fn square(x: i32) -> i32 {
 >     x * x
 > }
 >
 > fn main() {
->     println!("Doc example structured properly");
+>     // Call the real function — proving it produces the correct values at runtime.
+>     println!("square(4) = {}", square(4));
+>     println!("square(0) = {}", square(0));
 > }
 > ```
 >
-> **Explanation:** Lines starting with `#` in doc test blocks are compiled and executed when running `cargo test`, but omitted from the rendered HTML documentation.
+> **Explanation:**
+> When `cargo test` runs, it extracts every ` ``` ` code block from `///` comments and compiles each as a mini-program. Lines starting with `# ` are silently included in that compilation but stripped from the HTML page. This lets you keep examples realistic and compilable without cluttering the documentation with boilerplate. The outer `fn main()` here demonstrates the actual runtime behavior — they are two separate things: the doc test validates correctness during CI, and `main()` shows the function in action.
 
 ---
 

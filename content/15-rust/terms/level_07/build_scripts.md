@@ -167,45 +167,126 @@ What does this directive do, and what existing Rust mechanism would you use in `
 
 ---
 
-### Exercise 2: Emitting Cargo Instruction Directives
+### Exercise 2: Writing a Realistic Build Script for a C-Backed Crate
 
-**Problem:** Write a `build.rs` main function instructing Cargo to rerun if `src/schema.json` changes.
+**Problem:**
+Your crate wraps a system C library called `mysqlclient`. You need to write a complete `build.rs` that does **all three** of the following:
+
+1. Tells `rustc` to link against the system's `mysqlclient` dynamic library.
+2. Tells Cargo to only re-run this build script if the file `c_src/mysql_wrapper.h` changes (so normal Rust edits don't trigger a wasteful rebuild).
+3. Sets a custom `cfg` flag called `has_mysql` so that `src/lib.rs` can conditionally compile MySQL-specific code.
+
+Write the complete `build.rs` and show how `src/lib.rs` would use the `has_mysql` cfg flag to compile a function only when MySQL is available.
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Build instruction printed
-> ```
+> *(Build scripts don't produce user-visible stdout — the `cargo:` lines are consumed silently by Cargo. The observable effect is that `rustc` links the library, respects the rebuild trigger, and the `cfg` flag controls which code gets compiled.)*
+>
+> - **Hint 1:** Each `cargo:` directive is emitted with a plain `println!()` call — Cargo captures and interprets anything printed to stdout during `build.rs` execution.
+> - **Hint 2:** There are three distinct directive prefixes in play here:
+>   - `cargo:rustc-link-lib=` — tells `rustc` to pass `-l<name>` to the linker
+>   - `cargo:rerun-if-changed=` — narrows when Cargo re-executes this script
+>   - `cargo:rustc-cfg=` — injects a custom `cfg` key, readable in `src/` with `#[cfg(...)]`
+> - **Hint 3:** For `rustc-link-lib`, the default link kind is `dylib` (dynamic). You can be explicit with `dylib=mysqlclient`.
+>
 > ```rust
+> // build.rs
 > fn main() {
->     println!("cargo:rerun-if-changed=src/schema.json");
->     println!("Build instruction printed");
+>     // 1. Link against the system's mysqlclient dynamic library.
+>     //    This is equivalent to passing `-l mysqlclient` to rustc.
+>     println!("cargo:rustc-link-lib=dylib=mysqlclient");
+>
+>     // 2. Only re-run this build script when the C header changes.
+>     //    Without this, Cargo would conservatively re-run build.rs on *every* build.
+>     println!("cargo:rerun-if-changed=c_src/mysql_wrapper.h");
+>
+>     // 3. Set a custom cfg flag so src/ code can detect MySQL availability.
+>     println!("cargo:rustc-cfg=has_mysql");
 > }
 > ```
 >
-> **Explanation:** `println!("cargo:rerun-if-changed=...")` informs Cargo when to re-execute `build.rs`.
+> ```rust
+> // src/lib.rs
+> // This function is compiled into the binary ONLY when `has_mysql` cfg is set.
+> // The build script above guarantees it's set when mysqlclient is present.
+> #[cfg(has_mysql)]
+> pub fn connect() -> &'static str {
+>     "Connected to MySQL via mysqlclient"
+> }
+>
+> // This stub is compiled when MySQL is *not* available (e.g., CI without the library).
+> #[cfg(not(has_mysql))]
+> pub fn connect() -> &'static str {
+>     "MySQL not available in this build"
+> }
+> ```
+>
+> **Explanation:**
+> Build scripts communicate back to Cargo exclusively through `println!("cargo:...")` lines — Cargo intercepts them before they reach the terminal. Each directive prefix has a distinct job:
+> - `rustc-link-lib` solves the linker problem: it passes `-l mysqlclient` to `rustc` so the final binary can call into the C library. Without it, you'd get `undefined reference` linker errors at compile time.
+> - `rerun-if-changed` solves the stale-rebuild problem: by default Cargo re-runs `build.rs` on every `cargo build` call. Declaring a specific file path restricts re-execution to only when *that* file's mtime changes, keeping incremental builds fast.
+> - `rustc-cfg` solves the conditional compilation problem: it injects a flag identical to passing `--cfg has_mysql` to `rustc` directly, letting you use `#[cfg(has_mysql)]` in `src/` without touching `Cargo.toml` feature flags — ideal for capability detection discovered at build time.
 
 ---
 
-### Exercise 3: Generating Code to `OUT_DIR`
+### Exercise 3: Generating Code with `OUT_DIR` + `include!`
 
-**Problem:** Use `std::env::var("OUT_DIR")` in a build script to create a generated code file.
+**Problem:**
+The most powerful use of `build.rs` is generating Rust source code at build time and splicing it into your crate with `include!`. This pattern is used to embed constants computed from environment data, generate FFI bindings, or produce lookup tables that would be tedious to write by hand.
+
+Write a complete pipeline consisting of:
+1. `build.rs` — reads `OUT_DIR` from the environment, then writes a file `generated.rs` into it containing `pub const BUILD_PROFILE: &str = "debug";`.
+2. `src/lib.rs` — uses `include!(concat!(env!("OUT_DIR"), "/generated.rs"))` to splice the generated file in, and exposes `BUILD_PROFILE` as part of the public API.
+3. `src/main.rs` (or a doc test) — calls `my_crate::BUILD_PROFILE` and prints it.
+
+Then answer: **why must generated files go to `OUT_DIR` and not directly to `src/`?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Build profile: debug
 > ```
-> Generated code path retrieved
-> ```
+>
+> - **Hint 1:** `std::env::var("OUT_DIR")` returns the path Cargo assigns for this build's output artifacts. It is set by Cargo before running `build.rs` — you cannot choose it. It lives inside `target/` and is unique per crate per build profile.
+> - **Hint 2:** `std::fs::write(path, content)` creates the file. Construct the path with `std::path::Path::new(&out_dir).join("generated.rs")`.
+> - **Hint 3:** On the consuming side, `include!(concat!(env!("OUT_DIR"), "/generated.rs"))` is a macro that textually splices the file's contents at the call site — exactly as if you had typed that Rust code inline. It is evaluated at compile time, not runtime.
+>
 > ```rust
+> // build.rs
 > use std::env;
+> use std::fs;
+> use std::path::Path;
+>
 > fn main() {
->     if let Ok(out_dir) = env::var("OUT_DIR") {
->         println!("Generated code path retrieved: {}", out_dir);
->     }
+>     let out_dir = env::var("OUT_DIR").expect("OUT_DIR not set by Cargo");
+>     let dest = Path::new(&out_dir).join("generated.rs");
+>
+>     // Write a Rust constant into the generated file.
+>     // In real tools (e.g. bindgen), this could be thousands of lines.
+>     fs::write(&dest, "pub const BUILD_PROFILE: &str = \"debug\";\n")
+>         .expect("failed to write generated.rs");
+>
+>     // Tell Cargo to only re-run this script if build.rs itself changes.
+>     println!("cargo:rerun-if-changed=build.rs");
 > }
 > ```
 >
-> **Explanation:** Generated code should always be written into `$OUT_DIR` and included via `include!(concat!(env!("OUT_DIR"), "/file.rs"));`.
+> ```rust
+> // src/lib.rs
+> // Splice the generated file into this module at compile time.
+> // include! is a textual include — the const declaration lands here.
+> include!(concat!(env!("OUT_DIR"), "/generated.rs"));
+> ```
+>
+> ```rust
+> // src/main.rs
+> fn main() {
+>     println!("Build profile: {}", my_crate::BUILD_PROFILE);
+> }
+> ```
+>
+> **Answer to the `OUT_DIR` question:**
+> Writing into `src/` would dirty the source tree — version control would see the generated file as an untracked/modified file, creating noise in `git status` and potential conflicts between developers or CI runs that generate different content. `OUT_DIR` is inside `target/`, which is `.gitignore`d by convention, so generated files stay out of version control entirely. It also means each build profile (debug, release) gets its own `OUT_DIR`, so profile-specific generated code never collides.
 
 ---
 

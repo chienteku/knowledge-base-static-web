@@ -159,24 +159,50 @@ thread::spawn(move || {
 
 ### Exercise 2: Converting Environment Variables Safely
 
-**Problem:** Retrieve an environment variable `OsString` using `std::env::var_os("PATH")` and display it as a lossy string slice using `.to_string_lossy()`.
+**Problem:**
+Retrieve the `PATH` environment variable as an `OsString` using `std::env::var_os("PATH")`. Convert it to a displayable string using `.to_string_lossy()`, then:
+1. Print the first 60 characters of the value (or the full value if it's shorter).
+2. Handle the case where `PATH` is not set by printing `"PATH not set"`.
+
+Then answer: **why is `.to_string_lossy()` used instead of `.to_str()` here? What is the difference?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> PATH (first 60 chars): /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/
 > ```
-> PATH retrieved successfully
-> ```
+> *(exact output depends on your system's PATH)*
+>
+> - **Hint 1:** `var_os("PATH")` returns `Option<OsString>`. Use `if let Some(os_val) = ...` to unwrap it, and `else { println!("PATH not set"); }` for the None arm.
+> - **Hint 2:** `.to_string_lossy()` returns a `Cow<str>`. It borrows the data as `&str` if it's valid UTF-8, or allocates a new `String` (replacing invalid bytes with `\u{FFFD}`) if it isn't. In both cases you can treat the result like a `&str`.
+> - **Hint 3:** `&displayable[..displayable.len().min(60)]` slices the first 60 bytes. For a proper char-boundary safe version use `displayable.chars().take(60).collect::<String>()`.
+>
 > ```rust
 > use std::env;
+>
 > fn main() {
->     if let Some(path) = env::var_os("PATH") {
->         let displayable = path.to_string_lossy();
->         println!("PATH retrieved successfully");
+>     if let Some(os_val) = env::var_os("PATH") {
+>         // .to_string_lossy() never fails — invalid UTF-8 bytes are replaced
+>         // with the Unicode replacement character U+FFFD.
+>         let displayable = os_val.to_string_lossy();
+>
+>         // Collect the first 60 Unicode chars to avoid slicing mid-char.
+>         let preview: String = displayable.chars().take(60).collect();
+>         println!("PATH (first 60 chars): {}", preview);
+>     } else {
+>         println!("PATH not set");
 >     }
 > }
 > ```
 >
-> **Explanation:** `env::var_os` returns `Option<OsString>`, preserving native OS byte representations without requiring UTF-8 guarantees.
+> **Answer — `.to_string_lossy()` vs `.to_str()`:**
+>
+> | Method | Return type | On invalid UTF-8 |
+> |---|---|---|
+> | `.to_str()` | `Option<&str>` | Returns `None` — you get nothing |
+> | `.to_string_lossy()` | `Cow<str>` | Replaces bad bytes with `\u{FFFD}` — you always get a string |
+>
+> Use `.to_str()` when invalid UTF-8 is a logic error (you want to know about it). Use `.to_string_lossy()` for display purposes where showing *something* is better than showing nothing — log lines, progress messages, diagnostics. The `PATH` variable is almost always valid UTF-8 on modern systems, but `to_string_lossy()` is the safer choice for code that must not panic on any OS.
 
 ---
 

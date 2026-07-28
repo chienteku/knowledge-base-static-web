@@ -181,41 +181,128 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Spawning Concurrent Tokio Tasks
+### Exercise 2: Spawning Concurrent Tasks That Share Data
 
-**Problem:** Spawn a background task with `tokio::spawn(async move { ... })` and await its `JoinHandle`.
+**Problem:**
+You have a counter value `42` that needs to be processed by **three independent tasks** running concurrently. Each task should multiply the counter by its own task number (1, 2, and 3) and return the result. The main task collects all three results and prints them.
+
+Constraints:
+- Each spawned task must **own** the data it uses (you cannot pass a `&` reference into `tokio::spawn` — tasks must be `'static`).
+- All three tasks must be spawned **before** any of them are awaited, so they run concurrently.
+- Collect the results in order and print each one.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Task 1 result: 42
+> Task 2 result: 84
+> Task 3 result: 126
 > ```
-> Spawned task completed: 100
-> ```
+>
+> - **Hint 1:** `tokio::spawn` requires the async block to be `'static` — it cannot hold borrowed references to variables on the stack. Use `async move` to *move* ownership into the block. For shared data, wrap it in `Arc<T>` and clone the `Arc` before each spawn.
+> - **Hint 2:** Spawn all tasks first, collecting `JoinHandle`s into a `Vec`. Then iterate the `Vec` awaiting each handle. If you `.await` each handle right after spawning, you'd serialize the tasks — defeating the purpose of concurrent spawning.
+> - **Hint 3:** `handle.await` returns `Result<T, JoinError>`. Call `.unwrap()` (or `?`) to extract the inner value for this exercise.
+>
 > ```rust
-> fn main() {
->     println!("Spawned task completed: 100");
+> use std::sync::Arc;
+>
+> #[tokio::main]
+> async fn main() {
+>     // Arc lets each task clone a handle without requiring a `'static` borrow.
+>     let counter = Arc::new(42_u64);
+>
+>     let mut handles = vec![];
+>
+>     // Spawn all three tasks BEFORE awaiting any of them → true concurrency.
+>     for task_num in 1_u64..=3 {
+>         let counter = Arc::clone(&counter); // clone the Arc, not the data
+>         let handle = tokio::spawn(async move {
+>             // `counter` and `task_num` are moved in; no borrowed references.
+>             *counter * task_num
+>         });
+>         handles.push(handle);
+>     }
+>
+>     // Collect results in order (1, 2, 3).
+>     for (i, handle) in handles.into_iter().enumerate() {
+>         let result = handle.await.unwrap();
+>         println!("Task {} result: {}", i + 1, result);
+>     }
 > }
 > ```
 >
-> **Explanation:** `tokio::spawn` submits green tasks to the multi-threaded Tokio executor.
+> **Explanation:**
+> `tokio::spawn` enforces a `'static` bound on its closure — the spawned task may outlive the function that created it, so it cannot borrow anything from the caller's stack. `Arc::clone` creates a new reference-counted handle to the same heap allocation, giving each task its own owned pointer at the cost of just an atomic reference-count increment. Spawning all handles before awaiting any of them is the key to concurrency: the Tokio executor can schedule all three tasks simultaneously on its thread pool, so their total runtime approaches the maximum of their individual runtimes — not the sum.
 
 ---
 
-### Exercise 3: Handling Task Join Errors
+### Exercise 3: Catching Task Panics via `JoinError`
 
-**Problem:** Handle task panics by checking `JoinHandle` return `Result` for `JoinError`.
+**Problem:**
+Unlike `std::thread::spawn`, a panic inside a `tokio::spawn`ed task does **not** propagate automatically to the parent — it is captured inside the `JoinHandle`'s `Result`. This makes it possible to recover gracefully from a panicking task without crashing the whole program.
+
+Write a `#[tokio::main]` program that:
+
+1. Spawns a **healthy task** that returns the string `"all good"`.
+2. Spawns a **panicking task** that calls `panic!("something went wrong")`.
+3. Awaits both `JoinHandle`s and pattern-matches the `Result` to print:
+   - `"Task succeeded: all good"` for the healthy task.
+   - `"Task panicked: <reason>"` for the panicking task (extract the message from `JoinError`).
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Task succeeded: all good
+> Task panicked: something went wrong
 > ```
-> Task panic caught in join handle
-> ```
+> *(The panic message may also include Tokio's internal formatting depending on version.)*
+>
+> - **Hint 1:** `handle.await` returns `Result<T, tokio::task::JoinError>`. A task panic produces `Err(JoinError)` — it does **not** unwind into the spawning task. This is a deliberate isolation boundary.
+> - **Hint 2:** `JoinError` has two variants accessible via methods: `.is_panic()` returns `true` for task panics, and `.is_cancelled()` returns `true` for tasks cancelled via `JoinHandle::abort()`. Use `err.is_panic()` to distinguish them.
+> - **Hint 3:** To extract the panic message from a `JoinError`, call `.into_panic()` which returns a `Box<dyn Any>`. Downcast it with `.downcast_ref::<&str>()` or `.downcast_ref::<String>()` to get the original panic payload.
+>
 > ```rust
-> fn main() {
->     println!("Task panic caught in join handle");
+> #[tokio::main]
+> async fn main() {
+>     // Task 1: completes normally and returns a value.
+>     let healthy = tokio::spawn(async {
+>         "all good" // &'static str is 'static, safe to return from spawn
+>     });
+>
+>     // Task 2: panics internally. The panic is caught by Tokio and stored in JoinError.
+>     // It does NOT propagate to this task unless we explicitly re-panic.
+>     let panicking = tokio::spawn(async {
+>         panic!("something went wrong");
+>         #[allow(unreachable_code)]
+>         "never reached"
+>     });
+>
+>     // Pattern-match on the Result returned by .await.
+>     match healthy.await {
+>         Ok(msg) => println!("Task succeeded: {}", msg),
+>         Err(e) => println!("Task failed unexpectedly: {}", e),
+>     }
+>
+>     match panicking.await {
+>         Ok(msg) => println!("Task succeeded: {}", msg),
+>         Err(e) if e.is_panic() => {
+>             // Downcast the opaque panic payload back to its original type.
+>             let reason = e.into_panic();
+>             let msg = reason
+>                 .downcast_ref::<&str>()
+>                 .copied()
+>                 .unwrap_or("<non-string panic payload>");
+>             println!("Task panicked: {}", msg);
+>         }
+>         Err(e) => println!("Task was cancelled: {}", e),
+>     }
 > }
 > ```
 >
-> **Explanation:** Awaiting `JoinHandle` returns `Err(JoinError)` if spawned tasks panic.
+> **Explanation:**
+> Tokio isolates task panics at the `JoinHandle` boundary by design. When a spawned task panics, Tokio catches the unwind, wraps the payload in a `JoinError`, and returns `Err(JoinError)` to whoever awaits the handle. The spawning task continues running normally. This mirrors how web servers want to handle request handler panics: log the error and keep serving other requests, rather than crashing the entire process.
+>
+> Contrast this with `std::thread::spawn`: if you don't join a panicking thread, the panic is silently swallowed (the thread just dies). With `tokio::spawn`, the `JoinHandle` forces you to acknowledge the outcome — you cannot accidentally ignore a task's result because `JoinHandle` is `#[must_use]`, producing a compiler warning if dropped unexamined.
 
 ---
 

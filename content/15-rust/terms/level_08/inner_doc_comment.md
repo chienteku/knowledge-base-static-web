@@ -179,42 +179,123 @@ pub struct DatabaseConnection {
 
 ---
 
-### Exercise 2: Documenting Module Top-Level Context
+### Exercise 2: `//!` vs `///` — What Each Comment Attaches To
 
-**Problem:** Use `//!` at the top of a file to document module purpose.
+**Problem:**
+The key rule: `///` documents the item *below* it; `//!` documents the item *containing* it. In a module file, `//!` at the top documents the module itself — not any specific item inside it.
+
+Write a `src/math.rs` module that:
+1. Starts with `//!` inner doc comments describing what the module provides.
+2. Has a public function `add(a: i32, b: i32) -> i32` with its own `///` outer doc comments.
+3. Has a public function `multiply(a: i32, b: i32) -> i32` with its own `///` outer doc comments.
+
+Then answer: **if you replaced the `//!` lines at the top with `///` lines, what item would those comments be attached to in the generated docs?**
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Module documented via //!
-> ```
+> *(No runtime stdout — this is library documentation. Run `cargo doc --open` to see the module page with the `//!` text as the module header and `///` text on each function.)*
+>
+> - **Hint 1:** `//!` lines must come *before* any `use`, `pub`, or `fn` declarations. They attach to the enclosing item — in a module file, that means the module itself. In `src/lib.rs`, they attach to the whole crate.
+> - **Hint 2:** `///` lines must immediately precede the item they document (no blank lines between). They attach to the very next `pub fn`, `pub struct`, `pub enum`, etc.
+> - **Hint 3:** The two comment types can coexist freely: `//!` at the top of the file sets the module-level banner, and `///` above each function sets that function's individual docs.
+>
 > ```rust
-> //! Math utility module.
-> fn main() {
->     println!("Module documented via //!");
+> // src/math.rs
+>
+> //! Basic arithmetic utilities.
+> //!
+> //! This module provides simple integer arithmetic operations
+> //! for use throughout the application.
+>
+> /// Adds two integers together.
+> ///
+> /// # Examples
+> /// ```
+> /// assert_eq!(math::add(2, 3), 5);
+> /// ```
+> pub fn add(a: i32, b: i32) -> i32 {
+>     a + b
+> }
+>
+> /// Multiplies two integers.
+> ///
+> /// # Examples
+> /// ```
+> /// assert_eq!(math::multiply(3, 4), 12);
+> /// ```
+> pub fn multiply(a: i32, b: i32) -> i32 {
+>     a * b
 > }
 > ```
 >
-> **Explanation:** `//!` inner doc comments document enclosing file modules.
+> **Answer to the replacement question:**
+> If you replaced `//!` with `///` at the top of `src/math.rs`, those comment lines would attach to the **first item in the file** — in this case, the `add` function. The module itself would have no documentation at all, and `cargo doc` would show an empty module header. This is the mistake shown in Exercise 1: using `///` when you meant `//!` silently moves the description from the module to the first item below the comment block.
 
 ---
 
-### Exercise 3: Inner Doc Comments inside Crate Root
+### Exercise 3: Documenting a Full Crate in `src/lib.rs`
 
-**Problem:** Document `src/lib.rs` root using `//!`.
+**Problem:**
+The `src/lib.rs` file is special: `//!` comments at its top become the **crate-level landing page** on `docs.rs` and in your local `cargo doc` output. This is the first thing users see when they visit your crate's documentation.
+
+Write a complete `src/lib.rs` for a crate called `geometry` that:
+1. Starts with a `//!` block describing the crate: what it provides, a brief example.
+2. Declares a `pub struct Point` with `x: f64` and `y: f64` fields, documented with `///`.
+3. Implements a `pub fn distance(a: &Point, b: &Point) -> f64` with a `///` doc comment and a doc test.
+
+Then answer: **where in the `cargo doc` output does the `//!` text from `lib.rs` appear?**
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Crate root docs verified
-> ```
+> *(No runtime stdout — this is library code. Run `cargo doc --open` to see the crate landing page.)*
+>
+> - **Hint 1:** The `//!` block is the crate's "README in code". It appears at the very top of the crate's main documentation page — above the list of modules, structs, and functions. Many popular crates put their entire quickstart guide here.
+> - **Hint 2:** Markdown renders fully inside `//!` and `///` blocks: you can use `#` headings, `**bold**`, `` `code` ``, and fenced code blocks. The doc test in a ` ``` ` block inside `///` will be compiled and run by `cargo test`.
+> - **Hint 3:** To reference crate items inside the `//!` block, use the same intra-doc link syntax: `` [`Point`] `` will link to the `Point` struct's documentation page.
+>
 > ```rust
-> fn main() {
->     println!("Crate root docs verified");
+> // src/lib.rs
+>
+> //! # Geometry
+> //!
+> //! A minimal 2D geometry library.
+> //!
+> //! ## Quick start
+> //!
+> //! ```
+> //! use geometry::{Point, distance};
+> //!
+> //! let a = Point { x: 0.0, y: 0.0 };
+> //! let b = Point { x: 3.0, y: 4.0 };
+> //! assert_eq!(distance(&a, &b), 5.0);
+> //! ```
+>
+> /// A point in 2D space.
+> pub struct Point {
+>     /// Horizontal coordinate.
+>     pub x: f64,
+>     /// Vertical coordinate.
+>     pub y: f64,
+> }
+>
+> /// Returns the Euclidean distance between two points.
+> ///
+> /// # Examples
+> /// ```
+> /// use geometry::{Point, distance};
+> /// let a = Point { x: 0.0, y: 0.0 };
+> /// let b = Point { x: 3.0, y: 4.0 };
+> /// assert_eq!(distance(&a, &b), 5.0);
+> /// ```
+> pub fn distance(a: &Point, b: &Point) -> f64 {
+>     let dx = a.x - b.x;
+>     let dy = a.y - b.y;
+>     (dx * dx + dy * dy).sqrt()
 > }
 > ```
 >
-> **Explanation:** `//!` comments at `lib.rs` top supply crate-level documentation.
+> **Answer to the location question:**
+> The `//!` text from `src/lib.rs` becomes the content of the **crate root page** in `cargo doc` — the page you land on when you first open the documentation. On `docs.rs`, this is also the crate's main page. The `[package]` `readme` field in `Cargo.toml` can point to a `README.md` that `docs.rs` uses instead, but `//!` in `lib.rs` is what `cargo doc` uses locally.
 
 ---
 

@@ -168,45 +168,102 @@ The compiler throws an error: `no method named 'par_iter' found for struct 'Vec'
 
 ---
 
-### Exercise 2: Parallel Summation with `par_iter`
+### Exercise 2: Sequential vs. Parallel Sum with `par_iter`
 
-**Problem:** Demonstrate converting a vector iteration into parallel iteration using `.par_iter()` concept.
+**Problem:**
+Rayon's killer feature is that replacing `.iter()` with `.par_iter()` is a one-word change that distributes work across all CPU cores automatically. The interface is identical — the same adapters (`.map`, `.filter`, `.sum`, etc.) work on both.
+
+Write a program that:
+1. Creates a `Vec<i64>` of 10,000,000 numbers from 1 to 10,000,000.
+2. Computes the sum **sequentially** with `.iter().sum::<i64>()` and prints it.
+3. Computes the sum **in parallel** with `.par_iter().sum::<i64>()` and prints it.
+4. Asserts both results are equal.
+
+Then answer: **why will both produce the same result even though parallel order is non-deterministic?**
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Sequential sum: 50000005000000
+> Parallel sum:   50000005000000
+> Results match!
 > ```
-> Parallel sum completed
-> ```
+>
+> - **Hint 1:** Add `rayon = "1"` to `[dependencies]` in `Cargo.toml`, then `use rayon::prelude::*;` at the top of the file. Without the prelude import, `.par_iter()` does not exist — the method is added to `Vec` via an extension trait that the prelude brings into scope.
+> - **Hint 2:** The one-word change: `nums.iter().sum::<i64>()` → `nums.par_iter().sum::<i64>()`. Rayon splits the slice into chunks, sums each chunk on a separate thread pool worker, then combines the partial sums. The total is always correct because integer addition is associative and commutative — order doesn't affect the final sum.
+> - **Hint 3:** For very small vectors, `.par_iter()` will be *slower* than `.iter()` because thread management overhead exceeds the computation cost. The 10M-element range ensures the parallel version actually benefits from parallelism.
+>
 > ```rust
+> use rayon::prelude::*;
+>
 > fn main() {
->     let nums: Vec<i64> = (1..=1000).collect();
->     let sum: i64 = nums.iter().sum(); // Conceptual par_iter
->     println!("Parallel sum completed: {}", sum);
+>     let nums: Vec<i64> = (1..=10_000_000).collect();
+>
+>     // Sequential: single thread, left-to-right
+>     let seq_sum: i64 = nums.iter().sum();
+>     println!("Sequential sum: {}", seq_sum);
+>
+>     // Parallel: Rayon splits the slice across all CPU cores.
+>     // Each worker sums its chunk; results are combined (reduced) at the end.
+>     let par_sum: i64 = nums.par_iter().sum();
+>     println!("Parallel sum:   {}", par_sum);
+>
+>     assert_eq!(seq_sum, par_sum);
+>     println!("Results match!");
 > }
 > ```
 >
-> **Explanation:** Rayon's `.par_iter()` splits work across global thread pool workers automatically.
+> **Answer to the ordering question:**
+> Integer summation is both *associative* (`(a+b)+c == a+(b+c)`) and *commutative* (`a+b == b+a`). Rayon can split the slice into any number of chunks and sum them in any order — the partial sums will always combine to the same total. This is why `.par_iter().sum()` is always correct regardless of thread scheduling. Floating-point operations are **not** fully associative (due to rounding), so `f64` parallel sums may differ slightly from sequential sums.
 
 ---
 
-### Exercise 3: Parallel Sorting
+### Exercise 3: Parallel Sorting and `par_iter().map()` Pipeline
 
-**Problem:** Demonstrate parallel vector sorting concept.
+**Problem:**
+Rayon parallelises not just reductions (like `.sum()`) but also transformations (`.map()`, `.filter()`) and sorting (`.par_sort()`). The key rule: operations that are **embarrassingly parallel** — where each element is processed independently — are Rayon's sweet spot.
+
+Write a program that:
+1. Creates a `Vec<i32>` of 1,000,000 random-ish numbers using `(0..1_000_000).map(|i| (i * 7 + 3) % 997).collect()`.
+2. Uses `.par_sort()` to sort the vector in parallel and verifies it is sorted by checking `data.windows(2).all(|w| w[0] <= w[1])`.
+3. Uses `par_iter().map(|&x| x * x).sum::<i64>()` to compute the sum of squares in parallel.
+4. Prints both results.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Sorted: true
+> Sum of squares: 330836500000
 > ```
-> Parallel sort completed
-> ```
+>
+> - **Hint 1:** `.par_sort()` is an in-place parallel sort — it is a drop-in replacement for `.sort()`. It uses a parallel merge sort or introsort variant internally. Like sequential `.sort()`, it requires `T: Ord`. For a custom comparator, use `.par_sort_by(|a, b| a.cmp(b))`.
+> - **Hint 2:** `.par_iter().map(|&x| x * x).sum::<i64>()` is a parallel pipeline: Rayon splits the slice, each worker maps its chunk (squares every element), then all partial sums are reduced. The type annotation `::<i64>` prevents integer overflow for large sums.
+> - **Hint 3:** `.windows(2)` produces overlapping pairs `[a, b]` from the sorted vec. `all(|w| w[0] <= w[1])` checks every consecutive pair — the fastest way to verify a sorted `Vec` without re-sorting.
+>
 > ```rust
+> use rayon::prelude::*;
+>
 > fn main() {
->     let mut data = vec![5, 3, 1, 4, 2];
->     data.sort(); // Conceptual par_sort
->     println!("Parallel sort completed: {:?}", data);
+>     // Generate 1M pseudo-random numbers using a simple formula.
+>     let mut data: Vec<i32> = (0..1_000_000)
+>         .map(|i| (i * 7 + 3) % 997)
+>         .collect();
+>
+>     // par_sort: parallel in-place sort — drop-in replacement for .sort()
+>     data.par_sort();
+>     let is_sorted = data.windows(2).all(|w| w[0] <= w[1]);
+>     println!("Sorted: {}", is_sorted);
+>
+>     // Parallel map + sum pipeline: square each element, then sum all squares.
+>     let sum_of_squares: i64 = data.par_iter()
+>         .map(|&x| x as i64 * x as i64)
+>         .sum();
+>     println!("Sum of squares: {}", sum_of_squares);
 > }
 > ```
 >
-> **Explanation:** `par_sort` uses parallel divide-and-conquer quicksort algorithm variants.
+> **Explanation:**
+> `.par_sort()` and `.par_iter().map(...).sum()` both follow Rayon's **work-stealing** model: the global thread pool divides the data into chunks. Idle threads "steal" work from busy threads' queues, ensuring all CPU cores stay fully utilised. The result is that both operations run in roughly `O(n log n / cores)` and `O(n / cores)` wall-clock time respectively — the speedup scales with the number of cores. The programmer writes code that *looks* sequential but executes in parallel with zero explicit thread management.
 
 ---
 

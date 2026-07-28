@@ -182,22 +182,57 @@ mod internal {
 
 ---
 
-### Exercise 3: Denying Warnings in CI with Crate Level Attributes
+### Exercise 3: Crate-Level Lint Enforcement for CI
 
-**Problem:** Add `#![deny(clippy::all)]` to crate root.
+**Problem:**
+In CI pipelines it's common to turn warnings into hard errors so that warning debt doesn't accumulate silently. The two most common crate-level lint attributes for this are `#![deny(warnings)]` and `#![deny(clippy::all)]`.
+
+Write a complete `src/lib.rs` that:
+1. Uses `#![deny(clippy::all)]` at the crate root to make all clippy lints into hard errors.
+2. Uses `#![deny(unused_imports)]` to fail the build if any `use` statement is unused.
+3. Has a function `add(a: i32, b: i32) -> i32` that passes clippy cleanly.
+4. Demonstrates with a **commented-out** example how to locally exempt one specific function from a deny using `#[allow(...)]`.
+
+Then answer: **why do many projects prefer `RUSTFLAGS="-D warnings"` (or `RUSTDOCFLAGS="-D warnings"`) in CI over putting `#![deny(warnings)]` directly in the source?**
 
 **Expected output:**
 > [!check]- Answer
-> ```
-> Clippy deny configured
-> ```
-> ```rust
-> fn main() {
->     println!("Clippy deny configured");
-> }
+> ```text
+> 3   (calling add(1, 2))
 > ```
 >
-> **Explanation:** `#![deny(...)]` treats matching lint warnings as hard compilation errors.
+> - **Hint 1:** `#![...]` (with `!`) at the top of a file applies the attribute to the whole crate/module, not just the next item. It must appear before any `use` or `fn` declarations (only module-level attributes are allowed before items).
+> - **Hint 2:** `#[allow(clippy::some_lint)]` on a specific function overrides the crate-level `#![deny(clippy::all)]` for just that function — `deny` can be locally overridden by `allow` (unlike `forbid`).
+> - **Hint 3:** Clippy runs separately from `cargo build`: you need `cargo clippy` or `cargo clippy -- -D clippy::all`. The `#![deny]` in source only fires when clippy inspects the file, not during a plain `cargo build`.
+>
+> ```rust
+> // src/lib.rs
+>
+> // Crate-wide: any clippy lint violation is a hard compile error.
+> #![deny(clippy::all)]
+> // Crate-wide: any unused `use` statement is a hard compile error.
+> #![deny(unused_imports)]
+>
+> /// Adds two integers.
+> ///
+> /// Passes `clippy::all` cleanly: no integer overflow risk in i32 addition,
+> /// no clippy suggestions triggered.
+> pub fn add(a: i32, b: i32) -> i32 {
+>     a + b
+> }
+>
+> // Example: locally exempting a function from a specific clippy lint.
+> // If you had a function that triggers `clippy::too_many_arguments`, you can
+> // suppress it just for that function without affecting the rest of the crate:
+> //
+> // #[allow(clippy::too_many_arguments)]
+> // pub fn complex_builder(a: i32, b: i32, c: i32, d: i32, e: i32, f: i32, g: i32, h: i32) -> i32 {
+> //     a + b + c + d + e + f + g + h
+> // }
+> ```
+>
+> **Answer to the `RUSTFLAGS="-D warnings"` question:**
+> Putting `#![deny(warnings)]` in source code means the crate **never compiles** with any warning, even on a developer's local machine. This creates friction: every new Rust release that adds a new lint, or every clippy upgrade, causes compile failures locally before the developer can even run the code. Using `RUSTFLAGS="-D warnings"` (or an equivalent CI config) means the strictness is only enforced in CI \u2014 locally, warnings are still just warnings. This is the standard practice: catch warning debt in CI without blocking local development.
 
 ---
 

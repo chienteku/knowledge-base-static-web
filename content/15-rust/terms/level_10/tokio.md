@@ -185,41 +185,131 @@ async fn main() {
 
 ---
 
-### Exercise 2: Tokio Main Entry Point Setup
+### Exercise 2: Understanding `#[tokio::main]` — Entry Point and `async fn` Calls
 
-**Problem:** Write a `#[tokio::main]` entry point printing `"Tokio runtime initialized"`.
+**Problem:**
+The `#[tokio::main]` attribute is not magic — it is a *procedural macro* that expands your `async fn main()` into a synchronous `fn main()` that builds a Tokio runtime and calls `runtime.block_on(...)` for you.
+
+Do the following in a single file:
+
+1. Write an `async fn greet(name: &str)` that prints `"Hello, {name}! Running on Tokio."`.
+2. Write the `#[tokio::main] async fn main()` entry point that calls `greet("World").await` and then prints `"Runtime shutting down."`.
+3. **Answer:** If you accidentally wrote `greet("World")` without `.await`, what would the Rust compiler say, and why?
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Hello, World! Running on Tokio.
+> Runtime shutting down.
 > ```
-> Tokio runtime initialized
-> ```
+>
+> - **Hint 1:** `#[tokio::main]` only works on `async fn main()`. If you write plain `fn main()` you cannot use `.await` inside it — the compiler will error with `'await' is only allowed inside 'async' functions`.
+> - **Hint 2:** Every `async fn` call returns a `Future`, not its result. The Future does **no work** until it is `.await`ed (or explicitly polled). Forgetting `.await` means the function body never runs — the compiler will warn `unused implementer of Future that must be used`.
+> - **Hint 3:** What `#[tokio::main]` actually expands to (simplified):
+>   ```rust
+>   fn main() {
+>       tokio::runtime::Builder::new_multi_thread()
+>           .enable_all()
+>           .build()
+>           .unwrap()
+>           .block_on(async {
+>               // your async main body goes here
+>           });
+>   }
+>   ```
+>   Understanding this expansion explains why `#[tokio::main]` can only annotate `async fn main()`, and why any panic inside your async main propagates out through `block_on`.
+>
 > ```rust
-> fn main() {
->     println!("Tokio runtime initialized");
+> // The async helper — note: no runtime is needed to define async fns,
+> // only to *run* them. `greet` is just a state machine until .await'd.
+> async fn greet(name: &str) {
+>     println!("Hello, {}! Running on Tokio.", name);
+> }
+>
+> // #[tokio::main] builds the Tokio runtime and calls block_on(async_main_body).
+> // Without this macro, `async fn main()` is not valid Rust.
+> #[tokio::main]
+> async fn main() {
+>     greet("World").await; // .await drives the Future to completion
+>     println!("Runtime shutting down.");
 > }
 > ```
 >
-> **Explanation:** `#[tokio::main]` expands into runtime initialization and `block_on` execution.
+> **Answer to the compiler question:**
+> Calling `greet("World")` without `.await` creates the `Future` value but immediately drops it — the function body never executes. The Rust compiler (with the `must_use` lint) emits:
+> ```text
+> warning: unused implementer of `Future` that must be used
+>  --> src/main.rs:10:5
+>   |
+> 10|     greet("World");
+>   |     ^^^^^^^^^^^^^^^
+>   = note: futures do nothing unless you `.await` or poll them
+> ```
+> This is the fundamental rule of Rust async: **a Future is lazy**. It is only a description of work, not work itself. The Tokio runtime only executes work that has been handed to it via `.await` (or `tokio::spawn`).
+>
+> **Explanation:**
+> `#[tokio::main]` is purely a convenience macro — it has no runtime effect beyond generating the boilerplate `block_on` call. Understanding its expansion matters in two practical situations: (1) when you need to *customise* the runtime (e.g. `Builder::new_current_thread()` for single-threaded mode, or setting `.worker_threads(4)`) you must build the runtime manually and skip the macro; (2) when debugging panics, the stack trace will show `block_on` at the bottom, which is easier to interpret once you know the macro is generating it.
 
 ---
 
-### Exercise 3: Async Sleep with `tokio::time::sleep`
+### Exercise 3: Blocking vs. Non-Blocking Sleep — Observing the Difference
 
-**Problem:** Demonstrate non-blocking sleep concept `tokio::time::sleep(Duration::from_millis(100)).await`.
+**Problem:**
+You want to run **two independent async tasks** concurrently, each sleeping for 100 ms and then printing its name. The total wall-clock time should be approximately **100 ms** (both sleep in parallel), not 200 ms (sleeping sequentially).
+
+Write a `#[tokio::main]` program that:
+
+1. Spawns two tasks with `tokio::spawn`, where each task sleeps for 100 ms using **`tokio::time::sleep`** and then prints `"Task A done"` / `"Task B done"`.
+2. Awaits both handles with `tokio::join!` so `main` waits for both to finish.
+3. Prints `"Both tasks finished"` after both complete.
+
+Then answer: **why would replacing `tokio::time::sleep` with `std::thread::sleep` break the concurrency**, even though both tasks are spawned separately?
 
 **Expected output:**
 > [!check]- Answer
+> *(Task A and B may print in either order — the runtime decides which completes first.)*
+> ```text
+> Task A done
+> Task B done
+> Both tasks finished
 > ```
-> Slept asynchronously
-> ```
+> *(or `Task B done` then `Task A done` — order is not guaranteed)*
+>
+> - **Hint 1:** `tokio::spawn` launches a task onto the runtime. It returns a `JoinHandle<T>` — not the result itself. You must `.await` the handle (or use `tokio::join!`) to get the value.
+> - **Hint 2:** `tokio::time::sleep(Duration).await` suspends *only the current task*, handing the worker thread back to the Tokio executor to run other tasks. This is why both sleeps can overlap.
+> - **Hint 3:** `tokio::join!(handle_a, handle_b)` is the idiomatic way to await multiple `JoinHandle`s concurrently. It drives both handles simultaneously rather than awaiting them in sequence.
+> - **Hint 4 (blocking answer):** `std::thread::sleep` is a *synchronous blocking* call. It stalls the OS thread itself, not just the task. Because Tokio's default multi-threaded executor has a limited thread pool, blocking one thread with `thread::sleep` prevents that thread from running *any other* tasks while it sleeps — effectively serialising what was meant to be concurrent work.
+>
 > ```rust
-> fn main() {
->     println!("Slept asynchronously");
+> use std::time::Duration;
+> use tokio::time::sleep;
+>
+> #[tokio::main]
+> async fn main() {
+>     // Spawn Task A — runs concurrently with Task B on the Tokio thread pool.
+>     let handle_a = tokio::spawn(async {
+>         sleep(Duration::from_millis(100)).await; // yields back to executor during the wait
+>         println!("Task A done");
+>     });
+>
+>     // Spawn Task B — starts immediately alongside Task A, not after it.
+>     let handle_b = tokio::spawn(async {
+>         sleep(Duration::from_millis(100)).await; // same yield behaviour
+>         println!("Task B done");
+>     });
+>
+>     // Drive both handles concurrently; total elapsed time ≈ 100 ms, not 200 ms.
+>     tokio::join!(handle_a, handle_b).0.unwrap();
+>     // Note: join! returns a tuple of results; we unwrap handle_a's result above.
+>
+>     println!("Both tasks finished");
 > }
 > ```
 >
-> **Explanation:** `tokio::time::sleep` yields thread execution back to the Tokio event loop during delays.
+> **Explanation:**
+> `tokio::time::sleep(...).await` is *cooperative*: when a task hits `.await`, it suspends itself and returns the worker thread to the Tokio scheduler. The scheduler is then free to poll *other* tasks — including Task B's sleep — on that same thread. Both 100 ms timers run *concurrently*, so the total wall time is ~100 ms.
+>
+> `std::thread::sleep`, by contrast, is a raw OS syscall that blocks the calling thread unconditionally. The Tokio scheduler has no visibility into it and cannot reclaim the thread while it blocks. On the default `#[tokio::main]` multi-threaded runtime this may be partially masked by spare threads, but on a single-threaded runtime (`#[tokio::main(flavor = "current_thread")]`) it serialises both sleeps entirely, making the total time ~200 ms. Either way it is an anti-pattern: it starves the executor of threads and is the single most common Tokio performance mistake.
 
 ---
 

@@ -183,43 +183,111 @@ thread::spawn(move || {
 
 ---
 
-### Exercise 2: Sequential `.await` Execution
+### Exercise 2: Sequential `.await` — Order Guaranteed
 
-**Problem:** Demonstrate calling two async operations sequentially using `.await`.
+**Problem:**
+When you `.await` two futures one after the other (not with `join!`), they run *sequentially* — the second does not start until the first is fully complete. This is the key behavioural difference from `tokio::join!`.
+
+Write a `#[tokio::main]` program with:
+1. `async fn step_one()` — sleeps 50 ms, then prints `"Step 1 complete"` and returns `"step1"`.
+2. `async fn step_two(prev: &str)` — sleeps 20 ms, then prints `"Step 2 complete (after {prev})"` and returns `"step2"`.
+3. In `main`, call them sequentially: `let r1 = step_one().await;` then `let r2 = step_two(&r1).await;`.
+4. Print the total: `"Both done: {r1}, {r2}"`.
+
+Observe that `"Step 1 complete"` always prints before `"Step 2 complete"`.
 
 **Expected output:**
 > [!check]- Answer
-> ```
+> ```text
 > Step 1 complete
-> Step 2 complete
+> Step 2 complete (after step1)
+> Both done: step1, step2
 > ```
+>
+> - **Hint 1:** `.await` on a future *suspends* the current task until that future resolves. The executor is free to run other tasks during the wait, but in this program there are no other tasks — so it just waits.
+> - **Hint 2:** Because `step_two` takes `prev: &str` as a parameter, it *cannot* even start until `step_one` has returned a value. This is the natural composability of async functions: the output of one becomes the input of the next.
+> - **Hint 3:** The total time is ~70 ms (50 + 20), not ~50 ms — confirming sequential (not concurrent) execution. If you wanted concurrent execution, you'd use `tokio::join!(step_one(), step_two_no_args())`.
+>
 > ```rust
-> fn main() {
->     println!("Step 1 complete\nStep 2 complete");
+> use tokio::time::{sleep, Duration};
+>
+> async fn step_one() -> &'static str {
+>     sleep(Duration::from_millis(50)).await;
+>     println!("Step 1 complete");
+>     "step1"
+> }
+>
+> // step_two takes the result of step_one — it can't start until step_one finishes.
+> async fn step_two(prev: &str) -> &'static str {
+>     sleep(Duration::from_millis(20)).await;
+>     println!("Step 2 complete (after {})", prev);
+>     "step2"
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     // Sequential: step_two cannot begin until step_one's Future resolves.
+>     let r1 = step_one().await;
+>     let r2 = step_two(r1).await;
+>     println!("Both done: {}, {}", r1, r2);
 > }
 > ```
 >
-> **Explanation:** `.await` pauses current async task execution until the target future completes.
+> **Explanation:**
+> Sequential `.await` is the default and most readable form of async composition. Each `.await` is a *suspension point*: the current task yields to the executor, which can run other tasks in the meantime (cooperative multitasking). When the awaited future resolves, the executor resumes this task at the point immediately after the `.await`. This is exactly how `async/await` achieves concurrency without threads: tasks voluntarily give up the CPU at `.await` points rather than being preemptively interrupted.
 
 ---
 
-### Exercise 3: Awaiting Futures in Loop Pipelines
+### Exercise 3: `.await` Inside a Loop — Sequential Pipeline
 
-**Problem:** Iterate through a vector of items and `.await` processing calls sequentially.
+**Problem:**
+A common async pattern is processing a list of items one by one, where each item requires an async operation (e.g. a database query or HTTP request). Using `.await` inside a `for` loop makes each iteration wait for the previous to complete before starting the next.
+
+Write a `#[tokio::main]` program that:
+1. Defines `async fn process(item: u32) -> String` — simulates work with a 20 ms sleep and returns `format!("processed:{}", item)`.
+2. In `main`, iterates over `[1u32, 2, 3, 4, 5]` with a regular `for` loop, `.await`ing `process(item)` each iteration.
+3. Prints each result as `"Item processed: {result}"`.
+4. After the loop, prints `"All 5 items done."`.
 
 **Expected output:**
 > [!check]- Answer
+> ```text
+> Item processed: processed:1
+> Item processed: processed:2
+> Item processed: processed:3
+> Item processed: processed:4
+> Item processed: processed:5
+> All 5 items done.
 > ```
-> Item processed: 1
-> Item processed: 2
-> ```
+>
+> - **Hint 1:** A regular `for item in items` loop works inside `async fn main()` — you can `.await` inside the loop body just like anywhere else in an `async` context. The loop runs sequentially: item 2 does not start until item 1's future resolves.
+> - **Hint 2:** The total runtime is ~100 ms (5 × 20 ms). If you wanted all 5 to run concurrently (~20 ms total), you'd collect them into a `Vec<JoinHandle<_>>` via `tokio::spawn`, then await the handles — but that sacrifices the sequential ordering guarantee.
+> - **Hint 3:** This pattern is the async equivalent of a blocking `for` loop. It is simple and correct for cases where order matters or where the items depend on each other. Use `tokio::join!` or `futures::future::join_all` only when the items are truly independent.
+>
 > ```rust
-> fn main() {
->     println!("Item processed: 1\nItem processed: 2");
+> use tokio::time::{sleep, Duration};
+>
+> async fn process(item: u32) -> String {
+>     sleep(Duration::from_millis(20)).await; // simulate async work
+>     format!("processed:{}", item)
+> }
+>
+> #[tokio::main]
+> async fn main() {
+>     let items = [1u32, 2, 3, 4, 5];
+>
+>     for item in items {
+>         // .await inside a for loop: each iteration waits for the previous.
+>         let result = process(item).await;
+>         println!("Item processed: {}", result);
+>     }
+>
+>     println!("All 5 items done.");
 > }
 > ```
 >
-> **Explanation:** Sequential `.await` inside `for` loops yields control to the runtime between iterations.
+> **Explanation:**
+> `.await` inside a `for` loop is the idiomatic way to process items sequentially in async Rust. At each `.await`, the current task suspends and the executor can run other tasks on the thread. When `process` resolves, the loop advances to the next item. The key insight is that *suspending is not blocking*: even though this looks like a sequential loop, the thread is never actually blocked — it is available to run other tasks during each 20 ms sleep.
 
 ---
 
