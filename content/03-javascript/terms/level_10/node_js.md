@@ -162,13 +162,12 @@ async function processData() {
 **Problem:** In the browser, the highest-level object is called `window` (which holds things like `setTimeout`). What is the equivalent top-level object called in Node.js?
 
 **Expected output:**
-```text
-`global`.
-In Node.js, you can type `global.setTimeout`.
-*(Note: Modern JS introduced `globalThis` to provide a single name that works in both environments!)*
-```
-
 > [!check]- Answer
+> ```text
+> `global`.
+> In Node.js, you can type `global.setTimeout`.
+> *(Note: Modern JS introduced `globalThis` to provide a single name that works in both environments!)*
+> ```
 > - Think universally!
 
 ---
@@ -178,27 +177,27 @@ In Node.js, you can type `global.setTimeout`.
 **Problem:** Import core Node.js `fs` module using `import fs from 'node:fs'` syntax.
 
 **Expected output:**
-```text
-Core node:fs module loaded
-```
-
 > [!check]- Answer
+> ```text
+> Core node:fs module loaded
+> ```
 > ```javascript
 > console.log("Core node:fs module loaded");
 > ```
 >
 > **Explanation:** `node:` prefixes explicitly identify built-in Node.js runtime core modules.
 
+---
+
 ### Exercise 3: Reading Environment Variables via `process.env`
 
 **Problem:** Read `process.env.NODE_ENV` defaulting to `"development"`.
 
 **Expected output:**
-```text
-development
-```
-
 > [!check]- Answer
+> ```text
+> development
+> ```
 > ```javascript
 > const env = process.env.NODE_ENV || "development";
 > console.log(env);
@@ -206,7 +205,6 @@ development
 >
 > **Explanation:** `process.env` exposes system environment key-value pairs to Node.js applications.
 
----
 
 ---
 

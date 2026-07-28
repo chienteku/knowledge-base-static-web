@@ -160,14 +160,13 @@ CREATE user:[alice@example.com];
 4.  `session:b1a457f9-8c2d-4f10-b67c-5a1248cf9af4`
 
 **Expected output:**
-```text
-1. Numeric
-2. ULID (Time-sortable random character string)
-3. Custom String (Human-readable key)
-4. UUID (Standard random hexadecimal hash)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Numeric
+> 2. ULID (Time-sortable random character string)
+> 3. Custom String (Human-readable key)
+> 4. UUID (Standard random hexadecimal hash)
+> ```
 > - Look for standard UUID hash patterns (dashes separating hex codes).
 > - Analyze if the characters are human-readable words or random sorted codes.
 
@@ -180,27 +179,27 @@ CREATE user:[alice@example.com];
 **Problem:** Create a record in `user` table using email `admin@domain.com` as record ID.
 
 **Expected output:**
-```text
-CREATE user:[admin@domain.com] SET name = "Admin";
-```
-
 > [!check]- Answer
+> ```text
+> CREATE user:[admin@domain.com] SET name = "Admin";
+> ```
 > ```surrealql
 > CREATE user:[admin@domain.com] SET name = "Admin";
 > ```
 >
 > **Explanation:** Brackets `[id]` allow arbitrary special characters inside Record IDs.
 
+---
+
 ### Exercise 3: Built-in ID Generator Functions
 
 **Problem:** Generate record IDs using `rand()`, `ulid()`, and `uuid()` in `CREATE user` statements.
 
 **Expected output:**
-```text
-CREATE user:ulid(), CREATE user:uuid(), CREATE user:rand()
-```
-
 > [!check]- Answer
+> ```text
+> CREATE user:ulid(), CREATE user:uuid(), CREATE user:rand()
+> ```
 > ```surrealql
 > CREATE user:ulid();
 > CREATE user:uuid();

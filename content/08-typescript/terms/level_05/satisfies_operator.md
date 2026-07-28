@@ -185,11 +185,10 @@ console.log(en.errors.notFound.toUpperCase());
 ```
 
 **Expected output:**
-```text
-The compiler compiles the script without warnings. It knows errors is specifically a Record and accepts the .notFound key.
-```
-
 > [!check]- Answer
+> ```text
+> The compiler compiles the script without warnings. It knows errors is specifically a Record and accepts the .notFound key.
+> ```
 > - If you annotated `en: Locale`, `en.errors.notFound` would fail because the compiler would think `errors` could be a simple `string`.
 > - Append `satisfies Locale` after the object definition instead of using annotation.
 
@@ -202,11 +201,10 @@ The compiler compiles the script without warnings. It knows errors is specifical
 **Problem:** Validate object against `Record<string, unknown>` using `satisfies` while retaining method types.
 
 **Expected output:**
-```text
-Literal types preserved
-```
-
 > [!check]- Answer
+> ```text
+> Literal types preserved
+> ```
 > ```typescript
 > const config = {
 >   host: "localhost",
@@ -218,16 +216,17 @@ Literal types preserved
 >
 > **Explanation:** `satisfies` validates against target types without losing specific inferred literal types.
 
+---
+
 ### Exercise 3: Catching Missing Required Properties with `satisfies`
 
 **Problem:** Demonstrate `satisfies User` flagging missing `id: number` property at compile time.
 
 **Expected output:**
-```text
-Compile error: Property 'id' is missing
-```
-
 > [!check]- Answer
+> ```text
+> Compile error: Property 'id' is missing
+> ```
 > ```typescript
 > console.log("Compile error: Property 'id' is missing");
 > ```

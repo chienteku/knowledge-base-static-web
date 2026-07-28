@@ -142,12 +142,11 @@ Explain the difference in execution behavior between these two SurrealQL queries
 Assume `tracking_id` is defined as `TYPE uuid` on the table.
 
 **Expected output:**
-```text
-- Query 1 will fail or return no results because `"d3b0... "` is a string type, which does not match the binary `uuid` type stored in `tracking_id`.
-- Query 2 will succeed because the `<uuid>` casting operator converts the string literal into a native `uuid` type, allowing a binary comparison.
-```
-
 > [!check]- Answer
+> ```text
+> - Query 1 will fail or return no results because `"d3b0... "` is a string type, which does not match the binary `uuid` type stored in `tracking_id`.
+> - Query 2 will succeed because the `<uuid>` casting operator converts the string literal into a native `uuid` type, allowing a binary comparison.
+> ```
 > - Check the type conversion operators in SurrealQL.
 > - Consider if type mismatch filters block matches on schema-full tables.
 
@@ -160,27 +159,27 @@ Assume `tracking_id` is defined as `TYPE uuid` on the table.
 **Problem:** Generate a new UUID v4 using `rand::uuid::v4()` or `rand::uuid()`.
 
 **Expected output:**
-```text
-rand::uuid::v4()
-```
-
 > [!check]- Answer
+> ```text
+> rand::uuid::v4()
+> ```
 > ```surrealql
 > RETURN rand::uuid::v4();
 > ```
 >
 > **Explanation:** `rand::uuid::v4()` generates random UUID v4 values.
 
+---
+
 ### Exercise 3: UUID Field Schema Definition
 
 **Problem:** Define field `session_id` on `user` table as native `TYPE uuid`.
 
 **Expected output:**
-```text
-DEFINE FIELD session_id ON TABLE user TYPE uuid;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD session_id ON TABLE user TYPE uuid;
+> ```
 > ```surrealql
 > DEFINE FIELD session_id ON TABLE user TYPE uuid;
 > ```

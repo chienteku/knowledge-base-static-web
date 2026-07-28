@@ -144,11 +144,10 @@ export default function DashboardPage() {
 **Problem:** Write async Server Component checking `auth()` session and rendering user avatar or `redirect('/login')`.
 
 **Expected output:**
-```tsx
-import { auth } from '@/auth'; import { redirect } from 'next/navigation'; export default async function Profile() { const session = await auth(); if (!session) redirect('/login'); return <div>Welcome {session.user.name}</div>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> import { auth } from '@/auth'; import { redirect } from 'next/navigation'; export default async function Profile() { const session = await auth(); if (!session) redirect('/login'); return <div>Welcome {session.user.name}</div>; }
+> ```
 > - `auth()` retrieves session state in Server Components.
 > 
 > ```tsx
@@ -172,12 +171,11 @@ import { auth } from '@/auth'; import { redirect } from 'next/navigation'; expor
 **Problem:** Compare Database Sessions vs JWT Token Sessions in Next.js authentication.
 
 **Expected output:**
-```text
-Database Sessions: Stored server-side in DB/Redis (instant revocation, higher DB load);
-JWT Sessions: Stateless encrypted tokens stored in HttpOnly cookies (zero DB load, harder instant revocation).
-```
-
 > [!check]- Answer
+> ```text
+> Database Sessions: Stored server-side in DB/Redis (instant revocation, higher DB load);
+> JWT Sessions: Stateless encrypted tokens stored in HttpOnly cookies (zero DB load, harder instant revocation).
+> ```
 > - Database Sessions -> Server-side DB lookup, instant revocation.
 > - JWT Sessions -> Stateless token in cookie, zero DB lookup.
 > 

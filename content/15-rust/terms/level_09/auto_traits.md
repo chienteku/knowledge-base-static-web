@@ -159,11 +159,10 @@ struct Wrapper { count: Cell<i32> }
 **Problem:** Verify that a struct containing only `i32` and `String` automatically implements `Send`.
 
 **Expected output:**
-```
-Struct automatically implements Send
-```
-
 > [!check]- Answer
+> ```
+> Struct automatically implements Send
+> ```
 > ```rust
 > fn assert_send<T: Send>() {}
 > struct Person { name: String, age: u32 }
@@ -175,16 +174,17 @@ Struct automatically implements Send
 >
 > **Explanation:** Auto-traits automatically propagate to composite structs if all member fields implement the auto-trait.
 
+---
+
 ### Exercise 3: Raw Pointer Auto-Trait Opt-Out
 
 **Problem:** Demonstrate that `struct RawHolder(*const i32)` does not automatically derive `Send`.
 
 **Expected output:**
-```
-Raw pointer opts out of Send
-```
-
 > [!check]- Answer
+> ```
+> Raw pointer opts out of Send
+> ```
 > fn main() {
 >     println!("Raw pointer opts out of Send");
 > }

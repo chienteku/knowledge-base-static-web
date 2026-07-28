@@ -255,23 +255,22 @@ Container-relative unit values:
 **Problem:** You are styling an article preview list. You have a container `.article-wrapper` and a child title heading `.article-title`. The title should have a font size of `1.2rem` by default, but if the `.article-wrapper` is at least `500px` wide, scale the title font size to `1.8rem`. Write the CSS ruleset.
 
 **Expected output:**
-```css
-.article-wrapper {
-  container-type: inline-size;
-}
-
-.article-title {
-  font-size: 1.2rem;
-}
-
-@container (min-width: 500px) {
-  .article-title {
-    font-size: 1.8rem;
-  }
-}
-```
-
 > [!check]- Answer
+> ```css
+> .article-wrapper {
+>   container-type: inline-size;
+> }
+> 
+> .article-title {
+>   font-size: 1.2rem;
+> }
+> 
+> @container (min-width: 500px) {
+>   .article-title {
+>     font-size: 1.8rem;
+>   }
+> }
+> ```
 > - Remember to set the container context wrapper first.
 > - Target the child element inside the `@container` conditional query block.
 
@@ -284,11 +283,10 @@ Container-relative unit values:
 **Problem:** Write Container Query for `.card-wrapper` (`container-type: inline-size`) switching `.card` to `flex-direction: row` when wrapper exceeds `450px` width.
 
 **Expected output:**
-```text
-.card-wrapper { container-type: inline-size; } @container (min-width: 450px) { .card { flex-direction: row; } }
-```
-
 > [!check]- Answer
+> ```text
+> .card-wrapper { container-type: inline-size; } @container (min-width: 450px) { .card { flex-direction: row; } }
+> ```
 > ```css
 > .card-wrapper {
 >   container-type: inline-size;
@@ -302,16 +300,17 @@ Container-relative unit values:
 >
 > **Explanation:** Container queries allow components to adapt based on parent container width rather than viewport width.
 
+---
+
 ### Exercise 3: Container Queries vs Media Queries Difference
 
 **Problem:** Why are Container Queries superior to Media Queries for reusable component libraries?
 
 **Expected output:**
-```text
-Container Queries allow components to respond to their local parent box width wherever placed, independent of global browser viewport width.
-```
-
 > [!check]- Answer
+> ```text
+> Container Queries allow components to respond to their local parent box width wherever placed, independent of global browser viewport width.
+> ```
 > ```text
 > Container Queries allow components to respond to their local parent box width wherever placed, independent of global browser viewport width.
 > ```

@@ -200,11 +200,10 @@ fn main() {
 **Problem:** Parse `"100"` into `u16` using `"100".parse::<u16>().unwrap()`.
 
 **Expected output:**
-```
-Parsed: 100
-```
-
 > [!check]- Answer
+> ```
+> Parsed: 100
+> ```
 > ```rust
 > fn main() {
 >     let val = "100".parse::<u16>().unwrap();
@@ -214,16 +213,17 @@ Parsed: 100
 >
 > **Explanation:** `::<T>` supplies type arguments to generic methods in expression position.
 
+---
+
 ### Exercise 3: Turbofish Collection Types
 
 **Problem:** Collect a range `1..=3` into a `Vec<i32>` using `.collect::<Vec<i32>>()`.
 
 **Expected output:**
-```
-[1, 2, 3]
-```
-
 > [!check]- Answer
+> ```
+> [1, 2, 3]
+> ```
 > fn main() {
 >     let v = (1..=3).collect::<Vec<i32>>();
 >     println!("{:?}", v);

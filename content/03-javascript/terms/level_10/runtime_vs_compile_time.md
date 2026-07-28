@@ -197,34 +197,33 @@ async function processData() {
 **Problem:** Classify TypeScript syntax error (Compile-time) vs `TypeError: null.func()` (Runtime).
 
 **Expected output:**
-```text
-Compile-time vs Runtime
-```
-
 > [!check]- Answer
+> ```text
+> Compile-time vs Runtime
+> ```
 > ```javascript
 > console.log("Compile-time vs Runtime");
 > ```
 >
 > **Explanation:** Compile-time errors occur during build parsing; runtime errors occur during engine execution.
 
+---
+
 ### Exercise 3: Code Stripping in Compile Step
 
 **Problem:** Explain why TypeScript type annotations are stripped out completely during compilation.
 
 **Expected output:**
-```text
-Type annotations stripped into pure JavaScript
-```
-
 > [!check]- Answer
+> ```text
+> Type annotations stripped into pure JavaScript
+> ```
 > ```javascript
 > console.log("Type annotations stripped into pure JavaScript");
 > ```
 >
 > **Explanation:** JS engines execute plain JavaScript without type metadata overhead.
 
----
 
 ---
 

@@ -181,27 +181,27 @@ calculate(10, 20).then(result => console.log("Result:", result));
 **Problem:** Simulate awaiting dynamic module import `const mod = await import('./math.js')`.
 
 **Expected output:**
-```text
-Dynamic import returned Promise
-```
-
 > [!check]- Answer
+> ```text
+> Dynamic import returned Promise
+> ```
 > ```javascript
 > console.log("Dynamic import returned Promise");
 > ```
 >
 > **Explanation:** `import(path)` returns a Promise resolving to the target module namespace object.
 
+---
+
 ### Exercise 3: Destructuring Default Exports from Dynamic Imports
 
 **Problem:** Extract `default` export using `const { default: myFunc } = await import(path)`.
 
 **Expected output:**
-```text
-Default export destructured
-```
-
 > [!check]- Answer
+> ```text
+> Default export destructured
+> ```
 > ```javascript
 > console.log("Default export destructured");
 > ```

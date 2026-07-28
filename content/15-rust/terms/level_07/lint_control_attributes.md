@@ -166,11 +166,10 @@ mod internal {
 **Problem:** Suppress unused variable warning on `let unused = 42;` using `#[allow(unused_variables)]`.
 
 **Expected output:**
-```
-Lint suppressed cleanly
-```
-
 > [!check]- Answer
+> ```
+> Lint suppressed cleanly
+> ```
 > ```rust
 > fn main() {
 >     #[allow(unused_variables)]
@@ -181,16 +180,17 @@ Lint suppressed cleanly
 >
 > **Explanation:** `#[allow(lint_name)]` localizes lint suppression to single items or statements.
 
+---
+
 ### Exercise 3: Denying Warnings in CI with Crate Level Attributes
 
 **Problem:** Add `#![deny(clippy::all)]` to crate root.
 
 **Expected output:**
-```
-Clippy deny configured
-```
-
 > [!check]- Answer
+> ```
+> Clippy deny configured
+> ```
 > fn main() {
 >     println!("Clippy deny configured");
 > }

@@ -227,23 +227,23 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Hired: Alice
-```
-
 > [!check]- Answer
+> ```text
+> Hired: Alice
+> ```
 > - You need to add the `pub` keyword in multiple places: the `employees` module, the `Employee` struct, the `name` field, and the `new` function.
+
+---
 
 ### Exercise 2: Splitting into Modules
 
 **Problem:** Create a module named `network` containing a nested module named `server`. Inside `server`, create a public function `connect` that prints "Connected to server!". Call this function from `main`.
 
 **Expected output:**
-```text
-Connected to server!
-```
-
 > [!check]- Answer
+> ```text
+> Connected to server!
+> ```
 > - Use `mod network { pub mod server { ... } }` and call it via `network::server::connect()`.
 
 ---
@@ -253,11 +253,10 @@ Connected to server!
 **Problem:** Create a module layout where `mod internal { pub fn core_logic() {} }` is re-exported at module level using `pub use internal::core_logic;`.
 
 **Expected output:**
-```
-Core logic executed
-```
-
 > [!check]- Answer
+> ```
+> Core logic executed
+> ```
 > ```rust
 > mod api {
 >     mod internal {

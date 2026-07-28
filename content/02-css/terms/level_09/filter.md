@@ -207,13 +207,12 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 **Problem:** You are building a game dashboard UI. You have a transparent PNG icon of a flame. When the user hovers over the icon, you want to create a glowing red shadow effect around the exact outline of the flame shape. Write the `:hover` ruleset.
 
 **Expected output:**
-```css
-.flame-icon:hover {
-  filter: drop-shadow(0px 0px 12px rgba(255, 0, 0, 0.8));
-}
-```
-
 > [!check]- Answer
+> ```css
+> .flame-icon:hover {
+>   filter: drop-shadow(0px 0px 12px rgba(255, 0, 0, 0.8));
+> }
+> ```
 > - Avoid using `box-shadow` because the icon container is rectangular.
 > - Apply the shadow function designed for custom outlines.
 
@@ -226,11 +225,10 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 **Problem:** Write CSS for `.gallery-img` starting at `filter: grayscale(100%)`, transitioning to `filter: grayscale(0%)` on hover.
 
 **Expected output:**
-```text
-.gallery-img { filter: grayscale(100%); transition: filter 0.3s; } .gallery-img:hover { filter: grayscale(0%); }
-```
-
 > [!check]- Answer
+> ```text
+> .gallery-img { filter: grayscale(100%); transition: filter 0.3s; } .gallery-img:hover { filter: grayscale(0%); }
+> ```
 > ```css
 > .gallery-img {
 >   filter: grayscale(100%);
@@ -243,16 +241,17 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 >
 > **Explanation:** `filter: grayscale()` transforms image color channels.
 
+---
+
 ### Exercise 3: Chaining Multiple Filter Functions
 
 **Problem:** Write `filter` rule combining `contrast(120%)` and `brightness(90%)`.
 
 **Expected output:**
-```text
-filter: contrast(120%) brightness(90%);
-```
-
 > [!check]- Answer
+> ```text
+> filter: contrast(120%) brightness(90%);
+> ```
 > ```css
 > img {
 >   filter: contrast(120%) brightness(90%);

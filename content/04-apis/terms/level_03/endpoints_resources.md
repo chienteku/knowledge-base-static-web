@@ -183,13 +183,12 @@ GET /api/orders ; Standardized plural resource nouns
 3. Get all comments on that specific article.
 
 **Expected output:**
-```text
-1. `GET /articles`
-2. `GET /articles/42`
-3. `GET /articles/42/comments`
-```
-
 > [!check]- Answer
+> ```text
+> 1. `GET /articles`
+> 2. `GET /articles/42`
+> 3. `GET /articles/42/comments`
+> ```
 > - Remember to use Plural Nouns!
 > - To get a specific item, use a Path Variable.
 
@@ -203,13 +202,12 @@ GET /api/orders ; Standardized plural resource nouns
 3. `POST /api/deleteCustomer/10` 
 
 **Expected output:**
-```text
-1. GET /api/customers
-2. PUT /api/customers/10 (or PATCH)
-3. DELETE /api/customers/10
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET /api/customers
+> 2. PUT /api/customers/10 (or PATCH)
+> 3. DELETE /api/customers/10
+> ```
 > ```text
 > 1. GET /api/customers
 > 2. PUT /api/customers/10
@@ -223,11 +221,10 @@ GET /api/orders ; Standardized plural resource nouns
 **Problem:** Design a RESTful URI endpoint path for fetching all comments belonging to a specific post (`id: 42`).
 
 **Expected output:**
-```text
-GET /api/posts/42/comments
-```
-
 > [!check]- Answer
+> ```text
+> GET /api/posts/42/comments
+> ```
 > ```http
 > GET /api/posts/42/comments HTTP/1.1
 > ```
@@ -242,13 +239,12 @@ GET /api/posts/42/comments
 3. `POST /api/deleteCustomer/10` 
 
 **Expected output:**
-```text
-1. GET /api/customers
-2. PUT /api/customers/10 (or PATCH)
-3. DELETE /api/customers/10
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET /api/customers
+> 2. PUT /api/customers/10 (or PATCH)
+> 3. DELETE /api/customers/10
+> ```
 > ```text
 > 1. GET /api/customers
 > 2. PUT /api/customers/10
@@ -262,11 +258,10 @@ GET /api/posts/42/comments
 **Problem:** Design a RESTful URI endpoint path for fetching all comments belonging to a specific post (`id: 42`).
 
 **Expected output:**
-```text
-GET /api/posts/42/comments
-```
-
 > [!check]- Answer
+> ```text
+> GET /api/posts/42/comments
+> ```
 > ```http
 > GET /api/posts/42/comments HTTP/1.1
 > ```
@@ -281,13 +276,12 @@ GET /api/posts/42/comments
 3. `POST /api/deleteCustomer/10` 
 
 **Expected output:**
-```text
-1. GET /api/customers
-2. PUT /api/customers/10 (or PATCH)
-3. DELETE /api/customers/10
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET /api/customers
+> 2. PUT /api/customers/10 (or PATCH)
+> 3. DELETE /api/customers/10
+> ```
 > ```text
 > 1. GET /api/customers
 > 2. PUT /api/customers/10
@@ -301,11 +295,10 @@ GET /api/posts/42/comments
 **Problem:** Design a RESTful URI endpoint path for fetching all comments belonging to a specific post (`id: 42`).
 
 **Expected output:**
-```text
-GET /api/posts/42/comments
-```
-
 > [!check]- Answer
+> ```text
+> GET /api/posts/42/comments
+> ```
 > ```http
 > GET /api/posts/42/comments HTTP/1.1
 > ```

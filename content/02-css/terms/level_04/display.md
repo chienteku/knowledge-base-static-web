@@ -180,13 +180,12 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 **Problem:** You have a `<ul>` with three `<li>` elements: Home, About, Contact. By default, they stack vertically on top of each other. How can you make them sit side-by-side horizontally, while still allowing them to have a specific clickable `width` of 100px?
 
 **Expected output:**
-```text
-Set the `<li>` elements to `display: inline-block;`. 
-If you used `inline`, they would sit side-by-side but ignore the 100px width.
-If you used `block`, they would respect the width but stack vertically.
-```
-
 > [!check]- Answer
+> ```text
+> Set the `<li>` elements to `display: inline-block;`. 
+> If you used `inline`, they would sit side-by-side but ignore the 100px width.
+> If you used `block`, they would respect the width but stack vertically.
+> ```
 > - You need the best of both worlds.
 
 ---
@@ -202,14 +201,13 @@ If you used `block`, they would respect the width but stack vertically.
 4. `none` 
 
 **Expected output:**
-```text
-1. Starts on new line, stretches full width
-2. Flows within text, ignores width/height
-3. Flows within line, respects width/height
-4. Removes element completely from layout tree
-```
-
 > [!check]- Answer
+> ```text
+> 1. Starts on new line, stretches full width
+> 2. Flows within text, ignores width/height
+> 3. Flows within line, respects width/height
+> 4. Removes element completely from layout tree
+> ```
 > ```text
 > 1. block -> Starts on new line, stretches full width
 > 2. inline -> Flows within text, ignores width/height
@@ -219,16 +217,17 @@ If you used `block`, they would respect the width but stack vertically.
 >
 > **Explanation:** `display` dictates CSS box generation and flow positioning rules.
 
+---
+
 ### Exercise 3: Modern Outer/Inner Display Syntax
 
 **Problem:** What does multi-keyword syntax `display: inline flex;` specify?
 
 **Expected output:**
-```text
-Sets outer display behavior to inline, and inner formatting context to Flexbox.
-```
-
 > [!check]- Answer
+> ```text
+> Sets outer display behavior to inline, and inner formatting context to Flexbox.
+> ```
 > ```css
 > .container {
 >   display: inline flex;

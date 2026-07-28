@@ -203,13 +203,12 @@ POST /api/transactions HTTP/1.1 ; RESTful resource endpoint style
 **Problem:** You inherit a terrible, legacy API. It has the following endpoint: `GET /movies/addMovie?name=Inception&director=Nolan`. Convert this into a proper RESTful endpoint.
 
 **Expected output:**
-```text
-Method: `POST` (Because we are creating something new).
-URL: `/movies` (Just the plural noun).
-Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, not the query params!).
-```
-
 > [!check]- Answer
+> ```text
+> Method: `POST` (Because we are creating something new).
+> URL: `/movies` (Just the plural noun).
+> Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, not the query params!).
+> ```
 > - You are creating data. What HTTP method should you use?
 > - Can GET requests have bodies? Where should large data payloads go?
 
@@ -220,16 +219,15 @@ Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, 
 **Problem:** List the 6 architectural constraints defined by Roy Fielding for RESTful systems.
 
 **Expected output:**
-```text
-1. Client-Server
-2. Statelessness
-3. Cacheability
-4. Uniform Interface
-5. Layered System
-6. Code on Demand (Optional)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Client-Server
+> 2. Statelessness
+> 3. Cacheability
+> 4. Uniform Interface
+> 5. Layered System
+> 6. Code on Demand (Optional)
+> ```
 > ```text
 > 1. Client-Server Architecture
 > 2. Statelessness
@@ -246,14 +244,13 @@ Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, 
 **Problem:** Identify the 4 key requirements of the REST Uniform Interface constraint.
 
 **Expected output:**
-```text
-1. Resource Identification in requests (URIs)
-2. Resource Manipulation through representations
-3. Self-descriptive messages (Content-Type/headers)
-4. HATEOAS (Hypermedia As The Engine Of Application State)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Resource Identification in requests (URIs)
+> 2. Resource Manipulation through representations
+> 3. Self-descriptive messages (Content-Type/headers)
+> 4. HATEOAS (Hypermedia As The Engine Of Application State)
+> ```
 > ```text
 > 1. Resource Identification (URIs)
 > 2. Resource Manipulation through representations
@@ -268,16 +265,15 @@ Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, 
 **Problem:** List the 6 architectural constraints defined by Roy Fielding for RESTful systems.
 
 **Expected output:**
-```text
-1. Client-Server
-2. Statelessness
-3. Cacheability
-4. Uniform Interface
-5. Layered System
-6. Code on Demand (Optional)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Client-Server
+> 2. Statelessness
+> 3. Cacheability
+> 4. Uniform Interface
+> 5. Layered System
+> 6. Code on Demand (Optional)
+> ```
 > ```text
 > 1. Client-Server Architecture
 > 2. Statelessness
@@ -294,14 +290,13 @@ Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, 
 **Problem:** Identify the 4 key requirements of the REST Uniform Interface constraint.
 
 **Expected output:**
-```text
-1. Resource Identification in requests (URIs)
-2. Resource Manipulation through representations
-3. Self-descriptive messages (Content-Type/headers)
-4. HATEOAS (Hypermedia As The Engine Of Application State)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Resource Identification in requests (URIs)
+> 2. Resource Manipulation through representations
+> 3. Self-descriptive messages (Content-Type/headers)
+> 4. HATEOAS (Hypermedia As The Engine Of Application State)
+> ```
 > ```text
 > 1. Resource Identification (URIs)
 > 2. Resource Manipulation through representations
@@ -316,16 +311,15 @@ Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, 
 **Problem:** List the 6 architectural constraints defined by Roy Fielding for RESTful systems.
 
 **Expected output:**
-```text
-1. Client-Server
-2. Statelessness
-3. Cacheability
-4. Uniform Interface
-5. Layered System
-6. Code on Demand (Optional)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Client-Server
+> 2. Statelessness
+> 3. Cacheability
+> 4. Uniform Interface
+> 5. Layered System
+> 6. Code on Demand (Optional)
+> ```
 > ```text
 > 1. Client-Server Architecture
 > 2. Statelessness
@@ -342,14 +336,13 @@ Body: `{ "name": "Inception", "director": "Nolan" }` (Data goes in the payload, 
 **Problem:** Identify the 4 key requirements of the REST Uniform Interface constraint.
 
 **Expected output:**
-```text
-1. Resource Identification in requests (URIs)
-2. Resource Manipulation through representations
-3. Self-descriptive messages (Content-Type/headers)
-4. HATEOAS (Hypermedia As The Engine Of Application State)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Resource Identification in requests (URIs)
+> 2. Resource Manipulation through representations
+> 3. Self-descriptive messages (Content-Type/headers)
+> 4. HATEOAS (Hypermedia As The Engine Of Application State)
+> ```
 > ```text
 > 1. Resource Identification (URIs)
 > 2. Resource Manipulation through representations

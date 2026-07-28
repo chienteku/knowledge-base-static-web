@@ -218,11 +218,10 @@ defineOptions({
 ```
 
 **Expected output:**
-```text
-The component option `inheritAttrs` is set to false, and the `<button>` element is bound using `v-bind="$attrs"`.
-```
-
 > [!check]- Answer
+> ```text
+> The component option `inheritAttrs` is set to false, and the `<button>` element is bound using `v-bind="$attrs"`.
+> ```
 > - Inside the script, use `defineOptions({ inheritAttrs: false })`.
 > - In the template, add `v-bind="$attrs"` to the `<button>` element.
 
@@ -233,11 +232,10 @@ The component option `inheritAttrs` is set to false, and the `<button>` element 
 **Problem:** Write child component template with `inheritAttrs: false` binding all parent attributes to an inner `<input>` element.
 
 **Expected output:**
-```vue
-<script setup> defineOptions({ inheritAttrs: false }); </script> <template> <div class="wrapper"> <input v-bind="$attrs" /> </div> </template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> defineOptions({ inheritAttrs: false }); </script> <template> <div class="wrapper"> <input v-bind="$attrs" /> </div> </template>
+> ```
 > - `inheritAttrs: false` disables root element inheritance.
 > - `v-bind="$attrs"` forwards all attributes to inner element.
 > 
@@ -260,11 +258,10 @@ The component option `inheritAttrs` is set to false, and the `<button>` element 
 **Problem:** Which Vue composable allows accessing fallthrough attributes inside `<script setup>` code?
 
 **Expected output:**
-```text
-import { useAttrs } from 'vue'; const attrs = useAttrs();
-```
-
 > [!check]- Answer
+> ```text
+> import { useAttrs } from 'vue'; const attrs = useAttrs();
+> ```
 > - `useAttrs()` exposes `$attrs` inside `<script setup>`.
 > 
 > ```javascript

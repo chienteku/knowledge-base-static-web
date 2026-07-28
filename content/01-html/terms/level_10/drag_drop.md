@@ -275,18 +275,17 @@ function allowDrop(ev) {
 **Problem:** You have a custom element `<div id="box">Move Me</div>`. Write the HTML change to make this element draggable, and write the JavaScript listener that hides the box (e.g. setting `style.opacity = "0.5"`) when the user starts dragging it.
 
 **Expected output:**
-```html
-<div id="box" draggable="true">Move Me</div>
-
-<script>
-  const box = document.getElementById('box');
-  box.addEventListener('dragstart', (e) => {
-    e.target.style.opacity = '0.5';
-  });
-</script>
-```
-
 > [!check]- Answer
+> ```html
+> <div id="box" draggable="true">Move Me</div>
+> 
+> <script>
+>   const box = document.getElementById('box');
+>   box.addEventListener('dragstart', (e) => {
+>     e.target.style.opacity = '0.5';
+>   });
+> </script>
+> ```
 > - Add the global `draggable` attribute.
 > - Connect a listener for the `dragstart` event.
 
@@ -299,11 +298,10 @@ function allowDrop(ev) {
 **Problem:** Write `dragstart` JS code storing element ID `'card-1'` into `event.dataTransfer` payload.
 
 **Expected output:**
-```text
-function drag(ev) { ev.dataTransfer.setData('text/plain', ev.target.id); }
-```
-
 > [!check]- Answer
+> ```text
+> function drag(ev) { ev.dataTransfer.setData('text/plain', ev.target.id); }
+> ```
 > ```javascript
 > function drag(ev) {
 >   ev.dataTransfer.setData('text/plain', ev.target.id);
@@ -312,19 +310,20 @@ function drag(ev) { ev.dataTransfer.setData('text/plain', ev.target.id); }
 >
 > **Explanation:** `dataTransfer.setData()` attaches drag payload data passed to drop targets.
 
+---
+
 ### Exercise 3: HTML Drag & Drop Event Sequence
 
 **Problem:** Order HTML Drag and Drop events sequence from start to finish:
 `dragover`, `drop`, `dragstart`
 
 **Expected output:**
-```text
-1. dragstart (on source element)
-2. dragover (on target container)
-3. drop (on target container)
-```
-
 > [!check]- Answer
+> ```text
+> 1. dragstart (on source element)
+> 2. dragover (on target container)
+> 3. drop (on target container)
+> ```
 > ```text
 > 1. dragstart (on source element)
 > 2. dragover (on target container)

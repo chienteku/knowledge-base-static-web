@@ -105,12 +105,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 **Problem:** In the browser, you use `setTimeout()` and `console.log()`. If `window` doesn't exist in Node.js, how are these functions globally available?
 
 **Expected output:**
-```text
-They are attached to the `global` object! 
-In Node.js, `console.log` is actually `global.console.log`, and `setTimeout` is actually `global.setTimeout`. Node just hides the `global.` part to make it easier to write, exactly like the browser hides the `window.` part.
-```
-
 > [!check]- Answer
+> ```text
+> They are attached to the `global` object! 
+> In Node.js, `console.log` is actually `global.console.log`, and `setTimeout` is actually `global.setTimeout`. Node just hides the `global.` part to make it easier to write, exactly like the browser hides the `window.` part.
+> ```
 > - What is the Node.js equivalent of the `window` object?
 
 ---
@@ -126,27 +125,27 @@ In Node.js, `console.log` is actually `global.console.log`, and `setTimeout` is 
 4. `global`
 
 **Expected output:**
-```text
-1. process, 3. Buffer, 4. global
-```
-
 > [!check]- Answer
+> ```text
+> 1. process, 3. Buffer, 4. global
+> ```
 > ```text
 > 1. process, 3. Buffer, 4. global
 > ```
 >
 > **Explanation:** `process`, `Buffer`, and `global` are available everywhere in Node.js without requiring `require()`.
 
+---
+
 ### Exercise 3: ES Module __dirname Equivalent
 
 **Problem:** Write code to resolve `__dirname` in an ES Module using `import.meta.url`.
 
 **Expected output:**
-```text
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-```
-
 > [!check]- Answer
+> ```text
+> const __dirname = path.dirname(fileURLToPath(import.meta.url));
+> ```
 > ```javascript
 > import { fileURLToPath } from 'url';
 > import path from 'path';

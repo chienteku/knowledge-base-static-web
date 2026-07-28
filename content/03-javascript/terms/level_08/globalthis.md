@@ -183,27 +183,27 @@ console.log("Console available?", hasConsole());
 **Problem:** Read global `Set` constructor via `globalThis.Set`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(globalThis.Set === Set);
 > ```
 >
 > **Explanation:** `globalThis` provides unified access to standard ECMAScript global objects across runtime hosts.
 
+---
+
 ### Exercise 3: Attaching Global Utilities Safely
 
 **Problem:** Attach `globalThis.__DEBUG__ = true` and read it.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > globalThis.__DEBUG__ = true;
 > console.log(globalThis.__DEBUG__);
@@ -211,7 +211,6 @@ true
 >
 > **Explanation:** `globalThis` serves as standard root storage for global cross-module properties.
 
----
 
 ---
 

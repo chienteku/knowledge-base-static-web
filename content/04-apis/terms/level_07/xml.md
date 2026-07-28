@@ -119,12 +119,11 @@ parser.setFeature("http://xml.org/sax/features/external-general-entities", false
 ```
 
 **Expected output:**
-```text
-Because JSON doesn't use closing tags! 
-In XML, the word "product" is written twice, "id" is written twice, and "name" is written twice. In JSON, the keys are only written once (`"name": "Laptop"`), which drastically reduces the total number of characters transferred over the network.
-```
-
 > [!check]- Answer
+> ```text
+> Because JSON doesn't use closing tags! 
+> In XML, the word "product" is written twice, "id" is written twice, and "name" is written twice. In JSON, the keys are only written once (`"name": "Laptop"`), which drastically reduces the total number of characters transferred over the network.
+> ```
 > - Count how many times the word "name" appears.
 
 ---
@@ -140,12 +139,11 @@ In XML, the word "product" is written twice, "id" is written twice, and "name" i
 ```
 
 **Expected output:**
-```text
-Line 2: Missing closing angle bracket `>` on `</name>` tag
-Line 3: Mismatched tag case `<email>` vs `</Email>`
-```
-
 > [!check]- Answer
+> ```text
+> Line 2: Missing closing angle bracket `>` on `</name>` tag
+> Line 3: Mismatched tag case `<email>` vs `</Email>`
+> ```
 > ```xml
 > <user id="5">
 > <name>Alice</name>
@@ -160,11 +158,10 @@ Line 3: Mismatched tag case `<email>` vs `</Email>`
 **Problem:** What is the purpose of XPath in XML processing?
 
 **Expected output:**
-```text
-XPath is a query language used to search and select specific nodes or attributes within an XML document tree.
-```
-
 > [!check]- Answer
+> ```text
+> XPath is a query language used to search and select specific nodes or attributes within an XML document tree.
+> ```
 > ```text
 > XPath is a query language used to search and select specific nodes or attributes within an XML document tree.
 > ```

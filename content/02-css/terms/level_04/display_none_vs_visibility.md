@@ -315,11 +315,10 @@ Comparing declarations:
 If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what happens to the spacing between the heading and paragraph?
 
 **Expected output:**
-```text
-The spacing remains exactly the same! Because `visibility: hidden` does not collapse the box, the empty space occupied by the alert banner is preserved. Sighted users will see a large blank gap between the heading and the paragraph.
-```
-
 > [!check]- Answer
+> ```text
+> The spacing remains exactly the same! Because `visibility: hidden` does not collapse the box, the empty space occupied by the alert banner is preserved. Sighted users will see a large blank gap between the heading and the paragraph.
+> ```
 > - Does visibility hidden remove elements from the layout flow?
 
 ---
@@ -333,12 +332,11 @@ The spacing remains exactly the same! Because `visibility: hidden` does not coll
 2. DOM event listening
 
 **Expected output:**
-```text
-1. display: none collapses layout space; visibility: hidden preserves layout space
-2. Both prevent click interactions on hidden elements
-```
-
 > [!check]- Answer
+> ```text
+> 1. display: none collapses layout space; visibility: hidden preserves layout space
+> 2. Both prevent click interactions on hidden elements
+> ```
 > ```text
 > 1. display: none collapses layout space; visibility: hidden preserves layout space
 > 2. Both prevent click interactions on hidden elements
@@ -346,16 +344,17 @@ The spacing remains exactly the same! Because `visibility: hidden` does not coll
 >
 > **Explanation:** `display: none` alters render tree layout; `visibility: hidden` toggles visual rendering only.
 
+---
+
 ### Exercise 3: CSS Transitioning Visibility
 
 **Problem:** Can `display` be animated smoothly with CSS transitions? Can `opacity` + `visibility` be transitioned?
 
 **Expected output:**
-```text
-display CANNOT be transitioned smoothly. opacity + visibility CAN be transitioned together.
-```
-
 > [!check]- Answer
+> ```text
+> display CANNOT be transitioned smoothly. opacity + visibility CAN be transitioned together.
+> ```
 > ```css
 > .modal {
 >   opacity: 0;

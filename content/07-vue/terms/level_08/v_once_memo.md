@@ -109,13 +109,12 @@ Introduced in Vue 3.2, `v-memo` is the ultimate loop optimization tool. You pass
 **Problem:** You have a translation library. You render a button: `<button v-once>{{ $t('submit_button') }}</button>`. The user changes the app language from English to Spanish. The button text does not change! Why?
 
 **Expected output:**
-```text
-Because you used `v-once`! 
-`v-once` literally means "render this once and never, ever touch it again." Even though the `$t` function output changed due to the language swap, Vue completely ignored the button during the update cycle. 
-Remove `v-once` if the data can ever change during the user's session.
-```
-
 > [!check]- Answer
+> ```text
+> Because you used `v-once`! 
+> `v-once` literally means "render this once and never, ever touch it again." Even though the `$t` function output changed due to the language swap, Vue completely ignored the button during the update cycle. 
+> Remove `v-once` if the data can ever change during the user's session.
+> ```
 > - Read the literal translation of the directive's name.
 
 ---
@@ -125,11 +124,10 @@ Remove `v-once` if the data can ever change during the user's session.
 **Problem:** Write `v-for` element list item using `v-memo="[item.id === selectedId]"` to optimize rendering performance in a 1,000-item list.
 
 **Expected output:**
-```html
-<li v-for="item in list" :key="item.id" v-memo="[item.id === selectedId]">
-```
-
 > [!check]- Answer
+> ```html
+> <li v-for="item in list" :key="item.id" v-memo="[item.id === selectedId]">
+> ```
 > - `v-memo` skips Virtual DOM diffing for items whose selected state hasn't changed.
 > 
 > ```html
@@ -145,11 +143,10 @@ Remove `v-once` if the data can ever change during the user's session.
 **Problem:** Distinguish between `v-once` and `v-memo` directives.
 
 **Expected output:**
-```text
-v-once renders an element tree once and never updates it; v-memo conditionally re-renders an element tree ONLY when specified dependency array values change.
-```
-
 > [!check]- Answer
+> ```text
+> v-once renders an element tree once and never updates it; v-memo conditionally re-renders an element tree ONLY when specified dependency array values change.
+> ```
 > - `v-once` -> Never re-renders after initial mount.
 > - `v-memo` -> Conditionally re-renders when dependency array values change.
 > 

@@ -158,13 +158,12 @@ app.listen(8080);
 3. `10.0.4.15` 
 
 **Expected output:**
-```text
-1. Private (LAN)
-2. Public (Google DNS)
-3. Private (VPC/LAN)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Private (LAN)
+> 2. Public (Google DNS)
+> 3. Private (VPC/LAN)
+> ```
 > ```text
 > 1. Private (192.168.0.0/16 RFC 1918 range)
 > 2. Public (Routable WAN address)
@@ -178,11 +177,10 @@ app.listen(8080);
 **Problem:** Compress the IPv6 address `2001:0db8:0000:0000:0000:0000:0000:0001` using standard zero compression rules.
 
 **Expected output:**
-```text
-2001:db8::1
-```
-
 > [!check]- Answer
+> ```text
+> 2001:db8::1
+> ```
 > ```text
 > 2001:db8::1
 > ```

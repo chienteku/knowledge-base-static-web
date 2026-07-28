@@ -142,13 +142,12 @@ While HTTP, HTTPS, and WebSockets run on top of TCP because they require 100% da
 ACK, SYN, SYN-ACK
 
 **Expected output:**
-```text
-1. Client -> Server: SYN
-2. Server -> Client: SYN-ACK
-3. Client -> Server: ACK
-```
-
 > [!check]- Answer
+> ```text
+> 1. Client -> Server: SYN
+> 2. Server -> Client: SYN-ACK
+> 3. Client -> Server: ACK
+> ```
 > ```text
 > 1. Client sends SYN (Synchronize)
 > 2. Server responds SYN-ACK (Synchronize-Acknowledge)
@@ -165,13 +164,12 @@ ACK, SYN, SYN-ACK
 3. Built-in flow control and congestion management
 
 **Expected output:**
-```text
-1. UDP
-2. TCP
-3. TCP
-```
-
 > [!check]- Answer
+> ```text
+> 1. UDP
+> 2. TCP
+> 3. TCP
+> ```
 > ```text
 > 1. UDP -> Connectionless, fast, no delivery guarantee
 > 2. TCP -> Guaranteed ordered delivery with retransmission

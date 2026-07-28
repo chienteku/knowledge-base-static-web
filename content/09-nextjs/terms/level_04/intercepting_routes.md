@@ -116,13 +116,12 @@ app/
 **Problem:** You are viewing a photo inside an intercepted Modal. The URL is `/photo/99`. You press `Cmd+R` to hard refresh the browser. Does the Modal reappear?
 
 **Expected output:**
-```text
-No!
-Intercepting Routes ONLY trigger during client-side navigation (clicking a <Link> or using `router.push()`). 
-A hard refresh hits the server directly. The server ignores the interception and serves the standard non-intercepted route (the full-page version). This is the exact intended behavior for shareable links!
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Intercepting Routes ONLY trigger during client-side navigation (clicking a <Link> or using `router.push()`). 
+> A hard refresh hits the server directly. The server ignores the interception and serves the standard non-intercepted route (the full-page version). This is the exact intended behavior for shareable links!
+> ```
 > - Think about how a friend sees the link when you share it with them.
 
 ---
@@ -132,11 +131,10 @@ A hard refresh hits the server directly. The server ignores the interception and
 **Problem:** Explain how Intercepting Routes and Parallel Routes combine to build a modal gallery (e.g. Instagram feed photo modal).
 
 **Expected output:**
-```text
-Parallel routes provide a named modal slot (e.g. @modal); Intercepting routes intercept <Link href="/photo/1"> to render the photo inside the modal slot while URL updates.
-```
-
 > [!check]- Answer
+> ```text
+> Parallel routes provide a named modal slot (e.g. @modal); Intercepting routes intercept <Link href="/photo/1"> to render the photo inside the modal slot while URL updates.
+> ```
 > - Combining Parallel Routes + Intercepting Routes creates URL-sharable modal overlays.
 > 
 > ```text
@@ -154,13 +152,12 @@ Parallel routes provide a named modal slot (e.g. @modal); Intercepting routes in
 3. `(...)` 
 
 **Expected output:**
-```text
-1. Same directory level
-2. One directory level above
-3. Root app directory level
-```
-
 > [!check]- Answer
+> ```text
+> 1. Same directory level
+> 2. One directory level above
+> 3. Root app directory level
+> ```
 > - `(.)` -> Same level
 > - `(..)` -> One level up
 > - `(...)` -> Root app level

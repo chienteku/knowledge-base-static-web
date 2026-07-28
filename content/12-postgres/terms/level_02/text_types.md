@@ -138,13 +138,12 @@ bio TEXT -- Unconstrained text storage
 3.  Hourly weather summary comments (e.g., `'Clear sky, high humidity, temperature drops expected...'`).
 
 **Expected output:**
-```text
-1. Wind Direction: VARCHAR(2) (Length varies between 1 and 2 characters. Using CHAR(2) would pad single character inputs like 'N' with an extra space, e.g. 'N ', which makes queries annoying).
-2. Station Name: VARCHAR(100) (Names vary in length, but we want to cap it to prevent developers from accidentally dumping paragraphs in name boxes).
-3. Summary Comments: TEXT (Comments can be long and have no strict business length limit).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Wind Direction: VARCHAR(2) (Length varies between 1 and 2 characters. Using CHAR(2) would pad single character inputs like 'N' with an extra space, e.g. 'N ', which makes queries annoying).
+> 2. Station Name: VARCHAR(100) (Names vary in length, but we want to cap it to prevent developers from accidentally dumping paragraphs in name boxes).
+> 3. Summary Comments: TEXT (Comments can be long and have no strict business length limit).
+> ```
 > - Identify if the field has a variable length and if trailing spaces would complicate string comparisons.
 > - Consider if a strict length constraint is required for validation.
 
@@ -157,27 +156,27 @@ bio TEXT -- Unconstrained text storage
 **Problem:** What is the idiomatic PostgreSQL text data type for unconstrained string fields? (`TEXT`).
 
 **Expected output:**
-```text
-TEXT
-```
-
 > [!check]- Answer
+> ```text
+> TEXT
+> ```
 > ```text
 > TEXT
 > ```
 >
 > **Explanation:** `TEXT` is the recommended, fully performant string data type in PostgreSQL.
 
+---
+
 ### Exercise 3: Inspecting Character Length with `LENGTH()`
 
 **Problem:** Query users where character length of `username` is less than 5 using `LENGTH()`.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE LENGTH(username) < 5;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE LENGTH(username) < 5;
+> ```
 > ```sql
 > SELECT * FROM users WHERE LENGTH(username) < 5;
 > ```

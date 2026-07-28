@@ -149,18 +149,17 @@ db.sales.aggregate([{ $group: { _id: "$category", firstName: { $first: "$name" }
 `SELECT customer_id, AVG(price) FROM purchases GROUP BY customer_id;`
 
 **Expected output:**
-```javascript
-[
-  {
-    $group: {
-      _id: "$customer_id",
-      avg_price: { $avg: "$price" }
-    }
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $group: {
+>       _id: "$customer_id",
+>       avg_price: { $avg: "$price" }
+>     }
+>   }
+> ]
+> ```
 > - Map the SQL `GROUP BY` column `customer_id` to the mandatory `_id` field.
 > - Use the accumulator operator `$avg` to calculate average values.
 > - Remember to prefix both field references with `$` signs.
@@ -174,11 +173,10 @@ db.sales.aggregate([{ $group: { _id: "$category", firstName: { $first: "$name" }
 **Problem:** Group products by `category` calculating average price using `$avg: "$price"`.
 
 **Expected output:**
-```text
-db.products.aggregate([{ $group: { _id: "$category", avgPrice: { $avg: "$price" } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.products.aggregate([{ $group: { _id: "$category", avgPrice: { $avg: "$price" } } }]);
+> ```
 > ```javascript
 > db.products.aggregate([
 >   { $group: { _id: "$category", avgPrice: { $avg: "$price" } } }
@@ -187,16 +185,17 @@ db.products.aggregate([{ $group: { _id: "$category", avgPrice: { $avg: "$price" 
 >
 > **Explanation:** `$group` buckets documents by `_id` and calculates aggregate accumulator metrics.
 
+---
+
 ### Exercise 3: Compound Grouping Keys
 
 **Problem:** Group sales by both `year` and `month` using compound `_id` object.
 
 **Expected output:**
-```text
-db.sales.aggregate([{ $group: { _id: { year: "$year", month: "$month" }, total: { $sum: "$amount" } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.sales.aggregate([{ $group: { _id: { year: "$year", month: "$month" }, total: { $sum: "$amount" } } }]);
+> ```
 > ```javascript
 > db.sales.aggregate([
 >   { $group: { _id: { year: "$year", month: "$month" }, total: { $sum: "$amount" } } }

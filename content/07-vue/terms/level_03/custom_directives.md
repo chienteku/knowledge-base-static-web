@@ -215,12 +215,11 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 **Problem:** Create a custom directive called `vHighlight` that changes the background color of an element. The directive should support a custom color argument (e.g. `v-highlight:yellow`) or default to lightblue if no argument is passed.
 
 **Expected output:**
-```html
-<p v-highlight:yellow>This will have a yellow background.</p>
-<p v-highlight>This will have a lightblue background.</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p v-highlight:yellow>This will have a yellow background.</p>
+> <p v-highlight>This will have a lightblue background.</p>
+> ```
 > - The binding argument can be read from `binding.arg`.
 > - Apply the background color inside the `mounted` hook using `el.style.backgroundColor = binding.arg || 'lightblue'`.
 
@@ -231,11 +230,10 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 **Problem:** Write a custom directive `vFocus` inside `<script setup>` that automatically focuses an `<input>` element when mounted.
 
 **Expected output:**
-```vue
-<script setup> const vFocus = { mounted: (el) => el.focus() }; </script> <template> <input v-focus /> </template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> const vFocus = { mounted: (el) => el.focus() }; </script> <template> <input v-focus /> </template>
+> ```
 > - Name directive variable starting with `v` (e.g. `vFocus`).
 > - Hook `mounted(el)` receives target DOM element.
 > 
@@ -258,13 +256,12 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 **Problem:** List 3 common lifecycle hook functions available inside Vue 3 custom directives.
 
 **Expected output:**
-```text
-1. created(el, binding)
-2. mounted(el, binding)
-3. updated(el, binding) (or unmounted)
-```
-
 > [!check]- Answer
+> ```text
+> 1. created(el, binding)
+> 2. mounted(el, binding)
+> 3. updated(el, binding) (or unmounted)
+> ```
 > - Directive hooks mirror component DOM lifecycle.
 > 
 > ```text

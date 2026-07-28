@@ -237,11 +237,10 @@ function startEdit() {
 ```
 
 **Expected output:**
-```text
-Clicking "Edit" updates the state to show the input element and immediately places the cursor focus inside it.
-```
-
 > [!check]- Answer
+> ```text
+> Clicking "Edit" updates the state to show the input element and immediately places the cursor focus inside it.
+> ```
 > - The component fails because when `inputRef.value.focus()` is called, the input has not been rendered into the DOM yet (`inputRef.value` is still null).
 > - Make `startEdit` an `async` function and call `await nextTick()` between changing `isEditing.value` and calling `.focus()`.
 
@@ -252,11 +251,10 @@ Clicking "Edit" updates the state to show the input element and immediately plac
 **Problem:** Write `async` function `showAndFocusInput()` setting `showInput.value = true`, awaiting `nextTick()`, and focusing `inputRef.value`.
 
 **Expected output:**
-```javascript
-async function showAndFocusInput() { showInput.value = true; await nextTick(); inputRef.value.focus(); }
-```
-
 > [!check]- Answer
+> ```javascript
+> async function showAndFocusInput() { showInput.value = true; await nextTick(); inputRef.value.focus(); }
+> ```
 > - `await nextTick()` resolves after Vue flushes DOM updates.
 > 
 > ```javascript
@@ -274,11 +272,10 @@ async function showAndFocusInput() { showInput.value = true; await nextTick(); i
 **Problem:** Compare `await nextTick()` promise syntax vs `nextTick(() => {})` callback syntax.
 
 **Expected output:**
-```text
-Both are equivalent; await nextTick() offers cleaner async/await code flow.
-```
-
 > [!check]- Answer
+> ```text
+> Both are equivalent; await nextTick() offers cleaner async/await code flow.
+> ```
 > - Both forms wait for DOM update flush.
 > 
 > ```javascript

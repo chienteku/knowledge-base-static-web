@@ -195,15 +195,14 @@ Write the SurrealQL queries to:
 2.  Find all student names enrolled in course `course:math`.
 
 **Expected output:**
-```sql
--- 1. Courses Alice is in (Outgoing)
-SELECT ->enrolled->course.name AS courses FROM student:alice;
-
--- 2. Students in Math (Incoming)
-SELECT <-enrolled<-student.name AS students FROM course:math;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Courses Alice is in (Outgoing)
+> SELECT ->enrolled->course.name AS courses FROM student:alice;
+> 
+> -- 2. Students in Math (Incoming)
+> SELECT <-enrolled<-student.name AS students FROM course:math;
+> ```
 > - The edge table is `enrolled`.
 > - Check which node corresponds to the `in` source (student) and which to the `out` target (course) to orient your arrow queries.
 
@@ -216,11 +215,10 @@ SELECT <-enrolled<-student.name AS students FROM course:math;
 **Problem:** Write SurrealQL queries to select: 1. Users `user:alice` follows (`->follows->user`), 2. Users following `user:alice` (`<-follows<-user`).
 
 **Expected output:**
-```text
-1. SELECT ->follows->user FROM user:alice; 2. SELECT <-follows<-user FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> 1. SELECT ->follows->user FROM user:alice; 2. SELECT <-follows<-user FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ->follows->user FROM user:alice;
 > SELECT <-follows<-user FROM user:alice;
@@ -228,16 +226,17 @@ SELECT <-enrolled<-student.name AS students FROM course:math;
 >
 > **Explanation:** `->` traverses outgoing edges; `<-` traverses incoming edges.
 
+---
+
 ### Exercise 3: Undirected Friendship Graph Query
 
 **Problem:** Query all friends connected via `friend_of` in either direction using `<->`.
 
 **Expected output:**
-```text
-SELECT <->friend_of<->user AS friends FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT <->friend_of<->user AS friends FROM user:alice;
+> ```
 > ```surrealql
 > SELECT <->friend_of<->user AS friends FROM user:alice;
 > ```

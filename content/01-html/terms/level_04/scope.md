@@ -176,20 +176,19 @@ Using row and column header scopes in the same table:
 ```
 
 **Expected output:**
-```html
-<table>
-  <tr>
-    <th scope="col">Task</th>
-    <th scope="col">Deadline</th>
-  </tr>
-  <tr>
-    <th scope="row">Write report</th>
-    <td>Friday</td>
-  </tr>
-</table>
-```
-
 > [!check]- Answer
+> ```html
+> <table>
+>   <tr>
+>     <th scope="col">Task</th>
+>     <th scope="col">Deadline</th>
+>   </tr>
+>   <tr>
+>     <th scope="row">Write report</th>
+>     <td>Friday</td>
+>   </tr>
+> </table>
+> ```
 > - The top row labels columns vertically downwards (`col`).
 > - The cell "Write report" labels its horizontal row of details (`row`).
 
@@ -204,12 +203,11 @@ Using row and column header scopes in the same table:
 2. Leftmost row header cell
 
 **Expected output:**
-```text
-1. scope="col"
-2. scope="row"
-```
-
 > [!check]- Answer
+> ```text
+> 1. scope="col"
+> 2. scope="row"
+> ```
 > ```html
 > <th scope="col">Header</th>
 > <th scope="row">Row Name</th>
@@ -217,16 +215,17 @@ Using row and column header scopes in the same table:
 >
 > **Explanation:** `scope="col"` sets column scope; `scope="row"` sets row scope for screen readers.
 
+---
+
 ### Exercise 3: Colgroup Scope Usage
 
 **Problem:** When should `scope="colgroup"` be used in data tables?
 
 **Expected output:**
-```text
-When a header cell spans multiple columns via colspan over a column group (<colgroup>).
-```
-
 > [!check]- Answer
+> ```text
+> When a header cell spans multiple columns via colspan over a column group (<colgroup>).
+> ```
 > ```html
 > <th colspan="2" scope="colgroup">2026 Sales</th>
 > ```

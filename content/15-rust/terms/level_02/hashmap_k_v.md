@@ -164,11 +164,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Player not found
-```
-
 > [!check]- Answer
+> ```text
+> Player not found
+> ```
 > ```rust
 > use std::collections::HashMap;
 >
@@ -192,11 +191,10 @@ Player not found
 **Problem:** Create a `HashMap<String, u32>` for inventory items. Insert `"apples"` -> 50, `"bananas"` -> 30. Retrieve and print `"apples"`.
 
 **Expected output:**
-```
-Apples: 50
-```
-
 > [!check]- Answer
+> ```
+> Apples: 50
+> ```
 > ```rust
 > use std::collections::HashMap;
 > fn main() {
@@ -209,16 +207,17 @@ Apples: 50
 >
 > **Explanation:** `HashMap::get` takes a reference to the key `&K` and returns `Option<&V>`.
 
+---
+
 ### Exercise 3: HashMap Iteration by Value
 
 **Problem:** Iterate over a `HashMap<&str, i32>` and calculate the sum of all values.
 
 **Expected output:**
-```
-Total sum: 60
-```
-
 > [!check]- Answer
+> ```
+> Total sum: 60
+> ```
 > ```rust
 > use std::collections::HashMap;
 > fn main() {

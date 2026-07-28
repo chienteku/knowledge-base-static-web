@@ -143,13 +143,12 @@ useHead({
 ```
 
 **Expected output:**
-```text
-Document B is optimized for search indexing. 
-It contains raw semantic HTML elements (h1, p) directly inside the body. 
-Search crawlers can read this content immediately upon download without executing JavaScript, whereas Document A is blank and requires JS compilation to show any text.
-```
-
 > [!check]- Answer
+> ```text
+> Document B is optimized for search indexing. 
+> It contains raw semantic HTML elements (h1, p) directly inside the body. 
+> Search crawlers can read this content immediately upon download without executing JavaScript, whereas Document A is blank and requires JS compilation to show any text.
+> ```
 > - Search engines inspect raw HTTP response text bodies.
 
 ---
@@ -159,17 +158,16 @@ Search crawlers can read this content immediately upon download without executin
 **Problem:** Write `<script setup>` using `useSeoMeta()` configuring `title`, `description`, and OpenGraph image `ogImage`.
 
 **Expected output:**
-```vue
-<script setup>
-useSeoMeta({
-  title: 'My Product',
-  description: 'Product Description',
-  ogImage: 'https://example.com/og.jpg'
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> useSeoMeta({
+>   title: 'My Product',
+>   description: 'Product Description',
+>   ogImage: 'https://example.com/og.jpg'
+> });
+> </script>
+> ```
 > - `useSeoMeta()` provides strongly typed, auto-completed SEO metadata.
 > 
 > ```vue
@@ -190,11 +188,10 @@ useSeoMeta({
 **Problem:** Write `useHead()` code line setting meta tag `robots: 'noindex, nofollow'` for secret admin pages.
 
 **Expected output:**
-```typescript
-useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] });
-```
-
 > [!check]- Answer
+> ```typescript
+> useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] });
+> ```
 > - Prevents search engine crawlers from indexing secret routes.
 > 
 > ```typescript

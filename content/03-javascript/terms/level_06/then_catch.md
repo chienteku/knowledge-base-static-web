@@ -161,11 +161,10 @@ async function processData() {
 **Problem:** If the very first `fetch()` in a long chain of 10 `.then()` blocks fails due to a network error, which of those `.then()` blocks will execute?
 
 **Expected output:**
-```text
-None of them. The engine instantly skips all `.then()` blocks and drops straight down to the nearest `.catch()` block.
-```
-
 > [!check]- Answer
+> ```text
+> None of them. The engine instantly skips all `.then()` blocks and drops straight down to the nearest `.catch()` block.
+> ```
 > - This is why vertical chaining is so much cleaner than nested callbacks! One error handler to rule them all.
 
 ---
@@ -175,11 +174,10 @@ None of them. The engine instantly skips all `.then()` blocks and drops straight
 **Problem:** Chain `.then()` and `.catch()` on a rejected promise.
 
 **Expected output:**
-```text
-Caught: Rejection error
-```
-
 > [!check]- Answer
+> ```text
+> Caught: Rejection error
+> ```
 > ```javascript
 > Promise.reject(new Error("Rejection error"))
 >   .then(() => console.log("Success"))
@@ -188,16 +186,17 @@ Caught: Rejection error
 >
 > **Explanation:** `.catch(fn)` is syntactic shorthand for `.then(null, fn)`.
 
+---
+
 ### Exercise 3: Recovering from Rejections with `.catch()`
 
 **Problem:** Return a fallback value from `.catch()` and continue execution in a subsequent `.then()`.
 
 **Expected output:**
-```text
-Recovered value: fallback
-```
-
 > [!check]- Answer
+> ```text
+> Recovered value: fallback
+> ```
 > ```javascript
 > Promise.reject("error")
 >   .catch(() => "fallback")
@@ -206,7 +205,6 @@ Recovered value: fallback
 >
 > **Explanation:** Returning values from `.catch()` fulfills downstream promises, enabling recovery.
 
----
 
 ---
 

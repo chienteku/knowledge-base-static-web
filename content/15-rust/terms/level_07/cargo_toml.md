@@ -173,14 +173,13 @@ thread::spawn(move || {
 **Problem:** Write a `[package]` manifest section defining `name = "demo"`, `version = "0.1.0"`, `edition = "2021"`.
 
 **Expected output:**
-```
-[package]
-name = "demo"
-version = "0.1.0"
-edition = "2021"
-```
-
 > [!check]- Answer
+> ```
+> [package]
+> name = "demo"
+> version = "0.1.0"
+> edition = "2021"
+> ```
 > ```rust
 > fn main() {
 >     println!("[package]\nname = \"demo\"\nversion = \"0.1.0\"\nedition = \"2021\"");
@@ -189,16 +188,17 @@ edition = "2021"
 >
 > **Explanation:** `[package]` declares core crate manifest metadata.
 
+---
+
 ### Exercise 3: Adding Renamed Dependencies
 
 **Problem:** Rename a dependency `my_serde = { package = "serde", version = "1.0" }` in `Cargo.toml`.
 
 **Expected output:**
-```
-Dependency alias configured
-```
-
 > [!check]- Answer
+> ```
+> Dependency alias configured
+> ```
 > fn main() {
 >     println!("Dependency alias configured");
 > }

@@ -159,11 +159,10 @@ async function processData() {
 **Problem:** What visual shape does Callback Hell usually create in your code editor?
 
 **Expected output:**
-```text
-A sideways pyramid (often called the "Pyramid of Doom").
-```
-
 > [!check]- Answer
+> ```text
+> A sideways pyramid (often called the "Pyramid of Doom").
+> ```
 > - Look at the indentation of the code examples. `> > >`
 
 ---
@@ -173,11 +172,10 @@ A sideways pyramid (often called the "Pyramid of Doom").
 **Problem:** Refactor `getData(id, (err, res) => ...)` into a Promise-returning function.
 
 **Expected output:**
-```text
-Promise resolved: data
-```
-
 > [!check]- Answer
+> ```text
+> Promise resolved: data
+> ```
 > ```javascript
 > function getDataPromise(id) {
 >   return new Promise((resolve) => resolve("data"));
@@ -187,18 +185,19 @@ Promise resolved: data
 >
 > **Explanation:** Promises flatten deeply nested callback hierarchies into sequential `.then()` chains.
 
+---
+
 ### Exercise 3: Async Await Flattening
 
 **Problem:** Flatten a 3-step async process using `async/await` syntax.
 
 **Expected output:**
-```text
-Step 1
-Step 2
-Step 3
-```
-
 > [!check]- Answer
+> ```text
+> Step 1
+> Step 2
+> Step 3
+> ```
 > ```javascript
 > async function processSteps() {
 >   console.log("Step 1");
@@ -210,7 +209,6 @@ Step 3
 >
 > **Explanation:** `async/await` eliminates callback nesting by formatting async operations as clean linear code.
 
----
 
 ---
 

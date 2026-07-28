@@ -162,11 +162,10 @@ RETURN <number> "123"; // Correct angle bracket type casting
 Write the equivalent query in SurrealQL, casting `price` to a `decimal` type.
 
 **Expected output:**
-```sql
-SELECT <decimal> price FROM products;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT <decimal> price FROM products;
+> ```
 > - The casting operator in SurrealQL uses angle brackets `<type>`.
 > - Prefix the casting block directly before the target field name.
 
@@ -179,11 +178,10 @@ SELECT <decimal> price FROM products;
 **Problem:** Cast string `"100"` to int, string `"2026-01-01T00:00:00Z"` to datetime.
 
 **Expected output:**
-```text
-<int> "100", <datetime> "2026-01-01T00:00:00Z"
-```
-
 > [!check]- Answer
+> ```text
+> <int> "100", <datetime> "2026-01-01T00:00:00Z"
+> ```
 > ```surrealql
 > RETURN <int> "100";
 > RETURN <datetime> "2026-01-01T00:00:00Z";
@@ -191,16 +189,17 @@ SELECT <decimal> price FROM products;
 >
 > **Explanation:** `<type>` explicitly converts values into specified primitive data types.
 
+---
+
 ### Exercise 3: Record ID Casting Syntax
 
 **Problem:** Cast string `"user:alice"` to Record ID primitive using `<record>` or `r'user:alice'`.
 
 **Expected output:**
-```text
-<record> "user:alice"
-```
-
 > [!check]- Answer
+> ```text
+> <record> "user:alice"
+> ```
 > ```surrealql
 > RETURN <record> "user:alice";
 > ```

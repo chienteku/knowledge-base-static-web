@@ -169,11 +169,10 @@ fn first_word(s: &mut String) -> &str {
 **Problem:** Create an immutable borrow `r = &mut val`, modify `*r`, print it, and then mutate `val` directly on the next line.
 
 **Expected output:**
-```
-Modified val: 100
-```
-
 > [!check]- Answer
+> ```
+> Modified val: 100
+> ```
 > ```rust
 > fn main() {
 >     let mut val = 42;
@@ -187,16 +186,17 @@ Modified val: 100
 >
 > **Explanation:** NLL ends reference lifetimes immediately after their final point of use rather than at scope end.
 
+---
+
 ### Exercise 3: NLL in HashMap Entry Iteration
 
 **Problem:** Demonstrate looking up a key in `HashMap`, using the reference, and modifying the map on subsequent lines without scope block nesting.
 
 **Expected output:**
-```
-Updated map successfully
-```
-
 > [!check]- Answer
+> ```
+> Updated map successfully
+> ```
 > use std::collections::HashMap;
 > fn main() {
 >     let mut map = HashMap::new();

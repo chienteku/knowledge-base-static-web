@@ -180,12 +180,11 @@ thread::spawn(move || {
 **Problem:** Iterate over elements yielded by a stream concept using `while let Some(item) = stream.next().await`.
 
 **Expected output:**
-```
-Stream item: 1
-Stream item: 2
-```
-
 > [!check]- Answer
+> ```
+> Stream item: 1
+> Stream item: 2
+> ```
 > ```rust
 > fn main() {
 >     println!("Stream item: 1\nStream item: 2");
@@ -194,16 +193,17 @@ Stream item: 2
 >
 > **Explanation:** `Stream` represents asynchronous iterators yielding values over time via `poll_next`.
 
+---
+
 ### Exercise 3: Filtering Async Streams
 
 **Problem:** Filter stream numbers using `.filter(|x| ...)` adapter.
 
 **Expected output:**
-```
-Filtered stream items
-```
-
 > [!check]- Answer
+> ```
+> Filtered stream items
+> ```
 > fn main() {
 >     println!("Filtered stream items");
 > }

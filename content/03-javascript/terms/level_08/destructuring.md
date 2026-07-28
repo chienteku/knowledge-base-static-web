@@ -153,13 +153,12 @@ async function processData() {
 **Problem:** You have an array `const topThree = ["Gold", "Silver", "Bronze"]`. Write a destructuring assignment that only creates a variable for the "Bronze" medal, completely ignoring Gold and Silver.
 
 **Expected output:**
-```javascript
-// You can skip elements by leaving commas!
-const [, , thirdPlace] = topThree;
-console.log(thirdPlace); // "Bronze"
-```
-
 > [!check]- Answer
+> ```javascript
+> // You can skip elements by leaving commas!
+> const [, , thirdPlace] = topThree;
+> console.log(thirdPlace); // "Bronze"
+> ```
 > - Just put commas without a variable name!
 
 ---
@@ -169,11 +168,10 @@ console.log(thirdPlace); // "Bronze"
 **Problem:** Rename property `first_name` to variable `firstName` when destructuring `{ first_name: "Alice" }`.
 
 **Expected output:**
-```text
-Alice
-```
-
 > [!check]- Answer
+> ```text
+> Alice
+> ```
 > ```javascript
 > const user = { first_name: "Alice" };
 > const { first_name: firstName } = user;
@@ -182,16 +180,17 @@ Alice
 >
 > **Explanation:** Syntax `{ key: localName }` renames object properties to local variable names.
 
+---
+
 ### Exercise 3: Swapping Variables without Temporary Storage
 
 **Problem:** Swap `let a = 1; let b = 2;` using array destructuring `[a, b] = [b, a]`.
 
 **Expected output:**
-```text
-a: 2, b: 1
-```
-
 > [!check]- Answer
+> ```text
+> a: 2, b: 1
+> ```
 > ```javascript
 > let a = 1;
 > let b = 2;
@@ -201,7 +200,6 @@ a: 2, b: 1
 >
 > **Explanation:** Array destructuring assignment swaps variable values inline.
 
----
 
 ---
 

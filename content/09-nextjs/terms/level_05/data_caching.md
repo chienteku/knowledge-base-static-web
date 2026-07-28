@@ -116,13 +116,12 @@ const getCachedUsers = unstable_cache(async () => prisma.user.findMany(), ['user
 **Problem:** You have a `page.tsx`. Inside it, you have two `fetch` calls. One fetches the static site navigation (`force-cache`). The other fetches the user's live shopping cart (`no-store`). How does Next.js render this page?
 
 **Expected output:**
-```text
-Next.js dynamically renders the page!
-Because at least ONE piece of data on the page requires fresh data (`no-store`), Next.js knows it cannot pre-build this page as static HTML. It will execute the page on the server on every request.
-However, it is highly optimized! The navigation fetch resolves instantly from the cache, while only the shopping cart fetch hits the network.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js dynamically renders the page!
+> Because at least ONE piece of data on the page requires fresh data (`no-store`), Next.js knows it cannot pre-build this page as static HTML. It will execute the page on the server on every request.
+> However, it is highly optimized! The navigation fetch resolves instantly from the cache, while only the shopping cart fetch hits the network.
+> ```
 > - Think about the "lowest common denominator" of caching.
 
 ---
@@ -135,13 +134,12 @@ However, it is highly optimized! The navigation fetch resolves instantly from th
 3. `{ next: { revalidate: 60 } }` 
 
 **Expected output:**
-```text
-1. Caches data indefinitely in Next.js Data Cache (Default)
-2. Bypasses Data Cache; re-fetches fresh data on every request
-3. Caches data with Time-To-Live of 60 seconds (ISR)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Caches data indefinitely in Next.js Data Cache (Default)
+> 2. Bypasses Data Cache; re-fetches fresh data on every request
+> 3. Caches data with Time-To-Live of 60 seconds (ISR)
+> ```
 > - `force-cache` -> Persistent static cache
 > - `no-store` -> Dynamic un-cached fetch
 > - `revalidate: 60` -> Time-based ISR revalidation
@@ -157,11 +155,10 @@ However, it is highly optimized! The navigation fetch resolves instantly from th
 **Problem:** Write `unstable_cache` wrapper for `getProducts()` with cache tag `'products-tag'` and 1-hour revalidation.
 
 **Expected output:**
-```typescript
-const getCachedProducts = unstable_cache(async () => getProducts(), ['products-key'], { tags: ['products-tag'], revalidate: 3600 });
-```
-
 > [!check]- Answer
+> ```typescript
+> const getCachedProducts = unstable_cache(async () => getProducts(), ['products-key'], { tags: ['products-tag'], revalidate: 3600 });
+> ```
 > - `unstable_cache()` caches non-fetch data sources in Next.js Data Cache.
 > 
 > ```typescript

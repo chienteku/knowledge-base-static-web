@@ -157,12 +157,11 @@ Write the math formulas to calculate the values for the SurrealQL query paramete
 2.  `$start = ?`
 
 **Expected output:**
-```javascript
-1. $limit = pageSize;
-2. $start = (pageNumber - 1) * pageSize;
-```
-
 > [!check]- Answer
+> ```javascript
+> 1. $limit = pageSize;
+> 2. $start = (pageNumber - 1) * pageSize;
+> ```
 > - The limit value matches the page size directly.
 > - For Page 1, start offset must evaluate to `0`. For Page 2, start offset skips the first page's worth of items.
 
@@ -175,27 +174,27 @@ Write the math formulas to calculate the values for the SurrealQL query paramete
 **Problem:** Query page 2 (items 11-20) from `product` table ordered by `price` ascending.
 
 **Expected output:**
-```text
-SELECT * FROM product ORDER BY price ASC LIMIT 10 START 10;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM product ORDER BY price ASC LIMIT 10 START 10;
+> ```
 > ```surrealql
 > SELECT * FROM product ORDER BY price ASC LIMIT 10 START 10;
 > ```
 >
 > **Explanation:** `ORDER BY` + `LIMIT` + `START` provides deterministic paginated query results.
 
+---
+
 ### Exercise 3: Multi-Column Ordering
 
 **Problem:** Order users by `role` ascending, then `created_at` descending.
 
 **Expected output:**
-```text
-SELECT * FROM user ORDER BY role ASC, created_at DESC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM user ORDER BY role ASC, created_at DESC;
+> ```
 > ```surrealql
 > SELECT * FROM user ORDER BY role ASC, created_at DESC;
 > ```

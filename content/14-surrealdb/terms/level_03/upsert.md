@@ -156,15 +156,14 @@ UPSERT user:alice SET name = "Alice";
 2.  List the fields and values of the resulting document written to disk.
 
 **Expected output:**
-```text
-1. Yes, a new record is created because no records in the settings table match the filter 'user_id = user:john'.
-2. The written record will contain:
-   - `id`: An auto-generated Record ID (e.g. `settings:random_id`).
-   - `user_id`: `user:john` (copied from the WHERE filter condition).
-   - `theme`: `"dark"` (copied from the SET assignment).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes, a new record is created because no records in the settings table match the filter 'user_id = user:john'.
+> 2. The written record will contain:
+>    - `id`: An auto-generated Record ID (e.g. `settings:random_id`).
+>    - `user_id`: `user:john` (copied from the WHERE filter condition).
+>    - `theme`: `"dark"` (copied from the SET assignment).
+> ```
 > - An upsert statement copies values from the `WHERE` filters to populate missing fields in the new record.
 > - The table prefix for the generated ID is `settings`.
 
@@ -177,27 +176,27 @@ UPSERT user:alice SET name = "Alice";
 **Problem:** Upsert record `setting:theme` setting `value = "dark"`.
 
 **Expected output:**
-```text
-UPSERT setting:theme SET value = "dark";
-```
-
 > [!check]- Answer
+> ```text
+> UPSERT setting:theme SET value = "dark";
+> ```
 > ```surrealql
 > UPSERT setting:theme SET value = "dark";
 > ```
 >
 > **Explanation:** `UPSERT` creates or updates target records idempotently.
 
+---
+
 ### Exercise 3: Bulk Table Upsert
 
 **Problem:** Upsert all records in `user` table setting `status = "active"` WHERE `verified = true`.
 
 **Expected output:**
-```text
-UPSERT user SET status = "active" WHERE verified = true;
-```
-
 > [!check]- Answer
+> ```text
+> UPSERT user SET status = "active" WHERE verified = true;
+> ```
 > ```surrealql
 > UPSERT user SET status = "active" WHERE verified = true;
 > ```

@@ -107,13 +107,12 @@ import 'server-only'; // Enforces server-only execution guard at build time
 3. `<DatabaseStats>` (Reads secure info from the SQL database).
 
 **Expected output:**
-```text
-1. Server Component. (No interactivity needed, saves sending JS to the browser).
-2. Client Component. (Requires `onClick` and `useState` to change images).
-3. Server Component. (Requires secure server-side database access).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Server Component. (No interactivity needed, saves sending JS to the browser).
+> 2. Client Component. (Requires `onClick` and `useState` to change images).
+> 3. Server Component. (Requires secure server-side database access).
+> ```
 > - Interactivity = Client. Data fetching/Static UI = Server.
 
 ---
@@ -125,11 +124,10 @@ import 'server-only'; // Enforces server-only execution guard at build time
 **Problem:** Write async Server Component querying database directly without API endpoints.
 
 **Expected output:**
-```text
-export default async function UsersPage() { const users = await db.users.findMany(); return <ul>{users.map(u => <li key={u.id}>{u.name}</li>)}</ul>; }
-```
-
 > [!check]- Answer
+> ```text
+> export default async function UsersPage() { const users = await db.users.findMany(); return <ul>{users.map(u => <li key={u.id}>{u.name}</li>)}</ul>; }
+> ```
 > ```javascript
 > export default async function UsersPage() {
 >   const users = await db.users.findMany();
@@ -143,16 +141,17 @@ export default async function UsersPage() { const users = await db.users.findMan
 >
 > **Explanation:** React Server Components support direct `async/await` database queries with zero client bundle size.
 
+---
+
 ### Exercise 3: RSC Bundle Size Advantage
 
 **Problem:** Why do npm dependencies used strictly inside React Server Components add 0 bytes to client JS bundle size? (Server Components execute on the server, sending only rendered UI JSON to the browser).
 
 **Expected output:**
-```text
-Server Components execute on the server, sending rendered UI JSON to the browser without shipping code to client
-```
-
 > [!check]- Answer
+> ```text
+> Server Components execute on the server, sending rendered UI JSON to the browser without shipping code to client
+> ```
 > ```text
 > Server Components execute on the server, sending rendered UI JSON to the browser without shipping code to client
 > ```

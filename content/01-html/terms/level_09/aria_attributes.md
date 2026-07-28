@@ -187,11 +187,10 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 **Problem:** You are building an accordion FAQ panel. Sighted users click the question to toggle the answer visible/hidden. Write the opening `<button>` tag for the question, including the correct ARIA attribute to tell screen readers that the answer panel is currently collapsed (closed).
 
 **Expected output:**
-```html
-<button type="button" aria-expanded="false">Frequently Asked Question</button>
-```
-
 > [!check]- Answer
+> ```html
+> <button type="button" aria-expanded="false">Frequently Asked Question</button>
+> ```
 > - The dynamic accordion state is managed by the `aria-expanded` attribute.
 > - A collapsed state translates to `false`.
 
@@ -204,27 +203,27 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 **Problem:** Write button controlling modal visibility using `aria-expanded` and `aria-controls`.
 
 **Expected output:**
-```text
-<button aria-expanded="false" aria-controls="menu">Menu</button>
-```
-
 > [!check]- Answer
+> ```text
+> <button aria-expanded="false" aria-controls="menu">Menu</button>
+> ```
 > ```html
 > <button aria-expanded="false" aria-controls="menu">Menu</button>
 > ```
 >
 > **Explanation:** `aria-expanded` announces accordion/menu toggle state to screen readers.
 
+---
+
 ### Exercise 3: Hiding Decorative Icons with ARIA
 
 **Problem:** Which ARIA attribute hides decorative font icons or SVGs from screen readers?
 
 **Expected output:**
-```text
-aria-hidden="true"
-```
-
 > [!check]- Answer
+> ```text
+> aria-hidden="true"
+> ```
 > ```html
 > <svg aria-hidden="true"></svg>
 > ```

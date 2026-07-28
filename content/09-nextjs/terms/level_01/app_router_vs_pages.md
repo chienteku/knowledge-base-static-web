@@ -98,14 +98,13 @@ import { useRouter } from 'next/navigation'; // Correct App Router import
 `pages/blog.tsx`
 
 **Expected output:**
-```text
-app/
-  page.tsx        -> (translates to /)
-  blog/
-    page.tsx      -> (translates to /blog)
-```
-
 > [!check]- Answer
+> ```text
+> app/
+>   page.tsx        -> (translates to /)
+>   blog/
+>     page.tsx      -> (translates to /blog)
+> ```
 > - In the App Router, folders define routes, files define UI.
 
 ---
@@ -115,11 +114,10 @@ app/
 **Problem:** Contrast Pages Router `getServerSideProps` with App Router React Server Components (RSC) data fetching.
 
 **Expected output:**
-```text
-Pages Router fetches data in a top-level exported function `getServerSideProps`; App Router components are async functions that fetch data directly inside the component body.
-```
-
 > [!check]- Answer
+> ```text
+> Pages Router fetches data in a top-level exported function `getServerSideProps`; App Router components are async functions that fetch data directly inside the component body.
+> ```
 > - Pages Router: `export async function getServerSideProps() {}`
 > - App Router: `export default async function Page() { const data = await fetch(...); }`
 > 
@@ -139,11 +137,10 @@ Pages Router fetches data in a top-level exported function `getServerSideProps`;
 **Problem:** Which file in an `app/` directory route folder is responsible for rendering the unique UI for a route?
 
 **Expected output:**
-```text
-page.tsx (or page.jsx / page.js)
-```
-
 > [!check]- Answer
+> ```text
+> page.tsx (or page.jsx / page.js)
+> ```
 > - `page.tsx` defines the publicly accessible UI for a route segment.
 > 
 > ```text

@@ -181,11 +181,10 @@ thread::spawn(move || {
 **Problem:** Define a trait `Limit` with `const MAX_SIZE: usize;`. Implement it for `Buffer` with `MAX_SIZE = 1024`.
 
 **Expected output:**
-```
-Max size: 1024
-```
-
 > [!check]- Answer
+> ```
+> Max size: 1024
+> ```
 > ```rust
 > trait Limit { const MAX_SIZE: usize; }
 > struct Buffer;
@@ -197,16 +196,17 @@ Max size: 1024
 >
 > **Explanation:** Associated constants bind constant value contracts directly to trait definitions.
 
+---
+
 ### Exercise 3: Generic Bounds on Associated Constants
 
 **Problem:** Write a generic function `fn get_limit<T: Limit>() -> usize { T::MAX_SIZE }`.
 
 **Expected output:**
-```
-Limit: 1024
-```
-
 > [!check]- Answer
+> ```
+> Limit: 1024
+> ```
 > trait Limit { const MAX_SIZE: usize; }
 > struct Buffer;
 > impl Limit for Buffer { const MAX_SIZE: usize = 1024; }

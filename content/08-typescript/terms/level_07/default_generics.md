@@ -110,13 +110,12 @@ const s: State = { data: "default string" }; // Omitting type uses default 'stri
 **Problem:** In the DOM, `document.querySelector<E>()` is a generic function. If you just call `document.querySelector(".btn")` without providing a generic, what do you think the Default Type is set to under the hood?
 
 **Expected output:**
-```text
-The default is `Element`.
-Under the hood, it looks something like: `querySelector<E extends Element = Element>(selector: string): E | null`
-This ensures that if you don't provide a specific type (like HTMLButtonElement), it safely falls back to the generic `Element` interface.
-```
-
 > [!check]- Answer
+> ```text
+> The default is `Element`.
+> Under the hood, it looks something like: `querySelector<E extends Element = Element>(selector: string): E | null`
+> This ensures that if you don't provide a specific type (like HTMLButtonElement), it safely falls back to the generic `Element` interface.
+> ```
 > - What is the most basic building block of the DOM?
 
 ---
@@ -128,11 +127,10 @@ This ensures that if you don't provide a specific type (like HTMLButtonElement),
 **Problem:** Define `interface Response<T = unknown> { status: number; data: T }`.
 
 **Expected output:**
-```text
-Response interface with default generic created
-```
-
 > [!check]- Answer
+> ```text
+> Response interface with default generic created
+> ```
 > ```typescript
 > interface Response<T = unknown> {
 >   status: number;
@@ -144,16 +142,17 @@ Response interface with default generic created
 >
 > **Explanation:** Default generic parameters supply fallback types when callers omit generic arguments.
 
+---
+
 ### Exercise 3: Default Generics in Functions
 
 **Problem:** Define generic function `function createRef<T = HTMLDivElement>(): T | null`.
 
 **Expected output:**
-```text
-HTMLDivElement | null
-```
-
 > [!check]- Answer
+> ```text
+> HTMLDivElement | null
+> ```
 > ```typescript
 > function createRef<T = HTMLDivElement>(): T | null {
 >   return null;

@@ -126,13 +126,12 @@ const count = ref(0); // Use ref() for primitive values
 **Problem:** What happens if you try to do this: `const count = reactive(0)`?
 
 **Expected output:**
-```text
-Vue will throw a warning/error in the console. 
-`reactive()` only works on Reference Types (Objects, Arrays, Maps, Sets). It physically cannot proxy a primitive like a number or string. 
-For primitives, you MUST use `ref()`.
-```
-
 > [!check]- Answer
+> ```text
+> Vue will throw a warning/error in the console. 
+> `reactive()` only works on Reference Types (Objects, Arrays, Maps, Sets). It physically cannot proxy a primitive like a number or string. 
+> For primitives, you MUST use `ref()`.
+> ```
 > - Can a number `0` be wrapped in a JavaScript Proxy? No.
 
 ---
@@ -142,11 +141,10 @@ For primitives, you MUST use `ref()`.
 **Problem:** Write a `reactive` state object holding `user: { name: 'Bob', age: 25 }` and a function `celebrate()` incrementing age.
 
 **Expected output:**
-```javascript
-const state = reactive({ user: { name: 'Bob', age: 25 } }); function celebrate() { state.user.age++; }
-```
-
 > [!check]- Answer
+> ```javascript
+> const state = reactive({ user: { name: 'Bob', age: 25 } }); function celebrate() { state.user.age++; }
+> ```
 > - `reactive()` performs deep reactive Proxy wrapping.
 > 
 > ```javascript
@@ -169,11 +167,10 @@ const state = reactive({ user: { name: 'Bob', age: 25 } }); function celebrate()
 **Problem:** When should you prefer `ref()` over `reactive()`?
 
 **Expected output:**
-```text
-Use ref() for primitives (string, number, boolean) or when reassigning entire data structures; use reactive() for fixed nested state objects.
-```
-
 > [!check]- Answer
+> ```text
+> Use ref() for primitives (string, number, boolean) or when reassigning entire data structures; use reactive() for fixed nested state objects.
+> ```
 > - `ref()` handles primitives and object reassignment cleanly via `.value`.
 > 
 > ```text

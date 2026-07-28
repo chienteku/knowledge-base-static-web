@@ -165,11 +165,10 @@ fn main() {
 **Problem:** Convert a block containing multiple statements into a block expression returning the calculated product of `a` and `b`.
 
 **Expected output:**
-```
-Product: 50
-```
-
 > [!check]- Answer
+> ```
+> Product: 50
+> ```
 > ```rust
 > fn main() {
 >     let product = {
@@ -183,18 +182,19 @@ Product: 50
 >
 > **Explanation:** Combining local statements with a final un-semicoloned expression allows complex initialization blocks to yield computed values directly.
 
+---
+
 ### Exercise 3: Statement Execution Order
 
 **Problem:** Predict the output of executing three sequential `println!` statements versus block expression evaluation.
 
 **Expected output:**
-```
-Step 1
-Step 2
-Done
-```
-
 > [!check]- Answer
+> ```
+> Step 1
+> Step 2
+> Done
+> ```
 > ```rust
 > fn main() {
 >     println!("Step 1");

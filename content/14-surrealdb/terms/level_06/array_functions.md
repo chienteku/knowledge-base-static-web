@@ -155,11 +155,10 @@ LET $arr = array::add($arr, 3); // Reassign updated array
 Write the SurrealQL expression using `array::*` to check if `$user_roles` shares any roles with `$required_roles`, returning non-empty common items.
 
 **Expected output:**
-```sql
-RETURN array::intersect($user_roles, $required_roles);
-```
-
 > [!check]- Answer
+> ```sql
+> RETURN array::intersect($user_roles, $required_roles);
+> ```
 > - The set overlap function is `array::intersect(arr1, arr2)`.
 
 ---
@@ -171,27 +170,27 @@ RETURN array::intersect($user_roles, $required_roles);
 **Problem:** Filter numbers greater than 10 from `[5, 12, 8, 20]` using `array::filter()`.
 
 **Expected output:**
-```text
-[12, 20]
-```
-
 > [!check]- Answer
+> ```text
+> [12, 20]
+> ```
 > ```surrealql
 > RETURN array::filter([5, 12, 8, 20], |$v| $v > 10);
 > ```
 >
 > **Explanation:** `array::filter(arr, closure)` filters array elements using predicate closure functions.
 
+---
+
 ### Exercise 3: Array Mapping with `array::map`
 
 **Problem:** Double all values in `[1, 2, 3]` using `array::map()`.
 
 **Expected output:**
-```text
-[2, 4, 6]
-```
-
 > [!check]- Answer
+> ```text
+> [2, 4, 6]
+> ```
 > ```surrealql
 > RETURN array::map([1, 2, 3], |$v| $v * 2);
 > ```

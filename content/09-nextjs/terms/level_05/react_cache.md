@@ -173,11 +173,10 @@ export const getCachedArticles = cache(async (category: string) => {
 **Problem:** Write `React.cache()` wrapper around async function `getUser(id: string)` deduplicating requests within a server render pass.
 
 **Expected output:**
-```typescript
-import { cache } from 'react'; export const getCachedUser = cache(async (id: string) => { return await db.user.findUnique({ where: { id } }); });
-```
-
 > [!check]- Answer
+> ```typescript
+> import { cache } from 'react'; export const getCachedUser = cache(async (id: string) => { return await db.user.findUnique({ where: { id } }); });
+> ```
 > - `cache()` from `react` memoizes async functions per request.
 > 
 > ```typescript
@@ -196,11 +195,10 @@ import { cache } from 'react'; export const getCachedUser = cache(async (id: str
 **Problem:** What is the exact lifespan of data cached by `React.cache()`?
 
 **Expected output:**
-```text
-The duration of a single server HTTP request render pass (wiped when server render completes).
-```
-
 > [!check]- Answer
+> ```text
+> The duration of a single server HTTP request render pass (wiped when server render completes).
+> ```
 > - `React.cache()` scope is limited to a single server render request.
 > 
 > ```text

@@ -255,11 +255,10 @@ export async function generateStaticParams() {
 **Problem:** Write `generateStaticParams()` fetching top 100 post IDs from database for pre-rendering `app/posts/[id]/page.tsx`.
 
 **Expected output:**
-```typescript
-export async function generateStaticParams() { const posts = await db.post.findMany({ select: { id: true }, take: 100 }); return posts.map(post => ({ id: post.id })); }
-```
-
 > [!check]- Answer
+> ```typescript
+> export async function generateStaticParams() { const posts = await db.post.findMany({ select: { id: true }, take: 100 }); return posts.map(post => ({ id: post.id })); }
+> ```
 > - `generateStaticParams()` map objects to route parameters.
 > 
 > ```typescript
@@ -282,11 +281,10 @@ export async function generateStaticParams() { const posts = await db.post.findM
 **Problem:** How does `generateStaticParams()` behave when nested inside parent and child route segments (`/category/[cat]/[id]`)?
 
 **Expected output:**
-```text
-Next.js executes generateStaticParams() top-down from parent to child, generating all combinations of parent and child static routes.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js executes generateStaticParams() top-down from parent to child, generating all combinations of parent and child static routes.
+> ```
 > - Executes top-down, combining parent and child parameter combinations.
 > 
 > ```text

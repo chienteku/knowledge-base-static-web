@@ -138,12 +138,11 @@ export async function deleteUser(id: string) {
 **Problem:** Can you define a Server Action directly inside a Client Component (`"use client"`)?
 
 **Expected output:**
-```text
-No! You cannot define an inline `"use server"` function inside a `"use client"` file.
-If you need to use a Server Action inside a Client Component, you must create a separate file (e.g., `actions.ts`), put `"use server"` at the top of that file, export the function, and then import it into your Client Component.
-```
-
 > [!check]- Answer
+> ```text
+> No! You cannot define an inline `"use server"` function inside a `"use client"` file.
+> If you need to use a Server Action inside a Client Component, you must create a separate file (e.g., `actions.ts`), put `"use server"` at the top of that file, export the function, and then import it into your Client Component.
+> ```
 > - Think about the "Network Boundary" rule from Level 1.
 
 ---
@@ -153,12 +152,11 @@ If you need to use a Server Action inside a Client Component, you must create a 
 **Problem:** Where can the `'use server'` directive be placed in a Next.js App Router application?
 
 **Expected output:**
-```text
-1. At the top of an async function body inside a Server Component.
-2. At the top of a dedicated .ts/.js file to export actions for Client Components.
-```
-
 > [!check]- Answer
+> ```text
+> 1. At the top of an async function body inside a Server Component.
+> 2. At the top of a dedicated .ts/.js file to export actions for Client Components.
+> ```
 > - Inside Server Component: Place `'use server'` inside function body.
 > - Dedicated File: Place `'use server'` at top of file.
 > 
@@ -175,11 +173,10 @@ If you need to use a Server Action inside a Client Component, you must create a 
 **Problem:** Can a Server Action return JSON response objects back to a Client Component caller?
 
 **Expected output:**
-```text
-Yes. Server Actions can return serializable objects (e.g. { success: true, message: 'Saved' }).
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Server Actions can return serializable objects (e.g. { success: true, message: 'Saved' }).
+> ```
 > - Server Actions return serializable responses to Client Components.
 > 
 > ```typescript

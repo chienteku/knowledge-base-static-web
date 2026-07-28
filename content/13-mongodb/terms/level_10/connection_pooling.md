@@ -158,13 +158,12 @@ mongodb://localhost:27017/app?maxPoolSize=50 // Controlled connection pool
 Explain the likely cause of this connection inflation.
 
 **Expected output:**
-```text
-The connection inflation is caused by a connection leak in the application code. 
-Instead of reusing a single global `MongoClient` instance, the backend code is likely initializing a new `MongoClient` (or new Mongoose connection) on every incoming API request or router loop. 
-Each instantiation opens a new pool, quickly spawning thousands of sockets and saturating the database.
-```
-
 > [!check]- Answer
+> ```text
+> The connection inflation is caused by a connection leak in the application code. 
+> Instead of reusing a single global `MongoClient` instance, the backend code is likely initializing a new `MongoClient` (or new Mongoose connection) on every incoming API request or router loop. 
+> Each instantiation opens a new pool, quickly spawning thousands of sockets and saturating the database.
+> ```
 > - A client configured with `maxPoolSize=50` can open at most 50 sockets per instance.
 > - Look for code loops that instantiate new client connections dynamically.
 
@@ -177,27 +176,27 @@ Each instantiation opens a new pool, quickly spawning thousands of sockets and s
 **Problem:** Construct URI setting `maxPoolSize=50` and `minPoolSize=10`.
 
 **Expected output:**
-```text
-mongodb://localhost:27017/app?maxPoolSize=50&minPoolSize=10
-```
-
 > [!check]- Answer
+> ```text
+> mongodb://localhost:27017/app?maxPoolSize=50&minPoolSize=10
+> ```
 > ```text
 > mongodb://localhost:27017/app?maxPoolSize=50&minPoolSize=10
 > ```
 >
 > **Explanation:** `maxPoolSize` and `minPoolSize` control active TCP connection pool bounds.
 
+---
+
 ### Exercise 3: Connection Pool Reuse Pattern
 
 **Problem:** State singleton pattern rule for `MongoClient` in backend Web APIs (Initialize client once at app startup, reuse across requests).
 
 **Expected output:**
-```text
-Initialize single MongoClient instance at server boot; reuse across request handlers
-```
-
 > [!check]- Answer
+> ```text
+> Initialize single MongoClient instance at server boot; reuse across request handlers
+> ```
 > ```text
 > Initialize single MongoClient instance at server boot; reuse across request handlers
 > ```

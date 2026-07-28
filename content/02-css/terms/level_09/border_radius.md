@@ -122,13 +122,12 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 **Problem:** You are building a chat bubble. You want the top-left, top-right, and bottom-right corners to be heavily rounded, but you want the bottom-left corner to be perfectly sharp (pointy) to show that the person on the left is speaking. How do you do this?
 
 **Expected output:**
-```css
-/* border-radius starts at top-left, and goes clockwise! */
-/* top-left | top-right | bottom-right | bottom-left */
-border-radius: 20px 20px 20px 0;
-```
-
 > [!check]- Answer
+> ```css
+> /* border-radius starts at top-left, and goes clockwise! */
+> /* top-left | top-right | bottom-right | bottom-left */
+> border-radius: 20px 20px 20px 0;
+> ```
 > - Like margin and padding, `border-radius` is a shorthand property that can take 4 values!
 
 ---
@@ -140,11 +139,10 @@ border-radius: 20px 20px 20px 0;
 **Problem:** Write CSS `border-radius` setting pill shape on button of height 40px.
 
 **Expected output:**
-```text
-.btn-pill { border-radius: 9999px; }
-```
-
 > [!check]- Answer
+> ```text
+> .btn-pill { border-radius: 9999px; }
+> ```
 > ```css
 > .btn-pill {
 >   border-radius: 9999px;
@@ -153,16 +151,17 @@ border-radius: 20px 20px 20px 0;
 >
 > **Explanation:** Large pixel values (`9999px`) render perfect pill-shaped rounded ends.
 
+---
+
 ### Exercise 3: Asymmetric Corner Radius Syntax
 
 **Problem:** Write `border-radius` shorthand setting top-left 10px, top-right 20px, bottom-right 30px, bottom-left 40px.
 
 **Expected output:**
-```text
-border-radius: 10px 20px 30px 40px;
-```
-
 > [!check]- Answer
+> ```text
+> border-radius: 10px 20px 30px 40px;
+> ```
 > ```css
 > .custom-box {
 >   border-radius: 10px 20px 30px 40px;

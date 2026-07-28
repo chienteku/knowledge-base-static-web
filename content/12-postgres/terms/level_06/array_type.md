@@ -148,13 +148,12 @@ CREATE INDEX idx_tags_gin ON posts USING GIN (tags); -- Fast GIN array element i
 **Problem:** You have a `products` table with columns `name` and `features` (a `TEXT[]` array). Write a SQL query to select the `name` of all products that have the feature `'waterproof'` inside their features list.
 
 **Expected output:**
-```sql
-SELECT name 
-FROM products 
-WHERE features @> ARRAY['waterproof'];
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name 
+> FROM products 
+> WHERE features @> ARRAY['waterproof'];
+> ```
 > - Use the containment operator `@>` in the `WHERE` clause.
 > - Construct the search target array using `ARRAY['waterproof']`.
 
@@ -167,27 +166,27 @@ WHERE features @> ARRAY['waterproof'];
 **Problem:** Query posts where `tags` array contains `'postgres'` using GIN array operator `@>`.
 
 **Expected output:**
-```text
-SELECT * FROM posts WHERE tags @> ARRAY['postgres'];
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM posts WHERE tags @> ARRAY['postgres'];
+> ```
 > ```sql
 > SELECT * FROM posts WHERE tags @> ARRAY['postgres'];
 > ```
 >
 > **Explanation:** The `@>` operator tests if the LHS array contains all elements of the RHS array.
 
+---
+
 ### Exercise 3: Unnesting Arrays with `UNNEST()`
 
 **Problem:** Unnest `tags` array into individual rows using `UNNEST()` function.
 
 **Expected output:**
-```text
-SELECT title, UNNEST(tags) AS tag FROM posts;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT title, UNNEST(tags) AS tag FROM posts;
+> ```
 > ```sql
 > SELECT title, UNNEST(tags) AS tag FROM posts;
 > ```

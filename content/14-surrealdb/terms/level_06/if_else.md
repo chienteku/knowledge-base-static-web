@@ -161,17 +161,16 @@ Write a SurrealQL query to retrieve the product `name` and a calculated `availab
 - Otherwise, return `"In Stock"`.
 
 **Expected output:**
-```sql
-SELECT 
-  name,
-  IF stock = 0 THEN "Out of Stock"
-  ELSE IF stock < 10 THEN "Low Stock"
-  ELSE "In Stock"
-  END AS availability
-FROM inventory;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   name,
+>   IF stock = 0 THEN "Out of Stock"
+>   ELSE IF stock < 10 THEN "Low Stock"
+>   ELSE "In Stock"
+>   END AS availability
+> FROM inventory;
+> ```
 > - Chain conditions using `ELSE IF`.
 > - Close the expression with `END` before aliasing with `AS availability`.
 
@@ -184,27 +183,27 @@ FROM inventory;
 **Problem:** Assign `$tier = IF $points > 1000 THEN "gold" ELSE "standard" END`.
 
 **Expected output:**
-```text
-LET $tier = IF $points > 1000 THEN "gold" ELSE "standard" END;
-```
-
 > [!check]- Answer
+> ```text
+> LET $tier = IF $points > 1000 THEN "gold" ELSE "standard" END;
+> ```
 > ```surrealql
 > LET $tier = IF $points > 1000 THEN "gold" ELSE "standard" END;
 > ```
 >
 > **Explanation:** `IF ... THEN ... ELSE ... END` evaluates inline conditional value expressions.
 
+---
+
 ### Exercise 3: Multi-Branch IF ELSE IF Statement
 
 **Problem:** Write `IF / ELSE IF / ELSE` block evaluating `$role` string.
 
 **Expected output:**
-```text
-IF $role = "admin" { RETURN "full"; } ELSE IF $role = "mod" { RETURN "partial"; } ELSE { RETURN "read"; };
-```
-
 > [!check]- Answer
+> ```text
+> IF $role = "admin" { RETURN "full"; } ELSE IF $role = "mod" { RETURN "partial"; } ELSE { RETURN "read"; };
+> ```
 > ```surrealql
 > IF $role = "admin" {
 >   RETURN "full";

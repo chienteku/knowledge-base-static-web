@@ -158,12 +158,11 @@ const result = user?.profile?.score + expensiveFunction();
 ```
 
 **Expected output:**
-```text
-No! 
-When `user?.` evaluates to `undefined`, the entire chain "short-circuits" and stops evaluating immediately. The right side of the expression is completely ignored.
-```
-
 > [!check]- Answer
+> ```text
+> No! 
+> When `user?.` evaluates to `undefined`, the entire chain "short-circuits" and stops evaluating immediately. The right side of the expression is completely ignored.
+> ```
 > - Optional chaining stops execution the exact moment it hits `null` or `undefined`.
 
 ---
@@ -173,11 +172,10 @@ When `user?.` evaluates to `undefined`, the entire chain "short-circuits" and st
 **Problem:** Safely invoke `obj.customMethod?.()` when `customMethod` is undefined.
 
 **Expected output:**
-```text
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ```
 > ```javascript
 > const obj = {};
 > console.log(obj.customMethod?.());
@@ -185,16 +183,17 @@ undefined
 >
 > **Explanation:** `obj.method?.()` short-circuits to `undefined` if `method` is `null` or `undefined`.
 
+---
+
 ### Exercise 3: Optional Bracket Property Access (`?.[]`)
 
 **Problem:** Safely access array item `arr?.[0]` when `arr` is `null`.
 
 **Expected output:**
-```text
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ```
 > ```javascript
 > const arr = null;
 > console.log(arr?.[0]);
@@ -202,7 +201,6 @@ undefined
 >
 > **Explanation:** `?.[]` guards dynamic bracket property lookups against nullish targets.
 
----
 
 ---
 

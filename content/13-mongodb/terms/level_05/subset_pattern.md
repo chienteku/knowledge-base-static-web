@@ -166,24 +166,10 @@ db.products.updateOne({ _id: pId }, { $push: { recentReviews: { $each: [newRevie
 2.  Sketch the resulting article document outline.
 
 **Expected output:**
-```text
-1. I would embed an array named `top_comments` containing only the top 3 comments (storing fields: author, text, and likes) directly inside the article document. All other comments are saved as individual documents in a separate `comments` collection, referenced by `article_id`.
-```
-```javascript
-// 2. Article document layout
-{
-  _id: ObjectId("60c72b2f9b1d8b2e88a8d111"),
-  title: "Database Design Trends",
-  content: "Lorem ipsum...",
-  top_comments: [ // Capped subset of 3 items
-    { author: "user_a", text: "Insightful article!", likes: 45 },
-    { author: "user_b", text: "Great writeup.", likes: 30 },
-    { author: "user_c", text: "Good points.", likes: 12 }
-  ]
-}
-```
-
 > [!check]- Answer
+> ```text
+> 1. I would embed an array named `top_comments` containing only the top 3 comments (storing fields: author, text, and likes) directly inside the article document. All other comments are saved as individual documents in a separate `comments` collection, referenced by `article_id`.
+> ```
 > - Only the fields needed for the initial render should be inside the subset.
 > - Ensure the embedded array has a strict size boundary in the concept description.
 
@@ -196,11 +182,10 @@ db.products.updateOne({ _id: pId }, { $push: { recentReviews: { $each: [newRevie
 **Problem:** Push new review into `recentReviews` keeping ONLY the 5 most recent reviews using `$slice: -5`.
 
 **Expected output:**
-```text
-db.products.updateOne({ _id: 1 }, { $push: { recentReviews: { $each: [newReview], $slice: -5 } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.products.updateOne({ _id: 1 }, { $push: { recentReviews: { $each: [newReview], $slice: -5 } } });
+> ```
 > ```javascript
 > db.products.updateOne(
 >   { _id: 1 },
@@ -210,16 +195,17 @@ db.products.updateOne({ _id: 1 }, { $push: { recentReviews: { $each: [newReview]
 >
 > **Explanation:** `$slice: -N` caps array fields to the N most recent items, implementing Subset Pattern caching.
 
+---
+
 ### Exercise 3: Subset Pattern Benefit
 
 **Problem:** What is the primary performance benefit of the Subset Pattern? (Reduces document size and memory working set while satisfying primary UI read queries in a single read).
 
 **Expected output:**
-```text
-Reduces document size and memory working set while satisfying primary UI read queries
-```
-
 > [!check]- Answer
+> ```text
+> Reduces document size and memory working set while satisfying primary UI read queries
+> ```
 > ```text
 > Reduces document size and memory working set while satisfying primary UI read queries
 > ```

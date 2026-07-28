@@ -104,12 +104,11 @@ fetch('https://api.example.com/users/45/data');
 2. Where does the code live that displays a picture of a sun on the screen?
 
 **Expected output:**
-```text
-1. The Server. It holds the actual data and the connection to weather satellites.
-2. The Client. It is responsible for the UI (User Interface) and drawing the sun based on the data the Server provided.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The Server. It holds the actual data and the connection to weather satellites.
+> 2. The Client. It is responsible for the UI (User Interface) and drawing the sun based on the data the Server provided.
+> ```
 > - Who stores data vs who displays data?
 
 ---
@@ -122,13 +121,12 @@ fetch('https://api.example.com/users/45/data');
 3. Querying the SQL database for orders.
 
 **Expected output:**
-```text
-1. Server (S)
-2. Client (C)
-3. Server (S)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Server (S)
+> 2. Client (C)
+> 3. Server (S)
+> ```
 > ```text
 > 1. Server (S) - Password cryptography must occur on the secure backend.
 > 2. Client (C) - UI visual rendering occurs on the browser/app client.
@@ -142,11 +140,10 @@ fetch('https://api.example.com/users/45/data');
 **Problem:** A client sends `{ price: 0.01 }` in an order payload to `/checkout`. How should the server respond?
 
 **Expected output:**
-```text
-The server must ignore client-provided prices and fetch the canonical price from its own database before charging the user.
-```
-
 > [!check]- Answer
+> ```text
+> The server must ignore client-provided prices and fetch the canonical price from its own database before charging the user.
+> ```
 > ```text
 > The server must ignore client-provided prices and fetch the canonical price from its own database before charging the user.
 > ```

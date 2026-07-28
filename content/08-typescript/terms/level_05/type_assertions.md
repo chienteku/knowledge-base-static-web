@@ -100,13 +100,12 @@ const el = evt.target as HTMLInputElement; // Standard assertion syntax
 **Problem:** What happens if you write `const data = document.getElementById("main") as any;`?
 
 **Expected output:**
-```text
-You have just completely disabled the type checker for the `data` variable. 
-You can now write `data.makeMeASandwich()`, and the compiler will allow it, resulting in a runtime crash. 
-Never assert to `any` unless absolutely migrating legacy code.
-```
-
 > [!check]- Answer
+> ```text
+> You have just completely disabled the type checker for the `data` variable. 
+> You can now write `data.makeMeASandwich()`, and the compiler will allow it, resulting in a runtime crash. 
+> Never assert to `any` unless absolutely migrating legacy code.
+> ```
 > - Review the dangers of the `any` type.
 
 ---
@@ -118,11 +117,10 @@ Never assert to `any` unless absolutely migrating legacy code.
 **Problem:** Assert `document.getElementById("input")` to `HTMLInputElement`.
 
 **Expected output:**
-```text
-HTMLInputElement assertion applied
-```
-
 > [!check]- Answer
+> ```text
+> HTMLInputElement assertion applied
+> ```
 > ```typescript
 > const input = document.getElementById("input") as HTMLInputElement;
 > console.log("HTMLInputElement assertion applied");
@@ -130,16 +128,17 @@ HTMLInputElement assertion applied
 >
 > **Explanation:** Assertions inform TS of specific DOM element subclass types.
 
+---
+
 ### Exercise 3: Double Assertion Escape Hatch
 
 **Problem:** Perform double assertion `val as unknown as Target` for incompatible structural conversions.
 
 **Expected output:**
-```text
-Double assertion syntax verified
-```
-
 > [!check]- Answer
+> ```text
+> Double assertion syntax verified
+> ```
 > ```typescript
 > const str = "123";
 > const num = str as unknown as number; // Compiles, though unsafe!

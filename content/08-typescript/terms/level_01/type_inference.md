@@ -112,13 +112,12 @@ const action = "CLICK"; // Inferred as literal type "CLICK"
 `const data = [1, "Alice", true];`
 
 **Expected output:**
-```text
-TypeScript will infer a Union Array Type:
-`(string | number | boolean)[]`
-It looks at all the elements inside the initial array and combines their types!
-```
-
 > [!check]- Answer
+> ```text
+> TypeScript will infer a Union Array Type:
+> `(string | number | boolean)[]`
+> It looks at all the elements inside the initial array and combines their types!
+> ```
 > - Think about combining types!
 
 ---
@@ -130,11 +129,10 @@ It looks at all the elements inside the initial array and combines their types!
 **Problem:** What is the inferred return type of `function add(a: number, b: number) { return a + b; }`?
 
 **Expected output:**
-```text
-number
-```
-
 > [!check]- Answer
+> ```text
+> number
+> ```
 > ```typescript
 > function add(a: number, b: number) {
 >   return a + b; // Inferred return type: number
@@ -144,16 +142,17 @@ number
 >
 > **Explanation:** TypeScript infers function return types from evaluated `return` expressions.
 
+---
+
 ### Exercise 3: Inference in Array Initializers
 
 **Problem:** What is inferred type of `const items = [10, "hello"];`?
 
 **Expected output:**
-```text
-(string | number)[]
-```
-
 > [!check]- Answer
+> ```text
+> (string | number)[]
+> ```
 > ```typescript
 > console.log("(string | number)[]");
 > ```

@@ -155,12 +155,11 @@ Whitespace collapse demonstration showing different source formatting yielding t
 ```
 
 **Expected output:**
-```text
-Exactly one space.
-All consecutive carriage returns (new lines) and blank spaces are collapsed by the browser into a single space character.
-```
-
 > [!check]- Answer
+> ```text
+> Exactly one space.
+> All consecutive carriage returns (new lines) and blank spaces are collapsed by the browser into a single space character.
+> ```
 > - Remember that whitespace collapse treats line breaks (Enters) and spaces as the exact same block of collapse.
 
 ---
@@ -172,11 +171,10 @@ All consecutive carriage returns (new lines) and blank spaces are collapsed by t
 **Problem:** Which HTML tag preserves exact spaces, tabs, and line breaks without collapsing?
 
 **Expected output:**
-```text
-<pre> (Preformatted Text element).
-```
-
 > [!check]- Answer
+> ```text
+> <pre> (Preformatted Text element).
+> ```
 > ```html
 > <pre>
 >   Line 1
@@ -186,16 +184,17 @@ All consecutive carriage returns (new lines) and blank spaces are collapsed by t
 >
 > **Explanation:** `<pre>` tag displays text in monospace font, preserving all whitespace verbatim.
 
+---
+
 ### Exercise 3: CSS white-space Property
 
 **Problem:** Which CSS property disables whitespace collapsing on standard `<div>` elements?
 
 **Expected output:**
-```text
-white-space: pre; (or pre-wrap / pre-line)
-```
-
 > [!check]- Answer
+> ```text
+> white-space: pre; (or pre-wrap / pre-line)
+> ```
 > ```css
 > div {
 >   white-space: pre-wrap;

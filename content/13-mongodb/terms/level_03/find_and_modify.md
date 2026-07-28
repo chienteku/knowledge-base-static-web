@@ -178,15 +178,14 @@ const seq = await db.seq.findOneAndUpdate({ _id: "id" }, { $inc: { val: 1 } }, {
 **Problem:** You have an `emails_to_send` collection. Write the atomic MongoDB query to find the first document where `status` is `"queued"`, change `status` to `"sending"`, and return the document **after** the update is complete.
 
 **Expected output:**
-```javascript
-db.emails_to_send.findOneAndUpdate(
-  { status: "queued" },
-  { $set: { status: "sending" } },
-  { returnDocument: "after" }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.emails_to_send.findOneAndUpdate(
+>   { status: "queued" },
+>   { $set: { status: "sending" } },
+>   { returnDocument: "after" }
+> );
+> ```
 > - The task requires atomic modification, pointing to `findOneAndUpdate`.
 > - Include the option key `returnDocument` with the string value `"after"`.
 
@@ -199,11 +198,10 @@ db.emails_to_send.findOneAndUpdate(
 **Problem:** Increment counter `seq` on `counters` document `_id: "orderId"` returning updated document.
 
 **Expected output:**
-```text
-db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { returnDocument: "after", upsert: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { returnDocument: "after", upsert: true });
+> ```
 > ```javascript
 > db.counters.findOneAndUpdate(
 >   { _id: "orderId" },
@@ -214,16 +212,17 @@ db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { returnD
 >
 > **Explanation:** `findOneAndUpdate()` atomically modifies and returns documents without race conditions.
 
+---
+
 ### Exercise 3: Atomic Document Queue Consumption with `findOneAndDelete`
 
 **Problem:** Pop and return oldest task document from `tasks` queue using `findOneAndDelete()`.
 
 **Expected output:**
-```text
-db.tasks.findOneAndDelete({}, { sort: { createdAt: 1 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.tasks.findOneAndDelete({}, { sort: { createdAt: 1 } });
+> ```
 > ```javascript
 > db.tasks.findOneAndDelete({}, {
 >   sort: { createdAt: 1 }

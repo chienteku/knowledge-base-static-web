@@ -150,18 +150,17 @@ Write the MongoDB queries to:
 3.  Find all users who carry both the `"admin"` role and the `"billing"` role.
 
 **Expected output:**
-```javascript
-// 1. Implicit element search
-db.users.find({ roles: "admin" });
-
-// 2. Array length search
-db.users.find({ roles: { $size: 3 } });
-
-// 3. Array membership subset search
-db.users.find({ roles: { $all: ["admin", "billing"] } });
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Implicit element search
+> db.users.find({ roles: "admin" });
+> 
+> // 2. Array length search
+> db.users.find({ roles: { $size: 3 } });
+> 
+> // 3. Array membership subset search
+> db.users.find({ roles: { $all: ["admin", "billing"] } });
+> ```
 > - Simple element searches do not require BSON operators.
 > - Use `$size` for length checks and `$all` for multi-value checks.
 
@@ -174,27 +173,27 @@ db.users.find({ roles: { $all: ["admin", "billing"] } });
 **Problem:** Query posts containing tag `"mongodb"` in `tags` array.
 
 **Expected output:**
-```text
-db.posts.find({ tags: "mongodb" });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ tags: "mongodb" });
+> ```
 > ```javascript
 > db.posts.find({ tags: "mongodb" });
 > ```
 >
 > **Explanation:** Passing a scalar value to an array field checks if the array contains that element.
 
+---
+
 ### Exercise 3: Exact Array Element Count Query
 
 **Problem:** Query documents where `comments` array has exactly 5 elements using `$size`.
 
 **Expected output:**
-```text
-db.posts.find({ comments: { $size: 5 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ comments: { $size: 5 } });
+> ```
 > ```javascript
 > db.posts.find({ comments: { $size: 5 } });
 > ```

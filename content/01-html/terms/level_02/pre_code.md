@@ -254,6 +254,8 @@ fruits.forEach((fruit) => {
 >
 > **Explanation:** `&lt;` and `&gt;` escape angle brackets so code displays as text.
 
+---
+
 ### Exercise 3: pre Font Family Default
 
 **Problem:** What font family type do browsers apply by default to `<pre>` and `<code>` elements?

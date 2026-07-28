@@ -118,13 +118,12 @@ interface B extends A { b: string } // Interface inheritance
 **Problem:** You can also define an object shape using `type User = { name: string }`. In modern TypeScript, when should you use `interface` and when should you use `type`?
 
 **Expected output:**
-```text
-The modern TS community consensus:
-- Use `interface` by default when defining the shape of Objects or Classes. It provides better error messages and is more performant for the compiler.
-- Use `type` when you need advanced type manipulation (like Unions `type A = string | number`, Intersections, or mapped types).
-```
-
 > [!check]- Answer
+> ```text
+> The modern TS community consensus:
+> - Use `interface` by default when defining the shape of Objects or Classes. It provides better error messages and is more performant for the compiler.
+> - Use `type` when you need advanced type manipulation (like Unions `type A = string | number`, Intersections, or mapped types).
+> ```
 > - Which one supports `extends` naturally?
 
 ---
@@ -136,11 +135,10 @@ The modern TS community consensus:
 **Problem:** Create `interface Child extends Parent1, Parent2` combining `id: number` and `name: string`.
 
 **Expected output:**
-```text
-Child interface extends multiple parents
-```
-
 > [!check]- Answer
+> ```text
+> Child interface extends multiple parents
+> ```
 > ```typescript
 > interface Parent1 { id: number }
 > interface Parent2 { name: string }
@@ -151,16 +149,17 @@ Child interface extends multiple parents
 >
 > **Explanation:** Interfaces can extend multiple parent interfaces simultaneously.
 
+---
+
 ### Exercise 3: Interface vs Type Alias Selection Rule
 
 **Problem:** State recommended TS guideline for modeling public object shapes (Prefer Interface).
 
 **Expected output:**
-```text
-Prefer interface for object shapes to enable declaration merging & performance
-```
-
 > [!check]- Answer
+> ```text
+> Prefer interface for object shapes to enable declaration merging & performance
+> ```
 > ```typescript
 > console.log("Prefer interface for object shapes to enable declaration merging & performance");
 > ```

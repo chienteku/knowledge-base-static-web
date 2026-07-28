@@ -222,11 +222,10 @@ router.beforeEach((to, from, next) => {
 ```
 
 **Expected output:**
-```text
-The beforeEach guard checks to.meta.requiresAuth and successfully redirects unauthorized users.
-```
-
 > [!check]- Answer
+> ```text
+> The beforeEach guard checks to.meta.requiresAuth and successfully redirects unauthorized users.
+> ```
 > - You can check metadata on the destination route using the `to` object parameter.
 > - Access the metadata object via `to.meta`.
 
@@ -237,11 +236,10 @@ The beforeEach guard checks to.meta.requiresAuth and successfully redirects unau
 **Problem:** Write `<script setup>` reading route param `id` and query parameter `sort` using `useRoute()`.
 
 **Expected output:**
-```vue
-<script setup> import { useRoute } from 'vue-router'; const route = useRoute(); const id = route.params.id; const sort = route.query.sort; </script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> import { useRoute } from 'vue-router'; const route = useRoute(); const id = route.params.id; const sort = route.query.sort; </script>
+> ```
 > - `useRoute()` exposes active route parameters.
 > 
 > ```vue
@@ -261,11 +259,10 @@ The beforeEach guard checks to.meta.requiresAuth and successfully redirects unau
 **Problem:** Where do you define custom route metadata (e.g. `requiresAuth: true` or `title: 'Home'`) in Vue Router?
 
 **Expected output:**
-```text
-Inside the meta property of a route object definition: { path: '/home', meta: { title: 'Home' } }.
-```
-
 > [!check]- Answer
+> ```text
+> Inside the meta property of a route object definition: { path: '/home', meta: { title: 'Home' } }.
+> ```
 > - `meta` object stores arbitrary metadata attached to routes.
 > 
 > ```javascript

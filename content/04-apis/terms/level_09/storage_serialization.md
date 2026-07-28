@@ -186,16 +186,17 @@ function getCart() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Safe LocalStorage Wrapper Helper
 
 **Problem:** Write `getStorageItem(key, defaultValue)` helper reading and deserializing JSON from `localStorage` safely.
 
 **Expected output:**
-```text
-function getStorageItem(key, defaultValue) { try { const item = localStorage.getItem(key); return item ? JSON.parse(item) : defaultValue; } catch (e) { return defaultValue; } }
-```
-
 > [!check]- Answer
+> ```text
+> function getStorageItem(key, defaultValue) { try { const item = localStorage.getItem(key); return item ? JSON.parse(item) : defaultValue; } catch (e) { return defaultValue; } }
+> ```
 > ```javascript
 > function getStorageItem(key, defaultValue) {
 > try {
@@ -214,11 +215,10 @@ function getStorageItem(key, defaultValue) { try { const item = localStorage.get
 **Problem:** Why can IndexedDB store native `Date` objects and `ArrayBuffer` instances without calling `JSON.stringify()`?
 
 **Expected output:**
-```text
-IndexedDB uses the browser HTML Structured Clone Algorithm internally, which natively supports serializing complex types like Date, RegExp, Blob, and ArrayBuffer.
-```
-
 > [!check]- Answer
+> ```text
+> IndexedDB uses the browser HTML Structured Clone Algorithm internally, which natively supports serializing complex types like Date, RegExp, Blob, and ArrayBuffer.
+> ```
 > ```text
 > IndexedDB uses the browser HTML Structured Clone Algorithm internally, which natively supports serializing complex types like Date, RegExp, Blob, and ArrayBuffer.
 > ```

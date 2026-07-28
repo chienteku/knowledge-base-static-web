@@ -193,11 +193,10 @@ self.onmessage = function(event) {
 **Problem:** Simulate sending data to a worker via `worker.postMessage({ num: 10 })`.
 
 **Expected output:**
-```text
-Message posted to worker: 10
-```
-
 > [!check]- Answer
+> ```text
+> Message posted to worker: 10
+> ```
 > ```javascript
 > const msg = { num: 10 };
 > console.log(`Message posted to worker: ${msg.num}`);
@@ -205,23 +204,23 @@ Message posted to worker: 10
 >
 > **Explanation:** `postMessage()` transfers serialized structured clone data across thread boundaries.
 
+---
+
 ### Exercise 3: Offloading Heavy CPU Tasks to Workers
 
 **Problem:** Explain why Web Workers prevent UI freezing during heavy 10-second computations.
 
 **Expected output:**
-```text
-Offloads CPU work off main UI thread
-```
-
 > [!check]- Answer
+> ```text
+> Offloads CPU work off main UI thread
+> ```
 > ```javascript
 > console.log("Offloads CPU work off main UI thread");
 > ```
 >
 > **Explanation:** Web Workers run on separate OS background threads, keeping main UI event loops responsive.
 
----
 
 ---
 

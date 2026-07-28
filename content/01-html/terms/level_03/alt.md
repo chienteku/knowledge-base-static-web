@@ -142,11 +142,10 @@ If an image is purely decorative and offers no semantic meaning, you MUST includ
 `<img src="magnifying-glass.png" alt="___">`
 
 **Expected output:**
-```text
-alt="Search" (or "Submit search")
-```
-
 > [!check]- Answer
+> ```text
+> alt="Search" (or "Submit search")
+> ```
 > - For functional icons, describe the *action* it performs, not what it looks like. A blind user doesn't care that it's a magnifying glass; they need to know what happens if they click it!
 
 ---
@@ -158,27 +157,27 @@ alt="Search" (or "Submit search")
 **Problem:** Write appropriate `alt` text for an image of a red submit button inside a form.
 
 **Expected output:**
-```text
-alt="Submit Form" (describing image function, not visual color).
-```
-
 > [!check]- Answer
+> ```text
+> alt="Submit Form" (describing image function, not visual color).
+> ```
 > ```html
 > <img src="red-btn.png" alt="Submit Form">
 > ```
 >
 > **Explanation:** For functional images (buttons/links), alt text should describe the action destination.
 
+---
+
 ### Exercise 3: Decorative Image Alt Syntax
 
 **Problem:** How should decorative background line images be marked up with the `alt` attribute?
 
 **Expected output:**
-```text
-alt="" (empty string).
-```
-
 > [!check]- Answer
+> ```text
+> alt="" (empty string).
+> ```
 > ```html
 > <img src="decorative-line.png" alt="">
 > ```

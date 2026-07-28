@@ -182,11 +182,10 @@ catch (err) { setItems(prevItems); } // Rollback to previous state on sync error
 **Problem:** What is the role of the Service Worker `BackgroundSync` API in offline-first applications?
 
 **Expected output:**
-```text
-BackgroundSync allows web apps to defer tasks (e.g. sending a message) to the Service Worker, which automatically executes the network request when user regains connection.
-```
-
 > [!check]- Answer
+> ```text
+> BackgroundSync allows web apps to defer tasks (e.g. sending a message) to the Service Worker, which automatically executes the network request when user regains connection.
+> ```
 > ```javascript
 > // Register background sync task:
 > const registration = await navigator.serviceWorker.ready;
@@ -200,12 +199,11 @@ BackgroundSync allows web apps to defer tasks (e.g. sending a message) to the Se
 **Problem:** Which Service Worker caching strategy is preferred for static CSS/JS assets vs dynamic user feeds?
 
 **Expected output:**
-```text
-Static assets: Cache First (Fallback to Network)
-Dynamic feeds: Network First (Fallback to Cache)
-```
-
 > [!check]- Answer
+> ```text
+> Static assets: Cache First (Fallback to Network)
+> Dynamic feeds: Network First (Fallback to Cache)
+> ```
 > ```text
 > Static assets (CSS/JS) -> Cache First, Network Fallback
 > Dynamic feeds (API data) -> Network First, Cache Fallback

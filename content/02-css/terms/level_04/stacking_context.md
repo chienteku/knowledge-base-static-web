@@ -257,12 +257,11 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 ```
 
 **Expected output:**
-```text
-`child-2`! 
-Because `.box-y` has a higher `z-index` (20) than `.box-x` (10), everything inside `.box-y` (including `child-2`) is rendered on top of everything inside `.box-x`. The `z-index: 9999` on `child-1` is trapped within its parent's lower context.
-```
-
 > [!check]- Answer
+> ```text
+> `child-2`! 
+> Because `.box-y` has a higher `z-index` (20) than `.box-x` (10), everything inside `.box-y` (including `child-2`) is rendered on top of everything inside `.box-x`. The `z-index: 9999` on `child-1` is trapped within its parent's lower context.
+> ```
 > - Identify which elements create stacking contexts.
 > - Compare parent index priorities before comparing child values.
 
@@ -275,14 +274,13 @@ Because `.box-y` has a higher `z-index` (20) than `.box-x` (10), everything insi
 **Problem:** List 4 CSS properties that implicitly create a new Stacking Context on an element.
 
 **Expected output:**
-```text
-1. position: relative/absolute with z-index (not auto)
-2. opacity < 1
-3. transform (not none)
-4. filter / backdrop-filter (not none)
-```
-
 > [!check]- Answer
+> ```text
+> 1. position: relative/absolute with z-index (not auto)
+> 2. opacity < 1
+> 3. transform (not none)
+> 4. filter / backdrop-filter (not none)
+> ```
 > ```text
 > 1. position (relative/absolute) with z-index
 > 2. opacity < 1
@@ -292,16 +290,17 @@ Because `.box-y` has a higher `z-index` (20) than `.box-x` (10), everything insi
 >
 > **Explanation:** These properties create isolated stacking contexts for child layers.
 
+---
+
 ### Exercise 3: Explicit Stacking Context Isolation
 
 **Problem:** Which modern CSS property explicitly creates an isolated Stacking Context without adding visual side effects?
 
 **Expected output:**
-```text
-isolation: isolate;
-```
-
 > [!check]- Answer
+> ```text
+> isolation: isolate;
+> ```
 > ```css
 > .component {
 >   isolation: isolate;

@@ -183,12 +183,11 @@ fn main() {
 **Problem:** Define a global `static APP_NAME: &str = "Antigravity";` and print it from multiple functions.
 
 **Expected output:**
-```
-App: Antigravity
-Running Antigravity
-```
-
 > [!check]- Answer
+> ```
+> App: Antigravity
+> Running Antigravity
+> ```
 > ```rust
 > static APP_NAME: &str = "Antigravity";
 > fn print_header() { println!("App: {}", APP_NAME); }
@@ -201,16 +200,17 @@ Running Antigravity
 >
 > **Explanation:** Immutable `static` items have `'static` lifetime and reside in a fixed memory location accessible safely throughout application lifetime.
 
+---
+
 ### Exercise 3: Static Address vs Const Inlining
 
 **Problem:** Demonstrate that pointers to a `static` variable yield the exact same memory address across calls, whereas pointers to `const` can yield distinct addresses.
 
 **Expected output:**
-```
-Static addresses match: true
-```
-
 > [!check]- Answer
+> ```
+> Static addresses match: true
+> ```
 > ```rust
 > static NUM: i32 = 100;
 > fn main() {

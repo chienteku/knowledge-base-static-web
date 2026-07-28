@@ -223,22 +223,21 @@ Vertical snap layout:
 **Problem:** Build a full-screen vertical slide deck. The parent wrapper `.deck` covers the whole viewport (`100vw` by `100vh`) and snaps vertically. Each child section `.deck-slide` matches the viewport size and snaps its top edge to the top of the container. Write the CSS.
 
 **Expected output:**
-```css
-.deck {
-  width: 100vw;
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-}
-
-.deck-slide {
-  width: 100vw;
-  height: 100vh;
-  scroll-snap-align: start;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .deck {
+>   width: 100vw;
+>   height: 100vh;
+>   overflow-y: scroll;
+>   scroll-snap-type: y mandatory;
+> }
+> 
+> .deck-slide {
+>   width: 100vw;
+>   height: 100vh;
+>   scroll-snap-align: start;
+> }
+> ```
 > - Set parent overflow-y and scroll-snap directions.
 > - Configure child alignments to match structural boundaries.
 
@@ -251,11 +250,10 @@ Vertical snap layout:
 **Problem:** Write CSS for `.carousel` (parent) and `.slide` (children) creating smooth horizontal scroll snap alignment.
 
 **Expected output:**
-```text
-.carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; } .slide { flex: 0 0 100%; scroll-snap-align: start; }
-```
-
 > [!check]- Answer
+> ```text
+> .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; } .slide { flex: 0 0 100%; scroll-snap-align: start; }
+> ```
 > ```css
 > .carousel {
 >   display: flex;
@@ -270,16 +268,17 @@ Vertical snap layout:
 >
 > **Explanation:** Combining parent `scroll-snap-type` and child `scroll-snap-align` builds zero-JS touch carousels.
 
+---
+
 ### Exercise 3: mandatory vs proximity Snap Strictness
 
 **Problem:** Compare `scroll-snap-type: x mandatory` vs `scroll-snap-type: x proximity`.
 
 **Expected output:**
-```text
-mandatory forces scroll landing on a snap point strictly; proximity snaps ONLY when scrolling close to a snap point.
-```
-
 > [!check]- Answer
+> ```text
+> mandatory forces scroll landing on a snap point strictly; proximity snaps ONLY when scrolling close to a snap point.
+> ```
 > ```text
 > mandatory forces scroll landing on a snap point strictly; proximity snaps ONLY when scrolling close to a snap point.
 > ```

@@ -140,11 +140,10 @@ SELECT settings.{ theme, mode } FROM user; // Path destructuring syntax
 Write the SurrealQL query to retrieve the company `name` along with only the `phone` and `email` properties from the `contact` object using destructuring notation.
 
 **Expected output:**
-```sql
-SELECT name, contact.{phone, email} FROM company;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name, contact.{phone, email} FROM company;
+> ```
 > - Attach the brace list directly to `contact.`.
 > - Include `phone` and `email` inside `{}`.
 
@@ -157,27 +156,27 @@ SELECT name, contact.{phone, email} FROM company;
 **Problem:** Select `street` and `city` from nested `address` object using destructuring syntax `address.{ street, city }`.
 
 **Expected output:**
-```text
-SELECT address.{ street, city } FROM user;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT address.{ street, city } FROM user;
+> ```
 > ```surrealql
 > SELECT address.{ street, city } FROM user;
 > ```
 >
 > **Explanation:** `path.{ f1, f2 }` unwraps specified nested fields into top-level projections.
 
+---
+
 ### Exercise 3: Multi-Level Object Destructuring
 
 **Problem:** Select `profile.name` and `settings.theme` using multi-path projection.
 
 **Expected output:**
-```text
-SELECT profile.name, settings.theme FROM user;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT profile.name, settings.theme FROM user;
+> ```
 > ```surrealql
 > SELECT profile.name, settings.theme FROM user;
 > ```

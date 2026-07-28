@@ -177,11 +177,10 @@ async function getAccountData() {
 **Problem:** Write `async` function fetching `/api/user` and `/api/posts` in parallel using `Promise.all()`.
 
 **Expected output:**
-```text
-const [userRes, postsRes] = await Promise.all([fetch('/api/user'), fetch('/api/posts')]); const user = await userRes.json(); const posts = await postsRes.json();
-```
-
 > [!check]- Answer
+> ```text
+> const [userRes, postsRes] = await Promise.all([fetch('/api/user'), fetch('/api/posts')]); const user = await userRes.json(); const posts = await postsRes.json();
+> ```
 > ```javascript
 > const [userRes, postsRes] = await Promise.all([
 > fetch('/api/user'),
@@ -202,14 +201,13 @@ const [userRes, postsRes] = await Promise.all([fetch('/api/user'), fetch('/api/p
 4. `Promise.any` 
 
 **Expected output:**
-```text
-1. Fails fast if any promise rejects; resolves when all succeed
-2. Resolves after all promises settle (success or failure)
-3. Settles as soon as FIRST promise settles (resolve or reject)
-4. Resolves as soon as FIRST promise fulfills (ignores rejections unless all fail)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Fails fast if any promise rejects; resolves when all succeed
+> 2. Resolves after all promises settle (success or failure)
+> 3. Settles as soon as FIRST promise settles (resolve or reject)
+> 4. Resolves as soon as FIRST promise fulfills (ignores rejections unless all fail)
+> ```
 > ```text
 > 1. Promise.all -> Resolves when all fulfill; fails fast on first rejection.
 > 2. Promise.allSettled -> Resolves after all settle (returns status objects).

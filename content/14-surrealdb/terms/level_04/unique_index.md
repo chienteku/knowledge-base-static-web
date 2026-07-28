@@ -142,13 +142,12 @@ State whether the following sequence of insert writes will **Succeed** or **Fail
 3.  `CREATE stock SET product_id = product:01, store_id = store:A;` (Third run)
 
 **Expected output:**
-```text
-1. Succeeds: First entry is unique.
-2. Succeeds: The store_id is different ("store:B"), so the combination is unique.
-3. Fails: The combination of "product:01" and "store:A" already exists, violating the unique composite index.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Succeeds: First entry is unique.
+> 2. Succeeds: The store_id is different ("store:B"), so the combination is unique.
+> 3. Fails: The combination of "product:01" and "store:A" already exists, violating the unique composite index.
+> ```
 > - Composite unique indexes validate the combination of values, not single columns.
 > - Identify if any write matches an existing product-store combination.
 
@@ -161,27 +160,27 @@ State whether the following sequence of insert writes will **Succeed** or **Fail
 **Problem:** Define unique index `user_email_unique` on `user` table for `email` field.
 
 **Expected output:**
-```text
-DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
 > ```
 >
 > **Explanation:** `UNIQUE` enforces that no two records share identical indexed field values.
 
+---
+
 ### Exercise 3: Composite Unique Index
 
 **Problem:** Define composite unique index on `tenant_id` and `user_code` fields of `account` table.
 
 **Expected output:**
-```text
-DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
 > ```

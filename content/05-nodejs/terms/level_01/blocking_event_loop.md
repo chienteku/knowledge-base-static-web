@@ -199,27 +199,27 @@ app.post('/import-data', (req, res) => {
 **Problem:** Determine which function blocks the Event Loop: 1) `JSON.parse()` on a 500MB string; 2) `fs.promises.readFile()`. Explain why.
 
 **Expected output:**
-```text
-1) JSON.parse() on a 500MB string blocks the main thread because JSON parsing is a synchronous operation handled on the V8 call stack.
-```
-
 > [!check]- Answer
+> ```text
+> 1) JSON.parse() on a 500MB string blocks the main thread because JSON parsing is a synchronous operation handled on the V8 call stack.
+> ```
 > ```text
 > 1) JSON.parse() on a 500MB string blocks the main thread because JSON parsing is a synchronous operation handled on the V8 call stack.
 > ```
 >
 > **Explanation:** Heavy synchronous JSON parsing or CPU math blocks main loop execution; async disk I/O delegates work to libuv worker threads.
 
+---
+
 ### Exercise 3: Refactoring Synchronous File Reading
 
 **Problem:** Refactor `const data = fs.readFileSync('config.json')` into non-blocking async promises.
 
 **Expected output:**
-```text
-const data = await fs.promises.readFile('config.json', 'utf-8');
-```
-
 > [!check]- Answer
+> ```text
+> const data = await fs.promises.readFile('config.json', 'utf-8');
+> ```
 > ```javascript
 > const data = await fs.promises.readFile('config.json', 'utf-8');
 > ```

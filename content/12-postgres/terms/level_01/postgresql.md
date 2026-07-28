@@ -115,11 +115,10 @@ Check server engine version via SELECT version();
 **Problem:** You are building a banking application where users can transfer money between checking and savings accounts. If the database crashes mid-transfer (after subtracting money from checking, but before adding it to savings), what database standard prevents this money from vanishing, and why is Postgres a great choice?
 
 **Expected output:**
-```text
-The database standard is ACID compliance (specifically Atomicity and Consistency). This guarantees that a transaction is "all-or-nothing" — if any part of the transfer fails, the entire transaction is rolled back as if it never happened. Postgres is a great choice because it has spent over 35 years refining its ACID engine and transactional write-ahead logging (WAL), making it one of the safest databases in the industry for financial data.
-```
-
 > [!check]- Answer
+> ```text
+> The database standard is ACID compliance (specifically Atomicity and Consistency). This guarantees that a transaction is "all-or-nothing" — if any part of the transfer fails, the entire transaction is rolled back as if it never happened. Postgres is a great choice because it has spent over 35 years refining its ACID engine and transactional write-ahead logging (WAL), making it one of the safest databases in the industry for financial data.
+> ```
 > - Search for the definition of database "ACID compliance".
 > - Think about what database traits are critical when data errors lead to financial loss.
 
@@ -132,27 +131,27 @@ The database standard is ACID compliance (specifically Atomicity and Consistency
 **Problem:** SQL statement inspecting PostgreSQL server version details (`SELECT version();`).
 
 **Expected output:**
-```text
-SELECT version();
-```
-
 > [!check]- Answer
+> ```text
+> SELECT version();
+> ```
 > ```sql
 > SELECT version();
 > ```
 >
 > **Explanation:** `version()` outputs engine version, architecture, and compiler details.
 
+---
+
 ### Exercise 3: PostgreSQL Original Design Project
 
 **Problem:** What project at UC Berkeley preceded PostgreSQL? (POSTGRES / Ingres project by Michael Stonebraker).
 
 **Expected output:**
-```text
-Ingres / POSTGRES project at UC Berkeley
-```
-
 > [!check]- Answer
+> ```text
+> Ingres / POSTGRES project at UC Berkeley
+> ```
 > ```text
 > Ingres / POSTGRES project at UC Berkeley
 > ```

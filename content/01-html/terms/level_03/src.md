@@ -151,15 +151,14 @@ Different elements using `src` to load resources:
 5. `<iframe ____="map.html"></iframe>`
 
 **Expected output:**
-```text
-1. src
-2. href
-3. src
-4. href
-5. src
-```
-
 > [!check]- Answer
+> ```text
+> 1. src
+> 2. href
+> 3. src
+> 4. href
+> 5. src
+> ```
 > - Remember that stylesheets (`<link>`) are references, so they use `href`, while scripts (`<script>`) are embedded sources, so they use `src`.
 
 ---
@@ -175,14 +174,13 @@ Different elements using `src` to load resources:
 4. `<a>` (`href`)
 
 **Expected output:**
-```text
-1. script -> src
-2. link -> href
-3. iframe -> src
-4. a -> href
-```
-
 > [!check]- Answer
+> ```text
+> 1. script -> src
+> 2. link -> href
+> 3. iframe -> src
+> 4. a -> href
+> ```
 > ```text
 > 1. script -> src
 > 2. link -> href
@@ -192,16 +190,17 @@ Different elements using `src` to load resources:
 >
 > **Explanation:** `src` embeds external resources; `href` links external documents or style resources.
 
+---
+
 ### Exercise 3: Relative vs Absolute src Paths
 
 **Problem:** Explain the difference between `<img src="/logo.png">` and `<img src="logo.png">` on page `/blog/post-1`.
 
 **Expected output:**
-```text
-src="/logo.png" resolves to domain root (/logo.png); src="logo.png" resolves relative to current path (/blog/post-1/logo.png).
-```
-
 > [!check]- Answer
+> ```text
+> src="/logo.png" resolves to domain root (/logo.png); src="logo.png" resolves relative to current path (/blog/post-1/logo.png).
+> ```
 > ```text
 > src="/logo.png" resolves to domain root (/logo.png); src="logo.png" resolves relative to current path (/blog/post-1/logo.png).
 > ```

@@ -169,11 +169,10 @@ A valid ES6 arrow function.
 **Problem:** Write an arrow function returning an object literal `{ id: 1 }` implicitly using parenthesized syntax `() => ({ id: 1 })`.
 
 **Expected output:**
-```text
-{"id":1}
-```
-
 > [!check]- Answer
+> ```text
+> {"id":1}
+> ```
 > ```javascript
 > const getObj = () => ({ id: 1 });
 > console.log(JSON.stringify(getObj()));
@@ -181,16 +180,17 @@ A valid ES6 arrow function.
 >
 > **Explanation:** Wrapping returned object literals in parentheses `({ ... })` distinguishes object brackets from function body blocks.
 
+---
+
 ### Exercise 3: Lexical `this` in Timer Callbacks
 
 **Problem:** Use an arrow function inside a class method callback to preserve `this.count`.
 
 **Expected output:**
-```text
-Count: 1
-```
-
 > [!check]- Answer
+> ```text
+> Count: 1
+> ```
 > ```javascript
 > class Counter {
 >   constructor() { this.count = 0; }

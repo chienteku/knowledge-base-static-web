@@ -163,12 +163,11 @@ async function processData() {
 **Problem:** Write a HOF called `withLogging` that takes a function `fn` as an argument. It should return a *new* function that logs `"Executing..."` to the console, and then calls `fn()`.
 
 **Expected output:**
-```text
-const loggedSayHi = withLogging(sayHi);
-loggedSayHi(); // Logs: "Executing..." then "Hi!"
-```
-
 > [!check]- Answer
+> ```text
+> const loggedSayHi = withLogging(sayHi);
+> loggedSayHi(); // Logs: "Executing..." then "Hi!"
+> ```
 > - `function withLogging(fn) { return function() { console.log("Executing..."); fn(); } }`
 
 ---
@@ -178,11 +177,10 @@ loggedSayHi(); // Logs: "Executing..." then "Hi!"
 **Problem:** Write a custom HOF `myFilter(arr, predicate)` duplicating `Array.prototype.filter` logic.
 
 **Expected output:**
-```text
-[ 2, 4 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 2, 4 ]
+> ```
 > ```javascript
 > function myFilter(arr, predicate) {
 >   const result = [];
@@ -196,16 +194,17 @@ loggedSayHi(); // Logs: "Executing..." then "Hi!"
 >
 > **Explanation:** Higher-order functions accept functions as arguments to customize execution behavior.
 
+---
+
 ### Exercise 3: Function Composition HOF
 
 **Problem:** Write `compose(f, g)` that returns a new function executing `f(g(x))`.
 
 **Expected output:**
-```text
-21
-```
-
 > [!check]- Answer
+> ```text
+> 21
+> ```
 > ```javascript
 > const add1 = x => x + 1;
 > const double = x => x * 2;
@@ -216,7 +215,6 @@ loggedSayHi(); // Logs: "Executing..." then "Hi!"
 >
 > **Explanation:** Higher-order functions combine smaller functions into composite data pipelines.
 
----
 
 ---
 

@@ -159,12 +159,11 @@ CREATE TABLE system_logs (
 ```
 
 **Expected output:**
-```sql
-INSERT INTO system_logs (log_message, priority) 
-VALUES ('Failed to connect to authentication server', 5);
-```
-
 > [!check]- Answer
+> ```sql
+> INSERT INTO system_logs (log_message, priority) 
+> VALUES ('Failed to connect to authentication server', 5);
+> ```
 > - Only include the columns you want to manually configure inside the column parenthesis.
 > - Ensure the text values map to the text columns and integers map to integer columns.
 
@@ -177,27 +176,27 @@ VALUES ('Failed to connect to authentication server', 5);
 **Problem:** Insert new user `'Bob'` and return auto-generated `id` using `RETURNING id`.
 
 **Expected output:**
-```text
-INSERT INTO users (name) VALUES ('Bob') RETURNING id;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO users (name) VALUES ('Bob') RETURNING id;
+> ```
 > ```sql
 > INSERT INTO users (name) VALUES ('Bob') RETURNING id;
 > ```
 >
 > **Explanation:** `RETURNING id` returns generated sequence keys without requiring secondary queries.
 
+---
+
 ### Exercise 3: Inserting Query Results with `INSERT INTO ... SELECT`
 
 **Problem:** Copy active users from `legacy_users` into `users` table.
 
 **Expected output:**
-```text
-INSERT INTO users (name, email) SELECT name, email FROM legacy_users WHERE active IS TRUE;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO users (name, email) SELECT name, email FROM legacy_users WHERE active IS TRUE;
+> ```
 > ```sql
 > INSERT INTO users (name, email)
 > SELECT name, email FROM legacy_users WHERE active IS TRUE;

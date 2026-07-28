@@ -181,18 +181,17 @@ onMounted(() => {
 **Problem:** Write Vue template wrapping browser-only component `<Chart />` in `<ClientOnly>` with a loading slot fallback.
 
 **Expected output:**
-```vue
-<template>
-  <ClientOnly>
-    <Chart />
-    <template #fallback>
-      <p>Loading Chart...</p>
-    </template>
-  </ClientOnly>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <ClientOnly>
+>     <Chart />
+>     <template #fallback>
+>       <p>Loading Chart...</p>
+>     </template>
+>   </ClientOnly>
+> </template>
+> ```
 > - `<ClientOnly>` prevents server-side rendering of browser-only components.
 > 
 > ```vue
@@ -213,11 +212,10 @@ onMounted(() => {
 **Problem:** Why does state updated inside `onMounted()` NOT trigger hydration mismatch errors in Nuxt 3?
 
 **Expected output:**
-```text
-onMounted() executes EXCLUSIVELY in the browser AFTER hydration completes, avoiding server vs client DOM comparison conflicts.
-```
-
 > [!check]- Answer
+> ```text
+> onMounted() executes EXCLUSIVELY in the browser AFTER hydration completes, avoiding server vs client DOM comparison conflicts.
+> ```
 > - `onMounted()` fires after client DOM hydration finishes.
 > 
 > ```text

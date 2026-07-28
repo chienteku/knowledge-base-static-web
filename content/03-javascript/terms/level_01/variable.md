@@ -133,11 +133,10 @@ async function processData() {
 **Problem:** Declare a variable named `score`, set its initial value to 10, then update its value to 25 and log it.
 
 **Expected output:**
-```text
-25
-```
-
 > [!check]- Answer
+> ```text
+> 25
+> ```
 > - Use `let` to declare the variable so it can be updated.
 > - Use `=` to assign and reassign values.
 
@@ -148,12 +147,11 @@ async function processData() {
 **Problem:** Demonstrate that `var` leaks outside `if` blocks while `let` remains block-scoped.
 
 **Expected output:**
-```text
-varLeak: 10
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> varLeak: 10
+> ReferenceError caught
+> ```
 > ```javascript
 > if (true) {
 >   var varLeak = 10;
@@ -169,17 +167,18 @@ ReferenceError caught
 >
 > **Explanation:** `var` is function/globally scoped; `let` and `const` enforce strict block scoping (`{}`).
 
+---
+
 ### Exercise 3: Variable Hoisting Comparison
 
 **Problem:** Compare `console.log(a); var a = 1;` vs `console.log(b); let b = 2;`.
 
 **Expected output:**
-```text
-undefined
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ReferenceError caught
+> ```
 > ```javascript
 > console.log(a);
 > var a = 1;
@@ -193,7 +192,6 @@ ReferenceError caught
 >
 > **Explanation:** `var` hoists with `undefined` initialization; `let` hoists uninitialized in the Temporal Dead Zone.
 
----
 
 ---
 

@@ -128,12 +128,11 @@ Upgrade to M10+ dedicated cluster tier for load testing and production
 2.  If `node1` experiences a hardware failure, what does the application driver do?
 
 **Expected output:**
-```text
-1. The `mongodb+srv://` prefix uses DNS lookups to query the cluster state. It allows Atlas to add, remove, or modify replica server nodes in the background without requiring you to update your application code connection strings.
-2. If `node1` fails, the client driver automatically reads the DNS state, identifies that `node2` or `node3` has been promoted, and routes query traffic to the active nodes, keeping the app online without downtime.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The `mongodb+srv://` prefix uses DNS lookups to query the cluster state. It allows Atlas to add, remove, or modify replica server nodes in the background without requiring you to update your application code connection strings.
+> 2. If `node1` fails, the client driver automatically reads the DNS state, identifies that `node2` or `node3` has been promoted, and routes query traffic to the active nodes, keeping the app online without downtime.
+> ```
 > - The "+srv" indicates service records lookups in DNS.
 > - Consider how replica nodes manage failovers automatically.
 
@@ -146,27 +145,27 @@ Upgrade to M10+ dedicated cluster tier for load testing and production
 **Problem:** Construct Atlas connection URI using `mongodb+srv://` scheme for cluster `cluster0.abc.mongodb.net`.
 
 **Expected output:**
-```text
-mongodb+srv://user:pass@cluster0.abc.mongodb.net/app?retryWrites=true&w=majority
-```
-
 > [!check]- Answer
+> ```text
+> mongodb+srv://user:pass@cluster0.abc.mongodb.net/app?retryWrites=true&w=majority
+> ```
 > ```text
 > mongodb+srv://user:pass@cluster0.abc.mongodb.net/app?retryWrites=true&w=majority
 > ```
 >
 > **Explanation:** `mongodb+srv://` automatically resolves Atlas replica set nodes via DNS SRV records.
 
+---
+
 ### Exercise 3: Atlas Vector Search Feature
 
 **Problem:** What managed Atlas feature enables AI vector embedding search? (Atlas Vector Search).
 
 **Expected output:**
-```text
-Atlas Vector Search
-```
-
 > [!check]- Answer
+> ```text
+> Atlas Vector Search
+> ```
 > ```text
 > Atlas Vector Search
 > ```

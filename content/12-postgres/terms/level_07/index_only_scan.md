@@ -165,13 +165,12 @@ SELECT id, email FROM users WHERE email = 'a@ex.com'; -- Covered Index Only Scan
 Write the SQL query to build an optimized covering index that allows this search to run as an Index-Only Scan.
 
 **Expected output:**
-```sql
-CREATE UNIQUE INDEX idx_products_sku_covering 
-ON products(sku_code) 
-INCLUDE (price);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE UNIQUE INDEX idx_products_sku_covering 
+> ON products(sku_code) 
+> INCLUDE (price);
+> ```
 > - The search column in the `WHERE` clause is `sku_code`. Put it in the primary index parameter.
 > - Use the `INCLUDE` clause to append the extra select column `price`.
 
@@ -184,27 +183,27 @@ INCLUDE (price);
 **Problem:** Create covered index on `email` including `name` payload column using `INCLUDE (name)` in Postgres 11+.
 
 **Expected output:**
-```text
-CREATE INDEX idx_users_email_inc ON users (email) INCLUDE (name);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_users_email_inc ON users (email) INCLUDE (name);
+> ```
 > ```sql
 > CREATE INDEX idx_users_email_inc ON users (email) INCLUDE (name);
 > ```
 >
 > **Explanation:** `INCLUDE (payload)` stores non-search payload attributes in index leaf nodes to enable Index Only Scans.
 
+---
+
 ### Exercise 3: Verifying Index Only Scan in Explain
 
 **Problem:** What node name in `EXPLAIN` indicates a fully covered index query? (`Index Only Scan`).
 
 **Expected output:**
-```text
-Index Only Scan
-```
-
 > [!check]- Answer
+> ```text
+> Index Only Scan
+> ```
 > ```text
 > Index Only Scan
 > ```

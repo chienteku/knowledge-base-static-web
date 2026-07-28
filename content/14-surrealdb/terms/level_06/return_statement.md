@@ -158,17 +158,16 @@ Use predicate filters or `array::find()` for early value extraction
 3. Explicitly returns an object using `RETURN`: `{ active: $active_count, inactive: $inactive_count }`.
 
 **Expected output:**
-```sql
-LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
-LET $inactive_count = (SELECT VALUE count() FROM user WHERE active = false GROUP ALL)[0];
-
-RETURN {
-  active: $active_count,
-  inactive: $inactive_count
-};
-```
-
 > [!check]- Answer
+> ```sql
+> LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
+> LET $inactive_count = (SELECT VALUE count() FROM user WHERE active = false GROUP ALL)[0];
+> 
+> RETURN {
+>   active: $active_count,
+>   inactive: $inactive_count
+> };
+> ```
 > - Index subqueries `[0]` to assign scalar counts to variables.
 > - Terminate the script with `RETURN { ... };`.
 
@@ -181,11 +180,10 @@ RETURN {
 **Problem:** Write batch query that creates a user, logs audit entry, and returns final user record.
 
 **Expected output:**
-```text
-LET $u = (CREATE user SET name = "Alice"); CREATE log SET user = $u.id; RETURN $u;
-```
-
 > [!check]- Answer
+> ```text
+> LET $u = (CREATE user SET name = "Alice"); CREATE log SET user = $u.id; RETURN $u;
+> ```
 > ```surrealql
 > LET $u = (CREATE user SET name = "Alice");
 > CREATE log SET user = $u.id;
@@ -194,16 +192,17 @@ LET $u = (CREATE user SET name = "Alice"); CREATE log SET user = $u.id; RETURN $
 >
 > **Explanation:** `RETURN $var` outputs specified transaction results from batch scripts.
 
+---
+
 ### Exercise 3: Returning Object Expressions
 
 **Problem:** Return custom summary object `{ status: "ok", count: 42 }` using `RETURN`.
 
 **Expected output:**
-```text
-RETURN { status: "ok", count: 42 };
-```
-
 > [!check]- Answer
+> ```text
+> RETURN { status: "ok", count: 42 };
+> ```
 > ```surrealql
 > RETURN { status: "ok", count: 42 };
 > ```

@@ -151,13 +151,12 @@ Model core domain entities (User, Account, Subscription)
 3.  The relationship type between `ORDERS` and `ORDER_ITEMS`.
 
 **Expected output:**
-```text
-1. One-to-Many Relationship (one customer can place zero or many orders).
-2. No. The double line `||` on the CUSTOMERS side of the relationship line indicates that every order must connect to exactly one customer.
-3. One-to-Many Relationship (one order contains one or many order items).
-```
-
 > [!check]- Answer
+> ```text
+> 1. One-to-Many Relationship (one customer can place zero or many orders).
+> 2. No. The double line `||` on the CUSTOMERS side of the relationship line indicates that every order must connect to exactly one customer.
+> 3. One-to-Many Relationship (one order contains one or many order items).
+> ```
 > - Identify the symbols at the endpoints of the relationship connector lines.
 > - Look for the crow's foot forks (`{`) and straight vertical bars (`|`).
 
@@ -170,27 +169,27 @@ Model core domain entities (User, Account, Subscription)
 **Problem:** Identify ERD cardinality: User has many Orders (1:N); Student has many Courses (N:M).
 
 **Expected output:**
-```text
-User to Order: 1:N; Student to Course: N:M
-```
-
 > [!check]- Answer
+> ```text
+> User to Order: 1:N; Student to Course: N:M
+> ```
 > ```text
 > User to Order: 1:N; Student to Course: N:M
 > ```
 >
 > **Explanation:** ERD diagrams visualize entity relationship cardinalities before database physical implementation.
 
+---
+
 ### Exercise 3: Conceptual vs Physical ERD
 
 **Problem:** Compare: Conceptual ERD (High-level business entities); Physical ERD (Exact database tables, column types, foreign keys).
 
 **Expected output:**
-```text
-Conceptual: business entities; Physical: database tables, column types, foreign keys
-```
-
 > [!check]- Answer
+> ```text
+> Conceptual: business entities; Physical: database tables, column types, foreign keys
+> ```
 > ```text
 > Conceptual: business entities; Physical: database tables, column types, foreign keys
 > ```

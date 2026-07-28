@@ -174,19 +174,18 @@ db.users.createIndex({ _id: 1 }); // Ensure connectToField is indexed
 Write the `$graphLookup` stage (as a JSON block) to recursively find all ancestor categories for a given starting category, storing results in the array field `"ancestors"`.
 
 **Expected output:**
-```javascript
-{
-  $graphLookup: {
-    from: "categories",
-    startWith: "$parent_id",
-    connectFromField: "parent_id",
-    connectToField: "_id",
-    as: "ancestors"
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   $graphLookup: {
+>     from: "categories",
+>     startWith: "$parent_id",
+>     connectFromField: "parent_id",
+>     connectToField: "_id",
+>     as: "ancestors"
+>   }
+> }
+> ```
 > - The target collection is `"categories"`.
 > - The links are resolved by mapping `parent_id` to `_id` recursively.
 
@@ -199,11 +198,10 @@ Write the `$graphLookup` stage (as a JSON block) to recursively find all ancesto
 **Problem:** Traverse management reporting hierarchy up to 3 levels deep using `$graphLookup`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $graphLookup: { from: "users", startWith: "$managerId", connectFromField: "managerId", connectToField: "_id", maxDepth: 3, as: "managers" } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $graphLookup: { from: "users", startWith: "$managerId", connectFromField: "managerId", connectToField: "_id", maxDepth: 3, as: "managers" } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   {
@@ -221,16 +219,17 @@ db.users.aggregate([{ $graphLookup: { from: "users", startWith: "$managerId", co
 >
 > **Explanation:** `$graphLookup` performs recursive graph traversals over parent-child relationships.
 
+---
+
 ### Exercise 3: Tracking Depth Level with `depthField`
 
 **Problem:** Add depth level number to recursive graph results using `depthField: "level"`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $graphLookup: { ..., depthField: "level", as: "network" } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $graphLookup: { ..., depthField: "level", as: "network" } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   {

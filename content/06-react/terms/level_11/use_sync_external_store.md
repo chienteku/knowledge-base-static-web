@@ -203,16 +203,17 @@ export default function CounterComponent() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Subscribing to Window Online Status Store
 
 **Problem:** Subscribe to `navigator.onLine` store using `useSyncExternalStore`.
 
 **Expected output:**
-```text
-function subscribe(callback) { window.addEventListener('online', callback); window.addEventListener('offline', callback); return () => { window.removeEventListener('online', callback); window.removeEventListener('offline', callback); }; } function getSnapshot() { return navigator.onLine; } function useOnline() { return useSyncExternalStore(subscribe, getSnapshot); }
-```
-
 > [!check]- Answer
+> ```text
+> function subscribe(callback) { window.addEventListener('online', callback); window.addEventListener('offline', callback); return () => { window.removeEventListener('online', callback); window.removeEventListener('offline', callback); }; } function getSnapshot() { return navigator.onLine; } function useOnline() { return useSyncExternalStore(subscribe, getSnapshot); }
+> ```
 > ```javascript
 > function subscribe(callback) {
 >   window.addEventListener('online', callback);
@@ -232,16 +233,17 @@ function subscribe(callback) { window.addEventListener('online', callback); wind
 >
 > **Explanation:** `useSyncExternalStore` subscribes to external non-React stores without tearing bugs under Concurrent React.
 
+---
+
 ### Exercise 3: Why useSyncExternalStore Exists
 
 **Problem:** What concurrency issue does `useSyncExternalStore` solve for external state stores? (Prevents Tearing — inconsistent UI snapshots during concurrent renders).
 
 **Expected output:**
-```text
-Prevents Tearing (inconsistent UI snapshots during concurrent renders)
-```
-
 > [!check]- Answer
+> ```text
+> Prevents Tearing (inconsistent UI snapshots during concurrent renders)
+> ```
 > ```text
 > Prevents Tearing (inconsistent UI snapshots during concurrent renders)
 > ```

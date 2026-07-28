@@ -159,11 +159,10 @@ res.json({ id: "123" }); // ❌ Breaks clients expecting integer id: 123!
 **Problem:** What is the primary objective of Consumer-Driven Contract Testing tools like Pact?
 
 **Expected output:**
-```text
-Allows API consumers to define expected request/response contracts, validating backend services against those contracts during CI/CD builds before deployment.
-```
-
 > [!check]- Answer
+> ```text
+> Allows API consumers to define expected request/response contracts, validating backend services against those contracts during CI/CD builds before deployment.
+> ```
 > ```text
 > Allows API consumers to define expected request/response contracts, validating backend services against those contracts during CI/CD builds before deployment.
 > ```
@@ -178,11 +177,10 @@ Allows API consumers to define expected request/response contracts, validating b
 3. Renaming an existing field key
 
 **Expected output:**
-```text
-Modification 1 (Adding new optional response fields is backward compatible).
-```
-
 > [!check]- Answer
+> ```text
+> Modification 1 (Adding new optional response fields is backward compatible).
+> ```
 > ```text
 > Modification 1 -> Adding new optional response fields is backward compatible.
 > Modifying/removing existing fields breaks contracts.

@@ -174,11 +174,10 @@ async function processData() {
 **Problem:** What happens if you create a child class using `extends`, but you simply *don't write a constructor at all*? Will it crash because you didn't call `super()`?
 
 **Expected output:**
-```text
-It will NOT crash. If you leave the constructor out entirely, the JavaScript engine automatically creates a hidden constructor that simply calls `super(...args)` for you! You only need to manually write `super()` if you are explicitly writing a `constructor` block.
-```
-
 > [!check]- Answer
+> ```text
+> It will NOT crash. If you leave the constructor out entirely, the JavaScript engine automatically creates a hidden constructor that simply calls `super(...args)` for you! You only need to manually write `super()` if you are explicitly writing a `constructor` block.
+> ```
 > - JavaScript is helpful when you leave the constructor blank.
 
 ---
@@ -188,11 +187,10 @@ It will NOT crash. If you leave the constructor out entirely, the JavaScript eng
 **Problem:** Call `super.greet()` inside derived class `greet()` method.
 
 **Expected output:**
-```text
-Base Greet + Derived Extra
-```
-
 > [!check]- Answer
+> ```text
+> Base Greet + Derived Extra
+> ```
 > ```javascript
 > class Base { greet() { return "Base Greet"; } }
 > class Child extends Base {
@@ -203,16 +201,17 @@ Base Greet + Derived Extra
 >
 > **Explanation:** `super.method()` invokes parent prototype implementations within overridden subclass methods.
 
+---
+
 ### Exercise 3: Mandatory `super()` Constructor Invocation
 
 **Problem:** Demonstrate that referencing `this` before `super()` in a derived constructor throws `ReferenceError`.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > ```javascript
 > class Parent {}
 > class Child extends Parent {
@@ -230,7 +229,6 @@ ReferenceError caught
 >
 > **Explanation:** Derived class constructors must call `super()` before accessing instance `this` bindings.
 
----
 
 ---
 

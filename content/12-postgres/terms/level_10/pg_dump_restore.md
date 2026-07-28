@@ -134,15 +134,14 @@ psql -d dbname -f backup.sql -- Use psql for plain text SQL dumps
 2.  Write the restore command to execute that SQL script backup file against a database named `ecom_restore` (hint: plain text SQL dumps are executed using standard client terminals like `psql -f`, not `pg_restore`!).
 
 **Expected output:**
-```bash
-# 1. Backup to SQL script
-pg_dump -h localhost -U postgres -F p -f store.sql ecom_store
-
-# 2. Restore plain text SQL script
-psql -h localhost -U postgres -d ecom_restore -f store.sql
-```
-
 > [!check]- Answer
+> ```bash
+> # 1. Backup to SQL script
+> pg_dump -h localhost -U postgres -F p -f store.sql ecom_store
+> 
+> # 2. Restore plain text SQL script
+> psql -h localhost -U postgres -d ecom_restore -f store.sql
+> ```
 > - Differentiate plain text SQL files (restored via `psql -f`) from binary custom archives (restored via `pg_restore`).
 > - Specify host `-h` and user `-U` flags.
 
@@ -155,27 +154,27 @@ psql -h localhost -U postgres -d ecom_restore -f store.sql
 **Problem:** CLI command running parallel `pg_dump` with 4 jobs in directory format (`-Fd`).
 
 **Expected output:**
-```text
-pg_dump -Fd -j 4 -f /backups/db_dump prod_db
-```
-
 > [!check]- Answer
+> ```text
+> pg_dump -Fd -j 4 -f /backups/db_dump prod_db
+> ```
 > ```bash
 > pg_dump -Fd -j 4 -f /backups/db_dump prod_db
 > ```
 >
 > **Explanation:** `pg_dump -Fd -j N` performs high-speed multi-threaded directory backups.
 
+---
+
 ### Exercise 3: Parallel Restore Command
 
 **Problem:** CLI command restoring custom format dump `/backups/db.dump` using `pg_restore` with 4 jobs.
 
 **Expected output:**
-```text
-pg_restore -d target_db -j 4 /backups/db.dump
-```
-
 > [!check]- Answer
+> ```text
+> pg_restore -d target_db -j 4 /backups/db.dump
+> ```
 > ```bash
 > pg_restore -d target_db -j 4 /backups/db.dump
 > ```

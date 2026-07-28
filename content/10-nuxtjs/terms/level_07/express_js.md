@@ -132,20 +132,19 @@ export default defineEventHandler((event) => { return 'OK'; }); // Correct H3 ev
 **Problem:** How does reading a URL query parameter named `id` differ between an Express route handler and a Nuxt H3 handler? Write both code blocks side by side.
 
 **Expected output:**
-```javascript
-// Express.js
-app.get('/api', (req, res) => {
-  const id = req.query.id;
-});
-
-// Nuxt H3
-export default defineEventHandler((event) => {
-  const query = getQuery(event);
-  const id = query.id;
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> // Express.js
+> app.get('/api', (req, res) => {
+>   const id = req.query.id;
+> });
+> 
+> // Nuxt H3
+> export default defineEventHandler((event) => {
+>   const query = getQuery(event);
+>   const id = query.id;
+> });
+> ```
 > - Express attaches parsed queries directly to `req.query`. H3 uses the auto-imported helper `getQuery(event)`.
 
 ---
@@ -155,11 +154,10 @@ export default defineEventHandler((event) => {
 **Problem:** Which H3 helper function adapts legacy Express middleware functions for use in Nitro server handlers?
 
 **Expected output:**
-```text
-fromNodeMiddleware(expressMiddleware)
-```
-
 > [!check]- Answer
+> ```text
+> fromNodeMiddleware(expressMiddleware)
+> ```
 > - `fromNodeMiddleware` bridges Node.js Express middleware into Nitro handlers.
 > 
 > ```typescript
@@ -176,11 +174,10 @@ fromNodeMiddleware(expressMiddleware)
 **Problem:** Why are H3/Nitro server handlers faster and lighter than Express.js?
 
 **Expected output:**
-```text
-H3 is a minimal, composable web server framework designed for zero-dependency execution across Node.js, Edge, and Serverless environments.
-```
-
 > [!check]- Answer
+> ```text
+> H3 is a minimal, composable web server framework designed for zero-dependency execution across Node.js, Edge, and Serverless environments.
+> ```
 > - H3 is zero-dependency and optimized for Edge and Serverless runtimes.
 > 
 > ```text

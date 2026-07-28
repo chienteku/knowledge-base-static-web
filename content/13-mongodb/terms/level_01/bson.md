@@ -162,12 +162,11 @@ db.logs.insertOne({ userId: id, payload: largeLogPayload }); // Store logs in se
 **Problem:** Explain why BSON is better suited than standard JSON for storing financial transactions (hint: think about precision decimals).
 
 **Expected output:**
-```text
-Standard JSON has only a single generic "Number" type, which is parsed as a double-precision floating-point number. Floating-point numbers suffer from binary rounding errors (e.g. `0.1 + 0.2 = 0.30000000000000004`), which can cause financial discrepancies. 
-BSON introduces specialized numeric types, specifically `Decimal128`, which stores high-precision decimals using exact arithmetic, guaranteeing correct currency balance tracking.
-```
-
 > [!check]- Answer
+> ```text
+> Standard JSON has only a single generic "Number" type, which is parsed as a double-precision floating-point number. Floating-point numbers suffer from binary rounding errors (e.g. `0.1 + 0.2 = 0.30000000000000004`), which can cause financial discrepancies. 
+> BSON introduces specialized numeric types, specifically `Decimal128`, which stores high-precision decimals using exact arithmetic, guaranteeing correct currency balance tracking.
+> ```
 > - Floating-point conversions introduce arithmetic noise.
 > - Consider which BSON type maps to SQL's exact `NUMERIC` columns.
 
@@ -180,11 +179,10 @@ BSON introduces specialized numeric types, specifically `Decimal128`, which stor
 **Problem:** Serialize document `{ date: new Date(), id: new ObjectId() }` using BSON Extended JSON (`EJSON.stringify`).
 
 **Expected output:**
-```text
-Extended JSON stringified preserving $date and $oid keys
-```
-
 > [!check]- Answer
+> ```text
+> Extended JSON stringified preserving $date and $oid keys
+> ```
 > ```javascript
 > const { EJSON } = require('bson');
 > const doc = { date: new Date(), id: new ObjectId() };
@@ -193,16 +191,17 @@ Extended JSON stringified preserving $date and $oid keys
 >
 > **Explanation:** `EJSON` preserves BSON type annotations (`$date`, `$oid`) in JSON strings.
 
+---
+
 ### Exercise 3: BSON Type Inspection in mongosh
 
 **Problem:** Inspect BSON type of `db.coll.findOne()._id` using `typeof` or `bsontype`.
 
 **Expected output:**
-```text
-"object" (ObjectId instance in JS driver)
-```
-
 > [!check]- Answer
+> ```text
+> "object" (ObjectId instance in JS driver)
+> ```
 > ```javascript
 > typeof db.coll.findOne()._id;
 > ```

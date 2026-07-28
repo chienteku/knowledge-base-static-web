@@ -114,13 +114,12 @@ const model = defineModel(); // Mutate model.value directly
 **Problem:** Under the hood, `v-model="email"` is just a shortcut for two other directives. What are they?
 
 **Expected output:**
-```html
-<input :value="email" @input="event => email = event.target.value" />
-
-// v-model automatically combines `v-bind:value` and `v-on:input` into one easy attribute!
-```
-
 > [!check]- Answer
+> ```html
+> <input :value="email" @input="event => email = event.target.value" />
+> 
+> // v-model automatically combines `v-bind:value` and `v-on:input` into one easy attribute!
+> ```
 > - Which directive pushes data down? Which directive listens for events coming up?
 
 ---
@@ -133,13 +132,12 @@ const model = defineModel(); // Mutate model.value directly
 3. `.trim` 
 
 **Expected output:**
-```text
-1. Syncs input on change event (blur) instead of input event
-2. Typecasts user input string to JavaScript number automatically
-3. Trims leading and trailing whitespace automatically
-```
-
 > [!check]- Answer
+> ```text
+> 1. Syncs input on change event (blur) instead of input event
+> 2. Typecasts user input string to JavaScript number automatically
+> 3. Trims leading and trailing whitespace automatically
+> ```
 > ```html
 > <input v-model.lazy="msg">    <!-- Syncs on blur -->
 > <input v-model.number="age">  <!-- Typecasts to number -->
@@ -152,11 +150,10 @@ const model = defineModel(); // Mutate model.value directly
 **Problem:** Write Vue 3.4 `<script setup>` syntax for a custom input component declaring 2-way `modelValue` binding.
 
 **Expected output:**
-```vue
-<script setup> const model = defineModel(); </script> <template> <input v-model="model" /> </template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> const model = defineModel(); </script> <template> <input v-model="model" /> </template>
+> ```
 > - `defineModel()` simplifies component 2-way `v-model` bindings.
 > 
 > ```vue

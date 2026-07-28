@@ -137,11 +137,10 @@ window.analytics.init(); // ❌ ReferenceError on server SSR!
 **Problem:** You are installing a Google Analytics plugin that only works in the browser. You create the file `plugins/analytics.ts`. When you start the dev server, it crashes with `window is not defined`. How do you fix the filename?
 
 **Expected output:**
-```text
-Rename it to `plugins/analytics.client.ts`.
-```
-
 > [!check]- Answer
+> ```text
+> Rename it to `plugins/analytics.client.ts`.
+> ```
 > - You can append `.client` or `.server` to plugin filenames to tell Nuxt to run them in only one environment.
 
 ---
@@ -151,17 +150,16 @@ Rename it to `plugins/analytics.client.ts`.
 **Problem:** Write Nuxt 3 plugin `plugins/format.ts` providing helper `$formatCurrency(val)` accessible via `useNuxtApp()`. 
 
 **Expected output:**
-```typescript
-export default defineNuxtPlugin((nuxtApp) => {
-  return {
-    provide: {
-      formatCurrency: (val: number) => `$${val.toFixed(2)}` 
-    }
-  };
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtPlugin((nuxtApp) => {
+>   return {
+>     provide: {
+>       formatCurrency: (val: number) => `$${val.toFixed(2)}` 
+>     }
+>   };
+> });
+> ```
 > - `provide` object registers helper functions on `nuxtApp` (`$formatCurrency`).
 > 
 > ```typescript
@@ -182,11 +180,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 **Problem:** How can you enforce a specific execution order for plugins in the `plugins/` directory?
 
 **Expected output:**
-```text
-By prefixing filenames with numbers (e.g. plugins/01.setup.ts, plugins/02.auth.ts).
-```
-
 > [!check]- Answer
+> ```text
+> By prefixing filenames with numbers (e.g. plugins/01.setup.ts, plugins/02.auth.ts).
+> ```
 > - Numerical filename prefixes enforce sequential plugin execution.
 > 
 > ```text

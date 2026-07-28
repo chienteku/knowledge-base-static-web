@@ -98,15 +98,14 @@ export async function middleware() {
 **Problem:** A user makes a `POST` request to `/api/admin/deleteUser`. You have a `middleware.ts` file that checks for an admin token, and an `app/api/admin/deleteUser/route.ts` file that deletes the user from the database. In what order does the code execute?
 
 **Expected output:**
-```text
-1. The request hits Next.js.
-2. `middleware.ts` executes FIRST. It checks the token.
-3. If the token is valid, Middleware calls `NextResponse.next()` allowing the request to pass.
-4. The request arrives at `route.ts`.
-5. `route.ts` executes the database deletion and returns the JSON.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The request hits Next.js.
+> 2. `middleware.ts` executes FIRST. It checks the token.
+> 3. If the token is valid, Middleware calls `NextResponse.next()` allowing the request to pass.
+> 4. The request arrives at `route.ts`.
+> 5. `route.ts` executes the database deletion and returns the JSON.
+> ```
 > - Middleware is the outer shield.
 
 ---
@@ -119,13 +118,12 @@ export async function middleware() {
 3. Primary use case
 
 **Expected output:**
-```text
-1. Middleware: Global (all matching routes); Route Handler: Specific URL endpoint
-2. Middleware: Runs BEFORE route resolution; Route Handler: Runs WHEN specific endpoint is called
-3. Middleware: Auth redirects & header rewrites; Route Handler: REST API CRUD data endpoints
-```
-
 > [!check]- Answer
+> ```text
+> 1. Middleware: Global (all matching routes); Route Handler: Specific URL endpoint
+> 2. Middleware: Runs BEFORE route resolution; Route Handler: Runs WHEN specific endpoint is called
+> 3. Middleware: Auth redirects & header rewrites; Route Handler: REST API CRUD data endpoints
+> ```
 > - Middleware: Global request interceptor before routing.
 > - Route Handler: Dedicated API endpoint handler.
 > 
@@ -140,11 +138,10 @@ export async function middleware() {
 **Problem:** Write `config.matcher` array for `middleware.ts` targeting `/dashboard/:path*` and `/admin/:path*`.
 
 **Expected output:**
-```typescript
-export const config = { matcher: ['/dashboard/:path*', '/admin/:path*'] };
-```
-
 > [!check]- Answer
+> ```typescript
+> export const config = { matcher: ['/dashboard/:path*', '/admin/:path*'] };
+> ```
 > - `config.matcher` restricts middleware execution to matching URL paths.
 > 
 > ```typescript

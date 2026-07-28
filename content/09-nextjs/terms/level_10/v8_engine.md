@@ -121,14 +121,13 @@ const nums = [1, 2, 3, 4]; // Homogeneous integer array for maximum V8 speed
 4. `path.join` (Node path module helper)
 
 **Expected output:**
-```text
-1. V8/Web Standard (part of the standard web runtime spec, supported in Edge).
-2. Node-Specific (Edge runtime uses global env variable lookups but lacks full process binds).
-3. V8/Web Standard (globally supported timer mechanism).
-4. Node-Specific (requires importing Node's 'path' module, not supported in raw V8).
-```
-
 > [!check]- Answer
+> ```text
+> 1. V8/Web Standard (part of the standard web runtime spec, supported in Edge).
+> 2. Node-Specific (Edge runtime uses global env variable lookups but lacks full process binds).
+> 3. V8/Web Standard (globally supported timer mechanism).
+> 4. Node-Specific (requires importing Node's 'path' module, not supported in raw V8).
+> ```
 > - Standard Web APIs are supported natively in both Edge and Node runtimes.
 
 ---
@@ -138,12 +137,11 @@ const nums = [1, 2, 3, 4]; // Homogeneous integer array for maximum V8 speed
 **Problem:** Name the 2 primary memory spaces managed by V8 Garbage Collector (Orinoco).
 
 **Expected output:**
-```text
-1. Young Generation (Scavenger - short-lived objects)
-2. Old Generation (Mark-Sweep-Compact - long-lived objects)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Young Generation (Scavenger - short-lived objects)
+> 2. Old Generation (Mark-Sweep-Compact - long-lived objects)
+> ```
 > - Young Generation -> Fast Scavenger GC for short-lived objects.
 > - Old Generation -> Mark-Sweep-Compact GC for persistent objects.
 > 
@@ -158,12 +156,11 @@ const nums = [1, 2, 3, 4]; // Homogeneous integer array for maximum V8 speed
 **Problem:** Identify V8's baseline compiler and optimizing JIT compiler.
 
 **Expected output:**
-```text
-Baseline compiler: Ignition (Bytecode interpreter)
-Optimizing compiler: TurboFan (JIT Compiler)
-```
-
 > [!check]- Answer
+> ```text
+> Baseline compiler: Ignition (Bytecode interpreter)
+> Optimizing compiler: TurboFan (JIT Compiler)
+> ```
 > - Ignition -> Bytecode Interpreter
 > - TurboFan -> Optimizing JIT Compiler
 > 

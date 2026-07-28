@@ -133,28 +133,27 @@ const searchParams = useSearchParams(); // searchParams.get('q')
 **Problem:** `useSearchParams` is read-only. If you have a button that changes the sort order to "desc", how do you actually update the URL in the browser to `?sort=desc`?
 
 **Expected output:**
-```tsx
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-
-export default function SortButton() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const handleSort = () => {
-    // 1. Create a fresh URLSearchParams object using the current ones
-    const params = new URLSearchParams(searchParams);
-    // 2. Mutate it
-    params.set('sort', 'desc');
-    // 3. Push the new URL!
-    router.push(`${pathname}?${params.toString()}`);
-  }
-
-  return <button onClick={handleSort}>Sort Descending</button>;
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+> 
+> export default function SortButton() {
+>   const router = useRouter();
+>   const pathname = usePathname();
+>   const searchParams = useSearchParams();
+> 
+>   const handleSort = () => {
+>     // 1. Create a fresh URLSearchParams object using the current ones
+>     const params = new URLSearchParams(searchParams);
+>     // 2. Mutate it
+>     params.set('sort', 'desc');
+>     // 3. Push the new URL!
+>     router.push(`${pathname}?${params.toString()}`);
+>   }
+> 
+>   return <button onClick={handleSort}>Sort Descending</button>;
+> }
+> ```
 > - You need the `useRouter` hook from Level 3 to push the new URL!
 
 ---
@@ -164,11 +163,10 @@ export default function SortButton() {
 **Problem:** Write `NavLink` Client Component using `usePathname()` to append class `'active'` when `pathname === href`.
 
 **Expected output:**
-```tsx
-'use client'; import { usePathname } from 'next/navigation'; import Link from 'next/link'; export function NavLink({ href, children }: { href: string; children: React.ReactNode }) { const pathname = usePathname(); const isActive = pathname === href; return <Link href={href} className={isActive ? 'active' : ''}>{children}</Link>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; import { usePathname } from 'next/navigation'; import Link from 'next/link'; export function NavLink({ href, children }: { href: string; children: React.ReactNode }) { const pathname = usePathname(); const isActive = pathname === href; return <Link href={href} className={isActive ? 'active' : ''}>{children}</Link>; }
+> ```
 > - `usePathname()` enables active navigation styling in Client Components.
 > 
 > ```tsx
@@ -201,11 +199,10 @@ export default function SortButton() {
 **Problem:** If URL is `/users/123`, does `usePathname()` return `/users/123` or `/users/[id]`?
 
 **Expected output:**
-```text
-It returns the actual resolved URL path: /users/123.
-```
-
 > [!check]- Answer
+> ```text
+> It returns the actual resolved URL path: /users/123.
+> ```
 > - `usePathname()` returns the current browser URL pathname.
 > 
 > ```text

@@ -163,12 +163,11 @@ Use type validation schemas (Zod/Mongoose) to enforce scalar string inputs
 2.  State the data leakage consequence if your search controller runs this query directly.
 
 **Expected output:**
-```text
-1. The payload injects the `$gt` (greater than) operator, instructing MongoDB to search for all documents where the `category` field is greater than an empty string.
-2. Because almost all text categories are greater than an empty string, the query will return all documents in the collection, leaking confidential records to the client.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The payload injects the `$gt` (greater than) operator, instructing MongoDB to search for all documents where the `category` field is greater than an empty string.
+> 2. Because almost all text categories are greater than an empty string, the query will return all documents in the collection, leaking confidential records to the client.
+> ```
 > - The operator `$gt: ""` matches any non-empty string.
 > - Consider if this bypasses category filtering constraints.
 
@@ -181,11 +180,10 @@ Use type validation schemas (Zod/Mongoose) to enforce scalar string inputs
 **Problem:** Sanitize input string `req.body.user` enforcing string type before passing to MongoDB query filter.
 
 **Expected output:**
-```text
-const username = String(req.body.username); db.users.find({ username });
-```
-
 > [!check]- Answer
+> ```text
+> const username = String(req.body.username); db.users.find({ username });
+> ```
 > ```javascript
 > const username = String(req.body.username);
 > const user = await db.users.findOne({ username });
@@ -193,16 +191,17 @@ const username = String(req.body.username); db.users.find({ username });
 >
 > **Explanation:** Explicitly casting inputs to `String()` neutralizes object operator injection payloads like `{ $ne: null }`.
 
+---
+
 ### Exercise 3: Express `express-mongo-sanitize` Middleware
 
 **Problem:** What characters are stripped by `express-mongo-sanitize` to prevent injection? (`$` and `.`).
 
 **Expected output:**
-```text
-Prohibits or strips keys starting with $ or containing .
-```
-
 > [!check]- Answer
+> ```text
+> Prohibits or strips keys starting with $ or containing .
+> ```
 > ```text
 > Prohibits or strips keys starting with $ or containing .
 > ```

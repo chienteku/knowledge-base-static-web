@@ -138,11 +138,10 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 **Problem:** If you have two `<form>` elements on a single page, and the user clicks the submit button inside the *second* form, does the data from the *first* form get sent?
 
 **Expected output:**
-```text
-No! A form acts as a strict boundary. When a submit button is clicked, the browser ONLY collects the data from the input fields that exist inside that specific `<form>` container.
-```
-
 > [!check]- Answer
+> ```text
+> No! A form acts as a strict boundary. When a submit button is clicked, the browser ONLY collects the data from the input fields that exist inside that specific `<form>` container.
+> ```
 > - Think back to the manila envelope metaphor.
 
 ---
@@ -154,11 +153,10 @@ No! A form acts as a strict boundary. When a submit button is clicked, the brows
 **Problem:** Write `<form>` POSTing to `/login` with `email` and `password` inputs, labels, and submit button.
 
 **Expected output:**
-```text
-<form method="POST" action="/login"><label>Email <input type="email" name="email" required></label><label>Password <input type="password" name="password" required></label><button type="submit">Login</button></form>
-```
-
 > [!check]- Answer
+> ```text
+> <form method="POST" action="/login"><label>Email <input type="email" name="email" required></label><label>Password <input type="password" name="password" required></label><button type="submit">Login</button></form>
+> ```
 > ```html
 > <form method="POST" action="/login">
 >   <label>
@@ -175,16 +173,17 @@ No! A form acts as a strict boundary. When a submit button is clicked, the brows
 >
 > **Explanation:** Complete form encapsulates input controls, labels, methods, actions, and submit buttons.
 
+---
+
 ### Exercise 3: Disabling Native HTML5 Form Validation
 
 **Problem:** Which attribute on `<form>` disables native browser validation when testing custom JS validation?
 
 **Expected output:**
-```text
-novalidate attribute
-```
-
 > [!check]- Answer
+> ```text
+> novalidate attribute
+> ```
 > ```html
 > <form novalidate>
 > ```

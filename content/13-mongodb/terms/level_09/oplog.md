@@ -153,15 +153,14 @@ Before this write, the document was: `{ _id: "sku-01", tags: ["clearance"] }`.
 Write the idempotent update payload (`"o"` object) that MongoDB will write to the Oplog.
 
 **Expected output:**
-```javascript
-{
-  "$set": {
-    "tags": [ "clearance", "sale" ]
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   "$set": {
+>     "tags": [ "clearance", "sale" ]
+>   }
+> }
+> ```
 > - Oplog updates must not use relative array operations like `$push`.
 > - Convert the array change into an absolute `$set` containing the final array elements.
 
@@ -174,27 +173,27 @@ Write the idempotent update payload (`"o"` object) that MongoDB will write to th
 **Problem:** Check Oplog window capacity hours using `rs.printReplicationInfo()`.
 
 **Expected output:**
-```text
-rs.printReplicationInfo();
-```
-
 > [!check]- Answer
+> ```text
+> rs.printReplicationInfo();
+> ```
 > ```javascript
 > rs.printReplicationInfo();
 > ```
 >
 > **Explanation:** `rs.printReplicationInfo()` prints active Oplog size and buffer time window coverage.
 
+---
+
 ### Exercise 3: Resizing Oplog Dynamically
 
 **Problem:** Command to dynamically resize Oplog to 50,000 MB (50GB) using `replSetResizeOplog`.
 
 **Expected output:**
-```text
-db.adminCommand({ replSetResizeOplog: 1, size: 50000 });
-```
-
 > [!check]- Answer
+> ```text
+> db.adminCommand({ replSetResizeOplog: 1, size: 50000 });
+> ```
 > ```javascript
 > db.adminCommand({ replSetResizeOplog: 1, size: 50000 });
 > ```

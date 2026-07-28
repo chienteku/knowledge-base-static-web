@@ -137,27 +137,27 @@ async function processData() {
 **Problem:** Describe how Global Execution Context (GEC) remains at stack base while Function Execution Contexts (FEC) push/pop.
 
 **Expected output:**
-```text
-GEC at bottom; FEC pushed on invoke, popped on return
-```
-
 > [!check]- Answer
+> ```text
+> GEC at bottom; FEC pushed on invoke, popped on return
+> ```
 > ```javascript
 > console.log("GEC at bottom; FEC pushed on invoke, popped on return");
 > ```
 >
 > **Explanation:** The JS call stack manages active execution contexts in LIFO order.
 
+---
+
 ### Exercise 2: Execution Context Creation vs Execution Phase
 
 **Problem:** State two phases of Execution Context creation (Creation: Hoisting/Environment Record, Execution: Line-by-line code evaluation).
 
 **Expected output:**
-```text
-Phase 1: Creation, Phase 2: Execution
-```
-
 > [!check]- Answer
+> ```text
+> Phase 1: Creation, Phase 2: Execution
+> ```
 > ```javascript
 > console.log("Phase 1: Creation, Phase 2: Execution");
 > ```
@@ -173,18 +173,16 @@ Phase 1: Creation, Phase 2: Execution
 **Problem:** Explain what the Lexical Environment component of an Execution Context stores.
 
 **Expected output:**
-```text
-Identifier-variable mappings and outer environment reference
-```
-
 > [!check]- Answer
+> ```text
+> Identifier-variable mappings and outer environment reference
+> ```
 > ```javascript
 > console.log("Identifier-variable mappings and outer environment reference");
 > ```
 >
 > **Explanation:** Lexical Environment holds local variable bindings and pointer references to parent scopes.
 
----
 
 ---
 

@@ -316,6 +316,8 @@ function TableBody({ rows }) {
 >
 > **Explanation:** `React.Fragment` accepts `key` props when mapping multi-element list items.
 
+---
+
 ### Exercise 3: Short Fragment Syntax
 
 **Problem:** Write component returning two sibling `<p>` elements using short Fragment syntax `<> ... </>`.

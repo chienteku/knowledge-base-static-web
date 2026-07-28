@@ -152,18 +152,17 @@ Write the SurrealQL queries to:
 3.  Write a query to select books where the `summary` matches the search terms `"space travel"`.
 
 **Expected output:**
-```sql
--- 1. Define Analyzer
-DEFINE ANALYZER simple_text TOKENIZERS class FILTERS lowercase;
-
--- 2. Define Index
-DEFINE INDEX book_search ON books COLUMNS summary SEARCH ANALYZER simple_text;
-
--- 3. Query
-SELECT * FROM books WHERE summary @1@ "space travel";
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Define Analyzer
+> DEFINE ANALYZER simple_text TOKENIZERS class FILTERS lowercase;
+> 
+> -- 2. Define Index
+> DEFINE INDEX book_search ON books COLUMNS summary SEARCH ANALYZER simple_text;
+> 
+> -- 3. Query
+> SELECT * FROM books WHERE summary @1@ "space travel";
+> ```
 > - The analyzer creation keywords are `DEFINE ANALYZER`.
 > - The search index declaration requires appending the `SEARCH` keyword and specifying the analyzer name.
 
@@ -176,27 +175,27 @@ SELECT * FROM books WHERE summary @1@ "space travel";
 **Problem:** Define full-text search index `article_search` on `article` table for `title` and `body` fields.
 
 **Expected output:**
-```text
-DEFINE INDEX article_search ON TABLE article FIELDS title, body SEARCH BM25;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX article_search ON TABLE article FIELDS title, body SEARCH BM25;
+> ```
 > ```surrealql
 > DEFINE INDEX article_search ON TABLE article FIELDS title, body SEARCH BM25;
 > ```
 >
 > **Explanation:** `SEARCH BM25` configures full-text search indexing with BM25 relevance scoring.
 
+---
+
 ### Exercise 3: Full-Text Search Query with Relevance Scoring
 
 **Problem:** Query `article` table searching for `'surrealdb'` ordered by `search::score()` descending.
 
 **Expected output:**
-```text
-SELECT *, search::score(0) AS score FROM article WHERE title SEARCH 'surrealdb' ORDER BY score DESC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT *, search::score(0) AS score FROM article WHERE title SEARCH 'surrealdb' ORDER BY score DESC;
+> ```
 > ```surrealql
 > SELECT *, search::score(0) AS score FROM article WHERE title SEARCH 'surrealdb' ORDER BY score DESC;
 > ```

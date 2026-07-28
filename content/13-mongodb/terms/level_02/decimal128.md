@@ -144,12 +144,11 @@ NumberDecimal("0.1"); // Pass exact string literal
 Explain why `NumberDecimal("45.90")` is correct, whereas `NumberDecimal(45.90)` is incorrect.
 
 **Expected output:**
-```text
-- `NumberDecimal("45.90")` is correct because passing a string skips JavaScript's floating-point parsing. The string characters are sent directly to MongoDB, which parses them into a precise 128-bit decimal representation on disk.
-- `NumberDecimal(45.90)` is incorrect because the JavaScript interpreter immediately converts the unquoted number `45.90` into a binary float double, introducing rounding noise before the database wrapper can compile it.
-```
-
 > [!check]- Answer
+> ```text
+> - `NumberDecimal("45.90")` is correct because passing a string skips JavaScript's floating-point parsing. The string characters are sent directly to MongoDB, which parses them into a precise 128-bit decimal representation on disk.
+> - `NumberDecimal(45.90)` is incorrect because the JavaScript interpreter immediately converts the unquoted number `45.90` into a binary float double, introducing rounding noise before the database wrapper can compile it.
+> ```
 > - Assess the boundary where JavaScript hands variables to database drivers.
 > - Consider which parameter type prevents floating-point parsing.
 
@@ -162,27 +161,27 @@ Explain why `NumberDecimal("45.90")` is correct, whereas `NumberDecimal(45.90)` 
 **Problem:** Create exact Decimal128 value for `$99.95` using `NumberDecimal()`.
 
 **Expected output:**
-```text
-NumberDecimal("99.95")
-```
-
 > [!check]- Answer
+> ```text
+> NumberDecimal("99.95")
+> ```
 > ```javascript
 > NumberDecimal("99.95");
 > ```
 >
 > **Explanation:** `NumberDecimal("str")` constructs 128-bit IEEE 754-2008 decimal floating-point values.
 
+---
+
 ### Exercise 3: Node.js Driver Decimal128 Usage
 
 **Problem:** Import Decimal128 in Node.js MongoDB driver (`const { Decimal128 } = require('mongodb')`).
 
 **Expected output:**
-```text
-Decimal128.fromString("99.95")
-```
-
 > [!check]- Answer
+> ```text
+> Decimal128.fromString("99.95")
+> ```
 > ```javascript
 > const { Decimal128 } = require('mongodb');
 > const amount = Decimal128.fromString("99.95");

@@ -141,13 +141,12 @@ CREATE INDEX idx_trgm_title ON posts USING GIN (title gin_trgm_ops);
 **Problem:** You are building a search endpoint for a company directory. The user searches for a name keyword. The query must return employees whose `full_name` contains the search keyword, ignoring capitalization. Write the SQL statement to locate employees matching keyword `'smith'`.
 
 **Expected output:**
-```sql
-SELECT full_name 
-FROM employees 
-WHERE full_name ILIKE '%smith%';
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT full_name 
+> FROM employees 
+> WHERE full_name ILIKE '%smith%';
+> ```
 > - Add wildcard percentages on both sides of the search parameter to find the substring anywhere in the text.
 > - Use the PostgreSQL-specific case-insensitive operator.
 
@@ -160,27 +159,27 @@ WHERE full_name ILIKE '%smith%';
 **Problem:** Query users whose `username` starts with `'admin'` case-insensitively using `ILIKE`.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE username ILIKE 'admin%';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE username ILIKE 'admin%';
+> ```
 > ```sql
 > SELECT * FROM users WHERE username ILIKE 'admin%';
 > ```
 >
 > **Explanation:** `ILIKE 'prefix%'` performs case-insensitive prefix pattern matching.
 
+---
+
 ### Exercise 3: Trigram Index for Wildcard Searching
 
 **Problem:** Create GIN trigram index on `title` to accelerate `ILIKE '%query%'` substring searches.
 
 **Expected output:**
-```text
-CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
+> ```
 > ```sql
 > CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
 > ```

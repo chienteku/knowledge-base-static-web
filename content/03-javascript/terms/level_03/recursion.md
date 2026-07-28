@@ -213,11 +213,10 @@ console.log(factorial(5));
 ```
 
 **Expected output:**
-```text
-120
-```
-
 > [!check]- Answer
+> ```text
+> 120
+> ```
 > - The base case check is `if (n === 1) { return 1; }`.
 > - The recursive step returns `n * factorial(n - 1)`.
 
@@ -228,13 +227,12 @@ console.log(factorial(5));
 **Problem:** Write a recursive function `countDown(n)` printing `n` down to `1`.
 
 **Expected output:**
-```text
-3
-2
-1
-```
-
 > [!check]- Answer
+> ```text
+> 3
+> 2
+> 1
+> ```
 > ```javascript
 > function countDown(n) {
 >   if (n <= 0) return;
@@ -246,16 +244,17 @@ console.log(factorial(5));
 >
 > **Explanation:** Base cases (`n <= 0`) terminate call stack unwinding.
 
+---
+
 ### Exercise 3: Recursive Tree Traversal
 
 **Problem:** Recursively calculate sum of numbers in nested array `[1, [2, [3, 4]], 5]`.
 
 **Expected output:**
-```text
-15
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> ```
 > ```javascript
 > function sumNested(arr) {
 >   return arr.reduce((acc, val) => {
@@ -267,7 +266,6 @@ console.log(factorial(5));
 >
 > **Explanation:** Recursion traverses nested tree/array hierarchies naturally.
 
----
 
 ---
 

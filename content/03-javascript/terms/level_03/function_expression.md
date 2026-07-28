@@ -156,11 +156,10 @@ async function processData() {
 **Problem:** Create a Function Expression that takes one parameter `name` and logs `"Goodbye, [name]"`. Assign it to a `const` variable called `farewell`. Call `farewell("Alice")`.
 
 **Expected output:**
-```text
-Goodbye, Alice
-```
-
 > [!check]- Answer
+> ```text
+> Goodbye, Alice
+> ```
 > - `const farewell = function(name) { ... };`
 
 ---
@@ -170,11 +169,10 @@ Goodbye, Alice
 **Problem:** Create a named function expression `const fn = function myName() { return myName.name; };` and print `fn()`.
 
 **Expected output:**
-```text
-myName
-```
-
 > [!check]- Answer
+> ```text
+> myName
+> ```
 > ```javascript
 > const fn = function myName() {
 >   return myName.name;
@@ -184,16 +182,17 @@ myName
 >
 > **Explanation:** Named function expressions bind function names internally for diagnostic tracing and recursion.
 
+---
+
 ### Exercise 3: Conditional Function Expression Assignment
 
 **Problem:** Assign `const logger` dynamically using ternary expression based on boolean `debug` flag.
 
 **Expected output:**
-```text
-Log: hello
-```
-
 > [!check]- Answer
+> ```text
+> Log: hello
+> ```
 > ```javascript
 > const debug = true;
 > const logger = debug ? (msg) => console.log(`Log: ${msg}`) : () => {};
@@ -202,7 +201,6 @@ Log: hello
 >
 > **Explanation:** Function expressions permit conditional, dynamic assignment at runtime.
 
----
 
 ---
 

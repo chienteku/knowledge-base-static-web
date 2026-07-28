@@ -140,12 +140,11 @@ revalidateTag('comments'); // Targeted invalidation for comment feeds
 **Problem:** You have a `layout.tsx` that fetches a user's notification count. The user clicks a "Mark all as read" Server Action. If you call `revalidatePath('/dashboard')`, does it refresh the layout's data too?
 
 **Expected output:**
-```text
-Yes!
-`revalidatePath` clears the Router Cache and the Data Cache for the entire specified path, including its layouts. The next time the page renders, the layout will fetch the fresh notification count (0).
-```
-
 > [!check]- Answer
+> ```text
+> Yes!
+> `revalidatePath` clears the Router Cache and the Data Cache for the entire specified path, including its layouts. The next time the page renders, the layout will fetch the fresh notification count (0).
+> ```
 > - Think about the scope of a URL path.
 
 ---
@@ -155,11 +154,10 @@ Yes!
 **Problem:** When should you prefer `revalidateTag()` over `revalidatePath()`?
 
 **Expected output:**
-```text
-When cached data is shared across multiple different page URLs (e.g. product details rendered on homepage, category page, and product detail page).
-```
-
 > [!check]- Answer
+> ```text
+> When cached data is shared across multiple different page URLs (e.g. product details rendered on homepage, category page, and product detail page).
+> ```
 > - `revalidateTag()` purges tagged data across ALL page URLs simultaneously.
 > 
 > ```text
@@ -174,11 +172,10 @@ When cached data is shared across multiple different page URLs (e.g. product det
 **Problem:** Write a Next.js Route Handler `app/api/revalidate/route.ts` validating a secret token and calling `revalidateTag('posts')`.
 
 **Expected output:**
-```typescript
-import { revalidateTag } from 'next/cache'; import { NextRequest, NextResponse } from 'next/server'; export async function POST(req: NextRequest) { const secret = req.nextUrl.searchParams.get('secret'); if (secret !== process.env.MY_SECRET) return NextResponse.json({ message: 'Invalid token' }, { status: 401 }); revalidateTag('posts'); return NextResponse.json({ revalidated: true }); }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { revalidateTag } from 'next/cache'; import { NextRequest, NextResponse } from 'next/server'; export async function POST(req: NextRequest) { const secret = req.nextUrl.searchParams.get('secret'); if (secret !== process.env.MY_SECRET) return NextResponse.json({ message: 'Invalid token' }, { status: 401 }); revalidateTag('posts'); return NextResponse.json({ revalidated: true }); }
+> ```
 > - Secure webhook route handlers purge caches for headless CMS updates.
 > 
 > ```typescript

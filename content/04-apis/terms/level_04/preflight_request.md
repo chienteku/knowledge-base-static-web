@@ -153,13 +153,12 @@ Access-Control-Max-Age: 86400 ; Caches preflight approval for 24 hours
 **Problem:** Identify 3 mandatory CORS response headers returned in response to a preflight `OPTIONS` request.
 
 **Expected output:**
-```text
-1. Access-Control-Allow-Origin
-2. Access-Control-Allow-Methods
-3. Access-Control-Allow-Headers
-```
-
 > [!check]- Answer
+> ```text
+> 1. Access-Control-Allow-Origin
+> 2. Access-Control-Allow-Methods
+> 3. Access-Control-Allow-Headers
+> ```
 > ```http
 > HTTP/1.1 204 No Content
 > Access-Control-Allow-Origin: https://app.example.com
@@ -174,11 +173,10 @@ Access-Control-Max-Age: 86400 ; Caches preflight approval for 24 hours
 **Problem:** Does a `GET /data` request with `Accept: application/json` trigger a CORS preflight OPTIONS request?
 
 **Expected output:**
-```text
-No. GET with standard headers is a 'Simple Request' and bypasses preflight.
-```
-
 > [!check]- Answer
+> ```text
+> No. GET with standard headers is a 'Simple Request' and bypasses preflight.
+> ```
 > ```text
 > No. GET with standard headers is a 'Simple Request' and bypasses preflight.
 > ```

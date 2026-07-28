@@ -179,11 +179,10 @@ fn main() {
 **Problem:** Define a recursive `List` enum: `Cons(i32, Box<List>)` or `Nil`. Construct a list `1 -> 2 -> Nil`.
 
 **Expected output:**
-```
-Head: 1
-```
-
 > [!check]- Answer
+> ```
+> Head: 1
+> ```
 > enum List {
 >     Cons(i32, Box<List>),
 >     Nil,
@@ -198,16 +197,17 @@ Head: 1
 >
 > **Explanation:** Indirection via `Box` gives recursive types a known, fixed stack size at compile time.
 
+---
+
 ### Exercise 3: Deref Coercion with Boxed Types
 
 **Problem:** Pass a `Box<String>` to a function expecting `&str` using automatic deref coercion.
 
 **Expected output:**
-```
-Boxed text: Rust
-```
-
 > [!check]- Answer
+> ```
+> Boxed text: Rust
+> ```
 > fn print_slice(s: &str) { println!("Boxed text: {}", s); }
 > fn main() {
 >     let b = Box::new(String::from("Rust"));

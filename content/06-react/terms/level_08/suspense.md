@@ -109,13 +109,12 @@ Consolidate feature widget trees under single Suspense boundary
 The `<Widget>` component is lazy-loaded and says "I am not ready!". What happens to the `<Page>` component? Does it render?
 
 **Expected output:**
-```text
-No!
-Suspense catches the "Not Ready" signal bubbling up from ANY child or grandchild. 
-It immediately hides the entire `<Page>` and `<Widget>`, and displays the fallback spinner at the `<Suspense>` level until the `<Widget>` is fully ready.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Suspense catches the "Not Ready" signal bubbling up from ANY child or grandchild. 
+> It immediately hides the entire `<Page>` and `<Widget>`, and displays the fallback spinner at the `<Suspense>` level until the `<Widget>` is fully ready.
+> ```
 > - Suspense acts like a blanket that covers everything inside of it until the slowest piece finishes.
 
 ---
@@ -127,11 +126,10 @@ It immediately hides the entire `<Page>` and `<Widget>`, and displays the fallba
 **Problem:** Wrap async `UserProfile` component in `<Suspense>` with fallback `<SkeletonProfile />`.
 
 **Expected output:**
-```text
-function ProfilePage() { return <Suspense fallback={<SkeletonProfile />}><UserProfile /></Suspense>; }
-```
-
 > [!check]- Answer
+> ```text
+> function ProfilePage() { return <Suspense fallback={<SkeletonProfile />}><UserProfile /></Suspense>; }
+> ```
 > ```javascript
 > function ProfilePage() {
 >   return (
@@ -144,16 +142,17 @@ function ProfilePage() { return <Suspense fallback={<SkeletonProfile />}><UserPr
 >
 > **Explanation:** `<Suspense>` renders fallback UI while child components suspend loading dynamic resources.
 
+---
+
 ### Exercise 3: Suspense Resource Mechanism
 
 **Problem:** How does a component signal to `<Suspense>` that it is currently loading data? (By throwing a Promise during render).
 
 **Expected output:**
-```text
-By throwing a Promise during render
-```
-
 > [!check]- Answer
+> ```text
+> By throwing a Promise during render
+> ```
 > ```text
 > By throwing a Promise during render
 > ```

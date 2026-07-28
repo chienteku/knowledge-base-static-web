@@ -152,12 +152,11 @@ db.users.aggregate([{ $project: { name: 1, _id: 0 } }]);
 2.  You want to strip a heavy document down, returning only `_id` and the calculated `revenue` field to the frontend app.
 
 **Expected output:**
-```text
-1. $addFields: Because you want to inject a new calculated field (`fullname`) while preserving the rest of the document structure (settings, logs, email).
-2. $project: Because you want to explicitly discard all other fields, whitelisting only `_id` and the new `revenue` field to minimize the network payload.
-```
-
 > [!check]- Answer
+> ```text
+> 1. $addFields: Because you want to inject a new calculated field (`fullname`) while preserving the rest of the document structure (settings, logs, email).
+> 2. $project: Because you want to explicitly discard all other fields, whitelisting only `_id` and the new `revenue` field to minimize the network payload.
+> ```
 > - Determine if the operation requires discarding unspecified fields.
 > - Relate this to whitelisting vs. additive behaviors.
 
@@ -170,11 +169,10 @@ db.users.aggregate([{ $project: { name: 1, _id: 0 } }]);
 **Problem:** Add computed field `totalPrice` (`price * qty`) preserving all document fields using `$addFields`.
 
 **Expected output:**
-```text
-db.orders.aggregate([{ $addFields: { totalPrice: { $multiply: ["$price", "$qty"] } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([{ $addFields: { totalPrice: { $multiply: ["$price", "$qty"] } } }]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   {
@@ -187,16 +185,17 @@ db.orders.aggregate([{ $addFields: { totalPrice: { $multiply: ["$price", "$qty"]
 >
 > **Explanation:** `$addFields` appends new computed fields without modifying existing document properties.
 
+---
+
 ### Exercise 3: Reshaping Output with `$project`
 
 **Problem:** Project document returning ONLY `user_email: "$email"` suppressing `_id`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $project: { _id: 0, user_email: "$email" } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $project: { _id: 0, user_email: "$email" } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   { $project: { _id: 0, user_email: "$email" } }

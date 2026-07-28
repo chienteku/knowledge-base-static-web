@@ -195,6 +195,8 @@ function Cup({ guest }) {
 >
 > **Explanation:** Components encapsulate UI structure and behavior via props.
 
+---
+
 ### Exercise 3: Component Naming Capitalization
 
 **Problem:** Why MUST React component function names begin with a capital letter? (React uses capitalization to distinguish custom React components from standard built-in HTML tags).

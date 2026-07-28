@@ -103,13 +103,12 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 3. Saving a 10MB audio file recorded by the user.
 
 **Expected output:**
-```text
-1. localStorage (It's tiny text).
-2. IndexedDB (localStorage would crash trying to stringify and store 5,000 complex records, plus IndexedDB allows for fast searching/indexing).
-3. IndexedDB (localStorage literally cannot store binary audio files).
-```
-
 > [!check]- Answer
+> ```text
+> 1. localStorage (It's tiny text).
+> 2. IndexedDB (localStorage would crash trying to stringify and store 5,000 complex records, plus IndexedDB allows for fast searching/indexing).
+> 3. IndexedDB (localStorage literally cannot store binary audio files).
+> ```
 > - Does it exceed 5MB? Is it a file?
 
 ---
@@ -122,13 +121,12 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 3. Binary & Indexed Object support
 
 **Expected output:**
-```text
-1. LocalStorage: ~5MB limit; IndexedDB: Hundreds of MBs / GBs
-2. LocalStorage: Synchronous (blocks UI); IndexedDB: Asynchronous
-3. LocalStorage: Strings only; IndexedDB: Complex structured objects and binary Blobs
-```
-
 > [!check]- Answer
+> ```text
+> 1. LocalStorage: ~5MB limit; IndexedDB: Hundreds of MBs / GBs
+> 2. LocalStorage: Synchronous (blocks UI); IndexedDB: Asynchronous
+> 3. LocalStorage: Strings only; IndexedDB: Complex structured objects and binary Blobs
+> ```
 > ```text
 > Capacity   -> LocalStorage: ~5MB, IndexedDB: Hundreds of MBs / GBs
 > Execution  -> LocalStorage: Synchronous (UI blocking), IndexedDB: Asynchronous
@@ -142,11 +140,10 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 **Problem:** Which event handler MUST be used to create Object Stores or Indexes when opening a new IndexedDB database version?
 
 **Expected output:**
-```text
-onupgradeneeded (or db.on('upgradeneeded'))
-```
-
 > [!check]- Answer
+> ```text
+> onupgradeneeded (or db.on('upgradeneeded'))
+> ```
 > ```javascript
 > request.onupgradeneeded = (evt) => {
 > const db = evt.target.result;

@@ -179,11 +179,10 @@ console.log("Button label:", buttonLabel);
 ```
 
 **Expected output:**
-```text
-Button label: Login
-```
-
 > [!check]- Answer
+> ```text
+> Button label: Login
+> ```
 > - The condition is `isUserLoggedIn`.
 > - If true, the value is `"Logout"`.
 > - If false, the value is `"Login"`.
@@ -195,12 +194,11 @@ Button label: Login
 **Problem:** Write a ternary statement returning `name` if non-empty string, else `"Anonymous"`.
 
 **Expected output:**
-```text
-Alice
-Anonymous
-```
-
 > [!check]- Answer
+> ```text
+> Alice
+> Anonymous
+> ```
 > ```javascript
 > function getName(n) { return n ? n : "Anonymous"; }
 > console.log(getName("Alice"));
@@ -209,18 +207,19 @@ Anonymous
 >
 > **Explanation:** Ternary expressions evaluate truthy/falsy condition arms concisely.
 
+---
+
 ### Exercise 3: Multi-Condition Ternary Status Check
 
 **Problem:** Return `"High"` if score >= 80, `"Medium"` if score >= 50, else `"Low"` using ternary operators.
 
 **Expected output:**
-```text
-High
-Medium
-Low
-```
-
 > [!check]- Answer
+> ```text
+> High
+> Medium
+> Low
+> ```
 > ```javascript
 > function getStatus(s) { return s >= 80 ? "High" : s >= 50 ? "Medium" : "Low"; }
 > console.log(getStatus(85));

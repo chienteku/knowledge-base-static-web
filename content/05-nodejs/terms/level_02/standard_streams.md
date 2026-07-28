@@ -151,16 +151,17 @@ logMessage('ERROR', 'Failed to connect to database');
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Reading User Input from process.stdin
 
 **Problem:** Read line input from user via `process.stdin` using `readline` module.
 
 **Expected output:**
-```text
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout }); rl.question('Name? ', (answer) => { ... });
-```
-
 > [!check]- Answer
+> ```text
+> const rl = readline.createInterface({ input: process.stdin, output: process.stdout }); rl.question('Name? ', (answer) => { ... });
+> ```
 > ```javascript
 > const readline = require('readline');
 > const rl = readline.createInterface({
@@ -175,6 +176,8 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 >
 > **Explanation:** `readline` wraps `process.stdin` and `process.stdout` streams for interactive CLI prompts.
 
+---
+
 ### Exercise 3: Standard Streams File Descriptors
 
 **Problem:** Match stream to numeric POSIX file descriptor:
@@ -183,13 +186,12 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 3. `stderr` (2)
 
 **Expected output:**
-```text
-1. stdin: 0
-2. stdout: 1
-3. stderr: 2
-```
-
 > [!check]- Answer
+> ```text
+> 1. stdin: 0
+> 2. stdout: 1
+> 3. stderr: 2
+> ```
 > ```text
 > 1. stdin: 0
 > 2. stdout: 1

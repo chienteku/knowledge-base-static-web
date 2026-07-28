@@ -168,12 +168,11 @@ console.log(map.get([1, 2, 3]));
 ```
 
 **Expected output:**
-```text
-`undefined`.
-Why? Because `[1, 2, 3]` is an Array (which is an Object). When you write `[1, 2, 3]` the second time inside `.get()`, it creates a completely *new* array in a different location in memory. Maps use strict equality (`===`) to match keys. The new array does not match the old array's memory address! You must save the array to a variable first to use it as a key.
-```
-
 > [!check]- Answer
+> ```text
+> `undefined`.
+> Why? Because `[1, 2, 3]` is an Array (which is an Object). When you write `[1, 2, 3]` the second time inside `.get()`, it creates a completely *new* array in a different location in memory. Maps use strict equality (`===`) to match keys. The new array does not match the old array's memory address! You must save the array to a variable first to use it as a key.
+> ```
 > - Remember how Objects are compared by reference, not by value!
 
 ---
@@ -183,11 +182,10 @@ Why? Because `[1, 2, 3]` is an Array (which is an Object). When you write `[1, 2
 **Problem:** Store `map.set("a", 10)`, check `map.has("a")`, read `map.get("a")`, and print `map.size`.
 
 **Expected output:**
-```text
-has: true, val: 10, size: 1
-```
-
 > [!check]- Answer
+> ```text
+> has: true, val: 10, size: 1
+> ```
 > ```javascript
 > const map = new Map();
 > map.set("a", 10);
@@ -196,17 +194,18 @@ has: true, val: 10, size: 1
 >
 > **Explanation:** ES6 `Map` provides fast key-value storage supporting arbitrary key types.
 
+---
+
 ### Exercise 3: Iterating Maps with `for...of`
 
 **Problem:** Iterate `new Map([["x", 1], ["y", 2]])` using `for (const [k, v] of map)`.
 
 **Expected output:**
-```text
-x = 1
-y = 2
-```
-
 > [!check]- Answer
+> ```text
+> x = 1
+> y = 2
+> ```
 > ```javascript
 > const map = new Map([["x", 1], ["y", 2]]);
 > for (const [k, v] of map) {
@@ -216,7 +215,6 @@ y = 2
 >
 > **Explanation:** `Map` objects preserve key insertion order during iteration.
 
----
 
 ---
 

@@ -123,12 +123,11 @@ const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
 **Problem:** You have a Server Component that imports a massive 5MB markdown-parsing library to convert a database string into HTML. How much of that 5MB library is downloaded by the user's browser?
 
 **Expected output:**
-```text
-Zero! 0 bytes.
-Because the component executes exclusively on the server, the library is executed on the server, and only the resulting HTML string is sent to the browser. This is the superpower of RSCs!
-```
-
 > [!check]- Answer
+> ```text
+> Zero! 0 bytes.
+> Because the component executes exclusively on the server, the library is executed on the server, and only the resulting HTML string is sent to the browser. This is the superpower of RSCs!
+> ```
 > - Think about where the code executes.
 
 ---
@@ -138,11 +137,10 @@ Because the component executes exclusively on the server, the library is execute
 **Problem:** Write async React Server Component `UserPage({ params })` fetching user data directly with `await` and rendering user name.
 
 **Expected output:**
-```typescript
-export default async function UserPage({ params }: { params: { id: string } }) { const user = await db.user.findUnique({ where: { id: params.id } }); return <h1>{user?.name}</h1>; }
-```
-
 > [!check]- Answer
+> ```typescript
+> export default async function UserPage({ params }: { params: { id: string } }) { const user = await db.user.findUnique({ where: { id: params.id } }); return <h1>{user?.name}</h1>; }
+> ```
 > - RSC components can be `async` functions fetching data directly.
 > 
 > ```tsx
@@ -163,11 +161,10 @@ export default async function UserPage({ params }: { params: { id: string } }) {
 **Problem:** Why do React Server Component dependencies (e.g. heavy markdown parsers like `marked`) NOT add weight to the browser client JS bundle?
 
 **Expected output:**
-```text
-Server Components execute exclusively on the server. Their code dependencies are executed on the server and stripped from the browser JavaScript bundle.
-```
-
 > [!check]- Answer
+> ```text
+> Server Components execute exclusively on the server. Their code dependencies are executed on the server and stripped from the browser JavaScript bundle.
+> ```
 > - RSC dependencies stay on the server, reducing client bundle size.
 > 
 > ```text

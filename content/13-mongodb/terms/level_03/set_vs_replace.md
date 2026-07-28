@@ -169,15 +169,10 @@ db.users.updateOne({ _id: id }, { $set: { lastLogin: new Date() } });
 2.  Write the corrected query to safely update only the `tier` field.
 
 **Expected output:**
-```text
-1. The query failed because `updateOne()` requires BSON update operators (like `$set`) to perform modifications. Passing a plain object (`{ tier: "VIP" }`) is forbidden.
-```
-```javascript
-// 2. Corrected query
-db.customers.updateOne({ _id: 10 }, { $set: { tier: "VIP" } });
-```
-
 > [!check]- Answer
+> ```text
+> 1. The query failed because `updateOne()` requires BSON update operators (like `$set`) to perform modifications. Passing a plain object (`{ tier: "VIP" }`) is forbidden.
+> ```
 > - The `$set` operator must wrap the field modifications.
 > - Relate this to the requirement of partial updates.
 
@@ -190,27 +185,27 @@ db.customers.updateOne({ _id: 10 }, { $set: { tier: "VIP" } });
 **Problem:** State difference: `$set` (modifies specific fields, preserving siblings); `replaceOne` (replaces entire document object).
 
 **Expected output:**
-```text
-$set updates specific fields; replaceOne replaces the entire document
-```
-
 > [!check]- Answer
+> ```text
+> $set updates specific fields; replaceOne replaces the entire document
+> ```
 > ```text
 > $set updates specific fields; replaceOne replaces the entire document
 > ```
 >
 > **Explanation:** `$set` preserves existing fields; `replaceOne` overwrites documents.
 
+---
+
 ### Exercise 3: Nested Sub-Document `$set` Update
 
 **Problem:** Update nested field `address.city` using `$set` without touching `address.zip`.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $set: { "address.city": "Austin" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $set: { "address.city": "Austin" } });
+> ```
 > ```javascript
 > db.users.updateOne({
 >   _id: 1

@@ -133,11 +133,10 @@ read(nums); // Readonly parameter permits const asserted arrays
 **Problem:** Create object `Colors` with properties `RED = "#ff0000"` and `BLUE = "#0000ff"` using `as const`.
 
 **Expected output:**
-```text
-Colors object created with as const
-```
-
 > [!check]- Answer
+> ```text
+> Colors object created with as const
+> ```
 > ```typescript
 > const Colors = {
 >   RED: "#ff0000",
@@ -149,16 +148,17 @@ Colors object created with as const
 >
 > **Explanation:** `as const` creates type-safe immutable value maps as alternatives to Enums.
 
+---
+
 ### Exercise 2: Extracting Tuple Union Types from `as const` Arrays
 
 **Problem:** Extract literal union `"a" | "b"` from `const items = ["a", "b"] as const`.
 
 **Expected output:**
-```text
-"a" | "b"
-```
-
 > [!check]- Answer
+> ```text
+> "a" | "b"
+> ```
 > ```typescript
 > const items = ["a", "b"] as const;
 > type Item = typeof items[number];
@@ -167,16 +167,17 @@ Colors object created with as const
 >
 > **Explanation:** Indexing `typeof items[number]` extracts a union of tuple literal element types.
 
+---
+
 ### Exercise 3: `as const` Object Property Narrowing
 
 **Problem:** What is the inferred type of property `env` in `const cfg = { env: "dev" } as const`?
 
 **Expected output:**
-```text
-"dev" (string literal type)
-```
-
 > [!check]- Answer
+> ```text
+> "dev" (string literal type)
+> ```
 > ```typescript
 > console.log("\"dev\" (string literal type)");
 > ```

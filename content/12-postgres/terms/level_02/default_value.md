@@ -160,16 +160,15 @@ id UUID PRIMARY KEY DEFAULT gen_random_uuid() -- Generates new UUID per row
 4.  A timezone-aware timestamp `posted_at` that defaults to the current database transaction time.
 
 **Expected output:**
-```sql
-CREATE TABLE posts (
-  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  message TEXT NOT NULL,
-  likes_count INT DEFAULT 0 NOT NULL,
-  posted_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE posts (
+>   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   message TEXT NOT NULL,
+>   likes_count INT DEFAULT 0 NOT NULL,
+>   posted_at TIMESTAMPTZ DEFAULT NOW()
+> );
+> ```
 > - Combine constraints on the count column to enforce required zero fallbacks.
 > - Use the `NOW()` function on the timestamp default.
 
@@ -182,11 +181,10 @@ CREATE TABLE posts (
 **Problem:** Create table `tokens` with `id` defaulting to `gen_random_uuid()` and `created_at` defaulting to `NOW()`.
 
 **Expected output:**
-```text
-CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), created_at TIMESTAMPTZ DEFAULT NOW() );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), created_at TIMESTAMPTZ DEFAULT NOW() );
+> ```
 > ```sql
 > CREATE TABLE tokens (
 >   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -196,16 +194,17 @@ CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), created_at 
 >
 > **Explanation:** `DEFAULT` expressions compute dynamic default values for omitted column fields.
 
+---
+
 ### Exercise 3: Altering Column Default Value
 
 **Problem:** Set column default for `status` on `users` table to `'pending'`.
 
 **Expected output:**
-```text
-ALTER TABLE users ALTER COLUMN status SET DEFAULT 'pending';
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE users ALTER COLUMN status SET DEFAULT 'pending';
+> ```
 > ```sql
 > ALTER TABLE users ALTER COLUMN status SET DEFAULT 'pending';
 > ```

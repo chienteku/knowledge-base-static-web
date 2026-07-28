@@ -195,11 +195,10 @@ const { data: doc } = await useAsyncData(
 ```
 
 **Expected output:**
-```text
-The compiler reuses compiled data payloads between pages rather than re-requesting the API.
-```
-
 > [!check]- Answer
+> ```text
+> The compiler reuses compiled data payloads between pages rather than re-requesting the API.
+> ```
 > - In Nuxt, `useAsyncData` can cache payload states.
 > - The third argument configuration object supports `getCachedData(key)`.
 
@@ -210,11 +209,10 @@ The compiler reuses compiled data payloads between pages rather than re-requesti
 **Problem:** Which CLI command generates a static pre-rendered SSG deployment build in Nuxt 3?
 
 **Expected output:**
-```text
-npx nuxi generate (or npm run generate)
-```
-
 > [!check]- Answer
+> ```text
+> npx nuxi generate (or npm run generate)
+> ```
 > - `nuxi generate` pre-renders all application routes into static HTML/JS files.
 > 
 > ```bash
@@ -228,11 +226,10 @@ npx nuxi generate (or npm run generate)
 **Problem:** Can SSG static site outputs be hosted on free CDN hosting services (GitHub Pages, Netlify) without a running Node.js server?
 
 **Expected output:**
-```text
-Yes. SSG generates pure static HTML, CSS, and JS files that require zero server-side Node.js execution runtime.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. SSG generates pure static HTML, CSS, and JS files that require zero server-side Node.js execution runtime.
+> ```
 > - SSG outputs static files compatible with all web servers and CDNs.
 > 
 > ```text

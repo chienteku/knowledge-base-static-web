@@ -207,11 +207,10 @@ fn main() {
 **Problem:** Create `struct Wrapper<T> { value: T }` with a method `fn print(&self) where T: std::fmt::Display`.
 
 **Expected output:**
-```
-Value: 42
-```
-
 > [!check]- Answer
+> ```
+> Value: 42
+> ```
 > ```rust
 > struct Wrapper<T> { value: T }
 > impl<T> Wrapper<T> {
@@ -227,16 +226,17 @@ Value: 42
 >
 > **Explanation:** Generic parameters allow code reuse across distinct types while enforcing trait contracts.
 
+---
+
 ### Exercise 3: Generic Helper Functions
 
 **Problem:** Write a generic function `fn swap_pair<T, U>(pair: (T, U)) -> (U, T)`.
 
 **Expected output:**
-```
-Swapped: (world, 10)
-```
-
 > [!check]- Answer
+> ```
+> Swapped: (world, 10)
+> ```
 > fn swap_pair<T, U>(pair: (T, U)) -> (U, T) { (pair.1, pair.0) }
 > fn main() {
 >     let p = swap_pair((10, "world"));

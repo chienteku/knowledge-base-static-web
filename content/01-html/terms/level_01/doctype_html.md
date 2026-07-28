@@ -139,6 +139,8 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 >
 > **Explanation:** `<!DOCTYPE html>` must be line 1 to inform browser rendering engines to use Standards Mode.
 
+---
+
 ### Exercise 3: Case Sensitivity of DOCTYPE
 
 **Problem:** Is `<!doctype html>` valid in modern HTML5? (Yes/No).

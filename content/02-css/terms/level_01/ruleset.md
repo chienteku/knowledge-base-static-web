@@ -149,11 +149,10 @@ div {
 `margin: 20px;`
 
 **Expected output:**
-```text
-`margin` is the Property. (`20px` is the Value. Together they form a Declaration).
-```
-
 > [!check]- Answer
+> ```text
+> `margin` is the Property. (`20px` is the Value. Together they form a Declaration).
+> ```
 > - The left side of the colon is the "what", the right side is the "how much".
 
 ---
@@ -165,13 +164,12 @@ div {
 **Problem:** Identify the 3 parts of `.title { color: red; }`.
 
 **Expected output:**
-```text
-1. Selector: .title
-2. Property: color
-3. Value: red
-```
-
 > [!check]- Answer
+> ```text
+> 1. Selector: .title
+> 2. Property: color
+> 3. Value: red
+> ```
 > ```text
 > 1. Selector: .title
 > 2. Property: color
@@ -180,16 +178,17 @@ div {
 >
 > **Explanation:** A ruleset consists of a selector and a declaration block `{ property: value; }`.
 
+---
+
 ### Exercise 3: Grouping Multiple Selectors
 
 **Problem:** Write a grouped CSS ruleset setting `color: green` on `<h1>`, `<h2>`, and `.highlight` simultaneously.
 
 **Expected output:**
-```text
-h1, h2, .highlight { color: green; }
-```
-
 > [!check]- Answer
+> ```text
+> h1, h2, .highlight { color: green; }
+> ```
 > ```css
 > h1, h2, .highlight {
 >   color: green;

@@ -159,14 +159,13 @@ SELECT * FROM article WHERE title ~ "rust"; // Fuzzy string/regex match operator
 4.  Checking if a serial key matches exactly `"KEY-5599-XX"`.
 
 **Expected output:**
-```text
-1. CONTAINS (checks if array holds the item)
-2. INSIDE (checks if variable value exists in the options list)
-3. ~ (fuzzy match checks case-insensitive strings)
-4. = (exact equality checks cases and characters strictly)
-```
-
 > [!check]- Answer
+> ```text
+> 1. CONTAINS (checks if array holds the item)
+> 2. INSIDE (checks if variable value exists in the options list)
+> 3. ~ (fuzzy match checks case-insensitive strings)
+> 4. = (exact equality checks cases and characters strictly)
+> ```
 > - Determine if the check scans list values or single properties.
 > - Consider if casing matches must be strict or loose.
 
@@ -179,27 +178,27 @@ SELECT * FROM article WHERE title ~ "rust"; // Fuzzy string/regex match operator
 **Problem:** Match operators: 1. Contains element (`CONTAINS` / `?=`), 2. Fuzzy string match (`~`), 3. Record link arrow (`->`).
 
 **Expected output:**
-```text
-1. CONTAINS, 2. ~, 3. ->
-```
-
 > [!check]- Answer
+> ```text
+> 1. CONTAINS, 2. ~, 3. ->
+> ```
 > ```text
 > 1. CONTAINS, 2. ~, 3. ->
 > ```
 >
 > **Explanation:** SurrealQL features collection, string matching, and graph traversal operators.
 
+---
+
 ### Exercise 3: Inside Spatial Operator
 
 **Problem:** Operator to test if point is contained within polygon geometry (`<inside>`).
 
 **Expected output:**
-```text
-<inside>
-```
-
 > [!check]- Answer
+> ```text
+> <inside>
+> ```
 > ```text
 > <inside>
 > ```

@@ -179,12 +179,11 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 **Problem:** You are building a split-screen website. You want the left side to be red, and the right side to be blue. You want both sides to stretch all the way from the top of the screen to the bottom of the screen. What height property do you give them?
 
 **Expected output:**
-```text
-`height: 100vh;` 
-This ensures both colored boxes stretch perfectly from the top to the bottom of the browser window.
-```
-
 > [!check]- Answer
+> ```text
+> `height: 100vh;` 
+> This ensures both colored boxes stretch perfectly from the top to the bottom of the browser window.
+> ```
 > - You need 100% of the physical screen height.
 
 ---
@@ -200,14 +199,13 @@ This ensures both colored boxes stretch perfectly from the top to the bottom of 
 4. `svh` 
 
 **Expected output:**
-```text
-1. 1% of viewport width
-2. 1% of initial viewport height
-3. Dynamic viewport height (adjusts as mobile address bar expands/collapses)
-4. Small viewport height (calculates with address bar expanded)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 1% of viewport width
+> 2. 1% of initial viewport height
+> 3. Dynamic viewport height (adjusts as mobile address bar expands/collapses)
+> 4. Small viewport height (calculates with address bar expanded)
+> ```
 > ```text
 > 1. vw -> 1% of viewport width
 > 2. vh -> 1% of initial viewport height
@@ -217,16 +215,17 @@ This ensures both colored boxes stretch perfectly from the top to the bottom of 
 >
 > **Explanation:** Modern CSS viewport units handle mobile browser URL bar transitions.
 
+---
+
 ### Exercise 3: Full Screen Hero Section Pattern
 
 **Problem:** Write CSS for full-screen hero section occupying exact 100% dynamic mobile viewport height.
 
 **Expected output:**
-```text
-.hero { min-height: 100dvh; }
-```
-
 > [!check]- Answer
+> ```text
+> .hero { min-height: 100dvh; }
+> ```
 > ```css
 > .hero {
 >   min-height: 100dvh;

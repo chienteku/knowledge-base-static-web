@@ -150,12 +150,11 @@ Identify:
 2.  The anomaly that occurs if the instructor moves to a new office room.
 
 **Expected output:**
-```text
-1. Deletion Anomaly (deleting the course wipes out the instructor's office phone record from the database).
-2. Update Anomaly (you have to locate and update the phone number in multiple rows if the instructor teaches multiple courses, risking inconsistent data).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Deletion Anomaly (deleting the course wipes out the instructor's office phone record from the database).
+> 2. Update Anomaly (you have to locate and update the phone number in multiple rows if the instructor teaches multiple courses, risking inconsistent data).
+> ```
 > - Differentiate what data is lost when deleting top-level nodes.
 > - Consider the effort required to update shared attributes across rows.
 
@@ -168,27 +167,27 @@ Identify:
 **Problem:** List 3 standard Normal Forms in database design (1NF: atomic values; 2NF: no partial dependencies; 3NF: no transitive dependencies).
 
 **Expected output:**
-```text
-1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies)
-```
-
 > [!check]- Answer
+> ```text
+> 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies)
+> ```
 > ```text
 > 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies)
 > ```
 >
 > **Explanation:** Normal forms eliminate data redundancy and prevent update/delete anomalies.
 
+---
+
 ### Exercise 3: Goal of Relational Normalization
 
 **Problem:** What is the primary goal of relational database normalization? (Eliminates data redundancy and update anomalies).
 
 **Expected output:**
-```text
-Eliminates data redundancy and update/delete anomalies
-```
-
 > [!check]- Answer
+> ```text
+> Eliminates data redundancy and update/delete anomalies
+> ```
 > ```text
 > Eliminates data redundancy and update/delete anomalies
 > ```

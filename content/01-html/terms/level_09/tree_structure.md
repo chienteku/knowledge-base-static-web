@@ -126,13 +126,12 @@ html (Root)
 ```
 
 **Expected output:**
-```text
-The `<ul>` is the Parent of the `<li>` elements.
-The `<li>` elements are Children of the `<ul>`.
-The two `<li>` elements are Siblings to each other.
-```
-
 > [!check]- Answer
+> ```text
+> The `<ul>` is the Parent of the `<li>` elements.
+> The `<li>` elements are Children of the `<ul>`.
+> The two `<li>` elements are Siblings to each other.
+> ```
 > - Who contains who?
 
 ---
@@ -147,13 +146,12 @@ The two `<li>` elements are Siblings to each other.
 3. Children of `<main>` 
 
 **Expected output:**
-```text
-1. Parent of span: <p>
-2. Sibling of h1: <p>
-3. Children of main: <h1> and <p>
-```
-
 > [!check]- Answer
+> ```text
+> 1. Parent of span: <p>
+> 2. Sibling of h1: <p>
+> 3. Children of main: <h1> and <p>
+> ```
 > ```text
 > 1. Parent of span: <p>
 > 2. Sibling of h1: <p>
@@ -162,16 +160,17 @@ The two `<li>` elements are Siblings to each other.
 >
 > **Explanation:** DOM tree hierarchy defines parent-child and sibling relationships.
 
+---
+
 ### Exercise 3: DOM Node Traversal API
 
 **Problem:** Which JavaScript DOM property accesses the immediate parent element of a node (`node.parentNode` or `node.parentElement`)?
 
 **Expected output:**
-```text
-node.parentElement (or node.parentNode)
-```
-
 > [!check]- Answer
+> ```text
+> node.parentElement (or node.parentNode)
+> ```
 > ```javascript
 > const parent = element.parentElement;
 > ```

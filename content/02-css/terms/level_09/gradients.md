@@ -205,13 +205,12 @@ div {
 **Problem:** Create a CSS ruleset for a card background that is split perfectly down the middle horizontally, with the top half being solid white (`#ffffff`) and the bottom half being solid light gray (`#f0f0f0`).
 
 **Expected output:**
-```css
-.split-card {
-  background-image: linear-gradient(to bottom, #ffffff 50%, #f0f0f0 50%);
-}
-```
-
 > [!check]- Answer
+> ```css
+> .split-card {
+>   background-image: linear-gradient(to bottom, #ffffff 50%, #f0f0f0 50%);
+> }
+> ```
 > - The direction is `to bottom`.
 > - Use the same percentage stop (`50%`) for the end of the first color and start of the second color to prevent blending!
 
@@ -224,11 +223,10 @@ div {
 **Problem:** Write CSS `linear-gradient` flowing from left to right transitioning from `#ff0000` to `#0000ff`.
 
 **Expected output:**
-```text
-background: linear-gradient(to right, #ff0000, #0000ff);
-```
-
 > [!check]- Answer
+> ```text
+> background: linear-gradient(to right, #ff0000, #0000ff);
+> ```
 > ```css
 > .gradient {
 >   background: linear-gradient(to right, #ff0000, #0000ff);
@@ -237,16 +235,17 @@ background: linear-gradient(to right, #ff0000, #0000ff);
 >
 > **Explanation:** `to right` directs linear gradient color stops from left edge to right edge.
 
+---
+
 ### Exercise 3: Radial Gradient Center Syntax
 
 **Problem:** Write `radial-gradient` centered at container middle transitioning from white to black.
 
 **Expected output:**
-```text
-background: radial-gradient(circle at center, #ffffff, #000000);
-```
-
 > [!check]- Answer
+> ```text
+> background: radial-gradient(circle at center, #ffffff, #000000);
+> ```
 > ```css
 > .radial {
 >   background: radial-gradient(circle at center, #ffffff, #000000);

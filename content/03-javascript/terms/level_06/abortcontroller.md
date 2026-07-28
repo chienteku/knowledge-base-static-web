@@ -204,11 +204,10 @@ fetch("https://jsonplaceholder.typicode.com/posts", {
 ```
 
 **Expected output:**
-```text
-Operation Cancelled
-```
-
 > [!check]- Answer
+> ```text
+> Operation Cancelled
+> ```
 > - In fetch options, write `signal: controller.signal`.
 > - Use `setTimeout(() => controller.abort(), 100);` to trigger the cancellation.
 
@@ -219,11 +218,10 @@ Operation Cancelled
 **Problem:** Create an `AbortController` and pass its `signal` into `fetch(url, { signal })`.
 
 **Expected output:**
-```text
-Signal attached to fetch
-```
-
 > [!check]- Answer
+> ```text
+> Signal attached to fetch
+> ```
 > ```javascript
 > const controller = new AbortController();
 > const signal = controller.signal;
@@ -232,23 +230,23 @@ Signal attached to fetch
 >
 > **Explanation:** `AbortController.signal` allows cancelling in-flight HTTP requests and async operations.
 
+---
+
 ### Exercise 3: Setting Request Timeouts with `AbortSignal.timeout()`
 
 **Problem:** Use `AbortSignal.timeout(5000)` concept for automatic request cancellation timeouts.
 
 **Expected output:**
-```text
-5000ms timeout signal created
-```
-
 > [!check]- Answer
+> ```text
+> 5000ms timeout signal created
+> ```
 > ```javascript
 > console.log("5000ms timeout signal created");
 > ```
 >
 > **Explanation:** `AbortSignal.timeout(ms)` returns a pre-configured signal that aborts automatically after specified milliseconds.
 
----
 
 ---
 

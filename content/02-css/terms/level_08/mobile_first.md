@@ -311,20 +311,19 @@ Alternative layouts:
 ```
 
 **Expected output:**
-```css
-/* Mobile First */
-.menu {
-  width: 100%;
-}
-@media (min-width: 601px) {
-  .menu {
-    float: right;
-    width: 300px;
-  }
-}
-```
-
 > [!check]- Answer
+> ```css
+> /* Mobile First */
+> .menu {
+>   width: 100%;
+> }
+> @media (min-width: 601px) {
+>   .menu {
+>     float: right;
+>     width: 300px;
+>   }
+> }
+> ```
 > - The mobile layout is simple (`width: 100%`). Make this the default ruleset.
 > - Introduce the float complexity inside a `min-width` media query threshold.
 
@@ -337,11 +336,10 @@ Alternative layouts:
 **Problem:** Write mobile-first CSS for `.nav`: 1 column vertical stack by default, switching to horizontal row at `min-width: 768px`.
 
 **Expected output:**
-```text
-.nav { display: flex; flex-direction: column; } @media (min-width: 768px) { .nav { flex-direction: row; } }
-```
-
 > [!check]- Answer
+> ```text
+> .nav { display: flex; flex-direction: column; } @media (min-width: 768px) { .nav { flex-direction: row; } }
+> ```
 > ```css
 > /* Mobile base */
 > .nav {
@@ -359,17 +357,18 @@ Alternative layouts:
 >
 > **Explanation:** Mobile-first architecture writes clean mobile base styles enhanced via `min-width` queries.
 
+---
+
 ### Exercise 3: Mobile-First Architecture Advantage
 
 **Problem:** Name 2 core technical advantages of Mobile-First CSS design.
 
 **Expected output:**
-```text
-1. Faster mobile performance (lean initial CSS payload)
-2. Simplicity (easier to scale up simple mobile layouts than scale down desktop layouts)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Faster mobile performance (lean initial CSS payload)
+> 2. Simplicity (easier to scale up simple mobile layouts than scale down desktop layouts)
+> ```
 > ```text
 > 1. Faster mobile performance (lean initial CSS payload)
 > 2. Simplicity (easier to scale up simple mobile layouts than scale down desktop layouts)

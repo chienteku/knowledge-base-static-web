@@ -137,11 +137,10 @@ const currentImage = 'hero.jpg';
 **Problem:** You have a `sitemap.xml` file that Google uses to crawl your site. It must be accessible exactly at `yoursite.com/sitemap.xml`. Which directory should you put it in?
 
 **Expected output:**
-```text
-public/
-```
-
 > [!check]- Answer
+> ```text
+> public/
+> ```
 > - If a file needs to be accessible by name exactly at the root URL path of your site, it must not be compiled by Vite.
 
 ---
@@ -155,14 +154,13 @@ public/
 4. SVG icons processed by Vite inline loader
 
 **Expected output:**
-```text
-1. public/
-2. public/
-3. assets/
-4. assets/
-```
-
 > [!check]- Answer
+> ```text
+> 1. public/
+> 2. public/
+> 3. assets/
+> 4. assets/
+> ```
 > - `public/` -> Static un-processed root files (`favicon.ico`, `robots.txt`).
 > - `assets/` -> Bundled/compiled source files (`global.scss`, inline SVGs).
 > 
@@ -178,11 +176,10 @@ public/
 **Problem:** Given image file `public/images/banner.jpg`, write `<img />` tag referencing its URL path.
 
 **Expected output:**
-```vue
-<img src="/images/banner.jpg" alt="Banner" />
-```
-
 > [!check]- Answer
+> ```vue
+> <img src="/images/banner.jpg" alt="Banner" />
+> ```
 > - `public/` contents map directly to root URL `/`.
 > 
 > ```vue

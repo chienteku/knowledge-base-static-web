@@ -150,13 +150,12 @@ async function processData() {
 **Problem:** The default browser behavior for the `"contextmenu"` event is to open the right-click menu. Write an event listener on the `document` that prevents the right-click menu from ever opening anywhere on the page.
 
 **Expected output:**
-```javascript
-document.addEventListener("contextmenu", (event) => {
-  event.preventDefault();
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> document.addEventListener("contextmenu", (event) => {
+>   event.preventDefault();
+> });
+> ```
 > - Pass the event object `e` or `event` into your arrow function.
 > - Call `.preventDefault()` on that object.
 
@@ -167,27 +166,27 @@ document.addEventListener("contextmenu", (event) => {
 **Problem:** Cancel link click navigation using `e.preventDefault()`.
 
 **Expected output:**
-```text
-Navigation canceled
-```
-
 > [!check]- Answer
+> ```text
+> Navigation canceled
+> ```
 > ```javascript
 > console.log("Navigation canceled");
 > ```
 >
 > **Explanation:** `preventDefault()` halts default link redirection.
 
+---
+
 ### Exercise 3: Checking `defaultPrevented` Property
 
 **Problem:** Check `event.defaultPrevented` boolean property after calling `preventDefault()`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const evt = { defaultPrevented: false, preventDefault() { this.defaultPrevented = true; } };
 > evt.preventDefault();
@@ -196,7 +195,6 @@ true
 >
 > **Explanation:** `defaultPrevented` indicates whether downstream listeners or handlers invoked `preventDefault()`.
 
----
 
 ---
 

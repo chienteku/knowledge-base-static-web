@@ -157,11 +157,10 @@ thread::spawn(move || {
 **Problem:** Find the difference between two `HashSet`s `A = {1, 2, 3}` and `B = {2, 3, 4}` using `.difference()`.
 
 **Expected output:**
-```
-[1]
-```
-
 > [!check]- Answer
+> ```
+> [1]
+> ```
 > ```rust
 > use std::collections::HashSet;
 > fn main() {
@@ -174,16 +173,17 @@ thread::spawn(move || {
 >
 > **Explanation:** `.difference(&b)` returns items in `a` that do not exist in `b`.
 
+---
+
 ### Exercise 3: Sorted Uniqueness with BTreeSet
 
 **Problem:** Insert random numbers `[9, 2, 5, 2, 9, 1]` into a `BTreeSet` and print elements.
 
 **Expected output:**
-```
-1 2 5 9
-```
-
 > [!check]- Answer
+> ```
+> 1 2 5 9
+> ```
 > ```rust
 > use std::collections::BTreeSet;
 > fn main() {

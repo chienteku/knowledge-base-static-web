@@ -142,11 +142,10 @@ The query `SELECT * FROM logs WHERE severity = "ERROR" AND created_at >= d"2026-
 Write the SurrealQL command to create the single most effective composite index to optimize both filters.
 
 **Expected output:**
-```sql
-DEFINE INDEX idx_logs_severity_date ON logs COLUMNS severity, created_at;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX idx_logs_severity_date ON logs COLUMNS severity, created_at;
+> ```
 > - Combine `severity` and `created_at` in a composite index.
 > - The leftmost column should match the exact match filter (`severity`).
 
@@ -159,27 +158,27 @@ DEFINE INDEX idx_logs_severity_date ON logs COLUMNS severity, created_at;
 **Problem:** Run `EXPLAIN FULL` on query `SELECT * FROM user WHERE email = 'alice@example.com'`.
 
 **Expected output:**
-```text
-EXPLAIN FULL SELECT * FROM user WHERE email = 'alice@example.com';
-```
-
 > [!check]- Answer
+> ```text
+> EXPLAIN FULL SELECT * FROM user WHERE email = 'alice@example.com';
+> ```
 > ```surrealql
 > EXPLAIN FULL SELECT * FROM user WHERE email = 'alice@example.com';
 > ```
 >
 > **Explanation:** `EXPLAIN FULL` outputs the database query execution plan and index utilization details.
 
+---
+
 ### Exercise 3: Identifying Full Table Scans in Query Plans
 
 **Problem:** What property in `EXPLAIN` output indicates an index was utilized? (`FETCH` / `INDEX` plan operator).
 
 **Expected output:**
-```text
-INDEX operator presence in execution plan steps
-```
-
 > [!check]- Answer
+> ```text
+> INDEX operator presence in execution plan steps
+> ```
 > ```text
 > INDEX operator presence in execution plan steps
 > ```

@@ -130,11 +130,10 @@ The query `SELECT * FROM transactions WHERE status = "pending";` takes 3 seconds
 Write the SurrealQL statement to create a B-Tree index named `idx_status` on the `status` field to accelerate this query.
 
 **Expected output:**
-```sql
-DEFINE INDEX idx_status ON transactions COLUMNS status;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX idx_status ON transactions COLUMNS status;
+> ```
 > - Use the `DEFINE INDEX` DDL statement.
 > - Specify the target table `transactions` and column `status`.
 
@@ -147,27 +146,27 @@ DEFINE INDEX idx_status ON transactions COLUMNS status;
 **Problem:** Define index `user_email_idx` on `user` table for `email` field.
 
 **Expected output:**
-```text
-DEFINE INDEX user_email_idx ON TABLE user FIELDS email;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX user_email_idx ON TABLE user FIELDS email;
+> ```
 > ```surrealql
 > DEFINE INDEX user_email_idx ON TABLE user FIELDS email;
 > ```
 >
 > **Explanation:** `DEFINE INDEX` accelerates equality and range lookup queries.
 
+---
+
 ### Exercise 3: Removing Index
 
 **Problem:** Command to drop index `user_email_idx` from `user` table (`REMOVE INDEX user_email_idx ON TABLE user;`).
 
 **Expected output:**
-```text
-REMOVE INDEX user_email_idx ON TABLE user;
-```
-
 > [!check]- Answer
+> ```text
+> REMOVE INDEX user_email_idx ON TABLE user;
+> ```
 > ```surrealql
 > REMOVE INDEX user_email_idx ON TABLE user;
 > ```

@@ -162,11 +162,10 @@ thread::spawn(move || {
 **Problem:** Retrieve an environment variable `OsString` using `std::env::var_os("PATH")` and display it as a lossy string slice using `.to_string_lossy()`.
 
 **Expected output:**
-```
-PATH retrieved successfully
-```
-
 > [!check]- Answer
+> ```
+> PATH retrieved successfully
+> ```
 > ```rust
 > use std::env;
 > fn main() {
@@ -179,16 +178,17 @@ PATH retrieved successfully
 >
 > **Explanation:** `env::var_os` returns `Option<OsString>`, preserving native OS byte representations without requiring UTF-8 guarantees.
 
+---
+
 ### Exercise 3: Building OS Strings
 
 **Problem:** Create an `OsString`, push a file path segment `"/usr/bin"` and append `"/rustc"` using `.push()`. Print the resulting `OsString`.
 
 **Expected output:**
-```
-/usr/bin/rustc
-```
-
 > [!check]- Answer
+> ```
+> /usr/bin/rustc
+> ```
 > ```rust
 > use std::ffi::OsString;
 > fn main() {

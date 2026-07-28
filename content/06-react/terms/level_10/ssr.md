@@ -107,12 +107,11 @@ In App B, you see `<h1>Welcome to my Blog</h1><p>Here is the first post...</p>`.
 Which one is Server-Side Rendered?
 
 **Expected output:**
-```text
-App B is Server-Side Rendered (SSR).
-The server did the hard work of generating the actual HTML content before sending it over the network. App A is Client-Side Rendered (CSR); it relies on the browser to execute JS to build the UI.
-```
-
 > [!check]- Answer
+> ```text
+> App B is Server-Side Rendered (SSR).
+> The server did the hard work of generating the actual HTML content before sending it over the network. App A is Client-Side Rendered (CSR); it relies on the browser to execute JS to build the UI.
+> ```
 > - "View Page Source" shows exactly what the server sent over the network.
 
 ---
@@ -124,27 +123,27 @@ The server did the hard work of generating the actual HTML content before sendin
 **Problem:** Match rendering modes: 1. SSR (Render HTML per request on server); 2. SSG (Render HTML at build time); 3. CSR (Render HTML in browser via JS).
 
 **Expected output:**
-```text
-1. SSR: per-request server render; 2. SSG: build-time static render; 3. CSR: in-browser JS render
-```
-
 > [!check]- Answer
+> ```text
+> 1. SSR: per-request server render; 2. SSG: build-time static render; 3. CSR: in-browser JS render
+> ```
 > ```text
 > 1. SSR: per-request server render; 2. SSG: build-time static render; 3. CSR: in-browser JS render
 > ```
 >
 > **Explanation:** SSR provides dynamic real-time data rendering with initial HTML SEO benefits.
 
+---
+
 ### Exercise 3: SSR Hydration Error Prevention
 
 **Problem:** Why is it critical for server-rendered HTML to match initial client-rendered HTML output? (Mismatches trigger React hydration errors and force client DOM re-renders).
 
 **Expected output:**
-```text
-Mismatches trigger React hydration errors and force client DOM re-renders
-```
-
 > [!check]- Answer
+> ```text
+> Mismatches trigger React hydration errors and force client DOM re-renders
+> ```
 > ```text
 > Mismatches trigger React hydration errors and force client DOM re-renders
 > ```

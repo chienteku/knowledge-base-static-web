@@ -259,18 +259,17 @@ const depositUrl = account._links.deposit.href;
 **Problem:** Write HAL-compliant JSON payload for order (`id: 99`, `status: "shipped"`) containing HATEOAS links for `self` and `track` actions.
 
 **Expected output:**
-```json
-{
-  "id": 99,
-  "status": "shipped",
-  "_links": {
-    "self": { "href": "/api/orders/99" },
-    "track": { "href": "/api/orders/99/tracking" }
-  }
-}
-```
-
 > [!check]- Answer
+> ```json
+> {
+>   "id": 99,
+>   "status": "shipped",
+>   "_links": {
+>     "self": { "href": "/api/orders/99" },
+>     "track": { "href": "/api/orders/99/tracking" }
+>   }
+> }
+> ```
 > ```json
 > {
 > "id": 99,
@@ -289,11 +288,10 @@ const depositUrl = account._links.deposit.href;
 **Problem:** Which level of the Richardson Maturity Model requires HATEOAS hypermedia controls?
 
 **Expected output:**
-```text
-Level 3 (The highest level of REST maturity).
-```
-
 > [!check]- Answer
+> ```text
+> Level 3 (The highest level of REST maturity).
+> ```
 > ```text
 > Level 3 (Hypermedia Controls / HATEOAS).
 > ```
@@ -305,18 +303,17 @@ Level 3 (The highest level of REST maturity).
 **Problem:** Write HAL-compliant JSON payload for order (`id: 99`, `status: "shipped"`) containing HATEOAS links for `self` and `track` actions.
 
 **Expected output:**
-```json
-{
-  "id": 99,
-  "status": "shipped",
-  "_links": {
-    "self": { "href": "/api/orders/99" },
-    "track": { "href": "/api/orders/99/tracking" }
-  }
-}
-```
-
 > [!check]- Answer
+> ```json
+> {
+>   "id": 99,
+>   "status": "shipped",
+>   "_links": {
+>     "self": { "href": "/api/orders/99" },
+>     "track": { "href": "/api/orders/99/tracking" }
+>   }
+> }
+> ```
 > ```json
 > {
 > "id": 99,
@@ -335,11 +332,10 @@ Level 3 (The highest level of REST maturity).
 **Problem:** Which level of the Richardson Maturity Model requires HATEOAS hypermedia controls?
 
 **Expected output:**
-```text
-Level 3 (The highest level of REST maturity).
-```
-
 > [!check]- Answer
+> ```text
+> Level 3 (The highest level of REST maturity).
+> ```
 > ```text
 > Level 3 (Hypermedia Controls / HATEOAS).
 > ```
@@ -351,18 +347,17 @@ Level 3 (The highest level of REST maturity).
 **Problem:** Write HAL-compliant JSON payload for order (`id: 99`, `status: "shipped"`) containing HATEOAS links for `self` and `track` actions.
 
 **Expected output:**
-```json
-{
-  "id": 99,
-  "status": "shipped",
-  "_links": {
-    "self": { "href": "/api/orders/99" },
-    "track": { "href": "/api/orders/99/tracking" }
-  }
-}
-```
-
 > [!check]- Answer
+> ```json
+> {
+>   "id": 99,
+>   "status": "shipped",
+>   "_links": {
+>     "self": { "href": "/api/orders/99" },
+>     "track": { "href": "/api/orders/99/tracking" }
+>   }
+> }
+> ```
 > ```json
 > {
 > "id": 99,
@@ -381,11 +376,10 @@ Level 3 (The highest level of REST maturity).
 **Problem:** Which level of the Richardson Maturity Model requires HATEOAS hypermedia controls?
 
 **Expected output:**
-```text
-Level 3 (The highest level of REST maturity).
-```
-
 > [!check]- Answer
+> ```text
+> Level 3 (The highest level of REST maturity).
+> ```
 > ```text
 > Level 3 (Hypermedia Controls / HATEOAS).
 > ```

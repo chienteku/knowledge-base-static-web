@@ -152,11 +152,10 @@ SELECT * FROM user:alice; // Returns standard array response [{ ... }]
 Write the SurrealQL query using the `ONLY` keyword to retrieve the `balance` and `status` fields as a direct JSON object (without an outer array wrapper).
 
 **Expected output:**
-```sql
-SELECT balance, status FROM ONLY account:101;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT balance, status FROM ONLY account:101;
+> ```
 > - Place `ONLY` immediately after `FROM`.
 > - Target the Record ID `account:101`.
 
@@ -169,27 +168,27 @@ SELECT balance, status FROM ONLY account:101;
 **Problem:** Query single record `user:alice` returning raw object without array wrapper using `ONLY`.
 
 **Expected output:**
-```text
-SELECT ONLY * FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ONLY * FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ONLY * FROM user:alice;
 > ```
 >
 > **Explanation:** `SELECT ONLY` unwraps single-item array results into direct object responses.
 
+---
+
 ### Exercise 3: Combining `ONLY` and `VALUE`
 
 **Problem:** Extract raw scalar string value of `email` from `user:alice` using `SELECT ONLY VALUE email FROM user:alice`.
 
 **Expected output:**
-```text
-SELECT ONLY VALUE email FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ONLY VALUE email FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ONLY VALUE email FROM user:alice;
 > ```

@@ -121,13 +121,12 @@ function logBio(u: User) { return u.bio?.toUpperCase(); }
 **Problem:** Instead of writing a bulky `if (user.phoneNumber)` block, what is the modern ES2020/TypeScript operator used to safely access optional properties in a single line?
 
 **Expected output:**
-```typescript
-// The Optional Chaining operator (?.)
-const length = user.phoneNumber?.length;
-// If phoneNumber is undefined, the whole expression safely evaluates to undefined, avoiding a crash!
-```
-
 > [!check]- Answer
+> ```typescript
+> // The Optional Chaining operator (?.)
+> const length = user.phoneNumber?.length;
+> // If phoneNumber is undefined, the whole expression safely evaluates to undefined, avoiding a crash!
+> ```
 > - It shares the same symbol as the Optional Property modifier!
 
 ---
@@ -139,27 +138,27 @@ const length = user.phoneNumber?.length;
 **Problem:** What tsconfig flag prevents assigning explicit `undefined` to `prop?: string`?
 
 **Expected output:**
-```text
-exactOptionalPropertyTypes: true
-```
-
 > [!check]- Answer
+> ```text
+> exactOptionalPropertyTypes: true
+> ```
 > ```typescript
 > console.log("exactOptionalPropertyTypes: true");
 > ```
 >
 > **Explanation:** `exactOptionalPropertyTypes` distinguishes omitted keys from keys assigned `undefined`.
 
+---
+
 ### Exercise 3: Destructuring Optional Properties with Defaults
 
 **Problem:** Destructure `const { role = "guest" } = user` for `role?: string`.
 
 **Expected output:**
-```text
-guest
-```
-
 > [!check]- Answer
+> ```text
+> guest
+> ```
 > ```typescript
 > type User = { role?: string };
 > const user: User = {};

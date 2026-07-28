@@ -208,11 +208,10 @@ button, input, select, textarea {
 Which of these four styling values will apply to a `<p>` tag nested inside the container?
 
 **Expected output:**
-```text
-`color: green;` and `font-weight: bold;` will apply because typography properties are inherited. The `border` and `padding` are layout properties and will not inherit.
-```
-
 > [!check]- Answer
+> ```text
+> `color: green;` and `font-weight: bold;` will apply because typography properties are inherited. The `border` and `padding` are layout properties and will not inherit.
+> ```
 > - Differentiate between text formatting and box layout boundaries.
 
 ---
@@ -228,14 +227,13 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 4. `border` 
 
 **Expected output:**
-```text
-1. Inherited
-2. Non-Inherited
-3. Inherited
-4. Non-Inherited
-```
-
 > [!check]- Answer
+> ```text
+> 1. Inherited
+> 2. Non-Inherited
+> 3. Inherited
+> 4. Non-Inherited
+> ```
 > ```text
 > 1. color -> Inherited
 > 2. padding -> Non-Inherited
@@ -245,16 +243,17 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 >
 > **Explanation:** Text formatting inherits down the DOM tree; box-model dimensions do not.
 
+---
+
 ### Exercise 3: CSS Keyword Property Reset
 
 **Problem:** Explain the difference between `inherit`, `initial`, and `unset` keywords.
 
 **Expected output:**
-```text
-inherit: forces element to inherit parent value; initial: resets to CSS spec default; unset: inherits if property naturally inherits, else resets to initial.
-```
-
 > [!check]- Answer
+> ```text
+> inherit: forces element to inherit parent value; initial: resets to CSS spec default; unset: inherits if property naturally inherits, else resets to initial.
+> ```
 > ```css
 > p {
 >   color: inherit; /* Parent value */

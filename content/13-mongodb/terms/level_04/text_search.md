@@ -137,19 +137,18 @@ db.posts.createIndex({ title: "text", body: "text" }); // Single multi-field tex
 2.  Write the search query to find all documents matching the term `"javascript guide"`, sorted by relevance score (highest first).
 
 **Expected output:**
-```javascript
-// 1. Create text index
-db.posts.createIndex({ subject: "text", body: "text" });
-
-// 2. Execute text search
-db.posts.find(
-  { $text: { $search: "javascript guide" } },
-  { score: { $meta: "textScore" } }
-)
-.sort({ score: { $meta: "textScore" } });
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Create text index
+> db.posts.createIndex({ subject: "text", body: "text" });
+> 
+> // 2. Execute text search
+> db.posts.find(
+>   { $text: { $search: "javascript guide" } },
+>   { score: { $meta: "textScore" } }
+> )
+> .sort({ score: { $meta: "textScore" } });
+> ```
 > - The index declaration specifies the string `"text"` as the index type.
 > - Use the projection helper `$meta: "textScore"` to expose the scoring column.
 
@@ -162,11 +161,10 @@ db.posts.find(
 **Problem:** Create text index `post_text_idx` on `title` and `body` fields of `posts` collection.
 
 **Expected output:**
-```text
-db.posts.createIndex({ title: "text", body: "text" }, { name: "post_text_idx" });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.createIndex({ title: "text", body: "text" }, { name: "post_text_idx" });
+> ```
 > ```javascript
 > db.posts.createIndex(
 >   { title: "text", body: "text" },
@@ -176,16 +174,17 @@ db.posts.createIndex({ title: "text", body: "text" }, { name: "post_text_idx" })
 >
 > **Explanation:** Creating a compound text index indexes multiple string fields for `$text` search.
 
+---
+
 ### Exercise 3: Text Search with Relevance Score Ordering
 
 **Problem:** Query `$text` search for `"nosql database"` returning `textScore` meta projection ordered by score descending.
 
 **Expected output:**
-```text
-db.posts.find({ $text: { $search: "nosql database" } }, { projection: { score: { $meta: "textScore" } } }).sort({ score: { $meta: "textScore" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ $text: { $search: "nosql database" } }, { projection: { score: { $meta: "textScore" } } }).sort({ score: { $meta: "textScore" } });
+> ```
 > ```javascript
 > db.posts.find(
 >   { $text: { $search: "nosql database" } },

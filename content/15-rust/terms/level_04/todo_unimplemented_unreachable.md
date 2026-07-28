@@ -179,11 +179,10 @@ thread::spawn(move || {
 **Problem:** Define a function signature `fn calculate_tax(amount: f64) -> f64` stubbed with `todo!("implement tax rates")`.
 
 **Expected output:**
-```
-Stub function defined
-```
-
 > [!check]- Answer
+> ```
+> Stub function defined
+> ```
 > ```rust
 > fn calculate_tax(_amount: f64) -> f64 {
 >     todo!("implement tax rates")
@@ -195,16 +194,17 @@ Stub function defined
 >
 > **Explanation:** `todo!` acts as a type-satisfying stub macro during iterative API design.
 
+---
+
 ### Exercise 3: Marking Impossible Branches with `unreachable!`
 
 **Problem:** Use `unreachable!()` in a match arm after proving mathematically that `x % 2` can only be `0` or `1`.
 
 **Expected output:**
-```
-Matched: Even
-```
-
 > [!check]- Answer
+> ```
+> Matched: Even
+> ```
 > fn check_mod(x: u32) -> &'static str {
 >     match x % 2 {
 >         0 => "Even",

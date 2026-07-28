@@ -150,15 +150,14 @@ DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypt
 -   (Omit the `SIGNUP` block as admins are registered manually by root).
 
 **Expected output:**
-```sql
-DEFINE SCOPE admin_scope
-  SESSION 12h
-  SIGNIN (
-    SELECT * FROM admin WHERE email = $email AND crypto::argon2::compare(password, $password)
-  );
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE SCOPE admin_scope
+>   SESSION 12h
+>   SIGNIN (
+>     SELECT * FROM admin WHERE email = $email AND crypto::argon2::compare(password, $password)
+>   );
+> ```
 > - The scope configuration keyword is `DEFINE SCOPE`.
 > - Enclose the `SIGNIN` query block in parentheses.
 
@@ -171,11 +170,10 @@ DEFINE SCOPE admin_scope
 **Problem:** Define RECORD access `user_access` on database for `user` table.
 
 **Expected output:**
-```text
-DEFINE ACCESS user_access ON DATABASE TYPE RECORD ...
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD ...
+> ```
 > ```surrealql
 > DEFINE ACCESS user_access ON DATABASE TYPE RECORD
 >   SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
@@ -184,16 +182,17 @@ DEFINE ACCESS user_access ON DATABASE TYPE RECORD ...
 >
 > **Explanation:** `DEFINE ACCESS ... TYPE RECORD` configures user authentication handlers.
 
+---
+
 ### Exercise 3: Access Session Token Duration
 
 **Problem:** Set DURATION on access scope to expire tokens after `1d` (1 day).
 
 **Expected output:**
-```text
-DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 1d ...
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 1d ...
+> ```
 > ```surrealql
 > DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 1d;
 > ```

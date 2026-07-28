@@ -200,11 +200,10 @@ thread::spawn(move || {
 **Problem:** Create a shared node `Rc<RefCell<i32>>` and mutate its inner integer from two independent `Rc` clones.
 
 **Expected output:**
-```
-Val: 100
-```
-
 > [!check]- Answer
+> ```
+> Val: 100
+> ```
 > ```rust
 > use std::rc::Rc;
 > use std::cell::RefCell;
@@ -218,16 +217,17 @@ Val: 100
 >
 > **Explanation:** `Rc<RefCell<T>>` combines multiple reference ownership with runtime interior mutability.
 
+---
+
 ### Exercise 3: Safe Interior Mutability with `Mutex`
 
 **Problem:** Mutate a thread-safe `Mutex<u32>` using `.lock().unwrap()`.
 
 **Expected output:**
-```
-Mutex val: 10
-```
-
 > [!check]- Answer
+> ```
+> Mutex val: 10
+> ```
 > use std::sync::Mutex;
 > fn main() {
 >     let m = Mutex::new(0);

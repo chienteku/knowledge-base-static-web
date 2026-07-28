@@ -134,13 +134,12 @@ import { redirect } from 'next/navigation'; // Correct App Router import
 **Problem:** You are building a URL shortener app. You have a route `app/[shortCode]/page.tsx`. If the user visits `/g`, you look up the code and find the URL is `https://google.com`. Can you use `redirect()` to send them to an external website?
 
 **Expected output:**
-```text
-Yes!
-`redirect()` accepts absolute URLs. 
-You simply call: `redirect('https://google.com')` and Next.js will instantly bounce the user to Google.
-```
-
 > [!check]- Answer
+> ```text
+> Yes!
+> `redirect()` accepts absolute URLs. 
+> You simply call: `redirect('https://google.com')` and Next.js will instantly bounce the user to Google.
+> ```
 > - Does a redirect require a relative path?
 
 ---
@@ -150,11 +149,10 @@ You simply call: `redirect('https://google.com')` and Next.js will instantly bou
 **Problem:** Write Server Component `app/dashboard/page.tsx` checking `session` and executing `redirect('/login')` if unauthenticated.
 
 **Expected output:**
-```tsx
-import { redirect } from 'next/navigation'; export default async function Page() { const session = await getSession(); if (!session) redirect('/login'); return <h1>Dashboard</h1>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> import { redirect } from 'next/navigation'; export default async function Page() { const session = await getSession(); if (!session) redirect('/login'); return <h1>Dashboard</h1>; }
+> ```
 > - `redirect()` executes immediate server-side HTTP 307/308 redirects.
 > 
 > ```tsx
@@ -177,11 +175,10 @@ import { redirect } from 'next/navigation'; export default async function Page()
 **Problem:** What default HTTP status code is used by Next.js `redirect()` for temporary redirects?
 
 **Expected output:**
-```text
-HTTP 307 Temporary Redirect (Use RedirectType.replace for 308 permanent redirects)
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 307 Temporary Redirect (Use RedirectType.replace for 308 permanent redirects)
+> ```
 > - `redirect(url)` defaults to HTTP 307 Temporary Redirect.
 > 
 > ```typescript

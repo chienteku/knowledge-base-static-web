@@ -151,17 +151,16 @@ Execute COMMIT or ROLLBACK to conclude the outer transaction block
 Write the complete SQL transaction script.
 
 **Expected output:**
-```sql
-BEGIN;
-INSERT INTO users (username) VALUES ('Frank');
-SAVEPOINT post_frank;
-INSERT INTO users (username) VALUES ('Grace'); -- Simulates duplicate crash
-ROLLBACK TO post_frank;
-INSERT INTO users (username) VALUES ('Heidi');
-COMMIT;
-```
-
 > [!check]- Answer
+> ```sql
+> BEGIN;
+> INSERT INTO users (username) VALUES ('Frank');
+> SAVEPOINT post_frank;
+> INSERT INTO users (username) VALUES ('Grace'); -- Simulates duplicate crash
+> ROLLBACK TO post_frank;
+> INSERT INTO users (username) VALUES ('Heidi');
+> COMMIT;
+> ```
 > - Set the savepoint name after the insert of Frank.
 > - Target the exact checkpoint name inside the `ROLLBACK TO` clause.
 
@@ -174,11 +173,10 @@ COMMIT;
 **Problem:** Write SQL workflow creating `SAVEPOINT my_sp`, inserting a test row, and rolling back to `my_sp`.
 
 **Expected output:**
-```text
-BEGIN; SAVEPOINT my_sp; INSERT INTO users (name) VALUES ('Test'); ROLLBACK TO SAVEPOINT my_sp; COMMIT;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN; SAVEPOINT my_sp; INSERT INTO users (name) VALUES ('Test'); ROLLBACK TO SAVEPOINT my_sp; COMMIT;
+> ```
 > ```sql
 > BEGIN;
 > SAVEPOINT my_sp;
@@ -189,16 +187,17 @@ BEGIN; SAVEPOINT my_sp; INSERT INTO users (name) VALUES ('Test'); ROLLBACK TO SA
 >
 > **Explanation:** `ROLLBACK TO SAVEPOINT` undoes mutations executed after the savepoint without aborting the main transaction.
 
+---
+
 ### Exercise 3: Releasing Savepoints
 
 **Problem:** Command to release savepoint `sp1` freeing internal memory (`RELEASE SAVEPOINT sp1;`).
 
 **Expected output:**
-```text
-RELEASE SAVEPOINT sp1;
-```
-
 > [!check]- Answer
+> ```text
+> RELEASE SAVEPOINT sp1;
+> ```
 > ```sql
 > RELEASE SAVEPOINT sp1;
 > ```

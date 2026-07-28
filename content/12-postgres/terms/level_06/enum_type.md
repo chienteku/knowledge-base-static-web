@@ -150,17 +150,16 @@ Use a lookup table with foreign key reference for dynamic category lists
 2.  Create a table `company_accounts` containing an integer primary key `id`, a username text column (required), and a role column of type `user_role` (defaults to `'viewer'`).
 
 **Expected output:**
-```sql
-CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
-
-CREATE TABLE company_accounts (
-  id INT PRIMARY KEY,
-  username VARCHAR(100) NOT NULL,
-  role user_role NOT NULL DEFAULT 'viewer'
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
+> 
+> CREATE TABLE company_accounts (
+>   id INT PRIMARY KEY,
+>   username VARCHAR(100) NOT NULL,
+>   role user_role NOT NULL DEFAULT 'viewer'
+> );
+> ```
 > - Define the custom UDT type first using the `CREATE TYPE ... AS ENUM` syntax.
 > - Reference the newly created type name inside the table declaration column slot.
 
@@ -173,27 +172,27 @@ CREATE TABLE company_accounts (
 **Problem:** Create custom ENUM type `user_role` with values `'admin'`, `'editor'`, `'viewer'`.
 
 **Expected output:**
-```text
-CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
+> ```
 > ```sql
 > CREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');
 > ```
 >
 > **Explanation:** `CREATE TYPE ... AS ENUM` defines static custom enumerated value types.
 
+---
+
 ### Exercise 3: Adding Value to Existing ENUM Type
 
 **Problem:** Add new value `'guest'` to existing `user_role` ENUM type.
 
 **Expected output:**
-```text
-ALTER TYPE user_role ADD VALUE 'guest';
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TYPE user_role ADD VALUE 'guest';
+> ```
 > ```sql
 > ALTER TYPE user_role ADD VALUE 'guest';
 > ```

@@ -186,27 +186,27 @@ if (typeof document !== "undefined") {
 **Problem:** Iterate over a static `NodeList` using `nodeList.forEach(node => ...)`.
 
 **Expected output:**
-```text
-NodeList iterated via forEach
-```
-
 > [!check]- Answer
+> ```text
+> NodeList iterated via forEach
+> ```
 > ```javascript
 > console.log("NodeList iterated via forEach");
 > ```
 >
 > **Explanation:** Modern DOM NodeLists support `forEach` directly.
 
+---
+
 ### Exercise 3: Converting NodeList to Array
 
 **Problem:** Convert static `NodeList` to Array using `[...document.querySelectorAll('div')]`.
 
 **Expected output:**
-```text
-Converted NodeList to Array
-```
-
 > [!check]- Answer
+> ```text
+> Converted NodeList to Array
+> ```
 > ```javascript
 > console.log("Converted NodeList to Array");
 > ```

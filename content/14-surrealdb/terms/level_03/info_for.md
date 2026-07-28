@@ -163,18 +163,17 @@ Write the SurrealQL commands to:
 3.  Inspect the index and field definitions of the `invoice` table.
 
 **Expected output:**
-```sql
--- 1. Set context
-USE NS firm_hq DB production;
-
--- 2. Inspect database tables
-INFO FOR DB;
-
--- 3. Inspect table fields and indexes
-INFO FOR TABLE invoice;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Set context
+> USE NS firm_hq DB production;
+> 
+> -- 2. Inspect database tables
+> INFO FOR DB;
+> 
+> -- 3. Inspect table fields and indexes
+> INFO FOR TABLE invoice;
+> ```
 > - The target scope is `NS firm_hq DB production`.
 > - Use `INFO FOR DB` to see tables, and `INFO FOR TABLE <name>` to describe columns and indexes.
 
@@ -187,27 +186,27 @@ INFO FOR TABLE invoice;
 **Problem:** Write command to inspect fields, indexes, and events configured on `article` table.
 
 **Expected output:**
-```text
-INFO FOR TABLE article;
-```
-
 > [!check]- Answer
+> ```text
+> INFO FOR TABLE article;
+> ```
 > ```surrealql
 > INFO FOR TABLE article;
 > ```
 >
 > **Explanation:** `INFO FOR TABLE` outputs detailed schema metadata objects.
 
+---
+
 ### Exercise 3: Inspecting Active Database Definitions
 
 **Problem:** Command to list all tables, scope accesses, and parameters defined in current database.
 
 **Expected output:**
-```text
-INFO FOR DB;
-```
-
 > [!check]- Answer
+> ```text
+> INFO FOR DB;
+> ```
 > ```surrealql
 > INFO FOR DB;
 > ```

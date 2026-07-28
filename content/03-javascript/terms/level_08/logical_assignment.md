@@ -196,12 +196,11 @@ console.log("scale:", settings.scale); // should remain 0
 **Problem:** Demonstrate `user.name &&= user.name.toUpperCase()` updating `name` only if defined.
 
 **Expected output:**
-```text
-ALICE
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> ALICE
+> undefined
+> ```
 > ```javascript
 > const u1 = { name: "Alice" };
 > u1.name &&= u1.name.toUpperCase();
@@ -213,16 +212,17 @@ undefined
 >
 > **Explanation:** `x &&= y` evaluates and assigns `y` to `x` only if `x` is currently truthy.
 
+---
+
 ### Exercise 3: Nullish Coalescing Assignment (`??=`)
 
 **Problem:** Set default port `cfg.port ??= 3000` when `cfg.port` is `0`.
 
 **Expected output:**
-```text
-0
-```
-
 > [!check]- Answer
+> ```text
+> 0
+> ```
 > ```javascript
 > const cfg = { port: 0 };
 > cfg.port ??= 3000;
@@ -231,7 +231,6 @@ undefined
 >
 > **Explanation:** `??=` retains falsy non-nullish values like `0` without overriding them with defaults.
 
----
 
 ---
 

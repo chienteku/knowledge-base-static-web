@@ -118,14 +118,13 @@ const { data, error } = useSWR(`/api/search?q=${query}`, fetcher);
 **Problem:** How do you build an Infinite Scroll feed where the first 10 posts are great for SEO, but the rest load dynamically?
 
 **Expected output:**
-```text
-1. Use a Server Component (`page.tsx`) to fetch the first 10 posts using `await fetch()`.
-2. Pass those 10 posts as an `initialData` prop down to a Client Component (`<Feed initialData={posts} />`).
-3. Inside the Client Component, use SWR/React Query initialized with that `initialData`.
-4. As the user scrolls, the Client Component fetches posts 11-20 dynamically.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Use a Server Component (`page.tsx`) to fetch the first 10 posts using `await fetch()`.
+> 2. Pass those 10 posts as an `initialData` prop down to a Client Component (`<Feed initialData={posts} />`).
+> 3. Inside the Client Component, use SWR/React Query initialized with that `initialData`.
+> 4. As the user scrolls, the Client Component fetches posts 11-20 dynamically.
+> ```
 > - You can pass data from Server Components to Client Components as props!
 
 ---
@@ -135,11 +134,10 @@ const { data, error } = useSWR(`/api/search?q=${query}`, fetcher);
 **Problem:** Write Client Component using `useSWR('/api/user', fetcher)` displaying loading state, error, and user data.
 
 **Expected output:**
-```tsx
-'use client'; import useSWR from 'swr'; const fetcher = (url: string) => fetch(url).then(r => r.json()); export function UserProfile() { const { data, error, isLoading } = useSWR('/api/user', fetcher); if (isLoading) return <div>Loading...</div>; if (error) return <div>Error</div>; return <div>{data.name}</div>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; import useSWR from 'swr'; const fetcher = (url: string) => fetch(url).then(r => r.json()); export function UserProfile() { const { data, error, isLoading } = useSWR('/api/user', fetcher); if (isLoading) return <div>Loading...</div>; if (error) return <div>Error</div>; return <div>{data.name}</div>; }
+> ```
 > - SWR provides stale-while-revalidate client fetching, caching, and loading states.
 > 
 > ```tsx
@@ -164,11 +162,10 @@ const { data, error } = useSWR(`/api/search?q=${query}`, fetcher);
 **Problem:** When should you prefer SWR / React Query client fetching over Server Component `fetch()`?
 
 **Expected output:**
-```text
-When component data requires frequent real-time client polling, optimistic UI updates, or user-triggered refetching without full page reloads.
-```
-
 > [!check]- Answer
+> ```text
+> When component data requires frequent real-time client polling, optimistic UI updates, or user-triggered refetching without full page reloads.
+> ```
 > - Client fetching (SWR) is ideal for polling and optimistic UI mutations.
 > 
 > ```text

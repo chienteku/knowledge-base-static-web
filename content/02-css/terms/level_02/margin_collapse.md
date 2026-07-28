@@ -190,13 +190,12 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 3.  Element A has `margin-bottom: 25px;`. Element B below it is an empty div with `margin-top: 10px; margin-bottom: 10px;` and no border/padding/height. Element C below B has `margin-top: 20px;`.
 
 **Expected output:**
-```text
-1. 50px (The browser takes the maximum: 50 meets 30).
-2. 25px (The negative margin is added: 40 + (-15) = 25).
-3. 25px (All vertical margins collapse into one. The maximum value among 25, 10, 10, and 20 is 25).
-```
-
 > [!check]- Answer
+> ```text
+> 1. 50px (The browser takes the maximum: 50 meets 30).
+> 2. 25px (The negative margin is added: 40 + (-15) = 25).
+> 3. 25px (All vertical margins collapse into one. The maximum value among 25, 10, 10, and 20 is 25).
+> ```
 > - For positive margins, pick the largest number.
 > - Add negative numbers to positive numbers.
 > - Empty block margins merge with both siblings.
@@ -210,29 +209,29 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 **Problem:** If Element A has `margin-bottom: 40px` and adjacent Element B has `margin-top: 25px`, what is actual vertical space between them?
 
 **Expected output:**
-```text
-40px (the larger margin wins).
-```
-
 > [!check]- Answer
+> ```text
+> 40px (the larger margin wins).
+> ```
 > ```text
 > 40px (the larger margin wins).
 > ```
 >
 > **Explanation:** Vertical margin collapse resolves to `Math.max(marginA, marginB)`.
 
+---
+
 ### Exercise 3: 3 Ways to Prevent Parent-Child Margin Collapse
 
 **Problem:** List 3 CSS techniques to prevent parent-child margin collapse.
 
 **Expected output:**
-```text
-1. Add padding-top/bottom to parent
-2. Add border-top/bottom to parent
-3. Add display: flow-root (or overflow: auto) to parent
-```
-
 > [!check]- Answer
+> ```text
+> 1. Add padding-top/bottom to parent
+> 2. Add border-top/bottom to parent
+> 3. Add display: flow-root (or overflow: auto) to parent
+> ```
 > ```css
 > .parent {
 >   display: flow-root; /* Modern BFC creation prevents collapse */

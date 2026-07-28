@@ -128,11 +128,10 @@ export default defineNuxtConfig({
 **Problem:** Which underlying technology in Nuxt 3 is responsible for serving API endpoints and performing Server-Side Rendering?
 
 **Expected output:**
-```text
-Nitro
-```
-
 > [!check]- Answer
+> ```text
+> Nitro
+> ```
 > - It's not Vite (that's the bundler).
 > - It's the engine built specifically for Nuxt 3.
 
@@ -143,14 +142,13 @@ Nitro
 **Problem:** List the 4 core technology pillars that form the foundation of Nuxt 3.
 
 **Expected output:**
-```text
-1. Vue 3 (Composition API & Script Setup)
-2. Nitro Engine (Server runtime powered by H3 & Unimport)
-3. Vite (Lightning fast HMR build tool)
-4. Vue Router (File-based routing)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Vue 3 (Composition API & Script Setup)
+> 2. Nitro Engine (Server runtime powered by H3 & Unimport)
+> 3. Vite (Lightning fast HMR build tool)
+> 4. Vue Router (File-based routing)
+> ```
 > - Vue 3 -> UI Framework
 > - Nitro Engine -> Server Runtime
 > - Vite -> Development Bundler
@@ -167,11 +165,10 @@ Nitro
 **Problem:** Write minimal `nuxt.config.ts` file enabling TypeScript strict mode.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({ typescript: { strict: true } });
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({ typescript: { strict: true } });
+> ```
 > - `defineNuxtConfig` provides type hints for project settings.
 > 
 > ```typescript

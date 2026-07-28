@@ -142,12 +142,11 @@ TRUNCATE TABLE logs; -- Fast DDL table truncation
 **Problem:** You are building a session cleanup daemon. The `user_sessions` table has columns `session_token`, `username`, and `expires_at`. Write the SQL query to delete all sessions that have expired (where the `expires_at` timestamp is strictly less than the current time `NOW()`).
 
 **Expected output:**
-```sql
-DELETE FROM user_sessions 
-WHERE expires_at < NOW();
-```
-
 > [!check]- Answer
+> ```sql
+> DELETE FROM user_sessions 
+> WHERE expires_at < NOW();
+> ```
 > - Target the session table using the `DELETE FROM` clause.
 > - Use the inequality operator `<` to compare expiration times to `NOW()`.
 
@@ -160,11 +159,10 @@ WHERE expires_at < NOW();
 **Problem:** Delete inactive users updated before 2026 returning deleted user IDs.
 
 **Expected output:**
-```text
-DELETE FROM users WHERE last_login < '2026-01-01' RETURNING id;
-```
-
 > [!check]- Answer
+> ```text
+> DELETE FROM users WHERE last_login < '2026-01-01' RETURNING id;
+> ```
 > ```sql
 > DELETE FROM users
 > WHERE last_login < '2026-01-01'
@@ -173,16 +171,17 @@ DELETE FROM users WHERE last_login < '2026-01-01' RETURNING id;
 >
 > **Explanation:** `DELETE ... RETURNING` returns column attributes of deleted rows.
 
+---
+
 ### Exercise 3: Deleting Rows with Subquery Predicate
 
 **Problem:** Delete posts where `author_id` belongs to banned users in `banned_users` table.
 
 **Expected output:**
-```text
-DELETE FROM posts WHERE author_id IN (SELECT id FROM banned_users);
-```
-
 > [!check]- Answer
+> ```text
+> DELETE FROM posts WHERE author_id IN (SELECT id FROM banned_users);
+> ```
 > ```sql
 > DELETE FROM posts
 > WHERE author_id IN (SELECT id FROM banned_users);

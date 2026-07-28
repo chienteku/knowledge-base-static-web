@@ -165,6 +165,8 @@ Write the SurrealQL query to:
 >
 > **Explanation:** `SPLIT ON field` expands array elements into separate distinct output rows.
 
+---
+
 ### Exercise 3: Combining SPLIT and GROUP BY
 
 **Problem:** Split `tags` array on `article` table and group by `tags` to count occurrences per tag.

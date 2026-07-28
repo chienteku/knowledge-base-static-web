@@ -97,13 +97,12 @@ Model useEffect as state synchronization with external systems (DOM, WebSocket, 
 **Problem:** You build a Modal component. The user clicks "Open Modal". The user types into an input field inside the modal. The user clicks "Close Modal". Identify the lifecycle phases of the Modal component.
 
 **Expected output:**
-```text
-1. Clicking "Open": The Modal is inserted into the DOM (Mounting).
-2. Typing in the input: The Modal's state changes repeatedly (Updating).
-3. Clicking "Close": The Modal is removed from the DOM (Unmounting).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Clicking "Open": The Modal is inserted into the DOM (Mounting).
+> 2. Typing in the input: The Modal's state changes repeatedly (Updating).
+> 3. Clicking "Close": The Modal is removed from the DOM (Unmounting).
+> ```
 > - Birth, Life, Death.
 
 ---
@@ -115,27 +114,27 @@ Model useEffect as state synchronization with external systems (DOM, WebSocket, 
 **Problem:** Match lifecycle: 1. `componentDidMount` (`useEffect(..., [])`); 2. `componentDidUpdate` (`useEffect(..., [dep])`); 3. `componentWillUnmount` (`useEffect(() => () => cleanup, [])`).
 
 **Expected output:**
-```text
-1. useEffect(..., []), 2. useEffect(..., [dep]), 3. useEffect(() => () => cleanup, [])
-```
-
 > [!check]- Answer
+> ```text
+> 1. useEffect(..., []), 2. useEffect(..., [dep]), 3. useEffect(() => () => cleanup, [])
+> ```
 > ```text
 > 1. useEffect(..., []), 2. useEffect(..., [dep]), 3. useEffect(() => () => cleanup, [])
 > ```
 >
 > **Explanation:** Function components declare lifecycle behavior through `useEffect` dependency configurations.
 
+---
+
 ### Exercise 3: Execution Order of Render vs Mount
 
 **Problem:** Order steps: 1. Component Render Function -> 2. Real DOM Mutations -> 3. Browser Paint -> 4. `useEffect` Execution.
 
 **Expected output:**
-```text
-1. Render Function -> 2. Real DOM Mutations -> 3. Browser Paint -> 4. useEffect Execution
-```
-
 > [!check]- Answer
+> ```text
+> 1. Render Function -> 2. Real DOM Mutations -> 3. Browser Paint -> 4. useEffect Execution
+> ```
 > ```text
 > 1. Render Function -> 2. Real DOM Mutations -> 3. Browser Paint -> 4. useEffect Execution
 > ```

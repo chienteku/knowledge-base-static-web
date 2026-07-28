@@ -148,11 +148,10 @@ async function processData() {
 **Problem:** You have an array: `["apple", "banana", 42, "cherry"]`. Use `every()` and the `typeof` operator to check if every single item in the array is a string.
 
 **Expected output:**
-```text
-false
-```
-
 > [!check]- Answer
+> ```text
+> false
+> ```
 > - `array.every(item => typeof item === "string")`
 
 ---
@@ -162,11 +161,10 @@ false
 **Problem:** Check if all items in `[2, 4, 6]` are even using `.every()`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const nums = [2, 4, 6];
 > console.log(nums.every(x => x % 2 === 0));
@@ -174,18 +172,19 @@ true
 >
 > **Explanation:** `.every()` returns `true` if every element satisfies the testing predicate.
 
+---
+
 ### Exercise 3: Short-Circuiting in `.every()`
 
 **Problem:** Demonstrate that `.every()` stops testing upon encountering the first `false` element.
 
 **Expected output:**
-```text
-Tested: 1
-Tested: -2
-false
-```
-
 > [!check]- Answer
+> ```text
+> Tested: 1
+> Tested: -2
+> false
+> ```
 > ```javascript
 > const res = [1, -2, 3].every(x => {
 >   console.log(`Tested: ${x}`);
@@ -196,7 +195,6 @@ false
 >
 > **Explanation:** `.every()` short-circuits immediately when a falsy result is returned.
 
----
 
 ---
 

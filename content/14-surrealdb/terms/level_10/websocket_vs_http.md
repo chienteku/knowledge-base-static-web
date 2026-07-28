@@ -177,27 +177,27 @@ Select the best protocol (WebSocket or HTTP) for each scenario:
 **Problem:** Match protocol with use case: 1. Real-time web browser apps (`WebSockets`), 2. Stateless serverless lambdas (`HTTP`).
 
 **Expected output:**
-```text
-1. WebSockets, 2. HTTP
-```
-
 > [!check]- Answer
+> ```text
+> 1. WebSockets, 2. HTTP
+> ```
 > ```text
 > 1. WebSockets, 2. HTTP
 > ```
 >
 > **Explanation:** WebSockets provide real-time bi-directional streaming; HTTP provides stateless request-response execution.
 
+---
+
 ### Exercise 3: WebSocket Scheme Options
 
 **Problem:** List URI schemes for local un-encrypted and production encrypted WebSockets (`ws://`, `wss://`).
 
 **Expected output:**
-```text
-ws:// (local un-encrypted), wss:// (production TLS-encrypted)
-```
-
 > [!check]- Answer
+> ```text
+> ws:// (local un-encrypted), wss:// (production TLS-encrypted)
+> ```
 > ```text
 > ws:// (local un-encrypted), wss:// (production TLS-encrypted)
 > ```

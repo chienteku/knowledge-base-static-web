@@ -168,12 +168,11 @@ for (let i = 0; i < 100; i++) {
 **Problem:** Why is it that an element containing `visibility: hidden;` still triggers the Layout step (Step 4), but an element containing `display: none;` does not?
 
 **Expected output:**
-```text
-`display: none;` completely removes the element from the Render Tree, so the browser doesn't calculate its geometry. 
-`visibility: hidden;` keeps the element inside the Render Tree (it still takes up blank space on the screen, like an invisible box), so the browser must calculate its size and position during the Layout step.
-```
-
 > [!check]- Answer
+> ```text
+> `display: none;` completely removes the element from the Render Tree, so the browser doesn't calculate its geometry. 
+> `visibility: hidden;` keeps the element inside the Render Tree (it still takes up blank space on the screen, like an invisible box), so the browser must calculate its size and position during the Layout step.
+> ```
 > - Does an invisible box with `visibility: hidden` push other paragraphs down the page? Yes!
 
 ---
@@ -186,15 +185,14 @@ for (let i = 0; i < 100; i++) {
 Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 
 **Expected output:**
-```text
-1. DOM Construction
-2. CSSOM Construction
-3. Render Tree Construction
-4. Layout (Reflow)
-5. Paint
-```
-
 > [!check]- Answer
+> ```text
+> 1. DOM Construction
+> 2. CSSOM Construction
+> 3. Render Tree Construction
+> 4. Layout (Reflow)
+> 5. Paint
+> ```
 > ```text
 > 1. DOM Construction
 > 2. CSSOM Construction
@@ -205,17 +203,18 @@ Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 >
 > **Explanation:** Browsers construct DOM and CSSOM trees before combining them into Render Tree for Layout and Paint.
 
+---
+
 ### Exercise 3: Reflow vs Repaint
 
 **Problem:** Which browser rendering phase is triggered by changing CSS `width` (Reflow or Repaint)? Which phase is triggered by `color`?
 
 **Expected output:**
-```text
-width -> Reflow (Layout recalculation)
-color -> Repaint (Paint layer recalculation)
-```
-
 > [!check]- Answer
+> ```text
+> width -> Reflow (Layout recalculation)
+> color -> Repaint (Paint layer recalculation)
+> ```
 > ```text
 > width -> Reflow (Layout recalculation)
 > color -> Repaint (Paint layer recalculation)

@@ -191,12 +191,11 @@ const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate stati
 **Problem:** You are building a Documentation website. The markdown files change maybe once a week. You want perfect SEO and you want to host it for free on GitHub Pages (which only supports static files). Which rendering mode should you use: SSR, SPA, or SSG?
 
 **Expected output:**
-```text
-SSG (Static Site Generation).
-It provides perfect SEO (unlike SPA), and does not require a Node.js server (unlike SSR), meaning it can be hosted for free on GitHub pages.
-```
-
 > [!check]- Answer
+> ```text
+> SSG (Static Site Generation).
+> It provides perfect SEO (unlike SPA), and does not require a Node.js server (unlike SSR), meaning it can be hosted for free on GitHub pages.
+> ```
 > - Documentation sites that change infrequently do not require runtime dynamic database renders but still require full indexing accessibility.
 
 ---
@@ -206,17 +205,16 @@ It provides perfect SEO (unlike SPA), and does not require a Node.js server (unl
 **Problem:** Write `nuxt.config.ts` configuration instructing `nuxi generate` to pre-render dynamic routes `/posts/1` and `/posts/2`.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  nitro: {
-    prerender: {
-      routes: ['/posts/1', '/posts/2']
-    }
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   nitro: {
+>     prerender: {
+>       routes: ['/posts/1', '/posts/2']
+>     }
+>   }
+> });
+> ```
 > - `nitro.prerender.routes` specifies explicit static pre-rendering targets.
 > 
 > ```typescript
@@ -236,11 +234,10 @@ export default defineNuxtConfig({
 **Problem:** Where does `nuxi generate` save compiled static HTML files and static assets?
 
 **Expected output:**
-```text
-.output/public/ (or dist/)
-```
-
 > [!check]- Answer
+> ```text
+> .output/public/ (or dist/)
+> ```
 > - `.output/public/` contains pre-rendered static HTML and assets.
 > 
 > ```text

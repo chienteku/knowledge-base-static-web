@@ -141,11 +141,10 @@ async function processData() {
 **Problem:** Declare a variable `x` outside an `if` block and a different variable `y` inside the `if` block using `let`. Try to log both outside the block and observe what happens.
 
 **Expected output:**
-```text
-(An error should occur when accessing y)
-```
-
 > [!check]- Answer
+> ```text
+> (An error should occur when accessing y)
+> ```
 > - Variables declared with `let` inside `{ }` cannot be seen outside.
 > - Use a `try...catch` block if you want to cleanly catch the error, or just let it crash the script to see the `ReferenceError`.
 
@@ -156,13 +155,12 @@ async function processData() {
 **Problem:** Demonstrate that `let` inside a `for (let i = 0; ...)` loop creates a fresh binding per iteration.
 
 **Expected output:**
-```text
-0
-1
-2
-```
-
 > [!check]- Answer
+> ```text
+> 0
+> 1
+> 2
+> ```
 > ```javascript
 > const funcs = [];
 > for (let i = 0; i < 3; i++) {
@@ -173,16 +171,17 @@ async function processData() {
 >
 > **Explanation:** `for (let ...)` creates a new lexical scope binding for `i` in each loop iteration.
 
+---
+
 ### Exercise 3: Temporal Dead Zone with `let`
 
 **Problem:** Catch the `ReferenceError` when accessing `let age` before its declaration line inside a function.
 
 **Expected output:**
-```text
-ReferenceError: Cannot access 'age' before initialization
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError: Cannot access 'age' before initialization
+> ```
 > ```javascript
 > try {
 >   console.log(age);
@@ -194,7 +193,6 @@ ReferenceError: Cannot access 'age' before initialization
 >
 > **Explanation:** `let` variables are hoisted but uninitialized, remaining inaccessible in the Temporal Dead Zone (TDZ) prior to declaration.
 
----
 
 ---
 

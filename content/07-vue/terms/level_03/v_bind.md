@@ -108,14 +108,13 @@ They write: `<VideoPlayer speed="2" />`
 **Problem:** You have a `const isSubmitting = ref(false)`. How do you ensure the `<button>` is disabled while the form is submitting?
 
 **Expected output:**
-```html
-<button :disabled="isSubmitting">Submit</button>
-
-// When isSubmitting is true, the button is disabled. 
-// When it is false, Vue automatically removes the disabled attribute!
-```
-
 > [!check]- Answer
+> ```html
+> <button :disabled="isSubmitting">Submit</button>
+> 
+> // When isSubmitting is true, the button is disabled. 
+> // When it is false, Vue automatically removes the disabled attribute!
+> ```
 > - Bind the HTML `disabled` attribute to the reactive variable.
 
 ---
@@ -127,12 +126,11 @@ They write: `<VideoPlayer speed="2" />`
 2. Dynamic inline color style (`:style="{ color: activeColor }"`)
 
 **Expected output:**
-```html
-<div :class="{ active: isActive }">Class</div>
-<div :style="{ color: activeColor }">Style</div>
-```
-
 > [!check]- Answer
+> ```html
+> <div :class="{ active: isActive }">Class</div>
+> <div :style="{ color: activeColor }">Style</div>
+> ```
 > - Class object syntax: `{ className: booleanCondition }`.
 > - Style object syntax: `{ cssProperty: jsVariable }`.
 > 
@@ -148,11 +146,10 @@ They write: `<VideoPlayer speed="2" />`
 **Problem:** What shorthand syntax introduced in Vue 3.4 replaces `:id="id"` or `:src="src"` when attribute name matches variable name?
 
 **Expected output:**
-```text
-:id or :src (e.g. <img :src />)
-```
-
 > [!check]- Answer
+> ```text
+> :id or :src (e.g. <img :src />)
+> ```
 > - Vue 3.4 introduced same-name attribute binding shorthand.
 > 
 > ```html

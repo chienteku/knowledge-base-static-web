@@ -112,11 +112,10 @@ The `<title>` is the title printed on the spine of the book. When the book is si
 **Problem:** Why is the `<title>` tag considered the most important HTML element for SEO (Search Engine Optimization)?
 
 **Expected output:**
-```text
-Because search engines (like Google) use the text inside the `<title>` element as the primary clickable headline in their search results. If your title is missing or poorly written, users are unlikely to click on your website.
-```
-
 > [!check]- Answer
+> ```text
+> Because search engines (like Google) use the text inside the `<title>` element as the primary clickable headline in their search results. If your title is missing or poorly written, users are unlikely to click on your website.
+> ```
 > - Think about what you click on when you search for something on Google.
 
 ---
@@ -128,12 +127,11 @@ Because search engines (like Google) use the text inside the `<title>` element a
 **Problem:** List 2 primary reasons why descriptive `<title>` tags are crucial.
 
 **Expected output:**
-```text
-1. SEO: Displayed as clickable headline in search engine result pages
-2. Accessibility & UX: Announced by screen readers and displayed on browser tabs
-```
-
 > [!check]- Answer
+> ```text
+> 1. SEO: Displayed as clickable headline in search engine result pages
+> 2. Accessibility & UX: Announced by screen readers and displayed on browser tabs
+> ```
 > ```text
 > 1. SEO: Displayed as clickable headline in search engine result pages
 > 2. Accessibility & UX: Announced by screen readers and displayed on browser tabs
@@ -141,16 +139,17 @@ Because search engines (like Google) use the text inside the `<title>` element a
 >
 > **Explanation:** `<title>` provides primary identity context for search crawlers and browser tabs.
 
+---
+
 ### Exercise 3: Optimal Title Length
 
 **Problem:** What is recommended character length for `<title>` tags to avoid truncation in Google search results?
 
 **Expected output:**
-```text
-50 to 60 characters (or under 600 pixels).
-```
-
 > [!check]- Answer
+> ```text
+> 50 to 60 characters (or under 600 pixels).
+> ```
 > ```text
 > 50 to 60 characters (or under 600 pixels).
 > ```

@@ -194,14 +194,13 @@ return <ClientCard data={dto} />; // Lightweight RSC payload
 4. The JavaScript source code body of an `async` Server Component.
 
 **Expected output:**
-```text
-1. No (database details are secure and never leave the server).
-2. Yes (these are structural nodes required to render the layout).
-3. Yes (props must cross the network boundary to feed client components).
-4. No (Server Component code stays on the server, saving browser bundle size).
-```
-
 > [!check]- Answer
+> ```text
+> 1. No (database details are secure and never leave the server).
+> 2. Yes (these are structural nodes required to render the layout).
+> 3. Yes (props must cross the network boundary to feed client components).
+> 4. No (Server Component code stays on the server, saving browser bundle size).
+> ```
 > - Think about what the browser needs to reconstruct the DOM tree without executing server code.
 
 ---
@@ -211,11 +210,10 @@ return <ClientCard data={dto} />; // Lightweight RSC payload
 **Problem:** Where can developers inspect the raw RSC payload stream transmitted during App Router page navigation in Chrome DevTools?
 
 **Expected output:**
-```text
-In the Network tab under the fetch/XHR response payload stream for client navigation requests.
-```
-
 > [!check]- Answer
+> ```text
+> In the Network tab under the fetch/XHR response payload stream for client navigation requests.
+> ```
 > - Inspect Network tab XHR/Fetch response streams for client navigation.
 > 
 > ```text
@@ -229,13 +227,12 @@ In the Network tab under the fetch/XHR response payload stream for client naviga
 **Problem:** List 3 items serialized inside a Next.js RSC Payload stream.
 
 **Expected output:**
-```text
-1. Rendered Server Component Virtual DOM VNode trees
-2. Placeholders/slots for Client Components
-3. Props passed from Server Components to Client Components
-```
-
 > [!check]- Answer
+> ```text
+> 1. Rendered Server Component Virtual DOM VNode trees
+> 2. Placeholders/slots for Client Components
+> 3. Props passed from Server Components to Client Components
+> ```
 > - Rendered Server VNode trees
 > - Client Component placeholders & JS chunk references
 > - Serialized props passed across network boundary

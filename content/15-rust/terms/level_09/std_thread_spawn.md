@@ -182,11 +182,10 @@ thread::spawn(move || {
 **Problem:** Spawn a thread returning `42` and retrieve the result using `handle.join().unwrap()`.
 
 **Expected output:**
-```
-Thread returned: 42
-```
-
 > [!check]- Answer
+> ```
+> Thread returned: 42
+> ```
 > ```rust
 > use std::thread;
 > fn main() {
@@ -198,16 +197,17 @@ Thread returned: 42
 >
 > **Explanation:** `JoinHandle::join` blocks until the target thread terminates, returning `Result<T, Box<dyn Any>>`.
 
+---
+
 ### Exercise 3: Setting Custom Thread Names
 
 **Problem:** Use `std::thread::Builder::new().name("worker".into())` to spawn a named thread.
 
 **Expected output:**
-```
-Named thread spawned
-```
-
 > [!check]- Answer
+> ```
+> Named thread spawned
+> ```
 > use std::thread;
 > fn main() {
 >     let handle = thread::Builder::new()

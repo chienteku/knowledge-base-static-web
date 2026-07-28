@@ -112,12 +112,11 @@ Use React Query for server cache state and Zustand / Redux for client UI state
 Which global tool should you use for each?
 
 **Expected output:**
-```text
-1. Language: Use the built-in Context API. It rarely changes, and when it does, you want the whole app to re-render to update the text anyway.
-2. GPS Coordinates: Use Zustand/Redux. It updates rapidly, and you only want the map component to re-render, not the entire application.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Language: Use the built-in Context API. It rarely changes, and when it does, you want the whole app to re-render to update the text anyway.
+> 2. GPS Coordinates: Use Zustand/Redux. It updates rapidly, and you only want the map component to re-render, not the entire application.
+> ```
 > - Which one is high-frequency? High-frequency breaks the Context API.
 
 ---
@@ -129,27 +128,27 @@ Which global tool should you use for each?
 **Problem:** Categorize as Local, Shared, or Server State: 1. Input field text (Local); 2. Authenticated user object (Shared); 3. API product catalog (Server).
 
 **Expected output:**
-```text
-1. Local State, 2. Shared State, 3. Server State
-```
-
 > [!check]- Answer
+> ```text
+> 1. Local State, 2. Shared State, 3. Server State
+> ```
 > ```text
 > 1. Local State, 2. Shared State, 3. Server State
 > ```
 >
 > **Explanation:** Distinguishing state categories determines optimal state management tools.
 
+---
+
 ### Exercise 3: State Architecture Decision Matrix
 
 **Problem:** Which state tool to use: 1. Component UI toggle (`useState`); 2. Complex local state machine (`useReducer`); 3. App-wide theme/user (`Context`); 4. Server API cache (`React Query`).
 
 **Expected output:**
-```text
-1. useState, 2. useReducer, 3. Context, 4. React Query
-```
-
 > [!check]- Answer
+> ```text
+> 1. useState, 2. useReducer, 3. Context, 4. React Query
+> ```
 > ```text
 > 1. useState, 2. useReducer, 3. Context, 4. React Query
 > ```

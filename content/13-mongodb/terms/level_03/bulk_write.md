@@ -177,22 +177,21 @@ Use ordered: false to allow non-blocking continuation on write errors
 2.  Delete all product documents where the `stock` is exactly `-1`.
 
 **Expected output:**
-```javascript
-db.products.bulkWrite([
-  {
-    insertOne: {
-      document: { _id: 50, name: "Laser Pen" }
-    }
-  },
-  {
-    deleteOne: {
-      filter: { stock: -1 }
-    }
-  }
-]);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.bulkWrite([
+>   {
+>     insertOne: {
+>       document: { _id: 50, name: "Laser Pen" }
+>     }
+>   },
+>   {
+>     deleteOne: {
+>       filter: { stock: -1 }
+>     }
+>   }
+> ]);
+> ```
 > - Construct the operations inside a single array.
 > - Match the required nested sub-keys `document` and `filter`.
 
@@ -205,11 +204,10 @@ db.products.bulkWrite([
 **Problem:** Construct `bulkWrite()` array containing an `insertOne` and an `updateOne` operation.
 
 **Expected output:**
-```text
-db.coll.bulkWrite([ { insertOne: { document: { _id: 1 } } }, { updateOne: { filter: { _id: 2 }, update: { $set: { a: 1 } } } } ]);
-```
-
 > [!check]- Answer
+> ```text
+> db.coll.bulkWrite([ { insertOne: { document: { _id: 1 } } }, { updateOne: { filter: { _id: 2 }, update: { $set: { a: 1 } } } } ]);
+> ```
 > ```javascript
 > db.coll.bulkWrite([
 >   { insertOne: { document: { _id: 1, name: "Alice" } } },
@@ -219,16 +217,17 @@ db.coll.bulkWrite([ { insertOne: { document: { _id: 1 } } }, { updateOne: { filt
 >
 > **Explanation:** `bulkWrite([ ops ])` executes heterogeneous insert/update/delete operations in a single network batch.
 
+---
+
 ### Exercise 3: Unordered Bulk Write Flag
 
 **Problem:** Execute `bulkWrite()` with `{ ordered: false }` so individual errors do not stop remaining operations.
 
 **Expected output:**
-```text
-db.coll.bulkWrite(ops, { ordered: false });
-```
-
 > [!check]- Answer
+> ```text
+> db.coll.bulkWrite(ops, { ordered: false });
+> ```
 > ```javascript
 > db.coll.bulkWrite(ops, { ordered: false });
 > ```

@@ -167,17 +167,16 @@ db.collection.dropIndex("index_name"); // Cleanly aborts active index build
 List the correct sequential steps to execute a rolling index build.
 
 **Expected output:**
-```text
-1. Disconnect Secondary A from the replica set.
-2. Build the index locally on Secondary A while it is standalone.
-3. Reconnect Secondary A to the replica set and let it catch up.
-4. Disconnect Secondary B from the replica set.
-5. Build the index locally on Secondary B and reconnect it.
-6. Step down the Primary server to convert it to a secondary.
-7. Build the index on the old primary server.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Disconnect Secondary A from the replica set.
+> 2. Build the index locally on Secondary A while it is standalone.
+> 3. Reconnect Secondary A to the replica set and let it catch up.
+> 4. Disconnect Secondary B from the replica set.
+> 5. Build the index locally on Secondary B and reconnect it.
+> 6. Step down the Primary server to convert it to a secondary.
+> 7. Build the index on the old primary server.
+> ```
 > - The primary server must always stay online with the index built on secondaries first.
 > - Relate this back to the step-down command sequence.
 
@@ -190,11 +189,10 @@ List the correct sequential steps to execute a rolling index build.
 **Problem:** Inspect in-progress index builds using `db.currentOp()` in mongosh.
 
 **Expected output:**
-```text
-db.currentOp({ "command.createIndexes": { $exists: true } });
-```
-
 > [!check]- Answer
+> ```text
+> db.currentOp({ "command.createIndexes": { $exists: true } });
+> ```
 > ```javascript
 > db.currentOp({
 >   "command.createIndexes": { $exists: true }
@@ -203,16 +201,17 @@ db.currentOp({ "command.createIndexes": { $exists: true } });
 >
 > **Explanation:** `db.currentOp()` details active background index build progress.
 
+---
+
 ### Exercise 3: Aborting In-Progress Index Build
 
 **Problem:** Command to cleanly abort an in-progress index build `building_idx`.
 
 **Expected output:**
-```text
-db.collection.dropIndex("building_idx");
-```
-
 > [!check]- Answer
+> ```text
+> db.collection.dropIndex("building_idx");
+> ```
 > ```javascript
 > db.collection.dropIndex("building_idx");
 > ```

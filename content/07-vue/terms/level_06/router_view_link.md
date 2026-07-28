@@ -117,14 +117,13 @@ Now, if the URL path changes in the router config, every single link in your ent
 **Problem:** You have a navigation bar. You want the "Home" link to turn red when the user is actually on the Home page. How does `<RouterLink>` help you with this?
 
 **Expected output:**
-```text
-Vue Router does this automatically!
-When the current URL matches a `<RouterLink>`'s destination, Vue automatically injects a CSS class called `router-link-active` onto the rendered `<a>` tag.
-All you have to do is write the CSS: 
-`.router-link-active { color: red; }`
-```
-
 > [!check]- Answer
+> ```text
+> Vue Router does this automatically!
+> When the current URL matches a `<RouterLink>`'s destination, Vue automatically injects a CSS class called `router-link-active` onto the rendered `<a>` tag.
+> All you have to do is write the CSS: 
+> `.router-link-active { color: red; }`
+> ```
 > - Inspect a Vue Router link in the browser DevTools when you click it.
 
 ---
@@ -134,11 +133,10 @@ All you have to do is write the CSS:
 **Problem:** Write `<RouterLink>` using custom slot scope destructuring `href`, `navigate`, and `isActive` to render a custom `<button>`.
 
 **Expected output:**
-```html
-<RouterLink to="/profile" v-slot="{ href, navigate, isActive }"> <button :href="href" @click="navigate" :class="{ active: isActive }">Profile</button> </RouterLink>
-```
-
 > [!check]- Answer
+> ```html
+> <RouterLink to="/profile" v-slot="{ href, navigate, isActive }"> <button :href="href" @click="navigate" :class="{ active: isActive }">Profile</button> </RouterLink>
+> ```
 > - `<RouterLink>` slot exposes `href`, `navigate`, `isActive`, and `isExactActive`.
 > 
 > ```html
@@ -156,11 +154,10 @@ All you have to do is write the CSS:
 **Problem:** Write standard Vue Router 4 slot template wrapping `<RouterView>` with `<Transition>` and `<KeepAlive>`.
 
 **Expected output:**
-```html
-<RouterView v-slot="{ Component }"> <Transition> <KeepAlive> <component :is="Component" /> </KeepAlive> </Transition> </RouterView>
-```
-
 > [!check]- Answer
+> ```html
+> <RouterView v-slot="{ Component }"> <Transition> <KeepAlive> <component :is="Component" /> </KeepAlive> </Transition> </RouterView>
+> ```
 > - Vue Router 4 uses `<RouterView v-slot="{ Component }">` for transitions.
 > 
 > ```html

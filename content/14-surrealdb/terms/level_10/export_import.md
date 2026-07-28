@@ -176,27 +176,27 @@ b. `surreal import`
 **Problem:** Write CLI command exporting NS `prod` DB `main` to `export.surql`.
 
 **Expected output:**
-```text
-surreal export --endpoint http://localhost:8000 -u root -p root --ns prod --db main export.surql
-```
-
 > [!check]- Answer
+> ```text
+> surreal export --endpoint http://localhost:8000 -u root -p root --ns prod --db main export.surql
+> ```
 > ```text
 > surreal export --endpoint http://localhost:8000 -u root -p root --ns prod --db main export.surql
 > ```
 >
 > **Explanation:** `surreal export` generates portable SQL schema and record text dumps.
 
+---
+
 ### Exercise 3: Importing SQL Dump File
 
 **Problem:** Write CLI command importing `export.surql` into NS `dev` DB `test`.
 
 **Expected output:**
-```text
-surreal import --endpoint http://localhost:8000 -u root -p root --ns dev --db test export.surql
-```
-
 > [!check]- Answer
+> ```text
+> surreal import --endpoint http://localhost:8000 -u root -p root --ns dev --db test export.surql
+> ```
 > ```text
 > surreal import --endpoint http://localhost:8000 -u root -p root --ns dev --db test export.surql
 > ```

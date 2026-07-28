@@ -156,22 +156,21 @@ db.sensor_buckets.updateOne({ deviceId, count: { $lt: 1000 } }, { $push: { readi
 Write the MongoDB upsert query to log a reading.
 
 **Expected output:**
-```javascript
-db.solar_buckets.updateOne(
-  {
-    panel_id: 44,
-    date_bucket: "2026-07-21",
-    count: { $lt: 1440 }
-  },
-  {
-    $push: { readings: { watts: 15.2, time: new Date() } },
-    $inc: { count: 1 }
-  },
-  { upsert: true }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.solar_buckets.updateOne(
+>   {
+>     panel_id: 44,
+>     date_bucket: "2026-07-21",
+>     count: { $lt: 1440 }
+>   },
+>   {
+>     $push: { readings: { watts: 15.2, time: new Date() } },
+>     $inc: { count: 1 }
+>   },
+>   { upsert: true }
+> );
+> ```
 > - Match the panel ID, the current date bucket, and check that the count is strictly less than 1440.
 > - Append the new reading to the array using `$push` and increment the count using `$inc`.
 > - Enable the upsert option.
@@ -185,11 +184,10 @@ db.solar_buckets.updateOne(
 **Problem:** Model IoT sensor bucket document for `sensor:100` storing hourly readings and summary metrics.
 
 **Expected output:**
-```text
-{ sensorId: 100, day: ISODate("2026-01-01"), count: 60, readings: [...] }
-```
-
 > [!check]- Answer
+> ```text
+> { sensorId: 100, day: ISODate("2026-01-01"), count: 60, readings: [...] }
+> ```
 > ```javascript
 > const bucket = {
 >   sensorId: 100,
@@ -202,16 +200,17 @@ db.solar_buckets.updateOne(
 >
 > **Explanation:** Bucket Pattern aggregates time-series data streams into bounded group documents.
 
+---
+
 ### Exercise 3: Upserting into Bounded Bucket Document
 
 **Problem:** Upsert reading into bucket `sensorId: 100` where `count < 100` using `$inc` and `$push`.
 
 **Expected output:**
-```text
-db.buckets.updateOne({ sensorId: 100, count: { $lt: 100 } }, { $push: { readings: reading }, $inc: { count: 1, sum: reading.val } }, { upsert: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.buckets.updateOne({ sensorId: 100, count: { $lt: 100 } }, { $push: { readings: reading }, $inc: { count: 1, sum: reading.val } }, { upsert: true });
+> ```
 > ```javascript
 > db.buckets.updateOne(
 >   { sensorId: 100, count: { $lt: 100 } },

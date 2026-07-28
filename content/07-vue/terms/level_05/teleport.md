@@ -112,12 +112,11 @@ Even though the Modal HTML is physically rendered inside the `<body>` tag, Vue s
 **Problem:** You use `<style scoped>` in your component to make all `<button>`s red. You Teleport a button out to the `<body>` tag. Does the Teleported button still get the scoped red styling?
 
 **Expected output:**
-```text
-Yes!
-The Vue Compiler applies the `data-v-xxxx` scoping attributes to the elements *before* they are Teleported. So even though the button is physically in the `<body>` tag, it retains its scoped component styling!
-```
-
 > [!check]- Answer
+> ```text
+> Yes!
+> The Vue Compiler applies the `data-v-xxxx` scoping attributes to the elements *before* they are Teleported. So even though the button is physically in the `<body>` tag, it retains its scoped component styling!
+> ```
 > - Does Teleport break logical Vue behavior, or just physical DOM placement?
 
 ---
@@ -127,11 +126,10 @@ The Vue Compiler applies the `data-v-xxxx` scoping attributes to the elements *b
 **Problem:** Write `<Teleport>` syntax disabling DOM teleportation on mobile devices using boolean prop `:disabled="isMobile"`.
 
 **Expected output:**
-```html
-<Teleport to="body" :disabled="isMobile"><Modal /></Teleport>
-```
-
 > [!check]- Answer
+> ```html
+> <Teleport to="body" :disabled="isMobile"><Modal /></Teleport>
+> ```
 > - `:disabled="true"` keeps rendered DOM nodes in place without teleporting.
 > 
 > ```html
@@ -147,11 +145,10 @@ The Vue Compiler applies the `data-v-xxxx` scoping attributes to the elements *b
 **Problem:** Which valid CSS query selectors can be passed to `<Teleport to="...">`?
 
 **Expected output:**
-```text
-Any valid CSS query selector string (e.g. 'body', '#modal-root', '.popup-container') or a raw HTMLElement object.
-```
-
 > [!check]- Answer
+> ```text
+> Any valid CSS query selector string (e.g. 'body', '#modal-root', '.popup-container') or a raw HTMLElement object.
+> ```
 > - Accepts CSS selector string or DOM HTMLElement.
 > 
 > ```html

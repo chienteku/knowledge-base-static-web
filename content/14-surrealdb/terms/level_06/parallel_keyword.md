@@ -141,11 +141,10 @@ Write the SurrealQL query to:
 3. Add the `PARALLEL` keyword to execute the write across multi-core CPU threads.
 
 **Expected output:**
-```sql
-UPDATE logs SET archived = true PARALLEL;
-```
-
 > [!check]- Answer
+> ```sql
+> UPDATE logs SET archived = true PARALLEL;
+> ```
 > - Append the keyword `PARALLEL` to the very end of the statement.
 
 ---
@@ -157,11 +156,10 @@ UPDATE logs SET archived = true PARALLEL;
 **Problem:** Execute two independent SELECT queries on `user` and `product` in parallel using `PARALLEL`.
 
 **Expected output:**
-```text
-SELECT * FROM user; SELECT * FROM product PARALLEL;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM user; SELECT * FROM product PARALLEL;
+> ```
 > ```surrealql
 > SELECT * FROM user;
 > SELECT * FROM product PARALLEL;
@@ -169,16 +167,17 @@ SELECT * FROM user; SELECT * FROM product PARALLEL;
 >
 > **Explanation:** `PARALLEL` instructs database engine to execute query batch statements concurrently.
 
+---
+
 ### Exercise 3: Parallel Query Execution Benefit
 
 **Problem:** What is the primary benefit of `PARALLEL` execution in multi-statement queries? (Reduces overall batch latency by executing I/O tasks concurrently).
 
 **Expected output:**
-```text
-Executes independent storage read tasks concurrently to minimize total latency
-```
-
 > [!check]- Answer
+> ```text
+> Executes independent storage read tasks concurrently to minimize total latency
+> ```
 > ```text
 > Executes independent storage read tasks concurrently to minimize total latency
 > ```

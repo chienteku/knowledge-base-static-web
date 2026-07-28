@@ -173,11 +173,10 @@ thread::spawn(move || {
 **Problem:** Write a method `fn get_name(&self, _other: &str) -> &str` and explain why return lifetime elides to `&self`.
 
 **Expected output:**
-```
-Name: Alice
-```
-
 > [!check]- Answer
+> ```
+> Name: Alice
+> ```
 > ```rust
 > struct User { name: String }
 > impl User {
@@ -191,16 +190,17 @@ Name: Alice
 >
 > **Explanation:** By lifetime elision rule 3, if a method has `&self` or `&mut self`, the lifetime of `self` is assigned to all output lifetime parameters.
 
+---
+
 ### Exercise 3: Single Input Lifetime Elision Rule
 
 **Problem:** Demonstrate that `fn first_word(s: &str) -> &str` compiles without explicit annotations.
 
 **Expected output:**
-```
-Word: Hello
-```
-
 > [!check]- Answer
+> ```
+> Word: Hello
+> ```
 > fn first_word(s: &str) -> &str { &s[..5] }
 > fn main() { println!("Word: {}", first_word("Hello World")); }
 > ```

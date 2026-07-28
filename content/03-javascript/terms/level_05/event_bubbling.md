@@ -156,15 +156,14 @@ async function processData() {
 If a user clicks on the `<p>` tag, in what exact order will the click event travel through the DOM?
 
 **Expected output:**
-```text
-1. <p> (The target)
-2. <section>
-3. <main>
-4. <body>
-5. document
-```
-
 > [!check]- Answer
+> ```text
+> 1. <p> (The target)
+> 2. <section>
+> 3. <main>
+> 4. <body>
+> 5. document
+> ```
 > - Bubbling always goes from the innermost child (the target) UP to the outermost parent.
 
 ---
@@ -174,34 +173,33 @@ If a user clicks on the `<p>` tag, in what exact order will the click event trav
 **Problem:** Call `event.stopPropagation()` to prevent button clicks from reaching parent div handlers.
 
 **Expected output:**
-```text
-Child click handled; parent propagation stopped
-```
-
 > [!check]- Answer
+> ```text
+> Child click handled; parent propagation stopped
+> ```
 > ```javascript
 > console.log("Child click handled; parent propagation stopped");
 > ```
 >
 > **Explanation:** `stopPropagation()` prevents events from bubbling up DOM parent trees.
 
+---
+
 ### Exercise 3: Inspecting Event Phase
 
 **Problem:** Match `event.eventPhase` integer constants: `1` (CAPTURING_PHASE), `2` (AT_TARGET), `3` (BUBBLING_PHASE).
 
 **Expected output:**
-```text
-Capture: 1, Target: 2, Bubble: 3
-```
-
 > [!check]- Answer
+> ```text
+> Capture: 1, Target: 2, Bubble: 3
+> ```
 > ```javascript
 > console.log("Capture: 1, Target: 2, Bubble: 3");
 > ```
 >
 > **Explanation:** `eventPhase` numbers indicate current DOM event dispatch propagation stages.
 
----
 
 ---
 

@@ -144,17 +144,16 @@ RETURN math::sum([10, <number> "20"]); // Explicit numeric casting
 Write the equivalent query in SurrealQL.
 
 **Expected output:**
-```sql
-SELECT
-  category,
-  count() AS count,
-  math::sum(stock) AS sum,
-  math::min(last_updated) AS min
-FROM inventory
-GROUP BY category;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT
+>   category,
+>   count() AS count,
+>   math::sum(stock) AS sum,
+>   math::min(last_updated) AS min
+> FROM inventory
+> GROUP BY category;
+> ```
 > - Replace `COUNT(*)` with the empty function argument syntax `count()`.
 > - Map mathematical functions to their namespaced equivalents: `math::sum()` and `math::min()`.
 
@@ -167,27 +166,27 @@ GROUP BY category;
 **Problem:** Count users grouped by `role` field from `user` table.
 
 **Expected output:**
-```text
-SELECT role, count() FROM user GROUP BY role;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT role, count() FROM user GROUP BY role;
+> ```
 > ```surrealql
 > SELECT role, count() FROM user GROUP BY role;
 > ```
 >
 > **Explanation:** `GROUP BY field` aggregates record groups with `count()`.
 
+---
+
 ### Exercise 3: Min/Max Aggregations
 
 **Problem:** Calculate min and max product prices from `product` table using `math::min()` and `math::max()`.
 
 **Expected output:**
-```text
-SELECT math::min(price), math::max(price) FROM product GROUP ALL;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT math::min(price), math::max(price) FROM product GROUP ALL;
+> ```
 > ```surrealql
 > SELECT math::min(price), math::max(price) FROM product GROUP ALL;
 > ```

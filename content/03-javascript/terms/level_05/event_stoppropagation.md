@@ -150,12 +150,11 @@ async function processData() {
 **Problem:** You have a `<body>` listener that logs "Body Clicked", and a `<button>` listener that logs "Button Clicked". You add `event.stopPropagation()` inside the button listener. If you click the button, what exactly logs to the console?
 
 **Expected output:**
-```text
-"Button Clicked"
-(The "Body Clicked" log will not run because the bubble was popped before it reached the body).
-```
-
 > [!check]- Answer
+> ```text
+> "Button Clicked"
+> (The "Body Clicked" log will not run because the bubble was popped before it reached the body).
+> ```
 > - The element that was actually clicked (the target) still fires its listener normally. It's the *ancestors* that are kept in the dark.
 
 ---
@@ -165,27 +164,27 @@ async function processData() {
 **Problem:** Call `event.stopImmediatePropagation()` to prevent subsequent click handlers on current element from running.
 
 **Expected output:**
-```text
-Handler 1 executed; siblings halted
-```
-
 > [!check]- Answer
+> ```text
+> Handler 1 executed; siblings halted
+> ```
 > ```javascript
 > console.log("Handler 1 executed; siblings halted");
 > ```
 >
 > **Explanation:** `stopImmediatePropagation()` halts all remaining event listener callbacks registered on current target elements.
 
+---
+
 ### Exercise 3: Propagation Stopping vs Default Prevention
 
 **Problem:** Explain difference between `stopPropagation()` (halts bubbling) and `preventDefault()` (halts browser default action).
 
 **Expected output:**
-```text
-stopPropagation: DOM tree traversal, preventDefault: Browser action
-```
-
 > [!check]- Answer
+> ```text
+> stopPropagation: DOM tree traversal, preventDefault: Browser action
+> ```
 > ```javascript
 > console.log("stopPropagation: DOM tree traversal, preventDefault: Browser action");
 > ```

@@ -190,12 +190,11 @@ console.log("num1 value:", num1);
 ```
 
 **Expected output:**
-```text
-arr1 length: 4
-num1 value: 10
-```
-
 > [!check]- Answer
+> ```text
+> arr1 length: 4
+> num1 value: 10
+> ```
 > - Arrays copy by reference; pushing to `arr2` updates the shared array.
 > - Numbers copy by value; changing `num2` leaves `num1` untouched.
 
@@ -206,11 +205,10 @@ num1 value: 10
 **Problem:** Trace primitive values `let x = 10; let y = x; y = 20;`.
 
 **Expected output:**
-```text
-x: 10, y: 20
-```
-
 > [!check]- Answer
+> ```text
+> x: 10, y: 20
+> ```
 > ```javascript
 > let x = 10;
 > let y = x;
@@ -220,16 +218,17 @@ x: 10, y: 20
 >
 > **Explanation:** Primitives are assigned by value, creating independent value copies.
 
+---
+
 ### Exercise 3: Object Mutation via Reference
 
 **Problem:** Mutate object property via secondary reference `obj2.val = 99`.
 
 **Expected output:**
-```text
-obj1 val: 99
-```
-
 > [!check]- Answer
+> ```text
+> obj1 val: 99
+> ```
 > ```javascript
 > const obj1 = { val: 1 };
 > const obj2 = obj1;
@@ -239,7 +238,6 @@ obj1 val: 99
 >
 > **Explanation:** Object assignments copy reference pointers, allowing mutations to reflect across all references.
 
----
 
 ---
 

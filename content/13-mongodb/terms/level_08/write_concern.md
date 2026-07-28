@@ -149,13 +149,12 @@ db.orders.insertOne({ ... }, { writeConcern: { w: "majority" } }); // Dynamicall
 State the optimal Write Concern parameters (`w` and `j` settings) to handle this workload, and explain why.
 
 **Expected output:**
-```text
-The optimal settings are `{ w: 1 }` or `{ w: 0 }` with `{ j: false }`. 
-Since data loss is acceptable and writes are extremely frequent (10,000/sec), you want to minimize network and disk wait states. 
-By avoiding `w: "majority"` and `j: true`, you prevent the database from blocking writes on disk flushes and network handshakes, maximizing server throughput.
-```
-
 > [!check]- Answer
+> ```text
+> The optimal settings are `{ w: 1 }` or `{ w: 0 }` with `{ j: false }`. 
+> Since data loss is acceptable and writes are extremely frequent (10,000/sec), you want to minimize network and disk wait states. 
+> By avoiding `w: "majority"` and `j: true`, you prevent the database from blocking writes on disk flushes and network handshakes, maximizing server throughput.
+> ```
 > - Assess if data verification overhead is needed for telemetry data.
 > - Consider write speed performance under high logging throughput.
 
@@ -168,11 +167,10 @@ By avoiding `w: "majority"` and `j: true`, you prevent the database from blockin
 **Problem:** Configure write concern ensuring write is acknowledged by majority nodes and committed to disk journal (`w: 'majority'`, `j: true`).
 
 **Expected output:**
-```text
-db.orders.insertOne(doc, { writeConcern: { w: "majority", j: true, wtimeoutMS: 5000 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.insertOne(doc, { writeConcern: { w: "majority", j: true, wtimeoutMS: 5000 } });
+> ```
 > ```javascript
 > db.orders.insertOne(doc, {
 >   writeConcern: {
@@ -185,16 +183,17 @@ db.orders.insertOne(doc, { writeConcern: { w: "majority", j: true, wtimeoutMS: 5
 >
 > **Explanation:** `w: 'majority'` + `j: true` guarantees durability across cluster node failovers.
 
+---
+
 ### Exercise 3: Write Concern Timeout Protection
 
 **Problem:** Why specify `wtimeoutMS` in write concern configurations? (Prevents write operations from blocking indefinitely if node replication stalls).
 
 **Expected output:**
-```text
-Prevents operations from blocking indefinitely if replica nodes stall
-```
-
 > [!check]- Answer
+> ```text
+> Prevents operations from blocking indefinitely if replica nodes stall
+> ```
 > ```text
 > Prevents operations from blocking indefinitely if replica nodes stall
 > ```

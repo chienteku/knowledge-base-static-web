@@ -170,13 +170,12 @@ async function processData() {
 **Problem:** Print keys, values, and entries of `{ a: 1, b: 2 }` using `Object.keys`, `Object.values`, and `Object.entries`.
 
 **Expected output:**
-```text
-["a","b"]
-[1,2]
-[["a",1],["b",2]]
-```
-
 > [!check]- Answer
+> ```text
+> ["a","b"]
+> [1,2]
+> [["a",1],["b",2]]
+> ```
 > ```javascript
 > const obj = { a: 1, b: 2 };
 > console.log(JSON.stringify(Object.keys(obj)));
@@ -186,16 +185,17 @@ async function processData() {
 >
 > **Explanation:** `Object.keys`, `Object.values`, and `Object.entries` extract iterable arrays of object metadata.
 
+---
+
 ### Exercise 3: Deep Copying with `structuredClone`
 
 **Problem:** Create a deep clone of nested object `{ a: { b: 1 } }` using `structuredClone()`.
 
 **Expected output:**
-```text
-Original b: 1, Clone b: 99
-```
-
 > [!check]- Answer
+> ```text
+> Original b: 1, Clone b: 99
+> ```
 > ```javascript
 > const orig = { a: { b: 1 } };
 > const copy = structuredClone(orig);
@@ -205,7 +205,6 @@ Original b: 1, Clone b: 99
 >
 > **Explanation:** `structuredClone` creates complete, independent deep memory copies of objects and nested collections.
 
----
 
 ---
 

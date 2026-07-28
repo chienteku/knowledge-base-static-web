@@ -203,11 +203,10 @@ mod tests {
 **Problem:** Write a `#[cfg(test)] mod tests { use super::*; #[test] fn test_add() { assert_eq!(2+2, 4); } }` module.
 
 **Expected output:**
-```
-Unit test verified
-```
-
 > [!check]- Answer
+> ```
+> Unit test verified
+> ```
 > ```rust
 > #[cfg(test)]
 > mod tests {
@@ -224,16 +223,17 @@ Unit test verified
 >
 > **Explanation:** `#[cfg(test)]` ensures test module code is compiled only during `cargo test`.
 
+---
+
 ### Exercise 3: Result-Returning Unit Tests
 
 **Problem:** Write a test function returning `Result<(), String>` that uses `?` inside test body.
 
 **Expected output:**
-```
-Result test passed
-```
-
 > [!check]- Answer
+> ```
+> Result test passed
+> ```
 > #[test]
 > fn test_result() -> Result<(), String> {
 >     let val: u32 = "42".parse().map_err(|e| e.to_string())?;

@@ -258,15 +258,14 @@ navigator.geolocation.getCurrentPosition(
 **Problem:** Write a JavaScript snippet to check if the browser supports geolocation, and if so, watch the user's position continuously, logging the current latitude to the console.
 
 **Expected output:**
-```javascript
-if (navigator.geolocation) {
-  const watchId = navigator.geolocation.watchPosition((pos) => {
-    console.log("Updated Lat: " + pos.coords.latitude);
-  });
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> if (navigator.geolocation) {
+>   const watchId = navigator.geolocation.watchPosition((pos) => {
+>     console.log("Updated Lat: " + pos.coords.latitude);
+>   });
+> }
+> ```
 > - Use the `navigator.geolocation` check.
 > - Call `watchPosition()` instead of `getCurrentPosition()`.
 
@@ -279,11 +278,10 @@ if (navigator.geolocation) {
 **Problem:** Write JS snippet invoking `getCurrentPosition` logging `latitude` and `longitude`.
 
 **Expected output:**
-```text
-navigator.geolocation.getCurrentPosition(pos => { console.log(pos.coords.latitude, pos.coords.longitude); });
-```
-
 > [!check]- Answer
+> ```text
+> navigator.geolocation.getCurrentPosition(pos => { console.log(pos.coords.latitude, pos.coords.longitude); });
+> ```
 > ```javascript
 > navigator.geolocation.getCurrentPosition((position) => {
 >   const { latitude, longitude } = position.coords;
@@ -293,16 +291,17 @@ navigator.geolocation.getCurrentPosition(pos => { console.log(pos.coords.latitud
 >
 > **Explanation:** `position.coords` provides current device latitude and longitude.
 
+---
+
 ### Exercise 3: Continuous Location Tracking API
 
 **Problem:** Which Geolocation API method continuously tracks location updates as the user moves (`getCurrentPosition` or `watchPosition`)?
 
 **Expected output:**
-```text
-watchPosition (use clearWatch to stop tracking).
-```
-
 > [!check]- Answer
+> ```text
+> watchPosition (use clearWatch to stop tracking).
+> ```
 > ```javascript
 > const watchId = navigator.geolocation.watchPosition((pos) => {
 >   console.log(pos.coords);

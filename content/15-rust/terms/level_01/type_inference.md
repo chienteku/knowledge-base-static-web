@@ -153,11 +153,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Evens: [2, 4, 6]
-```
-
 > [!check]- Answer
+> ```text
+> Evens: [2, 4, 6]
+> ```
 > - The compiler error will say: `consider giving even_numbers a type`.
 > - Change `let even_numbers = ...` to `let even_numbers: Vec<i32> = ...`.
 
@@ -168,11 +167,10 @@ Evens: [2, 4, 6]
 **Problem:** Demonstrate specifying literal types using suffixes `42_u64` and `3.14_f32` so the compiler infers exact vector item types without type annotations.
 
 **Expected output:**
-```
-u64 vector created
-```
-
 > [!check]- Answer
+> ```
+> u64 vector created
+> ```
 > ```rust
 > fn main() {
 >     let numbers = vec![10_u64, 20_u64, 30_u64];
@@ -182,16 +180,17 @@ u64 vector created
 >
 > **Explanation:** Literal suffixes (e.g. `_u64`) explicitly specify the primitive type of numeric constants, guiding downstream type inference throughout the function.
 
+---
+
 ### Exercise 3: Resolving Collector Inference Errors
 
 **Problem:** Fix `let mapped = vec!["1", "2", "3"].into_iter().map(|s| s.parse().unwrap());` by providing partial type inference `Vec<i32>`.
 
 **Expected output:**
-```
-[1, 2, 3]
-```
-
 > [!check]- Answer
+> ```
+> [1, 2, 3]
+> ```
 > ```rust
 > fn main() {
 >     let mapped: Vec<i32> = vec!["1", "2", "3"]

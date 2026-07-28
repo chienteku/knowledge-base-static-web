@@ -180,11 +180,10 @@ thread::spawn(move || {
 **Problem:** Implement `FromStr` for `Point { x: i32, y: i32 }` parsing `"10,20"`.
 
 **Expected output:**
-```
-Point: (10, 20)
-```
-
 > [!check]- Answer
+> ```
+> Point: (10, 20)
+> ```
 > ```rust
 > use std::str::FromStr;
 > #[derive(Debug)]
@@ -207,16 +206,17 @@ Point: (10, 20)
 >
 > **Explanation:** `FromStr` enables string parsing via `.parse()` on custom domain types.
 
+---
+
 ### Exercise 3: Parsing Color Hex Strings
 
 **Problem:** Parse a hex color string `"#FF0000"` into `Color(u8, u8, u8)` using `.parse()`.
 
 **Expected output:**
-```
-Parsed red: 255
-```
-
 > [!check]- Answer
+> ```
+> Parsed red: 255
+> ```
 > use std::str::FromStr;
 > struct Color(u8, u8, u8);
 > impl FromStr for Color {

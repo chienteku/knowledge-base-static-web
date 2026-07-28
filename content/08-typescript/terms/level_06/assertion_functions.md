@@ -204,11 +204,10 @@ function assertHasTheme(obj: any): asserts obj is Config {
 ```
 
 **Expected output:**
-```text
-The assertion function is written with the corrects asserts obj is Config return signature and throws on invalid properties.
-```
-
 > [!check]- Answer
+> ```text
+> The assertion function is written with the corrects asserts obj is Config return signature and throws on invalid properties.
+> ```
 > - The return type must use `asserts obj is Config`.
 > - Check `obj.theme` using an `if` conditional and throw an `Error` on invalid values.
 
@@ -221,11 +220,10 @@ The assertion function is written with the corrects asserts obj is Config return
 **Problem:** Write assertion function `assertDefined<T>(val: T): asserts val is NonNullable<T>`.
 
 **Expected output:**
-```text
-assertDefined signature created
-```
-
 > [!check]- Answer
+> ```text
+> assertDefined signature created
+> ```
 > ```typescript
 > function assertDefined<T>(val: T): asserts val is NonNullable<T> {
 >   if (val === null || val === undefined) throw new Error("Value is nullish");
@@ -235,16 +233,17 @@ assertDefined signature created
 >
 > **Explanation:** Assertion functions guarantee non-nullish state after invocation.
 
+---
+
 ### Exercise 3: Assertion Function Execution Guarantee
 
 **Problem:** State what happens if an assertion function condition evaluates to false at runtime (Throws error).
 
 **Expected output:**
-```text
-Throws explicit runtime exception
-```
-
 > [!check]- Answer
+> ```text
+> Throws explicit runtime exception
+> ```
 > ```typescript
 > console.log("Throws explicit runtime exception");
 > ```

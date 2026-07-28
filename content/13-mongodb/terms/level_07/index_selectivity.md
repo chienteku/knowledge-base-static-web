@@ -169,14 +169,13 @@ db.users.createIndex({ email: 1, gender: 1 });
 2.  State which field (`status` or `sku`) should receive a database index.
 
 **Expected output:**
-```text
-1. Selectivity Calculation:
-   - Query A (status): 800,000 / 1,000,000 = 80% (Low Selectivity)
-   - Query B (sku): 1 / 1,000,000 = 0.0001% (High Selectivity)
-2. The `sku` field should receive the index. Its high selectivity allows the query planner to jump directly to the target record in logarithmic time, whereas a status index will be ignored due to its low selectivity.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Selectivity Calculation:
+>    - Query A (status): 800,000 / 1,000,000 = 80% (Low Selectivity)
+>    - Query B (sku): 1 / 1,000,000 = 0.0001% (High Selectivity)
+> 2. The `sku` field should receive the index. Its high selectivity allows the query planner to jump directly to the target record in logarithmic time, whereas a status index will be ignored due to its low selectivity.
+> ```
 > - Selectivity is the ratio of matching documents to total documents.
 > - Indexes are effective only when selectivity ratios are very small.
 
@@ -189,27 +188,27 @@ db.users.createIndex({ email: 1, gender: 1 });
 **Problem:** Which field has higher selectivity: `email` (unique) or `status` (3 values)? (`email`).
 
 **Expected output:**
-```text
-email (high selectivity unique values)
-```
-
 > [!check]- Answer
+> ```text
+> email (high selectivity unique values)
+> ```
 > ```text
 > email (high selectivity unique values)
 > ```
 >
 > **Explanation:** High selectivity fields narrow down query candidate sets rapidly.
 
+---
+
 ### Exercise 3: Selectivity Definition
 
 **Problem:** Define index selectivity in MongoDB (The ratio of distinct field values to total collection document count).
 
 **Expected output:**
-```text
-Ratio of unique field values to total collection document count
-```
-
 > [!check]- Answer
+> ```text
+> Ratio of unique field values to total collection document count
+> ```
 > ```text
 > Ratio of unique field values to total collection document count
 > ```

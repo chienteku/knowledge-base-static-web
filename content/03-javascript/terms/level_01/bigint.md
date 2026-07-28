@@ -161,11 +161,10 @@ console.log(result);
 ```
 
 **Expected output:**
-```text
-33n
-```
-
 > [!check]- Answer
+> ```text
+> 33n
+> ```
 > - BigInt represents integers only.
 > - Divisions that produce decimals are always rounded down (truncated) to the nearest integer.
 
@@ -176,12 +175,11 @@ console.log(result);
 **Problem:** Create a BigInt value representing `9007199254740993n` using `n` suffix syntax and `BigInt()` constructor from string.
 
 **Expected output:**
-```text
-9007199254740993n
-9007199254740993n
-```
-
 > [!check]- Answer
+> ```text
+> 9007199254740993n
+> 9007199254740993n
+> ```
 > ```javascript
 > const b1 = 9007199254740993n;
 > const b2 = BigInt("9007199254740993");
@@ -191,16 +189,17 @@ console.log(result);
 >
 > **Explanation:** BigInt literals require an `n` suffix or string parsing in `BigInt("...")` to avoid Number precision limits.
 
+---
+
 ### Exercise 3: BigInt Division Truncation
 
 **Problem:** Divide `7n / 2n` and explain why the result is `3n` instead of `3.5`.
 
 **Expected output:**
-```text
-3n
-```
-
 > [!check]- Answer
+> ```text
+> 3n
+> ```
 > ```javascript
 > console.log(7n / 2n); // 3n
 > ```

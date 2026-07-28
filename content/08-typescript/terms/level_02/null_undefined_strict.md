@@ -163,15 +163,14 @@ function getLength(str: string | undefined): number {
 ```
 
 **Expected output:**
-```typescript
-function getLength(str: string | undefined): number {
-  if (str === undefined) return 0;
-  return str.length;
-}
-// OR using ternary/nullish coalescing
-```
-
 > [!check]- Answer
+> ```typescript
+> function getLength(str: string | undefined): number {
+>   if (str === undefined) return 0;
+>   return str.length;
+> }
+> // OR using ternary/nullish coalescing
+> ```
 > - The type of `str` inside the function is a union.
 > - Use an `if` block checking `str === undefined` or `!str` to narrow the type to `string`.
 
@@ -184,11 +183,10 @@ function getLength(str: string | undefined): number {
 **Problem:** Use `??` operator to supply default string `"Anonymous"` for `name: string | null`.
 
 **Expected output:**
-```text
-Anonymous
-```
-
 > [!check]- Answer
+> ```text
+> Anonymous
+> ```
 > ```typescript
 > const name: string | null = null;
 > console.log(name ?? "Anonymous");
@@ -196,16 +194,17 @@ Anonymous
 >
 > **Explanation:** `??` provides default values when expressions evaluate to `null` or `undefined`.
 
+---
+
 ### Exercise 3: Strict Null Checks Flag Verification
 
 **Problem:** Which tsconfig flag prevents implicit assignment of `null` to `string` variables?
 
 **Expected output:**
-```text
-strictNullChecks: true
-```
-
 > [!check]- Answer
+> ```text
+> strictNullChecks: true
+> ```
 > ```typescript
 > console.log("strictNullChecks: true");
 > ```

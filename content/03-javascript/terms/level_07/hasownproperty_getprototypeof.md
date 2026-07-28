@@ -174,11 +174,10 @@ console.log("Own keys count:", countOwnProperties(child));
 ```
 
 **Expected output:**
-```text
-Own keys count: 1
-```
-
 > [!check]- Answer
+> ```text
+> Own keys count: 1
+> ```
 > - Check each key using `Object.hasOwn(config, key)`.
 
 ---
@@ -188,27 +187,27 @@ Own keys count: 1
 **Problem:** Inspect prototype of `[]` using `Object.getPrototypeOf([])`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(Object.getPrototypeOf([]) === Array.prototype);
 > ```
 >
 > **Explanation:** `Object.getPrototypeOf(obj)` returns the internal `[[Prototype]]` reference of target objects.
 
+---
+
 ### Exercise 3: Safe Property Checks with `Object.hasOwn`
 
 **Problem:** Check own property `"a"` on `Object.create(null)` using `Object.hasOwn`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const obj = Object.create(null);
 > obj.a = 1;

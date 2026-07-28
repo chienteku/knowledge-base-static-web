@@ -138,13 +138,12 @@ While you *can* put global headers and footers in `app.vue`, doing so means they
 **Problem:** Write the most minimal `app.vue` file required to activate the Nuxt routing system so the `pages/` directory works.
 
 **Expected output:**
-```vue
-<template>
-  <NuxtPage />
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <NuxtPage />
+> </template>
+> ```
 > - The built-in component `<NuxtPage />` acts as a placeholder viewport that tells Nuxt where to render matching routing templates from the `pages/` directory.
 
 ---
@@ -154,17 +153,16 @@ While you *can* put global headers and footers in `app.vue`, doing so means they
 **Problem:** Write a minimal `app.vue` component combining `<NuxtLayout>` and `<NuxtPage />`.
 
 **Expected output:**
-```vue
-<template>
-  <div>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <div>
+>     <NuxtLayout>
+>       <NuxtPage />
+>     </NuxtLayout>
+>   </div>
+> </template>
+> ```
 > - `<NuxtLayout>` wraps page rendering with layout templates.
 > 
 > ```vue
@@ -184,11 +182,10 @@ While you *can* put global headers and footers in `app.vue`, doing so means they
 **Problem:** Contrast `app.vue` vs `pages/index.vue`.
 
 **Expected output:**
-```text
-app.vue is the top-most main root wrapper component that renders on every route; pages/index.vue is the page component matching root URL path '/'.
-```
-
 > [!check]- Answer
+> ```text
+> app.vue is the top-most main root wrapper component that renders on every route; pages/index.vue is the page component matching root URL path '/'.
+> ```
 > - `app.vue` -> Global application wrapper.
 > - `pages/index.vue` -> Route handler for `/` URL.
 > 

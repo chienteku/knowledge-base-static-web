@@ -205,11 +205,10 @@ nav { display: flex; gap: 20px; }
 **Problem:** You want a grid with 2 columns. You want the left column to be exactly 250px wide (for a sidebar), and you want the right column to take up all the remaining flexible space. How do you write `grid-template-columns`?
 
 **Expected output:**
-```css
-grid-template-columns: 250px 1fr;
-```
-
 > [!check]- Answer
+> ```css
+> grid-template-columns: 250px 1fr;
+> ```
 > - You can mix hard pixels with fractional (`fr`) units!
 
 ---
@@ -221,27 +220,27 @@ grid-template-columns: 250px 1fr;
 **Problem:** When is CSS Grid superior to Flexbox?
 
 **Expected output:**
-```text
-When designing 2D layouts requiring strict control over both rows AND columns simultaneously.
-```
-
 > [!check]- Answer
+> ```text
+> When designing 2D layouts requiring strict control over both rows AND columns simultaneously.
+> ```
 > ```text
 > When designing 2D layouts requiring strict control over both rows AND columns simultaneously.
 > ```
 >
 > **Explanation:** Grid controls 2D layout tracks; Flexbox controls 1D flow alignment.
 
+---
+
 ### Exercise 3: Implicit Row Track Sizing
 
 **Problem:** Which CSS property defines height dimensions for implicitly generated grid rows?
 
 **Expected output:**
-```text
-grid-auto-rows
-```
-
 > [!check]- Answer
+> ```text
+> grid-auto-rows
+> ```
 > ```css
 > .grid {
 >   grid-auto-rows: minmax(100px, auto);

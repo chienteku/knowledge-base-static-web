@@ -262,6 +262,8 @@ function SortedList({ numbers }) {
 >
 > **Explanation:** Pure components derive UI strictly from input props without reading dynamic external state.
 
+---
+
 ### Exercise 3: Strict Mode Double Rendering
 
 **Problem:** Why does React `StrictMode` intentionally execute component render functions twice in development? (To detect and surface impure render side-effects early).

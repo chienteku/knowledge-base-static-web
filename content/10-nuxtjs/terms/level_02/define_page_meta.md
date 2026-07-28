@@ -176,17 +176,16 @@ definePageMeta({
 **Problem:** Write `definePageMeta()` block configuring layout `'auth'`, middleware `'auth'`, and custom meta `requiresAdmin: true`.
 
 **Expected output:**
-```vue
-<script setup>
-definePageMeta({
-  layout: 'auth',
-  middleware: ['auth'],
-  requiresAdmin: true
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> definePageMeta({
+>   layout: 'auth',
+>   middleware: ['auth'],
+>   requiresAdmin: true
+> });
+> </script>
+> ```
 > - `definePageMeta` configures page layouts, middleware, and route meta.
 > 
 > ```vue
@@ -206,11 +205,10 @@ definePageMeta({
 **Problem:** Write `definePageMeta()` setting disabling layout wrapping for a specific page.
 
 **Expected output:**
-```typescript
-definePageMeta({ layout: false });
-```
-
 > [!check]- Answer
+> ```typescript
+> definePageMeta({ layout: false });
+> ```
 > - `layout: false` disables layout wrapping.
 > 
 > ```typescript

@@ -168,11 +168,10 @@ app.post('/api/settings', (req, res) => {
 **Problem:** Distinguish between Serialization and Deserialization.
 
 **Expected output:**
-```text
-Serialization converts in-memory data objects into a transferable string/binary stream. Deserialization reconstructs a stream into in-memory data objects.
-```
-
 > [!check]- Answer
+> ```text
+> Serialization converts in-memory data objects into a transferable string/binary stream. Deserialization reconstructs a stream into in-memory data objects.
+> ```
 > ```text
 > Serialization -> Object in RAM ===> Byte Stream / JSON String
 > Deserialization -> Byte Stream / JSON String ===> Object in RAM
@@ -185,11 +184,10 @@ Serialization converts in-memory data objects into a transferable string/binary 
 **Problem:** Write Zod schema enforcing string `username` and positive integer `age`.
 
 **Expected output:**
-```text
-const userSchema = z.object({ username: z.string(), age: z.number().int().positive() });
-```
-
 > [!check]- Answer
+> ```text
+> const userSchema = z.object({ username: z.string(), age: z.number().int().positive() });
+> ```
 > ```javascript
 > const userSchema = z.object({
 > username: z.string(),

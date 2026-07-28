@@ -180,12 +180,11 @@ fn greet(name: &str) {
 **Problem:** Wrap a byte cursor `std::io::Cursor::new("line1\nline2")` in a `BufReader` and iterate through lines.
 
 **Expected output:**
-```
-line1
-line2
-```
-
 > [!check]- Answer
+> ```
+> line1
+> line2
+> ```
 > ```rust
 > use std::io::{BufRead, BufReader, Cursor};
 > fn main() {
@@ -199,16 +198,17 @@ line2
 >
 > **Explanation:** `BufRead::lines` yields string lines efficiently by reading until newline delimiters.
 
+---
+
 ### Exercise 3: Buffered Writing with `BufWriter`
 
 **Problem:** Write `b"Hello World"` to a vector using `BufWriter` and call `.flush()`.
 
 **Expected output:**
-```
-Written 11 bytes
-```
-
 > [!check]- Answer
+> ```
+> Written 11 bytes
+> ```
 > use std::io::{BufWriter, Write};
 > fn main() {
 >     let mut buffer = Vec::new();

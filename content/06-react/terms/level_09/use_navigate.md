@@ -124,16 +124,15 @@ navigate(-1) // Navigates 1 step back in browser history
 **Problem:** You are building a "Cancel" button. If the user clicks it, you want them to go back to whatever page they were on previously. How do you do this with `useNavigate`?
 
 **Expected output:**
-```javascript
-const navigate = useNavigate();
-
-function handleCancel() {
-  // Passing -1 tells the router to go back one step in history!
-  navigate(-1);
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> const navigate = useNavigate();
+> 
+> function handleCancel() {
+>   // Passing -1 tells the router to go back one step in history!
+>   navigate(-1);
+> }
+> ```
 > - The `navigate` function accepts numbers as well as strings!
 
 ---
@@ -145,11 +144,10 @@ function handleCancel() {
 **Problem:** Use `useNavigate()` to programmatically navigate to `/dashboard` after successful API form submit.
 
 **Expected output:**
-```text
-function LoginForm() { const navigate = useNavigate(); const handleSubmit = async e => { e.preventDefault(); await login(); navigate('/dashboard', { replace: true }); }; return <form onSubmit={handleSubmit}><button>Login</button></form>; }
-```
-
 > [!check]- Answer
+> ```text
+> function LoginForm() { const navigate = useNavigate(); const handleSubmit = async e => { e.preventDefault(); await login(); navigate('/dashboard', { replace: true }); }; return <form onSubmit={handleSubmit}><button>Login</button></form>; }
+> ```
 > ```javascript
 > function LoginForm() {
 >   const navigate = useNavigate();
@@ -168,16 +166,17 @@ function LoginForm() { const navigate = useNavigate(); const handleSubmit = asyn
 >
 > **Explanation:** `useNavigate()` executes programmatic client-side routing inside event handlers.
 
+---
+
 ### Exercise 3: Replacing History Entry with `{ replace: true }`
 
 **Problem:** Why pass `{ replace: true }` option to `navigate('/dashboard', { replace: true })` after login? (Replaces current login page entry in browser history so pressing Back button does not return to login).
 
 **Expected output:**
-```text
-Replaces current page in browser history so pressing Back button does not return to login page
-```
-
 > [!check]- Answer
+> ```text
+> Replaces current page in browser history so pressing Back button does not return to login page
+> ```
 > ```text
 > Replaces current page in browser history so pressing Back button does not return to login page
 > ```

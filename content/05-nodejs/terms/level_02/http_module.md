@@ -114,12 +114,11 @@ res.end();
 **Problem:** In the example code above, we ran `server.listen(3000)`. What is a Port, and why do we need it?
 
 **Expected output:**
-```text
-A Port is like an "apartment number" for an IP address. 
-If your server's IP address (the street address) receives network traffic, the computer needs to know *which program* should handle it. Because Node.js is listening on Port 3000, any traffic directed to `123.45.67.89:3000` is routed directly to your Node.js application.
-```
-
 > [!check]- Answer
+> ```text
+> A Port is like an "apartment number" for an IP address. 
+> If your server's IP address (the street address) receives network traffic, the computer needs to know *which program* should handle it. Because Node.js is listening on Port 3000, any traffic directed to `123.45.67.89:3000` is routed directly to your Node.js application.
+> ```
 > - Does a computer run more than one program at a time? How does it differentiate traffic meant for an email server vs a web server?
 
 ---
@@ -131,11 +130,10 @@ If your server's IP address (the street address) receives network traffic, the c
 **Problem:** Create an HTTP server using `http.createServer()` returning status 200 and text `'OK'` on port 8080.
 
 **Expected output:**
-```text
-http.createServer((req, res) => { res.writeHead(200, {'Content-Type': 'text/plain'}); res.end('OK'); }).listen(8080);
-```
-
 > [!check]- Answer
+> ```text
+> http.createServer((req, res) => { res.writeHead(200, {'Content-Type': 'text/plain'}); res.end('OK'); }).listen(8080);
+> ```
 > ```javascript
 > const http = require('http');
 > const server = http.createServer((req, res) => {
@@ -147,16 +145,17 @@ http.createServer((req, res) => { res.writeHead(200, {'Content-Type': 'text/plai
 >
 > **Explanation:** `http.createServer` instantiates a basic native HTTP web server listening on specified port.
 
+---
+
 ### Exercise 3: Reading HTTP Request Method & URL
 
 **Problem:** Write code inside request handler to return 404 if `req.method !== 'GET'` or `req.url !== '/api'`. 
 
 **Expected output:**
-```text
-if (req.method !== 'GET' || req.url !== '/api') { res.statusCode = 404; res.end('Not Found'); }
-```
-
 > [!check]- Answer
+> ```text
+> if (req.method !== 'GET' || req.url !== '/api') { res.statusCode = 404; res.end('Not Found'); }
+> ```
 > ```javascript
 > if (req.method !== 'GET' || req.url !== '/api') {
 >   res.statusCode = 404;

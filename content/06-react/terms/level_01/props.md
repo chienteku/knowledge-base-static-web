@@ -196,6 +196,8 @@ function Header({ title, onUpdate }) {
 >
 > **Explanation:** Destructuring parameters allows assigning clean fallback default prop values.
 
+---
+
 ### Exercise 3: Unidirectional Data Flow Prop Direction
 
 **Problem:** In React, do props flow down from Parent to Child, or up from Child to Parent? (Down from Parent to Child).

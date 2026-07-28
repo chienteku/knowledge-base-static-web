@@ -158,12 +158,11 @@ thread::spawn(move || {
 **Problem:** Use `dbg!` inline inside an arithmetic expression to inspect intermediate calculation steps without breaking expression flow: `(a + b) * c` where `a=2`, `b=3`, `c=4`.
 
 **Expected output:**
-```
-5
-20
-```
-
 > [!check]- Answer
+> ```
+> 5
+> 20
+> ```
 > ```rust
 > fn main() {
 >     let a = 2;
@@ -176,16 +175,17 @@ thread::spawn(move || {
 >
 > **Explanation:** `dbg!` takes ownership of the evaluated expression, prints file:line information along with the result, and returns the ownership of that value back to the enclosing expression.
 
+---
+
 ### Exercise 3: Debugging Non-Copy Move Values
 
 **Problem:** Explain why `dbg!(&my_string)` should be used instead of `dbg!(my_string)` when you need to use `my_string` again afterwards.
 
 **Expected output:**
-```
-Borrowed debug successfully
-```
-
 > [!check]- Answer
+> ```
+> Borrowed debug successfully
+> ```
 > ```rust
 > fn main() {
 >     let s = String::from("Rust");

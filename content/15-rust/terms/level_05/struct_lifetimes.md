@@ -190,11 +190,10 @@ thread::spawn(move || {
 **Problem:** Define `struct Highlight<'a> { text: &'a str }`. Instantiate it with a string slice and print `text`.
 
 **Expected output:**
-```
-Highlight: Important
-```
-
 > [!check]- Answer
+> ```
+> Highlight: Important
+> ```
 > ```rust
 > struct Highlight<'a> {
 >     text: &'a str,
@@ -208,16 +207,17 @@ Highlight: Important
 >
 > **Explanation:** Struct lifetime annotations guarantee struct instances cannot outlive referenced target data.
 
+---
+
 ### Exercise 3: Method Implementation on Lifetime Structs
 
 **Problem:** Implement an `impl<'a> Highlight<'a>` block with a method `fn announce(&self) -> &str`.
 
 **Expected output:**
-```
-Announce: Important
-```
-
 > [!check]- Answer
+> ```
+> Announce: Important
+> ```
 > struct Highlight<'a> { text: &'a str }
 > impl<'a> Highlight<'a> {
 >     fn announce(&self) -> &str { self.text }

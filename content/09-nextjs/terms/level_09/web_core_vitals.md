@@ -111,13 +111,12 @@ Next.js features map directly to these Core Vitals:
 3. "The page structure loaded instantly, but the large hero banner image took 8 seconds to transition from grey to full color."
 
 **Expected output:**
-```text
-1. CLS (Layout shift caused by lack of reserved dimensions).
-2. INP / FID (Latency between action input and browser thread reaction).
-3. LCP (Slow rendering of the primary layout element).
-```
-
 > [!check]- Answer
+> ```text
+> 1. CLS (Layout shift caused by lack of reserved dimensions).
+> 2. INP / FID (Latency between action input and browser thread reaction).
+> 3. LCP (Slow rendering of the primary layout element).
+> ```
 > - CLS is always related to elements moving unexpectedly.
 
 ---
@@ -130,13 +129,12 @@ Next.js features map directly to these Core Vitals:
 3. CLS (Cumulative Layout Shift)
 
 **Expected output:**
-```text
-1. Render time of largest image/text block visible in viewport (Loading speed)
-2. Latency of user interaction feedback to next painted frame (Interactivity)
-3. Visual stability score measuring unexpected layout movements (Visual stability)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Render time of largest image/text block visible in viewport (Loading speed)
+> 2. Latency of user interaction feedback to next painted frame (Interactivity)
+> 3. Visual stability score measuring unexpected layout movements (Visual stability)
+> ```
 > - LCP -> Loading Performance (Target < 2.5s)
 > - INP -> Interactivity & Responsiveness (Target < 200ms)
 > - CLS -> Visual Stability (Target < 0.1)
@@ -152,11 +150,10 @@ Next.js features map directly to these Core Vitals:
 **Problem:** Write `useReportWebVitals` hook function logging metric name and value inside `app/providers.tsx`.
 
 **Expected output:**
-```tsx
-'use client'; import { useReportWebVitals } from 'next/navigation'; export function WebVitals() { useReportWebVitals((metric) => { console.log(metric.name, metric.value); }); return null; }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; import { useReportWebVitals } from 'next/navigation'; export function WebVitals() { useReportWebVitals((metric) => { console.log(metric.name, metric.value); }); return null; }
+> ```
 > - `useReportWebVitals()` captures real-user Core Vitals metrics.
 > 
 > ```tsx

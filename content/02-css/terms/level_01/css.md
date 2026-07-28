@@ -153,11 +153,10 @@ h1 {
 **Problem:** You want to make a specific button look like a giant red circle. Do you modify the `index.html` file or the `styles.css` file to achieve this?
 
 **Expected output:**
-```text
-You modify the `styles.css` file! You would target the button in CSS and give it a red background color, a specific width/height, and a border-radius of 50%. The HTML file just needs the `<button>` tag.
-```
-
 > [!check]- Answer
+> ```text
+> You modify the `styles.css` file! You would target the button in CSS and give it a red background color, a specific width/height, and a border-radius of 50%. The HTML file just needs the `<button>` tag.
+> ```
 > - Does a giant red circle describe the *structure* of the data, or its *presentation*?
 
 ---
@@ -169,27 +168,27 @@ You modify the `styles.css` file! You would target the button in CSS and give it
 **Problem:** Write `<link>` tag in `<head>` linking external stylesheet `theme.css`.
 
 **Expected output:**
-```text
-<link rel="stylesheet" href="theme.css">
-```
-
 > [!check]- Answer
+> ```text
+> <link rel="stylesheet" href="theme.css">
+> ```
 > ```html
 > <link rel="stylesheet" href="theme.css">
 > ```
 >
 > **Explanation:** `rel="stylesheet"` binds external CSS files to HTML documents.
 
+---
+
 ### Exercise 3: CSS Separation of Concerns
 
 **Problem:** Explain why separating HTML structure and CSS presentation improves website maintainability.
 
 **Expected output:**
-```text
-Updating a single CSS file updates design presentation across thousands of HTML pages simultaneously.
-```
-
 > [!check]- Answer
+> ```text
+> Updating a single CSS file updates design presentation across thousands of HTML pages simultaneously.
+> ```
 > ```text
 > Updating a single CSS file updates design presentation across thousands of HTML pages simultaneously.
 > ```

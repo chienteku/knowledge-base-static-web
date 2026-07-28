@@ -201,13 +201,12 @@ You attempt to execute this statement:
 What will happen, and why?
 
 **Expected output:**
-```text
-The UPDATE statement will fail with a foreign key violation error!
-Because the `posts` table has a referential integrity constraint pointing to `users`, any value written to `author_id` must match an active primary key in the `users` table. 
-Since ID 5 does not exist in the `users` table, the database blocks the query to prevent an orphaned post.
-```
-
 > [!check]- Answer
+> ```text
+> The UPDATE statement will fail with a foreign key violation error!
+> Because the `posts` table has a referential integrity constraint pointing to `users`, any value written to `author_id` must match an active primary key in the `users` table. 
+> Since ID 5 does not exist in the `users` table, the database blocks the query to prevent an orphaned post.
+> ```
 > - Inspect the list of active user IDs.
 > - Verify if the target update ID is a member of that set.
 
@@ -220,11 +219,10 @@ Since ID 5 does not exist in the `users` table, the database blocks the query to
 **Problem:** Define foreign key constraint as `DEFERRABLE INITIALLY DEFERRED` to validate integrity at commit time.
 
 **Expected output:**
-```text
-ALTER TABLE child ADD CONSTRAINT fk_parent FOREIGN KEY (p_id) REFERENCES parent(id) DEFERRABLE INITIALLY DEFERRED;
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE child ADD CONSTRAINT fk_parent FOREIGN KEY (p_id) REFERENCES parent(id) DEFERRABLE INITIALLY DEFERRED;
+> ```
 > ```sql
 > ALTER TABLE child
 > ADD CONSTRAINT fk_parent
@@ -234,16 +232,17 @@ ALTER TABLE child ADD CONSTRAINT fk_parent FOREIGN KEY (p_id) REFERENCES parent(
 >
 > **Explanation:** Deferred constraints validate referential integrity at transaction commit time instead of per-statement.
 
+---
+
 ### Exercise 3: Referential Integrity Definition
 
 **Problem:** Define Referential Integrity in relational databases (Ensures relationship links between tables remain valid and child rows never reference non-existent parents).
 
 **Expected output:**
-```text
-Ensures relationship links between tables remain valid and child rows never reference non-existent parents
-```
-
 > [!check]- Answer
+> ```text
+> Ensures relationship links between tables remain valid and child rows never reference non-existent parents
+> ```
 > ```text
 > Ensures relationship links between tables remain valid and child rows never reference non-existent parents
 > ```

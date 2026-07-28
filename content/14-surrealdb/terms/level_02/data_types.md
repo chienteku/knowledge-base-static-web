@@ -166,16 +166,15 @@ Map these SurrealDB type declarations to their closest equivalent in **PostgreSQ
 3.  `TYPE array<string>`
 
 **Expected output:**
-```text
-1. - PostgreSQL: TEXT (or VARCHAR)
-   - MongoDB: String
-2. - PostgreSQL: FOREIGN KEY referencing table 'company'
-   - MongoDB: ObjectId reference string linking to 'company' collection
-3. - PostgreSQL: TEXT[] (Array of TEXT)
-   - MongoDB: Array of Strings
-```
-
 > [!check]- Answer
+> ```text
+> 1. - PostgreSQL: TEXT (or VARCHAR)
+>    - MongoDB: String
+> 2. - PostgreSQL: FOREIGN KEY referencing table 'company'
+>    - MongoDB: ObjectId reference string linking to 'company' collection
+> 3. - PostgreSQL: TEXT[] (Array of TEXT)
+>    - MongoDB: Array of Strings
+> ```
 > - A record type represents a direct pointer reference.
 > - Consider how arrays are handled in SQL columns vs NoSQL documents.
 
@@ -188,27 +187,27 @@ Map these SurrealDB type declarations to their closest equivalent in **PostgreSQ
 **Problem:** List 4 native data types supported in SurrealDB (datetime, duration, geometry, record link).
 
 **Expected output:**
-```text
-datetime, duration, geometry, record link
-```
-
 > [!check]- Answer
+> ```text
+> datetime, duration, geometry, record link
+> ```
 > ```text
 > datetime, duration, geometry, record link
 > ```
 >
 > **Explanation:** SurrealDB extends standard JSON data types with rich native primitives.
 
+---
+
 ### Exercise 3: Inspecting Field Value Type with `type::of()`
 
 **Problem:** Inspect data type of `d"2026-01-01T00:00:00Z"` using `type::of()`.
 
 **Expected output:**
-```text
-"datetime"
-```
-
 > [!check]- Answer
+> ```text
+> "datetime"
+> ```
 > ```surrealql
 > RETURN type::of(d"2026-01-01T00:00:00Z");
 > ```

@@ -140,16 +140,15 @@ async function processData() {
 **Problem:** Identify the expressions in the following line of code: `const result = addNumbers(10, 20) * 2;`
 
 **Expected output:**
-```text
-Expressions:
-1. `10` (resolves to 10)
-2. `20` (resolves to 20)
-3. `addNumbers(10, 20)` (resolves to whatever the function returns)
-4. `2` (resolves to 2)
-5. `addNumbers(10, 20) * 2` (resolves to the final calculated value)
-```
-
 > [!check]- Answer
+> ```text
+> Expressions:
+> 1. `10` (resolves to 10)
+> 2. `20` (resolves to 20)
+> 3. `addNumbers(10, 20)` (resolves to whatever the function returns)
+> 4. `2` (resolves to 2)
+> 5. `addNumbers(10, 20) * 2` (resolves to the final calculated value)
+> ```
 > - Any piece of code that you could `console.log()` is an expression.
 
 ---
@@ -159,11 +158,10 @@ Expressions:
 **Problem:** Embed a ternary expression `${age >= 18 ? "Adult" : "Minor"}` inside a template literal string.
 
 **Expected output:**
-```text
-Status: Adult
-```
-
 > [!check]- Answer
+> ```text
+> Status: Adult
+> ```
 > ```javascript
 > const age = 20;
 > console.log(`Status: ${age >= 18 ? "Adult" : "Minor"}`);
@@ -171,16 +169,17 @@ Status: Adult
 >
 > **Explanation:** Template literal interpolations `${expression}` accept any valid JavaScript expression.
 
+---
+
 ### Exercise 3: Comma Operator Expression Evaluation
 
 **Problem:** Evaluate `let x = (1 + 1, 2 + 2, 3 + 3);` and explain why `x` gets `6`.
 
 **Expected output:**
-```text
-6
-```
-
 > [!check]- Answer
+> ```text
+> 6
+> ```
 > ```javascript
 > let x = (1 + 1, 2 + 2, 3 + 3);
 > console.log(x);
@@ -188,7 +187,6 @@ Status: Adult
 >
 > **Explanation:** The comma operator evaluates each operand left-to-right and yields the value of the final rightmost expression.
 
----
 
 ---
 

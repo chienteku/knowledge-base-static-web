@@ -108,14 +108,13 @@ type Unwrapped = Awaited<ReturnType<typeof getData>>; // Yields number
 **Problem:** If `ReturnType<T>` extracts the output of a function, what is the name of the built-in Utility Type that extracts the input (arguments) of a function into a Tuple?
 
 **Expected output:**
-```typescript
-// Parameters<T>
-type GraphArgs = Parameters<typeof createGraph>;
-// If the function was `(a: string, b: number) => void`
-// GraphArgs would resolve to the tuple: `[string, number]`
-```
-
 > [!check]- Answer
+> ```typescript
+> // Parameters<T>
+> type GraphArgs = Parameters<typeof createGraph>;
+> // If the function was `(a: string, b: number) => void`
+> // GraphArgs would resolve to the tuple: `[string, number]`
+> ```
 > - What is the common word for function inputs?
 
 ---
@@ -127,11 +126,10 @@ type GraphArgs = Parameters<typeof createGraph>;
 **Problem:** Extract return type of `function createStore() { return { state: 1, dispatch: () => {} }; }`.
 
 **Expected output:**
-```text
-{ state: number; dispatch: () => void }
-```
-
 > [!check]- Answer
+> ```text
+> { state: number; dispatch: () => void }
+> ```
 > ```typescript
 > function createStore() { return { state: 1, dispatch: () => {} }; }
 > type Store = ReturnType<typeof createStore>;
@@ -140,16 +138,17 @@ type GraphArgs = Parameters<typeof createGraph>;
 >
 > **Explanation:** `ReturnType<typeof fn>` captures inferred function return object shapes.
 
+---
+
 ### Exercise 3: Non-Function Argument Errors in `ReturnType`
 
 **Problem:** What error occurs if `ReturnType<string>` is evaluated?
 
 **Expected output:**
-```text
-Type 'string' does not satisfy constraint '(...args: any) => any'
-```
-
 > [!check]- Answer
+> ```text
+> Type 'string' does not satisfy constraint '(...args: any) => any'
+> ```
 > ```typescript
 > console.log("Type 'string' does not satisfy constraint '(...args: any) => any'");
 > ```

@@ -114,13 +114,12 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 **Problem:** How does `var()` make implementing Dark Mode incredibly easy?
 
 **Expected output:**
-```text
-Because variables respect the Cascade! 
-You define `--bg-color: white;` and `--text-color: black;` in `:root`.
-You can then write a media query for Dark Mode (`@media (prefers-color-scheme: dark)`), and simply RE-DEFINE the variables to `--bg-color: black;` and `--text-color: white;`. The entire website will instantly swap colors without you having to write any new CSS for your actual elements!
-```
-
 > [!check]- Answer
+> ```text
+> Because variables respect the Cascade! 
+> You define `--bg-color: white;` and `--text-color: black;` in `:root`.
+> You can then write a media query for Dark Mode (`@media (prefers-color-scheme: dark)`), and simply RE-DEFINE the variables to `--bg-color: black;` and `--text-color: white;`. The entire website will instantly swap colors without you having to write any new CSS for your actual elements!
+> ```
 > - Can you overwrite variables using media queries?
 
 ---
@@ -132,11 +131,10 @@ You can then write a media query for Dark Mode (`@media (prefers-color-scheme: d
 **Problem:** Write CSS `background-color` consuming variable `--accent` with fallback `#005fcc`.
 
 **Expected output:**
-```text
-background-color: var(--accent, #005fcc);
-```
-
 > [!check]- Answer
+> ```text
+> background-color: var(--accent, #005fcc);
+> ```
 > ```css
 > .btn {
 >   background-color: var(--accent, #005fcc);
@@ -145,16 +143,17 @@ background-color: var(--accent, #005fcc);
 >
 > **Explanation:** `var(--name, fallback)` consumes custom properties with default fallbacks.
 
+---
+
 ### Exercise 3: Updating Custom Properties in JavaScript
 
 **Problem:** Write JavaScript line updating root custom property `--primary-color` to `'#6200ee'`. 
 
 **Expected output:**
-```text
-document.documentElement.style.setProperty('--primary-color', '#6200ee');
-```
-
 > [!check]- Answer
+> ```text
+> document.documentElement.style.setProperty('--primary-color', '#6200ee');
+> ```
 > ```javascript
 > document.documentElement.style.setProperty('--primary-color', '#6200ee');
 > ```

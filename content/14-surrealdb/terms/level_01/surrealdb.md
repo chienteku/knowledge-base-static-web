@@ -134,13 +134,12 @@ Identify which database engine (**PostgreSQL**, **MongoDB**, or **SurrealDB**) s
 3.  Allows web applications to connect via WebSockets and query data directly with built-in row permissions.
 
 **Expected output:**
-```text
-1. SurrealDB (PostgreSQL is strictly schema-full; MongoDB is schema-less/jsonSchema, but only SurrealDB allows toggling SCHEMAFULL vs SCHEMALESS per table).
-2. SurrealDB (PostgreSQL requires JOINs; MongoDB requires $lookup; SurrealDB utilizes native graph arrow routes).
-3. SurrealDB (Both PostgreSQL and MongoDB require an intermediary backend API server to handle client queries safely).
-```
-
 > [!check]- Answer
+> ```text
+> 1. SurrealDB (PostgreSQL is strictly schema-full; MongoDB is schema-less/jsonSchema, but only SurrealDB allows toggling SCHEMAFULL vs SCHEMALESS per table).
+> 2. SurrealDB (PostgreSQL requires JOINs; MongoDB requires $lookup; SurrealDB utilizes native graph arrow routes).
+> 3. SurrealDB (Both PostgreSQL and MongoDB require an intermediary backend API server to handle client queries safely).
+> ```
 > - Evaluate which database integrates client authentication and websockets directly.
 > - Consider which database supports graph edge links at the syntax layer.
 
@@ -153,27 +152,27 @@ Identify which database engine (**PostgreSQL**, **MongoDB**, or **SurrealDB**) s
 **Problem:** Map SurrealDB capabilities: Relational (Tables, SQL), Document (Nested JSON), Graph (`->` record links).
 
 **Expected output:**
-```text
-Relational: Tables & SQL, Document: Nested JSON, Graph: Record links & arrow paths
-```
-
 > [!check]- Answer
+> ```text
+> Relational: Tables & SQL, Document: Nested JSON, Graph: Record links & arrow paths
+> ```
 > ```text
 > Relational: Tables & SQL, Document: Nested JSON, Graph: Record links & arrow paths
 > ```
 >
 > **Explanation:** SurrealDB unifies relational structure, document flexibility, and graph connectivity.
 
+---
+
 ### Exercise 3: SurrealDB Embedded Rust Feature
 
 **Problem:** Can SurrealDB be embedded directly into Rust binaries without network overhead? (Yes).
 
 **Expected output:**
-```text
-Yes, SurrealDB runs embedded inside Rust or WASM applications natively
-```
-
 > [!check]- Answer
+> ```text
+> Yes, SurrealDB runs embedded inside Rust or WASM applications natively
+> ```
 > ```text
 > Yes, SurrealDB runs embedded inside Rust or WASM applications natively
 > ```

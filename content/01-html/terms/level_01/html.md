@@ -129,12 +129,11 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 **Problem:** What do the two parts of the acronym "HyperText" and "Markup Language" actually mean?
 
 **Expected output:**
-```text
-HyperText: Text that contains links to other texts (the ability to click and jump).
-Markup Language: A system for annotating a document in a way that is syntactically distinguishable from the text (using tags like `<p>` to define structure).
-```
-
 > [!check]- Answer
+> ```text
+> HyperText: Text that contains links to other texts (the ability to click and jump).
+> Markup Language: A system for annotating a document in a way that is syntactically distinguishable from the text (using tags like `<p>` to define structure).
+> ```
 > - Think about what makes the web different from a printed book.
 > - Think about what you do with a highlighter on a textbook.
 
@@ -147,27 +146,27 @@ Markup Language: A system for annotating a document in a way that is syntactical
 **Problem:** Explain why HTML is classified as a Markup Language rather than a Programming Language.
 
 **Expected output:**
-```text
-HTML describes document structure and content using tags; it lacks control flow logic, loops, variables, and math computation.
-```
-
 > [!check]- Answer
+> ```text
+> HTML describes document structure and content using tags; it lacks control flow logic, loops, variables, and math computation.
+> ```
 > ```text
 > HTML describes document structure and content using tags; it lacks control flow logic, loops, variables, and math computation.
 > ```
 >
 > **Explanation:** Markup languages annotate text structure; programming languages execute algorithmic logic.
 
+---
+
 ### Exercise 3: Building Barebones Valid HTML5 Page
 
 **Problem:** Write minimal valid HTML5 document structure containing DOCTYPE, html, head, title, body, and h1.
 
 **Expected output:**
-```text
-<!DOCTYPE html><html lang="en"><head><title>App</title></head><body><h1>Hello</h1></body></html>
-```
-
 > [!check]- Answer
+> ```text
+> <!DOCTYPE html><html lang="en"><head><title>App</title></head><body><h1>Hello</h1></body></html>
+> ```
 > ```html
 > <!DOCTYPE html>
 > <html lang="en">

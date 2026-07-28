@@ -157,16 +157,17 @@ function timeoutRace(networkPromise, timeoutMs = 2000) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Promise.race Timeout Pattern
 
 **Problem:** Write a `fetchWithTimeout(url, ms)` helper using `Promise.race()` and `setTimeout()`.
 
 **Expected output:**
-```text
-function fetchWithTimeout(url, ms) { const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), ms)); return Promise.race([fetch(url), timeout]); }
-```
-
 > [!check]- Answer
+> ```text
+> function fetchWithTimeout(url, ms) { const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), ms)); return Promise.race([fetch(url), timeout]); }
+> ```
 > ```javascript
 > function fetchWithTimeout(url, ms) {
 > const timeout = new Promise((_, reject) =>
@@ -183,11 +184,10 @@ function fetchWithTimeout(url, ms) { const timeout = new Promise((_, reject) => 
 **Problem:** What causes an HTTP `504 Gateway Timeout` status code?
 
 **Expected output:**
-```text
-An upstream server (like an API gateway, load balancer, or proxy) did not receive a timely response from an internal microservice.
-```
-
 > [!check]- Answer
+> ```text
+> An upstream server (like an API gateway, load balancer, or proxy) did not receive a timely response from an internal microservice.
+> ```
 > ```text
 > An upstream server (like an API gateway, load balancer, or proxy) did not receive a timely response from an internal microservice.
 > ```

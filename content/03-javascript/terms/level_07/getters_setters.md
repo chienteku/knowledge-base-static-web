@@ -217,11 +217,10 @@ console.log("Celsius:", thermometer._celsius); // should be 0
 **Problem:** Define getter `get fullName()` returning `this.first + " " + this.last`.
 
 **Expected output:**
-```text
-Alice Smith
-```
-
 > [!check]- Answer
+> ```text
+> Alice Smith
+> ```
 > ```javascript
 > const user = {
 >   first: "Alice",
@@ -233,16 +232,17 @@ Alice Smith
 >
 > **Explanation:** Getters execute function logic seamlessly upon standard property reads (`user.fullName`).
 
+---
+
 ### Exercise 3: Validating Input with Setters
 
 **Problem:** Use setter `set age(val)` throwing Error if `val < 0`.
 
 **Expected output:**
-```text
-Age updated: 25
-```
-
 > [!check]- Answer
+> ```text
+> Age updated: 25
+> ```
 > ```javascript
 > const person = {
 >   _age: 0,
@@ -258,7 +258,6 @@ Age updated: 25
 >
 > **Explanation:** Setters intercept property writes to validate data before updating backing state.
 
----
 
 ---
 

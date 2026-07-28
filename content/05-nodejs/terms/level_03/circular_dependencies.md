@@ -109,14 +109,13 @@ export const b = a + 1;
 If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dependency. How do you fix this architecture?
 
 **Expected output:**
-```text
-Extract `formatName()` out of `Parent.js` and put it into a new file named `utils.js`.
-Now, `Parent.js` imports `Child.js`. 
-`Child.js` imports `utils.js`.
-The circle is broken, and data flows strictly in one direction!
-```
-
 > [!check]- Answer
+> ```text
+> Extract `formatName()` out of `Parent.js` and put it into a new file named `utils.js`.
+> Now, `Parent.js` imports `Child.js`. 
+> `Child.js` imports `utils.js`.
+> The circle is broken, and data flows strictly in one direction!
+> ```
 > - Remember the "Third File" trick.
 
 ---
@@ -128,27 +127,27 @@ The circle is broken, and data flows strictly in one direction!
 **Problem:** What architectural refactoring pattern breaks a circular dependency between Module A and Module B?
 
 **Expected output:**
-```text
-Extract the shared logic/state into a third independent module (Module C) imported by both A and B.
-```
-
 > [!check]- Answer
+> ```text
+> Extract the shared logic/state into a third independent module (Module C) imported by both A and B.
+> ```
 > ```text
 > Extract the shared logic/state into a third independent module (Module C) imported by both A and B.
 > ```
 >
 > **Explanation:** Introducing a shared helper module removes direct mutual dependencies between A and B.
 
+---
+
 ### Exercise 3: CommonJS vs ESM Circular Handling
 
 **Problem:** Compare how CommonJS vs ES Modules handle circular dependencies.
 
 **Expected output:**
-```text
-CommonJS returns an incomplete exports object snapshot; ES Modules use live bindings that throw TDZ ReferenceError if evaluated before initialization.
-```
-
 > [!check]- Answer
+> ```text
+> CommonJS returns an incomplete exports object snapshot; ES Modules use live bindings that throw TDZ ReferenceError if evaluated before initialization.
+> ```
 > ```text
 > CommonJS returns an incomplete exports object snapshot; ES Modules use live bindings that throw TDZ ReferenceError if evaluated before initialization.
 > ```

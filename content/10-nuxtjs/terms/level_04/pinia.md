@@ -157,21 +157,20 @@ export const useAuthStore = defineStore('auth', () => {
 **Problem:** Write a minimal Pinia Setup Store named `user` that holds a `username` (string, default empty) and a `login` action that sets the `username` to "Admin".
 
 **Expected output:**
-```typescript
-import { defineStore } from 'pinia';
-
-export const useUserStore = defineStore('user', () => {
-  const username = ref('');
-  
-  function login() {
-    username.value = 'Admin';
-  }
-  
-  return { username, login };
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> import { defineStore } from 'pinia';
+> 
+> export const useUserStore = defineStore('user', () => {
+>   const username = ref('');
+>   
+>   function login() {
+>     username.value = 'Admin';
+>   }
+>   
+>   return { username, login };
+> });
+> ```
 > - Wrap your setup code in `defineStore('user', () => { ... })` and return state and action properties.
 
 ---
@@ -181,16 +180,15 @@ export const useUserStore = defineStore('user', () => {
 **Problem:** Write Pinia Setup Store `stores/user.ts` containing ref `user`, computed `isLoggedIn`, and action `setUser(data)`.
 
 **Expected output:**
-```typescript
-export const useUserStore = defineStore('user', () => {
-  const user = ref(null);
-  const isLoggedIn = computed(() => !!user.value);
-  function setUser(data) { user.value = data; }
-  return { user, isLoggedIn, setUser };
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export const useUserStore = defineStore('user', () => {
+>   const user = ref(null);
+>   const isLoggedIn = computed(() => !!user.value);
+>   function setUser(data) { user.value = data; }
+>   return { user, isLoggedIn, setUser };
+> });
+> ```
 > - `@pinia/nuxt` module auto-imports `defineStore` across Nuxt projects.
 > 
 > ```typescript
@@ -214,11 +212,10 @@ export const useUserStore = defineStore('user', () => {
 **Problem:** Which module name must be added to `modules` array in `nuxt.config.ts` for Pinia integration?
 
 **Expected output:**
-```text
-@pinia/nuxt
-```
-
 > [!check]- Answer
+> ```text
+> @pinia/nuxt
+> ```
 > - `@pinia/nuxt` provides automatic store auto-imports and SSR hydration.
 > 
 > ```typescript

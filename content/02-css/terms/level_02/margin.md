@@ -136,11 +136,10 @@ span { display: block; margin: 0 auto; width: 200px; }
 **Problem:** You have a button with a blue background. You want the blue background to be larger. Should you increase the margin or the padding?
 
 **Expected output:**
-```text
-Padding! Margin is *outside* the border, meaning it is completely transparent. The background color never bleeds into the margin. If you increase the margin, the button will just push other things away.
-```
-
 > [!check]- Answer
+> ```text
+> Padding! Margin is *outside* the border, meaning it is completely transparent. The background color never bleeds into the margin. If you increase the margin, the button will just push other things away.
+> ```
 > - Think about the property line vs the inside of the house.
 
 ---
@@ -152,11 +151,10 @@ Padding! Margin is *outside* the border, meaning it is completely transparent. T
 **Problem:** Write CSS centering a `<div>` with `width: 800px` horizontally inside parent page.
 
 **Expected output:**
-```text
-div { width: 800px; margin-left: auto; margin-right: auto; }
-```
-
 > [!check]- Answer
+> ```text
+> div { width: 800px; margin-left: auto; margin-right: auto; }
+> ```
 > ```css
 > div {
 >   width: 800px;
@@ -167,16 +165,17 @@ div { width: 800px; margin-left: auto; margin-right: auto; }
 >
 > **Explanation:** `margin: 0 auto` splits remaining horizontal space equally to center block elements.
 
+---
+
 ### Exercise 3: Margin Auto in Flexbox Containers
 
 **Problem:** How does `margin-left: auto` behave on a flex item inside a flex container?
 
 **Expected output:**
-```text
-Pushes the flex item all the way to the right edge of the flex container.
-```
-
 > [!check]- Answer
+> ```text
+> Pushes the flex item all the way to the right edge of the flex container.
+> ```
 > ```css
 > .flex-item-right {
 >   margin-left: auto;

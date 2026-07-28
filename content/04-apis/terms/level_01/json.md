@@ -128,14 +128,13 @@ console.log(JSON.stringify(data)); // '{"name":"Bob","score":null}'
 ```
 
 **Expected output:**
-```text
-There are 3 errors here!
-1. The key `name` is missing double quotes (`"name"`).
-2. The value `'John'` is using single quotes instead of double quotes.
-3. There is a trailing comma after `30`.
-```
-
 > [!check]- Answer
+> ```text
+> There are 3 errors here!
+> 1. The key `name` is missing double quotes (`"name"`).
+> 2. The value `'John'` is using single quotes instead of double quotes.
+> 3. There is a trailing comma after `30`.
+> ```
 > - JSON is incredibly strict compared to standard JavaScript. Check the quotes!
 
 ---
@@ -154,12 +153,11 @@ There are 3 errors here!
 ```
 
 **Expected output:**
-```text
-Line 5: Single quotes on string array items ['rest', 'http']
-Line 6: undefined is not a valid JSON primitive value
-```
-
 > [!check]- Answer
+> ```text
+> Line 5: Single quotes on string array items ['rest', 'http']
+> Line 6: undefined is not a valid JSON primitive value
+> ```
 > ```json
 > {
 > "id": 101,
@@ -177,11 +175,10 @@ Line 6: undefined is not a valid JSON primitive value
 **Problem:** What data type does a JavaScript `Date` object serialize to when passed to `JSON.stringify()`?
 
 **Expected output:**
-```text
-An ISO 8601 string representation (e.g. "2026-07-25T01:00:00.000Z").
-```
-
 > [!check]- Answer
+> ```text
+> An ISO 8601 string representation (e.g. "2026-07-25T01:00:00.000Z").
+> ```
 > ```text
 > An ISO 8601 string representation (e.g. "2026-07-25T01:00:00.000Z").
 > ```

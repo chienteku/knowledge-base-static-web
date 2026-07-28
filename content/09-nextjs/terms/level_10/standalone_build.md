@@ -107,12 +107,11 @@ COPY --from=builder /app/public ./public
 **Problem:** Why is the `standalone` output specifically designed for Docker?
 
 **Expected output:**
-```text
-Docker images thrive on being as small as possible so they can be pulled and booted up quickly in cloud environments. 
-A standard Next.js project might have an 800MB `node_modules` folder full of TypeScript tools and dev-dependencies. The `standalone` output uses file tracing to shrink the required Node environment down to just a few megabytes, resulting in a tiny, highly-efficient Docker image.
-```
-
 > [!check]- Answer
+> ```text
+> Docker images thrive on being as small as possible so they can be pulled and booted up quickly in cloud environments. 
+> A standard Next.js project might have an 800MB `node_modules` folder full of TypeScript tools and dev-dependencies. The `standalone` output uses file tracing to shrink the required Node environment down to just a few megabytes, resulting in a tiny, highly-efficient Docker image.
+> ```
 > - Think about the size of a standard `node_modules` folder.
 
 ---
@@ -122,11 +121,10 @@ A standard Next.js project might have an 800MB `node_modules` folder full of Typ
 **Problem:** Write `next.config.js` configuration enabling standalone build output for Docker deployments.
 
 **Expected output:**
-```javascript
-module.exports = { output: 'standalone' };
-```
-
 > [!check]- Answer
+> ```javascript
+> module.exports = { output: 'standalone' };
+> ```
 > - `output: 'standalone'` builds minimal production server output.
 > 
 > ```javascript
@@ -142,11 +140,10 @@ module.exports = { output: 'standalone' };
 **Problem:** Which file serves as the Node.js entrypoint script inside the `.next/standalone` directory?
 
 **Expected output:**
-```text
-node .next/standalone/server.js
-```
-
 > [!check]- Answer
+> ```text
+> node .next/standalone/server.js
+> ```
 > - `server.js` starts the standalone Node.js production server.
 > 
 > ```bash

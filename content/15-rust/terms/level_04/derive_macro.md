@@ -202,11 +202,10 @@ fn main() {
 **Problem:** Derive `Debug`, `Clone`, `PartialEq`, `Eq` on a struct `Point { x: i32, y: i32 }`.
 
 **Expected output:**
-```
-Points equal: true
-```
-
 > [!check]- Answer
+> ```
+> Points equal: true
+> ```
 > ```rust
 > #[derive(Debug, Clone, PartialEq, Eq)]
 > struct Point { x: i32, y: i32 }
@@ -219,16 +218,17 @@ Points equal: true
 >
 > **Explanation:** Derive macros generate boilerplate trait implementations automatically at compile time.
 
+---
+
 ### Exercise 3: Deriving Ord for Automatic Struct Comparison
 
 **Problem:** Derive `PartialOrd` and `Ord` on `Task { priority: u32 }` to sort tasks with `.sort()`.
 
 **Expected output:**
-```
-Sorted priority: 1, 5, 10
-```
-
 > [!check]- Answer
+> ```
+> Sorted priority: 1, 5, 10
+> ```
 > #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 > struct Task { priority: u32 }
 > fn main() {

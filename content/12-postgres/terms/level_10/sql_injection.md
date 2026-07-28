@@ -146,16 +146,10 @@ An attacker types this string into the email input box:
 Write the final SQL query compiled by the database, and explain why the password check was bypassed.
 
 **Expected output:**
-```sql
-SELECT * FROM users WHERE email = 'admin@company.com' --' AND password = 'PASSWORD_INPUT';
-```
-```text
-Explanation:
-The SQL comment symbol `--` instructs the database parser to completely ignore the rest of the query line. 
-The password check is commented out, allowing the attacker to log in as admin without knowing the password.
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT * FROM users WHERE email = 'admin@company.com' --' AND password = 'PASSWORD_INPUT';
+> ```
 > - Insert the user's input string directly into the `USER_INPUT` slot.
 > - Replace the trailing text following the SQL comment syntax `--` with standard comment layouts.
 
@@ -168,27 +162,27 @@ The password check is commented out, allowing the attacker to log in as admin wi
 **Problem:** Fix vulnerable query `db.query("SELECT * FROM products WHERE category = '" + cat + "'")` using parameterized placeholder.
 
 **Expected output:**
-```text
-db.query('SELECT * FROM products WHERE category = $1', [cat])
-```
-
 > [!check]- Answer
+> ```text
+> db.query('SELECT * FROM products WHERE category = $1', [cat])
+> ```
 > ```javascript
 > db.query('SELECT * FROM products WHERE category = $1', [cat]);
 > ```
 >
 > **Explanation:** Parameterized placeholders delegate string escaping to the database client driver.
 
+---
+
 ### Exercise 3: Escaping Identifiers in Dynamic PL/pgSQL
 
 **Problem:** Use `format()` with `%I` to safely escape table identifier variable `tbl_name` in dynamic PL/pgSQL statement.
 
 **Expected output:**
-```text
-EXECUTE format('SELECT COUNT(*) FROM %I', tbl_name) INTO cnt;
-```
-
 > [!check]- Answer
+> ```text
+> EXECUTE format('SELECT COUNT(*) FROM %I', tbl_name) INTO cnt;
+> ```
 > ```sql
 > EXECUTE format('SELECT COUNT(*) FROM %I', tbl_name) INTO cnt;
 > ```

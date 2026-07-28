@@ -160,13 +160,12 @@ Explain why this happened and how to handle it.
 3. IndexedDB
 
 **Expected output:**
-```text
-1. Cookies: 4 KB per cookie
-2. LocalStorage: ~5 MB per origin
-3. IndexedDB: Hundreds of MBs up to 60%+ of available disk space
-```
-
 > [!check]- Answer
+> ```text
+> 1. Cookies: 4 KB per cookie
+> 2. LocalStorage: ~5 MB per origin
+> 3. IndexedDB: Hundreds of MBs up to 60%+ of available disk space
+> ```
 > ```text
 > Cookies                  -> ~4 KB
 > LocalStorage/Session     -> ~5 MB
@@ -180,11 +179,10 @@ Explain why this happened and how to handle it.
 **Problem:** Which Web API method requests browser permission to prevent automatic storage eviction under disk pressure?
 
 **Expected output:**
-```text
-navigator.storage.persist()
-```
-
 > [!check]- Answer
+> ```text
+> navigator.storage.persist()
+> ```
 > ```javascript
 > if (navigator.storage && navigator.storage.persist) {
 > const isPersisted = await navigator.storage.persist();

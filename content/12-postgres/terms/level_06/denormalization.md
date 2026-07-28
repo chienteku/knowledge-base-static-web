@@ -144,12 +144,11 @@ Create AFTER UPDATE trigger on users to synchronize denormalized order_email fie
 2.  What is the risk or cost of this change?
 
 **Expected output:**
-```text
-1. Benefit: Speed. You can display a post and its author's name without running a JOIN query to the `users` table.
-2. Risk/Cost: Data synchronization overhead. If an author edits their name, the system must update the `author_name` column in the `users` table AND in every matching row in the `posts` table, otherwise the database will display conflicting names.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Benefit: Speed. You can display a post and its author's name without running a JOIN query to the `users` table.
+> 2. Risk/Cost: Data synchronization overhead. If an author edits their name, the system must update the `author_name` column in the `users` table AND in every matching row in the `posts` table, otherwise the database will display conflicting names.
+> ```
 > - Think about the steps required to render a list on screen.
 > - Consider what happens when users edit their profiles.
 
@@ -162,11 +161,10 @@ Create AFTER UPDATE trigger on users to synchronize denormalized order_email fie
 **Problem:** Create trigger function updating denormalized `posts.comment_count` on new `comments` insertion.
 
 **Expected output:**
-```text
-CREATE FUNCTION update_comment_count() RETURNS TRIGGER AS $$ BEGIN UPDATE posts SET comment_count = comment_count + 1 WHERE id = NEW.post_id; RETURN NEW; END; $$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE FUNCTION update_comment_count() RETURNS TRIGGER AS $$ BEGIN UPDATE posts SET comment_count = comment_count + 1 WHERE id = NEW.post_id; RETURN NEW; END; $$ LANGUAGE plpgsql;
+> ```
 > ```sql
 > CREATE FUNCTION update_comment_count() RETURNS TRIGGER AS $$
 > BEGIN
@@ -178,16 +176,17 @@ CREATE FUNCTION update_comment_count() RETURNS TRIGGER AS $$ BEGIN UPDATE posts 
 >
 > **Explanation:** Triggers keep denormalized aggregate counter columns updated in real-time.
 
+---
+
 ### Exercise 3: Denormalization Tradeoff Matrix
 
 **Problem:** State tradeoff of Denormalization: Faster reads (eliminates JOINs) vs Slower writes & data redundancy sync overhead.
 
 **Expected output:**
-```text
-Faster read performance vs slower writes and data update synchronization overhead
-```
-
 > [!check]- Answer
+> ```text
+> Faster read performance vs slower writes and data update synchronization overhead
+> ```
 > ```text
 > Faster read performance vs slower writes and data update synchronization overhead
 > ```

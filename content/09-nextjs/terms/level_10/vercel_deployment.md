@@ -96,13 +96,12 @@ One of Vercel's most powerful features. Whenever you open a Pull Request on GitH
 **Problem:** A user clicks "Generate Report". The report takes 5 minutes to generate. Can you use a Next.js Server Action to run this process on Vercel?
 
 **Expected output:**
-```text
-No!
-Vercel Serverless Functions have a strict execution timeout (usually 10 to 60 seconds, depending on your plan). If your Server Action runs for 5 minutes, Vercel will forcefully terminate it, and the user will get a 504 Gateway Timeout error.
-For long-running background jobs, you must use an external queuing service like Inngest, Trigger.dev, or AWS SQS.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Vercel Serverless Functions have a strict execution timeout (usually 10 to 60 seconds, depending on your plan). If your Server Action runs for 5 minutes, Vercel will forcefully terminate it, and the user will get a 504 Gateway Timeout error.
+> For long-running background jobs, you must use an external queuing service like Inngest, Trigger.dev, or AWS SQS.
+> ```
 > - Serverless functions are designed to be fast and ephemeral.
 
 ---
@@ -112,11 +111,10 @@ For long-running background jobs, you must use an external queuing service like 
 **Problem:** Explain how Vercel Preview Deployments improve team code review workflows.
 
 **Expected output:**
-```text
-Every Git branch or Pull Request automatically generates a unique live preview URL, allowing teams to test code changes in a real production-like environment before merging to main.
-```
-
 > [!check]- Answer
+> ```text
+> Every Git branch or Pull Request automatically generates a unique live preview URL, allowing teams to test code changes in a real production-like environment before merging to main.
+> ```
 > - Generates unique live preview URLs for every Pull Request.
 > 
 > ```text
@@ -130,11 +128,10 @@ Every Git branch or Pull Request automatically generates a unique live preview U
 **Problem:** Which CLI command deploys a Next.js project to production using Vercel CLI?
 
 **Expected output:**
-```text
-vercel --prod
-```
-
 > [!check]- Answer
+> ```text
+> vercel --prod
+> ```
 > - `vercel --prod` triggers production deployment.
 > 
 > ```bash

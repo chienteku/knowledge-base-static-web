@@ -123,13 +123,12 @@ In a REST API, `GET /posts` returns the title, the author ID, the date, and the 
 Why is GraphQL a better choice here?
 
 **Expected output:**
-```text
-Because of Over-fetching! 
-In REST, you are forced to download the 5,000-word body for 100 posts, which might be 5 Megabytes of useless data. 
-In GraphQL, you simply query `query { posts { title } }`. The server only sends the titles, turning a 5MB payload into a 5KB payload, making the app 1000x faster!
-```
-
 > [!check]- Answer
+> ```text
+> Because of Over-fetching! 
+> In REST, you are forced to download the 5,000-word body for 100 posts, which might be 5 Megabytes of useless data. 
+> In GraphQL, you simply query `query { posts { title } }`. The server only sends the titles, turning a 5MB payload into a 5KB payload, making the app 1000x faster!
+> ```
 > - Who decides what data is sent in REST? Who decides in GraphQL?
 
 ---
@@ -139,13 +138,12 @@ In GraphQL, you simply query `query { posts { title } }`. The server only sends 
 **Problem:** Identify the 3 root operation types supported by GraphQL schemas.
 
 **Expected output:**
-```text
-1. query (Read operations)
-2. mutation (Write/Update operations)
-3. subscription (Real-time event streams)
-```
-
 > [!check]- Answer
+> ```text
+> 1. query (Read operations)
+> 2. mutation (Write/Update operations)
+> 3. subscription (Real-time event streams)
+> ```
 > ```text
 > 1. query -> Fetch read data
 > 2. mutation -> Execute write/update actions
@@ -159,11 +157,10 @@ In GraphQL, you simply query `query { posts { title } }`. The server only sends 
 **Problem:** Contrast REST multi-endpoint URIs (`/users`, `/posts`) with GraphQL endpoint architecture.
 
 **Expected output:**
-```text
-GraphQL exposes a single HTTP POST endpoint (e.g. `/graphql`) accepting query payloads in request bodies.
-```
-
 > [!check]- Answer
+> ```text
+> GraphQL exposes a single HTTP POST endpoint (e.g. `/graphql`) accepting query payloads in request bodies.
+> ```
 > ```http
 > POST /graphql HTTP/1.1
 > Content-Type: application/json

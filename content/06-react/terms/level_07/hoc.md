@@ -131,11 +131,10 @@ import hoistNonReactStatics from 'hoist-non-react-statics'; hoistNonReactStatics
 **Problem:** Write `withAuth(WrappedComponent)` HOC checking `isAuthenticated` prop, rendering `<Login />` if unauthenticated.
 
 **Expected output:**
-```text
-function withAuth(WrappedComponent) { return function AuthenticatedComponent(props) { if (!props.isAuthenticated) return <Login />; return <WrappedComponent {...props} />; }; }
-```
-
 > [!check]- Answer
+> ```text
+> function withAuth(WrappedComponent) { return function AuthenticatedComponent(props) { if (!props.isAuthenticated) return <Login />; return <WrappedComponent {...props} />; }; }
+> ```
 > ```javascript
 > function withAuth(WrappedComponent) {
 >   return function AuthenticatedComponent(props) {
@@ -147,34 +146,34 @@ function withAuth(WrappedComponent) { return function AuthenticatedComponent(pro
 >
 > **Explanation:** HOCs take a component and return an enhanced component wrapping cross-cutting concern logic.
 
+---
+
 ### Exercise 2: HOCs vs Custom Hooks Choice
 
 **Problem:** Why have Custom Hooks largely replaced HOCs in modern React? (Custom Hooks share stateful logic without adding wrapper component hierarchy bloat).
 
 **Expected output:**
-```text
-Custom Hooks share stateful logic without adding wrapper component hierarchy bloat
-```
-
 > [!check]- Answer
+> ```text
+> Custom Hooks share stateful logic without adding wrapper component hierarchy bloat
+> ```
 > ```text
 > Custom Hooks share stateful logic without adding wrapper component hierarchy bloat
 > ```
 >
 > **Explanation:** Custom Hooks decouple logic from component tree nesting structures.
 
-
+---
 
 ### Exercise 3: Display Name Convention for HOCs
 
 **Problem:** Set `displayName` on HOC wrapper component for clean debugging in React DevTools.
 
 **Expected output:**
-```text
-Component.displayName = `WithAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
-```
-
 > [!check]- Answer
+> ```text
+> Component.displayName = `WithAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+> ```
 > ```javascript
 > Component.displayName = `WithAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 > ```

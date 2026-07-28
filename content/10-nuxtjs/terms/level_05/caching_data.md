@@ -123,12 +123,11 @@ const { data } = await useFetch(() => `/api/user?id=${id.value}`); // Dynamic fu
 **Problem:** You write `const { data } = await useAsyncData('user-123', fetchUser);`. You navigate away, and then a totally different component runs `const { data } = await useAsyncData('user-123', fetchAdmin)`. Which function is actually executed the second time?
 
 **Expected output:**
-```text
-Neither! 
-Because the key 'user-123' already exists in the cache, Nuxt immediately returns the data from the first fetch. `fetchAdmin` is never called. This is why unique keys are critical!
-```
-
 > [!check]- Answer
+> ```text
+> Neither! 
+> Because the key 'user-123' already exists in the cache, Nuxt immediately returns the data from the first fetch. `fetchAdmin` is never called. This is why unique keys are critical!
+> ```
 > - Nuxt searches the memory cache for any matching string key first before attempting to execute custom query callbacks.
 
 ---
@@ -138,11 +137,10 @@ Because the key 'user-123' already exists in the cache, Nuxt immediately returns
 **Problem:** Write `useFetch` call retrieving product list with custom cache key `'products-key'` and 60-second client cache.
 
 **Expected output:**
-```typescript
-const { data: products } = await useFetch('/api/products', { key: 'products-key' });
-```
-
 > [!check]- Answer
+> ```typescript
+> const { data: products } = await useFetch('/api/products', { key: 'products-key' });
+> ```
 > - `key` option specifies explicit cache key for `useFetch`.
 > 
 > ```typescript
@@ -158,11 +156,10 @@ const { data: products } = await useFetch('/api/products', { key: 'products-key'
 **Problem:** Which `useAsyncData` option function allows defining custom cache hit validation logic?
 
 **Expected output:**
-```text
-getCachedData: (key) => nuxtApp.payload.data[key] || nuxtApp.static.data[key]
-```
-
 > [!check]- Answer
+> ```text
+> getCachedData: (key) => nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+> ```
 > - `getCachedData` customizes cache retrieval behavior.
 > 
 > ```typescript

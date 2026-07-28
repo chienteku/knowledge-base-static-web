@@ -183,21 +183,20 @@ A simple table with a caption:
 ```
 
 **Expected output:**
-```html
-<table>
-  <caption>Weekly Class Schedule</caption>
-  <tr>
-    <th>Day</th>
-    <th>Time</th>
-  </tr>
-  <tr>
-    <td>Monday</td>
-    <td>9:00 AM</td>
-  </tr>
-</table>
-```
-
 > [!check]- Answer
+> ```html
+> <table>
+>   <caption>Weekly Class Schedule</caption>
+>   <tr>
+>     <th>Day</th>
+>     <th>Time</th>
+>   </tr>
+>   <tr>
+>     <td>Monday</td>
+>     <td>9:00 AM</td>
+>   </tr>
+> </table>
+> ```
 > - The `<caption>` tag must be nested right after the opening `<table>` tag.
 
 ---
@@ -209,11 +208,10 @@ A simple table with a caption:
 **Problem:** Write `<table>` with `<caption>` reading `'Q1 Sales Summary'`, containing single row with `th` and `td`.
 
 **Expected output:**
-```text
-<table><caption>Q1 Sales Summary</caption><tr><th>Region</th><td>East</td></tr></table>
-```
-
 > [!check]- Answer
+> ```text
+> <table><caption>Q1 Sales Summary</caption><tr><th>Region</th><td>East</td></tr></table>
+> ```
 > ```html
 > <table>
 >   <caption>Q1 Sales Summary</caption>
@@ -226,16 +224,17 @@ A simple table with a caption:
 >
 > **Explanation:** `<caption>` acts as accessible header title for tabular data for screen readers.
 
+---
+
 ### Exercise 3: Caption CSS Positioning
 
 **Problem:** Which CSS property moves `<caption>` display rendering to the bottom of the table?
 
 **Expected output:**
-```text
-caption-side: bottom;
-```
-
 > [!check]- Answer
+> ```text
+> caption-side: bottom;
+> ```
 > ```css
 > caption {
 >   caption-side: bottom;

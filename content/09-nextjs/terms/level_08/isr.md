@@ -181,13 +181,12 @@ export const revalidate = 300; // 5-minute timer + revalidateTag() for instant u
 **Problem:** An e-commerce checkout page requires reading the user's specific `session` cookie. Can you use ISR to make the checkout page faster?
 
 **Expected output:**
-```text
-No!
-ISR is still a form of Static Generation. A static HTML file is identical for every single user who visits it. 
-Because the checkout page relies on reading a user-specific cookie to show their specific cart, it MUST use Server-Side Rendering (Dynamic Rendering). You cannot serve User A's cached checkout HTML to User B!
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> ISR is still a form of Static Generation. A static HTML file is identical for every single user who visits it. 
+> Because the checkout page relies on reading a user-specific cookie to show their specific cart, it MUST use Server-Side Rendering (Dynamic Rendering). You cannot serve User A's cached checkout HTML to User B!
+> ```
 > - Think about what static means: "The same for everyone."
 
 ---
@@ -197,13 +196,12 @@ Because the checkout page relies on reading a user-specific cookie to show their
 **Problem:** Trace the step-by-step ISR request flow when a user requests a page whose revalidate timer has expired.
 
 **Expected output:**
-```text
-1. User requests page -> Next.js immediately serves cached stale HTML page
-2. Next.js triggers background re-render of page on server
-3. Subsequent user request receives newly generated HTML page
-```
-
 > [!check]- Answer
+> ```text
+> 1. User requests page -> Next.js immediately serves cached stale HTML page
+> 2. Next.js triggers background re-render of page on server
+> 3. Subsequent user request receives newly generated HTML page
+> ```
 > - ISR uses stale-while-revalidate caching logic.
 > 
 > ```text
@@ -217,11 +215,10 @@ Because the checkout page relies on reading a user-specific cookie to show their
 **Problem:** Write App Router segment config exporting a 10-minute (600 seconds) ISR revalidate interval.
 
 **Expected output:**
-```typescript
-export const revalidate = 600;
-```
-
 > [!check]- Answer
+> ```typescript
+> export const revalidate = 600;
+> ```
 > - `export const revalidate = N` defines ISR timer in seconds.
 > 
 > ```typescript

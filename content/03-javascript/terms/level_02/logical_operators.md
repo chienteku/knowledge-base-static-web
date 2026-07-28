@@ -142,14 +142,13 @@ async function processData() {
 **Problem:** Predict outputs of `0 || "default"`, `"value" && "fallback"`, `null ?? "valid"`, and `false || 0`.
 
 **Expected output:**
-```text
-default
-fallback
-valid
-0
-```
-
 > [!check]- Answer
+> ```text
+> default
+> fallback
+> valid
+> 0
+> ```
 > ```javascript
 > console.log(0 || "default");       // "default"
 > console.log("value" && "fallback");// "fallback"
@@ -159,16 +158,17 @@ valid
 >
 > **Explanation:** `||` evaluates to the first truthy operand; `&&` evaluates to the first falsy operand (or last operand); `??` evaluates to the first non-nullish operand.
 
+---
+
 ### Exercise 2: Guarding Function Execution with Short-Circuit `&&`
 
 **Problem:** Execute `fn()` only if `callback` is defined using `callback && callback()`.
 
 **Expected output:**
-```text
-Callback executed
-```
-
 > [!check]- Answer
+> ```text
+> Callback executed
+> ```
 > ```javascript
 > function run(cb) {
 >   cb && cb();
@@ -185,12 +185,11 @@ Callback executed
 **Problem:** Compare `0 || 100` vs `0 ?? 100`.
 
 **Expected output:**
-```text
-100
-0
-```
-
 > [!check]- Answer
+> ```text
+> 100
+> 0
+> ```
 > ```javascript
 > console.log(0 || 100);
 > console.log(0 ?? 100);

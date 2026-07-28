@@ -114,14 +114,13 @@ type AB = A & B; // Compatible property types merge safely
 `type User = { name: string } & { age: number }`
 
 **Expected output:**
-```text
-No!
-Because it uses the Intersection (`&`) operator, the object MUST satisfy BOTH sides simultaneously. 
-It must look like: `{ name: "Alice", age: 28 }`. 
-(If it used `|`, it could be just `{ name: "Alice" }`).
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Because it uses the Intersection (`&`) operator, the object MUST satisfy BOTH sides simultaneously. 
+> It must look like: `{ name: "Alice", age: 28 }`. 
+> (If it used `|`, it could be just `{ name: "Alice" }`).
+> ```
 > - Does `&` mean AND or OR?
 
 ---
@@ -133,11 +132,10 @@ It must look like: `{ name: "Alice", age: 28 }`.
 **Problem:** Create type `UserWithRole` by intersecting `User` (`name: string`) and `Role` (`role: string`).
 
 **Expected output:**
-```text
-UserWithRole merged
-```
-
 > [!check]- Answer
+> ```text
+> UserWithRole merged
+> ```
 > ```typescript
 > type User = { name: string };
 > type Role = { role: string };
@@ -148,16 +146,17 @@ UserWithRole merged
 >
 > **Explanation:** Intersection `A & B` combines properties from all member object types.
 
+---
+
 ### Exercise 3: Function Overload Intersections
 
 **Problem:** Intersect two function signature types `((x: string) => void) & ((x: number) => void)`.
 
 **Expected output:**
-```text
-Creates overloaded function signature
-```
-
 > [!check]- Answer
+> ```text
+> Creates overloaded function signature
+> ```
 > ```typescript
 > console.log("Creates overloaded function signature");
 > ```

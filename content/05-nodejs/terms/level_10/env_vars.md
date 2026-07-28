@@ -105,12 +105,11 @@ const port = parseInt(process.env.PORT || '3000', 10);
 **Problem:** You download your coworker's Node.js project from GitHub. You run `npm start`, but the app immediately crashes with the error: `TypeError: Cannot read property 'split' of undefined` on the database connection string. You look at the code and see `const url = process.env.DATABASE_URL`. Why did it crash, and how do you fix it?
 
 **Expected output:**
-```text
-It crashed because `process.env.DATABASE_URL` is undefined. 
-Because `.env` files are ignored by Git (for security), you didn't download it from GitHub! You must ask your coworker for the local `.env` values, or look for a `.env.example` file to create your own `.env` file locally.
-```
-
 > [!check]- Answer
+> ```text
+> It crashed because `process.env.DATABASE_URL` is undefined. 
+> Because `.env` files are ignored by Git (for security), you didn't download it from GitHub! You must ask your coworker for the local `.env` values, or look for a `.env.example` file to create your own `.env` file locally.
+> ```
 > - Are `.env` files supposed to be in GitHub repositories?
 
 ---
@@ -122,11 +121,10 @@ Because `.env` files are ignored by Git (for security), you didn't download it f
 **Problem:** Write code to load environment variables from `.env` file at application startup using `dotenv`.
 
 **Expected output:**
-```text
-require('dotenv').config();
-```
-
 > [!check]- Answer
+> ```text
+> require('dotenv').config();
+> ```
 > ```javascript
 > require('dotenv').config();
 > console.log(process.env.DATABASE_URL);
@@ -134,16 +132,17 @@ require('dotenv').config();
 >
 > **Explanation:** `dotenv.config()` parses `.env` file key-values into `process.env`.
 
+---
+
 ### Exercise 3: Node.js 20+ Native Env File Flag
 
 **Problem:** Which native Node.js 20+ CLI flag loads `.env` files without requiring external `dotenv` packages?
 
 **Expected output:**
-```text
-node --env-file=.env app.js
-```
-
 > [!check]- Answer
+> ```text
+> node --env-file=.env app.js
+> ```
 > ```bash
 > node --env-file=.env app.js
 > ```

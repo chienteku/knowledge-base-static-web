@@ -166,17 +166,16 @@ Basic contact block in a footer:
 **Problem:** Create a footer contact block containing the company name "CoffeeShop Ltd", their physical address "12 Main St, Boston", and their support link "mailto:coffee@shop.com" using semantic tags.
 
 **Expected output:**
-```html
-<footer>
-  <address>
-    <strong>CoffeeShop Ltd</strong><br>
-    12 Main St, Boston<br>
-    Email: <a href="mailto:coffee@shop.com">coffee@shop.com</a>
-  </address>
-</footer>
-```
-
 > [!check]- Answer
+> ```html
+> <footer>
+>   <address>
+>     <strong>CoffeeShop Ltd</strong><br>
+>     12 Main St, Boston<br>
+>     Email: <a href="mailto:coffee@shop.com">coffee@shop.com</a>
+>   </address>
+> </footer>
+> ```
 > - Nest the `<address>` tag inside the `<footer>`.
 > - Use standard line breaks (`<br>`) and hyperlinks (`<a>`) inside `<address>`.
 
@@ -189,11 +188,10 @@ Basic contact block in a footer:
 **Problem:** Write author contact details inside `<footer` using `<address>` containing email link.
 
 **Expected output:**
-```text
-<footer><address>Written by Jane Doe (<a href="mailto:jane@example.com">jane@example.com</a>)</address></footer>
-```
-
 > [!check]- Answer
+> ```text
+> <footer><address>Written by Jane Doe (<a href="mailto:jane@example.com">jane@example.com</a>)</address></footer>
+> ```
 > ```html
 > <footer>
 >   <address>
@@ -204,16 +202,17 @@ Basic contact block in a footer:
 >
 > **Explanation:** `<address>` inside `<footer>` provides semantic author contact metadata.
 
+---
+
 ### Exercise 3: Address Default Typography
 
 **Problem:** What default CSS font-style do browsers apply to `<address>` elements?
 
 **Expected output:**
-```text
-font-style: italic;
-```
-
 > [!check]- Answer
+> ```text
+> font-style: italic;
+> ```
 > ```text
 > font-style: italic;
 > ```

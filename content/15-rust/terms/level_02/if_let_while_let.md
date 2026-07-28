@@ -157,11 +157,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Call sign: Maverick
-```
-
 > [!check]- Answer
+> ```text
+> Call sign: Maverick
+> ```
 > - Delete the `match` block entirely.
 > - Write: `if let Some(name) = nickname { ... }`
 > - Put the `println!` inside the block.
@@ -173,11 +172,10 @@ Call sign: Maverick
 **Problem:** Refactor a single-arm match on `Option<String>` into an `if let Some(name) = opt` expression.
 
 **Expected output:**
-```
-Found: Alice
-```
-
 > [!check]- Answer
+> ```
+> Found: Alice
+> ```
 > ```rust
 > fn main() {
 >     let opt = Some(String::from("Alice"));
@@ -189,18 +187,19 @@ Found: Alice
 >
 > **Explanation:** `if let` provides concise pattern matching syntax when only one pattern variant matters.
 
+---
+
 ### Exercise 3: Looping over Stack with `while let`
 
 **Problem:** Pop items off a `Vec` stack using `while let Some(val) = stack.pop()` until empty.
 
 **Expected output:**
-```
-Popped: 3
-Popped: 2
-Popped: 1
-```
-
 > [!check]- Answer
+> ```
+> Popped: 3
+> Popped: 2
+> Popped: 1
+> ```
 > ```rust
 > fn main() {
 >     let mut stack = vec![1, 2, 3];

@@ -158,13 +158,12 @@ Analyze which of the following states can exist on disk when the server boots ba
 3.  The price is `49.99` but stock is unchanged.
 
 **Expected output:**
-```text
-1. Yes: The update completed successfully before the crash.
-2. Yes: The crash occurred before the update was applied, rolling back the entire write.
-3. No: Single-document updates are strictly atomic. The price change and the stock decrement cannot be split; it is "all-or-nothing."
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes: The update completed successfully before the crash.
+> 2. Yes: The crash occurred before the update was applied, rolling back the entire write.
+> 3. No: Single-document updates are strictly atomic. The price change and the stock decrement cannot be split; it is "all-or-nothing."
+> ```
 > - Single-document writes are protected by engine-level atomicity.
 > - Partial modifications of single documents are impossible in MongoDB.
 
@@ -177,27 +176,27 @@ Analyze which of the following states can exist on disk when the server boots ba
 **Problem:** Increment `downloads` counter atomically for `file:1` using `$inc`.
 
 **Expected output:**
-```text
-db.files.updateOne({ _id: 1 }, { $inc: { downloads: 1 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.files.updateOne({ _id: 1 }, { $inc: { downloads: 1 } });
+> ```
 > ```javascript
 > db.files.updateOne({ _id: 1 }, { $inc: { downloads: 1 } });
 > ```
 >
 > **Explanation:** `$inc` executes atomic server-side numeric increments without race conditions.
 
+---
+
 ### Exercise 3: Atomic Find and Update
 
 **Problem:** Atomically update order status to `"processing"` returning updated document using `findOneAndUpdate()`.
 
 **Expected output:**
-```text
-db.orders.findOneAndUpdate({ status: "pending" }, { $set: { status: "processing" } }, { returnDocument: "after" });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.findOneAndUpdate({ status: "pending" }, { $set: { status: "processing" } }, { returnDocument: "after" });
+> ```
 > ```javascript
 > db.orders.findOneAndUpdate(
 >   { status: "pending" },

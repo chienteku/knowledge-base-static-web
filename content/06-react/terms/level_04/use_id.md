@@ -186,16 +186,17 @@ function SearchBar() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Accessible Form Input with useId
 
 **Problem:** Connect `<label>` and `<input>` accessibly using `useId()` hook.
 
 **Expected output:**
-```text
-function FormInput({ label }) { const id = useId(); return <> <label htmlFor={id}>{label}</label> <input id={id} /> <>; }
-```
-
 > [!check]- Answer
+> ```text
+> function FormInput({ label }) { const id = useId(); return <> <label htmlFor={id}>{label}</label> <input id={id} /> <>; }
+> ```
 > ```javascript
 > function FormInput({ label }) {
 >   const id = useId();
@@ -210,16 +211,17 @@ function FormInput({ label }) { const id = useId(); return <> <label htmlFor={id
 >
 > **Explanation:** `useId()` generates hydration-safe unique IDs for accessible form controls.
 
+---
+
 ### Exercise 3: Prefixing Multiple IDs with single useId
 
 **Problem:** Generate derived IDs for input (`${id}-input`) and hint text (`${id}-hint`) using a single `useId()` hook.
 
 **Expected output:**
-```text
-const id = useId(); const inputId = `${id}-input`; const hintId = `${id}-hint`;
-```
-
 > [!check]- Answer
+> ```text
+> const id = useId(); const inputId = `${id}-input`; const hintId = `${id}-hint`;
+> ```
 > ```javascript
 > const id = useId();
 > const inputId = `${id}-input`;

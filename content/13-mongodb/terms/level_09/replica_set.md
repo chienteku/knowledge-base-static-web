@@ -141,12 +141,11 @@ Explain:
 2.  What roles Servers B and C will assume.
 
 **Expected output:**
-```text
-1. Write traffic will pause briefly (for a few seconds) while the driver detects the connection drop.
-2. Servers B and C will recognize that Server A is offline, hold an election, promote one of themselves (e.g. Server B) to be the new Primary, and resume processing write traffic. Server A, when reconnected, will join as a Secondary.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Write traffic will pause briefly (for a few seconds) while the driver detects the connection drop.
+> 2. Servers B and C will recognize that Server A is offline, hold an election, promote one of themselves (e.g. Server B) to be the new Primary, and resume processing write traffic. Server A, when reconnected, will join as a Secondary.
+> ```
 > - Replica sets monitor nodes using heartbeat pings.
 > - Consider how elections promote standby secondary servers.
 
@@ -159,11 +158,10 @@ Explain:
 **Problem:** Command to initialize a new replica set named `rs0` with local node.
 
 **Expected output:**
-```text
-rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] });
-```
-
 > [!check]- Answer
+> ```text
+> rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] });
+> ```
 > ```javascript
 > rs.initiate({
 >   _id: "rs0",
@@ -173,16 +171,17 @@ rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] });
 >
 > **Explanation:** `rs.initiate()` initializes new replica set configurations.
 
+---
+
 ### Exercise 3: Inspecting Replication Lag
 
 **Problem:** Command to print replication lag details across secondary nodes (`rs.printSlaveReplicationInfo()`).
 
 **Expected output:**
-```text
-rs.printSecondaryReplicationInfo();
-```
-
 > [!check]- Answer
+> ```text
+> rs.printSecondaryReplicationInfo();
+> ```
 > ```javascript
 > rs.printSecondaryReplicationInfo();
 > ```

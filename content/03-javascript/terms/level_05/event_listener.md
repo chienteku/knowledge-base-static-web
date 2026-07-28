@@ -158,14 +158,13 @@ btn.addEventListener("click", () => console.log("Second!"));
 Will they both fire, or will the second one overwrite the first?
 
 **Expected output:**
-```text
-They will both fire!
-Output:
-"First!"
-"Second!"
-```
-
 > [!check]- Answer
+> ```text
+> They will both fire!
+> Output:
+> "First!"
+> "Second!"
+> ```
 > - This is the main advantage of modern `addEventListener` over old inline `<button onclick="...">` attributes!
 
 ---
@@ -175,27 +174,27 @@ Output:
 **Problem:** Attach a scroll event listener with `{ passive: true }`.
 
 **Expected output:**
-```text
-Passive scroll listener attached
-```
-
 > [!check]- Answer
+> ```text
+> Passive scroll listener attached
+> ```
 > ```javascript
 > console.log("Passive scroll listener attached");
 > ```
 >
 > **Explanation:** `{ passive: true }` informs browser engines that listeners will not call `preventDefault()`, enabling instant smooth scrolling.
 
+---
+
 ### Exercise 3: Removing Named Event Listeners
 
 **Problem:** Attach named function `handleClick` and un-bind it using `removeEventListener`.
 
 **Expected output:**
-```text
-Listener removed successfully
-```
-
 > [!check]- Answer
+> ```text
+> Listener removed successfully
+> ```
 > ```javascript
 > function handleClick() {}
 > console.log("Listener removed successfully");
@@ -203,7 +202,6 @@ Listener removed successfully
 >
 > **Explanation:** `removeEventListener` requires passing exact named function references.
 
----
 
 ---
 

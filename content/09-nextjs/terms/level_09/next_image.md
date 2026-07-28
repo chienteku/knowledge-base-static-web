@@ -140,11 +140,10 @@ export default {
 **Problem:** Your homepage has a massive Hero image at the very top. When testing performance, Google PageSpeed Insights complains about the Largest Contentful Paint (LCP) being too slow. How do you fix the `<Image>`?
 
 **Expected output:**
-```tsx
-<Image src="/hero.jpg" alt="Hero" width={1200} height={800} priority />
-```
-
 > [!check]- Answer
+> ```tsx
+> <Image src="/hero.jpg" alt="Hero" width={1200} height={800} priority />
+> ```
 > - By default, `<Image>` lazy-loads images (waits until you scroll to them). The Hero image is at the top of the page! We need to tell Next.js to load it immediately.
 
 ---
@@ -154,11 +153,10 @@ export default {
 **Problem:** Write `<Image />` component for a hero banner image `/hero.png` with size `1200x600`, setting `priority` prop to optimize LCP.
 
 **Expected output:**
-```tsx
-import Image from 'next/image'; <Image src="/hero.png" alt="Hero Banner" width={1200} height={600} priority />
-```
-
 > [!check]- Answer
+> ```tsx
+> import Image from 'next/image'; <Image src="/hero.png" alt="Hero Banner" width={1200} height={600} priority />
+> ```
 > - `priority` prop preloads LCP (Largest Contentful Paint) hero images.
 > 
 > ```tsx
@@ -184,11 +182,10 @@ import Image from 'next/image'; <Image src="/hero.png" alt="Hero Banner" width={
 **Problem:** What is the default image compression quality integer value used by `next/image`?
 
 **Expected output:**
-```text
-75 (Can be overridden via quality prop, e.g. quality={85})
-```
-
 > [!check]- Answer
+> ```text
+> 75 (Can be overridden via quality prop, e.g. quality={85})
+> ```
 > - Default image quality is 75.
 > 
 > ```tsx

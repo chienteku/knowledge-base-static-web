@@ -136,13 +136,12 @@ getters: {
 **Problem:** Component A reads `cartStore.totalCost`. Component B reads `cartStore.totalCost`. The calculation involves looping over 10,000 items. How many times does the math actually run?
 
 **Expected output:**
-```text
-Exactly once!
-Because Getters are built on Vue's `computed()` properties, they cache their result. 
-When Component A asks, it does the math and caches it. When Component B asks a millisecond later, Pinia instantly returns the cached value without doing the math again.
-```
-
 > [!check]- Answer
+> ```text
+> Exactly once!
+> Because Getters are built on Vue's `computed()` properties, they cache their result. 
+> When Component A asks, it does the math and caches it. When Component B asks a millisecond later, Pinia instantly returns the cached value without doing the math again.
+> ```
 > - Think about how Computed Properties work.
 
 ---
@@ -152,11 +151,10 @@ When Component A asks, it does the math and caches it. When Component B asks a m
 **Problem:** Write a Pinia getter `getUserById` returning a function that accepts user ID number and finds user in `state.users` array.
 
 **Expected output:**
-```javascript
-getters: { getUserById: (state) => (id) => state.users.find(u => u.id === id) }
-```
-
 > [!check]- Answer
+> ```javascript
+> getters: { getUserById: (state) => (id) => state.users.find(u => u.id === id) }
+> ```
 > - Return a function from getters to accept dynamic arguments.
 > 
 > ```javascript
@@ -174,11 +172,10 @@ getters: { getUserById: (state) => (id) => state.users.find(u => u.id === id) }
 **Problem:** How do you access a getter from another store `useAuthStore()` inside a Pinia getter?
 
 **Expected output:**
-```text
-By instantiating the other store inside the getter function: const authStore = useAuthStore(); return state.user && authStore.isLoggedIn;.
-```
-
 > [!check]- Answer
+> ```text
+> By instantiating the other store inside the getter function: const authStore = useAuthStore(); return state.user && authStore.isLoggedIn;.
+> ```
 > - Instantiate other stores directly inside getter functions.
 > 
 > ```javascript

@@ -128,11 +128,10 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 **Problem:** Look at a standard HTML boilerplate. Which two elements are the *direct children* of the `<html>` root element?
 
 **Expected output:**
-```text
-The `<head>` and `<body>` elements.
-```
-
 > [!check]- Answer
+> ```text
+> The `<head>` and `<body>` elements.
+> ```
 > - Look at the "Fuller Example" above. What is nested immediately one level deep inside `<html>`?
 
 ---
@@ -144,27 +143,27 @@ The `<head>` and `<body>` elements.
 **Problem:** What is the top-level root element of every HTML document called?
 
 **Expected output:**
-```text
-The <html> element (Document Root).
-```
-
 > [!check]- Answer
+> ```text
+> The <html> element (Document Root).
+> ```
 > ```text
 > The <html> element (Document Root).
 > ```
 >
 > **Explanation:** `<html>` is the top-level root container encapsulating `<head>` and `<body>`.
 
+---
+
 ### Exercise 3: Declaring Multiple Sub-Languages
 
 **Problem:** If a page is in English (`lang="en"`) but contains a Spanish quote, how do you mark up the Spanish span?
 
 **Expected output:**
-```text
-<span lang="es">Hola amigo</span>
-```
-
 > [!check]- Answer
+> ```text
+> <span lang="es">Hola amigo</span>
+> ```
 > ```html
 > <p>He said, <span lang="es">Hola amigo</span>, and smiled.</p>
 > ```

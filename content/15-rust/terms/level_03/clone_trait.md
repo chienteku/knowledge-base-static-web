@@ -182,11 +182,10 @@ fn main() {
 **Problem:** Derive `Clone` on a custom `Point` struct and duplicate an instance with `.clone()`.
 
 **Expected output:**
-```
-Cloned point: (1, 2)
-```
-
 > [!check]- Answer
+> ```
+> Cloned point: (1, 2)
+> ```
 > ```rust
 > #[derive(Clone, Debug)]
 > struct Point { x: i32, y: i32 }
@@ -199,16 +198,17 @@ Cloned point: (1, 2)
 >
 > **Explanation:** `#[derive(Clone)]` generates field-by-field `.clone()` calls automatically.
 
+---
+
 ### Exercise 3: Clone-on-Write Strategy
 
 **Problem:** Clone a `Vec<String>` only when mutation is necessary.
 
 **Expected output:**
-```
-Original len: 2, Cloned len: 3
-```
-
 > [!check]- Answer
+> ```
+> Original len: 2, Cloned len: 3
+> ```
 > ```rust
 > fn main() {
 >     let original = vec!["a".to_string(), "b".to_string()];

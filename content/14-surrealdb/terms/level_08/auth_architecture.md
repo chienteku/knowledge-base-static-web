@@ -188,27 +188,27 @@ Categorize the following credentials into Root, Namespace, Database, or Record l
 **Problem:** List 3 authentication levels in SurrealDB (Root level, Namespace level, Database/Record Access level).
 
 **Expected output:**
-```text
-Root level, Namespace level, Database/Record Access level
-```
-
 > [!check]- Answer
+> ```text
+> Root level, Namespace level, Database/Record Access level
+> ```
 > ```text
 > Root level, Namespace level, Database/Record Access level
 > ```
 >
 > **Explanation:** SurrealDB enforces multi-tenant authentication at root, namespace, and database levels.
 
+---
+
 ### Exercise 3: Direct Client-to-Database Security Model
 
 **Problem:** How does SurrealDB authorize direct web browser query access safely? (Via SCOPE/ACCESS definitions and table PERMISSIONS).
 
 **Expected output:**
-```text
-Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
-```
-
 > [!check]- Answer
+> ```text
+> Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
+> ```
 > ```text
 > Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
 > ```

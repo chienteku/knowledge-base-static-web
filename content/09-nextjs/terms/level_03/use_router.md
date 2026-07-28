@@ -125,20 +125,19 @@ export default async function Page() {
 **Problem:** You are inside a Server Component (`page.tsx`), not a Client Component. You check the database, realize the user is not logged in, and want to redirect them. You cannot use `useRouter()` because hooks don't work on the server. What do you do?
 
 **Expected output:**
-```tsx
-// You use the `redirect()` function provided by Next.js!
-import { redirect } from 'next/navigation';
-
-export default async function Dashboard() {
-  const user = await getUser();
-  if (!user) {
-    redirect('/login'); // This throws a special error that Next.js catches and turns into a 307 redirect HTTP response!
-  }
-  return <div>Welcome!</div>;
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> // You use the `redirect()` function provided by Next.js!
+> import { redirect } from 'next/navigation';
+> 
+> export default async function Dashboard() {
+>   const user = await getUser();
+>   if (!user) {
+>     redirect('/login'); // This throws a special error that Next.js catches and turns into a 307 redirect HTTP response!
+>   }
+>   return <div>Welcome!</div>;
+> }
+> ```
 > - There is a specific server-side function for this, covered in Level 4!
 
 ---
@@ -152,14 +151,13 @@ export default async function Dashboard() {
 4. `router.back()` 
 
 **Expected output:**
-```text
-1. Navigates to target route adding new entry to browser history
-2. Navigates to target route replacing current entry in browser history
-3. Refreshes current route data by re-fetching Server Components from server
-4. Navigates back 1 step in browser history stack
-```
-
 > [!check]- Answer
+> ```text
+> 1. Navigates to target route adding new entry to browser history
+> 2. Navigates to target route replacing current entry in browser history
+> 3. Refreshes current route data by re-fetching Server Components from server
+> 4. Navigates back 1 step in browser history stack
+> ```
 > - `push()` -> Add history entry
 > - `replace()` -> Overwrite history entry
 > - `refresh()` -> Re-fetch server component data
@@ -177,11 +175,10 @@ export default async function Dashboard() {
 **Problem:** What advantage does `router.refresh()` offer over `window.location.reload()`?
 
 **Expected output:**
-```text
-router.refresh() re-fetches Server Component data from the server while preserving client React state (e.g. form inputs, scroll position).
-```
-
 > [!check]- Answer
+> ```text
+> router.refresh() re-fetches Server Component data from the server while preserving client React state (e.g. form inputs, scroll position).
+> ```
 > - `router.refresh()` updates server data without wiping client React state.
 > 
 > ```typescript

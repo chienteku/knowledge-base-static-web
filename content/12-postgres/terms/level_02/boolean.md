@@ -146,13 +146,12 @@ WHERE is_verified = TRUE AND marketing_consent = FALSE;
 ```
 
 **Expected output:**
-```sql
-SELECT username 
-FROM user_accounts 
-WHERE is_verified AND NOT marketing_consent;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT username 
+> FROM user_accounts 
+> WHERE is_verified AND NOT marketing_consent;
+> ```
 > - A boolean column is already a logical expression; it does not need `= TRUE`.
 > - Use the `NOT` operator to invert the truth check.
 
@@ -165,27 +164,27 @@ WHERE is_verified AND NOT marketing_consent;
 **Problem:** Query active users using `IS TRUE` syntax.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE is_active IS TRUE;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE is_active IS TRUE;
+> ```
 > ```sql
 > SELECT * FROM users WHERE is_active IS TRUE;
 > ```
 >
 > **Explanation:** `IS TRUE` matches boolean true values while explicitly excluding NULLs.
 
+---
+
 ### Exercise 3: Boolean 3-Valued Logic Comparison
 
 **Problem:** List 3 possible states for unconstrained boolean columns (`TRUE`, `FALSE`, `NULL`).
 
 **Expected output:**
-```text
-TRUE, FALSE, NULL
-```
-
 > [!check]- Answer
+> ```text
+> TRUE, FALSE, NULL
+> ```
 > ```text
 > TRUE, FALSE, NULL
 > ```

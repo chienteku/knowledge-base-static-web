@@ -141,12 +141,11 @@ Identify the functional dependencies for the following columns (use the $X \righ
 2.  Does manufacturer determine the model?
 
 **Expected output:**
-```text
-1. A manufacturer (like 'Toyota') makes multiple models (like 'Corolla', 'Prius'), so it does not uniquely determine a single model.
-2. No.
-```
-
 > [!check]- Answer
+> ```text
+> 1. A manufacturer (like 'Toyota') makes multiple models (like 'Corolla', 'Prius'), so it does not uniquely determine a single model.
+> 2. No.
+> ```
 > - A functional dependency only exists if a value of X points to exactly one value of Y across all rows.
 > - Look for unique hardware identifiers.
 
@@ -159,11 +158,10 @@ Identify the functional dependencies for the following columns (use the $X \righ
 **Problem:** Express functional dependency 'Student ID determines Student Name' in standard notation (`student_id -> student_name`).
 
 **Expected output:**
-```text
-student_id -> student_name
-```
-
 > [!check]- Answer
+> ```text
+> student_id -> student_name
+> ```
 > ```text
 > student_id -> student_name
 > ```
@@ -171,16 +169,17 @@ student_id -> student_name
 > **Explanation:** $A 
 ightarrow B$ denotes that attribute A uniquely determines attribute B.
 
+---
+
 ### Exercise 3: Partial vs Transitive Dependency
 
 **Problem:** Compare: Partial Dependency (Attribute depends on part of composite key); Transitive Dependency (Non-key attribute depends on another non-key attribute).
 
 **Expected output:**
-```text
-Partial: depends on part of composite key; Transitive: non-key depends on non-key attribute
-```
-
 > [!check]- Answer
+> ```text
+> Partial: depends on part of composite key; Transitive: non-key depends on non-key attribute
+> ```
 > ```text
 > Partial: depends on part of composite key; Transitive: non-key depends on non-key attribute
 > ```

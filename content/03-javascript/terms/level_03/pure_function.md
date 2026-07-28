@@ -200,13 +200,12 @@ function getMidnightTime() {
 ```
 
 **Expected output:**
-```text
-Function A: Pure (Deterministic, no side effects).
-Function B: Impure (console.log is a side effect that writes to standard output).
-Function C: Impure (Depends on new Date(), which reads the external system clock).
-```
-
 > [!check]- Answer
+> ```text
+> Function A: Pure (Deterministic, no side effects).
+> Function B: Impure (console.log is a side effect that writes to standard output).
+> Function C: Impure (Depends on new Date(), which reads the external system clock).
+> ```
 > - Any write operation (to console, disk, screen, network) is a side effect.
 > - Any reliance on non-arguments (like time, random numbers) breaks determinism.
 
@@ -217,11 +216,10 @@ Function C: Impure (Depends on new Date(), which reads the external system clock
 **Problem:** Refactor `function addGuest(arr, guest) { arr.push(guest); return arr; }` into a pure function using `concat` or spread.
 
 **Expected output:**
-```text
-Original len: 1, New len: 2
-```
-
 > [!check]- Answer
+> ```text
+> Original len: 1, New len: 2
+> ```
 > ```javascript
 > function addGuestPure(arr, guest) {
 >   return [...arr, guest];
@@ -233,18 +231,19 @@ Original len: 1, New len: 2
 >
 > **Explanation:** Pure functions return new data structures without mutating original input references.
 
+---
+
 ### Exercise 3: Testing Function Determinism
 
 **Problem:** Demonstrate that calling pure function `add(2, 3)` multiple times always returns identical output `5`.
 
 **Expected output:**
-```text
-5
-5
-5
-```
-
 > [!check]- Answer
+> ```text
+> 5
+> 5
+> 5
+> ```
 > ```javascript
 > const add = (a, b) => a + b;
 > console.log(add(2, 3));
@@ -254,7 +253,6 @@ Original len: 1, New len: 2
 >
 > **Explanation:** Pure functions are deterministic: identical inputs produce identical outputs unconditionally.
 
----
 
 ---
 

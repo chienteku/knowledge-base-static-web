@@ -123,19 +123,18 @@ Often, you need to run some code *after* a third-party script has successfully l
 **Problem:** You don't have a `src` URL. You just have a raw block of JavaScript you want to execute (like configuring Google Analytics tracking IDs). How do you use the `<Script>` component for inline code?
 
 **Expected output:**
-```tsx
-{/* You pass the raw code as children, and you MUST provide an 'id' prop! */}
-<Script id="google-analytics" strategy="afterInteractive">
-  {`
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'GA_MEASUREMENT_ID');
-  `}
-</Script>
-```
-
 > [!check]- Answer
+> ```tsx
+> {/* You pass the raw code as children, and you MUST provide an 'id' prop! */}
+> <Script id="google-analytics" strategy="afterInteractive">
+>   {`
+>     window.dataLayer = window.dataLayer || [];
+>     function gtag(){dataLayer.push(arguments);}
+>     gtag('js', new Date());
+>     gtag('config', 'GA_MEASUREMENT_ID');
+>   `}
+> </Script>
+> ```
 > - The `id` prop is strictly required so Next.js can track and deduplicate the inline script!
 
 ---
@@ -145,11 +144,10 @@ Often, you need to run some code *after* a third-party script has successfully l
 **Problem:** Write `<Script id="gtm-script">` component executing inline JavaScript string using `dangerouslySetInnerHTML`.
 
 **Expected output:**
-```tsx
-<Script id="gtm" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `console.log('GTM Init');` }} />
-```
-
 > [!check]- Answer
+> ```tsx
+> <Script id="gtm" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `console.log('GTM Init');` }} />
+> ```
 > - Inline scripts require unique `id` prop.
 > 
 > ```tsx
@@ -175,11 +173,10 @@ Often, you need to run some code *after* a third-party script has successfully l
 **Problem:** Why does `<Script>` require an explicit `id` prop when executing inline scripts?
 
 **Expected output:**
-```text
-Next.js uses the id prop to track and deduplicate inline script execution across page navigation.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js uses the id prop to track and deduplicate inline script execution across page navigation.
+> ```
 > - `id` enables script deduplication across SPA route transitions.
 > 
 > ```text

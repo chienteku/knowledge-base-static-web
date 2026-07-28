@@ -158,12 +158,11 @@ SELECT COALESCE(created_at::TEXT, 'N/A') FROM users;
 **Problem:** You have a `ledgers` table with columns `revenue` and `expenses` (both numeric, can be `NULL`). Write a SQL query that calculates the profit as `revenue - expenses`. If either column is `NULL`, treat its value as `0` in the math. Label the output column as `net_profit`.
 
 **Expected output:**
-```sql
-SELECT COALESCE(revenue, 0.00) - COALESCE(expenses, 0.00) AS net_profit 
-FROM ledgers;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT COALESCE(revenue, 0.00) - COALESCE(expenses, 0.00) AS net_profit 
+> FROM ledgers;
+> ```
 > - Wrap both columns in `COALESCE` before doing subtraction to prevent NULL propagation.
 > - Use `0.00` as the fallback value.
 
@@ -176,27 +175,27 @@ FROM ledgers;
 **Problem:** Prevent division by zero when calculating `total / count` when `count` is 0 using `NULLIF(count, 0)`.
 
 **Expected output:**
-```text
-SELECT total / NULLIF(count, 0) AS avg_val FROM stats;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT total / NULLIF(count, 0) AS avg_val FROM stats;
+> ```
 > ```sql
 > SELECT total / NULLIF(count, 0) AS avg_val FROM stats;
 > ```
 >
 > **Explanation:** `NULLIF(count, 0)` converts 0 to NULL, causing division by NULL to evaluate safely to NULL without crashing.
 
+---
+
 ### Exercise 3: Multi-Fallback `COALESCE` Chain
 
 **Problem:** Select user contact info trying `mobile_phone`, falling back to `home_phone`, then `email`, then `'No Contact'`.
 
 **Expected output:**
-```text
-SELECT COALESCE(mobile_phone, home_phone, email, 'No Contact') AS primary_contact FROM users;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT COALESCE(mobile_phone, home_phone, email, 'No Contact') AS primary_contact FROM users;
+> ```
 > ```sql
 > SELECT COALESCE(mobile_phone, home_phone, email, 'No Contact') AS primary_contact
 > FROM users;

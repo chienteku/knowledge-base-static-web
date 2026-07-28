@@ -142,13 +142,12 @@ for (let i = 0; i < items.length; i++) {
 ```
 
 **Expected output:**
-```sql
-SELECT name AS title, price AS cost 
-FROM items 
-WHERE status = 'active' AND price < 50;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name AS title, price AS cost 
+> FROM items 
+> WHERE status = 'active' AND price < 50;
+> ```
 > - Translate array name `items` to table name `FROM items`.
 > - Convert filter criteria inside the `if` block to `WHERE` conditions.
 > - Map the output object keys (`title`, `cost`) using column renaming commands (`AS`).
@@ -162,27 +161,27 @@ WHERE status = 'active' AND price < 50;
 **Problem:** Categorize statements: 1. `CREATE TABLE` (DDL), 2. `SELECT` (DQL), 3. `UPDATE` (DML), 4. `GRANT` (DCL).
 
 **Expected output:**
-```text
-1. DDL, 2. DQL, 3. DML, 4. DCL
-```
-
 > [!check]- Answer
+> ```text
+> 1. DDL, 2. DQL, 3. DML, 4. DCL
+> ```
 > ```text
 > 1. DDL, 2. DQL, 3. DML, 4. DCL
 > ```
 >
 > **Explanation:** SQL is divided into Data Definition (DDL), Query (DQL), Manipulation (DML), and Control (DCL).
 
+---
+
 ### Exercise 3: ANSI SQL Standard Compliance
 
 **Problem:** Why is PostgreSQL renowned among relational databases? (Strict ANSI-SQL standards compliance and feature richness).
 
 **Expected output:**
-```text
-Strict compliance with ANSI-SQL standards and enterprise reliability
-```
-
 > [!check]- Answer
+> ```text
+> Strict compliance with ANSI-SQL standards and enterprise reliability
+> ```
 > ```text
 > Strict compliance with ANSI-SQL standards and enterprise reliability
 > ```

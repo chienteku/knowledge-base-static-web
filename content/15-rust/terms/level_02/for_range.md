@@ -153,15 +153,14 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Step 1
-Step 2
-Step 3
-Step 4
-Step 5
-```
-
 > [!check]- Answer
+> ```text
+> Step 1
+> Step 2
+> Step 3
+> Step 4
+> Step 5
+> ```
 > - The `..` syntax is exclusive.
 > - Change `1..5` to `1..=5` to make it inclusive.
 
@@ -172,11 +171,10 @@ Step 5
 **Problem:** Calculate the sum of numbers from `1` to `100` inclusive using a `for` loop with range syntax `1..=100`.
 
 **Expected output:**
-```
-5050
-```
-
 > [!check]- Answer
+> ```
+> 5050
+> ```
 > ```rust
 > fn main() {
 >     let mut sum = 0;
@@ -189,21 +187,22 @@ Step 5
 >
 > **Explanation:** `1..=100` constructs an inclusive range `RangeInclusive` hitting both end points.
 
+---
+
 ### Exercise 3: Reverse Range Iteration
 
 **Problem:** Count down from `5` to `1` using `(1..=5).rev()` and print `"Liftoff!"` at the end.
 
 **Expected output:**
-```
-5
-4
-3
-2
-1
-Liftoff!
-```
-
 > [!check]- Answer
+> ```
+> 5
+> 4
+> 3
+> 2
+> 1
+> Liftoff!
+> ```
 > ```rust
 > fn main() {
 >     for i in (1..=5).rev() {

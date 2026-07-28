@@ -136,12 +136,11 @@ async function processData() {
 **Problem:** Declare a `const` array with three numbers. Try to reassign the array to a completely new array. Then, try to use `.push()` to add a number to the original array.
 
 **Expected output:**
-```text
-TypeError (on reassignment)
-[1, 2, 3, 4] (after pushing)
-```
-
 > [!check]- Answer
+> ```text
+> TypeError (on reassignment)
+> [1, 2, 3, 4] (after pushing)
+> ```
 > - You cannot use `=` on a `const` variable after it's initialized.
 > - Array methods like `.push()` mutate the existing array in memory, which is allowed.
 
@@ -152,11 +151,10 @@ TypeError (on reassignment)
 **Problem:** Use `Object.freeze()` to prevent property mutation on a `const` user object `{ role: "admin" }`.
 
 **Expected output:**
-```text
-TypeError or property unchanged
-```
-
 > [!check]- Answer
+> ```text
+> TypeError or property unchanged
+> ```
 > ```javascript
 > const config = Object.freeze({ role: "admin" });
 > // config.role = "user"; // Silently ignored in non-strict, throws TypeError in strict mode
@@ -165,16 +163,17 @@ TypeError or property unchanged
 >
 > **Explanation:** `Object.freeze()` prevents adding, removing, or modifying properties on target objects.
 
+---
+
 ### Exercise 3: Const Block Scope Temporal Dead Zone
 
 **Problem:** Demonstrate accessing `const x` before its declaration line triggers a `ReferenceError`.
 
 **Expected output:**
-```text
-ReferenceError: Cannot access x before initialization
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError: Cannot access x before initialization
+> ```
 > ```javascript
 > try {
 >   console.log(x);

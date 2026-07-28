@@ -202,12 +202,11 @@ console.log("Result:", processedInput);
 ```
 
 **Expected output:**
-```text
-Done
-Result: Unknown
-```
-
 > [!check]- Answer
+> ```text
+> Done
+> Result: Unknown
+> ```
 > - Inside the `catch` block, assign `processedInput = "Unknown"`.
 > - Inside the `finally` block, write `console.log("Done")`.
 
@@ -218,11 +217,10 @@ Result: Unknown
 **Problem:** Create a `class ValidationError extends Error` with custom `code = 400`.
 
 **Expected output:**
-```text
-ValidationError [400]: Invalid input
-```
-
 > [!check]- Answer
+> ```text
+> ValidationError [400]: Invalid input
+> ```
 > ```javascript
 > class ValidationError extends Error {
 >   constructor(msg) {
@@ -237,16 +235,17 @@ ValidationError [400]: Invalid input
 >
 > **Explanation:** Extending `Error` creates custom domain error types for targeted exception catching.
 
+---
+
 ### Exercise 3: Finally Block Cleanup Guarantee
 
 **Problem:** Demonstrate that `finally { ... }` executes regardless of whether `try` succeeds or throws.
 
 **Expected output:**
-```text
-Cleanup completed
-```
-
 > [!check]- Answer
+> ```text
+> Cleanup completed
+> ```
 > ```javascript
 > try {
 >   throw new Error("Fail");
@@ -259,7 +258,6 @@ Cleanup completed
 >
 > **Explanation:** `finally` blocks execute unconditionally after `try/catch` completion.
 
----
 
 ---
 

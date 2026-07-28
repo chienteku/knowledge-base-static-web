@@ -203,11 +203,10 @@ const settings = reactive({
 ```
 
 **Expected output:**
-```text
-Every time `settings.theme` or `settings.notifications` changes, the entry in localStorage is updated.
-```
-
 > [!check]- Answer
+> ```text
+> Every time `settings.theme` or `settings.notifications` changes, the entry in localStorage is updated.
+> ```
 > - Remember that `watchEffect` automatically tracks what you read inside. You just need to run `localStorage.setItem('user-settings', JSON.stringify(settings))` inside the effect.
 > - Since `settings` is reactive, touching its properties or converting it to string inside the effect will trigger Vue's tracking.
 
@@ -218,11 +217,10 @@ Every time `settings.theme` or `settings.notifications` changes, the entry in lo
 **Problem:** Does `watchEffect()` execute its callback function immediately upon component creation, or wait for dependency changes?
 
 **Expected output:**
-```text
-watchEffect() executes IMMEDIATELY upon creation to track dependencies during initial run.
-```
-
 > [!check]- Answer
+> ```text
+> watchEffect() executes IMMEDIATELY upon creation to track dependencies during initial run.
+> ```
 > - `watchEffect()` runs immediately to discover dependencies.
 > - `watch()` runs lazily by default.
 > 
@@ -239,11 +237,10 @@ watchEffect() executes IMMEDIATELY upon creation to track dependencies during in
 **Problem:** Write `watchEffect()` using `onCleanup` callback to abort pending fetch requests when dependencies change.
 
 **Expected output:**
-```javascript
-watchEffect((onCleanup) => { const controller = new AbortController(); fetch(url.value, { signal: controller.signal }); onCleanup(() => controller.abort()); });
-```
-
 > [!check]- Answer
+> ```javascript
+> watchEffect((onCleanup) => { const controller = new AbortController(); fetch(url.value, { signal: controller.signal }); onCleanup(() => controller.abort()); });
+> ```
 > - `onCleanup()` registers cleanup functions executed before re-runs.
 > 
 > ```javascript

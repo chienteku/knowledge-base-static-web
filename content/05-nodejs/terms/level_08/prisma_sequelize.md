@@ -178,16 +178,17 @@ const productsWithReviews = await Product.findAll({
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Prisma CRUD Query Syntax
 
 **Problem:** Write Prisma code to create a new `User` record with `email: 'a@b.com'` and `name: 'Alice'`. 
 
 **Expected output:**
-```text
-await prisma.user.create({ data: { email: 'a@b.com', name: 'Alice' } });
-```
-
 > [!check]- Answer
+> ```text
+> await prisma.user.create({ data: { email: 'a@b.com', name: 'Alice' } });
+> ```
 > ```javascript
 > await prisma.user.create({
 >   data: {
@@ -199,16 +200,17 @@ await prisma.user.create({ data: { email: 'a@b.com', name: 'Alice' } });
 >
 > **Explanation:** `prisma.model.create({ data: { ... } })` performs type-safe database insertions.
 
+---
+
 ### Exercise 3: Prisma vs Sequelize Architecture
 
 **Problem:** Compare schema definition approach in Prisma vs Sequelize.
 
 **Expected output:**
-```text
-Prisma uses declarative schema file (`schema.prisma`) generating type-safe client; Sequelize uses JS/TS model class definitions.
-```
-
 > [!check]- Answer
+> ```text
+> Prisma uses declarative schema file (`schema.prisma`) generating type-safe client; Sequelize uses JS/TS model class definitions.
+> ```
 > ```text
 > Prisma uses declarative schema file (schema.prisma) generating type-safe client; Sequelize uses JS/TS model class definitions.
 > ```

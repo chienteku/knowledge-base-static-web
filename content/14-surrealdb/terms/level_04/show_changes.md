@@ -160,15 +160,14 @@ Write the SurrealQL commands to:
 3.  Write the query to fetch the first `50` changes that occurred on `documents` since `2026-07-21T12:00:00Z`.
 
 **Expected output:**
-```sql
--- 1 & 2: Define Table and Change Feed
-DEFINE TABLE documents SCHEMAFULL CHANGEFEED 30d;
-
--- 3: Query Changes
-SHOW CHANGES FOR TABLE documents SINCE d"2026-07-21T12:00:00Z" LIMIT 50;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1 & 2: Define Table and Change Feed
+> DEFINE TABLE documents SCHEMAFULL CHANGEFEED 30d;
+> 
+> -- 3: Query Changes
+> SHOW CHANGES FOR TABLE documents SINCE d"2026-07-21T12:00:00Z" LIMIT 50;
+> ```
 > - The change feed duration unit for days is `d` (e.g. `30d`).
 > - Target the datetime literal inside the `SINCE` parameter using the `d` prefix.
 
@@ -181,27 +180,27 @@ SHOW CHANGES FOR TABLE documents SINCE d"2026-07-21T12:00:00Z" LIMIT 50;
 **Problem:** Define table `order` with 7-day changefeed retention window.
 
 **Expected output:**
-```text
-DEFINE TABLE order CHANGEFEED 7d;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE order CHANGEFEED 7d;
+> ```
 > ```surrealql
 > DEFINE TABLE order CHANGEFEED 7d;
 > ```
 >
 > **Explanation:** `CHANGEFEED duration` maintains historical record delta feeds for replication/sync.
 
+---
+
 ### Exercise 3: Querying Changefeed Delta Stream
 
 **Problem:** Query changefeed for `order` table since timestamp `$last_sync`.
 
 **Expected output:**
-```text
-SHOW CHANGES FOR TABLE order SINCE $last_sync;
-```
-
 > [!check]- Answer
+> ```text
+> SHOW CHANGES FOR TABLE order SINCE $last_sync;
+> ```
 > ```surrealql
 > SHOW CHANGES FOR TABLE order SINCE $last_sync;
 > ```

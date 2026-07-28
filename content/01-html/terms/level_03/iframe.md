@@ -128,11 +128,10 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 **Problem:** Does the CSS styling on your main website affect the buttons and text inside an `<iframe>`?
 
 **Expected output:**
-```text
-No! An iframe is a completely isolated environment (like looking through a glass porthole). Your website's CSS cannot cross the boundary to style the contents of the iframe, and the iframe's CSS cannot leak out to style your website.
-```
-
 > [!check]- Answer
+> ```text
+> No! An iframe is a completely isolated environment (like looking through a glass porthole). Your website's CSS cannot cross the boundary to style the contents of the iframe, and the iframe's CSS cannot leak out to style your website.
+> ```
 > - Remember the submarine metaphor. The water cannot leak in!
 
 ---
@@ -144,11 +143,10 @@ No! An iframe is a completely isolated environment (like looking through a glass
 **Problem:** Write accessible `<iframe>` for Youtube video with title `'Product Demo'` and `loading="lazy"`.
 
 **Expected output:**
-```text
-<iframe src="https://www.youtube.com/embed/xyz" title="Product Demo" loading="lazy" allowfullscreen></iframe>
-```
-
 > [!check]- Answer
+> ```text
+> <iframe src="https://www.youtube.com/embed/xyz" title="Product Demo" loading="lazy" allowfullscreen></iframe>
+> ```
 > ```html
 > <iframe 
 >   src="https://www.youtube.com/embed/xyz" 
@@ -160,16 +158,17 @@ No! An iframe is a completely isolated environment (like looking through a glass
 >
 > **Explanation:** `title` provides accessibility; `loading="lazy"` defers frame loading until scrolled into view.
 
+---
+
 ### Exercise 3: Sandbox Restrictions
 
 **Problem:** What does `<iframe sandbox>` with no attribute values restrict?
 
 **Expected output:**
-```text
-Applies maximum security restrictions: disables JS scripts, forms, popups, and same-origin storage access.
-```
-
 > [!check]- Answer
+> ```text
+> Applies maximum security restrictions: disables JS scripts, forms, popups, and same-origin storage access.
+> ```
 > ```text
 > Applies maximum security restrictions: disables JS scripts, forms, popups, and same-origin storage access.
 > ```

@@ -215,14 +215,13 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 **Problem:** You are building a green dashboard theme. You want all range sliders (`type="range"`) and progress elements inside `.dashboard` to use the primary green color `#00cc66`. Write the CSS ruleset.
 
 **Expected output:**
-```css
-.dashboard input[type="range"],
-.dashboard progress {
-  accent-color: #00cc66;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .dashboard input[type="range"],
+> .dashboard progress {
+>   accent-color: #00cc66;
+> }
+> ```
 > - Combine selectors with a comma to apply the rules in a clean block.
 > - Assign the branding property value.
 
@@ -235,11 +234,10 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 **Problem:** Write CSS `accent-color` rule applying brand color `#6200ee` to all checkboxes, radios, and range inputs.
 
 **Expected output:**
-```text
-input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: #6200ee; }
-```
-
 > [!check]- Answer
+> ```text
+> input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color: #6200ee; }
+> ```
 > ```css
 > input[type="checkbox"],
 > input[type="radio"],
@@ -250,19 +248,20 @@ input[type="checkbox"], input[type="radio"], input[type="range"] { accent-color:
 >
 > **Explanation:** `accent-color` styles native form input accents across browsers with single-line CSS.
 
+---
+
 ### Exercise 3: Elements Supporting accent-color
 
 **Problem:** List 4 HTML form elements that support `accent-color` property tinting.
 
 **Expected output:**
-```text
-1. Checkboxes (<input type="checkbox">)
-2. Radio buttons (<input type="radio">)
-3. Range sliders (<input type="range">)
-4. Progress bars (<progress>)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Checkboxes (<input type="checkbox">)
+> 2. Radio buttons (<input type="radio">)
+> 3. Range sliders (<input type="range">)
+> 4. Progress bars (<progress>)
+> ```
 > ```text
 > 1. Checkboxes (<input type="checkbox">
 > 2. Radio buttons (<input type="radio">

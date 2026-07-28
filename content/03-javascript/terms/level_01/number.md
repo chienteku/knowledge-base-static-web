@@ -152,11 +152,10 @@ async function processData() {
 **Problem:** Calculate the area of a circle with a radius of 5. Use `Math.PI` for Pi, and log the result rounded to two decimal places.
 
 **Expected output:**
-```text
-78.54
-```
-
 > [!check]- Answer
+> ```text
+> 78.54
+> ```
 > - Area = Pi * radius^2
 > - To round a number to a specific number of decimal places, you can use `Number.prototype.toFixed(2)`, but remember that `.toFixed()` returns a *string*, so you may need to convert it back or just log it.
 
@@ -167,12 +166,11 @@ async function processData() {
 **Problem:** Print `Number.MAX_SAFE_INTEGER` and explain why `9007199254740991 + 1 === 9007199254740991 + 2`.
 
 **Expected output:**
-```text
-9007199254740991
-true
-```
-
 > [!check]- Answer
+> ```text
+> 9007199254740991
+> true
+> ```
 > ```javascript
 > console.log(Number.MAX_SAFE_INTEGER);
 > console.log((9007199254740991 + 1) === (9007199254740991 + 2));
@@ -180,18 +178,19 @@ true
 >
 > **Explanation:** Double precision floats lose 1-unit integer precision beyond $2^{53} - 1$ (`9007199254740991`).
 
+---
+
 ### Exercise 3: Parsing Numbers with `parseInt` and `parseFloat`
 
 **Problem:** Parse `"100px"`, `"10.5em"`, and `"abc100"` using `parseInt` and `parseFloat`.
 
 **Expected output:**
-```text
-100
-10.5
-NaN
-```
-
 > [!check]- Answer
+> ```text
+> 100
+> 10.5
+> NaN
+> ```
 > ```javascript
 > console.log(parseInt("100px", 10));
 > console.log(parseFloat("10.5em"));
@@ -200,7 +199,6 @@ NaN
 >
 > **Explanation:** `parseInt` and `parseFloat` read leading numeric characters until encountering non-numeric characters.
 
----
 
 ---
 

@@ -133,13 +133,12 @@ const db = client.db("saas_app"); db.users.find({ tenantId: tenantId }); // Sing
 Write the shell commands to execute this.
 
 **Expected output:**
-```javascript
-use inventory_app
-
-db.tools.insertOne({ item: "wrench", stock: 15 });
-```
-
 > [!check]- Answer
+> ```javascript
+> use inventory_app
+> 
+> db.tools.insertOne({ item: "wrench", stock: 15 });
+> ```
 > - The database is created automatically upon document write.
 > - Switch context using the `use` keyword.
 
@@ -152,27 +151,27 @@ db.tools.insertOne({ item: "wrench", stock: 15 });
 **Problem:** Command to switch active database context to `analytics` (`use analytics`).
 
 **Expected output:**
-```text
-use analytics
-```
-
 > [!check]- Answer
+> ```text
+> use analytics
+> ```
 > ```javascript
 > use analytics
 > ```
 >
 > **Explanation:** `use dbname` sets active database context in mongosh.
 
+---
+
 ### Exercise 3: Listing Databases
 
 **Problem:** Command to list all databases and disk usage in mongosh (`show dbs`).
 
 **Expected output:**
-```text
-show dbs
-```
-
 > [!check]- Answer
+> ```text
+> show dbs
+> ```
 > ```javascript
 > show dbs
 > ```

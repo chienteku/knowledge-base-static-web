@@ -213,16 +213,17 @@ async function placeOrder(userId, productId, price) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Prisma Interactive Transaction Pattern
 
 **Problem:** Write a Prisma interactive transaction `$transaction` transferring funds between two user accounts.
 
 **Expected output:**
-```text
-await prisma.$transaction(async (tx) => { await tx.user.update({ where: { id: 1 }, data: { balance: { decrement: 100 } } }); await tx.user.update({ where: { id: 2 }, data: { balance: { increment: 100 } } }); });
-```
-
 > [!check]- Answer
+> ```text
+> await prisma.$transaction(async (tx) => { await tx.user.update({ where: { id: 1 }, data: { balance: { decrement: 100 } } }); await tx.user.update({ where: { id: 2 }, data: { balance: { increment: 100 } } }); });
+> ```
 > ```javascript
 > await prisma.$transaction(async (tx) => {
 >   await tx.user.update({
@@ -238,19 +239,20 @@ await prisma.$transaction(async (tx) => { await tx.user.update({ where: { id: 1 
 >
 > **Explanation:** Prisma `$transaction` handles `BEGIN`, `COMMIT`, and `ROLLBACK` automatically.
 
+---
+
 ### Exercise 3: ACID Properties Definition
 
 **Problem:** Name the 4 ACID properties of database transactions.
 
 **Expected output:**
-```text
-1. Atomicity
-2. Consistency
-3. Isolation
-4. Durability
-```
-
 > [!check]- Answer
+> ```text
+> 1. Atomicity
+> 2. Consistency
+> 3. Isolation
+> 4. Durability
+> ```
 > ```text
 > Atomicity, Consistency, Isolation, Durability
 > ```

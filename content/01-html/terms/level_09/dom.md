@@ -108,11 +108,10 @@ document.body.appendChild(fragment); // Single DOM reflow!
 **Problem:** If HTML is a markup language and JavaScript is a programming language, what is the DOM's role between them?
 
 **Expected output:**
-```text
-The DOM acts as a translator or a bridge. It takes the static structure of HTML and translates it into interactive JavaScript Objects, allowing the programming language to manipulate the visual markup.
-```
-
 > [!check]- Answer
+> ```text
+> The DOM acts as a translator or a bridge. It takes the static structure of HTML and translates it into interactive JavaScript Objects, allowing the programming language to manipulate the visual markup.
+> ```
 > - Think about the "O" in DOM. What does "Object" mean in programming?
 
 ---
@@ -127,13 +126,12 @@ The DOM acts as a translator or a bridge. It takes the static structure of HTML 
 3. `<!-- Note -->` node
 
 **Expected output:**
-```text
-1. Element Node (nodeType 1)
-2. Text Node (nodeType 3)
-3. Comment Node (nodeType 8)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Element Node (nodeType 1)
+> 2. Text Node (nodeType 3)
+> 3. Comment Node (nodeType 8)
+> ```
 > ```text
 > 1. Element Node (nodeType 1)
 > 2. Text Node (nodeType 3)
@@ -142,16 +140,17 @@ The DOM acts as a translator or a bridge. It takes the static structure of HTML 
 >
 > **Explanation:** DOM trees consist of Element, Text, Comment, and Attribute nodes.
 
+---
+
 ### Exercise 3: Efficient DOM Querying
 
 **Problem:** Which method is faster for querying a single element by ID: `document.getElementById('app')` or `document.querySelector('#app')`?
 
 **Expected output:**
-```text
-document.getElementById('app') is faster (direct hash table lookup).
-```
-
 > [!check]- Answer
+> ```text
+> document.getElementById('app') is faster (direct hash table lookup).
+> ```
 > ```javascript
 > document.getElementById('app'); // Fast direct lookup
 > ```

@@ -178,11 +178,10 @@ db.users.find({ age: { $type: "int" } }); // Readable BSON type alias
 Write the query to locate all products where the `price` field is stored as the incorrect BSON `string` type.
 
 **Expected output:**
-```javascript
-db.products.find({ price: { $type: "string" } });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find({ price: { $type: "string" } });
+> ```
 > - Choose the element operator `$type`.
 > - Pass the target type alias `"string"` inside the operator subdocument.
 
@@ -195,27 +194,27 @@ db.products.find({ price: { $type: "string" } });
 **Problem:** Query documents in `users` possessing optional field `middleName`.
 
 **Expected output:**
-```text
-db.users.find({ middleName: { $exists: true } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ middleName: { $exists: true } });
+> ```
 > ```javascript
 > db.users.find({ middleName: { $exists: true } });
 > ```
 >
 > **Explanation:** `{ $exists: true }` matches documents containing the specified field key.
 
+---
+
 ### Exercise 3: Filtering Array BSON Types with `$type`
 
 **Problem:** Query documents where `tags` field is typed as BSON array (`"array"`).
 
 **Expected output:**
-```text
-db.posts.find({ tags: { $type: "array" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ tags: { $type: "array" } });
+> ```
 > ```javascript
 > db.posts.find({ tags: { $type: "array" } });
 > ```

@@ -110,12 +110,11 @@ if (!res.ok) {
 **Problem:** A user clicks "Login". The browser immediately throws an error: `net::ERR_NAME_NOT_RESOLVED`. The server logs show absolutely nothing. Which step of the lifecycle failed?
 
 **Expected output:**
-```text
-Step 2 (The Network Routing) failed! 
-The server logs show nothing because the Request never physically reached the server. The Client failed to resolve the URL into an IP address (a DNS error), meaning the request died before leaving the user's computer/ISP.
-```
-
 > [!check]- Answer
+> ```text
+> Step 2 (The Network Routing) failed! 
+> The server logs show nothing because the Request never physically reached the server. The Client failed to resolve the URL into an IP address (a DNS error), meaning the request died before leaving the user's computer/ISP.
+> ```
 > - If the server has no logs, did the request ever make it there?
 
 ---
@@ -125,13 +124,12 @@ The server logs show nothing because the Request never physically reached the se
 **Problem:** Identify the 3 core structural components of a standard HTTP Request message.
 
 **Expected output:**
-```text
-1. Request Line (Method, URI, Protocol Version)
-2. Request Headers (Key-value metadata)
-3. Request Body (Payload data)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Request Line (Method, URI, Protocol Version)
+> 2. Request Headers (Key-value metadata)
+> 3. Request Body (Payload data)
+> ```
 > ```http
 > POST /v1/users HTTP/1.1
 > Host: api.example.com
@@ -146,11 +144,10 @@ The server logs show nothing because the Request never physically reached the se
 **Problem:** Write JS snippet checking if a `fetch` response is successful (`res.ok`) before parsing JSON.
 
 **Expected output:**
-```text
-if (res.ok) { return await res.json(); } else { throw new Error(res.statusText); }
-```
-
 > [!check]- Answer
+> ```text
+> if (res.ok) { return await res.json(); } else { throw new Error(res.statusText); }
+> ```
 > ```javascript
 > const res = await fetch('/api/items');
 > if (res.ok) {

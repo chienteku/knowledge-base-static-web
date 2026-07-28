@@ -115,14 +115,13 @@ Consolidate state update logic into a single parent handler or reducer
 **Problem:** You have an `<AudioPlayer />` component and a `<VolumeControl />` component. They are siblings. `VolumeControl` has a slider that changes the volume. How do you get the volume level from the slider into the audio player?
 
 **Expected output:**
-```text
-State cannot be passed between siblings. You must "Lift the State Up".
-You create the `volume` state inside their shared Parent component. 
-You pass `volume` down to `<AudioPlayer />` as a prop.
-You pass `setVolume` down to `<VolumeControl />` as a prop.
-```
-
 > [!check]- Answer
+> ```text
+> State cannot be passed between siblings. You must "Lift the State Up".
+> You create the `volume` state inside their shared Parent component. 
+> You pass `volume` down to `<AudioPlayer />` as a prop.
+> You pass `setVolume` down to `<VolumeControl />` as a prop.
+> ```
 > - Waterfalls only go down. Where is the top of the waterfall for these two siblings?
 
 ---
@@ -134,27 +133,27 @@ You pass `setVolume` down to `<VolumeControl />` as a prop.
 **Problem:** Describe how data and events flow in React (Data flows DOWN via props; Events flow UP via callback functions).
 
 **Expected output:**
-```text
-Data flows DOWN via props; Events flow UP via callback functions
-```
-
 > [!check]- Answer
+> ```text
+> Data flows DOWN via props; Events flow UP via callback functions
+> ```
 > ```text
 > Data flows DOWN via props; Events flow UP via callback functions
 > ```
 >
 > **Explanation:** Unidirectional flow guarantees deterministic, traceable state debugging.
 
+---
+
 ### Exercise 3: Controlled Input One-Way Flow
 
 **Problem:** Build controlled text input demonstrating unidirectional data flow.
 
 **Expected output:**
-```text
-function Input({ value, onChange }) { return <input value={value} onChange={e => onChange(e.target.value)} />; }
-```
-
 > [!check]- Answer
+> ```text
+> function Input({ value, onChange }) { return <input value={value} onChange={e => onChange(e.target.value)} />; }
+> ```
 > ```javascript
 > function Input({ value, onChange }) {
 >   return <input value={value} onChange={e => onChange(e.target.value)} />;

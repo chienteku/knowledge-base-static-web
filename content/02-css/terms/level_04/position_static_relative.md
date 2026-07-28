@@ -185,11 +185,10 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 **Problem:** You have a red box sitting directly above a blue box in the normal flow. You apply `position: relative; top: 50px;` to the red box. Does the blue box get pushed down 50px as well?
 
 **Expected output:**
-```text
-No! The blue box stays exactly where it was. The red box will literally slide down and visually overlap the blue box. The layout of the page does not change.
-```
-
 > [!check]- Answer
+> ```text
+> No! The blue box stays exactly where it was. The red box will literally slide down and visually overlap the blue box. The layout of the page does not change.
+> ```
 > - Think about the "ghost" left behind by relative positioning.
 
 ---
@@ -201,27 +200,27 @@ No! The blue box stays exactly where it was. The red box will literally slide do
 **Problem:** What happens to the original layout space when an element is offset using `position: relative; top: 50px;`?
 
 **Expected output:**
-```text
-The element moves visually down 50px, but its original layout space remains occupied in document flow.
-```
-
 > [!check]- Answer
+> ```text
+> The element moves visually down 50px, but its original layout space remains occupied in document flow.
+> ```
 > ```text
 > The element moves visually down 50px, but its original layout space remains occupied in document flow.
 > ```
 >
 > **Explanation:** `position: relative` offsets visual paint without altering surrounding document flow layout.
 
+---
+
 ### Exercise 3: Default Position Property Value
 
 **Problem:** What is the default `position` property value for all standard HTML elements?
 
 **Expected output:**
-```text
-position: static;
-```
-
 > [!check]- Answer
+> ```text
+> position: static;
+> ```
 > ```text
 > position: static;
 > ```

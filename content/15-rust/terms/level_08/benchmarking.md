@@ -173,11 +173,10 @@ thread::spawn(move || {
 **Problem:** Pass inputs and outputs through `std::hint::black_box` inside a benchmark loop.
 
 **Expected output:**
-```
-Black box result: 100
-```
-
 > [!check]- Answer
+> ```
+> Black box result: 100
+> ```
 > ```rust
 > use std::hint::black_box;
 > fn main() {
@@ -188,16 +187,17 @@ Black box result: 100
 >
 > **Explanation:** `black_box` prevents the compiler from optimizing away computations based on constant inputs.
 
+---
+
 ### Exercise 3: Executing Benchmarks with Cargo
 
 **Problem:** Command line invocation to run benchmark targets in Cargo.
 
 **Expected output:**
-```
-cargo bench
-```
-
 > [!check]- Answer
+> ```
+> cargo bench
+> ```
 > fn main() {
 >     println!("cargo bench");
 > }

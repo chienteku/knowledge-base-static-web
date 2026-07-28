@@ -125,12 +125,11 @@ const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`;
 **Problem:** You have a file `Sidebar.js` that contains a `const SidebarContainer = styled.nav...`. You delete `Sidebar.js` from your project. What happens to the CSS that was styling the Sidebar?
 
 **Expected output:**
-```text
-It is perfectly deleted!
-Because the CSS was inside the JavaScript file, deleting the JS file guarantees that 100% of the associated CSS is also removed from your application's final build. Zero dead CSS code!
-```
-
 > [!check]- Answer
+> ```text
+> It is perfectly deleted!
+> Because the CSS was inside the JavaScript file, deleting the JS file guarantees that 100% of the associated CSS is also removed from your application's final build. Zero dead CSS code!
+> ```
 > - Think about where the CSS lives physically.
 
 ---
@@ -142,11 +141,10 @@ Because the CSS was inside the JavaScript file, deleting the JS file guarantees 
 **Problem:** Create `Button` styled component setting background color to `'green'` if `$primary` prop is true.
 
 **Expected output:**
-```text
-import styled from 'styled-components'; const Button = styled.button` background-color: ${props => props.$primary ? 'green' : 'gray'}; color: white; padding: 10px; `;
-```
-
 > [!check]- Answer
+> ```text
+> import styled from 'styled-components'; const Button = styled.button` background-color: ${props => props.$primary ? 'green' : 'gray'}; color: white; padding: 10px; `;
+> ```
 > ```javascript
 > import styled from 'styled-components';
 >
@@ -159,16 +157,17 @@ import styled from 'styled-components'; const Button = styled.button` background
 >
 > **Explanation:** CSS-in-JS styled components evaluate dynamic JavaScript props to generate CSS styles.
 
+---
+
 ### Exercise 3: Transient Props Prefix
 
 **Problem:** What prefix prevents custom styled-components props from being passed down to HTML DOM elements? (`$` dollar sign prefix e.g. `$primary`).
 
 **Expected output:**
-```text
-$ (dollar sign) prefix e.g. $primary
-```
-
 > [!check]- Answer
+> ```text
+> $ (dollar sign) prefix e.g. $primary
+> ```
 > ```text
 > $ (dollar sign) prefix e.g. $primary
 > ```

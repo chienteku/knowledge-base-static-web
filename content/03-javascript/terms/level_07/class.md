@@ -168,12 +168,11 @@ async function processData() {
 **Problem:** If you run `typeof User` (assuming `User` is a class), what does the console print?
 
 **Expected output:**
-```text
-"function"
-Because under the hood, a class is literally just a Constructor Function!
-```
-
 > [!check]- Answer
+> ```text
+> "function"
+> Because under the hood, a class is literally just a Constructor Function!
+> ```
 > - Classes are just syntactic sugar. They didn't add a new data type to JS.
 
 ---
@@ -183,11 +182,10 @@ Because under the hood, a class is literally just a Constructor Function!
 **Problem:** Define `class Person` with `constructor(name)` and method `greet()`.
 
 **Expected output:**
-```text
-Hi, I am Alice
-```
-
 > [!check]- Answer
+> ```text
+> Hi, I am Alice
+> ```
 > ```javascript
 > class Person {
 >   constructor(name) {
@@ -203,16 +201,17 @@ Hi, I am Alice
 >
 > **Explanation:** ES6 class syntax provides clean object-oriented constructor and prototype method structures.
 
+---
+
 ### Exercise 3: Class Field Initializers
 
 **Problem:** Use class field declaration `count = 0;` inside class body.
 
 **Expected output:**
-```text
-0
-```
-
 > [!check]- Answer
+> ```text
+> 0
+> ```
 > ```javascript
 > class Counter {
 >   count = 0;

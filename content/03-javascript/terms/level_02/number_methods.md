@@ -172,11 +172,10 @@ console.log(finalOutput);
 ```
 
 **Expected output:**
-```text
-31.92
-```
-
 > [!check]- Answer
+> ```text
+> 31.92
+> ```
 > - Use `parseFloat(rawInput)` to extract the decimal value.
 > - Multiply the result by `0.8`.
 > - Call `.toFixed(2)` to format the output.
@@ -188,11 +187,10 @@ console.log(finalOutput);
 **Problem:** Format `19.999` to 2 decimal places string.
 
 **Expected output:**
-```text
-20.00
-```
-
 > [!check]- Answer
+> ```text
+> 20.00
+> ```
 > ```javascript
 > const price = 19.999;
 > console.log(price.toFixed(2));
@@ -200,18 +198,19 @@ console.log(finalOutput);
 >
 > **Explanation:** `toFixed(digits)` rounds numbers to fixed decimal places and returns a formatted string.
 
+---
+
 ### Exercise 3: Checking Integer Status with `Number.isInteger`
 
 **Problem:** Check `Number.isInteger(10)` vs `Number.isInteger(10.5)` vs `Number.isInteger("10")`.
 
 **Expected output:**
-```text
-true
-false
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> false
+> false
+> ```
 > ```javascript
 > console.log(Number.isInteger(10));
 > console.log(Number.isInteger(10.5));
@@ -220,7 +219,6 @@ false
 >
 > **Explanation:** `Number.isInteger` returns `true` strictly if input is of type `number` without fractional components.
 
----
 
 ---
 

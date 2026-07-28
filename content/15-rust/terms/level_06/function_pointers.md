@@ -161,11 +161,10 @@ fn make_adder(n: i32) -> fn(i32) -> i32 {
 **Problem:** Pass top-level function `add_one(x: i32) -> i32` to a higher-order function taking `fn(i32) -> i32`.
 
 **Expected output:**
-```
-Result: 11
-```
-
 > [!check]- Answer
+> ```
+> Result: 11
+> ```
 > ```rust
 > fn add_one(x: i32) -> i32 { x + 1 }
 > fn apply(val: i32, f: fn(i32) -> i32) -> i32 { f(val) }
@@ -176,16 +175,17 @@ Result: 11
 >
 > **Explanation:** Function pointers `fn(T) -> R` represent stateless function addresses taking zero environment captures.
 
+---
+
 ### Exercise 3: Coercing Non-Capturing Closures into `fn` Pointers
 
 **Problem:** Pass a non-capturing closure `|x| x * 2` directly to `apply(5, ...)`.
 
 **Expected output:**
-```
-Result: 10
-```
-
 > [!check]- Answer
+> ```
+> Result: 10
+> ```
 > fn apply(val: i32, f: fn(i32) -> i32) -> i32 { f(val) }
 > fn main() {
 >     println!("Result: {}", apply(5, |x| x * 2));

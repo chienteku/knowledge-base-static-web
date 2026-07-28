@@ -111,14 +111,13 @@ export default defineEventHandler((event) => { return { status: 'ok' }; });
 **Problem:** How do you define a server route in Nitro that returns a boolean value `true`?
 
 **Expected output:**
-```typescript
-// Inside server/api/status.ts
-export default defineEventHandler((event) => {
-  return true;
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> // Inside server/api/status.ts
+> export default defineEventHandler((event) => {
+>   return true;
+> });
+> ```
 > - Create a file in `server/api/` containing a default export wrapped in `defineEventHandler()`. Returning JSON is as simple as returning the value itself.
 
 ---
@@ -128,11 +127,10 @@ export default defineEventHandler((event) => {
 **Problem:** Write Nitro server handler `server/api/status.ts` returning JSON object `{ status: 'online', timestamp: Date.now() }`.
 
 **Expected output:**
-```typescript
-export default defineEventHandler((event) => { return { status: 'online', timestamp: Date.now() }; });
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler((event) => { return { status: 'online', timestamp: Date.now() }; });
+> ```
 > - `defineEventHandler` creates Nitro backend server routes.
 > 
 > ```typescript
@@ -152,13 +150,12 @@ export default defineEventHandler((event) => { return { status: 'online', timest
 **Problem:** Name 3 serverless/edge deployment platforms supported natively as preset build targets by Nitro.
 
 **Expected output:**
-```text
-1. Vercel (Edge & Serverless)
-2. Cloudflare Workers / Pages
-3. AWS Lambda (or Netlify / Node.js standalone)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Vercel (Edge & Serverless)
+> 2. Cloudflare Workers / Pages
+> 3. AWS Lambda (or Netlify / Node.js standalone)
+> ```
 > - Vercel, Cloudflare Workers, AWS Lambda, Netlify, Node.js.
 > 
 > ```text

@@ -166,11 +166,10 @@ fn main() {
 **Problem:** Wrap a `Vec<i32>` in an `Arc`, clone the `Arc`, and move it into a `std::thread::spawn` closure to print vector length from another thread.
 
 **Expected output:**
-```
-Thread saw len: 3
-```
-
 > [!check]- Answer
+> ```
+> Thread saw len: 3
+> ```
 > ```rust
 > use std::sync::Arc;
 > use std::thread;
@@ -186,16 +185,17 @@ Thread saw len: 3
 >
 > **Explanation:** `Arc` provides thread-safe atomic reference counting, allowing multiple thread scopes to share read access to data.
 
+---
+
 ### Exercise 3: Arc Weak References for Cyclic Prevention
 
 **Problem:** Create an `Arc::downgrade` weak pointer and attempt to upgrade it using `.upgrade()`.
 
 **Expected output:**
-```
-Upgraded: 42
-```
-
 > [!check]- Answer
+> ```
+> Upgraded: 42
+> ```
 > ```rust
 > use std::sync::Arc;
 > fn main() {

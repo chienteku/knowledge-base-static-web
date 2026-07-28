@@ -199,27 +199,27 @@ c. `db.create()`
 **Problem:** List JS SDK methods for: 1. Select all records (`db.select`), 2. Create record (`db.create`), 3. Update fields (`db.merge`), 4. Delete (`db.delete`).
 
 **Expected output:**
-```text
-db.select, db.create, db.merge, db.delete
-```
-
 > [!check]- Answer
+> ```text
+> db.select, db.create, db.merge, db.delete
+> ```
 > ```text
 > db.select, db.create, db.merge, db.delete
 > ```
 >
 > **Explanation:** SDK CRUD methods wrap SurrealQL statements into simple asynchronous JS calls.
 
+---
+
 ### Exercise 3: Merging Fields with SDK `db.merge`
 
 **Problem:** Update `user:alice` setting `age = 31` without overwriting other fields using `db.merge()`.
 
 **Expected output:**
-```text
-await db.merge("user:alice", { age: 31 });
-```
-
 > [!check]- Answer
+> ```text
+> await db.merge("user:alice", { age: 31 });
+> ```
 > ```javascript
 > await db.merge("user:alice", { age: 31 });
 > ```

@@ -158,23 +158,10 @@ Store array references on the side with smaller cardinality (e.g. user.groupIds)
 2.  Write a sample movie document referencing its actors.
 
 **Expected output:**
-```text
-1. The array of references can be stored on the Movie collection (storing `actor_ids`). Since movies are queried most often to see their cast list, storing the references in the movie document optimizes the primary read path. (Alternatively, storing them on both sides is acceptable because both arrays are small and bounded).
-```
-```javascript
-// 2. Movie document referencing actors
-{
-  _id: ObjectId("60c72b2f9b1d8b2e88a8d999"),
-  title: "Inception",
-  release_year: 2010,
-  actor_ids: [ // Many-to-Many references
-    ObjectId("60c72b2f9b1d8b2e88a8d111"),
-    ObjectId("60c72b2f9b1d8b2e88a8d222")
-  ]
-}
-```
-
 > [!check]- Answer
+> ```text
+> 1. The array of references can be stored on the Movie collection (storing `actor_ids`). Since movies are queried most often to see their cast list, storing the references in the movie document optimizes the primary read path. (Alternatively, storing them on both sides is acceptable because both arrays are small and bounded).
+> ```
 > - Assess the primary read queries of a movie database.
 > - Avoid creating a third collection. Store references inside array fields.
 
@@ -187,11 +174,10 @@ Store array references on the side with smaller cardinality (e.g. user.groupIds)
 **Problem:** Model `student` document referencing array of enrolled `courseIds`.
 
 **Expected output:**
-```text
-{ name: "Alice", courseIds: [ ObjectId("..."), ObjectId("...") ] }
-```
-
 > [!check]- Answer
+> ```text
+> { name: "Alice", courseIds: [ ObjectId("..."), ObjectId("...") ] }
+> ```
 > ```javascript
 > const student = {
 >   _id: new ObjectId(),
@@ -205,16 +191,17 @@ Store array references on the side with smaller cardinality (e.g. user.groupIds)
 >
 > **Explanation:** Storing arrays of ObjectIds models Many-to-Many relationships cleanly.
 
+---
+
 ### Exercise 3: Querying Many-to-Many Array References
 
 **Problem:** Query students enrolled in course `courseId` using direct array element match.
 
 **Expected output:**
-```text
-db.students.find({ courseIds: courseId });
-```
-
 > [!check]- Answer
+> ```text
+> db.students.find({ courseIds: courseId });
+> ```
 > ```javascript
 > db.students.find({ courseIds: courseId });
 > ```

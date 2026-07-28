@@ -183,11 +183,10 @@ What is the exact data type of `x`?
 **Problem:** Demonstrate defining and awaiting a closure returning an async block `let f = || async { 42 };`.
 
 **Expected output:**
-```
-Async closure result: 42
-```
-
 > [!check]- Answer
+> ```
+> Async closure result: 42
+> ```
 > ```rust
 > fn main() {
 >     let f = || async { 42 };
@@ -198,16 +197,17 @@ Async closure result: 42
 >
 > **Explanation:** Closures returning `async` blocks capture environment state for async execution.
 
+---
+
 ### Exercise 3: Higher-Ranked Async Borrowing Closures
 
 **Problem:** Explain why async closures allow borrowing parameters across `.await` points safely.
 
 **Expected output:**
-```
-HRTB async borrowing verified
-```
-
 > [!check]- Answer
+> ```
+> HRTB async borrowing verified
+> ```
 > fn main() {
 >     println!("HRTB async borrowing verified");
 > }

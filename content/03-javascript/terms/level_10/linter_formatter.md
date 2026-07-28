@@ -207,34 +207,33 @@ async function processData() {
 **Problem:** State primary role of ESLint (code quality/logic bugs) vs Prettier (opinionated code formatting).
 
 **Expected output:**
-```text
-ESLint: Code quality, Prettier: Code formatting
-```
-
 > [!check]- Answer
+> ```text
+> ESLint: Code quality, Prettier: Code formatting
+> ```
 > ```javascript
 > console.log("ESLint: Code quality, Prettier: Code formatting");
 > ```
 >
 > **Explanation:** Linters catch code smells and syntax bugs; formatters enforce consistent code style layout.
 
+---
+
 ### Exercise 3: ESLint Directive Comments
 
 **Problem:** Disable an ESLint rule for a single line using `// eslint-disable-next-line`.
 
 **Expected output:**
-```text
-Rule disabled for next line
-```
-
 > [!check]- Answer
+> ```text
+> Rule disabled for next line
+> ```
 > ```javascript
 > console.log("Rule disabled for next line");
 > ```
 >
 > **Explanation:** Inline ESLint directives override linting rules for specific code statements.
 
----
 
 ---
 

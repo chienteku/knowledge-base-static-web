@@ -179,15 +179,11 @@ db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true }); // 
 2.  State the error code returned if your application tries to write a duplicate username.
 
 **Expected output:**
-```javascript
-// 1. Index command
-db.users.createIndex({ username: 1 }, { unique: true });
-```
-```text
-2. Error code: 11000 (duplicate key error)
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Index command
+> db.users.createIndex({ username: 1 }, { unique: true });
+> ```
 > - The unique parameter is passed inside the options block.
 > - Identify the standard duplicate key code.
 
@@ -200,27 +196,27 @@ db.users.createIndex({ username: 1 }, { unique: true });
 **Problem:** Create unique index on `email` field in `users` collection.
 
 **Expected output:**
-```text
-db.users.createIndex({ email: 1 }, { unique: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.createIndex({ email: 1 }, { unique: true });
+> ```
 > ```javascript
 > db.users.createIndex({ email: 1 }, { unique: true });
 > ```
 >
 > **Explanation:** `unique: true` prevents duplicate key insertions across collection documents.
 
+---
+
 ### Exercise 3: Handling E11000 Duplicate Key Error in Node.js
 
 **Problem:** Catch MongoDB duplicate key error code in Node.js (`err.code === 11000`).
 
 **Expected output:**
-```text
-if (err.code === 11000) console.error("Duplicate key error");
-```
-
 > [!check]- Answer
+> ```text
+> if (err.code === 11000) console.error("Duplicate key error");
+> ```
 > ```javascript
 > try {
 >   await db.users.insertOne({ email: "dup@ex.com" });

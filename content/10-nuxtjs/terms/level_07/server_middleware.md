@@ -130,20 +130,19 @@ export default defineEventHandler((event) => {
 **Problem:** Server middleware runs on *every* request, including requests for public CSS files. Write the logic inside a middleware file to only execute a block of auth-checking code if the URL starts with `/api/admin`.
 
 **Expected output:**
-```typescript
-export default defineEventHandler((event) => {
-  // Read the requested URL
-  const url = getRequestURL(event);
-  
-  // Only intercept /api/admin routes
-  if (url.pathname.startsWith('/api/admin')) {
-     const token = getCookie(event, 'token');
-     if (!token) throw createError({ statusCode: 401, message: 'Unauthorized' });
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler((event) => {
+>   // Read the requested URL
+>   const url = getRequestURL(event);
+>   
+>   // Only intercept /api/admin routes
+>   if (url.pathname.startsWith('/api/admin')) {
+>      const token = getCookie(event, 'token');
+>      if (!token) throw createError({ statusCode: 401, message: 'Unauthorized' });
+>   }
+> });
+> ```
 > - Read the pathname using the `getRequestURL(event)` helper and conditionally check auth credentials.
 
 ---
@@ -153,16 +152,15 @@ export default defineEventHandler((event) => {
 **Problem:** Write server middleware `server/middleware/user.ts` parsing JWT token cookie and attaching `event.context.user` object.
 
 **Expected output:**
-```typescript
-export default defineEventHandler((event) => {
-  const token = getCookie(event, 'token');
-  if (token) {
-    event.context.user = verifyToken(token);
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler((event) => {
+>   const token = getCookie(event, 'token');
+>   if (token) {
+>     event.context.user = verifyToken(token);
+>   }
+> });
+> ```
 > - Server middleware extends `event.context` for downstream route handlers.
 > 
 > ```typescript
@@ -182,12 +180,11 @@ export default defineEventHandler((event) => {
 **Problem:** Contrast Nitro Server Middleware (`server/middleware/`) vs Vue Route Middleware (`middleware/`).
 
 **Expected output:**
-```text
-Server Middleware: Executes on Node.js server before Nitro routes for all HTTP requests;
-Route Middleware: Vue Router navigation guard executing on page transitions.
-```
-
 > [!check]- Answer
+> ```text
+> Server Middleware: Executes on Node.js server before Nitro routes for all HTTP requests;
+> Route Middleware: Vue Router navigation guard executing on page transitions.
+> ```
 > - Server Middleware -> Backend Nitro HTTP request interceptor.
 > - Route Middleware -> Frontend Vue Router page navigation guard.
 > 

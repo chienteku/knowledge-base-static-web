@@ -178,18 +178,17 @@ db.users.updateOne({ email: "new@ex.com" }, { $set: { name: "New" } }, { upsert:
 3.  Ensure the document is created dynamically if player `104` has no records yet.
 
 **Expected output:**
-```javascript
-db.player_stats.updateOne(
-  { player_id: 104 },
-  {
-    $set: { status: "online" },
-    $inc: { games_played: 1 }
-  },
-  { upsert: true }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.player_stats.updateOne(
+>   { player_id: 104 },
+>   {
+>     $set: { status: "online" },
+>     $inc: { games_played: 1 }
+>   },
+>   { upsert: true }
+> );
+> ```
 > - Specify the query filter matching the ID.
 > - Chain the `$set` and `$inc` operators.
 > - Pass the upsert flag in the options block.
@@ -203,11 +202,10 @@ db.player_stats.updateOne(
 **Problem:** Upsert user by `email: "a@b.com"` setting `name: "Alice"` and `$setOnInsert` `createdAt: new Date()`.
 
 **Expected output:**
-```text
-db.users.updateOne({ email: "a@b.com" }, { $set: { name: "Alice" }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ email: "a@b.com" }, { $set: { name: "Alice" }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
+> ```
 > ```javascript
 > db.users.updateOne(
 >   { email: "a@b.com" },
@@ -218,16 +216,17 @@ db.users.updateOne({ email: "a@b.com" }, { $set: { name: "Alice" }, $setOnInsert
 >
 > **Explanation:** Combining `{ upsert: true }` with `$setOnInsert` initializes creation timestamps only on insert.
 
+---
+
 ### Exercise 3: Inspecting Upserted Result ID
 
 **Problem:** Inspect `upsertedId` field on MongoDB driver write result objects.
 
 **Expected output:**
-```text
-result.upsertedId
-```
-
 > [!check]- Answer
+> ```text
+> result.upsertedId
+> ```
 > ```javascript
 > const res = await db.users.updateOne({ _id: 99 }, { $set: { a: 1 } }, { upsert: true });
 > console.log(res.upsertedId);

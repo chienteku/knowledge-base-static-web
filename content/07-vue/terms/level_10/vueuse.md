@@ -221,11 +221,10 @@ const toggleDark = useToggle(isDark)
 ```
 
 **Expected output:**
-```text
-Clicking the button toggles the theme. VueUse automatically handles injecting/removing the class="dark" attribute on the root HTML tag.
-```
-
 > [!check]- Answer
+> ```text
+> Clicking the button toggles the theme. VueUse automatically handles injecting/removing the class="dark" attribute on the root HTML tag.
+> ```
 > - `useDark()` automatically reads system preferences and manages DOM attributes.
 > - `useToggle` accepts a boolean ref and returns a toggling function.
 
@@ -236,11 +235,10 @@ Clicking the button toggles the theme. VueUse automatically handles injecting/re
 **Problem:** Write VueUse `useLocalStorage()` snippet creating reactive ref `username` synchronized with `localStorage` key `'user-key'` and default `'Guest'`. 
 
 **Expected output:**
-```javascript
-import { useLocalStorage } from '@vueuse/core'; const username = useLocalStorage('user-key', 'Guest');
-```
-
 > [!check]- Answer
+> ```javascript
+> import { useLocalStorage } from '@vueuse/core'; const username = useLocalStorage('user-key', 'Guest');
+> ```
 > - `useLocalStorage()` creates reactive refs bound to localStorage.
 > 
 > ```javascript
@@ -256,11 +254,10 @@ import { useLocalStorage } from '@vueuse/core'; const username = useLocalStorage
 **Problem:** Write VueUse snippet using `useDark()` and `useToggle()` to manage dark mode theme toggling.
 
 **Expected output:**
-```javascript
-import { useDark, useToggle } from '@vueuse/core'; const isDark = useDark(); const toggleDark = useToggle(isDark);
-```
-
 > [!check]- Answer
+> ```javascript
+> import { useDark, useToggle } from '@vueuse/core'; const isDark = useDark(); const toggleDark = useToggle(isDark);
+> ```
 > - `useDark()` toggles dark mode CSS classes; `useToggle()` toggles boolean refs.
 > 
 > ```javascript

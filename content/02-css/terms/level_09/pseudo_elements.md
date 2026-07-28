@@ -195,15 +195,14 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 **Problem:** You want to add a green bullet character (`•`) in front of every paragraph having the class `.intro`. Write the CSS rule.
 
 **Expected output:**
-```css
-.intro::before {
-  content: "• ";
-  color: green;
-  font-weight: bold;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .intro::before {
+>   content: "• ";
+>   color: green;
+>   font-weight: bold;
+> }
+> ```
 > - Target the content inserted *before* paragraph text.
 > - Declare the character inside the mandatory property.
 
@@ -216,11 +215,10 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 **Problem:** Write CSS `::after` pseudo-element for `[data-tooltip]` displaying `attr(data-tooltip)` on hover.
 
 **Expected output:**
-```text
-[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; }
-```
-
 > [!check]- Answer
+> ```text
+> [data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; }
+> ```
 > ```css
 > [data-tooltip]:hover::after {
 >   content: attr(data-tooltip);
@@ -233,16 +231,17 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 >
 > **Explanation:** `content: attr(data-attribute)` dynamically displays HTML data attribute values.
 
+---
+
 ### Exercise 3: Single vs Double Colon Pseudo-Element Syntax
 
 **Problem:** Why does modern CSS specification use double colons (`::before`) for pseudo-elements and single colons (`:hover`) for pseudo-classes?
 
 **Expected output:**
-```text
-To distinguish pseudo-elements (generated sub-nodes) from pseudo-classes (element states).
-```
-
 > [!check]- Answer
+> ```text
+> To distinguish pseudo-elements (generated sub-nodes) from pseudo-classes (element states).
+> ```
 > ```text
 > To distinguish pseudo-elements (generated sub-nodes) from pseudo-classes (element states).
 > ```

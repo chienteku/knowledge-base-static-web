@@ -103,14 +103,12 @@ process.on('unhandledRejection', (reason, promise) => {
 **Problem:** You want your API to log heavy debugging info when you run it on your laptop, but you want it to be totally silent when running on the live production server. How do you achieve this using the `process` object?
 
 **Expected output:**
-```javascript
-if (process.env.NODE_ENV === 'development') {
-  console.log("Heavy debugging info...");
-}
-```
-*Explanation: `NODE_ENV` is the standard environment variable used across the entire Node ecosystem to distinguish between a developer's laptop (`development`) and a live server (`production`).*
-
 > [!check]- Answer
+> ```javascript
+> if (process.env.NODE_ENV === 'development') {
+>   console.log("Heavy debugging info...");
+> }
+> ```
 > - Which property holds the environment variables?
 
 ---
@@ -122,11 +120,10 @@ if (process.env.NODE_ENV === 'development') {
 **Problem:** Read command line argument `--port=8080` from `process.argv`.
 
 **Expected output:**
-```text
-const portArg = process.argv.find(arg => arg.startsWith('--port=')).split('=')[1];
-```
-
 > [!check]- Answer
+> ```text
+> const portArg = process.argv.find(arg => arg.startsWith('--port=')).split('=')[1];
+> ```
 > ```javascript
 > const portArg = process.argv.find(arg => arg.startsWith('--port='));
 > const port = portArg ? portArg.split('=')[1] : '3000';
@@ -134,16 +131,17 @@ const portArg = process.argv.find(arg => arg.startsWith('--port=')).split('=')[1
 >
 > **Explanation:** `process.argv` is an array containing CLI launch command parameters (`[node, script, args...]`).
 
+---
+
 ### Exercise 3: Handling SIGTERM Graceful Shutdown Signal
 
 **Problem:** Register listener on `process` for `'SIGTERM'` signal to close HTTP server.
 
 **Expected output:**
-```text
-process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
-```
-
 > [!check]- Answer
+> ```text
+> process.on('SIGTERM', () => { server.close(() => process.exit(0)); });
+> ```
 > ```javascript
 > process.on('SIGTERM', () => {
 >   server.close(() => {

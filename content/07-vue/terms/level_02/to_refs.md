@@ -221,11 +221,10 @@ function promote() {
 ```
 
 **Expected output:**
-```text
-Clicking the "Promote" button successfully updates the UI from "Role: Developer" to "Role: Lead Architect".
-```
-
 > [!check]- Answer
+> ```text
+> Clicking the "Promote" button successfully updates the UI from "Role: Developer" to "Role: Lead Architect".
+> ```
 > - The component fails because `let { role } = profile` extracts a plain string, losing reactivity.
 > - You need to make `role` a ref linked to `profile`. You can use `toRefs(profile)` or `toRef(profile, 'role')`.
 > - Remember to use `.value` inside the `promote` function since `role` will now be a ref!
@@ -237,11 +236,10 @@ Clicking the "Promote" button successfully updates the UI from "Role: Developer"
 **Problem:** Write a composable `useFeature()` returning `toRefs(state)` so callers can destructure props safely.
 
 **Expected output:**
-```javascript
-function useFeature() { const state = reactive({ count: 0, title: 'App' }); return toRefs(state); }
-```
-
 > [!check]- Answer
+> ```javascript
+> function useFeature() { const state = reactive({ count: 0, title: 'App' }); return toRefs(state); }
+> ```
 > - `toRefs()` allows composable consumers to destructure properties without breaking reactivity.
 > 
 > ```javascript
@@ -260,11 +258,10 @@ function useFeature() { const state = reactive({ count: 0, title: 'App' }); retu
 **Problem:** What does `toRef(props, 'foo', 'defaultFoo')` do if property `foo` does not exist on `props`?
 
 **Expected output:**
-```text
-Returns a ref for 'foo' that evaluates to 'defaultFoo' if props.foo is undefined.
-```
-
 > [!check]- Answer
+> ```text
+> Returns a ref for 'foo' that evaluates to 'defaultFoo' if props.foo is undefined.
+> ```
 > - Provides fallback ref values for optional component props.
 > 
 > ```javascript

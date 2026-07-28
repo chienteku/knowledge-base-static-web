@@ -140,14 +140,13 @@ Ensure field values are consistently typed using Schema Validation
 4.  `true`
 
 **Expected output:**
-```text
-1. "active" -> "string"
-2. [1, 2, 3] -> "array"
-3. 123.45 -> "double"
-4. true -> "bool"
-```
-
 > [!check]- Answer
+> ```text
+> 1. "active" -> "string"
+> 2. [1, 2, 3] -> "array"
+> 3. 123.45 -> "double"
+> 4. true -> "bool"
+> ```
 > - The BSON aliases are standard strings used inside the `$type` operator queries.
 > - Double-precision decimals align with the generic floating-point alias.
 
@@ -160,27 +159,27 @@ Ensure field values are consistently typed using Schema Validation
 **Problem:** Query all documents in `orders` where `total` is typed as `Decimal128` (`"decimal"`).
 
 **Expected output:**
-```text
-db.orders.find({ total: { $type: "decimal" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.find({ total: { $type: "decimal" } });
+> ```
 > ```javascript
 > db.orders.find({ total: { $type: "decimal" } });
 > ```
 >
 > **Explanation:** `{ field: { $type: "decimal" } }` filters documents by exact BSON data type.
 
+---
+
 ### Exercise 3: BSON Type Aliases List
 
 **Problem:** List 4 string BSON type aliases (`"string"`, `"int"`, `"double"`, `"objectId"`).
 
 **Expected output:**
-```text
-"string", "int", "double", "objectId"
-```
-
 > [!check]- Answer
+> ```text
+> "string", "int", "double", "objectId"
+> ```
 > ```text
 > "string", "int", "double", "objectId"
 > ```

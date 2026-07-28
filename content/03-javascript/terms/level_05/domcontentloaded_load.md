@@ -196,34 +196,33 @@ async function processData() {
 **Problem:** Write a `document.addEventListener('DOMContentLoaded', ...)` setup handler.
 
 **Expected output:**
-```text
-DOM parsed and ready
-```
-
 > [!check]- Answer
+> ```text
+> DOM parsed and ready
+> ```
 > ```javascript
 > console.log("DOM parsed and ready");
 > ```
 >
 > **Explanation:** `DOMContentLoaded` signals that DOM elements are safe for script query access.
 
+---
+
 ### Exercise 3: Comparing Window Load vs DOMContentLoaded
 
 **Problem:** State which event fires first: `DOMContentLoaded` or `load`.
 
 **Expected output:**
-```text
-DOMContentLoaded fires first
-```
-
 > [!check]- Answer
+> ```text
+> DOMContentLoaded fires first
+> ```
 > ```javascript
 > console.log("DOMContentLoaded fires first");
 > ```
 >
 > **Explanation:** `DOMContentLoaded` executes upon HTML parse completion; `load` waits for external assets.
 
----
 
 ---
 

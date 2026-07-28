@@ -151,12 +151,11 @@ Line 3";
 2.  Explain how SurrealDB handles the line breaks when returning the data to a Node.js client.
 
 **Expected output:**
-```text
-1. Yes: The query will compile successfully. SurrealDB natively supports multi-line strings.
-2. SurrealDB preserves the line breaks and returns them to the Node.js client as a string containing new-line escape characters (`Line 1\nLine 2\nLine 3`).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes: The query will compile successfully. SurrealDB natively supports multi-line strings.
+> 2. SurrealDB preserves the line breaks and returns them to the Node.js client as a string containing new-line escape characters (`Line 1\nLine 2\nLine 3`).
+> ```
 > - Check if SurrealDB allows unescaped line breaks inside double quotes.
 > - Consider how multi-line blocks are translated to JSON strings over network sockets.
 
@@ -169,11 +168,10 @@ Line 3";
 **Problem:** Convert string `"hello world"` to uppercase and lowercase using string functions.
 
 **Expected output:**
-```text
-string::uppercase("hello world"), string::lowercase("HELLO WORLD")
-```
-
 > [!check]- Answer
+> ```text
+> string::uppercase("hello world"), string::lowercase("HELLO WORLD")
+> ```
 > ```surrealql
 > RETURN string::uppercase("hello world");
 > RETURN string::lowercase("HELLO WORLD");
@@ -181,16 +179,17 @@ string::uppercase("hello world"), string::lowercase("HELLO WORLD")
 >
 > **Explanation:** `string::uppercase()` and `string::lowercase()` format text strings.
 
+---
+
 ### Exercise 3: Regex String Matching with `~`
 
 **Problem:** Check if email field contains `@domain.com` using fuzzy regex match `~`.
 
 **Expected output:**
-```text
-SELECT * FROM user WHERE email ~ "@domain.com";
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM user WHERE email ~ "@domain.com";
+> ```
 > ```surrealql
 > SELECT * FROM user WHERE email ~ "@domain.com";
 > ```

@@ -167,12 +167,11 @@ async function processData() {
 **Problem:** What does LIFO stand for, and how does it relate to the Call Stack?
 
 **Expected output:**
-```text
-LIFO stands for Last In, First Out. 
-It means the most recently called function (the Last one In) is placed on top of the stack, and it must finish executing completely (First one Out) before the engine can go back to the older functions below it.
-```
-
 > [!check]- Answer
+> ```text
+> LIFO stands for Last In, First Out. 
+> It means the most recently called function (the Last one In) is placed on top of the stack, and it must finish executing completely (First one Out) before the engine can go back to the older functions below it.
+> ```
 > - Think of the dinner plates!
 
 ---
@@ -182,13 +181,12 @@ It means the most recently called function (the Last one In) is placed on top of
 **Problem:** Trace function calls `first()` -> `second()` -> `third()`.
 
 **Expected output:**
-```text
-Entering first
-Entering second
-Entering third
-```
-
 > [!check]- Answer
+> ```text
+> Entering first
+> Entering second
+> Entering third
+> ```
 > ```javascript
 > function third() { console.log("Entering third"); }
 > function second() { console.log("Entering second"); third(); }
@@ -198,16 +196,17 @@ Entering third
 >
 > **Explanation:** Functions push frames onto the LIFO call stack upon invocation and pop frames upon returning.
 
+---
+
 ### Exercise 3: Inspecting Error Stack Traces
 
 **Problem:** Print `err.stack` from a caught Error object showing function call origins.
 
 **Expected output:**
-```text
-Error stack contains call history
-```
-
 > [!check]- Answer
+> ```text
+> Error stack contains call history
+> ```
 > ```javascript
 > function fail() { throw new Error("Crash"); }
 > try {
@@ -219,7 +218,6 @@ Error stack contains call history
 >
 > **Explanation:** `Error.prototype.stack` captures a snapshot of call stack frames at error instantiation time.
 
----
 
 ---
 

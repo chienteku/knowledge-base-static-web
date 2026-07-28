@@ -182,11 +182,10 @@ console.log("Connected?", isConnected(clientA)); // true
 **Problem:** Demonstrate that `WeakMap` keys do not prevent garbage collection when object references are dropped.
 
 **Expected output:**
-```text
-Weak reference GC enabled
-```
-
 > [!check]- Answer
+> ```text
+> Weak reference GC enabled
+> ```
 > ```javascript
 > let keyObj = { id: 1 };
 > const wm = new WeakMap();
@@ -196,16 +195,17 @@ Weak reference GC enabled
 >
 > **Explanation:** `WeakMap` holds weak references to object keys, allowing garbage collection when key references are cleared.
 
+---
+
 ### Exercise 3: Checking Key Existence in `WeakSet`
 
 **Problem:** Add object to `WeakSet`, test `.has(obj)`, and delete reference.
 
 **Expected output:**
-```text
-has: true
-```
-
 > [!check]- Answer
+> ```text
+> has: true
+> ```
 > ```javascript
 > const ws = new WeakSet();
 > const item = { active: true };

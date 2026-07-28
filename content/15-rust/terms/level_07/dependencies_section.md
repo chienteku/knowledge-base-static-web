@@ -176,11 +176,10 @@ rand = 0.8
 **Problem:** Declare `serde = { version = "1.0", optional = true }` in `[dependencies]`.
 
 **Expected output:**
-```
-Optional dependency configured
-```
-
 > [!check]- Answer
+> ```
+> Optional dependency configured
+> ```
 > ```rust
 > fn main() {
 >     println!("Optional dependency configured");
@@ -189,16 +188,17 @@ Optional dependency configured
 >
 > **Explanation:** Marking dependencies as `optional = true` exposes corresponding feature flags of the same name.
 
+---
+
 ### Exercise 3: Git Dependency Specification
 
 **Problem:** Specify a git dependency `rand = { git = "https://github.com/rust-random/rand", branch = "master" }`.
 
 **Expected output:**
-```
-Git dependency declared
-```
-
 > [!check]- Answer
+> ```
+> Git dependency declared
+> ```
 > fn main() {
 >     println!("Git dependency declared");
 > }

@@ -162,15 +162,14 @@ function getJoke() {
 ```
 
 **Expected output:**
-```javascript
-async function getJoke() {
-  const res = await fetch('https://api.jokes.com/random');
-  const data = await res.json();
-  console.log(data.joke);
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> async function getJoke() {
+>   const res = await fetch('https://api.jokes.com/random');
+>   const data = await res.json();
+>   console.log(data.joke);
+> }
+> ```
 > - Don't forget to add `async` to the function declaration!
 > - Assign the result of `await fetch(...)` to a variable.
 
@@ -181,11 +180,10 @@ async function getJoke() {
 **Problem:** Wrap `await Promise.reject(new Error("Failed"))` in a `try...catch` block.
 
 **Expected output:**
-```text
-Caught error: Failed
-```
-
 > [!check]- Answer
+> ```text
+> Caught error: Failed
+> ```
 > ```javascript
 > async function run() {
 >   try {
@@ -199,16 +197,17 @@ Caught error: Failed
 >
 > **Explanation:** `try...catch` blocks catch rejected promise errors thrown inside `async` functions.
 
+---
+
 ### Exercise 3: Parallel Execution with `Promise.all` inside Async Functions
 
 **Problem:** Await two promises concurrently `const [a, b] = await Promise.all([p1, p2])`.
 
 **Expected output:**
-```text
-Results: 10, 20
-```
-
 > [!check]- Answer
+> ```text
+> Results: 10, 20
+> ```
 > ```javascript
 > async function fetchBoth() {
 >   const p1 = Promise.resolve(10);

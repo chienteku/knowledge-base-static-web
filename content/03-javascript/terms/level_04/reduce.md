@@ -153,11 +153,10 @@ async function processData() {
 **Problem:** You have an array of words: `["Hello", " ", "World", "!"]`. Use `reduce` to combine them into a single string. (Hint: the initial value should be an empty string `""`).
 
 **Expected output:**
-```text
-"Hello World!"
-```
-
 > [!check]- Answer
+> ```text
+> "Hello World!"
+> ```
 > - `words.reduce((acc, word) => acc + word, "")`
 
 ---
@@ -167,11 +166,10 @@ async function processData() {
 **Problem:** Sum `[10, 20, 30]` using `.reduce((acc, x) => acc + x, 0)`.
 
 **Expected output:**
-```text
-60
-```
-
 > [!check]- Answer
+> ```text
+> 60
+> ```
 > ```javascript
 > const nums = [10, 20, 30];
 > const sum = nums.reduce((acc, x) => acc + x, 0);
@@ -180,16 +178,17 @@ async function processData() {
 >
 > **Explanation:** `reduce` accumulates array items into a single consolidated value.
 
+---
+
 ### Exercise 3: Grouping Items into Frequency Map Object
 
 **Problem:** Count occurrences of items in `["a", "b", "a"]` using `.reduce()`.
 
 **Expected output:**
-```text
-{"a":2,"b":1}
-```
-
 > [!check]- Answer
+> ```text
+> {"a":2,"b":1}
+> ```
 > ```javascript
 > const items = ["a", "b", "a"];
 > const counts = items.reduce((acc, item) => {
@@ -201,7 +200,6 @@ async function processData() {
 >
 > **Explanation:** `reduce` with object initial values `{}` builds lookup frequency maps dynamically.
 
----
 
 ---
 

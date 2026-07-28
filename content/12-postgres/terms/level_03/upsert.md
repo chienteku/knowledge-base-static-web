@@ -150,14 +150,13 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name; -- Sets name to proposed ne
 **Problem:** You are building a user tracking table `active_users`. The table has columns `username` (unique) and `last_seen` (timestamp). Write an SQL statement that inserts user `'charlie'` with the current time `NOW()`. If Charlie already exists in the table, update his `last_seen` timestamp to `NOW()` instead of crashing.
 
 **Expected output:**
-```sql
-INSERT INTO active_users (username, last_seen) 
-VALUES ('charlie', NOW())
-ON CONFLICT (username) 
-DO UPDATE SET last_seen = EXCLUDED.last_seen;
-```
-
 > [!check]- Answer
+> ```sql
+> INSERT INTO active_users (username, last_seen) 
+> VALUES ('charlie', NOW())
+> ON CONFLICT (username) 
+> DO UPDATE SET last_seen = EXCLUDED.last_seen;
+> ```
 > - The target conflict column is `username`.
 > - Use the virtual table `EXCLUDED` to fetch the incoming timestamp value.
 
@@ -170,11 +169,10 @@ DO UPDATE SET last_seen = EXCLUDED.last_seen;
 **Problem:** Insert user `email: 'a@ex.com'`, `name: 'Alice'` on conflict `(email)` update `name = EXCLUDED.name` and `updated_at = NOW()`.
 
 **Expected output:**
-```text
-INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, updated_at = NOW();
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, updated_at = NOW();
+> ```
 > ```sql
 > INSERT INTO users (email, name)
 > VALUES ('a@ex.com', 'Alice')
@@ -185,16 +183,17 @@ INSERT INTO users (email, name) VALUES ('a@ex.com', 'Alice') ON CONFLICT (email)
 >
 > **Explanation:** `EXCLUDED.column` references newly proposed insert values during conflict resolution.
 
+---
+
 ### Exercise 3: Conflict Resolution with `DO NOTHING`
 
 **Problem:** Insert tag `'web'` on conflict `(name)` do nothing using `ON CONFLICT DO NOTHING`.
 
 **Expected output:**
-```text
-INSERT INTO tags (name) VALUES ('web') ON CONFLICT (name) DO NOTHING;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO tags (name) VALUES ('web') ON CONFLICT (name) DO NOTHING;
+> ```
 > ```sql
 > INSERT INTO tags (name) VALUES ('web')
 > ON CONFLICT (name) DO NOTHING;

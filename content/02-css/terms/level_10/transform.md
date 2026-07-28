@@ -192,12 +192,11 @@ Option B: You animate `transform: translateY(-100vh);` to `transform: translateY
 Which option will look perfectly smooth on a cheap 5-year-old smartphone?
 
 **Expected output:**
-```text
-Option B (`transform`)! 
-Animating properties like `top`, `margin`, or `width` forces the CPU to recalculate the page layout 60 times a second, causing lag. Animating `transform` is handled by the GPU and is incredibly smooth.
-```
-
 > [!check]- Answer
+> ```text
+> Option B (`transform`)! 
+> Animating properties like `top`, `margin`, or `width` forces the CPU to recalculate the page layout 60 times a second, causing lag. Animating `transform` is handled by the GPU and is incredibly smooth.
+> ```
 > - Which one uses the Graphics Card instead of the CPU?
 
 ---
@@ -209,11 +208,10 @@ Animating properties like `top`, `margin`, or `width` forces the CPU to recalcul
 **Problem:** Write CSS centering `.modal` absolutely using `top: 50%`, `left: 50%`, and `transform: translate(-50%, -50%)`.
 
 **Expected output:**
-```text
-.modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-```
-
 > [!check]- Answer
+> ```text
+> .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+> ```
 > ```css
 > .modal {
 >   position: absolute;
@@ -225,16 +223,17 @@ Animating properties like `top`, `margin`, or `width` forces the CPU to recalcul
 >
 > **Explanation:** `translate(-50%, -50%)` offsets element by half its own width and height for exact centering.
 
+---
+
 ### Exercise 3: Hardware Accelerated GPU Layer Trigger
 
 **Problem:** Which `transform` function forces GPU hardware acceleration layer creation (`transform: translateZ(0)` or `will-change`)?
 
 **Expected output:**
-```text
-transform: translateZ(0) (or transform: translate3d(0,0,0)).
-```
-
 > [!check]- Answer
+> ```text
+> transform: translateZ(0) (or transform: translate3d(0,0,0)).
+> ```
 > ```css
 > .gpu-layer {
 >   transform: translateZ(0);

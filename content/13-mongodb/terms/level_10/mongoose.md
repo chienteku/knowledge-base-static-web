@@ -144,14 +144,13 @@ Use pre('updateMany') query middleware or update document instances
 2.  Explain the difference in target mapping data structures between them.
 
 **Expected output:**
-```text
-1. - ORM: Object-Relational Mapper
-   - ODM: Object-Document Mapper
-2. - ORMs map programming language objects to relational flat rows and columns across tables.
-   - ODMs map programming language objects to hierarchical, nested BSON/JSON document trees.
-```
-
 > [!check]- Answer
+> ```text
+> 1. - ORM: Object-Relational Mapper
+>    - ODM: Object-Document Mapper
+> 2. - ORMs map programming language objects to relational flat rows and columns across tables.
+>    - ODMs map programming language objects to hierarchical, nested BSON/JSON document trees.
+> ```
 > - Think about the relational paradigm vs the document paradigm.
 > - Consider how nesting is handled in databases.
 
@@ -164,11 +163,10 @@ Use pre('updateMany') query middleware or update document instances
 **Problem:** Define Mongoose schema for `User` with string `email` (required, unique) and model `User`.
 
 **Expected output:**
-```text
-const userSchema = new mongoose.Schema({ email: { type: String, required: true, unique: true } }); const User = mongoose.model('User', userSchema);
-```
-
 > [!check]- Answer
+> ```text
+> const userSchema = new mongoose.Schema({ email: { type: String, required: true, unique: true } }); const User = mongoose.model('User', userSchema);
+> ```
 > ```javascript
 > const mongoose = require('mongoose');
 > const userSchema = new mongoose.Schema({
@@ -179,16 +177,17 @@ const userSchema = new mongoose.Schema({ email: { type: String, required: true, 
 >
 > **Explanation:** Mongoose schemas define document properties, types, and model wrappers.
 
+---
+
 ### Exercise 3: Mongoose Lean Queries for Read Performance
 
 **Problem:** Execute read-only query using `.lean()` returning plain JS objects instead of Mongoose Hydrated Documents.
 
 **Expected output:**
-```text
-const users = await User.find({ active: true }).lean();
-```
-
 > [!check]- Answer
+> ```text
+> const users = await User.find({ active: true }).lean();
+> ```
 > ```javascript
 > const users = await User.find({ active: true }).lean();
 > ```

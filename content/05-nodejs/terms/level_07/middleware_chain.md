@@ -255,6 +255,8 @@ app.get('/status', (req, res) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Tracing Middleware Execution Order
 
 **Problem:** Order execution sequence for:
@@ -265,27 +267,27 @@ app.use(m3);
 ```
 
 **Expected output:**
-```text
-m1 -> m2 -> route handler (res.send) (m3 is skipped because response ends).
-```
-
 > [!check]- Answer
+> ```text
+> m1 -> m2 -> route handler (res.send) (m3 is skipped because response ends).
+> ```
 > ```text
 > m1 -> m2 -> route handler (res.send)
 > ```
 >
 > **Explanation:** Execution flows through m1 to m2 to route handler; m3 is skipped because response is sent.
 
+---
+
 ### Exercise 3: Short-Circuiting Middleware Chain
 
 **Problem:** How does an authentication middleware short-circuit the execution chain if token is invalid?
 
 **Expected output:**
-```text
-By returning a response (e.g. res.status(401).send('Unauthorized')) without calling next().
-```
-
 > [!check]- Answer
+> ```text
+> By returning a response (e.g. res.status(401).send('Unauthorized')) without calling next().
+> ```
 > ```javascript
 > if (!token) {
 >   return res.status(401).send('Unauthorized');

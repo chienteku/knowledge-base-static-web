@@ -162,11 +162,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Welcome aboard, Captain Reynolds!
-```
-
 > [!check]- Answer
+> ```text
+> Welcome aboard, Captain Reynolds!
+> ```
 > - `let full_name = format!("{} {}", title, last_name);` or `format!("{title} {last_name}");`
 > - `println!("Welcome aboard, {}!", full_name);`
 
@@ -177,11 +176,10 @@ Welcome aboard, Captain Reynolds!
 **Problem:** Format and print a string using named parameters `{name}` and positional index `{0}` to display `"Alice (ID: 42) signed in as Alice"`.
 
 **Expected output:**
-```
-Alice (ID: 42) signed in as Alice
-```
-
 > [!check]- Answer
+> ```
+> Alice (ID: 42) signed in as Alice
+> ```
 > ```rust
 > fn main() {
 >     let name = "Alice";
@@ -192,16 +190,17 @@ Alice (ID: 42) signed in as Alice
 >
 > **Explanation:** Rust format macros support positional index referencing (`{0}`) alongside explicit named bindings (`{id}`).
 
+---
+
 ### Exercise 3: Floating-Point Precision & Alignment Formatting
 
 **Problem:** Print float `3.1415926` right-aligned in a 10-character wide column rounded to 2 decimal places.
 
 **Expected output:**
-```
-      3.14
-```
-
 > [!check]- Answer
+> ```
+>       3.14
+> ```
 > ```rust
 > fn main() {
 >     let val = 3.1415926;

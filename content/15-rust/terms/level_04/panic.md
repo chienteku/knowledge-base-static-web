@@ -170,11 +170,10 @@ thread::spawn(move || {
 **Problem:** Trigger a panic with custom formatted arguments `panic!("Invalid code: {}", 404)` inside `catch_unwind`.
 
 **Expected output:**
-```
-Caught panic
-```
-
 > [!check]- Answer
+> ```
+> Caught panic
+> ```
 > ```rust
 > use std::panic;
 > fn main() {
@@ -189,16 +188,17 @@ Caught panic
 >
 > **Explanation:** `std::panic::catch_unwind` catches unwinding panics at thread boundaries.
 
+---
+
 ### Exercise 3: Asserting Pre-conditions with `assert!`
 
 **Problem:** Validate function input using `assert!(val > 0, "Val must be positive")`.
 
 **Expected output:**
-```
-Precondition met
-```
-
 > [!check]- Answer
+> ```
+> Precondition met
+> ```
 > fn process(val: i32) {
 >     assert!(val > 0, "Val must be positive");
 >     println!("Precondition met");

@@ -162,12 +162,11 @@ family = null;
 ```
 
 **Expected output:**
-```text
-Yes, they will be destroyed!
-Even though John points to Ann, and Ann points to John, neither of them are connected to the "Root" (the global scope) anymore. They form an "Island of Isolation". The Garbage Collector sweeps away the entire island.
-```
-
 > [!check]- Answer
+> ```text
+> Yes, they will be destroyed!
+> Even though John points to Ann, and Ann points to John, neither of them are connected to the "Root" (the global scope) anymore. They form an "Island of Isolation". The Garbage Collector sweeps away the entire island.
+> ```
 > - The algorithm only cares if an object can be reached from the ROOT.
 
 ---
@@ -177,34 +176,33 @@ Even though John points to Ann, and Ann points to John, neither of them are conn
 **Problem:** Name 3 common causes of memory leaks in web applications (global variables, forgotten timers/listeners, detached DOM nodes).
 
 **Expected output:**
-```text
-Globals, Timers/Listeners, Detached DOM nodes
-```
-
 > [!check]- Answer
+> ```text
+> Globals, Timers/Listeners, Detached DOM nodes
+> ```
 > ```javascript
 > console.log("Globals, Timers/Listeners, Detached DOM nodes");
 > ```
 >
 > **Explanation:** Retaining unneeded object references in active scope trees prevents GC cleanup.
 
+---
+
 ### Exercise 3: Weak References with `WeakMap`
 
 **Problem:** Explain why `WeakMap` keys do not prevent garbage collection of metadata objects.
 
 **Expected output:**
-```text
-WeakMap keys allow GC collection
-```
-
 > [!check]- Answer
+> ```text
+> WeakMap keys allow GC collection
+> ```
 > ```javascript
 > console.log("WeakMap keys allow GC collection");
 > ```
 >
 > **Explanation:** `WeakMap` stores weak key pointers that do not count as reachability roots.
 
----
 
 ---
 

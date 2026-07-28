@@ -165,11 +165,10 @@ console.log(getFormattedDate(testDate));
 ```
 
 **Expected output:**
-```text
-2026-7-17
-```
-
 > [!check]- Answer
+> ```text
+> 2026-7-17
+> ```
 > - Add `1` to `dateObj.getMonth()`.
 > - Use `.getDate()` to get the day of the month.
 > - Concatenate the values separated by hyphens.
@@ -181,12 +180,11 @@ console.log(getFormattedDate(testDate));
 **Problem:** Create a Date from `"2026-01-01T00:00:00Z"` and print `date.getUTCFullYear()` and `date.getUTCMonth()`.
 
 **Expected output:**
-```text
-2026
-0
-```
-
 > [!check]- Answer
+> ```text
+> 2026
+> 0
+> ```
 > ```javascript
 > const d = new Date("2026-01-01T00:00:00Z");
 > console.log(d.getUTCFullYear());
@@ -195,16 +193,17 @@ console.log(getFormattedDate(testDate));
 >
 > **Explanation:** UTC methods on `Date` return standardized UTC values independent of local machine timezones.
 
+---
+
 ### Exercise 3: Calculating Date Differences in Days
 
 **Problem:** Calculate the difference in days between two Date objects 48 hours apart.
 
 **Expected output:**
-```text
-2
-```
-
 > [!check]- Answer
+> ```text
+> 2
+> ```
 > ```javascript
 > const d1 = new Date("2026-01-01");
 > const d2 = new Date("2026-01-03");

@@ -141,11 +141,10 @@ async function handleClick() {
 **Problem:** In the `#error` slot, you are provided a `clearError` function. When the user clicks the "Try Again" button to call `clearError`, what exactly does Vue do?
 
 **Expected output:**
-```text
-It wipes the error state and attempts to re-render (re-mount) the default slot (the <RecentActivityWidget />) from scratch.
-```
-
 > [!check]- Answer
+> ```text
+> It wipes the error state and attempts to re-render (re-mount) the default slot (the <RecentActivityWidget />) from scratch.
+> ```
 > - The `clearError` slot prop resets the error boundary state wrapper so the compiler attempts to reload child components.
 
 ---
@@ -155,19 +154,18 @@ It wipes the error state and attempts to re-render (re-mount) the default slot (
 **Problem:** Write Vue template wrapping `<Widget />` inside `<NuxtErrorBoundary>` displaying error message and a button calling `clearError` from slot props.
 
 **Expected output:**
-```vue
-<template>
-  <NuxtErrorBoundary>
-    <Widget />
-    <template #error="{ error, clearError }">
-      <p>Error: {{ error.message }}</p>
-      <button @click="clearError">Retry</button>
-    </template>
-  </NuxtErrorBoundary>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <NuxtErrorBoundary>
+>     <Widget />
+>     <template #error="{ error, clearError }">
+>       <p>Error: {{ error.message }}</p>
+>       <button @click="clearError">Retry</button>
+>     </template>
+>   </NuxtErrorBoundary>
+> </template>
+> ```
 > - `<NuxtErrorBoundary>` isolates component exceptions to sub-trees.
 > 
 > ```vue
@@ -193,12 +191,11 @@ It wipes the error state and attempts to re-render (re-mount) the default slot (
 **Problem:** Compare `<NuxtErrorBoundary>` vs `error.vue`.
 
 **Expected output:**
-```text
-NuxtErrorBoundary: Isolated component-level error boundary wrapping specific UI sub-trees;
-error.vue: Full-page global un-handled error boundary.
-```
-
 > [!check]- Answer
+> ```text
+> NuxtErrorBoundary: Isolated component-level error boundary wrapping specific UI sub-trees;
+> error.vue: Full-page global un-handled error boundary.
+> ```
 > - `<NuxtErrorBoundary>` -> Sub-tree component isolation.
 > - `error.vue` -> Global full-page error boundary.
 > 

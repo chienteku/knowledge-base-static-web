@@ -165,12 +165,11 @@ console.log(b);
 ```
 
 **Expected output:**
-```text
-It will print 20. 
-`var` ignores the `{}` block and leaks into the global scope. `const a` is safely destroyed.
-```
-
 > [!check]- Answer
+> ```text
+> It will print 20. 
+> `var` ignores the `{}` block and leaks into the global scope. `const a` is safely destroyed.
+> ```
 > - `var` is function-scoped, not block-scoped.
 > - Standalone `{}` still create a block scope for `let` and `const`.
 
@@ -181,11 +180,10 @@ It will print 20.
 **Problem:** Demonstrate that `let i` inside a `for` loop is inaccessible after the loop finishes.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > ```javascript
 > for (let i = 0; i < 3; i++) {}
 > try {
@@ -197,16 +195,17 @@ ReferenceError caught
 >
 > **Explanation:** `let` variables bound to loop blocks are destroyed upon loop exit.
 
+---
+
 ### Exercise 3: Standalone Block Scoping (`{ ... }`)
 
 **Problem:** Use a standalone `{ const secret = 123; }` block to isolate temporary variables.
 
 **Expected output:**
-```text
-Block isolation verified
-```
-
 > [!check]- Answer
+> ```text
+> Block isolation verified
+> ```
 > ```javascript
 > {
 >   const secret = 123;
@@ -216,7 +215,6 @@ Block isolation verified
 >
 > **Explanation:** Standalone curly braces `{}` create isolated block scopes for variable encapsulation.
 
----
 
 ---
 

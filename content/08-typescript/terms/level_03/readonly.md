@@ -111,12 +111,11 @@ const arr: number[] = [...ro]; // Create a mutable shallow copy
 **Problem:** You use `readonly id: number` in your TypeScript interface. You compile the code and run it in the browser. In your browser's DevTools console, you manually execute `myUser.id = 999`. Will the browser throw an error?
 
 **Expected output:**
-```text
-No! The browser will NOT throw an error, and the ID will change to 999.
-`readonly` is purely a Compile-Time TypeScript feature. It is completely erased during compilation. It does not compile into `Object.freeze()`. It only protects you from writing mutating code in your IDE.
-```
-
 > [!check]- Answer
+> ```text
+> No! The browser will NOT throw an error, and the ID will change to 999.
+> `readonly` is purely a Compile-Time TypeScript feature. It is completely erased during compilation. It does not compile into `Object.freeze()`. It only protects you from writing mutating code in your IDE.
+> ```
 > - Remember the Erasure Concept from Level 1.
 
 ---
@@ -128,27 +127,27 @@ No! The browser will NOT throw an error, and the ID will change to 999.
 **Problem:** Explain why `readonly` modifier on `{ readonly a: { b: number } }` allows mutating `obj.a.b = 2`.
 
 **Expected output:**
-```text
-readonly modifier is shallow by default
-```
-
 > [!check]- Answer
+> ```text
+> readonly modifier is shallow by default
+> ```
 > ```typescript
 > console.log("readonly modifier is shallow by default");
 > ```
 >
 > **Explanation:** Standard `readonly` modifiers prevent reassigning top-level properties only.
 
+---
+
 ### Exercise 3: Readonly Tuple Declaration
 
 **Problem:** Declare a readonly tuple of `[number, string]`.
 
 **Expected output:**
-```text
-readonly [number, string]
-```
-
 > [!check]- Answer
+> ```text
+> readonly [number, string]
+> ```
 > ```typescript
 > const tuple: readonly [number, string] = [1, "a"];
 > console.log("readonly [number, string]");

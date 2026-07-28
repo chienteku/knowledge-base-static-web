@@ -146,12 +146,11 @@ Use val::text for concise Postgres casting or CAST(val AS text) for ANSI SQL com
 **Problem:** You have a table `clicks_log` with columns `clicks` and `views` (both are `INTEGER` columns). Write a SQL query that calculates the click-through rate as `clicks / views`. Multiply by 100 to get a percentage. Ensure the calculation uses decimal division (so you don't get `0` returned!). Label the output column as `ctr_percent`.
 
 **Expected output:**
-```sql
-SELECT (clicks::FLOAT / views) * 100 AS ctr_percent 
-FROM clicks_log;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT (clicks::FLOAT / views) * 100 AS ctr_percent 
+> FROM clicks_log;
+> ```
 > - Cast the `clicks` column to `FLOAT` (using `::FLOAT`) before performing the division.
 > - Wrap the division in parenthesis before multiplying by 100.
 
@@ -164,27 +163,27 @@ FROM clicks_log;
 **Problem:** Cast string `'123'` to integer and string `'2026-01-01'` to `TIMESTAMPTZ` using `::` syntax.
 
 **Expected output:**
-```text
-SELECT '123'::INT AS num, '2026-01-01'::TIMESTAMPTZ AS ts;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT '123'::INT AS num, '2026-01-01'::TIMESTAMPTZ AS ts;
+> ```
 > ```sql
 > SELECT '123'::INT AS num, '2026-01-01'::TIMESTAMPTZ AS ts;
 > ```
 >
 > **Explanation:** `expression::type` performs explicit data type casting in PostgreSQL.
 
+---
+
 ### Exercise 3: Safe Casting with `pg_input_is_valid()`
 
 **Problem:** Check if string `'abc'` is a valid integer before casting using `pg_input_is_valid()` in Postgres 16+.
 
 **Expected output:**
-```text
-SELECT pg_input_is_valid('abc', 'integer');
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pg_input_is_valid('abc', 'integer');
+> ```
 > ```sql
 > SELECT pg_input_is_valid('abc', 'integer');
 > ```

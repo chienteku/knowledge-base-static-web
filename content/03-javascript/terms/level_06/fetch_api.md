@@ -162,13 +162,12 @@ async function processData() {
 **Problem:** You use `const res = await fetch('/api/data')`. Why can't you immediately do `console.log(res.user)`? What critical step is missing?
 
 **Expected output:**
-```text
-`res` is the raw HTTP Response object, which contains headers, status codes, and a raw data stream. 
-You must parse the body into JavaScript objects by doing:
-`const data = await res.json();`
-```
-
 > [!check]- Answer
+> ```text
+> `res` is the raw HTTP Response object, which contains headers, status codes, and a raw data stream. 
+> You must parse the body into JavaScript objects by doing:
+> `const data = await res.json();`
+> ```
 > - `fetch` resolves with a `Response` object, not the actual JSON data.
 
 ---
@@ -178,11 +177,10 @@ You must parse the body into JavaScript objects by doing:
 **Problem:** Check `response.ok` and throw error if `false` in a mock fetch handler.
 
 **Expected output:**
-```text
-HTTP Error: 404
-```
-
 > [!check]- Answer
+> ```text
+> HTTP Error: 404
+> ```
 > ```javascript
 > const mockRes = { ok: false, status: 404 };
 > try {
@@ -194,16 +192,17 @@ HTTP Error: 404
 >
 > **Explanation:** Checking `response.ok` ensures non-2xx HTTP status codes are handled as errors.
 
+---
+
 ### Exercise 3: Parsing JSON Body with `response.json()`
 
 **Problem:** Demonstrate chaining `fetch()` with `response.json()`.
 
 **Expected output:**
-```text
-Parsed JSON data
-```
-
 > [!check]- Answer
+> ```text
+> Parsed JSON data
+> ```
 > ```javascript
 > Promise.resolve({ json: () => Promise.resolve("Parsed JSON data") })
 >   .then(res => res.json())
@@ -212,7 +211,6 @@ Parsed JSON data
 >
 > **Explanation:** `response.json()` returns a Promise resolving to the parsed JSON body payload.
 
----
 
 ---
 

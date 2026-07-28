@@ -173,27 +173,27 @@ Write a `PERMISSIONS` clause for an `invoice` table allowing `select` if `organi
 **Problem:** Write `SIGNUP` scope query storing user email and Argon2 hashed password.
 
 **Expected output:**
-```text
-SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
-```
-
 > [!check]- Answer
+> ```text
+> SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
+> ```
 > ```surrealql
 > SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
 > ```
 >
 > **Explanation:** `crypto::argon2::generate($pass)` generates salted Argon2 password hashes.
 
+---
+
 ### Exercise 3: Argon2 Password Verification in SIGNIN
 
 **Problem:** Write `SIGNIN` scope query verifying user email and password using `crypto::argon2::compare()`.
 
 **Expected output:**
-```text
-SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
-```
-
 > [!check]- Answer
+> ```text
+> SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
+> ```
 > ```surrealql
 > SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
 > ```

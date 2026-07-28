@@ -154,14 +154,13 @@ SELECT category, COUNT(*) FROM products WHERE status = 'active' GROUP BY categor
 **Problem:** You have a `books` table with columns `category`, `title`, and `price`. Write a SQL query that returns the name of each `category` along with the average price of books in that category. Filter the results so you only display categories where the average price is strictly greater than `15.00`.
 
 **Expected output:**
-```sql
-SELECT category, AVG(price) AS avg_price 
-FROM books 
-GROUP BY category 
-HAVING AVG(price) > 15.00;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT category, AVG(price) AS avg_price 
+> FROM books 
+> GROUP BY category 
+> HAVING AVG(price) > 15.00;
+> ```
 > - Group by the category column first.
 > - Target the averaged price limit in the `HAVING` clause.
 
@@ -174,11 +173,10 @@ HAVING AVG(price) > 15.00;
 **Problem:** Query product categories having total count `COUNT(*) >= 5` and average price `AVG(price) > 50`.
 
 **Expected output:**
-```text
-SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category HAVING COUNT(*) >= 5 AND AVG(price) > 50;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category HAVING COUNT(*) >= 5 AND AVG(price) > 50;
+> ```
 > ```sql
 > SELECT category, COUNT(*), AVG(price)
 > FROM products
@@ -188,16 +186,17 @@ SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category HAVING COU
 >
 > **Explanation:** `HAVING` filters aggregated group results after `GROUP BY` evaluation.
 
+---
+
 ### Exercise 3: WHERE vs HAVING Execution Order
 
 **Problem:** Explain execution order: `WHERE` (filters raw rows before grouping) -> `GROUP BY` -> `HAVING` (filters summary groups).
 
 **Expected output:**
-```text
-WHERE filters rows before grouping; HAVING filters summary groups after grouping
-```
-
 > [!check]- Answer
+> ```text
+> WHERE filters rows before grouping; HAVING filters summary groups after grouping
+> ```
 > ```text
 > WHERE filters rows before grouping; HAVING filters summary groups after grouping
 > ```

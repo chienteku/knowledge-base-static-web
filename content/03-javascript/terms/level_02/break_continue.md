@@ -197,11 +197,10 @@ console.log("First even number:", firstEven);
 ```
 
 **Expected output:**
-```text
-First even number: 8
-```
-
 > [!check]- Answer
+> ```text
+> First even number: 8
+> ```
 > - A number is even if `(num % 2) === 0`.
 > - Use `break` to exit the loop once the condition evaluates to true.
 
@@ -212,11 +211,10 @@ First even number: 8
 **Problem:** Use a labeled break `outerLoop:` to exit a double nested loop when `i === 1 && j === 1`.
 
 **Expected output:**
-```text
-Exited outer loop at i: 1, j: 1
-```
-
 > [!check]- Answer
+> ```text
+> Exited outer loop at i: 1, j: 1
+> ```
 > ```javascript
 > outerLoop:
 > for (let i = 0; i < 3; i++) {
@@ -231,18 +229,19 @@ Exited outer loop at i: 1, j: 1
 >
 > **Explanation:** Labeled `break labelName;` terminates multi-level nested loops specified by the target label.
 
+---
+
 ### Exercise 3: Skipping Odd Numbers with `continue`
 
 **Problem:** Print even numbers between `1` and `6` using a loop with `continue`.
 
 **Expected output:**
-```text
-2
-4
-6
-```
-
 > [!check]- Answer
+> ```text
+> 2
+> 4
+> 6
+> ```
 > ```javascript
 > for (let i = 1; i <= 6; i++) {
 >   if (i % 2 !== 0) continue;

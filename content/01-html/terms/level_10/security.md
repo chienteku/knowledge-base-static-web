@@ -244,11 +244,10 @@ div.textContent = userInput; // Safe text-only assignment
 **Problem:** You are importing a styling framework from `https://cdn.styles.com/theme.css`. The developer documentation lists the file's SHA384 security hash as `abc123xyz...`. Write the secure HTML `<link>` tag including the required attributes to verify file integrity.
 
 **Expected output:**
-```html
-<link rel="stylesheet" href="https://cdn.styles.com/theme.css" integrity="sha384-abc123xyz..." crossorigin="anonymous">
-```
-
 > [!check]- Answer
+> ```html
+> <link rel="stylesheet" href="https://cdn.styles.com/theme.css" integrity="sha384-abc123xyz..." crossorigin="anonymous">
+> ```
 > - Use the `integrity` attribute containing the type prefix `sha384-`.
 > - Include the `crossorigin="anonymous"` attribute (SRI checks require cross-origin attributes to prevent CORS blockage).
 
@@ -261,27 +260,27 @@ div.textContent = userInput; // Safe text-only assignment
 **Problem:** Which DOM property safely sets plain text without risk of XSS HTML injection (`innerHTML` or `textContent`)?
 
 **Expected output:**
-```text
-textContent
-```
-
 > [!check]- Answer
+> ```text
+> textContent
+> ```
 > ```javascript
 > element.textContent = userInput;
 > ```
 >
 > **Explanation:** `textContent` escapes HTML entity tags automatically, preventing XSS script execution.
 
+---
+
 ### Exercise 3: Clickjacking Protection Header
 
 **Problem:** Which HTTP security header prevents unauthorized sites from embedding your page inside malicious `<iframe` frames?
 
 **Expected output:**
-```text
-X-Frame-Options: DENY (or SAMEORIGIN) / CSP frame-ancestors.
-```
-
 > [!check]- Answer
+> ```text
+> X-Frame-Options: DENY (or SAMEORIGIN) / CSP frame-ancestors.
+> ```
 > ```text
 > X-Frame-Options: DENY (or SAMEORIGIN) / CSP frame-ancestors.
 > ```

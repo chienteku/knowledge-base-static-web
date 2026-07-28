@@ -171,11 +171,10 @@ thread::spawn(move || {
 **Problem:** Iterate through words `["apple", "banana", "apple", "apple"]` and count word frequencies using `HashMap::entry` and `.or_insert(0)`.
 
 **Expected output:**
-```
-apple: 3
-```
-
 > [!check]- Answer
+> ```
+> apple: 3
+> ```
 > ```rust
 > use std::collections::HashMap;
 > fn main() {
@@ -190,16 +189,17 @@ apple: 3
 >
 > **Explanation:** `.entry(k).or_insert(v)` returns a mutable reference `&mut V` to the existing or freshly initialized value.
 
+---
+
 ### Exercise 3: In-Place Value Modification with `and_modify`
 
 **Problem:** Use `.entry(key).and_modify(|e| *e *= 2).or_insert(10)` to double an existing value or default to 10.
 
 **Expected output:**
-```
-Val: 100
-```
-
 > [!check]- Answer
+> ```
+> Val: 100
+> ```
 > ```rust
 > use std::collections::HashMap;
 > fn main() {

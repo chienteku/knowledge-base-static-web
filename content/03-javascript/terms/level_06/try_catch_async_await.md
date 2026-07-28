@@ -219,12 +219,11 @@ getUserProfile(false).then(p => console.log("Profile 2:", p));
 ```
 
 **Expected output:**
-```text
-Profile 1: Alice
-Profile 2: { name: 'Guest' }
-```
-
 > [!check]- Answer
+> ```text
+> Profile 1: Alice
+> Profile 2: { name: 'Guest' }
+> ```
 > - Inside `try`, return `await fetchUserMock(successFlag)`.
 > - Inside `catch(err)`, return `{ name: "Guest" }`.
 
@@ -235,11 +234,10 @@ Profile 2: { name: 'Guest' }
 **Problem:** Wrap `await asyncFail()` in `try/catch` and log error message.
 
 **Expected output:**
-```text
-Caught async error: Async failure
-```
-
 > [!check]- Answer
+> ```text
+> Caught async error: Async failure
+> ```
 > ```javascript
 > async function asyncFail() {
 >   throw new Error("Async failure");
@@ -256,16 +254,17 @@ Caught async error: Async failure
 >
 > **Explanation:** `await` unrolls promise rejections into standard exceptions caught by `try/catch`.
 
+---
+
 ### Exercise 3: Combining Async Try/Catch with Finally
 
 **Problem:** Add a `finally` block to set `loading = false` after async try/catch completion.
 
 **Expected output:**
-```text
-Loading set to false
-```
-
 > [!check]- Answer
+> ```text
+> Loading set to false
+> ```
 > ```javascript
 > async function load() {
 >   let loading = true;
@@ -281,7 +280,6 @@ Loading set to false
 >
 > **Explanation:** `finally` guarantees state cleanup after async operations complete.
 
----
 
 ---
 

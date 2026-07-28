@@ -120,12 +120,11 @@ This requires an exact combo of 3 specific properties to work!
 **Problem:** You are displaying a very long URL (`https://www.example.com/very/long/path/that/goes/on/forever`) inside a narrow mobile screen. You want the user to be able to read the entire URL by scrolling down, but you don't want the URL to blast out the right side of the screen. Which property do you use?
 
 **Expected output:**
-```text
-`overflow-wrap: break-word;` 
-This will aggressively snap the URL into multiple lines, keeping it safely inside the mobile screen so the user can read the whole thing. If you used `ellipsis`, they wouldn't be able to read the end of the URL.
-```
-
 > [!check]- Answer
+> ```text
+> `overflow-wrap: break-word;` 
+> This will aggressively snap the URL into multiple lines, keeping it safely inside the mobile screen so the user can read the whole thing. If you used `ellipsis`, they wouldn't be able to read the end of the URL.
+> ```
 > - Do you want to cut the stick, or snap it in half?
 
 ---
@@ -137,11 +136,10 @@ This will aggressively snap the URL into multiple lines, keeping it safely insid
 **Problem:** Write CSS rule truncating `.user-name` text with `...` on single line overflow.
 
 **Expected output:**
-```text
-.user-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-```
-
 > [!check]- Answer
+> ```text
+> .user-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+> ```
 > ```css
 > .user-name {
 >   white-space: nowrap;
@@ -152,16 +150,17 @@ This will aggressively snap the URL into multiple lines, keeping it safely insid
 >
 > **Explanation:** Single-line ellipsis requires `nowrap`, `hidden` overflow, and `text-overflow: ellipsis`.
 
+---
+
 ### Exercise 3: Multi-Line Truncation Property
 
 **Problem:** Which CSS property combination clamps text to exactly 3 lines with an ellipsis?
 
 **Expected output:**
-```text
-display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-```
-
 > [!check]- Answer
+> ```text
+> display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+> ```
 > ```css
 > .clamp-3 {
 >   display: -webkit-box;

@@ -124,13 +124,12 @@ export default defineEventHandler((event) => {
 **Problem:** You are migrating old routes. Write a Nitro endpoint at `server/routes/old-page.ts` that intercepts the request and instantly redirects the user to `/new-page` with a 301 Permanent Redirect status code. (Hint: H3 provides a `sendRedirect` utility).
 
 **Expected output:**
-```typescript
-export default defineEventHandler(async (event) => {
-  await sendRedirect(event, '/new-page', 301);
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler(async (event) => {
+>   await sendRedirect(event, '/new-page', 301);
+> });
+> ```
 > - H3 auto-imports `sendRedirect`, which accepts the current `event`, target redirect URL, and optional HTTP status code.
 
 ---
@@ -144,14 +143,13 @@ export default defineEventHandler(async (event) => {
 4. `setCookie(event, name, val)` 
 
 **Expected output:**
-```text
-1. Parses URL query search parameters
-2. Reads and parses JSON request body payload
-3. Retrieves dynamic route parameters
-4. Sets HTTP response cookie header
-```
-
 > [!check]- Answer
+> ```text
+> 1. Parses URL query search parameters
+> 2. Reads and parses JSON request body payload
+> 3. Retrieves dynamic route parameters
+> 4. Sets HTTP response cookie header
+> ```
 > - `getQuery(event)` -> Reads URL query params (`?q=val`)
 > - `readBody(event)` -> Reads JSON body payload
 > - `getRouterParam(event, 'id')` -> Reads dynamic path params
@@ -171,11 +169,10 @@ export default defineEventHandler(async (event) => {
 **Problem:** Write H3 line throwing HTTP 401 Unauthorized error using `createError()`.
 
 **Expected output:**
-```typescript
-throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
-```
-
 > [!check]- Answer
+> ```typescript
+> throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
+> ```
 > - `createError` throws structured H3 HTTP error exceptions.
 > 
 > ```typescript

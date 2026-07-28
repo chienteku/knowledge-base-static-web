@@ -214,27 +214,27 @@ try {
 **Problem:** Explain difference between `Object.seal` (can mutate existing properties, cannot add/delete) and `Object.freeze` (cannot mutate, add, or delete).
 
 **Expected output:**
-```text
-Seal: Mutate existing, Freeze: Read-only
-```
-
 > [!check]- Answer
+> ```text
+> Seal: Mutate existing, Freeze: Read-only
+> ```
 > ```javascript
 > console.log("Seal: Mutate existing, Freeze: Read-only");
 > ```
 >
 > **Explanation:** `seal()` prevents structure modifications while allowing property value updates; `freeze()` makes objects immutable.
 
+---
+
 ### Exercise 3: Strict Mode Immutability Errors
 
 **Problem:** Catch `TypeError` when modifying frozen object properties in strict mode.
 
 **Expected output:**
-```text
-TypeError caught
-```
-
 > [!check]- Answer
+> ```text
+> TypeError caught
+> ```
 > ```javascript
 > "use strict";
 > const obj = Object.freeze({ a: 1 });
@@ -247,7 +247,6 @@ TypeError caught
 >
 > **Explanation:** In strict mode, modifying frozen object properties throws `TypeError`.
 
----
 
 ---
 

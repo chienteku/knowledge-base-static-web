@@ -162,11 +162,10 @@ const fetchApi = (route: ApiRoute) => { ... };
 ```
 
 **Expected output:**
-```text
-ApiRoute evaluates to "/api/v1/users" | "/api/v1/products" | "/api/v1/orders".
-```
-
 > [!check]- Answer
+> ```text
+> ApiRoute evaluates to "/api/v1/users" | "/api/v1/products" | "/api/v1/orders".
+> ```
 > - The prefix string `/api/v1/` can be written directly inside the backticks, followed by the `${Endpoint}` variable.
 
 ---
@@ -178,11 +177,10 @@ ApiRoute evaluates to "/api/v1/users" | "/api/v1/products" | "/api/v1/orders".
 **Problem:** Generate `EventName` type combining `"click" | "scroll"` into `"onClick" | "onScroll"` using `Capitalize`.
 
 **Expected output:**
-```text
-"onClick" | "onScroll"
-```
-
 > [!check]- Answer
+> ```text
+> "onClick" | "onScroll"
+> ```
 > ```typescript
 > type Event = "click" | "scroll";
 > type EventName = `on${Capitalize<Event>}`;
@@ -191,16 +189,17 @@ ApiRoute evaluates to "/api/v1/users" | "/api/v1/products" | "/api/v1/orders".
 >
 > **Explanation:** Template literal types concatenate string unions with intrinsic type helpers like `Capitalize`.
 
+---
+
 ### Exercise 3: Intrinsic String Manipulation Utilities
 
 **Problem:** List 4 intrinsic string type utilities (`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`).
 
 **Expected output:**
-```text
-Uppercase, Lowercase, Capitalize, Uncapitalize
-```
-
 > [!check]- Answer
+> ```text
+> Uppercase, Lowercase, Capitalize, Uncapitalize
+> ```
 > ```typescript
 > console.log("Uppercase, Lowercase, Capitalize, Uncapitalize");
 > ```

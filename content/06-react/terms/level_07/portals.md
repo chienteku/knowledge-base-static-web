@@ -122,11 +122,10 @@ Add Escape key listener and use react-focus-lock for modal accessibility
 **Problem:** Create `Modal` portal component rendering `children` into `document.body` using `createPortal`.
 
 **Expected output:**
-```text
-import { createPortal } from 'react-dom'; function Modal({ children }) { return createPortal(<div className="modal-overlay">{children}</div>, document.body); }
-```
-
 > [!check]- Answer
+> ```text
+> import { createPortal } from 'react-dom'; function Modal({ children }) { return createPortal(<div className="modal-overlay">{children}</div>, document.body); }
+> ```
 > ```javascript
 > import { createPortal } from 'react-dom';
 >
@@ -140,34 +139,34 @@ import { createPortal } from 'react-dom'; function Modal({ children }) { return 
 >
 > **Explanation:** `createPortal(children, domNode)` mounts React elements into arbitrary DOM containers outside the parent DOM hierarchy.
 
+---
+
 ### Exercise 2: Common Use Cases for Portals
 
 **Problem:** List 3 common UI component use cases for React Portals (Modals/Dialogs, Tooltips, Dropdown/Popover Menus).
 
 **Expected output:**
-```text
-Modals/Dialogs, Tooltips, Dropdown/Popover Menus
-```
-
 > [!check]- Answer
+> ```text
+> Modals/Dialogs, Tooltips, Dropdown/Popover Menus
+> ```
 > ```text
 > Modals/Dialogs, Tooltips, Dropdown/Popover Menus
 > ```
 >
 > **Explanation:** Portals prevent parent `overflow: hidden` or `z-index` stacking context clipping issues.
 
-
+---
 
 ### Exercise 3: Closing Portal Modal on Escape Key
 
 **Problem:** Add `keydown` event listener in `useEffect` closing portal modal when `Escape` is pressed.
 
 **Expected output:**
-```text
-useEffect(() => { const handleKeyDown = e => { if (e.key === 'Escape') onClose(); }; window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown); }, [onClose]);
-```
-
 > [!check]- Answer
+> ```text
+> useEffect(() => { const handleKeyDown = e => { if (e.key === 'Escape') onClose(); }; window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown); }, [onClose]);
+> ```
 > ```javascript
 > useEffect(() => {
 >   const handleKeyDown = e => {

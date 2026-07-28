@@ -127,11 +127,10 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 ```
 
 **Expected output:**
-```text
-The `id` attribute is duplicated! You cannot have an `id="main-header"` on the `<header>` and also on the `<h1>`. One of them must be changed.
-```
-
 > [!check]- Answer
+> ```text
+> The `id` attribute is duplicated! You cannot have an `id="main-header"` on the `<header>` and also on the `<h1>`. One of them must be changed.
+> ```
 > - Think about the license plate metaphor.
 
 ---
@@ -143,13 +142,12 @@ The `id` attribute is duplicated! You cannot have an `id="main-header"` on the `
 **Problem:** List 3 primary technical uses of the `id` attribute in web development.
 
 **Expected output:**
-```text
-1. In-page anchor linking (#id)
-2. Form label binding (for="id")
-3. Unique DOM selection in JavaScript (getElementById)
-```
-
 > [!check]- Answer
+> ```text
+> 1. In-page anchor linking (#id)
+> 2. Form label binding (for="id")
+> 3. Unique DOM selection in JavaScript (getElementById)
+> ```
 > ```text
 > 1. In-page anchor linking (#id)
 > 2. Form label binding (for="id")
@@ -158,16 +156,17 @@ The `id` attribute is duplicated! You cannot have an `id="main-header"` on the `
 >
 > **Explanation:** `id` provides unique target hooks for links, labels, and scripts.
 
+---
+
 ### Exercise 3: ID vs Class Specificity
 
 **Problem:** Which CSS selector has higher specificity: `#main` (ID) or `.main` (Class)?
 
 **Expected output:**
-```text
-#main (ID selector specificity 1-0-0 outweighs Class specificity 0-1-0).
-```
-
 > [!check]- Answer
+> ```text
+> #main (ID selector specificity 1-0-0 outweighs Class specificity 0-1-0).
+> ```
 > ```text
 > #main (ID selector specificity 1-0-0 outweighs Class specificity 0-1-0).
 > ```

@@ -121,11 +121,10 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 **Problem:** What is the purpose of the `poster` attribute on a `<video>` tag?
 
 **Expected output:**
-```text
-It acts like a YouTube thumbnail. It displays a static image in the video player area while the video is downloading, or before the user has clicked the "Play" button.
-```
-
 > [!check]- Answer
+> ```text
+> It acts like a YouTube thumbnail. It displays a static image in the video player area while the video is downloading, or before the user has clicked the "Play" button.
+> ```
 > - Think about what you see on Netflix before you actually hit play.
 
 ---
@@ -137,11 +136,10 @@ It acts like a YouTube thumbnail. It displays a static image in the video player
 **Problem:** Write `<video>` with `controls`, poster `'thumb.jpg'`, and `<track>` element for English subtitles (`subtitles.vtt`).
 
 **Expected output:**
-```text
-<video controls poster="thumb.jpg"><source src="video.mp4" type="video/mp4"><track src="subtitles.vtt" kind="subtitles" srclang="en" label="English"></video>
-```
-
 > [!check]- Answer
+> ```text
+> <video controls poster="thumb.jpg"><source src="video.mp4" type="video/mp4"><track src="subtitles.vtt" kind="subtitles" srclang="en" label="English"></video>
+> ```
 > ```html
 > <video controls poster="thumb.jpg">
 >   <source src="video.mp4" type="video/mp4">
@@ -151,16 +149,17 @@ It acts like a YouTube thumbnail. It displays a static image in the video player
 >
 > **Explanation:** `<track>` element provides WebVTT closed captions and subtitles for accessibility.
 
+---
+
 ### Exercise 3: Poster Attribute Function
 
 **Problem:** What is the purpose of the `poster` attribute on `<video>` elements?
 
 **Expected output:**
-```text
-Displays a preview thumbnail image before the video is played or downloaded.
-```
-
 > [!check]- Answer
+> ```text
+> Displays a preview thumbnail image before the video is played or downloaded.
+> ```
 > ```html
 > <video poster="thumbnail.jpg" controls></video>
 > ```

@@ -160,11 +160,10 @@ console.log("Encoded Path:", target);
 ```
 
 **Expected output:**
-```text
-Encoded Path: /search?q=Node.js%20%26%20Express
-```
-
 > [!check]- Answer
+> ```text
+> Encoded Path: /search?q=Node.js%20%26%20Express
+> ```
 > - Inside the function, return `baseURL + "?q=" + encodeURIComponent(searchTerm)`.
 
 ---
@@ -177,13 +176,12 @@ Encoded Path: /search?q=Node.js%20%26%20Express
 3. Equals `=` 
 
 **Expected output:**
-```text
-1. %20 (or +)
-2. %26
-3. %3D
-```
-
 > [!check]- Answer
+> ```text
+> 1. %20 (or +)
+> 2. %26
+> 3. %3D
+> ```
 > ```text
 > 1. Space -> %20 (or +)
 > 2. Ampersand -> %26
@@ -197,11 +195,10 @@ Encoded Path: /search?q=Node.js%20%26%20Express
 **Problem:** Which function should be used to encode an entire complete URL string vs an individual query parameter value?
 
 **Expected output:**
-```text
-Use encodeURI() for complete URLs; use encodeURIComponent() for individual query parameter values.
-```
-
 > [!check]- Answer
+> ```text
+> Use encodeURI() for complete URLs; use encodeURIComponent() for individual query parameter values.
+> ```
 > ```javascript
 > // Complete URL:
 > const fullUrl = encodeURI('https://example.com/my page.html');

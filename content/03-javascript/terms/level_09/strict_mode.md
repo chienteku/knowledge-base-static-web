@@ -151,20 +151,10 @@ async function processData() {
 **Problem:** Can you turn on Strict Mode for just a *single function* without affecting the rest of the file?
 
 **Expected output:**
-```text
-Yes! You can put `"use strict";` as the very first line INSIDE a function block.
-```
-```javascript
-function strictFunction() {
-  "use strict";
-  // Strict rules apply here
-}
-function sloppyFunction() {
-  // Normal rules apply here
-}
-```
-
 > [!check]- Answer
+> ```text
+> Yes! You can put `"use strict";` as the very first line INSIDE a function block.
+> ```
 > - The string just needs to be the very first statement in the scope.
 
 ---
@@ -174,11 +164,10 @@ function sloppyFunction() {
 **Problem:** Catch `ReferenceError` when assigning `x = 10` without declaration in strict mode.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > ```javascript
 > "use strict";
 > try {
@@ -190,23 +179,23 @@ ReferenceError caught
 >
 > **Explanation:** Strict mode prevents implicit creation of undeclared global variables.
 
+---
+
 ### Exercise 3: Duplicate Parameter Name Rejection
 
 **Problem:** State whether `function dup(a, a) {}` is permitted in strict mode.
 
 **Expected output:**
-```text
-Forbidden in strict mode
-```
-
 > [!check]- Answer
+> ```text
+> Forbidden in strict mode
+> ```
 > ```javascript
 > console.log("Forbidden in strict mode");
 > ```
 >
 > **Explanation:** Strict mode throws early syntax errors on duplicate parameter names.
 
----
 
 ---
 

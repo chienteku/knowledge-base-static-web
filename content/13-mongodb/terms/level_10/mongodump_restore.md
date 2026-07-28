@@ -135,11 +135,10 @@ $ mongorestore --db app --drop dump/app # Drops existing collection before resto
 Write the terminal command to execute this, using gzip compression.
 
 **Expected output:**
-```bash
-mongodump --host production-db.example.com --port 27017 --db analytics --out /data/backup --gzip
-```
-
 > [!check]- Answer
+> ```bash
+> mongodump --host production-db.example.com --port 27017 --db analytics --out /data/backup --gzip
+> ```
 > - The host parameter is `--host`; the database parameter is `--db`.
 > - Include the `--gzip` flag at the end to compress files.
 
@@ -152,27 +151,27 @@ mongodump --host production-db.example.com --port 27017 --db analytics --out /da
 **Problem:** CLI command to dump `users` collection from database `app` to directory `backup`.
 
 **Expected output:**
-```text
-mongodump --db app --collection users --out backup
-```
-
 > [!check]- Answer
+> ```text
+> mongodump --db app --collection users --out backup
+> ```
 > ```bash
 > mongodump --db app --collection users --out backup
 > ```
 >
 > **Explanation:** `mongodump` exports collection BSON documents and index metadata.
 
+---
+
 ### Exercise 3: Restoring Database Dump
 
 **Problem:** CLI command to restore database `app` from `backup/app` directory dropping existing collections.
 
 **Expected output:**
-```text
-mongorestore --db app --drop backup/app
-```
-
 > [!check]- Answer
+> ```text
+> mongorestore --db app --drop backup/app
+> ```
 > ```bash
 > mongorestore --db app --drop backup/app
 > ```

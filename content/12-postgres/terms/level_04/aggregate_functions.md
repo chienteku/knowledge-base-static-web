@@ -144,15 +144,14 @@ SELECT COUNT(*) FROM users; -- Counts total rows including NULLs
 3.  The minimum transaction amount.
 
 **Expected output:**
-```sql
-SELECT 
-  COUNT(*) AS total_transactions,
-  MAX(amount) AS highest_sale,
-  MIN(amount) AS lowest_sale
-FROM sales_receipts;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   COUNT(*) AS total_transactions,
+>   MAX(amount) AS highest_sale,
+>   MIN(amount) AS lowest_sale
+> FROM sales_receipts;
+> ```
 > - Select the correct aggregate function names.
 > - Map them to the target amount column and use aliases to make the output headers clean.
 
@@ -165,11 +164,10 @@ FROM sales_receipts;
 **Problem:** Calculate average product price per `category` rounded to 2 decimal places using `ROUND(AVG(price), 2)`.
 
 **Expected output:**
-```text
-SELECT category, ROUND(AVG(price), 2) AS avg_price FROM products GROUP BY category;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT category, ROUND(AVG(price), 2) AS avg_price FROM products GROUP BY category;
+> ```
 > ```sql
 > SELECT category, ROUND(AVG(price), 2) AS avg_price
 > FROM products
@@ -178,16 +176,17 @@ SELECT category, ROUND(AVG(price), 2) AS avg_price FROM products GROUP BY catego
 >
 > **Explanation:** `AVG()` accumulates average numeric values across grouped row sets.
 
+---
+
 ### Exercise 3: Combining Aggregates with `FILTER` Clause
 
 **Problem:** Count total active users vs inactive users in a single query using `COUNT(*) FILTER (WHERE active IS TRUE)`.
 
 **Expected output:**
-```text
-SELECT COUNT(*) FILTER (WHERE active IS TRUE) AS active_cnt, COUNT(*) FILTER (WHERE active IS FALSE) AS inactive_cnt FROM users;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT COUNT(*) FILTER (WHERE active IS TRUE) AS active_cnt, COUNT(*) FILTER (WHERE active IS FALSE) AS inactive_cnt FROM users;
+> ```
 > ```sql
 > SELECT
 >   COUNT(*) FILTER (WHERE active IS TRUE) AS active_cnt,

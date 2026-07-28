@@ -161,12 +161,11 @@ async function processData() {
 **Problem:** What is the absolute end of the Prototype Chain in JavaScript? What object has a prototype of `null`?
 
 **Expected output:**
-```text
-`Object.prototype`. 
-It is the ultimate master object. Its own prototype is strictly `null`, which tells the JavaScript engine to stop searching.
-```
-
 > [!check]- Answer
+> ```text
+> `Object.prototype`. 
+> It is the ultimate master object. Its own prototype is strictly `null`, which tells the JavaScript engine to stop searching.
+> ```
 > - `Object.getPrototypeOf(Object.prototype)`
 
 ---
@@ -176,27 +175,27 @@ It is the ultimate master object. Its own prototype is strictly `null`, which te
 **Problem:** Walk prototype chain of `{}` until reaching `null`.
 
 **Expected output:**
-```text
-Object.prototype -> null
-```
-
 > [!check]- Answer
+> ```text
+> Object.prototype -> null
+> ```
 > ```javascript
 > console.log("Object.prototype -> null");
 > ```
 >
 > **Explanation:** All standard JS prototype chains terminate at `Object.prototype -> null`.
 
+---
+
 ### Exercise 3: Property Lookup Along Prototype Chain
 
 **Problem:** Lookup property `a` defined 2 levels up prototype chain.
 
 **Expected output:**
-```text
-Found on grandparent: 42
-```
-
 > [!check]- Answer
+> ```text
+> Found on grandparent: 42
+> ```
 > ```javascript
 > const grand = { a: 42 };
 > const parent = Object.create(grand);
@@ -206,7 +205,6 @@ Found on grandparent: 42
 >
 > **Explanation:** Engine looks up missing properties recursively along `[[Prototype]]` chains until found or reaching `null`.
 
----
 
 ---
 

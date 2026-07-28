@@ -243,11 +243,10 @@ console.log(toy2.speak()); // "Hello!"
 **Problem:** Implement a Singleton `DatabaseConnection` class returning a single shared instance.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > class DatabaseConnection {
 >   static instance;
@@ -261,16 +260,17 @@ true
 >
 > **Explanation:** Singletons guarantee that only one instance of a class exists across applications.
 
+---
+
 ### Exercise 3: Observer Pub/Sub Pattern
 
 **Problem:** Create a `EventEmitter` supporting `.on(event, cb)` and `.emit(event, data)`.
 
 **Expected output:**
-```text
-Event data: 42
-```
-
 > [!check]- Answer
+> ```text
+> Event data: 42
+> ```
 > ```javascript
 > class EventEmitter {
 >   events = {};
@@ -284,7 +284,6 @@ Event data: 42
 >
 > **Explanation:** Observer/PubSub patterns decouple event producers from event consumers.
 
----
 
 ---
 

@@ -160,13 +160,12 @@ res.cookie('session', id, { sameSite: 'strict', httpOnly: true });
 **Problem:** Compare `SameSite=Strict`, `SameSite=Lax`, and `SameSite=None` cookie settings for CSRF mitigation.
 
 **Expected output:**
-```text
-Strict: Cookie never sent in cross-site requests.
-Lax: Cookie sent on top-level GET navigation only (default).
-None: Cookie sent on all cross-site requests (requires Secure).
-```
-
 > [!check]- Answer
+> ```text
+> Strict: Cookie never sent in cross-site requests.
+> Lax: Cookie sent on top-level GET navigation only (default).
+> None: Cookie sent on all cross-site requests (requires Secure).
+> ```
 > ```text
 > Strict -> Blocks all cross-site cookie transmission.
 > Lax -> Permits cookies on top-level GET links only.
@@ -180,11 +179,10 @@ None: Cookie sent on all cross-site requests (requires Secure).
 **Problem:** Why does sending custom headers (e.g. `X-Requested-With` or `Authorization: Bearer`) prevent HTML form CSRF attacks?
 
 **Expected output:**
-```text
-Standard HTML forms cannot set custom headers. Adding custom headers forces browsers to issue a CORS preflight OPTIONS request, which is blocked if cross-site origins are disallowed.
-```
-
 > [!check]- Answer
+> ```text
+> Standard HTML forms cannot set custom headers. Adding custom headers forces browsers to issue a CORS preflight OPTIONS request, which is blocked if cross-site origins are disallowed.
+> ```
 > ```text
 > Standard HTML forms cannot set custom headers. Adding custom headers forces browsers to issue a CORS preflight OPTIONS request, which is blocked if cross-site origins are disallowed.
 > ```

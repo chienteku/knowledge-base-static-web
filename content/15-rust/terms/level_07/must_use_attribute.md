@@ -167,11 +167,10 @@ fn main() {
 **Problem:** Annotate `#[must_use = "calculating area returns a value that should be used"] fn area(r: f64) -> f64`.
 
 **Expected output:**
-```
-Area: 78.53981633974483
-```
-
 > [!check]- Answer
+> ```
+> Area: 78.53981633974483
+> ```
 > ```rust
 > #[must_use = "calculating area returns a value that should be used"]
 > fn area(r: f64) -> f64 { std::f64::consts::PI * r * r }
@@ -183,16 +182,17 @@ Area: 78.53981633974483
 >
 > **Explanation:** `#[must_use]` triggers compiler warnings if returned values are unused.
 
+---
+
 ### Exercise 3: Annotating Custom Struct Types with `#[must_use]`
 
 **Problem:** Annotate `#[must_use] struct Guard;` so any unassigned instance generation triggers compiler warnings.
 
 **Expected output:**
-```
-Guard assigned
-```
-
 > [!check]- Answer
+> ```
+> Guard assigned
+> ```
 > #[must_use]
 > struct Guard;
 > fn main() {

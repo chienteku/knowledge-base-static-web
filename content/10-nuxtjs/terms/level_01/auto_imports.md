@@ -129,14 +129,13 @@ const double = computed(() => count.value * 2);
 **Problem:** You create a file at `composables/useFormat.ts` with the following code: `export const useFormat = () => { return "Formatted!"; }`. How do you use this in `app.vue`?
 
 **Expected output:**
-```vue
-<script setup lang="ts">
-// You just call it directly!
-const formattedText = useFormat();
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts">
+> // You just call it directly!
+> const formattedText = useFormat();
+> </script>
+> ```
 > - In Nuxt, any files placed in the `composables/` directory are auto-scanned and their named exports are globally available without any import statements.
 
 ---
@@ -146,13 +145,12 @@ const formattedText = useFormat();
 **Problem:** List 3 directory paths in a Nuxt 3 project whose exports are automatically auto-imported application-wide.
 
 **Expected output:**
-```text
-1. composables/
-2. utils/
-3. components/ (components auto-imported for templates)
-```
-
 > [!check]- Answer
+> ```text
+> 1. composables/
+> 2. utils/
+> 3. components/ (components auto-imported for templates)
+> ```
 > - `composables/` -> Custom composable functions (`useCustom()`).
 > - `utils/` -> Helper functions (`formatDate()`).
 > - `components/` -> Vue components (`<MyButton />`).
@@ -168,11 +166,10 @@ const formattedText = useFormat();
 **Problem:** How can you disable specific auto-imports in `nuxt.config.ts` if naming collisions occur?
 
 **Expected output:**
-```text
-Via imports.transform.exclude or imports.imports array in nuxt.config.ts.
-```
-
 > [!check]- Answer
+> ```text
+> Via imports.transform.exclude or imports.imports array in nuxt.config.ts.
+> ```
 > - Configure `imports` option in `nuxt.config.ts`.
 > 
 > ```typescript

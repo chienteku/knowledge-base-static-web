@@ -181,11 +181,10 @@ fn main() {
 **Problem:** Pass a sub-slice `&arr[1..4]` of an array `[10, 20, 30, 40, 50]` to a function calculating slice sum.
 
 **Expected output:**
-```
-Slice sum: 90
-```
-
 > [!check]- Answer
+> ```
+> Slice sum: 90
+> ```
 > ```rust
 > fn sum_slice(slice: &[i32]) -> i32 { slice.iter().sum() }
 > fn main() {
@@ -197,16 +196,17 @@ Slice sum: 90
 >
 > **Explanation:** Slices `&[T]` provide cheap, non-owning views into contiguous memory sequences.
 
+---
+
 ### Exercise 3: Mutable Slices Window Updates
 
 **Problem:** Zero out elements of a sub-slice `&mut vec[1..3]` in-place.
 
 **Expected output:**
-```
-[10, 0, 0, 40]
-```
-
 > [!check]- Answer
+> ```
+> [10, 0, 0, 40]
+> ```
 > fn main() {
 >     let mut vec = vec![10, 20, 30, 40];
 >     for x in &mut vec[1..3] {

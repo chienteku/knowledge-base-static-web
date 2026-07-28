@@ -144,14 +144,13 @@ Imagine a high-security hotel.
 4. `https://example.com:8080/about.html` 
 
 **Expected output:**
-```text
-1. Yes (Same scheme, host, port)
-2. No (Different scheme http vs https)
-3. No (Different host api.example.com)
-4. No (Different port 8080 vs 443)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes (Same scheme, host, port)
+> 2. No (Different scheme http vs https)
+> 3. No (Different host api.example.com)
+> 4. No (Different port 8080 vs 443)
+> ```
 > ```text
 > 1. Yes -> Scheme, host, and port match.
 > 2. No  -> Scheme mismatch (http vs https).
@@ -166,12 +165,11 @@ Imagine a high-security hotel.
 **Problem:** List 2 legitimate browser mechanisms used to bypass default SOP restrictions.
 
 **Expected output:**
-```text
-1. CORS (Cross-Origin Resource Sharing headers)
-2. WebSocket connections (ws:// / wss://)
-```
-
 > [!check]- Answer
+> ```text
+> 1. CORS (Cross-Origin Resource Sharing headers)
+> 2. WebSocket connections (ws:// / wss://)
+> ```
 > ```text
 > 1. CORS (Cross-Origin Resource Sharing headers)
 > 2. WebSockets (wss://)

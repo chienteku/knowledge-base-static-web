@@ -166,14 +166,13 @@ Use GROUP BY if collapsing rows is desired; use OVER (PARTITION BY) to retain in
 2.  The total sum of all sales in the table, displayed next to every row (use the alias `grand_total`).
 
 **Expected output:**
-```sql
-SELECT 
-  amount,
-  SUM(amount) OVER() AS grand_total
-FROM sales;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   amount,
+>   SUM(amount) OVER() AS grand_total
+> FROM sales;
+> ```
 > - Run the `SUM` aggregate function as a window function.
 > - Since we want the total for the entire table, leave the `OVER()` clause empty.
 
@@ -186,11 +185,10 @@ FROM sales;
 **Problem:** Calculate running total of `amount` ordered by `created_at` using `SUM(amount) OVER (ORDER BY created_at ASC)`.
 
 **Expected output:**
-```text
-SELECT created_at, amount, SUM(amount) OVER (ORDER BY created_at ASC) AS running_total FROM transactions;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT created_at, amount, SUM(amount) OVER (ORDER BY created_at ASC) AS running_total FROM transactions;
+> ```
 > ```sql
 > SELECT created_at, amount,
 >   SUM(amount) OVER (ORDER BY created_at ASC) AS running_total
@@ -199,16 +197,17 @@ SELECT created_at, amount, SUM(amount) OVER (ORDER BY created_at ASC) AS running
 >
 > **Explanation:** `SUM(col) OVER (ORDER BY ...)` calculates cumulative running totals.
 
+---
+
 ### Exercise 3: Window Frame Specification (ROWS BETWEEN)
 
 **Problem:** Specify 3-row moving average window frame: `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING`.
 
 **Expected output:**
-```text
-AVG(price) OVER (ORDER BY date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
-```
-
 > [!check]- Answer
+> ```text
+> AVG(price) OVER (ORDER BY date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
+> ```
 > ```sql
 > SELECT date, price,
 >   AVG(price) OVER (ORDER BY date ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS moving_avg

@@ -153,16 +153,15 @@ div > span -- Block container wrapping inline child
 6. `<span>`
 
 **Expected output:**
-```text
-1. Inline
-2. Block-level
-3. Block-level
-4. Inline
-5. Block-level
-6. Inline
-```
-
 > [!check]- Answer
+> ```text
+> 1. Inline
+> 2. Block-level
+> 3. Block-level
+> 4. Inline
+> 5. Block-level
+> 6. Inline
+> ```
 > - Ask yourself: does this tag force a line break in normal text flow?
 > - Heading tags and wrappers take full width, while anchors and emphasis tags flow with words.
 
@@ -179,14 +178,13 @@ div > span -- Block container wrapping inline child
 4. `<a>` 
 
 **Expected output:**
-```text
-1. div -> Block
-2. span -> Inline
-3. h1 -> Block
-4. a -> Inline
-```
-
 > [!check]- Answer
+> ```text
+> 1. div -> Block
+> 2. span -> Inline
+> 3. h1 -> Block
+> 4. a -> Inline
+> ```
 > ```text
 > 1. div -> Block
 > 2. span -> Inline
@@ -196,16 +194,17 @@ div > span -- Block container wrapping inline child
 >
 > **Explanation:** Block elements start on a new line and stretch full width; inline elements take up only as much width as content needs.
 
+---
+
 ### Exercise 3: Converting Inline to Block-Block Display
 
 **Problem:** Which CSS property allows an inline `<span>` to respect `width` and `height` while staying on the same line as surrounding text?
 
 **Expected output:**
-```text
-display: inline-block;
-```
-
 > [!check]- Answer
+> ```text
+> display: inline-block;
+> ```
 > ```css
 > span {
 >   display: inline-block;

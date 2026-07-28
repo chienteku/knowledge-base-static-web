@@ -116,13 +116,12 @@ function parse(json: string): unknown { return JSON.parse(json); } // Safer unkn
 **Problem:** You have been using Generics since Level 2 without realizing it! The built-in Array type is actually a Generic Class. If you write `const arr = new Array<string>()`, what is happening?
 
 **Expected output:**
-```text
-The built-in Array class is defined as `class Array<T>`. 
-When you pass `<string>`, you are telling the Array class that its internal `push(item: T)` method should become `push(item: string)`.
-This is exactly how `string[]` works under the hood!
-```
-
 > [!check]- Answer
+> ```text
+> The built-in Array class is defined as `class Array<T>`. 
+> When you pass `<string>`, you are telling the Array class that its internal `push(item: T)` method should become `push(item: string)`.
+> This is exactly how `string[]` works under the hood!
+> ```
 > - Think about what `.push()` expects.
 
 ---
@@ -134,11 +133,10 @@ This is exactly how `string[]` works under the hood!
 **Problem:** Write generic identity function `identity<T>(val: T): T`.
 
 **Expected output:**
-```text
-100
-```
-
 > [!check]- Answer
+> ```text
+> 100
+> ```
 > ```typescript
 > function identity<T>(val: T): T {
 >   return val;
@@ -148,16 +146,17 @@ This is exactly how `string[]` works under the hood!
 >
 > **Explanation:** Generic `identity<T>` returns exact input type argument `T`.
 
+---
+
 ### Exercise 3: Generic Array First Item Extractor
 
 **Problem:** Write generic `first<T>(arr: T[]): T | undefined`.
 
 **Expected output:**
-```text
-hello
-```
-
 > [!check]- Answer
+> ```text
+> hello
+> ```
 > ```typescript
 > function first<T>(arr: T[]): T | undefined {
 >   return arr[0];

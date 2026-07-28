@@ -182,13 +182,12 @@ console.log("Removed scores:", scoresMinusOne);
 ```
 
 **Expected output:**
-```text
-Original remains same: [ 80, 90, 95 ]
-Added scores: [ 80, 90, 95, 100 ]
-Removed scores: [ 80, 95 ]
-```
-
 > [!check]- Answer
+> ```text
+> Original remains same: [ 80, 90, 95 ]
+> Added scores: [ 80, 90, 95, 100 ]
+> Removed scores: [ 80, 95 ]
+> ```
 > - Inside `addScore`, return `[...scoresArray, newScore]`.
 > - Inside `removeScore`, return `scoresArray.filter(s => s !== scoreToRemove)`.
 
@@ -199,11 +198,10 @@ Removed scores: [ 80, 95 ]
 **Problem:** Update property `role: "admin"` on `user` without mutating original `user` object.
 
 **Expected output:**
-```text
-Original role: user, Updated role: admin
-```
-
 > [!check]- Answer
+> ```text
+> Original role: user, Updated role: admin
+> ```
 > ```javascript
 > const user = { name: "Alice", role: "user" };
 > const updatedUser = { ...user, role: "admin" };
@@ -212,16 +210,17 @@ Original role: user, Updated role: admin
 >
 > **Explanation:** Object spread `{ ...obj }` constructs updated object copies immutably.
 
+---
+
 ### Exercise 3: Updating Arrays Immutably
 
 **Problem:** Insert item `2` at index 1 of `[1, 3]` immutably using `.slice()` or spread.
 
 **Expected output:**
-```text
-[ 1, 2, 3 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3 ]
+> ```
 > ```javascript
 > const arr = [1, 3];
 > const inserted = [...arr.slice(0, 1), 2, ...arr.slice(1)];
@@ -230,7 +229,6 @@ Original role: user, Updated role: admin
 >
 > **Explanation:** Immutable array operations return new array instances without mutating original collections.
 
----
 
 ---
 

@@ -155,11 +155,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-My tiny number is 10
-```
-
 > [!check]- Answer
+> ```text
+> My tiny number is 10
+> ```
 > - Place a colon `:` immediately after the variable name `tiny_number`.
 > - Follow the colon with the type you want: `u8`.
 > - The final code should look like `let tiny_number: u8 = 10;`.
@@ -171,12 +170,11 @@ My tiny number is 10
 **Problem:** Collect an iterator of numbers `1..=5` into a `Vec<i32>` using explicit variable type annotation `let v: Vec<i32> = ...`, and then using turbofish `.collect::<Vec<i32>>()`.
 
 **Expected output:**
-```
-[1, 2, 3, 4, 5]
-[1, 2, 3, 4, 5]
-```
-
 > [!check]- Answer
+> ```
+> [1, 2, 3, 4, 5]
+> [1, 2, 3, 4, 5]
+> ```
 > ```rust
 > fn main() {
 >     let v1: Vec<i32> = (1..=5).collect();
@@ -188,16 +186,17 @@ My tiny number is 10
 >
 > **Explanation:** Both variable type annotations and turbofish syntax (`::<T>`) supply necessary type information to generic collection functions.
 
+---
+
 ### Exercise 3: Function Signature Contract Annotations
 
 **Problem:** Write a function `parse_age(input: &str) -> Result<u8, std::num::ParseIntError>` requiring explicit input and return type annotations.
 
 **Expected output:**
-```
-Parsed age: 25
-```
-
 > [!check]- Answer
+> ```
+> Parsed age: 25
+> ```
 > ```rust
 > fn parse_age(input: &str) -> Result<u8, std::num::ParseIntError> {
 >     input.trim().parse::<u8>()

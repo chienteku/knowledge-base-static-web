@@ -248,17 +248,16 @@ function remove(id) {
 ```
 
 **Expected output:**
-```css
-.slide-enter-active, .slide-leave-active {
-  transition: all 0.3s ease-out;
-}
-.slide-enter-from, .slide-leave-to {
-  transform: translateX(100px);
-  opacity: 0;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .slide-enter-active, .slide-leave-active {
+>   transition: all 0.3s ease-out;
+> }
+> .slide-enter-from, .slide-leave-to {
+>   transform: translateX(100px);
+>   opacity: 0;
+> }
+> ```
 > - Match the class names: `.slide-enter-active`, `.slide-leave-active`, `.slide-enter-from`, and `.slide-leave-to`.
 > - Use standard CSS properties: `transition`, `transform`, and `opacity`.
 
@@ -269,12 +268,11 @@ function remove(id) {
 **Problem:** List the 6 auto-generated CSS classes provided by `<Transition name="fade">` during enter and leave phases.
 
 **Expected output:**
-```text
-Enter: fade-enter-from, fade-enter-active, fade-enter-to
-Leave: fade-leave-from, fade-leave-active, fade-leave-to
-```
-
 > [!check]- Answer
+> ```text
+> Enter: fade-enter-from, fade-enter-active, fade-enter-to
+> Leave: fade-leave-from, fade-leave-active, fade-leave-to
+> ```
 > - Enter phase: `fade-enter-from`, `fade-enter-active`, `fade-enter-to`
 > - Leave phase: `fade-leave-from`, `fade-leave-active`, `fade-leave-to`
 > 
@@ -294,11 +292,10 @@ Leave: fade-leave-from, fade-leave-active, fade-leave-to
 **Problem:** Which `mode` prop setting on `<Transition>` waits for the leaving element to finish animating out before entering the new element (`mode="out-in"`)?
 
 **Expected output:**
-```text
-mode="out-in"
-```
-
 > [!check]- Answer
+> ```text
+> mode="out-in"
+> ```
 > - `mode="out-in"` -> Outgoing element animates out first, then incoming element enters.
 > 
 > ```html

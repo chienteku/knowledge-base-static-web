@@ -282,6 +282,8 @@ exports.createPost = async (req, res, next) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Separating Controller and Service Responsibilities
 
 **Problem:** Categorize task as Controller or Service responsibility:
@@ -291,14 +293,13 @@ exports.createPost = async (req, res, next) => {
 4. Querying database and saving transaction (Service)
 
 **Expected output:**
-```text
-1. Controller
-2. Service
-3. Controller
-4. Service
-```
-
 > [!check]- Answer
+> ```text
+> 1. Controller
+> 2. Service
+> 3. Controller
+> 4. Service
+> ```
 > ```text
 > 1. Controller
 > 2. Service
@@ -308,16 +309,17 @@ exports.createPost = async (req, res, next) => {
 >
 > **Explanation:** Controllers handle HTTP transport layer (req/res); Services handle core business domain logic.
 
+---
+
 ### Exercise 3: Service Layer Unit Testing Advantage
 
 **Problem:** Why is testing a Service function easier than testing a Controller function?
 
 **Expected output:**
-```text
-Service functions take plain parameters and return data directly without requiring HTTP request/response mocks.
-```
-
 > [!check]- Answer
+> ```text
+> Service functions take plain parameters and return data directly without requiring HTTP request/response mocks.
+> ```
 > ```text
 > Service functions take plain parameters and return data directly without requiring HTTP request/response mocks.
 > ```

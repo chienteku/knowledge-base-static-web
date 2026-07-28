@@ -164,11 +164,10 @@ type ConfigData = Awaited<PromiseReturn>;
 ```
 
 **Expected output:**
-```text
-ConfigData evaluates to the object type: { databaseUrl: string; poolSize: number; }
-```
-
 > [!check]- Answer
+> ```text
+> ConfigData evaluates to the object type: { databaseUrl: string; poolSize: number; }
+> ```
 > - First get the return type of `loadConfig` (which is a Promise) using `ReturnType<typeof loadConfig>`.
 > - Wrap that result in `Awaited<...>` to peel away the Promise envelope.
 
@@ -181,11 +180,10 @@ ConfigData evaluates to the object type: { databaseUrl: string; poolSize: number
 **Problem:** Extract type of first parameter from `function fetchUser(id: number, opts?: object)`.
 
 **Expected output:**
-```text
-number
-```
-
 > [!check]- Answer
+> ```text
+> number
+> ```
 > ```typescript
 > function fetchUser(id: number, opts?: object) {}
 > type FirstParam = Parameters<typeof fetchUser>[0];
@@ -194,16 +192,17 @@ number
 >
 > **Explanation:** `Parameters<typeof fn>[0]` indexes the tuple type returned by `Parameters`.
 
+---
+
 ### Exercise 3: Unwrapping Async Return Types with `Awaited`
 
 **Problem:** Unwrap return type of `async function getData(): Promise<{ a: number }>`.
 
 **Expected output:**
-```text
-{ a: number }
-```
-
 > [!check]- Answer
+> ```text
+> { a: number }
+> ```
 > ```typescript
 > async function getData() { return { a: 1 }; }
 > type Unwrapped = Awaited<ReturnType<typeof getData>>;

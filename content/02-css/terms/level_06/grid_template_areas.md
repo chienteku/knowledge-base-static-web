@@ -307,14 +307,13 @@ grid-template-areas:
 - Row 3: Footer spans Col 1 and Col 2. The 3rd column cell is left empty.
 
 **Expected output:**
-```css
-grid-template-areas:
-  "header header header"
-  "sidebar content content"
-  "footer footer .";
-```
-
 > [!check]- Answer
+> ```css
+> grid-template-areas:
+>   "header header header"
+>   "sidebar content content"
+>   "footer footer .";
+> ```
 > - Represent each row inside a set of quotes.
 > - Use a period (`.`) for the empty cell in the footer row.
 
@@ -327,11 +326,10 @@ grid-template-areas:
 **Problem:** Write `grid-template-areas` for 3-row layout: Header (full width), Main + Sidebar, Footer (full width).
 
 **Expected output:**
-```text
-grid-template-areas: "header header" "main sidebar" "footer footer";
-```
-
 > [!check]- Answer
+> ```text
+> grid-template-areas: "header header" "main sidebar" "footer footer";
+> ```
 > ```css
 > .layout {
 >   display: grid;
@@ -344,16 +342,17 @@ grid-template-areas: "header header" "main sidebar" "footer footer";
 >
 > **Explanation:** Named area strings define visual layout maps intuitively.
 
+---
+
 ### Exercise 3: Empty Cell Dot Notation in Grid Areas
 
 **Problem:** How do you represent an empty null cell in `grid-template-areas` string rows?
 
 **Expected output:**
-```text
-Using a period/dot character (.) e.g. "header ."
-```
-
 > [!check]- Answer
+> ```text
+> Using a period/dot character (.) e.g. "header ."
+> ```
 > ```css
 > grid-template-areas:
 >   "header ."

@@ -155,15 +155,14 @@ Use triggers or application layer validation for dynamic date checks
 3.  A numeric grade column `score` (required, must be between `0.0` and `100.0` inclusive).
 
 **Expected output:**
-```sql
-CREATE TABLE course_grades (
-  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  student_name VARCHAR(100) NOT NULL,
-  score NUMERIC(5,2) NOT NULL CHECK (score >= 0.0 AND score <= 100.0)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE course_grades (
+>   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+>   student_name VARCHAR(100) NOT NULL,
+>   score NUMERIC(5,2) NOT NULL CHECK (score >= 0.0 AND score <= 100.0)
+> );
+> ```
 > - Combine numeric range constraints using the logical operator `AND`.
 > - Don't forget the required constraints on name and score.
 
@@ -176,27 +175,27 @@ CREATE TABLE course_grades (
 **Problem:** Add CHECK constraint ensuring `end_date >= start_date` on `events` table.
 
 **Expected output:**
-```text
-ALTER TABLE events ADD CONSTRAINT check_dates CHECK (end_date >= start_date);
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE events ADD CONSTRAINT check_dates CHECK (end_date >= start_date);
+> ```
 > ```sql
 > ALTER TABLE events ADD CONSTRAINT check_dates CHECK (end_date >= start_date);
 > ```
 >
 > **Explanation:** Multi-column CHECK constraints validate logical relationships across table columns.
 
+---
+
 ### Exercise 3: CHECK Constraint Array Length Validation
 
 **Problem:** Write CHECK constraint validating array `tags` contains between 1 and 5 items using `array_length()`.
 
 **Expected output:**
-```text
-CHECK (array_length(tags, 1) BETWEEN 1 AND 5)
-```
-
 > [!check]- Answer
+> ```text
+> CHECK (array_length(tags, 1) BETWEEN 1 AND 5)
+> ```
 > ```sql
 > ALTER TABLE posts ADD CONSTRAINT check_tags_count CHECK (array_length(tags, 1) BETWEEN 1 AND 5);
 > ```

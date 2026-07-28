@@ -128,14 +128,13 @@ const AsyncComp = defineAsyncComponent({
 **Problem:** How do Async Components relate to Vue Router?
 
 **Expected output:**
-```text
-They are a match made in heaven!
-Vue Router natively supports lazy loading. You don't even need `defineAsyncComponent`. You just pass the dynamic import directly to the route!
-`{ path: '/admin', component: () => import('./AdminPage.vue') }`
-This guarantees that standard users never download the Admin code!
-```
-
 > [!check]- Answer
+> ```text
+> They are a match made in heaven!
+> Vue Router natively supports lazy loading. You don't even need `defineAsyncComponent`. You just pass the dynamic import directly to the route!
+> `{ path: '/admin', component: () => import('./AdminPage.vue') }`
+> This guarantees that standard users never download the Admin code!
+> ```
 > - Think about navigating between entire pages.
 
 ---
@@ -145,11 +144,10 @@ This guarantees that standard users never download the Admin code!
 **Problem:** Write `defineAsyncComponent()` declaration configuring `loader`, `loadingComponent: Spinner`, and `delay: 200`.
 
 **Expected output:**
-```javascript
-const AsyncComp = defineAsyncComponent({ loader: () => import('./Comp.vue'), loadingComponent: Spinner, delay: 200 });
-```
-
 > [!check]- Answer
+> ```javascript
+> const AsyncComp = defineAsyncComponent({ loader: () => import('./Comp.vue'), loadingComponent: Spinner, delay: 200 });
+> ```
 > - `delay` prevents loading spinner flicker on fast connections.
 > 
 > ```javascript
@@ -167,11 +165,10 @@ const AsyncComp = defineAsyncComponent({ loader: () => import('./Comp.vue'), loa
 **Problem:** How does `defineAsyncComponent(() => import(...))` optimize production JavaScript bundle size?
 
 **Expected output:**
-```text
-Vite/Webpack automatically extracts the imported component into a separate asynchronous JS chunk file, reducing initial page load bundle size.
-```
-
 > [!check]- Answer
+> ```text
+> Vite/Webpack automatically extracts the imported component into a separate asynchronous JS chunk file, reducing initial page load bundle size.
+> ```
 > - Dynamic `import()` triggers automatic code splitting.
 > 
 > ```text

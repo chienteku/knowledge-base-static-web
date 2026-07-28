@@ -191,27 +191,27 @@ if (typeof document !== "undefined") {
 **Problem:** Call `event.preventDefault()` to stop form page reloads.
 
 **Expected output:**
-```text
-Form submission prevented
-```
-
 > [!check]- Answer
+> ```text
+> Form submission prevented
+> ```
 > ```javascript
 > console.log("Form submission prevented");
 > ```
 >
 > **Explanation:** `preventDefault()` cancels default browser actions like form submissions or link navigation.
 
+---
+
 ### Exercise 3: Reading Mouse Coordinates
 
 **Problem:** Extract `clientX` and `clientY` mouse positions from event objects.
 
 **Expected output:**
-```text
-Mouse at X: 100, Y: 200
-```
-
 > [!check]- Answer
+> ```text
+> Mouse at X: 100, Y: 200
+> ```
 > ```javascript
 > const evt = { clientX: 100, clientY: 200 };
 > console.log(`Mouse at X: ${evt.clientX}, Y: ${evt.clientY}`);
@@ -219,7 +219,6 @@ Mouse at X: 100, Y: 200
 >
 > **Explanation:** Mouse event objects contain viewport-relative mouse coordinate metadata.
 
----
 
 ---
 

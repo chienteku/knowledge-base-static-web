@@ -186,11 +186,10 @@ thread::spawn(move || {
 **Problem:** Spawn 5 threads incrementing a shared counter stored in `Arc<Mutex<u32>>`.
 
 **Expected output:**
-```
-Final count: 5
-```
-
 > [!check]- Answer
+> ```
+> Final count: 5
+> ```
 > ```rust
 > use std::sync::{Arc, Mutex};
 > use std::thread;
@@ -211,16 +210,17 @@ Final count: 5
 >
 > **Explanation:** `Arc<Mutex<T>>` provides thread-safe, shared mutable access across concurrent execution contexts.
 
+---
+
 ### Exercise 3: Scoped Block Release for Mutex Guards
 
 **Problem:** Scope `mutex.lock()` inside a block `{ ... }` so subsequent thread locks don't block.
 
 **Expected output:**
-```
-Lock released safely
-```
-
 > [!check]- Answer
+> ```
+> Lock released safely
+> ```
 > use std::sync::{Arc, Mutex};
 > fn main() {
 >     let m = Arc::new(Mutex::new(10));

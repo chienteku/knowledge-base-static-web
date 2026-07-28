@@ -184,12 +184,11 @@ export default defineNuxtConfig({ ssr: true }); // Universal SSR for public page
 **Problem:** You are building a secure web application for a bank. Users must log in before seeing any content. The UI is highly interactive and relies heavily on browser APIs like `window.localStorage` and WebCrypto. Does this app benefit from SSR, or should you configure `{ ssr: false }`?
 
 **Expected output:**
-```text
-Configure { ssr: false } (SPA mode).
-Because the content is behind a login, SEO is irrelevant. Because it heavily relies on browser-only APIs, SSR will cause hydration errors. SPA is the perfect choice here.
-```
-
 > [!check]- Answer
+> ```text
+> Configure { ssr: false } (SPA mode).
+> Because the content is behind a login, SEO is irrelevant. Because it heavily relies on browser-only APIs, SSR will cause hydration errors. SPA is the perfect choice here.
+> ```
 > - Secure dashboards behind a login wall do not require search crawler discoverability but do require browser-only storage access.
 
 ---
@@ -199,15 +198,14 @@ Because the content is behind a login, SEO is irrelevant. Because it heavily rel
 **Problem:** Write `nuxt.config.ts` `routeRules` disabling SSR for `/admin/**` routes while keeping public pages SSR.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  routeRules: {
-    '/admin/**': { ssr: false }
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   routeRules: {
+>     '/admin/**': { ssr: false }
+>   }
+> });
+> ```
 > - Setting `ssr: false` in `routeRules` applies SPA mode to targeted sub-routes.
 > 
 > ```typescript
@@ -225,11 +223,10 @@ export default defineNuxtConfig({
 **Problem:** Which static HTML fallback file is generated when building a Nuxt SPA application?
 
 **Expected output:**
-```text
-200.html (or 404.html)
-```
-
 > [!check]- Answer
+> ```text
+> 200.html (or 404.html)
+> ```
 > - `200.html` serves as the entry point for SPA static hosts.
 > 
 > ```text

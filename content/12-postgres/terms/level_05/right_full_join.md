@@ -192,13 +192,12 @@ SELECT * FROM table_a INNER JOIN table_b ON ...;
 **Problem:** You have a `users` table and a `laptops` table (columns: `id`, `serial_number`, `assigned_user_id` references `users(id)`). Some users don't have laptops, and some laptop assets sit in the storage closet assigned to no one. Write a SQL query using `FULL OUTER JOIN` to show the names of all users and serial numbers of all laptops.
 
 **Expected output:**
-```sql
-SELECT users.username, laptops.serial_number 
-FROM users
-FULL OUTER JOIN laptops ON users.id = laptops.assigned_user_id;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT users.username, laptops.serial_number 
+> FROM users
+> FULL OUTER JOIN laptops ON users.id = laptops.assigned_user_id;
+> ```
 > - A full outer join merges all rows from both tables.
 > - Align the child foreign key `laptops.assigned_user_id` to the parent primary key `users.id`.
 
@@ -211,11 +210,10 @@ FULL OUTER JOIN laptops ON users.id = laptops.assigned_user_id;
 **Problem:** Perform `FULL OUTER JOIN` between `system_a` and `system_b` to identify unmatched records on both sides.
 
 **Expected output:**
-```text
-SELECT a.id AS a_id, b.id AS b_id FROM system_a a FULL OUTER JOIN system_b b ON a.id = b.id;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT a.id AS a_id, b.id AS b_id FROM system_a a FULL OUTER JOIN system_b b ON a.id = b.id;
+> ```
 > ```sql
 > SELECT a.id AS a_id, b.id AS b_id
 > FROM system_a a
@@ -224,16 +222,17 @@ SELECT a.id AS a_id, b.id AS b_id FROM system_a a FULL OUTER JOIN system_b b ON 
 >
 > **Explanation:** `FULL OUTER JOIN` returns all matched and unmatched rows from both tables.
 
+---
+
 ### Exercise 3: Rewriting RIGHT JOIN as LEFT JOIN
 
 **Problem:** Rewrite `SELECT * FROM b RIGHT JOIN a ON b.id = a.b_id` using `LEFT JOIN`.
 
 **Expected output:**
-```text
-SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
+> ```
 > ```sql
 > SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
 > ```

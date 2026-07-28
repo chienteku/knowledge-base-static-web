@@ -142,11 +142,10 @@ async function processData() {
 If you create a `<p>` tag using `document.createElement('p')`, what is its `nodeType`?
 
 **Expected output:**
-```text
-1 (Because it is an HTML Element)
-```
-
 > [!check]- Answer
+> ```text
+> 1 (Because it is an HTML Element)
+> ```
 > - Tags = Elements (Type 1).
 > - The actual readable words = Text (Type 3).
 
@@ -157,34 +156,33 @@ If you create a `<p>` tag using `document.createElement('p')`, what is its `node
 **Problem:** Check if `parent.contains(child)` returns `true`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(true);
 > ```
 >
 > **Explanation:** `Node.contains(otherNode)` tests whether a node is a descendant of the target node.
 
+---
+
 ### Exercise 3: Cloning Nodes with `cloneNode(true)`
 
 **Problem:** Clone a DOM node and all its descendants using `elem.cloneNode(true)`.
 
 **Expected output:**
-```text
-Deep clone created
-```
-
 > [!check]- Answer
+> ```text
+> Deep clone created
+> ```
 > ```javascript
 > console.log("Deep clone created");
 > ```
 >
 > **Explanation:** `cloneNode(true)` recursively clones target nodes and child subtrees.
 
----
 
 ---
 

@@ -208,11 +208,10 @@ What are the 3 possible string values for the `action` parameter passed to the `
 **Problem:** Subscribe to `article` live query, receive updates, and kill query with `db.kill(queryId)`.
 
 **Expected output:**
-```text
-const id = await db.live('article', cb); ... await db.kill(id);
-```
-
 > [!check]- Answer
+> ```text
+> const id = await db.live('article', cb); ... await db.kill(id);
+> ```
 > ```javascript
 > const queryId = await db.live('article', (action, result) => {
 >   console.log(action, result);
@@ -223,16 +222,17 @@ const id = await db.live('article', cb); ... await db.kill(id);
 >
 > **Explanation:** `db.live()` returns a query ID used to cancel subscriptions via `db.kill()`.
 
+---
+
 ### Exercise 3: Handling Live Query Action Types
 
 **Problem:** List 3 action types passed to live query callbacks (`CREATE`, `UPDATE`, `DELETE`).
 
 **Expected output:**
-```text
-CREATE, UPDATE, DELETE
-```
-
 > [!check]- Answer
+> ```text
+> CREATE, UPDATE, DELETE
+> ```
 > ```text
 > CREATE, UPDATE, DELETE
 > ```

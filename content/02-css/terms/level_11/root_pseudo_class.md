@@ -192,21 +192,20 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 **Problem:** Declare a global primary theme color `--primary: #ff007f;` inside `:root`. Write a ruleset for a card title `.title` that uses this primary color, but override the primary color to `--primary: #00f0ff;` inside any card with the class `.dark-theme`.
 
 **Expected output:**
-```css
-:root {
-  --primary: #ff007f;
-}
-
-.title {
-  color: var(--primary);
-}
-
-.dark-theme {
-  --primary: #00f0ff;
-}
-```
-
 > [!check]- Answer
+> ```css
+> :root {
+>   --primary: #ff007f;
+> }
+> 
+> .title {
+>   color: var(--primary);
+> }
+> 
+> .dark-theme {
+>   --primary: #00f0ff;
+> }
+> ```
 > - Define the default global color inside the `:root` scope.
 > - Override the custom property variable locally inside the `.dark-theme` selector.
 
@@ -219,11 +218,10 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 **Problem:** Write `:root` block defining global CSS design tokens for `--color-primary: #005fcc`, `--spacing-md: 16px`, `--font-sans: 'Inter', sans-serif`.
 
 **Expected output:**
-```text
-:root { --color-primary: #005fcc; --spacing-md: 16px; --font-sans: 'Inter', sans-serif; }
-```
-
 > [!check]- Answer
+> ```text
+> :root { --color-primary: #005fcc; --spacing-md: 16px; --font-sans: 'Inter', sans-serif; }
+> ```
 > ```css
 > :root {
 >   --color-primary: #005fcc;
@@ -234,16 +232,17 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 >
 > **Explanation:** `:root` is the designated container for global CSS design tokens.
 
+---
+
 ### Exercise 3: :root Specificity Value
 
 **Problem:** What is the CSS specificity tuple value of the `:root` pseudo-class selector?
 
 **Expected output:**
-```text
-(0, 0, 1, 0) - Equal to a CSS class selector.
-```
-
 > [!check]- Answer
+> ```text
+> (0, 0, 1, 0) - Equal to a CSS class selector.
+> ```
 > ```text
 > (0, 0, 1, 0) - Equal to a CSS class selector.
 > ```

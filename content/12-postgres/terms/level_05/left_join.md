@@ -200,13 +200,12 @@ Keep primary entity table on LHS of LEFT JOIN: FROM users u LEFT JOIN orders o
 **Problem:** You have a `customers` table (columns: `id`, `name`) and an `orders` table (columns: `id`, `customer_id`, `amount`). Write a SQL query to list the name of **every** customer in the system, along with the total `amount` they spent. If they have never made a purchase, display `NULL` (or handle it using aggregates).
 
 **Expected output:**
-```sql
-SELECT customers.name, orders.amount 
-FROM customers
-LEFT JOIN orders ON customers.id = orders.customer_id;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT customers.name, orders.amount 
+> FROM customers
+> LEFT JOIN orders ON customers.id = orders.customer_id;
+> ```
 > - The master table containing the complete registry is `customers`. Place it in the `FROM` clause.
 > - Link `orders` using a `LEFT JOIN` on the matching customer ID keys.
 
@@ -219,11 +218,10 @@ LEFT JOIN orders ON customers.id = orders.customer_id;
 **Problem:** Query users who have placed 0 orders using `LEFT JOIN ... WHERE o.id IS NULL`.
 
 **Expected output:**
-```text
-SELECT u.* FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.id IS NULL;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT u.* FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.id IS NULL;
+> ```
 > ```sql
 > SELECT u.*
 > FROM users u
@@ -233,16 +231,17 @@ SELECT u.* FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.id IS NUL
 >
 > **Explanation:** `LEFT JOIN` paired with `WHERE right_id IS NULL` identifies unmatched left rows.
 
+---
+
 ### Exercise 3: Preserving Unmatched Left Rows with Aggregation
 
 **Problem:** Query user names and total order counts including users with 0 orders using `LEFT JOIN` and `COUNT(o.id)`.
 
 **Expected output:**
-```text
-SELECT u.name, COUNT(o.id) AS order_cnt FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT u.name, COUNT(o.id) AS order_cnt FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name;
+> ```
 > ```sql
 > SELECT u.name, COUNT(o.id) AS order_cnt
 > FROM users u

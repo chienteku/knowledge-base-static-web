@@ -183,27 +183,27 @@ async function processData() {
 **Problem:** Explain version prefix meaning: `^1.2.3` (allow compatible minor/patch updates) vs `~1.2.3` (allow patch updates only).
 
 **Expected output:**
-```text
-^1.2.3: Minor & Patch, ~1.2.3: Patch only
-```
-
 > [!check]- Answer
+> ```text
+> ^1.2.3: Minor & Patch, ~1.2.3: Patch only
+> ```
 > ```javascript
 > console.log("^1.2.3: Minor & Patch, ~1.2.3: Patch only");
 > ```
 >
 > **Explanation:** SemVer carets `^` and tildes `~` control automatic dependency upgrade boundaries.
 
+---
+
 ### Exercise 3: Deterministic Installs with `npm ci`
 
 **Problem:** Command to perform clean deterministic install using `package-lock.json` in CI pipelines.
 
 **Expected output:**
-```text
-npm ci
-```
-
 > [!check]- Answer
+> ```text
+> npm ci
+> ```
 > ```javascript
 > console.log("npm ci");
 > ```

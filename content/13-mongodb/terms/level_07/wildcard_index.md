@@ -185,11 +185,10 @@ Use explicit compound indexes for multi-field sort queries
 Write the MongoDB command to create a wildcard index on the `metrics` subdocument.
 
 **Expected output:**
-```javascript
-db.sensors.createIndex({ "metrics.$**": 1 });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.sensors.createIndex({ "metrics.$**": 1 });
+> ```
 > - The target namespace is the `metrics` field.
 > - Append the wildcard suffix `.$**` to the index key path string.
 
@@ -202,27 +201,27 @@ db.sensors.createIndex({ "metrics.$**": 1 });
 **Problem:** Create wildcard index on dynamic sub-document `customFields` path `"customFields.$**"`.
 
 **Expected output:**
-```text
-db.products.createIndex({ "customFields.$**": 1 });
-```
-
 > [!check]- Answer
+> ```text
+> db.products.createIndex({ "customFields.$**": 1 });
+> ```
 > ```javascript
 > db.products.createIndex({ "customFields.$**": 1 });
 > ```
 >
 > **Explanation:** Wildcard index `"subdoc.$**"` indexes all dynamic scalar fields inside `customFields`.
 
+---
+
 ### Exercise 3: Wildcard Indexing Use Case
 
 **Problem:** Describe ideal use case for Wildcard Indexes (Arbitrary user-defined custom attributes or polymorphic dynamic fields).
 
 **Expected output:**
-```text
-Arbitrary user-defined custom attributes or dynamic key-value sub-documents
-```
-
 > [!check]- Answer
+> ```text
+> Arbitrary user-defined custom attributes or dynamic key-value sub-documents
+> ```
 > ```text
 > Arbitrary user-defined custom attributes or dynamic key-value sub-documents
 > ```

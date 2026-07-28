@@ -191,34 +191,33 @@ logInfo("Logger initialized.");
 **Problem:** Import default `React` and named `{ useState }` in single import line syntax.
 
 **Expected output:**
-```text
-Combined import syntax verified
-```
-
 > [!check]- Answer
+> ```text
+> Combined import syntax verified
+> ```
 > ```javascript
 > console.log("Combined import syntax verified");
 > ```
 >
 > **Explanation:** `import DefaultItem, { NamedItem } from 'path'` combines default and named imports.
 
+---
+
 ### Exercise 3: Renaming Named Exports on Import
 
 **Problem:** Rename named export `import { calculateTax as calc } from './tax.js'`.
 
 **Expected output:**
-```text
-Renamed import verified
-```
-
 > [!check]- Answer
+> ```text
+> Renamed import verified
+> ```
 > ```javascript
 > console.log("Renamed import verified");
 > ```
 >
 > **Explanation:** `import { item as alias }` renames imported named exports locally.
 
----
 
 ---
 

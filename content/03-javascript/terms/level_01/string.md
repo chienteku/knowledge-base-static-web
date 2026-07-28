@@ -149,11 +149,10 @@ async function processData() {
 **Problem:** Given the string `const url = "https://www.example.com";`, extract just the domain name `"example.com"` using string methods and log it to the console.
 
 **Expected output:**
-```text
-example.com
-```
-
 > [!check]- Answer
+> ```text
+> example.com
+> ```
 > - Check out the `.slice()` or `.substring()` methods.
 > - You can find the starting position by looking at the index after `"www."`.
 > - `.slice(12)` will extract everything from the 12th character to the end.
@@ -165,11 +164,10 @@ example.com
 **Problem:** Call `str.toUpperCase()` on `let str = "hello"` and demonstrate that `str` remains unchanged unless reassigned.
 
 **Expected output:**
-```text
-Original: hello, Upper: HELLO
-```
-
 > [!check]- Answer
+> ```text
+> Original: hello, Upper: HELLO
+> ```
 > ```javascript
 > let str = "hello";
 > let upper = str.toUpperCase();
@@ -178,17 +176,18 @@ Original: hello, Upper: HELLO
 >
 > **Explanation:** String methods do not mutate strings in-place; they return brand new primitive string values.
 
+---
+
 ### Exercise 3: String UTF-16 Code Points vs Length
 
 **Problem:** Print `"hello".length` vs `"👍".length` and explain why the emoji length is `2`.
 
 **Expected output:**
-```text
-5
-2
-```
-
 > [!check]- Answer
+> ```text
+> 5
+> 2
+> ```
 > ```javascript
 > console.log("hello".length);
 > console.log("👍".length); // Surrogate pair (2 UTF-16 code units)
@@ -196,7 +195,6 @@ Original: hello, Upper: HELLO
 >
 > **Explanation:** String `.length` measures 16-bit code units, not Unicode grapheme clusters. Emoji outside BMP take 2 surrogate code units.
 
----
 
 ---
 

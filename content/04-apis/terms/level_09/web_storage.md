@@ -124,12 +124,11 @@ function render() { useTheme(theme); requestAnimationFrame(render); }
 **Problem:** You wrote `localStorage.setItem('highScore', '99')`. Where can you physically see this data without writing any `console.log` code?
 
 **Expected output:**
-```text
-In Chrome DevTools!
-Open DevTools (F12) -> Click the "Application" tab -> Look under the "Storage" sidebar. You will see a beautiful table displaying all the keys and values currently saved in localStorage for that specific website. You can even manually edit or delete them there!
-```
-
 > [!check]- Answer
+> ```text
+> In Chrome DevTools!
+> Open DevTools (F12) -> Click the "Application" tab -> Look under the "Storage" sidebar. You will see a beautiful table displaying all the keys and values currently saved in localStorage for that specific website. You can even manually edit or delete them there!
+> ```
 > - Is there a specific tab in Chrome DevTools designed for this?
 
 ---
@@ -141,12 +140,11 @@ Open DevTools (F12) -> Click the "Application" tab -> Look under the "Storage" s
 2. Tab isolation scope
 
 **Expected output:**
-```text
-1. localStorage persists permanently until cleared; sessionStorage expires when browser tab closes
-2. localStorage shared across all same-origin tabs; sessionStorage isolated to single tab
-```
-
 > [!check]- Answer
+> ```text
+> 1. localStorage persists permanently until cleared; sessionStorage expires when browser tab closes
+> 2. localStorage shared across all same-origin tabs; sessionStorage isolated to single tab
+> ```
 > ```text
 > 1. Lifespan -> LocalStorage: Permanent until explicitly deleted.
 > SessionStorage: Deleted when tab closes.
@@ -161,11 +159,10 @@ Open DevTools (F12) -> Click the "Application" tab -> Look under the "Storage" s
 **Problem:** Which DOM event allows a browser tab to listen for changes made to `localStorage` in ANOTHER same-origin browser tab?
 
 **Expected output:**
-```text
-window.addEventListener('storage', (event) => { console.log(event.key, event.newValue); });
-```
-
 > [!check]- Answer
+> ```text
+> window.addEventListener('storage', (event) => { console.log(event.key, event.newValue); });
+> ```
 > ```javascript
 > window.addEventListener('storage', (event) => {
 > console.log(`Key ${event.key} changed to ${event.newValue}`);

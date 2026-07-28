@@ -169,18 +169,17 @@ const searchQuery = route.query.q;
 **Problem:** Write `<script setup>` reading query parameter `q` from `useRoute()` and a button navigating to `/search?q=new` using `useRouter()`.
 
 **Expected output:**
-```vue
-<script setup>
-const route = useRoute();
-const router = useRouter();
-const currentQuery = computed(() => route.query.q);
-function updateQuery() {
-  router.push({ path: '/search', query: { q: 'new' } });
-}
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const route = useRoute();
+> const router = useRouter();
+> const currentQuery = computed(() => route.query.q);
+> function updateQuery() {
+>   router.push({ path: '/search', query: { q: 'new' } });
+> }
+> </script>
+> ```
 > - `useRoute()` reads state; `useRouter()` triggers navigation.
 > 
 > ```vue
@@ -203,11 +202,10 @@ function updateQuery() {
 **Problem:** What is the difference between `router.push('/login')` and `router.replace('/login')`?
 
 **Expected output:**
-```text
-push() adds a new entry to browser history stack; replace() overwrites the current history entry without creating a new back-button step.
-```
-
 > [!check]- Answer
+> ```text
+> push() adds a new entry to browser history stack; replace() overwrites the current history entry without creating a new back-button step.
+> ```
 > - `push()` -> Adds entry to history stack.
 > - `replace()` -> Overwrites current history entry.
 > 

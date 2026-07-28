@@ -189,11 +189,10 @@ console.log(point.printCoords()); // "Coordinates: 10, 20"
 **Problem:** Create object `{ name, age }` from variables `name = "Alice"` and `age = 30`.
 
 **Expected output:**
-```text
-{"name":"Alice","age":30}
-```
-
 > [!check]- Answer
+> ```text
+> {"name":"Alice","age":30}
+> ```
 > ```javascript
 > const name = "Alice";
 > const age = 30;
@@ -203,16 +202,17 @@ console.log(point.printCoords()); // "Coordinates: 10, 20"
 >
 > **Explanation:** ES6 property shorthand `{ name }` maps variable names directly as object keys.
 
+---
+
 ### Exercise 3: ES6 Method Shorthand
 
 **Problem:** Define method `speak() { return "Hi"; }` inside object literal.
 
 **Expected output:**
-```text
-Hi
-```
-
 > [!check]- Answer
+> ```text
+> Hi
+> ```
 > ```javascript
 > const bot = { speak() { return "Hi"; } };
 > console.log(bot.speak());
@@ -220,7 +220,6 @@ Hi
 >
 > **Explanation:** ES6 method shorthand eliminates colon and `function` keywords in object definitions.
 
----
 
 ---
 

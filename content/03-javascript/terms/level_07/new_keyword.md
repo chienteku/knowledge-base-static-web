@@ -150,11 +150,10 @@ async function processData() {
 **Problem:** By default, `new` automatically returns the `this` object. What happens if you explicitly write `return { test: "Oops" }` inside your constructor?
 
 **Expected output:**
-```text
-If a constructor explicitly returns a non-primitive Object, the `new` keyword will respect that and return the custom object INSTEAD of the `this` object! (If you return a primitive like a string or number, it ignores it and returns `this`).
-```
-
 > [!check]- Answer
+> ```text
+> If a constructor explicitly returns a non-primitive Object, the `new` keyword will respect that and return the custom object INSTEAD of the `this` object! (If you return a primitive like a string or number, it ignores it and returns `this`).
+> ```
 > - Constructors shouldn't have `return` statements for exactly this reason!
 
 ---
@@ -164,27 +163,27 @@ If a constructor explicitly returns a non-primitive Object, the `new` keyword wi
 **Problem:** List 4 internal actions performed when calling `new Constructor()`.
 
 **Expected output:**
-```text
-1. Create obj, 2. Set prototype, 3. Bind this & execute, 4. Return obj
-```
-
 > [!check]- Answer
+> ```text
+> 1. Create obj, 2. Set prototype, 3. Bind this & execute, 4. Return obj
+> ```
 > ```javascript
 > console.log("1. Create obj, 2. Set prototype, 3. Bind this & execute, 4. Return obj");
 > ```
 >
 > **Explanation:** `new` creates a blank object, binds its `__proto__`, executes constructor with `this`, and returns object.
 
+---
+
 ### Exercise 3: Overriding Constructor Return with Objects
 
 **Problem:** Demonstrate that returning `{ custom: true }` from a constructor overrides `new` creation.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > function Demo() {
 >   return { custom: true };
@@ -194,7 +193,6 @@ true
 >
 > **Explanation:** Returning object references from constructor functions explicitly overrides standard instance return values.
 
----
 
 ---
 

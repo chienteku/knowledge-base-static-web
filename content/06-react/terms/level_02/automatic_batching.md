@@ -204,11 +204,10 @@ function RenderCounter() {
 **Problem:** Opt out of automatic batching to synchronously update DOM scroll position using `flushSync` from `react-dom`.
 
 **Expected output:**
-```text
-import { flushSync } from 'react-dom'; flushSync(() => { setIsOpen(true); }); listRef.current.scrollTop = 0;
-```
-
 > [!check]- Answer
+> ```text
+> import { flushSync } from 'react-dom'; flushSync(() => { setIsOpen(true); }); listRef.current.scrollTop = 0;
+> ```
 > ```javascript
 > import { flushSync } from 'react-dom';
 >
@@ -221,16 +220,17 @@ import { flushSync } from 'react-dom'; flushSync(() => { setIsOpen(true); }); li
 >
 > **Explanation:** `flushSync()` forces React to flush state updates synchronously to the DOM immediately.
 
+---
+
 ### Exercise 3: Automatic Batching Render Counts
 
 **Problem:** In React 18, how many re-renders occur when calling `setA(1)`, `setB(2)`, `setC(3)` inside a `setTimeout` callback? (1 single batched re-render).
 
 **Expected output:**
-```text
-1 single batched re-render
-```
-
 > [!check]- Answer
+> ```text
+> 1 single batched re-render
+> ```
 > ```text
 > 1 single batched re-render
 > ```

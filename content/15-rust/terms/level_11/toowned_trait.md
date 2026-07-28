@@ -161,11 +161,10 @@ thread::spawn(move || {
 **Problem:** Convert `&str` slice `"rust"` into owned `String` using `.to_owned()`.
 
 **Expected output:**
-```
-Owned text: rust
-```
-
 > [!check]- Answer
+> ```
+> Owned text: rust
+> ```
 > ```rust
 > fn main() {
 >     let slice: &str = "rust";
@@ -176,16 +175,17 @@ Owned text: rust
 >
 > **Explanation:** `ToOwned` generalizes `.clone()` to clone borrowed slice data into owned buffer types.
 
+---
+
 ### Exercise 3: Converting Array Slices to Owned Vectors
 
 **Problem:** Convert a slice `&[1, 2, 3]` into an owned `Vec<i32>` using `.to_owned()`.
 
 **Expected output:**
-```
-Owned vec: [1, 2, 3]
-```
-
 > [!check]- Answer
+> ```
+> Owned vec: [1, 2, 3]
+> ```
 > fn main() {
 >     let slice: &[i32] = &[1, 2, 3];
 >     let owned: Vec<i32> = slice.to_owned();

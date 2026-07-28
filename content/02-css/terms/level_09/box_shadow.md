@@ -115,12 +115,11 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 **Problem:** A normal `box-shadow` drops a shadow *outside* the box. How do you create an effect where the shadow is cast *inside* the box, making it look like the box is a deep hole cut into the screen (often used for form inputs)?
 
 **Expected output:**
-```text
-Add the `inset` keyword to the very beginning or end of the rule!
-`box-shadow: inset 0px 4px 8px rgba(0,0,0,0.2);`
-```
-
 > [!check]- Answer
+> ```text
+> Add the `inset` keyword to the very beginning or end of the rule!
+> `box-shadow: inset 0px 4px 8px rgba(0,0,0,0.2);`
+> ```
 > - It's a special keyword you place right before the math values.
 
 ---
@@ -132,11 +131,10 @@ Add the `inset` keyword to the very beginning or end of the rule!
 **Problem:** Write CSS `box-shadow` for `.card` creating 0px X-offset, 8px Y-offset, 24px blur, and 12% black opacity.
 
 **Expected output:**
-```text
-.card { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); }
-```
-
 > [!check]- Answer
+> ```text
+> .card { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); }
+> ```
 > ```css
 > .card {
 >   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -145,16 +143,17 @@ Add the `inset` keyword to the very beginning or end of the rule!
 >
 > **Explanation:** `box-shadow` syntax: `offset-x offset-y blur-radius spread-radius color`.
 
+---
+
 ### Exercise 3: Multiple Box Shadow Layering
 
 **Problem:** Write CSS applying double layered box shadow for material design elevation.
 
 **Expected output:**
-```text
-box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-```
-
 > [!check]- Answer
+> ```text
+> box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+> ```
 > ```css
 > .elevation-2 {
 >   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);

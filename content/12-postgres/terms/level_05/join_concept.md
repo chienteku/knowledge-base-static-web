@@ -180,13 +180,12 @@ SELECT * FROM u LEFT JOIN o ON u.id = o.user_id AND o.status = 'completed';
 **Problem:** You have a `posts` table (columns: `id`, `title`, `author_id`) and a `users` table (columns: `id`, `username`). Write the SQL query structure to fetch the post `title` and the author's `username`. Qualify all columns.
 
 **Expected output:**
-```sql
-SELECT posts.title, users.username 
-FROM posts
-JOIN users ON posts.author_id = users.id;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT posts.title, users.username 
+> FROM posts
+> JOIN users ON posts.author_id = users.id;
+> ```
 > - The join matching condition must align the child's foreign key (`posts.author_id`) to the parent's primary key (`users.id`).
 > - Qualify columns using dot notation `table_name.column_name`.
 
@@ -199,27 +198,27 @@ JOIN users ON posts.author_id = users.id;
 **Problem:** Select JOIN type: 1. Match rows present in both tables (`INNER JOIN`), 2. Keep all left rows (`LEFT JOIN`), 3. All combinations (`CROSS JOIN`).
 
 **Expected output:**
-```text
-1. INNER JOIN, 2. LEFT JOIN, 3. CROSS JOIN
-```
-
 > [!check]- Answer
+> ```text
+> 1. INNER JOIN, 2. LEFT JOIN, 3. CROSS JOIN
+> ```
 > ```text
 > 1. INNER JOIN, 2. LEFT JOIN, 3. CROSS JOIN
 > ```
 >
 > **Explanation:** JOIN types dictate row preservation and matching semantics.
 
+---
+
 ### Exercise 3: Join Execution Strategy Types in Explain
 
 **Problem:** List 3 internal physical join strategies used by PostgreSQL query planner (`Nested Loop`, `Hash Join`, `Merge Join`).
 
 **Expected output:**
-```text
-Nested Loop, Hash Join, Merge Join
-```
-
 > [!check]- Answer
+> ```text
+> Nested Loop, Hash Join, Merge Join
+> ```
 > ```text
 > Nested Loop, Hash Join, Merge Join
 > ```

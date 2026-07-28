@@ -106,11 +106,10 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 **Problem:** You have a container with three children: HTML `<p>1</p> <p>2</p> <p>3</p>`. You apply `display: flex; flex-direction: row-reverse;`. In what order do the numbers appear on the screen, reading from left to right?
 
 **Expected output:**
-```text
-3, 2, 1! `row-reverse` flips the axis, meaning it starts packing items against the right side of the screen first.
-```
-
 > [!check]- Answer
+> ```text
+> 3, 2, 1! `row-reverse` flips the axis, meaning it starts packing items against the right side of the screen first.
+> ```
 > - Which side of the screen does `reverse` start on?
 
 ---
@@ -122,11 +121,10 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 **Problem:** Write CSS for `.card-stack` arranging child elements in vertical column with 16px gap.
 
 **Expected output:**
-```text
-.card-stack { display: flex; flex-direction: column; gap: 16px; }
-```
-
 > [!check]- Answer
+> ```text
+> .card-stack { display: flex; flex-direction: column; gap: 16px; }
+> ```
 > ```css
 > .card-stack {
 >   display: flex;
@@ -137,19 +135,20 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 >
 > **Explanation:** `flex-direction: column` stacks flex items vertically.
 
+---
+
 ### Exercise 3: Flex Direction Values List
 
 **Problem:** List the 4 valid keyword values for `flex-direction`.
 
 **Expected output:**
-```text
-1. row (default)
-2. row-reverse
-3. column
-4. column-reverse
-```
-
 > [!check]- Answer
+> ```text
+> 1. row (default)
+> 2. row-reverse
+> 3. column
+> 4. column-reverse
+> ```
 > ```text
 > 1. row
 > 2. row-reverse

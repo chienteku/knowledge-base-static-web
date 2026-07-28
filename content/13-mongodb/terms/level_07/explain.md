@@ -193,12 +193,11 @@ Optimize compound index to cover sort order and eliminate in-memory SORT stage
 2.  State the action required to fix the performance issue.
 
 **Expected output:**
-```text
-1. The metrics indicate that MongoDB executed a full Collection Scan (`COLLSCAN`). To return just 10 matching documents, it had to read 50,000 documents from disk, indicating a highly unoptimized query.
-2. Build an index on the fields used in the query filter to convert the search to an Index Scan (`IXSCAN`), reducing `totalDocsExamined` to 10.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The metrics indicate that MongoDB executed a full Collection Scan (`COLLSCAN`). To return just 10 matching documents, it had to read 50,000 documents from disk, indicating a highly unoptimized query.
+> 2. Build an index on the fields used in the query filter to convert the search to an Index Scan (`IXSCAN`), reducing `totalDocsExamined` to 10.
+> ```
 > - Look at the search stage `COLLSCAN`.
 > - Check the ratio of docs examined to docs returned.
 
@@ -211,27 +210,27 @@ Optimize compound index to cover sort order and eliminate in-memory SORT stage
 **Problem:** Run explain query in `executionStats` mode for `db.users.find({ status: "active" })`.
 
 **Expected output:**
-```text
-db.users.find({ status: "active" }).explain("executionStats");
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ status: "active" }).explain("executionStats");
+> ```
 > ```javascript
 > db.users.find({ status: "active" }).explain("executionStats");
 > ```
 >
 > **Explanation:** `explain("executionStats")` returns detailed execution metrics (`executionTimeMillis`, `totalKeysExamined`, `totalDocsExamined`).
 
+---
+
 ### Exercise 3: Evaluating Index Efficiency Ratio
 
 **Problem:** How to calculate query scan ratio from explain stats? (`totalDocsExamined / nReturned`).
 
 **Expected output:**
-```text
-totalDocsExamined / nReturned
-```
-
 > [!check]- Answer
+> ```text
+> totalDocsExamined / nReturned
+> ```
 > ```text
 > totalDocsExamined / nReturned
 > ```

@@ -144,15 +144,14 @@ The driver gets a `NotWritablePrimary` error.
 Describe the step-by-step actions the driver will execute to resolve this query.
 
 **Expected output:**
-```text
-1. The driver catches the transient `NotWritablePrimary` election error.
-2. The driver pauses and queries the replica set seeds to locate the newly elected Primary node.
-3. The driver establishes a connection to the new Primary node.
-4. The driver retries the `insertOne` command once on the new Primary, passing the original session and transaction numbers to guarantee idempotency.
-5. The query completes successfully, and the application execution continues without throwing errors.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The driver catches the transient `NotWritablePrimary` election error.
+> 2. The driver pauses and queries the replica set seeds to locate the newly elected Primary node.
+> 3. The driver establishes a connection to the new Primary node.
+> 4. The driver retries the `insertOne` command once on the new Primary, passing the original session and transaction numbers to guarantee idempotency.
+> 5. The query completes successfully, and the application execution continues without throwing errors.
+> ```
 > - The driver behaves as a smart cluster controller during elections.
 > - Explain how cluster clocks and transaction numbers guide the retry handshake.
 
@@ -165,27 +164,27 @@ Describe the step-by-step actions the driver will execute to resolve this query.
 **Problem:** Construct URI enabling `retryWrites=true` and `retryReads=true`.
 
 **Expected output:**
-```text
-mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&retryReads=true
-```
-
 > [!check]- Answer
+> ```text
+> mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&retryReads=true
+> ```
 > ```text
 > mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&retryReads=true
 > ```
 >
 > **Explanation:** Connection URI parameters enable automatic single-attempt retries for network glitches.
 
+---
+
 ### Exercise 3: Retryable Write Requirements
 
 **Problem:** What storage engine requirement exists for Retryable Writes? (WiredTiger storage engine with replica sets or sharded clusters).
 
 **Expected output:**
-```text
-WiredTiger storage engine with replica sets or sharded clusters
-```
-
 > [!check]- Answer
+> ```text
+> WiredTiger storage engine with replica sets or sharded clusters
+> ```
 > ```text
 > WiredTiger storage engine with replica sets or sharded clusters
 > ```

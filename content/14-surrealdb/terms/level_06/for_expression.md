@@ -149,15 +149,14 @@ Write a SurrealQL script to:
 2. Use a `FOR` loop to iterate over `$roles`, creating a `role` record for each role name with `active = true`.
 
 **Expected output:**
-```sql
-LET $roles = ["admin", "member", "guest"];
-
-FOR $r IN $roles {
-  CREATE role SET name = $r, active = true;
-};
-```
-
 > [!check]- Answer
+> ```sql
+> LET $roles = ["admin", "member", "guest"];
+> 
+> FOR $r IN $roles {
+>   CREATE role SET name = $r, active = true;
+> };
+> ```
 > - The loop format is `FOR $var IN $array { ... };`.
 > - Access the current iteration item using `$r`.
 
@@ -170,11 +169,10 @@ FOR $r IN $roles {
 **Problem:** Iterate array `["Alice", "Bob"]` using `FOR $name IN [...]` to create user records.
 
 **Expected output:**
-```text
-FOR $name IN ["Alice", "Bob"] { CREATE user SET name = $name; };
-```
-
 > [!check]- Answer
+> ```text
+> FOR $name IN ["Alice", "Bob"] { CREATE user SET name = $name; };
+> ```
 > ```surrealql
 > FOR $name IN ["Alice", "Bob"] {
 >   CREATE user SET name = $name;
@@ -183,16 +181,17 @@ FOR $name IN ["Alice", "Bob"] { CREATE user SET name = $name; };
 >
 > **Explanation:** `FOR $var IN array { ... }` loops over collection elements executing statements.
 
+---
+
 ### Exercise 3: Returning Array Results from FOR Block
 
 **Problem:** Collect squared numbers for `[1, 2, 3]` using a FOR loop expression.
 
 **Expected output:**
-```text
-FOR $n IN [1, 2, 3] { RETURN $n * $n; };
-```
-
 > [!check]- Answer
+> ```text
+> FOR $n IN [1, 2, 3] { RETURN $n * $n; };
+> ```
 > ```surrealql
 > FOR $n IN [1, 2, 3] {
 >   RETURN $n * $n;

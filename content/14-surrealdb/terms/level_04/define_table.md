@@ -146,12 +146,11 @@ DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth.id OR $auth.role = 'ad
 2.  Define a relation table named `wrote` that connects only `user` records to `comments` records.
 
 **Expected output:**
-```sql
-DEFINE TABLE comments SCHEMAFULL;
-DEFINE TABLE wrote TYPE RELATION FROM user TO comments;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE TABLE comments SCHEMAFULL;
+> DEFINE TABLE wrote TYPE RELATION FROM user TO comments;
+> ```
 > - The graph connection table requires `TYPE RELATION` configurations.
 > - Specify the source (`FROM`) and target (`TO`) boundaries.
 
@@ -164,27 +163,27 @@ DEFINE TABLE wrote TYPE RELATION FROM user TO comments;
 **Problem:** Define graph relation table `likes` enforcing `IN user` and `OUT article`.
 
 **Expected output:**
-```text
-DEFINE TABLE likes TYPE RELATION IN user OUT article;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE likes TYPE RELATION IN user OUT article;
+> ```
 > ```surrealql
 > DEFINE TABLE likes TYPE RELATION IN user OUT article;
 > ```
 >
 > **Explanation:** `TYPE RELATION IN in_table OUT out_table` constrains graph edge targets.
 
+---
+
 ### Exercise 3: Table Drop Removal
 
 **Problem:** Command to drop table definition `old_table` from database.
 
 **Expected output:**
-```text
-REMOVE TABLE old_table;
-```
-
 > [!check]- Answer
+> ```text
+> REMOVE TABLE old_table;
+> ```
 > ```surrealql
 > REMOVE TABLE old_table;
 > ```

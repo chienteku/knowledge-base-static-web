@@ -130,14 +130,13 @@ Identify which connection parameter panel input (**Endpoint**, **Namespace**, **
 4.  Entering the admin username and password.
 
 **Expected output:**
-```text
-1. Database (DB)
-2. Endpoint
-3. Namespace (NS)
-4. Authentication
-```
-
 > [!check]- Answer
+> ```text
+> 1. Database (DB)
+> 2. Endpoint
+> 3. Namespace (NS)
+> 4. Authentication
+> ```
 > - The Endpoint represents the network protocol URI address.
 > - Namespace handles the tenant boundary groupings.
 
@@ -150,27 +149,27 @@ Identify which connection parameter panel input (**Endpoint**, **Namespace**, **
 **Problem:** List 3 primary views in Surrealist GUI (Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer).
 
 **Expected output:**
-```text
-Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer
-```
-
 > [!check]- Answer
+> ```text
+> Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer
+> ```
 > ```text
 > Query Editor, Explorer / Table Inspector, Designer / Schema Visualizer
 > ```
 >
 > **Explanation:** Surrealist provides visual query editing, table inspection, and schema design views.
 
+---
+
 ### Exercise 3: Surrealist Sandbox Mode
 
 **Problem:** What is the purpose of Surrealist's built-in Sandbox mode? (Runs an ephemeral in-memory database for testing without running a separate server).
 
 **Expected output:**
-```text
-Runs an in-memory database instance directly in the browser/GUI for instant testing
-```
-
 > [!check]- Answer
+> ```text
+> Runs an in-memory database instance directly in the browser/GUI for instant testing
+> ```
 > ```text
 > Runs an in-memory database instance directly in the browser/GUI for instant testing
 > ```

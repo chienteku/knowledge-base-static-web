@@ -138,13 +138,12 @@ amount NUMERIC(12, 2), currency VARCHAR(3) -- Explicit numeric amount and ISO cu
 3.  The drone's current GPS longitude coordinate (requires high precision decimal places).
 
 **Expected output:**
-```text
-1. Sensor Reading: DOUBLE PRECISION (Requires high-speed writes and hardware CPU calculations; tiny rounding errors are irrelevant for sensor logs).
-2. Hourly Cost: NUMERIC (This is a financial value; must be mathematically exact to prevent billing discrepancies).
-3. GPS Coordinate: DOUBLE PRECISION (Scientific coordinate tracking values require high precision floating point ranges).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Sensor Reading: DOUBLE PRECISION (Requires high-speed writes and hardware CPU calculations; tiny rounding errors are irrelevant for sensor logs).
+> 2. Hourly Cost: NUMERIC (This is a financial value; must be mathematically exact to prevent billing discrepancies).
+> 3. GPS Coordinate: DOUBLE PRECISION (Scientific coordinate tracking values require high precision floating point ranges).
+> ```
 > - Determine if the column handles financial transactions.
 > - Consider if processing speed and writing frequency take priority over exact representation.
 
@@ -157,27 +156,27 @@ amount NUMERIC(12, 2), currency VARCHAR(3) -- Explicit numeric amount and ISO cu
 **Problem:** Categorize as Exact or Inexact: 1. `NUMERIC` (Exact), 2. `DOUBLE PRECISION` (Inexact), 3. `INTEGER` (Exact).
 
 **Expected output:**
-```text
-1. Exact, 2. Inexact, 3. Exact
-```
-
 > [!check]- Answer
+> ```text
+> 1. Exact, 2. Inexact, 3. Exact
+> ```
 > ```text
 > 1. Exact, 2. Inexact, 3. Exact
 > ```
 >
 > **Explanation:** Fixed-point NUMERIC and INTEGER types guarantee exact decimal arithmetic.
 
+---
+
 ### Exercise 3: Floating-Point Calculation Inspection
 
 **Problem:** Inspect floating point calculation `SELECT 0.1::FLOAT8 + 0.2::FLOAT8;` in PostgreSQL.
 
 **Expected output:**
-```text
-0.30000000000000004
-```
-
 > [!check]- Answer
+> ```text
+> 0.30000000000000004
+> ```
 > ```sql
 > SELECT 0.1::FLOAT8 + 0.2::FLOAT8;
 > ```

@@ -131,15 +131,14 @@ export default defineNuxtConfig({
 **Problem:** You have written a CSS reset file located at `assets/css/reset.css`. How do you configure Nuxt to include this CSS file on every single page of your app?
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  css: [
-    '~/assets/css/reset.css'
-  ]
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   css: [
+>     '~/assets/css/reset.css'
+>   ]
+> })
+> ```
 > - Place the asset alias path `'~/assets/css/reset.css'` inside the `css` array property of the configuration object.
 
 ---
@@ -149,15 +148,14 @@ export default defineNuxtConfig({
 **Problem:** Write `nuxt.config.ts` configuring TypeScript strict mode, CSS file `'~/assets/css/main.css'`, and modules `'@pinia/nuxt'`.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  typescript: { strict: true },
-  css: ['~/assets/css/main.css'],
-  modules: ['@pinia/nuxt']
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   typescript: { strict: true },
+>   css: ['~/assets/css/main.css'],
+>   modules: ['@pinia/nuxt']
+> });
+> ```
 > - `defineNuxtConfig` configures global project settings.
 > 
 > ```typescript
@@ -176,11 +174,10 @@ export default defineNuxtConfig({
 **Problem:** Which property in `nuxt.config.ts` enables hybrid rendering rules per route path?
 
 **Expected output:**
-```text
-routeRules (e.g. routeRules: { '/admin/**': { ssr: false } })
-```
-
 > [!check]- Answer
+> ```text
+> routeRules (e.g. routeRules: { '/admin/**': { ssr: false } })
+> ```
 > - `routeRules` configures per-route hybrid rendering strategies.
 > 
 > ```typescript

@@ -146,17 +146,16 @@ EXISTS (SELECT 1 FROM ...) is idiomatic, but SELECT * has zero performance penal
 **Problem:** You have an `authors` table (columns: `id`, `name`) and an `articles` table (columns: `id`, `author_id`, `title`). Write a SQL query to list the names of all authors who have **never** published an article. Use the `NOT EXISTS` operator.
 
 **Expected output:**
-```sql
-SELECT name 
-FROM authors a
-WHERE NOT EXISTS (
-  SELECT 1 
-  FROM articles ar 
-  WHERE ar.author_id = a.id
-);
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name 
+> FROM authors a
+> WHERE NOT EXISTS (
+>   SELECT 1 
+>   FROM articles ar 
+>   WHERE ar.author_id = a.id
+> );
+> ```
 > - Correlate the subquery by matching `ar.author_id` to the parent `a.id`.
 > - Use the `SELECT 1` convention inside the `NOT EXISTS` block.
 
@@ -169,11 +168,10 @@ WHERE NOT EXISTS (
 **Problem:** Query users who have placed at least one completed order using `EXISTS`.
 
 **Expected output:**
-```text
-SELECT * FROM users u WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id AND o.status = 'completed');
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users u WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id AND o.status = 'completed');
+> ```
 > ```sql
 > SELECT * FROM users u
 > WHERE EXISTS (
@@ -184,16 +182,17 @@ SELECT * FROM users u WHERE EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.i
 >
 > **Explanation:** `EXISTS` evaluates true if the correlated subquery returns 1 or more rows.
 
+---
+
 ### Exercise 3: Negated `NOT EXISTS` Subquery Filter
 
 **Problem:** Query users who have NEVER placed an order using `NOT EXISTS`.
 
 **Expected output:**
-```text
-SELECT * FROM users u WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users u WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.id);
+> ```
 > ```sql
 > SELECT * FROM users u
 > WHERE NOT EXISTS (

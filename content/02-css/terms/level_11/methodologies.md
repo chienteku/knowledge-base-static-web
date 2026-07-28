@@ -173,14 +173,13 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 ```
 
 **Expected output:**
-```css
-.navbar { background-color: #333; }
-.navbar__item { display: inline-block; }
-.navbar__link { color: white; }
-.navbar__link--active { color: yellow; }
-```
-
 > [!check]- Answer
+> ```css
+> .navbar { background-color: #333; }
+> .navbar__item { display: inline-block; }
+> .navbar__link { color: white; }
+> .navbar__link--active { color: yellow; }
+> ```
 > - The Block name is `navbar`.
 > - Identify sub-elements (`item`, `link`) and modifiers (`active`).
 > - Use BEM delimiters (`__` for elements, `--` for modifiers) to write classes with single specificity weights.
@@ -194,13 +193,12 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 **Problem:** Write BEM class names for: Button block (`btn`), Icon element inside button (`btn__icon`), Disabled modifier (`btn--disabled`).
 
 **Expected output:**
-```text
-Block: .btn
-Element: .btn__icon
-Modifier: .btn--disabled
-```
-
 > [!check]- Answer
+> ```text
+> Block: .btn
+> Element: .btn__icon
+> Modifier: .btn--disabled
+> ```
 > ```html
 > <button class="btn btn--disabled">
 >   <svg class="btn__icon"></svg>
@@ -210,6 +208,8 @@ Modifier: .btn--disabled
 >
 > **Explanation:** BEM constructs modular, self-documenting CSS class names.
 
+---
+
 ### Exercise 3: CSS Methodologies Overview
 
 **Problem:** Match CSS methodology acronym to full name:
@@ -218,13 +218,12 @@ Modifier: .btn--disabled
 3. SMACSS
 
 **Expected output:**
-```text
-1. Block Element Modifier
-2. Object-Oriented CSS
-3. Scalable and Modular Architecture for CSS
-```
-
 > [!check]- Answer
+> ```text
+> 1. Block Element Modifier
+> 2. Object-Oriented CSS
+> 3. Scalable and Modular Architecture for CSS
+> ```
 > ```text
 > 1. BEM -> Block Element Modifier
 > 2. OOCSS -> Object-Oriented CSS

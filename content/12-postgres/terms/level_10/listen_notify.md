@@ -170,13 +170,12 @@ NOTIFY channel, '{"entity_id": 123}'; -- Send small ID payload
 2.  Write the query to publish the message `'Unusual login detected'` to that channel.
 
 **Expected output:**
-```sql
-LISTEN security_alerts;
-
-NOTIFY security_alerts, 'Unusual login detected';
-```
-
 > [!check]- Answer
+> ```sql
+> LISTEN security_alerts;
+> 
+> NOTIFY security_alerts, 'Unusual login detected';
+> ```
 > - The listen statement does not require a payload parameter.
 > - The notify statement accepts the channel name followed by a comma and the text payload string.
 
@@ -189,11 +188,10 @@ NOTIFY security_alerts, 'Unusual login detected';
 **Problem:** Create trigger function issuing `NOTIFY order_events, payload` with inserted order ID as JSON payload.
 
 **Expected output:**
-```text
-CREATE FUNCTION notify_order() RETURNS TRIGGER AS $$ BEGIN PERFORM pg_notify('order_events', json_build_object('id', NEW.id)::text); RETURN NEW; END; $$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE FUNCTION notify_order() RETURNS TRIGGER AS $$ BEGIN PERFORM pg_notify('order_events', json_build_object('id', NEW.id)::text); RETURN NEW; END; $$ LANGUAGE plpgsql;
+> ```
 > ```sql
 > CREATE FUNCTION notify_order() RETURNS TRIGGER AS $$
 > BEGIN
@@ -205,16 +203,17 @@ CREATE FUNCTION notify_order() RETURNS TRIGGER AS $$ BEGIN PERFORM pg_notify('or
 >
 > **Explanation:** `pg_notify(channel, payload)` sends asynchronous real-time notifications to listening client connections.
 
+---
+
 ### Exercise 3: Listening to Channel in psql
 
 **Problem:** Command in `psql` to subscribe to notification channel `order_events` (`LISTEN order_events;`).
 
 **Expected output:**
-```text
-LISTEN order_events;
-```
-
 > [!check]- Answer
+> ```text
+> LISTEN order_events;
+> ```
 > ```sql
 > LISTEN order_events;
 > ```

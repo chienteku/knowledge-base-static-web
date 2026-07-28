@@ -125,21 +125,20 @@ The parent targets them using the `<template v-slot:header>` syntax (or the shor
 **Problem:** You have a `Card.vue` component with `<slot name="title">` and `<slot name="body">`. How do you pass an `<h1>` to the title and a `<p>` to the body from the parent?
 
 **Expected output:**
-```html
-<Card>
-  <template #title>
-    <h1>My Title</h1>
-  </template>
-  
-  <template #body>
-    <p>My body content goes here.</p>
-  </template>
-</Card>
-
-// Notice the `#` shorthand for `v-slot:`
-```
-
 > [!check]- Answer
+> ```html
+> <Card>
+>   <template #title>
+>     <h1>My Title</h1>
+>   </template>
+>   
+>   <template #body>
+>     <p>My body content goes here.</p>
+>   </template>
+> </Card>
+> 
+> // Notice the `#` shorthand for `v-slot:`
+> ```
 > - Wrap the content in a `<template>` tag and use the `#` shorthand!
 
 ---
@@ -149,11 +148,10 @@ The parent targets them using the `<template v-slot:header>` syntax (or the shor
 **Problem:** Write JavaScript code inside `<script setup>` checking if a named slot `'header'` was provided by the parent component using `useSlots()`.
 
 **Expected output:**
-```javascript
-import { useSlots } from 'vue'; const slots = useSlots(); const hasHeader = !!slots.header;
-```
-
 > [!check]- Answer
+> ```javascript
+> import { useSlots } from 'vue'; const slots = useSlots(); const hasHeader = !!slots.header;
+> ```
 > - `useSlots()` exposes slot functions passed by parent components.
 > 
 > ```javascript
@@ -169,11 +167,10 @@ import { useSlots } from 'vue'; const slots = useSlots(); const hasHeader = !!sl
 **Problem:** Write template syntax rendering a dynamic slot name defined by string variable `dynamicSlotName`.
 
 **Expected output:**
-```html
-<template #[dynamicSlotName]>Dynamic Content</template>
-```
-
 > [!check]- Answer
+> ```html
+> <template #[dynamicSlotName]>Dynamic Content</template>
+> ```
 > - Square brackets `#[dynamicName]` define dynamic slot names.
 > 
 > ```html

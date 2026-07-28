@@ -205,16 +205,17 @@ export default function InputForm({ onSubmitLabel }: InputFormProps) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Typing Component Props Interface
 
 **Problem:** Write TypeScript `Props` interface for component taking `name` (string), `age` (number), `onSave` callback, and optional `bio`.
 
 **Expected output:**
-```text
-interface UserProps { name: string; age: number; onSave: (id: number) => void; bio?: string; } function UserCard({ name, age, onSave, bio }: UserProps) { ... }
-```
-
 > [!check]- Answer
+> ```text
+> interface UserProps { name: string; age: number; onSave: (id: number) => void; bio?: string; } function UserCard({ name, age, onSave, bio }: UserProps) { ... }
+> ```
 > ```typescript
 > interface UserProps {
 >   name: string;
@@ -230,16 +231,17 @@ interface UserProps { name: string; age: number; onSave: (id: number) => void; b
 >
 > **Explanation:** TypeScript interfaces enforce compile-time prop type safety across components.
 
+---
+
 ### Exercise 3: Typing Children Props with ReactNode
 
 **Problem:** What TypeScript type should be used for typing arbitrary React JSX children props? (`React.ReactNode`).
 
 **Expected output:**
-```text
-React.ReactNode
-```
-
 > [!check]- Answer
+> ```text
+> React.ReactNode
+> ```
 > ```typescript
 > interface ContainerProps {
 >   children: React.ReactNode;

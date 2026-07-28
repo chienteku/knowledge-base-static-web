@@ -166,11 +166,10 @@ fn parse_all(inputs: &[&str]) -> Result<Vec<i32>, std::num::ParseIntError> {
 **Problem:** Create a mutable vector `vec![1, 2]`. Extend it with elements from a second vector `vec![3, 4, 5]` using `.extend()`.
 
 **Expected output:**
-```
-[1, 2, 3, 4, 5]
-```
-
 > [!check]- Answer
+> ```
+> [1, 2, 3, 4, 5]
+> ```
 > ```rust
 > fn main() {
 >     let mut v1 = vec![1, 2];
@@ -182,16 +181,17 @@ fn parse_all(inputs: &[&str]) -> Result<Vec<i32>, std::num::ParseIntError> {
 >
 > **Explanation:** `Extend` appends all items from an iterator into an existing mutable collection without reallocating a brand new container.
 
+---
+
 ### Exercise 3: Custom Collection `FromIterator` Implementation
 
 **Problem:** Demonstrate collecting a string iterator into a `String` using `FromIterator` to build a single concatenated string.
 
 **Expected output:**
-```
-rustlang
-```
-
 > [!check]- Answer
+> ```
+> rustlang
+> ```
 > ```rust
 > fn main() {
 >     let parts = vec!["rust", "lang"];

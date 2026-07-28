@@ -107,12 +107,11 @@ When the user finally clicks the link, the page transition is truly instant, bec
 **Problem:** Write a NuxtLink that redirects the user to `https://google.com`. Will Nuxt try to prefetch this link?
 
 **Expected output:**
-```vue
-<NuxtLink to="https://google.com">Google</NuxtLink>
-<!-- No, Nuxt is smart enough to detect it is external and disable prefetching. -->
-```
-
 > [!check]- Answer
+> ```vue
+> <NuxtLink to="https://google.com">Google</NuxtLink>
+> <!-- No, Nuxt is smart enough to detect it is external and disable prefetching. -->
+> ```
 > - Nuxt inspects the scheme/prefix of the link (like `http` or `https`) to classify if the destination is internal or external.
 
 ---
@@ -122,11 +121,10 @@ When the user finally clicks the link, the page transition is truly instant, bec
 **Problem:** Write `<NuxtLink>` component navigating to `/about` setting active class `'font-bold text-green-500'` when current route matches.
 
 **Expected output:**
-```vue
-<NuxtLink to="/about" active-class="font-bold text-green-500">About</NuxtLink>
-```
-
 > [!check]- Answer
+> ```vue
+> <NuxtLink to="/about" active-class="font-bold text-green-500">About</NuxtLink>
+> ```
 > - `active-class` applies CSS styles to active link matching current route.
 > 
 > ```vue
@@ -144,11 +142,10 @@ When the user finally clicks the link, the page transition is truly instant, bec
 **Problem:** When does `<NuxtLink>` automatically prefetch code payload for targeted routes?
 
 **Expected output:**
-```text
-When the <NuxtLink> enters the browser viewport in production mode.
-```
-
 > [!check]- Answer
+> ```text
+> When the <NuxtLink> enters the browser viewport in production mode.
+> ```
 > - Prefetches route payload when link enters the browser viewport.
 > 
 > ```text

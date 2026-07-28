@@ -116,14 +116,13 @@ function process(val: unknown) {
 **Problem:** TypeScript uses "Structural Typing" (Duck Typing). If an object walks like a duck and quacks like a duck, it is a duck. How does the `in` operator perfectly align with this philosophy?
 
 **Expected output:**
-```text
-The `in` operator checks the *structure* of an object at runtime. 
-It doesn't ask "Were you created from the Duck class?" (which is what `instanceof` does). 
-It simply asks "Do you have a 'quack' property?" (`"quack" in animal`). 
-Because TS is structurally typed, proving the property exists is enough proof to narrow the type!
-```
-
 > [!check]- Answer
+> ```text
+> The `in` operator checks the *structure* of an object at runtime. 
+> It doesn't ask "Were you created from the Duck class?" (which is what `instanceof` does). 
+> It simply asks "Do you have a 'quack' property?" (`"quack" in animal`). 
+> Because TS is structurally typed, proving the property exists is enough proof to narrow the type!
+> ```
 > - Does `in` check the prototype, or just the keys?
 
 ---
@@ -135,11 +134,10 @@ Because TS is structurally typed, proving the property exists is enough proof to
 **Problem:** Narrow union `Fish { swim(): void } | Bird { fly(): void }` using `"swim" in animal`.
 
 **Expected output:**
-```text
-Fish narrowed via swim in animal
-```
-
 > [!check]- Answer
+> ```text
+> Fish narrowed via swim in animal
+> ```
 > ```typescript
 > type Fish = { swim: () => void };
 > type Bird = { fly: () => void };
@@ -152,16 +150,17 @@ Fish narrowed via swim in animal
 >
 > **Explanation:** `"prop" in obj` checks property existence to narrow union member types.
 
+---
+
 ### Exercise 3: Optional Property Narrowing with `in`
 
 **Problem:** Demonstrate `in` narrowing optional property `"admin" in user`.
 
 **Expected output:**
-```text
-Property check narrows optional field presence
-```
-
 > [!check]- Answer
+> ```text
+> Property check narrows optional field presence
+> ```
 > ```typescript
 > console.log("Property check narrows optional field presence");
 > ```

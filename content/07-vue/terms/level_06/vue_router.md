@@ -126,13 +126,12 @@ const router = createRouter({
 **Problem:** You see older Vue code that uses `createWebHashHistory()`. The URLs look like this: `mysite.com/#/about`. Why did they use the `#` symbol?
 
 **Expected output:**
-```text
-The `#` (Hash) symbol is a trick. Everything after the `#` in a URL is never sent to the server. It is purely handled by the browser. 
-Using Hash History meant developers didn't have to configure their web servers to handle 404 fallbacks.
-However, Hash URLs are terrible for SEO. Today, `createWebHistory()` is the strict standard.
-```
-
 > [!check]- Answer
+> ```text
+> The `#` (Hash) symbol is a trick. Everything after the `#` in a URL is never sent to the server. It is purely handled by the browser. 
+> Using Hash History meant developers didn't have to configure their web servers to handle 404 fallbacks.
+> However, Hash URLs are terrible for SEO. Today, `createWebHistory()` is the strict standard.
+> ```
 > - Think about how servers interpret the `#` symbol in URLs.
 
 ---
@@ -142,11 +141,10 @@ However, Hash URLs are terrible for SEO. Today, `createWebHistory()` is the stri
 **Problem:** Write JS snippet creating a Vue Router 4 instance with `createWebHistory()`, 2 routes (`/` -> `Home`, `/about` -> `About`), exported for app plugin installation.
 
 **Expected output:**
-```javascript
-import { createRouter, createWebHistory } from 'vue-router'; const router = createRouter({ history: createWebHistory(), routes: [{ path: '/', component: Home }, { path: '/about', component: About }] }); export default router;
-```
-
 > [!check]- Answer
+> ```javascript
+> import { createRouter, createWebHistory } from 'vue-router'; const router = createRouter({ history: createWebHistory(), routes: [{ path: '/', component: Home }, { path: '/about', component: About }] }); export default router;
+> ```
 > - `createRouter()` configures routing instance.
 > - `createWebHistory()` enables HTML5 history mode.
 > 
@@ -173,11 +171,10 @@ import { createRouter, createWebHistory } from 'vue-router'; const router = crea
 **Problem:** Write dynamic `import()` route component loading definition for path `/dashboard`.
 
 **Expected output:**
-```text
-{ path: '/dashboard', component: () => import('./Dashboard.vue') }
-```
-
 > [!check]- Answer
+> ```text
+> { path: '/dashboard', component: () => import('./Dashboard.vue') }
+> ```
 > - Dynamic `import()` splits route code into separate async JS chunks.
 > 
 > ```javascript

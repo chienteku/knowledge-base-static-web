@@ -146,11 +146,10 @@ async function processData() {
 **Problem:** Declare a variable `isRaining` and set it to `false`. Declare `hasUmbrella` and set it to `true`. Write a condition that logs "You can go outside" if it is not raining OR if you have an umbrella.
 
 **Expected output:**
-```text
-You can go outside
-```
-
 > [!check]- Answer
+> ```text
+> You can go outside
+> ```
 > - The logical NOT operator is `!`.
 > - The logical OR operator is `||`.
 > - Combine them: `(!isRaining || hasUmbrella)`
@@ -162,15 +161,14 @@ You can go outside
 **Problem:** Coerce values `"hello"`, `0`, `null`, `[]`, `{}` into explicit boolean primitives using `!!`.
 
 **Expected output:**
-```text
-true
-false
-false
-true
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> false
+> false
+> true
+> true
+> ```
 > ```javascript
 > console.log(!!"hello");
 > console.log(!!0);
@@ -181,24 +179,24 @@ true
 >
 > **Explanation:** `!!value` coerces truthy values to `true` and falsy values (`0`, `null`, `undefined`, `NaN`, `""`, `false`) to `false`.
 
+---
+
 ### Exercise 3: Boolean Constructor vs Boolean Function
 
 **Problem:** Demonstrate the difference between `Boolean(0)` (primitive) and `new Boolean(0)` (object).
 
 **Expected output:**
-```text
-false
-true
-```
-
 > [!check]- Answer
+> ```text
+> false
+> true
+> ```
 > console.log(Boolean(0)); // false (primitive boolean)
 > console.log(!!new Boolean(0)); // true (object instance is truthy)
 > ```
 >
 > **Explanation:** Calling `Boolean(val)` casts to primitive boolean, whereas `new Boolean(val)` constructs an object wrapper.
 
----
 
 ---
 

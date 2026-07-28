@@ -186,27 +186,27 @@ Write a `PERMISSIONS` clause for a `system_settings` table allowing `update` onl
 **Problem:** Select `$token.exp` to inspect current JWT expiration timestamp.
 
 **Expected output:**
-```text
-RETURN $token.exp;
-```
-
 > [!check]- Answer
+> ```text
+> RETURN $token.exp;
+> ```
 > ```surrealql
 > RETURN $token.exp;
 > ```
 >
 > **Explanation:** `$token` exposes decoded JWT claim properties inside queries.
 
+---
+
 ### Exercise 3: Comparing `$auth` and `$token` Variables
 
 **Problem:** State difference between `$auth` (database record object) and `$token` (decoded JWT payload claims).
 
 **Expected output:**
-```text
-$auth holds the database user record; $token holds decoded JWT claims
-```
-
 > [!check]- Answer
+> ```text
+> $auth holds the database user record; $token holds decoded JWT claims
+> ```
 > ```text
 > $auth holds the database user record; $token holds decoded JWT claims
 > ```

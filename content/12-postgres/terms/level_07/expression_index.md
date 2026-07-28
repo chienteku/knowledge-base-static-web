@@ -148,12 +148,11 @@ CREATE INDEX idx_date ON events ((created_at AT TIME ZONE 'UTC'));
 **Problem:** You have a `server_assets` table with a `metadata` JSONB column. The JSON document stores a nested key `{"status": "active"}`. Write the SQL query to build a production-safe, background index named `idx_asset_status` on the nested status text extraction.
 
 **Expected output:**
-```sql
-CREATE INDEX CONCURRENTLY idx_asset_status 
-ON server_assets ((metadata ->> 'status'));
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE INDEX CONCURRENTLY idx_asset_status 
+> ON server_assets ((metadata ->> 'status'));
+> ```
 > - Remember to use double parentheses `((...))` to wrap the JSONB text extraction operator `->>`.
 > - Use the `CONCURRENTLY` keyword to make the build production-safe.
 
@@ -166,27 +165,27 @@ ON server_assets ((metadata ->> 'status'));
 **Problem:** Create expression index `idx_users_lower_email` on `LOWER(email)` for case-insensitive email searches.
 
 **Expected output:**
-```text
-CREATE INDEX idx_users_lower_email ON users (LOWER(email));
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_users_lower_email ON users (LOWER(email));
+> ```
 > ```sql
 > CREATE INDEX idx_users_lower_email ON users (LOWER(email));
 > ```
 >
 > **Explanation:** Expression indexes evaluate SQL functions (`LOWER()`) to index computed results.
 
+---
+
 ### Exercise 3: JSONB Expression Indexing
 
 **Problem:** Create expression index indexing nested JSONB field `(metadata->>'user_id')` as integer.
 
 **Expected output:**
-```text
-CREATE INDEX idx_meta_user_id ON users (((metadata->>'user_id')::INT));
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_meta_user_id ON users (((metadata->>'user_id')::INT));
+> ```
 > ```sql
 > CREATE INDEX idx_meta_user_id ON users (((metadata->>'user_id')::INT));
 > ```

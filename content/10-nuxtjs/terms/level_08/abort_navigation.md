@@ -165,16 +165,15 @@ export default defineNuxtRouteMiddleware((to) => {
 **Problem:** Write route middleware `middleware/admin.ts` aborting navigation with HTTP 403 error status if `user.value.role !== 'admin'`.
 
 **Expected output:**
-```typescript
-export default defineNuxtRouteMiddleware((to, from) => {
-  const user = useUser();
-  if (user.value?.role !== 'admin') {
-    return abortNavigation(createError({ statusCode: 403, statusMessage: 'Forbidden' }));
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtRouteMiddleware((to, from) => {
+>   const user = useUser();
+>   if (user.value?.role !== 'admin') {
+>     return abortNavigation(createError({ statusCode: 403, statusMessage: 'Forbidden' }));
+>   }
+> });
+> ```
 > - `abortNavigation(error)` passes structured error objects to router error boundary.
 > 
 > ```typescript
@@ -196,12 +195,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
 **Problem:** When should you use `abortNavigation()` vs `navigateTo('/login')`?
 
 **Expected output:**
-```text
-abortNavigation(): Stops current route transition completely, keeping user on current page;
-navigateTo(): Redirects user to a different target URL route.
-```
-
 > [!check]- Answer
+> ```text
+> abortNavigation(): Stops current route transition completely, keeping user on current page;
+> navigateTo(): Redirects user to a different target URL route.
+> ```
 > - `abortNavigation()` -> Cancels route transition, remains on current page.
 > - `navigateTo('/url')` -> Redirects user to new route URL.
 > 

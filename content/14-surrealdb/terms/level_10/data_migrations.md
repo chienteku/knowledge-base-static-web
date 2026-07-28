@@ -172,27 +172,27 @@ Which keyword must be appended to `DEFINE FIELD` and `DEFINE TABLE` statements t
 **Problem:** Write idempotent SurrealQL script adding `status` field defaulting to `"active"`.
 
 **Expected output:**
-```text
-DEFINE FIELD IF NOT EXISTS status ON TABLE user TYPE string DEFAULT "active";
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD IF NOT EXISTS status ON TABLE user TYPE string DEFAULT "active";
+> ```
 > ```surrealql
 > DEFINE FIELD IF NOT EXISTS status ON TABLE user TYPE string DEFAULT "active";
 > ```
 >
 > **Explanation:** `DEFINE FIELD IF NOT EXISTS` ensures migration scripts execute safely across deployments.
 
+---
+
 ### Exercise 3: SurrealDB Export Backup Command
 
 **Problem:** CLI command to export database schema and records to `backup.surql`.
 
 **Expected output:**
-```text
-surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app backup.surql
-```
-
 > [!check]- Answer
+> ```text
+> surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app backup.surql
+> ```
 > ```text
 > surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app backup.surql
 > ```

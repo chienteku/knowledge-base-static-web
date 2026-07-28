@@ -126,17 +126,16 @@ export default defineAppConfig({
 **Problem:** You have an app config defining `{ ui: { compactMode: false } }`. Write the `<script setup>` logic for a button that toggles `compactMode` between true and false.
 
 **Expected output:**
-```vue
-<script setup lang="ts">
-const appConfig = useAppConfig();
-
-function toggleCompact() {
-  appConfig.ui.compactMode = !appConfig.ui.compactMode;
-}
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts">
+> const appConfig = useAppConfig();
+> 
+> function toggleCompact() {
+>   appConfig.ui.compactMode = !appConfig.ui.compactMode;
+> }
+> </script>
+> ```
 > - Retrieve the reactive config object by executing `useAppConfig()` and modify its values within the function.
 
 ---
@@ -146,18 +145,17 @@ function toggleCompact() {
 **Problem:** Write `app.config.ts` defining UI theme colors and site title, and a Vue component consuming theme state via `useAppConfig()`.
 
 **Expected output:**
-```typescript
-// app.config.ts
-export default defineAppConfig({
-  theme: { primaryColor: '#3b82f6' }
-});
-// Component:
-<script setup>
-const appConfig = useAppConfig();
-</script>
-```
-
 > [!check]- Answer
+> ```typescript
+> // app.config.ts
+> export default defineAppConfig({
+>   theme: { primaryColor: '#3b82f6' }
+> });
+> // Component:
+> <script setup>
+> const appConfig = useAppConfig();
+> </script>
+> ```
 > - `useAppConfig()` exposes reactive UI configuration defined in `app.config.ts`.
 > 
 > ```typescript
@@ -178,12 +176,11 @@ const appConfig = useAppConfig();
 **Problem:** Compare `app.config.ts` vs `runtimeConfig` in `nuxt.config.ts`.
 
 **Expected output:**
-```text
-app.config.ts: Public build-time UI theme/styling config (bundled in client JS, reactive at runtime);
-runtimeConfig: Server/Client environment configuration populated by .env variables.
-```
-
 > [!check]- Answer
+> ```text
+> app.config.ts: Public build-time UI theme/styling config (bundled in client JS, reactive at runtime);
+> runtimeConfig: Server/Client environment configuration populated by .env variables.
+> ```
 > - `app.config.ts` -> Public UI theme & styling settings.
 > - `runtimeConfig` -> Server & Client `.env` environment secrets.
 > 

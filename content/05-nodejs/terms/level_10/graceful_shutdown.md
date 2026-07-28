@@ -180,16 +180,17 @@ process.on('SIGINT', async () => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Writing Complete Graceful Shutdown Handler
 
 **Problem:** Write a `SIGINT` listener that stops `server`, closes `dbPool`, and exits with status 0.
 
 **Expected output:**
-```text
-process.on('SIGINT', async () => { server.close(async () => { await dbPool.end(); process.exit(0); }); });
-```
-
 > [!check]- Answer
+> ```text
+> process.on('SIGINT', async () => { server.close(async () => { await dbPool.end(); process.exit(0); }); });
+> ```
 > ```javascript
 > process.on('SIGINT', () => {
 >   server.close(async () => {
@@ -202,16 +203,17 @@ process.on('SIGINT', async () => { server.close(async () => { await dbPool.end()
 >
 > **Explanation:** Graceful shutdown closes web listeners, drains DB connection pools, and exits.
 
+---
+
 ### Exercise 3: Kubernetes SIGTERM PreStop Sequence
 
 **Problem:** Which OS signal does Kubernetes send to container processes when terminating a pod?
 
 **Expected output:**
-```text
-SIGTERM (followed by SIGKILL after termination Grace Period).
-```
-
 > [!check]- Answer
+> ```text
+> SIGTERM (followed by SIGKILL after termination Grace Period).
+> ```
 > ```text
 > SIGTERM (followed by SIGKILL after termination Grace Period).
 > ```

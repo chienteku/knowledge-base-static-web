@@ -168,16 +168,17 @@ parentPort.on('message', (text) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Basic Worker Thread Implementation
 
 **Problem:** Write main thread code spawning worker `worker.js` passing `{ num: 10 }` via `workerData` and logging message.
 
 **Expected output:**
-```text
-const worker = new Worker('./worker.js', { workerData: { num: 10 } }); worker.on('message', result => console.log(result));
-```
-
 > [!check]- Answer
+> ```text
+> const worker = new Worker('./worker.js', { workerData: { num: 10 } }); worker.on('message', result => console.log(result));
+> ```
 > ```javascript
 > const { Worker } = require('worker_threads');
 > const worker = new Worker('./worker.js', {
@@ -190,16 +191,17 @@ const worker = new Worker('./worker.js', { workerData: { num: 10 } }); worker.on
 >
 > **Explanation:** `Worker` constructor spawns background V8 isolate threads passing initial `workerData`.
 
+---
+
 ### Exercise 3: SharedArrayBuffer and Worker Threads
 
 **Problem:** How do `SharedArrayBuffer` and `Atomics` allow Worker Threads to share memory without copying?
 
 **Expected output:**
-```text
-SharedArrayBuffer grants multiple worker threads shared access to identical raw binary memory bytes.
-```
-
 > [!check]- Answer
+> ```text
+> SharedArrayBuffer grants multiple worker threads shared access to identical raw binary memory bytes.
+> ```
 > ```text
 > SharedArrayBuffer grants multiple worker threads shared access to identical raw binary memory bytes.
 > ```

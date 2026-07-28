@@ -215,12 +215,11 @@ fn main() {
 **Problem:** Store different structs implementing `trait Speaker { fn speak(&self) -> &str; }` inside `Vec<Box<dyn Speaker>>`.
 
 **Expected output:**
-```
-Dog: Woof
-Cat: Meow
-```
-
 > [!check]- Answer
+> ```
+> Dog: Woof
+> Cat: Meow
+> ```
 > ```rust
 > trait Speaker { fn speak(&self) -> &str; }
 > struct Dog; impl Speaker for Dog { fn speak(&self) -> &str { "Woof" } }
@@ -235,16 +234,17 @@ Cat: Meow
 >
 > **Explanation:** `Box<dyn Trait>` enables heterogeneous collections of types sharing a trait interface via dynamic vtable dispatch.
 
+---
+
 ### Exercise 3: Passing Slices of Trait Objects
 
 **Problem:** Pass `&[&dyn Speaker]` to a function iterating and invoking `.speak()`.
 
 **Expected output:**
-```
-Speaker count: 2
-```
-
 > [!check]- Answer
+> ```
+> Speaker count: 2
+> ```
 > trait Speaker { fn speak(&self) -> &str; }
 > struct Dog; impl Speaker for Dog { fn speak(&self) -> &str { "Woof" } }
 > fn main() {

@@ -194,11 +194,10 @@ console.log(typeof mathPipeline(12)); // "string"
 **Problem:** Write a pure function `updateUser(user, newRole)` returning a new updated user object without mutating original input.
 
 **Expected output:**
-```text
-Original: user, Updated: admin
-```
-
 > [!check]- Answer
+> ```text
+> Original: user, Updated: admin
+> ```
 > ```javascript
 > function updateUser(user, newRole) {
 >   return { ...user, role: newRole };
@@ -210,16 +209,17 @@ Original: user, Updated: admin
 >
 > **Explanation:** FP emphasizes pure functions and immutable data structures.
 
+---
+
 ### Exercise 3: Function Composition Pipeline
 
 **Problem:** Pipe value `5` through `add2` (+2) then `square` (^2).
 
 **Expected output:**
-```text
-49
-```
-
 > [!check]- Answer
+> ```text
+> 49
+> ```
 > ```javascript
 > const add2 = x => x + 2;
 > const square = x => x * x;
@@ -229,7 +229,6 @@ Original: user, Updated: admin
 >
 > **Explanation:** Pipelines pass data outputs into subsequent transformation functions.
 
----
 
 ---
 

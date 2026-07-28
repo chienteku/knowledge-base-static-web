@@ -164,12 +164,11 @@ async function processData() {
 **Problem:** If `class Square extends Shape`, and you check `Object.getPrototypeOf(Square.prototype)`, what will the engine return?
 
 **Expected output:**
-```text
-`Shape.prototype`. 
-The `extends` keyword secretly wires the child's prototype to point directly to the parent's prototype, establishing the Prototype Chain!
-```
-
 > [!check]- Answer
+> ```text
+> `Shape.prototype`. 
+> The `extends` keyword secretly wires the child's prototype to point directly to the parent's prototype, establishing the Prototype Chain!
+> ```
 > - `extends` is just syntactic sugar for `Object.setPrototypeOf()`.
 
 ---
@@ -179,11 +178,10 @@ The `extends` keyword secretly wires the child's prototype to point directly to 
 **Problem:** Create subclass `class Dog extends Animal` overriding `speak()` method.
 
 **Expected output:**
-```text
-Woof!
-```
-
 > [!check]- Answer
+> ```text
+> Woof!
+> ```
 > ```javascript
 > class Animal {
 >   speak() { return "Noise"; }
@@ -196,16 +194,17 @@ Woof!
 >
 > **Explanation:** `extends` sets up prototype inheritance between parent and child classes.
 
+---
+
 ### Exercise 3: Super Constructor Delegation
 
 **Problem:** Pass parent arguments via `super(name)` in derived subclass constructor.
 
 **Expected output:**
-```text
-Buddy
-```
-
 > [!check]- Answer
+> ```text
+> Buddy
+> ```
 > ```javascript
 > class Base { constructor(name) { this.name = name; } }
 > class Derived extends Base {
@@ -219,7 +218,6 @@ Buddy
 >
 > **Explanation:** `super(args)` forwards arguments to parent class constructors.
 
----
 
 ---
 

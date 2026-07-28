@@ -188,16 +188,17 @@ function SearchResults() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Tab Switching with useTransition
 
 **Problem:** Use `useTransition` to mark non-urgent tab switching state update and display loading indicator via `isPending`.
 
 **Expected output:**
-```text
-function Tabs() { const [tab, setTab] = useState('home'); const [isPending, startTransition] = useTransition(); const selectTab = nextTab => { startTransition(() => setTab(nextTab)); }; return <> <button onClick={() => selectTab('heavy')}>{isPending ? 'Loading...' : 'Heavy Tab'}</button> {tab === 'heavy' && <HeavyTab />} <>; }
-```
-
 > [!check]- Answer
+> ```text
+> function Tabs() { const [tab, setTab] = useState('home'); const [isPending, startTransition] = useTransition(); const selectTab = nextTab => { startTransition(() => setTab(nextTab)); }; return <> <button onClick={() => selectTab('heavy')}>{isPending ? 'Loading...' : 'Heavy Tab'}</button> {tab === 'heavy' && <HeavyTab />} <>; }
+> ```
 > ```javascript
 > function Tabs() {
 >   const [tab, setTab] = useState('home');
@@ -220,16 +221,17 @@ function Tabs() { const [tab, setTab] = useState('home'); const [isPending, star
 >
 > **Explanation:** `useTransition` marks tab state updates as non-blocking transitions while providing `isPending` status.
 
+---
+
 ### Exercise 3: useTransition Hook Signature
 
 **Problem:** What tuple does `const [isPending, startTransition] = useTransition()` return? (Boolean `isPending` status and `startTransition(callback)` function).
 
 **Expected output:**
-```text
-Boolean isPending status and startTransition(callback) function
-```
-
 > [!check]- Answer
+> ```text
+> Boolean isPending status and startTransition(callback) function
+> ```
 > ```text
 > Boolean isPending status and startTransition(callback) function
 > ```

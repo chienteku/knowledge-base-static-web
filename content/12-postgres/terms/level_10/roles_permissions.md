@@ -137,14 +137,13 @@ GRANT SELECT ON users TO app_role;
 2.  Grant the role permissions to read (`SELECT`) and write (`INSERT`, `UPDATE`) data on a table named `reports`.
 
 **Expected output:**
-```sql
-CREATE ROLE service_writer WITH LOGIN PASSWORD 'write_secure_123';
-
-GRANT USAGE ON SCHEMA public TO service_writer;
-GRANT SELECT, INSERT, UPDATE ON TABLE reports TO service_writer;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE ROLE service_writer WITH LOGIN PASSWORD 'write_secure_123';
+> 
+> GRANT USAGE ON SCHEMA public TO service_writer;
+> GRANT SELECT, INSERT, UPDATE ON TABLE reports TO service_writer;
+> ```
 > - Remember to grant schema `USAGE` permission first, otherwise table lookups fail.
 > - Chain multiple privileges in the `GRANT` statement separating them with commas.
 
@@ -157,11 +156,10 @@ GRANT SELECT, INSERT, UPDATE ON TABLE reports TO service_writer;
 **Problem:** Create role `read_only_role` with login password and grant `SELECT` on all tables in schema `public`.
 
 **Expected output:**
-```text
-CREATE ROLE read_only_role WITH LOGIN PASSWORD 'pass'; GRANT USAGE ON SCHEMA public TO read_only_role; GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only_role;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE ROLE read_only_role WITH LOGIN PASSWORD 'pass'; GRANT USAGE ON SCHEMA public TO read_only_role; GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only_role;
+> ```
 > ```sql
 > CREATE ROLE read_only_role WITH LOGIN PASSWORD 'pass';
 > GRANT USAGE ON SCHEMA public TO read_only_role;
@@ -170,16 +168,17 @@ CREATE ROLE read_only_role WITH LOGIN PASSWORD 'pass'; GRANT USAGE ON SCHEMA pub
 >
 > **Explanation:** Roles combine user identity and permission grouping in PostgreSQL.
 
+---
+
 ### Exercise 3: Revoking Permissions
 
 **Problem:** Revoke `DELETE` permission on table `orders` from role `app_user`.
 
 **Expected output:**
-```text
-REVOKE DELETE ON orders FROM app_user;
-```
-
 > [!check]- Answer
+> ```text
+> REVOKE DELETE ON orders FROM app_user;
+> ```
 > ```sql
 > REVOKE DELETE ON orders FROM app_user;
 > ```

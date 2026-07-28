@@ -165,16 +165,17 @@ child.on('message', (result) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Spawning Long-Running Child Process
 
 **Problem:** Spawn `ping -c 4 google.com` using `child_process.spawn` and log stdout chunks.
 
 **Expected output:**
-```text
-const child = spawn('ping', ['-c', '4', 'google.com']); child.stdout.on('data', chunk => console.log(chunk.toString()));
-```
-
 > [!check]- Answer
+> ```text
+> const child = spawn('ping', ['-c', '4', 'google.com']); child.stdout.on('data', chunk => console.log(chunk.toString()));
+> ```
 > ```javascript
 > const { spawn } = require('child_process');
 > const child = spawn('ping', ['-c', '4', 'google.com']);
@@ -185,16 +186,17 @@ const child = spawn('ping', ['-c', '4', 'google.com']); child.stdout.on('data', 
 >
 > **Explanation:** `spawn()` returns child process object with readable stdout/stderr streams.
 
+---
+
 ### Exercise 3: Forking Node.js Child Scripts
 
 **Problem:** Which `child_process` method spawns a new Node.js V8 process with a built-in IPC communication channel? (`child_process.fork()`).
 
 **Expected output:**
-```text
-child_process.fork()
-```
-
 > [!check]- Answer
+> ```text
+> child_process.fork()
+> ```
 > ```text
 > child_process.fork()
 > ```

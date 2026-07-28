@@ -106,14 +106,13 @@ import Child from './Child.vue'; // Automatically registered and ready to use in
 **Problem:** You created a new file `Button.vue`. In your `App.vue`, you try to write `<Button />` in the template, but Vue throws an error: "Failed to resolve component". What did you forget to do?
 
 **Expected output:**
-```text
-You forgot to import it!
-In modern Vue (`<script setup>`), you simply need to import the component into the file where you want to use it:
-`import Button from './Button.vue'`
-Once imported, Vue automatically makes the `<Button>` tag available in the template.
-```
-
 > [!check]- Answer
+> ```text
+> You forgot to import it!
+> In modern Vue (`<script setup>`), you simply need to import the component into the file where you want to use it:
+> `import Button from './Button.vue'`
+> Once imported, Vue automatically makes the `<Button>` tag available in the template.
+> ```
 > - Vue doesn't magically know where your files are.
 
 ---
@@ -123,11 +122,10 @@ Once imported, Vue automatically makes the `<Button>` tag available in the templ
 **Problem:** Write Vue 3 `<script setup>` importing `BaseCard.vue` and rendering it with title prop `'News'` inside `<template>`.
 
 **Expected output:**
-```vue
-<script setup> import BaseCard from './BaseCard.vue'; </script> <template> <BaseCard title="News" /> </template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> import BaseCard from './BaseCard.vue'; </script> <template> <BaseCard title="News" /> </template>
+> ```
 > - Imported SFC components inside `<script setup>` are available directly in template.
 > 
 > ```vue
@@ -147,11 +145,10 @@ Once imported, Vue automatically makes the `<Button>` tag available in the templ
 **Problem:** Why is PascalCase (`<UserCard />`) recommended for component tags inside Vue Single File Components (SFCs)?
 
 **Expected output:**
-```text
-PascalCase tags visually distinguish custom Vue components from native lowercase HTML elements (`<div>`, `<span>`).
-```
-
 > [!check]- Answer
+> ```text
+> PascalCase tags visually distinguish custom Vue components from native lowercase HTML elements (`<div>`, `<span>`).
+> ```
 > - PascalCase `<MyComponent />` distinguishes Vue components from native HTML elements.
 > 
 > ```html

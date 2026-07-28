@@ -127,11 +127,10 @@ Usually, you type your column names there and make the text bold so it stands ou
 **Problem:** Can a `<th>` be used for the first item in a horizontal row, instead of just at the top of a vertical column?
 
 **Expected output:**
-```text
-Yes! A table can have row headers. For example, in a schedule, the left-most column might be `<th>` elements representing the days of the week (Monday, Tuesday), while the rest of the row contains `<td>` elements for the events on those days.
-```
-
 > [!check]- Answer
+> ```text
+> Yes! A table can have row headers. For example, in a schedule, the left-most column might be `<th>` elements representing the days of the week (Monday, Tuesday), while the rest of the row contains `<td>` elements for the events on those days.
+> ```
 > - Think about a timetable or a calendar. Where are the labels?
 
 ---
@@ -143,11 +142,10 @@ Yes! A table can have row headers. For example, in a schedule, the left-most col
 **Problem:** Write a `<tr>` row containing 1 row header `<th>` for user `'Alice'` and 1 data `<td>` for age `30`.
 
 **Expected output:**
-```text
-<tr><th scope="row">Alice</th><td>30</td></tr>
-```
-
 > [!check]- Answer
+> ```text
+> <tr><th scope="row">Alice</th><td>30</td></tr>
+> ```
 > ```html
 > <tr>
 >   <th scope="row">Alice</th>
@@ -157,16 +155,17 @@ Yes! A table can have row headers. For example, in a schedule, the left-most col
 >
 > **Explanation:** `scope="row"` designates `<th>` as header for the horizontal row.
 
+---
+
 ### Exercise 3: Default th Styling
 
 **Problem:** What default CSS font-weight and text-alignment do browsers apply to `<th>` cells?
 
 **Expected output:**
-```text
-font-weight: bold; text-align: center;
-```
-
 > [!check]- Answer
+> ```text
+> font-weight: bold; text-align: center;
+> ```
 > ```text
 > font-weight: bold; text-align: center;
 > ```

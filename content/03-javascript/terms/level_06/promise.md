@@ -154,13 +154,12 @@ async function processData() {
 **Problem:** What are the three possible states of a Promise? What do they mean?
 
 **Expected output:**
-```text
-1. Pending: The async operation is still ongoing.
-2. Fulfilled (or Resolved): The operation completed successfully.
-3. Rejected: The operation failed (usually throwing an error).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Pending: The async operation is still ongoing.
+> 2. Fulfilled (or Resolved): The operation completed successfully.
+> 3. Rejected: The operation failed (usually throwing an error).
+> ```
 > - Think about the restaurant pager! Quiet, Buzzing, or Cashier apologizing.
 
 ---
@@ -170,12 +169,11 @@ async function processData() {
 **Problem:** Create promises using `Promise.resolve(42)` and `Promise.reject("Error")`.
 
 **Expected output:**
-```text
-Resolved: 42
-Rejected: Error
-```
-
 > [!check]- Answer
+> ```text
+> Resolved: 42
+> Rejected: Error
+> ```
 > ```javascript
 > Promise.resolve(42).then(v => console.log(`Resolved: ${v}`));
 > Promise.reject("Error").catch(e => console.log(`Rejected: ${e}`));
@@ -183,16 +181,17 @@ Rejected: Error
 >
 > **Explanation:** `Promise.resolve()` and `Promise.reject()` return pre-settled promise instances.
 
+---
+
 ### Exercise 3: Promise State Transition Permanence
 
 **Problem:** Demonstrate that calling `resolve(1)` then `resolve(2)` inside `new Promise` ignores the second resolution call.
 
 **Expected output:**
-```text
-Resolved value: 1
-```
-
 > [!check]- Answer
+> ```text
+> Resolved value: 1
+> ```
 > ```javascript
 > const p = new Promise((resolve) => {
 >   resolve(1);
@@ -203,7 +202,6 @@ Resolved value: 1
 >
 > **Explanation:** Promises can settle only once; subsequent `resolve` or `reject` calls are ignored.
 
----
 
 ---
 

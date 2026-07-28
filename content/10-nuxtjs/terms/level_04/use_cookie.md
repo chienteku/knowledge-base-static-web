@@ -118,13 +118,12 @@ const token = useCookie('token', {
 **Problem:** You receive a JWT string from an API. Write the Nuxt code to store this token in a cookie named `auth_token` that expires when the browser closes (session cookie).
 
 **Expected output:**
-```typescript
-const authToken = useCookie('auth_token');
-authToken.value = 'eyJhbGciOiJIUz...'; 
-// Omitting 'maxAge' makes it a session cookie by default!
-```
-
 > [!check]- Answer
+> ```typescript
+> const authToken = useCookie('auth_token');
+> authToken.value = 'eyJhbGciOiJIUz...'; 
+> // Omitting 'maxAge' makes it a session cookie by default!
+> ```
 > - Initialize `useCookie('auth_token')` without configuring `maxAge` or `expires` parameters, then assign the value directly to `.value`.
 
 ---
@@ -134,16 +133,15 @@ authToken.value = 'eyJhbGciOiJIUz...';
 **Problem:** Write `<script setup>` reading cookie `'auth_token'` with 7-day expiration (`maxAge: 604800`) and function `logout()` clearing the cookie.
 
 **Expected output:**
-```vue
-<script setup>
-const token = useCookie('auth_token', { maxAge: 604800 });
-function logout() {
-  token.value = null;
-}
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const token = useCookie('auth_token', { maxAge: 604800 });
+> function logout() {
+>   token.value = null;
+> }
+> </script>
+> ```
 > - Setting `cookie.value = null` clears cookie storage.
 > 
 > ```vue
@@ -166,11 +164,10 @@ function logout() {
 **Problem:** How does `useCookie()` sync cookie changes made during server-side rendering (SSR) back to the browser?
 
 **Expected output:**
-```text
-Nitro automatically injects Set-Cookie HTTP response headers in the SSR HTTP response payload.
-```
-
 > [!check]- Answer
+> ```text
+> Nitro automatically injects Set-Cookie HTTP response headers in the SSR HTTP response payload.
+> ```
 > - Injects `Set-Cookie` HTTP response headers during SSR.
 > 
 > ```text

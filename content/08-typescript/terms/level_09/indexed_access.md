@@ -127,11 +127,10 @@ type Element = StrArray[number]; // Idiomatic array element extraction
 **Problem:** Extract `City` type from `interface Person { address: { city: string } }`.
 
 **Expected output:**
-```text
-string
-```
-
 > [!check]- Answer
+> ```text
+> string
+> ```
 > ```typescript
 > interface Person { address: { city: string } }
 > type City = Person["address"]["city"];
@@ -140,16 +139,17 @@ string
 >
 > **Explanation:** Chained indexed access `Type["k1"]["k2"]` unwraps deeply nested object properties.
 
+---
+
 ### Exercise 2: Tuple Element Extraction with Indexed Access
 
 **Problem:** Extract first item type from tuple `type Pair = [boolean, number]` using `Pair[0]`.
 
 **Expected output:**
-```text
-boolean
-```
-
 > [!check]- Answer
+> ```text
+> boolean
+> ```
 > ```typescript
 > type Pair = [boolean, number];
 > type First = Pair[0];
@@ -158,16 +158,17 @@ boolean
 >
 > **Explanation:** Indexing tuples with numeric literal types (`0`, `1`) extracts exact positional types.
 
+---
+
 ### Exercise 3: Union Property Type Extraction
 
 **Problem:** Extract return values for `User["id" | "name"]` from `{ id: number; name: string }`.
 
 **Expected output:**
-```text
-number | string
-```
-
 > [!check]- Answer
+> ```text
+> number | string
+> ```
 > ```typescript
 > interface User { id: number; name: string }
 > type Values = User["id" | "name"];

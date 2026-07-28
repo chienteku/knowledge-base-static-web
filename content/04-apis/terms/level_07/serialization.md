@@ -108,12 +108,11 @@ JSON.stringify({ socketId: activeSocket.id }); // Serialize primitive identifier
 **Problem:** You make a `GET` request. The server replies with a payload. You run `await response.json()`. Which concept is happening here? Serialization or Deserialization?
 
 **Expected output:**
-```text
-Deserialization. 
-The server sent you a flat string of text over the network. The `.json()` method takes that flat string and "rebuilds the LEGO castle," turning it back into a usable JavaScript object in your browser's RAM.
-```
-
 > [!check]- Answer
+> ```text
+> Deserialization. 
+> The server sent you a flat string of text over the network. The `.json()` method takes that flat string and "rebuilds the LEGO castle," turning it back into a usable JavaScript object in your browser's RAM.
+> ```
 > - Are you flattening a castle into a box, or taking it out of the box and building it?
 
 ---
@@ -123,11 +122,10 @@ The server sent you a flat string of text over the network. The `.json()` method
 **Problem:** What is the primary role of a DTO (Data Transfer Object) in API serialization?
 
 **Expected output:**
-```text
-A DTO defines a clean, explicit data structure specifically formatted for network transmission, decoupling internal database entities from external API contracts.
-```
-
 > [!check]- Answer
+> ```text
+> A DTO defines a clean, explicit data structure specifically formatted for network transmission, decoupling internal database entities from external API contracts.
+> ```
 > ```text
 > A DTO defines a clean, explicit data structure specifically formatted for network transmission, decoupling internal database entities from external API contracts.
 > ```
@@ -139,11 +137,10 @@ A DTO defines a clean, explicit data structure specifically formatted for networ
 **Problem:** How does defining a `.toJSON()` method on a JavaScript class customize its `JSON.stringify()` output?
 
 **Expected output:**
-```text
-JSON.stringify() automatically calls an object's .toJSON() method and serializes whatever value it returns.
-```
-
 > [!check]- Answer
+> ```text
+> JSON.stringify() automatically calls an object's .toJSON() method and serializes whatever value it returns.
+> ```
 > ```javascript
 > class User {
 > constructor(id, pass) { this.id = id; this.pass = pass; }

@@ -130,45 +130,44 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 **Problem:** Generate a 16-byte random hex string token using `crypto.randomBytes`.
 
 **Expected output:**
-```text
-const token = crypto.randomBytes(16).toString('hex');
-```
-
 > [!check]- Answer
+> ```text
+> const token = crypto.randomBytes(16).toString('hex');
+> ```
 > ```javascript
 > const token = crypto.randomBytes(16).toString('hex');
 > ```
 >
 > **Explanation:** `crypto.randomBytes` generates cryptographically strong pseudo-random data.
 
+---
+
 ### Exercise 2: Creating HMAC Signatures
 
 **Problem:** Generate SHA-256 HMAC signature for message `'hello'` using secret key `'secret'`.
 
 **Expected output:**
-```text
-const hmac = crypto.createHmac('sha256', 'secret').update('hello').digest('hex');
-```
-
 > [!check]- Answer
+> ```text
+> const hmac = crypto.createHmac('sha256', 'secret').update('hello').digest('hex');
+> ```
 > ```javascript
 > const hmac = crypto.createHmac('sha256', 'secret').update('hello').digest('hex');
 > ```
 >
 > **Explanation:** `crypto.createHmac` creates cryptographic HMAC authentication digests.
 
-
+---
 
 ### Exercise 3: Timing-Safe Buffer Comparison
 
 **Problem:** Which Node.js `crypto` method securely compares two buffers without timing side-channel vulnerabilities?
 
 **Expected output:**
-```text
-crypto.timingSafeEqual(buf1, buf2)
-```
-
 > [!check]- Answer
+> ```text
+> crypto.timingSafeEqual(buf1, buf2)
+> ```
 > ```javascript
 > const isMatch = crypto.timingSafeEqual(buf1, buf2);
 > ```

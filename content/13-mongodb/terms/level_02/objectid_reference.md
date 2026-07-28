@@ -153,19 +153,10 @@ Ensure foreign key field types match primary key _id types (both ObjectId)
 2.  Write a sample MongoDB document structure for a book that references its author.
 
 **Expected output:**
-```text
-1. You should not embed book chapters inside the author's document because books can grow extremely large. If an author writes multiple books containing hundreds of pages, the author's document will quickly exceed the 16MB size limit and crash the database.
-```
-```javascript
-// 2. Book document referencing the author
-{
-  _id: ObjectId("60c72b2f9b1d8b2e88a8d222"),
-  title: "Database Engineering Guide",
-  author_id: ObjectId("60c72b2f9b1d8b2e88a8d1a1") // Manual reference
-}
-```
-
 > [!check]- Answer
+> ```text
+> 1. You should not embed book chapters inside the author's document because books can grow extremely large. If an author writes multiple books containing hundreds of pages, the author's document will quickly exceed the 16MB size limit and crash the database.
+> ```
 > - Evaluate the size risks of storing long text contents.
 > - Store the unique identifier of the author in a dedicated field inside the book.
 
@@ -178,11 +169,10 @@ Ensure foreign key field types match primary key _id types (both ObjectId)
 **Problem:** Insert order document storing parent user `_id` as BSON `ObjectId` reference `userId`.
 
 **Expected output:**
-```text
-db.orders.insertOne({ userId: new ObjectId("60d5ecb8b5c9c22b9c8b4567"), total: 99.95 });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.insertOne({ userId: new ObjectId("60d5ecb8b5c9c22b9c8b4567"), total: 99.95 });
+> ```
 > ```javascript
 > db.orders.insertOne({
 >   userId: new ObjectId("60d5ecb8b5c9c22b9c8b4567"),
@@ -192,16 +182,17 @@ db.orders.insertOne({ userId: new ObjectId("60d5ecb8b5c9c22b9c8b4567"), total: 9
 >
 > **Explanation:** Storing parent `_id` values as BSON `ObjectId` enables fast `$lookup` aggregation joins.
 
+---
+
 ### Exercise 3: DBRef vs Manual ObjectId Reference
 
 **Problem:** What is the idiomatic MongoDB schema practice for referencing foreign documents? (Manual ObjectId references).
 
 **Expected output:**
-```text
-Manual ObjectId references (storing parent _id directly in child field)
-```
-
 > [!check]- Answer
+> ```text
+> Manual ObjectId references (storing parent _id directly in child field)
+> ```
 > ```text
 > Manual ObjectId references (storing parent _id directly in child field)
 > ```

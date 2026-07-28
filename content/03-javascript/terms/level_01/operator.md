@@ -151,12 +151,11 @@ async function processData() {
 **Problem:** In the expression `const result = (a * b) + c;`, list all the operands for the multiplication (`*`) and addition (`+`) operators.
 
 **Expected output:**
-```text
-Operands of '*': a, b
-Operands of '+': (a * b), c
-```
-
 > [!check]- Answer
+> ```text
+> Operands of '*': a, b
+> Operands of '+': (a * b), c
+> ```
 > - An operand is the target of the operator's action.
 > - The result of `a * b` becomes a single value, which then acts as an operand for `+`.
 
@@ -167,13 +166,12 @@ Operands of '+': (a * b), c
 **Problem:** Use a nested ternary operator to return `"Positive"`, `"Negative"`, or `"Zero"` for input number `x`.
 
 **Expected output:**
-```text
-Positive
-Negative
-Zero
-```
-
 > [!check]- Answer
+> ```text
+> Positive
+> Negative
+> Zero
+> ```
 > ```javascript
 > function checkSign(x) {
 >   return x > 0 ? "Positive" : x < 0 ? "Negative" : "Zero";
@@ -185,16 +183,17 @@ Zero
 >
 > **Explanation:** The ternary operator `cond ? expr1 : expr2` evaluates and yields values as an inline expression.
 
+---
+
 ### Exercise 3: In Operator Property Existence
 
 **Problem:** Use the `in` operator to check if property `"age"` exists in `{ name: "Alice", age: undefined }`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const user = { name: "Alice", age: undefined };
 > console.log("age" in user);
@@ -202,7 +201,6 @@ true
 >
 > **Explanation:** Property checks using `"prop" in obj` return `true` if property keys exist on objects or prototype chains regardless of value.
 
----
 
 ---
 

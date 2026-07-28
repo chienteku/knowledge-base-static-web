@@ -100,12 +100,11 @@ app.get('/crash', (req, res, next) => {
 Which product should use Node.js, and which should use a multi-threaded language like Go or Java?
 
 **Expected output:**
-```text
-1. Chat App = Node.js. It requires handling thousands of concurrent connections with very little CPU work (just passing text around). The single-threaded "roller-skate waiter" is perfect for this.
-2. Video App = Go/Java/C++. Video conversion requires massive CPU math. If you use Node.js, the single thread will block and the server will freeze.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Chat App = Node.js. It requires handling thousands of concurrent connections with very little CPU work (just passing text around). The single-threaded "roller-skate waiter" is perfect for this.
+> 2. Video App = Go/Java/C++. Video conversion requires massive CPU math. If you use Node.js, the single thread will block and the server will freeze.
+> ```
 > - Which app requires heavy math? Which app requires fast I/O?
 
 ---
@@ -117,27 +116,27 @@ Which product should use Node.js, and which should use a multi-threaded language
 **Problem:** Explain what component in Node.js handles background file I/O and crypto operations if JavaScript runs on a single thread.
 
 **Expected output:**
-```text
-libuv C++ thread pool (default 4 threads).
-```
-
 > [!check]- Answer
+> ```text
+> libuv C++ thread pool (default 4 threads).
+> ```
 > ```text
 > libuv C++ thread pool (default 4 threads)
 > ```
 >
 > **Explanation:** `libuv` manages a background pool of C++ worker threads for filesystem, DNS, and crypto tasks.
 
+---
+
 ### Exercise 3: Process Manager Protection
 
 **Problem:** What process manager tool is standard for automatically restarting crashed single-threaded Node.js applications in production?
 
 **Expected output:**
-```text
-PM2 (or systemd / Docker container restart policies).
-```
-
 > [!check]- Answer
+> ```text
+> PM2 (or systemd / Docker container restart policies).
+> ```
 > ```text
 > PM2 (or systemd / Docker container restart policies)
 > ```

@@ -144,12 +144,11 @@ SELECT DISTINCT ON (category) name, price FROM products ORDER BY category, price
 **Problem:** You have an `employees` table with columns `name`, `department`, and `job_title`. Multiple employees share the same department and job title. Write a SQL query to list all unique combinations of departments and job titles.
 
 **Expected output:**
-```sql
-SELECT DISTINCT department, job_title 
-FROM employees;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT DISTINCT department, job_title 
+> FROM employees;
+> ```
 > - Place `DISTINCT` immediately after the `SELECT` keyword.
 > - List the two columns separated by a comma.
 
@@ -162,11 +161,10 @@ FROM employees;
 **Problem:** Query latest order per customer selecting `customer_id`, `id`, and `created_at` using `DISTINCT ON`.
 
 **Expected output:**
-```text
-SELECT DISTINCT ON (customer_id) customer_id, id, created_at FROM orders ORDER BY customer_id, created_at DESC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT DISTINCT ON (customer_id) customer_id, id, created_at FROM orders ORDER BY customer_id, created_at DESC;
+> ```
 > ```sql
 > SELECT DISTINCT ON (customer_id) customer_id, id, created_at
 > FROM orders
@@ -175,16 +173,17 @@ SELECT DISTINCT ON (customer_id) customer_id, id, created_at FROM orders ORDER B
 >
 > **Explanation:** `DISTINCT ON (col)` paired with matching `ORDER BY` selects the top 1 row per group.
 
+---
+
 ### Exercise 3: Counting Unique Values with `COUNT(DISTINCT col)`
 
 **Problem:** Count unique active countries in `users` table using `COUNT(DISTINCT country)`.
 
 **Expected output:**
-```text
-SELECT COUNT(DISTINCT country) FROM users WHERE active IS TRUE;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT COUNT(DISTINCT country) FROM users WHERE active IS TRUE;
+> ```
 > ```sql
 > SELECT COUNT(DISTINCT country) FROM users WHERE active IS TRUE;
 > ```

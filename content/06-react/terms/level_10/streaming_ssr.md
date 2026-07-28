@@ -180,16 +180,17 @@ export default function LandingPage() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Streaming SSR Architecture Pattern
 
 **Problem:** Write Next.js App Router page combining instant static header with streamed async `<Comments />` component via `<Suspense>`.
 
 **Expected output:**
-```text
-export default function PostPage() { return <main><h1>Post Title</h1><Suspense fallback={<CommentsSkeleton />}><Comments /></Suspense></main>; }
-```
-
 > [!check]- Answer
+> ```text
+> export default function PostPage() { return <main><h1>Post Title</h1><Suspense fallback={<CommentsSkeleton />}><Comments /></Suspense></main>; }
+> ```
 > ```javascript
 > export default function PostPage() {
 >   return (
@@ -205,16 +206,17 @@ export default function PostPage() { return <main><h1>Post Title</h1><Suspense f
 >
 > **Explanation:** Streaming SSR delivers initial page HTML immediately, streaming suspended async chunks over HTTP.
 
+---
+
 ### Exercise 3: React 18 Server Stream APIs
 
 **Problem:** List 2 React 18 server streaming APIs (`renderToPipeableStream` for Node.js; `renderToReadableStream` for Edge runtimes).
 
 **Expected output:**
-```text
-renderToPipeableStream (Node.js), renderToReadableStream (Edge runtimes)
-```
-
 > [!check]- Answer
+> ```text
+> renderToPipeableStream (Node.js), renderToReadableStream (Edge runtimes)
+> ```
 > ```text
 > renderToPipeableStream (Node.js), renderToReadableStream (Edge runtimes)
 > ```

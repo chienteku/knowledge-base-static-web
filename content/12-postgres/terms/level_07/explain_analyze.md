@@ -152,13 +152,12 @@ Seq Scan on product_catalog  (cost=0.00..355.00 rows=10000 width=45)
 3.  How many rows does the planner estimate will match?
 
 **Expected output:**
-```text
-1. Scan Type: Sequential Scan (Seq Scan).
-2. Index Check: No. The database had to scan the table sequentially, indicating that there is no active B-tree index on the `price` column.
-3. Row Estimate: 10,000 rows.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Scan Type: Sequential Scan (Seq Scan).
+> 2. Index Check: No. The database had to scan the table sequentially, indicating that there is no active B-tree index on the `price` column.
+> 3. Row Estimate: 10,000 rows.
+> ```
 > - Read the first line of the plan node.
 > - Look for keywords like "Seq Scan" or "Index Scan".
 
@@ -171,11 +170,10 @@ Seq Scan on product_catalog  (cost=0.00..355.00 rows=10000 width=45)
 **Problem:** Safely run `EXPLAIN (ANALYZE, BUFFERS)` on `UPDATE` query inside a transaction block rolled back at the end.
 
 **Expected output:**
-```text
-BEGIN; EXPLAIN (ANALYZE, BUFFERS) UPDATE users SET status = 'active' WHERE id = 1; ROLLBACK;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN; EXPLAIN (ANALYZE, BUFFERS) UPDATE users SET status = 'active' WHERE id = 1; ROLLBACK;
+> ```
 > ```sql
 > BEGIN;
 > EXPLAIN (ANALYZE, BUFFERS)
@@ -185,16 +183,17 @@ BEGIN; EXPLAIN (ANALYZE, BUFFERS) UPDATE users SET status = 'active' WHERE id = 
 >
 > **Explanation:** Wrapping `EXPLAIN ANALYZE` inside `BEGIN...ROLLBACK` safely measures runtime execution without committing data mutations.
 
+---
+
 ### Exercise 3: Key Metrics in EXPLAIN ANALYZE Output
 
 **Problem:** List 3 essential metrics in `EXPLAIN ANALYZE` output (`actual time`, `rows`, `Buffers: shared hit/read`).
 
 **Expected output:**
-```text
-actual time, rows, Buffers (shared hit/read)
-```
-
 > [!check]- Answer
+> ```text
+> actual time, rows, Buffers (shared hit/read)
+> ```
 > ```text
 > actual time, rows, Buffers (shared hit/read)
 > ```

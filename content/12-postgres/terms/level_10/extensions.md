@@ -145,11 +145,10 @@ Audit extension security and superuser permissions before deployment
 **Problem:** You are diagnosing a slow production database. You want to install the standard queries stats collector extension named `pg_stat_statements`. Write the SQL query to install this module.
 
 **Expected output:**
-```sql
-CREATE EXTENSION pg_stat_statements;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE EXTENSION pg_stat_statements;
+> ```
 > - Use the `CREATE EXTENSION` keyword.
 > - Specify the exact extension name `pg_stat_statements`.
 
@@ -162,11 +161,10 @@ CREATE EXTENSION pg_stat_statements;
 **Problem:** Install `pg_trgm` and `uuid-ossp` extensions safely using `CREATE EXTENSION IF NOT EXISTS`.
 
 **Expected output:**
-```text
-CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-```
-
 > [!check]- Answer
+> ```text
+> CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+> ```
 > ```sql
 > CREATE EXTENSION IF NOT EXISTS pg_trgm;
 > CREATE EXTENSION IF NOT EXISTS 'uuid-ossp';
@@ -174,16 +172,17 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS "uuid-oss
 >
 > **Explanation:** `CREATE EXTENSION IF NOT EXISTS` installs extensions idempotently.
 
+---
+
 ### Exercise 3: Inspecting Installed Extensions
 
 **Problem:** Query installed database extensions from `pg_extension` system catalog.
 
 **Expected output:**
-```text
-SELECT extname, extversion FROM pg_extension;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT extname, extversion FROM pg_extension;
+> ```
 > ```sql
 > SELECT extname, extversion FROM pg_extension;
 > ```

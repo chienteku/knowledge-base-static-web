@@ -171,12 +171,11 @@ Explain how MongoDB handles a query sent to a secondary node 10 milliseconds lat
 2.  The query is executed **inside** a session configured with Causal Consistency.
 
 **Expected output:**
-```text
-1. Outside Session: The query executes immediately on the secondary node. Because the secondary lags by 2 seconds, the query reads and returns the user's old status.
-2. Inside Causal Session: The driver passes the write's cluster timestamp to the secondary. The secondary recognizes it has not replicated up to this timestamp yet, pauses the query, waits for the replication log to catch up, and then returns the correct new status.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Outside Session: The query executes immediately on the secondary node. Because the secondary lags by 2 seconds, the query reads and returns the user's old status.
+> 2. Inside Causal Session: The driver passes the write's cluster timestamp to the secondary. The secondary recognizes it has not replicated up to this timestamp yet, pauses the query, waits for the replication log to catch up, and then returns the correct new status.
+> ```
 > - Analyze the impact of replication lag on unlinked queries.
 > - Consider how the cluster clock blocks secondary reads until synchronization is complete.
 
@@ -189,27 +188,27 @@ Explain how MongoDB handles a query sent to a secondary node 10 milliseconds lat
 **Problem:** Start causally consistent client session in Node.js driver (`client.startSession({ causalConsistency: true })`).
 
 **Expected output:**
-```text
-const session = client.startSession({ causalConsistency: true });
-```
-
 > [!check]- Answer
+> ```text
+> const session = client.startSession({ causalConsistency: true });
+> ```
 > ```javascript
 > const session = client.startSession({ causalConsistency: true });
 > ```
 >
 > **Explanation:** Causally consistent sessions guarantee read-after-write operations across replica nodes.
 
+---
+
 ### Exercise 3: Causal Consistency Guarantees
 
 **Problem:** List 2 causal consistency guarantees in MongoDB (Read-after-write, Monotonic reads).
 
 **Expected output:**
-```text
-Read-after-write, Monotonic reads
-```
-
 > [!check]- Answer
+> ```text
+> Read-after-write, Monotonic reads
+> ```
 > ```text
 > Read-after-write, Monotonic reads
 > ```

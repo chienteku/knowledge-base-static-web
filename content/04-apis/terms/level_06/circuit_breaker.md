@@ -207,13 +207,12 @@ const breaker = new CircuitBreaker(fn, {
 3. HALF-OPEN
 
 **Expected output:**
-```text
-1. CLOSED: Normal operation; requests pass through to downstream service
-2. OPEN: Downstream service is failing; requests fail fast immediately without calling service
-3. HALF-OPEN: Trial period; canary requests test if downstream service has recovered
-```
-
 > [!check]- Answer
+> ```text
+> 1. CLOSED: Normal operation; requests pass through to downstream service
+> 2. OPEN: Downstream service is failing; requests fail fast immediately without calling service
+> 3. HALF-OPEN: Trial period; canary requests test if downstream service has recovered
+> ```
 > ```text
 > CLOSED    -> Normal flow. Requests pass to downstream service.
 > OPEN      -> Service failing. Calls fail fast immediately without execution.
@@ -227,11 +226,10 @@ const breaker = new CircuitBreaker(fn, {
 **Problem:** What should a Circuit Breaker return when in the OPEN state to maintain degraded user experience?
 
 **Expected output:**
-```text
-A cached fallback response or default degraded static payload.
-```
-
 > [!check]- Answer
+> ```text
+> A cached fallback response or default degraded static payload.
+> ```
 > ```javascript
 > breaker.fallback(() => ({ items: [], cached: true, offline: true }));
 > ```

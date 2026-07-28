@@ -199,15 +199,14 @@ Write the SurrealQL queries to:
 2.  Find all users who bought `product:shoes`.
 
 **Expected output:**
-```sql
--- 1. Products bought by Alice (Outgoing)
-SELECT ->bought->product FROM user:alice;
-
--- 2. Users who bought shoes (Incoming)
-SELECT <-bought<-user FROM product:shoes;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Products bought by Alice (Outgoing)
+> SELECT ->bought->product FROM user:alice;
+> 
+> -- 2. Users who bought shoes (Incoming)
+> SELECT <-bought<-user FROM product:shoes;
+> ```
 > - The source node is `user` and the target is `product`.
 > - Outgoing arrows (`->`) start at the source; incoming arrows (`<-`) start at the target.
 
@@ -220,27 +219,27 @@ SELECT <-bought<-user FROM product:shoes;
 **Problem:** State meaning: `->` (Outgoing), `<-` (Incoming), `<->` (Bidirectional).
 
 **Expected output:**
-```text
-->: Outgoing, <-: Incoming, <->: Bidirectional
-```
-
 > [!check]- Answer
+> ```text
+> ->: Outgoing, <-: Incoming, <->: Bidirectional
+> ```
 > ```text
 > ->: Outgoing, <-: Incoming, <->: Bidirectional
 > ```
 >
 > **Explanation:** Arrow directions specify graph traversal orientation relative to source nodes.
 
+---
+
 ### Exercise 3: Filtering Traversed Target Nodes with Arrow Clauses
 
 **Problem:** Select posts written by `user:alice` published after `d"2026-01-01T00:00:00Z"` using arrow filter syntax.
 
 **Expected output:**
-```text
-SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
 > ```

@@ -188,11 +188,10 @@ fn first_positive(numbers: &[i32]) -> i32 {
 **Problem:** Write a function `parse_even(opt: Option<i32>)` using `let-else` to extract `val` or exit early returning `()`.
 
 **Expected output:**
-```
-Extracted: 42
-```
-
 > [!check]- Answer
+> ```
+> Extracted: 42
+> ```
 > ```rust
 > fn parse_even(opt: Option<i32>) {
 >     let Some(val) = opt else { return; };
@@ -206,16 +205,17 @@ Extracted: 42
 >
 > **Explanation:** `let-else` binds variables in outer scope if the pattern matches or executes a diverging `else` block.
 
+---
+
 ### Exercise 3: Unwrapping Result Errors with `let-else`
 
 **Problem:** Extract `Ok(count)` from `Result<u32, &str>` using `let Ok(count) = res else { return; };`.
 
 **Expected output:**
-```
-Count: 10
-```
-
 > [!check]- Answer
+> ```
+> Count: 10
+> ```
 > ```rust
 > fn main() {
 >     let res: Result<u32, &str> = Ok(10);

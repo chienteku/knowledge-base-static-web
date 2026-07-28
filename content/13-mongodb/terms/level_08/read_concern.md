@@ -148,13 +148,12 @@ Select the optimal Read Concern level (**"local"**, **"majority"**, or **"linear
 3.  An administrative panel check confirming a user's admin role status before running critical account deletions.
 
 **Expected output:**
-```text
-1. "local": High speed is prioritized for social media feed loads, and reading transient posts that might roll back carries no business risk.
-2. "majority": Ensures that the subscription data read by the app has been replicated across a majority of nodes and cannot be rolled back.
-3. "linearizable": Prevents split-brain administrators from reading stale permission states, ensuring safety before executing destructive operations.
-```
-
 > [!check]- Answer
+> ```text
+> 1. "local": High speed is prioritized for social media feed loads, and reading transient posts that might roll back carries no business risk.
+> 2. "majority": Ensures that the subscription data read by the app has been replicated across a majority of nodes and cannot be rolled back.
+> 3. "linearizable": Prevents split-brain administrators from reading stale permission states, ensuring safety before executing destructive operations.
+> ```
 > - Determine the risk profile of reading data that might be rolled back.
 > - Consider if the check directly precedes a destructive operation.
 
@@ -167,27 +166,27 @@ Select the optimal Read Concern level (**"local"**, **"majority"**, or **"linear
 **Problem:** Query `orders` collection with `readConcern: 'majority'` in Node.js driver.
 
 **Expected output:**
-```text
-db.orders.find({}, { readConcern: { level: "majority" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.find({}, { readConcern: { level: "majority" } });
+> ```
 > ```javascript
 > db.orders.find({}, { readConcern: { level: "majority" } });
 > ```
 >
 > **Explanation:** `readConcern: 'majority'` returns data acknowledged by a majority of replica set nodes.
 
+---
+
 ### Exercise 3: Snapshot Read Concern in Transactions
 
 **Problem:** What read concern level is used in multi-document transactions to provide point-in-time snapshot isolation? (`"snapshot"`).
 
 **Expected output:**
-```text
-readConcern: { level: "snapshot" }
-```
-
 > [!check]- Answer
+> ```text
+> readConcern: { level: "snapshot" }
+> ```
 > ```text
 > readConcern: { level: "snapshot" }
 > ```

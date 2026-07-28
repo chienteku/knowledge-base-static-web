@@ -183,34 +183,33 @@ async function processData() {
 **Problem:** Classify React/Vue/Angular (Frameworks) vs Lodash/Date-fns (Libraries).
 
 **Expected output:**
-```text
-Frameworks: IoC architecture, Libraries: Utility toolkits
-```
-
 > [!check]- Answer
+> ```text
+> Frameworks: IoC architecture, Libraries: Utility toolkits
+> ```
 > ```javascript
 > console.log("Frameworks: IoC architecture, Libraries: Utility toolkits");
 > ```
 >
 > **Explanation:** Inversion of Control determines whether your code calls the utility or the framework calls your code.
 
+---
+
 ### Exercise 3: Routing Architecture Differences
 
 **Problem:** Explain how file-system routing in frameworks dictates project layout boundaries.
 
 **Expected output:**
-```text
-File-system routing enforces framework directory conventions
-```
-
 > [!check]- Answer
+> ```text
+> File-system routing enforces framework directory conventions
+> ```
 > ```javascript
 > console.log("File-system routing enforces framework directory conventions");
 > ```
 >
 > **Explanation:** Frameworks enforce opinionated directory structures and application lifecycles.
 
----
 
 ---
 

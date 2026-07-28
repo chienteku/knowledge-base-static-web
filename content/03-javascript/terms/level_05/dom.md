@@ -146,12 +146,11 @@ async function processData() {
 **Problem:** Open a new tab in your browser, go to any website (like google.com), and open the Developer Tools Console. Type `document.body.innerHTML = "<h1>Hacked!</h1>"`. What happens to the webpage?
 
 **Expected output:**
-```text
-The entire webpage disappears and is replaced by the word "Hacked!".
-(Don't worry, refreshing the page fixes it because the DOM is temporary!)
-```
-
 > [!check]- Answer
+> ```text
+> The entire webpage disappears and is replaced by the word "Hacked!".
+> (Don't worry, refreshing the page fixes it because the DOM is temporary!)
+> ```
 > - Right click -> Inspect -> Console tab.
 > - This is a fun way to realize how much power JavaScript has over the browser!
 
@@ -162,34 +161,33 @@ The entire webpage disappears and is replaced by the word "Hacked!".
 **Problem:** State difference between `Node.ELEMENT_NODE` (type 1) and `Node.TEXT_NODE` (type 3).
 
 **Expected output:**
-```text
-Element: 1, Text: 3
-```
-
 > [!check]- Answer
+> ```text
+> Element: 1, Text: 3
+> ```
 > ```javascript
 > console.log("Element: 1, Text: 3");
 > ```
 >
 > **Explanation:** `nodeType` integer constants identify DOM element nodes (1) vs text content nodes (3).
 
+---
+
 ### Exercise 3: Document Fragment Batching
 
 **Problem:** Explain why `document.createDocumentFragment()` reduces DOM reflow performance overhead.
 
 **Expected output:**
-```text
-DocumentFragment avoids layout thrashing
-```
-
 > [!check]- Answer
+> ```text
+> DocumentFragment avoids layout thrashing
+> ```
 > ```javascript
 > console.log("DocumentFragment avoids layout thrashing");
 > ```
 >
 > **Explanation:** Appending child nodes into off-screen `DocumentFragment` instances batches DOM inserts into 1 reflow.
 
----
 
 ---
 

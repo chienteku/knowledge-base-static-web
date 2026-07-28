@@ -163,11 +163,10 @@ console.log(domainOnly);
 ```
 
 **Expected output:**
-```text
-google.com
-```
-
 > [!check]- Answer
+> ```text
+> google.com
+> ```
 > - The `"https://"` substring is 8 characters long (indices 0 through 7).
 > - Use `.slice(startIndex)` to extract text from a starting index to the end of the string.
 
@@ -178,11 +177,10 @@ google.com
 **Problem:** Replace all spaces with dashes in `"a b c"` using `replaceAll`.
 
 **Expected output:**
-```text
-a-b-c
-```
-
 > [!check]- Answer
+> ```text
+> a-b-c
+> ```
 > ```javascript
 > const str = "a b c";
 > console.log(str.replaceAll(" ", "-"));
@@ -190,16 +188,17 @@ a-b-c
 >
 > **Explanation:** `replaceAll(target, replacement)` replaces all non-overlapping substring occurrences.
 
+---
+
 ### Exercise 3: Extracting Substrings with `slice`
 
 **Problem:** Extract the last 4 characters of string `"JavaScript"` using `slice(-4)`.
 
 **Expected output:**
-```text
-ript
-```
-
 > [!check]- Answer
+> ```text
+> ript
+> ```
 > ```javascript
 > const str = "JavaScript";
 > console.log(str.slice(-4));
@@ -207,7 +206,6 @@ ript
 >
 > **Explanation:** Passing negative start offsets to `.slice()` extracts characters relative to string end.
 
----
 
 ---
 

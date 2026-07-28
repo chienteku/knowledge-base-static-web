@@ -152,12 +152,11 @@ const [primary, ...others] = colors;
 ```
 
 **Expected output:**
-```javascript
-`["Green", "Blue", "Yellow"]`
-The Rest operator gathered the remaining un-destructured items into a new array!
-```
-
 > [!check]- Answer
+> ```javascript
+> `["Green", "Blue", "Yellow"]`
+> The Rest operator gathered the remaining un-destructured items into a new array!
+> ```
 > - Rest is a vacuum cleaner. It sucks up whatever is left over!
 
 ---
@@ -167,11 +166,10 @@ The Rest operator gathered the remaining un-destructured items into a new array!
 **Problem:** Write `function logUser(role, ...permissions)` and log `role` and `permissions` array.
 
 **Expected output:**
-```text
-Role: admin, Perms: ["read","write"]
-```
-
 > [!check]- Answer
+> ```text
+> Role: admin, Perms: ["read","write"]
+> ```
 > ```javascript
 > function logUser(role, ...permissions) {
 >   console.log(`Role: ${role}, Perms: ${JSON.stringify(permissions)}`);
@@ -181,16 +179,17 @@ Role: admin, Perms: ["read","write"]
 >
 > **Explanation:** Rest parameters collect remaining positional arguments into a true `Array` instance.
 
+---
+
 ### Exercise 3: Rest Parameters in Array Destructuring
 
 **Problem:** Destructure `const [first, ...rest] = [1, 2, 3]`.
 
 **Expected output:**
-```text
-first: 1, rest: [2,3]
-```
-
 > [!check]- Answer
+> ```text
+> first: 1, rest: [2,3]
+> ```
 > ```javascript
 > const [first, ...rest] = [1, 2, 3];
 > console.log(`first: ${first}, rest: ${JSON.stringify(rest)}`);
@@ -198,7 +197,6 @@ first: 1, rest: [2,3]
 >
 > **Explanation:** Rest element syntax in array destructuring gathers trailing array elements.
 
----
 
 ---
 

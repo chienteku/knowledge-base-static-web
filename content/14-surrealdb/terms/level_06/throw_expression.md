@@ -141,13 +141,12 @@ IF $age < 18 { THROW "User must be at least 18 years old"; };
 Write an `IF` statement checking if `$stock = 0`. If true, execute a `THROW` with the message `"Product is out of stock"`.
 
 **Expected output:**
-```sql
-IF $stock = 0 {
-  THROW "Product is out of stock";
-};
-```
-
 > [!check]- Answer
+> ```sql
+> IF $stock = 0 {
+>   THROW "Product is out of stock";
+> };
+> ```
 > - Use the `IF condition { ... }` block syntax.
 > - Raise the error using `THROW "message"`.
 
@@ -160,11 +159,10 @@ IF $stock = 0 {
 **Problem:** Write `IF` guard that throws `"Unauthorized access"` if `$user.role != "admin"`.
 
 **Expected output:**
-```text
-IF $user.role != "admin" { THROW "Unauthorized access"; };
-```
-
 > [!check]- Answer
+> ```text
+> IF $user.role != "admin" { THROW "Unauthorized access"; };
+> ```
 > ```surrealql
 > IF $user.role != "admin" {
 >   THROW "Unauthorized access";
@@ -173,16 +171,17 @@ IF $user.role != "admin" { THROW "Unauthorized access"; };
 >
 > **Explanation:** `THROW` aborts query execution and rolls back transaction mutations.
 
+---
+
 ### Exercise 3: Field Assertion Custom Error
 
 **Problem:** How does `THROW` behave inside custom functions (`fn::`) when validation fails? (Aborts function and returns error).
 
 **Expected output:**
-```text
-Aborts function execution and returns custom error string to caller
-```
-
 > [!check]- Answer
+> ```text
+> Aborts function execution and returns custom error string to caller
+> ```
 > ```text
 > Aborts function execution and returns custom error string to caller
 > ```

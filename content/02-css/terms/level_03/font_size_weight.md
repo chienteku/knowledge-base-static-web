@@ -115,11 +115,10 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 **Problem:** Assuming the browser's default font size is 16px, how many pixels is `font-size: 1.5rem;`?
 
 **Expected output:**
-```text
-24px! (1.5 * 16 = 24).
-```
-
 > [!check]- Answer
+> ```text
+> 24px! (1.5 * 16 = 24).
+> ```
 > - `1rem` = 16px. Multiply 16 by 1.5.
 
 ---
@@ -131,11 +130,10 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 **Problem:** Convert `24px` font size to `rem` units assuming standard `16px` root font size.
 
 **Expected output:**
-```text
-1.5rem (24 / 16 = 1.5)
-```
-
 > [!check]- Answer
+> ```text
+> 1.5rem (24 / 16 = 1.5)
+> ```
 > ```css
 > h2 {
 >   font-size: 1.5rem; /* 1.5 * 16px = 24px */
@@ -143,6 +141,8 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 > ```
 >
 > **Explanation:** `rem` values equal target pixel size divided by root font size (16px).
+
+---
 
 ### Exercise 3: Font-Weight Keyword Mapping Matrix
 
@@ -153,14 +153,13 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 4. `900` 
 
 **Expected output:**
-```text
-1. normal (or Regular)
-2. bold
-3. light
-4. black (or Heavy)
-```
-
 > [!check]- Answer
+> ```text
+> 1. normal (or Regular)
+> 2. bold
+> 3. light
+> 4. black (or Heavy)
+> ```
 > ```text
 > 1. 400 -> normal / Regular
 > 2. 700 -> bold

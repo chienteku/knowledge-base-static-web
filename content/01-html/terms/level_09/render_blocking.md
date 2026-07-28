@@ -173,11 +173,10 @@ JavaScript has the power to modify the DOM (e.g. adding new elements or writing 
 Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the other from starting to download?
 
 **Expected output:**
-```text
-The script `modal-widget.js` blocks the stylesheet from downloading. Because the script tag is synchronous and declared first, the browser halts HTML parsing and stops searching for other links until the script is fully downloaded and executed.
-```
-
 > [!check]- Answer
+> ```text
+> The script `modal-widget.js` blocks the stylesheet from downloading. Because the script tag is synchronous and declared first, the browser halts HTML parsing and stops searching for other links until the script is fully downloaded and executed.
+> ```
 > - The browser reads top-to-bottom. If a synchronous script halts the parser, does it see the lines below it?
 
 ---
@@ -193,11 +192,10 @@ The script `modal-widget.js` blocks the stylesheet from downloading. Because the
 4. Video media assets
 
 **Expected output:**
-```text
-1 and 3.
-```
-
 > [!check]- Answer
+> ```text
+> 1 and 3.
+> ```
 > ```text
 > 1. External <link rel="stylesheet"> in head
 > 3. Synchronous <script src="..."> in head without async/defer
@@ -205,16 +203,17 @@ The script `modal-widget.js` blocks the stylesheet from downloading. Because the
 >
 > **Explanation:** External CSS stylesheets and synchronous scripts block initial page paint.
 
+---
+
 ### Exercise 3: Eliminating Render-Blocking CSS for Critical Path
 
 **Problem:** How can critical above-the-fold CSS be delivered to eliminate render-blocking stylesheet network requests?
 
 **Expected output:**
-```text
-Inline critical above-the-fold CSS inside a <style> tag in <head>, deferring non-critical CSS.
-```
-
 > [!check]- Answer
+> ```text
+> Inline critical above-the-fold CSS inside a <style> tag in <head>, deferring non-critical CSS.
+> ```
 > ```html
 > <head>
 >   <style>/* Critical above-the-fold CSS */</style>

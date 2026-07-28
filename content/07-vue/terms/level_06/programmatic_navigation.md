@@ -231,11 +231,10 @@ function goBack() {
 ```
 
 **Expected output:**
-```text
-Clicking the button triggers `router.back()` or `router.go(-1)` to navigate back.
-```
-
 > [!check]- Answer
+> ```text
+> Clicking the button triggers `router.back()` or `router.go(-1)` to navigate back.
+> ```
 > - The router instance has a dedicated `.back()` method.
 > - Alternatively, you can use `.go(-1)`.
 
@@ -249,13 +248,12 @@ Clicking the button triggers `router.back()` or `router.go(-1)` to navigate back
 3. Route navigation with query parameter `{ search: 'vue' }` 
 
 **Expected output:**
-```javascript
-1. router.push('/dashboard');
-2. router.push({ name: 'user-profile', params: { id: 10 } });
-3. router.push({ path: '/search', query: { search: 'vue' } });
-```
-
 > [!check]- Answer
+> ```javascript
+> 1. router.push('/dashboard');
+> 2. router.push({ name: 'user-profile', params: { id: 10 } });
+> 3. router.push({ path: '/search', query: { search: 'vue' } });
+> ```
 > - String path: `router.push('/path')`
 > - Named route with params: `router.push({ name, params })`
 > - Query parameters: `router.push({ path, query })`
@@ -273,11 +271,10 @@ Clicking the button triggers `router.back()` or `router.go(-1)` to navigate back
 **Problem:** Contrast `router.push('/login')` vs `router.replace('/login')` regarding browser history stack.
 
 **Expected output:**
-```text
-router.push() adds a new entry to the browser history stack; router.replace() replaces the current entry without adding a new history step.
-```
-
 > [!check]- Answer
+> ```text
+> router.push() adds a new entry to the browser history stack; router.replace() replaces the current entry without adding a new history step.
+> ```
 > - `push()` -> Adds new entry to history (Back button returns to previous page).
 > - `replace()` -> Overwrites current history entry (Back button skips replaced page).
 > 

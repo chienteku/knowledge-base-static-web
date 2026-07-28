@@ -150,12 +150,11 @@ console.log(route.path);
 **Problem:** How do you declare a reactive integer in the Composition API that updates the UI when changed?
 
 **Expected output:**
-```typescript
-const age = ref(25);
-// To update it: age.value = 26;
-```
-
 > [!check]- Answer
+> ```typescript
+> const age = ref(25);
+> // To update it: age.value = 26;
+> ```
 > - Reactivity in Composition API is achieved by wrapping raw values in reactive containers like `ref()`.
 
 ---
@@ -165,16 +164,15 @@ const age = ref(25);
 **Problem:** Write a Vue 3 component capturing `useNuxtApp()` synchronously and calling `$fetch` inside an `onClick` async function.
 
 **Expected output:**
-```vue
-<script setup>
-const { $fetch } = useNuxtApp();
-async function handleSave() {
-  await $fetch('/api/save', { method: 'POST' });
-}
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const { $fetch } = useNuxtApp();
+> async function handleSave() {
+>   await $fetch('/api/save', { method: 'POST' });
+> }
+> </script>
+> ```
 > - Capture Nuxt context composables at the top level of `<script setup>`.
 > 
 > ```vue
@@ -198,11 +196,10 @@ async function handleSave() {
 **Problem:** Which helper function manually restores Nuxt instance context when executing callbacks across async boundaries?
 
 **Expected output:**
-```text
-callWithNuxt(app, callback)
-```
-
 > [!check]- Answer
+> ```text
+> callWithNuxt(app, callback)
+> ```
 > - `callWithNuxt` restores instance context for async functions.
 > 
 > ```typescript

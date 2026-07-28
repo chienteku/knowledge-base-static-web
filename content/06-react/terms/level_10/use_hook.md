@@ -200,16 +200,17 @@ function ProfileCard({ dataPromise, isExpanded }) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Consuming Promise with React 19 use() Hook
 
 **Problem:** Unwrap `userPromise` inside React 19 component using `use(userPromise)` inside `<Suspense>`.
 
 **Expected output:**
-```text
-import { use } from 'react'; function UserCard({ userPromise }) { const user = use(userPromise); return <h2>{user.name}</h2>; }
-```
-
 > [!check]- Answer
+> ```text
+> import { use } from 'react'; function UserCard({ userPromise }) { const user = use(userPromise); return <h2>{user.name}</h2>; }
+> ```
 > ```javascript
 > import { use } from 'react';
 >
@@ -221,16 +222,17 @@ import { use } from 'react'; function UserCard({ userPromise }) { const user = u
 >
 > **Explanation:** React 19 `use(promise)` unwraps promises directly inside component render, integrating with `<Suspense>`.
 
+---
+
 ### Exercise 3: Consuming Context with React 19 use() Hook
 
 **Problem:** Consume `ThemeContext` conditionally using `use(ThemeContext)` inside an `if` block.
 
 **Expected output:**
-```text
-if (showTheme) { const theme = use(ThemeContext); }
-```
-
 > [!check]- Answer
+> ```text
+> if (showTheme) { const theme = use(ThemeContext); }
+> ```
 > ```javascript
 > if (showTheme) {
 >   const { theme } = use(ThemeContext);

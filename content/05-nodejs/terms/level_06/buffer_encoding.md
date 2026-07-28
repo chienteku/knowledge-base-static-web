@@ -172,32 +172,34 @@ function decodeHexFile(filePath) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Converting Hex to Base64 via Buffer
 
 **Problem:** Convert hex string `'68656c6c6f'` to Base64 string using Node.js `Buffer`.
 
 **Expected output:**
-```text
-Buffer.from('68656c6c6f', 'hex').toString('base64');
-```
-
 > [!check]- Answer
+> ```text
+> Buffer.from('68656c6c6f', 'hex').toString('base64');
+> ```
 > ```javascript
 > const base64 = Buffer.from('68656c6c6f', 'hex').toString('base64');
 > ```
 >
 > **Explanation:** `Buffer.from(str, encoding)` parses encoded binary representations.
 
+---
+
 ### Exercise 3: StringDecoder Utility Role
 
 **Problem:** Why use `StringDecoder` instead of `buffer.toString()` when reading text streams?
 
 **Expected output:**
-```text
-It preserves incomplete multi-byte UTF-8 characters across chunk boundaries until the next chunk arrives.
-```
-
 > [!check]- Answer
+> ```text
+> It preserves incomplete multi-byte UTF-8 characters across chunk boundaries until the next chunk arrives.
+> ```
 > ```text
 > It preserves incomplete multi-byte UTF-8 characters across chunk boundaries until the next chunk arrives.
 > ```

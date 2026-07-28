@@ -150,26 +150,25 @@ db.runCommand({ collMod: "legacy", validator: { ... }, validationLevel: "moderat
 Write the `db.createCollection` command.
 
 **Expected output:**
-```javascript
-db.createCollection("products", {
-  validator: {
-    $jsonSchema: {
-      bsonType: "object",
-      required: [ "title", "price" ],
-      properties: {
-        title: {
-          bsonType: "string"
-        },
-        price: {
-          bsonType: "decimal"
-        }
-      }
-    }
-  }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.createCollection("products", {
+>   validator: {
+>     $jsonSchema: {
+>       bsonType: "object",
+>       required: [ "title", "price" ],
+>       properties: {
+>         title: {
+>           bsonType: "string"
+>         },
+>         price: {
+>           bsonType: "decimal"
+>         }
+>       }
+>     }
+>   }
+> });
+> ```
 > - Add `title` and `price` to the `required` array list.
 > - Specify the exact BSON type aliases `"string"` and `"decimal"` under properties.
 
@@ -182,11 +181,10 @@ db.createCollection("products", {
 **Problem:** Create collection `account` requiring `email` (string) and `balance` (number).
 
 **Expected output:**
-```text
-db.createCollection("account", { validator: { $jsonSchema: { required: ["email", "balance"], properties: { email: { bsonType: "string" }, balance: { bsonType: ["int", "double", "decimal"] } } } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.createCollection("account", { validator: { $jsonSchema: { required: ["email", "balance"], properties: { email: { bsonType: "string" }, balance: { bsonType: ["int", "double", "decimal"] } } } } });
+> ```
 > ```javascript
 > db.createCollection("account", {
 >   validator: {
@@ -204,16 +202,17 @@ db.createCollection("account", { validator: { $jsonSchema: { required: ["email",
 >
 > **Explanation:** `$jsonSchema` enforces database-level type validation on document insertions.
 
+---
+
 ### Exercise 3: Modifying Schema Validator with `collMod`
 
 **Problem:** Command to update schema validator rules on existing collection `account` (`collMod`).
 
 **Expected output:**
-```text
-db.runCommand({ collMod: "account", validator: { ... } });
-```
-
 > [!check]- Answer
+> ```text
+> db.runCommand({ collMod: "account", validator: { ... } });
+> ```
 > ```javascript
 > db.runCommand({
 >   collMod: "account",

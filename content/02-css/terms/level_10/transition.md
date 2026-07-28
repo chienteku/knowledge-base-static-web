@@ -206,12 +206,11 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 **Problem:** You have a button that changes both `background-color` and `color` (text color) on hover. You want the background to animate, but you want the text color to snap instantly. How do you write the transition?
 
 **Expected output:**
-```css
-/* Instead of using 'all', specifically target the background! */
-transition: background-color 0.3s ease;
-```
-
 > [!check]- Answer
+> ```css
+> /* Instead of using 'all', specifically target the background! */
+> transition: background-color 0.3s ease;
+> ```
 > - The first value in the shorthand is the specific property name.
 
 ---
@@ -223,11 +222,10 @@ transition: background-color 0.3s ease;
 **Problem:** Write CSS transitioning `transform` and `box-shadow` over 0.2s ease on `.btn` hover.
 
 **Expected output:**
-```text
-.btn { transition: transform 0.2s ease, box-shadow 0.2s ease; } .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-```
-
 > [!check]- Answer
+> ```text
+> .btn { transition: transform 0.2s ease, box-shadow 0.2s ease; } .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+> ```
 > ```css
 > .btn {
 >   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -240,16 +238,17 @@ transition: background-color 0.3s ease;
 >
 > **Explanation:** Explicitly listed transition properties animate hardware-accelerated transforms and shadows cleanly.
 
+---
+
 ### Exercise 3: Non-Animatable CSS Properties
 
 **Problem:** Can `display` (e.g. `display: none` to `display: block`) be animated smoothly with CSS `transition`? (Yes/No).
 
 **Expected output:**
-```text
-No. display is a discrete property and cannot interpolate smooth frame steps.
-```
-
 > [!check]- Answer
+> ```text
+> No. display is a discrete property and cannot interpolate smooth frame steps.
+> ```
 > ```text
 > No. display is a discrete property and cannot interpolate smooth frame steps.
 > ```

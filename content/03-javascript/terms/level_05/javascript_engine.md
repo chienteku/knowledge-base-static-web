@@ -132,27 +132,27 @@ async function processData() {
 **Problem:** Explain how V8 JIT compilers optimize monomorphic function call sites.
 
 **Expected output:**
-```text
-Monomorphic functions optimized inline
-```
-
 > [!check]- Answer
+> ```text
+> Monomorphic functions optimized inline
+> ```
 > ```javascript
 > console.log("Monomorphic functions optimized inline");
 > ```
 >
 > **Explanation:** Passing consistent object hidden classes (shapes) allows JIT compilers to inline property offsets.
 
+---
+
 ### Exercise 2: Call Stack & Memory Heap Roles
 
 **Problem:** Identify where primitives (Call Stack) vs objects (Memory Heap) are stored in JS engines.
 
 **Expected output:**
-```text
-Primitives: Stack, Objects: Heap
-```
-
 > [!check]- Answer
+> ```text
+> Primitives: Stack, Objects: Heap
+> ```
 > ```javascript
 > console.log("Primitives: Stack, Objects: Heap");
 > ```
@@ -168,18 +168,16 @@ Primitives: Stack, Objects: Heap
 **Problem:** Explain why initializing object properties in the same order optimizes V8 hidden classes.
 
 **Expected output:**
-```text
-Identical property order shares hidden class shapes
-```
-
 > [!check]- Answer
+> ```text
+> Identical property order shares hidden class shapes
+> ```
 > ```javascript
 > console.log("Identical property order shares hidden class shapes");
 > ```
 >
 > **Explanation:** V8 creates inline caches based on predictable object shapes.
 
----
 
 ---
 

@@ -113,24 +113,23 @@ if (loading) return <Spinner />; // Or return null;
 **Problem:** You have a component that receives a `user` object. If `user` is null, the entire component should stop rendering and just show a loading spinner. If `user` exists, it should show a massive 50-line profile UI. How do you conditionally render this cleanly?
 
 **Expected output:**
-```javascript
-function Profile({ user }) {
-  // Use an Early Return!
-  if (!user) {
-    return <Spinner />;
-  }
-
-  // If user exists, it skips the if statement and renders the rest normally.
-  return (
-    <div>
-      <h1>{user.name}</h1>
-      {/* 50 more lines of code */}
-    </div>
-  );
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> function Profile({ user }) {
+>   // Use an Early Return!
+>   if (!user) {
+>     return <Spinner />;
+>   }
+> 
+>   // If user exists, it skips the if statement and renders the rest normally.
+>   return (
+>     <div>
+>       <h1>{user.name}</h1>
+>       {/* 50 more lines of code */}
+>     </div>
+>   );
+> }
+> ```
 > - You don't always have to use inline operators inside the JSX. You can use standard `if` statements before the `return` keyword!
 
 ---
@@ -142,11 +141,10 @@ function Profile({ user }) {
 **Problem:** Render `<UserDashboard />` if `isLoggedIn` is true, otherwise render `<LoginForm />` using ternary operator.
 
 **Expected output:**
-```text
-function App({ isLoggedIn }) { return isLoggedIn ? <UserDashboard /> : <LoginForm />; }
-```
-
 > [!check]- Answer
+> ```text
+> function App({ isLoggedIn }) { return isLoggedIn ? <UserDashboard /> : <LoginForm />; }
+> ```
 > ```javascript
 > function App({ isLoggedIn }) {
 >   return isLoggedIn ? <UserDashboard /> : <LoginForm />;
@@ -155,16 +153,17 @@ function App({ isLoggedIn }) { return isLoggedIn ? <UserDashboard /> : <LoginFor
 >
 > **Explanation:** Ternary operators provide clean dual-branch conditional rendering.
 
+---
+
 ### Exercise 3: Falsy Values in JSX
 
 **Problem:** Which falsy values are ignored and render nothing in JSX? (`null`, `undefined`, `false`, ``). Which falsy value renders on screen? (`0`).
 
 **Expected output:**
-```text
-Ignored: null, undefined, false, empty string; Rendered on screen: 0
-```
-
 > [!check]- Answer
+> ```text
+> Ignored: null, undefined, false, empty string; Rendered on screen: 0
+> ```
 > ```text
 > Ignored: null, undefined, false, empty string; Rendered on screen: 0
 > ```

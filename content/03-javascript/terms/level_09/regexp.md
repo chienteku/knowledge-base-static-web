@@ -175,11 +175,10 @@ console.log("Zip Codes:", extractZipCodes(input));
 ```
 
 **Expected output:**
-```text
-Zip Codes: [ '90210', '02138', '10001' ]
-```
-
 > [!check]- Answer
+> ```text
+> Zip Codes: [ '90210', '02138', '10001' ]
+> ```
 > - Match digit sequences of length 5: `/\b\d{5}\b/g`.
 
 ---
@@ -189,11 +188,10 @@ Zip Codes: [ '90210', '02138', '10001' ]
 **Problem:** Test string `"User123"` for digits using `\d+` regex.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const regex = /\d+/;
 > console.log(regex.test("User123"));
@@ -201,16 +199,17 @@ true
 >
 > **Explanation:** RegExp `.test(str)` tests whether regex patterns match target strings.
 
+---
+
 ### Exercise 3: Extracting Named Capture Groups
 
 **Problem:** Extract year, month, day from `"2026-01-15"` using named capture groups `/(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/`.
 
 **Expected output:**
-```text
-2026
-```
-
 > [!check]- Answer
+> ```text
+> 2026
+> ```
 > ```javascript
 > const match = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/.exec("2026-01-15");
 > console.log(match.groups.year);

@@ -191,13 +191,12 @@ const cursor = collection.find(); try { for await (const doc of cursor) { ... } 
 Explain what database actions occur on the server at the moment this line is run, before any print outputs are called.
 
 **Expected output:**
-```text
-At the moment the line is run, MongoDB registers the query and applies the `limit(5)` modifier to the query plan on the server. 
-It opens a cursor pointer in memory. 
-Because no documents have been requested (no loop has run, and `.toArray()` was not called), the database does not read or send any product documents yet. It waits for the client to request the first batch.
-```
-
 > [!check]- Answer
+> ```text
+> At the moment the line is run, MongoDB registers the query and applies the `limit(5)` modifier to the query plan on the server. 
+> It opens a cursor pointer in memory. 
+> Because no documents have been requested (no loop has run, and `.toArray()` was not called), the database does not read or send any product documents yet. It waits for the client to request the first batch.
+> ```
 > - Consider whether cursors fetch data immediately upon definition.
 > - Identify the role of the limit modifier on the query plan.
 
@@ -210,11 +209,10 @@ Because no documents have been requested (no loop has run, and `.toArray()` was 
 **Problem:** Stream cursor documents using Node.js `for await (const doc of cursor)` loop.
 
 **Expected output:**
-```text
-for await (const doc of cursor) { console.log(doc); }
-```
-
 > [!check]- Answer
+> ```text
+> for await (const doc of cursor) { console.log(doc); }
+> ```
 > ```javascript
 > const cursor = db.collection("users").find();
 > for await (const doc of cursor) {
@@ -224,16 +222,17 @@ for await (const doc of cursor) { console.log(doc); }
 >
 > **Explanation:** Async iterators stream cursor documents memory-efficiently without loading whole arrays.
 
+---
+
 ### Exercise 3: Setting Cursor Batch Size
 
 **Problem:** Configure cursor batch size to 100 documents using `cursor.batchSize(100)`.
 
 **Expected output:**
-```text
-cursor.batchSize(100)
-```
-
 > [!check]- Answer
+> ```text
+> cursor.batchSize(100)
+> ```
 > ```javascript
 > const cursor = db.collection("logs").find().batchSize(100);
 > ```

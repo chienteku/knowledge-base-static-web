@@ -129,13 +129,12 @@ id INT PRIMARY KEY or BIGINT PRIMARY KEY
 3.  The quantity of a book copy currently in stock (typically ranges from `0` to `500`).
 
 **Expected output:**
-```text
-1. Publication Year: SMALLINT (Year numbers are around 2000, easily fitting inside 32,767).
-2. ISBN Barcode: BIGINT (ISBN codes are 13 digits long, which far exceeds the 2.14 billion limit of a standard INTEGER).
-3. Stock Quantity: SMALLINT (Stock numbers easily fit inside 32,767).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Publication Year: SMALLINT (Year numbers are around 2000, easily fitting inside 32,767).
+> 2. ISBN Barcode: BIGINT (ISBN codes are 13 digits long, which far exceeds the 2.14 billion limit of a standard INTEGER).
+> 3. Stock Quantity: SMALLINT (Stock numbers easily fit inside 32,767).
+> ```
 > - Match maximum possible value numbers with range tables.
 > - Barcodes are long number strings; verify if they fit in 2 billion limits.
 
@@ -148,27 +147,27 @@ id INT PRIMARY KEY or BIGINT PRIMARY KEY
 **Problem:** List 3 integer types in PostgreSQL and byte sizes (`SMALLINT`: 2 bytes, `INTEGER`: 4 bytes, `BIGINT`: 8 bytes).
 
 **Expected output:**
-```text
-SMALLINT (2 bytes), INTEGER (4 bytes), BIGINT (8 bytes)
-```
-
 > [!check]- Answer
+> ```text
+> SMALLINT (2 bytes), INTEGER (4 bytes), BIGINT (8 bytes)
+> ```
 > ```text
 > SMALLINT (2 bytes), INTEGER (4 bytes), BIGINT (8 bytes)
 > ```
 >
 > **Explanation:** Integer types provide 16-bit, 32-bit, and 64-bit signed integer storage.
 
+---
+
 ### Exercise 3: Maximum Value of 32-Bit Integer
 
 **Problem:** What is the maximum positive signed value for a 32-bit `INTEGER` in PostgreSQL? (`2,147,483,647`).
 
 **Expected output:**
-```text
-2,147,483,647 (2.14 billion)
-```
-
 > [!check]- Answer
+> ```text
+> 2,147,483,647 (2.14 billion)
+> ```
 > ```text
 > 2,147,483,647 (2.14 billion)
 > ```

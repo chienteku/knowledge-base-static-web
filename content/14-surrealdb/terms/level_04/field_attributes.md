@@ -159,12 +159,11 @@ Predict the values stored in `points` and `tier` for these write actions:
 2.  `CREATE user:02 SET points = 250;`
 
 **Expected output:**
-```text
-1. `points` = 100 (uses DEFAULT), `tier` = "Basic" (calculated using VALUE because points < 200).
-2. `points` = 250 (overrides DEFAULT), `tier` = "VIP" (calculated using VALUE because points >= 200).
-```
-
 > [!check]- Answer
+> ```text
+> 1. `points` = 100 (uses DEFAULT), `tier` = "Basic" (calculated using VALUE because points < 200).
+> 2. `points` = 250 (overrides DEFAULT), `tier` = "VIP" (calculated using VALUE because points >= 200).
+> ```
 > - Identify when the `DEFAULT` clause is executed.
 > - Recall that `VALUE` recalculates its expression on every insert, reading the active field values.
 
@@ -177,27 +176,27 @@ Predict the values stored in `points` and `tier` for these write actions:
 **Problem:** Define field `created_at` on `post` as `datetime` defaulting to `time::now()` and marked `READONLY`.
 
 **Expected output:**
-```text
-DEFINE FIELD created_at ON TABLE post TYPE datetime DEFAULT time::now() READONLY;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD created_at ON TABLE post TYPE datetime DEFAULT time::now() READONLY;
+> ```
 > ```surrealql
 > DEFINE FIELD created_at ON TABLE post TYPE datetime DEFAULT time::now() READONLY;
 > ```
 >
 > **Explanation:** Combining `DEFAULT` and `READONLY` freezes creation timestamps at record instantiation time.
 
+---
+
 ### Exercise 3: Dynamic Future Field Attribute
 
 **Problem:** Define field `total` computing `count * price` dynamically on every query using `VALUE <future>`.
 
 **Expected output:**
-```text
-DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
+> ```
 > ```surrealql
 > DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
 > ```

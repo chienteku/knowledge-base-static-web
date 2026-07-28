@@ -151,16 +151,17 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Configuring sideEffects False in package.json
 
 **Problem:** What property in `package.json` informs Webpack / Vite that ES modules produce zero side-effects during import? (`sideEffects: false`).
 
 **Expected output:**
-```text
-sideEffects: false
-```
-
 > [!check]- Answer
+> ```text
+> sideEffects: false
+> ```
 > ```json
 > {
 >   "sideEffects": false
@@ -169,16 +170,17 @@ sideEffects: false
 >
 > **Explanation:** `sideEffects: false` permits bundlers to safely drop unused ES module exports.
 
+---
+
 ### Exercise 3: Tree-Shaking ESM Prerequisite
 
 **Problem:** What module syntax is strictly required for Tree-Shaking to work in bundlers? (ES Modules `import` and `export` syntax).
 
 **Expected output:**
-```text
-ES Modules (import and export) syntax
-```
-
 > [!check]- Answer
+> ```text
+> ES Modules (import and export) syntax
+> ```
 > ```text
 > ES Modules (import and export) syntax
 > ```

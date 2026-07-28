@@ -172,11 +172,10 @@ thread::spawn(move || {
 **Problem:** Declare `thread_local! { static COUNTER: Cell<u32> = Cell::new(0); }` and increment it via `.with()`.
 
 **Expected output:**
-```
-Thread local val: 1
-```
-
 > [!check]- Answer
+> ```
+> Thread local val: 1
+> ```
 > ```rust
 > use std::cell::Cell;
 > thread_local! {
@@ -190,16 +189,17 @@ Thread local val: 1
 >
 > **Explanation:** `thread_local!` variables provide isolated per-thread global storage accessed via `.with()`.
 
+---
+
 ### Exercise 3: Independent Per-Thread Storage
 
 **Problem:** Demonstrate that mutating a `thread_local!` variable in a spawned thread does not affect `main()` thread value.
 
 **Expected output:**
-```
-Spawned: 100, Main: 0
-```
-
 > [!check]- Answer
+> ```
+> Spawned: 100, Main: 0
+> ```
 > use std::cell::Cell;
 > use std::thread;
 > thread_local! { static VAL: Cell<i32> = Cell::new(0); }

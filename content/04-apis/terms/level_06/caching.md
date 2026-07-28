@@ -103,13 +103,12 @@ Cache-Control: no-store ; Completely disables caching and disk storage
 A major breaking news event happens at noon. Your journalists publish the story to the database. Why are users complaining that they can't see the breaking news?
 
 **Expected output:**
-```text
-Because their browsers are using the cached copy! 
-You told the browsers they don't need to ask the server for updates for a full 24 hours. Even though the database updated, the browsers refuse to make a new network request until tomorrow. 
-Caching is a trade-off between Speed and "Staleness" (how outdated the data is).
-```
-
 > [!check]- Answer
+> ```text
+> Because their browsers are using the cached copy! 
+> You told the browsers they don't need to ask the server for updates for a full 24 hours. Even though the database updated, the browsers refuse to make a new network request until tomorrow. 
+> Caching is a trade-off between Speed and "Staleness" (how outdated the data is).
+> ```
 > - What does `max-age` tell the browser to do for the next 24 hours?
 
 ---
@@ -119,11 +118,10 @@ Caching is a trade-off between Speed and "Staleness" (how outdated the data is).
 **Problem:** When a client has a cached response with `ETag: "v123"`, which conditional header does it send on subsequent GET requests?
 
 **Expected output:**
-```text
-If-None-Match: "v123"
-```
-
 > [!check]- Answer
+> ```text
+> If-None-Match: "v123"
+> ```
 > ```http
 > GET /api/items HTTP/1.1
 > Host: api.example.com
@@ -137,11 +135,10 @@ If-None-Match: "v123"
 **Problem:** What does an HTTP `304 Not Modified` status code indicate to the client, and does it include a response body?
 
 **Expected output:**
-```text
-Indicates the cached resource is still fresh and unmodified. It contains NO response body.
-```
-
 > [!check]- Answer
+> ```text
+> Indicates the cached resource is still fresh and unmodified. It contains NO response body.
+> ```
 > ```http
 > HTTP/1.1 304 Not Modified
 > ETag: "v123"

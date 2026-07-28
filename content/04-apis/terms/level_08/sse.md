@@ -191,12 +191,11 @@ A) WebSockets
 B) Server-Sent Events
 
 **Expected output:**
-```text
-B) Server-Sent Events (SSE).
-You ask the question once (via a standard POST request). After that, the AI is simply dripping the answer down to you, one way, over an extended period of time. SSE is the absolute perfect tool for LLM text generation streaming!
-```
-
 > [!check]- Answer
+> ```text
+> B) Server-Sent Events (SSE).
+> You ask the question once (via a standard POST request). After that, the AI is simply dripping the answer down to you, one way, over an extended period of time. SSE is the absolute perfect tool for LLM text generation streaming!
+> ```
 > - Is the client actively sending data *while* the AI is typing? No.
 
 ---
@@ -206,14 +205,13 @@ You ask the question once (via a standard POST request). After that, the AI is s
 **Problem:** Write valid text payload for an SSE event with event name `ping` and data `{"time":1700000000}`.
 
 **Expected output:**
-```http
-event: ping
-data: {"time":1700000000}
-
-
-```
-
 > [!check]- Answer
+> ```http
+> event: ping
+> data: {"time":1700000000}
+> 
+> 
+> ```
 > ```http
 > event: ping
 > data: {"time":1700000000}
@@ -229,13 +227,12 @@ data: {"time":1700000000}
 3. Built-in reconnection support
 
 **Expected output:**
-```text
-1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
-2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
-3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
-```
-
 > [!check]- Answer
+> ```text
+> 1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
+> 2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
+> 3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
+> ```
 > ```text
 > Directionality -> SSE: Unidirectional (Server -> Client), WS: Bidirectional
 > Protocol       -> SSE: HTTP/1.1 or HTTP/2, WS: Custom TCP (ws://)
@@ -249,14 +246,13 @@ data: {"time":1700000000}
 **Problem:** Write valid text payload for an SSE event with event name `ping` and data `{"time":1700000000}`.
 
 **Expected output:**
-```http
-event: ping
-data: {"time":1700000000}
-
-
-```
-
 > [!check]- Answer
+> ```http
+> event: ping
+> data: {"time":1700000000}
+> 
+> 
+> ```
 > ```http
 > event: ping
 > data: {"time":1700000000}
@@ -272,13 +268,12 @@ data: {"time":1700000000}
 3. Built-in reconnection support
 
 **Expected output:**
-```text
-1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
-2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
-3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
-```
-
 > [!check]- Answer
+> ```text
+> 1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
+> 2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
+> 3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
+> ```
 > ```text
 > Directionality -> SSE: Unidirectional (Server -> Client), WS: Bidirectional
 > Protocol       -> SSE: HTTP/1.1 or HTTP/2, WS: Custom TCP (ws://)
@@ -292,14 +287,13 @@ data: {"time":1700000000}
 **Problem:** Write valid text payload for an SSE event with event name `ping` and data `{"time":1700000000}`.
 
 **Expected output:**
-```http
-event: ping
-data: {"time":1700000000}
-
-
-```
-
 > [!check]- Answer
+> ```http
+> event: ping
+> data: {"time":1700000000}
+> 
+> 
+> ```
 > ```http
 > event: ping
 > data: {"time":1700000000}
@@ -315,13 +309,12 @@ data: {"time":1700000000}
 3. Built-in reconnection support
 
 **Expected output:**
-```text
-1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
-2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
-3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
-```
-
 > [!check]- Answer
+> ```text
+> 1. SSE: Unidirectional (Server->Client); WebSockets: Bidirectional
+> 2. SSE: Standard HTTP; WebSockets: Custom WS protocol (ws://)
+> 3. SSE: Built-in automatic reconnection; WebSockets: Requires custom JS code
+> ```
 > ```text
 > Directionality -> SSE: Unidirectional (Server -> Client), WS: Bidirectional
 > Protocol       -> SSE: HTTP/1.1 or HTTP/2, WS: Custom TCP (ws://)

@@ -127,14 +127,13 @@ useSeoMeta({ ogTitle: 'Title', ogDescription: 'Description' }); // Strongly type
 **Problem:** Write a `useSeoMeta` block that sets the Open Graph Image (`og:image`) to `https://mysite.com/banner.jpg` and the Twitter Card type (`twitter:card`) to `summary_large_image`.
 
 **Expected output:**
-```typescript
-useSeoMeta({
-  ogImage: 'https://mysite.com/banner.jpg',
-  twitterCard: 'summary_large_image'
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> useSeoMeta({
+>   ogImage: 'https://mysite.com/banner.jpg',
+>   twitterCard: 'summary_large_image'
+> });
+> ```
 > - Set flat keys like `ogImage` and `twitterCard` directly on the metadata object.
 
 ---
@@ -144,20 +143,19 @@ useSeoMeta({
 **Problem:** Write `<script setup>` using `useSeoMeta()` configuring `title`, `description`, `ogTitle`, `ogDescription`, `ogImage`, and `twitterCard: 'summary_large_image'`.
 
 **Expected output:**
-```vue
-<script setup>
-useSeoMeta({
-  title: 'Blog Post',
-  description: 'Post summary',
-  ogTitle: 'Blog Post',
-  ogDescription: 'Post summary',
-  ogImage: 'https://example.com/og.jpg',
-  twitterCard: 'summary_large_image'
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> useSeoMeta({
+>   title: 'Blog Post',
+>   description: 'Post summary',
+>   ogTitle: 'Blog Post',
+>   ogDescription: 'Post summary',
+>   ogImage: 'https://example.com/og.jpg',
+>   twitterCard: 'summary_large_image'
+> });
+> </script>
+> ```
 > - `useSeoMeta()` configures comprehensive social preview cards.
 > 
 > ```vue
@@ -180,11 +178,10 @@ useSeoMeta({
 **Problem:** How do you make `ogTitle` reactive to a `post.value.title` ref inside `useSeoMeta()`?
 
 **Expected output:**
-```text
-By passing a getter function: ogTitle: () => post.value?.title
-```
-
 > [!check]- Answer
+> ```text
+> By passing a getter function: ogTitle: () => post.value?.title
+> ```
 > - Pass a getter function for dynamic reactivity.
 > 
 > ```typescript

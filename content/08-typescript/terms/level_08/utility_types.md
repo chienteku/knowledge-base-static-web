@@ -109,12 +109,11 @@ type Good = Required<Pick<User, "id">>; // id is explicitly required
 **Problem:** You can nest Utility Types indefinitely. `type X = Readonly<Partial<Pick<User, "name" | "age">>>`. Why might a Senior developer reject this in a code review?
 
 **Expected output:**
-```text
-Because it is almost impossible to read at a glance!
-While Utility Types are great, chaining 3 or 4 of them together creates a massive cognitive load for the next developer reading the code. If your derived type is that complex, it is often better to just explicitly write out a new interface, even if it slightly violates DRY principles.
-```
-
 > [!check]- Answer
+> ```text
+> Because it is almost impossible to read at a glance!
+> While Utility Types are great, chaining 3 or 4 of them together creates a massive cognitive load for the next developer reading the code. If your derived type is that complex, it is often better to just explicitly write out a new interface, even if it slightly violates DRY principles.
+> ```
 > - Just because you *can* do math, doesn't mean you *should*.
 
 ---
@@ -126,11 +125,10 @@ While Utility Types are great, chaining 3 or 4 of them together creates a massiv
 **Problem:** Create `UpdateUserDTO` making `id` required and all other `User` fields optional.
 
 **Expected output:**
-```text
-UpdateUserDTO created
-```
-
 > [!check]- Answer
+> ```text
+> UpdateUserDTO created
+> ```
 > ```typescript
 > interface User { id: number; name: string; age: number }
 > type UpdateUserDTO = Pick<User, "id"> & Partial<Omit<User, "id">>;
@@ -140,16 +138,17 @@ UpdateUserDTO created
 >
 > **Explanation:** Combining `Pick`, `Omit`, and `Partial` models precise update payload DTOs.
 
+---
+
 ### Exercise 3: Built-In Utility Types Categorization
 
 **Problem:** List 3 object manipulation utility types (`Partial`, `Required`, `Readonly`, `Pick`, `Omit`).
 
 **Expected output:**
-```text
-Partial, Pick, Omit
-```
-
 > [!check]- Answer
+> ```text
+> Partial, Pick, Omit
+> ```
 > ```typescript
 > console.log("Partial, Pick, Omit");
 > ```

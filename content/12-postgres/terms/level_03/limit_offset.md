@@ -141,13 +141,12 @@ SELECT * FROM users ORDER BY id ASC LIMIT 10;
 Calculate the correct SQL `LIMIT` and `OFFSET` parameters to query the database.
 
 **Expected output:**
-```text
-LIMIT = 5
-OFFSET = 15
-Calculation: (4 - 1) * 5 = 15. The query skips the first 15 articles and returns the next 5 (articles 16 through 20).
-```
-
 > [!check]- Answer
+> ```text
+> LIMIT = 5
+> OFFSET = 15
+> Calculation: (4 - 1) * 5 = 15. The query skips the first 15 articles and returns the next 5 (articles 16 through 20).
+> ```
 > - Apply the standard pagination equation using page count 4 and size 5.
 > - Calculate skipped row count first.
 
@@ -160,27 +159,27 @@ Calculation: (4 - 1) * 5 = 15. The query skips the first 15 articles and returns
 **Problem:** Query top 5 highest priced products sorted by `price` descending using `ORDER BY` and `LIMIT`.
 
 **Expected output:**
-```text
-SELECT * FROM products ORDER BY price DESC LIMIT 5;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM products ORDER BY price DESC LIMIT 5;
+> ```
 > ```sql
 > SELECT * FROM products ORDER BY price DESC LIMIT 5;
 > ```
 >
 > **Explanation:** `ORDER BY col DESC LIMIT N` returns the top N largest values.
 
+---
+
 ### Exercise 3: Keyset (Cursor-Based) Pagination Pattern
 
 **Problem:** Query next 10 posts created after `last_created_at` timestamp using keyset pagination.
 
 **Expected output:**
-```text
-SELECT * FROM posts WHERE created_at > '2026-01-01 00:00:00+00' ORDER BY created_at ASC LIMIT 10;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM posts WHERE created_at > '2026-01-01 00:00:00+00' ORDER BY created_at ASC LIMIT 10;
+> ```
 > ```sql
 > SELECT * FROM posts
 > WHERE created_at > '2026-01-01 00:00:00+00'

@@ -148,13 +148,12 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 **Problem:** If you want all the data rows to have a white background, but you want the header row and footer row to have a gray background, how do these grouping tags make your CSS easier?
 
 **Expected output:**
-```text
-Instead of adding a class to every single row, you can simply target the grouping tags in your CSS:
-`thead, tfoot { background-color: gray; }`
-`tbody { background-color: white; }`
-```
-
 > [!check]- Answer
+> ```text
+> Instead of adding a class to every single row, you can simply target the grouping tags in your CSS:
+> `thead, tfoot { background-color: gray; }`
+> `tbody { background-color: white; }`
+> ```
 > - Think about how applying a style to a parent container affects all its children.
 
 ---
@@ -166,11 +165,10 @@ Instead of adding a class to every single row, you can simply target the groupin
 **Problem:** Write skeletal `<table>` structure containing `<thead>`, `<tbody>`, and `<tfoot>` in correct order.
 
 **Expected output:**
-```text
-<table><thead></thead><tbody></tbody><tfoot></tfoot></table>
-```
-
 > [!check]- Answer
+> ```text
+> <table><thead></thead><tbody></tbody><tfoot></tfoot></table>
+> ```
 > ```html
 > <table>
 >   <thead>
@@ -187,16 +185,17 @@ Instead of adding a class to every single row, you can simply target the groupin
 >
 > **Explanation:** Standard table sections partition header (`thead`), data body (`tbody`), and summary (`tfoot`).
 
+---
+
 ### Exercise 3: Printing Table Behavior
 
 **Problem:** What special behavior do print stylesheets display for `<thead>` and `<tfoot>` when printing multi-page tables?
 
 **Expected output:**
-```text
-Browsers repeat the <thead> and <tfoot> rows at top and bottom of every printed page.
-```
-
 > [!check]- Answer
+> ```text
+> Browsers repeat the <thead> and <tfoot> rows at top and bottom of every printed page.
+> ```
 > ```text
 > Browsers repeat the <thead> and <tfoot> rows at top and bottom of every printed page.
 > ```

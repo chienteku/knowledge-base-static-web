@@ -138,12 +138,11 @@ SELECT * FROM post WHERE author IN (SELECT VALUE id FROM user WHERE role = 'admi
 Write a SurrealQL query to retrieve all `orders` where the `customer` field (a `record<customers>` link) belongs to a customer located in `"Tokyo"`.
 
 **Expected output:**
-```sql
-SELECT * FROM orders 
-WHERE customer IN (SELECT VALUE id FROM customers WHERE address.city = 'Tokyo');
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT * FROM orders 
+> WHERE customer IN (SELECT VALUE id FROM customers WHERE address.city = 'Tokyo');
+> ```
 > - The inner subquery should select `VALUE id` from `customers`.
 > - Use the `IN` operator in the outer query's `WHERE` clause.
 
@@ -156,27 +155,27 @@ WHERE customer IN (SELECT VALUE id FROM customers WHERE address.city = 'Tokyo');
 **Problem:** Select user name and total article count using correlated subquery in projection.
 
 **Expected output:**
-```text
-SELECT name, (SELECT VALUE count() FROM article WHERE author = $parent.id GROUP ALL)[0] AS article_count FROM user;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT name, (SELECT VALUE count() FROM article WHERE author = $parent.id GROUP ALL)[0] AS article_count FROM user;
+> ```
 > ```surrealql
 > SELECT name, (SELECT VALUE count() FROM article WHERE author = $parent.id GROUP ALL)[0] AS article_count FROM user;
 > ```
 >
 > **Explanation:** `$parent` accesses outer parent record fields from within nested subqueries.
 
+---
+
 ### Exercise 3: Subquery Predicate Filtering
 
 **Problem:** Select articles whose `author` is in active users list using `WHERE author IN (subquery)`.
 
 **Expected output:**
-```text
-SELECT * FROM article WHERE author IN (SELECT VALUE id FROM user WHERE active = true);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM article WHERE author IN (SELECT VALUE id FROM user WHERE active = true);
+> ```
 > ```surrealql
 > SELECT * FROM article WHERE author IN (SELECT VALUE id FROM user WHERE active = true);
 > ```

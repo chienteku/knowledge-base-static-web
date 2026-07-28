@@ -154,12 +154,11 @@ work_mem = 64MB -- Global setting; set higher per session for specific heavy que
 2.  `maintenance_work_mem` (recommended standard: 5% to 10% of RAM, up to 2GB).
 
 **Expected output:**
-```text
-1. shared_buffers: 8GB (25% of 32GB system RAM).
-2. maintenance_work_mem: 2GB (A safe allocation for high-speed index builds on a 32GB server).
-```
-
 > [!check]- Answer
+> ```text
+> 1. shared_buffers: 8GB (25% of 32GB system RAM).
+> 2. maintenance_work_mem: 2GB (A safe allocation for high-speed index builds on a 32GB server).
+> ```
 > - Multiply the total system RAM (32GB) by 0.25 to find the shared buffers target.
 > - Ensure maintenance work memory is set to a standard DBA target size.
 
@@ -172,27 +171,27 @@ work_mem = 64MB -- Global setting; set higher per session for specific heavy que
 **Problem:** State recommended baseline settings for: 1. `shared_buffers` (25% of RAM); 2. `effective_cache_size` (75% of RAM).
 
 **Expected output:**
-```text
-shared_buffers: 25% of RAM; effective_cache_size: 75% of RAM
-```
-
 > [!check]- Answer
+> ```text
+> shared_buffers: 25% of RAM; effective_cache_size: 75% of RAM
+> ```
 > ```text
 > shared_buffers: 25% of RAM; effective_cache_size: 75% of RAM
 > ```
 >
 > **Explanation:** Standard baseline memory configurations optimize PostgreSQL RAM caching performance.
 
+---
+
 ### Exercise 3: Reloading Configuration Settings
 
 **Problem:** SQL command reloading `postgresql.conf` parameters without server restart (`SELECT pg_reload_conf();`).
 
 **Expected output:**
-```text
-SELECT pg_reload_conf();
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pg_reload_conf();
+> ```
 > ```sql
 > SELECT pg_reload_conf();
 > ```

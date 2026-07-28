@@ -146,11 +146,10 @@ db.posts.find({ $text: { $search: "mongodb" } }); // Fast text index search
 **Problem:** You have a `users` collection. Write the query to find all users whose `email` field starts with the string `"admin"` (case-insensitive). Use the JavaScript regex literal format.
 
 **Expected output:**
-```javascript
-db.users.find({ email: /^admin/i });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.users.find({ email: /^admin/i });
+> ```
 > - Anchor the query to the start of the string using the caret symbol `^`.
 > - Apply the case-insensitivity flag `i` after the closing slash.
 
@@ -163,27 +162,27 @@ db.users.find({ email: /^admin/i });
 **Problem:** Query users where `username` starts with `"admin"` case-insensitively using `$regex` and `$options: "i"`.
 
 **Expected output:**
-```text
-db.users.find({ username: { $regex: "^admin", $options: "i" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ username: { $regex: "^admin", $options: "i" } });
+> ```
 > ```javascript
 > db.users.find({ username: { $regex: "^admin", $options: "i" } });
 > ```
 >
 > **Explanation:** `$options: "i"` performs case-insensitive regex matching; `^` anchors to string start.
 
+---
+
 ### Exercise 3: Anchored Regex Index Scan
 
 **Problem:** Why are anchored regex queries (`^prefix`) faster than un-anchored regex queries? (Anchored regex utilizes B-Tree index range scans).
 
 **Expected output:**
-```text
-Anchored regex queries utilize B-Tree index range scans
-```
-
 > [!check]- Answer
+> ```text
+> Anchored regex queries utilize B-Tree index range scans
+> ```
 > ```text
 > Anchored regex queries utilize B-Tree index range scans
 > ```

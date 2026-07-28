@@ -172,13 +172,12 @@ SELECT * FROM users JOIN orders ON users.id = orders.user_id;
 **Problem:** You have a chess tournament table `players` (columns: `player_name`) containing 3 rows: `'Alice'`, `'Bob'`, `'Charlie'`. You want to generate a schedule where every player plays a match against every other player (including playing against themselves for board testing). Write the SQL query to generate all matchups.
 
 **Expected output:**
-```sql
-SELECT p1.player_name AS white, p2.player_name AS black 
-FROM players AS p1
-CROSS JOIN players AS p2;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT p1.player_name AS white, p2.player_name AS black 
+> FROM players AS p1
+> CROSS JOIN players AS p2;
+> ```
 > - You can cross-join a table to itself (a self cross-join) by assigning two different table aliases (e.g. `p1` and `p2`).
 > - Do not include an `ON` clause since cross joins match everything.
 
@@ -191,11 +190,10 @@ CROSS JOIN players AS p2;
 **Problem:** Generate all possible size (`sizes`) and color (`colors`) product combinations using `CROSS JOIN`.
 
 **Expected output:**
-```text
-SELECT s.size_name, c.color_name FROM sizes s CROSS JOIN colors c;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT s.size_name, c.color_name FROM sizes s CROSS JOIN colors c;
+> ```
 > ```sql
 > SELECT s.size_name, c.color_name
 > FROM sizes s
@@ -204,16 +202,17 @@ SELECT s.size_name, c.color_name FROM sizes s CROSS JOIN colors c;
 >
 > **Explanation:** `CROSS JOIN` produces every combination of rows from LHS and RHS tables.
 
+---
+
 ### Exercise 3: Cartesian Row Count Calculation
 
 **Problem:** Calculate output row count for `CROSS JOIN` between Table A (100 rows) and Table B (50 rows) ($100 	imes 50 = 5,000$).
 
 **Expected output:**
-```text
-5,000 rows (100 * 50)
-```
-
 > [!check]- Answer
+> ```text
+> 5,000 rows (100 * 50)
+> ```
 > ```text
 > 5,000 rows (100 * 50)
 > ```

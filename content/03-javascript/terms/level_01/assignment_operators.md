@@ -163,11 +163,10 @@ let cartTotal = 0;
 ```
 
 **Expected output:**
-```text
-Final Total: 50
-```
-
 > [!check]- Answer
+> ```text
+> Final Total: 50
+> ```
 > - Add 50 using `+=`.
 > - To apply a 10% discount, multiply the total by 0.9 using `*=`.
 > - Add 5 using `+=`.
@@ -179,12 +178,11 @@ Final Total: 50
 **Problem:** Use `??=` to assign default port `8080` to `config.port` only if `config.port` is `null` or `undefined`.
 
 **Expected output:**
-```text
-8080
-3000
-```
-
 > [!check]- Answer
+> ```text
+> 8080
+> 3000
+> ```
 > ```javascript
 > let cfg1 = { port: undefined };
 > cfg1.port ??= 8080;
@@ -197,16 +195,17 @@ Final Total: 50
 >
 > **Explanation:** `x ??= y` assigns `y` to `x` only if `x` is nullish (`null` or `undefined`).
 
+---
+
 ### Exercise 3: Compound Addition Assignment Coercion
 
 **Problem:** Predict what happens when executing `let str = "Count: "; str += 5; str += true;`.
 
 **Expected output:**
-```text
-Count: 5true
-```
-
 > [!check]- Answer
+> ```text
+> Count: 5true
+> ```
 > ```javascript
 > let str = "Count: ";
 > str += 5;

@@ -170,18 +170,17 @@ class Child extends Base { render() { /* Concrete implementation */ } }
 **Problem:** Can you mark a class *property* as abstract, forcing the child class to provide a value for it?
 
 **Expected output:**
-```typescript
-// Yes!
-abstract class Component {
-  abstract templateName: string; // Forces children to declare this property
-}
-
-class Button extends Component {
-  templateName = "btn-template"; // Implemented!
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> // Yes!
+> abstract class Component {
+>   abstract templateName: string; // Forces children to declare this property
+> }
+> 
+> class Button extends Component {
+>   templateName = "btn-template"; // Implemented!
+> }
+> ```
 > - The syntax is exactly the same as abstract methods.
 
 ---
@@ -193,11 +192,10 @@ class Button extends Component {
 **Problem:** Create `abstract class Shape` with `abstract getArea(): number` and concrete `printArea()` method.
 
 **Expected output:**
-```text
-Abstract template method pattern implemented
-```
-
 > [!check]- Answer
+> ```text
+> Abstract template method pattern implemented
+> ```
 > ```typescript
 > abstract class Shape {
 >   abstract getArea(): number;
@@ -213,16 +211,17 @@ Abstract template method pattern implemented
 >
 > **Explanation:** Abstract classes combine concrete shared methods with abstract subclass contract hooks.
 
+---
+
 ### Exercise 3: Abstract Constructor Type Annotation
 
 **Problem:** Type a factory parameter expecting abstract class constructor `type ShapeCtor = abstract new (...args: any[]) => Shape`.
 
 **Expected output:**
-```text
-Abstract constructor type defined
-```
-
 > [!check]- Answer
+> ```text
+> Abstract constructor type defined
+> ```
 > ```typescript
 > type ShapeCtor = abstract new (...args: any[]) => Shape;
 > console.log("Abstract constructor type defined");
@@ -230,18 +229,17 @@ Abstract constructor type defined
 >
 > **Explanation:** `abstract new` syntax describes constructor function types of abstract classes.
 
-
+---
 
 ### Exercise 4: Abstract Class Template Method Pattern
 
 **Problem:** Create `abstract class Shape` with `abstract getArea(): number` and concrete `printArea()` method.
 
 **Expected output:**
-```text
-Abstract template method pattern implemented
-```
-
 > [!check]- Answer
+> ```text
+> Abstract template method pattern implemented
+> ```
 > ```typescript
 > abstract class Shape {
 >   abstract getArea(): number;
@@ -257,16 +255,17 @@ Abstract template method pattern implemented
 >
 > **Explanation:** Abstract classes combine concrete shared methods with abstract subclass contract hooks.
 
+---
+
 ### Exercise 5: Abstract Constructor Type Annotation
 
 **Problem:** Type a factory parameter expecting abstract class constructor `type ShapeCtor = abstract new (...args: any[]) => Shape`.
 
 **Expected output:**
-```text
-Abstract constructor type defined
-```
-
 > [!check]- Answer
+> ```text
+> Abstract constructor type defined
+> ```
 > ```typescript
 > type ShapeCtor = abstract new (...args: any[]) => Shape;
 > console.log("Abstract constructor type defined");

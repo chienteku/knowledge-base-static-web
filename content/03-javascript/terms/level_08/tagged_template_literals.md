@@ -185,11 +185,10 @@ console.log(output);
 ```
 
 **Expected output:**
-```text
-I bought a LAPTOP made by FRUIT.
-```
-
 > [!check]- Answer
+> ```text
+> I bought a LAPTOP made by FRUIT.
+> ```
 > - Inside the if statement, append `String(values[index]).toUpperCase()`.
 
 ---
@@ -199,11 +198,10 @@ I bought a LAPTOP made by FRUIT.
 **Problem:** Write a tag function `upper` that converts evaluated expressions to uppercase.
 
 **Expected output:**
-```text
-HELLO ALICE!
-```
-
 > [!check]- Answer
+> ```text
+> HELLO ALICE!
+> ```
 > ```javascript
 > function upper(strings, ...values) {
 >   return strings.reduce((acc, str, i) => {
@@ -217,16 +215,17 @@ HELLO ALICE!
 >
 > **Explanation:** Tagged template functions intercept literal strings and evaluated expressions for custom processing.
 
+---
+
 ### Exercise 3: Inspecting `strings.raw` Property
 
 **Problem:** Inspect `strings.raw[0]` inside a tagged template function for escaped characters.
 
 **Expected output:**
-```text
-Raw string inspected
-```
-
 > [!check]- Answer
+> ```text
+> Raw string inspected
+> ```
 > ```javascript
 > function tag(strings) {
 >   console.log("Raw string inspected");
@@ -236,7 +235,6 @@ Raw string inspected
 >
 > **Explanation:** `strings.raw` accesses unescaped raw template literal character inputs.
 
----
 
 ---
 

@@ -237,32 +237,34 @@ app.use('/static', express.static(assetsPath));
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Mounting Static Assets on Virtual Prefix Path
 
 **Problem:** Mount `public` static directory under virtual path prefix `/static`.
 
 **Expected output:**
-```text
-app.use('/static', express.static(path.join(__dirname, 'public')));
-```
-
 > [!check]- Answer
+> ```text
+> app.use('/static', express.static(path.join(__dirname, 'public')));
+> ```
 > ```javascript
 > app.use('/static', express.static(path.join(__dirname, 'public')));
 > ```
 >
 > **Explanation:** Providing path prefix string mounts static middleware under a virtual URL path.
 
+---
+
 ### Exercise 3: Configuring Cache Control Headers for Static Files
 
 **Problem:** Configure `express.static` to set `maxAge` cache header to 1 day (86400000 ms).
 
 **Expected output:**
-```text
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
-```
-
 > [!check]- Answer
+> ```text
+> app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
+> ```
 > ```javascript
 > app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
 > ```

@@ -159,16 +159,10 @@ CREATE TABLE logs_default PARTITION OF logs DEFAULT;
 2.  How would you rewrite the query to enable pruning?
 
 **Expected output:**
-```text
-1. Partition Pruning fails because the query filter (`WHERE amount > 1000.00`) does not include the partitioning key column (`logged_date` / year). Because the planner doesn't know what years are requested, it is forced to scan every single partition on disk, losing all pruning benefits.
-```
-```sql
--- 2. Rewritten query containing the partition key
-SELECT * FROM sales_history 
-WHERE amount > 1000.00 AND logged_date >= '2026-01-01';
-```
-
 > [!check]- Answer
+> ```text
+> 1. Partition Pruning fails because the query filter (`WHERE amount > 1000.00`) does not include the partitioning key column (`logged_date` / year). Because the planner doesn't know what years are requested, it is forced to scan every single partition on disk, losing all pruning benefits.
+> ```
 > - The database must know which partition boundaries contain the target rows.
 > - Always include the partition key in your query filters.
 
@@ -181,11 +175,10 @@ WHERE amount > 1000.00 AND logged_date >= '2026-01-01';
 **Problem:** Create range-partitioned table `metrics` partitioned by `created_at` and create partition `metrics_2026_01` for Jan 2026.
 
 **Expected output:**
-```text
-CREATE TABLE metrics ( id INT, created_at TIMESTAMPTZ NOT NULL, val NUMERIC, PRIMARY KEY (id, created_at) ) PARTITION BY RANGE (created_at); CREATE TABLE metrics_2026_01 PARTITION OF metrics FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE metrics ( id INT, created_at TIMESTAMPTZ NOT NULL, val NUMERIC, PRIMARY KEY (id, created_at) ) PARTITION BY RANGE (created_at); CREATE TABLE metrics_2026_01 PARTITION OF metrics FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
+> ```
 > ```sql
 > CREATE TABLE metrics (
 >   id INT,
@@ -200,16 +193,17 @@ CREATE TABLE metrics ( id INT, created_at TIMESTAMPTZ NOT NULL, val NUMERIC, PRI
 >
 > **Explanation:** Declarative Range Partitioning splits large tables into manageable time-based child partitions.
 
+---
+
 ### Exercise 3: Partition Pruning Verification
 
 **Problem:** What query planner optimization skips un-needed child partitions during query execution? (`Partition Pruning`).
 
 **Expected output:**
-```text
-Partition Pruning
-```
-
 > [!check]- Answer
+> ```text
+> Partition Pruning
+> ```
 > ```text
 > Partition Pruning
 > ```

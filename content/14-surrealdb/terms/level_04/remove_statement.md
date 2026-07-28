@@ -151,12 +151,11 @@ Write the SurrealQL commands to:
 3.  Add error suppression guards to both statements to ensure the script runs safely.
 
 **Expected output:**
-```sql
-REMOVE INDEX log_timestamp ON TABLE logs IF EXISTS;
-REMOVE FIELD session_hash ON TABLE logs IF EXISTS;
-```
-
 > [!check]- Answer
+> ```sql
+> REMOVE INDEX log_timestamp ON TABLE logs IF EXISTS;
+> REMOVE FIELD session_hash ON TABLE logs IF EXISTS;
+> ```
 > - The target schema component is specified using `ON TABLE logs`.
 > - Append the conditional modifier `IF EXISTS` to both commands.
 
@@ -169,11 +168,10 @@ REMOVE FIELD session_hash ON TABLE logs IF EXISTS;
 **Problem:** Write commands to remove field `legacy_age` and index `user_age_idx` from `user` table.
 
 **Expected output:**
-```text
-REMOVE FIELD legacy_age ON TABLE user; REMOVE INDEX user_age_idx ON TABLE user;
-```
-
 > [!check]- Answer
+> ```text
+> REMOVE FIELD legacy_age ON TABLE user; REMOVE INDEX user_age_idx ON TABLE user;
+> ```
 > ```surrealql
 > REMOVE FIELD legacy_age ON TABLE user;
 > REMOVE INDEX user_age_idx ON TABLE user;
@@ -181,16 +179,17 @@ REMOVE FIELD legacy_age ON TABLE user; REMOVE INDEX user_age_idx ON TABLE user;
 >
 > **Explanation:** `REMOVE FIELD` and `REMOVE INDEX` drop schema definitions.
 
+---
+
 ### Exercise 3: Removing Database Scope
 
 **Problem:** Command to drop entire database `test_db` from namespace (`REMOVE DATABASE test_db;`).
 
 **Expected output:**
-```text
-REMOVE DATABASE test_db;
-```
-
 > [!check]- Answer
+> ```text
+> REMOVE DATABASE test_db;
+> ```
 > ```surrealql
 > REMOVE DATABASE test_db;
 > ```

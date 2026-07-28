@@ -147,12 +147,11 @@ Wrap SERIALIZABLE transactions in retry loops catching error code 40001
 What is the lowest PostgreSQL isolation level that guarantees this?
 
 **Expected output:**
-```text
-REPEATABLE READ!
-Under REPEATABLE READ, the database snapshot is frozen at the start of the transaction block, preventing any subsequent updates committed by other concurrent transactions from appearing.
-```
-
 > [!check]- Answer
+> ```text
+> REPEATABLE READ!
+> Under REPEATABLE READ, the database snapshot is frozen at the start of the transaction block, preventing any subsequent updates committed by other concurrent transactions from appearing.
+> ```
 > - Read the Anomaly Matrix to see which levels block Non-Repeatable Reads.
 > - Recall that PostgreSQL's default is Read Committed, which allows values to change mid-transaction.
 
@@ -165,27 +164,27 @@ Under REPEATABLE READ, the database snapshot is frozen at the start of the trans
 **Problem:** Set isolation level to `SERIALIZABLE` for active transaction.
 
 **Expected output:**
-```text
-BEGIN ISOLATION LEVEL SERIALIZABLE;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN ISOLATION LEVEL SERIALIZABLE;
+> ```
 > ```sql
 > BEGIN ISOLATION LEVEL SERIALIZABLE;
 > ```
 >
 > **Explanation:** `BEGIN ISOLATION LEVEL` configures transaction isolation semantics.
 
+---
+
 ### Exercise 3: Default Isolation Level in PostgreSQL
 
 **Problem:** What is the default isolation level in PostgreSQL? (`READ COMMITTED`).
 
 **Expected output:**
-```text
-READ COMMITTED
-```
-
 > [!check]- Answer
+> ```text
+> READ COMMITTED
+> ```
 > ```text
 > READ COMMITTED
 > ```

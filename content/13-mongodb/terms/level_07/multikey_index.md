@@ -191,13 +191,12 @@ Identify which of the following index builds will fail (write **Succeed** or **F
 3.  `db.students.createIndex({ enrolled_classes: 1, hobbies: 1 })`
 
 **Expected output:**
-```text
-1. Succeed: This is a single-field index on an array, which translates to a standard multikey index.
-2. Succeed: This is a compound index containing only one array field (`enrolled_classes`), which is permitted.
-3. Fail: This index attempts to combine two array fields (`enrolled_classes` and `hobbies`) in a compound structure, violating the parallel array indexing rule.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Succeed: This is a single-field index on an array, which translates to a standard multikey index.
+> 2. Succeed: This is a compound index containing only one array field (`enrolled_classes`), which is permitted.
+> 3. Fail: This index attempts to combine two array fields (`enrolled_classes` and `hobbies`) in a compound structure, violating the parallel array indexing rule.
+> ```
 > - Check how many array fields exist in each compound index definition.
 > - The database restricts compound indexes to a maximum of one array path.
 
@@ -210,27 +209,27 @@ Identify which of the following index builds will fail (write **Succeed** or **F
 **Problem:** Create multikey index on array field `tags` in `posts` collection.
 
 **Expected output:**
-```text
-db.posts.createIndex({ tags: 1 });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.createIndex({ tags: 1 });
+> ```
 > ```javascript
 > db.posts.createIndex({ tags: 1 });
 > ```
 >
 > **Explanation:** Indexing an array field automatically creates a Multikey index indexing each array element.
 
+---
+
 ### Exercise 3: Multikey Index Flag in Explain Output
 
 **Problem:** What property in `explain()` indicates a multikey index? (`isMultiKey: true`).
 
 **Expected output:**
-```text
-isMultiKey: true
-```
-
 > [!check]- Answer
+> ```text
+> isMultiKey: true
+> ```
 > ```text
 > isMultiKey: true
 > ```

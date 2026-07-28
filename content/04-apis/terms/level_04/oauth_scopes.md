@@ -158,11 +158,10 @@ app.post('/items', verifyToken, requireScope('write:items'), (req, res) => {
 **Problem:** Specify minimal scopes for an app that reads user profile info and posts tweets on user's behalf.
 
 **Expected output:**
-```text
-read:profile write:tweets (or read:user user:write)
-```
-
 > [!check]- Answer
+> ```text
+> read:profile write:tweets (or read:user user:write)
+> ```
 > ```text
 > read:user write:tweets
 > ```
@@ -174,11 +173,10 @@ read:profile write:tweets (or read:user user:write)
 **Problem:** How are multiple granted scopes formatted inside a standard OAuth 2.0 access token payload?
 
 **Expected output:**
-```text
-As a space-separated string of scope names (e.g. "scope": "read:user write:orders").
-```
-
 > [!check]- Answer
+> ```text
+> As a space-separated string of scope names (e.g. "scope": "read:user write:orders").
+> ```
 > ```json
 > {
 > "sub": "user_123",

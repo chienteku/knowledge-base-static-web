@@ -136,11 +136,10 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 **Problem:** Is it acceptable to have two `<nav>` elements on a single page, for example, a primary menu at the top, and a "Table of Contents" menu for a long article?
 
 **Expected output:**
-```text
-Yes! It is perfectly acceptable and encouraged to have multiple `<nav>` elements if they both represent major blocks of navigation. (Best practice is to give them unique `aria-label` attributes, like `aria-label="Main menu"` and `aria-label="Table of contents"`).
-```
-
 > [!check]- Answer
+> ```text
+> Yes! It is perfectly acceptable and encouraged to have multiple `<nav>` elements if they both represent major blocks of navigation. (Best practice is to give them unique `aria-label` attributes, like `aria-label="Main menu"` and `aria-label="Table of contents"`).
+> ```
 > - Does a Table of Contents act as a major steering wheel for an article? Yes!
 
 ---
@@ -152,11 +151,10 @@ Yes! It is perfectly acceptable and encouraged to have multiple `<nav>` elements
 **Problem:** Write `<nav>` with `aria-label="Main"` containing unordered list of 2 links (`Home`, `About`).
 
 **Expected output:**
-```text
-<nav aria-label="Main"><ul><li><a href="/">Home</a></li><li><a href="/about">About</a></li></ul></nav>
-```
-
 > [!check]- Answer
+> ```text
+> <nav aria-label="Main"><ul><li><a href="/">Home</a></li><li><a href="/about">About</a></li></ul></nav>
+> ```
 > ```html
 > <nav aria-label="Main">
 >   <ul>
@@ -168,16 +166,17 @@ Yes! It is perfectly acceptable and encouraged to have multiple `<nav>` elements
 >
 > **Explanation:** `<ul>` inside `<nav>` provides accessible list count context for screen readers.
 
+---
+
 ### Exercise 3: Nav Landmark Role
 
 **Problem:** Which implicit ARIA landmark role does the `<nav>` element convey?
 
 **Expected output:**
-```text
-navigation landmark role.
-```
-
 > [!check]- Answer
+> ```text
+> navigation landmark role.
+> ```
 > ```text
 > navigation landmark role.
 > ```

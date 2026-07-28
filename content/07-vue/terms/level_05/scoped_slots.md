@@ -125,13 +125,12 @@ In the parent, you use `v-slot` (or `#`) to receive the exposed data object. You
 **Problem:** Have you ever seen a component that has absolutely no UI of its own? It just does logic (like fetching an API or tracking mouse coordinates) and uses a Scoped Slot for 100% of its rendering? This is called a "Renderless Component". Is this a good pattern in Vue 3?
 
 **Expected output:**
-```text
-In Vue 2, yes, this was a very popular pattern.
-In Vue 3, NO! 
-Renderless components have been entirely superseded by Composables (`useMouse()`, `useFetch()`). Composables extract logic without the heavy performance overhead of creating invisible Vue components.
-```
-
 > [!check]- Answer
+> ```text
+> In Vue 2, yes, this was a very popular pattern.
+> In Vue 3, NO! 
+> Renderless components have been entirely superseded by Composables (`useMouse()`, `useFetch()`). Composables extract logic without the heavy performance overhead of creating invisible Vue components.
+> ```
 > - Think about the new features introduced in Vue 3's Composition API!
 
 ---
@@ -141,11 +140,10 @@ Renderless components have been entirely superseded by Composables (`useMouse()`
 **Problem:** Write child component `<template>` exposing item data object `row` to a named scoped slot `item`.
 
 **Expected output:**
-```html
-<slot name="item" :row="row"></slot>
-```
-
 > [!check]- Answer
+> ```html
+> <slot name="item" :row="row"></slot>
+> ```
 > - Pass props to `<slot :propName="data">` to create scoped slots.
 > 
 > ```html
@@ -161,11 +159,10 @@ Renderless components have been entirely superseded by Composables (`useMouse()`
 **Problem:** Write parent component template consuming scoped slot `item` destructuring `row` and `index`.
 
 **Expected output:**
-```html
-<MyList #item="{ row, index }">{{ index }}: {{ row.title }}</MyList>
-```
-
 > [!check]- Answer
+> ```html
+> <MyList #item="{ row, index }">{{ index }}: {{ row.title }}</MyList>
+> ```
 > - Parent template uses `#slotName="{ destructure }"`.
 > 
 > ```html

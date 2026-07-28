@@ -182,6 +182,8 @@ Use surrogate id primary key alongside UNIQUE (col1, col2, col3, col4)
 >
 > **Explanation:** Composite primary keys enforce row uniqueness across multi-column combinations.
 
+---
+
 ### Exercise 3: Composite Key Index Prefix Matching
 
 **Problem:** Given composite primary key `(tenant_id, user_id)`, can query `WHERE user_id = 5` use the primary key index? (No, skips leading tenant_id prefix).

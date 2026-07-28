@@ -115,12 +115,11 @@ Embed closely-bound data into single documents
 Explain how this object is saved in MongoDB compared to a relational database.
 
 **Expected output:**
-```text
-- MongoDB: The object is saved exactly as it is written. MongoDB accepts the nested array `permissions` directly inside the user's document in a single collection.
-- Relational Database: The object must be split. The username goes to a `users` table, and the three permissions must be inserted as three separate rows inside a child `permissions` table, linked via a foreign key.
-```
-
 > [!check]- Answer
+> ```text
+> - MongoDB: The object is saved exactly as it is written. MongoDB accepts the nested array `permissions` directly inside the user's document in a single collection.
+> - Relational Database: The object must be split. The username goes to a `users` table, and the three permissions must be inserted as three separate rows inside a child `permissions` table, linked via a foreign key.
+> ```
 > - Think about whether MongoDB requires splitting nested structures.
 > - Consider how SQL handles array columns under normalization.
 
@@ -133,27 +132,27 @@ Explain how this object is saved in MongoDB compared to a relational database.
 **Problem:** State how MongoDB stores user permissions vs PostgreSQL (MongoDB embeds array; Postgres splits into child junction table).
 
 **Expected output:**
-```text
-MongoDB embeds permissions array in single document; Postgres splits into child table rows
-```
-
 > [!check]- Answer
+> ```text
+> MongoDB embeds permissions array in single document; Postgres splits into child table rows
+> ```
 > ```text
 > MongoDB embeds permissions array in single document; Postgres splits into child table rows
 > ```
 >
 > **Explanation:** Document stores preserve object structures natively without relational joins.
 
+---
+
 ### Exercise 3: Maximum Document Size Limit
 
 **Problem:** What is MongoDB's maximum single BSON document size limit? (`16MB`).
 
 **Expected output:**
-```text
-16MB
-```
-
 > [!check]- Answer
+> ```text
+> 16MB
+> ```
 > ```text
 > 16MB
 > ```

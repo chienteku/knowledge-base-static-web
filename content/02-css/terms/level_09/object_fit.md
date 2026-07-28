@@ -205,16 +205,15 @@ img { object-fit: cover; }
 **Problem:** You are building a background video banner. The video (`<video>`) must occupy 100% width and 400px height, filling the entire space like a background banner without distorting the video stream. Write the CSS.
 
 **Expected output:**
-```css
-.video-banner {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  object-position: center;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .video-banner {
+>   width: 100%;
+>   height: 400px;
+>   object-fit: cover;
+>   object-position: center;
+> }
+> ```
 > - Set width and height explicitly.
 > - Apply the property that scales media tags to fill containers.
 
@@ -227,11 +226,10 @@ img { object-fit: cover; }
 **Problem:** Write CSS for `img.avatar` making it 80x80px square, rounded 50%, with crop covering `object-fit`.
 
 **Expected output:**
-```text
-img.avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
-```
-
 > [!check]- Answer
+> ```text
+> img.avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+> ```
 > ```css
 > img.avatar {
 >   width: 80px;
@@ -243,16 +241,17 @@ img.avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
 >
 > **Explanation:** `object-fit: cover` prevents image stretching inside fixed aspect ratio boxes.
 
+---
+
 ### Exercise 3: Object Position Focal Point
 
 **Problem:** Which property adjusts focal point alignment when `object-fit: cover` crops an image?
 
 **Expected output:**
-```text
-object-position (e.g. object-position: top center;)
-```
-
 > [!check]- Answer
+> ```text
+> object-position (e.g. object-position: top center;)
+> ```
 > ```css
 > img {
 >   object-fit: cover;

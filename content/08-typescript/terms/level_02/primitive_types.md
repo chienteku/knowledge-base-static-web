@@ -103,13 +103,12 @@ const sum = 10n + BigInt(5);
 **Problem:** You need to work with a massive number that exceeds JavaScript's standard number limit, so you use ES2020's `BigInt`. How do you type this in TypeScript?
 
 **Expected output:**
-```typescript
-const hugeNumber: bigint = 9007199254740991n;
-// Notice it is lowercase `bigint`!
-// (You must configure your tsconfig.json `target` to "ES2020" for this to work).
-```
-
 > [!check]- Answer
+> ```typescript
+> const hugeNumber: bigint = 9007199254740991n;
+> // Notice it is lowercase `bigint`!
+> // (You must configure your tsconfig.json `target` to "ES2020" for this to work).
+> ```
 > - Does `BigInt` have a primitive type in TS?
 
 ---
@@ -121,11 +120,10 @@ const hugeNumber: bigint = 9007199254740991n;
 **Problem:** Annotate variables `age` (25), `isStudent` (true), `symbolKey` (Symbol()).
 
 **Expected output:**
-```text
-age: number, isStudent: boolean, symbolKey: symbol
-```
-
 > [!check]- Answer
+> ```text
+> age: number, isStudent: boolean, symbolKey: symbol
+> ```
 > ```typescript
 > const age: number = 25;
 > const isStudent: boolean = true;
@@ -135,16 +133,17 @@ age: number, isStudent: boolean, symbolKey: symbol
 >
 > **Explanation:** Lowercase annotations represent core JavaScript primitive data types.
 
+---
+
 ### Exercise 3: BigInt Type Usage
 
 **Problem:** Annotate a 64-bit integer literal `100n` using primitive `bigint`.
 
 **Expected output:**
-```text
-100n: bigint
-```
-
 > [!check]- Answer
+> ```text
+> 100n: bigint
+> ```
 > ```javascript
 > const big: bigint = 100n;
 > console.log("100n: bigint");

@@ -166,11 +166,10 @@ async function processData() {
 **Problem:** A common use case for Debounce is attaching it to the `window.onresize` event. If a user grabs the corner of their browser and drags it to make it larger, the browser fires the `resize` event hundreds of times a second. Why is Debounce perfect for recalculating complex UI layouts here?
 
 **Expected output:**
-```text
-Because recalculating a complex layout 100 times per second will freeze the browser. By debouncing it (e.g., 200ms), the layout only recalculates ONCE, exactly when the user finally lets go of the mouse button and stops dragging the window.
-```
-
 > [!check]- Answer
+> ```text
+> Because recalculating a complex layout 100 times per second will freeze the browser. By debouncing it (e.g., 200ms), the layout only recalculates ONCE, exactly when the user finally lets go of the mouse button and stops dragging the window.
+> ```
 > - Think about the "Elevator" metaphor. We wait for the chaos to stop.
 
 ---
@@ -180,11 +179,10 @@ Because recalculating a complex layout 100 times per second will freeze the brow
 **Problem:** Implement a `debounce(fn, delay)` helper that resets a timer on rapid calls.
 
 **Expected output:**
-```text
-Debounced call executed once
-```
-
 > [!check]- Answer
+> ```text
+> Debounced call executed once
+> ```
 > ```javascript
 > function debounce(fn, delay) {
 >   let timer;
@@ -199,23 +197,23 @@ Debounced call executed once
 >
 > **Explanation:** Debouncing delays execution until a burst of rapid events pauses for specified duration.
 
+---
+
 ### Exercise 3: Immediate Leading Edge Debouncing
 
 **Problem:** Explain how leading-edge debouncing executes immediately on the first call then suppresses subsequent calls during delay.
 
 **Expected output:**
-```text
-Leading edge execution mode
-```
-
 > [!check]- Answer
+> ```text
+> Leading edge execution mode
+> ```
 > ```javascript
 > console.log("Leading edge execution mode");
 > ```
 >
 > **Explanation:** Leading edge options execute immediately upon event start before initiating quiet timer delays.
 
----
 
 ---
 

@@ -117,12 +117,11 @@ HTTP/1.1 403 Forbidden ; Correct code: User authenticated, but forbidden permiss
 Should you spend the next hour debugging your React code, or call the backend engineer?
 
 **Expected output:**
-```text
-Call the backend engineer! 
-Any code starting with `5` means the Server failed. Your React code is completely fine; the backend infrastructure is broken.
-```
-
 > [!check]- Answer
+> ```text
+> Call the backend engineer! 
+> Any code starting with `5` means the Server failed. Your React code is completely fine; the backend infrastructure is broken.
+> ```
 > - Remember the 4xx vs 5xx rule! 4 is your fault, 5 is their fault.
 
 ---
@@ -137,15 +136,14 @@ Any code starting with `5` means the Server failed. Your React code is completel
 5. 5xx
 
 **Expected output:**
-```text
-1. Informational
-2. Success
-3. Redirection
-4. Client Error
-5. Server Error
-```
-
 > [!check]- Answer
+> ```text
+> 1. Informational
+> 2. Success
+> 3. Redirection
+> 4. Client Error
+> 5. Server Error
+> ```
 > ```text
 > 1xx -> Informational
 > 2xx -> Success
@@ -165,14 +163,13 @@ Any code starting with `5` means the Server failed. Your React code is completel
 4. Database connection timeout inside backend service.
 
 **Expected output:**
-```text
-1. 201 Created
-2. 404 Not Found
-3. 429 Too Many Requests
-4. 500 Internal Server Error (or 504 Gateway Timeout)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 201 Created
+> 2. 404 Not Found
+> 3. 429 Too Many Requests
+> 4. 500 Internal Server Error (or 504 Gateway Timeout)
+> ```
 > ```text
 > 1. 201 Created
 > 2. 404 Not Found

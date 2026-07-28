@@ -150,13 +150,12 @@ SELECT EXTRACT(YEAR FROM NOW())::INT AS year_num;
 **Problem:** You want to send marketing discount emails to users during their birthday month. Write a SQL query that retrieves the `username` and `email` of all users whose birthday month (`date_of_birth` column) matches the current calendar month.
 
 **Expected output:**
-```sql
-SELECT username, email 
-FROM users 
-WHERE EXTRACT(MONTH FROM date_of_birth) = EXTRACT(MONTH FROM NOW());
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT username, email 
+> FROM users 
+> WHERE EXTRACT(MONTH FROM date_of_birth) = EXTRACT(MONTH FROM NOW());
+> ```
 > - Use the `EXTRACT` function on the birthday column and the current time `NOW()`.
 > - Compare the two numeric month outputs using the `=` operator.
 
@@ -169,27 +168,27 @@ WHERE EXTRACT(MONTH FROM date_of_birth) = EXTRACT(MONTH FROM NOW());
 **Problem:** Truncate timestamp column `created_at` to the start of the month using `DATE_TRUNC('month', created_at)`.
 
 **Expected output:**
-```text
-SELECT DATE_TRUNC('month', created_at) AS month_start FROM orders;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT DATE_TRUNC('month', created_at) AS month_start FROM orders;
+> ```
 > ```sql
 > SELECT DATE_TRUNC('month', created_at) AS month_start FROM orders;
 > ```
 >
 > **Explanation:** `DATE_TRUNC(unit, timestamp)` rounds timestamps down to specified interval boundaries.
 
+---
+
 ### Exercise 3: Interval Arithmetic for Date Expiry
 
 **Problem:** Calculate expiry timestamp 30 days into the future from `NOW()` using interval arithmetic.
 
 **Expected output:**
-```text
-SELECT NOW() + INTERVAL '30 days' AS expires_at;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT NOW() + INTERVAL '30 days' AS expires_at;
+> ```
 > ```sql
 > SELECT NOW() + INTERVAL '30 days' AS expires_at;
 > ```

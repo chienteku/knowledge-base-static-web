@@ -171,13 +171,12 @@ Use JOIN: SELECT u.name, o.total FROM users u JOIN orders o ON u.id = o.user_id;
 **Problem:** You have an `employees` table with columns `name`, `department`, and `salary`. Write a SQL query to find the names of all employees who earn strictly more than the salary of the employee named `'Bob'`. Assume there is only one employee named Bob.
 
 **Expected output:**
-```sql
-SELECT name 
-FROM employees 
-WHERE salary > (SELECT salary FROM employees WHERE name = 'Bob');
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name 
+> FROM employees 
+> WHERE salary > (SELECT salary FROM employees WHERE name = 'Bob');
+> ```
 > - Write the inner query to fetch Bob's salary first.
 > - Nest it inside the outer query's `WHERE` clause comparing salaries.
 
@@ -190,11 +189,10 @@ WHERE salary > (SELECT salary FROM employees WHERE name = 'Bob');
 **Problem:** Query products whose `price` exceeds the overall average product price using a scalar subquery.
 
 **Expected output:**
-```text
-SELECT * FROM products WHERE price > (SELECT AVG(price) FROM products);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM products WHERE price > (SELECT AVG(price) FROM products);
+> ```
 > ```sql
 > SELECT * FROM products
 > WHERE price > (SELECT AVG(price) FROM products);
@@ -202,16 +200,17 @@ SELECT * FROM products WHERE price > (SELECT AVG(price) FROM products);
 >
 > **Explanation:** Scalar subqueries evaluate to a single value usable in comparison predicates.
 
+---
+
 ### Exercise 3: Derived Table Subquery in FROM Clause
 
 **Problem:** Select max category total from derived summary table `SELECT category, SUM(price) AS cat_total FROM products GROUP BY category`.
 
 **Expected output:**
-```text
-SELECT MAX(cat_total) FROM (SELECT category, SUM(price) AS cat_total FROM products GROUP BY category) AS sub;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT MAX(cat_total) FROM (SELECT category, SUM(price) AS cat_total FROM products GROUP BY category) AS sub;
+> ```
 > ```sql
 > SELECT MAX(cat_total)
 > FROM (

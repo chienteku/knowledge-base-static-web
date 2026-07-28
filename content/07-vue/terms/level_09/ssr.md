@@ -109,13 +109,12 @@ onMounted(() => {
 **Problem:** You are building an internal admin dashboard for your company's employees. It requires a login to see anything. Do you need SSR?
 
 **Expected output:**
-```text
-Absolutely not. 
-SSR is primarily used for SEO (which an internal tool doesn't need) and Initial Load Speed (which employees on office Wi-Fi don't care about). 
-An internal dashboard should be a standard SPA. SSR would just add unnecessary complexity and server costs.
-```
-
 > [!check]- Answer
+> ```text
+> Absolutely not. 
+> SSR is primarily used for SEO (which an internal tool doesn't need) and Initial Load Speed (which employees on office Wi-Fi don't care about). 
+> An internal dashboard should be a standard SPA. SSR would just add unnecessary complexity and server costs.
+> ```
 > - Does Google need to index an internal company dashboard?
 
 ---
@@ -125,11 +124,10 @@ An internal dashboard should be a standard SPA. SSR would just add unnecessary c
 **Problem:** Which official package function converts a Vue application instance into an HTML string on a Node.js SSR server?
 
 **Expected output:**
-```javascript
-import { renderToString } from 'vue/server-renderer'; await renderToString(app);
-```
-
 > [!check]- Answer
+> ```javascript
+> import { renderToString } from 'vue/server-renderer'; await renderToString(app);
+> ```
 > - `renderToString(app)` converts Vue components into HTML strings.
 > 
 > ```javascript
@@ -144,11 +142,10 @@ import { renderToString } from 'vue/server-renderer'; await renderToString(app);
 **Problem:** How does SSR improve TTFB (Time To First Byte) and FCP (First Contentful Paint) compared to CSR?
 
 **Expected output:**
-```text
-SSR returns pre-rendered HTML content directly in the initial HTTP response, allowing browsers to paint text/images immediately without waiting for JS bundle downloads.
-```
-
 > [!check]- Answer
+> ```text
+> SSR returns pre-rendered HTML content directly in the initial HTTP response, allowing browsers to paint text/images immediately without waiting for JS bundle downloads.
+> ```
 > - Pre-rendered server HTML displays content immediately.
 > 
 > ```text

@@ -196,13 +196,12 @@ span { font-variant: small-caps; }
 ```
 
 **Expected output:**
-```css
-.card-header {
-  font: italic small-caps bold 1.5rem/1.2 sans-serif;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .card-header {
+>   font: italic small-caps bold 1.5rem/1.2 sans-serif;
+> }
+> ```
 > - Follow the sequence: style -> variant -> weight -> size/line-height -> family.
 
 ---
@@ -214,11 +213,10 @@ span { font-variant: small-caps; }
 **Problem:** Write CSS rule applying small-caps variant to `.section-subtitle`.
 
 **Expected output:**
-```text
-.section-subtitle { font-variant: small-caps; }
-```
-
 > [!check]- Answer
+> ```text
+> .section-subtitle { font-variant: small-caps; }
+> ```
 > ```css
 > .section-subtitle {
 >   font-variant: small-caps;
@@ -227,16 +225,17 @@ span { font-variant: small-caps; }
 >
 > **Explanation:** `font-variant: small-caps` renders lowercase letters as smaller uppercase glyphs.
 
+---
+
 ### Exercise 3: Italic vs Oblique Font Style
 
 **Problem:** What is the typographic difference between `font-style: italic` and `font-style: oblique`?
 
 **Expected output:**
-```text
-italic uses specially designed cursive italic glyph shapes; oblique mechanically slants standard normal font glyphs.
-```
-
 > [!check]- Answer
+> ```text
+> italic uses specially designed cursive italic glyph shapes; oblique mechanically slants standard normal font glyphs.
+> ```
 > ```text
 > italic uses specially designed cursive italic glyph shapes; oblique mechanically slants standard normal font glyphs.
 > ```

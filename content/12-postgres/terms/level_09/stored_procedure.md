@@ -150,22 +150,21 @@ CALL my_procedure(); -- Correct procedure invocation
 2.  Write the SQL command to execute this procedure.
 
 **Expected output:**
-```sql
-CREATE PROCEDURE archive_tasks()
-LANGUAGE plpgsql AS $$
-BEGIN
-  UPDATE tasks 
-  SET status = 'archived' 
-  WHERE created_at < '2026-01-01';
-  
-  COMMIT;
-END;
-$$;
-
-CALL archive_tasks();
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE PROCEDURE archive_tasks()
+> LANGUAGE plpgsql AS $$
+> BEGIN
+>   UPDATE tasks 
+>   SET status = 'archived' 
+>   WHERE created_at < '2026-01-01';
+>   
+>   COMMIT;
+> END;
+> $$;
+> 
+> CALL archive_tasks();
+> ```
 > - Define the procedure using `CREATE PROCEDURE` (no returns parameter is required).
 > - Use the `CALL` statement to run the procedure.
 
@@ -178,11 +177,10 @@ CALL archive_tasks();
 **Problem:** Create stored procedure `batch_cleanup()` executing transaction commit inside procedure body.
 
 **Expected output:**
-```text
-CREATE OR REPLACE PROCEDURE batch_cleanup() AS $$ BEGIN DELETE FROM logs WHERE created_at < NOW() - INTERVAL '30 days'; COMMIT; END; $$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE OR REPLACE PROCEDURE batch_cleanup() AS $$ BEGIN DELETE FROM logs WHERE created_at < NOW() - INTERVAL '30 days'; COMMIT; END; $$ LANGUAGE plpgsql;
+> ```
 > ```sql
 > CREATE OR REPLACE PROCEDURE batch_cleanup() AS $$
 > BEGIN
@@ -194,16 +192,17 @@ CREATE OR REPLACE PROCEDURE batch_cleanup() AS $$ BEGIN DELETE FROM logs WHERE c
 >
 > **Explanation:** `CREATE PROCEDURE` allows issuing `COMMIT` and `ROLLBACK` commands mid-execution.
 
+---
+
 ### Exercise 3: Calling Stored Procedure
 
 **Problem:** Execute stored procedure `batch_cleanup()` using `CALL`.
 
 **Expected output:**
-```text
-CALL batch_cleanup();
-```
-
 > [!check]- Answer
+> ```text
+> CALL batch_cleanup();
+> ```
 > ```sql
 > CALL batch_cleanup();
 > ```

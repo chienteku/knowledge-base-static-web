@@ -163,11 +163,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Score: 100
-```
-
 > [!check]- Answer
+> ```text
+> Score: 100
+> ```
 > - The semicolon at the end of `score;` turns it into a statement that returns `()`.
 > - Remove the semicolon to make it an expression that returns its value!
 
@@ -178,11 +177,10 @@ Score: 100
 **Problem:** Write a function `fn process_data() -> Result<(), String>` that returns `Ok(())` on success.
 
 **Expected output:**
-```
-Data processed successfully
-```
-
 > [!check]- Answer
+> ```
+> Data processed successfully
+> ```
 > ```rust
 > fn process_data() -> Result<(), String> {
 >     println!("Data processed successfully");
@@ -195,16 +193,17 @@ Data processed successfully
 >
 > **Explanation:** In Rust APIs, `Result<(), Error>` signals operations that perform side effects without yielding a meaningful data value on success.
 
+---
+
 ### Exercise 3: Using Unit as Map Set Value
 
 **Problem:** Create a `std::collections::HashMap<String, ()>` to store unique keys, inserting `"key1"` with `()` as value.
 
 **Expected output:**
-```
-Key present: true
-```
-
 > [!check]- Answer
+> ```
+> Key present: true
+> ```
 > ```rust
 > use std::collections::HashMap;
 > fn main() {

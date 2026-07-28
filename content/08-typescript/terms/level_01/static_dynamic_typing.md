@@ -104,12 +104,11 @@ function isUser(obj: any): obj is User {
 **Problem:** Is Python statically or dynamically typed? What about Java?
 
 **Expected output:**
-```text
-Python is dynamically typed (like JavaScript). You can reassign a string to a number variable.
-Java is statically typed (like TypeScript). You must declare `int x = 5;` and it can never be a string.
-```
-
 > [!check]- Answer
+> ```text
+> Python is dynamically typed (like JavaScript). You can reassign a string to a number variable.
+> Java is statically typed (like TypeScript). You must declare `int x = 5;` and it can never be a string.
+> ```
 > - Think about whether you have to declare variable types in Python.
 
 ---
@@ -121,27 +120,27 @@ Java is statically typed (like TypeScript). You must declare `int x = 5;` and it
 **Problem:** Identify whether type checking occurs at Compile-Time (Static) or Runtime (Dynamic).
 
 **Expected output:**
-```text
-Static: Compile-Time, Dynamic: Runtime
-```
-
 > [!check]- Answer
+> ```text
+> Static: Compile-Time, Dynamic: Runtime
+> ```
 > ```typescript
 > console.log("Static: Compile-Time, Dynamic: Runtime");
 > ```
 >
 > **Explanation:** Static typing verifies types during compilation; dynamic typing checks types during execution.
 
+---
+
 ### Exercise 3: Type Error Detection Timing
 
 **Problem:** Explain why `"hello".toUpperCase()` typo in static TS is caught in editor vs dynamic JS in browser.
 
 **Expected output:**
-```text
-Caught immediately in editor at build time
-```
-
 > [!check]- Answer
+> ```text
+> Caught immediately in editor at build time
+> ```
 > ```typescript
 > console.log("Caught immediately in editor at build time");
 > ```

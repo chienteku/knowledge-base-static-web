@@ -164,16 +164,15 @@ const stream = collection.watch([], { resumeAfter: savedResumeToken });
 3.  If the `operationType` is `"delete"`, log the deleted document identifier (`documentKey._id`) to the console.
 
 **Expected output:**
-```javascript
-const changeStream = notifications.watch();
-changeStream.on('change', (event) => {
-  if (event.operationType === 'delete') {
-    console.log("Deleted notification ID:", event.documentKey._id);
-  }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> const changeStream = notifications.watch();
+> changeStream.on('change', (event) => {
+>   if (event.operationType === 'delete') {
+>     console.log("Deleted notification ID:", event.documentKey._id);
+>   }
+> });
+> ```
 > - Call the `.watch()` method to initialize the event stream.
 > - Access the deleted document ID using the `event.documentKey._id` property path.
 
@@ -186,11 +185,10 @@ changeStream.on('change', (event) => {
 **Problem:** Open change stream filtering for `operationType: "insert"` on `orders` collection.
 
 **Expected output:**
-```text
-const stream = db.orders.watch([{ $match: { operationType: "insert" } }]); stream.on("change", change => console.log(change));
-```
-
 > [!check]- Answer
+> ```text
+> const stream = db.orders.watch([{ $match: { operationType: "insert" } }]); stream.on("change", change => console.log(change));
+> ```
 > ```javascript
 > const stream = db.orders.watch([
 >   { $match: { operationType: "insert" } }
@@ -202,16 +200,17 @@ const stream = db.orders.watch([{ $match: { operationType: "insert" } }]); strea
 >
 > **Explanation:** `.watch([ pipeline ])` streams real-time database write mutations over WebSockets/RPC.
 
+---
+
 ### Exercise 3: Full Document Lookup Option
 
 **Problem:** Configure Change Stream to include full updated document on `update` events (`fullDocument: 'updateLookup'`).
 
 **Expected output:**
-```text
-const stream = db.orders.watch([], { fullDocument: "updateLookup" });
-```
-
 > [!check]- Answer
+> ```text
+> const stream = db.orders.watch([], { fullDocument: "updateLookup" });
+> ```
 > ```javascript
 > const stream = db.orders.watch([], {
 >   fullDocument: "updateLookup"

@@ -128,12 +128,11 @@ React Router excels at "Nested Routing". You can have a persistent `<DashboardLa
 ```
 
 **Expected output:**
-```text
-Both `<Store />` AND `<Cart />` will render!
-Because it's a nested route, the `<Cart />` component will be injected inside the layout of the `<Store />` component.
-```
-
 > [!check]- Answer
+> ```text
+> Both `<Store />` AND `<Cart />` will render!
+> Because it's a nested route, the `<Cart />` component will be injected inside the layout of the `<Store />` component.
+> ```
 > - Notice how the `shoes` and `cart` routes are nested inside the `store` route.
 
 ---
@@ -145,11 +144,10 @@ Because it's a nested route, the `<Cart />` component will be injected inside th
 **Problem:** Configure `<BrowserRouter>`, `<Routes>`, and `<Route>` for `/` (`<Home />`) and `*` 404 fallback (`<NotFound />`).
 
 **Expected output:**
-```text
-function App() { return <BrowserRouter><Routes><Route path="/" element={<Home />} /><Route path="*" element={<NotFound />} /></Routes></BrowserRouter>; }
-```
-
 > [!check]- Answer
+> ```text
+> function App() { return <BrowserRouter><Routes><Route path="/" element={<Home />} /><Route path="*" element={<NotFound />} /></Routes></BrowserRouter>; }
+> ```
 > ```javascript
 > function App() {
 >   return (
@@ -165,16 +163,17 @@ function App() { return <BrowserRouter><Routes><Route path="/" element={<Home />
 >
 > **Explanation:** `path="*"` acts as a catch-all route for un-matched URL paths.
 
+---
+
 ### Exercise 3: Nested Routes and Outlet
 
 **Problem:** What component in React Router v6 renders child route components inside parent layouts? (`<Outlet />`).
 
 **Expected output:**
-```text
-<Outlet />
-```
-
 > [!check]- Answer
+> ```text
+> <Outlet />
+> ```
 > ```javascript
 > function DashboardLayout() {
 >   return (

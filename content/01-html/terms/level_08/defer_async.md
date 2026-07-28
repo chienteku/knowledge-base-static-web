@@ -183,13 +183,12 @@ Comparing script tags in `<head>`:
 3.  A minor utility library (like jQuery) that must be loaded before your main application file executes.
 
 **Expected output:**
-```text
-1. async (Ads should load independently and not block rendering)
-2. defer (Needs the HTML body elements to be fully parsed before drawing)
-3. defer (Maintains declaration order, ensuring the library runs before the app script)
-```
-
 > [!check]- Answer
+> ```text
+> 1. async (Ads should load independently and not block rendering)
+> 2. defer (Needs the HTML body elements to be fully parsed before drawing)
+> 3. defer (Maintains declaration order, ensuring the library runs before the app script)
+> ```
 > - If order matters, choose `defer`.
 > - If DOM interaction is required, choose `defer`.
 > - If the script is standalone and independent, choose `async`.
@@ -206,13 +205,12 @@ Comparing script tags in `<head>`:
 3. `<script src="..." defer>` 
 
 **Expected output:**
-```text
-1. Blocks HTML parsing immediately while downloading and executing
-2. Downloads in background; executes IMMEDIATELY when downloaded (pausing HTML parser)
-3. Downloads in background; executes AFTER HTML parsing completes (in order)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Blocks HTML parsing immediately while downloading and executing
+> 2. Downloads in background; executes IMMEDIATELY when downloaded (pausing HTML parser)
+> 3. Downloads in background; executes AFTER HTML parsing completes (in order)
+> ```
 > ```text
 > 1. Standard: Blocks HTML parsing immediately while downloading and executing
 > 2. Async: Downloads in background; executes IMMEDIATELY when downloaded (pausing HTML parser)
@@ -221,16 +219,17 @@ Comparing script tags in `<head>`:
 >
 > **Explanation:** `defer` preserves script execution order and waits for DOM readiness.
 
+---
+
 ### Exercise 3: Analytics Script Best Attribute
 
 **Problem:** Which attribute (`async` or `defer`) is best suited for independent third-party analytics scripts (e.g. Google Analytics)?
 
 **Expected output:**
-```text
-async (executes independently as fast as possible without order dependencies).
-```
-
 > [!check]- Answer
+> ```text
+> async (executes independently as fast as possible without order dependencies).
+> ```
 > ```html
 > <script src="https://www.google-analytics.com/analytics.js" async></script>
 > ```

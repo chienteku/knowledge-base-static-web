@@ -197,11 +197,10 @@ export default function SidebarLayout({ children }: SidebarLayoutProps) {
 **Problem:** Write App Router `RootLayout` component accepting `children` typed with `React.ReactNode`, rendering `<html>` and `<body>` tags.
 
 **Expected output:**
-```tsx
-export default function RootLayout({ children }: { children: React.ReactNode }) { return ( <html lang="en"> <body>{children}</body> </html> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> export default function RootLayout({ children }: { children: React.ReactNode }) { return ( <html lang="en"> <body>{children}</body> </html> ); }
+> ```
 > - Root Layout MUST contain `<html>` and `<body>` tags.
 > 
 > ```tsx
@@ -225,11 +224,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 **Problem:** Besides `children`, which additional props do Layout components receive when using Parallel Routes (e.g. `@analytics`)?
 
 **Expected output:**
-```text
-Slot props matching the parallel route folder name (e.g. { children, analytics }).
-```
-
 > [!check]- Answer
+> ```text
+> Slot props matching the parallel route folder name (e.g. { children, analytics }).
+> ```
 > - Parallel routes pass named slot props to parent layouts.
 > 
 > ```tsx

@@ -176,23 +176,22 @@ Write the aggregation pipeline containing:
 2.  An `$unwind` stage to flatten the `author_info` array.
 
 **Expected output:**
-```javascript
-[
-  {
-    $lookup: {
-      from: "authors",
-      localField: "author_id",
-      foreignField: "_id",
-      as: "author_info"
-    }
-  },
-  {
-    $unwind: "$author_info"
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $lookup: {
+>       from: "authors",
+>       localField: "author_id",
+>       foreignField: "_id",
+>       as: "author_info"
+>     }
+>   },
+>   {
+>     $unwind: "$author_info"
+>   }
+> ]
+> ```
 > - The target collection in the lookup is `"authors"`.
 > - Apply the `$unwind` stage to the output field `"author_info"`.
 
@@ -205,11 +204,10 @@ Write the aggregation pipeline containing:
 **Problem:** Join `orders` to `users` matching `orders.userId` to `users._id` outputting array `userInfo`.
 
 **Expected output:**
-```text
-db.orders.aggregate([{ $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "userInfo" } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([{ $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "userInfo" } }]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   {
@@ -225,16 +223,17 @@ db.orders.aggregate([{ $lookup: { from: "users", localField: "userId", foreignFi
 >
 > **Explanation:** `$lookup` performs left outer joins between target database collections.
 
+---
+
 ### Exercise 3: Correlated Subquery `$lookup` Pipeline
 
 **Problem:** Join `orders` to `items` using custom pipeline with `$match` and `$expr`.
 
 **Expected output:**
-```text
-db.orders.aggregate([{ $lookup: { from: "items", let: { orderId: "$_id" }, pipeline: [{ $match: { $expr: { $eq: ["$orderId", "$$orderId"] } } }], as: "items" } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([{ $lookup: { from: "items", let: { orderId: "$_id" }, pipeline: [{ $match: { $expr: { $eq: ["$orderId", "$$orderId"] } } }], as: "items" } }]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   {

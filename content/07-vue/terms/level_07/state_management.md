@@ -102,13 +102,12 @@ In modern Vue 3, the official tool is **[Pinia](../level_07/pinia.md)**.
 3. The list of notifications shown in the bottom right corner of the screen.
 
 **Expected output:**
-```text
-1. Global State: The whole app needs to know if the user is authenticated to hide/show routes.
-2. Local State: Only the Tabs component cares which tab is active.
-3. Global State: Any component (API failure, successful save, new message) needs the ability to trigger a notification.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Global State: The whole app needs to know if the user is authenticated to hide/show routes.
+> 2. Local State: Only the Tabs component cares which tab is active.
+> 3. Global State: Any component (API failure, successful save, new message) needs the ability to trigger a notification.
+> ```
 > - Who else cares about this data?
 
 ---
@@ -118,11 +117,10 @@ In modern Vue 3, the official tool is **[Pinia](../level_07/pinia.md)**.
 **Problem:** Write Pinia `$patch()` call updating `user.name = 'Alice'` and `user.age = 30` in a single atomic update.
 
 **Expected output:**
-```javascript
-userStore.$patch({ user: { name: 'Alice', age: 30 } });
-```
-
 > [!check]- Answer
+> ```javascript
+> userStore.$patch({ user: { name: 'Alice', age: 30 } });
+> ```
 > - `$patch()` batches multiple state mutations into a single update.
 > 
 > ```javascript
@@ -139,11 +137,10 @@ userStore.$patch({ user: { name: 'Alice', age: 30 } });
 **Problem:** Does Pinia `$reset()` work out of the box for Options Stores, Setup Stores, or Both?
 
 **Expected output:**
-```text
-Options Stores support $reset() natively out of the box; Setup Stores require implementing custom $reset functions.
-```
-
 > [!check]- Answer
+> ```text
+> Options Stores support $reset() natively out of the box; Setup Stores require implementing custom $reset functions.
+> ```
 > - Options Stores: Built-in `$reset()` resets state to default.
 > - Setup Stores: Custom `$reset()` function must be implemented.
 > 

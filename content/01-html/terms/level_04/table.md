@@ -150,11 +150,10 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 3. The layout of a newspaper with a left column and right column.
 
 **Expected output:**
-```text
-Only #2 (The comparison chart). It is actual tabular data. The photo gallery and newspaper layout should be built using CSS Grid or Flexbox, because they are layout problems, not data relationships.
-```
-
 > [!check]- Answer
+> ```text
+> Only #2 (The comparison chart). It is actual tabular data. The photo gallery and newspaper layout should be built using CSS Grid or Flexbox, because they are layout problems, not data relationships.
+> ```
 > - Does the data lose its meaning if it's not strictly aligned in specific rows and columns?
 
 ---
@@ -166,11 +165,10 @@ Only #2 (The comparison chart). It is actual tabular data. The photo gallery and
 **Problem:** Write complete `<table>` containing `caption`, `thead` with 2 `th` cells, and `tbody` with 1 data row.
 
 **Expected output:**
-```text
-<table><caption>Users</caption><thead><tr><th>ID</th><th>Name</th></tr></thead><tbody><tr><td>1</td><td>Alice</td></tr></tbody></table>
-```
-
 > [!check]- Answer
+> ```text
+> <table><caption>Users</caption><thead><tr><th>ID</th><th>Name</th></tr></thead><tbody><tr><td>1</td><td>Alice</td></tr></tbody></table>
+> ```
 > ```html
 > <table>
 >   <caption>Users</caption>
@@ -185,16 +183,17 @@ Only #2 (The comparison chart). It is actual tabular data. The photo gallery and
 >
 > **Explanation:** Semantic table structure organizes data into `caption`, `thead`, and `tbody` sections.
 
+---
+
 ### Exercise 3: Table Border-Collapse CSS Property
 
 **Problem:** Which CSS property merges adjacent table cell borders into a single thin border?
 
 **Expected output:**
-```text
-border-collapse: collapse;
-```
-
 > [!check]- Answer
+> ```text
+> border-collapse: collapse;
+> ```
 > ```css
 > table {
 >   border-collapse: collapse;

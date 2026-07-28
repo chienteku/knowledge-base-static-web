@@ -190,11 +190,10 @@ export default function EventPage() {
 3. `createdDate: Date`
 
 **Expected output:**
-```text
-Prop 1 (Plain JSON-serializable object). Dates (3) should be converted to ISO strings; Functions (2) must be Server Actions.
-```
-
 > [!check]- Answer
+> ```text
+> Prop 1 (Plain JSON-serializable object). Dates (3) should be converted to ISO strings; Functions (2) must be Server Actions.
+> ```
 > - Serializable: Strings, Numbers, Booleans, Plain Objects, Arrays, Server Actions.
 > - Non-serializable: Functions, Classes, Symbols, DOM elements.
 > 
@@ -209,11 +208,10 @@ Prop 1 (Plain JSON-serializable object). Dates (3) should be converted to ISO st
 **Problem:** Which npm package enforces that a utility module can ONLY be imported by Client Components?
 
 **Expected output:**
-```text
-import 'client-only';
-```
-
 > [!check]- Answer
+> ```text
+> import 'client-only';
+> ```
 > - `client-only` prevents server components from importing browser-dependent utilities.
 > 
 > ```typescript

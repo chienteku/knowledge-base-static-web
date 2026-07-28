@@ -97,12 +97,11 @@ const vnode = h('div', 'New Text');
 **Problem:** How does Vue know exactly which parts of your `<template>` are static (will never change) and which parts are dynamic (contain `{{ variables }}`)?
 
 **Expected output:**
-```text
-The Vue Compiler analyzes your `.vue` file during the Build Step!
-It tags static HTML nodes with special flags. During the Virtual DOM diffing process, Vue looks at these flags and completely skips diffing the static parts! This makes Vue's Virtual DOM significantly faster than a purely runtime Virtual DOM.
-```
-
 > [!check]- Answer
+> ```text
+> The Vue Compiler analyzes your `.vue` file during the Build Step!
+> It tags static HTML nodes with special flags. During the Virtual DOM diffing process, Vue looks at these flags and completely skips diffing the static parts! This makes Vue's Virtual DOM significantly faster than a purely runtime Virtual DOM.
+> ```
 > - Vue templates are compiled at build-time.
 
 ---
@@ -112,11 +111,10 @@ It tags static HTML nodes with special flags. During the Virtual DOM diffing pro
 **Problem:** Write Vue `h()` render function creating `<button class="btn" onClick={handleClick}>Click</button>` VNode.
 
 **Expected output:**
-```javascript
-import { h } from 'vue'; const vnode = h('button', { class: 'btn', onClick: handleClick }, 'Click');
-```
-
 > [!check]- Answer
+> ```javascript
+> import { h } from 'vue'; const vnode = h('button', { class: 'btn', onClick: handleClick }, 'Click');
+> ```
 > - `h(tag, props, children)` creates Virtual DOM VNodes.
 > 
 > ```javascript
@@ -131,11 +129,10 @@ import { h } from 'vue'; const vnode = h('button', { class: 'btn', onClick: hand
 **Problem:** What is the primary architectural innovation of Vue 3 Virtual DOM compiler over Vue 2?
 
 **Expected output:**
-```text
-Vue 3 template compiler analyzes static vs dynamic node structures, generating Block Trees with patchFlags to bypass static subtrees during Virtual DOM diffing.
-```
-
 > [!check]- Answer
+> ```text
+> Vue 3 template compiler analyzes static vs dynamic node structures, generating Block Trees with patchFlags to bypass static subtrees during Virtual DOM diffing.
+> ```
 > - Block Trees and `patchFlags` skip diffing static VNode subtrees.
 > 
 > ```text

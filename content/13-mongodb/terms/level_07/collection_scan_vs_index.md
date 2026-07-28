@@ -176,12 +176,11 @@ If the collection size increases from `1,000` documents to `1,000,000` documents
 2.  Explain how the search time of Query 2 will change.
 
 **Expected output:**
-```text
-1. Query 1 (COLLSCAN) uses $O(N)$ linear time. If the collection grows 1,000x, the database must scan 1,000x more documents on disk, causing search times to increase linearly (e.g. from 2ms to 2000ms).
-2. Query 2 (IXSCAN) uses $O(\log N)$ logarithmic time. If the collection grows 1,000x, the B-Tree search path only requires a few extra node comparisons, so search times will stay almost instant (e.g. from 0.1ms to 0.2ms).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Query 1 (COLLSCAN) uses $O(N)$ linear time. If the collection grows 1,000x, the database must scan 1,000x more documents on disk, causing search times to increase linearly (e.g. from 2ms to 2000ms).
+> 2. Query 2 (IXSCAN) uses $O(\log N)$ logarithmic time. If the collection grows 1,000x, the B-Tree search path only requires a few extra node comparisons, so search times will stay almost instant (e.g. from 0.1ms to 0.2ms).
+> ```
 > - Apply the principles of $O(N)$ vs $O(\log N)$ complexities.
 > - Contrast disk-bound scans with memory B-Tree traversals.
 
@@ -194,27 +193,27 @@ If the collection size increases from `1,000` documents to `1,000,000` documents
 **Problem:** What execution stage in `explain("executionStats")` indicates an un-indexed query? (`COLLSCAN`).
 
 **Expected output:**
-```text
-COLLSCAN
-```
-
 > [!check]- Answer
+> ```text
+> COLLSCAN
+> ```
 > ```text
 > COLLSCAN
 > ```
 >
 > **Explanation:** `COLLSCAN` indicates that the database scanned all collection documents sequentially.
 
+---
+
 ### Exercise 3: Ideal `totalDocsExamined` to `nReturned` Ratio
 
 **Problem:** What is the target `totalDocsExamined` to `nReturned` ratio for fully indexed queries? (1:1 ratio or 0 for covered queries).
 
 **Expected output:**
-```text
-1:1 ratio (totalDocsExamined equals nReturned)
-```
-
 > [!check]- Answer
+> ```text
+> 1:1 ratio (totalDocsExamined equals nReturned)
+> ```
 > ```text
 > 1:1 ratio (totalDocsExamined equals nReturned)
 > ```

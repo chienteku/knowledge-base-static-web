@@ -159,11 +159,10 @@ mongodb+srv://user:pass@cluster0.mongodb.net/app // Correct SRV scheme for Atlas
 -   Authentication database source: `"admin"`
 
 **Expected output:**
-```javascript
-mongodb://worker:pass123@db-01:27017,db-02:27017/inventory?authSource=admin&replicaSet=prodRS
-```
-
 > [!check]- Answer
+> ```javascript
+> mongodb://worker:pass123@db-01:27017,db-02:27017/inventory?authSource=admin&replicaSet=prodRS
+> ```
 > - The standard prefix is `mongodb://`.
 > - Pass the parameters `authSource` and `replicaSet` in the query string after the database name.
 
@@ -176,27 +175,27 @@ mongodb://worker:pass123@db-01:27017,db-02:27017/inventory?authSource=admin&repl
 **Problem:** Percent-encode password `pass@123` for connection URI using `encodeURIComponent()`.
 
 **Expected output:**
-```text
-pass%40123
-```
-
 > [!check]- Answer
+> ```text
+> pass%40123
+> ```
 > ```javascript
 > encodeURIComponent("pass@123");
 > ```
 >
 > **Explanation:** `encodeURIComponent()` converts reserved URI characters into percent-encoded strings.
 
+---
+
 ### Exercise 3: Connection URI Options
 
 **Problem:** Construct URI specifying `retryWrites=true` and `w=majority` query options.
 
 **Expected output:**
-```text
-mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&w=majority
-```
-
 > [!check]- Answer
+> ```text
+> mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&w=majority
+> ```
 > ```text
 > mongodb+srv://user:pass@cluster.mongodb.net/app?retryWrites=true&w=majority
 > ```

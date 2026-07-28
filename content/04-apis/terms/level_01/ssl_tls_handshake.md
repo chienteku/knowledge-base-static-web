@@ -134,11 +134,10 @@ const agent = new https.Agent({ keepAlive: true });
 **Problem:** Explain the role of Asymmetric vs Symmetric encryption during a TLS Handshake.
 
 **Expected output:**
-```text
-Asymmetric (Public/Private key) encryption is used during initial handshake to authenticate server identity and exchange session keys. Symmetric encryption uses the shared session key to encrypt actual data streams efficiently.
-```
-
 > [!check]- Answer
+> ```text
+> Asymmetric (Public/Private key) encryption is used during initial handshake to authenticate server identity and exchange session keys. Symmetric encryption uses the shared session key to encrypt actual data streams efficiently.
+> ```
 > ```text
 > Asymmetric (Public/Private key) -> Authentication and session key exchange.
 > Symmetric (Shared session key) -> High-speed bulk data payload encryption.
@@ -151,12 +150,11 @@ Asymmetric (Public/Private key) encryption is used during initial handshake to a
 **Problem:** How many network round-trips (RTT) are required for an initial TLS 1.2 handshake vs a TLS 1.3 handshake?
 
 **Expected output:**
-```text
-TLS 1.2: 2 RTT
-TLS 1.3: 1 RTT (and 0 RTT for session resumption)
-```
-
 > [!check]- Answer
+> ```text
+> TLS 1.2: 2 RTT
+> TLS 1.3: 1 RTT (and 0 RTT for session resumption)
+> ```
 > ```text
 > TLS 1.2: 2 RTT
 > TLS 1.3: 1 RTT (0-RTT for session resumption)

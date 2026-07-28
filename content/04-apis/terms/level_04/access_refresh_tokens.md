@@ -178,19 +178,20 @@ api.interceptors.response.use(
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Dual Token Rotation Flow
 
 **Problem:** Explain the step-by-step token rotation flow when an access token expires.
 
 **Expected output:**
-```text
-1. Client makes API call with access token -> Server returns 401 Unauthorized
-2. Client sends refresh token to `/api/refresh`
-3. Server verifies refresh token in DB/Redis -> Issues new short-lived access token + new refresh token
-4. Client retries original request with new access token
-```
-
 > [!check]- Answer
+> ```text
+> 1. Client makes API call with access token -> Server returns 401 Unauthorized
+> 2. Client sends refresh token to `/api/refresh`
+> 3. Server verifies refresh token in DB/Redis -> Issues new short-lived access token + new refresh token
+> 4. Client retries original request with new access token
+> ```
 > ```text
 > 1. Client calls API -> Server returns 401 Unauthorized (token expired)
 > 2. Client posts refresh token to /api/refresh
@@ -205,11 +206,10 @@ api.interceptors.response.use(
 **Problem:** Why are `HttpOnly` cookies immune to XSS token theft?
 
 **Expected output:**
-```text
-HttpOnly cookies are inaccessible to browser JavaScript (document.cookie), preventing malicious scripts from reading the token string.
-```
-
 > [!check]- Answer
+> ```text
+> HttpOnly cookies are inaccessible to browser JavaScript (document.cookie), preventing malicious scripts from reading the token string.
+> ```
 > ```text
 > HttpOnly cookies are inaccessible to browser JavaScript (document.cookie), preventing malicious scripts from reading the token string.
 > ```

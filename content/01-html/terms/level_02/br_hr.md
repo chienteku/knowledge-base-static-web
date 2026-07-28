@@ -224,6 +224,8 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 >
 > **Explanation:** `<br>` creates semantic line breaks within postal addresses and poems.
 
+---
+
 ### Exercise 3: Thematic Break Accessibility
 
 **Problem:** How is `<hr>` announced by modern screen readers?

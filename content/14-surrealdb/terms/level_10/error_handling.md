@@ -192,11 +192,10 @@ c. `surreal export`
 **Problem:** Write JavaScript `try / catch` block handling SDK connection failures.
 
 **Expected output:**
-```text
-try { await db.connect(uri); } catch (err) { console.error("Connection failed:", err); }
-```
-
 > [!check]- Answer
+> ```text
+> try { await db.connect(uri); } catch (err) { console.error("Connection failed:", err); }
+> ```
 > ```javascript
 > try {
 >   await db.connect(uri);
@@ -207,16 +206,17 @@ try { await db.connect(uri); } catch (err) { console.error("Connection failed:",
 >
 > **Explanation:** `try / catch` handles network and RPC connection exceptions.
 
+---
+
 ### Exercise 3: SurrealDB RPC Error Code Parsing
 
 **Problem:** Inspect error code properties on SDK exception objects (`err.code`, `err.message`).
 
 **Expected output:**
-```text
-err.code, err.message
-```
-
 > [!check]- Answer
+> ```text
+> err.code, err.message
+> ```
 > ```javascript
 > console.log(err.code, err.message);
 > ```

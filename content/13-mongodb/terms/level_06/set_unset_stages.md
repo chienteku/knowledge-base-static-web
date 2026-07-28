@@ -141,12 +141,11 @@ Use $set as an alias for $addFields inside aggregate([ { $set: { ... } } ]) pipe
 State which query alters data on disk.
 
 **Expected output:**
-```text
-1. Aggregation Stage: Modifies the `viewed` field to `true` in memory only as the documents flow through the pipeline. Does not alter data on disk.
-2. Update Operator: Modifies the `viewed` field permanently on disk for all documents in the collection.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Aggregation Stage: Modifies the `viewed` field to `true` in memory only as the documents flow through the pipeline. Does not alter data on disk.
+> 2. Update Operator: Modifies the `viewed` field permanently on disk for all documents in the collection.
+> ```
 > - Inspect the method names `aggregate` and `updateMany`.
 > - Relate this back to disk persistence behaviors.
 
@@ -159,11 +158,10 @@ State which query alters data on disk.
 **Problem:** Set computed boolean field `isAdult` (`age >= 18`) using `$set` stage.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $set: { isAdult: { $gte: ["$age", 18] } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $set: { isAdult: { $gte: ["$age", 18] } } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   { $set: { isAdult: { $gte: ["$age", 18] } } }
@@ -172,16 +170,17 @@ db.users.aggregate([{ $set: { isAdult: { $gte: ["$age", 18] } } }]);
 >
 > **Explanation:** Aggregation `$set` stage appends computed fields while preserving existing document fields.
 
+---
+
 ### Exercise 3: Removing Temporary Fields with `$unset`
 
 **Problem:** Remove temporary processing fields `tempHash` and `internalId` using `$unset` stage.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $unset: ["tempHash", "internalId"] }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $unset: ["tempHash", "internalId"] }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   { $unset: ["tempHash", "internalId"] }

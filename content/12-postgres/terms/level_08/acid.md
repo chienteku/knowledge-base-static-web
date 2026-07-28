@@ -134,13 +134,12 @@ Check status or use idempotent request keys before retrying failed commits
 3.  Two store clerks sold the same physical item to two different customers at the same millisecond because they read the same stock count value simultaneously.
 
 **Expected output:**
-```text
-1. Durability (D) - Committed writes must survive system power crashes.
-2. Atomicity (A) - Partial writes are forbidden; the database should have rolled back.
-3. Isolation (I) - Concurrent transactions must run in isolation to prevent double-booking.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Durability (D) - Committed writes must survive system power crashes.
+> 2. Atomicity (A) - Partial writes are forbidden; the database should have rolled back.
+> 3. Isolation (I) - Concurrent transactions must run in isolation to prevent double-booking.
+> ```
 > - Differentiate write survival errors from concurrency execution anomalies.
 > - Consider which property rules the "all-or-nothing" boundary.
 
@@ -153,27 +152,27 @@ Check status or use idempotent request keys before retrying failed commits
 **Problem:** Define ACID properties: Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes).
 
 **Expected output:**
-```text
-Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes)
-```
-
 > [!check]- Answer
+> ```text
+> Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes)
+> ```
 > ```text
 > Atomicity (All-or-Nothing), Consistency (Valid states), Isolation (Concurrent safety), Durability (Persisted across crashes)
 > ```
 >
 > **Explanation:** ACID guarantees structural data safety across concurrent transactions.
 
+---
+
 ### Exercise 3: Transactional Money Transfer
 
 **Problem:** Write ACID-compliant SQL transferring $50 from account 1 to account 2.
 
 **Expected output:**
-```text
-BEGIN; UPDATE accounts SET balance = balance - 50 WHERE id = 1; UPDATE accounts SET balance = balance + 50 WHERE id = 2; COMMIT;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN; UPDATE accounts SET balance = balance - 50 WHERE id = 1; UPDATE accounts SET balance = balance + 50 WHERE id = 2; COMMIT;
+> ```
 > ```sql
 > BEGIN;
 > UPDATE accounts SET balance = balance - 50 WHERE id = 1;

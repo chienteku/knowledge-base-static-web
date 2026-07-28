@@ -162,13 +162,12 @@ db.large.aggregate([{ $sort: { unindexedField: 1 } }], { allowDiskUse: true });
 Arrange these actions as a list of three MongoDB aggregation stage names in the correct, most efficient execution order.
 
 **Expected output:**
-```text
-1. $match (Filters inactive users early, allowing index usage).
-2. $sort  (Orders the filtered active users).
-3. $limit (Restricts the output count to 5, preventing full array sorting).
-```
-
 > [!check]- Answer
+> ```text
+> 1. $match (Filters inactive users early, allowing index usage).
+> 2. $sort  (Orders the filtered active users).
+> 3. $limit (Restricts the output count to 5, preventing full array sorting).
+> ```
 > - Identify the stage operators corresponding to WHERE, ORDER BY, and LIMIT.
 > - Apply the rule of pruning data as early as possible in the pipeline.
 
@@ -181,11 +180,10 @@ Arrange these actions as a list of three MongoDB aggregation stage names in the 
 **Problem:** Filter orders `status: "completed"` and group by `customerId` counting total orders.
 
 **Expected output:**
-```text
-db.orders.aggregate([ { $match: { status: "completed" } }, { $group: { _id: "$customerId", count: { $sum: 1 } } } ]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([ { $match: { status: "completed" } }, { $group: { _id: "$customerId", count: { $sum: 1 } } } ]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   { $match: { status: "completed" } },
@@ -195,16 +193,17 @@ db.orders.aggregate([ { $match: { status: "completed" } }, { $group: { _id: "$cu
 >
 > **Explanation:** Pipelines execute sequentially: `$match` filters documents first, followed by `$group` aggregation.
 
+---
+
 ### Exercise 3: Allowing Disk Use for Large Aggregations
 
 **Problem:** Configure aggregation query to allow temporary disk spillover using `{ allowDiskUse: true }`.
 
 **Expected output:**
-```text
-db.orders.aggregate(pipeline, { allowDiskUse: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate(pipeline, { allowDiskUse: true });
+> ```
 > ```javascript
 > db.orders.aggregate(pipeline, { allowDiskUse: true });
 > ```

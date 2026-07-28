@@ -132,27 +132,26 @@ const getItem = cache(async (id: string) => db.item.findUnique({ where: { id } }
 **Problem:** You are in `/blog/[slug]/page.tsx`. You want to dynamically set the Open Graph image, but you want to *keep* all the Open Graph tags defined in the parent `layout.tsx`. How does `generateMetadata` access the parent's data?
 
 **Expected output:**
-```tsx
-// generateMetadata accepts a second parameter: parent!
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const post = await fetchPost(params.slug);
-  
-  // Await the parent metadata resolution
-  const previousImages = (await parent).openGraph?.images || [];
-
-  return {
-    openGraph: {
-      // Append the new image, preserving the parent images!
-      images: [post.coverImage, ...previousImages],
-    },
-  };
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> // generateMetadata accepts a second parameter: parent!
+> export async function generateMetadata(
+>   { params }: Props,
+>   parent: ResolvingMetadata
+> ): Promise<Metadata> {
+>   const post = await fetchPost(params.slug);
+>   
+>   // Await the parent metadata resolution
+>   const previousImages = (await parent).openGraph?.images || [];
+> 
+>   return {
+>     openGraph: {
+>       // Append the new image, preserving the parent images!
+>       images: [post.coverImage, ...previousImages],
+>     },
+>   };
+> }
+> ```
 > - `generateMetadata` has a second argument called `parent` (of type `ResolvingMetadata`).
 
 ---
@@ -162,11 +161,10 @@ export async function generateMetadata(
 **Problem:** Write `generateMetadata()` snippet resolving parent metadata via `parent: ResolvingMetadata` and extending page title.
 
 **Expected output:**
-```typescript
-import { Metadata, ResolvingMetadata } from 'next'; export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> { const parentMeta = await parent; return { title: `Child - ${parentMeta.title?.absolute}` }; }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { Metadata, ResolvingMetadata } from 'next'; export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> { const parentMeta = await parent; return { title: `Child - ${parentMeta.title?.absolute}` }; }
+> ```
 > - `parent` argument resolves metadata inherited from parent layout segments.
 > 
 > ```typescript
@@ -190,11 +188,10 @@ import { Metadata, ResolvingMetadata } from 'next'; export async function genera
 **Problem:** Which special filename in an `app/` route directory automatically generates dynamic OpenGraph social preview images using `@vercel/og`?
 
 **Expected output:**
-```text
-opengraph-image.tsx (or twitter-image.tsx)
-```
-
 > [!check]- Answer
+> ```text
+> opengraph-image.tsx (or twitter-image.tsx)
+> ```
 > - `opengraph-image.tsx` generates dynamic OG images at build/runtime.
 > 
 > ```tsx

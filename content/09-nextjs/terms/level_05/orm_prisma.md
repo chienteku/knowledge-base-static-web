@@ -172,11 +172,10 @@ if (process.env.NODE_ENV !== 'production') {
 **Problem:** Write `lib/db.ts` Prisma singleton exporting a single reusable `prisma` instance across Next.js HMR reloads.
 
 **Expected output:**
-```typescript
-import { PrismaClient } from '@prisma/client'; const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }; export const prisma = globalForPrisma.prisma || new PrismaClient(); if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
-```
-
 > [!check]- Answer
+> ```typescript
+> import { PrismaClient } from '@prisma/client'; const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }; export const prisma = globalForPrisma.prisma || new PrismaClient(); if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+> ```
 > - Global singleton pattern prevents connection leaks during dev HMR.
 > 
 > ```typescript
@@ -198,11 +197,10 @@ import { PrismaClient } from '@prisma/client'; const globalForPrisma = globalThi
 **Problem:** How does specifying `select: { id: true, name: true }` in Prisma queries improve Next.js performance?
 
 **Expected output:**
-```text
-It fetches ONLY required fields from SQL database, reducing network payload size and database memory footprint.
-```
-
 > [!check]- Answer
+> ```text
+> It fetches ONLY required fields from SQL database, reducing network payload size and database memory footprint.
+> ```
 > - `select` reduces SQL database query payload sizes.
 > 
 > ```typescript

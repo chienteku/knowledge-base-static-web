@@ -180,15 +180,14 @@ db.users.deleteMany({ status: "inactive" }); // Deletes all matching documents
 2.  Write the actual delete query.
 
 **Expected output:**
-```javascript
-// 1. Pre-verification check
-db.sessions.find({ active: false });
-
-// 2. Actual delete command
-db.sessions.deleteMany({ active: false });
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Pre-verification check
+> db.sessions.find({ active: false });
+> 
+> // 2. Actual delete command
+> db.sessions.deleteMany({ active: false });
+> ```
 > - The query filters used inside `find` and `deleteMany` must be identical.
 > - Use the bulk method `deleteMany` to clear all matching inactive records.
 
@@ -201,27 +200,27 @@ db.sessions.deleteMany({ active: false });
 **Problem:** Delete user document with `_id: ObjectId("60d5ecb8b5c9c22b9c8b4567")`.
 
 **Expected output:**
-```text
-db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
+> ```
 > ```javascript
 > db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
 > ```
 >
 > **Explanation:** `deleteOne({ _id })` deletes a single primary key document.
 
+---
+
 ### Exercise 3: Deleting Inactive Logs with `deleteMany`
 
 **Problem:** Delete all log documents created before `2026-01-01T00:00:00Z`.
 
 **Expected output:**
-```text
-db.logs.deleteMany({ createdAt: { $lt: new Date("2026-01-01T00:00:00Z") } });
-```
-
 > [!check]- Answer
+> ```text
+> db.logs.deleteMany({ createdAt: { $lt: new Date("2026-01-01T00:00:00Z") } });
+> ```
 > ```javascript
 > db.logs.deleteMany({
 >   createdAt: { $lt: new Date("2026-01-01T00:00:00Z") }

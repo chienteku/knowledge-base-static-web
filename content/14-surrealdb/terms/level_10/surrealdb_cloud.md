@@ -161,27 +161,27 @@ c. PostgreSQL
 **Problem:** Connect JS SDK to SurrealDB Cloud instance `wss://app.surreal.cloud/rpc`.
 
 **Expected output:**
-```text
-await db.connect("wss://app.surreal.cloud/rpc");
-```
-
 > [!check]- Answer
+> ```text
+> await db.connect("wss://app.surreal.cloud/rpc");
+> ```
 > ```javascript
 > await db.connect("wss://app.surreal.cloud/rpc");
 > ```
 >
 > **Explanation:** `wss://*.surreal.cloud/rpc` establishes TLS-encrypted WebSocket connections to managed SurrealDB Cloud.
 
+---
+
 ### Exercise 3: SurrealDB Cloud Fully Managed Benefits
 
 **Problem:** List 3 benefits of SurrealDB Cloud (Automatic scaling, automated backups, zero infrastructure maintenance).
 
 **Expected output:**
-```text
-Automatic scaling, automated backups, zero infrastructure maintenance
-```
-
 > [!check]- Answer
+> ```text
+> Automatic scaling, automated backups, zero infrastructure maintenance
+> ```
 > ```text
 > Automatic scaling, automated backups, zero infrastructure maintenance
 > ```

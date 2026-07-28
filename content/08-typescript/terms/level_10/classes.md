@@ -195,12 +195,11 @@ class User {
 **Problem:** Both `class User` and `interface User` allow you to define an object shape and use it as a type (`const u: User`). When should you use a Class, and when should you use an Interface?
 
 **Expected output:**
-```text
-- Use an **Interface** when you only care about the *Shape* of the data (e.g., standard API JSON responses, React component props, or function parameters). Interfaces are completely erased at compile-time, so they have zero performance cost.
-- Use a **Class** when you need *Behavior* (methods) combined with State (properties), or when you specifically need the `instanceof` operator at runtime.
-```
-
 > [!check]- Answer
+> ```text
+> - Use an **Interface** when you only care about the *Shape* of the data (e.g., standard API JSON responses, React component props, or function parameters). Interfaces are completely erased at compile-time, so they have zero performance cost.
+> - Use a **Class** when you need *Behavior* (methods) combined with State (properties), or when you specifically need the `instanceof` operator at runtime.
+> ```
 > - Think about the Compile-Time vs Runtime erasure rules.
 
 ---
@@ -212,11 +211,10 @@ class User {
 **Problem:** Create `class Car` with `speed: number` and method `accelerate(amount: number): number`.
 
 **Expected output:**
-```text
-Car class implemented
-```
-
 > [!check]- Answer
+> ```text
+> Car class implemented
+> ```
 > ```typescript
 > class Car {
 >   constructor(public speed: number = 0) {}
@@ -230,16 +228,17 @@ Car class implemented
 >
 > **Explanation:** Classes encapsulate state properties and behavior methods into object instances.
 
+---
+
 ### Exercise 3: Getter and Setter Method Typing
 
 **Problem:** Define getter `get name(): string` and setter `set name(val: string)`.
 
 **Expected output:**
-```text
-Getter/setter accessors implemented
-```
-
 > [!check]- Answer
+> ```text
+> Getter/setter accessors implemented
+> ```
 > ```typescript
 > class Person {
 >   private _name = "";
@@ -251,18 +250,17 @@ Getter/setter accessors implemented
 >
 > **Explanation:** Accessor getters and setters control property read and write operations.
 
-
+---
 
 ### Exercise 4: Class Implementation with Methods and Properties
 
 **Problem:** Create `class Car` with `speed: number` and method `accelerate(amount: number): number`.
 
 **Expected output:**
-```text
-Car class implemented
-```
-
 > [!check]- Answer
+> ```text
+> Car class implemented
+> ```
 > ```typescript
 > class Car {
 >   constructor(public speed: number = 0) {}
@@ -276,16 +274,17 @@ Car class implemented
 >
 > **Explanation:** Classes encapsulate state properties and behavior methods into object instances.
 
+---
+
 ### Exercise 5: Getter and Setter Method Typing
 
 **Problem:** Define getter `get name(): string` and setter `set name(val: string)`.
 
 **Expected output:**
-```text
-Getter/setter accessors implemented
-```
-
 > [!check]- Answer
+> ```text
+> Getter/setter accessors implemented
+> ```
 > ```typescript
 > class Person {
 >   private _name = "";

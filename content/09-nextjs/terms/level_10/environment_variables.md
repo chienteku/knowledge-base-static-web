@@ -130,13 +130,12 @@ DB_PASS=supersecret // Private server-only variable
 **Problem:** You deployed your app to Vercel, but the app crashed because `process.env.DATABASE_URL` is undefined. You double-checked, and it's definitely in your `.env.local` file! What went wrong?
 
 **Expected output:**
-```text
-The `.env.local` file is explicitly ignored by Git (`.gitignore`). It only exists on your laptop!
-When Vercel pulls your code from GitHub to build it, the `.env.local` file is missing. 
-You must log into the Vercel dashboard, go to the Project Settings -> Environment Variables, and manually paste your keys there!
-```
-
 > [!check]- Answer
+> ```text
+> The `.env.local` file is explicitly ignored by Git (`.gitignore`). It only exists on your laptop!
+> When Vercel pulls your code from GitHub to build it, the `.env.local` file is missing. 
+> You must log into the Vercel dashboard, go to the Project Settings -> Environment Variables, and manually paste your keys there!
+> ```
 > - Think about what files are actually pushed to GitHub.
 
 ---
@@ -147,14 +146,13 @@ You must log into the Vercel dashboard, go to the Project Settings -> Environmen
 `.env`, `.env.local`, `.env.production`
 
 **Expected output:**
-```text
-1. .env.production.local
-2. .env.local
-3. .env.production
-4. .env
-```
-
 > [!check]- Answer
+> ```text
+> 1. .env.production.local
+> 2. .env.local
+> 3. .env.production
+> 4. .env
+> ```
 > - `.local` files take precedence over default environment files.
 > 
 > ```text
@@ -168,11 +166,10 @@ You must log into the Vercel dashboard, go to the Project Settings -> Environmen
 **Problem:** Write Zod schema validating `process.env` containing `DATABASE_URL` (url) and `NEXT_PUBLIC_API_URL` (url).
 
 **Expected output:**
-```typescript
-import { z } from 'zod'; const envSchema = z.object({ DATABASE_URL: z.string().url(), NEXT_PUBLIC_API_URL: z.string().url() }); export const env = envSchema.parse(process.env);
-```
-
 > [!check]- Answer
+> ```typescript
+> import { z } from 'zod'; const envSchema = z.object({ DATABASE_URL: z.string().url(), NEXT_PUBLIC_API_URL: z.string().url() }); export const env = envSchema.parse(process.env);
+> ```
 > - Validating `process.env` with Zod prevents runtime configuration crashes.
 > 
 > ```typescript

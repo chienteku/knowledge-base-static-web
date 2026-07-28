@@ -148,19 +148,18 @@ Write the sequential mongosh commands to:
 2.  Terminate that query using its operation ID (assume the operation ID returned is `99088`).
 
 **Expected output:**
-```javascript
-// 1. Locate the query
-db.currentOp({
-  "active": true,
-  "ns": "reports.sales",
-  "secs_running": { $gt: 10 }
-});
-
-// 2. Terminate the query
-db.killOp(99088);
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Locate the query
+> db.currentOp({
+>   "active": true,
+>   "ns": "reports.sales",
+>   "secs_running": { $gt: 10 }
+> });
+> 
+> // 2. Terminate the query
+> db.killOp(99088);
+> ```
 > - Add search filter criteria inside `db.currentOp()` targeting the namespace `ns` and `secs_running`.
 > - Use the `db.killOp()` helper method to cancel the operation.
 
@@ -173,27 +172,27 @@ db.killOp(99088);
 **Problem:** CLI command to monitor time spent reading and writing per collection every 2 seconds (`mongotop 2`).
 
 **Expected output:**
-```text
-mongotop 2
-```
-
 > [!check]- Answer
+> ```text
+> mongotop 2
+> ```
 > ```bash
 > mongotop 2
 > ```
 >
 > **Explanation:** `mongotop [interval]` outputs real-time read and write time metrics per collection.
 
+---
+
 ### Exercise 3: Inspecting Server Status Metrics
 
 **Problem:** Command in `mongosh` to return detailed server status metrics (`db.serverStatus()`).
 
 **Expected output:**
-```text
-db.serverStatus();
-```
-
 > [!check]- Answer
+> ```text
+> db.serverStatus();
+> ```
 > ```javascript
 > db.serverStatus();
 > ```

@@ -199,11 +199,10 @@ try {
 ```
 
 **Expected output:**
-```text
-Type Mistake
-```
-
 > [!check]- Answer
+> ```text
+> Type Mistake
+> ```
 > - Use the `instanceof` operator: `if (error instanceof TypeError)`.
 
 ---
@@ -213,11 +212,10 @@ Type Mistake
 **Problem:** Trigger and catch a `TypeError` by calling `null.toString()`.
 
 **Expected output:**
-```text
-TypeError: Cannot read properties of null (reading 'toString')
-```
-
 > [!check]- Answer
+> ```text
+> TypeError: Cannot read properties of null (reading 'toString')
+> ```
 > ```javascript
 > try {
 >   null.toString();
@@ -228,16 +226,17 @@ TypeError: Cannot read properties of null (reading 'toString')
 >
 > **Explanation:** `TypeError` is thrown when an operation is performed on an incompatible value type.
 
+---
+
 ### Exercise 3: Custom Error Cause Chaining
 
 **Problem:** Re-throw an error using ES2022 cause option `{ cause: originalError }`.
 
 **Expected output:**
-```text
-High-level error caused by underlying failure
-```
-
 > [!check]- Answer
+> ```text
+> High-level error caused by underlying failure
+> ```
 > ```javascript
 > try {
 >   try {
@@ -252,7 +251,6 @@ High-level error caused by underlying failure
 >
 > **Explanation:** `{ cause: err }` chains low-level errors into high-level context errors.
 
----
 
 ---
 

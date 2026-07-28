@@ -103,12 +103,11 @@ const val = getRawData(); // Forces caller to narrow type safely
 **Problem:** You are fetching data from a third-party API. You literally have no idea what the JSON structure will look like. You are tempted to type it as `const data: any`. What is the safer, modern alternative?
 
 **Expected output:**
-```text
-You should use the `unknown` type! 
-`unknown` means "I don't know what this is yet." Unlike `any`, `unknown` forces you to write protective `if` checks before you are allowed to interact with the data.
-```
-
 > [!check]- Answer
+> ```text
+> You should use the `unknown` type! 
+> `unknown` means "I don't know what this is yet." Unlike `any`, `unknown` forces you to write protective `if` checks before you are allowed to interact with the data.
+> ```
 > - See the next term in this level!
 
 ---
@@ -120,11 +119,10 @@ You should use the `unknown` type!
 **Problem:** Refactor function signature `function log(msg: any)` to safe type `unknown`.
 
 **Expected output:**
-```text
-log(msg: unknown)
-```
-
 > [!check]- Answer
+> ```text
+> log(msg: unknown)
+> ```
 > ```typescript
 > function log(msg: unknown) {
 >   if (typeof msg === "string") console.log(msg.toUpperCase());
@@ -134,16 +132,17 @@ log(msg: unknown)
 >
 > **Explanation:** `unknown` requires type narrowing before performing property or method invocations.
 
+---
+
 ### Exercise 3: Compiler Flag `noImplicitAny`
 
 **Problem:** What flag in `tsconfig.json` flags un-typed function parameters?
 
 **Expected output:**
-```text
-noImplicitAny: true
-```
-
 > [!check]- Answer
+> ```text
+> noImplicitAny: true
+> ```
 > ```typescript
 > console.log("noImplicitAny: true");
 > ```

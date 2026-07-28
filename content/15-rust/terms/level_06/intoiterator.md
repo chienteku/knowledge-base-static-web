@@ -210,12 +210,11 @@ fn main() {
 **Problem:** Implement `IntoIterator` for `struct Group { members: Vec<String> }` to iterate over member strings.
 
 **Expected output:**
-```
-Member: Alice
-Member: Bob
-```
-
 > [!check]- Answer
+> ```
+> Member: Alice
+> Member: Bob
+> ```
 > ```rust
 > struct Group { members: Vec<String> }
 > impl IntoIterator for Group {
@@ -235,16 +234,17 @@ Member: Bob
 >
 > **Explanation:** Implementing `IntoIterator` allows custom collections to be used directly in `for` loops.
 
+---
+
 ### Exercise 3: Borrowing Iteration via `&Group` `IntoIterator`
 
 **Problem:** Implement `IntoIterator` for `&'a Group` to allow non-destructive `for m in &group` loops.
 
 **Expected output:**
-```
-Ref member: Alice
-```
-
 > [!check]- Answer
+> ```
+> Ref member: Alice
+> ```
 > struct Group { members: Vec<String> }
 > impl<'a> IntoIterator for &'a Group {
 >     type Item = &'a String;

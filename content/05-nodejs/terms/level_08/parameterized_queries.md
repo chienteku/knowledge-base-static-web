@@ -148,32 +148,34 @@ db.query(query, [username, password], callback); // PostgreSQL syntax
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Writing Safe Parameterized Query
 
 **Problem:** Convert unsafe query `db.query("SELECT * FROM products WHERE category = '" + cat + "'")` to safe parameterized query.
 
 **Expected output:**
-```text
-db.query('SELECT * FROM products WHERE category = $1', [cat]);
-```
-
 > [!check]- Answer
+> ```text
+> db.query('SELECT * FROM products WHERE category = $1', [cat]);
+> ```
 > ```javascript
 > db.query('SELECT * FROM products WHERE category = $1', [cat]);
 > ```
 >
 > **Explanation:** Parameterized queries pass user inputs separately from SQL code structure.
 
+---
+
 ### Exercise 3: How Parameterization Prevents Injection
 
 **Problem:** Explain how parameter placeholders prevent SQL injection at the database protocol level.
 
 **Expected output:**
-```text
-The database compiles the SQL query structure first, treating input parameters strictly as literal data values rather than executable SQL statements.
-```
-
 > [!check]- Answer
+> ```text
+> The database compiles the SQL query structure first, treating input parameters strictly as literal data values rather than executable SQL statements.
+> ```
 > ```text
 > The database compiles the SQL query structure first, treating input parameters strictly as literal data values rather than executable SQL statements.
 > ```

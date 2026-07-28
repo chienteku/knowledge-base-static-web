@@ -115,14 +115,13 @@ function simple<T, U>(input: ComplexInput<T, U>) {}
 **Problem:** The built-in Array `.map()` function takes an array of one type, and returns an array of a *potentially different* type. How many generics do you think the `.map()` method uses under the hood?
 
 **Expected output:**
-```text
-It uses Two! 
-1. The type of the items currently in the Array (let's call it `T`).
-2. The type of the items being returned by the callback function (let's call it `U`).
-`map<U>(callbackfn: (value: T) => U): U[]`
-```
-
 > [!check]- Answer
+> ```text
+> It uses Two! 
+> 1. The type of the items currently in the Array (let's call it `T`).
+> 2. The type of the items being returned by the callback function (let's call it `U`).
+> `map<U>(callbackfn: (value: T) => U): U[]`
+> ```
 > - Think about `[1, 2, 3].map(n => n.toString())`. Input is number, output is string.
 
 ---
@@ -134,11 +133,10 @@ It uses Two!
 **Problem:** Write `mapArray<T, U>(arr: T[], fn: (item: T) => U): U[]`.
 
 **Expected output:**
-```text
-[2, 4, 6]
-```
-
 > [!check]- Answer
+> ```text
+> [2, 4, 6]
+> ```
 > ```typescript
 > function mapArray<T, U>(arr: T[], fn: (item: T) => U): U[] {
 >   return arr.map(fn);
@@ -148,16 +146,17 @@ It uses Two!
 >
 > **Explanation:** Multi-generics `<T, U>` transform input array element types `T` into output array element types `U`.
 
+---
+
 ### Exercise 3: Pair Tuple Construction
 
 **Problem:** Write `makePair<K, V>(key: K, val: V): [K, V]`.
 
 **Expected output:**
-```text
-["id", 100]
-```
-
 > [!check]- Answer
+> ```text
+> ["id", 100]
+> ```
 > ```typescript
 > function makePair<K, V>(key: K, val: V): [K, V] {
 >   return [key, val];

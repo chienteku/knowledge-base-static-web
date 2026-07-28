@@ -118,19 +118,18 @@ Group related contexts or use Zustand for modular global state
 Write a custom hook called `useTheme` that returns the `ThemeContext`.
 
 **Expected output:**
-```javascript
-import { useContext } from 'react';
-import { ThemeContext } from './ThemeContextFile';
-
-// Custom Hook!
-export function useTheme() {
-  return useContext(ThemeContext);
-}
-
-// Now other files can just write: const theme = useTheme();
-```
-
 > [!check]- Answer
+> ```javascript
+> import { useContext } from 'react';
+> import { ThemeContext } from './ThemeContextFile';
+> 
+> // Custom Hook!
+> export function useTheme() {
+>   return useContext(ThemeContext);
+> }
+> 
+> // Now other files can just write: const theme = useTheme();
+> ```
 > - Wrap `useContext` inside a function that starts with `use`.
 
 ---
@@ -142,11 +141,10 @@ export function useTheme() {
 **Problem:** Create custom hook `useAuthContext()` throwing informative error if consumed outside `AuthProvider`.
 
 **Expected output:**
-```text
-function useAuthContext() { const context = useContext(AuthContext); if (!context) throw new Error('useAuthContext must be used within AuthProvider'); return context; }
-```
-
 > [!check]- Answer
+> ```text
+> function useAuthContext() { const context = useContext(AuthContext); if (!context) throw new Error('useAuthContext must be used within AuthProvider'); return context; }
+> ```
 > ```javascript
 > function useAuthContext() {
 >   const context = useContext(AuthContext);
@@ -159,16 +157,17 @@ function useAuthContext() { const context = useContext(AuthContext); if (!contex
 >
 > **Explanation:** Custom context hooks validate Provider wrapper presence early with clear error messages.
 
+---
+
 ### Exercise 3: Consuming Multiple Contexts
 
 **Problem:** Consume `ThemeContext` and `UserContext` inside a component using `useContext`.
 
 **Expected output:**
-```text
-function Header() { const { theme } = useContext(ThemeContext); const { user } = useContext(UserContext); return <header className={theme}>Welcome {user.name}</header>; }
-```
-
 > [!check]- Answer
+> ```text
+> function Header() { const { theme } = useContext(ThemeContext); const { user } = useContext(UserContext); return <header className={theme}>Welcome {user.name}</header>; }
+> ```
 > ```javascript
 > function Header() {
 >   const { theme } = useContext(ThemeContext);

@@ -219,11 +219,10 @@ describe('TitleCard', () => {
 ```
 
 **Expected output:**
-```text
-The test mounts the component with the target prop value and asserts the inner HTML of the h1 element matches it.
-```
-
 > [!check]- Answer
+> ```text
+> The test mounts the component with the target prop value and asserts the inner HTML of the h1 element matches it.
+> ```
 > - The component mount options object accepts a `props` object: `{ props: { key: value } }`.
 > - Use `.find('h1')` to query the heading tag, and `.text()` to read its content.
 
@@ -234,11 +233,10 @@ The test mounts the component with the target prop value and asserts the inner H
 **Problem:** Write Vitest test block using `@vue/test-utils` `mount()` verifying component renders text `'Welcome'`. 
 
 **Expected output:**
-```javascript
-import { test, expect } from 'vitest'; import { mount } from '@vue/test-utils'; import Welcome from './Welcome.vue'; test('renders welcome text', () => { const wrapper = mount(Welcome); expect(wrapper.text()).toContain('Welcome'); });
-```
-
 > [!check]- Answer
+> ```javascript
+> import { test, expect } from 'vitest'; import { mount } from '@vue/test-utils'; import Welcome from './Welcome.vue'; test('renders welcome text', () => { const wrapper = mount(Welcome); expect(wrapper.text()).toContain('Welcome'); });
+> ```
 > - Vitest provides Jest-compatible `test` and `expect` APIs.
 > 
 > ```javascript
@@ -259,11 +257,10 @@ import { test, expect } from 'vitest'; import { mount } from '@vue/test-utils'; 
 **Problem:** Why is Vitest significantly faster than Jest when running tests in Watch mode on Vite projects?
 
 **Expected output:**
-```text
-Vitest re-uses Vite's fast module graph dependency cache to re-execute ONLY tests affected by modified files.
-```
-
 > [!check]- Answer
+> ```text
+> Vitest re-uses Vite's fast module graph dependency cache to re-execute ONLY tests affected by modified files.
+> ```
 > - Leverages Vite module graph for smart test re-execution.
 > 
 > ```text

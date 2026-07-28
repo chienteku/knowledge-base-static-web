@@ -125,12 +125,11 @@ const type = res.headers.get('content-type'); // Correct Headers.get() method
 **Problem:** Why doesn't `fetch('/api')` just directly return the JSON data `{ username: "Bob" }`? Why does it force us to deal with this annoying `Response` wrapper object first?
 
 **Expected output:**
-```text
-Because sometimes you need to check the Metadata! 
-What if the server returned a `404 Not Found`? If `fetch` just gave you the body, you wouldn't know it was an error. The `Response` object allows you to check `response.status` to see if the request actually succeeded before you try to parse the data.
-```
-
 > [!check]- Answer
+> ```text
+> Because sometimes you need to check the Metadata! 
+> What if the server returned a `404 Not Found`? If `fetch` just gave you the body, you wouldn't know it was an error. The `Response` object allows you to check `response.status` to see if the request actually succeeded before you try to parse the data.
+> ```
 > - Does the Server only send a body, or does it also send Status Codes and Headers?
 
 ---
@@ -144,14 +143,13 @@ What if the server returned a `404 Not Found`? If `fetch` just gave you the body
 4. `res.url` 
 
 **Expected output:**
-```text
-1. Boolean (true if status is 200-299)
-2. HTTP 3-digit status code (e.g. 200, 404)
-3. Status message string (e.g. "OK", "Not Found")
-4. Final redirected URL string of response
-```
-
 > [!check]- Answer
+> ```text
+> 1. Boolean (true if status is 200-299)
+> 2. HTTP 3-digit status code (e.g. 200, 404)
+> 3. Status message string (e.g. "OK", "Not Found")
+> 4. Final redirected URL string of response
+> ```
 > ```text
 > 1. res.ok -> Boolean (true if 200 <= status <= 299)
 > 2. res.status -> 3-digit status code integer
@@ -166,14 +164,13 @@ What if the server returned a `404 Not Found`? If `fetch` just gave you the body
 **Problem:** List 4 methods available on `Response` for consuming body streams.
 
 **Expected output:**
-```text
-1. res.json()
-2. res.text()
-3. res.blob()
-4. res.arrayBuffer() (or res.formData())
-```
-
 > [!check]- Answer
+> ```text
+> 1. res.json()
+> 2. res.text()
+> 3. res.blob()
+> 4. res.arrayBuffer() (or res.formData())
+> ```
 > ```text
 > 1. res.json()
 > 2. res.text()

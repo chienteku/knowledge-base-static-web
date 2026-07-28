@@ -144,13 +144,12 @@ Use Compass 'Export Pipeline to Language' feature to export generated driver cod
 Which MongoDB client tool (**mongosh** or **Compass**) makes this task easier for a visual review? Explain why.
 
 **Expected output:**
-```text
-MongoDB Compass makes this task easier. 
-While both tools can retrieve this information, `mongosh` outputs execution plans as a massive, complex JSON text block in the terminal, which is difficult to parse. 
-Compass displays the query plan as an interactive, graphical flowchart, highlighting stages (like COLLSCAN for sequential scans versus IXSCAN for index scans) in red or green, allowing developers to spot missing indexes instantly.
-```
-
 > [!check]- Answer
+> ```text
+> MongoDB Compass makes this task easier. 
+> While both tools can retrieve this information, `mongosh` outputs execution plans as a massive, complex JSON text block in the terminal, which is difficult to parse. 
+> Compass displays the query plan as an interactive, graphical flowchart, highlighting stages (like COLLSCAN for sequential scans versus IXSCAN for index scans) in red or green, allowing developers to spot missing indexes instantly.
+> ```
 > - Consider which tool represents query plans as graphics instead of text strings.
 > - Think about the cognitive load of reading 200 lines of JSON logs.
 
@@ -163,27 +162,27 @@ Compass displays the query plan as an interactive, graphical flowchart, highligh
 **Problem:** Where in MongoDB Compass can you inspect query execution plans and index utilization? (Explain Plan tab).
 
 **Expected output:**
-```text
-Explain Plan tab in Compass query view
-```
-
 > [!check]- Answer
+> ```text
+> Explain Plan tab in Compass query view
+> ```
 > ```text
 > Explain Plan tab in Compass query view
 > ```
 >
 > **Explanation:** The Explain Plan tab displays execution stage details (COLLSCAN vs IXSCAN).
 
+---
+
 ### Exercise 3: Compass Aggregation Builder
 
 **Problem:** Name 2 visual aggregation stages available in Compass pipeline builder (`$match`, `$group`).
 
 **Expected output:**
-```text
-$match, $group
-```
-
 > [!check]- Answer
+> ```text
+> $match, $group
+> ```
 > ```text
 > $match, $group
 > ```

@@ -112,12 +112,11 @@ Will their Bcrypt hashes in the database look identical?
 (e.g., `$2b$10$abc...` and `$2b$10$abc...`)
 
 **Expected output:**
-```text
-No! Their hashes will be completely different.
-Bcrypt automatically adds a random "Salt" (random letters) to every password before hashing it. This ensures that even if two people have the same password, hackers cannot figure that out by looking at the database.
-```
-
 > [!check]- Answer
+> ```text
+> No! Their hashes will be completely different.
+> Bcrypt automatically adds a random "Salt" (random letters) to every password before hashing it. This ensures that even if two people have the same password, hackers cannot figure that out by looking at the database.
+> ```
 > - Remember the concept of "Salting" a password.
 
 ---
@@ -129,11 +128,10 @@ Bcrypt automatically adds a random "Salt" (random letters) to every password bef
 **Problem:** Use `bcrypt.compare()` to verify user input password against hashed password.
 
 **Expected output:**
-```text
-const match = await bcrypt.compare(inputPassword, hashedPassword);
-```
-
 > [!check]- Answer
+> ```text
+> const match = await bcrypt.compare(inputPassword, hashedPassword);
+> ```
 > ```javascript
 > const bcrypt = require('bcrypt');
 > const isMatch = await bcrypt.compare(inputPassword, hashedPassword);
@@ -142,16 +140,17 @@ const match = await bcrypt.compare(inputPassword, hashedPassword);
 >
 > **Explanation:** `bcrypt.compare` asynchronously hashes input password with embedded salt to verify matches.
 
+---
+
 ### Exercise 3: Salt Purpose in Bcrypt
 
 **Problem:** Why is a random salt automatically generated for each password hash in Bcrypt?
 
 **Expected output:**
-```text
-To ensure identical passwords produce different hash outputs, protecting against pre-computed Rainbow Table attacks.
-```
-
 > [!check]- Answer
+> ```text
+> To ensure identical passwords produce different hash outputs, protecting against pre-computed Rainbow Table attacks.
+> ```
 > ```text
 > To ensure identical passwords produce different hash outputs, protecting against pre-computed Rainbow Table attacks.
 > ```

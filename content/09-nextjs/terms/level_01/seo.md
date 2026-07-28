@@ -145,11 +145,10 @@ export const metadata = {
 **Problem:** Explain the difference in behavior when a social media bot (like the Discord or Slack link preview generator) attempts to parse a link from a standard React Vite app (CSR) vs. a Next.js app (SSR).
 
 **Expected output:**
-```text
-Social media preview generators do not execute JavaScript. When they request a CSR link, they get back an empty HTML container, so they display no preview card metadata. When they request a Next.js SSR link, they instantly receive the compiled HTML head containing the Open Graph tags, displaying a rich card preview with the correct title, description, and image.
-```
-
 > [!check]- Answer
+> ```text
+> Social media preview generators do not execute JavaScript. When they request a CSR link, they get back an empty HTML container, so they display no preview card metadata. When they request a Next.js SSR link, they instantly receive the compiled HTML head containing the Open Graph tags, displaying a rich card preview with the correct title, description, and image.
+> ```
 > - Social media scraper bots are lightweight crawlers that do not run JavaScript engines.
 
 ---
@@ -159,11 +158,10 @@ Social media preview generators do not execute JavaScript. When they request a C
 **Problem:** Write App Router `generateMetadata({ params })` fetching product details and returning dynamic page `title`.
 
 **Expected output:**
-```typescript
-export async function generateMetadata({ params }: { params: { id: string } }) { const product = await getProduct(params.id); return { title: product.title }; }
-```
-
 > [!check]- Answer
+> ```typescript
+> export async function generateMetadata({ params }: { params: { id: string } }) { const product = await getProduct(params.id); return { title: product.title }; }
+> ```
 > - `generateMetadata()` generates dynamic SEO tags for dynamic routes.
 > 
 > ```typescript
@@ -187,11 +185,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 **Problem:** Which reserved filenames in the `app/` directory generate dynamic `sitemap.xml` and `robots.txt` files?
 
 **Expected output:**
-```text
-app/sitemap.ts and app/robots.ts
-```
-
 > [!check]- Answer
+> ```text
+> app/sitemap.ts and app/robots.ts
+> ```
 > - `sitemap.ts` generates dynamic sitemaps.
 > - `robots.ts` generates dynamic robots.txt rules.
 > 

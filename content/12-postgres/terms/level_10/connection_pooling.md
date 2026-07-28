@@ -168,15 +168,14 @@ Keep pool size small (e.g. pool_size = (CPU cores * 2) + disk_spindle_count)
 Explain why this setup will crash under heavy traffic.
 
 **Expected output:**
-```text
-The setup will crash because of connection limits!
-Under heavy traffic, each of the 5 API instances will grow its pool to its maximum limit of 30 connections. 
-Together, they will try to open:
-5 instances * 30 connections/pool = 150 connections.
-Since the PostgreSQL server only permits a maximum of 100 connections, the database will reject the remaining 50 connections, throwing "too many clients already" errors and crashing the APIs.
-```
-
 > [!check]- Answer
+> ```text
+> The setup will crash because of connection limits!
+> Under heavy traffic, each of the 5 API instances will grow its pool to its maximum limit of 30 connections. 
+> Together, they will try to open:
+> 5 instances * 30 connections/pool = 150 connections.
+> Since the PostgreSQL server only permits a maximum of 100 connections, the database will reject the remaining 50 connections, throwing "too many clients already" errors and crashing the APIs.
+> ```
 > - Multiply the number of server instances by the maximum pool size of each instance.
 > - Compare the total to the server's `max_connections` setting.
 
@@ -189,27 +188,27 @@ Since the PostgreSQL server only permits a maximum of 100 connections, the datab
 **Problem:** List 3 pooling modes in PgBouncer (`session`, `transaction`, `statement`).
 
 **Expected output:**
-```text
-session, transaction, statement
-```
-
 > [!check]- Answer
+> ```text
+> session, transaction, statement
+> ```
 > ```text
 > session, transaction, statement
 > ```
 >
 > **Explanation:** Transaction pooling binds connections strictly for transaction durations, maximizing connection reuse.
 
+---
+
 ### Exercise 3: Node.js Pg Pool Error Handling
 
 **Problem:** Attach error event listener to `pg.Pool` instance handling idle client errors cleanly.
 
 **Expected output:**
-```text
-pool.on('error', (err, client) => { console.error('Unexpected idle client error', err); process.exit(-1); });
-```
-
 > [!check]- Answer
+> ```text
+> pool.on('error', (err, client) => { console.error('Unexpected idle client error', err); process.exit(-1); });
+> ```
 > ```javascript
 > pool.on('error', (err, client) => {
 >   console.error('Unexpected idle client error', err);

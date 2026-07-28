@@ -142,12 +142,11 @@ Explain:
 2.  Whether the nodes on Rack B (Nodes 4, 5) can elect a Primary.
 
 **Expected output:**
-```text
-1. Yes: Rack A contains 3 nodes. Since 3 is a strict majority of the total 5 nodes (3 / 5 = 60%), the nodes on Rack A can vote and successfully elect a Primary.
-2. No: Rack B only contains 2 nodes. Since 2 is not a majority of 5 (2 / 5 = 40%), the nodes on Rack B cannot achieve the 3 votes required, and will remain as read-only secondaries.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes: Rack A contains 3 nodes. Since 3 is a strict majority of the total 5 nodes (3 / 5 = 60%), the nodes on Rack A can vote and successfully elect a Primary.
+> 2. No: Rack B only contains 2 nodes. Since 2 is not a majority of 5 (2 / 5 = 40%), the nodes on Rack B cannot achieve the 3 votes required, and will remain as read-only secondaries.
+> ```
 > - The voting majority threshold is calculated based on the total cluster configuration (5 nodes), not local partitions.
 > - A partition must hold at least 3 nodes to nominate a primary.
 
@@ -160,27 +159,27 @@ Explain:
 **Problem:** Calculate minimum votes needed to elect primary in 5-node replica set ($5/2 + 1 = 3$).
 
 **Expected output:**
-```text
-3 votes (majority of 5 nodes)
-```
-
 > [!check]- Answer
+> ```text
+> 3 votes (majority of 5 nodes)
+> ```
 > ```text
 > 3 votes (majority of 5 nodes)
 > ```
 >
 > **Explanation:** Replica set elections require a strict majority vote ($N/2 + 1$).
 
+---
+
 ### Exercise 3: Replica Set Status Inspection
 
 **Problem:** Command in `mongosh` to inspect replica set member health and election state (`rs.status()`).
 
 **Expected output:**
-```text
-rs.status();
-```
-
 > [!check]- Answer
+> ```text
+> rs.status();
+> ```
 > ```javascript
 > rs.status();
 > ```

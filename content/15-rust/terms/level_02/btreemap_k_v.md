@@ -173,13 +173,12 @@ thread::spawn(move || {
 **Problem:** Insert unordered integer keys `5, 1, 3` into a `BTreeMap`, iterate over them, and verify keys are printed in ascending sorted order.
 
 **Expected output:**
-```
-1
-3
-5
-```
-
 > [!check]- Answer
+> ```
+> 1
+> 3
+> 5
+> ```
 > ```rust
 > use std::collections::BTreeMap;
 > fn main() {
@@ -195,18 +194,19 @@ thread::spawn(move || {
 >
 > **Explanation:** `BTreeMap` automatically maintains key order upon insertion.
 
+---
+
 ### Exercise 3: Range Search Queries
 
 **Problem:** Use `.range(2..=4)` on a `BTreeMap` containing keys `1..=5` to print only values whose keys fall within the range `[2, 4]`.
 
 **Expected output:**
-```
-2: b
-3: c
-4: d
-```
-
 > [!check]- Answer
+> ```
+> 2: b
+> 3: c
+> 4: d
+> ```
 > ```rust
 > use std::collections::BTreeMap;
 > fn main() {

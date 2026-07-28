@@ -156,16 +156,15 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY view_name;
 2.  Write the command to rebuild and refresh the cache concurrently in the background (assume a unique index is already active on the device type).
 
 **Expected output:**
-```sql
-CREATE MATERIALIZED VIEW mv_clicks_by_device AS
-SELECT device_type, COUNT(*) AS click_count
-FROM clicks
-GROUP BY device_type;
-
-REFRESH MATERIALIZED VIEW CONCURRENTLY mv_clicks_by_device;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE MATERIALIZED VIEW mv_clicks_by_device AS
+> SELECT device_type, COUNT(*) AS click_count
+> FROM clicks
+> GROUP BY device_type;
+> 
+> REFRESH MATERIALIZED VIEW CONCURRENTLY mv_clicks_by_device;
+> ```
 > - Remember to include the `MATERIALIZED` keyword in the view creation command.
 > - Specify `CONCURRENTLY` in the refresh command to avoid table locks.
 
@@ -178,11 +177,10 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY mv_clicks_by_device;
 **Problem:** Create materialized view `mv_daily_sales` summarizing daily total sales and create unique index on `sale_date`.
 
 **Expected output:**
-```text
-CREATE MATERIALIZED VIEW mv_daily_sales AS SELECT DATE(created_at) AS sale_date, SUM(total) AS total_sales FROM orders GROUP BY DATE(created_at); CREATE UNIQUE INDEX idx_mv_sale_date ON mv_daily_sales (sale_date);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE MATERIALIZED VIEW mv_daily_sales AS SELECT DATE(created_at) AS sale_date, SUM(total) AS total_sales FROM orders GROUP BY DATE(created_at); CREATE UNIQUE INDEX idx_mv_sale_date ON mv_daily_sales (sale_date);
+> ```
 > ```sql
 > CREATE MATERIALIZED VIEW mv_daily_sales AS
 > SELECT DATE(created_at) AS sale_date, SUM(total) AS total_sales
@@ -192,16 +190,17 @@ CREATE MATERIALIZED VIEW mv_daily_sales AS SELECT DATE(created_at) AS sale_date,
 >
 > **Explanation:** Materialized views cache computed query results physically on disk.
 
+---
+
 ### Exercise 3: Refreshing Materialized View Concurrently
 
 **Problem:** Refresh `mv_daily_sales` concurrently without blocking reader queries.
 
 **Expected output:**
-```text
-REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_sales;
-```
-
 > [!check]- Answer
+> ```text
+> REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_sales;
+> ```
 > ```sql
 > REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_sales;
 > ```

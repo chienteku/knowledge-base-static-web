@@ -144,15 +144,10 @@ Bind to private IP subnets and enforce TLS + firewall rules
 2.  Write the terminal command to fix it on a standard Linux development server.
 
 **Expected output:**
-```text
-1. The error occurs because the MongoDB server engine process (`mongod`) is not running in the background, or is listening on a different port/IP address.
-```
-```bash
-# 2. Start the daemon process
-sudo systemctl start mongod
-```
-
 > [!check]- Answer
+> ```text
+> 1. The error occurs because the MongoDB server engine process (`mongod`) is not running in the background, or is listening on a different port/IP address.
+> ```
 > - "Connection refused" indicates no listener process is active on that socket.
 > - Use standard service managers (`systemctl`) to start daemons.
 
@@ -165,27 +160,27 @@ sudo systemctl start mongod
 **Problem:** CLI command to start `mongod` daemon using config file `/etc/mongod.conf`.
 
 **Expected output:**
-```text
-mongod --config /etc/mongod.conf
-```
-
 > [!check]- Answer
+> ```text
+> mongod --config /etc/mongod.conf
+> ```
 > ```text
 > mongod --config /etc/mongod.conf
 > ```
 >
 > **Explanation:** `--config` loads server settings from YAML configuration files.
 
+---
+
 ### Exercise 3: Default MongoDB Port
 
 **Problem:** What is the default TCP listening port for `mongod`? (`27017`).
 
 **Expected output:**
-```text
-27017
-```
-
 > [!check]- Answer
+> ```text
+> 27017
+> ```
 > ```text
 > 27017
 > ```

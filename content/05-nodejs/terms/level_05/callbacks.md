@@ -133,12 +133,10 @@ function fetchUser(callback) {
 ```
 
 **Expected output:**
-```javascript
-callback(new Error("API Failed"), null);
-```
-*Explanation: The first argument must be the error object. The second argument (the data) is null because it failed.*
-
 > [!check]- Answer
+> ```javascript
+> callback(new Error("API Failed"), null);
+> ```
 > - Remember the "Error-First" rule! What is argument 1? What is argument 2?
 
 ---
@@ -150,11 +148,10 @@ callback(new Error("API Failed"), null);
 **Problem:** Refactor nested callback `step1((err, a) => { step2(a, (err, b) => { step3(b, cb); }); });` to `async/await`.
 
 **Expected output:**
-```text
-const a = await step1(); const b = await step2(a); const result = await step3(b);
-```
-
 > [!check]- Answer
+> ```text
+> const a = await step1(); const b = await step2(a); const result = await step3(b);
+> ```
 > ```javascript
 > const a = await step1();
 > const b = await step2(a);
@@ -163,16 +160,17 @@ const a = await step1(); const b = await step2(a); const result = await step3(b)
 >
 > **Explanation:** `async/await` flattens nested callback pyramids into clean sequential code.
 
+---
+
 ### Exercise 3: Error-First Callback Check
 
 **Problem:** Write error check guard for callback `(err, result) => {}`.
 
 **Expected output:**
-```text
-if (err) { console.error(err); return; }
-```
-
 > [!check]- Answer
+> ```text
+> if (err) { console.error(err); return; }
+> ```
 > ```javascript
 > if (err) {
 >   console.error('Operation failed:', err);

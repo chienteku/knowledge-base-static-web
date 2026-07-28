@@ -178,11 +178,10 @@ thread::spawn(move || {
 **Problem:** Annotate a function with `#[cfg(target_os = "linux")]`.
 
 **Expected output:**
-```
-Linux function compiled
-```
-
 > [!check]- Answer
+> ```
+> Linux function compiled
+> ```
 > ```rust
 > #[cfg(target_os = "linux")]
 > fn linux_only() { println!("Linux function compiled"); }
@@ -194,16 +193,17 @@ Linux function compiled
 >
 > **Explanation:** `#[cfg(...)]` conditionally includes items based on target OS/architecture.
 
+---
+
 ### Exercise 3: Combining `cfg` Logic with `all` and `not`
 
 **Problem:** Write `#[cfg(all(unix, not(target_os = "android")))]`.
 
 **Expected output:**
-```
-Desktop Unix verified
-```
-
 > [!check]- Answer
+> ```
+> Desktop Unix verified
+> ```
 > fn main() {
 >     println!("Desktop Unix verified");
 > }

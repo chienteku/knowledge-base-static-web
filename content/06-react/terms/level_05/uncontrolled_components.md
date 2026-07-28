@@ -110,12 +110,11 @@ Use useRef for uncontrolled forms or useState for controlled forms
 **Problem:** You are building an `<input type="file" />` for a user to upload a profile picture. Should this be Controlled or Uncontrolled?
 
 **Expected output:**
-```text
-It MUST be Uncontrolled.
-For security reasons, browsers do not allow JavaScript to programmatically set the `value` of a file input. Therefore, React State cannot control it. You must use a `ref` (or an `onChange` that just reads the `e.target.files` without forcing a `value` back into the input).
-```
-
 > [!check]- Answer
+> ```text
+> It MUST be Uncontrolled.
+> For security reasons, browsers do not allow JavaScript to programmatically set the `value` of a file input. Therefore, React State cannot control it. You must use a `ref` (or an `onChange` that just reads the `e.target.files` without forcing a `value` back into the input).
+> ```
 > - Think about browser security with user hard drives.
 
 ---
@@ -127,11 +126,10 @@ For security reasons, browsers do not allow JavaScript to programmatically set t
 **Problem:** Build uncontrolled form reading `emailRef.current.value` on submit.
 
 **Expected output:**
-```text
-function UncontrolledForm() { const emailRef = useRef(null); const handleSubmit = e => { e.preventDefault(); console.log(emailRef.current.value); }; return <form onSubmit={handleSubmit}><input ref={emailRef} defaultValue="user@ex.com" /><button type="submit">Save</button></form>; }
-```
-
 > [!check]- Answer
+> ```text
+> function UncontrolledForm() { const emailRef = useRef(null); const handleSubmit = e => { e.preventDefault(); console.log(emailRef.current.value); }; return <form onSubmit={handleSubmit}><input ref={emailRef} defaultValue="user@ex.com" /><button type="submit">Save</button></form>; }
+> ```
 > ```javascript
 > function UncontrolledForm() {
 >   const emailRef = useRef(null);
@@ -150,16 +148,17 @@ function UncontrolledForm() { const emailRef = useRef(null); const handleSubmit 
 >
 > **Explanation:** Uncontrolled components read DOM input values on demand using React refs.
 
+---
+
 ### Exercise 3: File Input Type Requirement
 
 **Problem:** Why MUST `<input type="file">` always be implemented as an uncontrolled component in React? (File inputs are read-only in browser DOM security models and cannot be programmatically set via `value`).
 
 **Expected output:**
-```text
-Browser security models restrict programmatically setting file input values
-```
-
 > [!check]- Answer
+> ```text
+> Browser security models restrict programmatically setting file input values
+> ```
 > ```text
 > Browser security models restrict programmatically setting file input values
 > ```

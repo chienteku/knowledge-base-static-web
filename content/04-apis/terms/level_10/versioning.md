@@ -102,12 +102,11 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 2. Splitting the name: `{ "id": 5, "firstName": "Bob", "lastName": "Smith" }`
 
 **Expected output:**
-```text
-1. Non-Breaking! Old apps will just ignore the `email` field. Keep v1.
-2. Breaking! Old apps are looking for `response.name`. Since `name` is gone, the old apps will crash trying to read `undefined`. You MUST create a v2 for this.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Non-Breaking! Old apps will just ignore the `email` field. Keep v1.
+> 2. Breaking! Old apps are looking for `response.name`. Since `name` is gone, the old apps will crash trying to read `undefined`. You MUST create a v2 for this.
+> ```
 > - If you delete something that existed before, it's breaking.
 
 ---
@@ -120,13 +119,12 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 3. Media Type (Accept) Versioning
 
 **Expected output:**
-```text
-1. GET /v1/users
-2. X-API-Version: 2.0
-3. Accept: application/vnd.example.v2+json
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET /v1/users
+> 2. X-API-Version: 2.0
+> 3. Accept: application/vnd.example.v2+json
+> ```
 > ```text
 > 1. URI Path -> GET /v1/users
 > 2. Header   -> X-API-Version: 2.0
@@ -140,11 +138,10 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 **Problem:** Given SemVer version `2.4.1`, identify Major, Minor, and Patch numbers and explain when Major increments.
 
 **Expected output:**
-```text
-Major: 2, Minor: 4, Patch: 1. Major increments when incompatible breaking API changes are introduced.
-```
-
 > [!check]- Answer
+> ```text
+> Major: 2, Minor: 4, Patch: 1. Major increments when incompatible breaking API changes are introduced.
+> ```
 > ```text
 > Major: 2 (Increments on breaking API changes)
 > Minor: 4 (Increments on backward-compatible new features)

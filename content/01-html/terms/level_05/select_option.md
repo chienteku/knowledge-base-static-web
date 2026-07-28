@@ -138,11 +138,10 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 ```
 
 **Expected output:**
-```text
-It creates unclickable, bolded categorical headers inside the dropdown menu, allowing you to organize a massive list of options into smaller, readable sections!
-```
-
 > [!check]- Answer
+> ```text
+> It creates unclickable, bolded categorical headers inside the dropdown menu, allowing you to organize a massive list of options into smaller, readable sections!
+> ```
 > - Think about navigating a massive dropdown with 100 items. How do you group them visually?
 
 ---
@@ -154,11 +153,10 @@ It creates unclickable, bolded categorical headers inside the dropdown menu, all
 **Problem:** Create `<select>` named `category` with disabled selected placeholder option `'Select Category'`. 
 
 **Expected output:**
-```text
-<select name="category"><option value="" disabled selected>Select Category</option><option value="tech">Tech</option></select>
-```
-
 > [!check]- Answer
+> ```text
+> <select name="category"><option value="" disabled selected>Select Category</option><option value="tech">Tech</option></select>
+> ```
 > ```html
 > <select name="category">
 >   <option value="" disabled selected>Select Category</option>
@@ -169,16 +167,17 @@ It creates unclickable, bolded categorical headers inside the dropdown menu, all
 >
 > **Explanation:** `disabled selected` option acts as a prompt without allowing re-selection.
 
+---
+
 ### Exercise 3: Grouping Options with optgroup
 
 **Problem:** Which HTML tag groups related `<option>` items under labeled sub-heading headers inside a `<select>`?
 
 **Expected output:**
-```text
-<optgroup label="Group Name">
-```
-
 > [!check]- Answer
+> ```text
+> <optgroup label="Group Name">
+> ```
 > ```html
 > <select name="car">
 >   <optgroup label="German Cars">

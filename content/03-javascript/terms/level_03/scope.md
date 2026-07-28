@@ -164,12 +164,11 @@ console.log(score);
 ```
 
 **Expected output:**
-```text
-10
-(Because the function declared its own local 'score' and didn't touch the global one)
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> (Because the function declared its own local 'score' and didn't touch the global one)
+> ```
 > - `let` inside the function creates a brand new variable that dies when the function finishes.
 
 ---
@@ -179,27 +178,27 @@ console.log(score);
 **Problem:** Explain how JS engine searches local scope, outer enclosing scopes, and global scope in order.
 
 **Expected output:**
-```text
-Local -> Outer -> Global
-```
-
 > [!check]- Answer
+> ```text
+> Local -> Outer -> Global
+> ```
 > ```javascript
 > console.log("Local -> Outer -> Global");
 > ```
 >
 > **Explanation:** Identifiers resolve by searching from inner scopes upward through parent lexical scope frames.
 
+---
+
 ### Exercise 3: Scope Isolation Verification
 
 **Problem:** Verify that variables inside `function A()` are inaccessible from sibling `function B()`.
 
 **Expected output:**
-```text
-Sibling scope isolated
-```
-
 > [!check]- Answer
+> ```text
+> Sibling scope isolated
+> ```
 > function A() { const a = 1; }
 > function B() {
 >   try { console.log(a); } catch (err) { console.log("Sibling scope isolated"); }
@@ -209,7 +208,6 @@ Sibling scope isolated
 >
 > **Explanation:** Sibling function scopes do not share identifier environments.
 
----
 
 ---
 

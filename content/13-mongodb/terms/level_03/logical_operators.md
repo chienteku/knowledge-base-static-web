@@ -198,17 +198,16 @@ db.users.find({ $nor: [{ status: "active" }] });
 `SELECT * FROM tickets WHERE status = 'open' AND (urgency = 'high' OR customer = 'VIP');`
 
 **Expected output:**
-```javascript
-db.tickets.find({
-  status: "open",
-  $or: [
-    { urgency: "high" },
-    { customer: "VIP" }
-  ]
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.tickets.find({
+>   status: "open",
+>   $or: [
+>     { urgency: "high" },
+>     { customer: "VIP" }
+>   ]
+> });
+> ```
 > - The top-level status condition is combined implicitly with the `$or` block.
 > - The `$or` operator expects an array of filter objects.
 
@@ -221,11 +220,10 @@ db.tickets.find({
 **Problem:** Query users where `role` is `"admin"` OR `permissions` contains `"all"`.
 
 **Expected output:**
-```text
-db.users.find({ $or: [{ role: "admin" }, { permissions: "all" }] });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ $or: [{ role: "admin" }, { permissions: "all" }] });
+> ```
 > ```javascript
 > db.users.find({
 >   $or: [{ role: "admin" }, { permissions: "all" }]
@@ -234,16 +232,17 @@ db.users.find({ $or: [{ role: "admin" }, { permissions: "all" }] });
 >
 > **Explanation:** `$or: [ { cond1 }, { cond2 } ]` matches documents satisfying any condition branch.
 
+---
+
 ### Exercise 3: Negation Query with `$nor`
 
 **Problem:** Query users who are neither `inactive` nor `banned` using `$nor`.
 
 **Expected output:**
-```text
-db.users.find({ $nor: [{ status: "inactive" }, { status: "banned" }] });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ $nor: [{ status: "inactive" }, { status: "banned" }] });
+> ```
 > ```javascript
 > db.users.find({
 >   $nor: [{ status: "inactive" }, { status: "banned" }]

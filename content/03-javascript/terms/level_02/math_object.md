@@ -159,11 +159,10 @@ console.log(getRandomRange(1, 10));
 ```
 
 **Expected output:**
-```text
-An integer between 1 and 10 (e.g. 7)
-```
-
 > [!check]- Answer
+> ```text
+> An integer between 1 and 10 (e.g. 7)
+> ```
 > - The size of the range is `(max - min + 1)`.
 > - Multiply `Math.random()` by the range size.
 > - Apply `Math.floor()` to round down, then add `min` to offset the starting number.
@@ -175,11 +174,10 @@ An integer between 1 and 10 (e.g. 7)
 **Problem:** Write a function `getRandomInt(min, max)` returning random inclusive integers between `min` and `max`.
 
 **Expected output:**
-```text
-Random integer in [1, 10]
-```
-
 > [!check]- Answer
+> ```text
+> Random integer in [1, 10]
+> ```
 > ```javascript
 > function getRandomInt(min, max) {
 >   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -190,16 +188,17 @@ Random integer in [1, 10]
 >
 > **Explanation:** `Math.random()` yields floats in $[0, 1)$. Multiplying by `(max - min + 1)` and flooring scales values into target integer ranges.
 
+---
+
 ### Exercise 3: Spreading Array Elements into `Math.max`
 
 **Problem:** Find the maximum number in `[10, 50, 20]` using `Math.max(...nums)`.
 
 **Expected output:**
-```text
-50
-```
-
 > [!check]- Answer
+> ```text
+> 50
+> ```
 > ```javascript
 > const nums = [10, 50, 20];
 > console.log(Math.max(...nums));

@@ -245,22 +245,25 @@ thread::spawn(move || {
 > - Library crates always have `src/lib.rs` and no `main` function
 > - Only binary crates can be run directly — library crates are meant to be used *by* other crates
 
+---
+
 ### Exercise 2: Create a library crate and use it
 
 **Problem:** Create a library crate called `string_utils` with a public function `shout(text: &str) -> String` that converts the input to uppercase and appends `"!!!"`. Then create a binary crate called `shouter` that depends on `string_utils` and prints `shout("hello rust")`.
 
 **Expected output:**
-```
-HELLO RUST!!!
-```
-
 > [!check]- Answer
+> ```
+> HELLO RUST!!!
+> ```
 > - Use `cargo new string_utils --lib` to create the library
 > - Use `cargo new shouter` to create the binary
 > - In `string_utils/src/lib.rs`, use `text.to_uppercase()` and `format!("{}!!!", ...)`
 > - Remember to mark the function as `pub`
 > - In `shouter/Cargo.toml`, add `string_utils = { path = "../string_utils" }`
 > - In `shouter/src/main.rs`, use `string_utils::shout("hello rust")`
+
+---
 
 ### Exercise 3: Understand crate privacy boundaries
 
@@ -283,11 +286,10 @@ HELLO RUST!!!
 **Problem:** Describe the default file entry points for a library crate root and a binary crate root in a Cargo package layout.
 
 **Expected output:**
-```
-Library: src/lib.rs, Binary: src/main.rs
-```
-
 > [!check]- Answer
+> ```
+> Library: src/lib.rs, Binary: src/main.rs
+> ```
 > ```rust
 > fn main() {
 >     println!("Library: src/lib.rs, Binary: src/main.rs");

@@ -182,13 +182,12 @@ State whether the index is **Used** or **Ignored** in these queries:
 3.  `db.users.find({ passport_num: { $exists: true } }).sort({ passport_num: 1 })`
 
 **Expected output:**
-```text
-1. Used: The query searches for a specific value on the indexed field.
-2. Ignored: The sort query lacks an exists filter, so the planner ignores the index to ensure documents missing the passport_num are not excluded from the output.
-3. Used: The query explicitly filters for passport_num existence, allowing the index to satisfy the sort path safely.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Used: The query searches for a specific value on the indexed field.
+> 2. Ignored: The sort query lacks an exists filter, so the planner ignores the index to ensure documents missing the passport_num are not excluded from the output.
+> 3. Used: The query explicitly filters for passport_num existence, allowing the index to satisfy the sort path safely.
+> ```
 > - Check if the query targets a specific value, or sorts without filtering.
 > - Look for the presence of the `$exists: true` constraint.
 
@@ -201,11 +200,10 @@ State whether the index is **Used** or **Ignored** in these queries:
 **Problem:** Create sparse unique index on optional field `passportNumber`.
 
 **Expected output:**
-```text
-db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true });
+> ```
 > ```javascript
 > db.users.createIndex(
 >   { passportNumber: 1 },
@@ -215,16 +213,17 @@ db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true });
 >
 > **Explanation:** `sparse: true` indexes documents containing `passportNumber`, omitting absent fields.
 
+---
+
 ### Exercise 3: Sparse vs Standard Indexing of Absent Keys
 
 **Problem:** How does a sparse index store documents missing the indexed key? (Omits missing documents from the index B-Tree).
 
 **Expected output:**
-```text
-Omits missing documents from the index B-Tree
-```
-
 > [!check]- Answer
+> ```text
+> Omits missing documents from the index B-Tree
+> ```
 > ```text
 > Omits missing documents from the index B-Tree
 > ```

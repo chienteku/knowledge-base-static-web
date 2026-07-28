@@ -250,6 +250,8 @@ padding: 10px 20px 30px 40px;
 >
 > **Explanation:** CSS shorthand value expansion rules infer symmetric side dimensions.
 
+---
+
 ### Exercise 3: Border Shorthand Order
 
 **Problem:** Write CSS `border` shorthand for 2px solid red border.

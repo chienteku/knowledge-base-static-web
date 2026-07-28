@@ -123,13 +123,12 @@ const handleSearch = useCallback(() => sendData(query), [query]);
 **Problem:** You have a simple `<button onClick={handleClick}>` element. Should you wrap `handleClick` in `useCallback`?
 
 **Expected output:**
-```text
-No! 
-Creating a new function in JavaScript is incredibly fast. Wrapping it in `useCallback` actually makes it slower due to the overhead.
-You ONLY use `useCallback` when you are passing the function down as a Prop to a Child component that has been explicitly optimized with `React.memo`.
-```
-
 > [!check]- Answer
+> ```text
+> No! 
+> Creating a new function in JavaScript is incredibly fast. Wrapping it in `useCallback` actually makes it slower due to the overhead.
+> You ONLY use `useCallback` when you are passing the function down as a Prop to a Child component that has been explicitly optimized with `React.memo`.
+> ```
 > - Does the standard HTML `<button>` care about memory addresses?
 
 ---
@@ -141,11 +140,10 @@ You ONLY use `useCallback` when you are passing the function down as a Prop to a
 **Problem:** Memoize `handleDelete` callback using `useCallback` to prevent re-rendering `<MemoizedItem onDelete={handleDelete} />`.
 
 **Expected output:**
-```text
-const handleDelete = useCallback((id) => { setItems(prev => prev.filter(i => i.id !== id)); }, []);
-```
-
 > [!check]- Answer
+> ```text
+> const handleDelete = useCallback((id) => { setItems(prev => prev.filter(i => i.id !== id)); }, []);
+> ```
 > ```javascript
 > const handleDelete = useCallback((id) => {
 >   setItems(prev => prev.filter(i => i.id !== id));
@@ -154,16 +152,17 @@ const handleDelete = useCallback((id) => { setItems(prev => prev.filter(i => i.i
 >
 > **Explanation:** Using `setItems(prev => ...)` eliminates the need to list `items` in `useCallback` dependencies.
 
+---
+
 ### Exercise 3: useCallback vs useMemo Relationship
 
 **Problem:** Express `useCallback(fn, deps)` in terms of `useMemo` (`useMemo(() => fn, deps)`).
 
 **Expected output:**
-```text
-useCallback(fn, deps) is syntax shorthand for useMemo(() => fn, deps)
-```
-
 > [!check]- Answer
+> ```text
+> useCallback(fn, deps) is syntax shorthand for useMemo(() => fn, deps)
+> ```
 > ```javascript
 > useCallback(fn, deps) === useMemo(() => fn, deps);
 > ```

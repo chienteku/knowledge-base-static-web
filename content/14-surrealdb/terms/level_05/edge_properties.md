@@ -203,11 +203,10 @@ Write the SurrealQL query to:
 2.  Retrieve a list of the `score` values stored on the `took` edges.
 
 **Expected output:**
-```sql
-SELECT ->took.score FROM student:alice;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT ->took.score FROM student:alice;
+> ```
 > - The source node is `student:alice`.
 > - Do not traverse past the edge to the `test` table; select `score` directly from the `took` path.
 
@@ -220,27 +219,27 @@ SELECT ->took.score FROM student:alice;
 **Problem:** Relate `user:alice` to `product:99` with edge `reviewed` setting `rating = 5` and `comment = "Great!"`.
 
 **Expected output:**
-```text
-RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
-```
-
 > [!check]- Answer
+> ```text
+> RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
+> ```
 > ```surrealql
 > RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
 > ```
 >
 > **Explanation:** `RELATE ... SET key = val` attaches rich metadata properties directly to graph edge records.
 
+---
+
 ### Exercise 3: Querying Edge Properties directly
 
 **Problem:** Select all `reviewed` edge records where `rating >= 4`.
 
 **Expected output:**
-```text
-SELECT * FROM reviewed WHERE rating >= 4;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM reviewed WHERE rating >= 4;
+> ```
 > ```surrealql
 > SELECT * FROM reviewed WHERE rating >= 4;
 > ```

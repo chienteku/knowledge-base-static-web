@@ -160,13 +160,12 @@ SELECT * FROM t WHERE (data->>'age')::INT = 30; -- Extract text and cast to int
 **Problem:** You have a `devices` table with columns `serial_number` and `specs` (a `JSONB` column). The `specs` JSON contains a nested key structure: `{"hardware": {"ram_gb": 16}}`. Write a SQL query to select the `serial_number` of all devices that have exactly `'16'` GB of RAM.
 
 **Expected output:**
-```sql
-SELECT serial_number 
-FROM devices 
-WHERE specs -> 'hardware' ->> 'ram_gb' = '16';
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT serial_number 
+> FROM devices 
+> WHERE specs -> 'hardware' ->> 'ram_gb' = '16';
+> ```
 > - Chain the `->` operator to drill down into the `'hardware'` object.
 > - Use the final `->>` operator to extract the `'ram_gb'` value as a text string for comparison.
 
@@ -179,27 +178,27 @@ WHERE specs -> 'hardware' ->> 'ram_gb' = '16';
 **Problem:** Create GIN index on `payload` JSONB column of `events` table.
 
 **Expected output:**
-```text
-CREATE INDEX idx_events_payload ON events USING GIN (payload);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_events_payload ON events USING GIN (payload);
+> ```
 > ```sql
 > CREATE INDEX idx_events_payload ON events USING GIN (payload);
 > ```
 >
 > **Explanation:** GIN indexes on JSONB columns accelerate `@>` containment queries.
 
+---
+
 ### Exercise 3: JSONB Containment Query with `@>`
 
 **Problem:** Query users where `metadata` JSONB contains `{ "role": "admin" }` using `@>` operator.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE metadata @> '{"role": "admin"}';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE metadata @> '{"role": "admin"}';
+> ```
 > ```sql
 > SELECT * FROM users WHERE metadata @> '{"role": "admin"}';
 > ```

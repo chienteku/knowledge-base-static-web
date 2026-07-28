@@ -165,11 +165,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Age: 28
-```
-
 > [!check]- Answer
+> ```text
+> Age: 28
+> ```
 > ```rust
 > match user_age {
 >     Some(age) => println!("Age: {}", age),
@@ -184,11 +183,10 @@ Age: 28
 **Problem:** Transform `Some(5)` to `Some(10)` using `.map(|x| x * 2)` on `Option<i32>`.
 
 **Expected output:**
-```
-Some(10)
-```
-
 > [!check]- Answer
+> ```
+> Some(10)
+> ```
 > ```rust
 > fn main() {
 >     let opt = Some(5);
@@ -199,16 +197,17 @@ Some(10)
 >
 > **Explanation:** `Option::map` transforms `Some(v)` values while passing `None` through untouched.
 
+---
+
 ### Exercise 3: Chaining Options with `.and_then()`
 
 **Problem:** Chain two option-returning functions using `.and_then()`: `parse_num("10").and_then(check_even)`.
 
 **Expected output:**
-```
-Some(10)
-```
-
 > [!check]- Answer
+> ```
+> Some(10)
+> ```
 > fn check_even(n: i32) -> Option<i32> { if n % 2 == 0 { Some(n) } else { None } }
 > fn main() {
 >     let opt: Option<i32> = Some(10);

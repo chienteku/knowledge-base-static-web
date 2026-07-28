@@ -152,14 +152,13 @@ Which of the following queries will **successfully leverage** the index?
 3.  `SELECT * FROM system_logs WHERE priority = 2;`
 
 **Expected output:**
-```text
-Queries 1 and 3 will leverage the index!
-1. Query 1 filters by both columns, matching the index structure.
-2. Query 2 will bypass the index because it filters only by `logged_at`, which is not the leftmost prefix of the index.
-3. Query 3 will leverage the index because `priority` is the leftmost prefix.
-```
-
 > [!check]- Answer
+> ```text
+> Queries 1 and 3 will leverage the index!
+> 1. Query 1 filters by both columns, matching the index structure.
+> 2. Query 2 will bypass the index because it filters only by `logged_at`, which is not the leftmost prefix of the index.
+> 3. Query 3 will leverage the index because `priority` is the leftmost prefix.
+> ```
 > - Check if the leftmost column (`priority`) is present in the `WHERE` filter.
 
 ---
@@ -171,27 +170,27 @@ Queries 1 and 3 will leverage the index!
 **Problem:** Create compound index `idx_orders_user_date` on `user_id` ascending and `created_at` descending.
 
 **Expected output:**
-```text
-CREATE INDEX idx_orders_user_date ON orders (user_id ASC, created_at DESC);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_orders_user_date ON orders (user_id ASC, created_at DESC);
+> ```
 > ```sql
 > CREATE INDEX idx_orders_user_date ON orders (user_id ASC, created_at DESC);
 > ```
 >
 > **Explanation:** Compound indexes support multi-column filtering and multi-column sort orders.
 
+---
+
 ### Exercise 3: Compound Index Prefix Matching Rules
 
 **Problem:** Given index `(a, b, c)`, list supported column query filters (`(a)`, `(a, b)`, `(a, b, c)`).
 
 **Expected output:**
-```text
-(a), (a, b), (a, b, c)
-```
-
 > [!check]- Answer
+> ```text
+> (a), (a, b), (a, b, c)
+> ```
 > ```text
 > (a), (a, b), (a, b, c)
 > ```

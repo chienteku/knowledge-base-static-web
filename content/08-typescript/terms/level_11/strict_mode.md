@@ -121,43 +121,44 @@ function process(data: unknown) {} // Explicit parameter type annotation
 **Problem:** Configure `"strict": true` in `tsconfig.json`.
 
 **Expected output:**
-```text
-Strict mode enabled
-```
-
 > [!check]- Answer
+> ```text
+> Strict mode enabled
+> ```
 > ```typescript
 > console.log("Strict mode enabled");
 > ```
 >
 > **Explanation:** `"strict": true` activates all strict type checking flags in TypeScript.
 
+---
+
 ### Exercise 2: Strict Flags Family Members
 
 **Problem:** Name 3 strict flags activated by `"strict": true` (`strictNullChecks`, `noImplicitAny`, `strictBindCallApply`).
 
 **Expected output:**
-```text
-strictNullChecks, noImplicitAny, strictBindCallApply
-```
-
 > [!check]- Answer
+> ```text
+> strictNullChecks, noImplicitAny, strictBindCallApply
+> ```
 > ```typescript
 > console.log("strictNullChecks, noImplicitAny, strictBindCallApply");
 > ```
 >
 > **Explanation:** `strict: true` turns on the full family of strict safety flags.
 
+---
+
 ### Exercise 3: Strict Bind Call Apply Verification
 
 **Problem:** Explain what `strictBindCallApply` checks (Verifies parameter types in `.call()`, `.apply()`, and `.bind()`).
 
 **Expected output:**
-```text
-Verifies argument types passed to call, apply, and bind
-```
-
 > [!check]- Answer
+> ```text
+> Verifies argument types passed to call, apply, and bind
+> ```
 > ```typescript
 > console.log("Verifies argument types passed to call, apply, and bind");
 > ```

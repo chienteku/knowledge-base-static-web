@@ -120,12 +120,11 @@ useMutation({
 **Problem:** You use React Query to fetch the `['users']` data in the `<Header>` component. Deep down in the app, the `<Footer>` component also needs the user data. Do you need to pass it down via Props? Do you need to put it in Context?
 
 **Expected output:**
-```text
-No! You just call the exact same `useQuery` hook in the `<Footer>` component.
-Because React Query caches data globally by the `queryKey`, the `<Footer>` will instantly read the data from the cache without triggering a second network request. It acts as a global state manager for your API data!
-```
-
 > [!check]- Answer
+> ```text
+> No! You just call the exact same `useQuery` hook in the `<Footer>` component.
+> Because React Query caches data globally by the `queryKey`, the `<Footer>` will instantly read the data from the cache without triggering a second network request. It acts as a global state manager for your API data!
+> ```
 > - Think about what the `queryKey` does.
 
 ---
@@ -137,11 +136,10 @@ Because React Query caches data globally by the `queryKey`, the `<Footer>` will 
 **Problem:** Fetch user data for `userId` using `useQuery` from `@tanstack/react-query`.
 
 **Expected output:**
-```text
-const { data, isLoading, error } = useQuery({ queryKey: ['user', userId], queryFn: () => fetchUser(userId) });
-```
-
 > [!check]- Answer
+> ```text
+> const { data, isLoading, error } = useQuery({ queryKey: ['user', userId], queryFn: () => fetchUser(userId) });
+> ```
 > ```javascript
 > const { data, isLoading, error } = useQuery({
 >   queryKey: ['user', userId],
@@ -151,16 +149,17 @@ const { data, isLoading, error } = useQuery({ queryKey: ['user', userId], queryF
 >
 > **Explanation:** `useQuery` manages server state, caching, loading statuses, and refetching automatically.
 
+---
+
 ### Exercise 3: Stale Time vs GC Time (Cache Time)
 
 **Problem:** Compare: `staleTime` (Duration data is considered fresh before background refetch); `gcTime` (Duration unused query cache remains in memory before garbage collection).
 
 **Expected output:**
-```text
-staleTime: duration data is considered fresh; gcTime: duration unused cache remains in memory
-```
-
 > [!check]- Answer
+> ```text
+> staleTime: duration data is considered fresh; gcTime: duration unused cache remains in memory
+> ```
 > ```text
 > staleTime: duration data is considered fresh; gcTime: duration unused cache remains in memory
 > ```

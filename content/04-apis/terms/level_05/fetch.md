@@ -127,13 +127,12 @@ fetch('https://api.example.com/me', {
 **Problem:** You want to delete a user. The API documentation says: `DELETE /api/users/:id`. Write the `fetch` call to delete User 42.
 
 **Expected output:**
-```javascript
-fetch('/api/users/42', {
-  method: 'DELETE'
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> fetch('/api/users/42', {
+>   method: 'DELETE'
+> });
+> ```
 > - You need to pass the options object to change the method.
 > - Do DELETE requests usually have bodies? (No).
 
@@ -144,11 +143,10 @@ fetch('/api/users/42', {
 **Problem:** Write reusable `postJSON(url, data)` async function executing HTTP POST request with JSON headers and status validation.
 
 **Expected output:**
-```text
-async function postJSON(url, data) { const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (!res.ok) throw new Error(`HTTP ${res.status}`); return await res.json(); }
-```
-
 > [!check]- Answer
+> ```text
+> async function postJSON(url, data) { const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); if (!res.ok) throw new Error(`HTTP ${res.status}`); return await res.json(); }
+> ```
 > ```javascript
 > async function postJSON(url, data) {
 > const res = await fetch(url, {
@@ -168,11 +166,10 @@ async function postJSON(url, data) { const res = await fetch(url, { method: 'POS
 **Problem:** Which `cache` option instructs `fetch()` to bypass browser HTTP cache and force fresh network fetches?
 
 **Expected output:**
-```text
-fetch(url, { cache: 'no-store' }) (or 'no-cache')
-```
-
 > [!check]- Answer
+> ```text
+> fetch(url, { cache: 'no-store' }) (or 'no-cache')
+> ```
 > ```javascript
 > fetch(url, { cache: 'no-store' });
 > ```

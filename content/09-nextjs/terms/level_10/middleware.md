@@ -123,18 +123,17 @@ export const config = {
 **Problem:** You are migrating your blog. The old URL was `/post/123`. The new URL is `/blog/123`. Instead of redirecting the user (which changes the URL in their browser), you want to "Rewrite" the request. How?
 
 **Expected output:**
-```ts
-export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith('/post/')) {
-    const slug = request.nextUrl.pathname.replace('/post/', '');
-    // A rewrite serves the content of /blog/[slug], but the user's browser 
-    // STILL SHOWS /post/[slug] in the URL bar!
-    return NextResponse.rewrite(new URL(`/blog/${slug}`, request.url));
-  }
-}
-```
-
 > [!check]- Answer
+> ```ts
+> export function middleware(request: NextRequest) {
+>   if (request.nextUrl.pathname.startsWith('/post/')) {
+>     const slug = request.nextUrl.pathname.replace('/post/', '');
+>     // A rewrite serves the content of /blog/[slug], but the user's browser 
+>     // STILL SHOWS /post/[slug] in the URL bar!
+>     return NextResponse.rewrite(new URL(`/blog/${slug}`, request.url));
+>   }
+> }
+> ```
 > - `NextResponse` has a `.rewrite()` method that acts as a proxy, hiding the true destination from the user.
 
 ---
@@ -144,11 +143,10 @@ export function middleware(request: NextRequest) {
 **Problem:** Write `middleware.ts` checking cookie `'token'` and executing `NextResponse.redirect(new URL('/login', req.url))` if missing on protected `/dashboard` paths.
 
 **Expected output:**
-```typescript
-import { NextResponse, NextRequest } from 'next/server'; export function middleware(req: NextRequest) { const token = req.cookies.get('token')?.value; if (!token && req.nextUrl.pathname.startswith('/dashboard')) { return NextResponse.redirect(new URL('/login', req.url)); } }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { NextResponse, NextRequest } from 'next/server'; export function middleware(req: NextRequest) { const token = req.cookies.get('token')?.value; if (!token && req.nextUrl.pathname.startswith('/dashboard')) { return NextResponse.redirect(new URL('/login', req.url)); } }
+> ```
 > - `middleware.ts` intercepts requests before route resolution.
 > 
 > ```typescript
@@ -174,11 +172,10 @@ import { NextResponse, NextRequest } from 'next/server'; export function middlew
 **Problem:** Can Next.js `middleware.ts` run in the standard Node.js runtime?
 
 **Expected output:**
-```text
-No. Middleware executes EXCLUSIVELY in the Edge Runtime environment.
-```
-
 > [!check]- Answer
+> ```text
+> No. Middleware executes EXCLUSIVELY in the Edge Runtime environment.
+> ```
 > - `middleware.ts` runs strictly in the Edge Runtime.
 > 
 > ```text

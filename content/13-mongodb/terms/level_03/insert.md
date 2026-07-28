@@ -185,14 +185,13 @@ await db.users.insertMany([{ name: "Alice" }]); // Correct array input
 -   Document 2: `{ item: "pen", qty: NumberInt(20) }`
 
 **Expected output:**
-```javascript
-db.inventory.insertMany([
-  { item: "notebook", qty: NumberInt(5) },
-  { item: "pen", qty: NumberInt(20) }
-]);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.inventory.insertMany([
+>   { item: "notebook", qty: NumberInt(5) },
+>   { item: "pen", qty: NumberInt(20) }
+> ]);
+> ```
 > - Choose the multi-insertion method `insertMany`.
 > - Wrap the two documents inside a parent JavaScript array `[ ]`.
 
@@ -205,11 +204,10 @@ db.inventory.insertMany([
 **Problem:** Insert user document `{ name: "Bob", email: "bob@example.com" }` using `insertOne()`.
 
 **Expected output:**
-```text
-db.users.insertOne({ name: "Bob", email: "bob@example.com" });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.insertOne({ name: "Bob", email: "bob@example.com" });
+> ```
 > ```javascript
 > db.users.insertOne({
 >   name: "Bob",
@@ -219,16 +217,17 @@ db.users.insertOne({ name: "Bob", email: "bob@example.com" });
 >
 > **Explanation:** `insertOne()` inserts a single document into the target collection.
 
+---
+
 ### Exercise 3: Bulk Insert with `insertMany`
 
 **Problem:** Insert array of 2 documents into `tags` collection using `insertMany()`.
 
 **Expected output:**
-```text
-db.tags.insertMany([ { name: "web" }, { name: "db" } ]);
-```
-
 > [!check]- Answer
+> ```text
+> db.tags.insertMany([ { name: "web" }, { name: "db" } ]);
+> ```
 > ```javascript
 > db.tags.insertMany([
 >   { name: "web" },

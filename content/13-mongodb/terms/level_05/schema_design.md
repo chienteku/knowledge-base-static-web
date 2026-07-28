@@ -160,12 +160,11 @@ Apply established MongoDB Schema Design Patterns (Subset, Extended Reference, Bu
 1.  Should you embed the full text of all comments inside the article document? Explain why or why not based on the access patterns.
 
 **Expected output:**
-```text
-1. No, you should not embed the full text of all comments inside the article document. 
-The homepage access pattern only requires article titles, author names, and dates. If you embed comments (which can grow to thousands of entries), fetching the latest article titles will load megabytes of unused comment text into database RAM cache, slowing down the homepage. Furthermore, comments can grow infinitely, risking hitting the 16MB document size limit. Comments should be stored in a separate collection or managed using referencing patterns.
-```
-
 > [!check]- Answer
+> ```text
+> 1. No, you should not embed the full text of all comments inside the article document. 
+> The homepage access pattern only requires article titles, author names, and dates. If you embed comments (which can grow to thousands of entries), fetching the latest article titles will load megabytes of unused comment text into database RAM cache, slowing down the homepage. Furthermore, comments can grow infinitely, risking hitting the 16MB document size limit. Comments should be stored in a separate collection or managed using referencing patterns.
+> ```
 > - Assess what data is needed for the homepage read pattern.
 > - Consider the risk of unbounded array growth.
 
@@ -178,27 +177,27 @@ The homepage access pattern only requires article titles, author names, and date
 **Problem:** State the golden rule of MongoDB schema design (Data that is accessed together should be stored together).
 
 **Expected output:**
-```text
-Data that is accessed together should be stored together
-```
-
 > [!check]- Answer
+> ```text
+> Data that is accessed together should be stored together
+> ```
 > ```text
 > Data that is accessed together should be stored together
 > ```
 >
 > **Explanation:** Co-locating frequently queried fields eliminates `$lookup` joins and network roundtrips.
 
+---
+
 ### Exercise 3: Read/Write Ratio Schema Tradeoffs
 
 **Problem:** How does high read/write ratio (99% reads) influence schema design? (Favors embedding and denormalization).
 
 **Expected output:**
-```text
-Favors embedding and denormalization to optimize fast single-query reads
-```
-
 > [!check]- Answer
+> ```text
+> Favors embedding and denormalization to optimize fast single-query reads
+> ```
 > ```text
 > Favors embedding and denormalization to optimize fast single-query reads
 > ```

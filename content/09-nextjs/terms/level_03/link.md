@@ -111,15 +111,14 @@ By the time the user actually moves their mouse and clicks the link, the destina
 **Problem:** You have a massive table of 500 users, each with a `<Link href="/user/123">` button. You notice your server is getting slammed because Next.js is prefetching all 500 user profiles as soon as the table loads. How do you disable this?
 
 **Expected output:**
-```tsx
-// You can pass the `prefetch={false}` prop!
-// Note: It will still prefetch if the user physically hovers their mouse over it.
-<Link href={`/user/${user.id}`} prefetch={false}>
-  View Profile
-</Link>
-```
-
 > [!check]- Answer
+> ```tsx
+> // You can pass the `prefetch={false}` prop!
+> // Note: It will still prefetch if the user physically hovers their mouse over it.
+> <Link href={`/user/${user.id}`} prefetch={false}>
+>   View Profile
+> </Link>
+> ```
 > - Check the props available on the Link component.
 
 ---
@@ -129,11 +128,10 @@ By the time the user actually moves their mouse and clicks the link, the destina
 **Problem:** Write `<Link>` passing URL path `/search` with query parameter `{ q: 'nextjs' }` and hash `#results`.
 
 **Expected output:**
-```tsx
-<Link href={{ pathname: '/search', query: { q: 'nextjs' }, hash: 'results' }}>Search</Link>
-```
-
 > [!check]- Answer
+> ```tsx
+> <Link href={{ pathname: '/search', query: { q: 'nextjs' }, hash: 'results' }}>Search</Link>
+> ```
 > - `<Link href={{ ... }}>` accepts URL location objects.
 > 
 > ```tsx
@@ -161,11 +159,10 @@ By the time the user actually moves their mouse and clicks the link, the destina
 **Problem:** When does Next.js automatically prefetch code for `<Link>` components in production?
 
 **Expected output:**
-```text
-When the <Link> component enters the browser viewport.
-```
-
 > [!check]- Answer
+> ```text
+> When the <Link> component enters the browser viewport.
+> ```
 > - Prefetching executes when links enter the browser viewport.
 > 
 > ```text

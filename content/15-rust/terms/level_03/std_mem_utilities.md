@@ -182,11 +182,10 @@ thread::spawn(move || {
 **Problem:** Swap two `String` variables `a` and `b` in-place using `std::mem::swap(&mut a, &mut b)` without cloning.
 
 **Expected output:**
-```
-a: World, b: Hello
-```
-
 > [!check]- Answer
+> ```
+> a: World, b: Hello
+> ```
 > ```rust
 > use std::mem;
 > fn main() {
@@ -199,16 +198,17 @@ a: World, b: Hello
 >
 > **Explanation:** `mem::swap` swaps underlying memory contents directly without heap reallocations or clones.
 
+---
+
 ### Exercise 3: Taking Struct Fields with `std::mem::take`
 
 **Problem:** Replace a struct's `Option<String>` field with `None` using `std::mem::take(&mut struct.field)`.
 
 **Expected output:**
-```
-Taken: Some("data"), Struct: None
-```
-
 > [!check]- Answer
+> ```
+> Taken: Some("data"), Struct: None
+> ```
 > use std::mem;
 > struct Buffer { data: Option<String> }
 > fn main() {

@@ -106,12 +106,11 @@ If you are currently on the `/about` URL, the `<NavLink to="/about">` will autom
 **Problem:** You are building a sidebar menu. You want the link to be bold if the user is currently on that page. Which component should you import from `react-router-dom`?
 
 **Expected output:**
-```text
-You should use `<NavLink>`. 
-It automatically provides an `isActive` boolean or an `active` class so you can easily apply bold styling to the current page.
-```
-
 > [!check]- Answer
+> ```text
+> You should use `<NavLink>`. 
+> It automatically provides an `isActive` boolean or an `active` class so you can easily apply bold styling to the current page.
+> ```
 > - `Link` is standard. There is a special version specifically for navigation menus.
 
 ---
@@ -123,11 +122,10 @@ It automatically provides an `isActive` boolean or an `active` class so you can 
 **Problem:** Use `<NavLink>` with function `className={({ isActive }) => isActive ? 'active' : ''}` to style active navigation links.
 
 **Expected output:**
-```text
-<NavLink to="/profile" className={({ isActive }) => isActive ? 'active' : ''}>Profile</NavLink>
-```
-
 > [!check]- Answer
+> ```text
+> <NavLink to="/profile" className={({ isActive }) => isActive ? 'active' : ''}>Profile</NavLink>
+> ```
 > ```javascript
 > <NavLink
 >   to="/profile"
@@ -139,16 +137,17 @@ It automatically provides an `isActive` boolean or an `active` class so you can 
 >
 > **Explanation:** `<NavLink>` provides `isActive` state callback for styling active navigation routes.
 
+---
+
 ### Exercise 3: Relative Link Navigation
 
 **Problem:** Navigate 1 level up relative to current route using `<Link to="..">`.
 
 **Expected output:**
-```text
-<Link to="..">Back</Link>
-```
-
 > [!check]- Answer
+> ```text
+> <Link to="..">Back</Link>
+> ```
 > ```javascript
 > <Link to="..">Back</Link>
 > ```

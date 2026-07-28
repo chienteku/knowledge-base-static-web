@@ -128,14 +128,13 @@ import Script from 'next/script';
 4. `strategy="worker"` 
 
 **Expected output:**
-```text
-1. Loads in server head before initial hydration script executes
-2. Loads immediately after page hydration completes (Default)
-3. Loads during browser idle time after all assets finish
-4. Offloads script execution to a Web Worker (partytown)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Loads in server head before initial hydration script executes
+> 2. Loads immediately after page hydration completes (Default)
+> 3. Loads during browser idle time after all assets finish
+> 4. Offloads script execution to a Web Worker (partytown)
+> ```
 > - `beforeInteractive` -> Critical scripts (e.g. polyfills, security consent)
 > - `afterInteractive` -> Analytics, tag managers (Default)
 > - `lazyOnload` -> Non-critical chat widgets, social widgets
@@ -152,11 +151,10 @@ import Script from 'next/script';
 **Problem:** Write `<Script />` component executing callback function `initMap()` when script finishes loading via `onLoad` prop.
 
 **Expected output:**
-```tsx
-<Script src="/map.js" onLoad={() => initMap()} />
-```
-
 > [!check]- Answer
+> ```tsx
+> <Script src="/map.js" onLoad={() => initMap()} />
+> ```
 > - `onLoad` fires callback function after script finishes loading.
 > 
 > ```tsx

@@ -166,11 +166,10 @@ fn main() {
 **Problem:** Write a macro `string_vec!["a", "b", "c"]` that constructs a `Vec<String>` from `&str` literals.
 
 **Expected output:**
-```
-["a", "b", "c"]
-```
-
 > [!check]- Answer
+> ```
+> ["a", "b", "c"]
+> ```
 > ```rust
 > macro_rules! string_vec {
 >     ( $( $x:expr ),* ) => {{
@@ -187,17 +186,18 @@ fn main() {
 >
 > **Explanation:** Macro repetition `$( v.push(...); )*` expands the enclosed statement once for every matching expression provided in the macro call.
 
+---
+
 ### Exercise 3: Macro Pattern Overloading
 
 **Problem:** Define a macro `calculate!` with two matcher branches: one for `calculate!(add a b)` and one for `calculate!(sub a b)`.
 
 **Expected output:**
-```
-15
-5
-```
-
 > [!check]- Answer
+> ```
+> 15
+> 5
+> ```
 > ```rust
 > macro_rules! calculate {
 >     (add $a:expr $b:expr) => { $a + $b };

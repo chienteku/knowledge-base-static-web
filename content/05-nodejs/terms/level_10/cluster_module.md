@@ -179,16 +179,17 @@ if (numCPUs > 1 && cluster.isPrimary) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Basic Cluster Setup
 
 **Problem:** Write basic Node.js Cluster code forking workers for each CPU core if primary, or starting server if worker.
 
 **Expected output:**
-```text
-if (cluster.isPrimary) { os.cpus().forEach(() => cluster.fork()); } else { app.listen(3000); }
-```
-
 > [!check]- Answer
+> ```text
+> if (cluster.isPrimary) { os.cpus().forEach(() => cluster.fork()); } else { app.listen(3000); }
+> ```
 > ```javascript
 > const cluster = require('cluster');
 > const os = require('os');
@@ -201,16 +202,17 @@ if (cluster.isPrimary) { os.cpus().forEach(() => cluster.fork()); } else { app.l
 >
 > **Explanation:** Primary process forks workers; worker processes listen on the shared HTTP port.
 
+---
+
 ### Exercise 3: Port Sharing in Cluster
 
 **Problem:** How can multiple clustered worker processes listen on the exact same HTTP port (3000) without `EADDRINUSE` errors?
 
 **Expected output:**
-```text
-The primary process opens the network socket and distributes incoming connections to workers using round-robin scheduling.
-```
-
 > [!check]- Answer
+> ```text
+> The primary process opens the network socket and distributes incoming connections to workers using round-robin scheduling.
+> ```
 > ```text
 > The primary process opens the network socket and distributes incoming connections to workers using round-robin scheduling.
 > ```

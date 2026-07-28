@@ -170,11 +170,10 @@ async function processData() {
 **Problem:** What happens if you create a Proxy with an empty handler object `{}`? Does it break the object?
 
 **Expected output:**
-```text
-No! If you don't provide a specific Trap (like `get` or `set`), the Proxy acts as a perfectly transparent window. It just forwards the request directly to the target object without doing anything.
-```
-
 > [!check]- Answer
+> ```text
+> No! If you don't provide a specific Trap (like `get` or `set`), the Proxy acts as a perfectly transparent window. It just forwards the request directly to the target object without doing anything.
+> ```
 > - The Proxy only intercepts what you explicitly tell it to intercept.
 
 ---
@@ -184,11 +183,10 @@ No! If you don't provide a specific Trap (like `get` or `set`), the Proxy acts a
 **Problem:** Use `Proxy` `get` trap to return default `"N/A"` for missing property keys.
 
 **Expected output:**
-```text
-N/A
-```
-
 > [!check]- Answer
+> ```text
+> N/A
+> ```
 > ```javascript
 > const target = { name: "Alice" };
 > const proxy = new Proxy(target, {
@@ -201,16 +199,17 @@ N/A
 >
 > **Explanation:** Proxy `get(target, prop)` intercepts property access calls.
 
+---
+
 ### Exercise 3: Property Mutation Validation with `set` Trap
 
 **Problem:** Use Proxy `set` trap to enforce numeric `age` assignment.
 
 **Expected output:**
-```text
-TypeError caught
-```
-
 > [!check]- Answer
+> ```text
+> TypeError caught
+> ```
 > ```javascript
 > const person = {};
 > const proxy = new Proxy(person, {
@@ -225,7 +224,6 @@ TypeError caught
 >
 > **Explanation:** Proxy `set` traps validate property assignment values before mutating targets.
 
----
 
 ---
 

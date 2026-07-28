@@ -139,17 +139,16 @@ export default {
 ```
 
 **Expected output:**
-```javascript
-import { ref } from 'vue'
-
-const age = ref(20)
-
-function birthday() {
-  age.value++
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> import { ref } from 'vue'
+> 
+> const age = ref(20)
+> 
+> function birthday() {
+>   age.value++
+> }
+> ```
 > - Create a `ref`.
 > - Create a standard JS function.
 > - Remember `.value`!
@@ -161,11 +160,10 @@ function birthday() {
 **Problem:** Write a `<script setup>` snippet creating reactive `name` ('Alice') and `age` (30) variables, and a function `birthday()` incrementing `age`.
 
 **Expected output:**
-```javascript
-import { ref } from 'vue'; const name = ref('Alice'); const age = ref(30); function birthday() { age.value++; }
-```
-
 > [!check]- Answer
+> ```javascript
+> import { ref } from 'vue'; const name = ref('Alice'); const age = ref(30); function birthday() { age.value++; }
+> ```
 > - `ref()` wraps primitives into reactive objects.
 > - Mutate `.value` inside `<script setup>`.
 > 
@@ -189,11 +187,10 @@ import { ref } from 'vue'; const name = ref('Alice'); const age = ref(30); funct
 **Problem:** Do you need to write `{{ count.value }}` inside the `<template>` block when referencing a `ref`?
 
 **Expected output:**
-```text
-No. Vue automatically unwraps top-level ref objects inside the template, so you write {{ count }}.
-```
-
 > [!check]- Answer
+> ```text
+> No. Vue automatically unwraps top-level ref objects inside the template, so you write {{ count }}.
+> ```
 > - Template ref unwrapping is automatic for top-level refs.
 > 
 > ```html

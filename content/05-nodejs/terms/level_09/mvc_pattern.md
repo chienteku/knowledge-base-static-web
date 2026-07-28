@@ -285,6 +285,8 @@ module.exports = router;
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Matching MVC Component Roles
 
 **Problem:** Match component to MVC role:
@@ -293,13 +295,12 @@ module.exports = router;
 3. HTML EJS template rendered to browser (View)
 
 **Expected output:**
-```text
-1. Model
-2. Controller
-3. View
-```
-
 > [!check]- Answer
+> ```text
+> 1. Model
+> 2. Controller
+> 3. View
+> ```
 > ```text
 > 1. Model
 > 2. Controller
@@ -308,16 +309,17 @@ module.exports = router;
 >
 > **Explanation:** Model manages data; View handles presentation; Controller orchestrates requests.
 
+---
+
 ### Exercise 3: Express res.render Method
 
 **Problem:** Which Express method renders a View template file passing data variables? (`res.render('templateName', { data })`).
 
 **Expected output:**
-```text
-res.render('templateName', { data })
-```
-
 > [!check]- Answer
+> ```text
+> res.render('templateName', { data })
+> ```
 > ```javascript
 > res.render('profile', { user });
 > ```

@@ -119,11 +119,10 @@ mod.add(1, 2); // Correct: Awaited module instance
 **Problem:** Add `export {}` to convert script file into an isolated ES module.
 
 **Expected output:**
-```text
-File converted to isolated ES module
-```
-
 > [!check]- Answer
+> ```text
+> File converted to isolated ES module
+> ```
 > ```typescript
 > export {};
 > console.log("File converted to isolated ES module");
@@ -131,16 +130,17 @@ File converted to isolated ES module
 >
 > **Explanation:** Top-level `export {}` informs TS parser that the file is an ES module.
 
+---
+
 ### Exercise 2: Exporting Type Aliases and Interfaces
 
 **Problem:** Write `export type UserID = string` and `export interface User { id: UserID }`.
 
 **Expected output:**
-```text
-Type exports created
-```
-
 > [!check]- Answer
+> ```text
+> Type exports created
+> ```
 > ```typescript
 > export type UserID = string;
 > export interface User { id: UserID }
@@ -149,16 +149,17 @@ Type exports created
 >
 > **Explanation:** Modules export both runtime JavaScript values and compile-time TypeScript types.
 
+---
+
 ### Exercise 3: Re-Exporting Modules
 
 **Problem:** Re-export all exports from `./user` using `export * from './user'`.
 
 **Expected output:**
-```text
-Module re-exported
-```
-
 > [!check]- Answer
+> ```text
+> Module re-exported
+> ```
 > ```typescript
 > export * from './user';
 > console.log("Module re-exported");

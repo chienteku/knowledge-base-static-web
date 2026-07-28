@@ -131,11 +131,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Max health is 100
-```
-
 > [!check]- Answer
+> ```text
+> Max health is 100
+> ```
 > - Change `max_health` to `MAX_HEALTH` (SCREAMING_SNAKE_CASE).
 > - Add `: i32` right after the name to satisfy the type annotation requirement.
 > - The final declaration should be `const MAX_HEALTH: i32 = 100;`.
@@ -147,11 +146,10 @@ Max health is 100
 **Problem:** Define a `const` for `SECONDS_IN_DAY` computed from `const SECONDS_IN_MINUTE: u32 = 60`, `MINUTES_IN_HOUR = 60`, and `HOURS_IN_DAY = 24`. Print the result.
 
 **Expected output:**
-```
-86400
-```
-
 > [!check]- Answer
+> ```
+> 86400
+> ```
 > ```rust
 > const SECONDS_IN_MINUTE: u32 = 60;
 > const MINUTES_IN_HOUR: u32 = 60;
@@ -165,16 +163,17 @@ Max health is 100
 >
 > **Explanation:** Rust constants support arbitrary compile-time arithmetic operations between existing constants.
 
+---
+
 ### Exercise 3: Const Function Implementation
 
 **Problem:** Write a `const fn square(x: u32) -> u32` and use it to initialize a constant `SQUARE_TEN`. Print `SQUARE_TEN` from `main()`.
 
 **Expected output:**
-```
-100
-```
-
 > [!check]- Answer
+> ```
+> 100
+> ```
 > ```rust
 > const fn square(x: u32) -> u32 {
 >     x * x

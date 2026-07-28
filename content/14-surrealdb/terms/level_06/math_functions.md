@@ -158,14 +158,13 @@ Write the SurrealQL query to:
 3. Group globally using `GROUP ALL`.
 
 **Expected output:**
-```sql
-SELECT 
-  math::round(math::sum(total), 2) AS grand_total 
-FROM invoices 
-GROUP ALL;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   math::round(math::sum(total), 2) AS grand_total 
+> FROM invoices 
+> GROUP ALL;
+> ```
 > - Nest `math::sum()` inside `math::round()`.
 > - The second argument to `math::round(val, precision)` specifies decimal places.
 
@@ -178,27 +177,27 @@ GROUP ALL;
 **Problem:** Round `19.8567` to 2 decimal places using `math::fixed()` or `math::round()`.
 
 **Expected output:**
-```text
-math::fixed(19.8567, 2)
-```
-
 > [!check]- Answer
+> ```text
+> math::fixed(19.8567, 2)
+> ```
 > ```surrealql
 > RETURN math::fixed(19.8567, 2);
 > ```
 >
 > **Explanation:** `math::fixed(val, precision)` rounds numbers to fixed decimal places.
 
+---
+
 ### Exercise 3: Summing Array of Numbers
 
 **Problem:** Calculate sum of `[10, 20, 30]` using `math::sum()`.
 
 **Expected output:**
-```text
-60
-```
-
 > [!check]- Answer
+> ```text
+> 60
+> ```
 > ```surrealql
 > RETURN math::sum([10, 20, 30]);
 > ```

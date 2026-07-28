@@ -99,13 +99,12 @@ useEffect(() => {
 ```
 
 **Expected output:**
-```text
-Strict Mode runs effects twice on mount!
-Because there is no cleanup function, the effect will run, append `<h1>Welcome!</h1>`, then run AGAIN and append a second `<h1>Welcome!</h1>`. 
-The developer will see TWO headings on the screen, instantly realizing they wrote an impure, unsafe side effect!
-```
-
 > [!check]- Answer
+> ```text
+> Strict Mode runs effects twice on mount!
+> Because there is no cleanup function, the effect will run, append `<h1>Welcome!</h1>`, then run AGAIN and append a second `<h1>Welcome!</h1>`. 
+> The developer will see TWO headings on the screen, instantly realizing they wrote an impure, unsafe side effect!
+> ```
 > - Think about what `+=` does if it runs twice in a row.
 
 ---
@@ -117,11 +116,10 @@ The developer will see TWO headings on the screen, instantly realizing they wrot
 **Problem:** Wrap `<App />` root in `<React.StrictMode>` component.
 
 **Expected output:**
-```text
-root.render(<React.StrictMode><App /></React.StrictMode>);
-```
-
 > [!check]- Answer
+> ```text
+> root.render(<React.StrictMode><App /></React.StrictMode>);
+> ```
 > ```javascript
 > root.render(
 >   <React.StrictMode>
@@ -132,16 +130,17 @@ root.render(<React.StrictMode><App /></React.StrictMode>);
 >
 > **Explanation:** `<React.StrictMode>` enables development-only checks for React applications.
 
+---
+
 ### Exercise 3: Checks Performed by StrictMode
 
 **Problem:** List 2 checks performed by StrictMode (1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions).
 
 **Expected output:**
-```text
-1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions
-```
-
 > [!check]- Answer
+> ```text
+> 1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions
+> ```
 > ```text
 > 1. Double-renders components to detect impure side-effects; 2. Double-runs effects to verify cleanup functions
 > ```

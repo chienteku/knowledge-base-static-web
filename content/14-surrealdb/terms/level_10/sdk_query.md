@@ -191,11 +191,10 @@ Write a `.query()` call that fetches all records from table `invoice` where `amo
 **Problem:** Execute batch query setting `$u` and selecting user with parameter `{ id: "user:alice" }`.
 
 **Expected output:**
-```text
-await db.query('LET $u = $id; SELECT * FROM $u;', { id: "user:alice" });
-```
-
 > [!check]- Answer
+> ```text
+> await db.query('LET $u = $id; SELECT * FROM $u;', { id: "user:alice" });
+> ```
 > ```javascript
 > const [letRes, selectRes] = await db.query(
 >   'LET $u = $id; SELECT * FROM $u;',
@@ -205,16 +204,17 @@ await db.query('LET $u = $id; SELECT * FROM $u;', { id: "user:alice" });
 >
 > **Explanation:** `db.query(sql, params)` executes multi-statement SurrealQL scripts safely.
 
+---
+
 ### Exercise 3: Destructuring Multi-Statement Batch Query Responses
 
 **Problem:** Destructure response array from `db.query('SELECT * FROM user; SELECT * FROM product;')`.
 
 **Expected output:**
-```text
-const [usersRes, productsRes] = await db.query(...);
-```
-
 > [!check]- Answer
+> ```text
+> const [usersRes, productsRes] = await db.query(...);
+> ```
 > ```javascript
 > const [usersRes, productsRes] = await db.query(
 >   'SELECT * FROM user; SELECT * FROM product;'

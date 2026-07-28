@@ -190,11 +190,10 @@ type CleanSession = DataPropertiesOnly<UserSession>;
 ```
 
 **Expected output:**
-```text
-CleanSession matches the type structure: { token: string; userId: number; }
-```
-
 > [!check]- Answer
+> ```text
+> CleanSession matches the type structure: { token: string; userId: number; }
+> ```
 > - Loop using `K in keyof T as T[K] extends Function ? never : K`.
 > - If the value of key `T[K]` extends `Function`, return `never` to exclude it, otherwise return its key `K`.
 
@@ -207,11 +206,10 @@ CleanSession matches the type structure: { token: string; userId: number; }
 **Problem:** Remap object `{ name: string }` to getter methods `{ getName: () => string }` using `as` remapping.
 
 **Expected output:**
-```text
-Getters remapped
-```
-
 > [!check]- Answer
+> ```text
+> Getters remapped
+> ```
 > ```typescript
 > type Getters<T> = {
 >   [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K]
@@ -222,16 +220,17 @@ Getters remapped
 >
 > **Explanation:** Key remapping with `as` and `Capitalize` generates type-safe getter signatures.
 
+---
+
 ### Exercise 3: Filtering Property Keys with `never`
 
 **Problem:** Remap mapped type keys to filter out properties starting with `_`.
 
 **Expected output:**
-```text
-Private keys filtered
-```
-
 > [!check]- Answer
+> ```text
+> Private keys filtered
+> ```
 > ```typescript
 > type PublicOnly<T> = {
 >   [K in keyof T as K extends `_${string}` ? never : K]: T[K]

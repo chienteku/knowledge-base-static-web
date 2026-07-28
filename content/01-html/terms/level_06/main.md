@@ -157,11 +157,10 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 **Problem:** In a standard blog layout with a Top Menu, a Left Sidebar (links to other posts), the Blog Post, and a Footer, which of those four items belongs inside the `<main>` tag?
 
 **Expected output:**
-```text
-ONLY the Blog Post. The Top Menu, Left Sidebar, and Footer are repeated across the whole site, so they belong outside the `<main>` tag.
-```
-
 > [!check]- Answer
+> ```text
+> ONLY the Blog Post. The Top Menu, Left Sidebar, and Footer are repeated across the whole site, so they belong outside the `<main>` tag.
+> ```
 > - What is unique to *this exact URL*?
 
 ---
@@ -173,11 +172,10 @@ ONLY the Blog Post. The Top Menu, Left Sidebar, and Footer are repeated across t
 **Problem:** Write an accessible 'Skip to Content' link targeting `<main id="main-content">`.
 
 **Expected output:**
-```text
-<a href="#main-content" class="skip-link">Skip to Main Content</a>
-```
-
 > [!check]- Answer
+> ```text
+> <a href="#main-content" class="skip-link">Skip to Main Content</a>
+> ```
 > ```html
 > <a href="#main-content" class="skip-link">Skip to Main Content</a>
 > <main id="main-content">
@@ -187,16 +185,17 @@ ONLY the Blog Post. The Top Menu, Left Sidebar, and Footer are repeated across t
 >
 > **Explanation:** Skip links allow keyboard users to bypass global navigation directly to `<main>`.
 
+---
+
 ### Exercise 3: Main Landmark Role
 
 **Problem:** Which implicit ARIA landmark role does the `<main>` element convey?
 
 **Expected output:**
-```text
-main landmark role.
-```
-
 > [!check]- Answer
+> ```text
+> main landmark role.
+> ```
 > ```text
 > main landmark role.
 > ```

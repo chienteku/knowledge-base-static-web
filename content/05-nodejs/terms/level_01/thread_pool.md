@@ -158,27 +158,27 @@ Explain why this happens, and how to configure the system to resolve the bottlen
 4. `setTimeout()` timer
 
 **Expected output:**
-```text
-2. crypto.pbkdf2() password hashing and 3. fs.readFile() disk I/O
-```
-
 > [!check]- Answer
+> ```text
+> 2. crypto.pbkdf2() password hashing and 3. fs.readFile() disk I/O
+> ```
 > ```text
 > 2. crypto.pbkdf2() password hashing and 3. fs.readFile() disk I/O
 > ```
 >
 > **Explanation:** `crypto` CPU algorithms, `fs` disk operations, and `zlib` compression use thread pool; network sockets and timers use OS event notifications.
 
+---
+
 ### Exercise 3: Configuring UV_THREADPOOL_SIZE
 
 **Problem:** How do you set `UV_THREADPOOL_SIZE` to 8 when launching a Node script from command line?
 
 **Expected output:**
-```text
-UV_THREADPOOL_SIZE=8 node app.js
-```
-
 > [!check]- Answer
+> ```text
+> UV_THREADPOOL_SIZE=8 node app.js
+> ```
 > ```bash
 > UV_THREADPOOL_SIZE=8 node app.js
 > ```

@@ -175,11 +175,10 @@ thread::spawn(move || {
 **Problem:** Pin a value to the stack using `std::pin::pin!(val)` and inspect its `Pin` reference type.
 
 **Expected output:**
-```
-Stack pinned successfully
-```
-
 > [!check]- Answer
+> ```
+> Stack pinned successfully
+> ```
 > ```rust
 > fn main() {
 >     let val = 42;
@@ -190,16 +189,17 @@ Stack pinned successfully
 >
 > **Explanation:** `std::pin::pin!` pins values to the current stack frame safely.
 
+---
+
 ### Exercise 3: Heap Pinning with `Box::pin`
 
 **Problem:** Create a heap-pinned future using `Box::pin(async { 100 })`.
 
 **Expected output:**
-```
-Heap pinned future created
-```
-
 > [!check]- Answer
+> ```
+> Heap pinned future created
+> ```
 > fn main() {
 >     println!("Heap pinned future created");
 > }

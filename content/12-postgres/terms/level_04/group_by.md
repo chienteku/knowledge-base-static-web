@@ -152,13 +152,12 @@ Group by category or dimensional status columns
 **Problem:** You have an `employees` table with columns `department`, `name`, and `salary`. Write a SQL query that returns the name of each `department` along with the sum of all salaries paid in that department. Label the sum as `total_payroll`.
 
 **Expected output:**
-```sql
-SELECT department, SUM(salary) AS total_payroll 
-FROM employees 
-GROUP BY department;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT department, SUM(salary) AS total_payroll 
+> FROM employees 
+> GROUP BY department;
+> ```
 > - The output needs to show values per department; make `department` your grouping column.
 > - Apply the `SUM()` aggregate to the salary column.
 
@@ -171,11 +170,10 @@ GROUP BY department;
 **Problem:** Group sales by `year` and `region` selecting total sales `SUM(amount)` and count `COUNT(*)`.
 
 **Expected output:**
-```text
-SELECT year, region, SUM(amount) AS total_sales, COUNT(*) AS order_cnt FROM sales GROUP BY year, region;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT year, region, SUM(amount) AS total_sales, COUNT(*) AS order_cnt FROM sales GROUP BY year, region;
+> ```
 > ```sql
 > SELECT year, region, SUM(amount) AS total_sales, COUNT(*)
 > FROM sales
@@ -184,16 +182,17 @@ SELECT year, region, SUM(amount) AS total_sales, COUNT(*) AS order_cnt FROM sale
 >
 > **Explanation:** `GROUP BY col1, col2` aggregates metrics across multi-dimensional group keys.
 
+---
+
 ### Exercise 3: Grouping Expression Columns
 
 **Problem:** Group users by signup year extracted using `EXTRACT(YEAR FROM created_at)`.
 
 **Expected output:**
-```text
-SELECT EXTRACT(YEAR FROM created_at)::INT AS signup_year, COUNT(*) FROM users GROUP BY EXTRACT(YEAR FROM created_at);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT EXTRACT(YEAR FROM created_at)::INT AS signup_year, COUNT(*) FROM users GROUP BY EXTRACT(YEAR FROM created_at);
+> ```
 > ```sql
 > SELECT EXTRACT(YEAR FROM created_at)::INT AS signup_year, COUNT(*)
 > FROM users

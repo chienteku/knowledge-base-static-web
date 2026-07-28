@@ -167,11 +167,10 @@ const rawTags = "coding, web , javascript";
 ```
 
 **Expected output:**
-```text
-coding-web-javascript
-```
-
 > [!check]- Answer
+> ```text
+> coding-web-javascript
+> ```
 > - Split by `","` first.
 > - Since we are in Level 4, you can loop through the parsed array using a loop or `.map(tag => tag.trim())` to clean up the spaces.
 > - Join the final array with `"-"`.
@@ -183,11 +182,10 @@ coding-web-javascript
 **Problem:** Join `["Apple", "Banana", "Cherry"]` with `", "` using `.join(", ")`.
 
 **Expected output:**
-```text
-Apple, Banana, Cherry
-```
-
 > [!check]- Answer
+> ```text
+> Apple, Banana, Cherry
+> ```
 > ```javascript
 > const fruits = ["Apple", "Banana", "Cherry"];
 > console.log(fruits.join(", "));
@@ -195,16 +193,17 @@ Apple, Banana, Cherry
 >
 > **Explanation:** `.join(separator)` concatenates array items into a single string with the specified delimiter.
 
+---
+
 ### Exercise 3: Combining Arrays with `.concat()` vs Spread
 
 **Problem:** Combine `[1, 2]` and `[3, 4]` using `.concat()`.
 
 **Expected output:**
-```text
-[ 1, 2, 3, 4 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3, 4 ]
+> ```
 > ```javascript
 > const a = [1, 2];
 > const b = [3, 4];

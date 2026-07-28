@@ -130,13 +130,12 @@ const [search, setSearch] = useState(''); // ❌ State persists across all sub-r
 **Problem:** You have `app/layout.tsx` and `app/dashboard/layout.tsx`. If the user navigates to `/dashboard`, how does the UI assemble itself?
 
 **Expected output:**
-```text
-Layouts nest perfectly!
-Next.js takes the Root Layout, injects the Dashboard Layout into the Root's `children`, and then injects the Dashboard Page into the Dashboard Layout's `children`.
-Result: <RootLayout> <DashboardLayout> <DashboardPage /> </DashboardLayout> </RootLayout>
-```
-
 > [!check]- Answer
+> ```text
+> Layouts nest perfectly!
+> Next.js takes the Root Layout, injects the Dashboard Layout into the Root's `children`, and then injects the Dashboard Page into the Dashboard Layout's `children`.
+> Result: <RootLayout> <DashboardLayout> <DashboardPage /> </DashboardLayout> </RootLayout>
+> ```
 > - Think of Russian nesting dolls.
 
 ---
@@ -146,11 +145,10 @@ Result: <RootLayout> <DashboardLayout> <DashboardPage /> </DashboardLayout> </Ro
 **Problem:** Which 2 HTML tags MUST be present in the top-most `app/layout.tsx` file?
 
 **Expected output:**
-```text
-<html> and <body>
-```
-
 > [!check]- Answer
+> ```text
+> <html> and <body>
+> ```
 > - Root layout MUST render top-level `<html>` and `<body>` elements.
 > 
 > ```tsx
@@ -170,11 +168,10 @@ Result: <RootLayout> <DashboardLayout> <DashboardPage /> </DashboardLayout> </Ro
 **Problem:** Trace how Next.js composes `app/layout.tsx`, `app/dashboard/layout.tsx`, and `app/dashboard/page.tsx`.
 
 **Expected output:**
-```text
-app/layout.tsx wraps app/dashboard/layout.tsx, which wraps app/dashboard/page.tsx.
-```
-
 > [!check]- Answer
+> ```text
+> app/layout.tsx wraps app/dashboard/layout.tsx, which wraps app/dashboard/page.tsx.
+> ```
 > - Layouts nest recursively down the folder hierarchy.
 > 
 > ```text

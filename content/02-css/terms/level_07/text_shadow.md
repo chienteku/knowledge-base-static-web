@@ -112,12 +112,11 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 **Problem:** How could you use `text-shadow` to make a neon sign that appears to glow in all directions, rather than casting a shadow to one specific side?
 
 **Expected output:**
-```text
-Set the X and Y offsets to 0! If the shadow doesn't move left/right or up/down, but has a large blur radius, it will peek out equally from all sides of the text, creating a glowing effect!
-`text-shadow: 0px 0px 10px limegreen;`
-```
-
 > [!check]- Answer
+> ```text
+> Set the X and Y offsets to 0! If the shadow doesn't move left/right or up/down, but has a large blur radius, it will peek out equally from all sides of the text, creating a glowing effect!
+> `text-shadow: 0px 0px 10px limegreen;`
+> ```
 > - What happens if the flashlight is pointing straight down from perfectly above the letter?
 
 ---
@@ -129,11 +128,10 @@ Set the X and Y offsets to 0! If the shadow doesn't move left/right or up/down, 
 **Problem:** Write `text-shadow` applying 2px right offset, 2px down offset, 4px blur, and 50% black alpha color.
 
 **Expected output:**
-```text
-text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-```
-
 > [!check]- Answer
+> ```text
+> text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+> ```
 > ```css
 > h1 {
 >   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -142,16 +140,17 @@ text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 >
 > **Explanation:** `text-shadow` parameters are `offset-x offset-y blur-radius color`.
 
+---
+
 ### Exercise 3: Multiple Text Shadows
 
 **Problem:** Write CSS applying double text shadow to create a glowing text effect.
 
 **Expected output:**
-```text
-text-shadow: 0 0 5px #fff, 0 0 10px #ff0000;
-```
-
 > [!check]- Answer
+> ```text
+> text-shadow: 0 0 5px #fff, 0 0 10px #ff0000;
+> ```
 > ```css
 > .glow {
 >   text-shadow: 0 0 5px #fff, 0 0 10px #ff0000;

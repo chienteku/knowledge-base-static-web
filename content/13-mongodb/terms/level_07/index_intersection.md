@@ -185,12 +185,11 @@ Use compound index { status: 1, createdAt: -1 } for query and sort coverage
 2.  State how you can optimize this query plan.
 
 **Expected output:**
-```text
-1. The `AND_SORTED` stage indicates that MongoDB is executing an Index Intersection, scanning two separate single-field indexes in parallel and merging their matched document pointers in memory.
-2. Create a compound index containing both query fields to replace the parallel scans with a single, direct B-Tree lookup (IXSCAN).
-```
-
 > [!check]- Answer
+> ```text
+> 1. The `AND_SORTED` stage indicates that MongoDB is executing an Index Intersection, scanning two separate single-field indexes in parallel and merging their matched document pointers in memory.
+> 2. Create a compound index containing both query fields to replace the parallel scans with a single, direct B-Tree lookup (IXSCAN).
+> ```
 > - Identify the meaning of the `AND_SORTED` query stage.
 > - Recall the multi-key index replacement pattern.
 
@@ -203,27 +202,27 @@ Use compound index { status: 1, createdAt: -1 } for query and sort coverage
 **Problem:** Name the explain execution stage indicating index intersection (`AND_SORTED` or `AND_HASH`).
 
 **Expected output:**
-```text
-AND_SORTED or AND_HASH
-```
-
 > [!check]- Answer
+> ```text
+> AND_SORTED or AND_HASH
+> ```
 > ```text
 > AND_SORTED or AND_HASH
 > ```
 >
 > **Explanation:** `AND_SORTED` stage intersects key streams from multiple single-field indexes.
 
+---
+
 ### Exercise 3: Compound Index vs Index Intersection
 
 **Problem:** Why is a compound index `{ a: 1, b: 1 }` faster than intersecting `{ a: 1 }` and `{ b: 1 }`? (Navigates a single B-Tree instead of intersecting key sets at runtime).
 
 **Expected output:**
-```text
-Navigates a single B-Tree without runtime key intersection overhead
-```
-
 > [!check]- Answer
+> ```text
+> Navigates a single B-Tree without runtime key intersection overhead
+> ```
 > ```text
 > Navigates a single B-Tree without runtime key intersection overhead
 > ```

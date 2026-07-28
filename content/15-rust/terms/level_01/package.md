@@ -172,6 +172,8 @@ The `[package]` header defines the package. Required fields typically include `n
 > [!check]- Answer
 > - Look for the `[package]` header in the `Cargo.toml` file.
 
+---
+
 ### Exercise 2: Add a Library to a Binary Package
 
 **Problem:** 
@@ -200,11 +202,10 @@ Output from `main.rs` followed by "Hello from the library crate!".
 **Problem:** Explain how to add a secondary binary executable `src/bin/admin.rs` to an existing Cargo package without editing `Cargo.toml`.
 
 **Expected output:**
-```
-cargo run --bin admin
-```
-
 > [!check]- Answer
+> ```
+> cargo run --bin admin
+> ```
 > ```rust
 > fn main() {
 >     println!("cargo run --bin admin");

@@ -119,15 +119,14 @@ if (val === null) { /* Correct null check */ }
 **Problem:** You have a parameter `data: string | string[]`. How do you safely narrow it so you can call `.join(",")` if it's an array?
 
 **Expected output:**
-```typescript
-if (Array.isArray(data)) {
-  console.log(data.join(","));
-} else {
-  console.log(data); // Narrowed to string
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> if (Array.isArray(data)) {
+>   console.log(data.join(","));
+> } else {
+>   console.log(data); // Narrowed to string
+> }
+> ```
 > - Remember, `typeof data === "object"` is dangerous!
 
 ---
@@ -139,11 +138,10 @@ if (Array.isArray(data)) {
 **Problem:** Narrow `err: Error | CustomError` using `if (err instanceof CustomError)`.
 
 **Expected output:**
-```text
-Narrowed to CustomError instance
-```
-
 > [!check]- Answer
+> ```text
+> Narrowed to CustomError instance
+> ```
 > ```typescript
 > class CustomError extends Error { code = 400; }
 > function handle(err: Error) {
@@ -155,16 +153,17 @@ Narrowed to CustomError instance
 >
 > **Explanation:** `instanceof` checks prototype chain references to narrow object class instances.
 
+---
+
 ### Exercise 3: Typeof Guard Values List
 
 **Problem:** List 6 primitive string return values of JS `typeof` operator (`"string"`, `"number"`, `"boolean"`, `"bigint"`, `"symbol"`, `"undefined"`).
 
 **Expected output:**
-```text
-string, number, boolean, bigint, symbol, undefined
-```
-
 > [!check]- Answer
+> ```text
+> string, number, boolean, bigint, symbol, undefined
+> ```
 > ```typescript
 > console.log("string, number, boolean, bigint, symbol, undefined");
 > ```

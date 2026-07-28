@@ -93,12 +93,11 @@ const STRIPE_SECRET_KEY = 'sk_live_51Nx...'; // ❌ Leaked in public browser bun
 **Problem:** You accidentally pushed your Stripe API Key to a public GitHub repository. Within 5 minutes, hackers found it and started making fraudulent charges. What is the immediate technical solution?
 
 **Expected output:**
-```text
-You must log into your Stripe dashboard and "Revoke" or "Roll" the API key. 
-This instantly invalidates the old string of characters, meaning any API requests using the stolen key will now receive a `401 Unauthorized` error. You will then be issued a brand new key to put in your backend code.
-```
-
 > [!check]- Answer
+> ```text
+> You must log into your Stripe dashboard and "Revoke" or "Roll" the API key. 
+> This instantly invalidates the old string of characters, meaning any API requests using the stolen key will now receive a `401 Unauthorized` error. You will then be issued a brand new key to put in your backend code.
+> ```
 > - Just like a stolen credit card, what do you ask the bank to do?
 
 ---
@@ -111,13 +110,12 @@ This instantly invalidates the old string of characters, meaning any API request
 3. Public GitHub repository
 
 **Expected output:**
-```text
-1. No (Bundled into public frontend code)
-2. Yes (Stays on private server)
-3. No (Publicly exposed)
-```
-
 > [!check]- Answer
+> ```text
+> 1. No (Bundled into public frontend code)
+> 2. Yes (Stays on private server)
+> 3. No (Publicly exposed)
+> ```
 > ```text
 > 1. No -> Frontend build tools bundle environment variables directly into client JS.
 > 2. Yes -> Backend environment variables remain private on the server.
@@ -131,11 +129,10 @@ This instantly invalidates the old string of characters, meaning any API request
 **Problem:** What architectural feature should an API key management system support to prevent downtime during key leaks?
 
 **Expected output:**
-```text
-Dual-key rotation support (allowing an old key and a new key to remain active simultaneously during migration).
-```
-
 > [!check]- Answer
+> ```text
+> Dual-key rotation support (allowing an old key and a new key to remain active simultaneously during migration).
+> ```
 > ```text
 > Dual-key rotation support (allowing an old key and a new key to remain active simultaneously during migration).
 > ```

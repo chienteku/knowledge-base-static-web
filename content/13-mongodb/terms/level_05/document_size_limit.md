@@ -137,13 +137,12 @@ Store small documents directly inside standard BSON collections
 Explain why this design will eventually crash the database, and state how to fix it.
 
 **Expected output:**
-```text
-The design will crash because the `pings` array is unbounded and appends data every 5 seconds forever. 
-Over time, the array will grow to millions of items, eventually exceeding the 16MB document size limit and throwing BSON size errors. 
-To fix this, separate the pings into their own collection, storing the parent `server_id` inside each ping document (Child Referencing), or use the Bucket Pattern to split pings into fixed daily documents.
-```
-
 > [!check]- Answer
+> ```text
+> The design will crash because the `pings` array is unbounded and appends data every 5 seconds forever. 
+> Over time, the array will grow to millions of items, eventually exceeding the 16MB document size limit and throwing BSON size errors. 
+> To fix this, separate the pings into their own collection, storing the parent `server_id` inside each ping document (Child Referencing), or use the Bucket Pattern to split pings into fixed daily documents.
+> ```
 > - Evaluate the growth boundary of a 5-second interval log over months.
 > - Relate the crash back to the BSON maximum payload constraint.
 
@@ -156,11 +155,10 @@ To fix this, separate the pings into their own collection, storing the parent `s
 **Problem:** Check BSON size of document using `Object.bsonsize(doc)` before saving.
 
 **Expected output:**
-```text
-if (Object.bsonsize(doc) > 16777216) throw new Error("Document exceeds 16MB limit");
-```
-
 > [!check]- Answer
+> ```text
+> if (Object.bsonsize(doc) > 16777216) throw new Error("Document exceeds 16MB limit");
+> ```
 > ```javascript
 > if (Object.bsonsize(doc) > 16 * 1024 * 1024) {
 >   throw new Error("Document exceeds 16MB limit");
@@ -169,16 +167,17 @@ if (Object.bsonsize(doc) > 16777216) throw new Error("Document exceeds 16MB limi
 >
 > **Explanation:** `Object.bsonsize(doc)` calculates exact BSON byte sizes.
 
+---
+
 ### Exercise 3: GridFS Usage Threshold
 
 **Problem:** State threshold size for using GridFS instead of standard BSON documents (16MB).
 
 **Expected output:**
-```text
-Files larger than 16MB threshold
-```
-
 > [!check]- Answer
+> ```text
+> Files larger than 16MB threshold
+> ```
 > ```text
 > Files larger than 16MB threshold
 > ```

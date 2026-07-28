@@ -192,11 +192,10 @@ fn first_three(s: &str) -> &str {
 **Problem:** Write `fn longest<'a>(x: &'a str, y: &'a str) -> &'a str` returning the longer string slice.
 
 **Expected output:**
-```
-Longest: world
-```
-
 > [!check]- Answer
+> ```
+> Longest: world
+> ```
 > ```rust
 > fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 >     if x.len() > y.len() { x } else { y }
@@ -210,16 +209,17 @@ Longest: world
 >
 > **Explanation:** Explicit `'a` lifetime annotations state that returned reference validities match the shorter input slice validity.
 
+---
+
 ### Exercise 3: Function Signatures with Multiple Distinct Lifetimes
 
 **Problem:** Write a function returning a reference bound to the first parameter's lifetime `'a` while ignoring `'b`.
 
 **Expected output:**
-```
-First: alpha
-```
-
 > [!check]- Answer
+> ```
+> First: alpha
+> ```
 > fn pick_first<'a, 'b>(x: &'a str, _y: &'b str) -> &'a str { x }
 > fn main() {
 >     let a = "alpha";

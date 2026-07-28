@@ -132,16 +132,15 @@ const routes = [
 **Problem:** You are building an e-commerce site. You want a route that looks like this: `/category/shoes/item/nike-air`. How do you define this in the `router.js`?
 
 **Expected output:**
-```javascript
-const routes = [
-  { path: '/category/:categoryId/item/:itemId', component: ItemView }
-]
-// Inside the component, you access them via:
-// route.params.categoryId (evaluates to 'shoes')
-// route.params.itemId (evaluates to 'nike-air')
-```
-
 > [!check]- Answer
+> ```javascript
+> const routes = [
+>   { path: '/category/:categoryId/item/:itemId', component: ItemView }
+> ]
+> // Inside the component, you access them via:
+> // route.params.categoryId (evaluates to 'shoes')
+> // route.params.itemId (evaluates to 'nike-air')
+> ```
 > - You can have as many colons as you want in a single path.
 
 ---
@@ -151,11 +150,10 @@ const routes = [
 **Problem:** Write Vue Router route definition object matching path `/users/:id` to component `UserProfile` with named route `'user-profile'`.
 
 **Expected output:**
-```javascript
-{ path: '/users/:id', name: 'user-profile', component: UserProfile }
-```
-
 > [!check]- Answer
+> ```javascript
+> { path: '/users/:id', name: 'user-profile', component: UserProfile }
+> ```
 > - `:id` defines dynamic route parameter segments.
 > 
 > ```javascript
@@ -171,11 +169,10 @@ const routes = [
 **Problem:** How do you define an optional dynamic route parameter segment in Vue Router 4?
 
 **Expected output:**
-```text
-By appending a question mark `?` to the parameter name (e.g. `/users/:id?`).
-```
-
 > [!check]- Answer
+> ```text
+> By appending a question mark `?` to the parameter name (e.g. `/users/:id?`).
+> ```
 > - `:param?` specifies optional route parameters.
 > 
 > ```javascript

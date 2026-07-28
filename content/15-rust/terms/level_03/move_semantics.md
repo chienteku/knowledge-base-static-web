@@ -175,12 +175,11 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Function says: Good morning!
-Main says: Good morning!
-```
-
 > [!check]- Answer
+> ```text
+> Function says: Good morning!
+> Main says: Good morning!
+> ```
 > ```rust
 > // Use the `.clone()` method to create a deep copy of the String.
 > // This way, the clone is moved into the function, and the original stays alive!
@@ -194,11 +193,10 @@ Main says: Good morning!
 **Problem:** Write `fn take_ownership(s: String) -> usize { s.len() }`. Show that calling it moves `s`.
 
 **Expected output:**
-```
-Length: 5
-```
-
 > [!check]- Answer
+> ```
+> Length: 5
+> ```
 > ```rust
 > fn take_ownership(s: String) -> usize { s.len() }
 > fn main() {
@@ -211,16 +209,17 @@ Length: 5
 >
 > **Explanation:** Ownership transfers into `take_ownership`, deallocating `text` upon function return.
 
+---
+
 ### Exercise 3: Preventing Moves with `.clone()`
 
 **Problem:** Pass a clone `s.clone()` into `take_ownership` so `s` remains valid in caller scope.
 
 **Expected output:**
-```
-Len: 5, Original: hello
-```
-
 > [!check]- Answer
+> ```
+> Len: 5, Original: hello
+> ```
 > ```rust
 > fn take_ownership(s: String) -> usize { s.len() }
 > fn main() {

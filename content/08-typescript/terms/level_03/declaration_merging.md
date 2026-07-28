@@ -166,11 +166,10 @@ window.analytics.logEvent('login_clicked');
 ```
 
 **Expected output:**
-```text
-The compiler compiles window.analytics.logEvent without errors.
-```
-
 > [!check]- Answer
+> ```text
+> The compiler compiles window.analytics.logEvent without errors.
+> ```
 > - The global `window` object is typed by the built-in `Window` interface.
 > - Redeclaring the `Window` interface adds properties to the existing global window definition.
 
@@ -183,11 +182,10 @@ The compiler compiles window.analytics.logEvent without errors.
 **Problem:** Use declaration merging to add `customProp: string` to global `Window` interface.
 
 **Expected output:**
-```text
-Global Window interface merged
-```
-
 > [!check]- Answer
+> ```text
+> Global Window interface merged
+> ```
 > ```typescript
 > declare global {
 >   interface Window {
@@ -199,16 +197,17 @@ Global Window interface merged
 >
 > **Explanation:** Declaration merging allows extending existing global module and library interfaces.
 
+---
+
 ### Exercise 3: Namespace and Function Merging
 
 **Problem:** Merge a function `function log() {}` with a namespace `namespace log { pub const label = "LOGGER"; }`.
 
 **Expected output:**
-```text
-LOGGER
-```
-
 > [!check]- Answer
+> ```text
+> LOGGER
+> ```
 > ```typescript
 > function log() {}
 > namespace log {

@@ -271,28 +271,27 @@ Single slide-in loading overlay:
 **Problem:** You are building an urgent warning dot. The warning dot should pulse: fade from `opacity: 1` down to `opacity: 0.3` and scale down to `scale(0.8)`, then loop back and repeat forever smoothly. Write the `@keyframes` block and alert dot ruleset.
 
 **Expected output:**
-```css
-@keyframes warningPulse {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: scale(0.8);
-    opacity: 0.3;
-  }
-}
-
-.warning-dot {
-  width: 15px;
-  height: 15px;
-  background-color: red;
-  border-radius: 50%;
-  animation: warningPulse 1s ease-in-out infinite alternate;
-}
-```
-
 > [!check]- Answer
+> ```css
+> @keyframes warningPulse {
+>   from {
+>     transform: scale(1);
+>     opacity: 1;
+>   }
+>   to {
+>     transform: scale(0.8);
+>     opacity: 0.3;
+>   }
+> }
+> 
+> .warning-dot {
+>   width: 15px;
+>   height: 15px;
+>   background-color: red;
+>   border-radius: 50%;
+>   animation: warningPulse 1s ease-in-out infinite alternate;
+> }
+> ```
 > - Alternate playback direction is required to make the pulse fade out and fade back in smoothly without snapping.
 > - Run the loop infinitely.
 
@@ -305,11 +304,10 @@ Single slide-in loading overlay:
 **Problem:** Write `@keyframes spin` rotating 0deg to 360deg, and apply it to `.spinner` for infinite 1s linear rotation.
 
 **Expected output:**
-```text
-@keyframes spin { to { transform: rotate(360deg); } } .spinner { animation: spin 1s linear infinite; }
-```
-
 > [!check]- Answer
+> ```text
+> @keyframes spin { to { transform: rotate(360deg); } } .spinner { animation: spin 1s linear infinite; }
+> ```
 > ```css
 > @keyframes spin {
 >   to { transform: rotate(360deg); }
@@ -321,19 +319,20 @@ Single slide-in loading overlay:
 >
 > **Explanation:** `infinite linear` creates smooth continuous 360-degree rotation animation.
 
+---
+
 ### Exercise 3: Animation Shorthand Property Order
 
 **Problem:** Identify the 4 primary components of `animation: spin 1s ease-in-out infinite;`.
 
 **Expected output:**
-```text
-1. Keyframe name: spin
-2. Duration: 1s
-3. Timing function: ease-in-out
-4. Iteration count: infinite
-```
-
 > [!check]- Answer
+> ```text
+> 1. Keyframe name: spin
+> 2. Duration: 1s
+> 3. Timing function: ease-in-out
+> 4. Iteration count: infinite
+> ```
 > ```text
 > 1. Keyframe name: spin
 > 2. Duration: 1s

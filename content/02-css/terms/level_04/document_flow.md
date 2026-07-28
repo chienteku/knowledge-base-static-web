@@ -290,13 +290,12 @@ Comparing flow styles:
 ```
 
 **Expected output:**
-```text
-- Rule A: In-Flow (Relative nudging preserves the original footprint).
-- Rule B: Out-of-Flow (Fixed locks to viewport glass, collapsing its footprint).
-- Rule C: Out-of-Flow (Float pulls the element to the edge and text wraps, collapsing its height block).
-```
-
 > [!check]- Answer
+> ```text
+> - Rule A: In-Flow (Relative nudging preserves the original footprint).
+> - Rule B: Out-of-Flow (Fixed locks to viewport glass, collapsing its footprint).
+> - Rule C: Out-of-Flow (Float pulls the element to the edge and text wraps, collapsing its height block).
+> ```
 > - Does the element leave a "ghost" footprint that reserves space?
 
 ---
@@ -309,11 +308,10 @@ Comparing flow styles:
 `static`, `relative`, `absolute`, `fixed`, `sticky`
 
 **Expected output:**
-```text
-absolute and fixed (and float). static, relative, and sticky remain in flow.
-```
-
 > [!check]- Answer
+> ```text
+> absolute and fixed (and float). static, relative, and sticky remain in flow.
+> ```
 > ```text
 > Out of flow: absolute, fixed (and floated elements)
 > In flow: static, relative, sticky
@@ -321,16 +319,17 @@ absolute and fixed (and float). static, relative, and sticky remain in flow.
 >
 > **Explanation:** `absolute` and `fixed` remove elements completely from normal flow layout.
 
+---
+
 ### Exercise 3: Creating Block Formatting Context (BFC)
 
 **Problem:** Which modern CSS property declaration creates a Block Formatting Context (BFC) to enclose out-of-flow floated children cleanly?
 
 **Expected output:**
-```text
-display: flow-root;
-```
-
 > [!check]- Answer
+> ```text
+> display: flow-root;
+> ```
 > ```css
 > .container {
 >   display: flow-root;

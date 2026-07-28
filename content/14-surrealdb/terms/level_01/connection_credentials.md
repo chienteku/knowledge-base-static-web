@@ -165,15 +165,14 @@ Write the SurrealQL code block to:
 4.  Create a record `user:john` with field `status = "archived"`.
 
 **Expected output:**
-```sql
-USE NS company_hq DB production;
-CREATE user:john SET status = "active";
-
-USE DB archive;
-CREATE user:john SET status = "archived";
-```
-
 > [!check]- Answer
+> ```sql
+> USE NS company_hq DB production;
+> CREATE user:john SET status = "active";
+> 
+> USE DB archive;
+> CREATE user:john SET status = "archived";
+> ```
 > - Use the `USE` keyword to set session scopes.
 > - Specify both `NS` and `DB` on the first call; switch only `DB` on the second call.
 
@@ -186,11 +185,10 @@ CREATE user:john SET status = "archived";
 **Problem:** Construct signin payload for record access `user_access` in NS `main` and DB `app`.
 
 **Expected output:**
-```text
-Scoped signin payload created
-```
-
 > [!check]- Answer
+> ```text
+> Scoped signin payload created
+> ```
 > ```javascript
 > const payload = {
 >   access: "user_access",
@@ -204,16 +202,17 @@ Scoped signin payload created
 >
 > **Explanation:** Access signin payloads identify target scope, namespace, database, and credentials.
 
+---
+
 ### Exercise 3: Authentication Hierarchy Levels
 
 **Problem:** List 3 authentication levels in SurrealDB (Root, Namespace, Database / Access Scope).
 
 **Expected output:**
-```text
-Root level, Namespace level, Database/Access Scope level
-```
-
 > [!check]- Answer
+> ```text
+> Root level, Namespace level, Database/Access Scope level
+> ```
 > ```text
 > Root level, Namespace level, Database/Access Scope level
 > ```

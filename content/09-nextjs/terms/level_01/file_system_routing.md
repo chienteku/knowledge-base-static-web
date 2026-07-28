@@ -150,14 +150,13 @@ app/
 4. `route.ts` 
 
 **Expected output:**
-```text
-1. Shared persistent UI layout shell across sub-routes
-2. Instant loading fallback UI powered by React Suspense
-3. Error boundary catch component for sub-tree runtime exceptions
-4. Server-side API endpoint handler (GET, POST, etc.)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Shared persistent UI layout shell across sub-routes
+> 2. Instant loading fallback UI powered by React Suspense
+> 3. Error boundary catch component for sub-tree runtime exceptions
+> 4. Server-side API endpoint handler (GET, POST, etc.)
+> ```
 > - `layout.tsx` -> Persistent wrapper layout
 > - `loading.tsx` -> Suspense fallback skeleton
 > - `error.tsx` -> Error boundary component
@@ -174,11 +173,10 @@ app/
 **Problem:** How do you create a private utility folder inside `app/` that is excluded from public URL routing?
 
 **Expected output:**
-```text
-By prefixing the folder name with an underscore (e.g. `app/_components/` or `app/_lib/`).
-```
-
 > [!check]- Answer
+> ```text
+> By prefixing the folder name with an underscore (e.g. `app/_components/` or `app/_lib/`).
+> ```
 > - Underscore prefix `_folder` creates private non-routable code folders.
 > 
 > ```text

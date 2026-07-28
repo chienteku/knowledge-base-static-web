@@ -91,12 +91,11 @@ Nginx config: try_files $uri $uri/ /index.html; -- Fallback to SPA root index.ht
 **Problem:** You are listening to a song on Spotify's web player. You click on a different playlist. The URL changes, the playlist UI updates, but the song *keeps playing seamlessly*. Is this Server-Side or Client-Side routing?
 
 **Expected output:**
-```text
-Client-Side Routing.
-If it were Server-Side, the entire browser page would refresh, and the song would immediately stop and have to reload.
-```
-
 > [!check]- Answer
+> ```text
+> Client-Side Routing.
+> If it were Server-Side, the entire browser page would refresh, and the song would immediately stop and have to reload.
+> ```
 > - Think about what happens to the browser tab during a refresh.
 
 ---
@@ -108,27 +107,27 @@ If it were Server-Side, the entire browser page would refresh, and the song woul
 **Problem:** State 2 benefits of Client-Side Routing over traditional Multi-Page Application (MPA) routing (1. Zero full-page reloads for fast route transitions; 2. Preserves React component state across route updates).
 
 **Expected output:**
-```text
-1. Zero full-page reloads for fast transitions; 2. Preserves React state across route updates
-```
-
 > [!check]- Answer
+> ```text
+> 1. Zero full-page reloads for fast transitions; 2. Preserves React state across route updates
+> ```
 > ```text
 > 1. Zero full-page reloads for fast transitions; 2. Preserves React state across route updates
 > ```
 >
 > **Explanation:** Client-side routing updates browser URL and DOM tree without requesting new HTML pages from servers.
 
+---
+
 ### Exercise 3: HTML5 History API Methods
 
 **Problem:** What browser History API method does client-side routing use to update URL without page reloads? (`history.pushState()`).
 
 **Expected output:**
-```text
-history.pushState()
-```
-
 > [!check]- Answer
+> ```text
+> history.pushState()
+> ```
 > ```text
 > history.pushState()
 > ```

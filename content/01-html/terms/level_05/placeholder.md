@@ -168,14 +168,13 @@ Correct usage pairing a label with an example placeholder:
 ```
 
 **Expected output:**
-```html
-<form>
-  <label for="zip">Zip Code:</label>
-  <input type="text" id="zip" name="zip" placeholder="e.g. 90210">
-</form>
-```
-
 > [!check]- Answer
+> ```html
+> <form>
+>   <label for="zip">Zip Code:</label>
+>   <input type="text" id="zip" name="zip" placeholder="e.g. 90210">
+> </form>
+> ```
 > - Create a `<label>` element with a `for` attribute.
 > - Connect the label to the input using a unique `id`.
 > - Change the placeholder value from a label name to a format example.
@@ -189,11 +188,10 @@ Correct usage pairing a label with an example placeholder:
 **Problem:** Write an email input containing a proper label AND a helpful format example placeholder.
 
 **Expected output:**
-```text
-<label for="em">Email</label><input type="email" id="em" placeholder="name@domain.com">
-```
-
 > [!check]- Answer
+> ```text
+> <label for="em">Email</label><input type="email" id="em" placeholder="name@domain.com">
+> ```
 > ```html
 > <label for="em">Email</label>
 > <input type="email" id="em" placeholder="name@domain.com">
@@ -201,16 +199,17 @@ Correct usage pairing a label with an example placeholder:
 >
 > **Explanation:** Placeholders should provide short sample format hints, not act as field labels.
 
+---
+
 ### Exercise 3: CSS Placeholder Pseudo-Element Selector
 
 **Problem:** Write CSS rule styling input placeholder text color to `#888`.
 
 **Expected output:**
-```text
-input::placeholder { color: #888; }
-```
-
 > [!check]- Answer
+> ```text
+> input::placeholder { color: #888; }
+> ```
 > ```css
 > input::placeholder {
 >   color: #888;

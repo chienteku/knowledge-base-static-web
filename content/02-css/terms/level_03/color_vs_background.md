@@ -119,11 +119,10 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 ```
 
 **Expected output:**
-```text
-The colors are swapped! This will create a white button with black text. It should be `background-color: black;` and `color: white;`.
-```
-
 > [!check]- Answer
+> ```text
+> The colors are swapped! This will create a white button with black text. It should be `background-color: black;` and `color: white;`.
+> ```
 > - Which property represents the Sharpie marker, and which represents the cardboard?
 
 ---
@@ -135,11 +134,10 @@ The colors are swapped! This will create a white button with black text. It shou
 **Problem:** Write CSS for `.card-dark` with dark gray background (`#1e1e1e`), white text (`#ffffff`), and subtle gray border (`#333333`).
 
 **Expected output:**
-```text
-.card-dark { background-color: #1e1e1e; color: #ffffff; border: 1px solid #333333; }
-```
-
 > [!check]- Answer
+> ```text
+> .card-dark { background-color: #1e1e1e; color: #ffffff; border: 1px solid #333333; }
+> ```
 > ```css
 > .card-dark {
 >   background-color: #1e1e1e;
@@ -150,16 +148,17 @@ The colors are swapped! This will create a white button with black text. It shou
 >
 > **Explanation:** Card containers combine background color, text color, and border styling.
 
+---
+
 ### Exercise 3: Transparent Background Reset
 
 **Problem:** Which keyword value resets an element's `background-color` to completely see-through?
 
 **Expected output:**
-```text
-background-color: transparent;
-```
-
 > [!check]- Answer
+> ```text
+> background-color: transparent;
+> ```
 > ```css
 > button {
 >   background-color: transparent;

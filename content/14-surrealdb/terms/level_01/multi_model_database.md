@@ -153,13 +153,12 @@ UPDATE user:1 SET settings.theme = "dark"; // Native nested document field
 3.  A blogging platform where articles have comments arrays and varying tagging categories that shift daily.
 
 **Expected output:**
-```text
-1. Graph Model: Follows and recommendation links are best modeled as nodes and edges to traverse relationships without heavy SQL joins.
-2. Relational Model: Structured invoice tables benefit from rigid columns and referential checks.
-3. Document Model: Dynamic articles and comment arrays fit nestable document shapes perfectly.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Graph Model: Follows and recommendation links are best modeled as nodes and edges to traverse relationships without heavy SQL joins.
+> 2. Relational Model: Structured invoice tables benefit from rigid columns and referential checks.
+> 3. Document Model: Dynamic articles and comment arrays fit nestable document shapes perfectly.
+> ```
 > - Assess the connectedness of the data points.
 > - Consider if data structures require rigid tabular layouts or dynamic, nested properties.
 
@@ -172,27 +171,27 @@ UPDATE user:1 SET settings.theme = "dark"; // Native nested document field
 **Problem:** Match SurrealDB capabilities with paradigms: SQL (SurrealQL queries), Document (Nested JSON), Graph (Arrow `->` links).
 
 **Expected output:**
-```text
-SQL: SurrealQL queries, Document: Nested JSON, Graph: Arrow -> links
-```
-
 > [!check]- Answer
+> ```text
+> SQL: SurrealQL queries, Document: Nested JSON, Graph: Arrow -> links
+> ```
 > ```text
 > SQL: SurrealQL queries, Document: Nested JSON, Graph: Arrow -> links
 > ```
 >
 > **Explanation:** Multi-model databases unify relational, document, and graph query capabilities into one engine.
 
+---
+
 ### Exercise 3: Graph Pointer vs SQL JOIN Performance
 
 **Problem:** Why does arrow path traversal `user:1->wrote->article` run in $O(1)$ constant pointer time vs $O(\log N)$ SQL JOINs?
 
 **Expected output:**
-```text
-Record links store direct storage pointers to target records without index lookup scanning
-```
-
 > [!check]- Answer
+> ```text
+> Record links store direct storage pointers to target records without index lookup scanning
+> ```
 > ```text
 > Record links store direct storage pointers to target records without index lookup scanning
 > ```

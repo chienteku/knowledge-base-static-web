@@ -210,11 +210,10 @@ thread::spawn(move || {
 **Problem:** Declare `pub(crate) fn internal_helper()` and call it within the same crate.
 
 **Expected output:**
-```
-Internal helper called
-```
-
 > [!check]- Answer
+> ```
+> Internal helper called
+> ```
 > ```rust
 > pub(crate) fn internal_helper() { println!("Internal helper called"); }
 > fn main() {
@@ -224,16 +223,17 @@ Internal helper called
 >
 > **Explanation:** `pub(crate)` restricts item visibility strictly to modules within the containing crate.
 
+---
+
 ### Exercise 3: Accessing Parent Scope with `super`
 
 **Problem:** Access a parent module function `super::parent_fn()` from an inner nested submodule.
 
 **Expected output:**
-```
-Parent function called
-```
-
 > [!check]- Answer
+> ```
+> Parent function called
+> ```
 > fn parent_fn() { println!("Parent function called"); }
 > mod child {
 >     pub fn call_parent() { super::parent_fn(); }

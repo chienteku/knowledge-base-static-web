@@ -218,14 +218,13 @@ DELETE /users/5 HTTP/1.1 -> 204 No Content ; Level 2 REST compliance
 4. Level 3
 
 **Expected output:**
-```text
-1. Level 0: The Swamp of POX (Single URI, POST only)
-2. Level 1: Resources (Individual URIs, single verb)
-3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
-4. Level 3: Hypermedia Controls (HATEOAS links)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Level 0: The Swamp of POX (Single URI, POST only)
+> 2. Level 1: Resources (Individual URIs, single verb)
+> 3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
+> 4. Level 3: Hypermedia Controls (HATEOAS links)
+> ```
 > ```text
 > Level 0 -> Single URI, single HTTP method (SOAP/RPC over HTTP)
 > Level 1 -> Multiple URIs for individual resources
@@ -240,11 +239,10 @@ DELETE /users/5 HTTP/1.1 -> 204 No Content ; Level 2 REST compliance
 **Problem:** An API has endpoints `/api/v1/orders` and `/api/v1/orders/42`, uses `GET`, `POST`, `DELETE` with `201` and `404` status codes, but includes no `_links` object in JSON responses. What level is it?
 
 **Expected output:**
-```text
-Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-```
-
 > [!check]- Answer
+> ```text
+> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
+> ```
 > ```text
 > Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
 > ```
@@ -260,14 +258,13 @@ Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3
 4. Level 3
 
 **Expected output:**
-```text
-1. Level 0: The Swamp of POX (Single URI, POST only)
-2. Level 1: Resources (Individual URIs, single verb)
-3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
-4. Level 3: Hypermedia Controls (HATEOAS links)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Level 0: The Swamp of POX (Single URI, POST only)
+> 2. Level 1: Resources (Individual URIs, single verb)
+> 3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
+> 4. Level 3: Hypermedia Controls (HATEOAS links)
+> ```
 > ```text
 > Level 0 -> Single URI, single HTTP method (SOAP/RPC over HTTP)
 > Level 1 -> Multiple URIs for individual resources
@@ -282,11 +279,10 @@ Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3
 **Problem:** An API has endpoints `/api/v1/orders` and `/api/v1/orders/42`, uses `GET`, `POST`, `DELETE` with `201` and `404` status codes, but includes no `_links` object in JSON responses. What level is it?
 
 **Expected output:**
-```text
-Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-```
-
 > [!check]- Answer
+> ```text
+> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
+> ```
 > ```text
 > Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
 > ```
@@ -302,14 +298,13 @@ Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3
 4. Level 3
 
 **Expected output:**
-```text
-1. Level 0: The Swamp of POX (Single URI, POST only)
-2. Level 1: Resources (Individual URIs, single verb)
-3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
-4. Level 3: Hypermedia Controls (HATEOAS links)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Level 0: The Swamp of POX (Single URI, POST only)
+> 2. Level 1: Resources (Individual URIs, single verb)
+> 3. Level 2: HTTP Verbs & Status Codes (Semantic verbs + status codes)
+> 4. Level 3: Hypermedia Controls (HATEOAS links)
+> ```
 > ```text
 > Level 0 -> Single URI, single HTTP method (SOAP/RPC over HTTP)
 > Level 1 -> Multiple URIs for individual resources
@@ -324,11 +319,10 @@ Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3
 **Problem:** An API has endpoints `/api/v1/orders` and `/api/v1/orders/42`, uses `GET`, `POST`, `DELETE` with `201` and `404` status codes, but includes no `_links` object in JSON responses. What level is it?
 
 **Expected output:**
-```text
-Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
-```
-
 > [!check]- Answer
+> ```text
+> Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
+> ```
 > ```text
 > Level 2 (Uses resources, HTTP verbs, and status codes, but lacks HATEOAS Level 3 hypermedia).
 > ```

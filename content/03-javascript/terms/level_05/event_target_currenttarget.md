@@ -198,12 +198,11 @@ async function processData() {
 ```
 
 **Expected output:**
-```text
-event.target: The <i> tag (specifically, the element with ID "trigger").
-event.currentTarget: The <div> tag (specifically, the element with ID "parent-box").
-```
-
 > [!check]- Answer
+> ```text
+> event.target: The <i> tag (specifically, the element with ID "trigger").
+> event.currentTarget: The <div> tag (specifically, the element with ID "parent-box").
+> ```
 > - `target` points to the exact element clicked (innermost).
 > - `currentTarget` points to the element that was bound to `addEventListener`.
 
@@ -214,11 +213,10 @@ event.currentTarget: The <div> tag (specifically, the element with ID "parent-bo
 **Problem:** Differentiate `target` (clicked child) vs `currentTarget` (listener container).
 
 **Expected output:**
-```text
-Target: SPAN, CurrentTarget: BUTTON
-```
-
 > [!check]- Answer
+> ```text
+> Target: SPAN, CurrentTarget: BUTTON
+> ```
 > ```javascript
 > const evt = { target: { tagName: "SPAN" }, currentTarget: { tagName: "BUTTON" } };
 > console.log(`Target: ${evt.target.tagName}, CurrentTarget: ${evt.currentTarget.tagName}`);
@@ -226,23 +224,23 @@ Target: SPAN, CurrentTarget: BUTTON
 >
 > **Explanation:** `currentTarget` tracks the active listening element during event propagation.
 
+---
+
 ### Exercise 3: `this` Binding Equivalence in Traditional Listeners
 
 **Problem:** Demonstrate that `this === event.currentTarget` inside traditional function event handlers.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(true);
 > ```
 >
 > **Explanation:** In standard function event handlers, `this` is bound to `event.currentTarget`.
 
----
 
 ---
 

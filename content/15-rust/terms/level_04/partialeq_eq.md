@@ -204,11 +204,10 @@ fn main() {
 **Problem:** Implement `PartialEq` for `struct InsensitiveString(String)` comparing strings case-insensitively.
 
 **Expected output:**
-```
-Strings match: true
-```
-
 > [!check]- Answer
+> ```
+> Strings match: true
+> ```
 > ```rust
 > struct InsensitiveString(String);
 > impl PartialEq for InsensitiveString {
@@ -225,16 +224,17 @@ Strings match: true
 >
 > **Explanation:** Custom `PartialEq` implementations override `==` comparison behavior.
 
+---
+
 ### Exercise 3: Deriving Total Equivalence with `Eq`
 
 **Problem:** Derive `PartialEq` and `Eq` on `UserId(u64)` and verify usage as `HashMap` keys.
 
 **Expected output:**
-```
-Total equivalence confirmed
-```
-
 > [!check]- Answer
+> ```
+> Total equivalence confirmed
+> ```
 > #[derive(PartialEq, Eq, Debug)]
 > struct UserId(u64);
 > fn main() {

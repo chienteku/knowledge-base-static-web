@@ -127,20 +127,19 @@ export default function DashboardLayout({
 **Problem:** You have a layout receiving an `@adminDashboard` slot. How can you easily hide it from standard users?
 
 **Expected output:**
-```tsx
-export default function Layout({ children, adminDashboard }) {
-  const isAdmin = checkUserRole();
-  return (
-    <>
-      {children}
-      {/* Just use standard React conditional logic! */}
-      {isAdmin ? adminDashboard : null} 
-    </>
-  );
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> export default function Layout({ children, adminDashboard }) {
+>   const isAdmin = checkUserRole();
+>   return (
+>     <>
+>       {children}
+>       {/* Just use standard React conditional logic! */}
+>       {isAdmin ? adminDashboard : null} 
+>     </>
+>   );
+> }
+> ```
 > - Slots are just React nodes passed as props.
 
 ---
@@ -150,11 +149,10 @@ export default function Layout({ children, adminDashboard }) {
 **Problem:** Write `app/layout.tsx` accepting `children`, `@team`, and `@analytics` parallel slot props.
 
 **Expected output:**
-```tsx
-export default function Layout({ children, team, analytics }: { children: React.ReactNode; team: React.ReactNode; analytics: React.ReactNode }) { return ( <div> {children} <div className="flex">{team}{analytics}</div> </div> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> export default function Layout({ children, team, analytics }: { children: React.ReactNode; team: React.ReactNode; analytics: React.ReactNode }) { return ( <div> {children} <div className="flex">{team}{analytics}</div> </div> ); }
+> ```
 > - Named slot folders `@slot` pass matching props to parent layout.
 > 
 > ```tsx
@@ -186,11 +184,10 @@ export default function Layout({ children, team, analytics }: { children: React.
 **Problem:** Which symbol prefix defines a Parallel Route slot folder in Next.js App Router?
 
 **Expected output:**
-```text
-@ (e.g. app/@slotName)
-```
-
 > [!check]- Answer
+> ```text
+> @ (e.g. app/@slotName)
+> ```
 > - `@` prefix defines named parallel route slots.
 > 
 > ```text

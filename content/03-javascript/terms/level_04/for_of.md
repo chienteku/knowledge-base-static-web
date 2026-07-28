@@ -160,11 +160,10 @@ async function processData() {
 **Problem:** You have an array: `[5, 10, 15]`. Create a variable `let sum = 0;`. Use a `for...of` loop to add each number to the `sum`.
 
 **Expected output:**
-```text
-30
-```
-
 > [!check]- Answer
+> ```text
+> 30
+> ```
 > - `for (const num of array) { sum += num; }`
 
 ---
@@ -174,12 +173,11 @@ async function processData() {
 **Problem:** Iterate over string `"JS"` using `for...of` and print characters.
 
 **Expected output:**
-```text
-J
-S
-```
-
 > [!check]- Answer
+> ```text
+> J
+> S
+> ```
 > ```javascript
 > for (const char of "JS") {
 >   console.log(char);
@@ -188,17 +186,18 @@ S
 >
 > **Explanation:** Strings implement `Symbol.iterator`, enabling `for...of` grapheme character iteration.
 
+---
+
 ### Exercise 3: Iterating Object Entries with Destructuring
 
 **Problem:** Iterate `Object.entries({ a: 10, b: 20 })` with `for...of` destructuring `for (const [key, val] of ...)`.
 
 **Expected output:**
-```text
-a = 10
-b = 20
-```
-
 > [!check]- Answer
+> ```text
+> a = 10
+> b = 20
+> ```
 > ```javascript
 > const data = { a: 10, b: 20 };
 > for (const [key, val] of Object.entries(data)) {
@@ -208,7 +207,6 @@ b = 20
 >
 > **Explanation:** `Object.entries()` produces `[key, value]` entry arrays compatible with `for...of` destructuring.
 
----
 
 ---
 

@@ -169,14 +169,13 @@ Write the SQL DDL queries to:
 2.  Create a policy named `user_profile_policy` that permits access only if the `username` column matches the active `current_user` name.
 
 **Expected output:**
-```sql
-ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY user_profile_policy ON user_profiles
-USING (username = current_user);
-```
-
 > [!check]- Answer
+> ```sql
+> ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+> 
+> CREATE POLICY user_profile_policy ON user_profiles
+> USING (username = current_user);
+> ```
 > - Use the `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` syntax.
 > - Reference the built-in PostgreSQL function `current_user` in the `USING` clause.
 
@@ -189,11 +188,10 @@ USING (username = current_user);
 **Problem:** Enable RLS on `documents` table and create policy isolating rows where `tenant_id = current_setting('app.current_tenant_id')::INT`.
 
 **Expected output:**
-```text
-ALTER TABLE documents ENABLE ROW LEVEL SECURITY; CREATE POLICY tenant_isolation_policy ON documents FOR ALL USING (tenant_id = current_setting('app.current_tenant_id')::INT);
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE documents ENABLE ROW LEVEL SECURITY; CREATE POLICY tenant_isolation_policy ON documents FOR ALL USING (tenant_id = current_setting('app.current_tenant_id')::INT);
+> ```
 > ```sql
 > ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 > CREATE POLICY tenant_isolation_policy ON documents
@@ -203,16 +201,17 @@ ALTER TABLE documents ENABLE ROW LEVEL SECURITY; CREATE POLICY tenant_isolation_
 >
 > **Explanation:** RLS policies filter table rows dynamically based on session settings (`current_setting()`).
 
+---
+
 ### Exercise 3: Bypassing RLS Attribute
 
 **Problem:** What role attribute allows superusers to bypass RLS policies? (`BYPASSRLS`).
 
 **Expected output:**
-```text
-BYPASSRLS attribute
-```
-
 > [!check]- Answer
+> ```text
+> BYPASSRLS attribute
+> ```
 > ```text
 > BYPASSRLS attribute
 > ```

@@ -148,12 +148,11 @@ export function getStripeKey(): string {
 2. Client Components
 
 **Expected output:**
-```text
-1. Server Components: ALL process.env variables (private and public)
-2. Client Components: ONLY variables prefixed with NEXT_PUBLIC_
-```
-
 > [!check]- Answer
+> ```text
+> 1. Server Components: ALL process.env variables (private and public)
+> 2. Client Components: ONLY variables prefixed with NEXT_PUBLIC_
+> ```
 > - Server: Accesses all environment variables.
 > - Client: Accesses ONLY `NEXT_PUBLIC_` variables.
 > 
@@ -168,13 +167,12 @@ export function getStripeKey(): string {
 **Problem:** List the 3 standard values `process.env.NODE_ENV` takes in Next.js applications.
 
 **Expected output:**
-```text
-1. 'development' (npm run dev)
-2. 'production' (npm run start / build)
-3. 'test' (vitest / jest)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 'development' (npm run dev)
+> 2. 'production' (npm run start / build)
+> 3. 'test' (vitest / jest)
+> ```
 > - `development`, `production`, `test`.
 > 
 > ```typescript

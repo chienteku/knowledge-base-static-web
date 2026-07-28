@@ -178,11 +178,10 @@ Rely on automatic default _id index
 Write the query to create a single-field index on the `created_at` field (use ascending order).
 
 **Expected output:**
-```javascript
-db.orders.createIndex({ created_at: 1 });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.orders.createIndex({ created_at: 1 });
+> ```
 > - The index targets only the single field `created_at`.
 > - Use the value `1` to specify the index key direction.
 
@@ -195,27 +194,27 @@ db.orders.createIndex({ created_at: 1 });
 **Problem:** Create ascending single-field index on `username` in `users` collection.
 
 **Expected output:**
-```text
-db.users.createIndex({ username: 1 });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.createIndex({ username: 1 });
+> ```
 > ```javascript
 > db.users.createIndex({ username: 1 });
 > ```
 >
 > **Explanation:** `createIndex({ field: 1 })` indexes a single field in ascending B-Tree order.
 
+---
+
 ### Exercise 3: Single-Field Index Traversal Direction
 
 **Problem:** Can single-field index `{ age: 1 }` satisfy query `.sort({ age: -1 })`? (Yes, single-field indexes traverse both directions).
 
 **Expected output:**
-```text
-Yes, single-field indexes traverse both ascending and descending directions
-```
-
 > [!check]- Answer
+> ```text
+> Yes, single-field indexes traverse both ascending and descending directions
+> ```
 > ```text
 > Yes, single-field indexes traverse both ascending and descending directions
 > ```

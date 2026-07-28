@@ -116,17 +116,16 @@ revalidateTag('comments'); // Targeted cache purge for specific tag
 **Problem:** You aren't using `fetch`. You are using a direct database client (`await prisma.user.findMany()`), so you can't pass the `next.revalidate` option. How can you apply a 60-second revalidation to the *entire page*?
 
 **Expected output:**
-```tsx
-// You export a Route Segment Config variable at the top of page.tsx!
-export const revalidate = 60; // Applies a 60s cache to the entire route
-
-export default async function Page() {
-  const users = await prisma.user.findMany(); // Now this is cached for 60s!
-  return <div>...</div>;
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> // You export a Route Segment Config variable at the top of page.tsx!
+> export const revalidate = 60; // Applies a 60s cache to the entire route
+> 
+> export default async function Page() {
+>   const users = await prisma.user.findMany(); // Now this is cached for 60s!
+>   return <div>...</div>;
+> }
+> ```
 > - There are exported variables Next.js looks for in a `page.tsx` file to configure the route.
 
 ---
@@ -136,12 +135,11 @@ export default async function Page() {
 **Problem:** Write a `fetch()` call tagged with `'products'` and a Server Action `revalidateTag('products')` purging product cache upon mutation.
 
 **Expected output:**
-```typescript
-// Fetch: fetch(url, { next: { tags: ['products'] } });
-// Revalidate: 'use server'; import { revalidateTag } from 'next/cache'; revalidateTag('products');
-```
-
 > [!check]- Answer
+> ```typescript
+> // Fetch: fetch(url, { next: { tags: ['products'] } });
+> // Revalidate: 'use server'; import { revalidateTag } from 'next/cache'; revalidateTag('products');
+> ```
 > - Tag-based revalidation allows targeted cache invalidation.
 > 
 > ```typescript
@@ -167,12 +165,11 @@ export default async function Page() {
 **Problem:** Contrast Time-Based Revalidation vs On-Demand Revalidation.
 
 **Expected output:**
-```text
-Time-Based: Revalidates automatically after a specified time interval (e.g. revalidate: 60).
-On-Demand: Revalidates instantly when triggered by events via revalidatePath() or revalidateTag().
-```
-
 > [!check]- Answer
+> ```text
+> Time-Based: Revalidates automatically after a specified time interval (e.g. revalidate: 60).
+> On-Demand: Revalidates instantly when triggered by events via revalidatePath() or revalidateTag().
+> ```
 > - Time-Based: Automatic background refresh on timer interval.
 > - On-Demand: Instant purge triggered by user mutations.
 > 

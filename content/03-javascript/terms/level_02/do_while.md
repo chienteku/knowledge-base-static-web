@@ -154,12 +154,11 @@ async function processData() {
 **Problem:** Write a script that declares a variable `isValid` and sets it to `false`. Use a `do...while` loop to log "Checking validity..." and then immediately set `isValid` to `true`. The loop should continue as long as `isValid` is false. How many times will it log?
 
 **Expected output:**
-```text
-Checking validity...
-(It logs exactly 1 time)
-```
-
 > [!check]- Answer
+> ```text
+> Checking validity...
+> (It logs exactly 1 time)
+> ```
 > - `do { console.log(...); isValid = true; } while (!isValid);`
 > - Because it's set to true inside the first pass, the condition evaluates to false at the end, and the loop stops.
 
@@ -170,11 +169,10 @@ Checking validity...
 **Problem:** Write a `do...while` loop that runs once even though initial condition `x > 10` is `false` (`x = 5`).
 
 **Expected output:**
-```text
-Ran once with x = 5
-```
-
 > [!check]- Answer
+> ```text
+> Ran once with x = 5
+> ```
 > ```javascript
 > let x = 5;
 > do {
@@ -184,18 +182,19 @@ Ran once with x = 5
 >
 > **Explanation:** `do...while` loops execute the body first before checking the termination condition.
 
+---
+
 ### Exercise 3: Interactive User Retry Simulation
 
 **Problem:** Simulate a retry mechanism that executes up to 3 times or until `success` is `true`.
 
 **Expected output:**
-```text
-Attempt 1
-Attempt 2
-Success on attempt 2
-```
-
 > [!check]- Answer
+> ```text
+> Attempt 1
+> Attempt 2
+> Success on attempt 2
+> ```
 > ```javascript
 > let attempt = 0;
 > let success = false;

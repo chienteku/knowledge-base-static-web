@@ -171,24 +171,23 @@ Use UNION in recursive CTE step to automatically discard duplicate tuples
 Write a recursive CTE named `category_tree` that starts at the root category `'Electronics'` (id=1, parent_id IS NULL) and builds a text breadcrumb trail path for all child categories (e.g. `'Electronics > Computers > Laptops'`).
 
 **Expected output:**
-```sql
-WITH RECURSIVE category_tree AS (
-  -- Anchor
-  SELECT id, name, CAST(name AS TEXT) AS path_trail
-  FROM categories
-  WHERE id = 1
-  
-  UNION ALL
-  
-  -- Recursive
-  SELECT c.id, c.name, t.path_trail || ' > ' || c.name
-  FROM categories c
-  JOIN category_tree t ON c.parent_id = t.id
-)
-SELECT * FROM category_tree;
-```
-
 > [!check]- Answer
+> ```sql
+> WITH RECURSIVE category_tree AS (
+>   -- Anchor
+>   SELECT id, name, CAST(name AS TEXT) AS path_trail
+>   FROM categories
+>   WHERE id = 1
+>   
+>   UNION ALL
+>   
+>   -- Recursive
+>   SELECT c.id, c.name, t.path_trail || ' > ' || c.name
+>   FROM categories c
+>   JOIN category_tree t ON c.parent_id = t.id
+> )
+> SELECT * FROM category_tree;
+> ```
 > - The anchor query finds the root node where `id = 1`.
 > - Cast the initial path column to `TEXT` in the anchor to prevent data type mismatches during string concatenation (`||`) in the recursive step.
 
@@ -201,11 +200,10 @@ SELECT * FROM category_tree;
 **Problem:** Traverse organization hierarchy starting from manager `id = 1` selecting employee `id`, `name`, `manager_id`.
 
 **Expected output:**
-```text
-WITH RECURSIVE org_chart AS (SELECT id, name, manager_id FROM employees WHERE id = 1 UNION ALL SELECT e.id, e.name, e.manager_id FROM employees e JOIN org_chart o ON e.manager_id = o.id) SELECT * FROM org_chart;
-```
-
 > [!check]- Answer
+> ```text
+> WITH RECURSIVE org_chart AS (SELECT id, name, manager_id FROM employees WHERE id = 1 UNION ALL SELECT e.id, e.name, e.manager_id FROM employees e JOIN org_chart o ON e.manager_id = o.id) SELECT * FROM org_chart;
+> ```
 > ```sql
 > WITH RECURSIVE org_chart AS (
 >   -- Anchor member
@@ -221,16 +219,17 @@ WITH RECURSIVE org_chart AS (SELECT id, name, manager_id FROM employees WHERE id
 >
 > **Explanation:** `WITH RECURSIVE` traverses hierarchical trees and graphs via anchor and recursive terms.
 
+---
+
 ### Exercise 3: Generating Sequence Numbers with Recursive CTE
 
 **Problem:** Generate series from 1 to 5 using `WITH RECURSIVE`.
 
 **Expected output:**
-```text
-WITH RECURSIVE seq AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM seq WHERE n < 5) SELECT * FROM seq;
-```
-
 > [!check]- Answer
+> ```text
+> WITH RECURSIVE seq AS (SELECT 1 AS n UNION ALL SELECT n + 1 FROM seq WHERE n < 5) SELECT * FROM seq;
+> ```
 > ```sql
 > WITH RECURSIVE seq AS (
 >   SELECT 1 AS n

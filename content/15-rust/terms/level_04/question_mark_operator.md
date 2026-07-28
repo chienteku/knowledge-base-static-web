@@ -198,11 +198,10 @@ fn get_first_word_length(text: Option<String>) -> Option<usize> {
 **Problem:** Write a function `fn add_opts(a: Option<i32>, b: Option<i32>) -> Option<i32>` that unwraps both using `?`.
 
 **Expected output:**
-```
-Some(30)
-```
-
 > [!check]- Answer
+> ```
+> Some(30)
+> ```
 > ```rust
 > fn add_opts(a: Option<i32>, b: Option<i32>) -> Option<i32> {
 >     let val_a = a?;
@@ -216,16 +215,17 @@ Some(30)
 >
 > **Explanation:** `?` short-circuits execution and returns `None` early if applied to `None` values.
 
+---
+
 ### Exercise 3: Chaining Error Conversions with `?`
 
 **Problem:** Write a function `parse_file_len(s: &str) -> Result<usize, std::num::ParseIntError>` using `?`.
 
 **Expected output:**
-```
-Parsed len: 42
-```
-
 > [!check]- Answer
+> ```
+> Parsed len: 42
+> ```
 > fn parse_file_len(s: &str) -> Result<usize, std::num::ParseIntError> {
 >     let val: usize = s.parse()?;
 >     Ok(val)

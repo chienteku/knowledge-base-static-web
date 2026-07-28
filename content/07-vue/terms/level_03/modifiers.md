@@ -214,12 +214,11 @@ function handleSubmit() {
 3. The function `handleAction` is called ONLY when the user clicks the left mouse button while holding the Shift key.
 
 **Expected output:**
-```text
-An tag styled like:
-<button @click.shift.left.stop.prevent="handleAction">Click Me</button>
-```
-
 > [!check]- Answer
+> ```text
+> An tag styled like:
+> <button @click.shift.left.stop.prevent="handleAction">Click Me</button>
+> ```
 > - Vue allows modifiers to be chained. E.g., `@click.stop.prevent`.
 > - Check system modifier keys (`.shift`, `.alt`, etc.) and mouse button modifiers (`.left`, `.right`).
 
@@ -234,14 +233,13 @@ An tag styled like:
 4. Trigger handler only if event originated from target element itself
 
 **Expected output:**
-```text
-1. .stop
-2. .prevent
-3. .once
-4. .self
-```
-
 > [!check]- Answer
+> ```text
+> 1. .stop
+> 2. .prevent
+> 3. .once
+> 4. .self
+> ```
 > - `.stop` -> stopPropagation()
 > - `.prevent` -> preventDefault()
 > - `.once` -> execute once
@@ -258,12 +256,11 @@ An tag styled like:
 **Problem:** Write click event binding triggering `submit()` ONLY when Enter key is pressed on input (`@keyup.enter`) or when Right mouse button is clicked (`@click.right`).
 
 **Expected output:**
-```html
-<input @keyup.enter="submit" />
-<button @click.right.prevent="openMenu">Context Menu</button>
-```
-
 > [!check]- Answer
+> ```html
+> <input @keyup.enter="submit" />
+> <button @click.right.prevent="openMenu">Context Menu</button>
+> ```
 > - `.enter`, `.tab`, `.delete`, `.esc` key modifiers.
 > - `.left`, `.right`, `.middle` mouse modifiers.
 > 

@@ -105,12 +105,11 @@ input:focus-visible {
 You remove the border, and add a `10px solid black` Outline instead. How wide is the box now?
 
 **Expected output:**
-```text
-With Border: The box is 120px wide (100 + 10 left + 10 right).
-With Outline: The box is still exactly 100px wide! The outline does not take up physical layout space.
-```
-
 > [!check]- Answer
+> ```text
+> With Border: The box is 120px wide (100 + 10 left + 10 right).
+> With Outline: The box is still exactly 100px wide! The outline does not take up physical layout space.
+> ```
 > - Does a laser pointer take up physical space?
 
 ---
@@ -122,11 +121,10 @@ With Outline: The box is still exactly 100px wide! The outline does not take up 
 **Problem:** Write CSS applying 2px solid blue focus outline offset by 3px away from element border.
 
 **Expected output:**
-```text
-button:focus-visible { outline: 2px solid blue; outline-offset: 3px; }
-```
-
 > [!check]- Answer
+> ```text
+> button:focus-visible { outline: 2px solid blue; outline-offset: 3px; }
+> ```
 > ```css
 > button:focus-visible {
 >   outline: 2px solid blue;
@@ -136,17 +134,18 @@ button:focus-visible { outline: 2px solid blue; outline-offset: 3px; }
 >
 > **Explanation:** `outline-offset` pushes the outline ring outward away from element borders.
 
+---
+
 ### Exercise 3: Outline vs Border Comparison
 
 **Problem:** List 2 primary differences between `outline` and `border`.
 
 **Expected output:**
-```text
-1. Outline does not consume box-model layout space
-2. Outline surrounds all sides equally (no outline-left/top longhands)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Outline does not consume box-model layout space
+> 2. Outline surrounds all sides equally (no outline-left/top longhands)
+> ```
 > ```text
 > 1. Outline does not consume box-model layout space
 > 2. Outline surrounds all sides equally (no outline-left/top longhands)

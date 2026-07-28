@@ -117,12 +117,11 @@ type Direction = "Up" | "Down"; // Zero JS runtime code overhead
 **Problem:** If you really want to use an Enum, but you don't want it to bloat your final compiled JavaScript, what keyword can you put in front of `enum`?
 
 **Expected output:**
-```typescript
-const enum Direction { Up, Down }
-// `const enum` tells TS: "Use this for type checking, but when you compile to JS, just replace `Direction.Up` with the raw number `0` inline, and delete the Enum structure completely."
-```
-
 > [!check]- Answer
+> ```typescript
+> const enum Direction { Up, Down }
+> // `const enum` tells TS: "Use this for type checking, but when you compile to JS, just replace `Direction.Up` with the raw number `0` inline, and delete the Enum structure completely."
+> ```
 > - It uses the standard JS variable declaration keyword for immutable variables.
 
 ---
@@ -134,11 +133,10 @@ const enum Direction { Up, Down }
 **Problem:** Define string enum `enum Direction { North = "NORTH", South = "SOUTH" }`.
 
 **Expected output:**
-```text
-String enum created
-```
-
 > [!check]- Answer
+> ```text
+> String enum created
+> ```
 > ```typescript
 > enum Direction {
 >   North = "NORTH",
@@ -150,16 +148,17 @@ String enum created
 >
 > **Explanation:** String enums enforce exact string value assignment contracts.
 
+---
+
 ### Exercise 3: `const enum` Inlining Advantage
 
 **Problem:** State what happens to `const enum Status { OK = 200 }` during compilation (Inlined directly as 200).
 
 **Expected output:**
-```text
-Inlined directly as literal values at call sites
-```
-
 > [!check]- Answer
+> ```text
+> Inlined directly as literal values at call sites
+> ```
 > ```typescript
 > console.log("Inlined directly as literal values at call sites");
 > ```

@@ -217,16 +217,17 @@ export default function ProductItem({ product }) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Form Handling with Server Action and revalidatePath
 
 **Problem:** Write Server Action `createPost` reading `formData`, inserting to DB, and calling `revalidatePath('/posts')`.
 
 **Expected output:**
-```text
-async function createPost(formData) { 'use server'; const title = formData.get('title'); await db.posts.create({ title }); revalidatePath('/posts'); }
-```
-
 > [!check]- Answer
+> ```text
+> async function createPost(formData) { 'use server'; const title = formData.get('title'); await db.posts.create({ title }); revalidatePath('/posts'); }
+> ```
 > ```javascript
 > async function createPost(formData) {
 >   'use server';
@@ -238,16 +239,17 @@ async function createPost(formData) { 'use server'; const title = formData.get('
 >
 > **Explanation:** Server Actions execute server mutations directly from forms, calling `revalidatePath` to purge stale caches.
 
+---
+
 ### Exercise 3: Client Hook for Server Action Pending State
 
 **Problem:** What React hook manages pending state and form status for Server Actions in Client Components? (`useFormStatus` / `useActionState`).
 
 **Expected output:**
-```text
-useFormStatus / useActionState hook
-```
-
 > [!check]- Answer
+> ```text
+> useFormStatus / useActionState hook
+> ```
 > ```javascript
 > const { pending } = useFormStatus();
 > ```

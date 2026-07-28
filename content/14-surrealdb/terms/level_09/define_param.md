@@ -181,27 +181,27 @@ Write a `DEFINE PARAM` statement that sets a persistent global string parameter 
 **Problem:** Define global database parameter `$DEFAULT_ROLE` set to `"user"`.
 
 **Expected output:**
-```text
-DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
+> ```
 > ```surrealql
 > DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
 > ```
 >
 > **Explanation:** `DEFINE PARAM $var ON DATABASE VALUE val` sets global database constants.
 
+---
+
 ### Exercise 3: Removing Global Schema Parameter
 
 **Problem:** Command to remove global database parameter `$OLD_PARAM` (`REMOVE PARAM $OLD_PARAM ON DATABASE;`).
 
 **Expected output:**
-```text
-REMOVE PARAM $OLD_PARAM ON DATABASE;
-```
-
 > [!check]- Answer
+> ```text
+> REMOVE PARAM $OLD_PARAM ON DATABASE;
+> ```
 > ```surrealql
 > REMOVE PARAM $OLD_PARAM ON DATABASE;
 > ```

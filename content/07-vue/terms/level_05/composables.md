@@ -135,14 +135,13 @@ function useCounter() {
 **Problem:** You import `const { x, y } = useMouse()` in Component A, and you import it again in Component B. Are Component A and B sharing the exact same `x` variable in memory?
 
 **Expected output:**
-```text
-No!
-Every time a component calls `useMouse()`, the function executes from scratch, creating brand new `ref` instances. 
-Composables reuse LOGIC, they do not share global STATE. 
-(If you want to share global state, you need Pinia, or you must define the `ref` OUTSIDE the composable function).
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Every time a component calls `useMouse()`, the function executes from scratch, creating brand new `ref` instances. 
+> Composables reuse LOGIC, they do not share global STATE. 
+> (If you want to share global state, you need Pinia, or you must define the `ref` OUTSIDE the composable function).
+> ```
 > - What happens every time you invoke a JavaScript function?
 
 ---
@@ -152,11 +151,10 @@ Composables reuse LOGIC, they do not share global STATE.
 **Problem:** What naming prefix convention MUST all Vue composables follow by standard community guidelines?
 
 **Expected output:**
-```text
-Composables must start with the camelCase 'use' prefix (e.g. useMouse, useFetch, useAuth).
-```
-
 > [!check]- Answer
+> ```text
+> Composables must start with the camelCase 'use' prefix (e.g. useMouse, useFetch, useAuth).
+> ```
 > - Prefix composables with `use` (e.g. `useEventListener`).
 > 
 > ```javascript
@@ -174,11 +172,10 @@ Composables must start with the camelCase 'use' prefix (e.g. useMouse, useFetch,
 **Problem:** Write a clean `useMouse()` composable returning reactive `x` and `y` coordinates updated on `window.mousemove` with `onUnmounted` cleanup.
 
 **Expected output:**
-```javascript
-export function useMouse() { const x = ref(0); const y = ref(0); function update(e) { x.value = e.pageX; y.value = e.pageY; } onMounted(() => window.addEventListener('mousemove', update)); onUnmounted(() => window.removeEventListener('mousemove', update)); return { x, y }; }
-```
-
 > [!check]- Answer
+> ```javascript
+> export function useMouse() { const x = ref(0); const y = ref(0); function update(e) { x.value = e.pageX; y.value = e.pageY; } onMounted(() => window.addEventListener('mousemove', update)); onUnmounted(() => window.removeEventListener('mousemove', update)); return { x, y }; }
+> ```
 > - Encapsulate state and lifecycle hooks inside composable functions.
 > 
 > ```javascript

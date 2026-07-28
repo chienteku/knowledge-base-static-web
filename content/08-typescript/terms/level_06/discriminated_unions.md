@@ -131,12 +131,11 @@ type VariantB = { type: "B"; str: string };
 **Problem:** The popular React state management library, Redux, relies entirely on Discriminated Unions. Look at a standard Redux action: `{ type: "ADD_TODO", payload: "Buy milk" }`. What is the "discriminant" property in Redux?
 
 **Expected output:**
-```text
-The `type` property is the discriminant!
-By putting a `switch(action.type)` inside a Redux Reducer, TypeScript can perfectly narrow the `action` object, ensuring you only access `payload` if that specific action type actually has a payload.
-```
-
 > [!check]- Answer
+> ```text
+> The `type` property is the discriminant!
+> By putting a `switch(action.type)` inside a Redux Reducer, TypeScript can perfectly narrow the `action` object, ensuring you only access `payload` if that specific action type actually has a payload.
+> ```
 > - Which property dictates the shape of the rest of the object?
 
 ---
@@ -148,11 +147,10 @@ By putting a `switch(action.type)` inside a Redux Reducer, TypeScript can perfec
 **Problem:** Create `Result` union with `{ status: "success"; data: string } | { status: "error"; error: Error }`.
 
 **Expected output:**
-```text
-Discriminated union created
-```
-
 > [!check]- Answer
+> ```text
+> Discriminated union created
+> ```
 > ```typescript
 > type Result =
 >   | { status: "success"; data: string }
@@ -162,16 +160,17 @@ Discriminated union created
 >
 > **Explanation:** Literal tag `status` provides clean discriminant narrowing across async result variants.
 
+---
+
 ### Exercise 3: Narrowing with Switch Statements
 
 **Problem:** Use `switch (res.status)` to handle success and error states safely.
 
 **Expected output:**
-```text
-Handled success status
-```
-
 > [!check]- Answer
+> ```text
+> Handled success status
+> ```
 > ```typescript
 > function handle(res: Result) {
 >   switch (res.status) {

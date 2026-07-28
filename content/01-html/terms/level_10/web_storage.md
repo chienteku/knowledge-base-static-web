@@ -194,11 +194,10 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 **Problem:** A user is filling out a massive 5-page insurance form. If they accidentally close the browser tab, you want their progress to be lost for security reasons. However, if they just refresh the page, the data should stay. Should you save their draft in `localStorage` or `sessionStorage`?
 
 **Expected output:**
-```text
-`sessionStorage`. It is designed perfectly for this. It survives page reloads, but is instantly wiped clean the second the specific browser tab is closed.
-```
-
 > [!check]- Answer
+> ```text
+> `sessionStorage`. It is designed perfectly for this. It survives page reloads, but is instantly wiped clean the second the specific browser tab is closed.
+> ```
 > - Which one lives forever, and which one dies with the tab?
 
 ---
@@ -210,27 +209,27 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 **Problem:** Compare `localStorage` vs `sessionStorage` persistence lifespan.
 
 **Expected output:**
-```text
-localStorage persists indefinitely until cleared; sessionStorage expires when browser tab/window closes.
-```
-
 > [!check]- Answer
+> ```text
+> localStorage persists indefinitely until cleared; sessionStorage expires when browser tab/window closes.
+> ```
 > ```text
 > localStorage persists indefinitely until cleared; sessionStorage expires when browser tab/window closes.
 > ```
 >
 > **Explanation:** `sessionStorage` scope is limited to active tab sessions.
 
+---
+
 ### Exercise 3: JSON Parsing Web Storage Objects
 
 **Problem:** Write JS line safely retrieving and parsing JSON object `'settings'` from `localStorage`.
 
 **Expected output:**
-```text
-const settings = JSON.parse(localStorage.getItem('settings') || '{}');
-```
-
 > [!check]- Answer
+> ```text
+> const settings = JSON.parse(localStorage.getItem('settings') || '{}');
+> ```
 > ```javascript
 > const settings = JSON.parse(localStorage.getItem('settings') || '{}');
 > ```

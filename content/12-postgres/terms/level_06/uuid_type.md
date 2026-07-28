@@ -137,15 +137,14 @@ id UUID DEFAULT gen_random_uuid() -- Built-in native function in Postgres 13+
 3.  A text column `diagnosis` (required).
 
 **Expected output:**
-```sql
-CREATE TABLE medical_records (
-  record_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  patient_id INT NOT NULL,
-  diagnosis TEXT NOT NULL
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE medical_records (
+>   record_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+>   patient_id INT NOT NULL,
+>   diagnosis TEXT NOT NULL
+> );
+> ```
 > - Use the `UUID` keyword for the data type.
 > - Set the generator default using the built-in function `gen_random_uuid()`.
 
@@ -158,11 +157,10 @@ CREATE TABLE medical_records (
 **Problem:** Create table `tokens` with UUID primary key defaulting to `gen_random_uuid()`.
 
 **Expected output:**
-```text
-CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), token_str TEXT NOT NULL );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), token_str TEXT NOT NULL );
+> ```
 > ```sql
 > CREATE TABLE tokens (
 >   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -172,16 +170,17 @@ CREATE TABLE tokens ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), token_str T
 >
 > **Explanation:** `gen_random_uuid()` generates v4 cryptographically secure 128-bit UUIDs.
 
+---
+
 ### Exercise 3: UUID Storage Size
 
 **Problem:** What is the byte storage size of native PostgreSQL `UUID` data type? (16 bytes).
 
 **Expected output:**
-```text
-16 bytes
-```
-
 > [!check]- Answer
+> ```text
+> 16 bytes
+> ```
 > ```text
 > 16 bytes
 > ```

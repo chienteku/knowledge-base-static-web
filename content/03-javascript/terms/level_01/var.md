@@ -139,12 +139,11 @@ async function processData() {
 **Problem:** Try to `console.log()` a `var` variable *before* you declare it in the code. Then do the same thing with a `let` variable. Note the difference in the errors (or lack thereof).
 
 **Expected output:**
-```text
-undefined (for var)
-ReferenceError (for let)
-```
-
 > [!check]- Answer
+> ```text
+> undefined (for var)
+> ReferenceError (for let)
+> ```
 > - `var` declarations are "hoisted" to the top of their scope, but their assignments are not. The engine knows the variable exists, but its value is `undefined`.
 > - `let` is also hoisted, but resides in a "Temporal Dead Zone" until execution reaches the declaration.
 
@@ -155,12 +154,11 @@ ReferenceError (for let)
 **Problem:** Demonstrate that `var` hoists declaration with `undefined` value.
 
 **Expected output:**
-```text
-undefined
-10
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> 10
+> ```
 > ```javascript
 > console.log(x);
 > var x = 10;
@@ -169,16 +167,17 @@ undefined
 >
 > **Explanation:** `var` declarations hoist to top of function/global scope initialized as `undefined`.
 
+---
+
 ### Exercise 3: Function Scope of Var
 
 **Problem:** Demonstrate that `var` inside a function does not leak to outer scope.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > ```javascript
 > function test() { var inner = 42; }
 > test();

@@ -128,11 +128,10 @@ button:hover { color: blue; }
 ```
 
 **Expected output:**
-```text
-The syntax inside the `style` attribute must be strictly valid CSS! CSS uses colons (`:`) to separate properties and values, not equal signs (`=`). It should be `style="color: blue;"`.
-```
-
 > [!check]- Answer
+> ```text
+> The syntax inside the `style` attribute must be strictly valid CSS! CSS uses colons (`:`) to separate properties and values, not equal signs (`=`). It should be `style="color: blue;"`.
+> ```
 > - HTML uses `=`, but what does CSS use?
 
 ---
@@ -144,27 +143,27 @@ The syntax inside the `style` attribute must be strictly valid CSS! CSS uses col
 **Problem:** Which CSS rule wins for element `<div id="box" class="card" style="color: red;">` if external CSS specifies `#box { color: blue; }`?
 
 **Expected output:**
-```text
-color: red (Inline style specificity 1-0-0-0 outweighs ID selector specificity 0-1-0-0).
-```
-
 > [!check]- Answer
+> ```text
+> color: red (Inline style specificity 1-0-0-0 outweighs ID selector specificity 0-1-0-0).
+> ```
 > ```text
 > color: red (Inline style specificity 1-0-0-0 outweighs ID selector specificity 0-1-0-0).
 > ```
 >
 > **Explanation:** Inline `style` attributes have higher specificity than ID, class, and element selectors.
 
+---
+
 ### Exercise 3: Valid Inline Style Use Case
 
 **Problem:** When IS an inline `style` attribute appropriate in modern web development?
 
 **Expected output:**
-```text
-For dynamic, runtime-calculated values (e.g. progress bar width percentages calculated in JavaScript).
-```
-
 > [!check]- Answer
+> ```text
+> For dynamic, runtime-calculated values (e.g. progress bar width percentages calculated in JavaScript).
+> ```
 > ```html
 > <div class="progress-bar" style="width: 75%;"></div>
 > ```

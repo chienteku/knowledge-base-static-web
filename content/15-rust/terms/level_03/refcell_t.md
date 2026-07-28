@@ -194,11 +194,10 @@ fn main() {
 **Problem:** Use `cell.try_borrow_mut()` to safely handle double borrow attempts without panicking.
 
 **Expected output:**
-```
-Borrow failed safely
-```
-
 > [!check]- Answer
+> ```
+> Borrow failed safely
+> ```
 > ```rust
 > use std::cell::RefCell;
 > fn main() {
@@ -212,16 +211,17 @@ Borrow failed safely
 >
 > **Explanation:** `try_borrow_mut()` returns `Result<RefMut<T>, BorrowMutError>` instead of panicking on conflict.
 
+---
+
 ### Exercise 3: Scoped Block Borrow Drop Release
 
 **Problem:** Isolate `cell.borrow_mut()` inside an inner scope `{ ... }` so subsequent `cell.borrow()` calls succeed.
 
 **Expected output:**
-```
-Val: 100
-```
-
 > [!check]- Answer
+> ```
+> Val: 100
+> ```
 > use std::cell::RefCell;
 > fn main() {
 >     let cell = RefCell::new(10);

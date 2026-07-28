@@ -189,11 +189,10 @@ Name the 2 primary embedded runtimes supported by SurrealDB:
 **Problem:** Initialize embedded in-memory SurrealDB instance in Rust using `Surreal::new::<Mem>(())`.
 
 **Expected output:**
-```text
-let db = Surreal::new::<Mem>(()).await?;
-```
-
 > [!check]- Answer
+> ```text
+> let db = Surreal::new::<Mem>(()).await?;
+> ```
 > ```rust
 > use surrealdb::engine::local::Mem;
 > use surrealdb::Surreal;
@@ -202,16 +201,17 @@ let db = Surreal::new::<Mem>(()).await?;
 >
 > **Explanation:** Embedded Rust instances run SurrealDB in-process without network overhead.
 
+---
+
 ### Exercise 3: Rust Embedded RocksDB Storage Initialization
 
 **Problem:** Initialize embedded persistent RocksDB instance in Rust.
 
 **Expected output:**
-```text
-let db = Surreal::new::<RocksDb>("path/to/db").await?;
-```
-
 > [!check]- Answer
+> ```text
+> let db = Surreal::new::<RocksDb>("path/to/db").await?;
+> ```
 > ```rust
 > use surrealdb::engine::local::RocksDb;
 > use surrealdb::Surreal;

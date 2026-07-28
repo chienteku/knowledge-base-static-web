@@ -182,11 +182,10 @@ async function processData() {
 **Problem:** Predict the result of the following expression: `const calc = 10 + 5 * 2 ** 3;`
 
 **Expected output:**
-```text
-Result: 50
-```
-
 > [!check]- Answer
+> ```text
+> Result: 50
+> ```
 > - Precedence order: Exponentiation (`**`) > Multiplication (`*`) > Addition (`+`).
 > - Calculate `2 ** 3` first (8).
 > - Multiply the result by `5` (40).
@@ -199,13 +198,12 @@ Result: 50
 **Problem:** Predict the result of `3 + 4 * 5`, `(3 + 4) * 5`, and `!true || true && false`.
 
 **Expected output:**
-```text
-23
-35
-false
-```
-
 > [!check]- Answer
+> ```text
+> 23
+> 35
+> false
+> ```
 > ```javascript
 > console.log(3 + 4 * 5); // 23 (* has higher precedence than +)
 > console.log((3 + 4) * 5); // 35 (parentheses override precedence)
@@ -214,23 +212,23 @@ false
 >
 > **Explanation:** Multiplication `*` and logical AND `&&` have higher operator precedence than addition `+` and logical OR `||`.
 
+---
+
 ### Exercise 3: Exponentiation Operator Precedence
 
 **Problem:** Evaluate `2 ** 3 ** 2` and explain why right-associativity yields `512` instead of `64`.
 
 **Expected output:**
-```text
-512
-```
-
 > [!check]- Answer
+> ```text
+> 512
+> ```
 > ```javascript
 > console.log(2 ** 3 ** 2); // 512 (evaluated as 2 ** (3 ** 2) = 2 ** 9)
 > ```
 >
 > **Explanation:** Exponentiation `**` is right-associative, evaluating `3 ** 2` first to get `9`, then `2 ** 9 = 512`.
 
----
 
 ---
 

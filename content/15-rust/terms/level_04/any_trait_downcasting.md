@@ -175,11 +175,10 @@ thread::spawn(move || {
 **Problem:** Pass `Box<dyn Any>` into a function and downcast it to `String` using `.downcast_ref::<String>()`.
 
 **Expected output:**
-```
-Downcast string: Hello
-```
-
 > [!check]- Answer
+> ```
+> Downcast string: Hello
+> ```
 > ```rust
 > use std::any::Any;
 > fn print_any(val: &dyn Any) {
@@ -195,16 +194,17 @@ Downcast string: Hello
 >
 > **Explanation:** `Any::downcast_ref` uses `TypeId` comparison to inspect concrete types dynamically at runtime.
 
+---
+
 ### Exercise 3: Inspecting Type Names with `std::any::type_name`
 
 **Problem:** Print the concrete type name of a generic type `T` using `std::any::type_name::<T>()`.
 
 **Expected output:**
-```
-Type: alloc::string::String
-```
-
 > [!check]- Answer
+> ```
+> Type: alloc::string::String
+> ```
 > use std::any::type_name;
 > fn print_type<T>(_: &T) {
 >     println!("Type: {}", type_name::<T>());

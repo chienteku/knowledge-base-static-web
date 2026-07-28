@@ -197,16 +197,17 @@ function SyncParent() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Lifting Shared Accordion State Up
 
 **Problem:** Lift `activeIndex` state up from child `Panel` components to parent `Accordion` component.
 
 **Expected output:**
-```text
-function Accordion() { const [activeIndex, setActiveIndex] = useState(0); return <> <Panel isActive={activeIndex === 0} onShow={() => setActiveIndex(0)} /> <Panel isActive={activeIndex === 1} onShow={() => setActiveIndex(1)} /> </>; }
-```
-
 > [!check]- Answer
+> ```text
+> function Accordion() { const [activeIndex, setActiveIndex] = useState(0); return <> <Panel isActive={activeIndex === 0} onShow={() => setActiveIndex(0)} /> <Panel isActive={activeIndex === 1} onShow={() => setActiveIndex(1)} /> </>; }
+> ```
 > ```javascript
 > function Accordion() {
 >   const [activeIndex, setActiveIndex] = useState(0);
@@ -221,16 +222,17 @@ function Accordion() { const [activeIndex, setActiveIndex] = useState(0); return
 >
 > **Explanation:** Lifting state up to the closest common parent coordinates state synchronization between sibling components.
 
+---
+
 ### Exercise 3: State Colocation Golden Rule
 
 **Problem:** State golden rule of React state placement (Store state in the lowest common parent component that needs it).
 
 **Expected output:**
-```text
-Store state in the lowest common parent component that needs it
-```
-
 > [!check]- Answer
+> ```text
+> Store state in the lowest common parent component that needs it
+> ```
 > ```text
 > Store state in the lowest common parent component that needs it
 > ```

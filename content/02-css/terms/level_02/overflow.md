@@ -187,16 +187,15 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 **Problem:** Build the CSS ruleset for a terms-and-conditions agreement box. The box must be exactly `400px` wide and `250px` tall. The layout must prevent horizontal scrolling, but must display a vertical scrollbar if the legal text overflows.
 
 **Expected output:**
-```css
-.terms-box {
-  width: 400px;
-  height: 250px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .terms-box {
+>   width: 400px;
+>   height: 250px;
+>   overflow-x: hidden;
+>   overflow-y: auto;
+> }
+> ```
 > - Split the overflow rules using `overflow-x` and `overflow-y`.
 > - Disable horizontal scrolling using `hidden`.
 > - Enable dynamic vertical scrolling using `auto`.
@@ -214,14 +213,13 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 4. `auto` 
 
 **Expected output:**
-```text
-1. Content spills outside container (default)
-2. Clips overflow content with no scrollbars
-3. Always displays scrollbars regardless of content size
-4. Adds scrollbars dynamically ONLY when content overflows
-```
-
 > [!check]- Answer
+> ```text
+> 1. Content spills outside container (default)
+> 2. Clips overflow content with no scrollbars
+> 3. Always displays scrollbars regardless of content size
+> 4. Adds scrollbars dynamically ONLY when content overflows
+> ```
 > ```text
 > 1. visible -> Content spills outside container (default)
 > 2. hidden -> Clips overflow content with no scrollbars
@@ -231,16 +229,17 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 >
 > **Explanation:** `overflow` controls container clipping and scrollbar rendering.
 
+---
+
 ### Exercise 3: Single-Line Text Ellipsis Truncation
 
 **Problem:** Write 3 CSS properties required to truncate long single-line text with an ellipsis (`...`).
 
 **Expected output:**
-```text
-white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-```
-
 > [!check]- Answer
+> ```text
+> white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+> ```
 > ```css
 > .truncate {
 >   white-space: nowrap;

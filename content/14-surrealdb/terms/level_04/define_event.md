@@ -158,15 +158,14 @@ Write the SurrealQL command to define an event named `log_new_post` that automat
 -   The notification should set `message = "New post: " + $after.title`.
 
 **Expected output:**
-```sql
-DEFINE EVENT log_new_post ON posts
-  WHEN $before = NONE
-  THEN (
-    CREATE notifications SET message = "New post: " + $after.title
-  );
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE EVENT log_new_post ON posts
+>   WHEN $before = NONE
+>   THEN (
+>     CREATE notifications SET message = "New post: " + $after.title
+>   );
+> ```
 > - The trigger condition for a creation event is `WHEN $before = NONE`.
 > - Access the new post's title using the `$after` variable: `$after.title`.
 
@@ -179,27 +178,27 @@ DEFINE EVENT log_new_post ON posts
 **Problem:** Define event `user_created` on `user` table creating an `audit` record when `$event = "CREATE"`.
 
 **Expected output:**
-```text
-DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
+> ```
 > ```surrealql
 > DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
 > ```
 >
 > **Explanation:** `DEFINE EVENT` triggers asynchronous or transactional event side-effects.
 
+---
+
 ### Exercise 3: Accessing `$before` and `$after` in Events
 
 **Problem:** Explain difference between `$before` (pre-update record state) and `$after` (post-update record state).
 
 **Expected output:**
-```text
-$before holds state before mutation; $after holds state after mutation
-```
-
 > [!check]- Answer
+> ```text
+> $before holds state before mutation; $after holds state after mutation
+> ```
 > ```text
 > $before holds state before mutation; $after holds state after mutation
 > ```

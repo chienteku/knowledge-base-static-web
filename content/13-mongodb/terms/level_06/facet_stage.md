@@ -133,22 +133,21 @@ db.products.aggregate([{ $match: { status: "active" } }, { $facet: { ... } }]);
 2.  An array named `status_groups` grouping tickets by `status` and counting them.
 
 **Expected output:**
-```javascript
-[
-  {
-    $facet: {
-      total_count: [
-        { $group: { _id: null, count: { $sum: 1 } } }
-      ],
-      status_groups: [
-        { $group: { _id: "$status", count: { $sum: 1 } } }
-      ]
-    }
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $facet: {
+>       total_count: [
+>         { $group: { _id: null, count: { $sum: 1 } } }
+>       ],
+>       status_groups: [
+>         { $group: { _id: "$status", count: { $sum: 1 } } }
+>       ]
+>     }
+>   }
+> ]
+> ```
 > - Construct the two independent pipelines inside the `$facet` object keys.
 > - Use `{ _id: null }` in the first pipeline to calculate the global database count.
 
@@ -161,11 +160,10 @@ db.products.aggregate([{ $match: { status: "active" } }, { $facet: { ... } }]);
 **Problem:** Create `$facet` stage returning simultaneous total product count (`totalCount`) and top 5 categories (`topCategories`).
 
 **Expected output:**
-```text
-db.products.aggregate([{ $facet: { totalCount: [{ $count: "count" }], topCategories: [{ $group: { _id: "$category", count: { $sum: 1 } } }, { $limit: 5 }] } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.products.aggregate([{ $facet: { totalCount: [{ $count: "count" }], topCategories: [{ $group: { _id: "$category", count: { $sum: 1 } } }, { $limit: 5 }] } }]);
+> ```
 > ```javascript
 > db.products.aggregate([
 >   {
@@ -182,16 +180,17 @@ db.products.aggregate([{ $facet: { totalCount: [{ $count: "count" }], topCategor
 >
 > **Explanation:** `$facet` runs multi-branch aggregation sub-pipelines in a single database roundtrip.
 
+---
+
 ### Exercise 3: Combining `$facet` with Pagination
 
 **Problem:** Build faceted pipeline returning both total matching items count and paginated items array.
 
 **Expected output:**
-```text
-db.items.aggregate([{ $facet: { metadata: [{ $count: "total" }], data: [{ $skip: 0 }, { $limit: 10 }] } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.items.aggregate([{ $facet: { metadata: [{ $count: "total" }], data: [{ $skip: 0 }, { $limit: 10 }] } }]);
+> ```
 > ```javascript
 > db.items.aggregate([
 >   {

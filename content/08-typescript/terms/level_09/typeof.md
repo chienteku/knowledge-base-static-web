@@ -124,11 +124,10 @@ type InstType = User; // Type of User instance
 **Problem:** Extract type `Config` from `const defaultConfig = { host: "localhost", port: 8080 }`.
 
 **Expected output:**
-```text
-{ host: string; port: number }
-```
-
 > [!check]- Answer
+> ```text
+> { host: string; port: number }
+> ```
 > ```typescript
 > const defaultConfig = { host: "localhost", port: 8080 };
 > type Config = typeof defaultConfig;
@@ -137,16 +136,17 @@ type InstType = User; // Type of User instance
 >
 > **Explanation:** Type-level `typeof` extracts exact TypeScript type shapes from runtime variable initializers.
 
+---
+
 ### Exercise 2: Extracting Enum Type Keys with `typeof`
 
 **Problem:** Extract key type of enum `enum Status { OK, FAIL }` using `keyof typeof Status`.
 
 **Expected output:**
-```text
-"OK" | "FAIL"
-```
-
 > [!check]- Answer
+> ```text
+> "OK" | "FAIL"
+> ```
 > ```typescript
 > enum Status { OK, FAIL }
 > type StatusKeys = keyof typeof Status;
@@ -155,16 +155,17 @@ type InstType = User; // Type of User instance
 >
 > **Explanation:** Combining `keyof typeof` extracts string key unions from enum objects.
 
+---
+
 ### Exercise 3: Extracting Function Signature with `typeof`
 
 **Problem:** Extract function type signature from `const log = (msg: string) => console.log(msg)`.
 
 **Expected output:**
-```text
-(msg: string) => void
-```
-
 > [!check]- Answer
+> ```text
+> (msg: string) => void
+> ```
 > ```typescript
 > const log = (msg: string) => console.log(msg);
 > type LogFn = typeof log;

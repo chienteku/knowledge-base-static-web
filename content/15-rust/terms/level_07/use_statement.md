@@ -186,11 +186,10 @@ fn main() {
 **Problem:** Import `std::fmt::Result as FmtResult` and `std::io::Result as IoResult` to avoid naming conflicts.
 
 **Expected output:**
-```
-Import aliases resolved
-```
-
 > [!check]- Answer
+> ```
+> Import aliases resolved
+> ```
 > ```rust
 > use std::fmt::Result as FmtResult;
 > use std::io::Result as IoResult;
@@ -201,16 +200,17 @@ Import aliases resolved
 >
 > **Explanation:** `use path as Alias` resolves ambiguous import name collisions.
 
+---
+
 ### Exercise 3: Nested Import Braces Grouping
 
 **Problem:** Group imports from `std::collections` using nested braces: `use std::collections::{HashMap, HashSet};`.
 
 **Expected output:**
-```
-Nested imports loaded
-```
-
 > [!check]- Answer
+> ```
+> Nested imports loaded
+> ```
 > use std::collections::{HashMap, HashSet};
 > fn main() {
 >     let _m: HashMap<i32, i32> = HashMap::new();

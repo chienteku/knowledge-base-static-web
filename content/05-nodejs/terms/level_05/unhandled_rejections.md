@@ -124,14 +124,13 @@ fetchWeather();
 ```
 
 **Expected output:**
-```javascript
-// Add a .catch() block!
-fetchWeather().catch((err) => {
-  console.log("Failed to get weather, but the server survives!", err);
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> // Add a .catch() block!
+> fetchWeather().catch((err) => {
+>   console.log("Failed to get weather, but the server survives!", err);
+> });
+> ```
 > - How do you handle errors on a standard Promise chain?
 
 ---
@@ -143,11 +142,10 @@ fetchWeather().catch((err) => {
 **Problem:** Write global event listener on `process` logging unhandled rejection reason and promise.
 
 **Expected output:**
-```text
-process.on('unhandledRejection', (reason, promise) => { console.error('Unhandled:', reason); });
-```
-
 > [!check]- Answer
+> ```text
+> process.on('unhandledRejection', (reason, promise) => { console.error('Unhandled:', reason); });
+> ```
 > ```javascript
 > process.on('unhandledRejection', (reason, promise) => {
 >   console.error('Unhandled Rejection:', reason);
@@ -156,16 +154,17 @@ process.on('unhandledRejection', (reason, promise) => { console.error('Unhandled
 >
 > **Explanation:** `process.on('unhandledRejection')` catches promises rejected without `.catch()` handlers.
 
+---
+
 ### Exercise 3: Node.js Unhandled Rejection CLI Mode Flag
 
 **Problem:** Which CLI flag configures Node.js to warn on unhandled rejections without crashing the process?
 
 **Expected output:**
-```text
-node --unhandled-rejections=warn app.js
-```
-
 > [!check]- Answer
+> ```text
+> node --unhandled-rejections=warn app.js
+> ```
 > ```bash
 > node --unhandled-rejections=warn app.js
 > ```

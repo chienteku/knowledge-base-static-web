@@ -210,21 +210,20 @@ By structuring your styles this way, the browser swaps every single element's ba
 **Problem:** Declare light-theme variables for background `--bg: #ffffff;` and accent text `--brand: #0077ff;` inside `:root`. Setup the override query for dark mode so that background becomes `#1a1a1a;` and brand text becomes `#00ddff;`. Write the complete variable block.
 
 **Expected output:**
-```css
-:root {
-  --bg: #ffffff;
-  --brand: #0077ff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1a1a1a;
-    --brand: #00ddff;
-  }
-}
-```
-
 > [!check]- Answer
+> ```css
+> :root {
+>   --bg: #ffffff;
+>   --brand: #0077ff;
+> }
+> 
+> @media (prefers-color-scheme: dark) {
+>   :root {
+>     --bg: #1a1a1a;
+>     --brand: #00ddff;
+>   }
+> }
+> ```
 > - Define base parameters globally.
 > - Open the media query and override the exact same variable names.
 
@@ -237,11 +236,10 @@ By structuring your styles this way, the browser swaps every single element's ba
 **Problem:** Write CSS variable setup on `:root` for `--bg` and `--color` swapping values when `[data-theme="dark"]` attribute is set.
 
 **Expected output:**
-```text
-:root { --bg: #fff; --color: #000; } [data-theme="dark"] { --bg: #121212; --color: #fff; } body { background: var(--bg); color: var(--color); }
-```
-
 > [!check]- Answer
+> ```text
+> :root { --bg: #fff; --color: #000; } [data-theme="dark"] { --bg: #121212; --color: #fff; } body { background: var(--bg); color: var(--color); }
+> ```
 > ```css
 > :root {
 >   --bg: #ffffff;
@@ -259,16 +257,17 @@ By structuring your styles this way, the browser swaps every single element's ba
 >
 > **Explanation:** Toggling `data-theme="dark"` on `<html>` swaps CSS variable values cleanly.
 
+---
+
 ### Exercise 3: System Color Scheme Media Query
 
 **Problem:** Write `@media` query detecting OS dark mode preference (`prefers-color-scheme`).
 
 **Expected output:**
-```text
-@media (prefers-color-scheme: dark) { :root { --bg: #121212; } }
-```
-
 > [!check]- Answer
+> ```text
+> @media (prefers-color-scheme: dark) { :root { --bg: #121212; } }
+> ```
 > ```css
 > @media (prefers-color-scheme: dark) {
 >   :root {

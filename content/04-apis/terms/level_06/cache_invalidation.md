@@ -175,13 +175,12 @@ await redis.del(`product:${productId}`); // Target specific key deletion
 3. Time-To-Live (TTL) Expiration
 
 **Expected output:**
-```text
-1. Application checks cache first; if miss, loads from DB and populates cache
-2. Application updates DB and cache simultaneously during writes
-3. Cache entry automatically expires after specified duration
-```
-
 > [!check]- Answer
+> ```text
+> 1. Application checks cache first; if miss, loads from DB and populates cache
+> 2. Application updates DB and cache simultaneously during writes
+> 3. Cache entry automatically expires after specified duration
+> ```
 > ```text
 > 1. Cache-Aside -> Read misses load from DB and populate cache.
 > 2. Write-Through -> Writes update DB and cache synchronously.
@@ -195,11 +194,10 @@ await redis.del(`product:${productId}`); // Target specific key deletion
 **Problem:** What is a Cache Stampede (Thundering Herd) and how can lock mechanisms prevent it?
 
 **Expected output:**
-```text
-A Cache Stampede occurs when a high-traffic cache key expires, causing thousands of concurrent requests to hit the database simultaneously. Distributed locks ensure only 1 request queries the DB while others wait for cache repopulation.
-```
-
 > [!check]- Answer
+> ```text
+> A Cache Stampede occurs when a high-traffic cache key expires, causing thousands of concurrent requests to hit the database simultaneously. Distributed locks ensure only 1 request queries the DB while others wait for cache repopulation.
+> ```
 > ```text
 > Distributed mutex locks ensure only 1 request queries the DB while others wait for cache repopulation.
 > ```

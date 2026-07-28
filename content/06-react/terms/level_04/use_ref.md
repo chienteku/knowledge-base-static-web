@@ -131,12 +131,11 @@ const handleClick = () => { setText('Updated'); };
 Which one should use `useState`, and which should use `useRef`?
 
 **Expected output:**
-```text
-`timeElapsed` MUST be `useState`, because it is displayed on the screen and requires re-renders.
-`intervalId` MUST be `useRef`, because it is a background variable. If you used state, setting the ID would cause an unnecessary, invisible re-render!
-```
-
 > [!check]- Answer
+> ```text
+> `timeElapsed` MUST be `useState`, because it is displayed on the screen and requires re-renders.
+> `intervalId` MUST be `useRef`, because it is a background variable. If you used state, setting the ID would cause an unnecessary, invisible re-render!
+> ```
 > - Is the data visible to the user?
 
 ---
@@ -148,11 +147,10 @@ Which one should use `useState`, and which should use `useRef`?
 **Problem:** Create component with `<input>` and button focusing input on click using `useRef`.
 
 **Expected output:**
-```text
-function FocusInput() { const inputRef = useRef(null); const handleClick = () => inputRef.current.focus(); return <> <input ref={inputRef} /> <button onClick={handleClick}>Focus</button> <>; }
-```
-
 > [!check]- Answer
+> ```text
+> function FocusInput() { const inputRef = useRef(null); const handleClick = () => inputRef.current.focus(); return <> <input ref={inputRef} /> <button onClick={handleClick}>Focus</button> <>; }
+> ```
 > ```javascript
 > function FocusInput() {
 >   const inputRef = useRef(null);
@@ -168,16 +166,17 @@ function FocusInput() { const inputRef = useRef(null); const handleClick = () =>
 >
 > **Explanation:** `useRef` holds direct references to browser DOM elements.
 
+---
+
 ### Exercise 3: useRef vs useState Comparison
 
 **Problem:** Compare: `useState` (Triggers re-render on state change); `useRef` (Persists mutable data across renders WITHOUT triggering re-renders).
 
 **Expected output:**
-```text
-useState: triggers re-render on change; useRef: persists mutable value without re-rendering
-```
-
 > [!check]- Answer
+> ```text
+> useState: triggers re-render on change; useRef: persists mutable value without re-rendering
+> ```
 > ```text
 > useState: triggers re-render on change; useRef: persists mutable value without re-rendering
 > ```

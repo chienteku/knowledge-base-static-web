@@ -167,14 +167,13 @@ UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 30 }];
 4.  Incrementing a user's loyalty points by `10`.
 
 **Expected output:**
-```text
-1. CONTENT (replaces the entire document, discarding old parameters)
-2. PATCH (allows specific array index insertions via JSON Patch operations)
-3. MERGE (merges object keys without deleting surrounding profile values)
-4. SET (ideal for direct field assignments and mathematical increments: `SET points += 10`)
-```
-
 > [!check]- Answer
+> ```text
+> 1. CONTENT (replaces the entire document, discarding old parameters)
+> 2. PATCH (allows specific array index insertions via JSON Patch operations)
+> 3. MERGE (merges object keys without deleting surrounding profile values)
+> 4. SET (ideal for direct field assignments and mathematical increments: `SET points += 10`)
+> ```
 > - Check if the operation replaces the document or target specific properties.
 > - Consider if array index manipulations are required.
 
@@ -187,27 +186,27 @@ UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 30 }];
 **Problem:** Match strategy: 1. Modify single field (`SET`), 2. JSON Patch operations (`PATCH`), 3. Replace object (`CONTENT`).
 
 **Expected output:**
-```text
-1. SET, 2. PATCH, 3. CONTENT
-```
-
 > [!check]- Answer
+> ```text
+> 1. SET, 2. PATCH, 3. CONTENT
+> ```
 > ```text
 > 1. SET, 2. PATCH, 3. CONTENT
 > ```
 >
 > **Explanation:** SurrealDB offers SET, MERGE, CONTENT, and PATCH update strategies.
 
+---
+
 ### Exercise 3: Array Element Removal Strategy
 
 **Problem:** Remove item `"guest"` from `roles` array field using `-=` operator.
 
 **Expected output:**
-```text
-UPDATE user:alice SET roles -= "guest";
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE user:alice SET roles -= "guest";
+> ```
 > ```surrealql
 > UPDATE user:alice SET roles -= "guest";
 > ```

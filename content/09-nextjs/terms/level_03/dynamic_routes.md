@@ -129,14 +129,13 @@ export default async function Page({
 **Problem:** You have a file structure: `app/shop/[category]/[productId]/page.tsx`. If a user visits `/shop/shoes/nike-air-123`, what does the `params` object look like when it reaches `page.tsx`?
 
 **Expected output:**
-```json
-{
-  "category": "shoes",
-  "productId": "nike-air-123"
-}
-```
-
 > [!check]- Answer
+> ```json
+> {
+>   "category": "shoes",
+>   "productId": "nike-air-123"
+> }
+> ```
 > - The folder names dictate the keys in the object!
 
 ---
@@ -146,11 +145,10 @@ export default async function Page({
 **Problem:** Write dynamic route component `app/users/[userId]/posts/[postId]/page.tsx` destructuring both parameter IDs.
 
 **Expected output:**
-```tsx
-export default async function Page({ params }: { params: { userId: string; postId: string } }) { return <div>User: {params.userId}, Post: {params.postId}</div>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> export default async function Page({ params }: { params: { userId: string; postId: string } }) { return <div>User: {params.userId}, Post: {params.postId}</div>; }
+> ```
 > - Multiple dynamic folders populate `params` object properties.
 > 
 > ```tsx
@@ -174,11 +172,10 @@ export default async function Page({ params }: { params: { userId: string; postI
 **Problem:** Which exported function pre-renders dynamic routes (e.g. `/posts/[id]`) statically at build time?
 
 **Expected output:**
-```text
-export async function generateStaticParams() { return [{ id: '1' }, { id: '2' }]; }
-```
-
 > [!check]- Answer
+> ```text
+> export async function generateStaticParams() { return [{ id: '1' }, { id: '2' }]; }
+> ```
 > - `generateStaticParams()` returns array of parameter objects for SSG.
 > 
 > ```typescript

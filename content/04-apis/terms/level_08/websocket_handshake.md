@@ -248,11 +248,10 @@ Sec-WebSocket-Version: 13
 **Problem:** How does a server calculate the `Sec-WebSocket-Accept` header value from client's `Sec-WebSocket-Key`?
 
 **Expected output:**
-```text
-Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", computes SHA-1 hash, and returns Base64 encoded string.
-```
-
 > [!check]- Answer
+> ```text
+> Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", computes SHA-1 hash, and returns Base64 encoded string.
+> ```
 > ```text
 > AcceptKey = Base64( SHA-1( ClientKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" ) )
 > ```
@@ -264,11 +263,10 @@ Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC8
 **Problem:** What specific HTTP status code MUST a server return to confirm successful WebSocket handshake upgrade?
 
 **Expected output:**
-```text
-HTTP 101 Switching Protocols
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 101 Switching Protocols
+> ```
 > ```http
 > HTTP/1.1 101 Switching Protocols
 > ```
@@ -280,11 +278,10 @@ HTTP 101 Switching Protocols
 **Problem:** How does a server calculate the `Sec-WebSocket-Accept` header value from client's `Sec-WebSocket-Key`?
 
 **Expected output:**
-```text
-Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", computes SHA-1 hash, and returns Base64 encoded string.
-```
-
 > [!check]- Answer
+> ```text
+> Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", computes SHA-1 hash, and returns Base64 encoded string.
+> ```
 > ```text
 > AcceptKey = Base64( SHA-1( ClientKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" ) )
 > ```
@@ -296,11 +293,10 @@ Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC8
 **Problem:** What specific HTTP status code MUST a server return to confirm successful WebSocket handshake upgrade?
 
 **Expected output:**
-```text
-HTTP 101 Switching Protocols
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 101 Switching Protocols
+> ```
 > ```http
 > HTTP/1.1 101 Switching Protocols
 > ```
@@ -312,11 +308,10 @@ HTTP 101 Switching Protocols
 **Problem:** How does a server calculate the `Sec-WebSocket-Accept` header value from client's `Sec-WebSocket-Key`?
 
 **Expected output:**
-```text
-Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", computes SHA-1 hash, and returns Base64 encoded string.
-```
-
 > [!check]- Answer
+> ```text
+> Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", computes SHA-1 hash, and returns Base64 encoded string.
+> ```
 > ```text
 > AcceptKey = Base64( SHA-1( ClientKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" ) )
 > ```
@@ -328,11 +323,10 @@ Concatenates client key with magic GUID string "258EAFA5-E914-47DA-95CA-C5AB0DC8
 **Problem:** What specific HTTP status code MUST a server return to confirm successful WebSocket handshake upgrade?
 
 **Expected output:**
-```text
-HTTP 101 Switching Protocols
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 101 Switching Protocols
+> ```
 > ```http
 > HTTP/1.1 101 Switching Protocols
 > ```

@@ -155,12 +155,11 @@ const res = await db.coll.bulkWrite(ops, { ordered: false }); if (res.hasWriteEr
 2.  State whether your application should immediately resend the exact same write command.
 
 **Expected output:**
-```text
-1. Yes: The document was successfully written to the Primary server. The error indicates only that the secondary replica nodes failed to acknowledge replication within the timeout.
-2. No: Resending the insert query can cause duplicate document writes because the record already exists on the Primary.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes: The document was successfully written to the Primary server. The error indicates only that the secondary replica nodes failed to acknowledge replication within the timeout.
+> 2. No: Resending the insert query can cause duplicate document writes because the record already exists on the Primary.
+> ```
 > - Check which array payload contains the error inside the object structure.
 > - Consider the disk status of the Primary node during write concern errors.
 
@@ -173,11 +172,10 @@ const res = await db.coll.bulkWrite(ops, { ordered: false }); if (res.hasWriteEr
 **Problem:** Catch error code `11000` in JS async function and log custom user error message.
 
 **Expected output:**
-```text
-try { await db.users.insertOne(doc); } catch (err) { if (err.code === 11000) console.log("User exists"); }
-```
-
 > [!check]- Answer
+> ```text
+> try { await db.users.insertOne(doc); } catch (err) { if (err.code === 11000) console.log("User exists"); }
+> ```
 > ```javascript
 > try {
 >   await db.users.insertOne(doc);
@@ -190,16 +188,17 @@ try { await db.users.insertOne(doc); } catch (err) { if (err.code === 11000) con
 >
 > **Explanation:** Checking `err.code === 11000` identifies unique index primary key collisions.
 
+---
+
 ### Exercise 3: Schema Validation Error Code
 
 **Problem:** What error code is returned when document writes violate `$jsonSchema` validation rules? (`121` or `DocumentValidationFailure`).
 
 **Expected output:**
-```text
-121 (DocumentValidationFailure)
-```
-
 > [!check]- Answer
+> ```text
+> 121 (DocumentValidationFailure)
+> ```
 > ```text
 > 121 (DocumentValidationFailure)
 > ```

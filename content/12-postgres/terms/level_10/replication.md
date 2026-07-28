@@ -135,12 +135,11 @@ Route write-after-read queries to Primary database node
 2.  You want to sync only 3 specific analytics tables from your main production database to a separate data warehouse database running on a different server version.
 
 **Expected output:**
-```text
-1. Streaming Replication: Perfect for high availability. It copies the entire cluster block-by-block with minimal latency, providing a ready standby clone for failovers.
-2. Logical Replication: Perfect for table-specific synchronization. It allows you to publish only the 3 target tables and sync them to a different database layout and version.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Streaming Replication: Perfect for high availability. It copies the entire cluster block-by-block with minimal latency, providing a ready standby clone for failovers.
+> 2. Logical Replication: Perfect for table-specific synchronization. It allows you to publish only the 3 target tables and sync them to a different database layout and version.
+> ```
 > - Determine if the backup must contain the entire database cluster or a subset.
 > - Consider version compatibility constraints.
 
@@ -153,11 +152,10 @@ Route write-after-read queries to Primary database node
 **Problem:** Write DDL creating publication `pub_orders` on Primary and subscription `sub_orders` on Replica.
 
 **Expected output:**
-```text
-Primary: CREATE PUBLICATION pub_orders FOR TABLE orders; Replica: CREATE SUBSCRIPTION sub_orders CONNECTION 'host=primary_host dbname=prod' PUBLICATION pub_orders;
-```
-
 > [!check]- Answer
+> ```text
+> Primary: CREATE PUBLICATION pub_orders FOR TABLE orders; Replica: CREATE SUBSCRIPTION sub_orders CONNECTION 'host=primary_host dbname=prod' PUBLICATION pub_orders;
+> ```
 > ```sql
 > -- On Primary:
 > CREATE PUBLICATION pub_orders FOR TABLE orders;
@@ -170,16 +168,17 @@ Primary: CREATE PUBLICATION pub_orders FOR TABLE orders; Replica: CREATE SUBSCRI
 >
 > **Explanation:** Logical replication uses Publications and Subscriptions for selective table data streaming.
 
+---
+
 ### Exercise 3: Monitoring Replication Lag Query
 
 **Problem:** Query replication lag bytes from `pg_stat_replication` on Primary node.
 
 **Expected output:**
-```text
-SELECT client_addr, pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes FROM pg_stat_replication;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT client_addr, pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes FROM pg_stat_replication;
+> ```
 > ```sql
 > SELECT client_addr, pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes
 > FROM pg_stat_replication;

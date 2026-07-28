@@ -164,11 +164,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-I have 3 items to buy.
-```
-
 > [!check]- Answer
+> ```text
+> I have 3 items to buy.
+> ```
 > ```rust
 > let mut shopping_list = vec!["Apples", "Milk"];
 > shopping_list.push("Bread");
@@ -182,11 +181,10 @@ I have 3 items to buy.
 **Problem:** Safely access element at index 5 of `vec![1, 2, 3]` using `.get()` and print `"Out of bounds"` if `None`.
 
 **Expected output:**
-```
-Out of bounds
-```
-
 > [!check]- Answer
+> ```
+> Out of bounds
+> ```
 > ```rust
 > fn main() {
 >     let v = vec![1, 2, 3];
@@ -199,16 +197,17 @@ Out of bounds
 >
 > **Explanation:** `.get()` returns `Option<&T>` without panicking on out-of-bounds accesses.
 
+---
+
 ### Exercise 3: Pre-allocating Vector Capacity
 
 **Problem:** Create a vector with pre-allocated capacity for 100 items using `Vec::with_capacity(100)`.
 
 **Expected output:**
-```
-Capacity: 100
-```
-
 > [!check]- Answer
+> ```
+> Capacity: 100
+> ```
 > ```rust
 > fn main() {
 >     let v: Vec<i32> = Vec::with_capacity(100);

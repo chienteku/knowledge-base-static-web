@@ -155,11 +155,10 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 ```
 
 **Expected output:**
-```text
-Because the browser executes the script immediately when it reads the `<head>`. At that exact millisecond, the browser hasn't reached the `<body>` yet, so the button doesn't exist! You must move the script to the bottom of the body, below the button.
-```
-
 > [!check]- Answer
+> ```text
+> Because the browser executes the script immediately when it reads the `<head>`. At that exact millisecond, the browser hasn't reached the `<body>` yet, so the button doesn't exist! You must move the script to the bottom of the body, below the button.
+> ```
 > - Browsers read top-to-bottom, line-by-line.
 
 ---
@@ -171,27 +170,27 @@ Because the browser executes the script immediately when it reads the `<head>`. 
 **Problem:** Write `<script>` tag loading ES module file `main.js` with deferred module parsing.
 
 **Expected output:**
-```text
-<script type="module" src="main.js"></script>
-```
-
 > [!check]- Answer
+> ```text
+> <script type="module" src="main.js"></script>
+> ```
 > ```html
 > <script type="module" src="main.js"></script>
 > ```
 >
 > **Explanation:** `type="module"` enables ES Module import/export syntax and defers execution automatically.
 
+---
+
 ### Exercise 3: Script Type Attribute Default
 
 **Problem:** Is `type="text/javascript"` required on modern HTML5 `<script>` tags? (Yes/No).
 
 **Expected output:**
-```text
-No. HTML5 defaults <script> tags to JavaScript automatically.
-```
-
 > [!check]- Answer
+> ```text
+> No. HTML5 defaults <script> tags to JavaScript automatically.
+> ```
 > ```text
 > No. HTML5 defaults <script> tags to JavaScript automatically.
 > ```

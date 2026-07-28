@@ -201,11 +201,10 @@ div { position: relative; z-index: 999; } /* Position relative enables z-index *
 Which box is visible on top?
 
 **Expected output:**
-```text
-The Red Box! Because its `z-index` (5) is higher than the Blue Box (3), it wins, regardless of the HTML order.
-```
-
 > [!check]- Answer
+> ```text
+> The Red Box! Because its `z-index` (5) is higher than the Blue Box (3), it wins, regardless of the HTML order.
+> ```
 > - Higher number wins.
 
 ---
@@ -217,27 +216,27 @@ The Red Box! Because its `z-index` (5) is higher than the Blue Box (3), it wins,
 **Problem:** Given 3 positioned elements: Box A (`z-index: 1`), Box B (`z-index: 10`), Box C (`z-index: 5`). Order them from bottom-most to top-most.
 
 **Expected output:**
-```text
-Box A (bottom) -> Box C (middle) -> Box B (top)
-```
-
 > [!check]- Answer
+> ```text
+> Box A (bottom) -> Box C (middle) -> Box B (top)
+> ```
 > ```text
 > Box A (z-index 1) -> Box C (z-index 5) -> Box B (z-index 10)
 > ```
 >
 > **Explanation:** Higher numerical `z-index` values stack above lower values within the same stacking context.
 
+---
+
 ### Exercise 3: Flexbox and Grid z-index Exception
 
 **Problem:** Do direct child items of Flexbox (`display: flex`) or Grid (`display: grid`) containers require `position: relative` for `z-index` to work?
 
 **Expected output:**
-```text
-No. Flex and Grid items respect z-index even with default position: static.
-```
-
 > [!check]- Answer
+> ```text
+> No. Flex and Grid items respect z-index even with default position: static.
+> ```
 > ```text
 > No. Flex and Grid items respect z-index even with default position: static.
 > ```

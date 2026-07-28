@@ -190,17 +190,16 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 **Problem:** Write the `@font-face` declaration to load a self-hosted bold font. The font family name is "Noir", the file path is "/fonts/noir-bold.woff2", and the format is "woff2". Include the standard rule to prevent invisible text.
 
 **Expected output:**
-```css
-@font-face {
-  font-family: 'Noir';
-  src: url('/fonts/noir-bold.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-```
-
 > [!check]- Answer
+> ```css
+> @font-face {
+>   font-family: 'Noir';
+>   src: url('/fonts/noir-bold.woff2') format('woff2');
+>   font-weight: bold;
+>   font-style: normal;
+>   font-display: swap;
+> }
+> ```
 > - Define the `font-family` name inside quotes or matching text.
 > - Call `url(...)` with the exact path.
 > - Include `font-display`.
@@ -214,11 +213,10 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 **Problem:** Write `@font-face` rule defining `'Inter'` font from `inter.woff2` with `font-display: swap`.
 
 **Expected output:**
-```text
-@font-face { font-family: 'Inter'; src: url('inter.woff2') format('woff2'); font-display: swap; }
-```
-
 > [!check]- Answer
+> ```text
+> @font-face { font-family: 'Inter'; src: url('inter.woff2') format('woff2'); font-display: swap; }
+> ```
 > ```css
 > @font-face {
 >   font-family: 'Inter';
@@ -229,16 +227,17 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 >
 > **Explanation:** `@font-face` binds custom web font files to family names.
 
+---
+
 ### Exercise 3: Font Preloading Technique
 
 **Problem:** Write `<link>` tag in HTML `<head>` preloading critical web font `inter.woff2`.
 
 **Expected output:**
-```text
-<link rel="preload" href="inter.woff2" as="font" type="font/woff2" crossorigin>
-```
-
 > [!check]- Answer
+> ```text
+> <link rel="preload" href="inter.woff2" as="font" type="font/woff2" crossorigin>
+> ```
 > ```html
 > <link rel="preload" href="inter.woff2" as="font" type="font/woff2" crossorigin>
 > ```

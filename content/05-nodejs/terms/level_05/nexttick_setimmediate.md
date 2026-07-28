@@ -168,27 +168,27 @@ app.get('/health', (res) => res.send('OK'));
 **Problem:** Inside an `fs.readFile()` callback, which executes first: `setImmediate()` or `setTimeout(fn, 0)`?
 
 **Expected output:**
-```text
-setImmediate() (guaranteed because Check phase immediately follows Poll phase).
-```
-
 > [!check]- Answer
+> ```text
+> setImmediate() (guaranteed because Check phase immediately follows Poll phase).
+> ```
 > ```text
 > setImmediate()
 > ```
 >
 > **Explanation:** Within an I/O callback (Poll phase), the Check phase (`setImmediate`) is entered immediately next.
 
+---
+
 ### Exercise 3: Use Case for process.nextTick
 
 **Problem:** Why use `process.nextTick()` in constructor initialization? (To allow callers to attach event listeners synchronously before events are emitted).
 
 **Expected output:**
-```text
-To allow callers to attach event listeners synchronously before events are emitted.
-```
-
 > [!check]- Answer
+> ```text
+> To allow callers to attach event listeners synchronously before events are emitted.
+> ```
 > ```javascript
 > function MyEmitter() {
 >   EventEmitter.call(this);

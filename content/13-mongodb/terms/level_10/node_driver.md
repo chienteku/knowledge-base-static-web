@@ -162,11 +162,10 @@ Write the asynchronous JavaScript code line (using `await`) to find all document
 Assume you have the `products` collection collection variable.
 
 **Expected output:**
-```javascript
-const cheapProducts = await products.find({ price: { $lt: 50 } }).toArray();
-```
-
 > [!check]- Answer
+> ```javascript
+> const cheapProducts = await products.find({ price: { $lt: 50 } }).toArray();
+> ```
 > - The search uses the `$lt` comparison operator.
 > - Call the `.toArray()` method on the returned cursor to resolve the Promise.
 
@@ -179,11 +178,10 @@ const cheapProducts = await products.find({ price: { $lt: 50 } }).toArray();
 **Problem:** Write async code connecting `MongoClient`, inserting document into `users`, and closing client in `finally`.
 
 **Expected output:**
-```text
-const client = new MongoClient(uri); try { await client.connect(); await client.db('app').collection('users').insertOne(doc); } finally { await client.close(); }
-```
-
 > [!check]- Answer
+> ```text
+> const client = new MongoClient(uri); try { await client.connect(); await client.db('app').collection('users').insertOne(doc); } finally { await client.close(); }
+> ```
 > ```javascript
 > const { MongoClient } = require('mongodb');
 > const client = new MongoClient(uri);
@@ -198,16 +196,17 @@ const client = new MongoClient(uri); try { await client.connect(); await client.
 >
 > **Explanation:** Native Node.js MongoDB driver manages connection lifecycle and BSON CRUD calls.
 
+---
+
 ### Exercise 3: Driver Import Package
 
 **Problem:** Official npm package name for MongoDB Node.js driver (`mongodb`).
 
 **Expected output:**
-```text
-mongodb
-```
-
 > [!check]- Answer
+> ```text
+> mongodb
+> ```
 > ```text
 > mongodb
 > ```

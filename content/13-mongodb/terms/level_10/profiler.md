@@ -147,14 +147,13 @@ Use MongoDB Database Profiler, Atlas Performance Advisor, or log aggregation too
 2.  Executed a Collection Scan (indicated by the `planSummary` string containing `"COLLSCAN"` or `docsExamined` being greater than 0 while `keysExamined` is 0).
 
 **Expected output:**
-```javascript
-db.system.profile.find({
-  ns: "shop.orders",
-  planSummary: { $regex: /COLLSCAN/ }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.system.profile.find({
+>   ns: "shop.orders",
+>   planSummary: { $regex: /COLLSCAN/ }
+> });
+> ```
 > - Search within the `system.profile` collection.
 > - Match the namespace `ns` and use a regex check on the `planSummary` field.
 
@@ -167,27 +166,27 @@ db.system.profile.find({
 **Problem:** Enable Profiler Level 1 logging queries taking longer than 200 milliseconds.
 
 **Expected output:**
-```text
-db.setProfilingLevel(1, { slowms: 200 });
-```
-
 > [!check]- Answer
+> ```text
+> db.setProfilingLevel(1, { slowms: 200 });
+> ```
 > ```javascript
 > db.setProfilingLevel(1, { slowms: 200 });
 > ```
 >
 > **Explanation:** `setProfilingLevel(1, { slowms })` logs queries exceeding specified latency thresholds.
 
+---
+
 ### Exercise 3: Querying `system.profile` Collection
 
 **Problem:** Query top 5 slowest operations recorded in `system.profile` collection.
 
 **Expected output:**
-```text
-db.system.profile.find().sort({ millis: -1 }).limit(5);
-```
-
 > [!check]- Answer
+> ```text
+> db.system.profile.find().sort({ millis: -1 }).limit(5);
+> ```
 > ```javascript
 > db.system.profile.find().sort({ millis: -1 }).limit(5);
 > ```

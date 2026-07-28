@@ -166,15 +166,14 @@ Leaving documentation notes and hiding code:
 ```
 
 **Expected output:**
-```html
-<div>
-  <h3>Special Offer</h3>
-  <!-- Disabled for maintenance: -->
-  <!-- <button>Claim Reward</button> -->
-</div>
-```
-
 > [!check]- Answer
+> ```html
+> <div>
+>   <h3>Special Offer</h3>
+>   <!-- Disabled for maintenance: -->
+>   <!-- <button>Claim Reward</button> -->
+> </div>
+> ```
 > - Wrap the entire `<button>` block in `<!--` and `-->` markers.
 
 ---
@@ -186,13 +185,12 @@ Leaving documentation notes and hiding code:
 **Problem:** Write a multi-line HTML comment explaining that the `<main>` section contains article listings.
 
 **Expected output:**
-```text
-<!-- 
-  The main section contains article listings.
--->
-```
-
 > [!check]- Answer
+> ```text
+> <!-- 
+>   The main section contains article listings.
+> -->
+> ```
 > ```html
 > <!-- 
 >   The main section contains article listings.
@@ -201,16 +199,17 @@ Leaving documentation notes and hiding code:
 >
 > **Explanation:** HTML comments begin with `<!--` and end with `-->`.
 
+---
+
 ### Exercise 3: Commenting Out Code Blocks
 
 **Problem:** Comment out the `<p>` element in `<main><p>Draft</p></main>`.
 
 **Expected output:**
-```text
-<main><!-- <p>Draft</p> --></main>
-```
-
 > [!check]- Answer
+> ```text
+> <main><!-- <p>Draft</p> --></main>
+> ```
 > ```html
 > <main>
 >   <!-- <p>Draft</p> -->

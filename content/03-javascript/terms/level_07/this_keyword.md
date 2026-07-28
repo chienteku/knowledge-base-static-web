@@ -175,12 +175,11 @@ dog.bark();
 ```
 
 **Expected output:**
-```text
-`undefined`.
-Arrow functions do not bind their own `this`. Since the arrow function is at the top level of the object, it inherits `this` from the global scope (where `sound` does not exist). Never use arrow functions for object methods if you need `this`!
-```
-
 > [!check]- Answer
+> ```text
+> `undefined`.
+> Arrow functions do not bind their own `this`. Since the arrow function is at the top level of the object, it inherits `this` from the global scope (where `sound` does not exist). Never use arrow functions for object methods if you need `this`!
+> ```
 > - Arrow functions are great for callbacks inside methods, but terrible for the methods themselves!
 
 ---
@@ -190,27 +189,27 @@ Arrow functions do not bind their own `this`. Since the arrow function is at the
 **Problem:** List 4 rules of `this` binding in order: 1. `new` binding, 2. Explicit binding (`call`/`apply`/`bind`), 3. Implicit object binding, 4. Default binding.
 
 **Expected output:**
-```text
-1. new, 2. Explicit, 3. Implicit, 4. Default
-```
-
 > [!check]- Answer
+> ```text
+> 1. new, 2. Explicit, 3. Implicit, 4. Default
+> ```
 > ```javascript
 > console.log("1. new, 2. Explicit, 3. Implicit, 4. Default");
 > ```
 >
 > **Explanation:** `this` resolution follows strict precedent rules based on call-site invocation.
 
+---
+
 ### Exercise 3: Arrow Function Lexical `this` Capture
 
 **Problem:** Demonstrate that arrow functions capture `this` from enclosing scope at creation time.
 
 **Expected output:**
-```text
-Alice
-```
-
 > [!check]- Answer
+> ```text
+> Alice
+> ```
 > ```javascript
 > const user = {
 >   name: "Alice",
@@ -223,7 +222,6 @@ Alice
 >
 > **Explanation:** Arrow functions do not bind `this`; they inherit `this` lexically from outer scope environments.
 
----
 
 ---
 

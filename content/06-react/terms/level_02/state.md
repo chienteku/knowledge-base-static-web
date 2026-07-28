@@ -104,13 +104,12 @@ Use React Query (useQuery) for server cache state management
 3. The username of the person who posted it.
 
 **Expected output:**
-```text
-1. Props (The text is passed down from the database/parent, the user reading it can't change it).
-2. State (The user reading the tweet clicks the heart, changing it from empty to full. It changes based on user interaction).
-3. Props (Passed down from the parent, read-only).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Props (The text is passed down from the database/parent, the user reading it can't change it).
+> 2. State (The user reading the tweet clicks the heart, changing it from empty to full. It changes based on user interaction).
+> 3. Props (Passed down from the parent, read-only).
+> ```
 > - Does the user interacting with the component change the value? If yes, it's State.
 
 ---
@@ -122,27 +121,27 @@ Use React Query (useQuery) for server cache state management
 **Problem:** Determine if item should be State or Regular Variable: 1. Input form value (State); 2. Intermediate calculation during render (Variable); 3. Modal open status (State).
 
 **Expected output:**
-```text
-1. State, 2. Variable, 3. State
-```
-
 > [!check]- Answer
+> ```text
+> 1. State, 2. Variable, 3. State
+> ```
 > ```text
 > 1. State, 2. Variable, 3. State
 > ```
 >
 > **Explanation:** Data that must persist across renders and trigger UI updates MUST be stored in React State.
 
+---
+
 ### Exercise 3: State Snapshot Behavior
 
 **Problem:** Inside event handler `const add = () => { setCount(count + 1); setCount(count + 1); }`, what is the net increment count? (Increments by 1 because `count` is a constant snapshot).
 
 **Expected output:**
-```text
-Increments by 1 because count is a constant snapshot within the event handler
-```
-
 > [!check]- Answer
+> ```text
+> Increments by 1 because count is a constant snapshot within the event handler
+> ```
 > ```text
 > Increments by 1 because count is a constant snapshot within the event handler
 > ```

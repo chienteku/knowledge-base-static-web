@@ -132,11 +132,10 @@ export default defineEventHandler((event) => {
 **Problem:** You want to create an endpoint that creates a new product in the database. The URL should be `/api/products` and it should strictly only accept `POST` requests. What should the exact file path and name be?
 
 **Expected output:**
-```text
-server/api/products.post.ts
-```
-
 > [!check]- Answer
+> ```text
+> server/api/products.post.ts
+> ```
 > - Restricting to a specific HTTP method requires appending `.post`, `.get`, etc., to the file path structure within the server api directory.
 
 ---
@@ -146,15 +145,14 @@ server/api/products.post.ts
 **Problem:** Write Nitro server handler `server/api/items.post.ts` reading JSON body `{ title }` and returning status HTTP 201 response.
 
 **Expected output:**
-```typescript
-export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
-  setResponseStatus(event, 201);
-  return { success: true, item: body };
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler(async (event) => {
+>   const body = await readBody(event);
+>   setResponseStatus(event, 201);
+>   return { success: true, item: body };
+> });
+> ```
 > - `.post.ts` file suffix routes POST HTTP requests automatically.
 > 
 > ```typescript
@@ -176,11 +174,10 @@ export default defineEventHandler(async (event) => {
 **Problem:** How do you access parameter `id` in dynamic server API file `server/api/users/[id].ts`?
 
 **Expected output:**
-```text
-Via getRouterParam(event, 'id') or event.context.params.id.
-```
-
 > [!check]- Answer
+> ```text
+> Via getRouterParam(event, 'id') or event.context.params.id.
+> ```
 > - `getRouterParam(event, 'id')` extracts dynamic route parameters.
 > 
 > ```typescript

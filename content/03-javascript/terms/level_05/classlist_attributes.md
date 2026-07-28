@@ -195,12 +195,11 @@ if (typeof document !== "undefined") {
 **Problem:** Simulate `elem.classList.toggle("hidden")` on a class list array representation.
 
 **Expected output:**
-```text
-["btn","hidden"]
-["btn"]
-```
-
 > [!check]- Answer
+> ```text
+> ["btn","hidden"]
+> ["btn"]
+> ```
 > ```javascript
 > class MockClassList {
 >   constructor(classes) { this.classes = classes; }
@@ -218,16 +217,17 @@ if (typeof document !== "undefined") {
 >
 > **Explanation:** `classList.toggle(cls)` adds class if missing, and removes class if present.
 
+---
+
 ### Exercise 3: Managing Data Attributes via `dataset`
 
 **Problem:** Read data attribute `data-user-id="42"` using `elem.dataset.userId` concept.
 
 **Expected output:**
-```text
-42
-```
-
 > [!check]- Answer
+> ```text
+> 42
+> ```
 > ```javascript
 > const dataset = { userId: "42" };
 > console.log(dataset.userId);

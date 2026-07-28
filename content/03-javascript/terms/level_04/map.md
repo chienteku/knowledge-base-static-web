@@ -155,11 +155,10 @@ async function processData() {
 **Problem:** You have an array of lowercase strings: `["hello", "world"]`. Use `.map()` to return a new array where all strings are completely uppercase. (Hint: use the `toUpperCase()` string method).
 
 **Expected output:**
-```text
-["HELLO", "WORLD"]
-```
-
 > [!check]- Answer
+> ```text
+> ["HELLO", "WORLD"]
+> ```
 > - `const upper = strings.map(str => str.toUpperCase());`
 
 ---
@@ -169,11 +168,10 @@ async function processData() {
 **Problem:** Transform `[1, 2, 3]` into an array of objects `[{ val: 1 }, { val: 2 }, { val: 3 }]` using `.map()`.
 
 **Expected output:**
-```text
-[{"val":1},{"val":2},{"val":3}]
-```
-
 > [!check]- Answer
+> ```text
+> [{"val":1},{"val":2},{"val":3}]
+> ```
 > ```javascript
 > const nums = [1, 2, 3];
 > const objs = nums.map(val => ({ val }));
@@ -182,16 +180,17 @@ async function processData() {
 >
 > **Explanation:** `.map()` returns a new array with transformed element values.
 
+---
+
 ### Exercise 3: Parsing Integers in `map` Trap
 
 **Problem:** Fix `["1", "2", "3"].map(parseInt)` bug by passing explicit `parseInt(x, 10)` wrapper.
 
 **Expected output:**
-```text
-[ 1, 2, 3 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3 ]
+> ```
 > ```javascript
 > const strings = ["1", "2", "3"];
 > const nums = strings.map(str => parseInt(str, 10));
@@ -200,7 +199,6 @@ async function processData() {
 >
 > **Explanation:** `["1","2","3"].map(parseInt)` fails because `.map` passes `(element, index)` into `parseInt(string, radix)`.
 
----
 
 ---
 

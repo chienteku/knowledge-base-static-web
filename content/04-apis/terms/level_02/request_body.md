@@ -119,12 +119,11 @@ app.use(express.json({ limit: '100kb' }));
 **Problem:** You are building a login form. You need to send the user's password to the backend to verify it. Should you put the password in the URL (e.g., `/login?password=123`), or in the Body?
 
 **Expected output:**
-```text
-In the Body! 
-If you put it in the URL, it will be saved in the browser history, server access logs, and will be visible to anyone standing behind the user looking at their screen.
-```
-
 > [!check]- Answer
+> ```text
+> In the Body! 
+> If you put it in the URL, it will be saved in the browser history, server access logs, and will be visible to anyone standing behind the user looking at their screen.
+> ```
 > - Which part of the HTTP request is hidden "inside the envelope"?
 
 ---
@@ -134,11 +133,10 @@ If you put it in the URL, it will be saved in the browser history, server access
 **Problem:** If a client sends malformed invalid JSON in a POST request body, what HTTP status code should the server return?
 
 **Expected output:**
-```text
-HTTP 400 Bad Request
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 400 Bad Request
+> ```
 > ```http
 > HTTP/1.1 400 Bad Request
 > Content-Type: application/json
@@ -152,11 +150,10 @@ HTTP 400 Bad Request
 **Problem:** Which header informs the client that a large request body is being streamed in dynamic chunks without a known initial `Content-Length`?
 
 **Expected output:**
-```text
-Transfer-Encoding: chunked
-```
-
 > [!check]- Answer
+> ```text
+> Transfer-Encoding: chunked
+> ```
 > ```http
 > Transfer-Encoding: chunked
 > ```

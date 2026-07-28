@@ -203,12 +203,11 @@ useEffect(() => {
 **Problem:** You are tracking a pizza delivery. The app makes a network request. The browser's network tab shows the request status as "Pending..." for 45 seconds. Suddenly, the status changes to "200 OK" and the pizza icon moves on the map. Which pattern is this?
 
 **Expected output:**
-```text
-Long Polling.
-Because the request sat "Pending" for 45 seconds, the server was intentionally holding the connection open until it had new location data to report.
-```
-
 > [!check]- Answer
+> ```text
+> Long Polling.
+> Because the request sat "Pending" for 45 seconds, the server was intentionally holding the connection open until it had new location data to report.
+> ```
 > - Did the app make 15 fast requests, or 1 very slow request?
 
 ---
@@ -218,12 +217,11 @@ Because the request sat "Pending" for 45 seconds, the server was intentionally h
 **Problem:** Contrast Short Polling vs Long Polling.
 
 **Expected output:**
-```text
-Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
-Long Polling: Server holds incoming request open until new data is available or timeout occurs.
-```
-
 > [!check]- Answer
+> ```text
+> Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
+> Long Polling: Server holds incoming request open until new data is available or timeout occurs.
+> ```
 > ```text
 > Short Polling -> Client requests data at fixed interval; server returns immediately.
 > Long Polling  -> Server holds request connection open until data arrives or timeout.
@@ -236,11 +234,10 @@ Long Polling: Server holds incoming request open until new data is available or 
 **Problem:** Give 1 valid architectural use case where simple Polling is preferred over WebSockets.
 
 **Expected output:**
-```text
-Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-```
-
 > [!check]- Answer
+> ```text
+> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
+> ```
 > ```text
 > Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
 > ```
@@ -252,12 +249,11 @@ Checking status of slow asynchronous background jobs (e.g. video processing expo
 **Problem:** Contrast Short Polling vs Long Polling.
 
 **Expected output:**
-```text
-Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
-Long Polling: Server holds incoming request open until new data is available or timeout occurs.
-```
-
 > [!check]- Answer
+> ```text
+> Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
+> Long Polling: Server holds incoming request open until new data is available or timeout occurs.
+> ```
 > ```text
 > Short Polling -> Client requests data at fixed interval; server returns immediately.
 > Long Polling  -> Server holds request connection open until data arrives or timeout.
@@ -270,11 +266,10 @@ Long Polling: Server holds incoming request open until new data is available or 
 **Problem:** Give 1 valid architectural use case where simple Polling is preferred over WebSockets.
 
 **Expected output:**
-```text
-Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-```
-
 > [!check]- Answer
+> ```text
+> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
+> ```
 > ```text
 > Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
 > ```
@@ -286,12 +281,11 @@ Checking status of slow asynchronous background jobs (e.g. video processing expo
 **Problem:** Contrast Short Polling vs Long Polling.
 
 **Expected output:**
-```text
-Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
-Long Polling: Server holds incoming request open until new data is available or timeout occurs.
-```
-
 > [!check]- Answer
+> ```text
+> Short Polling: Client requests data immediately on fixed timer interval regardless of server state.
+> Long Polling: Server holds incoming request open until new data is available or timeout occurs.
+> ```
 > ```text
 > Short Polling -> Client requests data at fixed interval; server returns immediately.
 > Long Polling  -> Server holds request connection open until data arrives or timeout.
@@ -304,11 +298,10 @@ Long Polling: Server holds incoming request open until new data is available or 
 **Problem:** Give 1 valid architectural use case where simple Polling is preferred over WebSockets.
 
 **Expected output:**
-```text
-Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
-```
-
 > [!check]- Answer
+> ```text
+> Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
+> ```
 > ```text
 > Checking status of slow asynchronous background jobs (e.g. video processing export) that take several minutes.
 > ```

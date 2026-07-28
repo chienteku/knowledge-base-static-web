@@ -176,27 +176,27 @@ Determine whether the following application features should connect **Directly t
 **Problem:** List 3 steps of Browser-to-Database flow (1. Browser connects via WSS, 2. Signin to RECORD access, 3. SurrealDB enforces PERMISSIONS).
 
 **Expected output:**
-```text
-1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
-```
-
 > [!check]- Answer
+> ```text
+> 1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
+> ```
 > ```text
 > 1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
 > ```
 >
 > **Explanation:** Direct browser-to-database connections rely on WSS and scoped row-level security.
 
+---
+
 ### Exercise 3: Browser Live Query Subscriptions
 
 **Problem:** Subscribe to real-time `LIVE SELECT` events directly from web browser SDK.
 
 **Expected output:**
-```text
-const query = await db.live('article', (action, result) => console.log(action, result));
-```
-
 > [!check]- Answer
+> ```text
+> const query = await db.live('article', (action, result) => console.log(action, result));
+> ```
 > ```javascript
 > const query = await db.live('article', (action, result) => console.log(action, result));
 > ```

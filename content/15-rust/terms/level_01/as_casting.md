@@ -150,15 +150,14 @@ fn main() {
 **Problem:** Given a `usize` loop counter starting at 200 and incremented by 20 for 5 iterations, cast each value to `u8` and print it. Explain why values past 255 wrap around.
 
 **Expected output:**
-```
-200
-220
-240
-4
-24
-```
-
 > [!check]- Answer
+> ```
+> 200
+> 220
+> 240
+> 4
+> 24
+> ```
 > ```rust
 > fn main() {
 >     let mut count: usize = 200;
@@ -171,18 +170,19 @@ fn main() {
 >
 > **Explanation:** `u8` can only represent values from 0 to 255. When `count` reaches 260, casting to `u8` truncates the higher bits: `260 % 256 = 4`. Next iteration yields `280 % 256 = 24`.
 
+---
+
 ### Exercise 3: Float-to-Integer Saturation
 
 **Problem:** Predict and print the result of casting `f32::NAN`, `1e10_f32`, and `-100.75_f32` to `i32` using `as`.
 
 **Expected output:**
-```
-NAN cast: 0
-Large cast: 2147483647
-Negative cast: -100
-```
-
 > [!check]- Answer
+> ```
+> NAN cast: 0
+> Large cast: 2147483647
+> Negative cast: -100
+> ```
 > ```rust
 > fn main() {
 >     let nan_val: f32 = f32::NAN;

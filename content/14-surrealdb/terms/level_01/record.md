@@ -145,13 +145,12 @@ UPSERT user:alice CONTENT { name: "Alice" }; // Safely creates or updates record
 3.  An ObjectId (`_id`) in MongoDB $\rightarrow$ *?*
 
 **Expected output:**
-```text
-1. Record
-2. Record
-3. Record ID (table:id)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Record
+> 2. Record
+> 3. Record ID (table:id)
+> ```
 > - SurrealDB unifies both rows and documents under a single term name.
 > - The unique identifier contains both the table namespace and the unique ID key.
 
@@ -164,27 +163,27 @@ UPSERT user:alice CONTENT { name: "Alice" }; // Safely creates or updates record
 **Problem:** Query single record `user:john` directly in $O(1)$ time without `WHERE` clauses.
 
 **Expected output:**
-```text
-SELECT * FROM user:john;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM user:john;
+> ```
 > ```surrealql
 > SELECT * FROM user:john;
 > ```
 >
 > **Explanation:** Specifying `table:id` directly in `FROM` performs constant-time primary key lookups.
 
+---
+
 ### Exercise 3: Record Content Insertion
 
 **Problem:** Insert a new record into `article` table with custom string ID `article:first`.
 
 **Expected output:**
-```text
-CREATE article:first SET title = "Hello World";
-```
-
 > [!check]- Answer
+> ```text
+> CREATE article:first SET title = "Hello World";
+> ```
 > ```surrealql
 > CREATE article:first SET title = "Hello World";
 > ```

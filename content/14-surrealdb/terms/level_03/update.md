@@ -148,11 +148,10 @@ UPDATE user:alice SET active = false; // Targets specific Record ID
 Write the equivalent, optimized query in SurrealQL.
 
 **Expected output:**
-```sql
-UPDATE product:101 SET stock -= 5;
-```
-
 > [!check]- Answer
+> ```sql
+> UPDATE product:101 SET stock -= 5;
+> ```
 > - Bypasses index scans by targeting the Record ID directly in the `UPDATE` target.
 > - Use the subtraction assignment shortcut operator `-=`.
 
@@ -165,27 +164,27 @@ UPDATE product:101 SET stock -= 5;
 **Problem:** Increment `view_count` on `article:1` by 1 using `+=` operator in `UPDATE` statement.
 
 **Expected output:**
-```text
-UPDATE article:1 SET view_count += 1;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE article:1 SET view_count += 1;
+> ```
 > ```surrealql
 > UPDATE article:1 SET view_count += 1;
 > ```
 >
 > **Explanation:** `+=` operator increments numeric field values inline.
 
+---
+
 ### Exercise 3: Conditional Update
 
 **Problem:** Update status to `"dormant"` for all users whose `last_login` was over 30 days ago.
 
 **Expected output:**
-```text
-UPDATE user SET status = "dormant" WHERE last_login < time::now() - 30d;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE user SET status = "dormant" WHERE last_login < time::now() - 30d;
+> ```
 > ```surrealql
 > UPDATE user SET status = "dormant" WHERE last_login < time::now() - 30d;
 > ```

@@ -161,13 +161,12 @@ async function processData() {
 **Problem:** You have a delegated click listener on a parent `<div>`. You only want the code to run if the user clicked an element with the `data-action="save"` attribute. How do you write the `if` statement?
 
 **Expected output:**
-```javascript
-if (event.target.matches('[data-action="save"]')) {
-  // save logic...
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> if (event.target.matches('[data-action="save"]')) {
+>   // save logic...
+> }
+> ```
 > - `element.matches('css-selector')` is the cleanest way to check if `event.target` is the element you want!
 
 ---
@@ -177,11 +176,10 @@ if (event.target.matches('[data-action="save"]')) {
 **Problem:** Attach 1 listener to parent `<ul>` and handle dynamic `<li>` clicks using `event.target.closest('li')`.
 
 **Expected output:**
-```text
-Delegated li clicked: item-1
-```
-
 > [!check]- Answer
+> ```text
+> Delegated li clicked: item-1
+> ```
 > ```javascript
 > const target = { closest: (sel) => ({ dataset: { id: "item-1" } }) };
 > const li = target.closest("li");
@@ -190,23 +188,23 @@ Delegated li clicked: item-1
 >
 > **Explanation:** Event delegation routes clicks on child elements to a single shared parent listener.
 
+---
+
 ### Exercise 3: Performance Benefits of Event Delegation
 
 **Problem:** Explain why event delegation avoids attaching 1,000 separate event listeners to dynamic list items.
 
 **Expected output:**
-```text
-Single listener handles 1000 dynamic items
-```
-
 > [!check]- Answer
+> ```text
+> Single listener handles 1000 dynamic items
+> ```
 > ```javascript
 > console.log("Single listener handles 1000 dynamic items");
 > ```
 >
 > **Explanation:** Delegating events to parent elements conserves memory and handles dynamically inserted elements automatically.
 
----
 
 ---
 

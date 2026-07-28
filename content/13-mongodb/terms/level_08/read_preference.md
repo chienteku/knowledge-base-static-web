@@ -159,13 +159,12 @@ Select the optimal Read Preference mode for these application tasks:
 3.  A mobile user looking up static help articles, where fast page loads are critical.
 
 **Expected output:**
-```text
-1. secondary: Offloads heavy log analysis queries completely from the primary node to prevent CPU lockups.
-2. primary: Guarantees strong consistency to prevent double-selling inventory due to replication lag.
-3. nearest: Routes queries to the closest geographic server node (New York, London, or Tokyo) to minimize page load latency.
-```
-
 > [!check]- Answer
+> ```text
+> 1. secondary: Offloads heavy log analysis queries completely from the primary node to prevent CPU lockups.
+> 2. primary: Guarantees strong consistency to prevent double-selling inventory due to replication lag.
+> 3. nearest: Routes queries to the closest geographic server node (New York, London, or Tokyo) to minimize page load latency.
+> ```
 > - Evaluate the impact of stale data on the action.
 > - Consider if network latency is the primary bottleneck.
 
@@ -178,11 +177,10 @@ Select the optimal Read Preference mode for these application tasks:
 **Problem:** Configure read preference routing queries to secondary nodes in datacenter `analytics` (`{ dc: "analytics" }`).
 
 **Expected output:**
-```text
-db.orders.find({}, { readPreference: new ReadPreference("secondary", [{ dc: "analytics" }]) });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.find({}, { readPreference: new ReadPreference("secondary", [{ dc: "analytics" }]) });
+> ```
 > ```javascript
 > const { ReadPreference } = require('mongodb');
 > db.orders.find({}, {
@@ -192,16 +190,17 @@ db.orders.find({}, { readPreference: new ReadPreference("secondary", [{ dc: "ana
 >
 > **Explanation:** Tag sets route secondary read queries to specific designated datacenter nodes.
 
+---
+
 ### Exercise 3: Read Preference Modes List
 
 **Problem:** List 5 read preference modes in MongoDB (`primary`, `primaryPreferred`, `secondary`, `secondaryPreferred`, `nearest`).
 
 **Expected output:**
-```text
-primary, primaryPreferred, secondary, secondaryPreferred, nearest
-```
-
 > [!check]- Answer
+> ```text
+> primary, primaryPreferred, secondary, secondaryPreferred, nearest
+> ```
 > ```text
 > primary, primaryPreferred, secondary, secondaryPreferred, nearest
 > ```

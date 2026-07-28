@@ -108,12 +108,11 @@ width: calc(10px * 2); /* Unitless multiplier */
 **Problem:** You are building a 3-column layout without using CSS Grid. You want 3 boxes to sit side-by-side using Flexbox. You want exactly 30px of `gap` between them (which means two 30px gaps total = 60px). How do you use `calc()` to figure out the exact width of one box?
 
 **Expected output:**
-```text
-`width: calc((100% - 60px) / 3);`
-Take the total width (100%), subtract the total gap space (60px), and divide the remaining space by 3 boxes!
-```
-
 > [!check]- Answer
+> ```text
+> `width: calc((100% - 60px) / 3);`
+> Take the total width (100%), subtract the total gap space (60px), and divide the remaining space by 3 boxes!
+> ```
 > - Remember standard order of operations (PEMDAS). You can use parenthesis inside `calc()`!
 
 ---
@@ -125,11 +124,10 @@ Take the total width (100%), subtract the total gap space (60px), and divide the
 **Problem:** Write CSS `width` calculation subtracting 280px sidebar width from 100% container width using `calc()`.
 
 **Expected output:**
-```text
-width: calc(100% - 280px);
-```
-
 > [!check]- Answer
+> ```text
+> width: calc(100% - 280px);
+> ```
 > ```css
 > .main-content {
 >   width: calc(100% - 280px);
@@ -138,16 +136,17 @@ width: calc(100% - 280px);
 >
 > **Explanation:** `calc()` combines mixed unit calculations (percentages and pixels).
 
+---
+
 ### Exercise 3: Nested calc() Functions
 
 **Problem:** Is `calc()` nesting allowed in modern CSS (e.g. `calc(100% - calc(20px * 2))`)?
 
 **Expected output:**
-```text
-Yes, but nested calc() can be simplified to single parentheses e.g. calc(100% - (20px * 2)).
-```
-
 > [!check]- Answer
+> ```text
+> Yes, but nested calc() can be simplified to single parentheses e.g. calc(100% - (20px * 2)).
+> ```
 > ```css
 > div {
 >   width: calc(100% - (20px * 2));

@@ -174,11 +174,10 @@ thread::spawn(move || {
 **Problem:** Demonstrate placing unsized slice DST `[i32]` behind a reference `&[i32]`.
 
 **Expected output:**
-```
-Slice DST len: 3
-```
-
 > [!check]- Answer
+> ```
+> Slice DST len: 3
+> ```
 > ```rust
 > fn print_dst(slice: &[i32]) {
 >     println!("Slice DST len: {}", slice.len());
@@ -191,16 +190,17 @@ Slice DST len: 3
 >
 > **Explanation:** References to DSTs store metadata (fat pointers) containing slice lengths or vtable addresses.
 
+---
+
 ### Exercise 3: Opting Out of Sized Bounds with `?Sized`
 
 **Problem:** Write a generic struct `struct RefHolder<'a, T: ?Sized> { ptr: &'a T }` holding DST targets.
 
 **Expected output:**
-```
-RefHolder with DST str verified
-```
-
 > [!check]- Answer
+> ```
+> RefHolder with DST str verified
+> ```
 > struct RefHolder<'a, T: ?Sized> { ptr: &'a T }
 > fn main() {
 >     let s: &str = "hello";

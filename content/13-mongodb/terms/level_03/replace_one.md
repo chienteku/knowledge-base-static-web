@@ -176,14 +176,13 @@ db.users.updateOne({ _id: id }, { $set: { name: "Alice" } }); // Preserves exist
 Write the correct MongoDB query using the appropriate method.
 
 **Expected output:**
-```javascript
-db.users.replaceOne(
-  { _id: 10 },
-  { name: "Alice", email: "alice@new.com", role: "user" }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.users.replaceOne(
+>   { _id: 10 },
+>   { name: "Alice", email: "alice@new.com", role: "user" }
+> );
+> ```
 > - The task requires a complete document overwrite, not a partial update.
 > - Pass the new payload as a plain object without any update operators.
 
@@ -196,11 +195,10 @@ db.users.replaceOne(
 **Problem:** Replace entire user document `_id: 1` with `{ name: "Bob", status: "active" }`.
 
 **Expected output:**
-```text
-db.users.replaceOne({ _id: 1 }, { name: "Bob", status: "active" });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.replaceOne({ _id: 1 }, { name: "Bob", status: "active" });
+> ```
 > ```javascript
 > db.users.replaceOne({
 >   _id: 1
@@ -212,16 +210,17 @@ db.users.replaceOne({ _id: 1 }, { name: "Bob", status: "active" });
 >
 > **Explanation:** `replaceOne(filter, newDoc)` replaces the document content while preserving `_id`.
 
+---
+
 ### Exercise 3: Upserting with `replaceOne`
 
 **Problem:** Replace or insert document `_id: 2` using `{ upsert: true }` option.
 
 **Expected output:**
-```text
-db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
+> ```
 > ```javascript
 > db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
 > ```

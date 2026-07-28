@@ -157,13 +157,12 @@ Select the optimal storage backend (**memory**, **file**, or **tikv**) for each 
 3.  Upgrading the production database to handle 50,000 transactions per second across 5 server instances with automatic failover backup redundancy.
 
 **Expected output:**
-```text
-1. memory: In-memory is fast, requires zero disk cleanup between test runs, and volatile loss is fine because tests discard data anyway.
-2. file (file://): Local file-based RocksDB/SurrealKV provides disk persistence on a single VM without the cost or complexity of a cluster.
-3. tikv (tikv://): The distributed TiKV backend scales horizontally across multiple servers, providing high-availability replication and sharding.
-```
-
 > [!check]- Answer
+> ```text
+> 1. memory: In-memory is fast, requires zero disk cleanup between test runs, and volatile loss is fine because tests discard data anyway.
+> 2. file (file://): Local file-based RocksDB/SurrealKV provides disk persistence on a single VM without the cost or complexity of a cluster.
+> 3. tikv (tikv://): The distributed TiKV backend scales horizontally across multiple servers, providing high-availability replication and sharding.
+> ```
 > - Match speed requirements and volatility profiles to the engine characteristics.
 > - Consider if the deployment is a single machine or a multi-server cluster.
 
@@ -176,27 +175,27 @@ Select the optimal storage backend (**memory**, **file**, or **tikv**) for each 
 **Problem:** Match use case with scheme: Local persistent single-node (`rocksdb://` / `surrealkv://`), Multi-node cluster (`tikv://`), Testing (`mem://`).
 
 **Expected output:**
-```text
-Testing: mem://, Local Disk: rocksdb:// or surrealkv://, Cluster: tikv://
-```
-
 > [!check]- Answer
+> ```text
+> Testing: mem://, Local Disk: rocksdb:// or surrealkv://, Cluster: tikv://
+> ```
 > ```text
 > Testing: mem://, Local Disk: rocksdb:// or surrealkv://, Cluster: tikv://
 > ```
 >
 > **Explanation:** Storage engine backends plug into SurrealDB core depending on deployment scale.
 
+---
+
 ### Exercise 3: Native SurrealKV Engine
 
 **Problem:** What is SurrealDB's embedded Rust key-value storage engine backend? (`surrealkv://`).
 
 **Expected output:**
-```text
-surrealkv://
-```
-
 > [!check]- Answer
+> ```text
+> surrealkv://
+> ```
 > ```text
 > surrealkv://
 > ```

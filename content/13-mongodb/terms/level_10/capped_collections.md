@@ -147,12 +147,11 @@ Evaluate whether the following two update operations will succeed on this docume
 2.  `db.chat_history.updateOne({ _id: 1 }, { $push: { messages: "Hello!" } })`
 
 **Expected output:**
-```text
-1. Succeeds: Setting `status` from "online" to "offline" changes string value but keeps the document within its pre-allocated size bounds.
-2. Fails: The `$push` operator adds an array field and an element, growing the document's size beyond its pre-allocated disk slot. MongoDB will block this operation to prevent size violations in the capped collection.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Succeeds: Setting `status` from "online" to "offline" changes string value but keeps the document within its pre-allocated size bounds.
+> 2. Fails: The `$push` operator adds an array field and an element, growing the document's size beyond its pre-allocated disk slot. MongoDB will block this operation to prevent size violations in the capped collection.
+> ```
 > - Review the size growth restrictions in capped collections.
 > - Consider if array modifications alter BSON byte sizes on disk.
 
@@ -165,11 +164,10 @@ Evaluate whether the following two update operations will succeed on this docume
 **Problem:** Create capped collection `app_logs` capped at 10MB (10485760 bytes) and max 5000 documents.
 
 **Expected output:**
-```text
-db.createCollection("app_logs", { capped: true, size: 10485760, max: 5000 });
-```
-
 > [!check]- Answer
+> ```text
+> db.createCollection("app_logs", { capped: true, size: 10485760, max: 5000 });
+> ```
 > ```javascript
 > db.createCollection("app_logs", {
 >   capped: true,
@@ -180,16 +178,17 @@ db.createCollection("app_logs", { capped: true, size: 10485760, max: 5000 });
 >
 > **Explanation:** `capped: true` maintains fixed-size circular buffer storage collections.
 
+---
+
 ### Exercise 3: Tailable Cursor on Capped Collection
 
 **Problem:** Create tailable cursor listening for new insertions in capped collection `app_logs`.
 
 **Expected output:**
-```text
-const cursor = db.app_logs.find().addCursorFlag("tailable", true).addCursorFlag("awaitData", true);
-```
-
 > [!check]- Answer
+> ```text
+> const cursor = db.app_logs.find().addCursorFlag("tailable", true).addCursorFlag("awaitData", true);
+> ```
 > ```javascript
 > const cursor = db.app_logs.find()
 >   .addCursorFlag("tailable", true)

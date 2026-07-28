@@ -190,11 +190,10 @@ fetch('/api/doc', { method: 'POST', body: form });
 **Problem:** Write JS snippet appending text field `username: 'Alice'` and file input `avatar` to a `FormData` object.
 
 **Expected output:**
-```text
-const data = new FormData(); data.append('username', 'Alice'); data.append('avatar', fileInput.files[0]);
-```
-
 > [!check]- Answer
+> ```text
+> const data = new FormData(); data.append('username', 'Alice'); data.append('avatar', fileInput.files[0]);
+> ```
 > ```javascript
 > const data = new FormData();
 > data.append('username', 'Alice');
@@ -208,11 +207,10 @@ const data = new FormData(); data.append('username', 'Alice'); data.append('avat
 **Problem:** Write single line converting `FormData` object to URL-encoded query string format.
 
 **Expected output:**
-```text
-const query = new URLSearchParams(formData).toString();
-```
-
 > [!check]- Answer
+> ```text
+> const query = new URLSearchParams(formData).toString();
+> ```
 > ```javascript
 > const query = new URLSearchParams(formData).toString();
 > ```

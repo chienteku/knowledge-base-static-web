@@ -182,34 +182,33 @@ async function processData() {
 **Problem:** State primary features of Deno (built-in TypeScript, security sandboxing) and Bun (high performance Zig engine, native bundler).
 
 **Expected output:**
-```text
-Deno: Security & TS native, Bun: Ultra fast & bundler
-```
-
 > [!check]- Answer
+> ```text
+> Deno: Security & TS native, Bun: Ultra fast & bundler
+> ```
 > ```javascript
 > console.log("Deno: Security & TS native, Bun: Ultra fast & bundler");
 > ```
 >
 > **Explanation:** Deno emphasizes security sandboxing; Bun optimizes performance with Zig/JavaScriptCore.
 
+---
+
 ### Exercise 3: Standardized Web API Support in Modern Runtimes
 
 **Problem:** Verify that `fetch`, `WebSocket`, and `WebStreams` exist natively across Deno, Bun, and Node.js 18+.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(typeof globalThis.fetch === "function");
 > ```
 >
 > **Explanation:** Modern JavaScript runtimes standardize Web API implementations across browser and server contexts.
 
----
 
 ---
 

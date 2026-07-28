@@ -252,11 +252,10 @@ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 Simplify this layout blueprint line using the `repeat()` function.
 
 **Expected output:**
-```css
-grid-template-columns: repeat(4, 100px 1fr);
-```
-
 > [!check]- Answer
+> ```css
+> grid-template-columns: repeat(4, 100px 1fr);
+> ```
 > - Identify the repeating pattern. Here, the pattern consists of two track sizes: `100px 1fr`.
 > - Count how many times this two-column pattern is repeated.
 
@@ -269,11 +268,10 @@ grid-template-columns: repeat(4, 100px 1fr);
 **Problem:** Write `grid-template-columns` using `repeat()` to create standard 12-column equal `1fr` grid.
 
 **Expected output:**
-```text
-grid-template-columns: repeat(12, 1fr);
-```
-
 > [!check]- Answer
+> ```text
+> grid-template-columns: repeat(12, 1fr);
+> ```
 > ```css
 > .grid-12 {
 >   display: grid;
@@ -283,16 +281,17 @@ grid-template-columns: repeat(12, 1fr);
 >
 > **Explanation:** `repeat(12, 1fr)` defines 12 equal-width column tracks.
 
+---
+
 ### Exercise 3: Mixed Track Pattern Repeat
 
 **Problem:** Write `grid-template-columns` repeating pattern of 1 fixed 100px column and 1 fluid 1fr column 3 times.
 
 **Expected output:**
-```text
-grid-template-columns: repeat(3, 100px 1fr);
-```
-
 > [!check]- Answer
+> ```text
+> grid-template-columns: repeat(3, 100px 1fr);
+> ```
 > ```css
 > .grid {
 >   grid-template-columns: repeat(3, 100px 1fr);

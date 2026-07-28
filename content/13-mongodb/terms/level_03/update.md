@@ -177,14 +177,13 @@ db.users.updateMany({ active: false }, { $set: { verified: false } });
 **Problem:** You have an `inventory` collection. Write the MongoDB query to update all documents where the `qty` is exactly `0`, setting their `status` field to the string `"out_of_stock"`.
 
 **Expected output:**
-```javascript
-db.inventory.updateMany(
-  { qty: 0 },
-  { $set: { status: "out_of_stock" } }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.inventory.updateMany(
+>   { qty: 0 },
+>   { $set: { status: "out_of_stock" } }
+> );
+> ```
 > - Choose the bulk modification method `updateMany`.
 > - Use the `$set` update operator to declare the field changes.
 
@@ -197,11 +196,10 @@ db.inventory.updateMany(
 **Problem:** Increment `loginCount` on `user:1` by 1 using `$inc`.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $inc: { loginCount: 1 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $inc: { loginCount: 1 } });
+> ```
 > ```javascript
 > db.users.updateOne({
 >   _id: 1
@@ -212,16 +210,17 @@ db.users.updateOne({ _id: 1 }, { $inc: { loginCount: 1 } });
 >
 > **Explanation:** `$inc` atomically increments numeric field values.
 
+---
+
 ### Exercise 3: Unsetting Field with `$unset`
 
 **Problem:** Remove field `tempToken` from `user:1` using `$unset`.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $unset: { tempToken: "" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $unset: { tempToken: "" } });
+> ```
 > ```javascript
 > db.users.updateOne({
 >   _id: 1

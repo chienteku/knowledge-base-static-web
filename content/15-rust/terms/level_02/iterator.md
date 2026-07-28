@@ -162,11 +162,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-No colors left!
-```
-
 > [!check]- Answer
+> ```text
+> No colors left!
+> ```
 > ```rust
 > fn main() {
 >     let colors = vec!["Red", "Blue"];
@@ -189,13 +188,12 @@ No colors left!
 **Problem:** Create an iterator over `vec![10, 20]`. Advance it manually using `.next()` twice and assert values.
 
 **Expected output:**
-```
-Some(10)
-Some(20)
-None
-```
-
 > [!check]- Answer
+> ```
+> Some(10)
+> Some(20)
+> None
+> ```
 > ```rust
 > fn main() {
 >     let nums = vec![10, 20];
@@ -208,16 +206,17 @@ None
 >
 > **Explanation:** Calling `.next()` advances mutable iterators, returning `Some(&item)` or `None` when exhausted.
 
+---
+
 ### Exercise 3: Creating a Custom Iterator
 
 **Problem:** Implement `Iterator` for `struct Counter { count: u32 }` yielding numbers `1..=3`.
 
 **Expected output:**
-```
-1 2 3 
-```
-
 > [!check]- Answer
+> ```
+> 1 2 3 
+> ```
 > ```rust
 > struct Counter { count: u32 }
 > impl Iterator for Counter {

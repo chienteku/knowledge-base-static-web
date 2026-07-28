@@ -104,18 +104,17 @@ const b = require('lib'); // Resolves to same cached instance
 List the exact directory paths Node.js will check in order, looking for `lodash`.
 
 **Expected output:**
-```text
-1. Node checks if `lodash` is a core module (It's not).
-2. It checks `/Users/bob/projects/app/src/node_modules/lodash`
-3. It climbs up: `/Users/bob/projects/app/node_modules/lodash` (This is usually where it finds it!)
-4. It climbs up: `/Users/bob/projects/node_modules/lodash`
-5. It climbs up: `/Users/bob/node_modules/lodash`
-6. It climbs up: `/Users/node_modules/lodash`
-7. It climbs up: `/node_modules/lodash`
-If it fails at the root `/`, it throws an Error.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Node checks if `lodash` is a core module (It's not).
+> 2. It checks `/Users/bob/projects/app/src/node_modules/lodash`
+> 3. It climbs up: `/Users/bob/projects/app/node_modules/lodash` (This is usually where it finds it!)
+> 4. It climbs up: `/Users/bob/projects/node_modules/lodash`
+> 5. It climbs up: `/Users/bob/node_modules/lodash`
+> 6. It climbs up: `/Users/node_modules/lodash`
+> 7. It climbs up: `/node_modules/lodash`
+> If it fails at the root `/`, it throws an Error.
+> ```
 > - Remember the rule: if it's not a core module and not a relative path, it hunts for a `node_modules` folder, climbing up the tree.
 
 ---
@@ -127,13 +126,12 @@ If it fails at the root `/`, it throws an Error.
 **Problem:** If file `/app/src/utils/math.js` calls `require('lodash')`, list the first 3 directories Node searches.
 
 **Expected output:**
-```text
-1. /app/src/utils/node_modules/lodash
-2. /app/src/node_modules/lodash
-3. /app/node_modules/lodash
-```
-
 > [!check]- Answer
+> ```text
+> 1. /app/src/utils/node_modules/lodash
+> 2. /app/src/node_modules/lodash
+> 3. /app/node_modules/lodash
+> ```
 > ```text
 > 1. /app/src/utils/node_modules/lodash
 > 2. /app/src/node_modules/lodash
@@ -142,16 +140,17 @@ If it fails at the root `/`, it throws an Error.
 >
 > **Explanation:** Node traverses parent directories recursively looking for `node_modules` until reaching filesystem root.
 
+---
+
 ### Exercise 3: Index File Resolution Order
 
 **Problem:** When resolving `require('./models')`, what file names does Node attempt if `./models` is a directory?
 
 **Expected output:**
-```text
-./models/index.js, ./models/index.json, ./models/index.node (or package.json main entry).
-```
-
 > [!check]- Answer
+> ```text
+> ./models/index.js, ./models/index.json, ./models/index.node (or package.json main entry).
+> ```
 > ```text
 > 1. ./models/package.json (main field)
 > 2. ./models/index.js

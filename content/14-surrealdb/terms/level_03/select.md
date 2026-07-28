@@ -145,11 +145,10 @@ SELECT id, name, email FROM user; // Explicit column projection
 3.  Target only the company record with ID `company:acme`.
 
 **Expected output:**
-```sql
-SELECT name AS company_name, address.city FROM company:acme;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name AS company_name, address.city FROM company:acme;
+> ```
 > - The target source is a specific Record ID, not the whole table name.
 > - Chain sub-properties using dot notation: `address.city`.
 
@@ -162,27 +161,27 @@ SELECT name AS company_name, address.city FROM company:acme;
 **Problem:** Select `first_name` and `last_name` aliased as `full_name` using `string::concat()`.
 
 **Expected output:**
-```text
-SELECT string::concat(first_name, " ", last_name) AS full_name FROM user;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT string::concat(first_name, " ", last_name) AS full_name FROM user;
+> ```
 > ```surrealql
 > SELECT string::concat(first_name, " ", last_name) AS full_name FROM user;
 > ```
 >
 > **Explanation:** `AS alias` renames projected expression columns in query outputs.
 
+---
+
 ### Exercise 3: Selecting Omitted Fields with `OMIT`
 
 **Problem:** Select all fields from `user` table except `password_hash` using `OMIT`.
 
 **Expected output:**
-```text
-SELECT * OMIT password_hash FROM user;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * OMIT password_hash FROM user;
+> ```
 > ```surrealql
 > SELECT * OMIT password_hash FROM user;
 > ```

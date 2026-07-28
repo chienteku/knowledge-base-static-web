@@ -168,18 +168,17 @@ db.orders.aggregate([{ $match: { $expr: { $gt: ["$spent", "$budget"] } } }]);
 2.  The `status` is exactly `"active"`.
 
 **Expected output:**
-```javascript
-[
-  {
-    $match: {
-      qty: { $gte: 10 },
-      status: "active"
-    }
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $match: {
+>       qty: { $gte: 10 },
+>       status: "active"
+>     }
+>   }
+> ]
+> ```
 > - The `$match` stage wraps a standard query filter document.
 > - Combine the two parameters inside a single query filter object.
 
@@ -192,11 +191,10 @@ db.orders.aggregate([{ $match: { $expr: { $gt: ["$spent", "$budget"] } } }]);
 **Problem:** Filter `orders` collection for active completed orders using `$match` as first pipeline stage.
 
 **Expected output:**
-```text
-db.orders.aggregate([{ $match: { status: "completed", active: true } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([{ $match: { status: "completed", active: true } }]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   { $match: { status: "completed", active: true } }
@@ -205,16 +203,17 @@ db.orders.aggregate([{ $match: { status: "completed", active: true } }]);
 >
 > **Explanation:** `$match` filters incoming collection documents using standard query syntax.
 
+---
+
 ### Exercise 3: Comparing Fields in `$match` with `$expr`
 
 **Problem:** Filter documents where `qty` exceeds `minStock` using `$match` and `$expr`.
 
 **Expected output:**
-```text
-db.inventory.aggregate([{ $match: { $expr: { $gt: ["$qty", "$minStock"] } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.inventory.aggregate([{ $match: { $expr: { $gt: ["$qty", "$minStock"] } } }]);
+> ```
 > ```javascript
 > db.inventory.aggregate([
 >   { $match: { $expr: { $gt: ["$qty", "$minStock"] } } }

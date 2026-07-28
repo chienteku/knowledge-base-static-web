@@ -169,27 +169,27 @@ Write a `DEFINE ACCESS` statement named `custom_service` on the database level u
 **Problem:** Define JWT access `app_jwt` on database using `HS256` algorithm and secret `"my_secret"`.
 
 **Expected output:**
-```text
-DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
+> ```
 > ```surrealql
 > DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
 > ```
 >
 > **Explanation:** `TYPE JWT ALGORITHM HS256 KEY ...` validates external HMAC-SHA256 tokens.
 
+---
+
 ### Exercise 3: JWKS Endpoint RS256 Integration
 
 **Problem:** Define JWT access for Auth0 using RS256 JWKS endpoint URL.
 
 **Expected output:**
-```text
-DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
+> ```
 > ```surrealql
 > DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
 > ```

@@ -179,12 +179,11 @@ console.log("Sorted Descending:", sortedDesc);
 ```
 
 **Expected output:**
-```text
-Original: [ 80, 95, 60, 100, 75 ]
-Sorted Descending: [ 100, 95, 80, 75, 60 ]
-```
-
 > [!check]- Answer
+> ```text
+> Original: [ 80, 95, 60, 100, 75 ]
+> Sorted Descending: [ 100, 95, 80, 75, 60 ]
+> ```
 > - Clone the array using `[...scores]`.
 > - Call `.sort()` on the clone with a comparator callback `(a, b) => b - a`.
 
@@ -195,11 +194,10 @@ Sorted Descending: [ 100, 95, 80, 75, 60 ]
 **Problem:** Sort `[40, 100, 1, 5, 25]` numerically in ascending order using compare function.
 
 **Expected output:**
-```text
-[ 1, 5, 25, 40, 100 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 5, 25, 40, 100 ]
+> ```
 > ```javascript
 > const nums = [40, 100, 1, 5, 25];
 > nums.sort((a, b) => a - b);
@@ -208,16 +206,17 @@ Sorted Descending: [ 100, 95, 80, 75, 60 ]
 >
 > **Explanation:** Comparator `(a, b) => a - b` sorts numbers in ascending order (negative yields `a < b`).
 
+---
+
 ### Exercise 3: Reversing Array Order in-place
 
 **Problem:** Reverse `[1, 2, 3]` using `.reverse()`.
 
 **Expected output:**
-```text
-[ 3, 2, 1 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 3, 2, 1 ]
+> ```
 > ```javascript
 > const arr = [1, 2, 3];
 > arr.reverse();

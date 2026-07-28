@@ -176,11 +176,10 @@ fn calculate_hash<K: Hash + Eq + Display, V: Default + Clone>(key: &K, value: &V
 **Problem:** Refactor `fn process<T: std::fmt::Debug + Clone, U: std::fmt::Display + Default>(t: T, u: U)` into a clean `where` clause format.
 
 **Expected output:**
-```
-Clean signature compiled
-```
-
 > [!check]- Answer
+> ```
+> Clean signature compiled
+> ```
 > ```rust
 > fn process<T, U>(t: T, u: U)
 > where
@@ -196,16 +195,17 @@ Clean signature compiled
 >
 > **Explanation:** `where` clauses place complex, multi-line generic bounds after parameter lists for clear readability.
 
+---
+
 ### Exercise 3: Where Clauses on Associated Types
 
 **Problem:** Write a `where` clause constraining iterator item associated types: `where I: Iterator, I::Item: std::fmt::Display`.
 
 **Expected output:**
-```
-Item: 10
-```
-
 > [!check]- Answer
+> ```
+> Item: 10
+> ```
 > fn print_items<I>(mut iter: I)
 > where
 >     I: Iterator,

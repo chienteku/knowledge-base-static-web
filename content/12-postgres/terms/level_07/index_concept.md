@@ -124,13 +124,12 @@ Maintain targeted composite indexes using ESR rule
 **Problem:** You are building an analytics logging table `click_events` that receives 5,000 write insertions per second, but is only queried once a week by administrators to compile reports. Should you build 5 separate indexes on this table? Explain why.
 
 **Expected output:**
-```text
-No, you should not build multiple indexes!
-Because the table is write-heavy (5,000 inserts/sec) and read-light (once a week), the performance cost of updating indexes on every write would cripple the database. 
-It is better to have slow weekly queries than to freeze the database's ability to save incoming events.
-```
-
 > [!check]- Answer
+> ```text
+> No, you should not build multiple indexes!
+> Because the table is write-heavy (5,000 inserts/sec) and read-light (once a week), the performance cost of updating indexes on every write would cripple the database. 
+> It is better to have slow weekly queries than to freeze the database's ability to save incoming events.
+> ```
 > - Balance the frequency of write transactions vs the frequency of read transactions.
 > - Consider which operation impacts live users more.
 
@@ -143,27 +142,27 @@ It is better to have slow weekly queries than to freeze the database's ability t
 **Problem:** List 5 index access types supported natively in PostgreSQL (`B-Tree`, `GIN`, `GiST`, `BRIN`, `Hash`).
 
 **Expected output:**
-```text
-B-Tree, GIN, GiST, BRIN, Hash
-```
-
 > [!check]- Answer
+> ```text
+> B-Tree, GIN, GiST, BRIN, Hash
+> ```
 > ```text
 > B-Tree, GIN, GiST, BRIN, Hash
 > ```
 >
 > **Explanation:** PostgreSQL provides specialized index types tailored for relational, text, geospatial, and array data.
 
+---
+
 ### Exercise 3: Checking Unused Indexes in System Catalog
 
 **Problem:** Query unused indexes with 0 scans from `pg_stat_user_indexes`.
 
 **Expected output:**
-```text
-SELECT indexrelname, idx_scan FROM pg_stat_user_indexes WHERE idx_scan = 0;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT indexrelname, idx_scan FROM pg_stat_user_indexes WHERE idx_scan = 0;
+> ```
 > ```sql
 > SELECT indexrelname, idx_scan
 > FROM pg_stat_user_indexes

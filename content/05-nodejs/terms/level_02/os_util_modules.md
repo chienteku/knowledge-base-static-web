@@ -169,16 +169,17 @@ execute();
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Checking Server Memory with OS Module
 
 **Problem:** Calculate free memory percentage using `os.freemem()` and `os.totalmem()`.
 
 **Expected output:**
-```text
-const freePct = (os.freemem() / os.totalmem()) * 100;
-```
-
 > [!check]- Answer
+> ```text
+> const freePct = (os.freemem() / os.totalmem()) * 100;
+> ```
 > ```javascript
 > const os = require('os');
 > const freePct = (os.freemem() / os.totalmem()) * 100;
@@ -187,16 +188,17 @@ const freePct = (os.freemem() / os.totalmem()) * 100;
 >
 > **Explanation:** `os.freemem()` and `os.totalmem()` return system memory stats in bytes.
 
+---
+
 ### Exercise 3: Promisifying Legacy setTimeout
 
 **Problem:** Convert legacy `setTimeout(cb, ms)` into a promise-returning function using `util.promisify`.
 
 **Expected output:**
-```text
-const sleep = util.promisify(setTimeout); await sleep(1000);
-```
-
 > [!check]- Answer
+> ```text
+> const sleep = util.promisify(setTimeout); await sleep(1000);
+> ```
 > ```javascript
 > const util = require('util');
 > const sleep = util.promisify(setTimeout);

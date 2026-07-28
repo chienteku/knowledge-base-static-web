@@ -269,16 +269,15 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 **Problem:** Build the JavaScript class scaffold to define a custom element `<info-box>`. You do not need to build the template logic, just register the tag name with the browser.
 
 **Expected output:**
-```javascript
-class InfoBox extends HTMLElement {
-  constructor() {
-    super();
-  }
-}
-customElements.define('info-box', InfoBox);
-```
-
 > [!check]- Answer
+> ```javascript
+> class InfoBox extends HTMLElement {
+>   constructor() {
+>     super();
+>   }
+> }
+> customElements.define('info-box', InfoBox);
+> ```
 > - Extend `HTMLElement` in your class definition.
 > - Call `super()` inside the constructor.
 > - Bind the tag using the `customElements` registry.
@@ -292,13 +291,12 @@ customElements.define('info-box', InfoBox);
 **Problem:** List the 3 web standard technologies that comprise Web Components.
 
 **Expected output:**
-```text
-1. Custom Elements
-2. Shadow DOM
-3. HTML Templates (<template> and <slot>)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Custom Elements
+> 2. Shadow DOM
+> 3. HTML Templates (<template> and <slot>)
+> ```
 > ```text
 > 1. Custom Elements
 > 2. Shadow DOM
@@ -307,16 +305,17 @@ customElements.define('info-box', InfoBox);
 >
 > **Explanation:** Web Components combine Custom Elements, Shadow DOM, and Templates for reusable UI widgets.
 
+---
+
 ### Exercise 3: Shadow DOM Mode Syntax
 
 **Problem:** Write JavaScript line inside custom element constructor attaching an open Shadow Root.
 
 **Expected output:**
-```text
-this.attachShadow({ mode: 'open' });
-```
-
 > [!check]- Answer
+> ```text
+> this.attachShadow({ mode: 'open' });
+> ```
 > ```javascript
 > this.attachShadow({ mode: 'open' });
 > ```

@@ -149,14 +149,13 @@ The **Element** is the *entire sandwich*—the top slice of bread, the meat and 
 Identify the opening tag, the closing tag, the content, and the element.
 
 **Expected output:**
-```text
-Opening Tag: <strong>
-Closing Tag: </strong>
-Content: Warning!
-Element: The entire string `<strong>Warning!</strong>`
-```
-
 > [!check]- Answer
+> ```text
+> Opening Tag: <strong>
+> Closing Tag: </strong>
+> Content: Warning!
+> Element: The entire string `<strong>Warning!</strong>`
+> ```
 > - Tags have angle brackets.
 > - The element is the whole sandwich!
 
@@ -169,13 +168,12 @@ Element: The entire string `<strong>Warning!</strong>`
 **Problem:** Identify the 3 parts of the HTML element `<h1 class="main">Header</h1>`.
 
 **Expected output:**
-```text
-1. Opening Tag: <h1 class="main">
-2. Content: Header
-3. Closing Tag: </h1>
-```
-
 > [!check]- Answer
+> ```text
+> 1. Opening Tag: <h1 class="main">
+> 2. Content: Header
+> 3. Closing Tag: </h1>
+> ```
 > ```text
 > 1. Opening Tag: <h1 class="main">
 > 2. Content: Header
@@ -184,16 +182,17 @@ Element: The entire string `<strong>Warning!</strong>`
 >
 > **Explanation:** An element consists of start tag (with optional attributes), inner content, and end tag.
 
+---
+
 ### Exercise 3: Self-Closing vs Void Terminology
 
 **Problem:** Give 2 examples of HTML Void Elements that do not require closing tags.
 
 **Expected output:**
-```text
-<img>, <input> (or <br>, <hr>, <meta>)
-```
-
 > [!check]- Answer
+> ```text
+> <img>, <input> (or <br>, <hr>, <meta>)
+> ```
 > ```html
 > <img src="pic.jpg" alt="Picture">
 > <input type="text" name="user">

@@ -155,11 +155,10 @@ export type { AppUser };
 ```
 
 **Expected output:**
-```text
-Vite successfully compiles src/index.ts without throwing isolatedModules errors.
-```
-
 > [!check]- Answer
+> ```text
+> Vite successfully compiles src/index.ts without throwing isolatedModules errors.
+> ```
 > - Add the `type` keyword between the `export` keyword and the curly braces.
 
 ---
@@ -171,11 +170,10 @@ Vite successfully compiles src/index.ts without throwing isolatedModules errors.
 **Problem:** Import value `createUser` and type `type User` in a single line using `import { createUser, type User } from './user'`.
 
 **Expected output:**
-```text
-Inline type-only import created
-```
-
 > [!check]- Answer
+> ```text
+> Inline type-only import created
+> ```
 > ```typescript
 > import { createUser, type User } from './user';
 > console.log("Inline type-only import created");
@@ -183,16 +181,17 @@ Inline type-only import created
 >
 > **Explanation:** Inline `type` modifiers selectively mark type-only imports within mixed import lists.
 
+---
+
 ### Exercise 3: Type-Only Export Syntax
 
 **Problem:** Write type-only re-export `export type { User } from './user'`.
 
 **Expected output:**
-```text
-Type-only re-export created
-```
-
 > [!check]- Answer
+> ```text
+> Type-only re-export created
+> ```
 > ```typescript
 > export type { User } from './user';
 > console.log("Type-only re-export created");

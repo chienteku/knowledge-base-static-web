@@ -120,12 +120,11 @@ console.log(stringified);
 ```
 
 **Expected output:**
-```text
-'{"name":"Bob"}'
-`JSON.stringify` intentionally ignores and deletes functions. A function is code, not data. JSON only supports data.
-```
-
 > [!check]- Answer
+> ```text
+> '{"name":"Bob"}'
+> `JSON.stringify` intentionally ignores and deletes functions. A function is code, not data. JSON only supports data.
+> ```
 > - Remember the rules of Serialization. Can you send a function over a network?
 
 ---
@@ -135,11 +134,10 @@ console.log(stringified);
 **Problem:** Write `JSON.stringify()` call formatting object `data` with 2-space pretty-print indentation.
 
 **Expected output:**
-```text
-JSON.stringify(data, null, 2);
-```
-
 > [!check]- Answer
+> ```text
+> JSON.stringify(data, null, 2);
+> ```
 > ```javascript
 > const formatted = JSON.stringify(data, null, 2);
 > ```
@@ -151,11 +149,10 @@ JSON.stringify(data, null, 2);
 **Problem:** Write `JSON.parse()` reviver function automatically converting date strings matching ISO pattern back into JavaScript `Date` instances.
 
 **Expected output:**
-```text
-JSON.parse(jsonStr, (key, value) => { return typeof value === 'string' && ISO_REGEX.test(value) ? new Date(value) : value; });
-```
-
 > [!check]- Answer
+> ```text
+> JSON.parse(jsonStr, (key, value) => { return typeof value === 'string' && ISO_REGEX.test(value) ? new Date(value) : value; });
+> ```
 > ```javascript
 > const data = JSON.parse(jsonStr, (key, val) => {
 > if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) {

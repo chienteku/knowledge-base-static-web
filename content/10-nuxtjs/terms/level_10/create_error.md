@@ -145,21 +145,20 @@ if (!data.value) throw createError({ statusCode: 404, statusMessage: 'Not Found'
 **Problem:** Write a Route Middleware (`middleware/admin.ts`). If the user is not an admin, you want to immediately trigger the `error.vue` page with a 401 status code and the message "Unauthorized Access".
 
 **Expected output:**
-```typescript
-export default defineNuxtRouteMiddleware((to, from) => {
-  const isAdmin = false; // Logic here
-  
-  if (!isAdmin) {
-    // In middleware, abortNavigation paired with createError triggers the error page!
-    return abortNavigation(createError({ 
-      statusCode: 401, 
-      message: 'Unauthorized Access' 
-    }));
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtRouteMiddleware((to, from) => {
+>   const isAdmin = false; // Logic here
+>   
+>   if (!isAdmin) {
+>     // In middleware, abortNavigation paired with createError triggers the error page!
+>     return abortNavigation(createError({ 
+>       statusCode: 401, 
+>       message: 'Unauthorized Access' 
+>     }));
+>   }
+> });
+> ```
 > - Inside the middleware transition guard, return `abortNavigation(createError({ ... }))` to halt and trigger the error UI.
 
 ---
@@ -169,15 +168,14 @@ export default defineNuxtRouteMiddleware((to, from) => {
 **Problem:** Write Nitro API handler throwing 403 Forbidden error using `createError()` when `event.context.user` is null.
 
 **Expected output:**
-```typescript
-export default defineEventHandler((event) => {
-  if (!event.context.user) {
-    throw createError({ statusCode: 403, statusMessage: 'Forbidden Access' });
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler((event) => {
+>   if (!event.context.user) {
+>     throw createError({ statusCode: 403, statusMessage: 'Forbidden Access' });
+>   }
+> });
+> ```
 > - `createError()` creates structured H3 and Nuxt error instances.
 > 
 > ```typescript
@@ -198,11 +196,10 @@ export default defineEventHandler((event) => {
 **Problem:** Which property on `createError({ data: { ... } })` allows passing custom JSON payload details to error boundary templates?
 
 **Expected output:**
-```text
-data (accessible via error.data in error.vue)
-```
-
 > [!check]- Answer
+> ```text
+> data (accessible via error.data in error.vue)
+> ```
 > - `data` property passes custom context to `error.vue`.
 > 
 > ```typescript

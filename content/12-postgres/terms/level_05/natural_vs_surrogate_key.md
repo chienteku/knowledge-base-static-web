@@ -190,14 +190,13 @@ id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, UNIQUE (org_id, dept_id, yea
 4.  Guarantees static, permanent index addresses.
 
 **Expected output:**
-```text
-1. Surrogate Key (integers are faster to compare than strings).
-2. Surrogate Key (requires generating an ID alongside business columns).
-3. Natural Key (real-world values can change).
-4. Surrogate Key (artificial IDs are immutable).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Surrogate Key (integers are faster to compare than strings).
+> 2. Surrogate Key (requires generating an ID alongside business columns).
+> 3. Natural Key (real-world values can change).
+> 4. Surrogate Key (artificial IDs are immutable).
+> ```
 > - Evaluate how string size impacts index lookup speeds.
 > - Consider which key is decoupled from real-world data corrections.
 
@@ -210,27 +209,27 @@ id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, UNIQUE (org_id, dept_id, yea
 **Problem:** Compare: Natural Key (Data field with real-world business meaning like SSN/ISBN); Surrogate Key (System-generated synthetic key like IDENTITY/UUID).
 
 **Expected output:**
-```text
-Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
-```
-
 > [!check]- Answer
+> ```text
+> Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
+> ```
 > ```text
 > Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
 > ```
 >
 > **Explanation:** Surrogate keys provide immutable row identity independent of business domain mutations.
 
+---
+
 ### Exercise 3: Best Practice Schema Pattern
 
 **Problem:** State best practice pattern for user table primary keys (Use surrogate `id` primary key + unique constraint on natural `email`).
 
 **Expected output:**
-```text
-Use surrogate id primary key alongside UNIQUE constraint on natural email
-```
-
 > [!check]- Answer
+> ```text
+> Use surrogate id primary key alongside UNIQUE constraint on natural email
+> ```
 > ```text
 > Use surrogate id primary key alongside UNIQUE constraint on natural email
 > ```

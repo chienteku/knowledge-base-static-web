@@ -143,12 +143,11 @@ async function processData() {
 **Problem:** Sometimes you see tutorials tell you to run `npx create-react-app`. What is the difference between `npm` and `npx`?
 
 **Expected output:**
-```text
-`npm` focuses on **installing** packages permanently to your computer.
-`npx` focuses on **executing** packages. It temporarily downloads a tool, runs it once to do a job (like setting up a new project folder), and then immediately deletes the tool so it doesn't clutter your hard drive.
-```
-
 > [!check]- Answer
+> ```text
+> `npm` focuses on **installing** packages permanently to your computer.
+> `npx` focuses on **executing** packages. It temporarily downloads a tool, runs it once to do a job (like setting up a new project folder), and then immediately deletes the tool so it doesn't clutter your hard drive.
+> ```
 > - `x` stands for eXecute!
 
 ---
@@ -158,34 +157,33 @@ async function processData() {
 **Problem:** State CLI flag for production (`--save` / `-S`) vs development (`--save-dev` / `-D`).
 
 **Expected output:**
-```text
-Production: -S, Dev: -D
-```
-
 > [!check]- Answer
+> ```text
+> Production: -S, Dev: -D
+> ```
 > ```javascript
 > console.log("Production: -S, Dev: -D");
 > ```
 >
 > **Explanation:** `-D` marks dependencies required only for building/testing binaries.
 
+---
+
 ### Exercise 3: Executing Package Scripts with `npm run`
 
 **Problem:** Command to run script `"build"` defined in `package.json`.
 
 **Expected output:**
-```text
-npm run build
-```
-
 > [!check]- Answer
+> ```text
+> npm run build
+> ```
 > ```javascript
 > console.log("npm run build");
 > ```
 >
 > **Explanation:** `npm run <script>` executes custom commands configured in `package.json`.
 
----
 
 ---
 

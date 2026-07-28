@@ -113,15 +113,14 @@ router.beforeEach(() => {
 **Problem:** You learned about [Composables](../level_05/composables.md) (like `useMouse()`). Pinia stores look very similar (like `useUserStore()`). Can't you just use a Composable to share global state?
 
 **Expected output:**
-```text
-Technically, yes (if you define the `ref` outside the composable function). 
-However, Pinia provides critical features that plain Composables lack:
-1. Integration with Vue DevTools (time-travel debugging, tracking who changed what state).
-2. Server-Side Rendering (SSR) support.
-3. Hot Module Replacement (HMR).
-```
-
 > [!check]- Answer
+> ```text
+> Technically, yes (if you define the `ref` outside the composable function). 
+> However, Pinia provides critical features that plain Composables lack:
+> 1. Integration with Vue DevTools (time-travel debugging, tracking who changed what state).
+> 2. Server-Side Rendering (SSR) support.
+> 3. Hot Module Replacement (HMR).
+> ```
 > - Think about debugging and DevTools!
 
 ---
@@ -131,11 +130,10 @@ However, Pinia provides critical features that plain Composables lack:
 **Problem:** Write a Pinia Setup Store `useCartStore` with `defineStore('cart', () => { ... })` declaring `items` ref, `count` computed, and `addItem()` function.
 
 **Expected output:**
-```javascript
-export const useCartStore = defineStore('cart', () => { const items = ref([]); const count = computed(() => items.value.length); function addItem(item) { items.value.push(item); } return { items, count, addItem }; });
-```
-
 > [!check]- Answer
+> ```javascript
+> export const useCartStore = defineStore('cart', () => { const items = ref([]); const count = computed(() => items.value.length); function addItem(item) { items.value.push(item); } return { items, count, addItem }; });
+> ```
 > - Setup stores mirror Composition API `<script setup>` syntax.
 > 
 > ```javascript
@@ -161,12 +159,11 @@ export const useCartStore = defineStore('cart', () => { const items = ref([]); c
 **Problem:** Name 2 major architectural advantages Pinia has over legacy Vuex 3/4.
 
 **Expected output:**
-```text
-1. Zero mutations (state is updated directly or via actions)
-2. Full TypeScript auto-completion support out of the box without complex type wrappers
-```
-
 > [!check]- Answer
+> ```text
+> 1. Zero mutations (state is updated directly or via actions)
+> 2. Full TypeScript auto-completion support out of the box without complex type wrappers
+> ```
 > - No mutations required (direct state mutation supported).
 > - First-class TypeScript inference without verbose types.
 > 

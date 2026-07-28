@@ -155,13 +155,12 @@ CREATE INDEX idx_logs_created_at ON logs (created_at DESC);
 **Problem:** You are building a blog dashboard. Write a SQL query to select `title` and `published_at` columns from the `articles` table. The output must be sorted so that the most recently published articles appear at the top. If multiple articles were published at the exact same second, sort them alphabetically by title.
 
 **Expected output:**
-```sql
-SELECT title, published_at 
-FROM articles 
-ORDER BY published_at DESC, title ASC;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT title, published_at 
+> FROM articles 
+> ORDER BY published_at DESC, title ASC;
+> ```
 > - Identify the primary sort column (most recent date = descending).
 > - Set up the tie-breaker column (alphabetical title = ascending).
 
@@ -174,11 +173,10 @@ ORDER BY published_at DESC, title ASC;
 **Problem:** Sort users by `rating` descending with NULLs at the end, then by `name` ascending.
 
 **Expected output:**
-```text
-SELECT * FROM users ORDER BY rating DESC NULLS LAST, name ASC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users ORDER BY rating DESC NULLS LAST, name ASC;
+> ```
 > ```sql
 > SELECT * FROM users
 > ORDER BY rating DESC NULLS LAST, name ASC;
@@ -186,16 +184,17 @@ SELECT * FROM users ORDER BY rating DESC NULLS LAST, name ASC;
 >
 > **Explanation:** `NULLS LAST` explicitly positions null values after non-null sorted items.
 
+---
+
 ### Exercise 3: Multi-Column Sort Direction
 
 **Problem:** Sort orders by `status` ascending and `total` descending.
 
 **Expected output:**
-```text
-SELECT * FROM orders ORDER BY status ASC, total DESC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM orders ORDER BY status ASC, total DESC;
+> ```
 > ```sql
 > SELECT * FROM orders ORDER BY status ASC, total DESC;
 > ```

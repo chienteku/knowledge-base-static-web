@@ -199,11 +199,10 @@ If initial delay is `100ms` and multiplier is `2`, calculate the delay duration 
 **Problem:** Write JS helper checking `res.status === 'OK'` on `db.query()` response arrays.
 
 **Expected output:**
-```text
-const [res] = await db.query(sql); if (res.status === 'OK') return res.result;
-```
-
 > [!check]- Answer
+> ```text
+> const [res] = await db.query(sql); if (res.status === 'OK') return res.result;
+> ```
 > ```javascript
 > const [res] = await db.query(sql);
 > if (res.status === 'OK') {
@@ -215,16 +214,17 @@ const [res] = await db.query(sql); if (res.status === 'OK') return res.result;
 >
 > **Explanation:** `db.query()` returns arrays of response objects containing `status` and `result` fields.
 
+---
+
 ### Exercise 3: Handling Permission Denied Exceptions
 
 **Problem:** Catch `PERMISSIONS` denied exception when running unauthorized SDK queries.
 
 **Expected output:**
-```text
-try { await db.select('secret'); } catch (err) { console.error('Access Denied:', err); }
-```
-
 > [!check]- Answer
+> ```text
+> try { await db.select('secret'); } catch (err) { console.error('Access Denied:', err); }
+> ```
 > ```javascript
 > try {
 >   await db.select('secret');

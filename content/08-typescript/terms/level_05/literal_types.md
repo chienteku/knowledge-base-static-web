@@ -112,12 +112,11 @@ req(verb); // Explicit literal union type annotation
 **Problem:** If you write `const a = "Hello"`, what is the inferred type? If you write `let b = "Hello"`, what is the inferred type?
 
 **Expected output:**
-```text
-`const a` is inferred as the Literal Type `"Hello"`. Because it's a const, it can never be any other string!
-`let b` is inferred as the generic Primitive Type `string`. Because it's a let, you could reassign it to "World" later.
-```
-
 > [!check]- Answer
+> ```text
+> `const a` is inferred as the Literal Type `"Hello"`. Because it's a const, it can never be any other string!
+> `let b` is inferred as the generic Primitive Type `string`. Because it's a let, you could reassign it to "World" later.
+> ```
 > - Think about mutability!
 
 ---
@@ -129,11 +128,10 @@ req(verb); // Explicit literal union type annotation
 **Problem:** Define literal type `DiceRoll = 1 | 2 | 3 | 4 | 5 | 6`.
 
 **Expected output:**
-```text
-DiceRoll type created
-```
-
 > [!check]- Answer
+> ```text
+> DiceRoll type created
+> ```
 > ```typescript
 > type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;
 > const roll: DiceRoll = 6;
@@ -142,16 +140,17 @@ DiceRoll type created
 >
 > **Explanation:** Literal types restrict variables to specific exact values.
 
+---
+
 ### Exercise 3: Template Literal Union Combinations
 
 **Problem:** Combine `"top" | "bottom"` with `"left" | "right"` into `Position` type.
 
 **Expected output:**
-```text
-"top-left" | "top-right" | "bottom-left" | "bottom-right"
-```
-
 > [!check]- Answer
+> ```text
+> "top-left" | "top-right" | "bottom-left" | "bottom-right"
+> ```
 > ```typescript
 > type V = "top" | "bottom";
 > type H = "left" | "right";

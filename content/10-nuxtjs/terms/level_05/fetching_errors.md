@@ -140,12 +140,11 @@ if (error.value) {
 **Problem:** The user just successfully logged out. You want to ensure absolutely no cached data from their session remains in memory. How do you clear the ENTIRE Nuxt data cache at once?
 
 **Expected output:**
-```typescript
-// Calling clearNuxtData with no arguments clears everything!
-clearNuxtData();
-```
-
 > [!check]- Answer
+> ```typescript
+> // Calling clearNuxtData with no arguments clears everything!
+> clearNuxtData();
+> ```
 > - The `clearNuxtData()` utility clears all cached keys globally when invoked without arguments.
 
 ---
@@ -155,11 +154,10 @@ clearNuxtData();
 **Problem:** Write `useFetch` call setting `fatal: true` option so HTTP 404 response triggers Nuxt error page (`error.vue`).
 
 **Expected output:**
-```typescript
-const { data } = await useFetch('/api/item', { fatal: true });
-```
-
 > [!check]- Answer
+> ```typescript
+> const { data } = await useFetch('/api/item', { fatal: true });
+> ```
 > - `fatal: true` forces `useFetch` errors to trigger Nuxt full-page error boundaries.
 > 
 > ```vue
@@ -177,12 +175,11 @@ const { data } = await useFetch('/api/item', { fatal: true });
 **Problem:** List 2 properties available on the `error.value` object returned by `useFetch`.
 
 **Expected output:**
-```text
-1. statusCode (e.g. 404, 500)
-2. statusMessage / message
-```
-
 > [!check]- Answer
+> ```text
+> 1. statusCode (e.g. 404, 500)
+> 2. statusMessage / message
+> ```
 > - `statusCode` -> HTTP status code
 > - `statusMessage` -> Status message string
 > 

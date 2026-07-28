@@ -141,11 +141,10 @@ async function processData() {
 **Problem:** Pass a custom `double(x)` function into `Array.prototype.map`.
 
 **Expected output:**
-```text
-[ 2, 4, 6 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 2, 4, 6 ]
+> ```
 > ```javascript
 > function double(x) { return x * 2; }
 > const nums = [1, 2, 3];
@@ -154,16 +153,17 @@ async function processData() {
 >
 > **Explanation:** First-class functions can be passed as values into function arguments.
 
+---
+
 ### Exercise 2: Storing Functions in Data Structures
 
 **Problem:** Store functions in an object dictionary `const ops = { add: (a,b) => a+b }` and call `ops.add(2, 3)`.
 
 **Expected output:**
-```text
-5
-```
-
 > [!check]- Answer
+> ```text
+> 5
+> ```
 > ```javascript
 > const ops = {
 >   add: (a, b) => a + b,
@@ -183,11 +183,10 @@ async function processData() {
 **Problem:** Demonstrate returning a function from another function call.
 
 **Expected output:**
-```text
-Hello World
-```
-
 > [!check]- Answer
+> ```text
+> Hello World
+> ```
 > ```javascript
 > function createGreeter(salutation) {
 >   return function(name) { return `${salutation} ${name}`; };
@@ -198,7 +197,6 @@ Hello World
 >
 > **Explanation:** First-class functions can be returned as output values from function calls.
 
----
 
 ---
 

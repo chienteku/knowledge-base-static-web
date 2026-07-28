@@ -196,34 +196,33 @@ async function processData() {
 **Problem:** Classify `Math` (ECMAScript) vs `fetch` (Web API) vs `fs` (Node.js API).
 
 **Expected output:**
-```text
-Math: ECMAScript, fetch: Web API, fs: Node.js API
-```
-
 > [!check]- Answer
+> ```text
+> Math: ECMAScript, fetch: Web API, fs: Node.js API
+> ```
 > ```javascript
 > console.log("Math: ECMAScript, fetch: Web API, fs: Node.js API");
 > ```
 >
 > **Explanation:** Host environments supply platform-specific APIs extending core ECMAScript specifications.
 
+---
+
 ### Exercise 3: Standardization Bodies Overview
 
 **Problem:** Match specification bodies: ECMA TC39 (ECMAScript) vs WHATWG (HTML/DOM/Fetch).
 
 **Expected output:**
-```text
-TC39: ECMAScript, WHATWG: Web APIs
-```
-
 > [!check]- Answer
+> ```text
+> TC39: ECMAScript, WHATWG: Web APIs
+> ```
 > ```javascript
 > console.log("TC39: ECMAScript, WHATWG: Web APIs");
 > ```
 >
 > **Explanation:** TC39 standardizes language syntax; WHATWG standardizes web platform host APIs.
 
----
 
 ---
 

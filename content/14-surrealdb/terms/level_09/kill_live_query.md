@@ -205,27 +205,27 @@ Write the SurrealQL command to kill a live subscription with UUID `u"a1b2c3d4-e5
 **Problem:** Kill live query subscription with UUID `u"12345678-1234-1234-1234-1234567890ab"`.
 
 **Expected output:**
-```text
-KILL u"12345678-1234-1234-1234-1234567890ab";
-```
-
 > [!check]- Answer
+> ```text
+> KILL u"12345678-1234-1234-1234-1234567890ab";
+> ```
 > ```surrealql
 > KILL u"12345678-1234-1234-1234-1234567890ab";
 > ```
 >
 > **Explanation:** `KILL query_uuid` terminates active real-time WebSocket live query subscriptions.
 
+---
+
 ### Exercise 3: SDK Live Query Cleanup
 
 **Problem:** Write JS SDK call cancelling a live query using `db.kill(queryId)`.
 
 **Expected output:**
-```text
-await db.kill(queryId);
-```
-
 > [!check]- Answer
+> ```text
+> await db.kill(queryId);
+> ```
 > ```javascript
 > await db.kill(queryId);
 > ```

@@ -170,16 +170,17 @@ process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Creating Uppercase Transform Stream
 
 **Problem:** Create a `Transform` stream that converts text chunks to uppercase.
 
 **Expected output:**
-```text
-const upper = new Transform({ transform(chunk, enc, cb) { cb(null, chunk.toString().toUpperCase()); } });
-```
-
 > [!check]- Answer
+> ```text
+> const upper = new Transform({ transform(chunk, enc, cb) { cb(null, chunk.toString().toUpperCase()); } });
+> ```
 > ```javascript
 > const { Transform } = require('stream');
 > const upper = new Transform({
@@ -191,17 +192,18 @@ const upper = new Transform({ transform(chunk, enc, cb) { cb(null, chunk.toStrin
 >
 > **Explanation:** `Transform` stream transforms written input chunks into read output chunks via callback.
 
+---
+
 ### Exercise 3: Common Built-in Transform Streams
 
 **Problem:** Name 2 built-in Node.js modules that provide Transform streams.
 
 **Expected output:**
-```text
-1. `zlib` (zlib.createGzip())
-2. `crypto` (crypto.createCipheriv())
-```
-
 > [!check]- Answer
+> ```text
+> 1. `zlib` (zlib.createGzip())
+> 2. `crypto` (crypto.createCipheriv())
+> ```
 > ```text
 > 1. zlib (e.g. zlib.createGzip())
 > 2. crypto (e.g. crypto.createCipheriv())

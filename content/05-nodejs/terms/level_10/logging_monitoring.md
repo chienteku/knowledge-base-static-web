@@ -170,16 +170,17 @@ app.get('/health/ready', (req, res) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Configuring Pino JSON Logger
 
 **Problem:** Instantiate Pino logger and log an `'info'` level event with `{ userId: 42 }` payload.
 
 **Expected output:**
-```text
-const logger = require('pino')(); logger.info({ userId: 42 }, 'User action');
-```
-
 > [!check]- Answer
+> ```text
+> const logger = require('pino')(); logger.info({ userId: 42 }, 'User action');
+> ```
 > ```javascript
 > const pino = require('pino');
 > const logger = pino();
@@ -188,18 +189,19 @@ const logger = require('pino')(); logger.info({ userId: 42 }, 'User action');
 >
 > **Explanation:** Pino outputs high-performance structured JSON logs compatible with Datadog/ELK.
 
+---
+
 ### Exercise 3: Application Performance Metrics (APM)
 
 **Problem:** List 3 key RED metrics tracked by Application Performance Monitoring (APM) tools for web services.
 
 **Expected output:**
-```text
-1. Rate (Requests per second)
-2. Errors (Failed requests ratio)
-3. Duration (Response latency distributions)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Rate (Requests per second)
+> 2. Errors (Failed requests ratio)
+> 3. Duration (Response latency distributions)
+> ```
 > ```text
 > 1. Rate (requests/sec)
 > 2. Errors (error percentage)

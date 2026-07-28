@@ -155,13 +155,12 @@ CREATE UNIQUE INDEX idx_phone ON users (phone) NULLS NOT DISTINCT; -- Postgres 1
 Write the SQL query to enforce that `listing_code` must be unique **only** for active listings (`is_active = TRUE`).
 
 **Expected output:**
-```sql
-CREATE UNIQUE INDEX idx_unique_active_listing 
-ON listings(listing_code) 
-WHERE is_active = TRUE;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE UNIQUE INDEX idx_unique_active_listing 
+> ON listings(listing_code) 
+> WHERE is_active = TRUE;
+> ```
 > - Use the `CREATE UNIQUE INDEX` syntax targeting the `listing_code` column.
 > - Append the filtering `WHERE` clause at the bottom of the index statement.
 
@@ -174,27 +173,27 @@ WHERE is_active = TRUE;
 **Problem:** Create unique index on `username` concurrently without write locking.
 
 **Expected output:**
-```text
-CREATE UNIQUE INDEX CONCURRENTLY idx_users_username ON users (username);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE UNIQUE INDEX CONCURRENTLY idx_users_username ON users (username);
+> ```
 > ```sql
 > CREATE UNIQUE INDEX CONCURRENTLY idx_users_username ON users (username);
 > ```
 >
 > **Explanation:** `CREATE UNIQUE INDEX CONCURRENTLY` enforces uniqueness without locking writes.
 
+---
+
 ### Exercise 3: Unique Constraint vs Unique Index Relationship
 
 **Problem:** Does creating a `UNIQUE` table constraint automatically create a unique index behind the scenes? (Yes, PostgreSQL creates a supporting unique B-Tree index).
 
 **Expected output:**
-```text
-Yes, PostgreSQL automatically creates a supporting unique B-Tree index
-```
-
 > [!check]- Answer
+> ```text
+> Yes, PostgreSQL automatically creates a supporting unique B-Tree index
+> ```
 > ```text
 > Yes, PostgreSQL automatically creates a supporting unique B-Tree index
 > ```

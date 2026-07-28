@@ -208,16 +208,15 @@ Write the SQL query to create a junction table named `order_items` that links th
 3.  Include an integer metadata column `quantity` (required, defaults to `1`).
 
 **Expected output:**
-```sql
-CREATE TABLE order_items (
-  order_id INT REFERENCES orders(id),
-  product_id INT REFERENCES products(id),
-  quantity INT NOT NULL DEFAULT 1,
-  PRIMARY KEY (order_id, product_id)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE order_items (
+>   order_id INT REFERENCES orders(id),
+>   product_id INT REFERENCES products(id),
+>   quantity INT NOT NULL DEFAULT 1,
+>   PRIMARY KEY (order_id, product_id)
+> );
+> ```
 > - Match the column data types of the foreign keys to the parent IDs.
 > - Declare the composite primary key at the bottom of the statement.
 
@@ -230,11 +229,10 @@ CREATE TABLE order_items (
 **Problem:** Create junction table `user_roles` linking `user_id` and `role_id` with composite primary key and foreign keys.
 
 **Expected output:**
-```text
-CREATE TABLE user_roles ( user_id INT REFERENCES users(id) ON DELETE CASCADE, role_id INT REFERENCES roles(id) ON DELETE CASCADE, PRIMARY KEY (user_id, role_id) );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE user_roles ( user_id INT REFERENCES users(id) ON DELETE CASCADE, role_id INT REFERENCES roles(id) ON DELETE CASCADE, PRIMARY KEY (user_id, role_id) );
+> ```
 > ```sql
 > CREATE TABLE user_roles (
 >   user_id INT REFERENCES users(id) ON DELETE CASCADE,
@@ -245,16 +243,17 @@ CREATE TABLE user_roles ( user_id INT REFERENCES users(id) ON DELETE CASCADE, ro
 >
 > **Explanation:** Junction tables establish normalized Many-to-Many relationships between entities.
 
+---
+
 ### Exercise 3: Querying Many-to-Many via Junction Table
 
 **Problem:** Query all role names for user `user_id = 1` by joining `users`, `user_roles`, and `roles`.
 
 **Expected output:**
-```text
-SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = 1;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = 1;
+> ```
 > ```sql
 > SELECT r.name
 > FROM roles r

@@ -109,16 +109,15 @@ type AbsNumber<T> = T extends number ? number : T; // Type-level conditional eva
 **Problem:** The built-in Utility Type `Exclude<T, U>` removes elements from a Union. For example, `Exclude<"A" | "B" | "C", "A">` resolves to `"B" | "C"`. How do you write this using a Distributive Conditional Type?
 
 **Expected output:**
-```typescript
-type MyExclude<T, U> = T extends U ? never : T;
-
-// How it works under the hood for `Exclude<"A" | "B", "A">`:
-// 1. "A" extends "A"? Yes -> resolve to `never`
-// 2. "B" extends "A"? No -> resolve to "B"
-// 3. Union the results: `never | "B"` === `"B"`!
-```
-
 > [!check]- Answer
+> ```typescript
+> type MyExclude<T, U> = T extends U ? never : T;
+> 
+> // How it works under the hood for `Exclude<"A" | "B", "A">`:
+> // 1. "A" extends "A"? Yes -> resolve to `never`
+> // 2. "B" extends "A"? No -> resolve to "B"
+> // 3. Union the results: `never | "B"` === `"B"`!
+> ```
 > - What type represents "nothing" in a Union? (`never`)
 
 ---
@@ -130,11 +129,10 @@ type MyExclude<T, U> = T extends U ? never : T;
 **Problem:** Create conditional type `TypeName<T>` returning `"string"` | `"number"` | `"boolean"` | `"object"`.
 
 **Expected output:**
-```text
-TypeName utility created
-```
-
 > [!check]- Answer
+> ```text
+> TypeName utility created
+> ```
 > ```typescript
 > type TypeName<T> =
 >   T extends string ? "string" :
@@ -145,16 +143,17 @@ TypeName utility created
 >
 > **Explanation:** Chained conditional types inspect type identity at compile time.
 
+---
+
 ### Exercise 3: Disabling Distributive Conditional Behavior
 
 **Problem:** How to disable distributive evaluation in generic conditional types? (Wrap `[T]` in tuple brackets).
 
 **Expected output:**
-```text
-Wrap generic parameter in tuple brackets [T]
-```
-
 > [!check]- Answer
+> ```text
+> Wrap generic parameter in tuple brackets [T]
+> ```
 > ```typescript
 > console.log("Wrap generic parameter in tuple brackets [T]");
 > ```

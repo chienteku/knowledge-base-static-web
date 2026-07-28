@@ -156,13 +156,12 @@ Select the optimal connection protocol (**ws://**, **wss://**, or **http://**) f
 3.  A production web dashboard deployed to Vercel that displays real-time system metrics charts.
 
 **Expected output:**
-```text
-1. ws:// : Stateful WebSocket is required for real-time updates, and since it is local dev, unencrypted 'ws' is sufficient.
-2. http:// (or https://) : Stateless HTTP is ideal for serverless edge workers where persistent socket pools are not supported.
-3. wss:// : Secure WebSocket is required to support real-time metrics push notifications securely in a production browser environment.
-```
-
 > [!check]- Answer
+> ```text
+> 1. ws:// : Stateful WebSocket is required for real-time updates, and since it is local dev, unencrypted 'ws' is sufficient.
+> 2. http:// (or https://) : Stateless HTTP is ideal for serverless edge workers where persistent socket pools are not supported.
+> 3. wss:// : Secure WebSocket is required to support real-time metrics push notifications securely in a production browser environment.
+> ```
 > - Determine if the environment requires real-time push alerts.
 > - Consider if the deployment is serverless (stateless) or a persistent browser view.
 
@@ -175,27 +174,27 @@ Select the optimal connection protocol (**ws://**, **wss://**, or **http://**) f
 **Problem:** Construct secure production connection URI using SSL WebSocket protocol for `db.example.com`.
 
 **Expected output:**
-```text
-wss://db.example.com/rpc
-```
-
 > [!check]- Answer
+> ```text
+> wss://db.example.com/rpc
+> ```
 > ```text
 > wss://db.example.com/rpc
 > ```
 >
 > **Explanation:** `wss://` establishes encrypted TLS WebSocket channels to SurrealDB RPC endpoints.
 
+---
+
 ### Exercise 3: Memory Storage URI Scheme
 
 **Problem:** What URI scheme is used to run an in-memory embedded SurrealDB instance in Rust or JS SDK? (`mem://`).
 
 **Expected output:**
-```text
-mem://
-```
-
 > [!check]- Answer
+> ```text
+> mem://
+> ```
 > ```text
 > mem://
 > ```

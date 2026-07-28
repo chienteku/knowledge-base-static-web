@@ -113,12 +113,11 @@ if (typeof input === "number") {
 **Problem:** Can you assign a `string` to an `unknown` variable? Can you assign an `unknown` variable to a `string` variable?
 
 **Expected output:**
-```text
-1. Yes: `let x: unknown = "Hello"` is allowed. `unknown` can accept EVERYTHING.
-2. No: `let y: string = x` is an ERROR. You cannot assign `unknown` to a strict type without proving it is a string first!
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes: `let x: unknown = "Hello"` is allowed. `unknown` can accept EVERYTHING.
+> 2. No: `let y: string = x` is an ERROR. You cannot assign `unknown` to a strict type without proving it is a string first!
+> ```
 > - Think of `unknown` as a locked safe.
 
 ---
@@ -130,11 +129,10 @@ if (typeof input === "number") {
 **Problem:** Safely extract `.length` from `val: unknown` using `Array.isArray()` check.
 
 **Expected output:**
-```text
-3
-```
-
 > [!check]- Answer
+> ```text
+> 3
+> ```
 > ```typescript
 > function getLen(val: unknown): number {
 >   if (Array.isArray(val)) return val.length;
@@ -145,16 +143,17 @@ if (typeof input === "number") {
 >
 > **Explanation:** Type guards like `Array.isArray()` safely narrow `unknown` types to specific array types.
 
+---
+
 ### Exercise 3: `any` vs `unknown` Assignment Rules
 
 **Problem:** Can `unknown` be assigned to `number` without type narrowing? (No)
 
 **Expected output:**
-```text
-No, unknown requires type narrowing first
-```
-
 > [!check]- Answer
+> ```text
+> No, unknown requires type narrowing first
+> ```
 > ```typescript
 > console.log("No, unknown requires type narrowing first");
 > ```

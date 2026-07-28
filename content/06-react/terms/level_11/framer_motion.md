@@ -127,16 +127,15 @@ function App({ isVisible }) {
 **Problem:** You want a button to slightly shrink when the user presses down on it, giving a tactile "click" feel. In Framer Motion, there is a specific prop for hover and click states. Can you guess what it looks like?
 
 **Expected output:**
-```javascript
-<motion.button
-  whileHover={{ scale: 1.1 }}
-  whileTap={{ scale: 0.9 }} // Shrinks to 90% size while pressed!
->
-  Click Me
-</motion.button>
-```
-
 > [!check]- Answer
+> ```javascript
+> <motion.button
+>   whileHover={{ scale: 1.1 }}
+>   whileTap={{ scale: 0.9 }} // Shrinks to 90% size while pressed!
+> >
+>   Click Me
+> </motion.button>
+> ```
 > - Think about declarative naming: "while..."
 
 ---
@@ -148,11 +147,10 @@ function App({ isVisible }) {
 **Problem:** Create `<motion.div>` fading in from `opacity: 0` to `opacity: 1` over `0.5` seconds.
 
 **Expected output:**
-```text
-<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>Content</motion.div>
-```
-
 > [!check]- Answer
+> ```text
+> <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>Content</motion.div>
+> ```
 > ```javascript
 > <motion.div
 >   initial={{ opacity: 0 }}
@@ -165,16 +163,17 @@ function App({ isVisible }) {
 >
 > **Explanation:** `initial`, `animate`, and `transition` props control Framer Motion component keyframe animations.
 
+---
+
 ### Exercise 3: AnimatePresence Key Requirement
 
 **Problem:** Why must items inside `<AnimatePresence>` have unique `key` props when animating list item removal? (React uses key identity to track which elements are exiting).
 
 **Expected output:**
-```text
-React uses key identity to track which elements are exiting during AnimatePresence transitions
-```
-
 > [!check]- Answer
+> ```text
+> React uses key identity to track which elements are exiting during AnimatePresence transitions
+> ```
 > ```text
 > React uses key identity to track which elements are exiting during AnimatePresence transitions
 > ```

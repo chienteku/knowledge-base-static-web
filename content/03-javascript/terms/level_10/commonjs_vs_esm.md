@@ -193,34 +193,33 @@ module.exports = logger;
 **Problem:** Convert `module.exports = { add };` to ES module syntax.
 
 **Expected output:**
-```text
-export default { add } or export { add }
-```
-
 > [!check]- Answer
+> ```text
+> export default { add } or export { add }
+> ```
 > ```javascript
 > console.log("export default { add } or export { add }");
 > ```
 >
 > **Explanation:** CommonJS uses `module.exports` and `require()`; ESM uses `export` and `import`.
 
+---
+
 ### Exercise 3: Emulating `__dirname` in ES Modules
 
 **Problem:** Use `import.meta.url` and `fileURLToPath` to emulate `__dirname` in ESM Node.js.
 
 **Expected output:**
-```text
-ESM __dirname emulated
-```
-
 > [!check]- Answer
+> ```text
+> ESM __dirname emulated
+> ```
 > ```javascript
 > console.log("ESM __dirname emulated");
 > ```
 >
 > **Explanation:** `import.meta.url` supplies module URL metadata in ES module contexts.
 
----
 
 ---
 

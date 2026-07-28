@@ -112,22 +112,21 @@ emitter.on('data', (data) => {
 **Problem:** You want to build a `ChatRoom` class. Whenever someone sends a message, it should emit a `message` event. How do you make your custom class an Event Emitter?
 
 **Expected output:**
-```javascript
-const EventEmitter = require('events');
-
-// By extending the class, ChatRoom gains the .on() and .emit() superpowers!
-class ChatRoom extends EventEmitter {
-  sendMessage(user, text) {
-    this.emit('message', `${user} said: ${text}`);
-  }
-}
-
-const room = new ChatRoom();
-room.on('message', (msg) => console.log(msg));
-room.sendMessage("Bob", "Hello!");
-```
-
 > [!check]- Answer
+> ```javascript
+> const EventEmitter = require('events');
+> 
+> // By extending the class, ChatRoom gains the .on() and .emit() superpowers!
+> class ChatRoom extends EventEmitter {
+>   sendMessage(user, text) {
+>     this.emit('message', `${user} said: ${text}`);
+>   }
+> }
+> 
+> const room = new ChatRoom();
+> room.on('message', (msg) => console.log(msg));
+> room.sendMessage("Bob", "Hello!");
+> ```
 > - How do you give a class the superpowers of a parent class in JavaScript?
 
 ---
@@ -139,11 +138,10 @@ room.sendMessage("Bob", "Hello!");
 **Problem:** Create `emitter`, listen for `'userLoggedIn'` event logging `'Welcome ' + name`, and emit event with `'Alice'`. 
 
 **Expected output:**
-```text
-const emitter = new EventEmitter(); emitter.on('userLoggedIn', name => console.log('Welcome ' + name)); emitter.emit('userLoggedIn', 'Alice');
-```
-
 > [!check]- Answer
+> ```text
+> const emitter = new EventEmitter(); emitter.on('userLoggedIn', name => console.log('Welcome ' + name)); emitter.emit('userLoggedIn', 'Alice');
+> ```
 > ```javascript
 > const { EventEmitter } = require('events');
 > const emitter = new EventEmitter();
@@ -153,16 +151,17 @@ const emitter = new EventEmitter(); emitter.on('userLoggedIn', name => console.l
 >
 > **Explanation:** `on(event, listener)` registers subscriber callbacks triggered by `emit(event, data)`.
 
+---
+
 ### Exercise 3: Increasing Max Listeners Limit
 
 **Problem:** Write code to increase default max listeners limit on `emitter` to 20.
 
 **Expected output:**
-```text
-emitter.setMaxListeners(20);
-```
-
 > [!check]- Answer
+> ```text
+> emitter.setMaxListeners(20);
+> ```
 > ```javascript
 > emitter.setMaxListeners(20);
 > ```

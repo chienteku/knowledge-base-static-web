@@ -147,11 +147,10 @@ You have an `images` table where the `vector` field stores `512`-dimension array
 Write the SurrealQL query to define a vector index named `image_similarity` using the `MTREE` algorithm and `euclidean` distance.
 
 **Expected output:**
-```sql
-DEFINE INDEX image_similarity ON images COLUMNS vector MTREE DIMENSION 512 DISTANCE euclidean;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX image_similarity ON images COLUMNS vector MTREE DIMENSION 512 DISTANCE euclidean;
+> ```
 > - The target table is `images` and the column is `vector`.
 > - Specify the algorithm (`MTREE`), dimensions (`512`), and distance metric (`euclidean`) in the definition statement.
 
@@ -164,27 +163,27 @@ DEFINE INDEX image_similarity ON images COLUMNS vector MTREE DIMENSION 512 DISTA
 **Problem:** Define HNSW vector index `doc_vec_idx` on `doc` for 1536-dim `embedding` field using `COSINE` distance.
 
 **Expected output:**
-```text
-DEFINE INDEX doc_vec_idx ON TABLE doc FIELDS embedding HNSW DIMENSION 1536 DIST COSINE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX doc_vec_idx ON TABLE doc FIELDS embedding HNSW DIMENSION 1536 DIST COSINE;
+> ```
 > ```surrealql
 > DEFINE INDEX doc_vec_idx ON TABLE doc FIELDS embedding HNSW DIMENSION 1536 DIST COSINE;
 > ```
 >
 > **Explanation:** `HNSW` vector indexing accelerates k-nearest neighbor (k-NN) similarity searches.
 
+---
+
 ### Exercise 3: Vector Nearest Neighbor Search Query
 
 **Problem:** Query top 5 nearest neighbor documents for `$query_vec` embedding using `vector::similarity::cosine()` or `<fn>`.
 
 **Expected output:**
-```text
-SELECT *, vector::similarity::cosine(embedding, $query_vec) AS score FROM doc ORDER BY score DESC LIMIT 5;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT *, vector::similarity::cosine(embedding, $query_vec) AS score FROM doc ORDER BY score DESC LIMIT 5;
+> ```
 > ```surrealql
 > SELECT *, vector::similarity::cosine(embedding, $query_vec) AS score FROM doc ORDER BY score DESC LIMIT 5;
 > ```

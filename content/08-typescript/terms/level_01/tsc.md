@@ -95,13 +95,12 @@ $ tsc # Correct: Uses tsconfig.json settings
 **Problem:** If you run `npx tsc --noEmit`, what happens?
 
 **Expected output:**
-```text
-The compiler will read your code and perform the Type Checking step (reporting any errors in the console). 
-However, it will completely skip the Code Emission step. No `.js` files will be generated.
-This is exactly how modern frameworks like Vite use TypeScript! They handle the JS building themselves, and just use `tsc` as a linter.
-```
-
 > [!check]- Answer
+> ```text
+> The compiler will read your code and perform the Type Checking step (reporting any errors in the console). 
+> However, it will completely skip the Code Emission step. No `.js` files will be generated.
+> This is exactly how modern frameworks like Vite use TypeScript! They handle the JS building themselves, and just use `tsc` as a linter.
+> ```
 > - What does "Emit" mean in the context of compilers?
 
 ---
@@ -113,27 +112,27 @@ This is exactly how modern frameworks like Vite use TypeScript! They handle the 
 **Problem:** Command to compile project in watch mode automatically recompiling on file save.
 
 **Expected output:**
-```text
-tsc --watch
-```
-
 > [!check]- Answer
+> ```text
+> tsc --watch
+> ```
 > ```typescript
 > console.log("tsc --watch");
 > ```
 >
 > **Explanation:** `tsc -w` / `tsc --watch` runs incremental compilations on file modifications.
 
+---
+
 ### Exercise 3: Type Checking Without JS Code Generation
 
 **Problem:** Command to run type check without emitting `.js` output files.
 
 **Expected output:**
-```text
-tsc --noEmit
-```
-
 > [!check]- Answer
+> ```text
+> tsc --noEmit
+> ```
 > ```typescript
 > console.log("tsc --noEmit");
 > ```

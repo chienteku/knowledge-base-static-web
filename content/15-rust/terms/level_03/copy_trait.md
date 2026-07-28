@@ -186,11 +186,10 @@ fn main() {
 **Problem:** Derive `Copy` and `Clone` on `struct Coordinate { x: f64, y: f64 }` and demonstrate implicit copy on assignment.
 
 **Expected output:**
-```
-Original: (1, 2), Copy: (1, 2)
-```
-
 > [!check]- Answer
+> ```
+> Original: (1, 2), Copy: (1, 2)
+> ```
 > ```rust
 > #[derive(Copy, Clone, Debug)]
 > struct Coordinate { x: f64, y: f64 }
@@ -203,16 +202,17 @@ Original: (1, 2), Copy: (1, 2)
 >
 > **Explanation:** `Copy` types are implicitly duplicated via bitwise stack copies without moving ownership.
 
+---
+
 ### Exercise 3: Function Call Semantics with Copy Types
 
 **Problem:** Pass a `Copy` struct to a function by value and verify the caller retains ownership.
 
 **Expected output:**
-```
-Caller retained: 42
-```
-
 > [!check]- Answer
+> ```
+> Caller retained: 42
+> ```
 > #[derive(Copy, Clone)]
 > struct Data(i32);
 > fn consume(d: Data) { let _ = d.0; }

@@ -193,11 +193,10 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 **Problem:** A user has perfect vision, so their browser root is set to the default `16px`. You write a CSS rule: `margin-bottom: 1.5rem;`. How many pixels of margin is that?
 
 **Expected output:**
-```text
-24 pixels! (1.5 * 16 = 24).
-```
-
 > [!check]- Answer
+> ```text
+> 24 pixels! (1.5 * 16 = 24).
+> ```
 > - Break out a calculator! What is one-and-a-half times sixteen?
 
 ---
@@ -211,12 +210,11 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 2. `font-size: 2em` inside `.card` 
 
 **Expected output:**
-```text
-1. 2rem = 32px (2 * 16px root)
-2. 2em = 40px (2 * 20px parent)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 2rem = 32px (2 * 16px root)
+> 2. 2em = 40px (2 * 20px parent)
+> ```
 > ```text
 > 1. 2rem = 32px (2 * 16px root)
 > 2. 2em = 40px (2 * 20px parent)
@@ -224,16 +222,17 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 >
 > **Explanation:** `rem` calculates against root `<html>` font size; `em` calculates against parent/element font size.
 
+---
+
 ### Exercise 3: Best Practice Unit Selection Rule
 
 **Problem:** When should `rem` be used vs `em`?
 
 **Expected output:**
-```text
-Use rem for global typography, paddings, margins, and container layouts; use em for element-level components that must scale proportionally with local font size (e.g. icon padding inside buttons).
-```
-
 > [!check]- Answer
+> ```text
+> Use rem for global typography, paddings, margins, and container layouts; use em for element-level components that must scale proportionally with local font size (e.g. icon padding inside buttons).
+> ```
 > ```text
 > Use rem for global typography, paddings, margins, and container layouts; use em for element-level components that must scale proportionally with local font size (e.g. icon padding inside buttons).
 > ```

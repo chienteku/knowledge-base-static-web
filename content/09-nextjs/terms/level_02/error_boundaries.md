@@ -178,13 +178,12 @@ async function handleClick() {
 3. A variable lookup on an undefined value during component rendering.
 
 **Expected output:**
-```text
-1. Yes. Render phase syntax or runtime execution errors are caught.
-2. No. Asynchronous promise rejections are not caught by Error Boundaries.
-3. Yes. Rendering property lookups on undefined variables are caught immediately.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes. Render phase syntax or runtime execution errors are caught.
+> 2. No. Asynchronous promise rejections are not caught by Error Boundaries.
+> 3. Yes. Rendering property lookups on undefined variables are caught immediately.
+> ```
 > - Remember that Error Boundaries only intercept errors that occur during the active rendering lifecycle of React.
 
 ---
@@ -194,11 +193,10 @@ async function handleClick() {
 **Problem:** Explain the benefit of placing localized `error.tsx` files inside sub-route folders (e.g. `app/dashboard/settings/error.tsx`).
 
 **Expected output:**
-```text
-Isolated error boundaries catch errors within their specific sub-tree, allowing the rest of the layout (sidebar, header) to remain interactive.
-```
-
 > [!check]- Answer
+> ```text
+> Isolated error boundaries catch errors within their specific sub-tree, allowing the rest of the layout (sidebar, header) to remain interactive.
+> ```
 > - Localized error boundaries isolate runtime failures to sub-routes.
 > 
 > ```text
@@ -213,11 +211,10 @@ Isolated error boundaries catch errors within their specific sub-tree, allowing 
 **Problem:** What is the `error.digest` property passed to `error.tsx` components in Next.js?
 
 **Expected output:**
-```text
-A server-generated hash digest matching the server log entry for security audit and tracking.
-```
-
 > [!check]- Answer
+> ```text
+> A server-generated hash digest matching the server log entry for security audit and tracking.
+> ```
 > - `digest` bridges client error views with server log entries.
 > 
 > ```tsx

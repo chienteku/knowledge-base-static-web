@@ -129,11 +129,10 @@ const { data } = await useFetch('/api/user'); // Serializes data into payload, p
 **Problem:** You use `useFetch('/api/profile')` inside `app.vue`. Explain why the browser's Network tab shows zero outgoing HTTP requests to `/api/profile` when you refresh the page.
 
 **Expected output:**
-```text
-Because of the Nuxt Payload mechanism, the API response is fetched on the server during SSR, serialized, and embedded inside the initial HTML page payload. During hydration, Nuxt reads this embedded data directly to populate the useFetch cache, bypassing the need to trigger a browser network request.
-```
-
 > [!check]- Answer
+> ```text
+> Because of the Nuxt Payload mechanism, the API response is fetched on the server during SSR, serialized, and embedded inside the initial HTML page payload. During hydration, Nuxt reads this embedded data directly to populate the useFetch cache, bypassing the need to trigger a browser network request.
+> ```
 > - Think about where the data is fetched first, and how the client obtains it.
 
 ---
@@ -143,11 +142,10 @@ Because of the Nuxt Payload mechanism, the API response is fetched on the server
 **Problem:** Where is the serialized Nuxt Payload embedded in the server-rendered HTML document?
 
 **Expected output:**
-```text
-Inside a window.__NUXT__ script tag embedded at the bottom of the HTML <body>.
-```
-
 > [!check]- Answer
+> ```text
+> Inside a window.__NUXT__ script tag embedded at the bottom of the HTML <body>.
+> ```
 > - Nuxt Payload is embedded inside `<script>window.__NUXT__=...</script>`.
 > 
 > ```text
@@ -161,11 +159,10 @@ Inside a window.__NUXT__ script tag embedded at the bottom of the HTML <body>.
 **Problem:** Which plugin method allows registering custom serialization reducers for complex objects (e.g. Date or Map) in Nuxt Payload?
 
 **Expected output:**
-```text
-nuxtApp.provide('payload', ...) or createPayloadPlugin()
-```
-
 > [!check]- Answer
+> ```text
+> nuxtApp.provide('payload', ...) or createPayloadPlugin()
+> ```
 > - Custom payload plugins serialize non-primitive data types.
 > 
 > ```typescript

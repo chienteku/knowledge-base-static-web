@@ -180,11 +180,10 @@ thread::spawn(move || {
 **Problem:** Filter a list of `Option<i32>` values using `.filter(|x| matches!(x, Some(n) if *n > 10))`.
 
 **Expected output:**
-```
-[Some(15), Some(20)]
-```
-
 > [!check]- Answer
+> ```
+> [Some(15), Some(20)]
+> ```
 > ```rust
 > fn main() {
 >     let items = vec![Some(5), Some(15), None, Some(20)];
@@ -198,16 +197,17 @@ thread::spawn(move || {
 >
 > **Explanation:** `matches!(val, pattern)` converts pattern matching expressions into Boolean predicates.
 
+---
+
 ### Exercise 3: Testing Multiple Pattern Variants
 
 **Problem:** Use `matches!(c, 'a' | 'e' | 'i' | 'o' | 'u')` to test if char `c` is a vowel.
 
 **Expected output:**
-```
-Is vowel: true
-```
-
 > [!check]- Answer
+> ```
+> Is vowel: true
+> ```
 > ```rust
 > fn main() {
 >     let c = 'e';

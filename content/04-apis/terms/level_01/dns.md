@@ -149,13 +149,12 @@ example.com.  IN  A  192.0.2.1
 3. MX Record
 
 **Expected output:**
-```text
-1. Maps hostname to IPv4 address
-2. Maps hostname to another hostname (alias)
-3. Directs email traffic to mail servers
-```
-
 > [!check]- Answer
+> ```text
+> 1. Maps hostname to IPv4 address
+> 2. Maps hostname to another hostname (alias)
+> 3. Directs email traffic to mail servers
+> ```
 > ```text
 > 1. A Record -> Maps hostname to IPv4 address
 > 2. CNAME Record -> Maps hostname to another hostname (alias)
@@ -170,14 +169,13 @@ example.com.  IN  A  192.0.2.1
 Top-Level Domain (TLD) Server, Recursive Resolver, Root Name Server, Authoritative Name Server
 
 **Expected output:**
-```text
-1. Recursive Resolver
-2. Root Name Server
-3. TLD Server (.com)
-4. Authoritative Name Server (github.com)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Recursive Resolver
+> 2. Root Name Server
+> 3. TLD Server (.com)
+> 4. Authoritative Name Server (github.com)
+> ```
 > ```text
 > 1. Recursive Resolver (e.g. 8.8.8.8)
 > 2. Root Name Server (.)

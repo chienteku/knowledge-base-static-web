@@ -112,13 +112,12 @@ await redis.incr('request_count'); // Persistent state in Redis
 **Problem:** Your Next.js app has a dynamic route `/api/reports` deployed to Vercel as a Serverless Function. On Monday morning at 9:00 AM, 500 users request that page simultaneously. Explain how many serverless containers boot up, and what happens to user variables.
 
 **Expected output:**
-```text
-The cloud provider will automatically detect the traffic spike and spin up approximately 500 individual, concurrent container instances. 
-Each container runs in isolation; they do not share server memory or local files. 
-Once the reports finish processing and traffic subsides, the provider scales down, destroying the containers.
-```
-
 > [!check]- Answer
+> ```text
+> The cloud provider will automatically detect the traffic spike and spin up approximately 500 individual, concurrent container instances. 
+> Each container runs in isolation; they do not share server memory or local files. 
+> Once the reports finish processing and traffic subsides, the provider scales down, destroying the containers.
+> ```
 > - Think about concurrency and stateless scaling characteristics.
 
 ---
@@ -128,11 +127,10 @@ Once the reports finish processing and traffic subsides, the provider scales dow
 **Problem:** Write segment config line setting maximum serverless execution duration to 60 seconds (Pro plan).
 
 **Expected output:**
-```typescript
-export const maxDuration = 60;
-```
-
 > [!check]- Answer
+> ```typescript
+> export const maxDuration = 60;
+> ```
 > - `export const maxDuration = N` configures serverless function timeout in seconds.
 > 
 > ```typescript
@@ -146,11 +144,10 @@ export const maxDuration = 60;
 **Problem:** How do Serverless Functions handle 1,000 simultaneous concurrent HTTP requests?
 
 **Expected output:**
-```text
-The cloud platform automatically spawns 1,000 independent container instances in parallel to handle each request concurrently.
-```
-
 > [!check]- Answer
+> ```text
+> The cloud platform automatically spawns 1,000 independent container instances in parallel to handle each request concurrently.
+> ```
 > - Auto-scales by spawning independent execution containers per request.
 > 
 > ```text

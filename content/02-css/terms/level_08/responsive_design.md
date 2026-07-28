@@ -259,14 +259,13 @@ img {
 How do you modify it to make the images responsive?
 
 **Expected output:**
-```css
-img {
-  max-width: 100%;
-  height: auto;
-}
-```
-
 > [!check]- Answer
+> ```css
+> img {
+>   max-width: 100%;
+>   height: auto;
+> }
+> ```
 > - The image has a hard constraint (`500px`).
 > - Force it to scale dynamically relative to the container width.
 
@@ -279,13 +278,12 @@ img {
 **Problem:** List the 3 foundational pillars of Responsive Web Design formulated by Ethan Marcotte.
 
 **Expected output:**
-```text
-1. Fluid Grids (percentage/fr layouts)
-2. Flexible Media (max-width: 100% images)
-3. Media Queries (@media breakpoints)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Fluid Grids (percentage/fr layouts)
+> 2. Flexible Media (max-width: 100% images)
+> 3. Media Queries (@media breakpoints)
+> ```
 > ```text
 > 1. Fluid Grids (percentage/fr layouts)
 > 2. Flexible Media (max-width: 100% images)
@@ -294,16 +292,17 @@ img {
 >
 > **Explanation:** These 3 pillars enable web pages to adapt fluidly across all screen sizes.
 
+---
+
 ### Exercise 3: Global Responsive Image CSS Reset
 
 **Problem:** Write CSS rule applying fluid responsive scaling to all `<img>`, `<picture>`, and `<video>` tags.
 
 **Expected output:**
-```text
-img, picture, video { max-width: 100%; height: auto; display: block; }
-```
-
 > [!check]- Answer
+> ```text
+> img, picture, video { max-width: 100%; height: auto; display: block; }
+> ```
 > ```css
 > img, picture, video {
 >   max-width: 100%;

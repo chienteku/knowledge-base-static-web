@@ -112,15 +112,14 @@ console.log("3. Done.");
 ```
 
 **Expected output:**
-```text
-1. Starting...
-3. Done.
-2. File finished reading!
-
-Because `fs.readFile` is Non-Blocking, Node.js hands the task to the C++ background workers and immediately jumps to line 3. Only after the file is completely read does the callback function on line 2 execute.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Starting...
+> 3. Done.
+> 2. File finished reading!
+> 
+> Because `fs.readFile` is Non-Blocking, Node.js hands the task to the C++ background workers and immediately jumps to line 3. Only after the file is completely read does the callback function on line 2 execute.
+> ```
 > - Does Node.js stop and wait on the `readFile` line?
 
 ---
@@ -132,11 +131,10 @@ Because `fs.readFile` is Non-Blocking, Node.js hands the task to the C++ backgro
 **Problem:** Convert synchronous code `const text = fs.readFileSync('file.txt', 'utf-8'); console.log(text);` to non-blocking async syntax using `fs.promises`.
 
 **Expected output:**
-```text
-const text = await fs.promises.readFile('file.txt', 'utf-8'); console.log(text);
-```
-
 > [!check]- Answer
+> ```text
+> const text = await fs.promises.readFile('file.txt', 'utf-8'); console.log(text);
+> ```
 > ```javascript
 > const text = await fs.promises.readFile('file.txt', 'utf-8');
 > console.log(text);
@@ -144,16 +142,17 @@ const text = await fs.promises.readFile('file.txt', 'utf-8'); console.log(text);
 >
 > **Explanation:** `fs.promises` delegates file operations to thread pool without blocking the main event loop.
 
+---
+
 ### Exercise 3: Understanding Non-Blocking Concurrency
 
 **Problem:** If 100 HTTP requests request a database query taking 50ms each, approximately how long does Node.js take to process all 100 requests concurrently?
 
 **Expected output:**
-```text
-Slightly over 50ms (around 50-60ms total) because non-blocking I/O queries execute concurrently on database sockets.
-```
-
 > [!check]- Answer
+> ```text
+> Slightly over 50ms (around 50-60ms total) because non-blocking I/O queries execute concurrently on database sockets.
+> ```
 > ```text
 > ~50-60ms total
 > ```

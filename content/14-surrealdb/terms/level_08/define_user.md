@@ -169,27 +169,27 @@ Write a `DEFINE USER` statement that creates a database user named `support_agen
 **Problem:** Define database system user `dev_editor` on database `main` with password `"pass123"` and role `EDITOR`.
 
 **Expected output:**
-```text
-DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
+> ```
 > ```surrealql
 > DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
 > ```
 >
 > **Explanation:** `DEFINE USER` creates system database administrators with specified role privileges.
 
+---
+
 ### Exercise 3: System User Roles Overview
 
 **Problem:** List 3 built-in system user roles in SurrealDB (`OWNER`, `EDITOR`, `VIEWER`).
 
 **Expected output:**
-```text
-OWNER, EDITOR, VIEWER
-```
-
 > [!check]- Answer
+> ```text
+> OWNER, EDITOR, VIEWER
+> ```
 > ```text
 > OWNER, EDITOR, VIEWER
 > ```

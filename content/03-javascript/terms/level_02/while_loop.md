@@ -155,16 +155,15 @@ async function processData() {
 **Problem:** Write a `while` loop that takes a starting number of `100`. Inside the loop, divide the number by `2` and log it. The loop should stop *before* the number drops below `1`.
 
 **Expected output:**
-```text
-50
-25
-12.5
-6.25
-3.125
-1.5625
-```
-
 > [!check]- Answer
+> ```text
+> 50
+> 25
+> 12.5
+> 6.25
+> 3.125
+> 1.5625
+> ```
 > - Start with `let num = 100;`
 > - The condition should be `while (num / 2 >= 1)` or similar.
 > - Inside the loop, do `num = num / 2;` and then `console.log(num);`.
@@ -176,11 +175,10 @@ async function processData() {
 **Problem:** Sum numbers from `1` to `5` using a `while` loop.
 
 **Expected output:**
-```text
-15
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> ```
 > ```javascript
 > let sum = 0;
 > let i = 1;
@@ -193,18 +191,19 @@ async function processData() {
 >
 > **Explanation:** `while` loops execute code blocks repeatedly as long as conditional expressions evaluate to truthy.
 
+---
+
 ### Exercise 3: Sentinel Value Loop Termination
 
 **Problem:** Pop items off an array `[10, 20, 30]` using `while (stack.length > 0)`.
 
 **Expected output:**
-```text
-Popped: 30
-Popped: 20
-Popped: 10
-```
-
 > [!check]- Answer
+> ```text
+> Popped: 30
+> Popped: 20
+> Popped: 10
+> ```
 > ```javascript
 > const stack = [10, 20, 30];
 > while (stack.length > 0) {
@@ -214,7 +213,6 @@ Popped: 10
 >
 > **Explanation:** Mutating collection boundaries in loop conditions provides clean sentinel termination.
 
----
 
 ---
 

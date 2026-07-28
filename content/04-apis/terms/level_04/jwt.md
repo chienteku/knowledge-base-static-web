@@ -106,12 +106,11 @@ jwt.verify(token, key, { algorithms: ['HS256'] });
 **Problem:** A hacker steals a user's valid JWT from an unencrypted Wi-Fi network. Can the hacker use the JWT to access the user's account?
 
 **Expected output:**
-```text
-Yes! 
-A JWT is a "Bearer Token." Whoever bears (holds) the token gets access. The server has no way of knowing the hacker isn't the real user. This is exactly why APIs MUST use HTTPS to encrypt the network so hackers can't steal the token in transit!
-```
-
 > [!check]- Answer
+> ```text
+> Yes! 
+> A JWT is a "Bearer Token." Whoever bears (holds) the token gets access. The server has no way of knowing the hacker isn't the real user. This is exactly why APIs MUST use HTTPS to encrypt the network so hackers can't steal the token in transit!
+> ```
 > - Does the server check IP addresses, or just the math of the signature?
 
 ---
@@ -121,13 +120,12 @@ A JWT is a "Bearer Token." Whoever bears (holds) the token gets access. The serv
 **Problem:** Identify the 3 dot-separated components of a JSON Web Token (`header.payload.signature`).
 
 **Expected output:**
-```text
-1. Header (Algorithm & Token Type)
-2. Payload (Claims & Expiration)
-3. Signature (HMAC or RSA signature verification string)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Header (Algorithm & Token Type)
+> 2. Payload (Claims & Expiration)
+> 3. Signature (HMAC or RSA signature verification string)
+> ```
 > ```text
 > Part 1 -> Header: {"alg": "HS256", "typ": "JWT"}
 > Part 2 -> Payload: {"sub": "123", "exp": 1700000000}
@@ -145,14 +143,13 @@ A JWT is a "Bearer Token." Whoever bears (holds) the token gets access. The serv
 4. `iss` 
 
 **Expected output:**
-```text
-1. Subject (User ID)
-2. Expiration Time
-3. Issued At
-4. Issuer
-```
-
 > [!check]- Answer
+> ```text
+> 1. Subject (User ID)
+> 2. Expiration Time
+> 3. Issued At
+> 4. Issuer
+> ```
 > ```text
 > 1. sub -> Subject (User ID)
 > 2. exp -> Expiration Time

@@ -160,12 +160,11 @@ console.log(mySet.size);
 ```
 
 **Expected output:**
-```text
-`2`.
-Just like Maps, Sets use strict equality (`===`) to check for duplicates. Because Objects are compared by memory reference, those are two completely different, unique Objects in memory, even though they look identical to a human. The Set accepts both!
-```
-
 > [!check]- Answer
+> ```text
+> `2`.
+> Just like Maps, Sets use strict equality (`===`) to check for duplicates. Because Objects are compared by memory reference, those are two completely different, unique Objects in memory, even though they look identical to a human. The Set accepts both!
+> ```
 > - Sets are extremely strict about what counts as a "duplicate".
 
 ---
@@ -175,11 +174,10 @@ Just like Maps, Sets use strict equality (`===`) to check for duplicates. Becaus
 **Problem:** Deduplicate `[1, 2, 2, 3, 3, 3]` using `[...new Set(arr)]`.
 
 **Expected output:**
-```text
-[ 1, 2, 3 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3 ]
+> ```
 > ```javascript
 > const dupes = [1, 2, 2, 3, 3, 3];
 > const unique = [...new Set(dupes)];
@@ -188,16 +186,17 @@ Just like Maps, Sets use strict equality (`===`) to check for duplicates. Becaus
 >
 > **Explanation:** Passing arrays into `Set` constructors and spreading back into arrays removes duplicate items.
 
+---
+
 ### Exercise 3: Set Operations (`has`, `add`, `delete`)
 
 **Problem:** Add elements to a `Set`, test `.has(2)`, delete `2`, and check `.size`.
 
 **Expected output:**
-```text
-has: true, size after delete: 1
-```
-
 > [!check]- Answer
+> ```text
+> has: true, size after delete: 1
+> ```
 > ```javascript
 > const set = new Set();
 > set.add(1);
@@ -209,7 +208,6 @@ has: true, size after delete: 1
 >
 > **Explanation:** `Set` methods manage collections of unique values efficiently.
 
----
 
 ---
 

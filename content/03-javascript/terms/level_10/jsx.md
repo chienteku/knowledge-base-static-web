@@ -136,20 +136,11 @@ async function processData() {
 **Problem:** If you try to write a component that returns two sibling elements, JSX will throw a Syntax Error: `return <h1>Title</h1><p>Description</p>;`. Why does this happen and how do you fix it?
 
 **Expected output:**
-```text
-A function can only return ONE thing. Because JSX compiles down to `React.createElement()` function calls, you cannot return two separate function calls at the same time!
-You must wrap them in a single parent element, like a `<div>`, or use a special React Fragment `<>`:
-```
-```jsx
-return (
-  <>
-    <h1>Title</h1>
-    <p>Description</p>
-  </>
-);
-```
-
 > [!check]- Answer
+> ```text
+> A function can only return ONE thing. Because JSX compiles down to `React.createElement()` function calls, you cannot return two separate function calls at the same time!
+> You must wrap them in a single parent element, like a `<div>`, or use a special React Fragment `<>`:
+> ```
 > - Think about how many values a normal JavaScript function can `return`.
 
 ---
@@ -159,34 +150,33 @@ return (
 **Problem:** Desugar `<h1 id="title">Hello</h1>` to raw JS function call.
 
 **Expected output:**
-```text
-React.createElement("h1", { id: "title" }, "Hello")
-```
-
 > [!check]- Answer
+> ```text
+> React.createElement("h1", { id: "title" }, "Hello")
+> ```
 > ```javascript
 > console.log('React.createElement("h1", { id: "title" }, "Hello")');
 > ```
 >
 > **Explanation:** Transpilers convert JSX tags into `React.createElement` or `jsx()` factory function calls.
 
+---
+
 ### Exercise 3: JSX Expression Interpolation Rules
 
 **Problem:** Explain why booleans, null, and undefined render nothing in JSX `{false}`.
 
 **Expected output:**
-```text
-Booleans, null, and undefined render empty nodes
-```
-
 > [!check]- Answer
+> ```text
+> Booleans, null, and undefined render empty nodes
+> ```
 > ```javascript
 > console.log("Booleans, null, and undefined render empty nodes");
 > ```
 >
 > **Explanation:** JSX ignores nullish and boolean values to facilitate conditional rendering (`cond && <Tag />`).
 
----
 
 ---
 

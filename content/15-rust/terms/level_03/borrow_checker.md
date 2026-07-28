@@ -185,11 +185,10 @@ fn main() {
 **Problem:** Fix compiler error `E0502` when trying to modify a struct field `p.x` while holding an active reference `r = &p.x`.
 
 **Expected output:**
-```
-X: 20
-```
-
 > [!check]- Answer
+> ```
+> X: 20
+> ```
 > ```rust
 > struct Point { x: i32 }
 > fn main() {
@@ -205,16 +204,17 @@ X: 20
 >
 > **Explanation:** Restricting reference variable scopes ensures immutable borrows end before mutable assignments begin.
 
+---
+
 ### Exercise 3: Non-Lexical Lifetimes (NLL) Optimization
 
 **Problem:** Demonstrate that an immutable reference `r = &val` can be used before a mutable reference `m = &mut val` if `r` is never accessed afterwards.
 
 **Expected output:**
-```
-Val: 100
-```
-
 > [!check]- Answer
+> ```
+> Val: 100
+> ```
 > ```rust
 > fn main() {
 >     let mut val = 50;

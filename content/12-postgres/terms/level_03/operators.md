@@ -147,15 +147,14 @@ SELECT * FROM t WHERE val = ANY(COALESCE(array_col, ARRAY[]::INT[]));
 3.  The item name starts with the word `'Smart'` (e.g. 'Smartphone', 'Smartwatch').
 
 **Expected output:**
-```sql
-SELECT item_name 
-FROM inventory 
-WHERE price > 100 
-  AND status <> 'discontinued' 
-  AND item_name LIKE 'Smart%';
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT item_name 
+> FROM inventory 
+> WHERE price > 100 
+>   AND status <> 'discontinued' 
+>   AND item_name LIKE 'Smart%';
+> ```
 > - Combine the conditions using `AND` operators.
 > - Use `<>` or `!=` for inequality and `LIKE 'Smart%'` for the prefix text match.
 
@@ -168,27 +167,27 @@ WHERE price > 100
 **Problem:** Query users whose `email` ends with `'@gmail.com'` case-insensitively using `ILIKE`.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE email ILIKE '%@gmail.com';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE email ILIKE '%@gmail.com';
+> ```
 > ```sql
 > SELECT * FROM users WHERE email ILIKE '%@gmail.com';
 > ```
 >
 > **Explanation:** `ILIKE` performs case-insensitive wildcard string pattern matching.
 
+---
+
 ### Exercise 3: Array Member Comparison with `ANY`
 
 **Problem:** Query rows where `role` matches any array item in `ARRAY['admin', 'mod']` using `= ANY()`.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE role = ANY(ARRAY['admin', 'mod']);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE role = ANY(ARRAY['admin', 'mod']);
+> ```
 > ```sql
 > SELECT * FROM users WHERE role = ANY(ARRAY['admin', 'mod']);
 > ```

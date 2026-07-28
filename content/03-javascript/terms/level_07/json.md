@@ -192,12 +192,10 @@ console.log(result);
 ```
 
 **Expected output:**
-```text
-{"theme":"dark","volume":75}
-```
-*(Notice that `saveState` was omitted entirely because JSON does not support the `undefined` type!)*
-
 > [!check]- Answer
+> ```text
+> {"theme":"dark","volume":75}
+> ```
 > - Call `JSON.stringify(localSettings)`.
 
 ---
@@ -207,11 +205,10 @@ console.log(result);
 **Problem:** Filter out object properties named `"password"` using `JSON.stringify(obj, ["name", "email"])`.
 
 **Expected output:**
-```text
-{"name":"Alice","email":"a@test.com"}
-```
-
 > [!check]- Answer
+> ```text
+> {"name":"Alice","email":"a@test.com"}
+> ```
 > ```javascript
 > const user = { name: "Alice", email: "a@test.com", password: "12345" };
 > console.log(JSON.stringify(user, ["name", "email"]));
@@ -219,16 +216,17 @@ console.log(result);
 >
 > **Explanation:** The second parameter array argument in `JSON.stringify` acts as an allowed property whitelist.
 
+---
+
 ### Exercise 3: Parsing JSON with Reviver Functions
 
 **Problem:** Revive ISO date strings to Date objects using `JSON.parse(str, reviver)`.
 
 **Expected output:**
-```text
-2026
-```
-
 > [!check]- Answer
+> ```text
+> 2026
+> ```
 > ```javascript
 > const json = '{"created":"2026-01-01T00:00:00.000Z"}';
 > const obj = JSON.parse(json, (key, val) => {

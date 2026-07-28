@@ -156,14 +156,13 @@ Keep autovacuum = on enabled globally and tune scale factors for busy tables
 4.  `VACUUM ANALYZE`
 
 **Expected output:**
-```text
-1. VACUUM: Reclaims dead tuple slots concurrently without blocking reads or writes.
-2. ANALYZE: Updates query planner statistics in the system catalogs.
-3. VACUUM FULL: Rebuilds the table file on disk to return space to the OS, locking the table.
-4. VACUUM ANALYZE: Performs both slot space reclamation and stats compilation in a single run.
-```
-
 > [!check]- Answer
+> ```text
+> 1. VACUUM: Reclaims dead tuple slots concurrently without blocking reads or writes.
+> 2. ANALYZE: Updates query planner statistics in the system catalogs.
+> 3. VACUUM FULL: Rebuilds the table file on disk to return space to the OS, locking the table.
+> 4. VACUUM ANALYZE: Performs both slot space reclamation and stats compilation in a single run.
+> ```
 > - Differentiate background tasks from blocking table rewrite operations.
 > - Identify the command that targets the query planner's maps.
 
@@ -176,27 +175,27 @@ Keep autovacuum = on enabled globally and tune scale factors for busy tables
 **Problem:** Run non-blocking `VACUUM ANALYZE` on `orders` table to clean dead tuples and update planner statistics.
 
 **Expected output:**
-```text
-VACUUM ANALYZE orders;
-```
-
 > [!check]- Answer
+> ```text
+> VACUUM ANALYZE orders;
+> ```
 > ```sql
 > VACUUM ANALYZE orders;
 > ```
 >
 > **Explanation:** Standard `VACUUM ANALYZE` reclaims dead tuple space concurrently while updating query planner statistics.
 
+---
+
 ### Exercise 3: Role of Autovacuum Daemon
 
 **Problem:** List 2 primary responsibilities of the autovacuum background daemon (1. Reclaims dead MVCC tuple space; 2. Updates `pg_statistic` planner statistics).
 
 **Expected output:**
-```text
-1. Reclaims dead MVCC tuple space; 2. Updates pg_statistic planner statistics
-```
-
 > [!check]- Answer
+> ```text
+> 1. Reclaims dead MVCC tuple space; 2. Updates pg_statistic planner statistics
+> ```
 > ```text
 > 1. Reclaims dead MVCC tuple space; 2. Updates pg_statistic planner statistics
 > ```

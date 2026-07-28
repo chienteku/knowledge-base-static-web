@@ -96,12 +96,11 @@ GET /api/verify?token=abc-def_123 HTTP/1.1 ; Safe Base64URL encoding
 **Problem:** You are building a login system. You don't want the database admin to see the user's passwords. You run the passwords through a Base64 encoder and save the resulting string (`cGFzc3dvcmQxMjM=`) in the database. Why are you fired the next day?
 
 **Expected output:**
-```text
-Because Base64 is not encryption! 
-Any hacker (or the database admin) can take that string, paste it into an online Base64 Decoder, and instantly see the original password ("password123"). You must use a one-way hashing algorithm (like bcrypt) for passwords!
-```
-
 > [!check]- Answer
+> ```text
+> Because Base64 is not encryption! 
+> Any hacker (or the database admin) can take that string, paste it into an online Base64 Decoder, and instantly see the original password ("password123"). You must use a one-way hashing algorithm (like bcrypt) for passwords!
+> ```
 > - Does Base64 require a secret key to decode? (No).
 
 ---
@@ -111,11 +110,10 @@ Any hacker (or the database admin) can take that string, paste it into an online
 **Problem:** Calculate the approximate size increase percentage when converting binary data into Base64 encoded text.
 
 **Expected output:**
-```text
-33% size increase (4 bytes of text generated for every 3 bytes of binary data).
-```
-
 > [!check]- Answer
+> ```text
+> 33% size increase (4 bytes of text generated for every 3 bytes of binary data).
+> ```
 > ```text
 > 33% size increase (Ratio of 4:3 -> 4/3 = 133.3%).
 > ```
@@ -127,11 +125,10 @@ Any hacker (or the database admin) can take that string, paste it into an online
 **Problem:** What is the purpose of the trailing equals sign (`=`) padding characters in Base64 strings?
 
 **Expected output:**
-```text
-Padding (`=` or `==`) pads the input to a multiple of 4 output characters when the binary byte length is not divisible by 3.
-```
-
 > [!check]- Answer
+> ```text
+> Padding (`=` or `==`) pads the input to a multiple of 4 output characters when the binary byte length is not divisible by 3.
+> ```
 > ```text
 > Padding (`=` or `==`) pads the input to a multiple of 4 output characters when the binary byte length is not divisible by 3.
 > ```

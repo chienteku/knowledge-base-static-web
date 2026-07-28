@@ -159,21 +159,20 @@ WITH ranked AS (SELECT name, ROW_NUMBER() OVER (ORDER BY score DESC) AS rk FROM 
 If there is a tie for the highest salary in a department, return **both** tied employees. (Use `DENSE_RANK()` and a CTE).
 
 **Expected output:**
-```sql
-WITH ranked_salaries AS (
-  SELECT 
-    name, 
-    dept, 
-    salary,
-    DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) as salary_rank
-  FROM employees
-)
-SELECT name, dept, salary
-FROM ranked_salaries
-WHERE salary_rank = 1;
-```
-
 > [!check]- Answer
+> ```sql
+> WITH ranked_salaries AS (
+>   SELECT 
+>     name, 
+>     dept, 
+>     salary,
+>     DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) as salary_rank
+>   FROM employees
+> )
+> SELECT name, dept, salary
+> FROM ranked_salaries
+> WHERE salary_rank = 1;
+> ```
 > - Set up a CTE to calculate the ranks using `DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC)`.
 > - In the outer query, filter for `salary_rank = 1`.
 
@@ -186,11 +185,10 @@ WHERE salary_rank = 1;
 **Problem:** Query highest price product per category using `ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC)` in CTE.
 
 **Expected output:**
-```text
-WITH ranked AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn FROM products) SELECT * FROM ranked WHERE rn = 1;
-```
-
 > [!check]- Answer
+> ```text
+> WITH ranked AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY category ORDER BY price DESC) AS rn FROM products) SELECT * FROM ranked WHERE rn = 1;
+> ```
 > ```sql
 > WITH ranked AS (
 >   SELECT *,
@@ -202,16 +200,17 @@ WITH ranked AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY category ORDER BY pric
 >
 > **Explanation:** Partitioning window functions by category isolates ranking subsets.
 
+---
+
 ### Exercise 3: RANK vs DENSE_RANK Sequence Output
 
 **Problem:** Given tied scores `[100, 100, 90]`, list outputs for `RANK()` (`1, 1, 3`) and `DENSE_RANK()` (`1, 1, 2`).
 
 **Expected output:**
-```text
-RANK: 1, 1, 3; DENSE_RANK: 1, 1, 2
-```
-
 > [!check]- Answer
+> ```text
+> RANK: 1, 1, 3; DENSE_RANK: 1, 1, 2
+> ```
 > ```text
 > RANK: 1, 1, 3; DENSE_RANK: 1, 1, 2
 > ```

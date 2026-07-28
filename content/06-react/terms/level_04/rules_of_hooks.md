@@ -125,12 +125,11 @@ function Checkout() {
 ```
 
 **Expected output:**
-```text
-1. `calculateTaxes` is a regular JS function, not a Component. You cannot use `useState` inside it.
-2. `Checkout` uses `useEffect` inside a `for` loop. Hooks must be at the top level, never nested in loops.
-```
-
 > [!check]- Answer
+> ```text
+> 1. `calculateTaxes` is a regular JS function, not a Component. You cannot use `useState` inside it.
+> 2. `Checkout` uses `useEffect` inside a `for` loop. Hooks must be at the top level, never nested in loops.
+> ```
 > - Check the two main rules: Top Level only, and React Functions only.
 
 ---
@@ -142,27 +141,27 @@ function Checkout() {
 **Problem:** State 2 core Rules of Hooks (1. Only call Hooks at the top level — never inside loops, conditions, or nested functions; 2. Only call Hooks from React Function Components or Custom Hooks).
 
 **Expected output:**
-```text
-1. Call Hooks at top level only; 2. Call Hooks from React Function Components or Custom Hooks only
-```
-
 > [!check]- Answer
+> ```text
+> 1. Call Hooks at top level only; 2. Call Hooks from React Function Components or Custom Hooks only
+> ```
 > ```text
 > 1. Call Hooks at top level only; 2. Call Hooks from React Function Components or Custom Hooks only
 > ```
 >
 > **Explanation:** Rules of Hooks guarantee consistent hook execution order across renders.
 
+---
+
 ### Exercise 3: Refactoring Conditional Hook Call
 
 **Problem:** Refactor `if (id) { const [data] = useState(); }` to comply with Rules of Hooks.
 
 **Expected output:**
-```text
-Call useState at top level unconditionally; handle condition in render or effect logic
-```
-
 > [!check]- Answer
+> ```text
+> Call useState at top level unconditionally; handle condition in render or effect logic
+> ```
 > ```javascript
 > const [data, setData] = useState();
 > useEffect(() => {

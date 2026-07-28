@@ -139,11 +139,10 @@ thread::spawn(move || {
 **Problem:** Define a function named `square` that takes a single `i32` parameter and returns its square (the number multiplied by itself).
 
 **Expected output:**
-```text
-The square of 4 is 16
-```
-
 > [!check]- Answer
+> ```text
+> The square of 4 is 16
+> ```
 > - Start with the `fn` keyword.
 > - Name the parameter something like `num: i32`.
 > - Don't forget the return type `-> i32`.
@@ -156,11 +155,10 @@ The square of 4 is 16
 **Problem:** Define a function `apply_op(a: i32, b: i32, op: fn(i32, i32) -> i32) -> i32`. Call it with a multiplication function and print the result for `3` and `7`.
 
 **Expected output:**
-```
-21
-```
-
 > [!check]- Answer
+> ```
+> 21
+> ```
 > ```rust
 > fn multiply(x: i32, y: i32) -> i32 { x * y }
 > fn apply_op(a: i32, b: i32, op: fn(i32, i32) -> i32) -> i32 {
@@ -173,16 +171,17 @@ The square of 4 is 16
 >
 > **Explanation:** `fn(i32, i32) -> i32` is a function pointer type in Rust, allowing top-level functions to be passed as arguments.
 
+---
+
 ### Exercise 3: Early Return Guard Clause
 
 **Problem:** Write a function `divide(numerator: f64, denominator: f64) -> Option<f64>` that uses an early `return None;` guard clause if `denominator == 0.0`.
 
 **Expected output:**
-```
-Result: 4
-```
-
 > [!check]- Answer
+> ```
+> Result: 4
+> ```
 > ```rust
 > fn divide(n: f64, d: f64) -> Option<f64> {
 >     if d == 0.0 {

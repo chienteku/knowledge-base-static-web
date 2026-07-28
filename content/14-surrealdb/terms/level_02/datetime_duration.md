@@ -157,11 +157,10 @@ RETURN $now + 5m; // Correct: Adds 5 minutes duration
 Calculate the resulting UTC datetime value returned by the database.
 
 **Expected output:**
-```text
-d"2026-07-22T12:30:00Z"
-```
-
 > [!check]- Answer
+> ```text
+> d"2026-07-22T12:30:00Z"
+> ```
 > - Add 1 day to the starting date: `2026-07-22T10:00:00Z`.
 > - Add 2 hours and 30 minutes to the calculated intermediate date time.
 
@@ -174,27 +173,27 @@ d"2026-07-22T12:30:00Z"
 **Problem:** Calculate expiration datetime 7 days from `time::now()` using `7d` duration.
 
 **Expected output:**
-```text
-time::now() + 7d
-```
-
 > [!check]- Answer
+> ```text
+> time::now() + 7d
+> ```
 > ```surrealql
 > RETURN time::now() + 7d;
 > ```
 >
 > **Explanation:** Durations (`7d`, `24h`, `30s`) add directly to native `datetime` values.
 
+---
+
 ### Exercise 3: Formatting Datetimes with `time::format()`
 
 **Problem:** Format `time::now()` into year-month-day string format `%Y-%m-%d`.
 
 **Expected output:**
-```text
-time::format(time::now(), "%Y-%m-%d")
-```
-
 > [!check]- Answer
+> ```text
+> time::format(time::now(), "%Y-%m-%d")
+> ```
 > ```surrealql
 > RETURN time::format(time::now(), "%Y-%m-%d");
 > ```

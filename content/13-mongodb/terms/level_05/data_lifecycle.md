@@ -143,15 +143,10 @@ The documents do not delete after 60 seconds.
 2.  Write the corrected index command.
 
 **Expected output:**
-```text
-1. The TTL index is failing because it was declared as a compound index (`{ ip: 1, created_at: 1 }`). MongoDB TTL indexes must be single-field indexes; the database engine cannot apply expiration rules to compound paths.
-```
-```javascript
-// 2. Corrected index command
-db.api_limits.createIndex({ created_at: 1 }, { expireAfterSeconds: 60 });
-```
-
 > [!check]- Answer
+> ```text
+> 1. The TTL index is failing because it was declared as a compound index (`{ ip: 1, created_at: 1 }`). MongoDB TTL indexes must be single-field indexes; the database engine cannot apply expiration rules to compound paths.
+> ```
 > - Check the number of fields in the index definition keys.
 > - TTL indexes can only be bound to a single date field.
 
@@ -164,11 +159,10 @@ db.api_limits.createIndex({ created_at: 1 }, { expireAfterSeconds: 60 });
 **Problem:** Create TTL index on `sessions` collection expiring documents 30 days (2592000 seconds) after `createdAt`.
 
 **Expected output:**
-```text
-db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
-```
-
 > [!check]- Answer
+> ```text
+> db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
+> ```
 > ```javascript
 > db.sessions.createIndex(
 >   { createdAt: 1 },
@@ -178,16 +172,17 @@ db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
 >
 > **Explanation:** TTL indexes automatically delete expired documents in background threads.
 
+---
+
 ### Exercise 3: Modifying Existing TTL Expiry Duration
 
 **Problem:** Command to modify existing TTL index expiry time using `collMod` command.
 
 **Expected output:**
-```text
-db.runCommand({ collMod: "sessions", index: { keyPattern: { createdAt: 1 }, expireAfterSeconds: 86400 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.runCommand({ collMod: "sessions", index: { keyPattern: { createdAt: 1 }, expireAfterSeconds: 86400 } });
+> ```
 > ```javascript
 > db.runCommand({
 >   collMod: "sessions",

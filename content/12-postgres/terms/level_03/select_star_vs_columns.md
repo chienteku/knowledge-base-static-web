@@ -144,12 +144,11 @@ SELECT id, name, email FROM users; -- Immutable explicit column list
 **Problem:** You are building a mobile app dashboard. The dashboard displays a user's name and avatar image link. The database `profiles` table has columns `id`, `user_name`, `avatar_url`, `hashed_password`, `street_address`, `zip_code`, and `bio_description`. Write the optimized SQL query to fetch the dashboard data.
 
 **Expected output:**
-```sql
-SELECT user_name, avatar_url 
-FROM profiles;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT user_name, avatar_url 
+> FROM profiles;
+> ```
 > - Only include the columns requested by the dashboard (name and avatar).
 > - Exclude security-sensitive columns like passwords and heavy columns like descriptions.
 
@@ -162,27 +161,27 @@ FROM profiles;
 **Problem:** Rewrite `SELECT * FROM users WHERE status = 'active';` to allow covered index scan on index `{ status, id }`.
 
 **Expected output:**
-```text
-SELECT id, status FROM users WHERE status = 'active';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT id, status FROM users WHERE status = 'active';
+> ```
 > ```sql
 > SELECT id, status FROM users WHERE status = 'active';
 > ```
 >
 > **Explanation:** Selecting only indexed columns enables Index Only Scans without reading table disk heaps.
 
+---
+
 ### Exercise 3: SELECT * Bandwidth Overhead
 
 **Problem:** State 2 reasons why explicit column listing is superior to `SELECT *` (1. Reduces network bandwidth; 2. Enables Covered Index Scans).
 
 **Expected output:**
-```text
-Reduces network bandwidth; enables Covered Index Scans
-```
-
 > [!check]- Answer
+> ```text
+> Reduces network bandwidth; enables Covered Index Scans
+> ```
 > ```text
 > Reduces network bandwidth; enables Covered Index Scans
 > ```

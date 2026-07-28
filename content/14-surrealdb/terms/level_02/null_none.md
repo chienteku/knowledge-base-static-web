@@ -166,12 +166,11 @@ Evaluate the result (returns **product:01**, **product:02**, **both**, or **neit
 2.  `SELECT * FROM product WHERE discount = NONE;`
 
 **Expected output:**
-```text
-1. product:01 (The field exists and is explicitly set to null).
-2. product:02 (The discount field is completely absent from product:02, so it evaluates to NONE).
-```
-
 > [!check]- Answer
+> ```text
+> 1. product:01 (The field exists and is explicitly set to null).
+> 2. product:02 (The discount field is completely absent from product:02, so it evaluates to NONE).
+> ```
 > - Differentiate between an explicit null assignment and an absent field.
 > - Match the filter keyword to the correct record state.
 
@@ -184,27 +183,27 @@ Evaluate the result (returns **product:01**, **product:02**, **both**, or **neit
 **Problem:** Query all records in `user` table where `email` is absent using `IS NONE`.
 
 **Expected output:**
-```text
-SELECT * FROM user WHERE email IS NONE;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM user WHERE email IS NONE;
+> ```
 > ```surrealql
 > SELECT * FROM user WHERE email IS NONE;
 > ```
 >
 > **Explanation:** `IS NONE` tests whether a field key is absent from target records.
 
+---
+
 ### Exercise 3: Setting Field to NONE
 
 **Problem:** Remove field `temporary_token` from `user:alice` by setting it to `NONE`.
 
 **Expected output:**
-```text
-UPDATE user:alice SET temporary_token = NONE;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE user:alice SET temporary_token = NONE;
+> ```
 > ```surrealql
 > UPDATE user:alice SET temporary_token = NONE;
 > ```

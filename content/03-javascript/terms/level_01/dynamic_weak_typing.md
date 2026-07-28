@@ -163,13 +163,12 @@ console.log(true + 1);
 ```
 
 **Expected output:**
-```text
-3 (type: number)
-"52" (type: string)
-2 (type: number)
-```
-
 > [!check]- Answer
+> ```text
+> 3 (type: number)
+> "52" (type: string)
+> 2 (type: number)
+> ```
 > - The subtraction operator `-` is purely mathematical, coercing `"5"` to a number.
 > - The addition operator `+` favors string concatenation if one operand is a string.
 > - The boolean `true` coerces to `1` in mathematical operations.
@@ -181,13 +180,12 @@ console.log(true + 1);
 **Problem:** Declare `let x = 10;`, reassign `x = "hello"`, then `x = true`. Print `typeof x` at each step.
 
 **Expected output:**
-```text
-number
-string
-boolean
-```
-
 > [!check]- Answer
+> ```text
+> number
+> string
+> boolean
+> ```
 > ```javascript
 > let x = 10;
 > console.log(typeof x);
@@ -199,17 +197,18 @@ boolean
 >
 > **Explanation:** JavaScript is dynamically typed: variable bindings hold values of any type and can change types at runtime.
 
+---
+
 ### Exercise 3: Safeguarding Dynamic Inputs
 
 **Problem:** Write a function `safeAdd(a, b)` that validates both inputs are typeof `"number"` before adding, or returns `NaN`.
 
 **Expected output:**
-```text
-15
-NaN
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> NaN
+> ```
 > ```javascript
 > function safeAdd(a, b) {
 >   if (typeof a !== "number" || typeof b !== "number") return NaN;

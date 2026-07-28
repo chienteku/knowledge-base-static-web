@@ -136,11 +136,10 @@ db.users.find({ email: "alice@example.com" }); // Normalize inputs to lowercase
 Write the MongoDB query using a regular expression to find all products where the `sku` starts with the uppercase prefix `"BIKE-"`.
 
 **Expected output:**
-```javascript
-db.products.find({ sku: /^BIKE-/ });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find({ sku: /^BIKE-/ });
+> ```
 > - The regex symbol `^` asserts the start of a string.
 > - Wrap the pattern inside forward slashes `/pattern/` to define a regular expression literal in `mongosh`.
 
@@ -153,11 +152,10 @@ db.products.find({ sku: /^BIKE-/ });
 **Problem:** Query user email `"Alice@Example.com"` case-insensitively using collation `{ locale: "en", strength: 2 }`.
 
 **Expected output:**
-```text
-db.users.find({ email: "Alice@Example.com" }).collation({ locale: "en", strength: 2 });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ email: "Alice@Example.com" }).collation({ locale: "en", strength: 2 });
+> ```
 > ```javascript
 > db.users.find({ email: "Alice@Example.com" }).collation({
 >   locale: "en",
@@ -167,16 +165,17 @@ db.users.find({ email: "Alice@Example.com" }).collation({ locale: "en", strength
 >
 > **Explanation:** Collation `strength: 2` performs case-insensitive string matching.
 
+---
+
 ### Exercise 3: String Regex Substring Matching
 
 **Problem:** Query users whose `name` starts with `"A"` using regex `^A`.
 
 **Expected output:**
-```text
-db.users.find({ name: { $regex: "^A" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ name: { $regex: "^A" } });
+> ```
 > ```javascript
 > db.users.find({ name: { $regex: "^A" } });
 > ```

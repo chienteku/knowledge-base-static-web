@@ -255,6 +255,8 @@ A simple nested blockquote showing visual indentation and attribution:
 >
 > **Explanation:** `cite` attribute holds source URL; `<cite>` tag holds work title inside quote attribution.
 
+---
+
 ### Exercise 3: q Tag for Inline Quotations
 
 **Problem:** Which tag should be used for short inline quotes embedded inside a paragraph instead of `<blockquote>`?

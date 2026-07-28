@@ -146,17 +146,16 @@ export default defineNuxtRouteMiddleware((to) => {
 **Problem:** Write a Route Middleware named `admin.ts` that checks if `useUser().isAdmin` is true. If they are an admin, let them pass. If they are not an admin, immediately cancel the navigation and throw a 403 Forbidden error using `abortNavigation()`.
 
 **Expected output:**
-```typescript
-export default defineNuxtRouteMiddleware((to, from) => {
-  const { isAdmin } = useUser();
-  
-  if (!isAdmin) {
-    return abortNavigation(createError({ statusCode: 403, message: 'Forbidden' }));
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtRouteMiddleware((to, from) => {
+>   const { isAdmin } = useUser();
+>   
+>   if (!isAdmin) {
+>     return abortNavigation(createError({ statusCode: 403, message: 'Forbidden' }));
+>   }
+> });
+> ```
 > - Combine `abortNavigation` with `createError({ statusCode: 403 })` to interrupt the transition.
 
 ---
@@ -166,20 +165,19 @@ export default defineNuxtRouteMiddleware((to, from) => {
 **Problem:** Write `definePageMeta()` block defining inline route middleware function checking `auth` state.
 
 **Expected output:**
-```vue
-<script setup>
-definePageMeta({
-  middleware: [
-    function (to, from) {
-      const auth = useAuth();
-      if (!auth.value.isLoggedIn) return navigateTo('/login');
-    }
-  ]
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> definePageMeta({
+>   middleware: [
+>     function (to, from) {
+>       const auth = useAuth();
+>       if (!auth.value.isLoggedIn) return navigateTo('/login');
+>     }
+>   ]
+> });
+> </script>
+> ```
 > - Inline middleware functions are declared directly inside `definePageMeta`.
 > 
 > ```vue
@@ -204,12 +202,11 @@ definePageMeta({
 **Problem:** What 2 arguments are passed to `defineNuxtRouteMiddleware((to, from) => {})`?
 
 **Expected output:**
-```text
-1. to (Target route location object)
-2. from (Previous route location object)
-```
-
 > [!check]- Answer
+> ```text
+> 1. to (Target route location object)
+> 2. from (Previous route location object)
+> ```
 > - `to` -> Target destination route object.
 > - `from` -> Originating route object.
 > 

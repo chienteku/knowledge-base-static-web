@@ -127,15 +127,14 @@ export default defineNuxtConfig({
 **Problem:** You are pair-programming and your teammate asks to temporarily disable the floating DevTools overlay in the browser because it blocks a UI component they are styling. Write the corresponding configuration in `nuxt.config.ts` to turn it off.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  devtools: {
-    enabled: false
-  }
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   devtools: {
+>     enabled: false
+>   }
+> })
+> ```
 > - Adjust the boolean value of the `devtools.enabled` property.
 
 ---
@@ -145,11 +144,10 @@ export default defineNuxtConfig({
 **Problem:** Which keyboard shortcut toggles the embedded Nuxt DevTools bar in browser development mode?
 
 **Expected output:**
-```text
-Shift + Alt + D (or Option + Shift + D on macOS)
-```
-
 > [!check]- Answer
+> ```text
+> Shift + Alt + D (or Option + Shift + D on macOS)
+> ```
 > - `Shift + Alt + D` toggles Nuxt DevTools bar in development.
 > 
 > ```text
@@ -163,13 +161,12 @@ Shift + Alt + D (or Option + Shift + D on macOS)
 **Problem:** List 3 inspection tabs available inside Nuxt DevTools.
 
 **Expected output:**
-```text
-1. Pages / Routing Inspector
-2. Components Inspector
-3. Composables & State Inspector (or Server Routes / Modules)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Pages / Routing Inspector
+> 2. Components Inspector
+> 3. Composables & State Inspector (or Server Routes / Modules)
+> ```
 > - Pages & Routes
 > - Components & Auto-Imports
 > - Server Routes & Storage

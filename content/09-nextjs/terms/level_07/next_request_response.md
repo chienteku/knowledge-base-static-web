@@ -129,19 +129,18 @@ return NextResponse.json({ status: 'ok' }); // Sets headers & serializes JSON au
 **Problem:** How do you set a cookie inside a Route Handler response?
 
 **Expected output:**
-```ts
-export async function POST() {
-  // Create a base response
-  const response = NextResponse.json({ success: true });
-  
-  // Use the cookies API to attach the Set-Cookie header!
-  response.cookies.set('theme', 'dark', { secure: true });
-  
-  return response;
-}
-```
-
 > [!check]- Answer
+> ```ts
+> export async function POST() {
+>   // Create a base response
+>   const response = NextResponse.json({ success: true });
+>   
+>   // Use the cookies API to attach the Set-Cookie header!
+>   response.cookies.set('theme', 'dark', { secure: true });
+>   
+>   return response;
+> }
+> ```
 > - Just like `NextRequest.cookies.get`, `NextResponse` has a `.cookies.set` method.
 
 ---
@@ -151,11 +150,10 @@ export async function POST() {
 **Problem:** Write Route Handler setting HttpOnly cookie `'token'` using `NextResponse` response cookies helper.
 
 **Expected output:**
-```typescript
-import { NextResponse } from 'next/server'; const res = NextResponse.json({ success: true }); res.cookies.set('token', 'val', { httpOnly: true, secure: true }); return res;
-```
-
 > [!check]- Answer
+> ```typescript
+> import { NextResponse } from 'next/server'; const res = NextResponse.json({ success: true }); res.cookies.set('token', 'val', { httpOnly: true, secure: true }); return res;
+> ```
 > - `NextResponse` provides `.cookies.set()` helper methods.
 > 
 > ```typescript
@@ -179,11 +177,10 @@ import { NextResponse } from 'next/server'; const res = NextResponse.json({ succ
 **Problem:** What is the difference between `NextResponse.redirect()` and `NextResponse.rewrite()`?
 
 **Expected output:**
-```text
-redirect() changes the browser URL location; rewrite() serves target content while preserving the original browser URL location.
-```
-
 > [!check]- Answer
+> ```text
+> redirect() changes the browser URL location; rewrite() serves target content while preserving the original browser URL location.
+> ```
 > - `redirect()` -> Updates browser URL address.
 > - `rewrite()` -> Proxies content while keeping browser URL intact.
 > 

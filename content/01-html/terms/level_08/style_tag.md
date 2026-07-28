@@ -183,17 +183,16 @@ A simple internal CSS block:
 ```
 
 **Expected output:**
-```html
-<style>
-  .card-desc {
-    color: gray;
-    margin: 10px;
-  }
-</style>
-<p class="card-desc">Card description.</p>
-```
-
 > [!check]- Answer
+> ```html
+> <style>
+>   .card-desc {
+>     color: gray;
+>     margin: 10px;
+>   }
+> </style>
+> <p class="card-desc">Card description.</p>
+> ```
 > - Write class selectors in CSS starting with a dot (`.card-desc`).
 > - Wrap the rules in curly braces (`{ ... }`).
 > - Remove the `style="..."` attribute from the `<p>` tag.
@@ -207,11 +206,10 @@ A simple internal CSS block:
 **Problem:** Write `<style>` tag with `media="print"` hiding element `.no-print`.
 
 **Expected output:**
-```text
-<style media="print">.no-print { display: none; }</style>
-```
-
 > [!check]- Answer
+> ```text
+> <style media="print">.no-print { display: none; }</style>
+> ```
 > ```html
 > <style media="print">
 >   .no-print { display: none; }
@@ -220,16 +218,17 @@ A simple internal CSS block:
 >
 > **Explanation:** `media` attribute restricts internal CSS rules to specific output media (e.g. print).
 
+---
+
 ### Exercise 3: CSS Type Attribute Redundancy
 
 **Problem:** Is `type="text/css"` required on HTML5 `<style>` tags? (Yes/No).
 
 **Expected output:**
-```text
-No. HTML5 defaults <style> elements to CSS automatically.
-```
-
 > [!check]- Answer
+> ```text
+> No. HTML5 defaults <style> elements to CSS automatically.
+> ```
 > ```text
 > No. HTML5 defaults <style> elements to CSS automatically.
 > ```

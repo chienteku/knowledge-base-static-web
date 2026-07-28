@@ -110,13 +110,12 @@ When you use `v-show`, Vue renders the element, mounts it to the DOM, and keeps 
 If you write `<Dashboard v-show="isLoggedIn" />`, what terrible thing happens?
 
 **Expected output:**
-```text
-The Dashboard will still execute its `mounted()` hook and make all 5 API calls in the background!
-Because `v-show` physically mounts the component to the DOM (it just hides it with CSS), the component fully initializes. 
-You MUST use `v-if` here to prevent the component from existing and executing its code before the user logs in!
-```
-
 > [!check]- Answer
+> ```text
+> The Dashboard will still execute its `mounted()` hook and make all 5 API calls in the background!
+> Because `v-show` physically mounts the component to the DOM (it just hides it with CSS), the component fully initializes. 
+> You MUST use `v-if` here to prevent the component from existing and executing its code before the user logs in!
+> ```
 > - Does `v-show` prevent a component from mounting?
 
 ---
@@ -126,13 +125,12 @@ You MUST use `v-if` here to prevent the component from existing and executing it
 **Problem:** Write template conditional chain rendering `Admin`, `Member`, or `Guest` based on string `role`.
 
 **Expected output:**
-```html
-<div v-if="role === 'admin'">Admin</div>
-<div v-else-if="role === 'member'">Member</div>
-<div v-else>Guest</div>
-```
-
 > [!check]- Answer
+> ```html
+> <div v-if="role === 'admin'">Admin</div>
+> <div v-else-if="role === 'member'">Member</div>
+> <div v-else>Guest</div>
+> ```
 > - `v-else-if` and `v-else` must immediately follow `v-if` elements.
 > 
 > ```html
@@ -151,13 +149,12 @@ You MUST use `v-if` here to prevent the component from existing and executing it
 3. Lifecycle hooks execution on toggle
 
 **Expected output:**
-```text
-1. v-if has lower initial render cost (lazy if false); v-show has higher initial render cost
-2. v-if has higher toggle cost (DOM destruction); v-show has low toggle cost (CSS display toggle)
-3. v-if triggers unmount/mount hooks; v-show triggers zero lifecycle hooks on toggle
-```
-
 > [!check]- Answer
+> ```text
+> 1. v-if has lower initial render cost (lazy if false); v-show has higher initial render cost
+> 2. v-if has higher toggle cost (DOM destruction); v-show has low toggle cost (CSS display toggle)
+> 3. v-if triggers unmount/mount hooks; v-show triggers zero lifecycle hooks on toggle
+> ```
 > - `v-if` -> Lazy initial render, high toggle cost, triggers lifecycle hooks.
 > - `v-show` -> High initial render, low toggle cost (CSS display), no lifecycle hooks.
 > 

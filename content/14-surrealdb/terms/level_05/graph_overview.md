@@ -183,14 +183,13 @@ Classify the following tables as either **Nodes** (entity tables) or **Edges** (
 4.  `bookmarked` (connects a user to a book for reading later)
 
 **Expected output:**
-```text
-1. Node Table (user entities)
-2. Edge Table (relation connecting user -> book with rating properties)
-3. Node Table (book entities)
-4. Edge Table (relation connecting user -> book)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Node Table (user entities)
+> 2. Edge Table (relation connecting user -> book with rating properties)
+> 3. Node Table (book entities)
+> 4. Edge Table (relation connecting user -> book)
+> ```
 > - Nodes represent the nouns (objects) in your database.
 > - Edges represent the verbs (actions/relationships) connecting those nouns.
 
@@ -203,27 +202,27 @@ Classify the following tables as either **Nodes** (entity tables) or **Edges** (
 **Problem:** Explain what fields every graph edge record contains (`id`, `in` pointer to source node, `out` pointer to target node).
 
 **Expected output:**
-```text
-id, in (source record link), out (target record link)
-```
-
 > [!check]- Answer
+> ```text
+> id, in (source record link), out (target record link)
+> ```
 > ```text
 > id, in (source record link), out (target record link)
 > ```
 >
 > **Explanation:** Edge records store `in` (source pointer) and `out` (target pointer) record links.
 
+---
+
 ### Exercise 3: Creating Edge Record with Custom ID
 
 **Problem:** Create graph edge with custom ID `likes:alice_post1` relating `user:alice` to `post:1`.
 
 **Expected output:**
-```text
-RELATE user:alice->likes:alice_post1->post:1;
-```
-
 > [!check]- Answer
+> ```text
+> RELATE user:alice->likes:alice_post1->post:1;
+> ```
 > ```surrealql
 > RELATE user:alice->likes:alice_post1->post:1;
 > ```

@@ -173,12 +173,11 @@ const d = 4;
 ```
 
 **Expected output:**
-```text
-`a` and `d` are in the Global Scope.
-(`b` is function scope, `c` is block scope).
-```
-
 > [!check]- Answer
+> ```text
+> `a` and `d` are in the Global Scope.
+> (`b` is function scope, `c` is block scope).
+> ```
 > - Look for variables that are not surrounded by any curly braces `{}`.
 
 ---
@@ -188,27 +187,27 @@ const d = 4;
 **Problem:** Use `globalThis` to access environment-agnostic global objects across Browser/Node.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(typeof globalThis !== "undefined");
 > ```
 >
 > **Explanation:** `globalThis` provides a unified standard identifier for global scope objects across browsers (`window`), Node (`global`), and Workers (`self`).
 
+---
+
 ### Exercise 3: Var Global Window Property Creation
 
 **Problem:** Demonstrate that top-level `var x = 10` creates a property on global objects in script contexts.
 
 **Expected output:**
-```text
-Property attached to global scope
-```
-
 > [!check]- Answer
+> ```text
+> Property attached to global scope
+> ```
 > ```javascript
 > var globalVarTest = 100;
 > console.log("Property attached to global scope");
@@ -216,7 +215,6 @@ Property attached to global scope
 >
 > **Explanation:** Top-level `var` declarations create configurable properties on global environment objects.
 
----
 
 ---
 

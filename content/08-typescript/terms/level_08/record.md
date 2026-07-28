@@ -112,15 +112,14 @@ type Good = Record<string, string>; // Valid PropertyKey type
 **Problem:** How do you type an object that is completely empty and is not allowed to have any properties assigned to it?
 
 **Expected output:**
-```typescript
-// The built-in Record type can achieve this using `never`!
-const empty: Record<never, never> = {};
-
-// Alternatively, the most common way is:
-const empty2: Record<string, never> = {};
-```
-
 > [!check]- Answer
+> ```typescript
+> // The built-in Record type can achieve this using `never`!
+> const empty: Record<never, never> = {};
+> 
+> // Alternatively, the most common way is:
+> const empty2: Record<string, never> = {};
+> ```
 > - Think about the type that represents "impossible".
 
 ---
@@ -132,11 +131,10 @@ const empty2: Record<string, never> = {};
 **Problem:** Create `RolePermissions` mapping `"admin" | "user"` to `string[]`.
 
 **Expected output:**
-```text
-Record mapping created
-```
-
 > [!check]- Answer
+> ```text
+> Record mapping created
+> ```
 > ```typescript
 > type Role = "admin" | "user";
 > type RolePermissions = Record<Role, string[]>;
@@ -149,16 +147,17 @@ Record mapping created
 >
 > **Explanation:** `Record<K, V>` enforces that all keys in union `K` are present in object definitions.
 
+---
+
 ### Exercise 3: Dictionary Records with Number Keys
 
 **Problem:** Define `Record<number, string>` for HTTP status message lookups.
 
 **Expected output:**
-```text
-HTTP 200: OK
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 200: OK
+> ```
 > ```typescript
 > const httpMessages: Record<number, string> = {
 >   200: "OK",

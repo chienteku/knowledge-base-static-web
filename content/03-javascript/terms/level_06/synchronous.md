@@ -154,12 +154,11 @@ sayHi();
 ```
 
 **Expected output:**
-```text
-"Bob"
-"Hi!"
-```
-
 > [!check]- Answer
+> ```text
+> "Bob"
+> "Hi!"
+> ```
 > - Variables update sequentially. Function calls execute exactly when they are invoked.
 
 ---
@@ -169,13 +168,12 @@ sayHi();
 **Problem:** Trace synchronous execution lines `1` -> `2` -> `3`.
 
 **Expected output:**
-```text
-Line 1
-Line 2
-Line 3
-```
-
 > [!check]- Answer
+> ```text
+> Line 1
+> Line 2
+> Line 3
+> ```
 > ```javascript
 > console.log("Line 1");
 > console.log("Line 2");
@@ -184,17 +182,18 @@ Line 3
 >
 > **Explanation:** Synchronous JavaScript code executes line-by-line in sequential order.
 
+---
+
 ### Exercise 3: Blocking Call Stack Execution
 
 **Problem:** Demonstrate that synchronous function execution blocks subsequent statements until complete.
 
 **Expected output:**
-```text
-Sync computation complete
-Next line executed
-```
-
 > [!check]- Answer
+> ```text
+> Sync computation complete
+> Next line executed
+> ```
 > ```javascript
 > function syncWork() { for(let i=0; i<1000000; i++){} }
 > syncWork();
@@ -204,7 +203,6 @@ Next line executed
 >
 > **Explanation:** Synchronous calls occupy the call stack, pausing outer code execution.
 
----
 
 ---
 

@@ -154,11 +154,10 @@ thread::spawn(move || {
 **Problem:** Demonstrate that `&'static str` can be passed to a function expecting `&'a str` due to covariance.
 
 **Expected output:**
-```
-Covariant slice accepted
-```
-
 > [!check]- Answer
+> ```
+> Covariant slice accepted
+> ```
 > ```rust
 > fn print_slice<'a>(s: &'a str) {
 >     println!("Covariant slice accepted: {}", s);
@@ -171,16 +170,17 @@ Covariant slice accepted
 >
 > **Explanation:** Immutable references `&'a T` are covariant over `'a`, allowing longer lifetimes (`'static`) to substitute for shorter requested lifetimes (`'a`).
 
+---
+
 ### Exercise 3: Invariance of Mutable References
 
 **Problem:** Explain why `&mut T` is invariant over `T` to prevent storing short-lived references in long-lived locations.
 
 **Expected output:**
-```
-Invariance prevents invalid reference assignment
-```
-
 > [!check]- Answer
+> ```
+> Invariance prevents invalid reference assignment
+> ```
 > ```rust
 > fn main() {
 >     println!("Invariance prevents invalid reference assignment");

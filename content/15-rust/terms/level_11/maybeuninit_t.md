@@ -177,11 +177,10 @@ thread::spawn(move || {
 **Problem:** Use `MaybeUninit` array buffers to construct an array of integers without double-initialization overhead.
 
 **Expected output:**
-```
-Array initialized safely
-```
-
 > [!check]- Answer
+> ```
+> Array initialized safely
+> ```
 > ```rust
 > use std::mem::MaybeUninit;
 > fn main() {
@@ -196,16 +195,17 @@ Array initialized safely
 >
 > **Explanation:** `MaybeUninit` allows incremental manual initialization of uninitialized memory buffers safely.
 
+---
+
 ### Exercise 3: Using `MaybeUninit::write`
 
 **Problem:** Initialize a `MaybeUninit<String>` using `.write(String::from("hello"))`.
 
 **Expected output:**
-```
-Initialized: hello
-```
-
 > [!check]- Answer
+> ```
+> Initialized: hello
+> ```
 > use std::mem::MaybeUninit;
 > fn main() {
 >     let mut uninit = MaybeUninit::<String>::uninit();

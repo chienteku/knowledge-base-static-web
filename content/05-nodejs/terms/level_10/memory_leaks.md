@@ -190,11 +190,10 @@ app.get('/status', (req, res) => {
 **Problem:** Which CLI flag or `v8` module function takes a V8 heap snapshot for memory leak inspection in Chrome DevTools?
 
 **Expected output:**
-```text
-v8.getHeapSnapshot() or node --heap-snapshot-on-signal=SIGUSR2 app.js
-```
-
 > [!check]- Answer
+> ```text
+> v8.getHeapSnapshot() or node --heap-snapshot-on-signal=SIGUSR2 app.js
+> ```
 > ```javascript
 > const v8 = require('v8');
 > const stream = v8.getHeapSnapshot();
@@ -202,16 +201,17 @@ v8.getHeapSnapshot() or node --heap-snapshot-on-signal=SIGUSR2 app.js
 >
 > **Explanation:** Heap snapshots write V8 memory object allocations to file for inspection in Chrome DevTools.
 
+---
+
 ### Exercise 3: Identifying Garbage Collection Root References
 
 **Problem:** What are GC Roots in V8 garbage collection?
 
 **Expected output:**
-```text
-Active root objects (global variables, active call stack variables, DOM/event listeners) that prevent referenced objects from being garbage collected.
-```
-
 > [!check]- Answer
+> ```text
+> Active root objects (global variables, active call stack variables, DOM/event listeners) that prevent referenced objects from being garbage collected.
+> ```
 > ```text
 > Active root objects (global variables, active call stack variables, DOM/event listeners) that prevent referenced objects from being garbage collected.
 > ```

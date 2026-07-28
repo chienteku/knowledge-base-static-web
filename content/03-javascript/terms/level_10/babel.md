@@ -140,11 +140,10 @@ async function processData() {
 **Problem:** Babel is great at translating new syntax (like `=>` to `function`). But what if you try to use a brand new feature like a [Promise](../level_06/promise.md)? Old browsers don't just lack the syntax for Promises; they literally don't have the Promise object in their memory! Can Babel translate a Promise?
 
 **Expected output:**
-```text
-No! Babel only translates **Syntax**. To add missing **Features** (like Promises, Maps, or Sets) to old browsers, you need a different tool called a **Polyfill**. (Babel is often paired with a polyfill library like `core-js` to solve both problems at once).
-```
-
 > [!check]- Answer
+> ```text
+> No! Babel only translates **Syntax**. To add missing **Features** (like Promises, Maps, or Sets) to old browsers, you need a different tool called a **Polyfill**. (Babel is often paired with a polyfill library like `core-js` to solve both problems at once).
+> ```
 > - Syntax is grammar. Features are vocabulary.
 
 ---
@@ -154,34 +153,33 @@ No! Babel only translates **Syntax**. To add missing **Features** (like Promises
 **Problem:** State 3 phases of Babel compilation (1. Parse AST, 2. Transform AST, 3. Generate Code).
 
 **Expected output:**
-```text
-Parse -> Transform -> Generate
-```
-
 > [!check]- Answer
+> ```text
+> Parse -> Transform -> Generate
+> ```
 > ```javascript
 > console.log("Parse -> Transform -> Generate");
 > ```
 >
 > **Explanation:** Babel parses JavaScript source into Abstract Syntax Trees (AST), applies AST plugin transforms, and generates target JS output.
 
+---
+
 ### Exercise 3: Configuring Target Environment Presets
 
 **Problem:** Describe how `@babel/preset-env` targets specific browser market shares using Browserslist configs.
 
 **Expected output:**
-```text
-preset-env targets specified browser matrix
-```
-
 > [!check]- Answer
+> ```text
+> preset-env targets specified browser matrix
+> ```
 > ```javascript
 > console.log("preset-env targets specified browser matrix");
 > ```
 >
 > **Explanation:** `@babel/preset-env` automatically determines syntax transforms based on target browser versions.
 
----
 
 ---
 

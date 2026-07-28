@@ -141,13 +141,12 @@ Imagine tools used for repair.
 3. Independent Service Scaling
 
 **Expected output:**
-```text
-1. Monolith: Low (Single CI/CD pipeline); Microservices: High (Multiple pipelines & containers)
-2. Monolith: Easy (In-memory function calls); Microservices: Hard (Distributed API contracts)
-3. Monolith: Hard (Scale entire app); Microservices: Easy (Scale individual hot services)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Monolith: Low (Single CI/CD pipeline); Microservices: High (Multiple pipelines & containers)
+> 2. Monolith: Easy (In-memory function calls); Microservices: Hard (Distributed API contracts)
+> 3. Monolith: Hard (Scale entire app); Microservices: Easy (Scale individual hot services)
+> ```
 > ```text
 > Deployment -> Monolith: Simple, Microservices: Complex (Orchestration required)
 > Refactoring -> Monolith: Easy in-memory, Microservices: Complex network contracts
@@ -161,11 +160,10 @@ Imagine tools used for repair.
 **Problem:** How do microservices join data across services without direct cross-database SQL queries?
 
 **Expected output:**
-```text
-Via API call aggregation (Gateway/BFF), Event-Driven Pub/Sub domain events, or CQRS read models.
-```
-
 > [!check]- Answer
+> ```text
+> Via API call aggregation (Gateway/BFF), Event-Driven Pub/Sub domain events, or CQRS read models.
+> ```
 > ```text
 > Via API call aggregation (Gateway/BFF), Event-Driven Pub/Sub domain events, or CQRS read models.
 > ```

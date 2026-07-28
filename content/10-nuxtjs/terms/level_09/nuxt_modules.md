@@ -216,11 +216,10 @@ export default defineNuxtModule({
 **Problem:** You want to add image optimization (resizing, WebP conversion) to your Nuxt app. Where is the official directory to search for trusted, community-built Nuxt modules?
 
 **Expected output:**
-```text
-The official Nuxt Modules directory: https://nuxt.com/modules
-```
-
 > [!check]- Answer
+> ```text
+> The official Nuxt Modules directory: https://nuxt.com/modules
+> ```
 > - Nuxt aggregates all community modules in a dedicated directory registry on their main site.
 
 ---
@@ -230,18 +229,17 @@ The official Nuxt Modules directory: https://nuxt.com/modules
 **Problem:** Write custom Nuxt module `modules/analytics.ts` adding a plugin `plugins/analytics.client.ts` via `addPlugin()`.
 
 **Expected output:**
-```typescript
-import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit';
-export default defineNuxtModule({
-  meta: { name: 'my-analytics' },
-  setup(options, nuxt) {
-    const resolver = createResolver(import.meta.url);
-    addPlugin(resolver.resolve('./runtime/plugin.client'));
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit';
+> export default defineNuxtModule({
+>   meta: { name: 'my-analytics' },
+>   setup(options, nuxt) {
+>     const resolver = createResolver(import.meta.url);
+>     addPlugin(resolver.resolve('./runtime/plugin.client'));
+>   }
+> });
+> ```
 > - `@nuxt/kit` provides helpers (`addPlugin`, `addImports`) for module development.
 > 
 > ```typescript
@@ -263,11 +261,10 @@ export default defineNuxtModule({
 **Problem:** Which official npm package contains composable helpers (`addPlugin`, `addServerHandler`, `addComponentsDir`) for building Nuxt modules?
 
 **Expected output:**
-```text
-@nuxt/kit
-```
-
 > [!check]- Answer
+> ```text
+> @nuxt/kit
+> ```
 > - `@nuxt/kit` provides utility APIs for module authors.
 > 
 > ```typescript

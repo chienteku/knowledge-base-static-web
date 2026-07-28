@@ -108,12 +108,11 @@ const userName = useSelector(state => state.user.name); // Granular selector
 **Problem:** Why does Redux force you to dispatch Action objects (`{ type: 'LOGIN' }`) instead of just letting you write `store.user = "Alice"`?
 
 **Expected output:**
-```text
-Predictability and Debugging!
-By forcing all changes through Actions, the Redux DevTools extension can record a literal history log of every single event that happened in your app. You can even "Time Travel" backwards through the actions to see exactly how your app reached a broken state!
-```
-
 > [!check]- Answer
+> ```text
+> Predictability and Debugging!
+> By forcing all changes through Actions, the Redux DevTools extension can record a literal history log of every single event that happened in your app. You can even "Time Travel" backwards through the actions to see exactly how your app reached a broken state!
+> ```
 > - Think about audit logs in a bank.
 
 ---
@@ -125,11 +124,10 @@ By forcing all changes through Actions, the Redux DevTools extension can record 
 **Problem:** Create `counterSlice` using Redux Toolkit `createSlice` with `increment` and `decrement` reducers.
 
 **Expected output:**
-```text
-import { createSlice } from '@reduxjs/toolkit'; const counterSlice = createSlice({ name: 'counter', initialState: { value: 0 }, reducers: { increment: state => { state.value += 1; }, decrement: state => { state.value -= 1; } } }); export const { increment, decrement } = counterSlice.actions; export default counterSlice.reducer;
-```
-
 > [!check]- Answer
+> ```text
+> import { createSlice } from '@reduxjs/toolkit'; const counterSlice = createSlice({ name: 'counter', initialState: { value: 0 }, reducers: { increment: state => { state.value += 1; }, decrement: state => { state.value -= 1; } } }); export const { increment, decrement } = counterSlice.actions; export default counterSlice.reducer;
+> ```
 > ```javascript
 > import { createSlice } from '@reduxjs/toolkit';
 >
@@ -148,16 +146,17 @@ import { createSlice } from '@reduxjs/toolkit'; const counterSlice = createSlice
 >
 > **Explanation:** Redux Toolkit `createSlice` automatically generates action creators and reducers using Immer.
 
+---
+
 ### Exercise 3: Dispatching Actions in React Components
 
 **Problem:** Dispatch `increment()` action inside component using `useDispatch()`.
 
 **Expected output:**
-```text
-const dispatch = useDispatch(); return <button onClick={() => dispatch(increment())}>Add</button>;
-```
-
 > [!check]- Answer
+> ```text
+> const dispatch = useDispatch(); return <button onClick={() => dispatch(increment())}>Add</button>;
+> ```
 > ```javascript
 > const dispatch = useDispatch();
 > return <button onClick={() => dispatch(increment())}>Add</button>;

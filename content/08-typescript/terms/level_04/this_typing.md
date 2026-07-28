@@ -118,12 +118,11 @@ function log(this: Context) {} // Use standard function declaration
 **Problem:** In pure JavaScript, when you attach an event listener to a button (`button.addEventListener('click', function() { ... })`), what does `this` refer to inside the function? How does TypeScript handle this?
 
 **Expected output:**
-```text
-In JS, `this` inside a standard event listener function refers to the HTML Element that fired the event (the button).
-TypeScript automatically types `this` for you in standard DOM events! But if you extract the function out, you might need to manually type `this: HTMLButtonElement`.
-```
-
 > [!check]- Answer
+> ```text
+> In JS, `this` inside a standard event listener function refers to the HTML Element that fired the event (the button).
+> TypeScript automatically types `this` for you in standard DOM events! But if you extract the function out, you might need to manually type `this: HTMLButtonElement`.
+> ```
 > - Think about how `this` behaves in DOM manipulation.
 
 ---
@@ -135,11 +134,10 @@ TypeScript automatically types `this` for you in standard DOM events! But if you
 **Problem:** Annotate `this: HTMLButtonElement` in a click event callback.
 
 **Expected output:**
-```text
-Type-safe this in button handler
-```
-
 > [!check]- Answer
+> ```text
+> Type-safe this in button handler
+> ```
 > ```typescript
 > function handleClick(this: HTMLButtonElement, ev: MouseEvent) {
 >   console.log(this.disabled);
@@ -149,16 +147,17 @@ Type-safe this in button handler
 >
 > **Explanation:** Explicit `this` parameters instruct TS on expected method receiver contexts.
 
+---
+
 ### Exercise 3: Stripping `this` Parameter from Compiled JS
 
 **Problem:** State what happens to the fake `this: Context` parameter after `tsc` compilation.
 
 **Expected output:**
-```text
-Completely erased during JS compilation
-```
-
 > [!check]- Answer
+> ```text
+> Completely erased during JS compilation
+> ```
 > ```typescript
 > console.log("Completely erased during JS compilation");
 > ```

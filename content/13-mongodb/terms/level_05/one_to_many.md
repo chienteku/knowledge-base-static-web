@@ -155,20 +155,10 @@ Embed addresses array directly inside user document: { addresses: [{ street, cit
 2.  Write the schema structure outline for a task document referencing its board.
 
 **Expected output:**
-```text
-1. You should not embed the tasks array inside the board document because project boards can have thousands of tasks. An embedded tasks array will cause the board document to grow extremely large, slowing down project page reads and risking hitting the 16MB document size limit if task details are large.
-```
-```javascript
-// 2. Task document referencing parent board
-{
-  _id: ObjectId("65fc71239b1d8b2e88a8d333"),
-  board_id: ObjectId("60c72b2f9b1d8b2e88a8d111"), // Child reference link
-  title: "Implement Login Page",
-  status: "todo"
-}
-```
-
 > [!check]- Answer
+> ```text
+> 1. You should not embed the tasks array inside the board document because project boards can have thousands of tasks. An embedded tasks array will cause the board document to grow extremely large, slowing down project page reads and risking hitting the 16MB document size limit if task details are large.
+> ```
 > - Assess the size boundaries of a list containing 5,000 complex items.
 > - Apply Child Referencing to prevent parent document bloat.
 
@@ -181,27 +171,27 @@ Embed addresses array directly inside user document: { addresses: [{ street, cit
 **Problem:** State design choice: 1-to-Few (Embed sub-documents), 1-to-Many Unbounded (Parent reference in child collection).
 
 **Expected output:**
-```text
-1-to-Few: Embed in parent; 1-to-Many Unbounded: Parent reference in child collection
-```
-
 > [!check]- Answer
+> ```text
+> 1-to-Few: Embed in parent; 1-to-Many Unbounded: Parent reference in child collection
+> ```
 > ```text
 > 1-to-Few: Embed in parent; 1-to-Many Unbounded: Parent reference in child collection
 > ```
 >
 > **Explanation:** Cardinality determines whether embedding or referencing is appropriate.
 
+---
+
 ### Exercise 3: Child Reference Model
 
 **Problem:** Model child `comment` document referencing parent `postId`.
 
 **Expected output:**
-```text
-{ postId: ObjectId("..."), author: "Alice", text: "Great post!" }
-```
-
 > [!check]- Answer
+> ```text
+> { postId: ObjectId("..."), author: "Alice", text: "Great post!" }
+> ```
 > ```javascript
 > const comment = {
 >   _id: new ObjectId(),

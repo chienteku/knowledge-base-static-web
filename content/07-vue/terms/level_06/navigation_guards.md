@@ -136,13 +136,12 @@ router.beforeEach((to) => {
 **Problem:** A user is filling out a massive form on `/create-post`. They accidentally click a link to go to `/home`. You want to show a warning: "You have unsaved changes. Leave?" before the router navigates away. What kind of guard do you use?
 
 **Expected output:**
-```text
-You use an "In-Component Guard" called `onBeforeRouteLeave`.
-This guard runs inside the component itself right before the router attempts to navigate away from it.
-`onBeforeRouteLeave(() => { return window.confirm("You have unsaved changes. Leave?") })`
-```
-
 > [!check]- Answer
+> ```text
+> You use an "In-Component Guard" called `onBeforeRouteLeave`.
+> This guard runs inside the component itself right before the router attempts to navigate away from it.
+> `onBeforeRouteLeave(() => { return window.confirm("You have unsaved changes. Leave?") })`
+> ```
 > - Global guards check where you are going. In-component guards check where you are leaving.
 
 ---
@@ -152,11 +151,10 @@ This guard runs inside the component itself right before the router attempts to 
 **Problem:** Write `router.beforeEach()` checking if target route requires authentication via `to.meta.requiresAuth` and redirecting to `/login` if `!isAuthenticated`.
 
 **Expected output:**
-```javascript
-router.beforeEach((to) => { if (to.meta.requiresAuth && !isAuthenticated.value) return '/login'; });
-```
-
 > [!check]- Answer
+> ```javascript
+> router.beforeEach((to) => { if (to.meta.requiresAuth && !isAuthenticated.value) return '/login'; });
+> ```
 > - Check `to.meta` properties inside navigation guards.
 > 
 > ```javascript
@@ -174,13 +172,12 @@ router.beforeEach((to) => { if (to.meta.requiresAuth && !isAuthenticated.value) 
 **Problem:** Identify the 3 levels where Vue Router navigation guards can be registered.
 
 **Expected output:**
-```text
-1. Global guards (router.beforeEach)
-2. Per-route guards (beforeEnter inside route object)
-3. In-component guards (onBeforeRouteLeave / onBeforeRouteUpdate)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Global guards (router.beforeEach)
+> 2. Per-route guards (beforeEnter inside route object)
+> 3. In-component guards (onBeforeRouteLeave / onBeforeRouteUpdate)
+> ```
 > - Global: `router.beforeEach` / `router.afterEach`
 > - Per-route: `beforeEnter` inside route definition
 > - Component: `onBeforeRouteLeave` / `onBeforeRouteUpdate`

@@ -108,12 +108,11 @@ nullable: true
 **Problem:** Your manager says: "We already have Postman Collections for our API, why do we need to bother with Swagger?" What is the main difference in their purpose?
 
 **Expected output:**
-```text
-Postman is primarily for Testing. Swagger is primarily for Documentation and Discovery.
-While Postman can generate docs, Swagger is an open-source standard. You can use a Swagger file to automatically generate SDKs (code libraries), generate strict validation rules for your backend, and create interactive web portals for third-party developers.
-```
-
 > [!check]- Answer
+> ```text
+> Postman is primarily for Testing. Swagger is primarily for Documentation and Discovery.
+> While Postman can generate docs, Swagger is an open-source standard. You can use a Swagger file to automatically generate SDKs (code libraries), generate strict validation rules for your backend, and create interactive web portals for third-party developers.
+> ```
 > - Which one is an application? Which one is a standardized blueprint?
 
 ---
@@ -123,17 +122,16 @@ While Postman can generate docs, Swagger is an open-source standard. You can use
 **Problem:** Write OpenAPI 3.0 snippet defining GET `/users` returning 200 OK response.
 
 **Expected output:**
-```yaml
-paths:
-  /users:
-    get:
-      summary: List users
-      responses:
-        '200':
-          description: Success
-```
-
 > [!check]- Answer
+> ```yaml
+> paths:
+>   /users:
+>     get:
+>       summary: List users
+>       responses:
+>         '200':
+>           description: Success
+> ```
 > ```yaml
 > paths:
 > /users:
@@ -151,13 +149,12 @@ paths:
 **Problem:** List 3 popular tools powered by OpenAPI specifications.
 
 **Expected output:**
-```text
-1. Swagger UI (Interactive API documentation)
-2. OpenAPI Generator (Automated SDK client code generation)
-3. Prism (Contract-compliant mock API server)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Swagger UI (Interactive API documentation)
+> 2. OpenAPI Generator (Automated SDK client code generation)
+> 3. Prism (Contract-compliant mock API server)
+> ```
 > ```text
 > 1. Swagger UI (Interactive API documentation)
 > 2. OpenAPI Generator (Automated SDK client code generation)

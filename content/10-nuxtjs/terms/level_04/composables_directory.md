@@ -133,20 +133,19 @@ export const useUser = () => useState('user-key', () => null);
 **Problem:** Write the code for a file named `composables/useTheme.ts` that exports a function. The function should return a reactive string `theme` initialized to `'light'`, and a function `toggleTheme` that switches it to `'dark'`.
 
 **Expected output:**
-```typescript
-// composables/useTheme.ts
-export const useTheme = () => {
-  const theme = ref('light');
-  
-  const toggleTheme = () => {
-    theme.value = theme.value === 'light' ? 'dark' : 'light';
-  };
-  
-  return { theme, toggleTheme };
-};
-```
-
 > [!check]- Answer
+> ```typescript
+> // composables/useTheme.ts
+> export const useTheme = () => {
+>   const theme = ref('light');
+>   
+>   const toggleTheme = () => {
+>     theme.value = theme.value === 'light' ? 'dark' : 'light';
+>   };
+>   
+>   return { theme, toggleTheme };
+> };
+> ```
 > - Export a named function, declare a reactive state container using `ref()`, and return them in an object.
 
 ---
@@ -156,17 +155,16 @@ export const useTheme = () => {
 **Problem:** Write custom composable `composables/useTheme.ts` returning SSR-safe state `'theme'` using `useState()`.
 
 **Expected output:**
-```typescript
-export const useTheme = () => {
-  const theme = useState('theme', () => 'light');
-  const toggleTheme = () => {
-    theme.value = theme.value === 'light' ? 'dark' : 'light';
-  };
-  return { theme, toggleTheme };
-};
-```
-
 > [!check]- Answer
+> ```typescript
+> export const useTheme = () => {
+>   const theme = useState('theme', () => 'light');
+>   const toggleTheme = () => {
+>     theme.value = theme.value === 'light' ? 'dark' : 'light';
+>   };
+>   return { theme, toggleTheme };
+> };
+> ```
 > - `useState()` creates SSR-safe state scoped to individual requests.
 > 
 > ```typescript
@@ -192,11 +190,10 @@ export const useTheme = () => {
 **Problem:** How does Nuxt 3 auto-import composables placed inside nested sub-directories (e.g. `composables/nested/useCustom.ts`)?
 
 **Expected output:**
-```text
-Nuxt auto-imports named exports from first-level files or index files inside sub-directories automatically.
-```
-
 > [!check]- Answer
+> ```text
+> Nuxt auto-imports named exports from first-level files or index files inside sub-directories automatically.
+> ```
 > - First-level files and `index.ts` files in sub-folders auto-import automatically.
 > 
 > ```text

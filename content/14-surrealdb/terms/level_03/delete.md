@@ -144,11 +144,10 @@ Write the SurrealQL query to:
 2.  Delete all records where the `updated_at` field is older than `24h` (relative to the current database time).
 
 **Expected output:**
-```sql
-DELETE cart WHERE updated_at < time::now() - 24h;
-```
-
 > [!check]- Answer
+> ```sql
+> DELETE cart WHERE updated_at < time::now() - 24h;
+> ```
 > - The table target is `cart`.
 > - Use duration arithmetic with the `time::now()` function to calculate the time boundary.
 
@@ -161,27 +160,27 @@ DELETE cart WHERE updated_at < time::now() - 24h;
 **Problem:** Delete record `session:123` directly.
 
 **Expected output:**
-```text
-DELETE session:123;
-```
-
 > [!check]- Answer
+> ```text
+> DELETE session:123;
+> ```
 > ```surrealql
 > DELETE session:123;
 > ```
 >
 > **Explanation:** `DELETE table:id` deletes specific primary key records in $O(1)$ time.
 
+---
+
 ### Exercise 3: Deleting Records Returning Deleted Data
 
 **Problem:** Delete all inactive logs returning the deleted records using `RETURN BEFORE`.
 
 **Expected output:**
-```text
-DELETE log WHERE active = false RETURN BEFORE;
-```
-
 > [!check]- Answer
+> ```text
+> DELETE log WHERE active = false RETURN BEFORE;
+> ```
 > ```surrealql
 > DELETE log WHERE active = false RETURN BEFORE;
 > ```

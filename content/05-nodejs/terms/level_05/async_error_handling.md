@@ -184,16 +184,17 @@ app.get('/user/:id', async (req, res, next) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Handling Promise.allSettled Results
 
 **Problem:** Use `Promise.allSettled([req1, req2])` to log fulfilled values and rejected error reasons.
 
 **Expected output:**
-```text
-const results = await Promise.allSettled([req1, req2]); results.forEach(r => r.status === 'fulfilled' ? console.log(r.value) : console.error(r.reason));
-```
-
 > [!check]- Answer
+> ```text
+> const results = await Promise.allSettled([req1, req2]); results.forEach(r => r.status === 'fulfilled' ? console.log(r.value) : console.error(r.reason));
+> ```
 > ```javascript
 > const results = await Promise.allSettled([req1, req2]);
 > results.forEach(r => {
@@ -204,16 +205,17 @@ const results = await Promise.allSettled([req1, req2]); results.forEach(r => r.s
 >
 > **Explanation:** `Promise.allSettled` waits for all promises to settle without short-circuiting on single rejections.
 
+---
+
 ### Exercise 3: Express Async Error Propagation
 
 **Problem:** In Express 4, how do you forward an async error caught in a route handler to central error middleware?
 
 **Expected output:**
-```text
-Pass the caught error to next(err).
-```
-
 > [!check]- Answer
+> ```text
+> Pass the caught error to next(err).
+> ```
 > ```javascript
 > catch (err) {
 >   next(err);

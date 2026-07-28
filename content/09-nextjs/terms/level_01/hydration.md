@@ -166,11 +166,10 @@ export default function SafeTimestamp() {
 **Problem:** Which React attribute suppresses hydration mismatch warnings on elements rendering dynamic timestamps like `new Date()`?
 
 **Expected output:**
-```text
-suppressHydrationWarning (e.g. <span suppressHydrationWarning>{new Date().toLocaleTimeString()}</span>)
-```
-
 > [!check]- Answer
+> ```text
+> suppressHydrationWarning (e.g. <span suppressHydrationWarning>{new Date().toLocaleTimeString()}</span>)
+> ```
 > - `suppressHydrationWarning` ignores text mismatch warnings 1 level deep.
 > 
 > ```tsx
@@ -186,11 +185,10 @@ suppressHydrationWarning (e.g. <span suppressHydrationWarning>{new Date().toLoca
 **Problem:** Explain what happens during the React Hydration step in the browser.
 
 **Expected output:**
-```text
-React matches the client-side Virtual DOM against pre-rendered server HTML nodes, attaching event listeners and initializing client state without re-creating DOM nodes.
-```
-
 > [!check]- Answer
+> ```text
+> React matches the client-side Virtual DOM against pre-rendered server HTML nodes, attaching event listeners and initializing client state without re-creating DOM nodes.
+> ```
 > - Hydration attaches JS event listeners to pre-rendered HTML.
 > 
 > ```text

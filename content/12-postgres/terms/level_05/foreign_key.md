@@ -192,15 +192,14 @@ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 3.  An integer column `assigned_to` that references the `emp_id` of the `employees` table.
 
 **Expected output:**
-```sql
-CREATE TABLE tasks (
-  task_id INT PRIMARY KEY,
-  task_desc TEXT NOT NULL,
-  assigned_to INT REFERENCES employees(emp_id)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE tasks (
+>   task_id INT PRIMARY KEY,
+>   task_desc TEXT NOT NULL,
+>   assigned_to INT REFERENCES employees(emp_id)
+> );
+> ```
 > - Map the foreign key reference using the column-level inline syntax `REFERENCES parent_table(parent_column)`.
 > - Match the data type of the foreign key column (`INT`) to the parent's primary key type.
 
@@ -213,11 +212,10 @@ CREATE TABLE tasks (
 **Problem:** Add foreign key `fk_orders_users` linking `orders.user_id` to `users.id` with `ON DELETE CASCADE`.
 
 **Expected output:**
-```text
-ALTER TABLE orders ADD CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE orders ADD CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+> ```
 > ```sql
 > ALTER TABLE orders
 > ADD CONSTRAINT fk_orders_users
@@ -227,16 +225,17 @@ ALTER TABLE orders ADD CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENC
 >
 > **Explanation:** `ON DELETE CASCADE` automatically deletes child rows when parent rows are deleted.
 
+---
+
 ### Exercise 3: Foreign Key Indexing Best Practice
 
 **Problem:** Why should foreign key columns in child tables be indexed? (Accelerates parent row deletion checks and JOIN queries).
 
 **Expected output:**
-```text
-Accelerates parent row deletion checks and JOIN queries
-```
-
 > [!check]- Answer
+> ```text
+> Accelerates parent row deletion checks and JOIN queries
+> ```
 > ```text
 > Accelerates parent row deletion checks and JOIN queries
 > ```

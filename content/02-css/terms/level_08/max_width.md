@@ -274,15 +274,14 @@ Fluid image scaling constraint:
 **Problem:** You are building a news website wrapper. You want the wrapper to take up `95%` of the screen width on phones, but never stretch wider than `1000px` on desktop monitors. Write the CSS ruleset.
 
 **Expected output:**
-```css
-.news-wrapper {
-  width: 95%;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .news-wrapper {
+>   width: 95%;
+>   max-width: 1000px;
+>   margin: 0 auto;
+> }
+> ```
 > - Define a percentage width for mobile screens.
 > - Apply `max-width` to cap the desktop sizing width.
 > - Center the container using margins.
@@ -296,11 +295,10 @@ Fluid image scaling constraint:
 **Problem:** Write CSS for `.page-wrapper` spanning full width up to max 1400px, centered with 20px side padding.
 
 **Expected output:**
-```text
-.page-wrapper { width: 100%; max-width: 1400px; padding: 0 20px; margin-left: auto; margin-right: auto; }
-```
-
 > [!check]- Answer
+> ```text
+> .page-wrapper { width: 100%; max-width: 1400px; padding: 0 20px; margin-left: auto; margin-right: auto; }
+> ```
 > ```css
 > .page-wrapper {
 >   width: 100%;
@@ -313,16 +311,17 @@ Fluid image scaling constraint:
 >
 > **Explanation:** Combining `width: 100%`, `max-width`, and `margin: auto` creates clean responsive container wrappers.
 
+---
+
 ### Exercise 3: Optimal Reading Line Length
 
 **Problem:** Write CSS restricting text paragraph width to optimal reading length of 65 characters (`ch` unit).
 
 **Expected output:**
-```text
-p { max-width: 65ch; }
-```
-
 > [!check]- Answer
+> ```text
+> p { max-width: 65ch; }
+> ```
 > ```css
 > p {
 >   max-width: 65ch;

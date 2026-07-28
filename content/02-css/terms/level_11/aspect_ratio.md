@@ -207,15 +207,14 @@ Alternative layouts:
 **Problem:** You are building a user grid. Each profile card `.profile` must be fluid in width to fit different grid columns, but must always remain a perfect square shape (`1:1`). Write the CSS ruleset.
 
 **Expected output:**
-```css
-.profile {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .profile {
+>   width: 100%;
+>   height: auto;
+>   aspect-ratio: 1 / 1;
+> }
+> ```
 > - The card needs a fluid width (`100%`).
 > - Force the height to compute dynamically relative to the aspect ratio equation.
 
@@ -230,12 +229,11 @@ Alternative layouts:
 2. Widescreen video `.video` (`16 / 9`)
 
 **Expected output:**
-```text
-1. .avatar { aspect-ratio: 1 / 1; }
-2. .video { aspect-ratio: 16 / 9; }
-```
-
 > [!check]- Answer
+> ```text
+> 1. .avatar { aspect-ratio: 1 / 1; }
+> 2. .video { aspect-ratio: 16 / 9; }
+> ```
 > ```css
 > .avatar { aspect-ratio: 1 / 1; }
 > .video { aspect-ratio: 16 / 9; }
@@ -243,16 +241,17 @@ Alternative layouts:
 >
 > **Explanation:** `aspect-ratio: width / height` enforces box proportions dynamically.
 
+---
+
 ### Exercise 3: Preventing Image Distortion with aspect-ratio
 
 **Problem:** Which property should be paired with `aspect-ratio` on `<img>` tags to prevent image stretching or distortion?
 
 **Expected output:**
-```text
-object-fit: cover;
-```
-
 > [!check]- Answer
+> ```text
+> object-fit: cover;
+> ```
 > ```css
 > img {
 >   width: 100%;

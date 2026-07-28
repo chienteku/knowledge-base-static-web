@@ -161,11 +161,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-My secure password is: hunter2
-```
-
 > [!check]- Answer
+> ```text
+> My secure password is: hunter2
+> ```
 > ```rust
 > struct Password(String);
 >
@@ -180,11 +179,10 @@ My secure password is: hunter2
 **Problem:** Create a newtype tuple struct `Meters(u64)` and implement addition for distance safety.
 
 **Expected output:**
-```
-Meters: 15
-```
-
 > [!check]- Answer
+> ```
+> Meters: 15
+> ```
 > struct Meters(u64);
 > fn main() {
 >     let d1 = Meters(5);
@@ -196,16 +194,17 @@ Meters: 15
 >
 > **Explanation:** Single-element tuple structs create strong distinct types for type-safe domain modeling.
 
+---
+
 ### Exercise 3: Destructuring Tuple Structs
 
 **Problem:** Define `struct Color(u8, u8, u8)`. Destructure `Color(255, 0, 0)` into `let Color(r, g, b) = c;`.
 
 **Expected output:**
-```
-Red: 255
-```
-
 > [!check]- Answer
+> ```
+> Red: 255
+> ```
 > ```rust
 > struct Color(u8, u8, u8);
 > fn main() {

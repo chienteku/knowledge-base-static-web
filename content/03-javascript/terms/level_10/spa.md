@@ -146,12 +146,11 @@ async function processData() {
 **Problem:** SPAs are incredibly fast *after* they load. But what is the biggest downside to the very *first* time a user visits an SPA website?
 
 **Expected output:**
-```text
-The "Time to Interactive" (TTI) is very slow!
-Because the SPA has to download the entire JavaScript bundle for the whole application (the routing logic, the UI components, the state management) before it can show anything on the screen, users often stare at a blank loading screen for a few seconds on their first visit.
-```
-
 > [!check]- Answer
+> ```text
+> The "Time to Interactive" (TTI) is very slow!
+> Because the SPA has to download the entire JavaScript bundle for the whole application (the routing logic, the UI components, the state management) before it can show anything on the screen, users often stare at a blank loading screen for a few seconds on their first visit.
+> ```
 > - If you pack for a 3-week vacation in one suitcase, that suitcase is going to be heavy.
 
 ---
@@ -161,34 +160,33 @@ Because the SPA has to download the entire JavaScript bundle for the whole appli
 **Problem:** Update browser URL without page reload using `history.pushState({}, '', '/new-url')`.
 
 **Expected output:**
-```text
-URL updated without page reload
-```
-
 > [!check]- Answer
+> ```text
+> URL updated without page reload
+> ```
 > ```javascript
 > console.log("URL updated without page reload");
 > ```
 >
 > **Explanation:** HTML5 History API `pushState` enables seamless client-side single page application navigation.
 
+---
+
 ### Exercise 3: Handling SPA Browser Back/Forward Buttons
 
 **Problem:** Listen for browser navigation changes using `window.addEventListener('popstate', ...)`.
 
 **Expected output:**
-```text
-Popstate listener registered
-```
-
 > [!check]- Answer
+> ```text
+> Popstate listener registered
+> ```
 > ```javascript
 > console.log("Popstate listener registered");
 > ```
 >
 > **Explanation:** `popstate` events fire when users navigate via browser back/forward buttons.
 
----
 
 ---
 

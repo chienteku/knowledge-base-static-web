@@ -135,11 +135,10 @@ thread::spawn(move || {
 **Problem:** Declare an immutable variable named `favorite_color`, assign it a string like `"blue"`, and print it to the console using `println!`.
 
 **Expected output:**
-```text
-My favorite color is blue
-```
-
 > [!check]- Answer
+> ```text
+> My favorite color is blue
+> ```
 > - Use the `let` keyword to declare the variable.
 > - Use `println!("My favorite color is {}", favorite_color);` to print it.
 
@@ -150,11 +149,10 @@ My favorite color is blue
 **Problem:** Declare an uninitialized variable `let result: &str;`, initialize it inside an `if/else` block, and print it after the block.
 
 **Expected output:**
-```
-Condition met: true
-```
-
 > [!check]- Answer
+> ```
+> Condition met: true
+> ```
 > ```rust
 > fn main() {
 >     let condition = true;
@@ -170,16 +168,17 @@ Condition met: true
 >
 > **Explanation:** Rust's compiler verifies that every execution path assigns a value to `result` before it is read.
 
+---
+
 ### Exercise 3: Variable Scope & Drop Lifetime
 
 **Problem:** Demonstrate that a variable `x` created inside an inner block `{ let x = 10; }` cannot be accessed outside that block.
 
 **Expected output:**
-```
-Inside: 10
-```
-
 > [!check]- Answer
+> ```
+> Inside: 10
+> ```
 > ```rust
 > fn main() {
 >     {

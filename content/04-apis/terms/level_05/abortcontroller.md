@@ -180,16 +180,17 @@ function loadProfileComponent(userId) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Timeout Fetch with AbortSignal.timeout()
 
 **Problem:** Write JavaScript `fetch()` request automatically aborting after 5000ms timeout using `AbortSignal.timeout()`.
 
 **Expected output:**
-```text
-fetch('/api/data', { signal: AbortSignal.timeout(5000) })
-```
-
 > [!check]- Answer
+> ```text
+> fetch('/api/data', { signal: AbortSignal.timeout(5000) })
+> ```
 > ```javascript
 > try {
 > const res = await fetch('/api/data', { signal: AbortSignal.timeout(5000) });
@@ -206,11 +207,10 @@ fetch('/api/data', { signal: AbortSignal.timeout(5000) })
 **Problem:** What error name property is set on the thrown Exception when a `fetch()` call is aborted via `AbortController`?
 
 **Expected output:**
-```text
-err.name === 'AbortError'
-```
-
 > [!check]- Answer
+> ```text
+> err.name === 'AbortError'
+> ```
 > ```javascript
 > catch (err) {
 > if (err.name === 'AbortError') {

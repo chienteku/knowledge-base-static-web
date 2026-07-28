@@ -149,13 +149,12 @@ Deploy at most 1 Arbiter per replica set cluster
 | **5** | 5 | 0 | *?* |
 
 **Expected output:**
-```text
-- Rows 1: 2 votes (Majority of 3 is 2).
-- Row 2: 2 votes (Majority of 3 is 2. The arbiter breaks the tie if one data node crashes).
-- Row 3: 3 votes (Majority of 5 is 3).
-```
-
 > [!check]- Answer
+> ```text
+> - Rows 1: 2 votes (Majority of 3 is 2).
+> - Row 2: 2 votes (Majority of 3 is 2. The arbiter breaks the tie if one data node crashes).
+> - Row 3: 3 votes (Majority of 5 is 3).
+> ```
 > - A majority is calculated as: `floor(N / 2) + 1` where `N` is the total configured nodes (including arbiters).
 > - Active data status does not change the total configured node count.
 
@@ -168,27 +167,27 @@ Deploy at most 1 Arbiter per replica set cluster
 **Problem:** Command to add an Arbiter node `arbiter1:27017` to active replica set in `mongosh`.
 
 **Expected output:**
-```text
-rs.addArb("arbiter1:27017");
-```
-
 > [!check]- Answer
+> ```text
+> rs.addArb("arbiter1:27017");
+> ```
 > ```javascript
 > rs.addArb("arbiter1:27017");
 > ```
 >
 > **Explanation:** `rs.addArb()` registers a non-data voting Arbiter in the replica set.
 
+---
+
 ### Exercise 3: Replica Set Node Roles Comparison
 
 **Problem:** Compare 3 node roles: Primary (Handles all writes), Secondary (Replicates data, handles reads), Arbiter (Holds no data, votes in elections).
 
 **Expected output:**
-```text
-Primary: writes/reads; Secondary: data copy reads; Arbiter: zero data, election vote only
-```
-
 > [!check]- Answer
+> ```text
+> Primary: writes/reads; Secondary: data copy reads; Arbiter: zero data, election vote only
+> ```
 > ```text
 > Primary: writes/reads; Secondary: data copy reads; Arbiter: zero data, election vote only
 > ```

@@ -145,14 +145,13 @@ Imagine mailing a document.
 **Problem:** Identify the 4 elements of a standard SOAP XML Envelope message.
 
 **Expected output:**
-```text
-1. <soap:Envelope> (Root element)
-2. <soap:Header> (Optional metadata/security)
-3. <soap:Body> (Mandatory request/response payload)
-4. <soap:Fault> (Optional error details inside Body)
-```
-
 > [!check]- Answer
+> ```text
+> 1. <soap:Envelope> (Root element)
+> 2. <soap:Header> (Optional metadata/security)
+> 3. <soap:Body> (Mandatory request/response payload)
+> 4. <soap:Fault> (Optional error details inside Body)
+> ```
 > ```xml
 > <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
 > <soap:Header>...</soap:Header>
@@ -169,11 +168,10 @@ Imagine mailing a document.
 **Problem:** What is the purpose of a WSDL (Web Services Description Language) file in SOAP architectures?
 
 **Expected output:**
-```text
-An XML file that formally defines the contract, available operations, data types, and network endpoints of a SOAP web service.
-```
-
 > [!check]- Answer
+> ```text
+> An XML file that formally defines the contract, available operations, data types, and network endpoints of a SOAP web service.
+> ```
 > ```text
 > An XML file that formally defines the contract, available operations, data types, and network endpoints of a SOAP web service.
 > ```

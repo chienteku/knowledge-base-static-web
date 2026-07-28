@@ -191,14 +191,15 @@ serde = "1.0" // Semantic version range pin
 **Problem:** Create a new Rust project called `my_first_app` that prints `"Rust is awesome!"` to the console. Build and run it using Cargo.
 
 **Expected output:**
-```
-Rust is awesome!
-```
-
 > [!check]- Answer
+> ```
+> Rust is awesome!
+> ```
 > - Use `cargo new my_first_app` to scaffold the project
 > - Edit `src/main.rs` to change the print message
 > - Use `cargo run` to compile and execute in one step
+
+---
 
 ### Exercise 2: Add a dependency and use it
 
@@ -212,19 +213,20 @@ Rust is awesome!
 > - Use `"Hello, Rust!".green().bold()` inside `println!("{}", ...)`
 > - Run with `cargo run` — Cargo will automatically download and compile the dependency
 
+---
+
 ### Exercise 3: Write and run a test
 
 **Problem:** In the `colorful_hello` project from Exercise 2, add a test module with a test that verifies `2 + 2 == 4`. Run all tests using Cargo.
 
 **Expected output:**
-```
-running 1 test
-test tests::math_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored
-```
-
 > [!check]- Answer
+> ```
+> running 1 test
+> test tests::math_works ... ok
+> 
+> test result: ok. 1 passed; 0 failed; 0 ignored
+> ```
 > - Add a `#[cfg(test)]` module at the bottom of `src/main.rs`
 > - Inside it, write a function annotated with `#[test]`
 > - Use `assert_eq!(2 + 2, 4);` as the assertion

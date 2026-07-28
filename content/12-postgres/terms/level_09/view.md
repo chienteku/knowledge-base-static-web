@@ -157,14 +157,13 @@ Create INSTEAD OF UPDATE trigger on view to route updates to base tables
 **Problem:** You have a `users` table containing columns `id`, `username`, `email`, `hashed_password`, and `is_active` (boolean). Write the SQL query to create a view named `active_users_public` that only exposes the `username` and `email` columns of users who are active (`is_active = TRUE`).
 
 **Expected output:**
-```sql
-CREATE VIEW active_users_public AS
-SELECT username, email
-FROM users
-WHERE is_active = TRUE;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE VIEW active_users_public AS
+> SELECT username, email
+> FROM users
+> WHERE is_active = TRUE;
+> ```
 > - Specify only the non-sensitive columns in the `SELECT` list.
 > - Apply the filter condition inside the `WHERE` clause of the view query.
 
@@ -177,11 +176,10 @@ WHERE is_active = TRUE;
 **Problem:** Create view `active_users` selecting `id`, `name`, `email` from `users` where `active IS TRUE`.
 
 **Expected output:**
-```text
-CREATE VIEW active_users AS SELECT id, name, email FROM users WHERE active IS TRUE;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE VIEW active_users AS SELECT id, name, email FROM users WHERE active IS TRUE;
+> ```
 > ```sql
 > CREATE VIEW active_users AS
 > SELECT id, name, email FROM users WHERE active IS TRUE;
@@ -189,16 +187,17 @@ CREATE VIEW active_users AS SELECT id, name, email FROM users WHERE active IS TR
 >
 > **Explanation:** Relational views provide virtual query abstractions over base table schemas.
 
+---
+
 ### Exercise 3: Creating View WITH CHECK OPTION
 
 **Problem:** Create view `vip_customers` `WITH CHECK OPTION` enforcing `tier = 'vip'` on view insertions.
 
 **Expected output:**
-```text
-CREATE VIEW vip_customers AS SELECT * FROM customers WHERE tier = 'vip' WITH CHECK OPTION;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE VIEW vip_customers AS SELECT * FROM customers WHERE tier = 'vip' WITH CHECK OPTION;
+> ```
 > ```sql
 > CREATE VIEW vip_customers AS
 > SELECT * FROM customers WHERE tier = 'vip'

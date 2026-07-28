@@ -161,11 +161,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Discount applied: 15%
-```
-
 > [!check]- Answer
+> ```text
+> Discount applied: 15%
+> ```
 > - Change `let mut discount = 0;` to `let discount = if is_member { ... };`.
 > - Inside the `{ ... }`, just put the number `15` without a semicolon, and `0` in the else block.
 > - Don't forget the semicolon at the very end of the closing brace `};`.
@@ -177,11 +176,10 @@ Discount applied: 15%
 **Problem:** Assign `let category = if age < 18 { "Minor" } else { "Adult" };` and print it for `age = 20`.
 
 **Expected output:**
-```
-Adult
-```
-
 > [!check]- Answer
+> ```
+> Adult
+> ```
 > ```rust
 > fn main() {
 >     let age = 20;
@@ -192,16 +190,17 @@ Adult
 >
 > **Explanation:** Expression-based `if/else` returns values directly to variable bindings.
 
+---
+
 ### Exercise 3: Chained Conditional Branching
 
 **Problem:** Write an `if / else if / else` expression determining grades (`A` >= 90, `B` >= 80, `C` else) for score `85`.
 
 **Expected output:**
-```
-Grade: B
-```
-
 > [!check]- Answer
+> ```
+> Grade: B
+> ```
 > ```rust
 > fn main() {
 >     let score = 85;

@@ -132,11 +132,10 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 ```
 
 **Expected output:**
-```text
-3 Rows. (There are three `<tr>` elements).
-```
-
 > [!check]- Answer
+> ```text
+> 3 Rows. (There are three `<tr>` elements).
+> ```
 > - Just count the `<tr>` tags!
 
 ---
@@ -148,11 +147,10 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 **Problem:** Write CSS pseudo-class selector to apply background `#f2f2f2` to even `<tr>` rows inside `<tbody>`.
 
 **Expected output:**
-```text
-tbody tr:nth-child(even) { background-color: #f2f2f2; }
-```
-
 > [!check]- Answer
+> ```text
+> tbody tr:nth-child(even) { background-color: #f2f2f2; }
+> ```
 > ```css
 > tbody tr:nth-child(even) {
 >   background-color: #f2f2f2;
@@ -161,16 +159,17 @@ tbody tr:nth-child(even) { background-color: #f2f2f2; }
 >
 > **Explanation:** `:nth-child(even)` targets alternating table rows for zebra-striping.
 
+---
+
 ### Exercise 3: Table Row Hover Effect
 
 **Problem:** Write CSS rule highlighting table row on mouse hover.
 
 **Expected output:**
-```text
-tr:hover { background-color: #e0e0e0; }
-```
-
 > [!check]- Answer
+> ```text
+> tr:hover { background-color: #e0e0e0; }
+> ```
 > ```css
 > tr:hover {
 >   background-color: #e0e0e0;

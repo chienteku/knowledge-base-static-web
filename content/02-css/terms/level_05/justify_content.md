@@ -121,11 +121,10 @@ Imagine three people sitting on a long bench.
 **Problem:** You have a Flex Container with some buttons. You want all the buttons packed tightly together on the right side of the screen. Which value do you use?
 
 **Expected output:**
-```text
-`flex-end`! This pushes all the empty space to the left, packing the items against the end (the right side).
-```
-
 > [!check]- Answer
+> ```text
+> `flex-end`! This pushes all the empty space to the left, packing the items against the end (the right side).
+> ```
 > - The start is the left. The end is the...
 
 ---
@@ -137,11 +136,10 @@ Imagine three people sitting on a long bench.
 **Problem:** Write CSS for `.header-nav` pushing logo to left edge and menu items to right edge using `justify-content`.
 
 **Expected output:**
-```text
-.header-nav { display: flex; justify-content: space-between; align-items: center; }
-```
-
 > [!check]- Answer
+> ```text
+> .header-nav { display: flex; justify-content: space-between; align-items: center; }
+> ```
 > ```css
 > .header-nav {
 >   display: flex;
@@ -152,6 +150,8 @@ Imagine three people sitting on a long bench.
 >
 > **Explanation:** `justify-content: space-between` pushes first and last flex items flush to container boundaries.
 
+---
+
 ### Exercise 3: Justify Content Values Matrix
 
 **Problem:** Match `justify-content` keyword to distribution behavior:
@@ -161,14 +161,13 @@ Imagine three people sitting on a long bench.
 4. `space-between` 
 
 **Expected output:**
-```text
-1. Packed at start of main axis (default)
-2. Packed at end of main axis
-3. Centered along main axis
-4. First item at start, last item at end, equal space between
-```
-
 > [!check]- Answer
+> ```text
+> 1. Packed at start of main axis (default)
+> 2. Packed at end of main axis
+> 3. Centered along main axis
+> 4. First item at start, last item at end, equal space between
+> ```
 > ```text
 > 1. flex-start -> Packed at start (default)
 > 2. flex-end -> Packed at end

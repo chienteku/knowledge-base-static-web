@@ -200,32 +200,34 @@ export default async function Page() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Server vs Client Component Placement Rule
 
 **Problem:** Categorize component type: 1. Database query component (`Server Component`); 2. Interactive modal toggle button (`Client Component`); 3. Static footer layout (`Server Component`).
 
 **Expected output:**
-```text
-1. Server Component, 2. Client Component, 3. Server Component
-```
-
 > [!check]- Answer
+> ```text
+> 1. Server Component, 2. Client Component, 3. Server Component
+> ```
 > ```text
 > 1. Server Component, 2. Client Component, 3. Server Component
 > ```
 >
 > **Explanation:** Default to Server Components; use Client Components (`'use client'`) for interactive state/hooks.
 
+---
+
 ### Exercise 3: Passing Server Component as Children to Client Component
 
 **Problem:** Can a Client Component render a Server Component passed as `children` prop? (Yes, children slots allow rendering Server Components inside Client Component layouts).
 
 **Expected output:**
-```text
-Yes, children slots allow rendering Server Components inside Client Component layouts
-```
-
 > [!check]- Answer
+> ```text
+> Yes, children slots allow rendering Server Components inside Client Component layouts
+> ```
 > ```javascript
 > // ClientWrapper.tsx ('use client')
 > function ClientWrapper({ children }) {

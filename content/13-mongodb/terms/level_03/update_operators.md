@@ -180,17 +180,16 @@ db.users.updateOne({ _id: id }, { $currentDate: { updatedAt: true } }); // Serve
 2.  Set the `last_purchased` field to the current server date/timestamp.
 
 **Expected output:**
-```javascript
-db.products.updateOne(
-  { sku: "HAMMER-1" },
-  {
-    $inc: { stock: -2 },
-    $currentDate: { last_purchased: true }
-  }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.updateOne(
+>   { sku: "HAMMER-1" },
+>   {
+>     $inc: { stock: -2 },
+>     $currentDate: { last_purchased: true }
+>   }
+> );
+> ```
 > - Target the document using a query filter first.
 > - Chain the `$inc` and `$currentDate` operators in the update object.
 
@@ -203,11 +202,10 @@ db.products.updateOne(
 **Problem:** Update `updatedAt` to current date timestamp on `user:1` using `$currentDate`.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $currentDate: { updatedAt: true } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $currentDate: { updatedAt: true } });
+> ```
 > ```javascript
 > db.users.updateOne({
 >   _id: 1
@@ -218,16 +216,17 @@ db.users.updateOne({ _id: 1 }, { $currentDate: { updatedAt: true } });
 >
 > **Explanation:** `$currentDate` sets target field values to current server dates or timestamps.
 
+---
+
 ### Exercise 3: Setting Min/Max Field Boundaries with `$min` and `$max`
 
 **Problem:** Update `highScore` on `game:1` to 500 ONLY if 500 is greater than current score using `$max`.
 
 **Expected output:**
-```text
-db.games.updateOne({ _id: 1 }, { $max: { highScore: 500 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.games.updateOne({ _id: 1 }, { $max: { highScore: 500 } });
+> ```
 > ```javascript
 > db.games.updateOne({
 >   _id: 1

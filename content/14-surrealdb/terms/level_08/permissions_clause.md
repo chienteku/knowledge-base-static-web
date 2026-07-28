@@ -175,27 +175,27 @@ Write a `PERMISSIONS` clause for a `profile` table allowing any authenticated us
 **Problem:** Define `article` table permissions allowing `select` and `update` ONLY if `author = $auth.id`.
 
 **Expected output:**
-```text
-DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
+> ```
 > ```surrealql
 > DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
 > ```
 >
 > **Explanation:** `PERMISSIONS FOR statement WHERE condition` enforces fine-grained row-level security.
 
+---
+
 ### Exercise 3: Hiding Sensitive Field with PERMISSIONS NONE
 
 **Problem:** Hide field `password_hash` on `user` table from all read queries using `PERMISSIONS NONE`.
 
 **Expected output:**
-```text
-DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
+> ```
 > ```surrealql
 > DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
 > ```

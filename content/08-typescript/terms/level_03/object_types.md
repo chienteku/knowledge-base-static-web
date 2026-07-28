@@ -105,13 +105,12 @@ const user: { readonly name: string } = { name: "Alice" };
 **Problem:** Write an inline Object Type for a `car` parameter that contains a `brand` (string) and an `engine` (an object containing `cylinders` (number)).
 
 **Expected output:**
-```typescript
-function start(car: { brand: string; engine: { cylinders: number } }) {
-  // ...
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> function start(car: { brand: string; engine: { cylinders: number } }) {
+>   // ...
+> }
+> ```
 > - Object Types can be nested infinitely, just like JS objects!
 
 ---
@@ -123,11 +122,10 @@ function start(car: { brand: string; engine: { cylinders: number } }) {
 **Problem:** Annotate function parameter `user: { id: number; name: string }`.
 
 **Expected output:**
-```text
-Inline object type verified
-```
-
 > [!check]- Answer
+> ```text
+> Inline object type verified
+> ```
 > ```typescript
 > function printUser(user: { id: number; name: string }) {
 >   console.log(`${user.id}: ${user.name}`);
@@ -137,16 +135,17 @@ Inline object type verified
 >
 > **Explanation:** Inline object types specify required property shapes directly.
 
+---
+
 ### Exercise 3: Primitive Exclusion with `object`
 
 **Problem:** Does `const val: object = "hello"` compile? (No)
 
 **Expected output:**
-```text
-No, primitive strings are not assignable to object
-```
-
 > [!check]- Answer
+> ```text
+> No, primitive strings are not assignable to object
+> ```
 > ```typescript
 > console.log("No, primitive strings are not assignable to object");
 > ```

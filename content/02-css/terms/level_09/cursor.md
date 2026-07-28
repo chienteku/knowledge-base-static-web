@@ -119,11 +119,10 @@ button:disabled {
 **Problem:** When you hover over a normal paragraph of text (`<p>`), the mouse changes from an arrow into a vertical line that looks like a capital "I". What is the name of this cursor value?
 
 **Expected output:**
-```text
-It's called `text`. You can apply `cursor: text;` to inputs or custom elements to signal to the user that they can click and start typing!
-```
-
 > [!check]- Answer
+> ```text
+> It's called `text`. You can apply `cursor: text;` to inputs or custom elements to signal to the user that they can click and start typing!
+> ```
 > - What do you call letters and words?
 
 ---
@@ -139,14 +138,13 @@ It's called `text`. You can apply `cursor: text;` to inputs or custom elements t
 4. Disabled element (`not-allowed`)
 
 **Expected output:**
-```text
-1. pointer
-2. text
-3. grab
-4. not-allowed
-```
-
 > [!check]- Answer
+> ```text
+> 1. pointer
+> 2. text
+> 3. grab
+> 4. not-allowed
+> ```
 > ```text
 > 1. pointer
 > 2. text
@@ -156,16 +154,17 @@ It's called `text`. You can apply `cursor: text;` to inputs or custom elements t
 >
 > **Explanation:** `cursor` values provide affordance cues for mouse interactions.
 
+---
+
 ### Exercise 3: Custom Image Cursor Syntax
 
 **Problem:** Write CSS `cursor` property using custom image `pointer.png` with `auto` fallback.
 
 **Expected output:**
-```text
-cursor: url('pointer.png'), auto;
-```
-
 > [!check]- Answer
+> ```text
+> cursor: url('pointer.png'), auto;
+> ```
 > ```css
 > .custom-cursor {
 >   cursor: url('pointer.png'), auto;

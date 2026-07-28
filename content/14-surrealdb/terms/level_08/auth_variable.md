@@ -170,27 +170,27 @@ Write a `DEFINE FIELD` statement for a `task` table named `created_by` of type `
 **Problem:** Define SELECT permission on `article` table restricting users to reading their own articles using `$auth.id`.
 
 **Expected output:**
-```text
-DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id;
+> ```
 > ```surrealql
 > DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id;
 > ```
 >
 > **Explanation:** `$auth.id` injects the authenticated user's Record ID into row-level security rules.
 
+---
+
 ### Exercise 3: Admin Role Check via `$auth`
 
 **Problem:** Allow SELECT access if user is owner (`author = $auth.id`) OR user role is admin (`$auth.role = "admin"`).
 
 **Expected output:**
-```text
-DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id OR $auth.role = "admin";
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id OR $auth.role = "admin";
+> ```
 > ```surrealql
 > DEFINE TABLE article PERMISSIONS FOR select WHERE author = $auth.id OR $auth.role = "admin";
 > ```

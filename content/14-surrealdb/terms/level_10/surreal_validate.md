@@ -174,27 +174,27 @@ c. It benchmarks query execution speed.
 **Problem:** CLI command to validate syntax of `schema.surql` file.
 
 **Expected output:**
-```text
-surreal validate schema.surql
-```
-
 > [!check]- Answer
+> ```text
+> surreal validate schema.surql
+> ```
 > ```text
 > surreal validate schema.surql
 > ```
 >
 > **Explanation:** `surreal validate file.surql` checks SurrealQL static syntax correctness.
 
+---
+
 ### Exercise 3: CI/CD Pre-Deployment Validation Step
 
 **Problem:** Why should `surreal validate` be included in CI/CD pipelines? (Catches syntax errors before executing production migrations).
 
 **Expected output:**
-```text
-Catches SurrealQL syntax errors before executing production database migrations
-```
-
 > [!check]- Answer
+> ```text
+> Catches SurrealQL syntax errors before executing production database migrations
+> ```
 > ```text
 > Catches SurrealQL syntax errors before executing production database migrations
 > ```

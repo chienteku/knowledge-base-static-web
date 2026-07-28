@@ -149,17 +149,16 @@ Use user-defined variable names without system prefixes in $let blocks
 **Problem:** You have a `users` collection. Write the aggregation pipeline containing a single `$addFields` (or `$set`) stage that appends a new field named `processed_at` carrying the exact server date-time (using the system variable).
 
 **Expected output:**
-```javascript
-[
-  {
-    $set: {
-      processed_at: "$$NOW"
-    }
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $set: {
+>       processed_at: "$$NOW"
+>     }
+>   }
+> ]
+> ```
 > - The database-level time variable requires double dollar signs.
 > - Assign the variable value to the new key `processed_at`.
 
@@ -172,11 +171,10 @@ Use user-defined variable names without system prefixes in $let blocks
 **Problem:** Filter `scores` array returning items greater than 80 using `$filter` and `$$score`.
 
 **Expected output:**
-```text
-db.students.aggregate([{ $project: { highScores: { $filter: { input: "$scores", as: "score", cond: { $gt: ["$$score", 80] } } } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.students.aggregate([{ $project: { highScores: { $filter: { input: "$scores", as: "score", cond: { $gt: ["$$score", 80] } } } } }]);
+> ```
 > ```javascript
 > db.students.aggregate([
 >   {
@@ -195,16 +193,17 @@ db.students.aggregate([{ $project: { highScores: { $filter: { input: "$scores", 
 >
 > **Explanation:** `as: "score"` defines an array item variable accessed via `$$score` inside expressions.
 
+---
+
 ### Exercise 3: Current Timestamp System Variable `$$NOW`
 
 **Problem:** Calculate age in days using `$$NOW` system date variable inside `$project`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $project: { ageDays: { $divide: [{ $subtract: ["$$NOW", "$createdAt"] }, 86400000] } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $project: { ageDays: { $divide: [{ $subtract: ["$$NOW", "$createdAt"] }, 86400000] } } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   {

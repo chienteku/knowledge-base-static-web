@@ -109,11 +109,10 @@ To deploy a Nuxt application to a standard Node.js server (like DigitalOcean or 
 **Problem:** You ran `npm run generate` to build a Static Site Generated (SSG) blog without a Node.js server. You want to upload the files to an AWS S3 Bucket. Which folder *inside* `.output/` contains the fully rendered `.html` files you need to upload?
 
 **Expected output:**
-```text
-.output/public/
-```
-
 > [!check]- Answer
+> ```text
+> .output/public/
+> ```
 > - SSG outputs raw browser assets (HTML/CSS/JS) into the static web server folder.
 
 ---
@@ -125,12 +124,11 @@ To deploy a Nuxt application to a standard Node.js server (like DigitalOcean or 
 2. `.output/public/` 
 
 **Expected output:**
-```text
-1. .output/server/: Compiled Nitro Node.js entrypoint (index.mjs) and server handlers
-2. .output/public/: Pre-rendered static HTML files, client JS chunks, and static assets
-```
-
 > [!check]- Answer
+> ```text
+> 1. .output/server/: Compiled Nitro Node.js entrypoint (index.mjs) and server handlers
+> 2. .output/public/: Pre-rendered static HTML files, client JS chunks, and static assets
+> ```
 > - `.output/server/` -> Node.js server engine entrypoint (`index.mjs`).
 > - `.output/public/` -> Pre-rendered static HTML, JS client chunks, and assets.
 > 
@@ -145,11 +143,10 @@ To deploy a Nuxt application to a standard Node.js server (like DigitalOcean or 
 **Problem:** Write CLI command launching compiled Nuxt 3 production server.
 
 **Expected output:**
-```text
-node .output/server/index.mjs
-```
-
 > [!check]- Answer
+> ```text
+> node .output/server/index.mjs
+> ```
 > - `node .output/server/index.mjs` launches the production server.
 > 
 > ```bash

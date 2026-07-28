@@ -177,14 +177,13 @@ You attempt to insert the following four rows:
 Which row will fail, and why?
 
 **Expected output:**
-```text
-Row 4 will fail! 
-A composite primary key checks the uniqueness of the *combined* values. 
-Rows 1, 2, and 3 are unique combinations. 
-Row 4 repeats the exact combination of `order_id = 101` and `item_id = 1` which was already written in Row 1, violating the unique constraint.
-```
-
 > [!check]- Answer
+> ```text
+> Row 4 will fail! 
+> A composite primary key checks the uniqueness of the *combined* values. 
+> Rows 1, 2, and 3 are unique combinations. 
+> Row 4 repeats the exact combination of `order_id = 101` and `item_id = 1` which was already written in Row 1, violating the unique constraint.
+> ```
 > - Evaluate the combinations of values in each row.
 > - Identify the duplicate pair.
 
@@ -197,11 +196,10 @@ Row 4 repeats the exact combination of `order_id = 101` and `item_id = 1` which 
 **Problem:** Create table `orders` with `id` as `BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY`.
 
 **Expected output:**
-```text
-CREATE TABLE orders ( id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, total NUMERIC(10,2) );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE orders ( id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, total NUMERIC(10,2) );
+> ```
 > ```sql
 > CREATE TABLE orders (
 >   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -211,16 +209,17 @@ CREATE TABLE orders ( id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, total 
 >
 > **Explanation:** `IDENTITY PRIMARY KEY` specifies standard auto-incrementing primary key columns.
 
+---
+
 ### Exercise 3: Primary Key Constraints Combination
 
 **Problem:** What 2 SQL column constraints are implicitly included in every PRIMARY KEY constraint? (`NOT NULL` and `UNIQUE`).
 
 **Expected output:**
-```text
-NOT NULL and UNIQUE
-```
-
 > [!check]- Answer
+> ```text
+> NOT NULL and UNIQUE
+> ```
 > ```text
 > NOT NULL and UNIQUE
 > ```

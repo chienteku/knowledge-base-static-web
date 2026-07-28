@@ -155,11 +155,10 @@ async function processData() {
 **Problem:** You have an array: `[0, "apple", false, "banana", "", "cherry", null]`. Use `filter()` to remove all falsy values from the array, leaving only the valid strings.
 
 **Expected output:**
-```text
-["apple", "banana", "cherry"]
-```
-
 > [!check]- Answer
+> ```text
+> ["apple", "banana", "cherry"]
+> ```
 > - The callback just needs to return truthy or falsy. 
 > - You can simply write: `array.filter(item => item);` ! If the item itself is truthy, it passes. If it is falsy, it fails.
 
@@ -170,11 +169,10 @@ async function processData() {
 **Problem:** Filter `[1, 2, 3, 4, 5, 6]` to extract even numbers.
 
 **Expected output:**
-```text
-[ 2, 4, 6 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 2, 4, 6 ]
+> ```
 > ```javascript
 > const nums = [1, 2, 3, 4, 5, 6];
 > const evens = nums.filter(x => x % 2 === 0);
@@ -183,16 +181,17 @@ async function processData() {
 >
 > **Explanation:** `.filter()` returns a new array containing elements that pass predicate tests.
 
+---
+
 ### Exercise 3: Removing Nullish Values with `.filter(Boolean)`
 
 **Problem:** Clean an array `[1, null, 2, undefined, 3, ""]` using `.filter(Boolean)`.
 
 **Expected output:**
-```text
-[ 1, 2, 3 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3 ]
+> ```
 > ```javascript
 > const dirty = [1, null, 2, undefined, 3, ""];
 > const clean = dirty.filter(Boolean);
@@ -201,7 +200,6 @@ async function processData() {
 >
 > **Explanation:** Passing `Boolean` filters out all falsy values (`null`, `undefined`, `0`, ``).
 
----
 
 ---
 

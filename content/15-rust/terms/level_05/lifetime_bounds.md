@@ -182,11 +182,10 @@ thread::spawn(move || {
 **Problem:** Write a struct `struct Container<'a, T: 'a> { data: &'a T }` ensuring `T` lives at least as long as `'a`.
 
 **Expected output:**
-```
-Container data: 100
-```
-
 > [!check]- Answer
+> ```
+> Container data: 100
+> ```
 > ```rust
 > struct Container<'a, T: 'a> { data: &'a T }
 > fn main() {
@@ -198,16 +197,17 @@ Container data: 100
 >
 > **Explanation:** `T: 'a` states that type `T` must be valid for at least lifetime `'a`.
 
+---
+
 ### Exercise 3: Subtyping Outlives Bounds `'a: 'b`
 
 **Problem:** Write `fn tie<'a, 'b: 'a>(x: &'a str, y: &'b str)` where `'b` outlives `'a`.
 
 **Expected output:**
-```
-Lifetime subtype verified
-```
-
 > [!check]- Answer
+> ```
+> Lifetime subtype verified
+> ```
 > fn tie<'a, 'b: 'a>(_x: &'a str, _y: &'b str) { println!("Lifetime subtype verified"); }
 > fn main() { tie("short", "longer_static"); }
 > ```

@@ -183,27 +183,27 @@ if (typeof document !== "undefined") {
 **Problem:** Read `document.title` and `document.URL` in browser environments.
 
 **Expected output:**
-```text
-Browser Document API verified
-```
-
 > [!check]- Answer
+> ```text
+> Browser Document API verified
+> ```
 > ```javascript
 > console.log("Browser Document API verified");
 > ```
 >
 > **Explanation:** `document` represents the root web page loaded inside browser windows.
 
+---
+
 ### Exercise 3: Creating Elements with `document.createElement`
 
 **Problem:** Simulate creating a `<button>` element and setting text content `"Click Me"`.
 
 **Expected output:**
-```text
-Button created with text: Click Me
-```
-
 > [!check]- Answer
+> ```text
+> Button created with text: Click Me
+> ```
 > ```javascript
 > const button = { tagName: "BUTTON", textContent: "Click Me" };
 > console.log(`Button created with text: ${button.textContent}`);
@@ -211,7 +211,6 @@ Button created with text: Click Me
 >
 > **Explanation:** `document.createElement(tagName)` instantiates new unattached DOM element nodes.
 
----
 
 ---
 

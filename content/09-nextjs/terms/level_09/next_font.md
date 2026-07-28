@@ -130,21 +130,20 @@ export default function Page() { return <div className={inter.className}>Text</d
 **Problem:** You bought a premium font called "Helvetica Neue.woff2". It isn't on Google Fonts. Can you still optimize it with `next/font`?
 
 **Expected output:**
-```tsx
-// Yes! You use `next/font/local` instead of `next/font/google`.
-import localFont from 'next/font/local';
-
-const helvetica = localFont({
-  src: './fonts/HelveticaNeue.woff2',
-  display: 'swap',
-});
-
-export default function RootLayout({ children }) {
-  return <body className={helvetica.className}>{children}</body>;
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> // Yes! You use `next/font/local` instead of `next/font/google`.
+> import localFont from 'next/font/local';
+> 
+> const helvetica = localFont({
+>   src: './fonts/HelveticaNeue.woff2',
+>   display: 'swap',
+> });
+> 
+> export default function RootLayout({ children }) {
+>   return <body className={helvetica.className}>{children}</body>;
+> }
+> ```
 > - Next.js has a specific import path for local font files.
 
 ---
@@ -154,11 +153,10 @@ export default function RootLayout({ children }) {
 **Problem:** Write `app/layout.tsx` importing Google font `Inter` from `next/font/google` and applying `inter.className` to the `<body>` tag.
 
 **Expected output:**
-```tsx
-import { Inter } from 'next/font/google'; const inter = Inter({ subsets: ['latin'] }); export default function RootLayout({ children }: { children: React.ReactNode }) { return ( <html lang="en"> <body className={inter.className}>{children}</body> </html> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> import { Inter } from 'next/font/google'; const inter = Inter({ subsets: ['latin'] }); export default function RootLayout({ children }: { children: React.ReactNode }) { return ( <html lang="en"> <body className={inter.className}>{children}</body> </html> ); }
+> ```
 > - `next/font` downloads font files at build time, self-hosting them automatically.
 > 
 > ```tsx
@@ -186,11 +184,10 @@ import { Inter } from 'next/font/google'; const inter = Inter({ subsets: ['latin
 **Problem:** How do you configure `next/font` to expose a font as a CSS variable for Tailwind CSS integration?
 
 **Expected output:**
-```text
-By passing variable property: const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-```
-
 > [!check]- Answer
+> ```text
+> By passing variable property: const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+> ```
 > - `variable` option binds font family to CSS variables.
 > 
 > ```typescript

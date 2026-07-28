@@ -173,27 +173,27 @@ What CNCF-graduated distributed key-value engine does SurrealDB use to achieve h
 **Problem:** CLI command to start SurrealDB server connected to TiKV PD cluster at `10.0.0.1:2379`.
 
 **Expected output:**
-```text
-surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
-```
-
 > [!check]- Answer
+> ```text
+> surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
+> ```
 > ```text
 > surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
 > ```
 >
 > **Explanation:** `tikv://pd_address:2379` connects SurrealDB nodes to distributed TiKV storage clusters.
 
+---
+
 ### Exercise 3: Distributed Scaling Architecture
 
 **Problem:** Explain role of TiKV in SurrealDB multi-node deployments (Provides distributed horizontal key-value storage with Raft consensus).
 
 **Expected output:**
-```text
-Provides distributed ACID key-value storage and Raft consensus replication across nodes
-```
-
 > [!check]- Answer
+> ```text
+> Provides distributed ACID key-value storage and Raft consensus replication across nodes
+> ```
 > ```text
 > Provides distributed ACID key-value storage and Raft consensus replication across nodes
 > ```

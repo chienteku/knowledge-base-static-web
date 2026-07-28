@@ -152,13 +152,12 @@ RETURN string::slice("hello", 0, 2); // Correct argument signature
 3. Find the average value of a numeric field across records.
 
 **Expected output:**
-```text
-1. rand::uuid()
-2. string::is::email($val)
-3. math::mean(field)
-```
-
 > [!check]- Answer
+> ```text
+> 1. rand::uuid()
+> 2. string::is::email($val)
+> 3. math::mean(field)
+> ```
 > - Random generators live in the `rand::` module.
 > - Validation checks live in `string::is::`.
 
@@ -171,27 +170,27 @@ RETURN string::slice("hello", 0, 2); // Correct argument signature
 **Problem:** List 5 built-in function namespaces in SurrealQL (string, math, array, time, crypto).
 
 **Expected output:**
-```text
-string, math, array, time, crypto
-```
-
 > [!check]- Answer
+> ```text
+> string, math, array, time, crypto
+> ```
 > ```text
 > string, math, array, time, crypto
 > ```
 >
 > **Explanation:** SurrealQL organizes utility functions into scoped domain namespaces.
 
+---
+
 ### Exercise 3: Random String Generation
 
 **Problem:** Generate a 16-character random alphanumeric string using `rand::string()`.
 
 **Expected output:**
-```text
-rand::string(16)
-```
-
 > [!check]- Answer
+> ```text
+> rand::string(16)
+> ```
 > ```surrealql
 > RETURN rand::string(16);
 > ```

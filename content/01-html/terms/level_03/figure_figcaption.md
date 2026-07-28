@@ -165,14 +165,13 @@ A basic image wrapped in a figure with a caption:
 **Problem:** Wrap the image `chart.jpg` (description: "Line graph showing stock prices rising") with the caption "Figure 1: Quarterly stock growth." using semantic elements.
 
 **Expected output:**
-```html
-<figure>
-  <img src="chart.jpg" alt="Line graph showing stock prices rising">
-  <figcaption>Figure 1: Quarterly stock growth.</figcaption>
-</figure>
-```
-
 > [!check]- Answer
+> ```html
+> <figure>
+>   <img src="chart.jpg" alt="Line graph showing stock prices rising">
+>   <figcaption>Figure 1: Quarterly stock growth.</figcaption>
+> </figure>
+> ```
 > - The parent container must be `<figure>`.
 > - The child image tag must have an `alt` attribute.
 > - The caption must use `<figcaption>`.
@@ -186,11 +185,10 @@ A basic image wrapped in a figure with a caption:
 **Problem:** Wrap a `<pre><code>` block inside a `<figure>` with `<figcaption>` reading `'Listing 1: Express Server'`. 
 
 **Expected output:**
-```text
-<figure><figcaption>Listing 1: Express Server</figcaption><pre><code>const app = express();</code></pre></figure>
-```
-
 > [!check]- Answer
+> ```text
+> <figure><figcaption>Listing 1: Express Server</figcaption><pre><code>const app = express();</code></pre></figure>
+> ```
 > ```html
 > <figure>
 >   <figcaption>Listing 1: Express Server</figcaption>
@@ -200,16 +198,17 @@ A basic image wrapped in a figure with a caption:
 >
 > **Explanation:** `<figure>` can encapsulate code snippets, diagrams, quotes, and images.
 
+---
+
 ### Exercise 3: Figcaption Placement Order
 
 **Problem:** Where can `<figcaption>` be located inside `<figure>`? (As the very first child or very last child).
 
 **Expected output:**
-```text
-As the very first child or very last child.
-```
-
 > [!check]- Answer
+> ```text
+> As the very first child or very last child.
+> ```
 > ```text
 > As the very first child or very last child.
 > ```

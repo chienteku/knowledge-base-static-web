@@ -207,6 +207,8 @@ function FormApp() {
 >
 > **Explanation:** The diffing algorithm optimizes DOM mutations by comparing node types and keys.
 
+---
+
 ### Exercise 3: Resetting State via Key Prop Mutation
 
 **Problem:** How can you force a React component to completely unmount and reset state when `userId` changes? (Pass `key={userId}` to the component).

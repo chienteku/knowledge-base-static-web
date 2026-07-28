@@ -172,11 +172,10 @@ What does this directive do, and what existing Rust mechanism would you use in `
 **Problem:** Write a `build.rs` main function instructing Cargo to rerun if `src/schema.json` changes.
 
 **Expected output:**
-```
-Build instruction printed
-```
-
 > [!check]- Answer
+> ```
+> Build instruction printed
+> ```
 > ```rust
 > fn main() {
 >     println!("cargo:rerun-if-changed=src/schema.json");
@@ -186,16 +185,17 @@ Build instruction printed
 >
 > **Explanation:** `println!("cargo:rerun-if-changed=...")` informs Cargo when to re-execute `build.rs`.
 
+---
+
 ### Exercise 3: Generating Code to `OUT_DIR`
 
 **Problem:** Use `std::env::var("OUT_DIR")` in a build script to create a generated code file.
 
 **Expected output:**
-```
-Generated code path retrieved
-```
-
 > [!check]- Answer
+> ```
+> Generated code path retrieved
+> ```
 > use std::env;
 > fn main() {
 >     if let Ok(out_dir) = env::var("OUT_DIR") {

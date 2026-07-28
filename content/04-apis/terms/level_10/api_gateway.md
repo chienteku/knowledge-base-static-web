@@ -129,14 +129,13 @@ Imagine entering a large corporate headquarters building.
 **Problem:** List 4 primary cross-cutting responsibilities managed by an enterprise API Gateway.
 
 **Expected output:**
-```text
-1. Request Routing / Reverse Proxying
-2. Centralized Authentication & Authorization
-3. Rate Limiting & Throttling
-4. TLS Termination & CORS management
-```
-
 > [!check]- Answer
+> ```text
+> 1. Request Routing / Reverse Proxying
+> 2. Centralized Authentication & Authorization
+> 3. Rate Limiting & Throttling
+> 4. TLS Termination & CORS management
+> ```
 > ```text
 > 1. Request Routing / Reverse Proxying
 > 2. Centralized Authentication & Authorization
@@ -151,11 +150,10 @@ Imagine entering a large corporate headquarters building.
 **Problem:** What is the Backend-For-Frontend (BFF) API Gateway pattern?
 
 **Expected output:**
-```text
-Creating tailored API Gateway instances for specific client types (e.g. Mobile BFF vs Web BFF) to optimize payload structures for each platform.
-```
-
 > [!check]- Answer
+> ```text
+> Creating tailored API Gateway instances for specific client types (e.g. Mobile BFF vs Web BFF) to optimize payload structures for each platform.
+> ```
 > ```text
 > Creating tailored API Gateway instances for specific client types (e.g. Mobile BFF vs Web BFF) to optimize payload structures for each platform.
 > ```

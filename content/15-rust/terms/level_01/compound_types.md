@@ -154,11 +154,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Alice is 28 years old and scored 90
-```
-
 > [!check]- Answer
+> ```text
+> Alice is 28 years old and scored 90
+> ```
 > - To get the second element of a tuple, use `.1` (tuples are zero-indexed).
 > - To get the third element of an array, use `[2]` (arrays are zero-indexed).
 
@@ -169,11 +168,10 @@ Alice is 28 years old and scored 90
 **Problem:** Given a tuple `(100, "Rust", 3.14)`, destructure it into individual variables, swap the integer and float positions into a new tuple, and print the new tuple.
 
 **Expected output:**
-```
-(3.14, "Rust", 100)
-```
-
 > [!check]- Answer
+> ```
+> (3.14, "Rust", 100)
+> ```
 > ```rust
 > fn main() {
 >     let tuple = (100, "Rust", 3.14);
@@ -185,16 +183,17 @@ Alice is 28 years old and scored 90
 >
 > **Explanation:** Tuple pattern matching `let (count, name, ratio) = tuple;` extracts fields by position, allowing flexible rearrangement into a new tuple structure.
 
+---
+
 ### Exercise 3: Array Initialization with Repeat Syntax
 
 **Problem:** Create an array of 5 elements filled with the number `42`. Modify the third element to `99` and print the entire array.
 
 **Expected output:**
-```
-[42, 42, 99, 42, 42]
-```
-
 > [!check]- Answer
+> ```
+> [42, 42, 99, 42, 42]
+> ```
 > ```rust
 > fn main() {
 >     let mut arr = [42; 5];

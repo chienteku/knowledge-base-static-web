@@ -177,12 +177,11 @@ fn main() {
 **Problem:** Demonstrate that calling `fn process<T>(val: T)` with `i32` and `&str` compiles separate code paths.
 
 **Expected output:**
-```
-Monomorphized i32
-Monomorphized str
-```
-
 > [!check]- Answer
+> ```
+> Monomorphized i32
+> Monomorphized str
+> ```
 > ```rust
 > fn process<T: std::fmt::Debug>(val: T) {
 >     println!("Monomorphized {:?}", val);
@@ -195,16 +194,17 @@ Monomorphized str
 >
 > **Explanation:** Rust generates concrete function instances for `process::<i32>` and `process::<&str>` during compilation.
 
+---
+
 ### Exercise 3: Reducing Monomorphization Bloat with Inner Non-Generic Helpers
 
 **Problem:** Refactor a generic function to delegate common logic to a non-generic helper function `fn inner_log(msg: &str)`.
 
 **Expected output:**
-```
-Logged: test
-```
-
 > [!check]- Answer
+> ```
+> Logged: test
+> ```
 > fn inner_log(msg: &str) { println!("Logged: {}", msg); }
 > fn log_data<T: std::fmt::Display>(data: T) {
 >     inner_log(&data.to_string());

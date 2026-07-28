@@ -158,12 +158,11 @@ async function processData() {
 **Problem:** How do you tell `addEventListener` that you want it to trigger during the Capturing phase instead of the default Bubbling phase?
 
 **Expected output:**
-```text
-Pass `true` as the third argument to the addEventListener method:
-element.addEventListener('click', callback, true);
-```
-
 > [!check]- Answer
+> ```text
+> Pass `true` as the third argument to the addEventListener method:
+> element.addEventListener('click', callback, true);
+> ```
 > - The third argument is called `useCapture`.
 
 ---
@@ -173,34 +172,33 @@ element.addEventListener('click', callback, true);
 **Problem:** Register an event listener in capture phase using `addEventListener('click', handler, true)`.
 
 **Expected output:**
-```text
-Capture phase listener executed first
-```
-
 > [!check]- Answer
+> ```text
+> Capture phase listener executed first
+> ```
 > ```javascript
 > console.log("Capture phase listener executed first");
 > ```
 >
 > **Explanation:** Passing `true` or `{ capture: true }` attaches event listeners to the downward capture phase.
 
+---
+
 ### Exercise 3: Capture vs Bubble Propagation Direction
 
 **Problem:** State direction of capture phase (Window -> Target) vs bubble phase (Target -> Window).
 
 **Expected output:**
-```text
-Capture: Downward, Bubble: Upward
-```
-
 > [!check]- Answer
+> ```text
+> Capture: Downward, Bubble: Upward
+> ```
 > ```javascript
 > console.log("Capture: Downward, Bubble: Upward");
 > ```
 >
 > **Explanation:** Events flow down DOM trees in capture phase before bubbling back upward.
 
----
 
 ---
 

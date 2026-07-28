@@ -185,11 +185,10 @@ db.users.find({ status: { $in: ["active", "pending"] } });
 `SELECT * FROM inventory WHERE status = 'low' AND qty <= 5;`
 
 **Expected output:**
-```javascript
-db.inventory.find({ status: "low", qty: { $lte: 5 } });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.inventory.find({ status: "low", qty: { $lte: 5 } });
+> ```
 > - Combine the status and quantity conditions inside a single JSON object.
 > - Map the SQL `<=` symbol to the BSON `$lte` operator.
 
@@ -202,11 +201,10 @@ db.inventory.find({ status: "low", qty: { $lte: 5 } });
 **Problem:** Query products with `price` between 20 and 50 inclusive using `$gte` and `$lte`.
 
 **Expected output:**
-```text
-db.products.find({ price: { $gte: 20, $lte: 50 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.products.find({ price: { $gte: 20, $lte: 50 } });
+> ```
 > ```javascript
 > db.products.find({
 >   price: { $gte: 20, $lte: 50 }
@@ -215,16 +213,17 @@ db.products.find({ price: { $gte: 20, $lte: 50 } });
 >
 > **Explanation:** Combining `$gte` and `$lte` filters documents within numeric range boundaries.
 
+---
+
 ### Exercise 3: Excluding Values with `$nin`
 
 **Problem:** Query users whose `role` is neither `"admin"` nor `"manager"` using `$nin`.
 
 **Expected output:**
-```text
-db.users.find({ role: { $nin: ["admin", "manager"] } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ role: { $nin: ["admin", "manager"] } });
+> ```
 > ```javascript
 > db.users.find({
 >   role: { $nin: ["admin", "manager"] }

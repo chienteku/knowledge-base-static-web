@@ -187,11 +187,10 @@ export const ProductSchema = z.object({
 **Problem:** Write Zod schema for `userSchema` requiring valid `email` and min 8-char `password`, and a function validating `formData` with `safeParse()`.
 
 **Expected output:**
-```typescript
-import { z } from 'zod'; const userSchema = z.object({ email: z.string().email(), password: z.string().min(8) }); export function validateForm(data: unknown) { return userSchema.safeParse(data); }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { z } from 'zod'; const userSchema = z.object({ email: z.string().email(), password: z.string().min(8) }); export function validateForm(data: unknown) { return userSchema.safeParse(data); }
+> ```
 > - `z.object()` defines validation rules; `safeParse()` checks input safely.
 > 
 > ```typescript
@@ -218,11 +217,10 @@ import { z } from 'zod'; const userSchema = z.object({ email: z.string().email()
 **Problem:** Write TypeScript line inferring static TS type `UserType` from Zod `userSchema`.
 
 **Expected output:**
-```text
-type UserType = z.infer<typeof userSchema>;
-```
-
 > [!check]- Answer
+> ```text
+> type UserType = z.infer<typeof userSchema>;
+> ```
 > - `z.infer<typeof schema>` extracts static TypeScript types automatically.
 > 
 > ```typescript

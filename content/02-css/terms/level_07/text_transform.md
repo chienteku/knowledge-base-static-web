@@ -108,11 +108,10 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 **Problem:** You have an HTML title that says `<h2>breaking news story</h2>`. You want it to look like `Breaking News Story`. Which value do you use?
 
 **Expected output:**
-```text
-`text-transform: capitalize;`
-```
-
 > [!check]- Answer
+> ```text
+> `text-transform: capitalize;`
+> ```
 > - You only want the first letter of each word.
 
 ---
@@ -127,13 +126,12 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 3. `capitalize` 
 
 **Expected output:**
-```text
-1. HELLO WORLD
-2. hello world
-3. Hello World
-```
-
 > [!check]- Answer
+> ```text
+> 1. HELLO WORLD
+> 2. hello world
+> 3. Hello World
+> ```
 > ```text
 > 1. uppercase -> HELLO WORLD
 > 2. lowercase -> hello world
@@ -142,16 +140,17 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 >
 > **Explanation:** `text-transform` alters visual character casing dynamically.
 
+---
+
 ### Exercise 3: Full-Width Character Casing
 
 **Problem:** Which `text-transform` value forces full-width ideographic character casing for Asian typography?
 
 **Expected output:**
-```text
-text-transform: full-width;
-```
-
 > [!check]- Answer
+> ```text
+> text-transform: full-width;
+> ```
 > ```css
 > span {
 >   text-transform: full-width;

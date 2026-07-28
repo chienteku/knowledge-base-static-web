@@ -153,13 +153,12 @@ State whether the following query will succeed or fail, and explain why:
 `CREATE logs:log01 SET message = "Server Ok", user_id = "user:12";`
 
 **Expected output:**
-```text
-The query will fail. 
-Because the `logs` table is defined as `SCHEMAFULL`, it rejects any fields that have not been explicitly registered. 
-Since no `DEFINE FIELD` commands were run for `message` or `user_id` on the `logs` table, SurrealDB will block the write.
-```
-
 > [!check]- Answer
+> ```text
+> The query will fail. 
+> Because the `logs` table is defined as `SCHEMAFULL`, it rejects any fields that have not been explicitly registered. 
+> Since no `DEFINE FIELD` commands were run for `message` or `user_id` on the `logs` table, SurrealDB will block the write.
+> ```
 > - Check the schema validation rules of the `SCHEMAFULL` toggle.
 > - Consider if any schema fields have been declared.
 
@@ -172,27 +171,27 @@ Since no `DEFINE FIELD` commands were run for `message` or `user_id` on the `log
 **Problem:** Define table `customer` as `SCHEMAFULL` with `DROP` permissions restricted.
 
 **Expected output:**
-```text
-DEFINE TABLE customer SCHEMAFULL;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE customer SCHEMAFULL;
+> ```
 > ```surrealql
 > DEFINE TABLE customer SCHEMAFULL;
 > ```
 >
 > **Explanation:** `DEFINE TABLE` specifies table schema enforcement and permissions.
 
+---
+
 ### Exercise 3: Dropping Table Contents vs Structure
 
 **Problem:** Command to delete all records in `log` table without removing the table schema (`DELETE log;`).
 
 **Expected output:**
-```text
-DELETE log;
-```
-
 > [!check]- Answer
+> ```text
+> DELETE log;
+> ```
 > ```surrealql
 > DELETE log;
 > ```

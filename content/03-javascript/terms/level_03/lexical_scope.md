@@ -179,15 +179,14 @@ stepTwo();
 ```
 
 **Expected output:**
-```text
-Output: 5
-Explanation: When stepOne is invoked inside stepTwo, the engine executes stepOne.
-The scope lookup chain for 'count' in stepOne starts in stepOne's local scope (not found)
-and immediately jumps to the global scope (where stepOne was defined), resolving to '5'.
-stepTwo's local scope is bypassed entirely.
-```
-
 > [!check]- Answer
+> ```text
+> Output: 5
+> Explanation: When stepOne is invoked inside stepTwo, the engine executes stepOne.
+> The scope lookup chain for 'count' in stepOne starts in stepOne's local scope (not found)
+> and immediately jumps to the global scope (where stepOne was defined), resolving to '5'.
+> stepTwo's local scope is bypassed entirely.
+> ```
 > - Remember that scope in JavaScript is determined by where the function is written in the code.
 > - `stepOne` is defined in the global scope, not inside `stepTwo`.
 
@@ -198,13 +197,12 @@ stepTwo's local scope is bypassed entirely.
 **Problem:** Trace `val` inside nested functions where `val` exists in global, outer, and inner scopes.
 
 **Expected output:**
-```text
-inner
-outer
-global
-```
-
 > [!check]- Answer
+> ```text
+> inner
+> outer
+> global
+> ```
 > ```javascript
 > const val = "global";
 > function outer() {
@@ -222,16 +220,17 @@ global
 >
 > **Explanation:** Scope resolution walks outward from local scope to parent scopes along the static lexical structure.
 
+---
+
 ### Exercise 3: Lexical Scope Closure Preservation
 
 **Problem:** Demonstrate a function `makeGetter()` returning a closure that reads `secret` defined in `makeGetter` scope.
 
 **Expected output:**
-```text
-top secret
-```
-
 > [!check]- Answer
+> ```text
+> top secret
+> ```
 > ```javascript
 > function makeGetter() {
 >   const secret = "top secret";
@@ -243,7 +242,6 @@ top secret
 >
 > **Explanation:** Functions retain lifetime references to their parent lexical environment.
 
----
 
 ---
 

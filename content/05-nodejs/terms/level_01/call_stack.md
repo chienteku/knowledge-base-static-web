@@ -160,13 +160,12 @@ console.log("C");
 ```
 
 **Expected output:**
-```text
-A
-C
-B
-```
-
 > [!check]- Answer
+> ```text
+> A
+> C
+> B
+> ```
 > - `console.log("A")` and `"C"` run synchronously. Even though `setTimeout` has a delay of `0`ms, its callback is placed in the macrotask queue. It must wait until the main stack is empty.
 
 ---
@@ -183,13 +182,12 @@ first();
 ```
 
 **Expected output:**
-```text
-A
-C
-B
-```
-
 > [!check]- Answer
+> ```text
+> A
+> C
+> B
+> ```
 > ```text
 > A
 > C
@@ -198,16 +196,17 @@ B
 >
 > **Explanation:** `first()` logs 'A', calls `second()` which logs 'C' and pops off stack, then `first()` resumes and logs 'B'.
 
+---
+
 ### Exercise 3: Preventing Stack Overflow with Asynchronous Deferral
 
 **Problem:** How can `setImmediate` or `process.nextTick` prevent stack overflow in deep recursive processing loops?
 
 **Expected output:**
-```text
-By deferring the next recursive iteration to the Event Loop, allowing the current call stack frame to pop off completely.
-```
-
 > [!check]- Answer
+> ```text
+> By deferring the next recursive iteration to the Event Loop, allowing the current call stack frame to pop off completely.
+> ```
 > ```javascript
 > function processChunk(n) {
 >   if (n <= 0) return;

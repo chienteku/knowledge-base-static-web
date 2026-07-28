@@ -100,12 +100,11 @@ Cache-Control: no-cache, no-store
 **Problem:** You deploy an update to your website. You change the background color from Blue to Red. A user visits the site, but the background is still Blue! You tell them to refresh. Still Blue! You tell them to clear their browser cache. *Still Blue!* What is causing this?
 
 **Expected output:**
-```text
-A rogue Service Worker!
-Even if the user clears the standard browser cache, the Service Worker might still be alive in the background, aggressively intercepting the request for `styles.css` and serving the old Blue version from its private Cache API vault. Service Workers have a complex "Lifecycle" and must be explicitly told to update and delete old caches.
-```
-
 > [!check]- Answer
+> ```text
+> A rogue Service Worker!
+> Even if the user clears the standard browser cache, the Service Worker might still be alive in the background, aggressively intercepting the request for `styles.css` and serving the old Blue version from its private Cache API vault. Service Workers have a complex "Lifecycle" and must be explicitly told to update and delete old caches.
+> ```
 > - Who is standing at the door, intercepting the request before the internet?
 
 ---
@@ -115,13 +114,12 @@ Even if the user clears the standard browser cache, the Service Worker might sti
 **Problem:** Identify the 3 sequential lifecycle stages of a Service Worker script.
 
 **Expected output:**
-```text
-1. Registration
-2. Installation (install event)
-3. Activation (activate event)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Registration
+> 2. Installation (install event)
+> 3. Activation (activate event)
+> ```
 > ```text
 > 1. Registration -> Browser registers sw.js script URL.
 > 2. Installation -> self.addEventListener('install') fires (cache pre-fetching).
@@ -135,11 +133,10 @@ Even if the user clears the standard browser cache, the Service Worker might sti
 **Problem:** Write Service Worker event listener intercepting outbound HTTP requests (`fetch` event).
 
 **Expected output:**
-```text
-self.addEventListener('fetch', (event) => { event.respondWith(caches.match(event.request)); });
-```
-
 > [!check]- Answer
+> ```text
+> self.addEventListener('fetch', (event) => { event.respondWith(caches.match(event.request)); });
+> ```
 > ```javascript
 > self.addEventListener('fetch', (event) => {
 > event.respondWith(

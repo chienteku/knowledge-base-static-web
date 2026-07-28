@@ -147,15 +147,14 @@ Expand-contract migration pattern across zero-downtime releases
 **Problem:** You need to add a required `bio` text column to the `users` table. Write the UP and DOWN SQL statements for the migration file.
 
 **Expected output:**
-```sql
--- UP
-ALTER TABLE users ADD COLUMN bio TEXT NOT NULL DEFAULT '';
-
--- DOWN
-ALTER TABLE users DROP COLUMN bio;
-```
-
 > [!check]- Answer
+> ```sql
+> -- UP
+> ALTER TABLE users ADD COLUMN bio TEXT NOT NULL DEFAULT '';
+> 
+> -- DOWN
+> ALTER TABLE users DROP COLUMN bio;
+> ```
 > - The UP statement alters the table to add the column.
 > - The DOWN statement must undo the change by dropping the same column.
 
@@ -168,11 +167,10 @@ ALTER TABLE users DROP COLUMN bio;
 **Problem:** Create migration tracking table `schema_migrations` storing `version` string and `executed_at` timestamp.
 
 **Expected output:**
-```text
-CREATE TABLE schema_migrations ( version VARCHAR(255) PRIMARY KEY, executed_at TIMESTAMPTZ DEFAULT NOW() );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE schema_migrations ( version VARCHAR(255) PRIMARY KEY, executed_at TIMESTAMPTZ DEFAULT NOW() );
+> ```
 > ```sql
 > CREATE TABLE schema_migrations (
 >   version VARCHAR(255) PRIMARY KEY,
@@ -182,16 +180,17 @@ CREATE TABLE schema_migrations ( version VARCHAR(255) PRIMARY KEY, executed_at T
 >
 > **Explanation:** Migration tracking tables prevent re-applying completed database migrations.
 
+---
+
 ### Exercise 3: Zero-Downtime Column Rename Pattern
 
 **Problem:** State 3 phases of Expand-Contract zero-downtime column renames (1. Add new column; 2. Sync data & update app; 3. Drop old column).
 
 **Expected output:**
-```text
-1. Add new column; 2. Sync data & update app; 3. Drop old column
-```
-
 > [!check]- Answer
+> ```text
+> 1. Add new column; 2. Sync data & update app; 3. Drop old column
+> ```
 > ```text
 > 1. Add new column; 2. Sync data & update app; 3. Drop old column
 > ```

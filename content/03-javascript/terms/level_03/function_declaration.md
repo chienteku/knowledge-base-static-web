@@ -139,11 +139,10 @@ async function processData() {
 **Problem:** Write a function call `sayGoodbye();` on line 1. On line 3, write the Function Declaration for `sayGoodbye` that logs `"See ya!"`. Run the code to prove it works.
 
 **Expected output:**
-```text
-See ya!
-```
-
 > [!check]- Answer
+> ```text
+> See ya!
+> ```
 > - Just write the call at the top, and `function sayGoodbye() { ... }` at the bottom.
 
 ---
@@ -153,11 +152,10 @@ See ya!
 **Problem:** Call `greet()` before its `function greet() {}` declaration line.
 
 **Expected output:**
-```text
-Hello!
-```
-
 > [!check]- Answer
+> ```text
+> Hello!
+> ```
 > ```javascript
 > greet();
 > function greet() {
@@ -167,16 +165,17 @@ Hello!
 >
 > **Explanation:** Function declarations hoist both identifier names and function bodies to scope top.
 
+---
+
 ### Exercise 3: Function Declaration Scope Isolation
 
 **Problem:** Demonstrate that nested function declarations are contained within parent scopes.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > function outer() {
 >   function inner() { return "secret"; }
 > }
@@ -190,7 +189,6 @@ ReferenceError caught
 >
 > **Explanation:** Function declarations create local lexical scope boundaries.
 
----
 
 ---
 

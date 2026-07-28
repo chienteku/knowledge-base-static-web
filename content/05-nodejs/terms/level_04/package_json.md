@@ -119,12 +119,10 @@ This is one of the most powerful features. Instead of typing complex terminal co
 **Problem:** You download a repository from GitHub. The folder only contains `app.js` and `package.json`. You try to run `node app.js` and it crashes immediately, complaining about missing modules. What single command fixes everything?
 
 **Expected output:**
-```bash
-npm install
-```
-*Explanation: Running `npm install` without any package names tells NPM to read the `package.json` file and automatically download every single package listed in both the `dependencies` and `devDependencies` sections.*
-
 > [!check]- Answer
+> ```bash
+> npm install
+> ```
 > - How do you tell NPM to "read the blueprint and build the house"?
 
 ---
@@ -136,11 +134,10 @@ npm install
 **Problem:** Add `start` and `dev` scripts to `package.json` running `node server.js` and `nodemon server.js`.
 
 **Expected output:**
-```text
-"scripts": { "start": "node server.js", "dev": "nodemon server.js" }
-```
-
 > [!check]- Answer
+> ```text
+> "scripts": { "start": "node server.js", "dev": "nodemon server.js" }
+> ```
 > ```json
 > {
 >   "scripts": {
@@ -152,16 +149,17 @@ npm install
 >
 > **Explanation:** `scripts` configures command shortcuts for development and production execution.
 
+---
+
 ### Exercise 3: Specifying Engines Requirement
 
 **Problem:** Specify in `package.json` that Node.js version must be 18 or higher.
 
 **Expected output:**
-```text
-"engines": { "node": ">=18.0.0" }
-```
-
 > [!check]- Answer
+> ```text
+> "engines": { "node": ">=18.0.0" }
+> ```
 > ```json
 > {
 >   "engines": {

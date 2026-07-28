@@ -127,12 +127,11 @@ interface Good {
 **Problem:** Writing `[key: string]: number` in an interface every time is slightly tedious. What is the built-in Generic Utility Type that accomplishes the exact same thing in a single line?
 
 **Expected output:**
-```typescript
-const scores: Record<string, number> = {};
-// Record<KeyType, ValueType> is the exact same thing as an Index Signature!
-```
-
 > [!check]- Answer
+> ```typescript
+> const scores: Record<string, number> = {};
+> // Record<KeyType, ValueType> is the exact same thing as an Index Signature!
+> ```
 > - It starts with 'R'.
 
 ---
@@ -144,27 +143,27 @@ const scores: Record<string, number> = {};
 **Problem:** What tsconfig compiler option automatically adds `| undefined` to index signature lookups?
 
 **Expected output:**
-```text
-noUncheckedIndexedAccess: true
-```
-
 > [!check]- Answer
+> ```text
+> noUncheckedIndexedAccess: true
+> ```
 > ```typescript
 > console.log("noUncheckedIndexedAccess: true");
 > ```
 >
 > **Explanation:** `noUncheckedIndexedAccess` forces index lookups to include `undefined` in their return types.
 
+---
+
 ### Exercise 3: Symbol and Number Index Signatures
 
 **Problem:** Can number index signatures be assignable to string index signatures? (Yes)
 
 **Expected output:**
-```text
-Yes, number keys convert to strings in JS object indexing
-```
-
 > [!check]- Answer
+> ```text
+> Yes, number keys convert to strings in JS object indexing
+> ```
 > ```typescript
 > console.log("Yes, number keys convert to strings in JS object indexing");
 > ```

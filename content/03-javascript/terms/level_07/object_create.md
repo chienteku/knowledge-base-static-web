@@ -178,11 +178,10 @@ console.log("Full Name:", child.firstName, child.familyName);
 ```
 
 **Expected output:**
-```text
-Full Name: John Smith
-```
-
 > [!check]- Answer
+> ```text
+> Full Name: John Smith
+> ```
 > - Call `Object.create(parent)` to create the child.
 
 ---
@@ -192,11 +191,10 @@ Full Name: John Smith
 **Problem:** Create a pure dictionary object `Object.create(null)` without prototype overhead.
 
 **Expected output:**
-```text
-null
-```
-
 > [!check]- Answer
+> ```text
+> null
+> ```
 > ```javascript
 > const dict = Object.create(null);
 > console.log(Object.getPrototypeOf(dict));
@@ -204,16 +202,17 @@ null
 >
 > **Explanation:** `Object.create(null)` instantiates pure dictionary objects with zero inherited properties.
 
+---
+
 ### Exercise 3: Explicit Prototype Inheritance Setup
 
 **Problem:** Inherit `protoObj = { greet() { return "Hi"; } }` using `Object.create(protoObj)`.
 
 **Expected output:**
-```text
-Hi
-```
-
 > [!check]- Answer
+> ```text
+> Hi
+> ```
 > ```javascript
 > const protoObj = { greet() { return "Hi"; } };
 > const obj = Object.create(protoObj);
@@ -222,7 +221,6 @@ Hi
 >
 > **Explanation:** `Object.create(proto)` assigns `proto` directly as the new object's `[[Prototype]]`.
 
----
 
 ---
 

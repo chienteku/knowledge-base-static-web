@@ -150,12 +150,11 @@ async function processData() {
 **Problem:** If you write `let score = 100;` in TypeScript (without explicitly adding `: number`), what happens if you later try to write `score = "High Score";`?
 
 **Expected output:**
-```text
-It will throw an error! 
-TypeScript is incredibly smart. Even if you don't explicitly write the type, it uses **Type Inference** to guess what you meant. It saw you assign `100`, so it permanently locked the `score` variable to be a `number`.
-```
-
 > [!check]- Answer
+> ```text
+> It will throw an error! 
+> TypeScript is incredibly smart. Even if you don't explicitly write the type, it uses **Type Inference** to guess what you meant. It saw you assign `100`, so it permanently locked the `score` variable to be a `number`.
+> ```
 > - TypeScript assumes you meant to be strict from the very first assignment.
 
 ---
@@ -165,27 +164,27 @@ TypeScript is incredibly smart. Even if you don't explicitly write the type, it 
 **Problem:** Define `interface User { id: number; name: string; }` and validate object declaration.
 
 **Expected output:**
-```text
-TypeScript Interface verified
-```
-
 > [!check]- Answer
+> ```text
+> TypeScript Interface verified
+> ```
 > ```javascript
 > console.log("TypeScript Interface verified");
 > ```
 >
 > **Explanation:** Interfaces define structured compile-time shape contracts for objects.
 
+---
+
 ### Exercise 3: Type Narrowing with Type Guards
 
 **Problem:** Demonstrate narrowing `unknown` input using `typeof val === 'string'`.
 
 **Expected output:**
-```text
-Type narrowed to string
-```
-
 > [!check]- Answer
+> ```text
+> Type narrowed to string
+> ```
 > ```javascript
 > function printString(val) {
 >   if (typeof val === "string") {
@@ -197,7 +196,6 @@ Type narrowed to string
 >
 > **Explanation:** Control flow type guards narrow generic types into specific types safely.
 
----
 
 ---
 

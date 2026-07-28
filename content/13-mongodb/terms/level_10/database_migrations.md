@@ -153,12 +153,11 @@ The collection is write-heavy and must not experience query degradation.
 2.  Explain how a **Lazy Migration** can be implemented inside your application model logic.
 
 **Expected output:**
-```text
-1. Eager Migration Danger: Running an upfront bulk migration over 500 million documents will trigger massive disk I/O and CPU load, locking the database and causing service timeouts during peak hours.
-2. Lazy Migration Implementation: In your Node.js application (e.g. using a Mongoose pre-save hook or getter), check if the `full_name` field exists when loading a document. If it is missing, combine `first_name` and `last_name` on the fly, delete the old keys, and write the updated document back to the database.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Eager Migration Danger: Running an upfront bulk migration over 500 million documents will trigger massive disk I/O and CPU load, locking the database and causing service timeouts during peak hours.
+> 2. Lazy Migration Implementation: In your Node.js application (e.g. using a Mongoose pre-save hook or getter), check if the `full_name` field exists when loading a document. If it is missing, combine `first_name` and `last_name` on the fly, delete the old keys, and write the updated document back to the database.
+> ```
 > - Assess the scale of 500 million documents on query capacity.
 > - Consider where lazy defaults are intercepted in ODMs.
 
@@ -171,11 +170,10 @@ The collection is write-heavy and must not experience query degradation.
 **Problem:** Rename field `uname` to `username` across all documents using `$rename`.
 
 **Expected output:**
-```text
-db.users.updateMany({ uname: { $exists: true } }, { $rename: { uname: "username" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateMany({ uname: { $exists: true } }, { $rename: { uname: "username" } });
+> ```
 > ```javascript
 > db.users.updateMany(
 >   { uname: { $exists: true } },
@@ -185,16 +183,17 @@ db.users.updateMany({ uname: { $exists: true } }, { $rename: { uname: "username"
 >
 > **Explanation:** `$rename` renames document field keys across collection documents.
 
+---
+
 ### Exercise 3: Lazy Schema Migration Pattern
 
 **Problem:** Describe Lazy Schema Migration pattern (Migrates document schema format on-the-fly as documents are read and updated in application code).
 
 **Expected output:**
-```text
-Migrates document schema format on-the-fly as documents are read and updated in application code
-```
-
 > [!check]- Answer
+> ```text
+> Migrates document schema format on-the-fly as documents are read and updated in application code
+> ```
 > ```text
 > Migrates document schema format on-the-fly as documents are read and updated in application code
 > ```

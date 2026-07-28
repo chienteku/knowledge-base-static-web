@@ -117,18 +117,17 @@ Ensure cleanup logic safely handles frequent re-executions when dependencies upd
 **Problem:** You have a component with `useEffect(() => { setInterval(console.log, 1000) }, [])`. The user navigates away from the component, but the console keeps printing! Write the correct cleanup function to fix this.
 
 **Expected output:**
-```javascript
-useEffect(() => {
-  const timerId = setInterval(console.log, 1000);
-  
-  // Cleanup function
-  return () => {
-    clearInterval(timerId);
-  };
-}, []);
-```
-
 > [!check]- Answer
+> ```javascript
+> useEffect(() => {
+>   const timerId = setInterval(console.log, 1000);
+>   
+>   // Cleanup function
+>   return () => {
+>     clearInterval(timerId);
+>   };
+> }, []);
+> ```
 > - Store the ID of the interval, and use `clearInterval()`.
 
 ---
@@ -140,11 +139,10 @@ useEffect(() => {
 **Problem:** Setup `setInterval` timer in `useEffect` and return cleanup function calling `clearInterval`.
 
 **Expected output:**
-```text
-useEffect(() => { const id = setInterval(() => { setSeconds(s => s + 1); }, 1000); return () => clearInterval(id); }, []);
-```
-
 > [!check]- Answer
+> ```text
+> useEffect(() => { const id = setInterval(() => { setSeconds(s => s + 1); }, 1000); return () => clearInterval(id); }, []);
+> ```
 > ```javascript
 > useEffect(() => {
 >   const id = setInterval(() => {
@@ -156,16 +154,17 @@ useEffect(() => { const id = setInterval(() => { setSeconds(s => s + 1); }, 1000
 >
 > **Explanation:** Returning a cleanup function `() => clearInterval(id)` prevents interval timer memory leaks.
 
+---
+
 ### Exercise 3: AbortController Cleanup for Fetch
 
 **Problem:** Cancel active `fetch` request on unmount using `AbortController` in `useEffect` cleanup.
 
 **Expected output:**
-```text
-useEffect(() => { const controller = new AbortController(); fetch(url, { signal: controller.signal }); return () => controller.abort(); }, [url]);
-```
-
 > [!check]- Answer
+> ```text
+> useEffect(() => { const controller = new AbortController(); fetch(url, { signal: controller.signal }); return () => controller.abort(); }, [url]);
+> ```
 > ```javascript
 > useEffect(() => {
 >   const controller = new AbortController();

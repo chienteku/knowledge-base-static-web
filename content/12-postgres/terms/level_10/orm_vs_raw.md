@@ -164,12 +164,11 @@ const [{ sum }] = await db.query('SELECT SUM(total) FROM orders');
 2.  You are building a high-traffic financial app in TypeScript. You want to guarantee that if you change a column name in the database, the TypeScript compiler will immediately flag errors in your code before deployment.
 
 **Expected output:**
-```text
-1. ORM: Ideal for rapid prototyping. It handles DDL creation and relationships automatically, allowing junior developers to write code without worrying about SQL syntax.
-2. Query Builder (like Drizzle): Ideal for type-safe applications. It maintains a schema map that generates TypeScript types, ensuring compile-time safety and checking database references.
-```
-
 > [!check]- Answer
+> ```text
+> 1. ORM: Ideal for rapid prototyping. It handles DDL creation and relationships automatically, allowing junior developers to write code without worrying about SQL syntax.
+> 2. Query Builder (like Drizzle): Ideal for type-safe applications. It maintains a schema map that generates TypeScript types, ensuring compile-time safety and checking database references.
+> ```
 > - Balance development speed priorities against type-safety requirements.
 > - Consider which interface maps database changes directly to type systems.
 
@@ -182,27 +181,27 @@ const [{ sum }] = await db.query('SELECT SUM(total) FROM orders');
 **Problem:** How to resolve N+1 query problem in ORMs? (Use eager loading `include` / `JOIN` or batch `IN (...)` queries).
 
 **Expected output:**
-```text
-Use eager loading include / JOIN or batch IN (...) queries
-```
-
 > [!check]- Answer
+> ```text
+> Use eager loading include / JOIN or batch IN (...) queries
+> ```
 > ```text
 > Use eager loading include / JOIN or batch IN (...) queries
 > ```
 >
 > **Explanation:** Eager loading fetches related child entities in a single JOIN query.
 
+---
+
 ### Exercise 3: ORM vs Raw SQL Comparison Matrix
 
 **Problem:** Compare: ORM (High developer productivity, type safety, migration tools); Raw SQL (Maximum performance, query optimizer control, zero memory overhead).
 
 **Expected output:**
-```text
-ORM: high productivity and type safety; Raw SQL: maximum performance and query optimizer control
-```
-
 > [!check]- Answer
+> ```text
+> ORM: high productivity and type safety; Raw SQL: maximum performance and query optimizer control
+> ```
 > ```text
 > ORM: high productivity and type safety; Raw SQL: maximum performance and query optimizer control
 > ```

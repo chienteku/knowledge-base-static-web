@@ -105,14 +105,13 @@ type Node = { children: Node[] }; // Safe container recursive type
 **Problem:** How would you use a Type Alias to give a name to a Tuple that holds an X and Y coordinate (`[number, number]`)? Can you do this with an interface?
 
 **Expected output:**
-```typescript
-type Coordinate = [number, number];
-
-// No, you cannot cleanly do this with an interface! 
-// Interfaces are for Objects. Tuples are Arrays. You must use `type` for this!
-```
-
 > [!check]- Answer
+> ```typescript
+> type Coordinate = [number, number];
+> 
+> // No, you cannot cleanly do this with an interface! 
+> // Interfaces are for Objects. Tuples are Arrays. You must use `type` for this!
+> ```
 > - Tuples are just strict arrays, not standard objects.
 
 ---
@@ -124,11 +123,10 @@ type Coordinate = [number, number];
 **Problem:** Define `type ID = string | number` and `type Admin = User & { permissions: string[] }`.
 
 **Expected output:**
-```text
-Type aliases defined
-```
-
 > [!check]- Answer
+> ```text
+> Type aliases defined
+> ```
 > ```typescript
 > type ID = string | number;
 > type User = { name: string };
@@ -138,16 +136,17 @@ Type aliases defined
 >
 > **Explanation:** Type aliases can model arbitrary complex unions, intersections, primitives, and tuples.
 
+---
+
 ### Exercise 3: Type Alias vs Interface Summary
 
 **Problem:** Which construct can model primitive unions `type Status = "a" | "b"`? (Type Alias)
 
 **Expected output:**
-```text
-Type Alias
-```
-
 > [!check]- Answer
+> ```text
+> Type Alias
+> ```
 > ```typescript
 > console.log("Type Alias");
 > ```

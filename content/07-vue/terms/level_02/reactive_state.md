@@ -103,12 +103,11 @@ export const globalState = reactive({ user: null }); // ❌ Shared state leak ac
 **Problem:** You have a massive Vue component with 50 paragraphs. The very last paragraph uses a reactive variable `counter`. If you change `counter`, does Vue re-render the first 49 paragraphs?
 
 **Expected output:**
-```text
-No!
-Vue tracks dependencies at an extremely granular level. It knows that the first 49 paragraphs do not depend on `counter`. It will only touch the 50th paragraph.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Vue tracks dependencies at an extremely granular level. It knows that the first 49 paragraphs do not depend on `counter`. It will only touch the 50th paragraph.
+> ```
 > - Vue is surgical. It isn't React.
 
 ---
@@ -118,11 +117,10 @@ Vue tracks dependencies at an extremely granular level. It knows that the first 
 **Problem:** Does mutating a deeply nested property (`state.a.b.c = 10`) inside `reactive()` trigger UI re-renders?
 
 **Expected output:**
-```text
-Yes. Vue 3 reactive() creates deep Proxy wrappers that track mutations at all nesting levels.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Vue 3 reactive() creates deep Proxy wrappers that track mutations at all nesting levels.
+> ```
 > - Vue 3 reactive proxies are deeply reactive by default.
 > 
 > ```javascript
@@ -137,11 +135,10 @@ Yes. Vue 3 reactive() creates deep Proxy wrappers that track mutations at all ne
 **Problem:** Why is component-level state mutation preferred inside explicit action/setter functions rather than inline template handlers?
 
 **Expected output:**
-```text
-Explicit action functions centralize state mutation logic, improving debuggability and code traceability.
-```
-
 > [!check]- Answer
+> ```text
+> Explicit action functions centralize state mutation logic, improving debuggability and code traceability.
+> ```
 > - Centralized methods make state changes traceable.
 > 
 > ```javascript

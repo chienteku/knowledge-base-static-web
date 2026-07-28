@@ -265,16 +265,17 @@ app.use((err, req, res, next) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Writing Central Express Error Handler
 
 **Problem:** Write 4-parameter Express error handling middleware logging error and returning status 500 JSON payload.
 
 **Expected output:**
-```text
-app.use((err, req, res, next) => { console.error(err); res.status(err.status || 500).json({ error: err.message }); });
-```
-
 > [!check]- Answer
+> ```text
+> app.use((err, req, res, next) => { console.error(err); res.status(err.status || 500).json({ error: err.message }); });
+> ```
 > ```javascript
 > app.use((err, req, res, next) => {
 >   console.error(err.stack);
@@ -286,16 +287,17 @@ app.use((err, req, res, next) => { console.error(err); res.status(err.status || 
 >
 > **Explanation:** 4-parameter error middleware catches errors passed via `next(err)`.
 
+---
+
 ### Exercise 3: Custom AppError Class Pattern
 
 **Problem:** Create custom `AppError` class extending `Error` adding `statusCode` property.
 
 **Expected output:**
-```text
-class AppError extends Error { constructor(message, statusCode) { super(message); this.statusCode = statusCode; } }
-```
-
 > [!check]- Answer
+> ```text
+> class AppError extends Error { constructor(message, statusCode) { super(message); this.statusCode = statusCode; } }
+> ```
 > ```javascript
 > class AppError extends Error {
 >   constructor(message, statusCode) {

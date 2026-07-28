@@ -149,12 +149,11 @@ metrics: [{ date: "2026-01-01", count: 100 }, { date: "2026-01-02", count: 200 }
 2.  List the fields nested inside the `pricing` field.
 
 **Expected output:**
-```text
-1. Top-level fields: `_id`, `sku`, and `pricing`.
-2. Nested fields inside `pricing`: `retail` and `discounted`.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Top-level fields: `_id`, `sku`, and `pricing`.
+> 2. Nested fields inside `pricing`: `retail` and `discounted`.
+> ```
 > - Top-level keys reside directly inside the outermost curly braces.
 > - Nested keys reside inside the subdocument brace block.
 
@@ -167,27 +166,27 @@ metrics: [{ date: "2026-01-01", count: 100 }, { date: "2026-01-02", count: 200 }
 **Problem:** Query users where nested field `address.city` equals `"New York"`.
 
 **Expected output:**
-```text
-db.users.find({ "address.city": "New York" });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ "address.city": "New York" });
+> ```
 > ```javascript
 > db.users.find({ "address.city": "New York" });
 > ```
 >
 > **Explanation:** Dot-notation in quotes `"address.city"` accesses nested sub-document fields.
 
+---
+
 ### Exercise 3: Array Element Position Query
 
 **Problem:** Query documents where first tag `tags.0` equals `"tech"`.
 
 **Expected output:**
-```text
-db.posts.find({ "tags.0": "tech" });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ "tags.0": "tech" });
+> ```
 > ```javascript
 > db.posts.find({ "tags.0": "tech" });
 > ```

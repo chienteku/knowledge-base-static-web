@@ -145,13 +145,12 @@ BEGIN; SAVEPOINT sp1; -- Use SAVEPOINT for sub-transactions
 Describe the state of the database after Query 3 fails, assuming no savepoints are used.
 
 **Expected output:**
-```text
-The database will roll back the entire transaction! 
-Even though Queries 1 and 2 completed successfully, the failure of Query 3 aborts the transaction. 
-The new user insert and the setting update are completely undone, leaving the database exactly as it was before the `BEGIN` command was run.
-```
-
 > [!check]- Answer
+> ```text
+> The database will roll back the entire transaction! 
+> Even though Queries 1 and 2 completed successfully, the failure of Query 3 aborts the transaction. 
+> The new user insert and the setting update are completely undone, leaving the database exactly as it was before the `BEGIN` command was run.
+> ```
 > - Transactions enforce an "all-or-nothing" rule.
 > - Consider whether partial commits are allowed in standard transactions.
 
@@ -164,27 +163,27 @@ The new user insert and the setting update are completely undone, leaving the da
 **Problem:** State golden rule regarding network calls and transactions (Perform external HTTP network calls OUTSIDE active database transaction blocks).
 
 **Expected output:**
-```text
-Perform external HTTP network calls OUTSIDE active database transaction blocks
-```
-
 > [!check]- Answer
+> ```text
+> Perform external HTTP network calls OUTSIDE active database transaction blocks
+> ```
 > ```text
 > Perform external HTTP network calls OUTSIDE active database transaction blocks
 > ```
 >
 > **Explanation:** Keeping transaction duration minimal prevents lock contention and connection pool exhaustion.
 
+---
+
 ### Exercise 3: Transaction Idle Timeout Configuration
 
 **Problem:** Configure `idle_in_transaction_session_timeout` to 5 seconds to automatically terminate abandoned transactions.
 
 **Expected output:**
-```text
-SET idle_in_transaction_session_timeout = '5s';
-```
-
 > [!check]- Answer
+> ```text
+> SET idle_in_transaction_session_timeout = '5s';
+> ```
 > ```sql
 > SET idle_in_transaction_session_timeout = '5s';
 > ```

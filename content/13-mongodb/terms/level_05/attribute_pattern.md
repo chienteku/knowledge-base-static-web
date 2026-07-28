@@ -170,13 +170,12 @@ db.products.createIndex({ "attributes.k": 1, "attributes.v": 1 });
 Write the query to locate all documents where the attribute array `specs` contains a subdocument where the key `k` is `"status"` and the value `v` is `"active"`.
 
 **Expected output:**
-```javascript
-db.devices.find({
-  specs: { $elemMatch: { k: "status", v: "active" } }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.devices.find({
+>   specs: { $elemMatch: { k: "status", v: "active" } }
+> });
+> ```
 > - The search targets a key-value match inside an array, requiring the `$elemMatch` operator.
 > - Specify the fields `k` and `v` inside the match filter block.
 
@@ -189,11 +188,10 @@ db.devices.find({
 **Problem:** Model product specifications (RAM: 16GB, Storage: 512GB) using Attribute Pattern key-value array.
 
 **Expected output:**
-```text
-specs: [{ k: "RAM", v: "16GB" }, { k: "Storage", v: "512GB" }]
-```
-
 > [!check]- Answer
+> ```text
+> specs: [{ k: "RAM", v: "16GB" }, { k: "Storage", v: "512GB" }]
+> ```
 > ```javascript
 > const product = {
 >   name: "Laptop",
@@ -206,16 +204,17 @@ specs: [{ k: "RAM", v: "16GB" }, { k: "Storage", v: "512GB" }]
 >
 > **Explanation:** Attribute Pattern groups rare or dynamic product specifications into indexable key-value arrays.
 
+---
+
 ### Exercise 3: Attribute Pattern Compound Multikey Index
 
 **Problem:** Create compound index supporting Attribute Pattern queries on `specs` array.
 
 **Expected output:**
-```text
-db.products.createIndex({ "specs.k": 1, "specs.v": 1 });
-```
-
 > [!check]- Answer
+> ```text
+> db.products.createIndex({ "specs.k": 1, "specs.v": 1 });
+> ```
 > ```javascript
 > db.products.createIndex({ "specs.k": 1, "specs.v": 1 });
 > ```

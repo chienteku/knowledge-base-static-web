@@ -140,14 +140,13 @@ Write the SurrealQL statements to:
 3. Update the `product` record matching `$item_id`, adding `$qty` to its `stock` field using the addition assignment operator.
 
 **Expected output:**
-```sql
-LET $item_id = product:laptop;
-LET $qty = 5;
-
-UPDATE $item_id SET stock += $qty;
-```
-
 > [!check]- Answer
+> ```sql
+> LET $item_id = product:laptop;
+> LET $qty = 5;
+> 
+> UPDATE $item_id SET stock += $qty;
+> ```
 > - Define variables using the `LET` keyword and dollar sign prefix `$`.
 > - Target the parameter directly in the `UPDATE` clause.
 
@@ -160,27 +159,27 @@ UPDATE $item_id SET stock += $qty;
 **Problem:** Define global database parameter `$APP_NAME` set to `"My Application"` using `DEFINE PARAM`.
 
 **Expected output:**
-```text
-DEFINE PARAM $APP_NAME ON DATABASE VALUE "My Application";
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE PARAM $APP_NAME ON DATABASE VALUE "My Application";
+> ```
 > ```surrealql
 > DEFINE PARAM $APP_NAME ON DATABASE VALUE "My Application";
 > ```
 >
 > **Explanation:** `DEFINE PARAM $var ON DATABASE VALUE val` sets global database constants.
 
+---
+
 ### Exercise 3: Parameterized SDK Query
 
 **Problem:** Write JS SDK call executing `SELECT * FROM user WHERE role = $role` with parameter `{ role: "admin" }`.
 
 **Expected output:**
-```text
-await db.query('SELECT * FROM user WHERE role = $role', { role: "admin" });
-```
-
 > [!check]- Answer
+> ```text
+> await db.query('SELECT * FROM user WHERE role = $role', { role: "admin" });
+> ```
 > ```javascript
 > await db.query('SELECT * FROM user WHERE role = $role', { role: "admin" });
 > ```

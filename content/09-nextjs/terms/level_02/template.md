@@ -123,12 +123,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
 **Problem:** You have a multi-step checkout process (`/checkout/step1`, `/checkout/step2`). You want to ensure a specific feedback form resets its text input every time the user moves to a new step. Should the feedback form live in `layout.tsx` or `template.tsx`?
 
 **Expected output:**
-```text
-It should live in `template.tsx`.
-If it lived in `layout.tsx`, the text the user typed into the feedback form on Step 1 would still be sitting there on Step 2. By using a Template, the component is remounted, wiping the `useState` back to its initial empty string.
-```
-
 > [!check]- Answer
+> ```text
+> It should live in `template.tsx`.
+> If it lived in `layout.tsx`, the text the user typed into the feedback form on Step 1 would still be sitting there on Step 2. By using a Template, the component is remounted, wiping the `useState` back to its initial empty string.
+> ```
 > - Do you want the state preserved or destroyed?
 
 ---
@@ -138,11 +137,10 @@ If it lived in `layout.tsx`, the text the user typed into the feedback form on S
 **Problem:** Write App Router `template.tsx` triggering page entrance animations using `useEffect` on every route navigation.
 
 **Expected output:**
-```tsx
-'use client'; import { useEffect } from 'react'; export default function Template({ children }: { children: React.ReactNode }) { useEffect(() => { logPageView(); }, []); return <div className="animate-fade-in">{children}</div>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; import { useEffect } from 'react'; export default function Template({ children }: { children: React.ReactNode }) { useEffect(() => { logPageView(); }, []); return <div className="animate-fade-in">{children}</div>; }
+> ```
 > - `template.tsx` re-mounts on every route transition, re-firing `useEffect`.
 > 
 > ```tsx
@@ -168,13 +166,12 @@ If it lived in `layout.tsx`, the text the user typed into the feedback form on S
 3. useEffect re-triggering
 
 **Expected output:**
-```text
-1. layout.tsx: Persists instance; template.tsx: Re-creates instance
-2. layout.tsx: Preserves DOM state; template.tsx: Wipes DOM state
-3. layout.tsx: useEffect runs once; template.tsx: useEffect runs on every navigation
-```
-
 > [!check]- Answer
+> ```text
+> 1. layout.tsx: Persists instance; template.tsx: Re-creates instance
+> 2. layout.tsx: Preserves DOM state; template.tsx: Wipes DOM state
+> 3. layout.tsx: useEffect runs once; template.tsx: useEffect runs on every navigation
+> ```
 > - `layout.tsx` -> Persistent, state-preserving, runs effect once.
 > - `template.tsx` -> Instantiates fresh component on every navigation.
 > 

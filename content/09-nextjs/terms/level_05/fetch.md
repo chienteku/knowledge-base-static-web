@@ -121,12 +121,11 @@ const data = await res.json(); // Store parsed JSON in variable once
 **Problem:** You have a `RootLayout` and a deeply nested `UserProfile` Server Component. Both need to check `fetch('https://api.com/auth/status')`. Should the Layout fetch it and pass it down as a prop through 5 layers?
 
 **Expected output:**
-```text
-No!
-Because of Next.js Request Memoization, you should just write `await fetch('https://api.com/auth/status')` in BOTH the Layout and the UserProfile. Next.js will automatically deduplicate the request so it only hits the external API once.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Because of Next.js Request Memoization, you should just write `await fetch('https://api.com/auth/status')` in BOTH the Layout and the UserProfile. Next.js will automatically deduplicate the request so it only hits the external API once.
+> ```
 > - Think about what Next.js does to multiple identical `fetch` requests.
 
 ---
@@ -136,11 +135,10 @@ Because of Next.js Request Memoization, you should just write `await fetch('http
 **Problem:** Write async function `fetchData(url)` with proper error handling (`!res.ok`), returning parsed JSON with `{ next: { revalidate: 300 } }`.
 
 **Expected output:**
-```typescript
-async function fetchData(url: string) { const res = await fetch(url, { next: { revalidate: 300 } }); if (!res.ok) throw new Error('Fetch failed'); return await res.json(); }
-```
-
 > [!check]- Answer
+> ```typescript
+> async function fetchData(url: string) { const res = await fetch(url, { next: { revalidate: 300 } }); if (!res.ok) throw new Error('Fetch failed'); return await res.json(); }
+> ```
 > - Always check `res.ok` before parsing response bodies.
 > 
 > ```typescript
@@ -160,11 +158,10 @@ async function fetchData(url: string) { const res = await fetch(url, { next: { r
 **Problem:** If 3 separate Server Components call `fetch('https://api.example.com/user')` during a single server render, how many network HTTP requests are sent?
 
 **Expected output:**
-```text
-1 HTTP request (Next.js request memoization automatically deduplicates identical fetch GET requests within a render pass).
-```
-
 > [!check]- Answer
+> ```text
+> 1 HTTP request (Next.js request memoization automatically deduplicates identical fetch GET requests within a render pass).
+> ```
 > - Next.js automatically deduplicates identical `fetch` calls during render.
 > 
 > ```text

@@ -185,11 +185,10 @@ fn process(mut items: Vec<i32>) {
 **Problem:** Push `1` to front and `2` to back of a `VecDeque`. Pop items from front and back.
 
 **Expected output:**
-```
-Front: 1, Back: 2
-```
-
 > [!check]- Answer
+> ```
+> Front: 1, Back: 2
+> ```
 > ```rust
 > use std::collections::VecDeque;
 > fn main() {
@@ -202,16 +201,17 @@ Front: 1, Back: 2
 >
 > **Explanation:** `VecDeque` efficiently supports pushing/popping from both ends.
 
+---
+
 ### Exercise 3: Ring Buffer Rotation
 
 **Problem:** Rotate a `VecDeque` of elements `[1, 2, 3]` left by 1 position using `.rotate_left(1)`.
 
 **Expected output:**
-```
-[2, 3, 1]
-```
-
 > [!check]- Answer
+> ```
+> [2, 3, 1]
+> ```
 > ```rust
 > use std::collections::VecDeque;
 > fn main() {

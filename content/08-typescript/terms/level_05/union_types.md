@@ -119,14 +119,13 @@ let val: string | number; // Represents a value that can be either string or num
 **Problem:** How do you type a User object where the `age` property might be a number, but it could also be `null` because they haven't set it yet?
 
 **Expected output:**
-```typescript
-interface User {
-  // You use a Union with null!
-  age: number | null;
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> interface User {
+>   // You use a Union with null!
+>   age: number | null;
+> }
+> ```
 > - `null` is a valid type in TypeScript!
 
 ---
@@ -138,11 +137,10 @@ interface User {
 **Problem:** Narrow `type State = { status: "loading" } | { status: "success"; data: string }` using `s.status === "success"`.
 
 **Expected output:**
-```text
-State narrowed to success
-```
-
 > [!check]- Answer
+> ```text
+> State narrowed to success
+> ```
 > ```typescript
 > type State = { status: "loading" } | { status: "success"; data: string };
 > function render(s: State) {
@@ -153,16 +151,17 @@ State narrowed to success
 >
 > **Explanation:** Discriminant properties (`status`) enable clean control flow type narrowing.
 
+---
+
 ### Exercise 3: Array Union Precedence
 
 **Problem:** Difference between `string | number[]` (string OR array of numbers) vs `(string | number)[]` (array of strings/numbers).
 
 **Expected output:**
-```text
-(string | number)[] specifies array containing string or number items
-```
-
 > [!check]- Answer
+> ```text
+> (string | number)[] specifies array containing string or number items
+> ```
 > ```typescript
 > console.log("(string | number)[] specifies array containing string or number items");
 > ```

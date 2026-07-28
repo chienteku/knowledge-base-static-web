@@ -162,11 +162,10 @@ Hover tooltips on different elements:
 ```
 
 **Expected output:**
-```html
-<a href="index.html" title="Goes to homepage">Home</a>
-```
-
 > [!check]- Answer
+> ```html
+> <a href="index.html" title="Goes to homepage">Home</a>
+> ```
 > - Add the `title` attribute directly inside the opening `<a>` tag.
 
 ---
@@ -178,27 +177,27 @@ Hover tooltips on different elements:
 **Problem:** Write an `<a>` link to `https://example.com` with hover tooltip reading `'Visit Example Website'`. 
 
 **Expected output:**
-```text
-<a href="https://example.com" title="Visit Example Website">Example</a>
-```
-
 > [!check]- Answer
+> ```text
+> <a href="https://example.com" title="Visit Example Website">Example</a>
+> ```
 > ```html
 > <a href="https://example.com" title="Visit Example Website">Example</a>
 > ```
 >
 > **Explanation:** The global `title` attribute displays hover tooltips on desktop browsers.
 
+---
+
 ### Exercise 3: Touchscreen Tooltip Problem
 
 **Problem:** Why is the global `title` attribute problematic for mobile smartphone web users?
 
 **Expected output:**
-```text
-Touchscreens do not have a mouse cursor hover state, making tooltips impossible to reveal on mobile devices.
-```
-
 > [!check]- Answer
+> ```text
+> Touchscreens do not have a mouse cursor hover state, making tooltips impossible to reveal on mobile devices.
+> ```
 > ```text
 > Touchscreens do not have a mouse cursor hover state, making tooltips impossible to reveal on mobile devices.
 > ```

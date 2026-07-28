@@ -150,13 +150,12 @@ async function processData() {
 **Problem:** You are fetching data from an API. Sometimes it returns a valid user object, and sometimes it returns a completely empty object `{}`. Write an `if` statement using `Object.keys()` to check if the object is empty.
 
 **Expected output:**
-```javascript
-if (Object.keys(apiData).length === 0) {
-  console.log("The object is empty!");
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> if (Object.keys(apiData).length === 0) {
+>   console.log("The object is empty!");
+> }
+> ```
 > - Since `apiData.length` doesn't exist on Objects, you must turn it into an array first.
 
 ---
@@ -166,11 +165,10 @@ if (Object.keys(apiData).length === 0) {
 **Problem:** Count own properties of `{ a: 1, b: 2 }` using `Object.keys(obj).length`.
 
 **Expected output:**
-```text
-2
-```
-
 > [!check]- Answer
+> ```text
+> 2
+> ```
 > ```javascript
 > const obj = { a: 1, b: 2 };
 > console.log(Object.keys(obj).length);
@@ -178,16 +176,17 @@ if (Object.keys(apiData).length === 0) {
 >
 > **Explanation:** `Object.keys()` returns an array of own enumerable string property keys.
 
+---
+
 ### Exercise 3: Filtering Keys by Value Criteria
 
 **Problem:** Filter keys of `{ a: 10, b: 5, c: 20 }` for values > 8.
 
 **Expected output:**
-```text
-["a","c"]
-```
-
 > [!check]- Answer
+> ```text
+> ["a","c"]
+> ```
 > ```javascript
 > const data = { a: 10, b: 5, c: 20 };
 > const keys = Object.keys(data).filter(k => data[k] > 8);
@@ -196,7 +195,6 @@ if (Object.keys(apiData).length === 0) {
 >
 > **Explanation:** Combining `Object.keys()` with `filter` extracts property names satisfying value predicates.
 
----
 
 ---
 

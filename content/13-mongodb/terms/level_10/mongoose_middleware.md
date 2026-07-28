@@ -165,17 +165,16 @@ Example title: `"My First Post"` should become slug: `"my-first-post"`.
 Write the `pre` middleware code block for the `articleSchema` using standard function syntax. Assume you have access to a helper function `slugify(text)` that performs the string conversion.
 
 **Expected output:**
-```javascript
-articleSchema.pre('validate', function(next) {
-  const article = this;
-  if (article.isModified('title') && article.title) {
-    article.slug = slugify(article.title);
-  }
-  next();
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> articleSchema.pre('validate', function(next) {
+>   const article = this;
+>   if (article.isModified('title') && article.title) {
+>     article.slug = slugify(article.title);
+>   }
+>   next();
+> });
+> ```
 > - Hook into the `'validate'` event (which runs before the validation check).
 > - Refer to the current document using the `this` keyword inside a standard function scope.
 
@@ -188,11 +187,10 @@ articleSchema.pre('validate', function(next) {
 **Problem:** Write Mongoose `pre('save')` hook hashing `password` if modified using bcrypt.
 
 **Expected output:**
-```text
-userSchema.pre('save', async function() { if (this.isModified('password')) { this.password = await bcrypt.hash(this.password, 10); } });
-```
-
 > [!check]- Answer
+> ```text
+> userSchema.pre('save', async function() { if (this.isModified('password')) { this.password = await bcrypt.hash(this.password, 10); } });
+> ```
 > ```javascript
 > userSchema.pre('save', async function() {
 >   if (this.isModified('password')) {
@@ -203,16 +201,17 @@ userSchema.pre('save', async function() { if (this.isModified('password')) { thi
 >
 > **Explanation:** `this.isModified('password')` checks if the password field was changed before hashing.
 
+---
+
 ### Exercise 3: Post-Remove Cleanup Hook
 
 **Problem:** Write `post('findOneAndDelete')` hook deleting user orders after user removal.
 
 **Expected output:**
-```text
-userSchema.post('findOneAndDelete', async function(doc) { if (doc) { await Order.deleteMany({ userId: doc._id }); } });
-```
-
 > [!check]- Answer
+> ```text
+> userSchema.post('findOneAndDelete', async function(doc) { if (doc) { await Order.deleteMany({ userId: doc._id }); } });
+> ```
 > ```javascript
 > userSchema.post('findOneAndDelete', async function(doc) {
 >   if (doc) {

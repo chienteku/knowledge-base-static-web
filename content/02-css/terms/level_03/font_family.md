@@ -115,11 +115,10 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 **Problem:** You write `font-family: "Comic Sans MS", "Arial", sans-serif;`. The user is on an Apple Mac that has "Arial" installed, but does *not* have "Comic Sans" installed. What font will the user see?
 
 **Expected output:**
-```text
-Arial! The browser reads from left to right. It looks for Comic Sans, fails to find it, moves to Arial, finds it, and stops.
-```
-
 > [!check]- Answer
+> ```text
+> Arial! The browser reads from left to right. It looks for Comic Sans, fails to find it, moves to Arial, finds it, and stops.
+> ```
 > - The browser reads the list from left to right.
 
 ---
@@ -131,11 +130,10 @@ Arial! The browser reads from left to right. It looks for Comic Sans, fails to f
 **Problem:** Write CSS `font-family` declaration using `'Roboto'`, falling back to `Arial`, and generic `sans-serif`.
 
 **Expected output:**
-```text
-font-family: 'Roboto', Arial, sans-serif;
-```
-
 > [!check]- Answer
+> ```text
+> font-family: 'Roboto', Arial, sans-serif;
+> ```
 > ```css
 > body {
 >   font-family: 'Roboto', Arial, sans-serif;
@@ -144,20 +142,21 @@ font-family: 'Roboto', Arial, sans-serif;
 >
 > **Explanation:** Font stacks list preferred fonts first, falling back to system and generic font families.
 
+---
+
 ### Exercise 3: 5 Generic Font Families
 
 **Problem:** List 5 standard CSS generic fallback font family keywords.
 
 **Expected output:**
-```text
-1. sans-serif
-2. serif
-3. monospace
-4. cursive
-5. fantasy (or system-ui)
-```
-
 > [!check]- Answer
+> ```text
+> 1. sans-serif
+> 2. serif
+> 3. monospace
+> 4. cursive
+> 5. fantasy (or system-ui)
+> ```
 > ```text
 > 1. sans-serif
 > 2. serif

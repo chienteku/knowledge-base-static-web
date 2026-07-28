@@ -158,11 +158,10 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 **Problem:** True or False: The `<footer>` tag must physically be the very last element inside the `<body>` tag in your HTML file.
 
 **Expected output:**
-```text
-False. While the main page footer is almost always at the bottom of the page visually and structurally, you can also use `<footer>` tags inside `<article>` or `<section>` elements, meaning they might appear in the middle of your HTML document!
-```
-
 > [!check]- Answer
+> ```text
+> False. While the main page footer is almost always at the bottom of the page visually and structurally, you can also use `<footer>` tags inside `<article>` or `<section>` elements, meaning they might appear in the middle of your HTML document!
+> ```
 > - Think about how the `<header>` tag works. Is it limited to just the top of the page?
 
 ---
@@ -174,11 +173,10 @@ False. While the main page footer is almost always at the bottom of the page vis
 **Problem:** Write page `<footer>` containing copyright paragraph, sitemap nav list, and back-to-top anchor link.
 
 **Expected output:**
-```text
-<footer><nav><ul><li><a href="/sitemap">Sitemap</a></li></ul></nav><p>&copy; 2026 Company</p><a href="#top">Back to Top</a></footer>
-```
-
 > [!check]- Answer
+> ```text
+> <footer><nav><ul><li><a href="/sitemap">Sitemap</a></li></ul></nav><p>&copy; 2026 Company</p><a href="#top">Back to Top</a></footer>
+> ```
 > ```html
 > <footer>
 >   <nav>
@@ -191,16 +189,17 @@ False. While the main page footer is almost always at the bottom of the page vis
 >
 > **Explanation:** `<footer>` encapsulates page copyright, sitemap links, and site attribution metadata.
 
+---
+
 ### Exercise 3: Footer Landmark Role
 
 **Problem:** Which implicit ARIA landmark role does a top-level `<footer>` element convey to screen readers?
 
 **Expected output:**
-```text
-contentinfo landmark role.
-```
-
 > [!check]- Answer
+> ```text
+> contentinfo landmark role.
+> ```
 > ```text
 > contentinfo landmark role.
 > ```

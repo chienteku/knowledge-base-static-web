@@ -97,12 +97,11 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 **Problem:** V8 is written entirely in C++. Node.js is written in C++. How is it possible that you write your application in JavaScript?
 
 **Expected output:**
-```text
-V8 acts as a translator! 
-You write human-readable JavaScript. V8 reads it and compiles it down into low-level machine instructions. The C++ code of Node.js then takes those instructions and interacts with the computer's operating system (like opening a file).
-```
-
 > [!check]- Answer
+> ```text
+> V8 acts as a translator! 
+> You write human-readable JavaScript. V8 reads it and compiles it down into low-level machine instructions. The C++ code of Node.js then takes those instructions and interacts with the computer's operating system (like opening a file).
+> ```
 > - Think about the translator metaphor.
 
 ---
@@ -114,28 +113,28 @@ You write human-readable JavaScript. V8 reads it and compiles it down into low-l
 **Problem:** Write the CLI command flag to increase V8 memory limit to 4096MB (4GB) for `server.js`.
 
 **Expected output:**
-```text
-node --max-old-space-size=4096 server.js
-```
-
 > [!check]- Answer
+> ```text
+> node --max-old-space-size=4096 server.js
+> ```
 > ```bash
 > node --max-old-space-size=4096 server.js
 > ```
 >
 > **Explanation:** `--max-old-space-size` configures max V8 old space heap limit in megabytes.
 
+---
+
 ### Exercise 3: V8 JIT Compilation Pipeline
 
 **Problem:** Name the 2 key components in V8 JIT compilation: 1) Baseline interpreter; 2) Optimizing compiler.
 
 **Expected output:**
-```text
-1. Ignition (Interpreter)
-2. TurboFan (Optimizing Compiler)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Ignition (Interpreter)
+> 2. TurboFan (Optimizing Compiler)
+> ```
 > ```text
 > 1. Ignition (Interpreter)
 > 2. TurboFan (Optimizing Compiler)

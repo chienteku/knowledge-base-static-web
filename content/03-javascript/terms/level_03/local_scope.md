@@ -160,11 +160,10 @@ function processData(price) {
 ```
 
 **Expected output:**
-```text
-`price` (parameter) and `discount` are strictly local to processData.
-```
-
 > [!check]- Answer
+> ```text
+> `price` (parameter) and `discount` are strictly local to processData.
+> ```
 > - Parameters are always local.
 > - Anything declared inside the `{}` of the function is local.
 > - `tax` is declared outside, so it is global.
@@ -176,11 +175,10 @@ function processData(price) {
 **Problem:** Demonstrate that function parameters `(a, b)` reside strictly within local scope.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > function add(a, b) { return a + b; }
 > add(1, 2);
 > try {
@@ -192,17 +190,18 @@ ReferenceError caught
 >
 > **Explanation:** Function parameters are initialized as local scope variables inside function execution contexts.
 
+---
+
 ### Exercise 3: Local Scope Shadowing Outer Variables
 
 **Problem:** Shadow global variable `let name = "Global"` inside function `test()` with local `let name = "Local"`.
 
 **Expected output:**
-```text
-Local
-Global
-```
-
 > [!check]- Answer
+> ```text
+> Local
+> Global
+> ```
 > ```javascript
 > let name = "Global";
 > function test() {
@@ -215,7 +214,6 @@ Global
 >
 > **Explanation:** Declaring identical variable names in local scopes shadows outer scope variables without mutating them.
 
----
 
 ---
 

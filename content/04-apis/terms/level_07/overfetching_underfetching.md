@@ -181,12 +181,11 @@ GET /api/users/5?embed=posts,comments ; Single request fetching nested sub-resou
 **Problem:** Define Overfetching and Underfetching in API design.
 
 **Expected output:**
-```text
-Overfetching: API response returns more data fields than the client needs.
-Underfetching: API response returns insufficient data, forcing client to make additional requests.
-```
-
 > [!check]- Answer
+> ```text
+> Overfetching: API response returns more data fields than the client needs.
+> Underfetching: API response returns insufficient data, forcing client to make additional requests.
+> ```
 > ```text
 > Overfetching -> Fetching extra unneeded data fields (wasteful payload size).
 > Underfetching -> Fetching partial data (forces additional round-trip requests).
@@ -199,11 +198,10 @@ Underfetching: API response returns insufficient data, forcing client to make ad
 **Problem:** How does GraphQL solve both Overfetching and Underfetching in a single request?
 
 **Expected output:**
-```text
-Clients specify exact required fields in query requests, fetching precisely what is needed in a single round trip.
-```
-
 > [!check]- Answer
+> ```text
+> Clients specify exact required fields in query requests, fetching precisely what is needed in a single round trip.
+> ```
 > ```graphql
 > query {
 > user(id: 5) {

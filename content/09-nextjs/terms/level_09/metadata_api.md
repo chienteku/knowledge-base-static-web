@@ -134,18 +134,17 @@ export const metadata = {
 **Problem:** You set `robots: { index: true }` in your root `layout.tsx`. In your `app/secret/page.tsx`, you want to prevent search engines from indexing the page. How do you override it?
 
 **Expected output:**
-```tsx
-// app/secret/page.tsx
-export const metadata = {
-  // Just define it in the page! Page metadata always overwrites Layout metadata.
-  robots: {
-    index: false,
-    follow: false,
-  }
-};
-```
-
 > [!check]- Answer
+> ```tsx
+> // app/secret/page.tsx
+> export const metadata = {
+>   // Just define it in the page! Page metadata always overwrites Layout metadata.
+>   robots: {
+>     index: false,
+>     follow: false,
+>   }
+> };
+> ```
 > - Child pages always have priority in the merge hierarchy.
 
 ---
@@ -155,11 +154,10 @@ export const metadata = {
 **Problem:** Write root layout `metadata` object with `title.default = 'Store'`, `title.template = '%s | Store'`, and `metadataBase` set to `https://example.com`.
 
 **Expected output:**
-```typescript
-export const metadata: Metadata = { metadataBase: new URL('https://example.com'), title: { default: 'Store', template: '%s | Store' } };
-```
-
 > [!check]- Answer
+> ```typescript
+> export const metadata: Metadata = { metadataBase: new URL('https://example.com'), title: { default: 'Store', template: '%s | Store' } };
+> ```
 > - `metadataBase` resolves relative OpenGraph image URLs.
 > 
 > ```typescript
@@ -182,11 +180,10 @@ export const metadata: Metadata = { metadataBase: new URL('https://example.com')
 **Problem:** How does Next.js resolve metadata defined in both `app/layout.tsx` and nested `app/blog/page.tsx`?
 
 **Expected output:**
-```text
-Next.js merges metadata shallowly, overriding parent properties with child page properties while inheriting un-specified parent tags.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js merges metadata shallowly, overriding parent properties with child page properties while inheriting un-specified parent tags.
+> ```
 > - Child metadata overrides parent metadata tags shallowly.
 > 
 > ```text

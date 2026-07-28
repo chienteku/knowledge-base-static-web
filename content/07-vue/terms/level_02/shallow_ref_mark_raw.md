@@ -204,11 +204,10 @@ function addLog(message) {
 ```
 
 **Expected output:**
-```text
-The logs list is updated efficiently without recursively scanning the entire array for reactive changes.
-```
-
 > [!check]- Answer
+> ```text
+> The logs list is updated efficiently without recursively scanning the entire array for reactive changes.
+> ```
 > - Replace `ref` with `shallowRef`.
 > - Because `shallowRef` does not track array operations like `.push()`, you must reassign `.value` with a new array: `logs.value = [...logs.value, newLog]`.
 
@@ -219,11 +218,10 @@ The logs list is updated efficiently without recursively scanning the entire arr
 **Problem:** Which Vue utility function forces template updates after mutating deep properties inside a `shallowRef()`?
 
 **Expected output:**
-```text
-triggerRef(shallowRefInstance)
-```
-
 > [!check]- Answer
+> ```text
+> triggerRef(shallowRefInstance)
+> ```
 > - `triggerRef()` manually executes shallowRef watchers.
 > 
 > ```javascript
@@ -240,11 +238,10 @@ triggerRef(shallowRefInstance)
 **Problem:** Why is `markRaw()` essential when storing large third-party class instances (e.g. Three.js scenes or WebGL contexts) in Vue state?
 
 **Expected output:**
-```text
-Wrapping complex third-party class instances in Vue reactive proxies creates heavy memory overhead and causes unexpected internal proxy method breaks.
-```
-
 > [!check]- Answer
+> ```text
+> Wrapping complex third-party class instances in Vue reactive proxies creates heavy memory overhead and causes unexpected internal proxy method breaks.
+> ```
 > - Avoids Proxy wrapping overhead for heavy non-reactive instances.
 > 
 > ```javascript

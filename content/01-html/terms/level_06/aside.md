@@ -183,14 +183,13 @@ A simple blog post alongside a tangential ad banner:
 4.  A popup window displaying a "Sign Up for Newsletter" prompt.
 
 **Expected output:**
-```text
-1. <aside> (Tangential to the active article)
-2. <nav> (Major navigation table of contents)
-3. <aside> (Non-essential advertisement)
-4. <aside> (Tangential interaction element)
-```
-
 > [!check]- Answer
+> ```text
+> 1. <aside> (Tangential to the active article)
+> 2. <nav> (Major navigation table of contents)
+> 3. <aside> (Non-essential advertisement)
+> 4. <aside> (Tangential interaction element)
+> ```
 > - Ask: Is this content part of the primary document body? If not, it belongs in an `aside` or a specific navigation `nav`.
 
 ---
@@ -202,11 +201,10 @@ A simple blog post alongside a tangential ad banner:
 **Problem:** Structure webpage with `<main>` article and `<aside>` containing related links list.
 
 **Expected output:**
-```text
-<main><article>...</article></main><aside><h3>Related Reading</h3><ul><li><a href="#">Link</a></li></ul></aside>
-```
-
 > [!check]- Answer
+> ```text
+> <main><article>...</article></main><aside><h3>Related Reading</h3><ul><li><a href="#">Link</a></li></ul></aside>
+> ```
 > ```html
 > <main>
 >   <article>Main article content...</article>
@@ -221,16 +219,17 @@ A simple blog post alongside a tangential ad banner:
 >
 > **Explanation:** `<aside>` encapsulates secondary sidebar and related resource links.
 
+---
+
 ### Exercise 3: Screen Reader Landmark for Aside
 
 **Problem:** Which ARIA landmark role is implicitly assigned to top-level `<aside>` elements?
 
 **Expected output:**
-```text
-complementary landmark role.
-```
-
 > [!check]- Answer
+> ```text
+> complementary landmark role.
+> ```
 > ```text
 > complementary landmark role.
 > ```

@@ -146,15 +146,14 @@ export default defineNuxtPlugin((nuxtApp) => {
 **Problem:** You have a third-party Vue component `SuperSlider`. The documentation says to run `app.component('SuperSlider', SuperSlider)`. Write the Nuxt plugin code to accomplish this.
 
 **Expected output:**
-```typescript
-import SuperSlider from 'super-slider-library';
-
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.component('SuperSlider', SuperSlider);
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> import SuperSlider from 'super-slider-library';
+> 
+> export default defineNuxtPlugin((nuxtApp) => {
+>   nuxtApp.vueApp.component('SuperSlider', SuperSlider);
+> });
+> ```
 > - Inside the plugin function, access `nuxtApp.vueApp.component()` to register the component globally.
 
 ---
@@ -164,14 +163,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 **Problem:** Write Nuxt plugin `plugins/vue-toastification.client.ts` registering third-party Vue plugin `Toast` on `nuxtApp.vueApp`.
 
 **Expected output:**
-```typescript
-import Toast from 'vue-toastification';
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(Toast);
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> import Toast from 'vue-toastification';
+> export default defineNuxtPlugin((nuxtApp) => {
+>   nuxtApp.vueApp.use(Toast);
+> });
+> ```
 > - `nuxtApp.vueApp.use()` registers third-party Vue plugins.
 > 
 > ```typescript
@@ -191,12 +189,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 **Problem:** Compare Vue Plugins vs Nuxt Plugins.
 
 **Expected output:**
-```text
-Vue Plugins: Extend Vue app instance (components, directives);
-Nuxt Plugins: Extend full Nuxt lifecycle (SSR context, Nitro hooks, universal payload, provide helpers).
-```
-
 > [!check]- Answer
+> ```text
+> Vue Plugins: Extend Vue app instance (components, directives);
+> Nuxt Plugins: Extend full Nuxt lifecycle (SSR context, Nitro hooks, universal payload, provide helpers).
+> ```
 > - Vue Plugins -> Extend Vue component instance.
 > - Nuxt Plugins -> Extend full Nuxt universal lifecycle & Nitro server.
 > 

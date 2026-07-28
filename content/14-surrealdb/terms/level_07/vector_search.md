@@ -146,20 +146,19 @@ SELECT *, vector::similarity::cosine(embedding, $q) AS score FROM doc ORDER BY s
 2. Write a query to select `title` and vector distance (`vector::distance::knn(vec, $query_vec)`) as `dist` from `items`, ordered by `dist ASC` with `LIMIT 3`.
 
 **Expected output:**
-```sql
--- 1. Define Vector Index
-DEFINE INDEX idx_item_vector ON items COLUMNS vec MTREE DIMENSION 384 DISTANCE EUCLIDEAN;
-
--- 2. Similarity Query
-SELECT 
-  title, 
-  vector::distance::knn(vec, $query_vec) AS dist 
-FROM items 
-ORDER BY dist ASC 
-LIMIT 3;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Define Vector Index
+> DEFINE INDEX idx_item_vector ON items COLUMNS vec MTREE DIMENSION 384 DISTANCE EUCLIDEAN;
+> 
+> -- 2. Similarity Query
+> SELECT 
+>   title, 
+>   vector::distance::knn(vec, $query_vec) AS dist 
+> FROM items 
+> ORDER BY dist ASC 
+> LIMIT 3;
+> ```
 > - The distance helper function is `vector::distance::knn(field, query_vec)`.
 > - Order vector distances ascending (`ASC`) because smaller distances mean higher similarity.
 
@@ -172,27 +171,27 @@ LIMIT 3;
 **Problem:** Query top 5 nearest neighbor documents for `$query_vector` using `vector::similarity::cosine()`.
 
 **Expected output:**
-```text
-SELECT *, vector::similarity::cosine(embedding, $query_vector) AS score FROM doc ORDER BY score DESC LIMIT 5;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT *, vector::similarity::cosine(embedding, $query_vector) AS score FROM doc ORDER BY score DESC LIMIT 5;
+> ```
 > ```surrealql
 > SELECT *, vector::similarity::cosine(embedding, $query_vector) AS score FROM doc ORDER BY score DESC LIMIT 5;
 > ```
 >
 > **Explanation:** `vector::similarity::cosine()` ranks vector embeddings by similarity score.
 
+---
+
 ### Exercise 3: Vector Distance KNN Operator
 
 **Problem:** Query top 10 nearest vectors using `<~10,1536~>` KNN operator syntax.
 
 **Expected output:**
-```text
-SELECT * FROM doc WHERE embedding <~10,1536~> $query_vec;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM doc WHERE embedding <~10,1536~> $query_vec;
+> ```
 > ```surrealql
 > SELECT * FROM doc WHERE embedding <~10,1536~> $query_vec;
 > ```

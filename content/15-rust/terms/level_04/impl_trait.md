@@ -185,11 +185,10 @@ fn log_item<T: Display + Debug>(item: T) {
 **Problem:** Write a function `fn even_numbers() -> impl Iterator<Item = i32>` returning an adapted iterator pipeline.
 
 **Expected output:**
-```
-[2, 4, 6, 8, 10]
-```
-
 > [!check]- Answer
+> ```
+> [2, 4, 6, 8, 10]
+> ```
 > ```rust
 > fn even_numbers() -> impl Iterator<Item = i32> {
 >     (1..=10).filter(|x| x % 2 == 0)
@@ -202,16 +201,17 @@ fn log_item<T: Display + Debug>(item: T) {
 >
 > **Explanation:** `impl Trait` hides complex, unnamable iterator closure types behind clean interfaces.
 
+---
+
 ### Exercise 3: Using `impl Trait` in Argument Position
 
 **Problem:** Write `fn print_display(val: impl std::fmt::Display)` as shorthand for generic bounds.
 
 **Expected output:**
-```
-Printed: Hello
-```
-
 > [!check]- Answer
+> ```
+> Printed: Hello
+> ```
 > fn print_display(val: impl std::fmt::Display) {
 >     println!("Printed: {}", val);
 > }

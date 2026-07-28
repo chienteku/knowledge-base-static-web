@@ -116,12 +116,11 @@ export default function Loading() {
 **Problem:** You have `app/loading.tsx` (a generic spinner) and `app/dashboard/loading.tsx` (a dashboard skeleton). If the user navigates to `/dashboard`, which loading state is shown?
 
 **Expected output:**
-```text
-The `app/dashboard/loading.tsx` is shown.
-Next.js always uses the closest, most specific `loading.tsx` file to the page being rendered. This allows you to have highly specific loading skeletons for different parts of your app.
-```
-
 > [!check]- Answer
+> ```text
+> The `app/dashboard/loading.tsx` is shown.
+> Next.js always uses the closest, most specific `loading.tsx` file to the page being rendered. This allows you to have highly specific loading skeletons for different parts of your app.
+> ```
 > - React Suspense boundaries catch the closest thrown promise.
 
 ---
@@ -131,11 +130,10 @@ Next.js always uses the closest, most specific `loading.tsx` file to the page be
 **Problem:** Write an App Router `loading.tsx` component rendering a pulse skeleton placeholder grid.
 
 **Expected output:**
-```tsx
-export default function Loading() { return ( <div className="animate-pulse grid grid-cols-3 gap-4"> <div className="h-32 bg-gray-200 rounded" /> </div> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> export default function Loading() { return ( <div className="animate-pulse grid grid-cols-3 gap-4"> <div className="h-32 bg-gray-200 rounded" /> </div> ); }
+> ```
 > - `loading.tsx` renders fallback UI during route segment transitions.
 > 
 > ```tsx
@@ -156,11 +154,10 @@ export default function Loading() { return ( <div className="animate-pulse grid 
 **Problem:** Does `loading.tsx` block initial server response headers from reaching the client browser?
 
 **Expected output:**
-```text
-No. Next.js streams the loading.tsx fallback HTML immediately to the browser in the first HTTP chunk.
-```
-
 > [!check]- Answer
+> ```text
+> No. Next.js streams the loading.tsx fallback HTML immediately to the browser in the first HTTP chunk.
+> ```
 > - `loading.tsx` streams initial fallback HTML instantly.
 > 
 > ```text

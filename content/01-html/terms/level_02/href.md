@@ -225,6 +225,8 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 >
 > **Explanation:** `href` accepts web URLs, element IDs, and URI protocol schemes.
 
+---
+
 ### Exercise 3: Downloading Files via href
 
 **Problem:** Which attribute can be added to `<a href="file.pdf">` to force the browser to download the file instead of displaying it inline?

@@ -155,16 +155,17 @@ undefined
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Launching Custom Context REPL
 
 **Problem:** Launch a custom REPL instance programmatically using `repl.start()` injecting custom context variable `db`.
 
 **Expected output:**
-```text
-const r = repl.start('> '); r.context.db = myDbInstance;
-```
-
 > [!check]- Answer
+> ```text
+> const r = repl.start('> '); r.context.db = myDbInstance;
+> ```
 > ```javascript
 > const repl = require('repl');
 > const r = repl.start('> ');
@@ -173,16 +174,17 @@ const r = repl.start('> '); r.context.db = myDbInstance;
 >
 > **Explanation:** `repl.start()` starts a interactive custom REPL shell with pre-loaded database/service contexts.
 
+---
+
 ### Exercise 3: Node REPL History Saving
 
 **Problem:** What command saves current REPL session history to a file? (`.save filename.js`).
 
 **Expected output:**
-```text
-.save filename.js
-```
-
 > [!check]- Answer
+> ```text
+> .save filename.js
+> ```
 > ```text
 > .save filename.js
 > ```

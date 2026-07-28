@@ -112,11 +112,10 @@ body { color: red; }
 **Problem:** You go to Google Fonts to get a cool custom font. Google gives you a snippet of code that looks like this: `@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');`. Where do you paste this in your CSS file?
 
 **Expected output:**
-```text
-At the absolute top of your CSS file, on line 1! If you put it anywhere else, the browser will ignore it and your custom font will not load.
-```
-
 > [!check]- Answer
+> ```text
+> At the absolute top of your CSS file, on line 1! If you put it anywhere else, the browser will ignore it and your custom font will not load.
+> ```
 > - Where do imports go?
 
 ---
@@ -128,27 +127,27 @@ At the absolute top of your CSS file, on line 1! If you put it anywhere else, th
 **Problem:** Write `@import` rule loading `print.css` only when media is `print`.
 
 **Expected output:**
-```text
-@import url('print.css') print;
-```
-
 > [!check]- Answer
+> ```text
+> @import url('print.css') print;
+> ```
 > ```css
 > @import url('print.css') print;
 > ```
 >
 > **Explanation:** `@import` accepts optional trailing media query constraints.
 
+---
+
 ### Exercise 3: @import Layer Syntax
 
 **Problem:** Write `@import` statement importing `reset.css` directly into Cascade Layer `@layer base`.
 
 **Expected output:**
-```text
-@import url('reset.css') layer(base);
-```
-
 > [!check]- Answer
+> ```text
+> @import url('reset.css') layer(base);
+> ```
 > ```css
 > @import url('reset.css') layer(base);
 > ```

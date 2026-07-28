@@ -169,11 +169,10 @@ thread::spawn(move || {
 **Problem:** Write a function `fn assert_send<T: Send>()` and verify `Arc<i32>` implements `Send`.
 
 **Expected output:**
-```
-Arc implements Send
-```
-
 > [!check]- Answer
+> ```
+> Arc implements Send
+> ```
 > ```rust
 > fn assert_send<T: Send>() {}
 > fn main() {
@@ -184,16 +183,17 @@ Arc implements Send
 >
 > **Explanation:** `Send` indicates that ownership of a type can be transferred safely across thread boundaries.
 
+---
+
 ### Exercise 3: Raw Pointer `Send` Wrapper Implementation
 
 **Problem:** Wrap a raw pointer in a custom struct `struct PtrWrapper(*mut i32)` and implement `unsafe impl Send for PtrWrapper`.
 
 **Expected output:**
-```
-Unsafe Send implemented
-```
-
 > [!check]- Answer
+> ```
+> Unsafe Send implemented
+> ```
 > struct PtrWrapper(*mut i32);
 > unsafe impl Send for PtrWrapper {}
 > fn main() {

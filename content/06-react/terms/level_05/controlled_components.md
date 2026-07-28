@@ -107,17 +107,16 @@ const [val, setVal] = useState(data.name || ''); // Default empty string
 **Problem:** You have a controlled input for a phone number. Write the `onChange` handler so that it ONLY updates the state if the user types numbers. If they type a letter, the input ignores it.
 
 **Expected output:**
-```javascript
-function handleChange(e) {
-  const input = e.target.value;
-  // Only update state if it contains only numbers
-  if (/^\d*$/.test(input)) {
-    setPhone(input);
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> function handleChange(e) {
+>   const input = e.target.value;
+>   // Only update state if it contains only numbers
+>   if (/^\d*$/.test(input)) {
+>     setPhone(input);
+>   }
+> }
+> ```
 > - You can use an `if` statement to conditionally call the `set` function based on what `e.target.value` is.
 
 ---
@@ -129,11 +128,10 @@ function handleChange(e) {
 **Problem:** Build controlled form managing `email` and `password` with a single object state handler.
 
 **Expected output:**
-```text
-function LoginForm() { const [form, setForm] = useState({ email: '', password: '' }); const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value }); return <form><input name="email" value={form.email} onChange={handleChange} /><input name="password" value={form.password} onChange={handleChange} /></form>; }
-```
-
 > [!check]- Answer
+> ```text
+> function LoginForm() { const [form, setForm] = useState({ email: '', password: '' }); const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value }); return <form><input name="email" value={form.email} onChange={handleChange} /><input name="password" value={form.password} onChange={handleChange} /></form>; }
+> ```
 > ```javascript
 > function LoginForm() {
 >   const [form, setForm] = useState({ email: '', password: '' });
@@ -151,16 +149,17 @@ function LoginForm() { const [form, setForm] = useState({ email: '', password: '
 >
 > **Explanation:** Computed property names (`[e.target.name]`) manage multi-input form object state.
 
+---
+
 ### Exercise 3: Controlled Checkbox Input Property
 
 **Problem:** What prop handles controlled state for checkbox inputs? (`checked={isChecked}` instead of `value`).
 
 **Expected output:**
-```text
-checked={isChecked} prop paired with onChange={e => setIsChecked(e.target.checked)}
-```
-
 > [!check]- Answer
+> ```text
+> checked={isChecked} prop paired with onChange={e => setIsChecked(e.target.checked)}
+> ```
 > ```javascript
 > <input type="checkbox" checked={isChecked} onChange={e => setIsChecked(e.target.checked)} />
 > ```

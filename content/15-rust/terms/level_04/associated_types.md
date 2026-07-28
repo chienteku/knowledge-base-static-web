@@ -216,11 +216,10 @@ fn main() {
 **Problem:** Define `trait Graph { type Node; type Edge; }`. Implement it for `MyGraph` with `type Node = u64; type Edge = String;`.
 
 **Expected output:**
-```
-Graph node defined
-```
-
 > [!check]- Answer
+> ```
+> Graph node defined
+> ```
 > ```rust
 > trait Graph {
 >     type Node;
@@ -238,16 +237,17 @@ Graph node defined
 >
 > **Explanation:** Associated types establish type relationships tied uniquely to trait implementors.
 
+---
+
 ### Exercise 3: Trait Bounds with Equality Constraints
 
 **Problem:** Write a function `fn print_first<I>(mut iter: I) where I: Iterator<Item = String>`.
 
 **Expected output:**
-```
-First: hello
-```
-
 > [!check]- Answer
+> ```
+> First: hello
+> ```
 > fn print_first<I>(mut iter: I) where I: Iterator<Item = String> {
 >     if let Some(s) = iter.next() {
 >         println!("First: {}", s);

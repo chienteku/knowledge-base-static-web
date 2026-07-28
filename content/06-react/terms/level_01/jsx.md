@@ -194,6 +194,8 @@ function Header() {
 >
 > **Explanation:** Curly braces `{}` embed dynamic JavaScript expressions inside JSX markup.
 
+---
+
 ### Exercise 3: Inline Style Object Syntax in JSX
 
 **Problem:** Apply inline background color `'blue'` and font size `16` to `<div>` using `style={{ backgroundColor: 'blue', fontSize: 16 }}`.

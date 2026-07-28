@@ -167,17 +167,16 @@ db.users.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 90 } }, { array
 Write the update query to locate cart `105` and reduce the `price` of all cart items costing **more than 100** by `10` (hint: use the identifier `premiumItem`).
 
 **Expected output:**
-```javascript
-db.carts.updateOne(
-  { _id: 105 },
-  { $inc: { "items.$[premiumItem].price": -10 } },
-  {
-    arrayFilters: [ { "premiumItem.price": { $gt: 100 } } ]
-  }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.carts.updateOne(
+>   { _id: 105 },
+>   { $inc: { "items.$[premiumItem].price": -10 } },
+>   {
+>     arrayFilters: [ { "premiumItem.price": { $gt: 100 } } ]
+>   }
+> );
+> ```
 > - The identifier `premiumItem` must be placed inside the update path: `items.$[premiumItem].price`.
 > - Write the condition mapping `premiumItem.price > 100` inside `arrayFilters`.
 
@@ -190,11 +189,10 @@ db.carts.updateOne(
 **Problem:** Update score to 100 for all grade sub-documents where `grade.score < 60` using `arrayFilters`.
 
 **Expected output:**
-```text
-db.students.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 100 } }, { arrayFilters: [{ "elem.score": { $lt: 60 } }] });
-```
-
 > [!check]- Answer
+> ```text
+> db.students.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 100 } }, { arrayFilters: [{ "elem.score": { $lt: 60 } }] });
+> ```
 > ```javascript
 > db.students.updateOne(
 >   { _id: 1 },
@@ -205,16 +203,17 @@ db.students.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 100 } }, { a
 >
 > **Explanation:** `arrayFilters` identifies specific array element sub-documents matching criteria for updates.
 
+---
+
 ### Exercise 3: All Array Elements Update Operator `$[ ]`
 
 **Problem:** Increment score by 5 for ALL items in `grades` array using `$[ ]` operator.
 
 **Expected output:**
-```text
-db.students.updateOne({ _id: 1 }, { $inc: { "grades.$[].score": 5 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.students.updateOne({ _id: 1 }, { $inc: { "grades.$[].score": 5 } });
+> ```
 > ```javascript
 > db.students.updateOne({
 >   _id: 1

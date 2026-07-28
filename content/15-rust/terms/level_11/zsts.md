@@ -166,11 +166,10 @@ enum D { OnlyVariant }
 **Problem:** Print `size_of::<()>()` and `size_of::<PhantomData<String>>()`.
 
 **Expected output:**
-```
-Unit size: 0, PhantomData size: 0
-```
-
 > [!check]- Answer
+> ```
+> Unit size: 0, PhantomData size: 0
+> ```
 > ```rust
 > use std::mem::size_of;
 > use std::marker::PhantomData;
@@ -181,16 +180,17 @@ Unit size: 0, PhantomData size: 0
 >
 > **Explanation:** ZSTs take up 0 bytes in compiled binary memory layouts.
 
+---
+
 ### Exercise 3: Zero-Allocation Collections with ZSTs
 
 **Problem:** Push 1,000 unit elements `()` into `Vec<()>` and check vector capacity.
 
 **Expected output:**
-```
-Vec<()> len: 1000
-```
-
 > [!check]- Answer
+> ```
+> Vec<()> len: 1000
+> ```
 > fn main() {
 >     let mut v = Vec::new();
 >     for _ in 0..1000 { v.push(()); }

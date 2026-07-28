@@ -155,17 +155,16 @@ BEGIN; SELECT * FROM users WHERE id = 1 FOR UPDATE; /* update work */ COMMIT;
 **Problem:** You are building a background worker script. Multiple worker servers run at the same time. You have a `tasks` table. Write the SQL transaction queries to select and lock the single oldest pending task (`status = 'queued'`) without letting workers wait for each other's locks.
 
 **Expected output:**
-```sql
-BEGIN;
-SELECT id FROM tasks 
-WHERE status = 'queued' 
-ORDER BY id ASC 
-LIMIT 1 
-FOR UPDATE SKIP LOCKED;
--- Followed by UPDATE and COMMIT
-```
-
 > [!check]- Answer
+> ```sql
+> BEGIN;
+> SELECT id FROM tasks 
+> WHERE status = 'queued' 
+> ORDER BY id ASC 
+> LIMIT 1 
+> FOR UPDATE SKIP LOCKED;
+> -- Followed by UPDATE and COMMIT
+> ```
 > - Combine the `FOR UPDATE` query modifier with the `SKIP LOCKED` sub-clause.
 > - Ensure you order tasks by ID or timestamp to find the oldest.
 
@@ -178,11 +177,10 @@ FOR UPDATE SKIP LOCKED;
 **Problem:** Write SQL statement for background workers fetching 1 pending job without blocking other workers using `FOR UPDATE SKIP LOCKED`.
 
 **Expected output:**
-```text
-BEGIN; SELECT * FROM jobs WHERE status = 'pending' ORDER BY id ASC LIMIT 1 FOR UPDATE SKIP LOCKED;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN; SELECT * FROM jobs WHERE status = 'pending' ORDER BY id ASC LIMIT 1 FOR UPDATE SKIP LOCKED;
+> ```
 > ```sql
 > BEGIN;
 > SELECT * FROM jobs
@@ -193,16 +191,17 @@ BEGIN; SELECT * FROM jobs WHERE status = 'pending' ORDER BY id ASC LIMIT 1 FOR U
 >
 > **Explanation:** `FOR UPDATE SKIP LOCKED` skips rows locked by concurrent workers, enabling parallel queue processing.
 
+---
+
 ### Exercise 3: FOR UPDATE vs FOR SHARE Comparison
 
 **Problem:** Compare: `FOR UPDATE` (Exclusive row lock blocking reads/writes); `FOR SHARE` (Shared row lock permitting concurrent reads but blocking updates).
 
 **Expected output:**
-```text
-FOR UPDATE: exclusive row lock; FOR SHARE: shared row lock permitting concurrent reads
-```
-
 > [!check]- Answer
+> ```text
+> FOR UPDATE: exclusive row lock; FOR SHARE: shared row lock permitting concurrent reads
+> ```
 > ```text
 > FOR UPDATE: exclusive row lock; FOR SHARE: shared row lock permitting concurrent reads
 > ```

@@ -95,13 +95,12 @@ VITE_API_URL=https://api.com # Prefixed variables are exposed to import.meta.env
 **Problem:** You are starting a new Vue project. Should you type `vue create my-project` (Vue CLI) or `npm create vue@latest` (create-vue)?
 
 **Expected output:**
-```text
-You MUST use `npm create vue@latest`!
-`vue create` triggers the old Vue CLI, which uses Webpack. The Vue CLI is officially deprecated and in maintenance mode. 
-`npm create vue@latest` scaffolds a modern Vue project powered by Vite.
-```
-
 > [!check]- Answer
+> ```text
+> You MUST use `npm create vue@latest`!
+> `vue create` triggers the old Vue CLI, which uses Webpack. The Vue CLI is officially deprecated and in maintenance mode. 
+> `npm create vue@latest` scaffolds a modern Vue project powered by Vite.
+> ```
 > - Which tool is officially deprecated?
 
 ---
@@ -111,11 +110,10 @@ You MUST use `npm create vue@latest`!
 **Problem:** Write minimal `vite.config.js` file importing `@vitejs/plugin-vue` and configuring `plugins: [vue()]`.
 
 **Expected output:**
-```javascript
-import { defineConfig } from 'vite'; import vue from '@vitejs/plugin-vue'; export default defineConfig({ plugins: [vue()] });
-```
-
 > [!check]- Answer
+> ```javascript
+> import { defineConfig } from 'vite'; import vue from '@vitejs/plugin-vue'; export default defineConfig({ plugins: [vue()] });
+> ```
 > - `@vitejs/plugin-vue` compiles Vue SFC components in Vite.
 > 
 > ```javascript
@@ -134,11 +132,10 @@ import { defineConfig } from 'vite'; import vue from '@vitejs/plugin-vue'; expor
 **Problem:** Why does Vite development server start instantaneously compared to legacy Webpack dev servers?
 
 **Expected output:**
-```text
-Vite serves source code via native browser ES Modules (ESM) without bundling upfront during development.
-```
-
 > [!check]- Answer
+> ```text
+> Vite serves source code via native browser ES Modules (ESM) without bundling upfront during development.
+> ```
 > - Serves un-bundled native ES Modules to modern browsers.
 > 
 > ```text

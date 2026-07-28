@@ -104,12 +104,11 @@ SELECT * FROM posts WHERE id < 100000 ORDER BY id DESC LIMIT 20; -- Uses index l
 **Problem:** You are building an internal company dashboard to display a list of 500 employees. Users want to click buttons at the bottom that say `[1] [2] [3] [4] [5]`. Which pagination strategy should you use?
 
 **Expected output:**
-```text
-Offset Pagination. 
-Cursor pagination does not support specific page numbers (you can't jump directly to Page 4 using a cursor without knowing the ID of the last item on Page 3). Because the dataset is small (500 items) and doesn't update every millisecond, Offset is perfect here.
-```
-
 > [!check]- Answer
+> ```text
+> Offset Pagination. 
+> Cursor pagination does not support specific page numbers (you can't jump directly to Page 4 using a cursor without knowing the ID of the last item on Page 3). Because the dataset is small (500 items) and doesn't update every millisecond, Offset is perfect here.
+> ```
 > - Does the user want infinite scroll, or explicit page numbers?
 
 ---
@@ -122,13 +121,12 @@ Cursor pagination does not support specific page numbers (you can't jump directl
 3. Resistance to item duplication during live writes
 
 **Expected output:**
-```text
-1. Offset degrades on deep pages; Cursor maintains constant O(1) performance
-2. Offset supports arbitrary page jumping; Cursor does not
-3. Offset suffers page drift; Cursor is immune to page drift
-```
-
 > [!check]- Answer
+> ```text
+> 1. Offset degrades on deep pages; Cursor maintains constant O(1) performance
+> 2. Offset supports arbitrary page jumping; Cursor does not
+> 3. Offset suffers page drift; Cursor is immune to page drift
+> ```
 > ```text
 > 1. Deep Page Speed -> Offset: Slow O(N), Cursor: Fast O(1)
 > 2. Direct Page Jump -> Offset: Supported, Cursor: Not supported
@@ -142,17 +140,16 @@ Cursor pagination does not support specific page numbers (you can't jump directl
 **Problem:** Write standard JSON pagination metadata envelope containing `data`, `next_cursor`, `has_more`.
 
 **Expected output:**
-```json
-{
-  "data": [...],
-  "pagination": {
-    "next_cursor": "eyJpZCI6MTAwfQ==",
-    "has_more": true
-  }
-}
-```
-
 > [!check]- Answer
+> ```json
+> {
+>   "data": [...],
+>   "pagination": {
+>     "next_cursor": "eyJpZCI6MTAwfQ==",
+>     "has_more": true
+>   }
+> }
+> ```
 > ```json
 > {
 > "data": [ { "id": 101, "title": "Post 101" } ],

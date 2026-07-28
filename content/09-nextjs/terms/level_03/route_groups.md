@@ -113,14 +113,13 @@ app/
 **Problem:** You have an authentication flow: `login`, `register`, and `forgot-password`. You want them to share a specific "Split Screen" layout. How do you organize this without making the URLs `/auth/login`?
 
 **Expected output:**
-```text
-Create a Route Group named `(auth)`.
-Inside `(auth)`, create a `layout.tsx` returning your split-screen design.
-Place the `login`, `register`, and `forgot-password` folders inside `(auth)`.
-The URLs remain `/login` and `/register`, but they now share the isolated layout!
-```
-
 > [!check]- Answer
+> ```text
+> Create a Route Group named `(auth)`.
+> Inside `(auth)`, create a `layout.tsx` returning your split-screen design.
+> Place the `login`, `register`, and `forgot-password` folders inside `(auth)`.
+> The URLs remain `/login` and `/register`, but they now share the isolated layout!
+> ```
 > - Wrap the grouping word in parentheses.
 
 ---
@@ -130,11 +129,10 @@ The URLs remain `/login` and `/register`, but they now share the isolated layout
 **Problem:** Describe how Route Groups allow creating 2 completely distinct root layouts (`(marketing)` vs `(dashboard)`) in the same App Router app.
 
 **Expected output:**
-```text
-By removing the top-level app/layout.tsx and creating distinct app/(marketing)/layout.tsx and app/(dashboard)/layout.tsx each with their own <html> and <body> tags.
-```
-
 > [!check]- Answer
+> ```text
+> By removing the top-level app/layout.tsx and creating distinct app/(marketing)/layout.tsx and app/(dashboard)/layout.tsx each with their own <html> and <body> tags.
+> ```
 > - Route groups allow splitting applications into isolated root layout sub-trees.
 > 
 > ```text
@@ -149,11 +147,10 @@ By removing the top-level app/layout.tsx and creating distinct app/(marketing)/l
 **Problem:** Which character convention defines a Route Group folder name in Next.js App Router?
 
 **Expected output:**
-```text
-Parentheses (e.g. (groupName))
-```
-
 > [!check]- Answer
+> ```text
+> Parentheses (e.g. (groupName))
+> ```
 > - Parentheses `(folder)` omit the folder from URL paths.
 > 
 > ```text

@@ -146,15 +146,14 @@ async function processData() {
 **Problem:** Write a `for` loop that counts down from 10 to 1, logging each number to the console, and then logs "Liftoff!" after the loop finishes.
 
 **Expected output:**
-```text
-10
-9
-...
-1
-Liftoff!
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> 9
+> ...
+> 1
+> Liftoff!
+> ```
 > - Initialization: `let i = 10`
 > - Condition: `i > 0`
 > - Update: `i--`
@@ -167,14 +166,13 @@ Liftoff!
 **Problem:** Iterate over `["a", "b"]` using both `for...in` and `for...of` and print values.
 
 **Expected output:**
-```text
-for...in key: "0" (type string)
-for...in key: "1" (type string)
-for...of val: a
-for...of val: b
-```
-
 > [!check]- Answer
+> ```text
+> for...in key: "0" (type string)
+> for...in key: "1" (type string)
+> for...of val: a
+> for...of val: b
+> ```
 > ```javascript
 > const arr = ["a", "b"];
 > for (const key in arr) {
@@ -187,18 +185,19 @@ for...of val: b
 >
 > **Explanation:** `for...in` inspects object keys as strings; `for...of` iterates values of iterable collections.
 
+---
+
 ### Exercise 3: Reverse Array Iteration
 
 **Problem:** Write a `for` loop iterating an array `[10, 20, 30]` in reverse order.
 
 **Expected output:**
-```text
-30
-20
-10
-```
-
 > [!check]- Answer
+> ```text
+> 30
+> 20
+> 10
+> ```
 > ```javascript
 > const nums = [10, 20, 30];
 > for (let i = nums.length - 1; i >= 0; i--) {

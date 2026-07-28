@@ -157,11 +157,10 @@ CREATE post SET author = user:alice; // Valid matching table Record ID
 Assuming you have migrated this schema to SurrealDB where the `user` field on the `orders` table is a `record<user>` link type, write the simplified SurrealQL query to retrieve the same data.
 
 **Expected output:**
-```sql
-SELECT id, user.email FROM orders;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT id, user.email FROM orders;
+> ```
 > - Replace the foreign key ID with the record link field `user`.
 > - Access the user's email directly using dot notation, removing all `JOIN` syntax.
 
@@ -174,27 +173,27 @@ SELECT id, user.email FROM orders;
 **Problem:** Define field `publisher` on `book` table linking to `company` table.
 
 **Expected output:**
-```text
-DEFINE FIELD publisher ON TABLE book TYPE record<company>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD publisher ON TABLE book TYPE record<company>;
+> ```
 > ```surrealql
 > DEFINE FIELD publisher ON TABLE book TYPE record<company>;
 > ```
 >
 > **Explanation:** `TYPE record<table>` enforces foreign record link pointer types.
 
+---
+
 ### Exercise 3: Fetching Linked Records in Single Query
 
 **Problem:** Query all posts and expand linked `author` record using `FETCH` clause.
 
 **Expected output:**
-```text
-SELECT * FROM post FETCH author;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM post FETCH author;
+> ```
 > ```surrealql
 > SELECT * FROM post FETCH author;
 > ```

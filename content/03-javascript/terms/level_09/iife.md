@@ -167,13 +167,12 @@ async function processData() {
 **Problem:** Can you write an IIFE using the modern Arrow Function syntax? Write a simple one that logs "Arrow IIFE!".
 
 **Expected output:**
-```javascript
-(() => {
-  console.log("Arrow IIFE!");
-})();
-```
-
 > [!check]- Answer
+> ```javascript
+> (() => {
+>   console.log("Arrow IIFE!");
+> })();
+> ```
 > - Just replace `function()` with `() =>`.
 
 ---
@@ -183,11 +182,10 @@ async function processData() {
 **Problem:** Use an IIFE `(function() { var privateVal = 42; })()` to isolate temporary variables.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > ```javascript
 > (function() {
 >   var privateVal = 42;
@@ -201,16 +199,17 @@ ReferenceError caught
 >
 > **Explanation:** IIFEs (Immediately Invoked Function Expressions) create private scope closures immediately.
 
+---
+
 ### Exercise 3: IIFE Module Pattern
 
 **Problem:** Return a public API `{ getCount() }` from an IIFE closing over private state.
 
 **Expected output:**
-```text
-10
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> ```
 > ```javascript
 > const CounterModule = (function() {
 >   let count = 10;
@@ -221,7 +220,6 @@ ReferenceError caught
 >
 > **Explanation:** IIFEs form the foundation of classic JavaScript module patterns.
 
----
 
 ---
 

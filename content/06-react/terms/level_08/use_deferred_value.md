@@ -174,16 +174,17 @@ const HeavyList = React.memo(function HeavyList({ query }) { ... });
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Deferring Search Query for Heavy List
 
 **Problem:** Use `useDeferredValue` to defer heavy search filtering while keeping input typing instant.
 
 **Expected output:**
-```text
-function SearchPage() { const [query, setQuery] = useState(''); const deferredQuery = useDeferredValue(query); return <> <input value={query} onChange={e => setQuery(e.target.value)} /> <MemoizedList query={deferredQuery} /> <>; }
-```
-
 > [!check]- Answer
+> ```text
+> function SearchPage() { const [query, setQuery] = useState(''); const deferredQuery = useDeferredValue(query); return <> <input value={query} onChange={e => setQuery(e.target.value)} /> <MemoizedList query={deferredQuery} /> <>; }
+> ```
 > ```javascript
 > function SearchPage() {
 >   const [query, setQuery] = useState('');
@@ -199,16 +200,17 @@ function SearchPage() { const [query, setQuery] = useState(''); const deferredQu
 >
 > **Explanation:** `useDeferredValue` keeps input typing responsive while deferring heavy child list renders.
 
+---
+
 ### Exercise 3: useDeferredValue vs Debounce Comparison
 
 **Problem:** Compare: `debounce` (Fixed time delay e.g. 300ms regardless of CPU speed); `useDeferredValue` (Adaptive delay that renders immediately once CPU main thread is free).
 
 **Expected output:**
-```text
-debounce: fixed timer delay; useDeferredValue: adaptive rendering as soon as CPU main thread is free
-```
-
 > [!check]- Answer
+> ```text
+> debounce: fixed timer delay; useDeferredValue: adaptive rendering as soon as CPU main thread is free
+> ```
 > ```text
 > debounce: fixed timer delay; useDeferredValue: adaptive rendering as soon as CPU main thread is free
 > ```

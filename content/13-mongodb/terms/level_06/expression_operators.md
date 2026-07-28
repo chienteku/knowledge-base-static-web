@@ -162,22 +162,21 @@ It cannot process expression transformations like `$concat` natively.
 `SELECT COALESCE(nickname, 'No Nickname') AS username, CASE WHEN score >= 90 THEN 'A' ELSE 'B' END AS grade FROM students;`
 
 **Expected output:**
-```javascript
-{
-  $set: {
-    username: { $ifNull: [ "$nickname", "No Nickname" ] },
-    grade: {
-      $cond: {
-        if: { $gte: [ "$score", 90 ] },
-        then: "A",
-        else: "B"
-      }
-    }
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   $set: {
+>     username: { $ifNull: [ "$nickname", "No Nickname" ] },
+>     grade: {
+>       $cond: {
+>         if: { $gte: [ "$score", 90 ] },
+>         then: "A",
+>         else: "B"
+>       }
+>     }
+>   }
+> }
+> ```
 > - Map `COALESCE` to the `$ifNull` array format.
 > - Map the `CASE WHEN` branches to the `$cond` if/then/else format.
 > - Ensure all field references are prefixed with `$` inside the expression operators.
@@ -191,11 +190,10 @@ It cannot process expression transformations like `$concat` natively.
 **Problem:** Project `status` field: if `age >= 18` return `"Adult"` else `"Minor"` using `$cond`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $project: { status: { $cond: { if: { $gte: ["$age", 18] }, then: "Adult", else: "Minor" } } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $project: { status: { $cond: { if: { $gte: ["$age", 18] }, then: "Adult", else: "Minor" } } } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   {
@@ -214,16 +212,17 @@ db.users.aggregate([{ $project: { status: { $cond: { if: { $gte: ["$age", 18] },
 >
 > **Explanation:** `$cond: { if, then, else }` evaluates ternary conditional expressions in pipelines.
 
+---
+
 ### Exercise 3: Transforming Array Elements with `$map`
 
 **Problem:** Multiply all numbers in `prices` array by 1.1 (adding 10% tax) using `$map`.
 
 **Expected output:**
-```text
-db.products.aggregate([{ $project: { taxedPrices: { $map: { input: "$prices", as: "p", in: { $multiply: ["$$p", 1.1] } } } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.products.aggregate([{ $project: { taxedPrices: { $map: { input: "$prices", as: "p", in: { $multiply: ["$$p", 1.1] } } } } }]);
+> ```
 > ```javascript
 > db.products.aggregate([
 >   {

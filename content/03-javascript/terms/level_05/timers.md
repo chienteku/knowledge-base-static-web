@@ -191,11 +191,10 @@ const welcomeTimer = setTimeout(() => {
 **Problem:** Cancel a running `setInterval` using `clearInterval(timerId)`.
 
 **Expected output:**
-```text
-Interval cleared
-```
-
 > [!check]- Answer
+> ```text
+> Interval cleared
+> ```
 > ```javascript
 > const id = setTimeout(() => {}, 1000);
 > clearTimeout(id);
@@ -204,16 +203,17 @@ Interval cleared
 >
 > **Explanation:** `clearTimeout` / `clearInterval` cancel scheduled async timer callbacks.
 
+---
+
 ### Exercise 3: Timer Parameter Passing
 
 **Problem:** Pass arguments `"Alice"` directly into `setTimeout(fn, delay, arg1)`.
 
 **Expected output:**
-```text
-Hello Alice
-```
-
 > [!check]- Answer
+> ```text
+> Hello Alice
+> ```
 > ```javascript
 > function greet(name) { console.log(`Hello ${name}`); }
 > greet("Alice"); // Simulated timer arg pass

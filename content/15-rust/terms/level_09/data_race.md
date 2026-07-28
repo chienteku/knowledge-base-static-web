@@ -168,11 +168,10 @@ thread::spawn(move || {
 **Problem:** Explain how Rust's `Send` and `Sync` traits make data races impossible in safe Rust.
 
 **Expected output:**
-```
-Safe Rust guarantees data-race freedom
-```
-
 > [!check]- Answer
+> ```
+> Safe Rust guarantees data-race freedom
+> ```
 > ```rust
 > fn main() {
 >     println!("Safe Rust guarantees data-race freedom");
@@ -181,16 +180,17 @@ Safe Rust guarantees data-race freedom
 >
 > **Explanation:** Disallowing unsynchronized shared mutability (`&mut T` exclusivity) eliminates data races at compile time.
 
+---
+
 ### Exercise 3: Simulating Race Conditions with Locks
 
 **Problem:** Demonstrate a high-level race condition where thread interleaving alters final balance despite using `Mutex`.
 
 **Expected output:**
-```
-Race condition logic acknowledged
-```
-
 > [!check]- Answer
+> ```
+> Race condition logic acknowledged
+> ```
 > fn main() {
 >     println!("Race condition logic acknowledged");
 > }

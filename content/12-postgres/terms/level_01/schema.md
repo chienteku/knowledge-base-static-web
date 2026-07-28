@@ -142,12 +142,11 @@ CREATE SCHEMA auth; CREATE TABLE auth.users (...);
 Postgres returns an error saying "relation 'tokens' does not exist." Why did this happen, and how do you fix it?
 
 **Expected output:**
-```text
-It happened because Postgres defaulted to looking for the table inside the `public` schema (`public.tokens`). Since `tokens` was created inside the `security` schema, Postgres cannot find it. 
-To fix this, you must explicitly specify the schema path in the query: `SELECT * FROM security.tokens;`.
-```
-
 > [!check]- Answer
+> ```text
+> It happened because Postgres defaulted to looking for the table inside the `public` schema (`public.tokens`). Since `tokens` was created inside the `security` schema, Postgres cannot find it. 
+> To fix this, you must explicitly specify the schema path in the query: `SELECT * FROM security.tokens;`.
+> ```
 > - Remember that Postgres falls back to the `public` namespace unless instructed otherwise.
 > - Look up the search path concept or explicit schema referencing.
 
@@ -160,27 +159,27 @@ To fix this, you must explicitly specify the schema path in the query: `SELECT *
 **Problem:** Set active connection `search_path` to custom schema `app_schema`.
 
 **Expected output:**
-```text
-SET search_path TO app_schema, public;
-```
-
 > [!check]- Answer
+> ```text
+> SET search_path TO app_schema, public;
+> ```
 > ```sql
 > SET search_path TO app_schema, public;
 > ```
 >
 > **Explanation:** `search_path` specifies ordered schema namespaces for un-qualified table references.
 
+---
+
 ### Exercise 3: Creating Custom Schema
 
 **Problem:** Create custom schema `inventory` if it does not exist.
 
 **Expected output:**
-```text
-CREATE SCHEMA IF NOT EXISTS inventory;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE SCHEMA IF NOT EXISTS inventory;
+> ```
 > ```sql
 > CREATE SCHEMA IF NOT EXISTS inventory;
 > ```

@@ -160,11 +160,10 @@ async function processData() {
 **Problem:** If `rabbit` inherits from `animal`, and you use a `for...in` loop to iterate over `rabbit`, will it print the properties of `animal` too?
 
 **Expected output:**
-```text
-Yes! A `for...in` loop iterates over both an object's own properties AND its inherited enumerable properties. (If you only want the object's own properties, you must use `Object.keys()` or `hasOwnProperty()`).
-```
-
 > [!check]- Answer
+> ```text
+> Yes! A `for...in` loop iterates over both an object's own properties AND its inherited enumerable properties. (If you only want the object's own properties, you must use `Object.keys()` or `hasOwnProperty()`).
+> ```
 > - Prototypal inheritance makes properties feel like they belong to the child.
 
 ---
@@ -174,11 +173,10 @@ Yes! A `for...in` loop iterates over both an object's own properties AND its inh
 **Problem:** Link `Child.prototype` to `Parent.prototype` using `Object.create`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > function Parent() {}
 > function Child() {}
@@ -189,16 +187,17 @@ true
 >
 > **Explanation:** `Object.create(Parent.prototype)` establishes prototypal inheritance chains.
 
+---
+
 ### Exercise 3: Property Shadowing on Prototype Chains
 
 **Problem:** Demonstrate that assigning property `x = 10` on an instance shadows prototype property `x = 5`.
 
 **Expected output:**
-```text
-Instance x: 10, Proto x: 5
-```
-
 > [!check]- Answer
+> ```text
+> Instance x: 10, Proto x: 5
+> ```
 > ```javascript
 > const proto = { x: 5 };
 > const inst = Object.create(proto);
@@ -208,7 +207,6 @@ Instance x: 10, Proto x: 5
 >
 > **Explanation:** Writing properties to instances shadows prototype properties without mutating prototype defaults.
 
----
 
 ---
 

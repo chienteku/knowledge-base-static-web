@@ -191,11 +191,10 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 **Problem:** Your boss asks you to build a navigation bar with a logo on the left and 4 links on the right. Should you use `float: left` for the logo and `float: right` for the links?
 
 **Expected output:**
-```text
-No! You should use Flexbox (`display: flex; justify-content: space-between;`). You only use `float` if you want a large block of text to wrap around a picture like a newspaper.
-```
-
 > [!check]- Answer
+> ```text
+> No! You should use Flexbox (`display: flex; justify-content: space-between;`). You only use `float` if you want a large block of text to wrap around a picture like a newspaper.
+> ```
 > - Are we wrapping text around an image, or building a UI layout?
 
 ---
@@ -207,11 +206,10 @@ No! You should use Flexbox (`display: flex; justify-content: space-between;`). Y
 **Problem:** What is the single primary valid use case for `float` in modern HTML5 web design?
 
 **Expected output:**
-```text
-Floating an image to the left or right inside a paragraph block so text wraps smoothly around it.
-```
-
 > [!check]- Answer
+> ```text
+> Floating an image to the left or right inside a paragraph block so text wraps smoothly around it.
+> ```
 > ```css
 > img.article-image {
 >   float: left;
@@ -221,16 +219,17 @@ Floating an image to the left or right inside a paragraph block so text wraps sm
 >
 > **Explanation:** `float` was specifically designed to wrap text around images inside articles.
 
+---
+
 ### Exercise 3: Clearfix CSS Snippet
 
 **Problem:** Write micro-clearfix pseudo-element pattern for container `.clearfix`.
 
 **Expected output:**
-```text
-.clearfix::after { content: ""; display: table; clear: both; }
-```
-
 > [!check]- Answer
+> ```text
+> .clearfix::after { content: ""; display: table; clear: both; }
+> ```
 > ```css
 > .clearfix::after {
 >   content: "";

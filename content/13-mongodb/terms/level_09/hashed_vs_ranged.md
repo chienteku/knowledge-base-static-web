@@ -155,12 +155,11 @@ Select the optimal sharding strategy (**Ranged** or **Hashed**) for each scenari
 2.  A `customers` collection sharded on `{ last_name: 1 }`, where the application constantly displays alphabetical directories (e.g., listing names from "M" to "P").
 
 **Expected output:**
-```text
-1. Hashed: The timestamp is a monotonically increasing field. Under 50,000 writes/sec, ranged sharding will write-saturate a single primary shard. Hashed sharding distributes the writes evenly across all shards.
-2. Ranged: The application frequently queries ranges on the shard key (alphabetical slices). Ranged sharding keeps these folders contiguous on the same shard, avoiding slow scatter-gather broadcasts.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Hashed: The timestamp is a monotonically increasing field. Under 50,000 writes/sec, ranged sharding will write-saturate a single primary shard. Hashed sharding distributes the writes evenly across all shards.
+> 2. Ranged: The application frequently queries ranges on the shard key (alphabetical slices). Ranged sharding keeps these folders contiguous on the same shard, avoiding slow scatter-gather broadcasts.
+> ```
 > - Assess the write volume and if the key grows sequentially.
 > - Check if queries filter ranges or single equality keys.
 
@@ -173,27 +172,27 @@ Select the optimal sharding strategy (**Ranged** or **Hashed**) for each scenari
 **Problem:** Enable Hashed Sharding on `_id` field for `orders` collection.
 
 **Expected output:**
-```text
-sh.shardCollection("app.orders", { _id: "hashed" });
-```
-
 > [!check]- Answer
+> ```text
+> sh.shardCollection("app.orders", { _id: "hashed" });
+> ```
 > ```javascript
 > sh.shardCollection("app.orders", { _id: "hashed" });
 > ```
 >
 > **Explanation:** `{ field: "hashed" }` hashes key values to distribute inserts evenly across cluster shards.
 
+---
+
 ### Exercise 3: Hashed vs Ranged Tradeoff Matrix
 
 **Problem:** State tradeoff: Hashed Sharding (Even write distribution; scatters range queries), Ranged Sharding (Co-locates ranges; risk of monotonic write hotspots).
 
 **Expected output:**
-```text
-Hashed: even write distribution; Ranged: fast localized range queries
-```
-
 > [!check]- Answer
+> ```text
+> Hashed: even write distribution; Ranged: fast localized range queries
+> ```
 > ```text
 > Hashed: even write distribution; Ranged: fast localized range queries
 > ```

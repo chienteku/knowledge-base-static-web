@@ -188,15 +188,14 @@ import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge 
 **Problem:** You are deploying your Nuxt application to Cloudflare Pages. Write the build configuration block in `nuxt.config.ts` to instruct Nitro to compile the application for the `cloudflare-pages` preset.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  nitro: {
-    preset: 'cloudflare-pages'
-  }
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   nitro: {
+>     preset: 'cloudflare-pages'
+>   }
+> })
+> ```
 > - Specify the target platform name inside the `nitro.preset` property in the config.
 
 ---
@@ -206,15 +205,14 @@ export default defineNuxtConfig({
 **Problem:** Write `nuxt.config.ts` setting Nitro preset to `'cloudflare-pages'` for Edge Side Rendering.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  nitro: {
-    preset: 'cloudflare-pages'
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   nitro: {
+>     preset: 'cloudflare-pages'
+>   }
+> });
+> ```
 > - `nitro.preset` compiles project output to Edge runtimes.
 > 
 > ```typescript
@@ -232,11 +230,10 @@ export default defineNuxtConfig({
 **Problem:** Why does Edge Side Rendering (ESR) dramatically lower TTFB latency for global users?
 
 **Expected output:**
-```text
-ESR executes HTML rendering and API logic on CDN PoP nodes located geographically close to the user, eliminating physical network distance roundtrips.
-```
-
 > [!check]- Answer
+> ```text
+> ESR executes HTML rendering and API logic on CDN PoP nodes located geographically close to the user, eliminating physical network distance roundtrips.
+> ```
 > - Executes rendering logic in CDN PoP data centers nearest to the user.
 > 
 > ```text

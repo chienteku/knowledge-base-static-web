@@ -195,34 +195,33 @@ async function processData() {
 **Problem:** State key advantages of Vite (ESM-native dev server, instant HMR) vs Esbuild (ultra-fast Go bundler).
 
 **Expected output:**
-```text
-Vite: Native ESM dev HMR, Esbuild: Ultra-fast Go compiler
-```
-
 > [!check]- Answer
+> ```text
+> Vite: Native ESM dev HMR, Esbuild: Ultra-fast Go compiler
+> ```
 > ```javascript
 > console.log("Vite: Native ESM dev HMR, Esbuild: Ultra-fast Go compiler");
 > ```
 >
 > **Explanation:** Modern bundlers leverage native ESM and compiled languages for instant dev feedback.
 
+---
+
 ### Exercise 3: Hot Module Replacement (HMR)
 
 **Problem:** Explain how HMR updates modified modules in running apps without triggering full page reloads.
 
 **Expected output:**
-```text
-HMR replaces modules inline preserving application state
-```
-
 > [!check]- Answer
+> ```text
+> HMR replaces modules inline preserving application state
+> ```
 > ```javascript
 > console.log("HMR replaces modules inline preserving application state");
 > ```
 >
 > **Explanation:** HMR injects updated module bundles over WebSocket connections.
 
----
 
 ---
 

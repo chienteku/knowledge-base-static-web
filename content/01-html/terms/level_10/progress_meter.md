@@ -243,11 +243,10 @@ Basic progress and meter tags:
 **Problem:** Write the markup for a password strength gauge. The maximum score is 4. The password has a score of 1. Set the warning thresholds so a score of 1 displays as a warning color, and set the optimum score target to 4. Include screen-reader fallback text.
 
 **Expected output:**
-```html
-<meter value="1" min="0" max="4" low="2" high="3" optimum="4">Strength: 1 out of 4</meter>
-```
-
 > [!check]- Answer
+> ```html
+> <meter value="1" min="0" max="4" low="2" high="3" optimum="4">Strength: 1 out of 4</meter>
+> ```
 > - Use the `<meter>` element.
 > - Connect the `value` to `1` and `max` to `4`.
 > - Set `low="2"` so 1 falls below the low threshold, triggering warning colors.
@@ -264,12 +263,11 @@ Basic progress and meter tags:
 2. Battery charge 90% level (`<meter>`)
 
 **Expected output:**
-```text
-1. <progress value="70" max="100">70%</progress>
-2. <meter value="0.9" min="0" max="1.0">90%</meter>
-```
-
 > [!check]- Answer
+> ```text
+> 1. <progress value="70" max="100">70%</progress>
+> 2. <meter value="0.9" min="0" max="1.0">90%</meter>
+> ```
 > ```html
 > <!-- Progress bar -->
 > <label>Upload: <progress value="70" max="100">70%</progress></label>
@@ -280,16 +278,17 @@ Basic progress and meter tags:
 >
 > **Explanation:** `<progress>` tracks task completion; `<meter>` measures scalar gauge values.
 
+---
+
 ### Exercise 3: Indeterminate Progress State
 
 **Problem:** How do you create an indeterminate progress bar (loading spinner style) where completion % is unknown?
 
 **Expected output:**
-```text
-Omit the `value` attribute on `<progress>`.
-```
-
 > [!check]- Answer
+> ```text
+> Omit the `value` attribute on `<progress>`.
+> ```
 > ```html
 > <progress></progress> <!-- Indeterminate progress bar -->
 > ```

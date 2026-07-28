@@ -185,11 +185,10 @@ pub mod storage {
 **Problem:** Re-export a deeply nested function `pub use deep::nested::core_action;` at top level.
 
 **Expected output:**
-```
-Core action executed
-```
-
 > [!check]- Answer
+> ```
+> Core action executed
+> ```
 > ```rust
 > mod deep {
 >     pub mod nested {
@@ -204,16 +203,17 @@ Core action executed
 >
 > **Explanation:** `pub use` exposes nested items under convenient top-level module paths.
 
+---
+
 ### Exercise 3: Re-exporting External Dependencies
 
 **Problem:** Re-export a third-party type `pub use serde::Serialize;` from a library API.
 
 **Expected output:**
-```
-Re-exported trait available
-```
-
 > [!check]- Answer
+> ```
+> Re-exported trait available
+> ```
 > fn main() { println!("Re-exported trait available"); }
 > ```
 >

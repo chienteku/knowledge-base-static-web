@@ -148,15 +148,14 @@ const loadProduct = () => {
 ```
 
 **Expected output:**
-```javascript
-const loadProduct = async () => {
-  const res = await fetch('/api/products/1');
-  const product = await res.json();
-  console.log(product.name);
-};
-```
-
 > [!check]- Answer
+> ```javascript
+> const loadProduct = async () => {
+>   const res = await fetch('/api/products/1');
+>   const product = await res.json();
+>   console.log(product.name);
+> };
+> ```
 > - Arrow functions can be `async` too! Just put the keyword before the `()`.
 > - Every `.then()` becomes a new line with `await`.
 
@@ -173,11 +172,10 @@ fetch('/api/user')
 ```
 
 **Expected output:**
-```text
-try { const res = await fetch('/api/user'); const user = await res.json(); console.log(user.name); } catch (err) { console.error(err); }
-```
-
 > [!check]- Answer
+> ```text
+> try { const res = await fetch('/api/user'); const user = await res.json(); console.log(user.name); } catch (err) { console.error(err); }
+> ```
 > ```javascript
 > try {
 > const res = await fetch('/api/user');
@@ -195,11 +193,10 @@ try { const res = await fetch('/api/user'); const user = await res.json(); conso
 **Problem:** What does an `async` function ALWAYS return, regardless of what value is inside the return statement?
 
 **Expected output:**
-```text
-A Promise (resolving to the returned value).
-```
-
 > [!check]- Answer
+> ```text
+> A Promise (resolving to the returned value).
+> ```
 > ```text
 > A Promise (resolving to the returned value).
 > ```

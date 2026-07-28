@@ -165,11 +165,10 @@ thread::spawn(move || {
 **Problem:** Link to a struct `[`Widget`]` in function doc comments using intra-doc link syntax.
 
 **Expected output:**
-```
-Intra-doc link verified
-```
-
 > [!check]- Answer
+> ```
+> Intra-doc link verified
+> ```
 > ```rust
 > /// Uses [`Widget`] for rendering.
 > pub struct Widget;
@@ -180,16 +179,17 @@ Intra-doc link verified
 >
 > **Explanation:** Intra-doc links in markdown `[`TypeName`]` automatically resolve to target item documentation.
 
+---
+
 ### Exercise 3: Generating Docs with Private Items Included
 
 **Problem:** Command to build documentation including private items.
 
 **Expected output:**
-```
-cargo doc --document-private-items --open
-```
-
 > [!check]- Answer
+> ```
+> cargo doc --document-private-items --open
+> ```
 > fn main() {
 >     println!("cargo doc --document-private-items --open");
 > }

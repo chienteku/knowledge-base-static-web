@@ -201,34 +201,33 @@ if (typeof document !== "undefined") {
 **Problem:** Find nearest ancestor matching `.card` using `elem.closest(".card")`.
 
 **Expected output:**
-```text
-.card ancestor found
-```
-
 > [!check]- Answer
+> ```text
+> .card ancestor found
+> ```
 > ```javascript
 > console.log(".card ancestor found");
 > ```
 >
 > **Explanation:** `Element.closest(selector)` traverses upward through parent nodes until a matching selector is found.
 
+---
+
 ### Exercise 3: Sibling Traversal with `nextElementSibling`
 
 **Problem:** Traverse to next sibling element using `elem.nextElementSibling`.
 
 **Expected output:**
-```text
-Next sibling element traversed
-```
-
 > [!check]- Answer
+> ```text
+> Next sibling element traversed
+> ```
 > ```javascript
 > console.log("Next sibling element traversed");
 > ```
 >
 > **Explanation:** `nextElementSibling` skips whitespace text nodes to return adjacent HTML elements.
 
----
 
 ---
 

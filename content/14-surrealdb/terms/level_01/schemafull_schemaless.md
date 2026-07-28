@@ -175,12 +175,11 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 2.  `CREATE user:02 SET email = "alice@mail.com", age = 30, city = "Paris";`
 
 **Expected output:**
-```text
-1. Succeeds: The `email` field is defined on the schema, and `age` is omitted (missing fields are accepted as `NONE` in SurrealDB unless marked as required).
-2. Fails: The table is `SCHEMAFULL`, and `city` is not defined on the schema, so SurrealDB blocks the write.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Succeeds: The `email` field is defined on the schema, and `age` is omitted (missing fields are accepted as `NONE` in SurrealDB unless marked as required).
+> 2. Fails: The table is `SCHEMAFULL`, and `city` is not defined on the schema, so SurrealDB blocks the write.
+> ```
 > - Check which fields are defined on the `user` table.
 > - Consider if any undefined fields are present in the query inputs.
 
@@ -193,11 +192,10 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 **Problem:** Define table `product` as `SCHEMAFULL` and table `log` as `SCHEMALESS`.
 
 **Expected output:**
-```text
-DEFINE TABLE product SCHEMAFULL; DEFINE TABLE log SCHEMALESS;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE product SCHEMAFULL; DEFINE TABLE log SCHEMALESS;
+> ```
 > ```surrealql
 > DEFINE TABLE product SCHEMAFULL;
 > DEFINE TABLE log SCHEMALESS;
@@ -205,16 +203,17 @@ DEFINE TABLE product SCHEMAFULL; DEFINE TABLE log SCHEMALESS;
 >
 > **Explanation:** `SCHEMAFULL` enforces strict schema rules; `SCHEMALESS` permits flexible document fields.
 
+---
+
 ### Exercise 3: Default Table Schema Behavior
 
 **Problem:** What is the default schema mode when creating a table without `SCHEMAFULL` or `SCHEMALESS` modifiers? (`SCHEMALESS`).
 
 **Expected output:**
-```text
-SCHEMALESS
-```
-
 > [!check]- Answer
+> ```text
+> SCHEMALESS
+> ```
 > ```text
 > SCHEMALESS
 > ```

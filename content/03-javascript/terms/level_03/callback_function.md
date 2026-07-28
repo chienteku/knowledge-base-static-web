@@ -158,11 +158,10 @@ async function processData() {
 
 **Expected output:**
 *(Wait 1 second)*
-```text
-Time's up!
-```
-
 > [!check]- Answer
+> ```text
+> Time's up!
+> ```
 > - `setTimeout(() => { console.log("Time's up!"); }, 1000);`
 > - Passing anonymous arrow functions as callbacks is the most common pattern in modern React/JavaScript.
 
@@ -173,11 +172,10 @@ Time's up!
 **Problem:** Write `processData(val, callback)` that multiplies `val` by 2 and passes it to `callback`.
 
 **Expected output:**
-```text
-Result: 20
-```
-
 > [!check]- Answer
+> ```text
+> Result: 20
+> ```
 > ```javascript
 > function processData(val, callback) {
 >   const res = val * 2;
@@ -188,16 +186,17 @@ Result: 20
 >
 > **Explanation:** Callbacks are functions passed as arguments executed inside higher-order routines.
 
+---
+
 ### Exercise 3: Error-First Callback Pattern (Node.js style)
 
 **Problem:** Simulate Node.js error-first callback `callback(err, data)` handling success vs error.
 
 **Expected output:**
-```text
-Data received: Success
-```
-
 > [!check]- Answer
+> ```text
+> Data received: Success
+> ```
 > ```javascript
 > function fetchData(cb) {
 >   cb(null, "Success");

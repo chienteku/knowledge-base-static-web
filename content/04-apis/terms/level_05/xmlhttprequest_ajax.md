@@ -179,11 +179,10 @@ function sendData(data) {
 **Problem:** What does the AJAX acronym stand for?
 
 **Expected output:**
-```text
-Asynchronous JavaScript And XML
-```
-
 > [!check]- Answer
+> ```text
+> Asynchronous JavaScript And XML
+> ```
 > ```text
 > Asynchronous JavaScript And XML
 > ```
@@ -195,11 +194,10 @@ Asynchronous JavaScript And XML
 **Problem:** Identify the `readyState` integer corresponding to XHR DONE (request completed):
 
 **Expected output:**
-```text
-readyState 4 (DONE)
-```
-
 > [!check]- Answer
+> ```text
+> readyState 4 (DONE)
+> ```
 > ```text
 > readyState 4 (DONE - The operation is complete).
 > ```

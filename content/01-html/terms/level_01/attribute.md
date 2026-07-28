@@ -157,6 +157,8 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 > ```
 > **Explanation:** Attributes modify element behavior or provide metadata in `name="value"` format.
 
+---
+
 ### Exercise 3: Boolean Attribute Syntax
 
 **Problem:** Write `disabled` attribute on `<button>` using valid boolean attribute shorthand.

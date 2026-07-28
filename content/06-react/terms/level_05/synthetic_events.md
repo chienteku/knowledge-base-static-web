@@ -107,13 +107,12 @@ const handleSubmit = async (e) => {
 **Problem:** You have a function `deleteUser(id)`. You want to call it when a button is clicked. Why is `<button onClick={deleteUser(user.id)}>` wrong, and how do you fix it?
 
 **Expected output:**
-```text
-It's wrong because adding `(user.id)` invokes the function immediately on render.
-To fix it, wrap it in an inline arrow function:
-`<button onClick={() => deleteUser(user.id)}>`
-```
-
 > [!check]- Answer
+> ```text
+> It's wrong because adding `(user.id)` invokes the function immediately on render.
+> To fix it, wrap it in an inline arrow function:
+> `<button onClick={() => deleteUser(user.id)}>`
+> ```
 > - Create a new function that waits to be clicked, and *then* calls `deleteUser`.
 
 ---
@@ -125,11 +124,10 @@ To fix it, wrap it in an inline arrow function:
 **Problem:** Write form `onSubmit` event handler calling `e.preventDefault()` to stop browser page reloads.
 
 **Expected output:**
-```text
-function Form() { const handleSubmit = (e) => { e.preventDefault(); console.log('Submitted'); }; return <form onSubmit={handleSubmit}><button type="submit">Submit</button></form>; }
-```
-
 > [!check]- Answer
+> ```text
+> function Form() { const handleSubmit = (e) => { e.preventDefault(); console.log('Submitted'); }; return <form onSubmit={handleSubmit}><button type="submit">Submit</button></form>; }
+> ```
 > ```javascript
 > function Form() {
 >   const handleSubmit = (e) => {
@@ -146,16 +144,17 @@ function Form() { const handleSubmit = (e) => { e.preventDefault(); console.log(
 >
 > **Explanation:** `e.preventDefault()` prevents native browser navigation reloads on form submission.
 
+---
+
 ### Exercise 3: Event Target vs CurrentTarget
 
 **Problem:** Compare: `e.target` (The actual DOM element that triggered the event); `e.currentTarget` (The DOM element that attached the event listener).
 
 **Expected output:**
-```text
-target: element that triggered event; currentTarget: element holding event listener
-```
-
 > [!check]- Answer
+> ```text
+> target: element that triggered event; currentTarget: element holding event listener
+> ```
 > ```text
 > target: element that triggered event; currentTarget: element holding event listener
 > ```

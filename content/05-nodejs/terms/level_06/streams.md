@@ -98,12 +98,11 @@ Scenario B: You click "Play" on Spotify. It starts playing instantly, even thoug
 Which scenario uses Streams?
 
 **Expected output:**
-```text
-Scenario B uses Streams. The audio data is sent in tiny chunks and played immediately upon arrival. 
-Scenario A uses the "Bucket" method (loading the entire file into memory before it can be used).
-```
-
 > [!check]- Answer
+> ```text
+> Scenario B uses Streams. The audio data is sent in tiny chunks and played immediately upon arrival. 
+> Scenario A uses the "Bucket" method (loading the entire file into memory before it can be used).
+> ```
 > - Which one processes data piece-by-piece?
 
 ---
@@ -115,14 +114,13 @@ Scenario A uses the "Bucket" method (loading the entire file into memory before 
 **Problem:** List the 4 fundamental stream types in Node.js.
 
 **Expected output:**
-```text
-1. Readable
-2. Writable
-3. Duplex
-4. Transform
-```
-
 > [!check]- Answer
+> ```text
+> 1. Readable
+> 2. Writable
+> 3. Duplex
+> 4. Transform
+> ```
 > ```text
 > 1. Readable (read source)
 > 2. Writable (write destination)
@@ -132,16 +130,17 @@ Scenario A uses the "Bucket" method (loading the entire file into memory before 
 >
 > **Explanation:** Node.js stream architecture is built on these 4 stream primitives.
 
+---
+
 ### Exercise 3: Async Iteration over Streams
 
 **Problem:** Iterate over readable file stream chunks using modern `for await...of` loop syntax.
 
 **Expected output:**
-```text
-for await (const chunk of fs.createReadStream('file.txt')) { console.log(chunk); }
-```
-
 > [!check]- Answer
+> ```text
+> for await (const chunk of fs.createReadStream('file.txt')) { console.log(chunk); }
+> ```
 > ```javascript
 > for await (const chunk of fs.createReadStream('file.txt')) {
 >   console.log(chunk);

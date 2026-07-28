@@ -94,12 +94,11 @@ import Image from 'next/image';
 **Problem:** Why is React called a "Library", but Next.js is called a "Framework"?
 
 **Expected output:**
-```text
-A Library is a tool you call to perform a specific task (React just handles UI rendering).
-A Framework provides an architecture. It calls *your* code. Next.js dictates where you put your files (Routing), how you fetch data, and how your code is bundled and deployed. It provides the entire house; React is just the bricks.
-```
-
 > [!check]- Answer
+> ```text
+> A Library is a tool you call to perform a specific task (React just handles UI rendering).
+> A Framework provides an architecture. It calls *your* code. Next.js dictates where you put your files (Routing), how you fetch data, and how your code is bundled and deployed. It provides the entire house; React is just the bricks.
+> ```
 > - Who is in control of the file structure?
 
 ---
@@ -109,13 +108,12 @@ A Framework provides an architecture. It calls *your* code. Next.js dictates whe
 **Problem:** List 3 core production capabilities provided out-of-the-box by Next.js over vanilla React.
 
 **Expected output:**
-```text
-1. Hybrid Server Rendering (RSC, SSR, SSG, ISR)
-2. File-system based Routing
-3. Built-in performance optimizations (Image, Font, Script)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Hybrid Server Rendering (RSC, SSR, SSG, ISR)
+> 2. File-system based Routing
+> 3. Built-in performance optimizations (Image, Font, Script)
+> ```
 > - Hybrid Rendering: RSC, SSR, SSG, ISR.
 > - File-system routing: App Router & Pages Router.
 > - Automatic performance optimization: `next/image`, `next/font`.
@@ -131,11 +129,10 @@ A Framework provides an architecture. It calls *your* code. Next.js dictates whe
 **Problem:** Why does Next.js deploy seamlessly to Vercel's Edge Network?
 
 **Expected output:**
-```text
-Next.js is maintained by Vercel; its build output compiles directly into serverless and edge functions optimized for Vercel CDN infrastructure.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js is maintained by Vercel; its build output compiles directly into serverless and edge functions optimized for Vercel CDN infrastructure.
+> ```
 > - Build outputs compile to serverless and edge function primitives.
 > 
 > ```text

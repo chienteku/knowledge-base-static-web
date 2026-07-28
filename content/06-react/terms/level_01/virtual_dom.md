@@ -155,6 +155,8 @@ If React compares these two trees, how many changes will it make to the real Bro
 >
 > **Explanation:** Virtual DOM nodes are lightweight JavaScript objects representing DOM element trees.
 
+---
+
 ### Exercise 3: Virtual DOM Render Pipeline Sequence
 
 **Problem:** Sequence steps: 1. State Update -> 2. Render Virtual DOM Tree -> 3. Diff with Previous Virtual DOM -> 4. Batch Real DOM Mutations.

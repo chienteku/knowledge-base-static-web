@@ -116,13 +116,12 @@ import ServerComponent from './ServerComponent'; // Will this work?
 ```
 
 **Expected output:**
-```text
-No!
-Because `"use client"` forces all imported dependencies to become part of the client bundle, the `ServerComponent` will silently be converted into a Client Component! If it had database code inside it, it would crash.
-(Note: You CAN pass a Server Component as a `children` prop to a Client Component, but you cannot import it directly).
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Because `"use client"` forces all imported dependencies to become part of the client bundle, the `ServerComponent` will silently be converted into a Client Component! If it had database code inside it, it would crash.
+> (Note: You CAN pass a Server Component as a `children` prop to a Client Component, but you cannot import it directly).
+> ```
 > - Think about the "Network Boundary" cascading effect.
 
 ---
@@ -135,11 +134,10 @@ Because `"use client"` forces all imported dependencies to become part of the cl
 3. Database user query page
 
 **Expected output:**
-```text
-Component 2 (Interactive Like button using useState and onClick requires 'use client').
-```
-
 > [!check]- Answer
+> ```text
+> Component 2 (Interactive Like button using useState and onClick requires 'use client').
+> ```
 > - React state (`useState`), effects (`useEffect`), and event listeners (`onClick`) require `'use client'`.
 > 
 > ```tsx
@@ -159,11 +157,10 @@ Component 2 (Interactive Like button using useState and onClick requires 'use cl
 **Problem:** How can a Client Component wrap a Server Component without converting the Server Component into a Client Component?
 
 **Expected output:**
-```text
-By passing the Server Component as the `children` prop to the Client Component.
-```
-
 > [!check]- Answer
+> ```text
+> By passing the Server Component as the `children` prop to the Client Component.
+> ```
 > - Passing Server Components as `children` preserves server-side execution for the children.
 > 
 > ```tsx

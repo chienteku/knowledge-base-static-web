@@ -213,16 +213,17 @@ function SearchList({ users }) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Calculating Filtered Items as Derived State
 
 **Problem:** Calculate `filteredItems` on-the-fly during render using `items.filter()` without storing in `useState`.
 
 **Expected output:**
-```text
-function ItemList({ items, query }) { const filteredItems = items.filter(item => item.name.includes(query)); return <ul>{filteredItems.map(i => <li key={i.id}>{i.name}</li>)}</ul>; }
-```
-
 > [!check]- Answer
+> ```text
+> function ItemList({ items, query }) { const filteredItems = items.filter(item => item.name.includes(query)); return <ul>{filteredItems.map(i => <li key={i.id}>{i.name}</li>)}</ul>; }
+> ```
 > ```javascript
 > function ItemList({ items, query }) {
 >   const filteredItems = items.filter(item => item.name.includes(query));
@@ -236,16 +237,17 @@ function ItemList({ items, query }) { const filteredItems = items.filter(item =>
 >
 > **Explanation:** Computing values directly during render eliminates redundant state and extra render cycles.
 
+---
+
 ### Exercise 3: When to Memoize Derived State
 
 **Problem:** When should derived calculations during render be wrapped in `useMemo`? (Only when calculations are expensive like filtering 10,000 items).
 
 **Expected output:**
-```text
-Only when calculations are computationally expensive (e.g. filtering thousands of items)
-```
-
 > [!check]- Answer
+> ```text
+> Only when calculations are computationally expensive (e.g. filtering thousands of items)
+> ```
 > ```text
 > Only when calculations are computationally expensive (e.g. filtering thousands of items)
 > ```

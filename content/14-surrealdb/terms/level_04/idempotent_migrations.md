@@ -154,19 +154,18 @@ COMMIT TRANSACTION;
 ```
 
 **Expected output:**
-```text
-The script is not safe because:
-1. The `REMOVE TABLE logs` statement does not have an `IF EXISTS` guard. On the very first run of this migration script (when the database is completely empty), this command will fail because the table does not exist, causing the entire transaction to rollback and fail.
-2. The `DEFINE TABLE` and `DEFINE FIELD` commands do not have `IF NOT EXISTS` guards.
-To make it safe, it must be rewritten as:
-BEGIN TRANSACTION;
-REMOVE TABLE logs IF EXISTS;
-DEFINE TABLE logs IF NOT EXISTS SCHEMAFULL;
-DEFINE FIELD message ON logs IF NOT EXISTS TYPE string;
-COMMIT TRANSACTION;
-```
-
 > [!check]- Answer
+> ```text
+> The script is not safe because:
+> 1. The `REMOVE TABLE logs` statement does not have an `IF EXISTS` guard. On the very first run of this migration script (when the database is completely empty), this command will fail because the table does not exist, causing the entire transaction to rollback and fail.
+> 2. The `DEFINE TABLE` and `DEFINE FIELD` commands do not have `IF NOT EXISTS` guards.
+> To make it safe, it must be rewritten as:
+> BEGIN TRANSACTION;
+> REMOVE TABLE logs IF EXISTS;
+> DEFINE TABLE logs IF NOT EXISTS SCHEMAFULL;
+> DEFINE FIELD message ON logs IF NOT EXISTS TYPE string;
+> COMMIT TRANSACTION;
+> ```
 > - Assess what happens on the first run when the `logs` table is completely absent.
 > - Apply error-suppression keywords to every DDL statement in the transaction.
 
@@ -179,27 +178,27 @@ COMMIT TRANSACTION;
 **Problem:** Define unique index on `user.username` idempotently.
 
 **Expected output:**
-```text
-DEFINE INDEX IF NOT EXISTS user_username_idx ON TABLE user FIELDS username UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX IF NOT EXISTS user_username_idx ON TABLE user FIELDS username UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX IF NOT EXISTS user_username_idx ON TABLE user FIELDS username UNIQUE;
 > ```
 >
 > **Explanation:** `IF NOT EXISTS` prevents index re-creation errors during repeated deployment runs.
 
+---
+
 ### Exercise 3: Idempotent Data Seeding
 
 **Problem:** Write idempotent SurrealQL query to seed initial admin user `user:admin`.
 
 **Expected output:**
-```text
-UPSERT user:admin SET name = "Admin", role = "admin";
-```
-
 > [!check]- Answer
+> ```text
+> UPSERT user:admin SET name = "Admin", role = "admin";
+> ```
 > ```surrealql
 > UPSERT user:admin SET name = "Admin", role = "admin";
 > ```

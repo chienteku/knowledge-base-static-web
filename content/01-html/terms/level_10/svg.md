@@ -177,17 +177,16 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 **Problem:** How could you use standard CSS to make an SVG circle turn red when the user hovers over it with their mouse?
 
 **Expected output:**
-```css
-/* Because SVGs are in the DOM, you can target them exactly like normal HTML! */
-circle {
-  fill: blue;
-}
-circle:hover {
-  fill: red;
-}
-```
-
 > [!check]- Answer
+> ```css
+> /* Because SVGs are in the DOM, you can target them exactly like normal HTML! */
+> circle {
+>   fill: blue;
+> }
+> circle:hover {
+>   fill: red;
+> }
+> ```
 > - Think about how you would change the background color of a `<div>` on hover. SVG is just as easy!
 
 ---
@@ -199,11 +198,10 @@ circle:hover {
 **Problem:** Write inline `<svg>` with `viewBox="0 0 100 100"` containing a red circle centered at (50,50) with radius 40.
 
 **Expected output:**
-```text
-<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="red"/></svg>
-```
-
 > [!check]- Answer
+> ```text
+> <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="red"/></svg>
+> ```
 > ```html
 > <svg viewBox="0 0 100 100">
 >   <circle cx="50" cy="50" r="40" fill="red"/>
@@ -212,16 +210,17 @@ circle:hover {
 >
 > **Explanation:** `<circle>` element draws vector circles using center `cx`/`cy` and radius `r`.
 
+---
+
 ### Exercise 3: SVG Reusability with use Tag
 
 **Problem:** Which SVG element allows referencing and reusing pre-defined `<symbol>` vector icons across a page?
 
 **Expected output:**
-```text
-<use href="#symbol-id">
-```
-
 > [!check]- Answer
+> ```text
+> <use href="#symbol-id">
+> ```
 > ```html
 > <svg><use href="#logo-symbol"></use></svg>
 > ```

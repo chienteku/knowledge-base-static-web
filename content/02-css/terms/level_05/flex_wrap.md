@@ -109,11 +109,10 @@ Imagine typing a sentence in Microsoft Word.
 **Problem:** You have a mobile website. You put 5 large buttons in a row using `display: flex`. On a tiny phone screen, the buttons are squished so thin the text is unreadable. How do you fix it so the buttons stay large and just stack on top of each other when space runs out?
 
 **Expected output:**
-```text
-Apply `flex-wrap: wrap;` to the Flex Container. The buttons will hit the edge of the phone screen and drop down to create multiple rows of large buttons.
-```
-
 > [!check]- Answer
+> ```text
+> Apply `flex-wrap: wrap;` to the Flex Container. The buttons will hit the edge of the phone screen and drop down to create multiple rows of large buttons.
+> ```
 > - Give the container permission to use multiple lines.
 
 ---
@@ -125,11 +124,10 @@ Apply `flex-wrap: wrap;` to the Flex Container. The buttons will hit the edge of
 **Problem:** Write CSS for `.card` flex items expanding to fill row, but wrapping onto new lines when width falls below `300px`.
 
 **Expected output:**
-```text
-.card { flex: 1 1 300px; }
-```
-
 > [!check]- Answer
+> ```text
+> .card { flex: 1 1 300px; }
+> ```
 > ```css
 > .card {
 >   flex: 1 1 300px;
@@ -138,16 +136,17 @@ Apply `flex-wrap: wrap;` to the Flex Container. The buttons will hit the edge of
 >
 > **Explanation:** `flex: 1 1 300px` sets basis threshold of 300px before triggering row wrapping.
 
+---
+
 ### Exercise 3: Flex Flow Shorthand
 
 **Problem:** Write `flex-flow` shorthand combining `flex-direction: column` and `flex-wrap: wrap`.
 
 **Expected output:**
-```text
-flex-flow: column wrap;
-```
-
 > [!check]- Answer
+> ```text
+> flex-flow: column wrap;
+> ```
 > ```css
 > .container {
 >   flex-flow: column wrap;

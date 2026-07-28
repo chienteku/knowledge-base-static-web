@@ -166,11 +166,10 @@ thread::spawn(move || {
 **Problem:** Name keywords added in 2018 edition (e.g. `async`, `await`, `try`).
 
 **Expected output:**
-```
-Keywords: async, await, try
-```
-
 > [!check]- Answer
+> ```
+> Keywords: async, await, try
+> ```
 > ```rust
 > fn main() {
 >     println!("Keywords: async, await, try");
@@ -179,16 +178,17 @@ Keywords: async, await, try
 >
 > **Explanation:** New Rust editions introduce new reserved keywords without breaking older edition code.
 
+---
+
 ### Exercise 3: Running Edition Automated Migration
 
 **Problem:** Command to run automated edition migration.
 
 **Expected output:**
-```
-cargo fix --edition
-```
-
 > [!check]- Answer
+> ```
+> cargo fix --edition
+> ```
 > fn main() {
 >     println!("cargo fix --edition");
 > }

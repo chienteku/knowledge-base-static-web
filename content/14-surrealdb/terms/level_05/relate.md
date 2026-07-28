@@ -194,11 +194,10 @@ Write the SurrealQL statement to relate a customer record (`customer:alice`) to 
 -   Set the relationship property `visit_date` to `time::now()`.
 
 **Expected output:**
-```sql
-RELATE customer:alice -> visited -> store:downtown SET visit_date = time::now();
-```
-
 > [!check]- Answer
+> ```sql
+> RELATE customer:alice -> visited -> store:downtown SET visit_date = time::now();
+> ```
 > - Construct the statement using the arrow format: `source -> edge -> target`.
 > - Use the `SET` keyword to append custom property values to the relation.
 
@@ -211,27 +210,27 @@ RELATE customer:alice -> visited -> store:downtown SET visit_date = time::now();
 **Problem:** Relate `user:alice` to `group:devs` with edge `member_of` setting `role = "admin"` and `joined_at = time::now()`.
 
 **Expected output:**
-```text
-RELATE user:alice->member_of->group:devs SET role = "admin", joined_at = time::now();
-```
-
 > [!check]- Answer
+> ```text
+> RELATE user:alice->member_of->group:devs SET role = "admin", joined_at = time::now();
+> ```
 > ```surrealql
 > RELATE user:alice->member_of->group:devs SET role = "admin", joined_at = time::now();
 > ```
 >
 > **Explanation:** `RELATE node->edge->node SET ...` constructs graph edges with custom properties.
 
+---
+
 ### Exercise 3: Relating Sets of Records
 
 **Problem:** Relate all users in `user` table to `organization:main` using `RELATE (SELECT * FROM user)->member_of->organization:main`.
 
 **Expected output:**
-```text
-RELATE (SELECT * FROM user)->member_of->organization:main;
-```
-
 > [!check]- Answer
+> ```text
+> RELATE (SELECT * FROM user)->member_of->organization:main;
+> ```
 > ```surrealql
 > RELATE (SELECT * FROM user)->member_of->organization:main;
 > ```

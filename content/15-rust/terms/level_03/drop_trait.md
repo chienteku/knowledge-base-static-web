@@ -197,11 +197,10 @@ fn main() {
 **Problem:** Implement `Drop` for `struct TempFile { path: String }` printing cleanup logs on destruction.
 
 **Expected output:**
-```
-Cleaning temp file: /tmp/test.txt
-```
-
 > [!check]- Answer
+> ```
+> Cleaning temp file: /tmp/test.txt
+> ```
 > ```rust
 > struct TempFile { path: String }
 > impl Drop for TempFile {
@@ -216,18 +215,19 @@ Cleaning temp file: /tmp/test.txt
 >
 > **Explanation:** `Drop::drop` executes destructor cleanup code automatically when instances leave scope.
 
+---
+
 ### Exercise 3: RAII Resource Lock Guard
 
 **Problem:** Build an RAII struct `LockGuard` printing `"Acquired lock"` on creation and `"Released lock"` on drop.
 
 **Expected output:**
-```
-Acquired lock
-Doing work
-Released lock
-```
-
 > [!check]- Answer
+> ```
+> Acquired lock
+> Doing work
+> Released lock
+> ```
 > ```rust
 > struct LockGuard;
 > impl LockGuard {

@@ -148,11 +148,10 @@ async function processData() {
 **Problem:** Create an object `settings` with properties `theme: "dark"` and `notifications: true`. Use the `delete` operator to remove the `notifications` property. Then log the `settings` object.
 
 **Expected output:**
-```text
-{ theme: 'dark' }
-```
-
 > [!check]- Answer
+> ```text
+> { theme: 'dark' }
+> ```
 > - `delete settings.notifications;`
 
 ---
@@ -162,11 +161,10 @@ async function processData() {
 **Problem:** Check if `"toString"` is an own property of `{ a: 1 }` vs `"a"` using `Object.hasOwn()`.
 
 **Expected output:**
-```text
-a: true, toString: false
-```
-
 > [!check]- Answer
+> ```text
+> a: true, toString: false
+> ```
 > ```javascript
 > const obj = { a: 1 };
 > console.log(`a: ${Object.hasOwn(obj, "a")}, toString: ${Object.hasOwn(obj, "toString")}`);
@@ -174,16 +172,17 @@ a: true, toString: false
 >
 > **Explanation:** `Object.hasOwn(obj, prop)` checks if `prop` exists as a direct non-inherited property on `obj`.
 
+---
+
 ### Exercise 3: Configuring Property Descriptors
 
 **Problem:** Use `Object.defineProperty` to create a non-writable property `id: 100`.
 
 **Expected output:**
-```text
-100
-```
-
 > [!check]- Answer
+> ```text
+> 100
+> ```
 > ```javascript
 > const item = {};
 > Object.defineProperty(item, "id", {
@@ -195,7 +194,6 @@ a: true, toString: false
 >
 > **Explanation:** Property descriptors configure `writable`, `enumerable`, and `configurable` object property flags.
 
----
 
 ---
 

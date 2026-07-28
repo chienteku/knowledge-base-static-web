@@ -162,12 +162,11 @@ Embed address sub-document directly inside user profile document
 2.  State the correct modeling strategy (Embedding or Referencing) for this relationship.
 
 **Expected output:**
-```text
-1. You should not embed full student records inside the class document because a single student can enroll in multiple classes. If you embed them, the student's name, email, and grades are duplicated across multiple class documents. If a student changes their email, the application must run updates across all their enrolled classes, risking data inconsistency. Furthermore, embedding large student arrays could cause the class document to bloat.
-2. Referencing: Store students and classes in separate collections, and link them using arrays of ObjectIds (Many-to-Many referencing).
-```
-
 > [!check]- Answer
+> ```text
+> 1. You should not embed full student records inside the class document because a single student can enroll in multiple classes. If you embed them, the student's name, email, and grades are duplicated across multiple class documents. If a student changes their email, the application must run updates across all their enrolled classes, risking data inconsistency. Furthermore, embedding large student arrays could cause the class document to bloat.
+> 2. Referencing: Store students and classes in separate collections, and link them using arrays of ObjectIds (Many-to-Many referencing).
+> ```
 > - Assess the duplication risks of many-to-many structures.
 > - Consider data consistency constraints during updates.
 
@@ -180,27 +179,27 @@ Embed address sub-document directly inside user profile document
 **Problem:** State rule: 1. Embed (1-to-Few, data read together), 2. Reference (1-to-Many unbounded, data updated/accessed independently).
 
 **Expected output:**
-```text
-Embed 1-to-Few co-located data; Reference 1-to-Many unbounded or independently updated data
-```
-
 > [!check]- Answer
+> ```text
+> Embed 1-to-Few co-located data; Reference 1-to-Many unbounded or independently updated data
+> ```
 > ```text
 > Embed 1-to-Few co-located data; Reference 1-to-Many unbounded or independently updated data
 > ```
 >
 > **Explanation:** Schema design balances read latency (embedding) against document size limits (referencing).
 
+---
+
 ### Exercise 3: Modeling E-Commerce Shopping Cart
 
 **Problem:** Should active shopping cart items be embedded or referenced in a user document? (Embedded).
 
 **Expected output:**
-```text
-Embedded (small, bounded, read and updated together with cart state)
-```
-
 > [!check]- Answer
+> ```text
+> Embedded (small, bounded, read and updated together with cart state)
+> ```
 > ```text
 > Embedded (small, bounded, read and updated together with cart state)
 > ```

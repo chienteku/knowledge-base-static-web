@@ -169,11 +169,10 @@ if (isEven) {
 ```
 
 **Expected output:**
-```text
-Odd
-```
-
 > [!check]- Answer
+> ```text
+> Odd
+> ```
 > - The remainder (modulus) operator is `%`.
 > - If a number is perfectly divisible by 2, its remainder is `0`.
 
@@ -184,14 +183,13 @@ Odd
 **Problem:** Predict the output of `"10" - 5`, `"10" + 5`, `"10" * "2"`, and `"10" / "a"`.
 
 **Expected output:**
-```text
-5
-105
-20
-NaN
-```
-
 > [!check]- Answer
+> ```text
+> 5
+> 105
+> 20
+> NaN
+> ```
 > ```javascript
 > console.log("10" - 5);  // 5 (coerces "10" to number)
 > console.log("10" + 5);  // "105" (string concatenation)
@@ -201,17 +199,18 @@ NaN
 >
 > **Explanation:** The `+` operator prefers string concatenation if any operand is a string, whereas `-`, `*`, and `/` always coerce operands to numbers.
 
+---
+
 ### Exercise 3: Remainder Operator Sign Behavior
 
 **Problem:** Calculate `-10 % 3` and `10 % -3` and explain why the sign matches the dividend.
 
 **Expected output:**
-```text
--1
-1
-```
-
 > [!check]- Answer
+> ```text
+> -1
+> 1
+> ```
 > ```javascript
 > console.log(-10 % 3);  // -1
 > console.log(10 % -3);  // 1

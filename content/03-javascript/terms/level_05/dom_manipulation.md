@@ -196,27 +196,27 @@ if (typeof document !== "undefined") {
 **Problem:** Simulate replacing `oldChild` with `newChild` using `parent.replaceChild(newChild, oldChild)`.
 
 **Expected output:**
-```text
-Replaced child node
-```
-
 > [!check]- Answer
+> ```text
+> Replaced child node
+> ```
 > ```javascript
 > console.log("Replaced child node");
 > ```
 >
 > **Explanation:** `replaceChild(new, old)` swaps DOM nodes atomically.
 
+---
+
 ### Exercise 3: Removing Nodes with `.remove()`
 
 **Problem:** Remove an element directly using `elem.remove()`.
 
 **Expected output:**
-```text
-Element removed
-```
-
 > [!check]- Answer
+> ```text
+> Element removed
+> ```
 > ```javascript
 > console.log("Element removed");
 > ```

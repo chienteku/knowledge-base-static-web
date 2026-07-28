@@ -120,12 +120,11 @@ If you are using `box-sizing: content-box` (the default), what is the total widt
 If you are using `box-sizing: border-box` (the modern way), what is the total width?
 
 **Expected output:**
-```text
-Default (`content-box`): 460px (400 + 25 + 25 + 5 + 5)
-Modern (`border-box`): 400px (The browser forces the total size to equal the width you set).
-```
-
 > [!check]- Answer
+> ```text
+> Default (`content-box`): 460px (400 + 25 + 25 + 5 + 5)
+> Modern (`border-box`): 400px (The browser forces the total size to equal the width you set).
+> ```
 > - Does `border-box` grow the box, or shrink the content inside?
 
 ---
@@ -137,11 +136,10 @@ Modern (`border-box`): 400px (The browser forces the total size to equal the wid
 **Problem:** Write universal CSS reset selector applying `box-sizing: border-box` to all elements and pseudo-elements.
 
 **Expected output:**
-```text
-*, *::before, *::after { box-sizing: border-box; }
-```
-
 > [!check]- Answer
+> ```text
+> *, *::before, *::after { box-sizing: border-box; }
+> ```
 > ```css
 > *, *::before, *::after {
 >   box-sizing: border-box;
@@ -150,17 +148,18 @@ Modern (`border-box`): 400px (The browser forces the total size to equal the wid
 >
 > **Explanation:** Universal `border-box` reset guarantees predictable box-model width calculations.
 
+---
+
 ### Exercise 3: Content-Box vs Border-Box Width Formula
 
 **Problem:** For `width: 200px; padding: 20px; border: 5px solid;`: calculate total rendered element width in `content-box` vs `border-box`.
 
 **Expected output:**
-```text
-content-box width: 250px (200 + 40 + 10)
-border-box width: 200px (content shrinks to 150px)
-```
-
 > [!check]- Answer
+> ```text
+> content-box width: 250px (200 + 40 + 10)
+> border-box width: 200px (content shrinks to 150px)
+> ```
 > ```text
 > content-box width: 250px (200 + 40 + 10)
 border-box width: 200px (content shrinks to 150px)

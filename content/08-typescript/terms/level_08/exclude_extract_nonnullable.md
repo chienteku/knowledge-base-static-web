@@ -161,11 +161,10 @@ const getHandler = (method: SafeMethod) => { ... };
 ```
 
 **Expected output:**
-```text
-SafeMethod evaluates to 'GET' | 'POST' | 'PUT'.
-```
-
 > [!check]- Answer
+> ```text
+> SafeMethod evaluates to 'GET' | 'POST' | 'PUT'.
+> ```
 > - The second argument of `Exclude` can be a union of multiple items you want to remove.
 > - Pass `'DELETE' | 'PATCH'` as the second argument.
 
@@ -178,11 +177,10 @@ SafeMethod evaluates to 'GET' | 'POST' | 'PUT'.
 **Problem:** Filter `string | number | null | undefined` using `NonNullable<T>`.
 
 **Expected output:**
-```text
-string | number
-```
-
 > [!check]- Answer
+> ```text
+> string | number
+> ```
 > ```typescript
 > type Raw = string | number | null | undefined;
 > type Clean = NonNullable<Raw>;
@@ -191,16 +189,17 @@ string | number
 >
 > **Explanation:** `NonNullable<T>` excludes `null` and `undefined` from union `T`.
 
+---
+
 ### Exercise 3: Extracting Action Types
 
 **Problem:** Extract actions ending with success from `"click" | "load_success" | "save_success"` using `Extract`.
 
 **Expected output:**
-```text
-"load_success" | "save_success"
-```
-
 > [!check]- Answer
+> ```text
+> "load_success" | "save_success"
+> ```
 > ```typescript
 > type Action = "click" | "load_success" | "save_success";
 > type SuccessActions = Extract<Action, `${string}_success`>;

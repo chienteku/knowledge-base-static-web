@@ -111,13 +111,12 @@ function count(step: number = 1) {} // Automatically optional with default
 **Problem:** Why does `function register(age?: number, name: string)` throw a compilation error?
 
 **Expected output:**
-```text
-Because an optional parameter cannot precede a required parameter.
-If you called `register(28)`, how does the compiler know if `28` is meant for `age` or `name`? It doesn't. 
-Therefore, all required parameters must come first, and all optional parameters must be pushed to the very end of the signature.
-```
-
 > [!check]- Answer
+> ```text
+> Because an optional parameter cannot precede a required parameter.
+> If you called `register(28)`, how does the compiler know if `28` is meant for `age` or `name`? It doesn't. 
+> Therefore, all required parameters must come first, and all optional parameters must be pushed to the very end of the signature.
+> ```
 > - Think about how positional arguments work in JS.
 
 ---
@@ -129,11 +128,10 @@ Therefore, all required parameters must come first, and all optional parameters 
 **Problem:** What is the inferred parameter type for `function multiply(x = 10)`?
 
 **Expected output:**
-```text
-number
-```
-
 > [!check]- Answer
+> ```text
+> number
+> ```
 > ```typescript
 > function multiply(x = 10) {
 >   return x * 2;
@@ -143,16 +141,17 @@ number
 >
 > **Explanation:** TypeScript infers parameter types from default assignment values.
 
+---
+
 ### Exercise 3: Passing `undefined` to Trigger Defaults
 
 **Problem:** Demonstrate that passing `undefined` triggers parameter default initializer.
 
 **Expected output:**
-```text
-Hello Guest
-```
-
 > [!check]- Answer
+> ```text
+> Hello Guest
+> ```
 > ```typescript
 > function greet(name = "Guest") {
 >   console.log(`Hello ${name}`);

@@ -170,24 +170,23 @@ async function processData() {
 **Problem:** The basic `memoize` function above only handles a single argument `arg`. How would you modify it to handle a function that takes multiple arguments, like `add(a, b)`?
 
 **Expected output:**
-```javascript
-function memoize(fn) {
-  const cache = {};
-  // Use the Rest Parameter to gather all arguments!
-  return function(...args) {
-    // Stringify the arguments to use as a single cache key
-    const key = JSON.stringify(args); 
-    if (cache[key]) return cache[key];
-    
-    // Use Spread Syntax to pass them to the function
-    const result = fn(...args);
-    cache[key] = result;
-    return result;
-  };
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> function memoize(fn) {
+>   const cache = {};
+>   // Use the Rest Parameter to gather all arguments!
+>   return function(...args) {
+>     // Stringify the arguments to use as a single cache key
+>     const key = JSON.stringify(args); 
+>     if (cache[key]) return cache[key];
+>     
+>     // Use Spread Syntax to pass them to the function
+>     const result = fn(...args);
+>     cache[key] = result;
+>     return result;
+>   };
+> }
+> ```
 > - Object keys must be strings. You need to combine `a` and `b` into a single string key!
 
 ---
@@ -197,12 +196,11 @@ function memoize(fn) {
 **Problem:** Write a generic `memoize(fn)` wrapper using a `Map` cache.
 
 **Expected output:**
-```text
-Computed: 10
-Cached: 10
-```
-
 > [!check]- Answer
+> ```text
+> Computed: 10
+> Cached: 10
+> ```
 > ```javascript
 > function memoize(fn) {
 >   const cache = new Map();
@@ -221,23 +219,23 @@ Cached: 10
 >
 > **Explanation:** Memoization caches function computation results mapped to argument keys.
 
+---
+
 ### Exercise 3: Cache Memory Size Management
 
 **Problem:** Explain why unbounded memoization caches cause memory leaks in long-running applications.
 
 **Expected output:**
-```text
-Unbounded caches retain memory indefinitely
-```
-
 > [!check]- Answer
+> ```text
+> Unbounded caches retain memory indefinitely
+> ```
 > ```javascript
 > console.log("Unbounded caches retain memory indefinitely");
 > ```
 >
 > **Explanation:** Caching every unique input argument without eviction policies (e.g. LRU) causes memory growth.
 
----
 
 ---
 

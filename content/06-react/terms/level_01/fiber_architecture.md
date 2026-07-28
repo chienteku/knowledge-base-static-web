@@ -202,6 +202,8 @@ function Timer() {
 >
 > **Explanation:** Fiber splits work into an interruptible calculation phase and a synchronous DOM commit phase.
 
+---
+
 ### Exercise 3: Fiber Tree Double-Buffering
 
 **Problem:** What is Double-Buffering in React Fiber? (React maintains `current` tree visible on screen and `workInProgress` tree built in memory).

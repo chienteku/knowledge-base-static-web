@@ -174,11 +174,10 @@ Execute index creation migration scripts separately in deployment pipelines
 **Problem:** You have a `products` collection. Write the MongoDB query to create a unique index on the `sku` field, sorting in ascending order.
 
 **Expected output:**
-```javascript
-db.products.createIndex({ sku: 1 }, { unique: true });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.createIndex({ sku: 1 }, { unique: true });
+> ```
 > - The key specification is `{ sku: 1 }`.
 > - Pass the unique option flag inside the second parameter object.
 
@@ -191,27 +190,27 @@ db.products.createIndex({ sku: 1 }, { unique: true });
 **Problem:** Create ascending index on `email` field named `email_asc_idx`.
 
 **Expected output:**
-```text
-db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
+> ```
 > ```javascript
 > db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
 > ```
 >
 > **Explanation:** `createIndex({ field: 1 })` builds an ascending B-Tree index.
 
+---
+
 ### Exercise 3: Hiding Index with `hideIndex`
 
 **Problem:** Hide index `old_idx` to test if query performance drops without deleting the index.
 
 **Expected output:**
-```text
-db.users.hideIndex("old_idx");
-```
-
 > [!check]- Answer
+> ```text
+> db.users.hideIndex("old_idx");
+> ```
 > ```javascript
 > db.users.hideIndex("old_idx");
 > ```

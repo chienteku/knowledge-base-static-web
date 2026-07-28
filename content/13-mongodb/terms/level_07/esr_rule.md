@@ -199,12 +199,11 @@ db.users.find({
 Apply the ESR Rule to determine the optimal compound index key order. Write the `createIndex` command.
 
 **Expected output:**
-```javascript
-// E (country) -> S (joined_at) -> R (age)
-db.users.createIndex({ country: 1, joined_at: 1, age: 1 });
-```
-
 > [!check]- Answer
+> ```javascript
+> // E (country) -> S (joined_at) -> R (age)
+> db.users.createIndex({ country: 1, joined_at: 1, age: 1 });
+> ```
 > - Identify the Equality field, the Sort field, and the Range field.
 > - Arrange them in the sequence: Equality, Sort, Range.
 
@@ -217,27 +216,27 @@ db.users.createIndex({ country: 1, joined_at: 1, age: 1 });
 **Problem:** Apply ESR rule for query `.find({ category: "tech", price: { $gte: 100 } }).sort({ rating: -1 })`.
 
 **Expected output:**
-```text
-Index: { category: 1, rating: -1, price: 1 }
-```
-
 > [!check]- Answer
+> ```text
+> Index: { category: 1, rating: -1, price: 1 }
+> ```
 > ```javascript
 > db.products.createIndex({ category: 1, rating: -1, price: 1 });
 > ```
 >
 > **Explanation:** ESR Rule orders compound index keys: 1. Equality (`category`), 2. Sort (`rating`), 3. Range (`price`).
 
+---
+
 ### Exercise 3: ESR Rule Acronym Breakdown
 
 **Problem:** State what ESR stands for in MongoDB index design (Equality, Sort, Range).
 
 **Expected output:**
-```text
-Equality, Sort, Range
-```
-
 > [!check]- Answer
+> ```text
+> Equality, Sort, Range
+> ```
 > ```text
 > Equality, Sort, Range
 > ```

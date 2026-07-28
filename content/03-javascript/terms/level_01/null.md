@@ -153,12 +153,11 @@ async function processData() {
 **Problem:** Create a variable `a` but do not initialize it. Create a variable `b` and assign it `null`. Log the strict equality (`===`) and loose equality (`==`) comparison of `a` and `b`.
 
 **Expected output:**
-```text
-false
-true
-```
-
 > [!check]- Answer
+> ```text
+> false
+> true
+> ```
 > - `undefined === null` is `false` because they are different types.
 > - `undefined == null` is `true` due to type coercion; they both represent "emptiness".
 
@@ -169,13 +168,12 @@ true
 **Problem:** Check if a variable `x` is `null` or `undefined` using loose equality `x == null`.
 
 **Expected output:**
-```text
-true
-true
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> true
+> false
+> ```
 > ```javascript
 > function isNullish(x) {
 >   return x == null;
@@ -187,19 +185,20 @@ false
 >
 > **Explanation:** `x == null` matches both `null` and `undefined` while returning `false` for all other falsy values (`0`, `false`, `""`).
 
+---
+
 ### Exercise 3: Null Coalescing Defaulting
 
 **Problem:** Use `??` to supply default `"Guest"` for `null` and `undefined`, but keep empty string `""` and `0`.
 
 **Expected output:**
-```text
-Guest
-Guest
-""
-0
-```
-
 > [!check]- Answer
+> ```text
+> Guest
+> Guest
+> ""
+> 0
+> ```
 > ```javascript
 > console.log(null ?? "Guest");
 > console.log(undefined ?? "Guest");
@@ -209,7 +208,6 @@ Guest
 >
 > **Explanation:** `a ?? b` returns `b` only if `a` is `null` or `undefined`.
 
----
 
 ---
 

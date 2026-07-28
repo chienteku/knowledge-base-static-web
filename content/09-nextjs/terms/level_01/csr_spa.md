@@ -120,11 +120,10 @@ export default async function Page() {
 **Problem:** Why do Search Engine Optimization (SEO) crawler bots struggle to read and rank typical Client-Side Rendered (CSR) websites?
 
 **Expected output:**
-```text
-SEO bots fetch the initial HTML file returned directly from the web server. In a CSR app, this initial HTML is empty (containing only a root div and a script tag). Because the crawler does not execute the JavaScript, it sees a blank page and cannot parse the textual content or links of the site.
-```
-
 > [!check]- Answer
+> ```text
+> SEO bots fetch the initial HTML file returned directly from the web server. In a CSR app, this initial HTML is empty (containing only a root div and a script tag). Because the crawler does not execute the JavaScript, it sees a blank page and cannot parse the textual content or links of the site.
+> ```
 > - Think about what HTML is returned from the server *before* JavaScript runs.
 
 ---
@@ -134,12 +133,11 @@ SEO bots fetch the initial HTML file returned directly from the web server. In a
 **Problem:** Trace network round-trips for CSR data fetching vs RSC (React Server Components) data fetching.
 
 **Expected output:**
-```text
-CSR: HTML download -> JS bundle download -> Execution -> API fetch request -> Re-render (2+ network round trips).
-RSC: Server fetches data + renders HTML -> Browser receives fully populated HTML/RSC payload (1 network round trip).
-```
-
 > [!check]- Answer
+> ```text
+> CSR: HTML download -> JS bundle download -> Execution -> API fetch request -> Re-render (2+ network round trips).
+> RSC: Server fetches data + renders HTML -> Browser receives fully populated HTML/RSC payload (1 network round trip).
+> ```
 > - RSC reduces waterfall round-trips by performing data fetching directly on the server.
 > 
 > ```text
@@ -154,11 +152,10 @@ RSC: Server fetches data + renders HTML -> Browser receives fully populated HTML
 **Problem:** State 1 scenario where Client-Side Rendering (CSR) is appropriate inside a Next.js application.
 
 **Expected output:**
-```text
-Authenticated user dashboard widgets with user-specific real-time polling (e.g. live chat or stock tickers).
-```
-
 > [!check]- Answer
+> ```text
+> Authenticated user dashboard widgets with user-specific real-time polling (e.g. live chat or stock tickers).
+> ```
 > - Real-time interactive components benefit from client state and browser WebSockets.
 > 
 > ```text

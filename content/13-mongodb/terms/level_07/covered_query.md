@@ -191,12 +191,11 @@ Analyze why the following queries are **Not Covered** by the index, and state th
 2.  `db.products.find({ sku: "A10" }, { price: 1, description: 1, _id: 0 })`
 
 **Expected output:**
-```text
-1. Not Covered: The projection defaults to returning the `_id` field, forcing a disk fetch. To fix: Add `_id: 0` to the projection.
-2. Not Covered: The projection requests the `description` field, which is not part of the index keys, forcing a disk fetch. To fix: Remove `description` from the projection, or add it to the compound index.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Not Covered: The projection defaults to returning the `_id` field, forcing a disk fetch. To fix: Add `_id: 0` to the projection.
+> 2. Not Covered: The projection requests the `description` field, which is not part of the index keys, forcing a disk fetch. To fix: Remove `description` from the projection, or add it to the compound index.
+> ```
 > - Check if the projection returns the default `_id` field.
 > - Verify if all fields in the projection are included in the index definition.
 
@@ -209,11 +208,10 @@ Analyze why the following queries are **Not Covered** by the index, and state th
 **Problem:** Construct covered query on index `{ status: 1, email: 1 }` returning `email` without fetching documents.
 
 **Expected output:**
-```text
-db.users.find({ status: "active" }, { email: 1, _id: 0 });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ status: "active" }, { email: 1, _id: 0 });
+> ```
 > ```javascript
 > db.users.find(
 >   { status: "active" },
@@ -223,16 +221,17 @@ db.users.find({ status: "active" }, { email: 1, _id: 0 });
 >
 > **Explanation:** Covered queries satisfy all filtered and projected fields directly from index B-Trees (`totalDocsExamined: 0`).
 
+---
+
 ### Exercise 3: Verifying Covered Query in Explain Output
 
 **Problem:** What value of `totalDocsExamined` in `explain()` indicates a covered query? (`0`).
 
 **Expected output:**
-```text
-totalDocsExamined: 0
-```
-
 > [!check]- Answer
+> ```text
+> totalDocsExamined: 0
+> ```
 > ```text
 > totalDocsExamined: 0
 > ```

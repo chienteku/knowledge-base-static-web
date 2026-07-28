@@ -123,12 +123,11 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 2. What are the Query Parameters?
 
 **Expected output:**
-```text
-1. Path Variables: `electronics` and `laptops` (they define the specific categories we are looking in).
-2. Query Parameters: `brand=apple` and `sort=price` (they filter and sort the list of laptops).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Path Variables: `electronics` and `laptops` (they define the specific categories we are looking in).
+> 2. Query Parameters: `brand=apple` and `sort=price` (they filter and sort the list of laptops).
+> ```
 > - Where does the question mark start?
 
 ---
@@ -138,11 +137,10 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 **Problem:** Write JavaScript code using `URLSearchParams` to construct query string for `page=2`, `limit=50`, `sort=asc`.
 
 **Expected output:**
-```text
-const params = new URLSearchParams({ page: '2', limit: '50', sort: 'asc' });
-```
-
 > [!check]- Answer
+> ```text
+> const params = new URLSearchParams({ page: '2', limit: '50', sort: 'asc' });
+> ```
 > ```javascript
 > const params = new URLSearchParams({
 > page: '2',
@@ -159,11 +157,10 @@ const params = new URLSearchParams({ page: '2', limit: '50', sort: 'asc' });
 **Problem:** When should you use Path Parameters (`/users/123`) vs Query Parameters (`/users?role=admin`)?
 
 **Expected output:**
-```text
-Use Path Parameters for identifying specific resources; use Query Parameters for filtering, sorting, pagination, or searching collections.
-```
-
 > [!check]- Answer
+> ```text
+> Use Path Parameters for identifying specific resources; use Query Parameters for filtering, sorting, pagination, or searching collections.
+> ```
 > ```text
 > Path Parameters -> Resource identification (/users/123)
 > Query Parameters -> Filtering, sorting, and pagination (/users?role=admin&page=1)

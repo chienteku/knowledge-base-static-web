@@ -165,11 +165,10 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 **Problem:** You are building a Twitter/X clone. Is a single "Tweet" an `<article>` or a `<section>`?
 
 **Expected output:**
-```text
-An `<article>`. A Tweet is completely self-contained. It has an author, a timestamp, and a message. If you took that single Tweet and embedded it on a different website, it would still make perfect sense.
-```
-
 > [!check]- Answer
+> ```text
+> An `<article>`. A Tweet is completely self-contained. It has an author, a timestamp, and a message. If you took that single Tweet and embedded it on a different website, it would still make perfect sense.
+> ```
 > - Apply the "Scissor Test." If you cut it out and hand it to a stranger, does it make sense?
 
 ---
@@ -185,14 +184,13 @@ An `<article>`. A Tweet is completely self-contained. It has an author, a timest
 4. Product features grid section (`<section>`)
 
 **Expected output:**
-```text
-1. article
-2. section
-3. article
-4. section
-```
-
 > [!check]- Answer
+> ```text
+> 1. article
+> 2. section
+> 3. article
+> 4. section
+> ```
 > ```text
 > 1. article (standalone syndicatable content)
 > 2. section (thematic content division)
@@ -202,16 +200,17 @@ An `<article>`. A Tweet is completely self-contained. It has an author, a timest
 >
 > **Explanation:** `<article>` for independent reusable content; `<section>` for thematic document sub-divisions.
 
+---
+
 ### Exercise 3: Section Heading Requirement
 
 **Problem:** What element should almost always be included as the first child inside a `<section>`?
 
 **Expected output:**
-```text
-A heading element (<h2> - <h6>).
-```
-
 > [!check]- Answer
+> ```text
+> A heading element (<h2> - <h6>).
+> ```
 > ```html
 > <section>
 >   <h2>Section Title</h2>

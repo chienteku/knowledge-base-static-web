@@ -249,6 +249,8 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 >
 > **Explanation:** `<sup>` renders exponent superscript; `<sub>` renders chemical subscript.
 
+---
+
 ### Exercise 3: Footnote Anchor Reference
 
 **Problem:** Write HTML footnote link reference `[1]` pointing to `#fn1` using `<sup>`.

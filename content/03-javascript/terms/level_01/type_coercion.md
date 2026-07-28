@@ -144,13 +144,12 @@ async function processData() {
 3. `'10' + 5`
 
 **Expected output:**
-```text
-2 (true coerces to 1)
-5 ('10' coerces to number 10)
-"105" (5 coerces to string '5')
-```
-
 > [!check]- Answer
+> ```text
+> 2 (true coerces to 1)
+> 5 ('10' coerces to number 10)
+> "105" (5 coerces to string '5')
+> ```
 > - The `+` operator prefers String concatenation if any operand is a string.
 > - Math operators (`-`, `*`, `/`) force Strings to become Numbers.
 > - Booleans coerce to `1` (true) and `0` (false) in math operations.
@@ -162,12 +161,11 @@ async function processData() {
 **Problem:** Create an object `{ toString() { return "5"; }, valueOf() { return 10; } }` and predict `obj + 2` and `String(obj)`.
 
 **Expected output:**
-```text
-12
-5
-```
-
 > [!check]- Answer
+> ```text
+> 12
+> 5
+> ```
 > ```javascript
 > const obj = {
 >   toString() { return "5"; },
@@ -179,16 +177,17 @@ async function processData() {
 >
 > **Explanation:** Object coercion invokes `Symbol.toPrimitive`, falling back to `valueOf()` for numeric hints and `toString()` for string hints.
 
+---
+
 ### Exercise 3: Falsy Value Coercion Table
 
 **Problem:** List all 8 falsy values in JavaScript.
 
 **Expected output:**
-```text
-false, 0, -0, 0n, "", null, undefined, NaN
-```
-
 > [!check]- Answer
+> ```text
+> false, 0, -0, 0n, "", null, undefined, NaN
+> ```
 > ```javascript
 > const falsies = [false, 0, -0, 0n, "", null, undefined, NaN];
 > console.log(falsies.every(v => !v));
@@ -196,7 +195,6 @@ false, 0, -0, 0n, "", null, undefined, NaN
 >
 > **Explanation:** There are exactly 8 falsy values in JavaScript that coerce to `false` in boolean contexts.
 
----
 
 ---
 

@@ -142,12 +142,11 @@ SELECT created_at, updated_at FROM users;
 2.  Explain why.
 
 **Expected output:**
-```text
-1. No, Transaction 60 cannot see the new row!
-2. Under standard PostgreSQL isolation (Read Committed), a transaction's query snapshot is taken at the start of the query execution. Since Transaction 60 was already active and running before Transaction 50 committed, its active snapshot does not include the updates of Transaction 50, preventing data shifts mid-read.
-```
-
 > [!check]- Answer
+> ```text
+> 1. No, Transaction 60 cannot see the new row!
+> 2. Under standard PostgreSQL isolation (Read Committed), a transaction's query snapshot is taken at the start of the query execution. Since Transaction 60 was already active and running before Transaction 50 committed, its active snapshot does not include the updates of Transaction 50, preventing data shifts mid-read.
+> ```
 > - Consider when the snapshot was established.
 > - Think about the isolation boundaries.
 
@@ -160,27 +159,27 @@ SELECT created_at, updated_at FROM users;
 **Problem:** Select hidden MVCC system columns `xmin`, `xmax`, `ctid` alongside user attributes.
 
 **Expected output:**
-```text
-SELECT xmin, xmax, ctid, * FROM users LIMIT 5;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT xmin, xmax, ctid, * FROM users LIMIT 5;
+> ```
 > ```sql
 > SELECT xmin, xmax, ctid, * FROM users LIMIT 5;
 > ```
 >
 > **Explanation:** `xmin` (creation transaction ID), `xmax` (deletion transaction ID), and `ctid` (tuple disk location) govern MVCC visibility.
 
+---
+
 ### Exercise 3: Core MVCC Guarantees
 
 **Problem:** State primary phrase describing MVCC concurrency guarantee (Readers never block Writers; Writers never block Readers).
 
 **Expected output:**
-```text
-Readers never block Writers; Writers never block Readers
-```
-
 > [!check]- Answer
+> ```text
+> Readers never block Writers; Writers never block Readers
+> ```
 > ```text
 > Readers never block Writers; Writers never block Readers
 > ```

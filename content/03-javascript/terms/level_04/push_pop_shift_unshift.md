@@ -191,11 +191,10 @@ console.log("Final tasks:", tasks);
 ```
 
 **Expected output:**
-```text
-Final tasks: [ 'Clean Room', 'Study JavaScript' ]
-```
-
 > [!check]- Answer
+> ```text
+> Final tasks: [ 'Clean Room', 'Study JavaScript' ]
+> ```
 > - Add to the start using `.unshift()`.
 > - Add to the end using `.push()`.
 > - Remove from the end using `.pop()`.
@@ -207,11 +206,10 @@ Final tasks: [ 'Clean Room', 'Study JavaScript' ]
 **Problem:** Push `10` and `20` onto array stack, pop `20`, and print final stack.
 
 **Expected output:**
-```text
-Popped: 20, Stack: [ 10 ]
-```
-
 > [!check]- Answer
+> ```text
+> Popped: 20, Stack: [ 10 ]
+> ```
 > ```javascript
 > const stack = [];
 > stack.push(10);
@@ -222,16 +220,17 @@ Popped: 20, Stack: [ 10 ]
 >
 > **Explanation:** `push` appends elements to end; `pop` removes and returns last element ($O(1)$).
 
+---
+
 ### Exercise 3: Return Values of Push vs Pop
 
 **Problem:** Print return value of `[1, 2].push(3)` (new length) vs `[1, 2].pop()` (removed value).
 
 **Expected output:**
-```text
-push return: 3, pop return: 2
-```
-
 > [!check]- Answer
+> ```text
+> push return: 3, pop return: 2
+> ```
 > ```javascript
 > const a = [1, 2];
 > console.log(`push return: ${a.push(3)}`);
@@ -241,7 +240,6 @@ push return: 3, pop return: 2
 >
 > **Explanation:** `push()` returns the new array length; `pop()` returns the removed element.
 
----
 
 ---
 

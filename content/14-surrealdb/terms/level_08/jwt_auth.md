@@ -184,27 +184,27 @@ Identify the 4 core system claims included in every SurrealDB Record Access JWT 
 **Problem:** List essential claims in SurrealDB JWT tokens (`NS`, `DB`, `AC` / access scope, `ID` / `$auth.id`).
 
 **Expected output:**
-```text
-NS, DB, AC (access scope), ID ($auth.id)
-```
-
 > [!check]- Answer
+> ```text
+> NS, DB, AC (access scope), ID ($auth.id)
+> ```
 > ```text
 > NS, DB, AC (access scope), ID ($auth.id)
 > ```
 >
 > **Explanation:** SurrealDB JWT claims specify target namespace, database, access scope, and user identity.
 
+---
+
 ### Exercise 3: Authenticating SDK with Raw JWT Token
 
 **Problem:** Write JS SDK call authenticating using token `await db.authenticate(token)`.
 
 **Expected output:**
-```text
-await db.authenticate(token);
-```
-
 > [!check]- Answer
+> ```text
+> await db.authenticate(token);
+> ```
 > ```javascript
 > await db.authenticate(token);
 > ```

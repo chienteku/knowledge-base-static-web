@@ -166,11 +166,10 @@ thread::spawn(move || {
 **Problem:** Print `std::mem::size_of::<&[i32]>()` versus `std::mem::size_of::<&i32>()`.
 
 **Expected output:**
-```
-Thin ptr: 8, Fat ptr: 16
-```
-
 > [!check]- Answer
+> ```
+> Thin ptr: 8, Fat ptr: 16
+> ```
 > ```rust
 > use std::mem::size_of;
 > fn main() {
@@ -181,16 +180,17 @@ Thin ptr: 8, Fat ptr: 16
 >
 > **Explanation:** Slice references `&[T]` store pointer + length metadata, taking 2 pointer words.
 
+---
+
 ### Exercise 3: Trait Object Fat Pointer Inspection
 
 **Problem:** Print `size_of::<&dyn std::fmt::Display>()` showing vtable pointer overhead.
 
 **Expected output:**
-```
-Trait object fat ptr size: 16
-```
-
 > [!check]- Answer
+> ```
+> Trait object fat ptr size: 16
+> ```
 > use std::mem::size_of;
 > fn main() {
 >     println!("Trait object fat ptr size: {}", size_of::<&dyn std::fmt::Display>());

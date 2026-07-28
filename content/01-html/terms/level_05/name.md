@@ -182,14 +182,13 @@ Form payload fields declaring names:
 ```
 
 **Expected output:**
-```html
-<form>
-  <input type="radio" name="newsletter_accept" value="y"> Yes
-  <input type="radio" name="newsletter_accept" value="n"> No
-</form>
-```
-
 > [!check]- Answer
+> ```html
+> <form>
+>   <input type="radio" name="newsletter_accept" value="y"> Yes
+>   <input type="radio" name="newsletter_accept" value="n"> No
+> </form>
+> ```
 > - To make radio buttons group together so only one can be checked at a time, they must share the exact same `name` attribute.
 
 ---
@@ -201,27 +200,27 @@ Form payload fields declaring names:
 **Problem:** For `<input name="user_age" value="25">`, what key-value pair is submitted in the HTTP form payload?
 
 **Expected output:**
-```text
-user_age=25
-```
-
 > [!check]- Answer
+> ```text
+> user_age=25
+> ```
 > ```text
 > user_age=25
 > ```
 >
 > **Explanation:** Form submission payloads map `name=value` pairs.
 
+---
+
 ### Exercise 3: Multi-Select Array Syntax in PHP/Frameworks
 
 **Problem:** Write `name` attribute on `<input type="checkbox">` to submit an array of values in PHP/Express array parsers (`tags[]`).
 
 **Expected output:**
-```text
-<input type="checkbox" name="tags[]" value="news">
-```
-
 > [!check]- Answer
+> ```text
+> <input type="checkbox" name="tags[]" value="news">
+> ```
 > ```html
 > <input type="checkbox" name="tags[]" value="news">
 > <input type="checkbox" name="tags[]" value="sports">

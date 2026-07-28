@@ -135,11 +135,10 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 **Problem:** When you open a website, there is usually a tiny logo in the browser tab next to the page title. How do you think the browser knows where to find that image?
 
 **Expected output:**
-```text
-It uses a `<link>` tag! Specifically: `<link rel="icon" href="logo.png">`. By changing the `rel` attribute to "icon" instead of "stylesheet", the browser knows to put that image in the browser tab.
-```
-
 > [!check]- Answer
+> ```text
+> It uses a `<link>` tag! Specifically: `<link rel="icon" href="logo.png">`. By changing the `rel` attribute to "icon" instead of "stylesheet", the browser knows to put that image in the browser tab.
+> ```
 > - Look closely at the "Fuller Example" snippet above.
 
 ---
@@ -153,12 +152,11 @@ It uses a `<link>` tag! Specifically: `<link rel="icon" href="logo.png">`. By ch
 2. Preloading critical font `font.woff2`
 
 **Expected output:**
-```text
-1. <link rel="preconnect" href="https://fonts.googleapis.com">
-2. <link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
-```
-
 > [!check]- Answer
+> ```text
+> 1. <link rel="preconnect" href="https://fonts.googleapis.com">
+> 2. <link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
+> ```
 > ```html
 > <link rel="preconnect" href="https://fonts.googleapis.com">
 > <link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>
@@ -166,16 +164,17 @@ It uses a `<link>` tag! Specifically: `<link rel="icon" href="logo.png">`. By ch
 >
 > **Explanation:** `preconnect` warms up DNS/TLS connections; `preload` fetches critical assets early.
 
+---
+
 ### Exercise 3: Canonical Link Tag Purpose
 
 **Problem:** Write canonical `<link>` tag preventing duplicate content SEO penalties for URL `https://example.com/page`.
 
 **Expected output:**
-```text
-<link rel="canonical" href="https://example.com/page">
-```
-
 > [!check]- Answer
+> ```text
+> <link rel="canonical" href="https://example.com/page">
+> ```
 > ```html
 > <link rel="canonical" href="https://example.com/page">
 > ```

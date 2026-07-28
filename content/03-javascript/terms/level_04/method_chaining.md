@@ -187,11 +187,10 @@ console.log(formattedPrices);
 ```
 
 **Expected output:**
-```text
-[ '$66.00', '$88.00' ]
-```
-
 > [!check]- Answer
+> ```text
+> [ '$66.00', '$88.00' ]
+> ```
 > - In step 1: `.filter(p => p > 50)`
 > - In step 2: `.map(p => "$" + (p * 1.1).toFixed(2))`
 
@@ -202,11 +201,10 @@ console.log(formattedPrices);
 **Problem:** Filter `[1, 2, 3, 4, 5, 6]` for even numbers, double them with `.map()`, and sum with `.reduce()`.
 
 **Expected output:**
-```text
-24
-```
-
 > [!check]- Answer
+> ```text
+> 24
+> ```
 > ```javascript
 > const result = [1, 2, 3, 4, 5, 6]
 >   .filter(x => x % 2 === 0)
@@ -217,16 +215,17 @@ console.log(formattedPrices);
 >
 > **Explanation:** Method chaining passes intermediate transformed collections down functional pipelines.
 
+---
+
 ### Exercise 3: Chaining Custom Object Builders
 
 **Problem:** Create a fluent builder object `Calc` supporting `.add(5).sub(2).val()`.
 
 **Expected output:**
-```text
-3
-```
-
 > [!check]- Answer
+> ```text
+> 3
+> ```
 > ```javascript
 > const Calc = {
 >   num: 0,

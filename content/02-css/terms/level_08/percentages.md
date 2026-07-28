@@ -186,13 +186,12 @@ html, body { height: 100%; }
 How many pixels wide is the Child on the screen?
 
 **Expected output:**
-```text
-200px!
-The Parent calculates 50% of 800px = 400px.
-The Child calculates 50% of its Parent (400px) = 200px.
-```
-
 > [!check]- Answer
+> ```text
+> 200px!
+> The Parent calculates 50% of 800px = 400px.
+> The Child calculates 50% of its Parent (400px) = 200px.
+> ```
 > - Do the math one layer at a time.
 
 ---
@@ -204,27 +203,27 @@ The Child calculates 50% of its Parent (400px) = 200px.
 **Problem:** If parent container width is 500px, what is the computed pixel size of `padding-top: 20%`?
 
 **Expected output:**
-```text
-100px (20% of 500px parent width).
-```
-
 > [!check]- Answer
+> ```text
+> 100px (20% of 500px parent width).
+> ```
 > ```text
 > 100px (20% of 500px parent width).
 > ```
 >
 > **Explanation:** All padding percentages (vertical and horizontal) calculate against parent width.
 
+---
+
 ### Exercise 3: Percentage Width in Flexbox
 
 **Problem:** Why use `flex-basis: 50%` instead of `width: 50%` on flex items?
 
 **Expected output:**
-```text
-flex-basis integrates directly with Flexbox flex-grow and flex-shrink distribution algorithms.
-```
-
 > [!check]- Answer
+> ```text
+> flex-basis integrates directly with Flexbox flex-grow and flex-shrink distribution algorithms.
+> ```
 > ```css
 > .flex-item {
 >   flex: 0 0 50%; /* flex-basis 50% */

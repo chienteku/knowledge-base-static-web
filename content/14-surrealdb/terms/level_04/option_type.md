@@ -155,12 +155,11 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 2.  `CREATE products:02 SET discount_code = "SALE10";`
 
 **Expected output:**
-```text
-1. Succeeds: The required `title` field is supplied, and the optional `discount_code` is omitted (evaluates to `NONE`).
-2. Fails: The required `title` field is missing, so the schema validator blocks the insert.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Succeeds: The required `title` field is supplied, and the optional `discount_code` is omitted (evaluates to `NONE`).
+> 2. Fails: The required `title` field is missing, so the schema validator blocks the insert.
+> ```
 > - Check which fields are marked optional using the `option` keyword wrapper.
 > - Required fields must always be present in the query write payload.
 
@@ -173,27 +172,27 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 **Problem:** Define optional field `middle_name` on `user` table as `option<string>`.
 
 **Expected output:**
-```text
-DEFINE FIELD middle_name ON TABLE user TYPE option<string>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD middle_name ON TABLE user TYPE option<string>;
+> ```
 > ```surrealql
 > DEFINE FIELD middle_name ON TABLE user TYPE option<string>;
 > ```
 >
 > **Explanation:** `TYPE option<T>` marks fields as optional, accepting `NONE` or type `T`.
 
+---
+
 ### Exercise 3: Optional Record Link Field
 
 **Problem:** Define optional record link `referrer` on `user` table as `option<record<user>>`.
 
 **Expected output:**
-```text
-DEFINE FIELD referrer ON TABLE user TYPE option<record<user>>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD referrer ON TABLE user TYPE option<record<user>>;
+> ```
 > ```surrealql
 > DEFINE FIELD referrer ON TABLE user TYPE option<record<user>>;
 > ```

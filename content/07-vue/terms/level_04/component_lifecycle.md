@@ -126,20 +126,19 @@ onUnmounted(() => {
 **Problem:** A component starts a `setInterval` that fetches the stock price every 1 second. The user clicks a link to go to a different page. The component disappears, but the browser keeps fetching the stock price in the background, eventually crashing. How do you fix this?
 
 **Expected output:**
-```javascript
-let timerId;
-
-onMounted(() => {
-  timerId = setInterval(fetchStock, 1000)
-})
-
-// You MUST clean up the timer when the component dies!
-onUnmounted(() => {
-  clearInterval(timerId)
-})
-```
-
 > [!check]- Answer
+> ```javascript
+> let timerId;
+> 
+> onMounted(() => {
+>   timerId = setInterval(fetchStock, 1000)
+> })
+> 
+> // You MUST clean up the timer when the component dies!
+> onUnmounted(() => {
+>   clearInterval(timerId)
+> })
+> ```
 > - Which lifecycle phase deals with a component's death?
 
 ---
@@ -150,14 +149,13 @@ onUnmounted(() => {
 `onUnmounted`, `onMounted`, `onBeforeMount`, `onBeforeUnmount`
 
 **Expected output:**
-```text
-1. onBeforeMount
-2. onMounted
-3. onBeforeUnmount
-4. onUnmounted
-```
-
 > [!check]- Answer
+> ```text
+> 1. onBeforeMount
+> 2. onMounted
+> 3. onBeforeUnmount
+> 4. onUnmounted
+> ```
 > - `onBeforeMount` -> Before DOM insertion.
 > - `onMounted` -> DOM nodes created and inserted.
 > - `onBeforeUnmount` -> Before component destruction.
@@ -177,12 +175,11 @@ onUnmounted(() => {
 **Problem:** Which Composition API hook replaces Options API `mounted()` and `beforeDestroy()`?
 
 **Expected output:**
-```text
-mounted() -> onMounted()
-beforeDestroy() -> onBeforeUnmount()
-```
-
 > [!check]- Answer
+> ```text
+> mounted() -> onMounted()
+> beforeDestroy() -> onBeforeUnmount()
+> ```
 > - Composition API lifecycle hooks prepend `on` to hook names.
 > 
 > ```javascript

@@ -182,11 +182,10 @@ export default function Button({ label }: ButtonProps) {
 **Problem:** In the Next.js App Router, are components in the `app/` directory React Server Components (RSC) or Client Components by default?
 
 **Expected output:**
-```text
-React Server Components (RSC) by default unless marked with 'use client'.
-```
-
 > [!check]- Answer
+> ```text
+> React Server Components (RSC) by default unless marked with 'use client'.
+> ```
 > - All components in `app/` are Server Components by default.
 > 
 > ```text
@@ -200,11 +199,10 @@ React Server Components (RSC) by default unless marked with 'use client'.
 **Problem:** Write TypeScript interface and functional component definition for `UserCard` accepting `name: string` and optional `age?: number`.
 
 **Expected output:**
-```typescript
-interface UserCardProps { name: string; age?: number; } export function UserCard({ name, age }: UserCardProps) { return <div>{name}</div>; }
-```
-
 > [!check]- Answer
+> ```typescript
+> interface UserCardProps { name: string; age?: number; } export function UserCard({ name, age }: UserCardProps) { return <div>{name}</div>; }
+> ```
 > - Type component props using explicit TypeScript interfaces.
 > 
 > ```tsx

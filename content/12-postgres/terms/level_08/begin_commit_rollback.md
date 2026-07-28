@@ -173,14 +173,13 @@ INSERT INTO accounts VALUES ('Evan', 30.00);
 Query the `accounts` table. Which names will exist in the database?
 
 **Expected output:**
-```text
-'Charlie' and 'Evan' will exist in the database!
-- 'Charlie' is inserted outside the transaction (autocommitted).
-- 'Diana' is inserted inside the transaction block, but the ROLLBACK command undoes the insert.
-- 'Evan' is inserted after the transaction block has closed (autocommitted).
-```
-
 > [!check]- Answer
+> ```text
+> 'Charlie' and 'Evan' will exist in the database!
+> - 'Charlie' is inserted outside the transaction (autocommitted).
+> - 'Diana' is inserted inside the transaction block, but the ROLLBACK command undoes the insert.
+> - 'Evan' is inserted after the transaction block has closed (autocommitted).
+> ```
 > - Identify the transaction boundary wrapper brackets (`BEGIN` and `ROLLBACK`).
 > - Focus on which statements are bypassed during rollbacks.
 
@@ -193,11 +192,10 @@ Query the `accounts` table. Which names will exist in the database?
 **Problem:** Write Node.js try-catch-finally block managing PostgreSQL transaction lifecycle cleanly.
 
 **Expected output:**
-```text
-const client = await pool.connect(); try { await client.query('BEGIN'); /* queries */ await client.query('COMMIT'); } catch (e) { await client.query('ROLLBACK'); throw e; } finally { client.release(); }
-```
-
 > [!check]- Answer
+> ```text
+> const client = await pool.connect(); try { await client.query('BEGIN'); /* queries */ await client.query('COMMIT'); } catch (e) { await client.query('ROLLBACK'); throw e; } finally { client.release(); }
+> ```
 > ```javascript
 > const client = await pool.connect();
 > try {
@@ -214,16 +212,17 @@ const client = await pool.connect(); try { await client.query('BEGIN'); /* queri
 >
 > **Explanation:** Standard transaction lifecycle control guarantees `ROLLBACK` on errors and socket release in `finally`.
 
+---
+
 ### Exercise 3: Transaction Rollback Verification
 
 **Problem:** If a transaction executes `INSERT` followed by `ROLLBACK`, do inserted rows remain in the database? (No, all mutations are undone).
 
 **Expected output:**
-```text
-No, ROLLBACK reverts all transaction data mutations completely
-```
-
 > [!check]- Answer
+> ```text
+> No, ROLLBACK reverts all transaction data mutations completely
+> ```
 > ```text
 > No, ROLLBACK reverts all transaction data mutations completely
 > ```

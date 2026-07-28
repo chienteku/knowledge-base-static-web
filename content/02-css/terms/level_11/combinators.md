@@ -186,13 +186,12 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 **Problem:** You have a blog post container `.post`. You want to select any paragraph (`p`) that is a direct child of `.post`, but only if it immediately follows a heading `h3` inside the container. Write the CSS selector.
 
 **Expected output:**
-```css
-.post > h3 + p {
-  /* target paragraph style rules go here */
-}
-```
-
 > [!check]- Answer
+> ```css
+> .post > h3 + p {
+>   /* target paragraph style rules go here */
+> }
+> ```
 > - The `h3` must be a direct child of `.post` (`.post > h3`).
 > - The paragraph must immediately follow the heading (`+ p`).
 
@@ -209,14 +208,13 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 4. General Sibling `~` 
 
 **Expected output:**
-```text
-1. All descendant elements at any depth
-2. Direct 1st-level child elements only
-3. Immediately adjacent following sibling
-4. All subsequent following siblings
-```
-
 > [!check]- Answer
+> ```text
+> 1. All descendant elements at any depth
+> 2. Direct 1st-level child elements only
+> 3. Immediately adjacent following sibling
+> 4. All subsequent following siblings
+> ```
 > ```text
 > 1. Space -> Descendant at any depth
 > 2. > -> Direct child only
@@ -226,16 +224,17 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 >
 > **Explanation:** Combinators define structural relationships between CSS selectors.
 
+---
+
 ### Exercise 3: Lobed Form Element Sibling Pattern
 
 **Problem:** Write CSS `+` adjacent sibling rule highlighting error message `<span class="err">` immediately following invalid `<input class="invalid">`.
 
 **Expected output:**
-```text
-input.invalid + span.err { color: red; }
-```
-
 > [!check]- Answer
+> ```text
+> input.invalid + span.err { color: red; }
+> ```
 > ```css
 > input.invalid + span.err {
 >   color: red;

@@ -190,19 +190,11 @@ CREATE INDEX idx_orders_user_id ON orders (user_id);
 Write the SQL schema query for the comment table.
 
 **Expected output:**
-```text
-1. The `posts` table is the "One" side; the `comments` table is the "Many" side.
-2. The `comments` table must contain the foreign key.
-```
-```sql
-CREATE TABLE comments (
-  id INT PRIMARY KEY,
-  comment_text TEXT NOT NULL,
-  post_id INT REFERENCES posts(id)
-);
-```
-
 > [!check]- Answer
+> ```text
+> 1. The `posts` table is the "One" side; the `comments` table is the "Many" side.
+> 2. The `comments` table must contain the foreign key.
+> ```
 > - A post exists independently of comments. Comments cannot exist without a parent post.
 > - The table containing the foreign key represents the child ("Many" side).
 
@@ -215,11 +207,10 @@ CREATE TABLE comments (
 **Problem:** Create parent `publishers` and child `books` tables establishing 1-to-Many relationship.
 
 **Expected output:**
-```text
-CREATE TABLE publishers ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE books ( id SERIAL PRIMARY KEY, title TEXT, publisher_id INT REFERENCES publishers(id) );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE publishers ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE books ( id SERIAL PRIMARY KEY, title TEXT, publisher_id INT REFERENCES publishers(id) );
+> ```
 > ```sql
 > CREATE TABLE publishers ( id SERIAL PRIMARY KEY, name TEXT );
 > CREATE TABLE books (
@@ -231,16 +222,17 @@ CREATE TABLE publishers ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE books
 >
 > **Explanation:** The child table `books` stores foreign key `publisher_id` referencing the parent.
 
+---
+
 ### Exercise 3: Querying 1-to-Many Aggregates
 
 **Problem:** Query publishers with total published book counts using `LEFT JOIN` and `GROUP BY`.
 
 **Expected output:**
-```text
-SELECT p.name, COUNT(b.id) FROM publishers p LEFT JOIN books b ON p.id = b.publisher_id GROUP BY p.id, p.name;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT p.name, COUNT(b.id) FROM publishers p LEFT JOIN books b ON p.id = b.publisher_id GROUP BY p.id, p.name;
+> ```
 > ```sql
 > SELECT p.name, COUNT(b.id)
 > FROM publishers p

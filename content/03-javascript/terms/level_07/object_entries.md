@@ -161,14 +161,13 @@ async function processData() {
 **Problem:** `Object.entries()` converts an Object into a 2D Array. Is there a built-in method that does the exact reverse (takes a 2D Array and turns it back into an Object)?
 
 **Expected output:**
-```text
-Yes! `Object.fromEntries()`.
-Example: 
-const arr = [["name", "Bob"], ["age", 30]];
-const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
-```
-
 > [!check]- Answer
+> ```text
+> Yes! `Object.fromEntries()`.
+> Example: 
+> const arr = [["name", "Bob"], ["age", 30]];
+> const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
+> ```
 > - Introduced in ES10 (2019).
 
 ---
@@ -178,11 +177,10 @@ const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
 **Problem:** Convert `Object.entries({ a: 1, b: 2 })` into a `Map` instance.
 
 **Expected output:**
-```text
-1
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> ```
 > ```javascript
 > const map = new Map(Object.entries({ a: 1, b: 2 }));
 > console.log(map.get("a"));
@@ -190,16 +188,17 @@ const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
 >
 > **Explanation:** `Object.entries()` returns `[key, value]` arrays compatible with `Map` constructors.
 
+---
+
 ### Exercise 3: Rebuilding Objects with `Object.fromEntries`
 
 **Problem:** Transform entries back into an object using `Object.fromEntries([["x", 10]])`.
 
 **Expected output:**
-```text
-{"x":10}
-```
-
 > [!check]- Answer
+> ```text
+> {"x":10}
+> ```
 > ```javascript
 > const entries = [["x", 10]];
 > console.log(JSON.stringify(Object.fromEntries(entries)));
@@ -207,7 +206,6 @@ const obj = Object.fromEntries(arr); // { name: "Bob", age: 30 }
 >
 > **Explanation:** `Object.fromEntries()` transforms iterable `[key, value]` pairs back into objects.
 
----
 
 ---
 

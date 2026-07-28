@@ -118,12 +118,11 @@ fetch('https://api.com/terms', { next: { revalidate: 86400 } }); // Revalidate d
 **Problem:** SSR generates the HTML on *every single request*. If you have a marketing landing page that never changes, why is SSR a bad choice?
 
 **Expected output:**
-```text
-Because it is a waste of server resources! Generating the exact same HTML 10,000 times for 10,000 users is slow and expensive.
-For pages that don't change, you should use Static Site Generation (SSG), where the HTML is generated exactly once at Build Time, and then cached/served instantly to all users.
-```
-
 > [!check]- Answer
+> ```text
+> Because it is a waste of server resources! Generating the exact same HTML 10,000 times for 10,000 users is slow and expensive.
+> For pages that don't change, you should use Static Site Generation (SSG), where the HTML is generated exactly once at Build Time, and then cached/served instantly to all users.
+> ```
 > - Think about server CPU cost vs caching.
 
 ---
@@ -133,13 +132,12 @@ For pages that don't change, you should use Static Site Generation (SSG), where 
 **Problem:** List 3 dynamic functions in Next.js App Router that opt a route segment out of static caching and force dynamic SSR rendering.
 
 **Expected output:**
-```text
-1. cookies()
-2. headers()
-3. searchParams (accessing searchParams prop in page)
-```
-
 > [!check]- Answer
+> ```text
+> 1. cookies()
+> 2. headers()
+> 3. searchParams (accessing searchParams prop in page)
+> ```
 > - `cookies()`, `headers()`, and `searchParams` opt routes into dynamic SSR.
 > 
 > ```typescript
@@ -157,11 +155,10 @@ For pages that don't change, you should use Static Site Generation (SSG), where 
 **Problem:** Which React feature allows Next.js SSR to stream HTML chunks progressively to the browser while async data fetches resolve?
 
 **Expected output:**
-```text
-React Suspense (and loading.tsx)
-```
-
 > [!check]- Answer
+> ```text
+> React Suspense (and loading.tsx)
+> ```
 > - React Suspense streams HTML chunks to the browser progressively.
 > 
 > ```tsx

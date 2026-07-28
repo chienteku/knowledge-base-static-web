@@ -145,11 +145,10 @@ Queries must respond in under 5 milliseconds.
 Write the SurrealQL statement to define an `HNSW` vector index named `idx_large_search` on table `docs`, field `vec`, using `1536` dimensions and `COSINE` distance.
 
 **Expected output:**
-```sql
-DEFINE INDEX idx_large_search ON docs COLUMNS vec HNSW DIMENSION 1536 DISTANCE COSINE;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX idx_large_search ON docs COLUMNS vec HNSW DIMENSION 1536 DISTANCE COSINE;
+> ```
 > - Replace `MTREE` with `HNSW` in the definition.
 > - Specify dimensions (`1536`) and distance metric (`COSINE`).
 
@@ -162,27 +161,27 @@ DEFINE INDEX idx_large_search ON docs COLUMNS vec HNSW DIMENSION 1536 DISTANCE C
 **Problem:** Define HNSW index `vector_idx` on `article` for 768-dim `embedding` field using `COSINE` distance.
 
 **Expected output:**
-```text
-DEFINE INDEX vector_idx ON TABLE article FIELDS embedding HNSW DIMENSION 768 DIST COSINE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX vector_idx ON TABLE article FIELDS embedding HNSW DIMENSION 768 DIST COSINE;
+> ```
 > ```surrealql
 > DEFINE INDEX vector_idx ON TABLE article FIELDS embedding HNSW DIMENSION 768 DIST COSINE;
 > ```
 >
 > **Explanation:** `HNSW` vector indexing powers fast approximate k-nearest neighbor (k-NN) vector searches.
 
+---
+
 ### Exercise 3: HNSW Distance Metric Options
 
 **Problem:** List 3 vector distance metrics supported in SurrealDB (`COSINE`, `EUCLIDEAN`, `MANHATTAN`).
 
 **Expected output:**
-```text
-COSINE, EUCLIDEAN, MANHATTAN
-```
-
 > [!check]- Answer
+> ```text
+> COSINE, EUCLIDEAN, MANHATTAN
+> ```
 > ```text
 > COSINE, EUCLIDEAN, MANHATTAN
 > ```

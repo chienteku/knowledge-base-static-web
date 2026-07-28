@@ -96,13 +96,12 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 3. Update to `3.0.0`
 
 **Expected output:**
-```text
-1. Safe (Patch): Only bug fixes.
-2. Safe (Minor): Only new features added.
-3. Dangerous (Major): Code you rely on was deleted or changed! You must rewrite your code.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Safe (Patch): Only bug fixes.
+> 2. Safe (Minor): Only new features added.
+> 3. Dangerous (Major): Code you rely on was deleted or changed! You must rewrite your code.
+> ```
 > - Which number represents "Breaking Changes"?
 
 ---
@@ -117,13 +116,12 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 - PATCH version
 
 **Expected output:**
-```text
-MAJOR: 2
-MINOR: 4
-PATCH: 1
-```
-
 > [!check]- Answer
+> ```text
+> MAJOR: 2
+> MINOR: 4
+> PATCH: 1
+> ```
 > ```text
 > MAJOR: 2
 > MINOR: 4
@@ -132,6 +130,8 @@ PATCH: 1
 >
 > **Explanation:** SemVer format is `MAJOR.MINOR.PATCH` (Breaking.Feature.Fix).
 
+---
+
 ### Exercise 3: Matching SemVer Range Specs
 
 **Problem:** Determine highest allowed version for:
@@ -139,12 +139,11 @@ PATCH: 1
 2. `^1.4.2`
 
 **Expected output:**
-```text
-1. 1.4.x (up to 1.4.99...)
-2. 1.x.x (up to 1.99.99...)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 1.4.x (up to 1.4.99...)
+> 2. 1.x.x (up to 1.99.99...)
+> ```
 > ```text
 > 1. ~1.4.2 permits up to <1.5.0
 > 2. ^1.4.2 permits up to <2.0.0

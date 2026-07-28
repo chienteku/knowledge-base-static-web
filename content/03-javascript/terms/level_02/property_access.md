@@ -185,11 +185,10 @@ console.log(currentValue);
 ```
 
 **Expected output:**
-```text
-light
-```
-
 > [!check]- Answer
+> ```text
+> light
+> ```
 > - The key name is stored in a variable, so you must use bracket notation.
 > - Pass the variable `userSelection` into the brackets without quotes.
 
@@ -200,11 +199,10 @@ light
 **Problem:** Safely read `user?.address?.city` when `user` is `{ address: null }` without throwing a `TypeError`.
 
 **Expected output:**
-```text
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ```
 > ```javascript
 > const user = { address: null };
 > console.log(user?.address?.city);
@@ -212,16 +210,17 @@ undefined
 >
 > **Explanation:** `?.` short-circuits and evaluates to `undefined` if target reference operands are nullish (`null` or `undefined`).
 
+---
+
 ### Exercise 3: Dynamic Bracket Property Lookup
 
 **Problem:** Use variable `const prop = "age"` to dynamically access `user[prop]` on `{ age: 30 }`.
 
 **Expected output:**
-```text
-30
-```
-
 > [!check]- Answer
+> ```text
+> 30
+> ```
 > ```javascript
 > const user = { age: 30 };
 > const prop = "age";

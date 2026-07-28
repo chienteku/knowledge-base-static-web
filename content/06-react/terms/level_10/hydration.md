@@ -101,21 +101,20 @@ function Clock() {
 **Problem:** You want to render `<div>{window.innerWidth}</div>` to show the screen size. How do you rewrite this to prevent a Hydration error?
 
 **Expected output:**
-```javascript
-function ScreenSize() {
-  // Start with a safe, generic default that matches the server
-  const [width, setWidth] = useState(0); 
-
-  // Wait until Hydration is finished to update the state!
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
-
-  return <div>{width}</div>;
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> function ScreenSize() {
+>   // Start with a safe, generic default that matches the server
+>   const [width, setWidth] = useState(0); 
+> 
+>   // Wait until Hydration is finished to update the state!
+>   useEffect(() => {
+>     setWidth(window.innerWidth);
+>   }, []);
+> 
+>   return <div>{width}</div>;
+> }
+> ```
 > - `useEffect` never runs on the server. It only runs in the browser, after hydration!
 
 ---
@@ -127,27 +126,27 @@ function ScreenSize() {
 **Problem:** Define React Hydration (The process where React attaches event listeners and client state to pre-rendered server HTML DOM nodes).
 
 **Expected output:**
-```text
-Attaching client event listeners and React state to pre-rendered server HTML DOM nodes
-```
-
 > [!check]- Answer
+> ```text
+> Attaching client event listeners and React state to pre-rendered server HTML DOM nodes
+> ```
 > ```text
 > Attaching client event listeners and React state to pre-rendered server HTML DOM nodes
 > ```
 >
 > **Explanation:** Hydration transforms static server HTML markup into interactive React application components.
 
+---
+
 ### Exercise 3: Suppressing Hydration Warnings Intentionally
 
 **Problem:** What attribute suppresses hydration warnings on dynamic text elements when mismatch is unavoidable? (`suppressHydrationWarning`).
 
 **Expected output:**
-```text
-suppressHydrationWarning attribute
-```
-
 > [!check]- Answer
+> ```text
+> suppressHydrationWarning attribute
+> ```
 > ```javascript
 > <span suppressHydrationWarning>{new Date().getFullYear()}</span>
 > ```

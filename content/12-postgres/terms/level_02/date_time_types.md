@@ -156,13 +156,12 @@ Store timezone name string in separate column if original timezone name is requi
 3.  A movie screening slot (e.g., Spider-Man screens on Friday at 8:00 PM local theater time).
 
 **Expected output:**
-```text
-1. Birthday: DATE (Only calendar day matters, timezones are irrelevant).
-2. Checkout Moment: TIMESTAMPTZ (Audit logging must record the exact global absolute moment to prevent fraud and handle payment reconciliation).
-3. Screening Slot: TIMESTAMP (A screening at 8:00 PM happens at 8:00 PM local theater time, regardless of what timezone the server hosting the database runs in).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Birthday: DATE (Only calendar day matters, timezones are irrelevant).
+> 2. Checkout Moment: TIMESTAMPTZ (Audit logging must record the exact global absolute moment to prevent fraud and handle payment reconciliation).
+> 3. Screening Slot: TIMESTAMP (A screening at 8:00 PM happens at 8:00 PM local theater time, regardless of what timezone the server hosting the database runs in).
+> ```
 > - Determine if absolute global time matching (timezone) is critical for audits.
 > - Consider if local clock representation takes precedence.
 
@@ -175,27 +174,27 @@ Store timezone name string in separate column if original timezone name is requi
 **Problem:** SQL statement getting current UTC timestamp (`NOW()`, `CURRENT_TIMESTAMP`).
 
 **Expected output:**
-```text
-SELECT NOW();
-```
-
 > [!check]- Answer
+> ```text
+> SELECT NOW();
+> ```
 > ```sql
 > SELECT NOW();
 > ```
 >
 > **Explanation:** `NOW()` and `CURRENT_TIMESTAMP` return active transaction start `TIMESTAMPTZ` values.
 
+---
+
 ### Exercise 3: Timezone Conversion with `AT TIME ZONE`
 
 **Problem:** Convert current timestamp to `'UTC'` or `'America/New_York'` using `AT TIME ZONE`.
 
 **Expected output:**
-```text
-SELECT NOW() AT TIME ZONE 'America/New_York';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT NOW() AT TIME ZONE 'America/New_York';
+> ```
 > ```sql
 > SELECT NOW() AT TIME ZONE 'America/New_York';
 > ```

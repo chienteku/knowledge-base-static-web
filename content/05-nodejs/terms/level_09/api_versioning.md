@@ -216,16 +216,17 @@ app.get('/api/v1/user', (req, res) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Express URL Path Versioning Router
 
 **Problem:** Mount `v1Router` and `v2Router` on `/api/v1` and `/api/v2` in Express.
 
 **Expected output:**
-```text
-app.use('/api/v1', v1Router); app.use('/api/v2', v2Router);
-```
-
 > [!check]- Answer
+> ```text
+> app.use('/api/v1', v1Router); app.use('/api/v2', v2Router);
+> ```
 > ```javascript
 > app.use('/api/v1', v1Router);
 > app.use('/api/v2', v2Router);
@@ -233,18 +234,19 @@ app.use('/api/v1', v1Router); app.use('/api/v2', v2Router);
 >
 > **Explanation:** URL path versioning mounts versioned Express routers on distinct sub-path prefixes.
 
+---
+
 ### Exercise 3: 3 Common API Versioning Strategies
 
 **Problem:** List 3 common API versioning strategies.
 
 **Expected output:**
-```text
-1. URI Path (/api/v1/users)
-2. Query Parameter (/api/users?version=1)
-3. Custom Header (Accept: application/json; version=1)
-```
-
 > [!check]- Answer
+> ```text
+> 1. URI Path (/api/v1/users)
+> 2. Query Parameter (/api/users?version=1)
+> 3. Custom Header (Accept: application/json; version=1)
+> ```
 > ```text
 > 1. URI Path (/api/v1/users)
 > 2. Query Parameter (/api/users?version=1)

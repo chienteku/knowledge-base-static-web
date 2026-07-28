@@ -165,27 +165,27 @@ Write a `DEFINE TABLE` statement for a `user_profile` table with `SCHEMAFULL` mo
 **Problem:** Define table `product` with a 14-day changefeed retention window.
 
 **Expected output:**
-```text
-DEFINE TABLE product CHANGEFEED 14d;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE product CHANGEFEED 14d;
+> ```
 > ```surrealql
 > DEFINE TABLE product CHANGEFEED 14d;
 > ```
 >
 > **Explanation:** `CHANGEFEED duration` maintains historical delta feeds for offline consumers.
 
+---
+
 ### Exercise 3: Streaming Changefeed Deltas
 
 **Problem:** Query changefeed for `product` table since timestamp `$last_sync`.
 
 **Expected output:**
-```text
-SHOW CHANGES FOR TABLE product SINCE $last_sync;
-```
-
 > [!check]- Answer
+> ```text
+> SHOW CHANGES FOR TABLE product SINCE $last_sync;
+> ```
 > ```surrealql
 > SHOW CHANGES FOR TABLE product SINCE $last_sync;
 > ```

@@ -171,11 +171,10 @@ thread::spawn(move || {
 **Problem:** Spawn 3 threads waiting at a `Barrier::new(3)` before executing phase 2.
 
 **Expected output:**
-```
-Phase 2 reached across threads
-```
-
 > [!check]- Answer
+> ```
+> Phase 2 reached across threads
+> ```
 > ```rust
 > use std::sync::{Arc, Barrier};
 > use std::thread;
@@ -195,16 +194,17 @@ Phase 2 reached across threads
 >
 > **Explanation:** `Barrier` blocks executing threads until the specified target thread count reaches the barrier.
 
+---
+
 ### Exercise 3: Signaling Condition Variables
 
 **Problem:** Use `Condvar::notify_one()` to signal a waiting thread when a Boolean flag becomes `true`.
 
 **Expected output:**
-```
-Notified and resumed
-```
-
 > [!check]- Answer
+> ```
+> Notified and resumed
+> ```
 > use std::sync::{Arc, Mutex, Condvar};
 > fn main() {
 >     let pair = Arc::new((Mutex::new(false), Condvar::new()));

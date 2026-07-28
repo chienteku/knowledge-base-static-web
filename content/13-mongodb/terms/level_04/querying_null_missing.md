@@ -150,11 +150,10 @@ db.users.find({ middleName: { $exists: false } }); // Matches absent keys only
 Write the query to find all products where the `discount_code` field is **physically present in the document** with an **explicit null value**.
 
 **Expected output:**
-```javascript
-db.inventory.find({ discount_code: { $type: "null" } });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.inventory.find({ discount_code: { $type: "null" } });
+> ```
 > - Choose the element operator `$type` to evaluate the data type.
 > - Pass the target type alias string `"null"`.
 
@@ -167,27 +166,27 @@ db.inventory.find({ discount_code: { $type: "null" } });
 **Problem:** Query users where `deletedAt` field does not exist (`$exists: false`).
 
 **Expected output:**
-```text
-db.users.find({ deletedAt: { $exists: false } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ deletedAt: { $exists: false } });
+> ```
 > ```javascript
 > db.users.find({ deletedAt: { $exists: false } });
 > ```
 >
 > **Explanation:** `{ $exists: false }` matches documents where the specified key is absent.
 
+---
+
 ### Exercise 3: Matching Explicit BSON Null Values
 
 **Problem:** Query users where `middleName` is explicitly set to BSON `null` using `$type`.
 
 **Expected output:**
-```text
-db.users.find({ middleName: { $type: "null" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ middleName: { $type: "null" } });
+> ```
 > ```javascript
 > db.users.find({ middleName: { $type: "null" } });
 > ```

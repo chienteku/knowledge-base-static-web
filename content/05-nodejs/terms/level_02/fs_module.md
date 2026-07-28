@@ -114,12 +114,11 @@ try {
 **Problem:** You want to write a function that records every time a user logs in by adding a new line to `log.txt`. Should you use `writeFile` or `appendFile`?
 
 **Expected output:**
-```text
-`fs.appendFile`. 
-If you use `writeFile`, it will instantly erase all previous logs in the file and replace it with just the newest login event. `appendFile` preserves the existing file and safely adds the new data to the bottom.
-```
-
 > [!check]- Answer
+> ```text
+> `fs.appendFile`. 
+> If you use `writeFile`, it will instantly erase all previous logs in the file and replace it with just the newest login event. `appendFile` preserves the existing file and safely adds the new data to the bottom.
+> ```
 > - Which one overwrites? Which one adds?
 
 ---
@@ -131,27 +130,27 @@ If you use `writeFile`, it will instantly erase all previous logs in the file an
 **Problem:** Append string `'Log entry\n'` to file `app.log` using `fs.promises`.
 
 **Expected output:**
-```text
-await fs.promises.appendFile('app.log', 'Log entry\n');
-```
-
 > [!check]- Answer
+> ```text
+> await fs.promises.appendFile('app.log', 'Log entry\n');
+> ```
 > ```javascript
 > await fs.promises.appendFile('app.log', 'Log entry\n');
 > ```
 >
 > **Explanation:** `appendFile` appends data to a file, creating the file if it does not exist.
 
+---
+
 ### Exercise 3: Checking File Stats
 
 **Problem:** Get size in bytes of `data.txt` using `fs.promises.stat`.
 
 **Expected output:**
-```text
-const stats = await fs.promises.stat('data.txt'); console.log(stats.size);
-```
-
 > [!check]- Answer
+> ```text
+> const stats = await fs.promises.stat('data.txt'); console.log(stats.size);
+> ```
 > ```javascript
 > const stats = await fs.promises.stat('data.txt');
 > console.log(stats.size);

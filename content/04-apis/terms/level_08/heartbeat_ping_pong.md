@@ -257,12 +257,11 @@ At what time will the server detect the drop and terminate the socket resource?
 **Problem:** Identify the 2 control frame opcodes used for heartbeats in WebSocket protocol (RFC 6455).
 
 **Expected output:**
-```text
-1. 0x9 (Ping frame)
-2. 0xA (Pong frame)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 0x9 (Ping frame)
+> 2. 0xA (Pong frame)
+> ```
 > ```text
 > 0x9 -> Ping frame
 > 0xA -> Pong frame
@@ -275,11 +274,10 @@ At what time will the server detect the drop and terminate the socket resource?
 **Problem:** How should a WebSocket receiver respond upon receiving a Ping control frame?
 
 **Expected output:**
-```text
-It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-```
-
 > [!check]- Answer
+> ```text
+> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
+> ```
 > ```text
 > It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
 > ```
@@ -291,12 +289,11 @@ It MUST send a Pong control frame back as soon as possible with the exact same p
 **Problem:** Identify the 2 control frame opcodes used for heartbeats in WebSocket protocol (RFC 6455).
 
 **Expected output:**
-```text
-1. 0x9 (Ping frame)
-2. 0xA (Pong frame)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 0x9 (Ping frame)
+> 2. 0xA (Pong frame)
+> ```
 > ```text
 > 0x9 -> Ping frame
 > 0xA -> Pong frame
@@ -309,11 +306,10 @@ It MUST send a Pong control frame back as soon as possible with the exact same p
 **Problem:** How should a WebSocket receiver respond upon receiving a Ping control frame?
 
 **Expected output:**
-```text
-It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-```
-
 > [!check]- Answer
+> ```text
+> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
+> ```
 > ```text
 > It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
 > ```
@@ -325,12 +321,11 @@ It MUST send a Pong control frame back as soon as possible with the exact same p
 **Problem:** Identify the 2 control frame opcodes used for heartbeats in WebSocket protocol (RFC 6455).
 
 **Expected output:**
-```text
-1. 0x9 (Ping frame)
-2. 0xA (Pong frame)
-```
-
 > [!check]- Answer
+> ```text
+> 1. 0x9 (Ping frame)
+> 2. 0xA (Pong frame)
+> ```
 > ```text
 > 0x9 -> Ping frame
 > 0xA -> Pong frame
@@ -343,11 +338,10 @@ It MUST send a Pong control frame back as soon as possible with the exact same p
 **Problem:** How should a WebSocket receiver respond upon receiving a Ping control frame?
 
 **Expected output:**
-```text
-It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
-```
-
 > [!check]- Answer
+> ```text
+> It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
+> ```
 > ```text
 > It MUST send a Pong control frame back as soon as possible with the exact same payload bytes received in the Ping frame.
 > ```

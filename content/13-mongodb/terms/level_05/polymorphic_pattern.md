@@ -151,11 +151,10 @@ Single events collection with discriminator field: { type: "click", ... }, { typ
 Write the query to find all video clips (hint: filter by the discriminator) that have more than `1000` views.
 
 **Expected output:**
-```javascript
-db.content.find({ type: "video", views: { $gt: 1000 } });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.content.find({ type: "video", views: { $gt: 1000 } });
+> ```
 > - Identify the discriminator field key `type` and target value `"video"`.
 > - Apply standard comparison filters for the views count.
 
@@ -168,11 +167,10 @@ db.content.find({ type: "video", views: { $gt: 1000 } });
 **Problem:** Model single `content` collection storing both `article` and `video` documents using `type` discriminator.
 
 **Expected output:**
-```text
-{ type: "article", title: "...", text: "..." } and { type: "video", title: "...", url: "..." }
-```
-
 > [!check]- Answer
+> ```text
+> { type: "article", title: "...", text: "..." } and { type: "video", title: "...", url: "..." }
+> ```
 > ```javascript
 > const article = { type: "article", title: "News", text: "..." };
 > const video = { type: "video", title: "Tutorial", url: "http://..." };
@@ -180,16 +178,17 @@ db.content.find({ type: "video", views: { $gt: 1000 } });
 >
 > **Explanation:** Polymorphic Pattern stores distinct sub-type shapes in a single collection using `type` discriminators.
 
+---
+
 ### Exercise 3: Indexing Polymorphic Discriminator
 
 **Problem:** Create compound index supporting polymorphic queries on `type` and `createdAt`.
 
 **Expected output:**
-```text
-db.content.createIndex({ type: 1, createdAt: -1 });
-```
-
 > [!check]- Answer
+> ```text
+> db.content.createIndex({ type: 1, createdAt: -1 });
+> ```
 > ```javascript
 > db.content.createIndex({ type: 1, createdAt: -1 });
 > ```

@@ -153,12 +153,11 @@ Calculate the output numbers of the following two queries:
 2.  `SELECT COUNT(rating) FROM survey_responses;`
 
 **Expected output:**
-```text
-1. Query 1 returns: 100 (COUNT(*) counts all rows in the dataset).
-2. Query 2 returns: 80 (COUNT(column) skips the 20 rows containing NULL ratings).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Query 1 returns: 100 (COUNT(*) counts all rows in the dataset).
+> 2. Query 2 returns: 80 (COUNT(column) skips the 20 rows containing NULL ratings).
+> ```
 > - Differentiate between counting grid cards vs counting specific non-empty cells.
 
 ---
@@ -170,27 +169,27 @@ Calculate the output numbers of the following two queries:
 **Problem:** Calculate average score treating NULL scores as 0 using `AVG(COALESCE(score, 0))`.
 
 **Expected output:**
-```text
-SELECT AVG(COALESCE(score, 0)) AS avg_score FROM tests;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT AVG(COALESCE(score, 0)) AS avg_score FROM tests;
+> ```
 > ```sql
 > SELECT AVG(COALESCE(score, 0)) AS avg_score FROM tests;
 > ```
 >
 > **Explanation:** `COALESCE(score, 0)` replaces NULLs with 0 so all rows contribute to the average.
 
+---
+
 ### Exercise 3: Null Handling in `SUM()` Function
 
 **Problem:** What does `SUM(val)` return if all rows in a group are NULL? (`NULL`).
 
 **Expected output:**
-```text
-NULL
-```
-
 > [!check]- Answer
+> ```text
+> NULL
+> ```
 > ```text
 > NULL
 > ```

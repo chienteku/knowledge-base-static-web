@@ -169,11 +169,10 @@ SELECT role, count() FROM user GROUP BY role HAVING count() > 5;
 3.  Filter only transactions where the `status` is `"cleared"`.
 
 **Expected output:**
-```sql
-SELECT store_id, math::sum(amount) AS sales_sum FROM transactions WHERE status = "cleared" GROUP BY store_id;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT store_id, math::sum(amount) AS sales_sum FROM transactions WHERE status = "cleared" GROUP BY store_id;
+> ```
 > - The table source is `transactions`.
 > - Apply the `WHERE` filter before writing the `GROUP BY` clause.
 
@@ -186,27 +185,27 @@ SELECT store_id, math::sum(amount) AS sales_sum FROM transactions WHERE status =
 **Problem:** Group sales by `country` and `year` calculating total sales with `math::sum(amount)`.
 
 **Expected output:**
-```text
-SELECT country, year, math::sum(amount) AS total FROM sale GROUP BY country, year;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT country, year, math::sum(amount) AS total FROM sale GROUP BY country, year;
+> ```
 > ```surrealql
 > SELECT country, year, math::sum(amount) AS total FROM sale GROUP BY country, year;
 > ```
 >
 > **Explanation:** `GROUP BY f1, f2` aggregates records by multi-field composite keys.
 
+---
+
 ### Exercise 3: Group All Aggregation
 
 **Problem:** Calculate average age across all records in `user` table using `GROUP ALL`.
 
 **Expected output:**
-```text
-SELECT math::mean(age) FROM user GROUP ALL;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT math::mean(age) FROM user GROUP ALL;
+> ```
 > ```surrealql
 > SELECT math::mean(age) FROM user GROUP ALL;
 > ```

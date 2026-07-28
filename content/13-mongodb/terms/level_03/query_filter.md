@@ -180,11 +180,10 @@ db.users.updateMany({ lastLogin: { $lt: date } }, { $set: { status: "inactive" }
 `SELECT * FROM inventory WHERE qty < 10 AND status = 'low';`
 
 **Expected output:**
-```javascript
-{ qty: { $lt: 10 }, status: "low" }
-```
-
 > [!check]- Answer
+> ```javascript
+> { qty: { $lt: 10 }, status: "low" }
+> ```
 > - Map the SQL less-than operator `<` to the BSON query operator `$lt`.
 > - Combine the two fields inside a single JSON object.
 
@@ -197,11 +196,10 @@ db.users.updateMany({ lastLogin: { $lt: date } }, { $set: { status: "inactive" }
 **Problem:** Query users with `age >= 21` whose `status` is in `["active", "pending"]`.
 
 **Expected output:**
-```text
-db.users.find({ age: { $gte: 21 }, status: { $in: ["active", "pending"] } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ age: { $gte: 21 }, status: { $in: ["active", "pending"] } });
+> ```
 > ```javascript
 > db.users.find({
 >   age: { $gte: 21 },
@@ -211,16 +209,17 @@ db.users.find({ age: { $gte: 21 }, status: { $in: ["active", "pending"] } });
 >
 > **Explanation:** Query filter objects combine field predicates using implicit AND logic.
 
+---
+
 ### Exercise 3: Filtering Array Element Criteria
 
 **Problem:** Query posts containing array element matching `{ tag: "tech", score: { $gt: 5 } }` using `$elemMatch`.
 
 **Expected output:**
-```text
-db.posts.find({ tags: { $elemMatch: { tag: "tech", score: { $gt: 5 } } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ tags: { $elemMatch: { tag: "tech", score: { $gt: 5 } } } });
+> ```
 > ```javascript
 > db.posts.find({
 >   tags: { $elemMatch: { tag: "tech", score: { $gt: 5 } } }

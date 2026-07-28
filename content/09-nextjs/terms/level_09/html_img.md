@@ -143,13 +143,12 @@ import Image from 'next/image';
 **Problem:** List 3 automated performance benefits provided by `next/image` over native `<img>`.
 
 **Expected output:**
-```text
-1. Automatic WebP/AVIF format conversion
-2. Automatic resizing for different screen resolutions (responsive srcset)
-3. Layout shift protection via mandatory width/height or fill layout
-```
-
 > [!check]- Answer
+> ```text
+> 1. Automatic WebP/AVIF format conversion
+> 2. Automatic resizing for different screen resolutions (responsive srcset)
+> 3. Layout shift protection via mandatory width/height or fill layout
+> ```
 > - Automatic WebP/AVIF format conversion.
 > - Responsive `srcset` image generation per device size.
 > - Prevention of Cumulative Layout Shift (CLS).
@@ -165,11 +164,10 @@ import Image from 'next/image';
 **Problem:** Which ESLint rule flags usage of native `<img>` tags in Next.js projects?
 
 **Expected output:**
-```text
-@next/next/no-img-element
-```
-
 > [!check]- Answer
+> ```text
+> @next/next/no-img-element
+> ```
 > - `@next/next/no-img-element` warns against using native `<img>` tags.
 > 
 > ```text

@@ -185,11 +185,10 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 **Problem:** You are building a frontend app. You send a request to a backend API you don't control, and the server returns a `500 Internal Server Error`. Your boss yells at you to fix your frontend code. How do you defend yourself using your knowledge of Status Codes?
 
 **Expected output:**
-```text
-"Boss, a 500-level error explicitly means the SERVER crashed. It is a Backend bug, not a Frontend bug! If I had sent bad data from the frontend, the server would have returned a 400-level error."
-```
-
 > [!check]- Answer
+> ```text
+> "Boss, a 500-level error explicitly means the SERVER crashed. It is a Backend bug, not a Frontend bug! If I had sent bad data from the frontend, the server would have returned a 400-level error."
+> ```
 > - 4xx = Client's fault. 5xx = Server's fault.
 
 ---
@@ -205,14 +204,13 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 4. Unhandled server database crash (500)
 
 **Expected output:**
-```text
-1. 201 Created
-2. 400 Bad Request
-3. 404 Not Found
-4. 500 Internal Server Error
-```
-
 > [!check]- Answer
+> ```text
+> 1. 201 Created
+> 2. 400 Bad Request
+> 3. 404 Not Found
+> 4. 500 Internal Server Error
+> ```
 > ```text
 > 1. 201 Created
 > 2. 400 Bad Request
@@ -222,16 +220,17 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 >
 > **Explanation:** Standard status codes communicate exact request processing outcomes.
 
+---
+
 ### Exercise 3: 204 No Content Usage
 
 **Problem:** When should `HTTP 204 No Content` be returned? (When a request succeeds, e.g. DELETE, and requires no response body payload).
 
 **Expected output:**
-```text
-When a request succeeds (e.g. DELETE or UPDATE) and requires no response body payload.
-```
-
 > [!check]- Answer
+> ```text
+> When a request succeeds (e.g. DELETE or UPDATE) and requires no response body payload.
+> ```
 > ```javascript
 > app.delete('/items/:id', async (req, res) => {
 >   await Item.delete(req.params.id);

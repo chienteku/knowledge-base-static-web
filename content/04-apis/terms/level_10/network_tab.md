@@ -139,15 +139,14 @@ Click on the `search?q=query` request to open the inspector panel:
 5. Content Download
 
 **Expected output:**
-```text
-1. Request waiting for browser connection slot
-2. Resolving hostname IP address
-3. TCP handshake and TLS negotiation
-4. Waiting for backend server to send 1st response byte
-5. Receiving full response body stream
-```
-
 > [!check]- Answer
+> ```text
+> 1. Request waiting for browser connection slot
+> 2. Resolving hostname IP address
+> 3. TCP handshake and TLS negotiation
+> 4. Waiting for backend server to send 1st response byte
+> 5. Receiving full response body stream
+> ```
 > ```text
 > 1. Queueing/Stalled -> Waiting for connection slot / connection pool limit.
 > 2. DNS Lookup       -> Resolving IP address.
@@ -163,11 +162,10 @@ Click on the `search?q=query` request to open the inspector panel:
 **Problem:** Which standard file format is used to export complete DevTools Network tab trace logs for sharing?
 
 **Expected output:**
-```text
-HAR (HTTP Archive format - .har file)
-```
-
 > [!check]- Answer
+> ```text
+> HAR (HTTP Archive format - .har file)
+> ```
 > ```text
 > HAR (HTTP Archive format - .har file).
 > ```

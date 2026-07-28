@@ -176,11 +176,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-The rectangle is 30 by 50
-```
-
 > [!check]- Answer
+> ```text
+> The rectangle is 30 by 50
+> ```
 > ```rust
 > struct Rectangle {
 >     width: u32,
@@ -197,11 +196,10 @@ The rectangle is 30 by 50
 **Problem:** Create `User { name, email, active: true }`. Construct `user2` with a different name using `..user1` update syntax.
 
 **Expected output:**
-```
-User2 email: alice@example.com
-```
-
 > [!check]- Answer
+> ```
+> User2 email: alice@example.com
+> ```
 > ```rust
 > struct User { name: String, email: String, active: bool }
 > fn main() {
@@ -213,16 +211,17 @@ User2 email: alice@example.com
 >
 > **Explanation:** `..u1` copies or moves remaining unassigned fields from `u1` into the new struct instance.
 
+---
+
 ### Exercise 3: Field Init Shorthand
 
 **Problem:** Construct a struct `Point { x, y }` using field init shorthand when local variable names match struct field names.
 
 **Expected output:**
-```
-Point: 10, 20
-```
-
 > [!check]- Answer
+> ```
+> Point: 10, 20
+> ```
 > ```rust
 > struct Point { x: i32, y: i32 }
 > fn main() {

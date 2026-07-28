@@ -253,14 +253,13 @@ body { background-color: white; }
 **Problem:** You are building a navbar menu. On desktop it lies in a row. On mobile it wraps to a vertical column. How do you find the ideal breakpoint width to swap from mobile menu column to desktop navbar row?
 
 **Expected output:**
-```text
-Open the page in the browser, launch DevTools, and click the responsive design toggle. 
-Slowly shrink the window from desktop size. 
-At the exact width where the menu links start colliding or wrapping awkwardly, note that pixel width (e.g. 710px). 
-Add a breakpoint at that width: `@media (min-width: 710px)`.
-```
-
 > [!check]- Answer
+> ```text
+> Open the page in the browser, launch DevTools, and click the responsive design toggle. 
+> Slowly shrink the window from desktop size. 
+> At the exact width where the menu links start colliding or wrapping awkwardly, note that pixel width (e.g. 710px). 
+> Add a breakpoint at that width: `@media (min-width: 710px)`.
+> ```
 > - A content-first breakpoint is determined by testing the layout directly in a browser resize check.
 
 ---
@@ -272,13 +271,12 @@ Add a breakpoint at that width: `@media (min-width: 710px)`.
 **Problem:** Define 3 standard mobile-first media query breakpoints for Tablet (`768px`), Desktop (`1024px`), and Large Desktop (`1280px`).
 
 **Expected output:**
-```text
-@media (min-width: 768px) {}
-@media (min-width: 1024px) {}
-@media (min-width: 1280px) {}
-```
-
 > [!check]- Answer
+> ```text
+> @media (min-width: 768px) {}
+> @media (min-width: 1024px) {}
+> @media (min-width: 1280px) {}
+> ```
 > ```css
 > /* Mobile base styles first */
 > 
@@ -295,16 +293,17 @@ Add a breakpoint at that width: `@media (min-width: 710px)`.
 >
 > **Explanation:** Mobile-first architecture layers progressive enhancements using `min-width` queries.
 
+---
+
 ### Exercise 3: Em Units in Breakpoints
 
 **Problem:** Why are `em` units recommended over `px` for media query breakpoints?
 
 **Expected output:**
-```text
-em breakpoints scale dynamically if users increase browser default font size settings for accessibility.
-```
-
 > [!check]- Answer
+> ```text
+> em breakpoints scale dynamically if users increase browser default font size settings for accessibility.
+> ```
 > ```css
 > @media (min-width: 48em) { /* 48em * 16px = 768px */
 >   /* Responsive styles */

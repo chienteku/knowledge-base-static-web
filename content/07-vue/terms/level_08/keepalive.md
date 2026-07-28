@@ -121,13 +121,12 @@ defineOptions({ name: 'UserTab' });
 **Problem:** You have a `Dashboard.vue` component that fetches analytics data in `onMounted()`. You wrap it in `<KeepAlive>`. The user leaves the dashboard and comes back 10 minutes later. The data on the screen is 10 minutes old! How do you ensure the data is fresh without losing the UI state?
 
 **Expected output:**
-```text
-Move the API fetch from `onMounted` to `onActivated`!
-`onMounted` only fires once (the first time the component is created). 
-`onActivated` fires every time the component is restored from the KeepAlive cache.
-```
-
 > [!check]- Answer
+> ```text
+> Move the API fetch from `onMounted` to `onActivated`!
+> `onMounted` only fires once (the first time the component is created). 
+> `onActivated` fires every time the component is restored from the KeepAlive cache.
+> ```
 > - Review the new lifecycle hooks introduced by `KeepAlive`.
 
 ---
@@ -137,11 +136,10 @@ Move the API fetch from `onMounted` to `onActivated`!
 **Problem:** Write `<KeepAlive>` syntax capping cached component instances to a maximum limit of `5` using the `max` prop.
 
 **Expected output:**
-```html
-<KeepAlive :max="5"><component :is="view" /></KeepAlive>
-```
-
 > [!check]- Answer
+> ```html
+> <KeepAlive :max="5"><component :is="view" /></KeepAlive>
+> ```
 > - `max` enforces LRU (Least Recently Used) cache eviction.
 > 
 > ```html
@@ -157,12 +155,11 @@ Move the API fetch from `onMounted` to `onActivated`!
 **Problem:** Which 2 specific Vue lifecycle hooks are dedicated exclusively to components cached inside `<KeepAlive>`?
 
 **Expected output:**
-```text
-1. onActivated()
-2. onDeactivated()
-```
-
 > [!check]- Answer
+> ```text
+> 1. onActivated()
+> 2. onDeactivated()
+> ```
 > - `onActivated` -> Executes when cached component is inserted.
 > - `onDeactivated` -> Executes when cached component is hidden.
 > 

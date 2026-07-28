@@ -119,17 +119,16 @@ console.log(age + 5); // 30
 **Problem:** You have a form with a "Save as Draft" button and a "Publish" button. How can you trigger different Server Actions depending on which button is clicked?
 
 **Expected output:**
-```tsx
-<form action={defaultAction}>
-  <input name="title" />
-  
-  {/* The formAction prop overrides the form's action! */}
-  <button formAction={saveDraftAction}>Save as Draft</button>
-  <button formAction={publishAction}>Publish</button>
-</form>
-```
-
 > [!check]- Answer
+> ```tsx
+> <form action={defaultAction}>
+>   <input name="title" />
+>   
+>   {/* The formAction prop overrides the form's action! */}
+>   <button formAction={saveDraftAction}>Save as Draft</button>
+>   <button formAction={publishAction}>Publish</button>
+> </form>
+> ```
 > - Native HTML buttons have a specific attribute that overrides the form's action.
 
 ---
@@ -139,11 +138,10 @@ console.log(age + 5); // 30
 **Problem:** Why do Next.js `<form action={serverAction}>` forms function even if JavaScript is disabled in the browser?
 
 **Expected output:**
-```text
-Next.js server actions leverage standard HTML native form POST submission mechanisms, enabling progressive enhancement when JS is disabled.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js server actions leverage standard HTML native form POST submission mechanisms, enabling progressive enhancement when JS is disabled.
+> ```
 > - Native HTML `<form action>` submits POST requests without browser JS.
 > 
 > ```text
@@ -158,11 +156,10 @@ Next.js server actions leverage standard HTML native form POST submission mechan
 **Problem:** Write Server Action `createUser(formData: FormData)` extracting string `email` and `name`.
 
 **Expected output:**
-```typescript
-'use server'; export async function createUser(formData: FormData) { const email = formData.get('email') as string; const name = formData.get('name') as string; await db.user.create({ data: { email, name } }); }
-```
-
 > [!check]- Answer
+> ```typescript
+> 'use server'; export async function createUser(formData: FormData) { const email = formData.get('email') as string; const name = formData.get('name') as string; await db.user.create({ data: { email, name } }); }
+> ```
 > - `formData.get('key')` extracts submitted form input fields.
 > 
 > ```typescript

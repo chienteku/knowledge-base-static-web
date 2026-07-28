@@ -229,13 +229,12 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 **Problem:** You have a horizontal navbar menu where list items (`<li>`) have a `margin-right: 20px;`. However, the last list item shifts the right side of the navbar, breaking alignments. Write the CSS selector to remove the margin from only the last item.
 
 **Expected output:**
-```css
-.nav-item:last-child {
-  margin-right: 0;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .nav-item:last-child {
+>   margin-right: 0;
+> }
+> ```
 > - Target the last sibling matching the navigation category class.
 > - Reset the margin parameter value.
 
@@ -248,11 +247,10 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 **Problem:** Write CSS targeting even `<tr>` rows inside `<tbody>`.
 
 **Expected output:**
-```text
-tbody tr:nth-child(even) { background-color: #f9f9f9; }
-```
-
 > [!check]- Answer
+> ```text
+> tbody tr:nth-child(even) { background-color: #f9f9f9; }
+> ```
 > ```css
 > tbody tr:nth-child(even) {
 >   background-color: #f9f9f9;
@@ -261,16 +259,17 @@ tbody tr:nth-child(even) { background-color: #f9f9f9; }
 >
 > **Explanation:** `:nth-child(even)` targets alternating even table rows.
 
+---
+
 ### Exercise 3: :is() vs :where() Pseudo-Class Specificity
 
 **Problem:** Which pseudo-class helper has zero (0-0-0) specificity: `:is()` or `:where()`?
 
 **Expected output:**
-```text
-:where() always has 0 specificity.
-```
-
 > [!check]- Answer
+> ```text
+> :where() always has 0 specificity.
+> ```
 > ```css
 > :where(h1, h2, h3) {
 >   margin: 0; /* Zero specificity reset */

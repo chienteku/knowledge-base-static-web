@@ -106,19 +106,17 @@ This is the single most important setting in TypeScript. By default, TypeScript 
 **Problem:** You hate writing `import Button from '../../../components/Button'`. You want to write `import Button from '@/components/Button'`. What `compilerOptions` in `tsconfig.json` make this possible?
 
 **Expected output:**
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
-  }
-}
-```
-*(Note: You also have to configure your bundler, like Vite or Webpack, to respect this path alias!)*
-
 > [!check]- Answer
+> ```json
+> {
+>   "compilerOptions": {
+>     "baseUrl": ".",
+>     "paths": {
+>       "@/*": ["src/*"]
+>     }
+>   }
+> }
+> ```
 > - Look up `baseUrl` and `paths`.
 
 ---
@@ -130,27 +128,27 @@ This is the single most important setting in TypeScript. By default, TypeScript 
 **Problem:** Name 2 critical strictness flags enabled by `"strict": true` (`strictNullChecks`, `noImplicitAny`).
 
 **Expected output:**
-```text
-strictNullChecks, noImplicitAny
-```
-
 > [!check]- Answer
+> ```text
+> strictNullChecks, noImplicitAny
+> ```
 > ```typescript
 > console.log("strictNullChecks, noImplicitAny");
 > ```
 >
 > **Explanation:** `strict: true` activates family of safety enforcement compiler flags.
 
+---
+
 ### Exercise 3: Configuring Output Directories
 
 **Problem:** Specify compiler option key to redirect compiled JS files into `./dist` directory (`outDir`).
 
 **Expected output:**
-```text
-outDir: "./dist"
-```
-
 > [!check]- Answer
+> ```text
+> outDir: "./dist"
+> ```
 > ```typescript
 > console.log('outDir: "./dist"');
 > ```

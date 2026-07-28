@@ -171,20 +171,19 @@ HTML structure index file loading order:
 **Problem:** You are starting a fresh project and want to write a basic CSS Reset that sets `box-sizing: border-box` on all elements, removes margins and paddings from all elements, and makes sure image tags (`<img>`) are displayed as block elements with a maximum width of 100% to prevent overflow. Write the CSS.
 
 **Expected output:**
-```css
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-```
-
 > [!check]- Answer
+> ```css
+> *, *::before, *::after {
+>   box-sizing: border-box;
+>   margin: 0;
+>   padding: 0;
+> }
+> 
+> img {
+>   display: block;
+>   max-width: 100%;
+> }
+> ```
 > - Use the universal selector `*` to target all boxes.
 > - Select the image tag specifically to assign block and max-width layout limits.
 
@@ -197,11 +196,10 @@ img {
 **Problem:** Write minimal modern CSS reset covering `border-box`, margin/padding reset, and responsive media handling.
 
 **Expected output:**
-```text
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } img, picture, video { max-width: 100%; display: block; }
-```
-
 > [!check]- Answer
+> ```text
+> *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } img, picture, video { max-width: 100%; display: block; }
+> ```
 > ```css
 > *, *::before, *::after {
 >   box-sizing: border-box;
@@ -216,16 +214,17 @@ img {
 >
 > **Explanation:** Modern CSS resets provide clean baseline defaults for modern web apps.
 
+---
+
 ### Exercise 3: Normalize.css Core Strategy
 
 **Problem:** What is the primary architectural goal of Normalize.css?
 
 **Expected output:**
-```text
-To normalize cross-browser default styles while preserving useful browser defaults (like heading sizes and list markers).
-```
-
 > [!check]- Answer
+> ```text
+> To normalize cross-browser default styles while preserving useful browser defaults (like heading sizes and list markers).
+> ```
 > ```text
 > To normalize cross-browser default styles while preserving useful browser defaults (like heading sizes and list markers).
 > ```

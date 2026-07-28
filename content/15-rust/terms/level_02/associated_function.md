@@ -180,11 +180,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Starting Production server on port 8080
-```
-
 > [!check]- Answer
+> ```text
+> Starting Production server on port 8080
+> ```
 > ```rust
 > impl ServerConfig {
 >     fn default() -> ServerConfig {
@@ -203,11 +202,10 @@ Starting Production server on port 8080
 **Problem:** Create a struct `Rectangle` with `width` and `height`. Add an associated constructor function `Rectangle::square(size: u32) -> Self` and call it.
 
 **Expected output:**
-```
-Square: 10x10
-```
-
 > [!check]- Answer
+> ```
+> Square: 10x10
+> ```
 > ```rust
 > struct Rectangle {
 >     width: u32,
@@ -226,16 +224,17 @@ Square: 10x10
 >
 > **Explanation:** Associated functions without `self` parameters act as constructors or namespace helper functions, instantiated via `Type::fn_name()`.
 
+---
+
 ### Exercise 3: Default Instance Construction
 
 **Problem:** Add an associated function `Config::default_config() -> Config` returning a default struct `Config { port: 8080 }`.
 
 **Expected output:**
-```
-Port: 8080
-```
-
 > [!check]- Answer
+> ```
+> Port: 8080
+> ```
 > ```rust
 > struct Config { port: u16 }
 > impl Config {

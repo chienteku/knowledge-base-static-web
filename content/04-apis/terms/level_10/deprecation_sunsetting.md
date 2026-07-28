@@ -140,12 +140,11 @@ Deprecation: @1700000000
 **Problem:** Write HTTP headers declaring an endpoint deprecated as of timestamp `1700000000` and scheduled for final Sunset on `Sun, 01 Nov 2026 00:00:00 GMT`.
 
 **Expected output:**
-```text
-Deprecation: @1700000000
-Sunset: Sun, 01 Nov 2026 00:00:00 GMT
-```
-
 > [!check]- Answer
+> ```text
+> Deprecation: @1700000000
+> Sunset: Sun, 01 Nov 2026 00:00:00 GMT
+> ```
 > ```http
 > Deprecation: @1700000000
 > Sunset: Sun, 01 Nov 2026 00:00:00 GMT
@@ -159,14 +158,13 @@ Sunset: Sun, 01 Nov 2026 00:00:00 GMT
 **Problem:** Identify the 4 phases of a formal API deprecation process.
 
 **Expected output:**
-```text
-1. Announcement (Documentation & headers added)
-2. Deprecated phase (API works, warning headers returned)
-3. Brownout phase (Temporary scheduled outages testing client resilience)
-4. Sunset phase (Permanent shutdown and 410 Gone response)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Announcement (Documentation & headers added)
+> 2. Deprecated phase (API works, warning headers returned)
+> 3. Brownout phase (Temporary scheduled outages testing client resilience)
+> 4. Sunset phase (Permanent shutdown and 410 Gone response)
+> ```
 > ```text
 > 1. Announcement
 > 2. Deprecation (with headers)

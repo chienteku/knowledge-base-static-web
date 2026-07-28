@@ -137,12 +137,11 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 **Problem:** You want to create a big, blue, clickable rectangle that takes the user to `about.html`. Should you use a `<button>` or an `<a>` (Anchor)?
 
 **Expected output:**
-```text
-You should use an `<a>` tag and style it with CSS to LOOK like a button! 
-Buttons (`<button>`) are for actions (submitting forms, opening modals). Anchors (`<a>`) are for navigation (going to a new URL). Using a button for navigation breaks accessibility and prevents users from right-clicking to "Open in new tab".
-```
-
 > [!check]- Answer
+> ```text
+> You should use an `<a>` tag and style it with CSS to LOOK like a button! 
+> Buttons (`<button>`) are for actions (submitting forms, opening modals). Anchors (`<a>`) are for navigation (going to a new URL). Using a button for navigation breaks accessibility and prevents users from right-clicking to "Open in new tab".
+> ```
 > - Think about the semantic *purpose* of the action. Is the user traveling, or is the user commanding?
 
 ---
@@ -154,13 +153,12 @@ Buttons (`<button>`) are for actions (submitting forms, opening modals). Anchors
 **Problem:** List 3 valid values for `<button type="...">` attribute.
 
 **Expected output:**
-```text
-1. submit (submits form data)
-2. reset (resets form fields to initial values)
-3. button (generic button with no default behavior)
-```
-
 > [!check]- Answer
+> ```text
+> 1. submit (submits form data)
+> 2. reset (resets form fields to initial values)
+> 3. button (generic button with no default behavior)
+> ```
 > ```html
 > <button type="submit">Submit</button>
 > <button type="reset">Reset</button>
@@ -169,16 +167,17 @@ Buttons (`<button>`) are for actions (submitting forms, opening modals). Anchors
 >
 > **Explanation:** `type` dictates button form interaction behavior.
 
+---
+
 ### Exercise 3: Keyboard Button Triggering
 
 **Problem:** Which two keyboard keys automatically trigger a focused `<button>` element?
 
 **Expected output:**
-```text
-Enter key and Spacebar.
-```
-
 > [!check]- Answer
+> ```text
+> Enter key and Spacebar.
+> ```
 > ```text
 > Enter key and Spacebar.
 > ```

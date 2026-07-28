@@ -194,11 +194,10 @@ SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice; // De
 Write the SurrealQL query starting from `user:john` to retrieve all genre names of movies watched by users that John follows.
 
 **Expected output:**
-```sql
-SELECT ->follows->user->watched->movie->genre->genre.name AS genres FROM user:john;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT ->follows->user->watched->movie->genre->genre.name AS genres FROM user:john;
+> ```
 > - Follow the node-edge-node alternation pattern strictly.
 > - Chain the path: `user:john` $\rightarrow$ `follows` $\rightarrow$ `user` $\rightarrow$ `watched` $\rightarrow$ `movie` $\rightarrow$ `genre` $\rightarrow$ `genre`.
 
@@ -211,27 +210,27 @@ SELECT ->follows->user->watched->movie->genre->genre.name AS genres FROM user:jo
 **Problem:** Query 2-hop friends-of-friends from `user:alice` deduplicating result IDs.
 
 **Expected output:**
-```text
-SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
+> ```
 > ```surrealql
 > SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
 > ```
 >
 > **Explanation:** Chaining arrow paths `->edge->table->edge->table` traverses multi-hop graph networks.
 
+---
+
 ### Exercise 3: 3-Hop Supply Chain Traversal
 
 **Problem:** Query suppliers 3 hops away: `product:1 -> ->supplied_by->vendor -> ->sourced_from->factory -> ->owned_by->company`.
 
 **Expected output:**
-```text
-SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
+> ```
 > ```surrealql
 > SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
 > ```

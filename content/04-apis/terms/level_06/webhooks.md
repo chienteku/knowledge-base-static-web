@@ -116,12 +116,11 @@ A) Write a script that uses the standard GitHub API to `GET /pulls` every 60 sec
 B) Register a Webhook URL in the GitHub repository settings.
 
 **Expected output:**
-```text
-B) Webhooks! 
-If you poll every 60 seconds, your deployment might be delayed by up to 59 seconds. Furthermore, GitHub heavily Rate Limits their API, so polling constantly will likely get you temporarily banned. A Webhook is instant and costs zero CPU cycles while waiting.
-```
-
 > [!check]- Answer
+> ```text
+> B) Webhooks! 
+> If you poll every 60 seconds, your deployment might be delayed by up to 59 seconds. Furthermore, GitHub heavily Rate Limits their API, so polling constantly will likely get you temporarily banned. A Webhook is instant and costs zero CPU cycles while waiting.
+> ```
 > - Which one is instant? Which one wastes network bandwidth?
 
 ---
@@ -131,11 +130,10 @@ If you poll every 60 seconds, your deployment might be delayed by up to 59 secon
 **Problem:** Describe an exponential backoff retry policy for delivering webhooks when a receiver server returns 500 Server Error.
 
 **Expected output:**
-```text
-Retry initial delivery up to 5-10 times over 24 hours (e.g. 1m, 5m, 15m, 1h, 6h, 24h), moving failed webhooks to a Dead-Letter Queue (DLQ) upon final failure.
-```
-
 > [!check]- Answer
+> ```text
+> Retry initial delivery up to 5-10 times over 24 hours (e.g. 1m, 5m, 15m, 1h, 6h, 24h), moving failed webhooks to a Dead-Letter Queue (DLQ) upon final failure.
+> ```
 > ```text
 > Retry schedule: 1m -> 5m -> 15m -> 1h -> 6h -> 24h.
 > Final failure moves webhook event to Dead-Letter Queue (DLQ) for manual inspection.
@@ -148,11 +146,10 @@ Retry initial delivery up to 5-10 times over 24 hours (e.g. 1m, 5m, 15m, 1h, 6h,
 **Problem:** How does a webhook receiver verify an incoming signature header `X-Signature: sha256=...`?
 
 **Expected output:**
-```text
-Receiver calculates `HMAC-SHA256(rawRequestBody, sharedSecret)` and compares it against the incoming header using timing-safe string comparison.
-```
-
 > [!check]- Answer
+> ```text
+> Receiver calculates `HMAC-SHA256(rawRequestBody, sharedSecret)` and compares it against the incoming header using timing-safe string comparison.
+> ```
 > ```javascript
 > const expectedSig = crypto
 > .createHmac('sha256', secret)

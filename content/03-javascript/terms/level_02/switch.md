@@ -193,11 +193,10 @@ Caution
 **Problem:** Pass string `"5"` into a `switch` with numeric `case 5:` and show that no match occurs.
 
 **Expected output:**
-```text
-Default arm executed
-```
-
 > [!check]- Answer
+> ```text
+> Default arm executed
+> ```
 > ```javascript
 > const val = "5";
 > switch (val) {
@@ -211,16 +210,17 @@ Default arm executed
 >
 > **Explanation:** `switch` statements evaluate case clauses using strict equality `===` (no type coercion).
 
+---
+
 ### Exercise 3: Grouping Multiple Cases
 
 **Problem:** Group `case 1: case 2: case 3:` to execute shared logic printing `"Low"`.
 
 **Expected output:**
-```text
-Low
-```
-
 > [!check]- Answer
+> ```text
+> Low
+> ```
 > ```javascript
 > const num = 2;
 > switch (num) {
@@ -234,7 +234,6 @@ Low
 >
 > **Explanation:** Stacking consecutive `case` statements executes shared code blocks for multiple matching cases.
 
----
 
 ---
 

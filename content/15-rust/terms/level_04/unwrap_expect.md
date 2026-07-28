@@ -177,11 +177,10 @@ fn main() {
 **Problem:** Replace `.unwrap()` on `Option` parsing with `.expect("Port must be specified")`.
 
 **Expected output:**
-```
-Port: 8080
-```
-
 > [!check]- Answer
+> ```
+> Port: 8080
+> ```
 > ```rust
 > fn main() {
 >     let port_opt: Option<u16> = Some(8080);
@@ -192,16 +191,17 @@ Port: 8080
 >
 > **Explanation:** `.expect(msg)` supplies custom diagnostic context messages when unwrapping panics.
 
+---
+
 ### Exercise 3: Safe Fallback Unwrapping with `unwrap_or_default`
 
 **Problem:** Unwrap `Option<String>` using `.unwrap_or_default()` when `None` is encountered.
 
 **Expected output:**
-```
-Default str: ""
-```
-
 > [!check]- Answer
+> ```
+> Default str: ""
+> ```
 > fn main() {
 >     let empty_opt: Option<String> = None;
 >     let val = empty_opt.unwrap_or_default();

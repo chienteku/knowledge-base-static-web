@@ -202,11 +202,10 @@ const players = ref([
 ```
 
 **Expected output:**
-```text
-The loop is modified to use a stable property. Since there is no numeric ID, player.username is the next best choice because it is unique and stable.
-```
-
 > [!check]- Answer
+> ```text
+> The loop is modified to use a stable property. Since there is no numeric ID, player.username is the next best choice because it is unique and stable.
+> ```
 > - The current key is `:key="index"`.
 > - Replace it with a stable unique key using the player's properties.
 > - Since usernames are unique here, `player.username` is the ideal key.
@@ -221,13 +220,12 @@ The loop is modified to use a stable property. Since there is no numeric ID, pla
 3. Range integer iteration (`n in 5`)
 
 **Expected output:**
-```html
-1. <li v-for="(item, index) in items" :key="item.id">{{ item }}</li>
-2. <div v-for="(val, key) in user" :key="key">{{ key }}: {{ val }}</div>
-3. <span v-for="n in 5" :key="n">{{ n }}</span>
-```
-
 > [!check]- Answer
+> ```html
+> 1. <li v-for="(item, index) in items" :key="item.id">{{ item }}</li>
+> 2. <div v-for="(val, key) in user" :key="key">{{ key }}: {{ val }}</div>
+> 3. <span v-for="n in 5" :key="n">{{ n }}</span>
+> ```
 > - Array: `(item, index) in array`
 > - Object: `(val, key, index) in object`
 > - Range: `n in 10` (1-indexed)
@@ -245,11 +243,10 @@ The loop is modified to use a stable property. Since there is no numeric ID, pla
 **Problem:** Why is placing `v-if` and `v-for` on the exact same HTML element considered an anti-pattern in Vue 3?
 
 **Expected output:**
-```text
-In Vue 3, v-if has higher precedence than v-for, so v-if cannot access variables declared inside v-for. Use computed properties to filter lists instead.
-```
-
 > [!check]- Answer
+> ```text
+> In Vue 3, v-if has higher precedence than v-for, so v-if cannot access variables declared inside v-for. Use computed properties to filter lists instead.
+> ```
 > - Vue 3: `v-if` has HIGHER priority than `v-for`.
 > - `v-if` executes first and cannot read loop variables.
 > 

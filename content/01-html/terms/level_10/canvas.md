@@ -220,6 +220,8 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 >
 > **Explanation:** `getContext('2d')` provides the 2D rendering API for drawing canvas shapes.
 
+---
+
 ### Exercise 3: Canvas vs SVG Comparison
 
 **Problem:** Compare Canvas vs SVG rendering modes (Raster/Bitmap vs Vector).

@@ -166,11 +166,10 @@ thread::spawn(move || {
 **Problem:** Pass an owned `String` into a function requiring `T: 'static` bound.
 
 **Expected output:**
-```
-Owned string satisfies 'static: Hello
-```
-
 > [!check]- Answer
+> ```
+> Owned string satisfies 'static: Hello
+> ```
 > ```rust
 > fn spawn_task<T: 'static + std::fmt::Display>(val: T) {
 >     println!("Owned string satisfies 'static: {}", val);
@@ -183,16 +182,17 @@ Owned string satisfies 'static: Hello
 >
 > **Explanation:** Owned types containing no temporary references satisfy `'static` lifetime bounds.
 
+---
+
 ### Exercise 3: Leaking Memory Safely for `'static` References via `Box::leak`
 
 **Problem:** Convert a dynamic `String` into a `&'static str` slice using `Box::leak`.
 
 **Expected output:**
-```
-Leaked static slice: Dynamic
-```
-
 > [!check]- Answer
+> ```
+> Leaked static slice: Dynamic
+> ```
 > fn main() {
 >     let s = String::from("Dynamic");
 >     let static_slice: &'static str = Box::leak(s.into_boxed_str());

@@ -176,11 +176,10 @@ thread::spawn(move || {
 **Problem:** Verify that `Mutex<i32>` implements `Sync` by passing `&Mutex<i32>` to multiple threads.
 
 **Expected output:**
-```
-Mutex implements Sync
-```
-
 > [!check]- Answer
+> ```
+> Mutex implements Sync
+> ```
 > ```rust
 > use std::sync::Mutex;
 > fn assert_sync<T: Sync>() {}
@@ -192,16 +191,17 @@ Mutex implements Sync
 >
 > **Explanation:** `Sync` indicates that references `&T` can be safely shared across concurrent threads.
 
+---
+
 ### Exercise 3: Relationship Between `Send` and `Sync`
 
 **Problem:** Demonstrate that `&T` implements `Send` if and only if `T` implements `Sync`.
 
 **Expected output:**
-```
-Sync relationship verified
-```
-
 > [!check]- Answer
+> ```
+> Sync relationship verified
+> ```
 > fn assert_send<T: Send>() {}
 > fn check_sync<T: Sync>() { assert_send::<&T>(); }
 > fn main() {

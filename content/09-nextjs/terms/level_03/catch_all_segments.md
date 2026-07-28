@@ -120,17 +120,16 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 **Problem:** You have a route `app/store/[...filters]/page.tsx`. A user visits `/store/shoes/nike/red`. How would you extract "shoes" as the category, and the rest of the array elements as tags, using JavaScript destructuring?
 
 **Expected output:**
-```tsx
-export default function Store({ params }: { params: { filters: string[] } }) {
-  // Using array destructuring and the REST operator!
-  const [category, ...tags] = params.filters;
-  
-  console.log(category); // "shoes"
-  console.log(tags);     // ["nike", "red"]
-}
-```
-
 > [!check]- Answer
+> ```tsx
+> export default function Store({ params }: { params: { filters: string[] } }) {
+>   // Using array destructuring and the REST operator!
+>   const [category, ...tags] = params.filters;
+>   
+>   console.log(category); // "shoes"
+>   console.log(tags);     // ["nike", "red"]
+> }
+> ```
 > - Combine your knowledge of Next.js routing with your JS Level 4 knowledge!
 
 ---
@@ -143,13 +142,12 @@ export default function Store({ params }: { params: { filters: string[] } }) {
 3. `/shop/clothing/tops/shirts` 
 
 **Expected output:**
-```text
-1. undefined (or empty array)
-2. ['clothing']
-3. ['clothing', 'tops', 'shirts']
-```
-
 > [!check]- Answer
+> ```text
+> 1. undefined (or empty array)
+> 2. ['clothing']
+> 3. ['clothing', 'tops', 'shirts']
+> ```
 > - Optional catch-all `[[...slug]]` resolves root as `undefined`.
 > 
 > ```text
@@ -165,11 +163,10 @@ export default function Store({ params }: { params: { filters: string[] } }) {
 **Problem:** Write `PageProps` TypeScript type for optional catch-all segment `[[...slug]]`.
 
 **Expected output:**
-```text
-interface PageProps { params: { slug?: string[] }; }
-```
-
 > [!check]- Answer
+> ```text
+> interface PageProps { params: { slug?: string[] }; }
+> ```
 > - Optional catch-all `slug` parameter is typed as `string[] | undefined`.
 > 
 > ```typescript

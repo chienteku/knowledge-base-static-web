@@ -280,13 +280,12 @@ Full-width header placement:
 **Problem:** You have a grid container with 12 responsive columns. Write the ruleset for a `.footer` child element so that it always spans the entire width of the grid, regardless of screen resizing.
 
 **Expected output:**
-```css
-.footer {
-  grid-column: 1 / -1;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .footer {
+>   grid-column: 1 / -1;
+> }
+> ```
 > - Remember the negative index shortcut that targets the final grid boundary line.
 
 ---
@@ -298,11 +297,10 @@ Full-width header placement:
 **Problem:** Write CSS `grid-column` shorthand spanning a grid item across all columns from first line to last line.
 
 **Expected output:**
-```text
-grid-column: 1 / -1;
-```
-
 > [!check]- Answer
+> ```text
+> grid-column: 1 / -1;
+> ```
 > ```css
 > .full-width {
 >   grid-column: 1 / -1;
@@ -311,16 +309,17 @@ grid-column: 1 / -1;
 >
 > **Explanation:** `1 / -1` spans from line 1 to the final grid line (-1).
 
+---
+
 ### Exercise 3: Span Keyword Syntax
 
 **Problem:** Write `grid-column` syntax starting at column line 2 and spanning 3 columns.
 
 **Expected output:**
-```text
-grid-column: 2 / span 3;
-```
-
 > [!check]- Answer
+> ```text
+> grid-column: 2 / span 3;
+> ```
 > ```css
 > .span-item {
 >   grid-column: 2 / span 3;

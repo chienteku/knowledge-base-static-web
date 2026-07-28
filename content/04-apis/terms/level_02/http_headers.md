@@ -119,12 +119,11 @@ res.setHeader('User-Token', sanitizedInput);
 **Problem:** Go to any website (e.g., github.com). Right-click and open Chrome DevTools. Go to the **Network** tab. Refresh the page. Click on the very first document request (usually the website URL). Look at the "Response Headers" section. What is the `Content-Type`?
 
 **Expected output:**
-```text
-It will be `text/html; charset=utf-8`. 
-The server uses this header to tell Chrome, "Hey, this is HTML, please render it visually on the screen instead of just downloading a text file!"
-```
-
 > [!check]- Answer
+> ```text
+> It will be `text/html; charset=utf-8`. 
+> The server uses this header to tell Chrome, "Hey, this is HTML, please render it visually on the screen instead of just downloading a text file!"
+> ```
 > - The Network tab is the most important tool for debugging APIs!
 
 ---
@@ -137,13 +136,12 @@ The server uses this header to tell Chrome, "Hey, this is HTML, please render it
 3. `Content-Type` 
 
 **Expected output:**
-```text
-1. Request Header
-2. Response Header
-3. Representation Header
-```
-
 > [!check]- Answer
+> ```text
+> 1. Request Header
+> 2. Response Header
+> 3. Representation Header
+> ```
 > ```text
 > 1. Authorization -> Request Header
 > 2. Server -> Response Header
@@ -157,11 +155,10 @@ The server uses this header to tell Chrome, "Hey, this is HTML, please render it
 **Problem:** True or False: HTTP header names are case-insensitive according to RFC specifications.
 
 **Expected output:**
-```text
-True. `content-type`, `Content-Type`, and `CONTENT-TYPE` are semantically equivalent.
-```
-
 > [!check]- Answer
+> ```text
+> True. `content-type`, `Content-Type`, and `CONTENT-TYPE` are semantically equivalent.
+> ```
 > ```text
 > True. HTTP header field names are case-insensitive.
 > ```

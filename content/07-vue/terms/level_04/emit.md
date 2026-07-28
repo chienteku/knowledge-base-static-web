@@ -129,14 +129,13 @@ emit('user-updated', user);
 **Problem:** You know that `v-model` creates Two-Way Data Binding on inputs. How do you think `v-model` works on custom components?
 
 **Expected output:**
-```text
-It's just a combination of Props and Emits!
-When you write `<CustomInput v-model="text" />`, Vue automatically translates it to:
-`<CustomInput :modelValue="text" @update:modelValue="newValue => text = newValue" />`
-The child receives the `modelValue` prop, and emits `update:modelValue` when it changes!
-```
-
 > [!check]- Answer
+> ```text
+> It's just a combination of Props and Emits!
+> When you write `<CustomInput v-model="text" />`, Vue automatically translates it to:
+> `<CustomInput :modelValue="text" @update:modelValue="newValue => text = newValue" />`
+> The child receives the `modelValue` prop, and emits `update:modelValue` when it changes!
+> ```
 > - Remember the deconstruction of `v-model` from Level 3?
 
 ---
@@ -146,11 +145,10 @@ The child receives the `modelValue` prop, and emits `update:modelValue` when it 
 **Problem:** Write `defineEmits()` setup in `<script setup>` with object validation for event `'submit'` checking that `email` payload string contains `@`.
 
 **Expected output:**
-```javascript
-const emit = defineEmits({ submit: (payload) => typeof payload.email === 'string' && payload.email.includes('@') });
-```
-
 > [!check]- Answer
+> ```javascript
+> const emit = defineEmits({ submit: (payload) => typeof payload.email === 'string' && payload.email.includes('@') });
+> ```
 > - Object syntax in `defineEmits` validates event payload arguments.
 > 
 > ```javascript
@@ -168,11 +166,10 @@ const emit = defineEmits({ submit: (payload) => typeof payload.email === 'string
 **Problem:** How does a parent component listen to a custom event `submit-form` emitted by child component `<ChildForm>`?
 
 **Expected output:**
-```text
-<ChildForm @submit-form="handleParentSubmit" />
-```
-
 > [!check]- Answer
+> ```text
+> <ChildForm @submit-form="handleParentSubmit" />
+> ```
 > - Parents listen to child custom events using `@eventName` directive.
 > 
 > ```html

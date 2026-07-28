@@ -142,12 +142,11 @@ const [state, formAction] = useActionState(action, null);
 **Problem:** Why is `useFormState` particularly powerful when combined with a schema validation library like Zod?
 
 **Expected output:**
-```text
-Because Zod returns structured error objects (e.g., specifying that the 'password' field specifically failed the 'minimum length' test). 
-You can return that exact Zod error object from the Server Action, and `useFormState` will instantly make it available on the client, allowing you to easily highlight the exact input field that failed validation in red!
-```
-
 > [!check]- Answer
+> ```text
+> Because Zod returns structured error objects (e.g., specifying that the 'password' field specifically failed the 'minimum length' test). 
+> You can return that exact Zod error object from the Server Action, and `useFormState` will instantly make it available on the client, allowing you to easily highlight the exact input field that failed validation in red!
+> ```
 > - Think about returning complex objects instead of just string messages.
 
 ---
@@ -157,11 +156,10 @@ You can return that exact Zod error object from the Server Action, and `useFormS
 **Problem:** Write Client Component form using React 19 `useActionState` displaying error message returned from `formAction`.
 
 **Expected output:**
-```tsx
-'use client'; import { useActionState } from 'react'; import { signupAction } from './actions'; export function SignupForm() { const [state, formAction, isPending] = useActionState(signupAction, null); return ( <form action={formAction}> <input name="email" /> {state?.error && <p>{state.error}</p>} <button disabled={isPending}>Sign Up</button> </form> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; import { useActionState } from 'react'; import { signupAction } from './actions'; export function SignupForm() { const [state, formAction, isPending] = useActionState(signupAction, null); return ( <form action={formAction}> <input name="email" /> {state?.error && <p>{state.error}</p>} <button disabled={isPending}>Sign Up</button> </form> ); }
+> ```
 > - `useActionState` binds server action responses to client form state.
 > 
 > ```tsx
@@ -191,11 +189,10 @@ You can return that exact Zod error object from the Server Action, and `useFormS
 **Problem:** What is the new standard React 19 hook name that replaces `useFormState` from `react-dom`?
 
 **Expected output:**
-```text
-useActionState (imported from 'react')
-```
-
 > [!check]- Answer
+> ```text
+> useActionState (imported from 'react')
+> ```
 > - React 19 renamed `useFormState` to `useActionState` in `react` package.
 > 
 > ```typescript

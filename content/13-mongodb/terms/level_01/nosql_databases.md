@@ -124,13 +124,12 @@ Use relational SQL databases when complex 3NF normalization is required
 3.  Storing a product catalog for an e-commerce store where shoes have sizes, laptops have RAM specs, and books have page counts.
 
 **Expected output:**
-```text
-1. Key-Value (e.g. Redis) - Optimized for simple, ultra-fast key lookups.
-2. Graph (e.g. Neo4j) - Optimized for traversing relationships and network connections.
-3. Document (e.g. MongoDB) - Optimized for flexible schemas containing nested, variable fields.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Key-Value (e.g. Redis) - Optimized for simple, ultra-fast key lookups.
+> 2. Graph (e.g. Neo4j) - Optimized for traversing relationships and network connections.
+> 3. Document (e.g. MongoDB) - Optimized for flexible schemas containing nested, variable fields.
+> ```
 > - Consider which database specializes in maps/connections.
 > - Think about where nested JSON arrays fit best.
 
@@ -143,27 +142,27 @@ Use relational SQL databases when complex 3NF normalization is required
 **Problem:** List 4 primary families of NoSQL databases (Document, Key-Value, Wide-Column, Graph).
 
 **Expected output:**
-```text
-Document, Key-Value, Wide-Column, Graph
-```
-
 > [!check]- Answer
+> ```text
+> Document, Key-Value, Wide-Column, Graph
+> ```
 > ```text
 > Document, Key-Value, Wide-Column, Graph
 > ```
 >
 > **Explanation:** NoSQL databases fall into document, key-value, wide-column, and graph paradigms.
 
+---
+
 ### Exercise 3: BASE vs ACID Guarantees
 
 **Problem:** What does BASE stand for in distributed NoSQL systems? (Basically Available, Soft-state, Eventual consistency).
 
 **Expected output:**
-```text
-Basically Available, Soft-state, Eventual consistency
-```
-
 > [!check]- Answer
+> ```text
+> Basically Available, Soft-state, Eventual consistency
+> ```
 > ```text
 > Basically Available, Soft-state, Eventual consistency
 > ```

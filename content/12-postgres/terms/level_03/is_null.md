@@ -147,13 +147,12 @@ WHERE payment_date = NULL;
 However, the dashboard displays an empty list. Fix the query so that it successfully locates unpaid customers.
 
 **Expected output:**
-```sql
-SELECT customer_name 
-FROM invoices 
-WHERE payment_date IS NULL;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT customer_name 
+> FROM invoices 
+> WHERE payment_date IS NULL;
+> ```
 > - Identify the comparison operator in the `WHERE` clause.
 > - Swap the equal operator for the dedicated missing state checker.
 
@@ -166,27 +165,27 @@ WHERE payment_date IS NULL;
 **Problem:** Query users missing both `phone` and `address` using `IS NULL`.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE phone IS NULL AND address IS NULL;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE phone IS NULL AND address IS NULL;
+> ```
 > ```sql
 > SELECT * FROM users WHERE phone IS NULL AND address IS NULL;
 > ```
 >
 > **Explanation:** `IS NULL` filters rows lacking optional column values.
 
+---
+
 ### Exercise 3: IS DISTINCT FROM Null-Safe Comparison
 
 **Problem:** Compare column `status` to `'active'` safely when `status` can be NULL using `IS DISTINCT FROM`.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE status IS DISTINCT FROM 'active';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE status IS DISTINCT FROM 'active';
+> ```
 > ```sql
 > SELECT * FROM users WHERE status IS DISTINCT FROM 'active';
 > ```

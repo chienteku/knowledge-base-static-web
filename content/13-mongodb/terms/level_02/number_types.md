@@ -137,14 +137,13 @@ const { Long } = require('mongodb'); const id = Long.fromString("900719925474099
 2.  A money field named `late_fee` with the value `2.50` (saved as Decimal128).
 
 **Expected output:**
-```javascript
-{
-  books_count: NumberInt(140),
-  late_fee: NumberDecimal("2.50")
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   books_count: NumberInt(140),
+>   late_fee: NumberDecimal("2.50")
+> }
+> ```
 > - Use the constructor wrappers `NumberInt` and `NumberDecimal`.
 > - Always wrap the decimal value inside a text string `"2.50"` inside the constructor to preserve accuracy.
 
@@ -157,11 +156,10 @@ const { Long } = require('mongodb'); const id = Long.fromString("900719925474099
 **Problem:** Insert document with 32-bit int `age` using `NumberInt()` and 64-bit long `views` using `NumberLong()`.
 
 **Expected output:**
-```text
-db.users.insertOne({ age: NumberInt(30), views: NumberLong(100000) });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.insertOne({ age: NumberInt(30), views: NumberLong(100000) });
+> ```
 > ```javascript
 > db.users.insertOne({
 >   age: NumberInt(30),
@@ -171,16 +169,17 @@ db.users.insertOne({ age: NumberInt(30), views: NumberLong(100000) });
 >
 > **Explanation:** `NumberInt()` and `NumberLong()` enforce explicit 32-bit and 64-bit integer BSON storage.
 
+---
+
 ### Exercise 3: BSON Number Types Overview
 
 **Problem:** List 3 numeric BSON types in MongoDB (`double`, `int` / 32-bit, `long` / 64-bit, `decimal` / 128-bit).
 
 **Expected output:**
-```text
-double, int, long, decimal
-```
-
 > [!check]- Answer
+> ```text
+> double, int, long, decimal
+> ```
 > ```text
 > double, int, long, decimal
 > ```

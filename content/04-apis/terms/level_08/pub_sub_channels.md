@@ -240,11 +240,10 @@ publisher.publish('events', JSON.stringify({ event: 'file_ready', url: s3Url }))
 **Problem:** Explain how Publish-Subscribe (Pub/Sub) pattern decouples message senders from receivers.
 
 **Expected output:**
-```text
-Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-```
-
 > [!check]- Answer
+> ```text
+> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
+> ```
 > ```text
 > Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
 > ```
@@ -256,11 +255,10 @@ Publishers broadcast messages to named channels without knowing who or how many 
 **Problem:** In Redis Pub/Sub, which command allows subscribing to channels matching a glob pattern (e.g. `orders.*`)?
 
 **Expected output:**
-```text
-PSUBSCRIBE orders.*
-```
-
 > [!check]- Answer
+> ```text
+> PSUBSCRIBE orders.*
+> ```
 > ```text
 > PSUBSCRIBE orders.*
 > ```
@@ -272,11 +270,10 @@ PSUBSCRIBE orders.*
 **Problem:** Explain how Publish-Subscribe (Pub/Sub) pattern decouples message senders from receivers.
 
 **Expected output:**
-```text
-Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-```
-
 > [!check]- Answer
+> ```text
+> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
+> ```
 > ```text
 > Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
 > ```
@@ -288,11 +285,10 @@ Publishers broadcast messages to named channels without knowing who or how many 
 **Problem:** In Redis Pub/Sub, which command allows subscribing to channels matching a glob pattern (e.g. `orders.*`)?
 
 **Expected output:**
-```text
-PSUBSCRIBE orders.*
-```
-
 > [!check]- Answer
+> ```text
+> PSUBSCRIBE orders.*
+> ```
 > ```text
 > PSUBSCRIBE orders.*
 > ```
@@ -304,11 +300,10 @@ PSUBSCRIBE orders.*
 **Problem:** Explain how Publish-Subscribe (Pub/Sub) pattern decouples message senders from receivers.
 
 **Expected output:**
-```text
-Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
-```
-
 > [!check]- Answer
+> ```text
+> Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
+> ```
 > ```text
 > Publishers broadcast messages to named channels without knowing who or how many subscribers exist. Subscribers listen to channels without knowing publisher identity.
 > ```
@@ -320,11 +315,10 @@ Publishers broadcast messages to named channels without knowing who or how many 
 **Problem:** In Redis Pub/Sub, which command allows subscribing to channels matching a glob pattern (e.g. `orders.*`)?
 
 **Expected output:**
-```text
-PSUBSCRIBE orders.*
-```
-
 > [!check]- Answer
+> ```text
+> PSUBSCRIBE orders.*
+> ```
 > ```text
 > PSUBSCRIBE orders.*
 > ```

@@ -153,11 +153,10 @@ db.posts.find({ tags: "tech" }); // Matches any array containing "tech"
 Write the MongoDB query to select all products that belong to the `'electronics'` category.
 
 **Expected output:**
-```javascript
-db.products.find({ categories: "electronics" });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find({ categories: "electronics" });
+> ```
 > - You do not need special array search operators for basic element matching.
 > - Direct matching triggers implicit unwrapping searches.
 
@@ -170,27 +169,27 @@ db.products.find({ categories: "electronics" });
 **Problem:** Query all documents in `posts` collection containing tag `"mongodb"` inside `tags` array.
 
 **Expected output:**
-```text
-db.posts.find({ tags: "mongodb" });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ tags: "mongodb" });
+> ```
 > ```javascript
 > db.posts.find({ tags: "mongodb" });
 > ```
 >
 > **Explanation:** Passing a scalar value to an array field queries if any array element matches.
 
+---
+
 ### Exercise 3: Querying Array Size with `$size`
 
 **Problem:** Query posts where `tags` array contains exactly 3 items using `$size`.
 
 **Expected output:**
-```text
-db.posts.find({ tags: { $size: 3 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ tags: { $size: 3 } });
+> ```
 > ```javascript
 > db.posts.find({ tags: { $size: 3 } });
 > ```

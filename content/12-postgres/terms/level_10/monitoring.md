@@ -171,12 +171,11 @@ SET idle_in_transaction_session_timeout = '10s';
 2.  Should you spend time optimizing it? Explain why.
 
 **Expected output:**
-```text
-1. No, the query is extremely fast (average execution time is 0.05 ms, indicating it is using a primary key index scan).
-2. No, you should not spend time optimizing it. Although it is the highest consumer of total execution time (50 seconds), this is simply because it was called 1 million times. Because the average speed is already optimal, there is no way to make it faster. Focus your efforts instead on queries that have a high `mean_exec_time` (e.g. 500ms), even if they have fewer calls.
-```
-
 > [!check]- Answer
+> ```text
+> 1. No, the query is extremely fast (average execution time is 0.05 ms, indicating it is using a primary key index scan).
+> 2. No, you should not spend time optimizing it. Although it is the highest consumer of total execution time (50 seconds), this is simply because it was called 1 million times. Because the average speed is already optimal, there is no way to make it faster. Focus your efforts instead on queries that have a high `mean_exec_time` (e.g. 500ms), even if they have fewer calls.
+> ```
 > - Differentiate the query's average speed (`mean_exec_time`) from its cumulative load (`total_exec_time`).
 > - Focus optimization efforts on queries with poor average performance.
 
@@ -189,11 +188,10 @@ SET idle_in_transaction_session_timeout = '10s';
 **Problem:** Query top 5 queries by mean execution time from `pg_stat_statements`.
 
 **Expected output:**
-```text
-SELECT query, calls, total_exec_time, mean_exec_time FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT query, calls, total_exec_time, mean_exec_time FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 5;
+> ```
 > ```sql
 > SELECT query, calls, total_exec_time, mean_exec_time
 > FROM pg_stat_statements
@@ -202,16 +200,17 @@ SELECT query, calls, total_exec_time, mean_exec_time FROM pg_stat_statements ORD
 >
 > **Explanation:** `pg_stat_statements` tracks aggregated query execution metrics across all client connections.
 
+---
+
 ### Exercise 3: Querying Active Long-Running Queries
 
 **Problem:** Query active queries running for longer than 5 seconds from `pg_stat_activity`.
 
 **Expected output:**
-```text
-SELECT pid, now() - query_start AS duration, query FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > INTERVAL '5 seconds';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pid, now() - query_start AS duration, query FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > INTERVAL '5 seconds';
+> ```
 > ```sql
 > SELECT pid, now() - query_start AS duration, query
 > FROM pg_stat_activity

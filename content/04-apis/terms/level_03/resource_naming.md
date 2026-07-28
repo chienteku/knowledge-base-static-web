@@ -229,13 +229,12 @@ Accept: application/json ; Content negotiation header
 3. `/api/v1/deleteItem?id=4` 
 
 **Expected output:**
-```text
-1. /api/v1/active-orders (GET)
-2. /api/v1/user-profiles (no trailing slash)
-3. /api/v1/items/4 (DELETE)
-```
-
 > [!check]- Answer
+> ```text
+> 1. /api/v1/active-orders (GET)
+> 2. /api/v1/user-profiles (no trailing slash)
+> 3. /api/v1/items/4 (DELETE)
+> ```
 > ```text
 > 1. GET /api/v1/active-orders
 > 2. GET /api/v1/user-profiles
@@ -249,11 +248,10 @@ Accept: application/json ; Content negotiation header
 **Problem:** Why should REST API design avoid trailing slashes in endpoint paths (e.g. `/users/` vs `/users`)?
 
 **Expected output:**
-```text
-Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-```
-
 > [!check]- Answer
+> ```text
+> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
+> ```
 > ```text
 > Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
 > ```
@@ -268,13 +266,12 @@ Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separa
 3. `/api/v1/deleteItem?id=4` 
 
 **Expected output:**
-```text
-1. /api/v1/active-orders (GET)
-2. /api/v1/user-profiles (no trailing slash)
-3. /api/v1/items/4 (DELETE)
-```
-
 > [!check]- Answer
+> ```text
+> 1. /api/v1/active-orders (GET)
+> 2. /api/v1/user-profiles (no trailing slash)
+> 3. /api/v1/items/4 (DELETE)
+> ```
 > ```text
 > 1. GET /api/v1/active-orders
 > 2. GET /api/v1/user-profiles
@@ -288,11 +285,10 @@ Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separa
 **Problem:** Why should REST API design avoid trailing slashes in endpoint paths (e.g. `/users/` vs `/users`)?
 
 **Expected output:**
-```text
-Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-```
-
 > [!check]- Answer
+> ```text
+> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
+> ```
 > ```text
 > Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
 > ```
@@ -307,13 +303,12 @@ Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separa
 3. `/api/v1/deleteItem?id=4` 
 
 **Expected output:**
-```text
-1. /api/v1/active-orders (GET)
-2. /api/v1/user-profiles (no trailing slash)
-3. /api/v1/items/4 (DELETE)
-```
-
 > [!check]- Answer
+> ```text
+> 1. /api/v1/active-orders (GET)
+> 2. /api/v1/user-profiles (no trailing slash)
+> 3. /api/v1/items/4 (DELETE)
+> ```
 > ```text
 > 1. GET /api/v1/active-orders
 > 2. GET /api/v1/user-profiles
@@ -327,11 +322,10 @@ Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separa
 **Problem:** Why should REST API design avoid trailing slashes in endpoint paths (e.g. `/users/` vs `/users`)?
 
 **Expected output:**
-```text
-Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
-```
-
 > [!check]- Answer
+> ```text
+> Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
+> ```
 > ```text
 > Many Web servers and HTTP caches treat `/users` and `/users/` as distinct separate resources, causing duplicate cache entries or unexpected 301 redirects.
 > ```

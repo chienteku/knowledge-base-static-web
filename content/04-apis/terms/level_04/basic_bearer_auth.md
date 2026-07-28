@@ -105,12 +105,11 @@ Authorization: Bearer eyJhbGciOi... ; Standard OAuth2 Bearer token header
 **Problem:** You are building a frontend app. The user types their email and password into a login form and clicks submit. You need to send these credentials to `/api/login`. Which scheme should you use in the `Authorization` header?
 
 **Expected output:**
-```text
-Basic Authentication.
-You are sending the raw username and password. Once the server verifies it, it will return a Token, which you will then use for *Bearer* Authentication on all future requests!
-```
-
 > [!check]- Answer
+> ```text
+> Basic Authentication.
+> You are sending the raw username and password. Once the server verifies it, it will return a Token, which you will then use for *Bearer* Authentication on all future requests!
+> ```
 > - Are you sending a raw password, or a generated token?
 
 ---
@@ -120,11 +119,10 @@ You are sending the raw username and password. Once the server verifies it, it w
 **Problem:** Encode username `admin` and password `secret` into an HTTP Basic Auth header string format.
 
 **Expected output:**
-```text
-Authorization: Basic YWRtaW46c2VjcmV0
-```
-
 > [!check]- Answer
+> ```text
+> Authorization: Basic YWRtaW46c2VjcmV0
+> ```
 > ```javascript
 > const credentials = btoa('admin:secret'); // 'YWRtaW46c2VjcmV0'
 > const header = `Authorization: Basic ${credentials}`;
@@ -137,11 +135,10 @@ Authorization: Basic YWRtaW46c2VjcmV0
 **Problem:** Which RFC specification defines the HTTP Bearer Token authentication scheme?
 
 **Expected output:**
-```text
-RFC 6750 (The OAuth 2.0 Authorization Framework: Bearer Token Usage).
-```
-
 > [!check]- Answer
+> ```text
+> RFC 6750 (The OAuth 2.0 Authorization Framework: Bearer Token Usage).
+> ```
 > ```text
 > RFC 6750 (OAuth 2.0 Bearer Token Usage).
 > ```

@@ -169,11 +169,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Status: Not Found
-```
-
 > [!check]- Answer
+> ```text
+> Status: Not Found
+> ```
 > - Add `_ => "Unknown Error",` to the bottom of the match list.
 
 ---
@@ -183,11 +182,10 @@ Status: Not Found
 **Problem:** Match an integer `x` using match guards `n if n % 2 == 0 => "Even"` and `_ => "Odd"`.
 
 **Expected output:**
-```
-Even
-```
-
 > [!check]- Answer
+> ```
+> Even
+> ```
 > ```rust
 > fn main() {
 >     let x = 4;
@@ -201,16 +199,17 @@ Even
 >
 > **Explanation:** Match guards (`if condition`) add secondary runtime Boolean predicates to match arms.
 
+---
+
 ### Exercise 3: Matching Tuple Ranges
 
 **Problem:** Match coordinate tuple `(x, y)`: `(0, 0) => "Origin"`, `(x, 0) => "X-axis"`, `(0, y) => "Y-axis"`, `_ => "Space"`.
 
 **Expected output:**
-```
-X-axis
-```
-
 > [!check]- Answer
+> ```
+> X-axis
+> ```
 > ```rust
 > fn main() {
 >     let pt = (5, 0);

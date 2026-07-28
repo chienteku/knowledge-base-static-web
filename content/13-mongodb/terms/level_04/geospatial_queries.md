@@ -168,21 +168,20 @@ db.places.find({ location: { $near: { $geometry: point } } });
 Write the query to find all documents in the `stores` collection located within `5000` meters (5 km) of the user, sorting them closest-first.
 
 **Expected output:**
-```javascript
-db.stores.find({
-  location: {
-    $near: {
-      $geometry: {
-        type: "Point",
-        coordinates: [ -73.935242, 40.730610 ]
-      },
-      $maxDistance: 5000
-    }
-  }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.stores.find({
+>   location: {
+>     $near: {
+>       $geometry: {
+>         type: "Point",
+>         coordinates: [ -73.935242, 40.730610 ]
+>       },
+>       $maxDistance: 5000
+>     }
+>   }
+> });
+> ```
 > - Order the user's coordinates with longitude `-73.935242` first.
 > - Supply the max distance parameter in meters inside the `$near` subdocument.
 
@@ -195,11 +194,10 @@ db.stores.find({
 **Problem:** Find places within 5000 meters of GeoJSON Point `[-73.97, 40.77]` using `$near` and `$maxDistance`.
 
 **Expected output:**
-```text
-db.places.find({ location: { $near: { $geometry: { type: "Point", coordinates: [-73.97, 40.77] }, $maxDistance: 5000 } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.places.find({ location: { $near: { $geometry: { type: "Point", coordinates: [-73.97, 40.77] }, $maxDistance: 5000 } } });
+> ```
 > ```javascript
 > db.places.find({
 >   location: {
@@ -213,16 +211,17 @@ db.places.find({ location: { $near: { $geometry: { type: "Point", coordinates: [
 >
 > **Explanation:** `$near` with `$maxDistance` returns spatial documents sorted by distance from query points.
 
+---
+
 ### Exercise 3: GeoJSON Polygon Containment with `$geoWithin`
 
 **Problem:** Query places inside GeoJSON Polygon using `$geoWithin`.
 
 **Expected output:**
-```text
-db.places.find({ location: { $geoWithin: { $geometry: polygonDoc } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.places.find({ location: { $geoWithin: { $geometry: polygonDoc } } });
+> ```
 > ```javascript
 > db.places.find({
 >   location: { $geoWithin: { $geometry: polygonDoc } }

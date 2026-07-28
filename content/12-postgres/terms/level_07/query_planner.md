@@ -143,14 +143,13 @@ ANALYZE table_name; -- Updates query planner catalog statistics
 4.  `ANALYZE`
 
 **Expected output:**
-```text
-1. pg_statistic: The system catalog table storing table histograms and null fractions.
-2. EXPLAIN: The SQL command used by developers to inspect the planner's selected plan.
-3. random_page_cost: The cost variable representing random disk seek reads.
-4. ANALYZE: The maintenance command used to update statistics.
-```
-
 > [!check]- Answer
+> ```text
+> 1. pg_statistic: The system catalog table storing table histograms and null fractions.
+> 2. EXPLAIN: The SQL command used by developers to inspect the planner's selected plan.
+> 3. random_page_cost: The cost variable representing random disk seek reads.
+> 4. ANALYZE: The maintenance command used to update statistics.
+> ```
 > - Differentiate diagnostic query statements from system catalog tables.
 > - Consider which parameter represents page-read penalty ratios.
 
@@ -163,27 +162,27 @@ ANALYZE table_name; -- Updates query planner catalog statistics
 **Problem:** SQL command updating statistics catalog for `orders` table (`ANALYZE orders;`).
 
 **Expected output:**
-```text
-ANALYZE orders;
-```
-
 > [!check]- Answer
+> ```text
+> ANALYZE orders;
+> ```
 > ```sql
 > ANALYZE orders;
 > ```
 >
 > **Explanation:** `ANALYZE` updates `pg_statistic` catalog entries used by the query planner.
 
+---
+
 ### Exercise 3: Inspecting Estimated Query Costs
 
 **Problem:** What do the numbers `cost=0.00..8.50` represent in `EXPLAIN` output? (Query planner estimated startup cost and total execution cost units).
 
 **Expected output:**
-```text
-Estimated startup cost and total execution cost units calculated by the planner
-```
-
 > [!check]- Answer
+> ```text
+> Estimated startup cost and total execution cost units calculated by the planner
+> ```
 > ```text
 > Estimated startup cost and total execution cost units calculated by the planner
 > ```

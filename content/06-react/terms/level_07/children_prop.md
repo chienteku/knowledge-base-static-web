@@ -135,11 +135,10 @@ function Wrapper({ children }) {
 **Problem:** Create `Card` layout component wrapping `children` in styled `div` wrapper.
 
 **Expected output:**
-```text
-function Card({ title, children }) { return <div className="card"><h2>{title}</h2><div className="card-body">{children}</div></div>; }
-```
-
 > [!check]- Answer
+> ```text
+> function Card({ title, children }) { return <div className="card"><h2>{title}</h2><div className="card-body">{children}</div></div>; }
+> ```
 > ```javascript
 > function Card({ title, children }) {
 >   return (
@@ -153,16 +152,17 @@ function Card({ title, children }) { return <div className="card"><h2>{title}</h
 >
 > **Explanation:** The `children` prop projects nested JSX elements passed inside component tags.
 
+---
+
 ### Exercise 2: Safely Counting Children
 
 **Problem:** Use `React.Children.count(children)` to return exact count of passed children elements.
 
 **Expected output:**
-```text
-function Badge({ children }) { return <span>Count: {React.Children.count(children)}</span>; }
-```
-
 > [!check]- Answer
+> ```text
+> function Badge({ children }) { return <span>Count: {React.Children.count(children)}</span>; }
+> ```
 > ```javascript
 > function Badge({ children }) {
 >   return <span>Count: {React.Children.count(children)}</span>;
@@ -171,18 +171,17 @@ function Badge({ children }) { return <span>Count: {React.Children.count(childre
 >
 > **Explanation:** `React.Children.count()` safely counts children regardless of single, array, or null types.
 
-
+---
 
 ### Exercise 3: Cloning Children with Added Props
 
 **Problem:** Use `React.cloneElement` to inject `disabled={true}` into child components.
 
 **Expected output:**
-```text
-function FieldGroup({ children }) { return <>{React.Children.map(children, child => React.isValidElement(child) ? React.cloneElement(child, { disabled: true }) : child)}</>; }
-```
-
 > [!check]- Answer
+> ```text
+> function FieldGroup({ children }) { return <>{React.Children.map(children, child => React.isValidElement(child) ? React.cloneElement(child, { disabled: true }) : child)}</>; }
+> ```
 > ```javascript
 > function FieldGroup({ children }) {
 >   return (

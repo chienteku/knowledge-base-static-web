@@ -205,14 +205,13 @@ A simple outline schema:
 ```
 
 **Expected output:**
-```html
-<h1>Car Catalog</h1>
-<h2>Sedans</h2>
-<h3>Toyota Camry</h3>
-<h2>SUVs</h2>
-```
-
 > [!check]- Answer
+> ```html
+> <h1>Car Catalog</h1>
+> <h2>Sedans</h2>
+> <h3>Toyota Camry</h3>
+> <h2>SUVs</h2>
+> ```
 > - The page jumps from `<h1>` directly to `<h3>` at "Sedans". That level must be repaired to `<h2>`.
 > - "Toyota Camry" should drop to `<h3>` since it is a subsection of "Sedans".
 
@@ -225,27 +224,27 @@ A simple outline schema:
 **Problem:** Audit heading hierarchy order: `<h1>` -> `<h2>` -> `<h4>` -> `<h3>`. Identify error and fix.
 
 **Expected output:**
-```text
-Error: <h4> comes before <h3>. Fix: <h1> -> <h2> -> <h3> -> <h4>.
-```
-
 > [!check]- Answer
+> ```text
+> Error: <h4> comes before <h3>. Fix: <h1> -> <h2> -> <h3> -> <h4>.
+> ```
 > ```text
 > Error: <h4> comes before <h3>. Fix: <h1> -> <h2> -> <h3> -> <h4>.
 > ```
 >
 > **Explanation:** Heading levels must descend sequentially without skipping or reversing levels.
 
+---
+
 ### Exercise 3: Screen Reader Heading Navigation Shortcut
 
 **Problem:** Which keyboard shortcut key do screen reader users (NVDA/JAWS) press to cycle through headings on a webpage?
 
 **Expected output:**
-```text
-H key (or 1-6 number keys for specific heading levels).
-```
-
 > [!check]- Answer
+> ```text
+> H key (or 1-6 number keys for specific heading levels).
+> ```
 > ```text
 > H key (or 1-6 number keys for specific heading levels).
 > ```

@@ -203,16 +203,15 @@ To center elements inside a single row vertically, you must use **`align-items: 
 **Problem:** You are building a responsive image gallery. The images wrap onto three rows inside a container that has a fixed height of `600px`. You want the first row at the top edge, the third row at the bottom edge, and the middle row centered. What property and value do you declare?
 
 **Expected output:**
-```css
-.gallery-container {
-  display: flex;
-  flex-wrap: wrap;
-  height: 600px;
-  align-content: space-between;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .gallery-container {
+>   display: flex;
+>   flex-wrap: wrap;
+>   height: 600px;
+>   align-content: space-between;
+> }
+> ```
 > - Check which property handles rows distribution, and which value pins elements to the outer edges.
 
 ---
@@ -224,11 +223,10 @@ To center elements inside a single row vertically, you must use **`align-items: 
 **Problem:** Write CSS for multi-line flex container distributing flex lines with equal space between them.
 
 **Expected output:**
-```text
-.container { display: flex; flex-wrap: wrap; align-content: space-between; }
-```
-
 > [!check]- Answer
+> ```text
+> .container { display: flex; flex-wrap: wrap; align-content: space-between; }
+> ```
 > ```css
 > .container {
 >   display: flex;
@@ -239,16 +237,17 @@ To center elements inside a single row vertically, you must use **`align-items: 
 >
 > **Explanation:** `align-content: space-between` distributes extra vertical space between wrapped flex lines.
 
+---
+
 ### Exercise 3: align-content Default Value
 
 **Problem:** What is default value of `align-content` in CSS Flexbox?
 
 **Expected output:**
-```text
-align-content: normal (or stretch).
-```
-
 > [!check]- Answer
+> ```text
+> align-content: normal (or stretch).
+> ```
 > ```text
 > align-content: normal (or stretch).
 > ```

@@ -105,13 +105,12 @@ React.memo(Comp, (prev, next) => prev.id === next.id); // Return true when equal
 **Problem:** You have a simple `<Button text="Submit" />` component. Should you wrap it in `React.memo` to optimize it?
 
 **Expected output:**
-```text
-No!
-`React.memo` has a performance cost! React has to take the time to run the `Object.is()` comparison on all the props. 
-For a simple button, running the comparison math actually takes LONGER than just letting the button re-render!
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> `React.memo` has a performance cost! React has to take the time to run the `Object.is()` comparison on all the props. 
+> For a simple button, running the comparison math actually takes LONGER than just letting the button re-render!
+> ```
 > - Does a simple `<button>` take a long time to render? Does the optimization cost more than the render?
 
 ---
@@ -123,11 +122,10 @@ For a simple button, running the comparison math actually takes LONGER than just
 **Problem:** Wrap `ExpensiveList` component in `React.memo` to skip re-renders when `items` prop is reference-equal.
 
 **Expected output:**
-```text
-const ExpensiveList = React.memo(function ExpensiveList({ items }) { return <ul>{items.map(i => <li key={i.id}>{i.name}</li>)}</ul>; });
-```
-
 > [!check]- Answer
+> ```text
+> const ExpensiveList = React.memo(function ExpensiveList({ items }) { return <ul>{items.map(i => <li key={i.id}>{i.name}</li>)}</ul>; });
+> ```
 > ```javascript
 > const ExpensiveList = React.memo(function ExpensiveList({ items }) {
 >   return (
@@ -140,16 +138,17 @@ const ExpensiveList = React.memo(function ExpensiveList({ items }) { return <ul>
 >
 > **Explanation:** `React.memo` skips component re-renders if incoming props match previous props via shallow equality.
 
+---
+
 ### Exercise 3: Custom Prop Comparison Function
 
 **Problem:** Write `React.memo` with custom comparison function checking `prevProps.userId === nextProps.userId`.
 
 **Expected output:**
-```text
-const UserCard = React.memo(Card, (prev, next) => prev.userId === next.userId);
-```
-
 > [!check]- Answer
+> ```text
+> const UserCard = React.memo(Card, (prev, next) => prev.userId === next.userId);
+> ```
 > ```javascript
 > const UserCard = React.memo(Card, (prev, next) => prev.userId === next.userId);
 > ```

@@ -171,12 +171,11 @@ app.use(cors()); // Use official cors middleware handling OPTIONS preflight auto
 Your friend gets a CORS error. You do not. Why?
 
 **Expected output:**
-```text
-CORS is a security feature enforced by Web Browsers (like Chrome or Safari). 
-Mobile apps (React Native) are not web browsers, so they completely ignore CORS rules! Only the React JS website will be blocked.
-```
-
 > [!check]- Answer
+> ```text
+> CORS is a security feature enforced by Web Browsers (like Chrome or Safari). 
+> Mobile apps (React Native) are not web browsers, so they completely ignore CORS rules! Only the React JS website will be blocked.
+> ```
 > - Where does the Same-Origin Policy actually live? (Hint: The user's device).
 
 ---
@@ -188,11 +187,10 @@ Mobile apps (React Native) are not web browsers, so they completely ignore CORS 
 **Problem:** Configure `cors` middleware in Express to allow origins `['https://app.com', 'https://admin.app.com']`.
 
 **Expected output:**
-```text
-app.use(cors({ origin: ['https://app.com', 'https://admin.app.com'] }));
-```
-
 > [!check]- Answer
+> ```text
+> app.use(cors({ origin: ['https://app.com', 'https://admin.app.com'] }));
+> ```
 > ```javascript
 > const cors = require('cors');
 > app.use(cors({
@@ -202,16 +200,17 @@ app.use(cors({ origin: ['https://app.com', 'https://admin.app.com'] }));
 >
 > **Explanation:** Passing an array of domain strings restricts CORS access to authorized client domains.
 
+---
+
 ### Exercise 3: CORS Preflight Triggering Headers
 
 **Problem:** Which HTTP header sent by frontend clients triggers a CORS preflight `OPTIONS` request?
 
 **Expected output:**
-```text
-Content-Type: application/json (or custom headers like Authorization)
-```
-
 > [!check]- Answer
+> ```text
+> Content-Type: application/json (or custom headers like Authorization)
+> ```
 > ```text
 > Content-Type: application/json (or custom headers like Authorization)
 > ```

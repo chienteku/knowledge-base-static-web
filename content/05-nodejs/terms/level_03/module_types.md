@@ -110,13 +110,12 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 3. `const react = require('react');`
 
 **Expected output:**
-```text
-1. Local File. (It starts with `./`, meaning it looks in the current directory).
-2. Built-in Module. (`crypto` is part of the Node standard library).
-3. External Module. (`react` is not built into Node.js; it must be downloaded via NPM).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Local File. (It starts with `./`, meaning it looks in the current directory).
+> 2. Built-in Module. (`crypto` is part of the Node standard library).
+> 3. External Module. (`react` is not built into Node.js; it must be downloaded via NPM).
+> ```
 > - Does it have a slash? Was it built by the Node.js core team?
 
 ---
@@ -131,13 +130,12 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 3. `.js` (with `"type": "module"` in package.json)
 
 **Expected output:**
-```text
-1. CommonJS
-2. ES Module
-3. ES Module
-```
-
 > [!check]- Answer
+> ```text
+> 1. CommonJS
+> 2. ES Module
+> 3. ES Module
+> ```
 > ```text
 > 1. .cjs -> CommonJS
 > 2. .mjs -> ES Module
@@ -146,16 +144,17 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 >
 > **Explanation:** `.cjs` is explicitly CommonJS; `.mjs` is explicitly ESM; `.js` defaults to CJS unless package `type` specifies `module`.
 
+---
+
 ### Exercise 3: Conditional Package Exports
 
 **Problem:** Write package.json `exports` field supporting `require` and `import` entry points.
 
 **Expected output:**
-```text
-"exports": { ".": { "import": "./index.mjs", "require": "./index.cjs" } }
-```
-
 > [!check]- Answer
+> ```text
+> "exports": { ".": { "import": "./index.mjs", "require": "./index.cjs" } }
+> ```
 > ```json
 > {
 >   "exports": {

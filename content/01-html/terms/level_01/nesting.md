@@ -149,14 +149,13 @@ Nesting layout elements to create a profile card:
 ```
 
 **Expected output:**
-```html
-<div>
-  <h1>Welcome to our store!</h1>
-  <p>Find the best <strong>deals here.</strong></p>
-</div>
-```
-
 > [!check]- Answer
+> ```html
+> <div>
+>   <h1>Welcome to our store!</h1>
+>   <p>Find the best <strong>deals here.</strong></p>
+> </div>
+> ```
 > - The `<h1>` tag is opened but never closed.
 > - The `<strong>` tag closes after the `</p>` tag, creating an overlap.
 
@@ -169,27 +168,27 @@ Nesting layout elements to create a profile card:
 **Problem:** Fix nesting error in `<div><p><span>Content</div></p></span>`.
 
 **Expected output:**
-```text
-<div><p><span>Content</span></p></div>
-```
-
 > [!check]- Answer
+> ```text
+> <div><p><span>Content</span></p></div>
+> ```
 > ```html
 > <div><p><span>Content</span></p></div>
 > ```
 >
 > **Explanation:** Tags must be closed in exact reverse order of opening (`span` -> `p` -> `div`).
 
+---
+
 ### Exercise 3: Anchor Tag Nesting Rules in HTML5
 
 **Problem:** Can an `<a>` anchor tag contain a `<div>` element in modern HTML5? (Yes/No).
 
 **Expected output:**
-```text
-Yes. HTML5 allows block elements inside <a> anchors as long as no interactive elements (like buttons or other links) are nested.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. HTML5 allows block elements inside <a> anchors as long as no interactive elements (like buttons or other links) are nested.
+> ```
 > ```html
 > <a href="/card">
 >   <div>

@@ -158,15 +158,14 @@ Write the SurrealQL commands to:
 2.  Switch the database target to `"analytics"` under the same namespace.
 
 **Expected output:**
-```sql
--- 1. Target Namespace and Database
-USE NS saas_tenant_01 DB billing;
-
--- 2. Switch Database context
-USE DB analytics;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Target Namespace and Database
+> USE NS saas_tenant_01 DB billing;
+> 
+> -- 2. Switch Database context
+> USE DB analytics;
+> ```
 > - The keyword to select database context scopes is `USE`.
 > - If you only change the database, you can omit the `NS` prefix parameter.
 
@@ -179,27 +178,27 @@ USE DB analytics;
 **Problem:** Write SurrealQL command to select namespace `tenant_a` and database `billing`.
 
 **Expected output:**
-```text
-USE NS tenant_a DB billing;
-```
-
 > [!check]- Answer
+> ```text
+> USE NS tenant_a DB billing;
+> ```
 > ```surrealql
 > USE NS tenant_a DB billing;
 > ```
 >
 > **Explanation:** The `USE` statement sets active namespace and database context for subsequent queries.
 
+---
+
 ### Exercise 3: Multi-Tenancy Hierarchy Isolation
 
 **Problem:** Explain how Namespaces enable multi-tenant application isolation.
 
 **Expected output:**
-```text
-Namespaces isolate databases, users, and tokens per tenant boundary
-```
-
 > [!check]- Answer
+> ```text
+> Namespaces isolate databases, users, and tokens per tenant boundary
+> ```
 > ```text
 > Namespaces isolate databases, users, and tokens per tenant boundary
 > ```

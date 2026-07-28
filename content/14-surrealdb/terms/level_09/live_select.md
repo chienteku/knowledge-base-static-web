@@ -190,27 +190,27 @@ Write a `LIVE SELECT` statement that subscribes only to `order` table updates wh
 **Problem:** Write SurrealQL query subscribing to live updates on `article` table where `published = true`.
 
 **Expected output:**
-```text
-LIVE SELECT * FROM article WHERE published = true;
-```
-
 > [!check]- Answer
+> ```text
+> LIVE SELECT * FROM article WHERE published = true;
+> ```
 > ```surrealql
 > LIVE SELECT * FROM article WHERE published = true;
 > ```
 >
 > **Explanation:** `LIVE SELECT ... WHERE` pushes live delta events for records matching predicates.
 
+---
+
 ### Exercise 3: JS SDK Live Query Listener
 
 **Problem:** Subscribe to `order` table updates using `db.live('order', callback)`.
 
 **Expected output:**
-```text
-const queryId = await db.live('order', (action, result) => console.log(action, result));
-```
-
 > [!check]- Answer
+> ```text
+> const queryId = await db.live('order', (action, result) => console.log(action, result));
+> ```
 > ```javascript
 > const queryId = await db.live('order', (action, result) => console.log(action, result));
 > ```

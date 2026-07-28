@@ -98,11 +98,10 @@ node_modules
 **Problem:** Before Docker, people used Virtual Machines (VMs) to isolate applications. A VM installs an entire heavy 20GB Windows or Ubuntu Operating System just to run one Node.js app. Why is a Docker Container better than a VM?
 
 **Expected output:**
-```text
-Containers are incredibly lightweight. Instead of installing a full 20GB OS, a container shares the host computer's operating system kernel. A Node.js Docker image might only be 100 Megabytes, and it boots up in 1 second instead of 1 minute!
-```
-
 > [!check]- Answer
+> ```text
+> Containers are incredibly lightweight. Instead of installing a full 20GB OS, a container shares the host computer's operating system kernel. A Node.js Docker image might only be 100 Megabytes, and it boots up in 1 second instead of 1 minute!
+> ```
 > - Think about size and speed.
 
 ---
@@ -114,11 +113,10 @@ Containers are incredibly lightweight. Instead of installing a full 20GB OS, a c
 **Problem:** Why use multi-stage Docker builds for Node.js applications?
 
 **Expected output:**
-```text
-To separate build steps (TypeScript compilation, devDependencies) from final lean production runtime image.
-```
-
 > [!check]- Answer
+> ```text
+> To separate build steps (TypeScript compilation, devDependencies) from final lean production runtime image.
+> ```
 > ```dockerfile
 > FROM node:18 AS build
 > WORKDIR /app
@@ -137,16 +135,17 @@ To separate build steps (TypeScript compilation, devDependencies) from final lea
 >
 > **Explanation:** Multi-stage builds produce tiny production images containing zero dev dependencies.
 
+---
+
 ### Exercise 3: Docker Process Signal Passing (PID 1 Problem)
 
 **Problem:** Why use `dumb-init` or Tini as entrypoint in Docker containers running Node.js?
 
 **Expected output:**
-```text
-To act as PID 1 init process, properly forwarding SIGTERM signals to Node for graceful shutdown and reaping zombie processes.
-```
-
 > [!check]- Answer
+> ```text
+> To act as PID 1 init process, properly forwarding SIGTERM signals to Node for graceful shutdown and reaping zombie processes.
+> ```
 > ```text
 > To act as PID 1 init process, properly forwarding SIGTERM signals to Node for graceful shutdown and reaping zombie processes.
 > ```

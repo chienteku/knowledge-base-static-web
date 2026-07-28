@@ -155,13 +155,12 @@ CREATE INDEX idx_active_orders ON orders (user_id) WHERE deleted_at IS NULL;
 **Problem:** You have an `invoices` table with columns `id`, `customer_name`, `amount`, and `paid_at` (timestamp, `NULL` if unpaid). 95% of invoices are paid. Write the SQL query to create an optimized partial index named `idx_unpaid_invoices` on the `amount` column that only indexes unpaid invoices.
 
 **Expected output:**
-```sql
-CREATE INDEX idx_unpaid_invoices 
-ON invoices(amount) 
-WHERE paid_at IS NULL;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE INDEX idx_unpaid_invoices 
+> ON invoices(amount) 
+> WHERE paid_at IS NULL;
+> ```
 > - The condition for unpaid invoices checks for `IS NULL` status.
 > - Append the `WHERE` condition at the end of the `CREATE INDEX` query.
 
@@ -174,27 +173,27 @@ WHERE paid_at IS NULL;
 **Problem:** Create partial index `idx_unprocessed_jobs` on `jobs(id)` where `status = 'pending'`.
 
 **Expected output:**
-```text
-CREATE INDEX idx_unprocessed_jobs ON jobs (id) WHERE status = 'pending';
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_unprocessed_jobs ON jobs (id) WHERE status = 'pending';
+> ```
 > ```sql
 > CREATE INDEX idx_unprocessed_jobs ON jobs (id) WHERE status = 'pending';
 > ```
 >
 > **Explanation:** Partial indexes index only rows matching `WHERE` filter predicates.
 
+---
+
 ### Exercise 3: Partial Unique Index for Nullable Columns
 
 **Problem:** Create partial unique index on `passport_num` where `passport_num IS NOT NULL`.
 
 **Expected output:**
-```text
-CREATE UNIQUE INDEX idx_passport ON users (passport_num) WHERE passport_num IS NOT NULL;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE UNIQUE INDEX idx_passport ON users (passport_num) WHERE passport_num IS NOT NULL;
+> ```
 > ```sql
 > CREATE UNIQUE INDEX idx_passport ON users (passport_num) WHERE passport_num IS NOT NULL;
 > ```

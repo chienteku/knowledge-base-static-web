@@ -158,12 +158,11 @@ async function processData() {
 **Problem:** True or False: When the Event Loop checks the Macrotask Queue, it will pull *all* waiting callbacks out and run them back-to-back before doing anything else.
 
 **Expected output:**
-```text
-False. 
-The Event Loop takes exactly ONE callback from the Macrotask Queue per cycle, allowing the browser to render the screen in between tasks. (Unlike the Microtask Queue, which is emptied completely).
-```
-
 > [!check]- Answer
+> ```text
+> False. 
+> The Event Loop takes exactly ONE callback from the Macrotask Queue per cycle, allowing the browser to render the screen in between tasks. (Unlike the Microtask Queue, which is emptied completely).
+> ```
 > - Remember the Economy passenger metaphor. One at a time!
 
 ---
@@ -173,34 +172,33 @@ The Event Loop takes exactly ONE callback from the Macrotask Queue per cycle, al
 **Problem:** Name 3 Web API macrotask sources (`setTimeout`, `setInterval`, `setImmediate` / `MessageChannel`).
 
 **Expected output:**
-```text
-setTimeout, setInterval, setImmediate
-```
-
 > [!check]- Answer
+> ```text
+> setTimeout, setInterval, setImmediate
+> ```
 > ```javascript
 > console.log("setTimeout, setInterval, setImmediate");
 > ```
 >
 > **Explanation:** Timers, I/O callbacks, and `setImmediate` schedule jobs onto the macrotask queue.
 
+---
+
 ### Exercise 3: Macrotask Execution Lifecycle
 
 **Problem:** Trace macrotask execution: JS engine executes 1 macrotask, drains all microtasks, then renders UI.
 
 **Expected output:**
-```text
-1 macrotask -> Drain Microtasks -> UI Render
-```
-
 > [!check]- Answer
+> ```text
+> 1 macrotask -> Drain Microtasks -> UI Render
+> ```
 > ```javascript
 > console.log("1 macrotask -> Drain Microtasks -> UI Render");
 > ```
 >
 > **Explanation:** Each event loop iteration pops 1 macrotask, completely drains microtasks, and performs browser layout rendering.
 
----
 
 ---
 

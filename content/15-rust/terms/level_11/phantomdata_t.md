@@ -192,11 +192,10 @@ thread::spawn(move || {
 **Problem:** Build a `struct Lock<State> { _state: PhantomData<State> }` modeling `Locked` and `Unlocked` states.
 
 **Expected output:**
-```
-State machine lock compiled
-```
-
 > [!check]- Answer
+> ```
+> State machine lock compiled
+> ```
 > ```rust
 > use std::marker::PhantomData;
 > struct Locked;
@@ -210,16 +209,17 @@ State machine lock compiled
 >
 > **Explanation:** `PhantomData<T>` acts as a zero-sized marker type for generic typestate patterns.
 
+---
+
 ### Exercise 3: Informing Variance with `PhantomData`
 
 **Problem:** Use `PhantomData<fn() -> T>` to mark covariant lifetime ownership.
 
 **Expected output:**
-```
-PhantomData covariance verified
-```
-
 > [!check]- Answer
+> ```
+> PhantomData covariance verified
+> ```
 > use std::marker::PhantomData;
 > struct Holder<T> { _marker: PhantomData<fn() -> T> }
 > fn main() {

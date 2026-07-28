@@ -190,34 +190,33 @@ describe("User utilities", () => {
 **Problem:** Structure a unit test following Arrange, Act, Assert layout.
 
 **Expected output:**
-```text
-Arrange -> Act -> Assert
-```
-
 > [!check]- Answer
+> ```text
+> Arrange -> Act -> Assert
+> ```
 > ```javascript
 > console.log("Arrange -> Act -> Assert");
 > ```
 >
 > **Explanation:** AAA pattern organizes test cases into clear setup, execution, and verification phases.
 
+---
+
 ### Exercise 3: Mocking Dependencies with Test Spies
 
 **Problem:** Use test mocks to verify function invocation counts.
 
 **Expected output:**
-```text
-Mock function called once
-```
-
 > [!check]- Answer
+> ```text
+> Mock function called once
+> ```
 > ```javascript
 > console.log("Mock function called once");
 > ```
 >
 > **Explanation:** Spies and mocks isolate unit test subjects from external network or database dependencies.
 
----
 
 ---
 

@@ -210,11 +210,10 @@ fn main() {
 **Problem:** Implement `Display` for `struct Point(i32, i32)` formatting output as `"(x, y)"`.
 
 **Expected output:**
-```
-(10, 20)
-```
-
 > [!check]- Answer
+> ```
+> (10, 20)
+> ```
 > ```rust
 > use std::fmt;
 > struct Point(i32, i32);
@@ -231,16 +230,17 @@ fn main() {
 >
 > **Explanation:** Implementing `Display` defines user-facing text formatting via `{}` specifiers.
 
+---
+
 ### Exercise 3: Formatting Custom Currency Values
 
 **Problem:** Implement `Display` for `struct Money(u32)` printing dollars as `"$10.00"`.
 
 **Expected output:**
-```
-$10.00
-```
-
 > [!check]- Answer
+> ```
+> $10.00
+> ```
 > use std::fmt;
 > struct Money(u32);
 > impl fmt::Display for Money {

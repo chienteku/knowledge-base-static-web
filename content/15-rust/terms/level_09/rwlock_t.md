@@ -206,11 +206,10 @@ thread::spawn(move || {
 **Problem:** Acquire two simultaneous read guards `r1 = lock.read()` and `r2 = lock.read()`.
 
 **Expected output:**
-```
-r1: 42, r2: 42
-```
-
 > [!check]- Answer
+> ```
+> r1: 42, r2: 42
+> ```
 > ```rust
 > use std::sync::RwLock;
 > fn main() {
@@ -223,16 +222,17 @@ r1: 42, r2: 42
 >
 > **Explanation:** `RwLock` permits multiple simultaneous reader guards when no writer guard is active.
 
+---
+
 ### Exercise 3: Exclusive Writer Acquisition
 
 **Problem:** Acquire an exclusive write guard `w = lock.write()` and modify the protected value.
 
 **Expected output:**
-```
-Writer updated: 100
-```
-
 > [!check]- Answer
+> ```
+> Writer updated: 100
+> ```
 > use std::sync::RwLock;
 > fn main() {
 >     let lock = RwLock::new(10);

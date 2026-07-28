@@ -167,12 +167,11 @@ async function processData() {
 **Problem:** Most computer monitors refresh at 60 Frames Per Second (FPS). That is roughly 1 frame every 16 milliseconds. If you are building a tool that tracks the user's mouse cursor to draw a trail behind it, what is a logical limit to set your `throttle(drawTrail, limit)` to?
 
 **Expected output:**
-```text
-`16` milliseconds!
-If you allow it to fire faster than 16ms, you are doing math that the monitor cannot physically display fast enough. It's wasted CPU power. Throttling to 16ms guarantees buttery smooth 60 FPS without wasting resources.
-```
-
 > [!check]- Answer
+> ```text
+> `16` milliseconds!
+> If you allow it to fire faster than 16ms, you are doing math that the monitor cannot physically display fast enough. It's wasted CPU power. Throttling to 16ms guarantees buttery smooth 60 FPS without wasting resources.
+> ```
 > - `1000ms / 60 frames = 16.6ms`
 
 ---
@@ -182,11 +181,10 @@ If you allow it to fire faster than 16ms, you are doing math that the monitor ca
 **Problem:** Implement `throttle(fn, limit)` preventing execution more than once per `limit` milliseconds.
 
 **Expected output:**
-```text
-Throttled call executed
-```
-
 > [!check]- Answer
+> ```text
+> Throttled call executed
+> ```
 > ```javascript
 > function throttle(fn, limit) {
 >   let inThrottle = false;
@@ -204,23 +202,23 @@ Throttled call executed
 >
 > **Explanation:** Throttling enforces a maximum execution frequency rate limit for high-frequency events.
 
+---
+
 ### Exercise 3: Scroll Event Throttling
 
 **Problem:** Explain why throttling is suited for window scroll positioning updates.
 
 **Expected output:**
-```text
-Throttling limits scroll callback rate
-```
-
 > [!check]- Answer
+> ```text
+> Throttling limits scroll callback rate
+> ```
 > ```javascript
 > console.log("Throttling limits scroll callback rate");
 > ```
 >
 > **Explanation:** Throttling maintains smooth periodic UI updates during continuous user scrolling.
 
----
 
 ---
 

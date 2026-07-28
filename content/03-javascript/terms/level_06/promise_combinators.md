@@ -179,11 +179,10 @@ const p3 = Promise.resolve(30);
 ```
 
 **Expected output:**
-```text
-Sum: 60
-```
-
 > [!check]- Answer
+> ```text
+> Sum: 60
+> ```
 > - Pass `[p1, p2, p3]` to `Promise.all()`.
 > - In `.then(results => ...)` use `results.reduce((a, b) => a + b)` to sum them.
 
@@ -194,12 +193,11 @@ Sum: 60
 **Problem:** Pass `[Promise.resolve(1), Promise.reject("err")]` to `Promise.allSettled()` and inspect statuses.
 
 **Expected output:**
-```text
-fulfilled
-rejected
-```
-
 > [!check]- Answer
+> ```text
+> fulfilled
+> rejected
+> ```
 > ```javascript
 > const p1 = Promise.resolve(1);
 > const p2 = Promise.reject("err");
@@ -210,16 +208,17 @@ rejected
 >
 > **Explanation:** `Promise.allSettled` yields an array of status objects without short-circuiting on rejections.
 
+---
+
 ### Exercise 3: Racing Promises with `Promise.race`
 
 **Problem:** Race a 10ms fast promise against a 100ms slow promise using `Promise.race()`.
 
 **Expected output:**
-```text
-Fast winner
-```
-
 > [!check]- Answer
+> ```text
+> Fast winner
+> ```
 > ```javascript
 > const fast = new Promise(res => setTimeout(() => res("Fast winner"), 10));
 > const slow = new Promise(res => setTimeout(() => res("Slow"), 100));
@@ -228,7 +227,6 @@ Fast winner
 >
 > **Explanation:** `Promise.race` settles with the value or error of the first promise that settles.
 
----
 
 ---
 

@@ -182,11 +182,10 @@ console.log("Book Title:", getTitle());
 ```
 
 **Expected output:**
-```text
-Book Title: JavaScript Guide
-```
-
 > [!check]- Answer
+> ```text
+> Book Title: JavaScript Guide
+> ```
 > - Assign `printTitle.bind(book)` to `getTitle`.
 
 ---
@@ -196,11 +195,10 @@ Book Title: JavaScript Guide
 **Problem:** Invoke `greet.call({ name: "Alice" })` for `function greet() { return this.name; }`.
 
 **Expected output:**
-```text
-Alice
-```
-
 > [!check]- Answer
+> ```text
+> Alice
+> ```
 > ```javascript
 > function greet() { return this.name; }
 > console.log(greet.call({ name: "Alice" }));
@@ -208,16 +206,17 @@ Alice
 >
 > **Explanation:** `.call(ctx, ...args)` invokes target functions with explicitly assigned `this` contexts.
 
+---
+
 ### Exercise 3: Partial Function Application with `.bind()`
 
 **Problem:** Use `.bind(null, 2)` to create a `double` function from `function mult(a, b) { return a * b; }`.
 
 **Expected output:**
-```text
-20
-```
-
 > [!check]- Answer
+> ```text
+> 20
+> ```
 > ```javascript
 > function mult(a, b) { return a * b; }
 > const double = mult.bind(null, 2);

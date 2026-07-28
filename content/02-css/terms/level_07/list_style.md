@@ -114,12 +114,11 @@ ul { list-style: none; padding: 0; margin: 0; }
 **Problem:** You want to use a tiny picture of a star (`star.png`) as your bullet point. Can you do this with `list-style`?
 
 **Expected output:**
-```text
-Yes! You can use the `list-style-image` property: `list-style-image: url('star.png');`. 
-(Though in modern CSS, developers often use the `::before` pseudo-element for better alignment control).
-```
-
 > [!check]- Answer
+> ```text
+> Yes! You can use the `list-style-image` property: `list-style-image: url('star.png');`. 
+> (Though in modern CSS, developers often use the `::before` pseudo-element for better alignment control).
+> ```
 > - Is there a property specifically for images?
 
 ---
@@ -131,11 +130,10 @@ Yes! You can use the `list-style-image` property: `list-style-image: url('star.p
 **Problem:** Write CSS ruleset resetting `list-style`, `padding`, and `margin` to 0 on `.nav-list`.
 
 **Expected output:**
-```text
-.nav-list { list-style: none; padding: 0; margin: 0; }
-```
-
 > [!check]- Answer
+> ```text
+> .nav-list { list-style: none; padding: 0; margin: 0; }
+> ```
 > ```css
 > .nav-list {
 >   list-style: none;
@@ -146,16 +144,17 @@ Yes! You can use the `list-style-image` property: `list-style-image: url('star.p
 >
 > **Explanation:** Complete list resets remove default browser bullet marks and indentation padding.
 
+---
+
 ### Exercise 3: Custom Bullet Marker Styling
 
 **Problem:** Which modern CSS pseudo-element targets custom bullet markers inside list items (`li::marker`)?
 
 **Expected output:**
-```text
-li::marker
-```
-
 > [!check]- Answer
+> ```text
+> li::marker
+> ```
 > ```css
 > li::marker {
 >   color: red;

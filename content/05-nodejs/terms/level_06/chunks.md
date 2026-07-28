@@ -105,12 +105,11 @@ stream.pipe(destination);
 **Problem:** You write `readStream.on('data', (chunk) => { console.log(typeof chunk); });`. What exact data structure does Node.js output to the console?
 
 **Expected output:**
-```text
-An `object` (Specifically, an instance of the `Buffer` class). 
-A chunk is not a String! It is raw binary Buffer data.
-```
-
 > [!check]- Answer
+> ```text
+> An `object` (Specifically, an instance of the `Buffer` class). 
+> A chunk is not a String! It is raw binary Buffer data.
+> ```
 > - Remember what streams are made of (1s and 0s).
 
 ---
@@ -122,27 +121,27 @@ A chunk is not a String! It is raw binary Buffer data.
 **Problem:** Write code to create a file read stream with a small 1KB (1024 bytes) `highWaterMark` chunk threshold.
 
 **Expected output:**
-```text
-const stream = fs.createReadStream('file.txt', { highWaterMark: 1024 });
-```
-
 > [!check]- Answer
+> ```text
+> const stream = fs.createReadStream('file.txt', { highWaterMark: 1024 });
+> ```
 > ```javascript
 > const stream = fs.createReadStream('file.txt', { highWaterMark: 1024 });
 > ```
 >
 > **Explanation:** `highWaterMark` configures internal buffer size limits for stream chunks.
 
+---
+
 ### Exercise 3: Default Stream highWaterMark Sizes
 
 **Problem:** What are default `highWaterMark` buffer sizes for binary file streams vs objectMode streams in Node.js?
 
 **Expected output:**
-```text
-Binary streams: 64KB (65536 bytes); ObjectMode streams: 16 objects.
-```
-
 > [!check]- Answer
+> ```text
+> Binary streams: 64KB (65536 bytes); ObjectMode streams: 16 objects.
+> ```
 > ```text
 > Binary streams: 64KB (65536 bytes)
 > ObjectMode streams: 16 objects

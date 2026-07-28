@@ -200,11 +200,10 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 **Problem:** Construct the single-line shorthand `background` rule for a banner. The banner needs a fallback color `#222`, loads `url('stars.png')`, centers the position, scales to `contain`, and does not repeat.
 
 **Expected output:**
-```css
-background: #222 url('stars.png') center/contain no-repeat;
-```
-
 > [!check]- Answer
+> ```css
+> background: #222 url('stars.png') center/contain no-repeat;
+> ```
 > - Follow the standard shorthand sequence.
 > - Remember to separate the position (`center`) and the size (`contain`) with a `/`.
 
@@ -217,11 +216,10 @@ background: #222 url('stars.png') center/contain no-repeat;
 **Problem:** Write `background` shorthand setting `url('hero.jpg')`, no-repeat, centered horizontally and vertically, covering the box, with `#333` fallback color.
 
 **Expected output:**
-```text
-background: #333 url('hero.jpg') no-repeat center / cover;
-```
-
 > [!check]- Answer
+> ```text
+> background: #333 url('hero.jpg') no-repeat center / cover;
+> ```
 > ```css
 > .hero {
 >   background: #333 url('hero.jpg') no-repeat center / cover;
@@ -230,16 +228,17 @@ background: #333 url('hero.jpg') no-repeat center / cover;
 >
 > **Explanation:** Shorthand combines fallback color, image URL, repeat behavior, position, and size.
 
+---
+
 ### Exercise 3: Multiple Background Image Layers
 
 **Problem:** Write CSS layering `top-layer.png` over `bottom-layer.png` using comma-separated `background-image` syntax.
 
 **Expected output:**
-```text
-background-image: url('top-layer.png'), url('bottom-layer.png');
-```
-
 > [!check]- Answer
+> ```text
+> background-image: url('top-layer.png'), url('bottom-layer.png');
+> ```
 > ```css
 > div {
 >   background-image: url('top-layer.png'), url('bottom-layer.png');

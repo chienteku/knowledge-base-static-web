@@ -149,13 +149,12 @@ Restrict pg_user_mappings catalog permissions or use SSL certificates
 Write the SQL DDL command to create the foreign server object named `remote_user_server` utilizing the standard `postgres_fdw` wrapper.
 
 **Expected output:**
-```sql
-CREATE SERVER remote_user_server
-FOREIGN DATA WRAPPER postgres_fdw
-OPTIONS (host '10.0.0.50', port '5432', dbname 'user_directory');
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE SERVER remote_user_server
+> FOREIGN DATA WRAPPER postgres_fdw
+> OPTIONS (host '10.0.0.50', port '5432', dbname 'user_directory');
+> ```
 > - Use the `CREATE SERVER` statement targeting the IP address.
 > - Specify `postgres_fdw` as the foreign data wrapper type.
 
@@ -168,11 +167,10 @@ OPTIONS (host '10.0.0.50', port '5432', dbname 'user_directory');
 **Problem:** List 4 DDL steps to query remote PostgreSQL server via FDW (1. `CREATE EXTENSION postgres_fdw`; 2. `CREATE SERVER`; 3. `CREATE USER MAPPING`; 4. `IMPORT FOREIGN SCHEMA` / `CREATE FOREIGN TABLE`).
 
 **Expected output:**
-```text
-1. CREATE EXTENSION postgres_fdw; 2. CREATE SERVER; 3. CREATE USER MAPPING; 4. IMPORT FOREIGN SCHEMA
-```
-
 > [!check]- Answer
+> ```text
+> 1. CREATE EXTENSION postgres_fdw; 2. CREATE SERVER; 3. CREATE USER MAPPING; 4. IMPORT FOREIGN SCHEMA
+> ```
 > ```sql
 > CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 > CREATE SERVER remote_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host 'remote.com', dbname 'prod');
@@ -182,16 +180,17 @@ OPTIONS (host '10.0.0.50', port '5432', dbname 'user_directory');
 >
 > **Explanation:** `postgres_fdw` connects local PostgreSQL instances to remote foreign databases.
 
+---
+
 ### Exercise 3: FDW Predicate Pushdown Concept
 
 **Problem:** What is FDW Predicate Pushdown? (Pushes WHERE filters and joins to remote server for execution).
 
 **Expected output:**
-```text
-Pushes WHERE filters and joins to remote server for remote execution
-```
-
 > [!check]- Answer
+> ```text
+> Pushes WHERE filters and joins to remote server for remote execution
+> ```
 > ```text
 > Pushes WHERE filters and joins to remote server for remote execution
 > ```

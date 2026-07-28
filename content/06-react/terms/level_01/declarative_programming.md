@@ -188,6 +188,8 @@ btn.addEventListener('click', () => {
 >
 > **Explanation:** Declarative components declare UI output based on current state values.
 
+---
+
 ### Exercise 3: Imperative vs Declarative Comparison
 
 **Problem:** Compare: Imperative (Step-by-step DOM manipulation instructions); Declarative (Describing desired UI state output).

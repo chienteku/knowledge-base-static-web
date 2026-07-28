@@ -161,12 +161,11 @@ CREATE log:ulid(); // Time-ordered sequential insertion in index
 2.  Explain the performance benefit of using ULID over UUID for high-volume logs databases.
 
 **Expected output:**
-```text
-1. The record generated via `logs:ulid()` will be sortable by creation time.
-2. Because ULIDs are time-sortable, new inserts are appended sequentially to the end of the B-Tree index on disk. Random UUIDs insert keys randomly, forcing the database to rewrite index pages constantly (index fragmentation), which slows down write throughput under high concurrency.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The record generated via `logs:ulid()` will be sortable by creation time.
+> 2. Because ULIDs are time-sortable, new inserts are appended sequentially to the end of the B-Tree index on disk. Random UUIDs insert keys randomly, forcing the database to rewrite index pages constantly (index fragmentation), which slows down write throughput under high concurrency.
+> ```
 > - Analyze the lexicographical sortability properties of ULIDs.
 > - Consider how sequential writes impact B-Tree index fragmentation.
 
@@ -179,27 +178,27 @@ CREATE log:ulid(); // Time-ordered sequential insertion in index
 **Problem:** Match generator function: 1. Random UUID v4 (`uuid()`), 2. Time-ordered lexicographical (`ulid()`), 3. Cryptographic random string (`rand()`).
 
 **Expected output:**
-```text
-1. uuid(), 2. ulid(), 3. rand()
-```
-
 > [!check]- Answer
+> ```text
+> 1. uuid(), 2. ulid(), 3. rand()
+> ```
 > ```text
 > 1. uuid(), 2. ulid(), 3. rand()
 > ```
 >
 > **Explanation:** `ulid()` provides time-ordered IDs; `uuid()` creates standard UUIDs; `rand()` produces random strings.
 
+---
+
 ### Exercise 3: Custom Record ID Generation in CREATE
 
 **Problem:** Create a record in `session` table using ULID generator syntax.
 
 **Expected output:**
-```text
-CREATE session:ulid() SET started_at = time::now();
-```
-
 > [!check]- Answer
+> ```text
+> CREATE session:ulid() SET started_at = time::now();
+> ```
 > ```surrealql
 > CREATE session:ulid() SET started_at = time::now();
 > ```

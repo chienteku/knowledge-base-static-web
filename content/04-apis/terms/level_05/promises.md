@@ -147,12 +147,11 @@ console.log("C");
 ```
 
 **Expected output:**
-```text
-A, C, B.
-JavaScript logs A. It fires the fetch and gets a pending Promise. It does NOT wait. It moves to the next line and logs C. Finally, milliseconds later, the network returns and it logs B.
-```
-
 > [!check]- Answer
+> ```text
+> A, C, B.
+> JavaScript logs A. It fires the fetch and gets a pending Promise. It does NOT wait. It moves to the next line and logs C. Finally, milliseconds later, the network returns and it logs B.
+> ```
 > - JavaScript never waits for the network unless you explicitly tell it to with `await`!
 
 ---
@@ -162,13 +161,12 @@ JavaScript logs A. It fires the fetch and gets a pending Promise. It does NOT wa
 **Problem:** Identify the 3 mutually exclusive states of a JavaScript Promise.
 
 **Expected output:**
-```text
-1. Pending (Initial state)
-2. Fulfilled (Operation succeeded - resolved)
-3. Rejected (Operation failed)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Pending (Initial state)
+> 2. Fulfilled (Operation succeeded - resolved)
+> 3. Rejected (Operation failed)
+> ```
 > ```text
 > 1. Pending -> Initial state (neither fulfilled nor rejected)
 > 2. Fulfilled -> Completed successfully with value
@@ -182,11 +180,10 @@ JavaScript logs A. It fires the fetch and gets a pending Promise. It does NOT wa
 **Problem:** Write single line creating a Promise that immediately fulfills with value `42`.
 
 **Expected output:**
-```text
-const p = Promise.resolve(42);
-```
-
 > [!check]- Answer
+> ```text
+> const p = Promise.resolve(42);
+> ```
 > ```javascript
 > const p = Promise.resolve(42);
 > ```

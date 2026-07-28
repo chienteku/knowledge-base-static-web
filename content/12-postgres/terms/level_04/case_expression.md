@@ -176,18 +176,17 @@ CASE WHEN status = 'active' THEN 1 ELSE 0 END -- Fallback 0
 -   `Fail` if score is below 50.
 
 **Expected output:**
-```sql
-SELECT name, exam_score,
-  CASE
-    WHEN exam_score >= 90 THEN 'A'
-    WHEN exam_score >= 80 THEN 'B'
-    WHEN exam_score >= 50 THEN 'Pass'
-    ELSE 'Fail'
-  END AS grade
-FROM students;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name, exam_score,
+>   CASE
+>     WHEN exam_score >= 90 THEN 'A'
+>     WHEN exam_score >= 80 THEN 'B'
+>     WHEN exam_score >= 50 THEN 'Pass'
+>     ELSE 'Fail'
+>   END AS grade
+> FROM students;
+> ```
 > - Order your `WHEN` conditions from highest to lowest. SQL evaluates conditions from top to bottom and exits at the first match.
 > - Append the `END AS grade` clause to close the block and alias the column.
 
@@ -200,11 +199,10 @@ FROM students;
 **Problem:** Label product prices: price < 20 -> `'Budget'`, price BETWEEN 20 AND 100 -> `'Standard'`, else -> `'Premium'`. 
 
 **Expected output:**
-```text
-SELECT name, CASE WHEN price < 20 THEN 'Budget' WHEN price BETWEEN 20 AND 100 THEN 'Standard' ELSE 'Premium' END AS price_category FROM products;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT name, CASE WHEN price < 20 THEN 'Budget' WHEN price BETWEEN 20 AND 100 THEN 'Standard' ELSE 'Premium' END AS price_category FROM products;
+> ```
 > ```sql
 > SELECT name,
 >   CASE
@@ -217,16 +215,17 @@ SELECT name, CASE WHEN price < 20 THEN 'Budget' WHEN price BETWEEN 20 AND 100 TH
 >
 > **Explanation:** `CASE WHEN ... THEN ... ELSE ... END` evaluates conditional branches in SQL queries.
 
+---
+
 ### Exercise 3: Conditional Aggregation with `CASE`
 
 **Problem:** Sum `total` amount for `'completed'` orders vs `'pending'` orders in a single row using `SUM(CASE WHEN ...)`.
 
 **Expected output:**
-```text
-SELECT SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) AS completed_sum FROM orders;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) AS completed_sum FROM orders;
+> ```
 > ```sql
 > SELECT
 >   SUM(CASE WHEN status = 'completed' THEN total ELSE 0 END) AS completed_sum,

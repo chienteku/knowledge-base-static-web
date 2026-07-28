@@ -179,13 +179,12 @@ SELECT e.name, m.name FROM employees e LEFT JOIN employees m ON e.manager_id = m
 **Problem:** You have a `categories` table (columns: `id`, `name`, `parent_id` references `categories(id)`). Write a SQL query using a self-join to select each category's `name` and its parent category's `name`. Label the columns as `category_name` and `parent_name`. Include categories that do not have a parent.
 
 **Expected output:**
-```sql
-SELECT c.name AS category_name, p.name AS parent_name 
-FROM categories AS c
-LEFT JOIN categories AS p ON c.parent_id = p.id;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT c.name AS category_name, p.name AS parent_name 
+> FROM categories AS c
+> LEFT JOIN categories AS p ON c.parent_id = p.id;
+> ```
 > - Alias the left side as `c` (category) and the right side as `p` (parent).
 > - Use a `LEFT JOIN` to keep top-level categories that have `parent_id = NULL`.
 
@@ -198,11 +197,10 @@ LEFT JOIN categories AS p ON c.parent_id = p.id;
 **Problem:** Self-join `employees` table (aliases `e` for employee, `m` for manager) selecting `e.name` and `m.name` as `manager_name`.
 
 **Expected output:**
-```text
-SELECT e.name AS employee_name, m.name AS manager_name FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT e.name AS employee_name, m.name AS manager_name FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;
+> ```
 > ```sql
 > SELECT e.name AS employee_name, m.name AS manager_name
 > FROM employees e
@@ -211,16 +209,17 @@ SELECT e.name AS employee_name, m.name AS manager_name FROM employees e LEFT JOI
 >
 > **Explanation:** Self-joins match rows within a single hierarchical table using distinct table aliases.
 
+---
+
 ### Exercise 3: Finding Consecutive Metric Entries with Self-Join
 
 **Problem:** Self-join `readings` table to find rows where current reading `val` is greater than previous reading `val`.
 
 **Expected output:**
-```text
-SELECT curr.id FROM readings curr JOIN readings prev ON curr.id = prev.id + 1 WHERE curr.val > prev.val;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT curr.id FROM readings curr JOIN readings prev ON curr.id = prev.id + 1 WHERE curr.val > prev.val;
+> ```
 > ```sql
 > SELECT curr.id
 > FROM readings curr

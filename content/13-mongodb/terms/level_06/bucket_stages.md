@@ -150,17 +150,16 @@ boundaries: [0, 100], default: "Other"
 -   Assign users outside this range to the default category `"Invalid Age"`.
 
 **Expected output:**
-```javascript
-{
-  $bucket: {
-    groupBy: "$age",
-    boundaries: [ 0, 18, 65, 120 ],
-    default: "Invalid Age"
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   $bucket: {
+>     groupBy: "$age",
+>     boundaries: [ 0, 18, 65, 120 ],
+>     default: "Invalid Age"
+>   }
+> }
+> ```
 > - The grouping target is the `$age` field.
 > - Arrange the boundaries list in ascending order: `[0, 18, 65, 120]`.
 
@@ -173,11 +172,10 @@ boundaries: [0, 100], default: "Other"
 **Problem:** Bucket products by `price` into ranges `[0, 50, 100, 200]` counting items per bucket using `$bucket`.
 
 **Expected output:**
-```text
-db.products.aggregate([{ $bucket: { groupBy: "$price", boundaries: [0, 50, 100, 200], default: "200+", output: { count: { $sum: 1 } } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.products.aggregate([{ $bucket: { groupBy: "$price", boundaries: [0, 50, 100, 200], default: "200+", output: { count: { $sum: 1 } } } }]);
+> ```
 > ```javascript
 > db.products.aggregate([
 >   {
@@ -193,16 +191,17 @@ db.products.aggregate([{ $bucket: { groupBy: "$price", boundaries: [0, 50, 100, 
 >
 > **Explanation:** `$bucket` categorizes incoming documents into defined numerical range buckets.
 
+---
+
 ### Exercise 3: Automatic Histogram Bucket Generation with `$bucketAuto`
 
 **Problem:** Automatically divide products into 5 equal-sized price buckets using `$bucketAuto`.
 
 **Expected output:**
-```text
-db.products.aggregate([{ $bucketAuto: { groupBy: "$price", buckets: 5 } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.products.aggregate([{ $bucketAuto: { groupBy: "$price", buckets: 5 } }]);
+> ```
 > ```javascript
 > db.products.aggregate([
 >   { $bucketAuto: { groupBy: "$price", buckets: 5 } }

@@ -187,11 +187,10 @@ fn main() {
 **Problem:** Define an enum `Shape` with variants `Circle(f64)` and `Square(f64)`. Implement an `area(&self) -> f64` method on `Shape`.
 
 **Expected output:**
-```
-Circle area: 78.53981633974483
-```
-
 > [!check]- Answer
+> ```
+> Circle area: 78.53981633974483
+> ```
 > ```rust
 > enum Shape {
 >     Circle(f64),
@@ -213,16 +212,17 @@ Circle area: 78.53981633974483
 >
 > **Explanation:** Methods on enums pattern match on `self` variants to execute variant-specific computations.
 
+---
+
 ### Exercise 3: Discriminant Value Assignment
 
 **Problem:** Define a C-style enum `HttpStatus` with custom integer discriminants `Ok = 200`, `NotFound = 404`. Cast `HttpStatus::NotFound as u16` and print it.
 
 **Expected output:**
-```
-404
-```
-
 > [!check]- Answer
+> ```
+> 404
+> ```
 > ```rust
 > enum HttpStatus {
 >     Ok = 200,

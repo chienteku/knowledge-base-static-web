@@ -168,12 +168,11 @@ Correct placement of the charset tag:
 **Problem:** A client complains that their website displays black diamonds containing question marks () or random symbols (like `Ã©`) instead of the word "café". What are the two most likely causes?
 
 **Expected output:**
-```text
-1. The developer forgot to include `<meta charset="UTF-8">` in the HTML `<head>`.
-2. The developer's text editor saved the HTML file using a legacy encoding (like Windows-1252 or ASCII) instead of UTF-8.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The developer forgot to include `<meta charset="UTF-8">` in the HTML `<head>`.
+> 2. The developer's text editor saved the HTML file using a legacy encoding (like Windows-1252 or ASCII) instead of UTF-8.
+> ```
 > - The replacement character  is the browser's way of saying: "A byte was sent that does not match a valid symbol in my current lookup table."
 
 ---
@@ -185,27 +184,27 @@ Correct placement of the charset tag:
 **Problem:** Write modern HTML5 UTF-8 character encoding declaration tag.
 
 **Expected output:**
-```text
-<meta charset="UTF-8">
-```
-
 > [!check]- Answer
+> ```text
+> <meta charset="UTF-8">
+> ```
 > ```html
 > <meta charset="UTF-8">
 > ```
 >
 > **Explanation:** Standard UTF-8 declaration covers all international character sets and emojis.
 
+---
+
 ### Exercise 3: HTTP Header vs Meta Encoding
 
 **Problem:** If HTTP header specifies `Content-Type: text/html; charset=ISO-8859-1` and HTML meta specifies `UTF-8`, which encoding wins?
 
 **Expected output:**
-```text
-HTTP header encoding takes precedence over HTML meta tag.
-```
-
 > [!check]- Answer
+> ```text
+> HTTP header encoding takes precedence over HTML meta tag.
+> ```
 > ```text
 > HTTP header encoding takes precedence over HTML meta tag.
 > ```

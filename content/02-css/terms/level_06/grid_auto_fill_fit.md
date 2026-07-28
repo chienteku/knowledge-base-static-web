@@ -276,12 +276,11 @@ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive fluid
 Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for Option B?
 
 **Expected output:**
-```text
-- Option A: Use `auto-fill` (leaves the remaining column slots open).
-- Option B: Use `auto-fit` (collapses the empty slots, stretching the single card).
-```
-
 > [!check]- Answer
+> ```text
+> - Option A: Use `auto-fill` (leaves the remaining column slots open).
+> - Option B: Use `auto-fit` (collapses the empty slots, stretching the single card).
+> ```
 > - Which keyword "fills" the layout row with empty spaces, and which "fits" the active items?
 
 ---
@@ -293,11 +292,10 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 **Problem:** Write classic single-line CSS Grid rule for responsive card grid (min 280px cards, fluid expansion, auto-stretching).
 
 **Expected output:**
-```text
-grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-```
-
 > [!check]- Answer
+> ```text
+> grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+> ```
 > ```css
 > .grid {
 >   display: grid;
@@ -308,16 +306,17 @@ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 >
 > **Explanation:** The `repeat(auto-fit, minmax(280px, 1fr))` pattern builds responsive grids with zero media queries.
 
+---
+
 ### Exercise 3: auto-fill vs auto-fit Trait Difference
 
 **Problem:** What happens when 2 items of min width 200px are placed in a 1000px wide grid using `auto-fill` vs `auto-fit`?
 
 **Expected output:**
-```text
-auto-fill keeps 5 track slots (2 items + 3 empty tracks); auto-fit collapses empty tracks so the 2 items stretch to 500px each.
-```
-
 > [!check]- Answer
+> ```text
+> auto-fill keeps 5 track slots (2 items + 3 empty tracks); auto-fit collapses empty tracks so the 2 items stretch to 500px each.
+> ```
 > ```text
 > auto-fill keeps 5 track slots (2 items + 3 empty tracks); auto-fit collapses empty tracks so the 2 items stretch to 500px each.
 > ```

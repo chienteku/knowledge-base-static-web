@@ -161,18 +161,17 @@ CREATE TABLE user_settings (
 Write the equivalent MongoDB document schema structure for a user named Alice (`email: "alice@mail.com"`, `dark_mode: true`, `timezone: "UTC"`) using the correct 1:1 modeling pattern.
 
 **Expected output:**
-```javascript
-{
-  _id: 1,
-  email: "alice@mail.com",
-  settings: {
-    dark_mode: true,
-    timezone: "UTC"
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   _id: 1,
+>   email: "alice@mail.com",
+>   settings: {
+>     dark_mode: true,
+>     timezone: "UTC"
+>   }
+> }
+> ```
 > - Collapse the two relational tables into a single document.
 > - Embed the settings fields inside a dedicated nested key object (e.g. `settings`).
 
@@ -185,11 +184,10 @@ Write the equivalent MongoDB document schema structure for a user named Alice (`
 **Problem:** Model user document embedding 1-to-1 `settings` sub-document.
 
 **Expected output:**
-```text
-{ name: "Alice", settings: { theme: "dark", notifications: true } }
-```
-
 > [!check]- Answer
+> ```text
+> { name: "Alice", settings: { theme: "dark", notifications: true } }
+> ```
 > ```javascript
 > const user = {
 >   _id: new ObjectId(),
@@ -203,16 +201,17 @@ Write the equivalent MongoDB document schema structure for a user named Alice (`
 >
 > **Explanation:** 1-to-1 data is embedded directly inside parent documents for optimal read performance.
 
+---
+
 ### Exercise 3: 1-to-1 Field Isolation Exception
 
 **Problem:** When should 1-to-1 data be split into a separate collection? (When fields are large/rarely accessed or require security isolation).
 
 **Expected output:**
-```text
-When fields are large, rarely accessed, or require separate security/permission isolation
-```
-
 > [!check]- Answer
+> ```text
+> When fields are large, rarely accessed, or require separate security/permission isolation
+> ```
 > ```text
 > When fields are large, rarely accessed, or require separate security/permission isolation
 > ```

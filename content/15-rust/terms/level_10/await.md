@@ -188,12 +188,11 @@ thread::spawn(move || {
 **Problem:** Demonstrate calling two async operations sequentially using `.await`.
 
 **Expected output:**
-```
-Step 1 complete
-Step 2 complete
-```
-
 > [!check]- Answer
+> ```
+> Step 1 complete
+> Step 2 complete
+> ```
 > ```rust
 > fn main() {
 >     println!("Step 1 complete\nStep 2 complete");
@@ -202,17 +201,18 @@ Step 2 complete
 >
 > **Explanation:** `.await` pauses current async task execution until the target future completes.
 
+---
+
 ### Exercise 3: Awaiting Futures in Loop Pipelines
 
 **Problem:** Iterate through a vector of items and `.await` processing calls sequentially.
 
 **Expected output:**
-```
-Item processed: 1
-Item processed: 2
-```
-
 > [!check]- Answer
+> ```
+> Item processed: 1
+> Item processed: 2
+> ```
 > fn main() {
 >     println!("Item processed: 1\nItem processed: 2");
 > }

@@ -111,14 +111,13 @@ type MakeRequired<T> = { [K in keyof T]-?: T[K] }; // Correct: Strips '?' option
 **Problem:** How would you write your own `MyReadonly<T>` mapped type that takes an object and locks every single property so it cannot be mutated?
 
 **Expected output:**
-```typescript
-type MyReadonly<T> = {
-  // We add the `readonly` modifier to the left of the iterator!
-  readonly [P in keyof T]: T[P];
-};
-```
-
 > [!check]- Answer
+> ```typescript
+> type MyReadonly<T> = {
+>   // We add the `readonly` modifier to the left of the iterator!
+>   readonly [P in keyof T]: T[P];
+> };
+> ```
 > - Where does the `readonly` keyword usually go in an interface?
 
 ---
@@ -130,11 +129,10 @@ type MyReadonly<T> = {
 **Problem:** Implement custom `MyReadonly<T> = { readonly [K in keyof T]: T[K] }`.
 
 **Expected output:**
-```text
-MyReadonly mapped type created
-```
-
 > [!check]- Answer
+> ```text
+> MyReadonly mapped type created
+> ```
 > ```typescript
 > type MyReadonly<T> = { readonly [K in keyof T]: T[K] };
 > type FrozenUser = MyReadonly<{ name: string }>;
@@ -143,16 +141,17 @@ MyReadonly mapped type created
 >
 > **Explanation:** Mapped types iterate over keys of `T` applying property modifiers.
 
+---
+
 ### Exercise 3: Removing Readonly Modifier
 
 **Problem:** Implement `Mutable<T> = { -readonly [K in keyof T]: T[K] }`.
 
 **Expected output:**
-```text
-Mutable mapped type created
-```
-
 > [!check]- Answer
+> ```text
+> Mutable mapped type created
+> ```
 > ```typescript
 > type Mutable<T> = { -readonly [K in keyof T]: T[K] };
 > type NormalUser = Mutable<{ readonly name: string }>;

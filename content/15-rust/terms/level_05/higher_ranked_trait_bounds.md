@@ -175,11 +175,10 @@ thread::spawn(move || {
 **Problem:** Write a function `fn apply_to_str<F>(f: F) where F: for<'a> Fn(&'a str) -> usize` that calls `f` on local string slices.
 
 **Expected output:**
-```
-Len: 5
-```
-
 > [!check]- Answer
+> ```
+> Len: 5
+> ```
 > ```rust
 > fn apply_to_str<F>(f: F) where F: for<'a> Fn(&'a str) -> usize {
 >     let s = String::from("hello");
@@ -192,16 +191,17 @@ Len: 5
 >
 > **Explanation:** `for<'a>` higher-ranked trait bounds ensure closures can borrow temporary local stack slices.
 
+---
+
 ### Exercise 3: Higher-Ranked Trait Bounds on Function Pointers
 
 **Problem:** Accept a function pointer with higher-ranked lifetime: `for<'a> fn(&'a i32) -> i32`.
 
 **Expected output:**
-```
-Value: 42
-```
-
 > [!check]- Answer
+> ```
+> Value: 42
+> ```
 > fn deref_val(x: &i32) -> i32 { *x }
 > fn exec(f: for<'a> fn(&'a i32) -> i32) {
 >     let val = 42;

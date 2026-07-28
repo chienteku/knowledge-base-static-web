@@ -250,14 +250,13 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 - The third column takes up all remaining available space.
 
 **Expected output:**
-```css
-.custom-grid {
-  display: grid;
-  grid-template-columns: 200px minmax(250px, 500px) 1fr;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .custom-grid {
+>   display: grid;
+>   grid-template-columns: 200px minmax(250px, 500px) 1fr;
+> }
+> ```
 > - Define three space-separated track widths.
 > - Use the `minmax()` helper for the second column constraint.
 
@@ -270,11 +269,10 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 **Problem:** Write `grid-template-columns` with fixed 250px sidebar and fluid main content scaling between 500px and 1fr.
 
 **Expected output:**
-```text
-grid-template-columns: 250px minmax(500px, 1fr);
-```
-
 > [!check]- Answer
+> ```text
+> grid-template-columns: 250px minmax(500px, 1fr);
+> ```
 > ```css
 > .app-layout {
 >   display: grid;
@@ -284,16 +282,17 @@ grid-template-columns: 250px minmax(500px, 1fr);
 >
 > **Explanation:** `250px minmax(500px, 1fr)` defines fixed sidebar and fluid main area.
 
+---
+
 ### Exercise 3: minmax Min Content Keyword
 
 **Problem:** What does `minmax(min-content, 1fr)` enforce as the minimum column width boundary?
 
 **Expected output:**
-```text
-Minimum width equals the width of the longest un-wrapped word/content inside the column.
-```
-
 > [!check]- Answer
+> ```text
+> Minimum width equals the width of the longest un-wrapped word/content inside the column.
+> ```
 > ```text
 > Minimum width equals the width of the longest un-wrapped word/content inside the column.
 > ```

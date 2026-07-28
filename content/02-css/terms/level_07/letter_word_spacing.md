@@ -108,11 +108,10 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 **Problem:** You have a button that says "SUBMIT". The designer complains that it looks too heavy and the letters are bleeding into each other. What CSS properties do you apply?
 
 **Expected output:**
-```text
-You should ensure it has `text-transform: uppercase;` (rather than hardcoded HTML), and then apply `letter-spacing: 1px;` (or a small `em` value) to give the letters breathing room.
-```
-
 > [!check]- Answer
+> ```text
+> You should ensure it has `text-transform: uppercase;` (rather than hardcoded HTML), and then apply `letter-spacing: 1px;` (or a small `em` value) to give the letters breathing room.
+> ```
 > - How do we add horizontal space between characters?
 
 ---
@@ -124,11 +123,10 @@ You should ensure it has `text-transform: uppercase;` (rather than hardcoded HTM
 **Problem:** Write CSS for `.small-caps-header` converting text to uppercase with `0.15em` letter spacing.
 
 **Expected output:**
-```text
-.small-caps-header { text-transform: uppercase; letter-spacing: 0.15em; }
-```
-
 > [!check]- Answer
+> ```text
+> .small-caps-header { text-transform: uppercase; letter-spacing: 0.15em; }
+> ```
 > ```css
 > .small-caps-header {
 >   text-transform: uppercase;
@@ -138,16 +136,17 @@ You should ensure it has `text-transform: uppercase;` (rather than hardcoded HTM
 >
 > **Explanation:** Combining uppercase transformation with subtle `em` tracking enhances header elegance.
 
+---
+
 ### Exercise 3: Word Spacing vs Letter Spacing
 
 **Problem:** Distinguish `letter-spacing` vs `word-spacing`.
 
 **Expected output:**
-```text
-letter-spacing adjusts space between individual characters; word-spacing adjusts space between whole words.
-```
-
 > [!check]- Answer
+> ```text
+> letter-spacing adjusts space between individual characters; word-spacing adjusts space between whole words.
+> ```
 > ```text
 > letter-spacing adjusts space between individual characters; word-spacing adjusts space between whole words.
 > ```

@@ -143,12 +143,11 @@ CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT );
 **Problem:** You are designing a database for a blog. The blog has "Articles" and "Authors". If you store the author's bio inside the `articles` table next to every article title, what two problems will happen when the author updates their bio?
 
 **Expected output:**
-```text
-1. Data Inconsistency (Out-of-sync bios): If you fail to update the bio on every single article row the author wrote (or if the server crashes mid-update), some articles will show the old bio and others will show the new bio.
-2. Wasted Disk Storage: You are storing the exact same paragraph of text multiple times across your database disk drive, which increases storage costs.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Data Inconsistency (Out-of-sync bios): If you fail to update the bio on every single article row the author wrote (or if the server crashes mid-update), some articles will show the old bio and others will show the new bio.
+> 2. Wasted Disk Storage: You are storing the exact same paragraph of text multiple times across your database disk drive, which increases storage costs.
+> ```
 > - Think about what happens if an author writes 500 articles and updates their bio text.
 > - Consider the physical disk space utilized when text blocks are copied repeatedly.
 
@@ -161,27 +160,27 @@ CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT );
 **Problem:** List 3 core structural components of Relational Database systems (Tables, Columns, Rows/Tuples).
 
 **Expected output:**
-```text
-Tables, Columns, Rows/Tuples
-```
-
 > [!check]- Answer
+> ```text
+> Tables, Columns, Rows/Tuples
+> ```
 > ```text
 > Tables, Columns, Rows/Tuples
 > ```
 >
 > **Explanation:** Relational databases structure data into tabular relations of columns and rows.
 
+---
+
 ### Exercise 3: Referential Integrity Definition
 
 **Problem:** What mechanism enforces valid relationships between relational tables? (Foreign Key constraints).
 
 **Expected output:**
-```text
-Foreign Key constraints
-```
-
 > [!check]- Answer
+> ```text
+> Foreign Key constraints
+> ```
 > ```text
 > Foreign Key constraints
 > ```

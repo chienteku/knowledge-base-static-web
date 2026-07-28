@@ -249,14 +249,13 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 **Problem:** You have a logo image of size 100x100 pixels. You want the right-half of the logo to link to "right.html" and the left-half to link to "left.html". Write the `<map>` and `<area>` tags to achieve this.
 
 **Expected output:**
-```html
-<map name="logo-map">
-  <area shape="rect" coords="0,0,50,100" href="left.html" alt="Left side link">
-  <area shape="rect" coords="50,0,100,100" href="right.html" alt="Right side link">
-</map>
-```
-
 > [!check]- Answer
+> ```html
+> <map name="logo-map">
+>   <area shape="rect" coords="0,0,50,100" href="left.html" alt="Left side link">
+>   <area shape="rect" coords="50,0,100,100" href="right.html" alt="Right side link">
+> </map>
+> ```
 > - The left rectangle starts at (0,0) and ends at middle-right (50,100).
 > - The right rectangle starts at middle-left (50,0) and ends at bottom-right (100,100).
 
@@ -269,30 +268,30 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 **Problem:** Write `<area>` element for rectangular region from top-left (0,0) to bottom-right (100,200) linking to `/details`.
 
 **Expected output:**
-```text
-<area shape="rect" coords="0,0,100,200" href="/details" alt="Details">
-```
-
 > [!check]- Answer
+> ```text
+> <area shape="rect" coords="0,0,100,200" href="/details" alt="Details">
+> ```
 > ```html
 > <area shape="rect" coords="0,0,100,200" href="/details" alt="Details">
 > ```
 >
 > **Explanation:** `shape="rect"` expects `coords="x1,y1,x2,y2"` pixel coordinates.
 
+---
+
 ### Exercise 3: Supported Area Shapes
 
 **Problem:** List the 4 valid `shape` attribute options for `<area>` elements.
 
 **Expected output:**
-```text
-1. rect (rectangular)
-2. circle (circular)
-3. poly (polygonal)
-4. default (entire image region)
-```
-
 > [!check]- Answer
+> ```text
+> 1. rect (rectangular)
+> 2. circle (circular)
+> 3. poly (polygonal)
+> 4. default (entire image region)
+> ```
 > ```text
 > 1. rect
 > 2. circle

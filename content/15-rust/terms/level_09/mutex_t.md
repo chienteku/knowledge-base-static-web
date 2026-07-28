@@ -191,11 +191,10 @@ thread::spawn(move || {
 **Problem:** Handle a poisoned mutex using `.lock().unwrap_or_else(|e| e.into_inner())` after a thread panics while holding the lock.
 
 **Expected output:**
-```
-Recovered poisoned value: 42
-```
-
 > [!check]- Answer
+> ```
+> Recovered poisoned value: 42
+> ```
 > ```rust
 > use std::sync::{Arc, Mutex};
 > use std::thread;
@@ -213,16 +212,17 @@ Recovered poisoned value: 42
 >
 > **Explanation:** `Mutex::lock` returns `PoisonError` if a thread panics while holding the lock guard.
 
+---
+
 ### Exercise 3: Non-Blocking Lock Acquisition with `try_lock`
 
 **Problem:** Use `mutex.try_lock()` to attempt non-blocking lock acquisition.
 
 **Expected output:**
-```
-Try lock succeeded
-```
-
 > [!check]- Answer
+> ```
+> Try lock succeeded
+> ```
 > use std::sync::Mutex;
 > fn main() {
 >     let m = Mutex::new(10);

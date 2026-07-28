@@ -154,18 +154,17 @@ Use $all to check if an array contains a set of required elements
 Write the MongoDB query to select all companies that employ **at least one employee** whose `role` is exactly `"engineer"` AND whose `salary` is greater than or equal to `100000`.
 
 **Expected output:**
-```javascript
-db.companies.find({
-  employees: {
-    $elemMatch: {
-      role: "engineer",
-      salary: { $gte: 100000 }
-    }
-  }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.companies.find({
+>   employees: {
+>     $elemMatch: {
+>       role: "engineer",
+>       salary: { $gte: 100000 }
+>     }
+>   }
+> });
+> ```
 > - The search targets multiple conditions locked to the same nested employee object.
 > - Use the `$elemMatch` operator wrapping the target properties.
 
@@ -178,11 +177,10 @@ db.companies.find({
 **Problem:** Query students possessing a grade sub-document matching `{ mean: { $gt: 80 }, grade: "A" }` using `$elemMatch`.
 
 **Expected output:**
-```text
-db.students.find({ grades: { $elemMatch: { mean: { $gt: 80 }, grade: "A" } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.students.find({ grades: { $elemMatch: { mean: { $gt: 80 }, grade: "A" } } });
+> ```
 > ```javascript
 > db.students.find({
 >   grades: { $elemMatch: { mean: { $gt: 80 }, grade: "A" } }
@@ -191,16 +189,17 @@ db.students.find({ grades: { $elemMatch: { mean: { $gt: 80 }, grade: "A" } } });
 >
 > **Explanation:** `$elemMatch` enforces that all specified query conditions match the SAME array element.
 
+---
+
 ### Exercise 3: Matching Subset of Array Elements with `$all`
 
 **Problem:** Query posts containing both tags `"mongodb"` and `"nosql"` using `$all`.
 
 **Expected output:**
-```text
-db.posts.find({ tags: { $all: ["mongodb", "nosql"] } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ tags: { $all: ["mongodb", "nosql"] } });
+> ```
 > ```javascript
 > db.posts.find({ tags: { $all: ["mongodb", "nosql"] } });
 > ```

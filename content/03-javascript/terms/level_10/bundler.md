@@ -149,12 +149,11 @@ async function processData() {
 **Problem:** When you look at the `bundle.js` file output by a Bundler, it is usually completely unreadable. All the variable names have been changed to `a`, `b`, `c`, and all the spaces and newlines have been deleted. Why do Bundlers do this?
 
 **Expected output:**
-```text
-This is called **Minification**. 
-By stripping out all spaces, comments, and renaming long variables (`const calculateTotalPrice` becomes `const a`), the Bundler shrinks the file size of your code by up to 80%. A smaller file means it downloads faster on the user's phone!
-```
-
 > [!check]- Answer
+> ```text
+> This is called **Minification**. 
+> By stripping out all spaces, comments, and renaming long variables (`const calculateTotalPrice` becomes `const a`), the Bundler shrinks the file size of your code by up to 80%. A smaller file means it downloads faster on the user's phone!
+> ```
 > - Think about network speed and file sizes.
 
 ---
@@ -164,34 +163,33 @@ By stripping out all spaces, comments, and renaming long variables (`const calcu
 **Problem:** State role of Entry point (e.g. `src/index.js`) and Output bundle (e.g. `dist/bundle.js`).
 
 **Expected output:**
-```text
-Entry: Dependency graph root, Output: Consolidated bundle
-```
-
 > [!check]- Answer
+> ```text
+> Entry: Dependency graph root, Output: Consolidated bundle
+> ```
 > ```javascript
 > console.log("Entry: Dependency graph root, Output: Consolidated bundle");
 > ```
 >
 > **Explanation:** Bundlers trace import dependency graphs starting from entry points to produce optimized production assets.
 
+---
+
 ### Exercise 3: Asset Loader Modules Concept
 
 **Problem:** Explain how bundlers process non-JS assets like CSS or images into module graphs.
 
 **Expected output:**
-```text
-Loaders convert non-JS assets into valid JS modules
-```
-
 > [!check]- Answer
+> ```text
+> Loaders convert non-JS assets into valid JS modules
+> ```
 > ```javascript
 > console.log("Loaders convert non-JS assets into valid JS modules");
 > ```
 >
 > **Explanation:** Loaders transform stylesheets and media assets into module exports for bundle inclusion.
 
----
 
 ---
 

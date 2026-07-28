@@ -171,11 +171,10 @@ export default function StatusPage() {
 **Problem:** Write route segment configuration line switching a Route Handler runtime from Node.js to Edge Runtime.
 
 **Expected output:**
-```typescript
-export const runtime = 'edge';
-```
-
 > [!check]- Answer
+> ```typescript
+> export const runtime = 'edge';
+> ```
 > - `export const runtime = 'edge'` selects V8 Edge Runtime.
 > 
 > ```typescript
@@ -193,11 +192,10 @@ export const runtime = 'edge';
 **Problem:** Explain what a "Cold Start" means in Next.js Serverless Node.js execution.
 
 **Expected output:**
-```text
-The delay experienced when a new serverless container instance is initialized from scratch to handle an incoming HTTP request.
-```
-
 > [!check]- Answer
+> ```text
+> The delay experienced when a new serverless container instance is initialized from scratch to handle an incoming HTTP request.
+> ```
 > - Cold start is the initialization latency of new serverless containers.
 > 
 > ```text

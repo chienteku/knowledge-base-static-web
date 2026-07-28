@@ -93,15 +93,14 @@ if (process.env.NODE_ENV === 'development') return MOCK_DATA; // ❌ Risky produ
 **Problem:** You are the Frontend lead. The Backend lead says, "I will have the `/checkout` API ready next Friday." What exact steps do you take today to ensure your team isn't blocked?
 
 **Expected output:**
-```text
-1. Meet with the Backend lead today to agree upon the EXACT JSON schema (what the keys and data types will be).
-2. Write a `db.json` file containing that exact dummy data.
-3. Use a tool like JSON Server to launch a mock API.
-4. Have the frontend team build the entire checkout UI using the mock API.
-5. Next Friday, swap the base URL to the real backend.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Meet with the Backend lead today to agree upon the EXACT JSON schema (what the keys and data types will be).
+> 2. Write a `db.json` file containing that exact dummy data.
+> 3. Use a tool like JSON Server to launch a mock API.
+> 4. Have the frontend team build the entire checkout UI using the mock API.
+> 5. Next Friday, swap the base URL to the real backend.
+> ```
 > - What must both teams agree upon *before* you can write the dummy data?
 
 ---
@@ -111,11 +110,10 @@ if (process.env.NODE_ENV === 'development') return MOCK_DATA; // ❌ Risky produ
 **Problem:** Write MSW REST handler intercepting `GET /api/user` and returning HTTP 200 JSON `{ id: 1, name: 'Alice' }`.
 
 **Expected output:**
-```text
-http.get('/api/user', () => { return HttpResponse.json({ id: 1, name: 'Alice' }); })
-```
-
 > [!check]- Answer
+> ```text
+> http.get('/api/user', () => { return HttpResponse.json({ id: 1, name: 'Alice' }); })
+> ```
 > ```javascript
 > import { http, HttpResponse } from 'msw';
 > export const handlers = [
@@ -132,11 +130,10 @@ http.get('/api/user', () => { return HttpResponse.json({ id: 1, name: 'Alice' })
 **Problem:** Which CLI command starts an instant mock API server from an `openapi.yaml` specification file using Prism?
 
 **Expected output:**
-```text
-prism mock openapi.yaml
-```
-
 > [!check]- Answer
+> ```text
+> prism mock openapi.yaml
+> ```
 > ```bash
 > npx @stoplight/prism-cli mock openapi.yaml
 > ```

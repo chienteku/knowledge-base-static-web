@@ -146,20 +146,19 @@ CREATE TABLE user_phones ( user_id INT REFERENCES users(id), phone TEXT );
 Write the SQL DDL queries to normalize this schema into 1NF.
 
 **Expected output:**
-```sql
-CREATE TABLE employees (
-  emp_id INT PRIMARY KEY,
-  emp_name VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE employee_project_links (
-  emp_id INT REFERENCES employees(emp_id),
-  project_name VARCHAR(100),
-  PRIMARY KEY (emp_id, project_name)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE employees (
+>   emp_id INT PRIMARY KEY,
+>   emp_name VARCHAR(100) NOT NULL
+> );
+> 
+> CREATE TABLE employee_project_links (
+>   emp_id INT REFERENCES employees(emp_id),
+>   project_name VARCHAR(100),
+>   PRIMARY KEY (emp_id, project_name)
+> );
+> ```
 > - Remove repeating columns (`project_1`, `project_2`) and store projects as rows in a separate link table.
 > - Define a composite primary key on the link table to ensure row uniqueness.
 
@@ -172,11 +171,10 @@ CREATE TABLE employee_project_links (
 **Problem:** Convert non-atomic `users (id, phones_csv)` into 1NF schema using child table `user_phones`.
 
 **Expected output:**
-```text
-CREATE TABLE user_phones ( user_id INT REFERENCES users(id), phone TEXT, PRIMARY KEY (user_id, phone) );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE user_phones ( user_id INT REFERENCES users(id), phone TEXT, PRIMARY KEY (user_id, phone) );
+> ```
 > ```sql
 > CREATE TABLE user_phones (
 >   user_id INT REFERENCES users(id),
@@ -187,16 +185,17 @@ CREATE TABLE user_phones ( user_id INT REFERENCES users(id), phone TEXT, PRIMARY
 >
 > **Explanation:** Moving non-atomic values into a child table satisfies 1NF atomic value requirements.
 
+---
+
 ### Exercise 3: 1NF Rules Summary
 
 **Problem:** List 2 primary rules of First Normal Form (1. Each column contains atomic single values; 2. No repeating column groups).
 
 **Expected output:**
-```text
-1. Columns contain atomic single values; 2. No repeating column groups
-```
-
 > [!check]- Answer
+> ```text
+> 1. Columns contain atomic single values; 2. No repeating column groups
+> ```
 > ```text
 > 1. Columns contain atomic single values; 2. No repeating column groups
 > ```

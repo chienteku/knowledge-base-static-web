@@ -159,11 +159,10 @@ async function processData() {
 **Problem:** Create an object called `robot` with a property `name` set to `"R2D2"`. Add a method called `greet` that logs `"Beep boop, I am R2D2"` using the `this` keyword to access the robot's name. Call the method.
 
 **Expected output:**
-```text
-Beep boop, I am R2D2
-```
-
 > [!check]- Answer
+> ```text
+> Beep boop, I am R2D2
+> ```
 > - `const robot = { name: "R2D2", greet() { console.log(`Beep boop, I am ${this.name}`); } }`
 > - Don't forget to call it: `robot.greet();`
 
@@ -174,11 +173,10 @@ Beep boop, I am R2D2
 **Problem:** Define an object `calculator` with method shorthand `add(a, b) { return a + b; }`.
 
 **Expected output:**
-```text
-15
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> ```
 > ```javascript
 > const calculator = {
 >   add(a, b) {
@@ -190,16 +188,17 @@ Beep boop, I am R2D2
 >
 > **Explanation:** ES6 method shorthand syntax `methodName() {}` defines clean object methods.
 
+---
+
 ### Exercise 3: Binding Method `this` Context
 
 **Problem:** Bind detached method `user.getName` to `user` using `.bind(user)`.
 
 **Expected output:**
-```text
-Alice
-```
-
 > [!check]- Answer
+> ```text
+> Alice
+> ```
 > ```javascript
 > const user = {
 >   name: "Alice",
@@ -212,7 +211,6 @@ Alice
 >
 > **Explanation:** `Function.prototype.bind()` locks the explicit `this` target of functions regardless of how they are invoked.
 
----
 
 ---
 

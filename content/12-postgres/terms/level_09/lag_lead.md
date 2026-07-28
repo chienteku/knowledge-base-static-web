@@ -152,15 +152,14 @@ SELECT price, LAG(price) OVER (ORDER BY date ASC) FROM prices; -- Accesses PREVI
 2.  The timestamp of the **subsequent** click made by the same user (use the alias `next_click_time`).
 
 **Expected output:**
-```sql
-SELECT 
-  user_id,
-  page_name,
-  LEAD(clicked_at, 1) OVER (PARTITION BY user_id ORDER BY clicked_at ASC) AS next_click_time
-FROM page_views;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   user_id,
+>   page_name,
+>   LEAD(clicked_at, 1) OVER (PARTITION BY user_id ORDER BY clicked_at ASC) AS next_click_time
+> FROM page_views;
+> ```
 > - Use the `LEAD` function to fetch the next timestamp forward.
 > - Partition the window by `user_id` so you don't read other users' click times, and sort by `clicked_at` ascending.
 
@@ -173,11 +172,10 @@ FROM page_views;
 **Problem:** Calculate price change from previous day using `price - LAG(price) OVER (ORDER BY date ASC)`.
 
 **Expected output:**
-```text
-SELECT date, price, price - LAG(price, 1, price) OVER (ORDER BY date ASC) AS price_diff FROM daily_stocks;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT date, price, price - LAG(price, 1, price) OVER (ORDER BY date ASC) AS price_diff FROM daily_stocks;
+> ```
 > ```sql
 > SELECT date, price,
 >   price - LAG(price, 1, price) OVER (ORDER BY date ASC) AS price_diff
@@ -186,16 +184,17 @@ SELECT date, price, price - LAG(price, 1, price) OVER (ORDER BY date ASC) AS pri
 >
 > **Explanation:** `LAG(col, offset, default)` fetches previous row attributes for delta calculations.
 
+---
+
 ### Exercise 3: Default Fallback Value in LAG Function
 
 **Problem:** Set default fallback value of `0` for first row of `LAG(amount, 1, 0)`.
 
 **Expected output:**
-```text
-SELECT LAG(amount, 1, 0) OVER (ORDER BY id ASC) FROM sales;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT LAG(amount, 1, 0) OVER (ORDER BY id ASC) FROM sales;
+> ```
 > ```sql
 > SELECT LAG(amount, 1, 0) OVER (ORDER BY id ASC) FROM sales;
 > ```

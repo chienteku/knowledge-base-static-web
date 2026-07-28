@@ -137,11 +137,10 @@ export default defineNuxtRouteMiddleware((to) => {
 **Problem:** You want to create a middleware that checks if the application is currently in "Maintenance Mode." If it is, you want every single URL to redirect to `/maintenance`. What should you name the file in the `middleware/` directory?
 
 **Expected output:**
-```text
-maintenance.global.ts
-```
-
 > [!check]- Answer
+> ```text
+> maintenance.global.ts
+> ```
 > - Suffixing a middleware file name with `.global` marks it for universal execution across all route transitions.
 
 ---
@@ -151,12 +150,11 @@ maintenance.global.ts
 **Problem:** Contrast file naming conventions for Global vs Named route middleware in the `middleware/` directory.
 
 **Expected output:**
-```text
-Global Middleware: middleware/log.global.ts (.global.ts suffix);
-Named Middleware: middleware/auth.ts (no global suffix).
-```
-
 > [!check]- Answer
+> ```text
+> Global Middleware: middleware/log.global.ts (.global.ts suffix);
+> Named Middleware: middleware/auth.ts (no global suffix).
+> ```
 > - Global -> `middleware/analytics.global.ts` (Executes automatically everywhere).
 > - Named -> `middleware/auth.ts` (Registered per page).
 > 
@@ -171,12 +169,11 @@ Named Middleware: middleware/auth.ts (no global suffix).
 **Problem:** In what sequence do Global vs Named middleware execute during a page transition?
 
 **Expected output:**
-```text
-1. Global Middleware (ordered alphabetically by filename or numerical prefix 01.log.global.ts)
-2. Named Middleware (in order defined in definePageMeta array)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Global Middleware (ordered alphabetically by filename or numerical prefix 01.log.global.ts)
+> 2. Named Middleware (in order defined in definePageMeta array)
+> ```
 > - Global middleware runs first, followed by page named middleware.
 > 
 > ```text

@@ -139,11 +139,10 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 **Problem:** What will physically appear on the user's screen if you write `<img src="missing-file.jpg" alt="Company Logo">` but the image file has been deleted from the server?
 
 **Expected output:**
-```text
-A small "broken image" icon will appear, followed immediately by the plain text: "Company Logo".
-```
-
 > [!check]- Answer
+> ```text
+> A small "broken image" icon will appear, followed immediately by the plain text: "Company Logo".
+> ```
 > - What is the backup plan when the `src` fails?
 
 ---
@@ -155,27 +154,27 @@ A small "broken image" icon will appear, followed immediately by the plain text:
 **Problem:** Write `<img>` tag with `src="hero.jpg"`, `alt="Hero"`, dimensions 800x600, and native browser lazy loading.
 
 **Expected output:**
-```text
-<img src="hero.jpg" alt="Hero" width="800" height="600" loading="lazy">
-```
-
 > [!check]- Answer
+> ```text
+> <img src="hero.jpg" alt="Hero" width="800" height="600" loading="lazy">
+> ```
 > ```html
 > <img src="hero.jpg" alt="Hero" width="800" height="600" loading="lazy">
 > ```
 >
 > **Explanation:** `loading="lazy"` defers image fetching until element approaches the viewport.
 
+---
+
 ### Exercise 3: Modern Image Format Support
 
 **Problem:** Name 2 modern compressed web image formats offering superior compression over legacy JPEG/PNG.
 
 **Expected output:**
-```text
-WebP and AVIF.
-```
-
 > [!check]- Answer
+> ```text
+> WebP and AVIF.
+> ```
 > ```text
 > WebP and AVIF.
 > ```

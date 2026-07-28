@@ -139,13 +139,12 @@ Classify these queries as either **Targeted** or **Scatter-Gather**:
 3.  `db.products.find({ sku: "SKU-9908", price: { $lt: 50 } })`
 
 **Expected output:**
-```text
-1. Targeted: The query filters on the shard key `sku` directly.
-2. Scatter-Gather: The query filter lacks the shard key `sku`, forcing `mongos` to broadcast to all shards.
-3. Targeted: The query filters on `sku` (shard key) and `price`. Since the shard key is present, `mongos` can route the query directly to the correct shard.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Targeted: The query filters on the shard key `sku` directly.
+> 2. Scatter-Gather: The query filter lacks the shard key `sku`, forcing `mongos` to broadcast to all shards.
+> 3. Targeted: The query filters on `sku` (shard key) and `price`. Since the shard key is present, `mongos` can route the query directly to the correct shard.
+> ```
 > - Check for the presence of the shard key `sku` inside each query filter object.
 > - Additional filter parameters do not disable targeted routing.
 
@@ -158,27 +157,27 @@ Classify these queries as either **Targeted** or **Scatter-Gather**:
 **Problem:** State difference: Targeted Query (Includes shard key, routed directly to 1 shard); Scatter-Gather Query (Omits shard key, broadcast to all shards).
 
 **Expected output:**
-```text
-Targeted: routed to 1 shard via shard key; Scatter-Gather: broadcast to all cluster shards
-```
-
 > [!check]- Answer
+> ```text
+> Targeted: routed to 1 shard via shard key; Scatter-Gather: broadcast to all cluster shards
+> ```
 > ```text
 > Targeted: routed to 1 shard via shard key; Scatter-Gather: broadcast to all cluster shards
 > ```
 >
 > **Explanation:** Targeted queries minimize network RPCs and CPU churn in sharded clusters.
 
+---
+
 ### Exercise 3: Verifying Shard Routing in Explain Output
 
 **Problem:** What explain output property indicates single-shard targeted query routing? (`SINGLE_SHARD` stage or single shard execution stats).
 
 **Expected output:**
-```text
-SINGLE_SHARD execution stage
-```
-
 > [!check]- Answer
+> ```text
+> SINGLE_SHARD execution stage
+> ```
 > ```text
 > SINGLE_SHARD execution stage
 > ```

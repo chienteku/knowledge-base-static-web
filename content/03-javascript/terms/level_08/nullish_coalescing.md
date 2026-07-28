@@ -154,13 +154,12 @@ async function processData() {
 3. `undefined ?? "Default"`
 
 **Expected output:**
-```text
-1. `""` (Empty string is not null/undefined!)
-2. `false` (False is not null/undefined!)
-3. `"Default"` (Undefined triggers the fallback!)
-```
-
 > [!check]- Answer
+> ```text
+> 1. `""` (Empty string is not null/undefined!)
+> 2. `false` (False is not null/undefined!)
+> 3. `"Default"` (Undefined triggers the fallback!)
+> ```
 > - `??` only cares about two specific values. Nothing else matters.
 
 ---
@@ -170,14 +169,13 @@ async function processData() {
 **Problem:** Evaluate `0 ?? 100`, `"" ?? "default"`, `false ?? true`, `null ?? "fallback"`.
 
 **Expected output:**
-```text
-0
-""
-false
-fallback
-```
-
 > [!check]- Answer
+> ```text
+> 0
+> ""
+> false
+> fallback
+> ```
 > ```javascript
 > console.log(0 ?? 100);
 > console.log("" ?? "default");
@@ -187,23 +185,23 @@ fallback
 >
 > **Explanation:** `??` returns right-hand operand ONLY if left-hand operand is `null` or `undefined`.
 
+---
+
 ### Exercise 3: Chaining Nullish Coalescing Operators
 
 **Problem:** Chain `undefined ?? null ?? "first valid"`.
 
 **Expected output:**
-```text
-first valid
-```
-
 > [!check]- Answer
+> ```text
+> first valid
+> ```
 > ```javascript
 > console.log(undefined ?? null ?? "first valid");
 > ```
 >
 > **Explanation:** Chained `??` operators evaluate left-to-right until encountering the first non-nullish value.
 
----
 
 ---
 

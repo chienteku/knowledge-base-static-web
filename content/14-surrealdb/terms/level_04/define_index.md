@@ -148,11 +148,10 @@ DEFINE INDEX idx ON TABLE user FIELDS active;
 Write the SurrealQL statement to define an index that optimizes this specific query.
 
 **Expected output:**
-```sql
-DEFINE INDEX product_cat_price ON products COLUMNS category, price;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX product_cat_price ON products COLUMNS category, price;
+> ```
 > - The target table is `products`.
 > - Combine both filtering columns into a single composite index definition.
 
@@ -165,27 +164,27 @@ DEFINE INDEX product_cat_price ON products COLUMNS category, price;
 **Problem:** Define composite index `user_name_age` on `user` table covering `name` and `age` fields.
 
 **Expected output:**
-```text
-DEFINE INDEX user_name_age ON TABLE user FIELDS name, age;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX user_name_age ON TABLE user FIELDS name, age;
+> ```
 > ```surrealql
 > DEFINE INDEX user_name_age ON TABLE user FIELDS name, age;
 > ```
 >
 > **Explanation:** Composite indexes speed up multi-column `WHERE` queries.
 
+---
+
 ### Exercise 3: Dropping Index Definition
 
 **Problem:** Command to remove index `user_email` from `user` table (`REMOVE INDEX user_email ON TABLE user;`).
 
 **Expected output:**
-```text
-REMOVE INDEX user_email ON TABLE user;
-```
-
 > [!check]- Answer
+> ```text
+> REMOVE INDEX user_email ON TABLE user;
+> ```
 > ```surrealql
 > REMOVE INDEX user_email ON TABLE user;
 > ```

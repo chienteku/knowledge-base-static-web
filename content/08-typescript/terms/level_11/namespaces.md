@@ -125,11 +125,10 @@ import { Runner } from './feature';
 **Problem:** Create `namespace Geometry { export const PI = 3.14; }` and access `Geometry.PI`.
 
 **Expected output:**
-```text
-3.14
-```
-
 > [!check]- Answer
+> ```text
+> 3.14
+> ```
 > ```typescript
 > namespace Geometry {
 >   export const PI = 3.14;
@@ -139,32 +138,34 @@ import { Runner } from './feature';
 >
 > **Explanation:** `export` makes namespace properties accessible on the namespace object.
 
+---
+
 ### Exercise 2: Multi-File Namespace Merging
 
 **Problem:** Explain how multiple `.ts` files declaring `namespace App` merge their exported members together.
 
 **Expected output:**
-```text
-Namespaces with matching names across files merge automatically
-```
-
 > [!check]- Answer
+> ```text
+> Namespaces with matching names across files merge automatically
+> ```
 > ```typescript
 > console.log("Namespaces with matching names across files merge automatically");
 > ```
 >
 > **Explanation:** TS declaration merging merges namespace blocks across multiple files.
 
+---
+
 ### Exercise 3: ES Modules vs Namespaces Rule
 
 **Problem:** Which module system is recommended for modern TypeScript development? (ES Modules)
 
 **Expected output:**
-```text
-ES Modules (import / export)
-```
-
 > [!check]- Answer
+> ```text
+> ES Modules (import / export)
+> ```
 > ```typescript
 > console.log("ES Modules (import / export)");
 > ```

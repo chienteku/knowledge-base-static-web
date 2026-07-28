@@ -141,11 +141,10 @@ Write the terminal command to:
 3.  Configure it to store data persistently in a local path: `/home/user/db_data`.
 
 **Expected output:**
-```bash
-surreal start --user devUser --pass devPass --bind 0.0.0.0:8080 file:///home/user/db_data
-```
-
 > [!check]- Answer
+> ```bash
+> surreal start --user devUser --pass devPass --bind 0.0.0.0:8080 file:///home/user/db_data
+> ```
 > - The binding parameter value is `0.0.0.0:8080`.
 > - Use the `file://` protocol prefix for the storage path argument.
 
@@ -158,27 +157,27 @@ surreal start --user devUser --pass devPass --bind 0.0.0.0:8080 file:///home/use
 **Problem:** Command to start a local development server on port `8000` in-memory with user `root` pass `root`.
 
 **Expected output:**
-```text
-surreal start --bind 0.0.0.0:8000 --user root --pass root mem://
-```
-
 > [!check]- Answer
+> ```text
+> surreal start --bind 0.0.0.0:8000 --user root --pass root mem://
+> ```
 > ```text
 > surreal start --bind 0.0.0.0:8000 --user root --pass root mem://
 > ```
 >
 > **Explanation:** `mem://` creates fast ephemeral in-memory database instances for local development.
 
+---
+
 ### Exercise 3: Log Level Configuration Flag
 
 **Problem:** Flag to increase server logging verbosity to debug level (`--log debug` / `-l debug`).
 
 **Expected output:**
-```text
-surreal start --log debug rocksdb://data.db
-```
-
 > [!check]- Answer
+> ```text
+> surreal start --log debug rocksdb://data.db
+> ```
 > ```text
 > surreal start --log debug rocksdb://data.db
 > ```

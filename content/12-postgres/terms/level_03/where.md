@@ -158,13 +158,12 @@ SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) > 5;
 **Problem:** You have a table `users` with columns `username`, `status`, and `registration_year`. Write a SQL query to select the `username` column for all users whose `status` is exactly `'inactive'` and who registered in the year `2024`.
 
 **Expected output:**
-```sql
-SELECT username 
-FROM users 
-WHERE status = 'inactive' AND registration_year = 2024;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT username 
+> FROM users 
+> WHERE status = 'inactive' AND registration_year = 2024;
+> ```
 > - Combine filter criteria inside the `WHERE` clause using the logical `AND` operator.
 > - Match string parameters using exact single quotes.
 
@@ -177,11 +176,10 @@ WHERE status = 'inactive' AND registration_year = 2024;
 **Problem:** Query active users (`status = 'active'`) created in year 2026 (`created_at >= '2026-01-01'`).
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE status = 'active' AND created_at >= '2026-01-01';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE status = 'active' AND created_at >= '2026-01-01';
+> ```
 > ```sql
 > SELECT * FROM users
 > WHERE status = 'active'
@@ -190,16 +188,17 @@ SELECT * FROM users WHERE status = 'active' AND created_at >= '2026-01-01';
 >
 > **Explanation:** `WHERE` clauses filter individual row tuples before grouping or projection.
 
+---
+
 ### Exercise 3: Pattern Matching Predicates with `ILIKE`
 
 **Problem:** Query products where `name` starts with `'Pro'` case-insensitively using `ILIKE`.
 
 **Expected output:**
-```text
-SELECT * FROM products WHERE name ILIKE 'Pro%';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM products WHERE name ILIKE 'Pro%';
+> ```
 > ```sql
 > SELECT * FROM products WHERE name ILIKE 'Pro%';
 > ```

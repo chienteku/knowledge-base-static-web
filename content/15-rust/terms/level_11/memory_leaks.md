@@ -175,11 +175,10 @@ thread::spawn(move || {
 **Problem:** Leak a `Box<Vec<i32>>` to create a `'static` slice reference.
 
 **Expected output:**
-```
-Static leaked slice: [1, 2, 3]
-```
-
 > [!check]- Answer
+> ```
+> Static leaked slice: [1, 2, 3]
+> ```
 > ```rust
 > fn main() {
 >     let v = vec![1, 2, 3];
@@ -190,16 +189,17 @@ Static leaked slice: [1, 2, 3]
 >
 > **Explanation:** `Box::leak` intentionally leaks heap memory to yield stable `'static` references.
 
+---
+
 ### Exercise 3: Detecting Reference Cycles with `Rc`
 
 **Problem:** Explain how reference cycles in `Rc<RefCell<Node>>` prevent destructor invocation.
 
 **Expected output:**
-```
-Reference cycle memory leak verified
-```
-
 > [!check]- Answer
+> ```
+> Reference cycle memory leak verified
+> ```
 > fn main() {
 >     println!("Reference cycle memory leak verified");
 > }

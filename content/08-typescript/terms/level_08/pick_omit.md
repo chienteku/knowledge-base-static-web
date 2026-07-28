@@ -124,12 +124,11 @@ type Good = Exclude<Union, "a">; // Result: "b" | "c"
 **Problem:** You have an interface with 10 properties. You need a new type with 8 of those properties. Should you use `Pick` or `Omit`?
 
 **Expected output:**
-```text
-You should almost certainly use `Omit<Type, "key1" | "key2">`.
-Writing out 8 keys for `Pick` is tedious and harder to read. Always use whichever one results in typing fewer literal keys.
-```
-
 > [!check]- Answer
+> ```text
+> You should almost certainly use `Omit<Type, "key1" | "key2">`.
+> Writing out 8 keys for `Pick` is tedious and harder to read. Always use whichever one results in typing fewer literal keys.
+> ```
 > - Which one requires less typing?
 
 ---
@@ -141,11 +140,10 @@ Writing out 8 keys for `Pick` is tedious and harder to read. Always use whicheve
 **Problem:** Construct `UserPreview` picking `id` and `name` from `User` interface.
 
 **Expected output:**
-```text
-Pick DTO created
-```
-
 > [!check]- Answer
+> ```text
+> Pick DTO created
+> ```
 > ```typescript
 > interface User { id: number; name: string; email: string; passwordHash: string }
 > type UserPreview = Pick<User, "id" | "name">;
@@ -155,16 +153,17 @@ Pick DTO created
 >
 > **Explanation:** `Pick<T, K>` constructs object types containing specified subset keys.
 
+---
+
 ### Exercise 3: Stripping Sensitive Fields with `Omit`
 
 **Problem:** Omit `passwordHash` from `User` interface.
 
 **Expected output:**
-```text
-Omit sanitized interface created
-```
-
 > [!check]- Answer
+> ```text
+> Omit sanitized interface created
+> ```
 > ```typescript
 > interface User { id: number; name: string; passwordHash: string }
 > type SafeUser = Omit<User, "passwordHash">;

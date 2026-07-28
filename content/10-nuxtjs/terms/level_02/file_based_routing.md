@@ -101,11 +101,10 @@ If you want to create a layout specifically for a sub-section of your site (like
 **Problem:** If you create a file at `pages/settings/profile/index.vue`, what URL path will Nuxt generate for it?
 
 **Expected output:**
-```text
-/settings/profile
-```
-
 > [!check]- Answer
+> ```text
+> /settings/profile
+> ```
 > - The `index.vue` filename is treated as the default route file for its containing directory.
 
 ---
@@ -118,13 +117,12 @@ If you want to create a layout specifically for a sub-section of your site (like
 3. `pages/blog/[id].vue` 
 
 **Expected output:**
-```text
-1. /about
-2. /blog
-3. /blog/:id (e.g. /blog/123)
-```
-
 > [!check]- Answer
+> ```text
+> 1. /about
+> 2. /blog
+> 3. /blog/:id (e.g. /blog/123)
+> ```
 > - `pages/about.vue` -> `/about`
 > - `pages/blog/index.vue` -> `/blog`
 > - `pages/blog/[id].vue` -> `/blog/123`
@@ -140,11 +138,10 @@ If you want to create a layout specifically for a sub-section of your site (like
 **Problem:** Which component MUST be placed inside a parent page (e.g. `pages/parent.vue`) to render nested child route pages (`pages/parent/child.vue`)?
 
 **Expected output:**
-```text
-<NuxtPage />
-```
-
 > [!check]- Answer
+> ```text
+> <NuxtPage />
+> ```
 > - Parent page MUST include `<NuxtPage />` to render nested sub-routes.
 > 
 > ```vue

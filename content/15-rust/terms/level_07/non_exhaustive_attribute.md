@@ -171,11 +171,10 @@ thread::spawn(move || {
 **Problem:** Match an external `#[non_exhaustive] enum Status { Active, Inactive }` using `_ => ...` wildcard fallback.
 
 **Expected output:**
-```
-Matched active
-```
-
 > [!check]- Answer
+> ```
+> Matched active
+> ```
 > ```rust
 > #[non_exhaustive]
 > enum Status { Active, Inactive }
@@ -190,16 +189,17 @@ Matched active
 >
 > **Explanation:** `#[non_exhaustive]` enforces wildcard `_` fallback arms outside the defining crate.
 
+---
+
 ### Exercise 3: Non-Exhaustive Struct Field Construction Constraints
 
 **Problem:** Explain why `#[non_exhaustive] struct Config { pub host: String }` cannot be constructed directly using struct literals outside its defining crate.
 
 **Expected output:**
-```
-Construct via constructor method required
-```
-
 > [!check]- Answer
+> ```
+> Construct via constructor method required
+> ```
 > fn main() { println!("Construct via constructor method required"); }
 > ```
 >

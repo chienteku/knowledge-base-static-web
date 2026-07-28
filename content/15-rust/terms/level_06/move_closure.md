@@ -194,11 +194,10 @@ fn main() {
 **Problem:** Move a `String` into a thread closure using `move ||` and print it inside the spawned thread.
 
 **Expected output:**
-```
-Thread received: hello
-```
-
 > [!check]- Answer
+> ```
+> Thread received: hello
+> ```
 > ```rust
 > use std::thread;
 > fn main() {
@@ -212,16 +211,17 @@ Thread received: hello
 >
 > **Explanation:** `move` forces closures to take full ownership of all captured variables.
 
+---
+
 ### Exercise 3: Moving Copy Types vs Non-Copy Types
 
 **Problem:** Demonstrate that moving a `Copy` integer into a `move ||` closure leaves the original integer accessible in caller scope.
 
 **Expected output:**
-```
-Original integer valid: 42
-```
-
 > [!check]- Answer
+> ```
+> Original integer valid: 42
+> ```
 > fn main() {
 >     let x = 42;
 >     let c = move || x + 1;

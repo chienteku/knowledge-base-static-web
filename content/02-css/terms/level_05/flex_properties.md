@@ -209,16 +209,15 @@ Fixed sidebar and fluid main content:
 How many pixels wide will Box A be on the screen?
 
 **Expected output:**
-```text
-250px! 
-1. Starting sizes (flex-basis) total is 300px (100 + 100 + 100).
-2. The remaining empty space is 300px (600 container - 300 baseline).
-3. Box A and Box B have grow weight of 1, Box C has 0. Total grow weights = 2.
-4. Box A gets half of the empty space: 300 / 2 = 150px.
-5. Box A final size is 100px baseline + 150px growth = 250px.
-```
-
 > [!check]- Answer
+> ```text
+> 250px! 
+> 1. Starting sizes (flex-basis) total is 300px (100 + 100 + 100).
+> 2. The remaining empty space is 300px (600 container - 300 baseline).
+> 3. Box A and Box B have grow weight of 1, Box C has 0. Total grow weights = 2.
+> 4. Box A gets half of the empty space: 300 / 2 = 150px.
+> 5. Box A final size is 100px baseline + 150px growth = 250px.
+> ```
 > - Subtract the sum of baseline sizes from the parent container width.
 > - Divide the remaining space among growing items based on their weights.
 
@@ -231,11 +230,10 @@ How many pixels wide will Box A be on the screen?
 **Problem:** Expand `flex: 1;` into its 3 longhand values (`flex-grow`, `flex-shrink`, `flex-basis`).
 
 **Expected output:**
-```text
-flex-grow: 1, flex-shrink: 1, flex-basis: 0%
-```
-
 > [!check]- Answer
+> ```text
+> flex-grow: 1, flex-shrink: 1, flex-basis: 0%
+> ```
 > ```text
 > flex-grow: 1
 > flex-shrink: 1
@@ -244,16 +242,17 @@ flex-grow: 1, flex-shrink: 1, flex-basis: 0%
 >
 > **Explanation:** `flex: 1` expands to `1 1 0%`, allocating equal container space.
 
+---
+
 ### Exercise 3: Preventing Item Shrinking
 
 **Problem:** Write CSS `flex` declaration preventing a flex item from shrinking when container space is tight.
 
 **Expected output:**
-```text
-flex-shrink: 0; (or flex: 0 0 auto;)
-```
-
 > [!check]- Answer
+> ```text
+> flex-shrink: 0; (or flex: 0 0 auto;)
+> ```
 > ```css
 > .fixed-sidebar {
 >   flex-shrink: 0;

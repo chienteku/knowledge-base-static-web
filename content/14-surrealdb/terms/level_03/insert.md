@@ -149,11 +149,10 @@ UPDATE user:alice SET name = "Alice Smith"; // Correct update statement
 -   Row 2: ID is `tags:javascript`, `popularity` is `90`.
 
 **Expected output:**
-```sql
-INSERT INTO tags (id, popularity) VALUES (tags:rust, 95), (tags:javascript, 90);
-```
-
 > [!check]- Answer
+> ```sql
+> INSERT INTO tags (id, popularity) VALUES (tags:rust, 95), (tags:javascript, 90);
+> ```
 > - The statement must start with `INSERT INTO`.
 > - Separate the value rows using parentheses and commas: `VALUES (row1), (row2)`.
 
@@ -166,27 +165,27 @@ INSERT INTO tags (id, popularity) VALUES (tags:rust, 95), (tags:javascript, 90);
 **Problem:** Bulk insert 2 records into `tag` table using `INSERT INTO tag [ { name: "a" }, { name: "b" } ]`.
 
 **Expected output:**
-```text
-INSERT INTO tag [ { name: "a" }, { name: "b" } ];
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO tag [ { name: "a" }, { name: "b" } ];
+> ```
 > ```surrealql
 > INSERT INTO tag [ { name: "a" }, { name: "b" } ];
 > ```
 >
 > **Explanation:** `INSERT INTO table [ ... ]` performs bulk record insertions.
 
+---
+
 ### Exercise 3: INSERT VALUES Syntax
 
 **Problem:** Insert a record into `user` table using `VALUES` syntax.
 
 **Expected output:**
-```text
-INSERT INTO user (name, age) VALUES ("Alice", 30);
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO user (name, age) VALUES ("Alice", 30);
+> ```
 > ```surrealql
 > INSERT INTO user (name, age) VALUES ("Alice", 30);
 > ```

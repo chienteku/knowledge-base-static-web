@@ -95,12 +95,11 @@ return { paths: [...top10], fallback: 'blocking' }; // Generates missing pages o
 Which rendering strategy (SSR or SSG) should you use for each?
 
 **Expected output:**
-```text
-1. ShoppingCart: Must use SSR (or Client-Side Rendering). It depends on the current user's session cookies.
-2. TermsOfService: Must use SSG. The text is the same for every human on Earth, so build it into a static HTML file once to save server costs!
-```
-
 > [!check]- Answer
+> ```text
+> 1. ShoppingCart: Must use SSR (or Client-Side Rendering). It depends on the current user's session cookies.
+> 2. TermsOfService: Must use SSG. The text is the same for every human on Earth, so build it into a static HTML file once to save server costs!
+> ```
 > - If it's the same for everyone, pre-build it.
 
 ---
@@ -112,27 +111,27 @@ Which rendering strategy (SSR or SSG) should you use for each?
 **Problem:** Define Static Site Generation (SSG) (Pre-rendering HTML pages at build time to serve static HTML from CDN edge caches).
 
 **Expected output:**
-```text
-Pre-rendering HTML pages at build time to serve static HTML from CDN edge caches
-```
-
 > [!check]- Answer
+> ```text
+> Pre-rendering HTML pages at build time to serve static HTML from CDN edge caches
+> ```
 > ```text
 > Pre-rendering HTML pages at build time to serve static HTML from CDN edge caches
 > ```
 >
 > **Explanation:** SSG delivers maximum page load performance by serving pre-built HTML from CDN edges.
 
+---
+
 ### Exercise 3: ISR Revalidation Option
 
 **Problem:** How do you enable Incremental Static Regeneration (ISR) to re-build static pages in background every 60 seconds? (Specify `next: { revalidate: 60 }` in fetch or `export const revalidate = 60`).
 
 **Expected output:**
-```text
-Specify revalidate: 60 (revalidate interval in seconds)
-```
-
 > [!check]- Answer
+> ```text
+> Specify revalidate: 60 (revalidate interval in seconds)
+> ```
 > ```javascript
 > export const revalidate = 60; // Revalidate page every 60s
 > ```

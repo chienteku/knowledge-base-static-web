@@ -183,16 +183,17 @@ Use useEffect for SSR components or fallback to useEffect on server
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Measuring DOM Dimensions with useLayoutEffect
 
 **Problem:** Measure tooltip DOM `getBoundingClientRect()` inside `useLayoutEffect` to position it before browser paint.
 
 **Expected output:**
-```text
-useLayoutEffect(() => { const rect = ref.current.getBoundingClientRect(); setCoords({ width: rect.width, height: rect.height }); }, []);
-```
-
 > [!check]- Answer
+> ```text
+> useLayoutEffect(() => { const rect = ref.current.getBoundingClientRect(); setCoords({ width: rect.width, height: rect.height }); }, []);
+> ```
 > ```javascript
 > useLayoutEffect(() => {
 >   const rect = ref.current.getBoundingClientRect();
@@ -202,16 +203,17 @@ useLayoutEffect(() => { const rect = ref.current.getBoundingClientRect(); setCoo
 >
 > **Explanation:** `useLayoutEffect` reads and mutates DOM geometry synchronously before the screen is painted, preventing visual flicker.
 
+---
+
 ### Exercise 3: useEffect vs useLayoutEffect Timing Comparison
 
 **Problem:** Compare: `useEffect` (Runs asynchronously AFTER browser paint); `useLayoutEffect` (Runs synchronously BEFORE browser paint).
 
 **Expected output:**
-```text
-useEffect: runs asynchronously after paint; useLayoutEffect: runs synchronously before paint
-```
-
 > [!check]- Answer
+> ```text
+> useEffect: runs asynchronously after paint; useLayoutEffect: runs synchronously before paint
+> ```
 > ```text
 > useEffect: runs asynchronously after paint; useLayoutEffect: runs synchronously before paint
 > ```

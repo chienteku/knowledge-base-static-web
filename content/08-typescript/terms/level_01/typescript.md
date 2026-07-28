@@ -97,12 +97,11 @@ function greet(name) {
 ```
 
 **Expected output:**
-```text
-Yes!
-Because TypeScript is a superset of JavaScript, standard JS is perfectly valid TS. However, if you turn on "Strict Mode" (which you always should), TypeScript will warn you that `name` is implicitly an `any` type, and it will ask you to add an explicit type annotation.
-```
-
 > [!check]- Answer
+> ```text
+> Yes!
+> Because TypeScript is a superset of JavaScript, standard JS is perfectly valid TS. However, if you turn on "Strict Mode" (which you always should), TypeScript will warn you that `name` is implicitly an `any` type, and it will ask you to add an explicit type annotation.
+> ```
 > - Remember the definition of a "Superset".
 
 ---
@@ -114,27 +113,27 @@ Because TypeScript is a superset of JavaScript, standard JS is perfectly valid T
 **Problem:** State what happens to `interface User {}` after `tsc` compilation to JavaScript.
 
 **Expected output:**
-```text
-Completely erased; zero runtime JS code emitted
-```
-
 > [!check]- Answer
+> ```text
+> Completely erased; zero runtime JS code emitted
+> ```
 > ```typescript
 > console.log("Completely erased; zero runtime JS code emitted");
 > ```
 >
 > **Explanation:** Type annotations, interfaces, and type aliases produce zero runtime code.
 
+---
+
 ### Exercise 3: TypeScript Superset Principle
 
 **Problem:** Is standard ES6 JavaScript valid TypeScript source code?
 
 **Expected output:**
-```text
-Yes, valid TypeScript source code
-```
-
 > [!check]- Answer
+> ```text
+> Yes, valid TypeScript source code
+> ```
 > ```typescript
 > console.log("Yes, valid TypeScript source code");
 > ```

@@ -176,17 +176,16 @@ FROM products;
 Rewrite this query using the `WINDOW` alias keyword to keep the SQL DRY.
 
 **Expected output:**
-```sql
-SELECT 
-  name, 
-  price,
-  AVG(price) OVER w AS avg_cat,
-  SUM(price) OVER w AS sum_cat
-FROM products
-WINDOW w AS (PARTITION BY category ORDER BY price DESC);
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   name, 
+>   price,
+>   AVG(price) OVER w AS avg_cat,
+>   SUM(price) OVER w AS sum_cat
+> FROM products
+> WINDOW w AS (PARTITION BY category ORDER BY price DESC);
+> ```
 > - Define the window alias label `w` at the bottom of the query using the `WINDOW` keyword.
 > - Replace the repetitive `OVER (...)` blocks with `OVER w`.
 
@@ -199,11 +198,10 @@ WINDOW w AS (PARTITION BY category ORDER BY price DESC);
 **Problem:** Define named window `w AS (PARTITION BY department ORDER BY salary DESC)` and compute `ROW_NUMBER() OVER w` and `AVG(salary) OVER w`.
 
 **Expected output:**
-```text
-SELECT name, ROW_NUMBER() OVER w, AVG(salary) OVER w FROM employees WINDOW w AS (PARTITION BY department ORDER BY salary DESC);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT name, ROW_NUMBER() OVER w, AVG(salary) OVER w FROM employees WINDOW w AS (PARTITION BY department ORDER BY salary DESC);
+> ```
 > ```sql
 > SELECT name,
 >   ROW_NUMBER() OVER w,
@@ -214,16 +212,17 @@ SELECT name, ROW_NUMBER() OVER w, AVG(salary) OVER w FROM employees WINDOW w AS 
 >
 > **Explanation:** Named `WINDOW` clauses eliminate duplicate window specification code.
 
+---
+
 ### Exercise 3: Re-Using Window Definitions in Queries
 
 **Problem:** Why use named `WINDOW` clauses? (Reduces code duplication and clarifies window frame specifications).
 
 **Expected output:**
-```text
-Reduces code duplication and clarifies window frame specifications
-```
-
 > [!check]- Answer
+> ```text
+> Reduces code duplication and clarifies window frame specifications
+> ```
 > ```text
 > Reduces code duplication and clarifies window frame specifications
 > ```

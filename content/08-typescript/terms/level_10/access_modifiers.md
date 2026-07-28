@@ -160,12 +160,11 @@ class Child extends Base { getId() { return this.id; } } // Accessible inside su
 **Problem:** You have a `class Animal { private name: string; protected age: number; }`. You create `class Dog extends Animal`. Inside `Dog`, can you write `console.log(this.name)`? Can you write `console.log(this.age)`?
 
 **Expected output:**
-```text
-You CANNOT access `this.name` because it is `private`. Private means *strictly* the Animal class.
-You CAN access `this.age` because it is `protected`. Protected allows subclasses to access the property.
-```
-
 > [!check]- Answer
+> ```text
+> You CANNOT access `this.name` because it is `private`. Private means *strictly* the Animal class.
+> You CAN access `this.age` because it is `protected`. Protected allows subclasses to access the property.
+> ```
 > - Think about inheritance!
 
 ---
@@ -177,61 +176,61 @@ You CAN access `this.age` because it is `protected`. Protected allows subclasses
 **Problem:** State visibility differences: `public` (everywhere), `protected` (class & subclasses), `private` (class only).
 
 **Expected output:**
-```text
-public: everywhere, protected: subclasses, private: class only
-```
-
 > [!check]- Answer
+> ```text
+> public: everywhere, protected: subclasses, private: class only
+> ```
 > ```typescript
 > console.log("public: everywhere, protected: subclasses, private: class only");
 > ```
 >
 > **Explanation:** Access modifiers restrict compile-time member visibility across class hierarchies.
+
+---
 
 ### Exercise 3: ES Private Fields `#` vs TS `private`
 
 **Problem:** Which syntax enforces true hard JavaScript runtime privacy? (ES `#field`)
 
 **Expected output:**
-```text
-ES #field syntax enforces runtime privacy
-```
-
 > [!check]- Answer
+> ```text
+> ES #field syntax enforces runtime privacy
+> ```
 > ```typescript
 > console.log("ES #field syntax enforces runtime privacy");
 > ```
 >
 > **Explanation:** ES `#field` private members use native JavaScript language-level private slots.
 
-
+---
 
 ### Exercise 4: Access Modifier Hierarchy Matrix
 
 **Problem:** State visibility differences: `public` (everywhere), `protected` (class & subclasses), `private` (class only).
 
 **Expected output:**
-```text
-public: everywhere, protected: subclasses, private: class only
-```
-
 > [!check]- Answer
+> ```text
+> public: everywhere, protected: subclasses, private: class only
+> ```
 > ```typescript
 > console.log("public: everywhere, protected: subclasses, private: class only");
 > ```
 >
 > **Explanation:** Access modifiers restrict compile-time member visibility across class hierarchies.
 
+---
+
 ### Exercise 5: ES Private Fields `#` vs TS `private`
 
 **Problem:** Which syntax enforces true hard JavaScript runtime privacy? (ES `#field`)
 
 **Expected output:**
-```text
-ES #field syntax enforces runtime privacy
-```
-
 > [!check]- Answer
+> ```text
+> ES #field syntax enforces runtime privacy
+> ```
 > ```typescript
 > console.log("ES #field syntax enforces runtime privacy");
 > ```

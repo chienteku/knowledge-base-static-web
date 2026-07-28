@@ -193,14 +193,13 @@ app.delete('/orders/:id', async (req, res) => {
 4. The tweet is embarrassing, so you remove it from your profile.
 
 **Expected output:**
-```text
-1. Read (GET)
-2. Create (POST)
-3. Update (PATCH/PUT)
-4. Delete (DELETE)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Read (GET)
+> 2. Create (POST)
+> 3. Update (PATCH/PUT)
+> 4. Delete (DELETE)
+> ```
 > - Think about what is happening to the permanent data in the Twitter database.
 
 ---
@@ -214,14 +213,13 @@ app.delete('/orders/:id', async (req, res) => {
 4. Delete
 
 **Expected output:**
-```text
-1. Create: POST -> INSERT
-2. Read: GET -> SELECT
-3. Update: PUT/PATCH -> UPDATE
-4. Delete: DELETE -> DELETE
-```
-
 > [!check]- Answer
+> ```text
+> 1. Create: POST -> INSERT
+> 2. Read: GET -> SELECT
+> 3. Update: PUT/PATCH -> UPDATE
+> 4. Delete: DELETE -> DELETE
+> ```
 > ```text
 > 1. Create -> HTTP POST   -> SQL INSERT
 > 2. Read   -> HTTP GET    -> SQL SELECT
@@ -238,12 +236,11 @@ app.delete('/orders/:id', async (req, res) => {
 2. Successful Delete with empty body (DELETE)
 
 **Expected output:**
-```text
-1. 201 Created
-2. 204 No Content
-```
-
 > [!check]- Answer
+> ```text
+> 1. 201 Created
+> 2. 204 No Content
+> ```
 > ```text
 > 1. 201 Created
 > 2. 204 No Content
@@ -260,14 +257,13 @@ app.delete('/orders/:id', async (req, res) => {
 4. Delete
 
 **Expected output:**
-```text
-1. Create: POST -> INSERT
-2. Read: GET -> SELECT
-3. Update: PUT/PATCH -> UPDATE
-4. Delete: DELETE -> DELETE
-```
-
 > [!check]- Answer
+> ```text
+> 1. Create: POST -> INSERT
+> 2. Read: GET -> SELECT
+> 3. Update: PUT/PATCH -> UPDATE
+> 4. Delete: DELETE -> DELETE
+> ```
 > ```text
 > 1. Create -> HTTP POST   -> SQL INSERT
 > 2. Read   -> HTTP GET    -> SQL SELECT
@@ -284,12 +280,11 @@ app.delete('/orders/:id', async (req, res) => {
 2. Successful Delete with empty body (DELETE)
 
 **Expected output:**
-```text
-1. 201 Created
-2. 204 No Content
-```
-
 > [!check]- Answer
+> ```text
+> 1. 201 Created
+> 2. 204 No Content
+> ```
 > ```text
 > 1. 201 Created
 > 2. 204 No Content
@@ -306,14 +301,13 @@ app.delete('/orders/:id', async (req, res) => {
 4. Delete
 
 **Expected output:**
-```text
-1. Create: POST -> INSERT
-2. Read: GET -> SELECT
-3. Update: PUT/PATCH -> UPDATE
-4. Delete: DELETE -> DELETE
-```
-
 > [!check]- Answer
+> ```text
+> 1. Create: POST -> INSERT
+> 2. Read: GET -> SELECT
+> 3. Update: PUT/PATCH -> UPDATE
+> 4. Delete: DELETE -> DELETE
+> ```
 > ```text
 > 1. Create -> HTTP POST   -> SQL INSERT
 > 2. Read   -> HTTP GET    -> SQL SELECT
@@ -330,12 +324,11 @@ app.delete('/orders/:id', async (req, res) => {
 2. Successful Delete with empty body (DELETE)
 
 **Expected output:**
-```text
-1. 201 Created
-2. 204 No Content
-```
-
 > [!check]- Answer
+> ```text
+> 1. 201 Created
+> 2. 204 No Content
+> ```
 > ```text
 > 1. 201 Created
 > 2. 204 No Content

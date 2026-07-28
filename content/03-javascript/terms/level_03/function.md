@@ -169,11 +169,10 @@ async function processData() {
 **Problem:** Inspect `.length` on `function sum(a, b, c = 0) {}`.
 
 **Expected output:**
-```text
-2
-```
-
 > [!check]- Answer
+> ```text
+> 2
+> ```
 > ```javascript
 > function sum(a, b, c = 0) {}
 > console.log(sum.length);
@@ -181,16 +180,17 @@ async function processData() {
 >
 > **Explanation:** `fn.length` measures positional expected parameters prior to default parameters.
 
+---
+
 ### Exercise 3: Function Constructor Prototype Property
 
 **Problem:** Check `typeof function(){}.prototype`.
 
 **Expected output:**
-```text
-object
-```
-
 > [!check]- Answer
+> ```text
+> object
+> ```
 > ```javascript
 > function Demo() {}
 > console.log(typeof Demo.prototype);
@@ -198,7 +198,6 @@ object
 >
 > **Explanation:** Standard function declarations automatically instantiate prototype object references.
 
----
 
 ---
 

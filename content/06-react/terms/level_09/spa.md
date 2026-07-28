@@ -117,45 +117,44 @@ Use Next.js SSR/SSG for public SEO marketing pages
 **Problem:** Define Single Page Application (SPA) (A web application that loads a single HTML page and dynamically updates page content as the user interacts with the app, without requesting new HTML pages from servers).
 
 **Expected output:**
-```text
-Loads a single HTML page and dynamically updates content without requesting full page reloads from servers
-```
-
 > [!check]- Answer
+> ```text
+> Loads a single HTML page and dynamically updates content without requesting full page reloads from servers
+> ```
 > ```text
 > Loads a single HTML page and dynamically updates content without requesting full page reloads from servers
 > ```
 >
 > **Explanation:** SPAs provide desktop-like fluid user experiences via client-side rendering and routing.
 
+---
+
 ### Exercise 2: SPA vs MPA Tradeoffs
 
 **Problem:** Compare: SPA (Fast client navigation, rich interactivity; complex SEO/initial bundle size); MPA (Fast initial page load, simple SEO; full page reload on navigation).
 
 **Expected output:**
-```text
-SPA: fast navigation & interactivity; MPA: simple SEO & fast initial HTML load
-```
-
 > [!check]- Answer
+> ```text
+> SPA: fast navigation & interactivity; MPA: simple SEO & fast initial HTML load
+> ```
 > ```text
 > SPA: fast navigation & interactivity; MPA: simple SEO & fast initial HTML load
 > ```
 >
 > **Explanation:** Architectural choices depend on interactivity requirements vs initial SEO loading needs.
 
-
+---
 
 ### Exercise 3: Updating Page Title in SPA
 
 **Problem:** Update `document.title` on route changes in SPA using `useEffect`.
 
 **Expected output:**
-```text
-useEffect(() => { document.title = 'Dashboard | My App'; }, []);
-```
-
 > [!check]- Answer
+> ```text
+> useEffect(() => { document.title = 'Dashboard | My App'; }, []);
+> ```
 > ```javascript
 > useEffect(() => {
 >   document.title = 'Dashboard | My App';

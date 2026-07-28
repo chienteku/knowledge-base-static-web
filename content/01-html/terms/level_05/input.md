@@ -127,11 +127,10 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 **Problem:** What happens if a user tries to submit a form containing `<input type="number">` but they typed the letter "A" into the box?
 
 **Expected output:**
-```text
-The browser will natively block the form submission and display a built-in error message telling the user to enter a valid number. (This is why choosing the correct `type` is so important!)
-```
-
 > [!check]- Answer
+> ```text
+> The browser will natively block the form submission and display a built-in error message telling the user to enter a valid number. (This is why choosing the correct `type` is so important!)
+> ```
 > - Modern HTML5 does a lot of heavy lifting for you so you don't have to write JavaScript!
 
 ---
@@ -147,14 +146,13 @@ The browser will natively block the form submission and display a built-in error
 4. Range slider (`type="range"`)
 
 **Expected output:**
-```text
-1. password
-2. date
-3. color
-4. range
-```
-
 > [!check]- Answer
+> ```text
+> 1. password
+> 2. date
+> 3. color
+> 4. range
+> ```
 > ```text
 > 1. password
 > 2. date
@@ -164,16 +162,17 @@ The browser will natively block the form submission and display a built-in error
 >
 > **Explanation:** Specialized input types activate native browser UI controls and mobile keyboards.
 
+---
+
 ### Exercise 3: Input Pattern Regular Expression Validation
 
 **Problem:** Write `pattern` attribute on `<input>` enforcing a 5-digit US ZIP code.
 
 **Expected output:**
-```text
-<input type="text" pattern="[0-9]{5}" title="5-digit ZIP code">
-```
-
 > [!check]- Answer
+> ```text
+> <input type="text" pattern="[0-9]{5}" title="5-digit ZIP code">
+> ```
 > ```html
 > <input type="text" pattern="[0-9]{5}" title="Five digit ZIP code">
 > ```

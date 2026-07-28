@@ -154,23 +154,22 @@ DO $$ BEGIN ... END; $$ LANGUAGE plpgsql;
 The script should check if the table `test_accounts` contains more than 10 rows. If it does, truncate the table; otherwise, print a warning notice saying `'No action required.'`.
 
 **Expected output:**
-```sql
-DO $$
-DECLARE
-  row_count INT;
-BEGIN
-  SELECT COUNT(*) INTO row_count FROM test_accounts;
-  
-  IF row_count > 10 THEN
-    TRUNCATE TABLE test_accounts;
-    RAISE NOTICE 'Table truncated.';
-  ELSE
-    RAISE WARNING 'No action required.';
-  END IF;
-END $$;
-```
-
 > [!check]- Answer
+> ```sql
+> DO $$
+> DECLARE
+>   row_count INT;
+> BEGIN
+>   SELECT COUNT(*) INTO row_count FROM test_accounts;
+>   
+>   IF row_count > 10 THEN
+>     TRUNCATE TABLE test_accounts;
+>     RAISE NOTICE 'Table truncated.';
+>   ELSE
+>     RAISE WARNING 'No action required.';
+>   END IF;
+> END $$;
+> ```
 > - Declare a variable to hold the counts.
 > - Run the select count statement and save the output using `INTO row_count`.
 > - Wrap the if-else branch inside the `BEGIN/END` block.
@@ -184,11 +183,10 @@ END $$;
 **Problem:** Write `DO` block counting rows in `users` and printing result with `RAISE NOTICE`.
 
 **Expected output:**
-```text
-DO $$ DECLARE cnt INT; BEGIN SELECT COUNT(*) INTO cnt FROM users; RAISE NOTICE 'Total Users: %', cnt; END; $$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```text
+> DO $$ DECLARE cnt INT; BEGIN SELECT COUNT(*) INTO cnt FROM users; RAISE NOTICE 'Total Users: %', cnt; END; $$ LANGUAGE plpgsql;
+> ```
 > ```sql
 > DO $$
 > DECLARE
@@ -202,16 +200,17 @@ DO $$ DECLARE cnt INT; BEGIN SELECT COUNT(*) INTO cnt FROM users; RAISE NOTICE '
 >
 > **Explanation:** `DO` blocks execute one-off procedural scripts using `RAISE NOTICE` logging.
 
+---
+
 ### Exercise 3: Conditional DDL Execution inside DO Block
 
 **Problem:** Write `DO` block checking if index `idx_custom` exists in `pg_indexes`, creating it if missing.
 
 **Expected output:**
-```text
-DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_custom') THEN CREATE INDEX idx_custom ON users (email); END IF; END; $$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```text
+> DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_custom') THEN CREATE INDEX idx_custom ON users (email); END IF; END; $$ LANGUAGE plpgsql;
+> ```
 > ```sql
 > DO $$
 > BEGIN

@@ -175,11 +175,10 @@ console.log(metals);
 ```
 
 **Expected output:**
-```text
-[ 'Gold', 'Silver', 'Copper', 'Bronze' ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 'Gold', 'Silver', 'Copper', 'Bronze' ]
+> ```
 > - The start index is `2`.
 > - The delete count is `1`.
 > - The replacement item is `"Copper"`.
@@ -191,11 +190,10 @@ console.log(metals);
 **Problem:** Remove 2 items starting at index `1` from `[10, 20, 30, 40]` using `.splice(1, 2)`.
 
 **Expected output:**
-```text
-Removed: [ 20, 30 ], Remaining: [ 10, 40 ]
-```
-
 > [!check]- Answer
+> ```text
+> Removed: [ 20, 30 ], Remaining: [ 10, 40 ]
+> ```
 > ```javascript
 > const arr = [10, 20, 30, 40];
 > const removed = arr.splice(1, 2);
@@ -204,16 +202,17 @@ Removed: [ 20, 30 ], Remaining: [ 10, 40 ]
 >
 > **Explanation:** `splice(start, deleteCount)` mutates original array in-place and returns removed items.
 
+---
+
 ### Exercise 3: Shallow Copying Arrays with `slice()`
 
 **Problem:** Make a shallow copy of `[1, 2, 3]` using `.slice()`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const orig = [1, 2, 3];
 > const copy = orig.slice();

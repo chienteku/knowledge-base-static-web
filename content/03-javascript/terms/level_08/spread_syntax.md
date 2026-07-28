@@ -150,12 +150,11 @@ async function processData() {
 **Problem:** What happens if you use the Spread operator on a primitive String? e.g., `const letters = [..."HELLO"];`
 
 **Expected output:**
-```text
-`["H", "E", "L", "L", "O"]`
-Because Strings are "Iterables" in JavaScript, the spread operator will unpack the string into individual character elements inside the array!
-```
-
 > [!check]- Answer
+> ```text
+> `["H", "E", "L", "L", "O"]`
+> Because Strings are "Iterables" in JavaScript, the spread operator will unpack the string into individual character elements inside the array!
+> ```
 > - Try running it in your console! It's a great trick.
 
 ---
@@ -165,11 +164,10 @@ Because Strings are "Iterables" in JavaScript, the spread operator will unpack t
 **Problem:** Create a shallow copy of `{ a: 1 }` using `{ ...obj }` and add property `b: 2`.
 
 **Expected output:**
-```text
-{"a":1,"b":2}
-```
-
 > [!check]- Answer
+> ```text
+> {"a":1,"b":2}
+> ```
 > ```javascript
 > const orig = { a: 1 };
 > const copy = { ...orig, b: 2 };
@@ -178,16 +176,17 @@ Because Strings are "Iterables" in JavaScript, the spread operator will unpack t
 >
 > **Explanation:** Object spread `{ ...obj }` copies own enumerable properties into new object literals.
 
+---
+
 ### Exercise 3: Merging Arrays with Spread Syntax
 
 **Problem:** Merge `[1, 2]` and `[3, 4]` using `[...a, ...b]`.
 
 **Expected output:**
-```text
-[ 1, 2, 3, 4 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3, 4 ]
+> ```
 > ```javascript
 > const a = [1, 2];
 > const b = [3, 4];
@@ -196,7 +195,6 @@ Because Strings are "Iterables" in JavaScript, the spread operator will unpack t
 >
 > **Explanation:** Array spread expands iterable elements inside fresh array literals.
 
----
 
 ---
 

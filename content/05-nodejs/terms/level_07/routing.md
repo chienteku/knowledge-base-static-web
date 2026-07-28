@@ -197,24 +197,23 @@ app.use('/users', userRouter);
 **Problem:** You want to move all your Product routes into a separate file called `productRoutes.js` so they all automatically start with `/products`. How do you export the router from the file, and how do you connect it in `server.js`?
 
 **Expected output:**
-```javascript
-// --- productRoutes.js ---
-const express = require('express');
-const router = express.Router();
-
-// This automatically becomes /products/list
-router.get('/list', (req, res) => res.send("List of products")); 
-
-module.exports = router;
-
-// --- server.js ---
-const productRoutes = require('./productRoutes');
-
-// Mount the router! Any request starting with /products goes to that file.
-app.use('/products', productRoutes); 
-```
-
 > [!check]- Answer
+> ```javascript
+> // --- productRoutes.js ---
+> const express = require('express');
+> const router = express.Router();
+> 
+> // This automatically becomes /products/list
+> router.get('/list', (req, res) => res.send("List of products")); 
+> 
+> module.exports = router;
+> 
+> // --- server.js ---
+> const productRoutes = require('./productRoutes');
+> 
+> // Mount the router! Any request starting with /products goes to that file.
+> app.use('/products', productRoutes); 
+> ```
 > - Create `express.Router()`. 
 > - Use `app.use()` to mount it to a specific base path.
 
@@ -227,11 +226,10 @@ app.use('/products', productRoutes);
 **Problem:** Create modular `express.Router()` instance for `/products` export.
 
 **Expected output:**
-```text
-const router = express.Router(); router.get('/', getProducts); module.exports = router;
-```
-
 > [!check]- Answer
+> ```text
+> const router = express.Router(); router.get('/', getProducts); module.exports = router;
+> ```
 > ```javascript
 > const express = require('express');
 > const router = express.Router();
@@ -241,16 +239,17 @@ const router = express.Router(); router.get('/', getProducts); module.exports = 
 >
 > **Explanation:** `express.Router()` creates isolated modular route handler modules.
 
+---
+
 ### Exercise 3: Chaining HTTP Route Methods
 
 **Problem:** Chain `get`, `post`, `delete` handlers on path `'/api/items'` using `app.route()`.
 
 **Expected output:**
-```text
-app.route('/api/items').get(getItems).post(createItem).delete(deleteItem);
-```
-
 > [!check]- Answer
+> ```text
+> app.route('/api/items').get(getItems).post(createItem).delete(deleteItem);
+> ```
 > ```javascript
 > app.route('/api/items')
 >   .get((req, res) => res.send('Get'))

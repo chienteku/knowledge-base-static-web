@@ -142,12 +142,11 @@ RETURN array::add($arr, 3); // Correct array element addition
 2.  Define a field named `scores` on the `course` table as an array that can only store integers.
 
 **Expected output:**
-```sql
-DEFINE TABLE course SCHEMAFULL;
-DEFINE FIELD scores ON course TYPE array<int>;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE TABLE course SCHEMAFULL;
+> DEFINE FIELD scores ON course TYPE array<int>;
+> ```
 > - The table configuration keyword is `SCHEMAFULL`.
 > - Use angle brackets to specify the element type inside the array declaration: `array<T>`.
 
@@ -160,27 +159,27 @@ DEFINE FIELD scores ON course TYPE array<int>;
 **Problem:** Define field `tags` on `article` as an array of strings using `DEFINE FIELD`.
 
 **Expected output:**
-```text
-DEFINE FIELD tags ON TABLE article TYPE array<string>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD tags ON TABLE article TYPE array<string>;
+> ```
 > ```surrealql
 > DEFINE FIELD tags ON TABLE article TYPE array<string>;
 > ```
 >
 > **Explanation:** `TYPE array<type>` restricts array elements to specific inner data types.
 
+---
+
 ### Exercise 3: Array Deduplication with `array::distinct`
 
 **Problem:** Deduplicate `[1, 2, 2, 3]` using built-in array function `array::distinct()`.
 
 **Expected output:**
-```text
-[1, 2, 3]
-```
-
 > [!check]- Answer
+> ```text
+> [1, 2, 3]
+> ```
 > ```surrealql
 > RETURN array::distinct([1, 2, 2, 3]);
 > ```

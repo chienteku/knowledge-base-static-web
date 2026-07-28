@@ -208,11 +208,10 @@ fn main() {
 **Problem:** Define `pub struct User { pub name: String, age: u32 }` where `age` remains private.
 
 **Expected output:**
-```
-Name: Alice
-```
-
 > [!check]- Answer
+> ```
+> Name: Alice
+> ```
 > ```rust
 > pub struct User {
 >     pub name: String,
@@ -229,16 +228,17 @@ Name: Alice
 >
 > **Explanation:** Struct fields can have granular visibility independent of container struct visibility.
 
+---
+
 ### Exercise 3: Restricting Visibility to Ancestors with `pub(in path)`
 
 **Problem:** Use `pub(in crate::outer)` to restrict a function's visibility to an ancestor module.
 
 **Expected output:**
-```
-Restricted ancestor function called
-```
-
 > [!check]- Answer
+> ```
+> Restricted ancestor function called
+> ```
 > mod outer {
 >     pub mod inner {
 >         pub(in crate::outer) fn secret() { println!("Restricted ancestor function called"); }

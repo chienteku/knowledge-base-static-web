@@ -151,11 +151,10 @@ console.log(score);
 ```
 
 **Expected output:**
-```text
-3 statements
-```
-
 > [!check]- Answer
+> ```text
+> 3 statements
+> ```
 > - Look for the semicolons! In JavaScript, semicolons generally mark the end of a statement.
 
 ---
@@ -165,14 +164,13 @@ console.log(score);
 **Problem:** Classify `let x = 5;`, `5 + 5`, `if (true) {}`, and `x > 0 ? 1 : 0` as Statements or Expressions.
 
 **Expected output:**
-```text
-Statement
-Expression
-Statement
-Expression
-```
-
 > [!check]- Answer
+> ```text
+> Statement
+> Expression
+> Statement
+> Expression
+> ```
 > ```javascript
 > // let x = 5;         -> Statement
 > // 5 + 5              -> Expression
@@ -183,16 +181,17 @@ Expression
 >
 > **Explanation:** Statements perform control flow actions; expressions evaluate to concrete values.
 
+---
+
 ### Exercise 3: Expression Statements with Side Effects
 
 **Problem:** Turn an expression `counter++` into a valid statement line with semicolon.
 
 **Expected output:**
-```text
-1
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> ```
 > ```javascript
 > let counter = 0;
 > counter++; // Expression statement
@@ -201,7 +200,6 @@ Expression
 >
 > **Explanation:** Adding a semicolon to an expression forms an expression statement executed for its side effect.
 
----
 
 ---
 

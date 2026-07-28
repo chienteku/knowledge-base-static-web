@@ -123,17 +123,16 @@ ALTER TABLE heavy_table ADD COLUMN new_col INT DEFAULT 0;
 **Problem:** You are building an inventory system for a car dealership. You need to store cars. Create a SQL table named `cars` that stores a unique ID, the car's model name, make, manufacture year, and price.
 
 **Expected output:**
-```sql
-CREATE TABLE cars (
-  id INTEGER PRIMARY KEY,
-  make VARCHAR(50),
-  model VARCHAR(50),
-  manufacture_year INTEGER,
-  price NUMERIC(10,2)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE cars (
+>   id INTEGER PRIMARY KEY,
+>   make VARCHAR(50),
+>   model VARCHAR(50),
+>   manufacture_year INTEGER,
+>   price NUMERIC(10,2)
+> );
+> ```
 > - Define clean, descriptive names for all columns.
 > - Think about what data type fits price numbers (decimals are best handled by `NUMERIC`).
 
@@ -146,11 +145,10 @@ CREATE TABLE cars (
 **Problem:** Create table `products` with `id` primary key, `name` (NOT NULL), and `price` (CHECK price > 0).
 
 **Expected output:**
-```text
-CREATE TABLE products ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, price NUMERIC CHECK (price > 0) );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE products ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, price NUMERIC CHECK (price > 0) );
+> ```
 > ```sql
 > CREATE TABLE products (
 >   id SERIAL PRIMARY KEY,
@@ -161,16 +159,17 @@ CREATE TABLE products ( id SERIAL PRIMARY KEY, name TEXT NOT NULL, price NUMERIC
 >
 > **Explanation:** DDL column constraints enforce data integrity at table creation.
 
+---
+
 ### Exercise 3: Inspecting Table Schema in `psql`
 
 **Problem:** Command in `psql` to inspect schema definition of table `products` (`\d products`).
 
 **Expected output:**
-```text
-\d products
-```
-
 > [!check]- Answer
+> ```text
+> \d products
+> ```
 > ```text
 > \d products
 > ```

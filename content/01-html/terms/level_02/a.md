@@ -226,6 +226,8 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 >
 > **Explanation:** `mailto:` opens email client; `tel:` initiates phone call on mobile devices.
 
+---
+
 ### Exercise 3: In-Page Smooth Anchor Jumping
 
 **Problem:** Write anchor link targeting section `<section id="features">` on the same page.

@@ -111,13 +111,12 @@ div { display: flex; align-items: center; min-height: 100px; }
 **Problem:** A paragraph has `font-size: 20px` and `line-height: 2`. The paragraph wraps into 3 lines of text. Not including any padding or margins, how tall is the physical box of this paragraph?
 
 **Expected output:**
-```text
-120px! 
-The line-height multiplier (2) * font-size (20) = 40px per line.
-40px * 3 lines = 120px total height.
-```
-
 > [!check]- Answer
+> ```text
+> 120px! 
+> The line-height multiplier (2) * font-size (20) = 40px per line.
+> 40px * 3 lines = 120px total height.
+> ```
 > - Calculate the height of a single line first.
 
 ---
@@ -129,11 +128,10 @@ The line-height multiplier (2) * font-size (20) = 40px per line.
 **Problem:** Write CSS rule applying unitless line-height of `1.6` to body paragraph text.
 
 **Expected output:**
-```text
-p { line-height: 1.6; }
-```
-
 > [!check]- Answer
+> ```text
+> p { line-height: 1.6; }
+> ```
 > ```css
 > p {
 >   line-height: 1.6;
@@ -142,16 +140,17 @@ p { line-height: 1.6; }
 >
 > **Explanation:** Unitless numbers (e.g. `1.6`) multiply font size dynamically across all child elements.
 
+---
+
 ### Exercise 3: Single-Line Button Vertical Centering
 
 **Problem:** Write single-line button CSS setting height 40px and line-height 40px for vertical text centering.
 
 **Expected output:**
-```text
-.btn { height: 40px; line-height: 40px; }
-```
-
 > [!check]- Answer
+> ```text
+> .btn { height: 40px; line-height: 40px; }
+> ```
 > ```css
 > .btn {
 >   height: 40px;

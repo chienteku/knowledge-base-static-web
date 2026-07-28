@@ -96,12 +96,11 @@ const res = await fetch(`${process.env.API_BASE_URL}/users`);
 **Problem:** You build a `DELETE /api/users/5` endpoint. Why can't you just test this by typing `http://localhost:3000/api/users/5` into your Chrome address bar and hitting Enter?
 
 **Expected output:**
-```text
-Because the browser address bar ALWAYS sends an HTTP `GET` request! 
-You cannot use the browser's address bar to send `POST`, `PUT`, or `DELETE` requests, and you cannot attach a JSON body to it. This is exactly why tools like Postman exist!
-```
-
 > [!check]- Answer
+> ```text
+> Because the browser address bar ALWAYS sends an HTTP `GET` request! 
+> You cannot use the browser's address bar to send `POST`, `PUT`, or `DELETE` requests, and you cannot attach a JSON body to it. This is exactly why tools like Postman exist!
+> ```
 > - What HTTP Method does the browser use when you press Enter in the URL bar?
 
 ---
@@ -111,11 +110,10 @@ You cannot use the browser's address bar to send `POST`, `PUT`, or `DELETE` requ
 **Problem:** Write Axios request interceptor injecting `Authorization: Bearer <token>` into all outbound requests.
 
 **Expected output:**
-```text
-apiClient.interceptors.request.use((config) => { config.headers.Authorization = `Bearer ${getToken()}`; return config; });
-```
-
 > [!check]- Answer
+> ```text
+> apiClient.interceptors.request.use((config) => { config.headers.Authorization = `Bearer ${getToken()}`; return config; });
+> ```
 > ```javascript
 > apiClient.interceptors.request.use((config) => {
 > const token = getAuthToken();
@@ -131,12 +129,11 @@ apiClient.interceptors.request.use((config) => { config.headers.Authorization = 
 **Problem:** Name 2 technical benefits of configuring a centralized API Client instance (Axios / Ky / custom fetch wrapper).
 
 **Expected output:**
-```text
-1. Centralized base URL and timeout configuration
-2. Global request/response interceptors (error logging, token injection)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Centralized base URL and timeout configuration
+> 2. Global request/response interceptors (error logging, token injection)
+> ```
 > ```text
 > 1. Centralized base URL, headers, and timeout configuration.
 > 2. Global request/response interceptors for auth and error handling.

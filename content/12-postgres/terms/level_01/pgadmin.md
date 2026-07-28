@@ -124,12 +124,11 @@ Use psql CLI COPY command for large dataset exports
 **Problem:** You need to import a 10GB database backup file containing 50 million rows on a remote server. You have two options: use the visual pgAdmin import wizard or the command-line `psql` connection. Which should you choose, and why?
 
 **Expected output:**
-```text
-Choose the command-line interface (`psql` or `pg_restore` CLI)! 
-GUI tools like pgAdmin load data into local computer memory to render visual progress bars and grids. Attempting to parse 10GB of visual row blocks inside a web browser/desktop application window will cause the GUI app to run out of memory and freeze. The command-line client streams data directly to the server with zero visual interface overhead, making it much faster and more reliable for large datasets.
-```
-
 > [!check]- Answer
+> ```text
+> Choose the command-line interface (`psql` or `pg_restore` CLI)! 
+> GUI tools like pgAdmin load data into local computer memory to render visual progress bars and grids. Attempting to parse 10GB of visual row blocks inside a web browser/desktop application window will cause the GUI app to run out of memory and freeze. The command-line client streams data directly to the server with zero visual interface overhead, making it much faster and more reliable for large datasets.
+> ```
 > - Think about the memory overhead required to draw graphics vs displaying plain text.
 > - Consider processing limits when files are larger than server RAM.
 
@@ -142,27 +141,27 @@ GUI tools like pgAdmin load data into local computer memory to render visual pro
 **Problem:** What function key executes SQL queries in pgAdmin Query Tool? (`F5`).
 
 **Expected output:**
-```text
-F5
-```
-
 > [!check]- Answer
+> ```text
+> F5
+> ```
 > ```text
 > F5
 > ```
 >
 > **Explanation:** Pressing F5 executes active SQL scripts in pgAdmin Query Tool.
 
+---
+
 ### Exercise 3: pgAdmin Connection Server Grouping
 
 **Problem:** What component in pgAdmin holds server connection credentials? (Server objects under Object Tree).
 
 **Expected output:**
-```text
-Server definitions under Object Tree
-```
-
 > [!check]- Answer
+> ```text
+> Server definitions under Object Tree
+> ```
 > ```text
 > Server definitions under Object Tree
 > ```

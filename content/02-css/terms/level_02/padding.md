@@ -123,11 +123,10 @@ span {
 **Problem:** You have a `<div>` with a yellow background. You apply `margin: 50px;` and `padding: 50px;`. Will the yellow background fill the margin area, the padding area, both, or neither?
 
 **Expected output:**
-```text
-It will fill the padding area ONLY! Padding is inside the element, so backgrounds apply to it. Margin is outside the element and is completely transparent.
-```
-
 > [!check]- Answer
+> ```text
+> It will fill the padding area ONLY! Padding is inside the element, so backgrounds apply to it. Margin is outside the element and is completely transparent.
+> ```
 > - Does the background color stretch outside the border?
 
 ---
@@ -139,11 +138,10 @@ It will fill the padding area ONLY! Padding is inside the element, so background
 **Problem:** Write CSS for `.btn` applying 12px vertical padding and 24px horizontal padding.
 
 **Expected output:**
-```text
-.btn { padding: 12px 24px; }
-```
-
 > [!check]- Answer
+> ```text
+> .btn { padding: 12px 24px; }
+> ```
 > ```css
 > .btn {
 >   padding: 12px 24px;
@@ -152,16 +150,17 @@ It will fill the padding area ONLY! Padding is inside the element, so background
 >
 > **Explanation:** 2-value padding shorthand sets `Top/Bottom` (12px) and `Left/Right` (24px).
 
+---
+
 ### Exercise 3: Padding vs Margin Selection Rule
 
 **Problem:** Explain when to use `padding` vs `margin` when styling a card component.
 
 **Expected output:**
-```text
-Use padding for internal space inside the card border; use margin for external space between adjacent card components.
-```
-
 > [!check]- Answer
+> ```text
+> Use padding for internal space inside the card border; use margin for external space between adjacent card components.
+> ```
 > ```text
 > Use padding for internal space inside the card border; use margin for external space between adjacent card components.
 > ```

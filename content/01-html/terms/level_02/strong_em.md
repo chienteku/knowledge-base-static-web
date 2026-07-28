@@ -213,6 +213,8 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 >
 > **Explanation:** `<strong>` denotes mandatory/urgent importance; `<em>` denotes stress emphasis.
 
+---
+
 ### Exercise 3: CSS Styling Override
 
 **Problem:** Can CSS override `<strong>` font-weight from bold to normal? (Yes/No).

@@ -163,12 +163,11 @@ async function processData() {
 Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createGreeter("Howdy")`.
 
 **Expected output:**
-```text
-sayHello("Alice") -> "Hello, Alice!"
-sayHowdy("Bob") -> "Howdy, Bob!"
-```
-
 > [!check]- Answer
+> ```text
+> sayHello("Alice") -> "Hello, Alice!"
+> sayHowdy("Bob") -> "Howdy, Bob!"
+> ```
 > - `function createGreeter(greeting) { return function(name) { console.log(...) } }`
 > - Each time you call `createGreeter`, it creates a *new*, independent closure backpack.
 
@@ -179,13 +178,12 @@ sayHowdy("Bob") -> "Howdy, Bob!"
 **Problem:** Create `createCounter()` returning `{ inc(), dec(), get() }` wrapping a private `count` variable.
 
 **Expected output:**
-```text
-1
-2
-1
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> 2
+> 1
+> ```
 > ```javascript
 > function createCounter() {
 >   let count = 0;
@@ -203,16 +201,17 @@ sayHowdy("Bob") -> "Howdy, Bob!"
 >
 > **Explanation:** Closures retain access to outer function scope variables even after parent functions return.
 
+---
+
 ### Exercise 3: Function Factory with Closures
 
 **Problem:** Write `multiplier(factor)` returning a function multiplying inputs by `factor`.
 
 **Expected output:**
-```text
-30
-```
-
 > [!check]- Answer
+> ```text
+> 30
+> ```
 > ```javascript
 > function multiplier(factor) {
 >   return (num) => num * factor;

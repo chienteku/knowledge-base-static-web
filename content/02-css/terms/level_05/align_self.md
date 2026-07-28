@@ -189,13 +189,12 @@ If you want to push a single child item to the far-right, use the margin trick: 
 **Problem:** You have a horizontal navbar. The parent is styled with `display: flex; align-items: stretch;`. You have a logo item that needs to keep its natural height instead of stretching to match the navbar height. What property and value do you apply to the logo?
 
 **Expected output:**
-```css
-.logo {
-  align-self: center; /* Or flex-start, depending on alignment design */
-}
-```
-
 > [!check]- Answer
+> ```css
+> .logo {
+>   align-self: center; /* Or flex-start, depending on alignment design */
+> }
+> ```
 > - The parent forces stretching using `stretch`.
 > - Override this behavior on the child ruleset.
 
@@ -208,11 +207,10 @@ If you want to push a single child item to the far-right, use the margin trick: 
 **Problem:** Write CSS where `.container` has `align-items: flex-start`, but `.special-item` aligns to `flex-end`.
 
 **Expected output:**
-```text
-.container { display: flex; align-items: flex-start; } .special-item { align-self: flex-end; }
-```
-
 > [!check]- Answer
+> ```text
+> .container { display: flex; align-items: flex-start; } .special-item { align-self: flex-end; }
+> ```
 > ```css
 > .container {
 >   display: flex;
@@ -225,16 +223,17 @@ If you want to push a single child item to the far-right, use the margin trick: 
 >
 > **Explanation:** `align-self` overrides parent container `align-items` rules for specific items.
 
+---
+
 ### Exercise 3: align-self Default Value
 
 **Problem:** What is the default value of `align-self` on flex items?
 
 **Expected output:**
-```text
-align-self: auto (inherits parent align-items value).
-```
-
 > [!check]- Answer
+> ```text
+> align-self: auto (inherits parent align-items value).
+> ```
 > ```text
 > align-self: auto (inherits parent align-items value).
 > ```

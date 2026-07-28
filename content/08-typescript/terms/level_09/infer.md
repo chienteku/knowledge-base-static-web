@@ -142,11 +142,10 @@ type Target = FirstParameter<Callback>; // Target should evaluate to number
 ```
 
 **Expected output:**
-```text
-Target evaluates to number.
-```
-
 > [!check]- Answer
+> ```text
+> Target evaluates to number.
+> ```
 > - The function pattern is `(first: infer P, ...args: any[]) => any`.
 > - Check if `T` extends this pattern; if it does, return `P`, otherwise return `never`.
 
@@ -159,11 +158,10 @@ Target evaluates to number.
 **Problem:** Implement `UnwrapPromise<T> = T extends Promise<infer U> ? U : T`.
 
 **Expected output:**
-```text
-UnwrapPromise utility created
-```
-
 > [!check]- Answer
+> ```text
+> UnwrapPromise utility created
+> ```
 > ```typescript
 > type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
 > type Result = UnwrapPromise<Promise<number>>;
@@ -172,16 +170,17 @@ UnwrapPromise utility created
 >
 > **Explanation:** `infer U` captures type parameters from generic wrapper structures.
 
+---
+
 ### Exercise 3: Inferring Function First Parameter
 
 **Problem:** Implement `FirstParam<T> = T extends (first: infer P, ...args: any[]) => any ? P : never`.
 
 **Expected output:**
-```text
-FirstParam utility created
-```
-
 > [!check]- Answer
+> ```text
+> FirstParam utility created
+> ```
 > ```typescript
 > type FirstParam<T> = T extends (first: infer P, ...args: any[]) => any ? P : never;
 > type Param = FirstParam<(name: string, age: number) => void>;

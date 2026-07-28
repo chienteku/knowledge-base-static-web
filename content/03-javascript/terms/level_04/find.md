@@ -156,11 +156,10 @@ async function processData() {
 **Problem:** You have an array of users: `[{name: "Alice", role: "user"}, {name: "Bob", role: "admin"}, {name: "Charlie", role: "admin"}]`. Use `find()` to get the first admin. What is their name?
 
 **Expected output:**
-```text
-Bob
-```
-
 > [!check]- Answer
+> ```text
+> Bob
+> ```
 > - `users.find(u => u.role === "admin")`
 > - Notice that even though Charlie is also an admin, `find()` stops as soon as it hits Bob!
 
@@ -171,11 +170,10 @@ Bob
 **Problem:** Find the first user with `id: 2` in `[{ id: 1 }, { id: 2 }, { id: 3 }]` using `.find()`.
 
 **Expected output:**
-```text
-{"id":2}
-```
-
 > [!check]- Answer
+> ```text
+> {"id":2}
+> ```
 > ```javascript
 > const users = [{ id: 1 }, { id: 2 }, { id: 3 }];
 > const user = users.find(u => u.id === 2);
@@ -184,16 +182,17 @@ Bob
 >
 > **Explanation:** `find()` returns the first matching element value or `undefined`.
 
+---
+
 ### Exercise 3: Handling Unmatched `find()` Defaults
 
 **Problem:** Safely read property of `.find()` result using optional chaining `?.name`.
 
 **Expected output:**
-```text
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ```
 > ```javascript
 > const users = [{ id: 1, name: "Alice" }];
 > const user = users.find(u => u.id === 99);
@@ -202,7 +201,6 @@ undefined
 >
 > **Explanation:** Optional chaining prevents `TypeError` when `.find()` evaluates to `undefined`.
 
----
 
 ---
 

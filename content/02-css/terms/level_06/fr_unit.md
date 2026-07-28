@@ -250,16 +250,15 @@ The CSS template is: `grid-template-columns: 200px 1fr 2fr; gap: 50px;`
 What is the final width in pixels of the second column (the `1fr` column)?
 
 **Expected output:**
-```text
-200px!
-1. Start with total container width: 900px.
-2. Subtract the fixed column: 900 - 200 = 700px.
-3. Subtract the two gaps (each 50px): 700 - 100 = 600px of free space.
-4. Total fr units = 3 (1fr + 2fr).
-5. Column 2 gets 1 share: 600 / 3 = 200px.
-```
-
 > [!check]- Answer
+> ```text
+> 200px!
+> 1. Start with total container width: 900px.
+> 2. Subtract the fixed column: 900 - 200 = 700px.
+> 3. Subtract the two gaps (each 50px): 700 - 100 = 600px of free space.
+> 4. Total fr units = 3 (1fr + 2fr).
+> 5. Column 2 gets 1 share: 600 / 3 = 200px.
+> ```
 > - Remember to subtract both gap spacings (three columns have two gaps!).
 > - Divide the remaining space by the sum of the `fr` units.
 
@@ -272,13 +271,12 @@ What is the final width in pixels of the second column (the `1fr` column)?
 **Problem:** For `grid-template-columns: 1fr 2fr 1fr;` in a 1000px container with 0 gap, calculate width of each column.
 
 **Expected output:**
-```text
-Col 1: 250px (1/4)
-Col 2: 500px (2/4)
-Col 3: 250px (1/4)
-```
-
 > [!check]- Answer
+> ```text
+> Col 1: 250px (1/4)
+> Col 2: 500px (2/4)
+> Col 3: 250px (1/4)
+> ```
 > ```text
 > Total fr = 1 + 2 + 1 = 4fr
 > Col 1 = (1/4) * 1000 = 250px
@@ -288,16 +286,17 @@ Col 3: 250px (1/4)
 >
 > **Explanation:** `fr` units distribute available free space proportionally.
 
+---
+
 ### Exercise 3: fr vs Percentage Difference
 
 **Problem:** Why are `fr` units superior to `%` percentages in CSS Grid when using `gap`?
 
 **Expected output:**
-```text
-fr units automatically subtract gap spacing BEFORE allocating fractions, preventing row overflow.
-```
-
 > [!check]- Answer
+> ```text
+> fr units automatically subtract gap spacing BEFORE allocating fractions, preventing row overflow.
+> ```
 > ```text
 > fr units automatically subtract gap spacing BEFORE allocating fractions, preventing row overflow.
 > ```

@@ -175,12 +175,11 @@ thread::spawn(move || {
 **Problem:** Write a function `sanitize(input: &str) -> Cow<str>` returning borrowed `input` if no changes needed, or owned `Cow::Owned` if modifications occur.
 
 **Expected output:**
-```
-Clean: Borrowed("clean")
-Dirty: Owned("dirty_clean")
-```
-
 > [!check]- Answer
+> ```
+> Clean: Borrowed("clean")
+> Dirty: Owned("dirty_clean")
+> ```
 > ```rust
 > use std::borrow::Cow;
 > fn sanitize(s: &str) -> Cow<'_, str> {
@@ -198,16 +197,17 @@ Dirty: Owned("dirty_clean")
 >
 > **Explanation:** `Cow` avoids allocations by borrowing data when unmodified and cloning lazily on mutation.
 
+---
+
 ### Exercise 3: Modifying Cow Data in-place via `to_mut`
 
 **Problem:** Call `.to_mut()` on `Cow::Borrowed("hello")` to push extra characters.
 
 **Expected output:**
-```
-Modified Cow: hello world
-```
-
 > [!check]- Answer
+> ```
+> Modified Cow: hello world
+> ```
 > use std::borrow::Cow;
 > fn main() {
 >     let mut cow: Cow<'_, str> = Cow::Borrowed("hello");

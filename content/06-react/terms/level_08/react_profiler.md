@@ -185,11 +185,10 @@ Why is `<ItemList>` re-rendering, and how would you resolve the issue?
 **Problem:** Wrap `<Navigation />` component in `<Profiler>` logging render duration to console.
 
 **Expected output:**
-```text
-function onRender(id, phase, actualDuration) { console.log(`${id} [${phase}]: ${actualDuration}ms`); } function App() { return <Profiler id="Navigation" onRender={onRender}> <Navigation /> </Profiler>; }
-```
-
 > [!check]- Answer
+> ```text
+> function onRender(id, phase, actualDuration) { console.log(`${id} [${phase}]: ${actualDuration}ms`); } function App() { return <Profiler id="Navigation" onRender={onRender}> <Navigation /> </Profiler>; }
+> ```
 > ```javascript
 > function onRender(id, phase, actualDuration) {
 >   console.log(`${id} [${phase}]: ${actualDuration}ms`);
@@ -206,16 +205,17 @@ function onRender(id, phase, actualDuration) { console.log(`${id} [${phase}]: ${
 >
 > **Explanation:** `<Profiler>` tracks component render duration metrics programmatically.
 
+---
+
 ### Exercise 3: Profiler Callback Key Arguments
 
 **Problem:** List 3 key arguments passed to `onRender` profiler callback (`id`, `phase` ['mount'|'update'], `actualDuration`).
 
 **Expected output:**
-```text
-id, phase ('mount'|'update'), actualDuration
-```
-
 > [!check]- Answer
+> ```text
+> id, phase ('mount'|'update'), actualDuration
+> ```
 > ```text
 > id, phase ('mount'|'update'), actualDuration
 > ```

@@ -143,11 +143,10 @@ TRUNCATE is fully transactional in PostgreSQL and can be rolled back inside BEGI
 It takes over 2 minutes to execute, slowing down your deployment pipeline. Refactor the script to make it complete in milliseconds, and ensure the auto-increment ID counter starts back at 1.
 
 **Expected output:**
-```sql
-TRUNCATE TABLE test_users RESTART IDENTITY;
-```
-
 > [!check]- Answer
+> ```sql
+> TRUNCATE TABLE test_users RESTART IDENTITY;
+> ```
 > - Replace DML delete loops with DDL file resets.
 > - Append the identity reset parameter.
 
@@ -160,27 +159,27 @@ TRUNCATE TABLE test_users RESTART IDENTITY;
 **Problem:** Truncate `logs` table and reset identity sequence numbers using `RESTART IDENTITY`.
 
 **Expected output:**
-```text
-TRUNCATE TABLE logs RESTART IDENTITY;
-```
-
 > [!check]- Answer
+> ```text
+> TRUNCATE TABLE logs RESTART IDENTITY;
+> ```
 > ```sql
 > TRUNCATE TABLE logs RESTART IDENTITY;
 > ```
 >
 > **Explanation:** `RESTART IDENTITY` resets underlying auto-increment sequence generators to 1.
 
+---
+
 ### Exercise 3: TRUNCATE vs DELETE Comparison
 
 **Problem:** Why is `TRUNCATE` faster than `DELETE FROM table` for wiping tables? (Re-allocates table storage files directly instead of scanning and deleting row tuples).
 
 **Expected output:**
-```text
-Re-allocates storage files directly instead of logging individual row tuple deletions
-```
-
 > [!check]- Answer
+> ```text
+> Re-allocates storage files directly instead of logging individual row tuple deletions
+> ```
 > ```text
 > Re-allocates storage files directly instead of logging individual row tuple deletions
 > ```

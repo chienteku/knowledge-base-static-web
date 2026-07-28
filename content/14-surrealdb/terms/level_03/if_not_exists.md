@@ -147,14 +147,13 @@ DEFINE INDEX post_title ON posts IF NOT EXISTS COLUMNS title;
 ```
 
 **Expected output:**
-```text
-The script will fail on its second run.
-Although the index creation is protected by `IF NOT EXISTS`, the first line (`DEFINE TABLE posts`) has no conditional guard. 
-On the second run, the database will attempt to define the `posts` table again, see that it already exists, throw an error, and halt execution. 
-To fix it, change the first line to `DEFINE TABLE posts IF NOT EXISTS SCHEMALESS;`.
-```
-
 > [!check]- Answer
+> ```text
+> The script will fail on its second run.
+> Although the index creation is protected by `IF NOT EXISTS`, the first line (`DEFINE TABLE posts`) has no conditional guard. 
+> On the second run, the database will attempt to define the `posts` table again, see that it already exists, throw an error, and halt execution. 
+> To fix it, change the first line to `DEFINE TABLE posts IF NOT EXISTS SCHEMALESS;`.
+> ```
 > - Check every command starting with the `DEFINE` keyword.
 > - Consider if any command lacks error suppression guards.
 
@@ -167,11 +166,10 @@ To fix it, change the first line to `DEFINE TABLE posts IF NOT EXISTS SCHEMALESS
 **Problem:** Write idempotent SurrealQL statements to define `article` table and `title` field.
 
 **Expected output:**
-```text
-DEFINE TABLE IF NOT EXISTS article; DEFINE FIELD IF NOT EXISTS title ON TABLE article TYPE string;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE IF NOT EXISTS article; DEFINE FIELD IF NOT EXISTS title ON TABLE article TYPE string;
+> ```
 > ```surrealql
 > DEFINE TABLE IF NOT EXISTS article;
 > DEFINE FIELD IF NOT EXISTS title ON TABLE article TYPE string;
@@ -179,16 +177,17 @@ DEFINE TABLE IF NOT EXISTS article; DEFINE FIELD IF NOT EXISTS title ON TABLE ar
 >
 > **Explanation:** `IF NOT EXISTS` guarantees idempotent schema migrations across deployments.
 
+---
+
 ### Exercise 3: Idempotent Index Definition
 
 **Problem:** Define unique index on `user.email` using `IF NOT EXISTS`.
 
 **Expected output:**
-```text
-DEFINE INDEX IF NOT EXISTS user_email_idx ON TABLE user FIELDS email UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX IF NOT EXISTS user_email_idx ON TABLE user FIELDS email UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX IF NOT EXISTS user_email_idx ON TABLE user FIELDS email UNIQUE;
 > ```

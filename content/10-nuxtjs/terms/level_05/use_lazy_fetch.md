@@ -177,19 +177,18 @@ watch(post, (newPost) => {
 **Problem:** Write Vue component using `useLazyFetch('/api/comments')` displaying a loading spinner while `pending` is true.
 
 **Expected output:**
-```vue
-<script setup>
-const { data: comments, pending } = await useLazyFetch('/api/comments');
-</script>
-<template>
-  <div v-if="pending">Loading comments...</div>
-  <ul v-else>
-    <li v-for="c in comments" :key="c.id">{{ c.text }}</li>
-  </ul>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const { data: comments, pending } = await useLazyFetch('/api/comments');
+> </script>
+> <template>
+>   <div v-if="pending">Loading comments...</div>
+>   <ul v-else>
+>     <li v-for="c in comments" :key="c.id">{{ c.text }}</li>
+>   </ul>
+> </template>
+> ```
 > - `useLazyFetch` provides instant page transitions with background data loading.
 > 
 > ```vue
@@ -216,11 +215,10 @@ const { data: comments, pending } = await useLazyFetch('/api/comments');
 **Problem:** Is `useLazyFetch(url)` identical to calling `useFetch(url, { lazy: true })`?
 
 **Expected output:**
-```text
-Yes. useLazyFetch is a shorthand wrapper for useFetch with { lazy: true } option.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. useLazyFetch is a shorthand wrapper for useFetch with { lazy: true } option.
+> ```
 > - `useLazyFetch` is a shorthand for `useFetch(url, { lazy: true })`.
 > 
 > ```text

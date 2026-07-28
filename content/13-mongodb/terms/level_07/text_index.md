@@ -194,24 +194,23 @@ Write the MongoDB command to create a text index on all three fields, assigning 
 -   `details`: weight `1`
 
 **Expected output:**
-```javascript
-db.products.createIndex(
-  {
-    name: "text",
-    summary: "text",
-    details: "text"
-  },
-  {
-    weights: {
-      name: 15,
-      summary: 5,
-      details: 1
-    }
-  }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.createIndex(
+>   {
+>     name: "text",
+>     summary: "text",
+>     details: "text"
+>   },
+>   {
+>     weights: {
+>       name: 15,
+>       summary: 5,
+>       details: 1
+>     }
+>   }
+> );
+> ```
 > - The keys object maps the target fields to the string value `"text"`.
 > - Specify the weights configuration inside the second options object.
 
@@ -224,11 +223,10 @@ db.products.createIndex(
 **Problem:** Create text index on `title` (weight 10) and `body` (weight 1).
 
 **Expected output:**
-```text
-db.posts.createIndex({ title: "text", body: "text" }, { weights: { title: 10, body: 1 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.createIndex({ title: "text", body: "text" }, { weights: { title: 10, body: 1 } });
+> ```
 > ```javascript
 > db.posts.createIndex(
 >   { title: "text", body: "text" },
@@ -238,16 +236,17 @@ db.posts.createIndex({ title: "text", body: "text" }, { weights: { title: 10, bo
 >
 > **Explanation:** `weights` assigns higher relevance scores to matches in specified fields.
 
+---
+
 ### Exercise 3: Full-Text Search Phrase Match
 
 **Problem:** Query `$text` search matching exact phrase `"database index"` in quotes.
 
 **Expected output:**
-```text
-db.posts.find({ $text: { $search: "\"database index\"" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ $text: { $search: "\"database index\"" } });
+> ```
 > ```javascript
 > db.posts.find({ $text: { $search: "\"database index\"" } });
 > ```

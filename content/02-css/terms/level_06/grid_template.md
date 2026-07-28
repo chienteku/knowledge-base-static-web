@@ -269,14 +269,13 @@ A standard 3-column card grid:
 **Problem:** Build the CSS rule for a grid container that has a fixed sidebar on the left (`250px`), a fluid center content column, and a fixed details pane on the right (`300px`).
 
 **Expected output:**
-```css
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 250px 1fr 300px;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .dashboard-grid {
+>   display: grid;
+>   grid-template-columns: 250px 1fr 300px;
+> }
+> ```
 > - Define three space-separated track widths.
 > - Use pixels for fixed columns, and fractional units for fluid columns.
 
@@ -289,11 +288,10 @@ A standard 3-column card grid:
 **Problem:** Write CSS for `.app` grid defining 3 rows (`60px`, `1fr`, `40px`) and 2 columns (`250px`, `1fr`).
 
 **Expected output:**
-```text
-.app { display: grid; grid-template-rows: 60px 1fr 40px; grid-template-columns: 250px 1fr; }
-```
-
 > [!check]- Answer
+> ```text
+> .app { display: grid; grid-template-rows: 60px 1fr 40px; grid-template-columns: 250px 1fr; }
+> ```
 > ```css
 > .app {
 >   display: grid;
@@ -304,16 +302,17 @@ A standard 3-column card grid:
 >
 > **Explanation:** `grid-template-rows` and `grid-template-columns` define explicit grid structures.
 
+---
+
 ### Exercise 3: grid-template Shorthand Syntax
 
 **Problem:** Combine rows (`60px 1fr`) and columns (`200px 1fr`) into single `grid-template` shorthand rule.
 
 **Expected output:**
-```text
-grid-template: 60px 1fr / 200px 1fr;
-```
-
 > [!check]- Answer
+> ```text
+> grid-template: 60px 1fr / 200px 1fr;
+> ```
 > ```css
 > .layout {
 >   display: grid;

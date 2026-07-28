@@ -170,12 +170,11 @@ await db.large.estimatedDocumentCount(); // Fast metadata count in milliseconds
 2.  Implementing database pagination loops, calculating how many total pages of search results exist for the search query `"laptop"`.
 
 **Expected output:**
-```text
-1. estimatedDocumentCount(): Because you want to count the entire collection and speed is preferred over micro-accuracy, reading the metadata counter in 0ms is ideal.
-2. countDocuments({ name: /laptop/i }): Because the count depends on a specific search filter and must be accurate to compile pagination links, you must scan the matching records.
-```
-
 > [!check]- Answer
+> ```text
+> 1. estimatedDocumentCount(): Because you want to count the entire collection and speed is preferred over micro-accuracy, reading the metadata counter in 0ms is ideal.
+> 2. countDocuments({ name: /laptop/i }): Because the count depends on a specific search filter and must be accurate to compile pagination links, you must scan the matching records.
+> ```
 > - Determine if the count requires filtering by a field value.
 > - Assess the performance penalty of scanning documents on every page click.
 
@@ -188,27 +187,27 @@ await db.large.estimatedDocumentCount(); // Fast metadata count in milliseconds
 **Problem:** Count verified users in `users` collection using `countDocuments()`.
 
 **Expected output:**
-```text
-db.users.countDocuments({ verified: true });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.countDocuments({ verified: true });
+> ```
 > ```javascript
 > db.users.countDocuments({ verified: true });
 > ```
 >
 > **Explanation:** `countDocuments(filter)` returns accurate counts of documents matching filter predicates.
 
+---
+
 ### Exercise 3: Fast Estimated Collection Count
 
 **Problem:** Get fast estimated document count for `logs` collection using `estimatedDocumentCount()`.
 
 **Expected output:**
-```text
-db.logs.estimatedDocumentCount();
-```
-
 > [!check]- Answer
+> ```text
+> db.logs.estimatedDocumentCount();
+> ```
 > ```javascript
 > db.logs.estimatedDocumentCount();
 > ```

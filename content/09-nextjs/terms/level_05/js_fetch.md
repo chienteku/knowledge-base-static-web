@@ -185,11 +185,10 @@ export async function fetchUser(userId: string) {
 **Problem:** Write `fetch()` call using `AbortController` signal to abort requests taking longer than 5000ms.
 
 **Expected output:**
-```typescript
-const controller = new AbortController(); const id = setTimeout(() => controller.abort(), 5000); const res = await fetch(url, { signal: controller.signal }); clearTimeout(id);
-```
-
 > [!check]- Answer
+> ```typescript
+> const controller = new AbortController(); const id = setTimeout(() => controller.abort(), 5000); const res = await fetch(url, { signal: controller.signal }); clearTimeout(id);
+> ```
 > - `AbortController` cancels pending fetch HTTP requests.
 > 
 > ```typescript
@@ -212,11 +211,10 @@ const controller = new AbortController(); const id = setTimeout(() => controller
 **Problem:** Which `fetch()` option parameter ensures cross-origin HTTP requests send HttpOnly session cookies?
 
 **Expected output:**
-```text
-credentials: 'include'
-```
-
 > [!check]- Answer
+> ```text
+> credentials: 'include'
+> ```
 > - `credentials: 'include'` forwards cookies on cross-origin requests.
 > 
 > ```typescript

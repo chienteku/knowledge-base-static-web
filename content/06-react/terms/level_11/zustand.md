@@ -198,16 +198,17 @@ function ThemeToggleButton() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Creating Zustand Store
 
 **Problem:** Create Zustand store `useCounterStore` with `count` state and `increment` action.
 
 **Expected output:**
-```text
-import { create } from 'zustand'; const useCounterStore = create(set => ({ count: 0, increment: () => set(state => ({ count: state.count + 1 })) }));
-```
-
 > [!check]- Answer
+> ```text
+> import { create } from 'zustand'; const useCounterStore = create(set => ({ count: 0, increment: () => set(state => ({ count: state.count + 1 })) }));
+> ```
 > ```javascript
 > import { create } from 'zustand';
 >
@@ -219,16 +220,17 @@ import { create } from 'zustand'; const useCounterStore = create(set => ({ count
 >
 > **Explanation:** `create()` returns a custom React hook to consume and update state across components.
 
+---
+
 ### Exercise 3: Zustand Outside-React Usage
 
 **Problem:** How do you read/write Zustand store state outside React components (e.g. in vanilla JS files)? (Use `useCounterStore.getState()` and `useCounterStore.setState()`).
 
 **Expected output:**
-```text
-useCounterStore.getState() and useCounterStore.setState()
-```
-
 > [!check]- Answer
+> ```text
+> useCounterStore.getState() and useCounterStore.setState()
+> ```
 > ```javascript
 > const count = useCounterStore.getState().count;
 > useCounterStore.setState({ count: 10 });

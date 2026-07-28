@@ -237,12 +237,11 @@ onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
 **Problem:** You implement a static component displaying table information. Compare what the client browser receives when this component is defined as `InfoTable.vue` vs `InfoTable.server.vue`.
 
 **Expected output:**
-```text
-With InfoTable.vue, the client receives the HTML markup AND the JavaScript bundle code required to load and hydrate the table component in memory.
-With InfoTable.server.vue, the client receives ONLY the static HTML markup; zero JavaScript code for the component is sent to the browser.
-```
-
 > [!check]- Answer
+> ```text
+> With InfoTable.vue, the client receives the HTML markup AND the JavaScript bundle code required to load and hydrate the table component in memory.
+> With InfoTable.server.vue, the client receives ONLY the static HTML markup; zero JavaScript code for the component is sent to the browser.
+> ```
 > - Think about the hydration process and how client-side JS bundling differs.
 
 ---
@@ -252,18 +251,17 @@ With InfoTable.server.vue, the client receives ONLY the static HTML markup; zero
 **Problem:** Write Nuxt Server Component `components/Highlight.server.vue` parsing heavy Markdown on the server without sending parser JS to browser.
 
 **Expected output:**
-```vue
-<!-- components/Highlight.server.vue -->
-<script setup>
-const props = defineProps<{ code: string }>();
-const html = await highlightCode(props.code);
-</script>
-<template>
-  <div v-html="html" />
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <!-- components/Highlight.server.vue -->
+> <script setup>
+> const props = defineProps<{ code: string }>();
+> const html = await highlightCode(props.code);
+> </script>
+> <template>
+>   <div v-html="html" />
+> </template>
+> ```
 > - `.server.vue` suffix restricts component execution to server, keeping heavy JS libraries out of browser bundles.
 > 
 > ```vue
@@ -286,11 +284,10 @@ const html = await highlightCode(props.code);
 **Problem:** Which configuration flag in `nuxt.config.ts` enables Nuxt Island Server Components?
 
 **Expected output:**
-```text
-experimental: { componentIslands: true }
-```
-
 > [!check]- Answer
+> ```text
+> experimental: { componentIslands: true }
+> ```
 > - `experimental.componentIslands` enables `.server.vue` component islands.
 > 
 > ```typescript

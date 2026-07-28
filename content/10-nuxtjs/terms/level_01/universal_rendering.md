@@ -137,11 +137,10 @@ routeRules: { '/admin/**': { ssr: false } }
 **Problem:** If you put `console.log("Component setup")` directly inside a `<script setup>` in a page component, where will that log appear on a fresh page load?
 
 **Expected output:**
-```text
-It will appear in BOTH the server terminal (Node.js) AND the browser's developer console, because the component executes twice during Universal Rendering.
-```
-
 > [!check]- Answer
+> ```text
+> It will appear in BOTH the server terminal (Node.js) AND the browser's developer console, because the component executes twice during Universal Rendering.
+> ```
 > - Think about the double execution nature of Universal Rendering: first, the server generates static HTML (runs component setup), then the client hydrates it (runs setup again to hook reactivity).
 
 ---
@@ -154,13 +153,12 @@ It will appear in BOTH the server terminal (Node.js) AND the browser's developer
 3. Nitro server API request
 
 **Expected output:**
-```text
-1. Server AND Client
-2. Client ONLY
-3. Server ONLY
-```
-
 > [!check]- Answer
+> ```text
+> 1. Server AND Client
+> 2. Client ONLY
+> 3. Server ONLY
+> ```
 > - `<script setup>` -> Executes on Server (SSR) and re-executes on Client (Hydration).
 > - `onMounted()` -> Client ONLY.
 > - Nitro API -> Server ONLY.
@@ -176,11 +174,10 @@ It will appear in BOTH the server terminal (Node.js) AND the browser's developer
 **Problem:** Write an `if` condition using Nuxt process guards executing `console.log('Server Execution')` only when rendering on the server.
 
 **Expected output:**
-```typescript
-if (import.meta.server) { console.log('Server Execution'); } (or if (process.server))
-```
-
 > [!check]- Answer
+> ```typescript
+> if (import.meta.server) { console.log('Server Execution'); } (or if (process.server))
+> ```
 > - `import.meta.server` (or `process.server`) isolates server execution.
 > 
 > ```typescript

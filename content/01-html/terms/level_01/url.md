@@ -166,15 +166,14 @@ Absolute vs relative path attributes inside HTML:
 5. `http://localhost:3000`
 
 **Expected output:**
-```text
-1. Relative Path
-2. Absolute URL
-3. Relative Path
-4. Relative Path
-5. Absolute URL
-```
-
 > [!check]- Answer
+> ```text
+> 1. Relative Path
+> 2. Absolute URL
+> 3. Relative Path
+> 4. Relative Path
+> 5. Absolute URL
+> ```
 > - Does the string start with a protocol prefix like `http://` or `https://`?
 
 ---
@@ -192,16 +191,15 @@ Absolute vs relative path attributes inside HTML:
 - Anchor Hash
 
 **Expected output:**
-```text
-Protocol: https
-Domain: api.example.com
-Port: 8080
-Path: /v1/users
-Query: ?sort=asc
-Hash: #profile
-```
-
 > [!check]- Answer
+> ```text
+> Protocol: https
+> Domain: api.example.com
+> Port: 8080
+> Path: /v1/users
+> Query: ?sort=asc
+> Hash: #profile
+> ```
 > ```text
 > Protocol: https
 > Subdomain & Domain: api.example.com
@@ -213,17 +211,18 @@ Hash: #profile
 >
 > **Explanation:** URLs consist of protocol, host, port, path, query string, and fragment identifier.
 
+---
+
 ### Exercise 3: Absolute vs Relative URL Comparison
 
 **Problem:** Compare Absolute URL vs Relative URL with code examples.
 
 **Expected output:**
-```text
-Absolute: https://example.com/about.html (includes protocol + domain)
-Relative: /about.html or ../about.html (relative to current location)
-```
-
 > [!check]- Answer
+> ```text
+> Absolute: https://example.com/about.html (includes protocol + domain)
+> Relative: /about.html or ../about.html (relative to current location)
+> ```
 > ```html
 > <!-- Absolute URL -->
 > <a href="https://example.com/about">About</a>

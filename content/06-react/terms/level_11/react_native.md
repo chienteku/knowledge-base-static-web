@@ -120,20 +120,19 @@ function Button() {
 ```
 
 **Expected output:**
-```javascript
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-
-function Button() {
-  return (
-    // TouchableOpacity is the standard wrapper for making things clickable
-    <TouchableOpacity onPress={() => Alert.alert("Clicked")}>
-      <Text>Click Me</Text>
-    </TouchableOpacity>
-  )
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> import { View, Text, TouchableOpacity, Alert } from 'react-native';
+> 
+> function Button() {
+>   return (
+>     // TouchableOpacity is the standard wrapper for making things clickable
+>     <TouchableOpacity onPress={() => Alert.alert("Clicked")}>
+>       <Text>Click Me</Text>
+>     </TouchableOpacity>
+>   )
+> }
+> ```
 > - `<div>` -> `<View>` (or Touchable)
 > - `<span>` -> `<Text>`
 > - `onClick` -> `onPress`
@@ -147,11 +146,10 @@ function Button() {
 **Problem:** Build React Native counter component using `<View>`, `<Text>`, and `<TouchableOpacity>`.
 
 **Expected output:**
-```text
-import { View, Text, TouchableOpacity } from 'react-native'; function Counter() { const [count, setCount] = useState(0); return <View><Text>Count: {count}</Text><TouchableOpacity onPress={() => setCount(c => c + 1)}><Text>Increment</Text></TouchableOpacity></View>; }
-```
-
 > [!check]- Answer
+> ```text
+> import { View, Text, TouchableOpacity } from 'react-native'; function Counter() { const [count, setCount] = useState(0); return <View><Text>Count: {count}</Text><TouchableOpacity onPress={() => setCount(c => c + 1)}><Text>Increment</Text></TouchableOpacity></View>; }
+> ```
 > ```javascript
 > import { View, Text, TouchableOpacity } from 'react-native';
 >
@@ -170,16 +168,17 @@ import { View, Text, TouchableOpacity } from 'react-native'; function Counter() 
 >
 > **Explanation:** React Native maps core component primitives (`View`, `Text`) directly to native mobile UI controls.
 
+---
+
 ### Exercise 3: React Native Flexbox Layout Default
 
 **Problem:** What is the default `flexDirection` in React Native Flexbox layout? (`'column'` instead of web default `'row'`).
 
 **Expected output:**
-```text
-flexDirection: 'column'
-```
-
 > [!check]- Answer
+> ```text
+> flexDirection: 'column'
+> ```
 > ```text
 > flexDirection: 'column'
 > ```

@@ -203,11 +203,10 @@ res.json({ user_name: user.name }); // ❌ Breaks clients expecting { name: '...
 **Problem:** You buy a new TV. You don't know how to solder circuits, and you can't manually change the voltage inside the TV to change the channel. But the TV comes with a remote control with 15 specific buttons. How is the remote control like an API?
 
 **Expected output:**
-```text
-The remote control provides a strictly defined "Interface" (buttons) for interacting with a complex underlying system (the TV hardware). It abstracts away the complexity and prevents you from breaking the TV, only allowing you to perform the specific actions the manufacturer designed.
-```
-
 > [!check]- Answer
+> ```text
+> The remote control provides a strictly defined "Interface" (buttons) for interacting with a complex underlying system (the TV hardware). It abstracts away the complexity and prevents you from breaking the TV, only allowing you to perform the specific actions the manufacturer designed.
+> ```
 > - Does the remote let you do *anything*, or only what the buttons allow?
 
 ---
@@ -217,11 +216,10 @@ The remote control provides a strictly defined "Interface" (buttons) for interac
 **Problem:** Explain the concept of an API as an abstraction layer between two software systems.
 
 **Expected output:**
-```text
-An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
-```
-
 > [!check]- Answer
+> ```text
+> An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
+> ```
 > ```text
 > An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
 > ```
@@ -233,11 +231,10 @@ An API hides complex internal business logic and database implementations behind
 **Problem:** Distinguish between Public APIs, Partner APIs, and Internal (Private) APIs.
 
 **Expected output:**
-```text
-Public APIs are open for external developers; Partner APIs are shared with specific business partners; Internal APIs connect microservices inside an organization.
-```
-
 > [!check]- Answer
+> ```text
+> Public APIs are open for external developers; Partner APIs are shared with specific business partners; Internal APIs connect microservices inside an organization.
+> ```
 > ```text
 > Public APIs -> Open to third-party external developers.
 > Partner APIs -> Restricted to authorized business integration partners.
@@ -251,11 +248,10 @@ Public APIs are open for external developers; Partner APIs are shared with speci
 **Problem:** Explain the concept of an API as an abstraction layer between two software systems.
 
 **Expected output:**
-```text
-An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
-```
-
 > [!check]- Answer
+> ```text
+> An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
+> ```
 > ```text
 > An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
 > ```
@@ -267,11 +263,10 @@ An API hides complex internal business logic and database implementations behind
 **Problem:** Distinguish between Public APIs, Partner APIs, and Internal (Private) APIs.
 
 **Expected output:**
-```text
-Public APIs are open for external developers; Partner APIs are shared with specific business partners; Internal APIs connect microservices inside an organization.
-```
-
 > [!check]- Answer
+> ```text
+> Public APIs are open for external developers; Partner APIs are shared with specific business partners; Internal APIs connect microservices inside an organization.
+> ```
 > ```text
 > Public APIs -> Open to third-party external developers.
 > Partner APIs -> Restricted to authorized business integration partners.
@@ -285,11 +280,10 @@ Public APIs are open for external developers; Partner APIs are shared with speci
 **Problem:** Explain the concept of an API as an abstraction layer between two software systems.
 
 **Expected output:**
-```text
-An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
-```
-
 > [!check]- Answer
+> ```text
+> An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
+> ```
 > ```text
 > An API hides complex internal business logic and database implementations behind a clean, predictable request/response interface contract.
 > ```
@@ -301,11 +295,10 @@ An API hides complex internal business logic and database implementations behind
 **Problem:** Distinguish between Public APIs, Partner APIs, and Internal (Private) APIs.
 
 **Expected output:**
-```text
-Public APIs are open for external developers; Partner APIs are shared with specific business partners; Internal APIs connect microservices inside an organization.
-```
-
 > [!check]- Answer
+> ```text
+> Public APIs are open for external developers; Partner APIs are shared with specific business partners; Internal APIs connect microservices inside an organization.
+> ```
 > ```text
 > Public APIs -> Open to third-party external developers.
 > Partner APIs -> Restricted to authorized business integration partners.

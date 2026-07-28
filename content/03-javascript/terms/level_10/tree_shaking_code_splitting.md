@@ -186,34 +186,33 @@ async function processData() {
 **Problem:** Use dynamic `import('./chart.js')` to code-split heavy chart rendering libraries.
 
 **Expected output:**
-```text
-Code-split chunk loaded on demand
-```
-
 > [!check]- Answer
+> ```text
+> Code-split chunk loaded on demand
+> ```
 > ```javascript
 > console.log("Code-split chunk loaded on demand");
 > ```
 >
 > **Explanation:** Dynamic `import()` splits bundle outputs into separate lazy-loaded HTTP chunks.
 
+---
+
 ### Exercise 3: Configuring `sideEffects: false` in `package.json`
 
 **Problem:** Explain why `sideEffects: false` in library `package.json` assists bundlers in tree shaking.
 
 **Expected output:**
-```text
-sideEffects: false enables aggressive dead code elimination
-```
-
 > [!check]- Answer
+> ```text
+> sideEffects: false enables aggressive dead code elimination
+> ```
 > ```javascript
 > console.log("sideEffects: false enables aggressive dead code elimination");
 > ```
 >
 > **Explanation:** Marking packages side-effect free allows bundlers to safely drop unused module exports.
 
----
 
 ---
 

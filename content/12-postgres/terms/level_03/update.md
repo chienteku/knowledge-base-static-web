@@ -133,13 +133,12 @@ UPDATE users SET score = v.score FROM (VALUES (1, 10), (2, 20)) AS v(id, score) 
 **Problem:** You are building a store management system. A shipment of 50 new keyboards arrives. You need to update the `stock_count` of item `'SKU-KEYBOARD'` in the `products` table. The new stock count should add 50 to the current stock. Write the SQL update statement.
 
 **Expected output:**
-```sql
-UPDATE products 
-SET stock_count = stock_count + 50 
-WHERE sku = 'SKU-KEYBOARD';
-```
-
 > [!check]- Answer
+> ```sql
+> UPDATE products 
+> SET stock_count = stock_count + 50 
+> WHERE sku = 'SKU-KEYBOARD';
+> ```
 > - You can reference a column's current value inside the `SET` equation (e.g. `SET col = col + 1`).
 > - Target the product specifically using the unique SKU code in the `WHERE` clause.
 
@@ -152,11 +151,10 @@ WHERE sku = 'SKU-KEYBOARD';
 **Problem:** Update user `status` to `'active'` for `id = 1` returning updated `updated_at` timestamp.
 
 **Expected output:**
-```text
-UPDATE users SET status = 'active', updated_at = NOW() WHERE id = 1 RETURNING updated_at;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE users SET status = 'active', updated_at = NOW() WHERE id = 1 RETURNING updated_at;
+> ```
 > ```sql
 > UPDATE users
 > SET status = 'active', updated_at = NOW()
@@ -166,16 +164,17 @@ UPDATE users SET status = 'active', updated_at = NOW() WHERE id = 1 RETURNING up
 >
 > **Explanation:** `UPDATE ... RETURNING` returns updated column attributes directly.
 
+---
+
 ### Exercise 3: Batch UPDATE FROM Values Pattern
 
 **Problem:** Update scores for `id = 1` (score 50) and `id = 2` (score 80) in a single batch update using `UPDATE ... FROM (VALUES ...)`.
 
 **Expected output:**
-```text
-UPDATE users SET score = v.score FROM (VALUES (1, 50), (2, 80)) AS v(id, score) WHERE users.id = v.id;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE users SET score = v.score FROM (VALUES (1, 50), (2, 80)) AS v(id, score) WHERE users.id = v.id;
+> ```
 > ```sql
 > UPDATE users
 > SET score = v.score

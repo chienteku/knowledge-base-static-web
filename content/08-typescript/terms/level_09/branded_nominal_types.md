@@ -194,11 +194,10 @@ chargeCard(walletUSD); // Should compile successfully
 ```
 
 **Expected output:**
-```text
-The compiler rejects walletEUR but accepts walletUSD.
-```
-
 > [!check]- Answer
+> ```text
+> The compiler rejects walletEUR but accepts walletUSD.
+> ```
 > - The type parameter USD should be a number intersected with a brand shape.
 > - Call `chargeCard` passing `walletUSD` instead of `walletEUR`.
 
@@ -211,11 +210,10 @@ The compiler rejects walletEUR but accepts walletUSD.
 **Problem:** Create branded types `USD = number & { readonly __brand: unique symbol }` and `EUR` preventing accidental currency mixing.
 
 **Expected output:**
-```text
-USD and EUR branded types created
-```
-
 > [!check]- Answer
+> ```text
+> USD and EUR branded types created
+> ```
 > ```typescript
 > declare const usdBrand: unique symbol;
 > type USD = number & { readonly [usdBrand]: true };
@@ -226,16 +224,17 @@ USD and EUR branded types created
 >
 > **Explanation:** Unique symbols prevent brand collision across independent domain types.
 
+---
+
 ### Exercise 3: Branded Type Factory Helper
 
 **Problem:** Write factory function `makeUSD(n: number): USD` for branded currency amounts.
 
 **Expected output:**
-```text
-Branded USD factory function verified
-```
-
 > [!check]- Answer
+> ```text
+> Branded USD factory function verified
+> ```
 > ```typescript
 > function makeUSD(n: number): USD {
 >   if (n < 0) throw new Error("Amount must be positive");

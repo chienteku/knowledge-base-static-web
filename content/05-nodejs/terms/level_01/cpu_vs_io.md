@@ -165,14 +165,13 @@ const users = await db.query('SELECT * FROM users');
 4. Reading a 2GB file stream from SSD
 
 **Expected output:**
-```text
-1. CPU-Bound
-2. I/O-Bound
-3. CPU-Bound
-4. I/O-Bound
-```
-
 > [!check]- Answer
+> ```text
+> 1. CPU-Bound
+> 2. I/O-Bound
+> 3. CPU-Bound
+> 4. I/O-Bound
+> ```
 > ```text
 > 1. CPU-Bound
 > 2. I/O-Bound
@@ -182,17 +181,18 @@ const users = await db.query('SELECT * FROM users');
 >
 > **Explanation:** CPU-bound tasks require math/logic computation on processor core; I/O-bound tasks involve waiting for disk or network data transfer.
 
+---
+
 ### Exercise 3: Optimal Scaling Architecture Selection
 
 **Problem:** Which Node.js tool is best suited for scaling CPU-bound computations vs I/O-bound connections? Select between: Worker Threads, Cluster Module, Async I/O.
 
 **Expected output:**
-```text
-CPU-Bound: Worker Threads / Worker Pools
-I/O-Bound: Async I/O (default Event Loop architecture)
-```
-
 > [!check]- Answer
+> ```text
+> CPU-Bound: Worker Threads / Worker Pools
+> I/O-Bound: Async I/O (default Event Loop architecture)
+> ```
 > ```text
 > CPU-Bound: Worker Threads / Worker Pools
 > I/O-Bound: Async I/O (default Event Loop architecture)

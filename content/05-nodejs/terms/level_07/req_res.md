@@ -185,17 +185,16 @@ The body of their request contains a JSON object: `{ "email": "bob@bob.com" }`.
 Inside your route `app.post('/api/users/:id/update')`, how do you extract the `99`, the `true`, and the `email`?
 
 **Expected output:**
-```javascript
-app.post('/api/users/:id/update', (req, res) => {
-  const userId = req.params.id;         // 99 (From the dynamic path)
-  const isForce = req.query.force;      // "true" (From the URL query string)
-  const userEmail = req.body.email;     // "bob@bob.com" (From the JSON body)
-  
-  res.json({ success: true });
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> app.post('/api/users/:id/update', (req, res) => {
+>   const userId = req.params.id;         // 99 (From the dynamic path)
+>   const isForce = req.query.force;      // "true" (From the URL query string)
+>   const userEmail = req.body.email;     // "bob@bob.com" (From the JSON body)
+>   
+>   res.json({ success: true });
+> });
+> ```
 > - `params` = Path variables
 > - `query` = Question mark variables
 > - `body` = JSON payload
@@ -209,27 +208,27 @@ app.post('/api/users/:id/update', (req, res) => {
 **Problem:** Write Express line setting HTTP 201 Created and JSON body `{ id: 1 }`.
 
 **Expected output:**
-```text
-res.status(201).json({ id: 1 });
-```
-
 > [!check]- Answer
+> ```text
+> res.status(201).json({ id: 1 });
+> ```
 > ```javascript
 > res.status(201).json({ id: 1 });
 > ```
 >
 > **Explanation:** `res.status().json()` chains HTTP status and JSON response body formatting.
 
+---
+
 ### Exercise 3: Extracting Request IP and User-Agent
 
 **Problem:** Extract client IP address and User-Agent header from Express `req` object.
 
 **Expected output:**
-```text
-const ip = req.ip; const agent = req.get('User-Agent');
-```
-
 > [!check]- Answer
+> ```text
+> const ip = req.ip; const agent = req.get('User-Agent');
+> ```
 > ```javascript
 > const ip = req.ip;
 > const agent = req.get('User-Agent');

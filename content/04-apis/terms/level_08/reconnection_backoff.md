@@ -287,11 +287,10 @@ Calculate the backoff delay (excluding jitter) for **Attempt 4** (the 5th retry 
 **Problem:** Write JavaScript expression calculating reconnect delay for attempt #4 with 1000ms base and 500ms max random jitter.
 
 **Expected output:**
-```text
-const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
-```
-
 > [!check]- Answer
+> ```text
+> const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
+> ```
 > ```javascript
 > const attempts = 4;
 > const baseDelay = Math.pow(2, attempts) * 1000; // 16000ms
@@ -306,11 +305,10 @@ const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
 **Problem:** Why should exponential backoff reconnection delays be capped at a maximum ceiling (e.g. `Math.min(calculatedDelay, 30000)`)?
 
 **Expected output:**
-```text
-Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-```
-
 > [!check]- Answer
+> ```text
+> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
+> ```
 > ```text
 > Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
 > ```
@@ -322,11 +320,10 @@ Without a cap, exponential delays quickly explode to several hours (2^15 seconds
 **Problem:** Write JavaScript expression calculating reconnect delay for attempt #4 with 1000ms base and 500ms max random jitter.
 
 **Expected output:**
-```text
-const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
-```
-
 > [!check]- Answer
+> ```text
+> const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
+> ```
 > ```javascript
 > const attempts = 4;
 > const baseDelay = Math.pow(2, attempts) * 1000; // 16000ms
@@ -341,11 +338,10 @@ const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
 **Problem:** Why should exponential backoff reconnection delays be capped at a maximum ceiling (e.g. `Math.min(calculatedDelay, 30000)`)?
 
 **Expected output:**
-```text
-Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-```
-
 > [!check]- Answer
+> ```text
+> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
+> ```
 > ```text
 > Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
 > ```
@@ -357,11 +353,10 @@ Without a cap, exponential delays quickly explode to several hours (2^15 seconds
 **Problem:** Write JavaScript expression calculating reconnect delay for attempt #4 with 1000ms base and 500ms max random jitter.
 
 **Expected output:**
-```text
-const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
-```
-
 > [!check]- Answer
+> ```text
+> const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
+> ```
 > ```javascript
 > const attempts = 4;
 > const baseDelay = Math.pow(2, attempts) * 1000; // 16000ms
@@ -376,11 +371,10 @@ const delay = Math.min(30000, Math.pow(2, 4) * 1000) + Math.random() * 500;
 **Problem:** Why should exponential backoff reconnection delays be capped at a maximum ceiling (e.g. `Math.min(calculatedDelay, 30000)`)?
 
 **Expected output:**
-```text
-Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
-```
-
 > [!check]- Answer
+> ```text
+> Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
+> ```
 > ```text
 > Without a cap, exponential delays quickly explode to several hours (2^15 seconds = 9 hours), preventing clients from reconnecting within reasonable timeframes.
 > ```

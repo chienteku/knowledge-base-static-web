@@ -119,12 +119,11 @@ div { background-color: yellow; padding: 20px; }
 **Problem:** You have a button with text in it. You want to make the button *physically larger* so there is more blue space around the text, but you *don't* want the button to push away from the paragraph next to it. Which layer of the Box Model do you increase?
 
 **Expected output:**
-```text
-You increase the **Padding**. 
-Padding adds space *inside* the border, making the button itself larger. If you increased the Margin, the button would stay the same size, but it would push the paragraph further away.
-```
-
 > [!check]- Answer
+> ```text
+> You increase the **Padding**. 
+> Padding adds space *inside* the border, making the button itself larger. If you increased the Margin, the button would stay the same size, but it would push the paragraph further away.
+> ```
 > - Think of the shipping box. Do you need more bubble wrap inside, or more space in the truck outside?
 
 ---
@@ -137,14 +136,13 @@ Padding adds space *inside* the border, making the button itself larger. If you 
 Margin, Content, Border, Padding
 
 **Expected output:**
-```text
-1. Content
-2. Padding
-3. Border
-4. Margin
-```
-
 > [!check]- Answer
+> ```text
+> 1. Content
+> 2. Padding
+> 3. Border
+> 4. Margin
+> ```
 > ```text
 > 1. Content (Innermost)
 > 2. Padding
@@ -154,16 +152,17 @@ Margin, Content, Border, Padding
 >
 > **Explanation:** The box model wraps content in padding, border, and margin layers.
 
+---
+
 ### Exercise 3: Calculating Total Rendered Box Height
 
 **Problem:** Calculate total rendered height for element with `content-box`, `height: 100px`, `padding: 15px top/bottom`, `border: 2px top/bottom`, `margin: 10px top/bottom`.
 
 **Expected output:**
-```text
-Rendered height = 100 + 30 (padding) + 4 (border) = 134px (plus 20px margin space).
-```
-
 > [!check]- Answer
+> ```text
+> Rendered height = 100 + 30 (padding) + 4 (border) = 134px (plus 20px margin space).
+> ```
 > ```text
 > Rendered height = 100 + 30 (padding) + 4 (border) = 134px (plus 20px margin space).
 > ```

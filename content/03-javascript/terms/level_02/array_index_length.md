@@ -167,12 +167,11 @@ console.log("Updated fruits:", fruits);
 ```
 
 **Expected output:**
-```text
-Last fruit: Orange
-Updated fruits: [ 'Apple', 'Mango', 'Orange' ]
-```
-
 > [!check]- Answer
+> ```text
+> Last fruit: Orange
+> Updated fruits: [ 'Apple', 'Mango', 'Orange' ]
+> ```
 > - The last element is at index `fruits.length - 1`.
 > - The second item is at index `1` due to zero-based indexing.
 
@@ -183,11 +182,10 @@ Updated fruits: [ 'Apple', 'Mango', 'Orange' ]
 **Problem:** Set `arr.length = 2` on `let arr = [1, 2, 3, 4]` and print `arr`.
 
 **Expected output:**
-```text
-[ 1, 2 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2 ]
+> ```
 > ```javascript
 > let arr = [1, 2, 3, 4];
 > arr.length = 2;
@@ -196,17 +194,18 @@ Updated fruits: [ 'Apple', 'Mango', 'Orange' ]
 >
 > **Explanation:** Manually setting `length` to a smaller integer truncates the array, permanently deleting extra trailing elements.
 
+---
+
 ### Exercise 3: Negative Array Indices Traps
 
 **Problem:** Predict `arr[-1]` on `let arr = [10, 20]` versus `arr.at(-1)`.
 
 **Expected output:**
-```text
-undefined
-20
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> 20
+> ```
 > ```javascript
 > let arr = [10, 20];
 > console.log(arr[-1]);    // undefined (looks for key "-1")

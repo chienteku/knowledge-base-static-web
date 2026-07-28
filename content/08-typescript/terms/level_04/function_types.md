@@ -111,17 +111,16 @@ function exec(cb: (a: number, b: number) => void) { cb(1, 2); }
 **Problem:** How do you define an interface `User` that has a property `greet`, which is a function that takes no arguments and returns a string?
 
 **Expected output:**
-```typescript
-interface User {
-  // Option 1: Method syntax
-  greet(): string;
-  
-  // Option 2: Property syntax with arrow function type
-  // greet: () => string;
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> interface User {
+>   // Option 1: Method syntax
+>   greet(): string;
+>   
+>   // Option 2: Property syntax with arrow function type
+>   // greet: () => string;
+> }
+> ```
 > - Think about the callback syntax!
 
 ---
@@ -133,11 +132,10 @@ interface User {
 **Problem:** Define `type BinaryOp = (a: number, b: number) => number`.
 
 **Expected output:**
-```text
-BinaryOp type alias defined
-```
-
 > [!check]- Answer
+> ```text
+> BinaryOp type alias defined
+> ```
 > ```typescript
 > type BinaryOp = (a: number, b: number) => number;
 > const add: BinaryOp = (x, y) => x + y;
@@ -146,16 +144,17 @@ BinaryOp type alias defined
 >
 > **Explanation:** Function type aliases reusable function signature definitions.
 
+---
+
 ### Exercise 3: Callable Object Interfaces
 
 **Problem:** Define an interface for a function that also has property `version: string`.
 
 **Expected output:**
-```text
-Callable interface created
-```
-
 > [!check]- Answer
+> ```text
+> Callable interface created
+> ```
 > ```typescript
 > interface Calculator {
 >   (x: number): number;

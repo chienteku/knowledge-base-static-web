@@ -153,11 +153,10 @@ Basic inline highlight:
 "For this recipe, cream the butter and sugar together."
 
 **Expected output:**
-```html
-<p>For this recipe, cream the <mark>butter</mark> and sugar together.</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p>For this recipe, cream the <mark>butter</mark> and sugar together.</p>
+> ```
 > - Wrap ONLY the word "butter" in the `<mark>` and `</mark>` tags.
 
 ---
@@ -169,27 +168,27 @@ Basic inline highlight:
 **Problem:** Highlight search keyword `'javascript'` in paragraph `'Learning javascript is fun.'` using `<mark>`.
 
 **Expected output:**
-```text
-<p>Learning <mark>javascript</mark> is fun.</p>
-```
-
 > [!check]- Answer
+> ```text
+> <p>Learning <mark>javascript</mark> is fun.</p>
+> ```
 > ```html
 > <p>Learning <mark>javascript</mark> is fun.</p>
 > ```
 >
 > **Explanation:** `<mark>` semantically highlights search term matches in search result snippets.
 
+---
+
 ### Exercise 3: Mark Default Background Styling
 
 **Problem:** What default CSS background color do browsers apply to `<mark>` elements?
 
 **Expected output:**
-```text
-Yellow background (background-color: mark; / yellow).
-```
-
 > [!check]- Answer
+> ```text
+> Yellow background (background-color: mark; / yellow).
+> ```
 > ```text
 > Yellow background (background-color: mark; / yellow).
 > ```

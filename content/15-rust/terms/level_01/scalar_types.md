@@ -155,11 +155,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Sum is 1010
-```
-
 > [!check]- Answer
+> ```text
+> Sum is 1010
+> ```
 > - You cannot add a `u8` directly to an `i32`.
 > - Change `small_num + large_num` to `(small_num as i32) + large_num`.
 
@@ -170,13 +169,12 @@ Sum is 1010
 **Problem:** Perform bitwise AND (`&`), OR (`|`), and XOR (`^`) on `0b1100_u8` and `0b1010_u8`. Print the resulting values in binary format (`{:04b}`).
 
 **Expected output:**
-```
-AND: 1000
-OR: 1110
-XOR: 0110
-```
-
 > [!check]- Answer
+> ```
+> AND: 1000
+> OR: 1110
+> XOR: 0110
+> ```
 > ```rust
 > fn main() {
 >     let a: u8 = 0b1100;
@@ -189,17 +187,18 @@ XOR: 0110
 >
 > **Explanation:** Bitwise operators manipulate bit fields directly, and `{:04b}` formats numbers into binary representations padded to 4 digits.
 
+---
+
 ### Exercise 3: IEEE-754 Float NaN Comparison Trap
 
 **Problem:** Demonstrate why comparing `f32::NAN == f32::NAN` returns `false`, and check NaN using `.is_nan()` instead.
 
 **Expected output:**
-```
-Direct equality: false
-is_nan check: true
-```
-
 > [!check]- Answer
+> ```
+> Direct equality: false
+> is_nan check: true
+> ```
 > ```rust
 > fn main() {
 >     let nan = f32::NAN;

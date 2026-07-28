@@ -196,12 +196,11 @@ fn main() {
 **Problem:** Write `fn exec_twice<F: Fn()>(f: F)` calling `f()` twice.
 
 **Expected output:**
-```
-Ping
-Ping
-```
-
 > [!check]- Answer
+> ```
+> Ping
+> Ping
+> ```
 > ```rust
 > fn exec_twice<F: Fn()>(f: F) {
 >     f();
@@ -214,16 +213,17 @@ Ping
 >
 > **Explanation:** `Fn` bounds accept closures that capture environment variables immutably and can be invoked repeatedly.
 
+---
+
 ### Exercise 3: Consuming Environment with `FnOnce`
 
 **Problem:** Pass a closure consuming an owned `String` to a function bounded by `F: FnOnce() -> String`.
 
 **Expected output:**
-```
-Consumed: hello
-```
-
 > [!check]- Answer
+> ```
+> Consumed: hello
+> ```
 > fn consume<F: FnOnce() -> String>(f: F) -> String { f() }
 > fn main() {
 >     let s = String::from("hello");

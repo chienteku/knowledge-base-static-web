@@ -157,12 +157,11 @@ Tune GIN fastupdate buffers or limit GIN indexes to read-heavy search tables
 **Problem:** You have a `listings` table with a `specs` JSONB column. Landlords store varying key-value details in `specs`. Write the SQL query to create a GIN index named `idx_listings_specs` on the `specs` column to speed up arbitrary key search filters.
 
 **Expected output:**
-```sql
-CREATE INDEX idx_listings_specs 
-ON listings USING gin(specs);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE INDEX idx_listings_specs 
+> ON listings USING gin(specs);
+> ```
 > - Specify the GIN index structure using the `USING gin` clause.
 > - Target the entire `specs` column.
 
@@ -175,27 +174,27 @@ ON listings USING gin(specs);
 **Problem:** Create GIN index on `payload` JSONB column of `events` table.
 
 **Expected output:**
-```text
-CREATE INDEX idx_events_payload ON events USING GIN (payload);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_events_payload ON events USING GIN (payload);
+> ```
 > ```sql
 > CREATE INDEX idx_events_payload ON events USING GIN (payload);
 > ```
 >
 > **Explanation:** GIN (Generalized Inverted Index) indexes multi-value array items and JSONB keys.
 
+---
+
 ### Exercise 3: Trigram GIN Index for Wildcard Searching
 
 **Problem:** Create GIN index using `gin_trgm_ops` on `title` to accelerate `ILIKE '%query%'` substring searches.
 
 **Expected output:**
-```text
-CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
+> ```
 > ```sql
 > CREATE INDEX idx_posts_title_trgm ON posts USING GIN (title gin_trgm_ops);
 > ```

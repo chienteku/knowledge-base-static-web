@@ -151,14 +151,13 @@ async function processData() {
 **Problem:** Use `typeof` to log the type of the following values: `undefined`, `NaN`, `null`, and a function `function() {}`.
 
 **Expected output:**
-```text
-"undefined"
-"number"
-"object"
-"function"
-```
-
 > [!check]- Answer
+> ```text
+> "undefined"
+> "number"
+> "object"
+> "function"
+> ```
 > - Yes, `NaN` (Not a Number) is ironically of type `"number"`.
 > - Functions are a special type of object, and `typeof` uniquely identifies them as `"function"`.
 
@@ -169,15 +168,14 @@ async function processData() {
 **Problem:** Check `typeof` for `[]`, `{}`, `null`, `undefined`, and `Symbol()`.
 
 **Expected output:**
-```text
-object
-object
-object
-undefined
-symbol
-```
-
 > [!check]- Answer
+> ```text
+> object
+> object
+> object
+> undefined
+> symbol
+> ```
 > ```javascript
 > console.log(typeof []);
 > console.log(typeof {});
@@ -188,16 +186,17 @@ symbol
 >
 > **Explanation:** `typeof` returns standard primitive or object type string names.
 
+---
+
 ### Exercise 3: Safely Checking Undeclared Functions
 
 **Problem:** Check if a global function `myPlugin` is defined using `typeof`.
 
 **Expected output:**
-```text
-false
-```
-
 > [!check]- Answer
+> ```text
+> false
+> ```
 > ```javascript
 > console.log(typeof myPlugin === "function");
 > ```

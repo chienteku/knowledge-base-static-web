@@ -178,11 +178,10 @@ fn main() {
 **Problem:** Take a vector with duplicate values `vec![1, 2, 2, 3, 3, 3]` and collect it into a `HashSet<i32>` to remove duplicates.
 
 **Expected output:**
-```
-Unique elements count: 3
-```
-
 > [!check]- Answer
+> ```
+> Unique elements count: 3
+> ```
 > ```rust
 > use std::collections::HashSet;
 > fn main() {
@@ -194,16 +193,17 @@ Unique elements count: 3
 >
 > **Explanation:** `HashSet` automatically discards duplicate items when collected from an iterator.
 
+---
+
 ### Exercise 3: Transposing Iterator of Results with `.collect()`
 
 **Problem:** Collect an iterator of `Result<i32, &str>` containing `[Ok(1), Ok(2), Ok(3)]` into a single `Result<Vec<i32>, &str>`.
 
 **Expected output:**
-```
-Ok([1, 2, 3])
-```
-
 > [!check]- Answer
+> ```
+> Ok([1, 2, 3])
+> ```
 > ```rust
 > fn main() {
 >     let results = vec![Ok(1), Ok(2), Ok(3)];

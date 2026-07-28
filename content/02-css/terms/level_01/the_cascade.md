@@ -126,11 +126,10 @@ h1 { color: pink; }
 ```
 
 **Expected output:**
-```text
-Pink! Because all three rules have the exact same selector, the cascade relies entirely on source order. The last rule wins.
-```
-
 > [!check]- Answer
+> ```text
+> Pink! Because all three rules have the exact same selector, the cascade relies entirely on source order. The last rule wins.
+> ```
 > - Which rule does the browser read last?
 
 ---
@@ -142,13 +141,12 @@ Pink! Because all three rules have the exact same selector, the cascade relies e
 **Problem:** List the 3 criteria CSS uses in order to resolve conflicts between competing declarations.
 
 **Expected output:**
-```text
-1. Importance & Origin (User-Agent, Author, !important)
-2. Specificity (Inline, ID, Class, Type)
-3. Source Order (Last declared wins)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Importance & Origin (User-Agent, Author, !important)
+> 2. Specificity (Inline, ID, Class, Type)
+> 3. Source Order (Last declared wins)
+> ```
 > ```text
 > 1. Importance & Origin (User-Agent, Author, !important)
 > 2. Specificity (Inline, ID, Class, Type)
@@ -157,16 +155,17 @@ Pink! Because all three rules have the exact same selector, the cascade relies e
 >
 > **Explanation:** The Cascade algorithm evaluates origin, specificity, and order to determine winning styles.
 
+---
+
 ### Exercise 3: Cascade Layers (@layer) Purpose
 
 **Problem:** How do modern CSS Cascade Layers (`@layer`) control style precedence independent of selector specificity?
 
 **Expected output:**
-```text
-Styles in later declared @layer blocks take precedence over earlier layers regardless of selector specificity.
-```
-
 > [!check]- Answer
+> ```text
+> Styles in later declared @layer blocks take precedence over earlier layers regardless of selector specificity.
+> ```
 > ```css
 > @layer base, components;
 > @layer base { #hero { color: red; } }

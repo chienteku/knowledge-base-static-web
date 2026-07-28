@@ -127,12 +127,11 @@ Use Zustand / Redux Toolkit with selector subscriptions for high-frequency updat
 Can the `<Footer />` access the "dark" theme?
 
 **Expected output:**
-```text
-No!
-A component can only consume context if it is nested INSIDE the `<Context.Provider>` tags. Since Footer is outside the Provider, it cannot hear the broadcast.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> A component can only consume context if it is nested INSIDE the `<Context.Provider>` tags. Since Footer is outside the Provider, it cannot hear the broadcast.
+> ```
 > - Think about HTML hierarchy. Where does the Provider close?
 
 ---
@@ -144,11 +143,10 @@ A component can only consume context if it is nested INSIDE the `<Context.Provid
 **Problem:** Create `ThemeContext` and `ThemeProvider` component exposing `theme` state and `toggleTheme` callback.
 
 **Expected output:**
-```text
-const ThemeContext = createContext(); function ThemeProvider({ children }) { const [theme, setTheme] = useState('light'); const toggleTheme = useCallback(() => setTheme(t => t === 'light' ? 'dark' : 'light'), []); const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]); return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>; }
-```
-
 > [!check]- Answer
+> ```text
+> const ThemeContext = createContext(); function ThemeProvider({ children }) { const [theme, setTheme] = useState('light'); const toggleTheme = useCallback(() => setTheme(t => t === 'light' ? 'dark' : 'light'), []); const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]); return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>; }
+> ```
 > ```javascript
 > const ThemeContext = createContext();
 >
@@ -168,16 +166,17 @@ const ThemeContext = createContext(); function ThemeProvider({ children }) { con
 >
 > **Explanation:** Context Providers wrap child trees to supply global state without prop drilling.
 
+---
+
 ### Exercise 3: Context Default Value Fallback
 
 **Problem:** What value does `useContext(MyContext)` return if a component consumes Context outside its Provider? (The initial default value passed to `createContext(defaultValue)`).
 
 **Expected output:**
-```text
-The initial default value passed to createContext(defaultValue)
-```
-
 > [!check]- Answer
+> ```text
+> The initial default value passed to createContext(defaultValue)
+> ```
 > ```text
 > The initial default value passed to createContext(defaultValue)
 > ```

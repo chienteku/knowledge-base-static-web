@@ -149,14 +149,13 @@ Use pg-format: format('SELECT * FROM %I WHERE id = $1', tableName), [id]
 Refactor this into a secure parameterized query structure using Postgres placeholder syntax.
 
 **Expected output:**
-```python
-# Query structure containing placeholders
-query = "SELECT * FROM products WHERE category = $1 AND price < $2"
-# Parameters sent separately
-parameters = (cat, max_price)
-```
-
 > [!check]- Answer
+> ```python
+> # Query structure containing placeholders
+> query = "SELECT * FROM products WHERE category = $1 AND price < $2"
+> # Parameters sent separately
+> parameters = (cat, max_price)
+> ```
 > - Replace the variable concatenations (`{cat}`) with `$1` and `$2` placeholders.
 > - Store the data values in a separate list or tuple.
 
@@ -169,11 +168,10 @@ parameters = (cat, max_price)
 **Problem:** Write safe parameterized query in Node.js `pg` driver searching `email = inputEmail` and `active = true`.
 
 **Expected output:**
-```text
-const res = await pool.query('SELECT * FROM users WHERE email = $1 AND active = $2', [inputEmail, true]);
-```
-
 > [!check]- Answer
+> ```text
+> const res = await pool.query('SELECT * FROM users WHERE email = $1 AND active = $2', [inputEmail, true]);
+> ```
 > ```javascript
 > const res = await pool.query(
 >   'SELECT * FROM users WHERE email = $1 AND active = $2',
@@ -183,16 +181,17 @@ const res = await pool.query('SELECT * FROM users WHERE email = $1 AND active = 
 >
 > **Explanation:** Parameterized query placeholders (`$1`, `$2`) separate SQL query code from untrusted user data.
 
+---
+
 ### Exercise 3: PostgreSQL Parameter Placeholder Syntax
 
 **Problem:** What positional placeholder syntax does PostgreSQL use? (`$1`, `$2`, `$3`).
 
 **Expected output:**
-```text
-$1, $2, $3
-```
-
 > [!check]- Answer
+> ```text
+> $1, $2, $3
+> ```
 > ```text
 > $1, $2, $3
 > ```

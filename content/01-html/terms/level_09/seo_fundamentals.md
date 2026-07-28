@@ -186,11 +186,10 @@ Add a canonical link in the `<head>` to declare the "master copy":
 How would you improve the `<title>` tag to target local keywords like "dog grooming Chicago" and "pet salon"?
 
 **Expected output:**
-```html
-<title>Dog Grooming Chicago | Pet Salon Services - Bark & Bubble</title>
-```
-
 > [!check]- Answer
+> ```html
+> <title>Dog Grooming Chicago | Pet Salon Services - Bark & Bubble</title>
+> ```
 > - Place the primary target keywords near the beginning of the title.
 > - Include the brand name at the end separated by a dash or pipe.
 
@@ -203,14 +202,13 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 **Problem:** List 4 essential HTML elements required for technical SEO optimization.
 
 **Expected output:**
-```text
-1. Unique, descriptive <title> tag
-2. Meta description tag
-3. Single <h1> headline per page
-4. Descriptive alt text on <img> elements
-```
-
 > [!check]- Answer
+> ```text
+> 1. Unique, descriptive <title> tag
+> 2. Meta description tag
+> 3. Single <h1> headline per page
+> 4. Descriptive alt text on <img> elements
+> ```
 > ```text
 > 1. Unique, descriptive <title> tag
 > 2. Meta description tag
@@ -220,16 +218,17 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 >
 > **Explanation:** Technical SEO requires clear, machine-readable page metadata and semantic structure.
 
+---
+
 ### Exercise 3: Meta Description Character Limit
 
 **Problem:** What is the recommended character count limit for `<meta name="description">` to prevent truncation in Google search results?
 
 **Expected output:**
-```text
-150 to 160 characters.
-```
-
 > [!check]- Answer
+> ```text
+> 150 to 160 characters.
+> ```
 > ```text
 > 150 to 160 characters.
 > ```

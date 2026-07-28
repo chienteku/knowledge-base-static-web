@@ -120,15 +120,14 @@ Developer B writes: `module.exports = { User: User };`
 How does the `require` statement look different for Developer A vs Developer B?
 
 **Expected output:**
-```javascript
-// Developer A (Exporting the class directly)
-const User = require('./user.js');
-
-// Developer B (Exporting an object containing the class)
-const { User } = require('./user.js');
-```
-
 > [!check]- Answer
+> ```javascript
+> // Developer A (Exporting the class directly)
+> const User = require('./user.js');
+> 
+> // Developer B (Exporting an object containing the class)
+> const { User } = require('./user.js');
+> ```
 > - Is `require()` returning the class itself, or an object *holding* the class?
 
 ---
@@ -140,11 +139,10 @@ const { User } = require('./user.js');
 **Problem:** Write CommonJS syntax to export object with `add` and `subtract` math functions.
 
 **Expected output:**
-```text
-module.exports = { add: (a, b) => a + b, subtract: (a, b) => a - b };
-```
-
 > [!check]- Answer
+> ```text
+> module.exports = { add: (a, b) => a + b, subtract: (a, b) => a - b };
+> ```
 > ```javascript
 > module.exports = {
 >   add: (a, b) => a + b,
@@ -154,16 +152,17 @@ module.exports = { add: (a, b) => a + b, subtract: (a, b) => a - b };
 >
 > **Explanation:** `module.exports` defines the public API object returned when requiring the module.
 
+---
+
 ### Exercise 3: CommonJS Caching Behavior
 
 **Problem:** If module `a.js` is required 3 times across different files, how many times is `a.js` executed?
 
 **Expected output:**
-```text
-1 time (cached in `require.cache` on first import).
-```
-
 > [!check]- Answer
+> ```text
+> 1 time (cached in `require.cache` on first import).
+> ```
 > ```text
 > 1 time (cached in require.cache on first import)
 > ```

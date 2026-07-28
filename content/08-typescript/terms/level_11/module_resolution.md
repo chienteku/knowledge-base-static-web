@@ -184,12 +184,11 @@ node -r tsconfig-paths/register dist/index.js # Resolves aliases at runtime!
 ```
 
 **Expected output:**
-```text
-The compiler successfully resolves Service imports:
-import { UserService } from '@services/UserService';
-```
-
 > [!check]- Answer
+> ```text
+> The compiler successfully resolves Service imports:
+> import { UserService } from '@services/UserService';
+> ```
 > - The key is the alias pattern `"@services/*"`.
 > - The value is an array containing the path relative to `baseUrl`: `["src/services/*"]`.
 
@@ -202,27 +201,27 @@ import { UserService } from '@services/UserService';
 **Problem:** Configure `baseUrl: "."` and `paths: { "@components/*": ["src/components/*"] }`.
 
 **Expected output:**
-```text
-Path aliases configured
-```
-
 > [!check]- Answer
+> ```text
+> Path aliases configured
+> ```
 > ```typescript
 > console.log("Path aliases configured");
 > ```
 >
 > **Explanation:** `paths` and `baseUrl` create concise import path aliases in TS projects.
 
+---
+
 ### Exercise 3: ESM `.js` File Extension Imports
 
 **Problem:** Why does `moduleResolution: "node16"` require writing `import { foo } from './foo.js'` in `.ts` files?
 
 **Expected output:**
-```text
-Node16 module resolution enforces explicit file extension imports
-```
-
 > [!check]- Answer
+> ```text
+> Node16 module resolution enforces explicit file extension imports
+> ```
 > ```typescript
 > console.log("Node16 module resolution enforces explicit file extension imports");
 > ```

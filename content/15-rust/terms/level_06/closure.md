@@ -183,11 +183,10 @@ fn main() {
 **Problem:** Write a closure capturing `factor = 3` by reference to multiply input numbers.
 
 **Expected output:**
-```
-Result: 15
-```
-
 > [!check]- Answer
+> ```
+> Result: 15
+> ```
 > ```rust
 > fn main() {
 >     let factor = 3;
@@ -198,16 +197,17 @@ Result: 15
 >
 > **Explanation:** Closures automatically infer environment variable capture modes (`&`, `&mut`, or move) based on body usage.
 
+---
+
 ### Exercise 3: Mutable Closure State
 
 **Problem:** Create a `mut` closure `let mut accumulator = || ...` incrementing a local total count.
 
 **Expected output:**
-```
-Total: 3
-```
-
 > [!check]- Answer
+> ```
+> Total: 3
+> ```
 > fn main() {
 >     let mut count = 0;
 >     let mut inc = || count += 1;

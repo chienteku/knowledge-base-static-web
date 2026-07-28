@@ -157,12 +157,11 @@ const usersWithDetails = await getUsersWithBatchDetails();
 2. Bandwidth
 
 **Expected output:**
-```text
-1. Speed limit of the cars (how fast one car completes the trip)
-2. Number of lanes on the highway (how many cars can travel simultaneously)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Speed limit of the cars (how fast one car completes the trip)
+> 2. Number of lanes on the highway (how many cars can travel simultaneously)
+> ```
 > ```text
 > 1. Latency -> Speed limit / travel time of a single payload.
 > 2. Bandwidth -> Width of the highway / total capacity volume.
@@ -175,11 +174,10 @@ const usersWithDetails = await getUsersWithBatchDetails();
 **Problem:** If network latency between Client and Server is 40ms, calculate total time spent waiting on network traffic for 5 sequential synchronous HTTP calls.
 
 **Expected output:**
-```text
-200ms (5 * 40ms RTT).
-```
-
 > [!check]- Answer
+> ```text
+> 200ms (5 * 40ms RTT).
+> ```
 > ```text
 > 200ms (5 calls * 40ms RTT per call).
 > ```

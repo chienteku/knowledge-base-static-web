@@ -170,11 +170,10 @@ Displaying code examples safely:
 "The syntax for a line break is <br>."
 
 **Expected output:**
-```html
-<p>The syntax for a line break is &lt;br&gt;.</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p>The syntax for a line break is &lt;br&gt;.</p>
+> ```
 > - Replace `<` with `&lt;`.
 > - Replace `>` with `&gt;`.
 
@@ -192,15 +191,14 @@ Displaying code examples safely:
 5. `©` 
 
 **Expected output:**
-```text
-1. &lt;
-2. &gt;
-3. &amp;
-4. &quot;
-5. &copy;
-```
-
 > [!check]- Answer
+> ```text
+> 1. &lt;
+> 2. &gt;
+> 3. &amp;
+> 4. &quot;
+> 5. &copy;
+> ```
 > ```text
 > 1. <  -> &lt;
 > 2. >  -> &gt;
@@ -211,16 +209,17 @@ Displaying code examples safely:
 >
 > **Explanation:** HTML entities escape reserved character symbols.
 
+---
+
 ### Exercise 3: Non-Breaking Space Entity
 
 **Problem:** Which HTML entity creates a non-breaking space character that prevents line wrapping between two words?
 
 **Expected output:**
-```text
-&nbsp;
-```
-
 > [!check]- Answer
+> ```text
+> &nbsp;
+> ```
 > ```html
 > <span>100&nbsp;km/h</span>
 > ```

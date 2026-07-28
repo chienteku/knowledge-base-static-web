@@ -173,15 +173,14 @@ definePageMeta({
 **Problem:** You have a `layouts/default.vue` file containing your site navigation. You are building a `pages/login.vue` page, and you want the screen to be completely blank except for the login form (no navbar). How do you configure the login page to skip the default layout?
 
 **Expected output:**
-```vue
-<script setup lang="ts">
-definePageMeta({
-  layout: false // Disables the layout system for this specific page
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts">
+> definePageMeta({
+>   layout: false // Disables the layout system for this specific page
+> });
+> </script>
+> ```
 > - You can set the layout property to a boolean `false` inside the metadata macro to instruct Nuxt to bypass layout containers.
 
 ---
@@ -191,16 +190,15 @@ definePageMeta({
 **Problem:** Write custom layout `layouts/admin.vue` rendering an admin sidebar header, `<slot />`, and footer wrapper.
 
 **Expected output:**
-```vue
-<template>
-  <div class="admin-layout">
-    <AdminSidebar />
-    <main><slot /></main>
-  </div>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <div class="admin-layout">
+>     <AdminSidebar />
+>     <main><slot /></main>
+>   </div>
+> </template>
+> ```
 > - Named layout files in `layouts/` are referenced via `definePageMeta({ layout: 'admin' })`.
 > 
 > ```vue
@@ -222,11 +220,10 @@ definePageMeta({
 **Problem:** What filename MUST be used in `layouts/` to automatically apply a layout to all pages by default?
 
 **Expected output:**
-```text
-layouts/default.vue
-```
-
 > [!check]- Answer
+> ```text
+> layouts/default.vue
+> ```
 > - `layouts/default.vue` is applied automatically across all pages.
 > 
 > ```text

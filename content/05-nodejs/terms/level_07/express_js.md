@@ -206,20 +206,19 @@ app.get('/data', async (req, res, next) => {
 **Problem:** How do you start an Express server on Port 3000 that replies with `"Hello Express!"` when a user visits the root URL `/`?
 
 **Expected output:**
-```javascript
-const express = require('express');
-const app = express();
-
-app.get('/', (req, res) => {
-  res.send('Hello Express!');
-});
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> const express = require('express');
+> const app = express();
+> 
+> app.get('/', (req, res) => {
+>   res.send('Hello Express!');
+> });
+> 
+> app.listen(3000, () => {
+>   console.log('Server is running on port 3000');
+> });
+> ```
 > - Use `app.get()` for the route.
 > - Use `app.listen()` to start the server.
 
@@ -232,11 +231,10 @@ app.listen(3000, () => {
 **Problem:** Write basic Express app listening on port 3000 returning `'Hello World'` on `GET /`.
 
 **Expected output:**
-```text
-const express = require('express'); const app = express(); app.get('/', (req, res) => res.send('Hello World')); app.listen(3000);
-```
-
 > [!check]- Answer
+> ```text
+> const express = require('express'); const app = express(); app.get('/', (req, res) => res.send('Hello World')); app.listen(3000);
+> ```
 > ```javascript
 > const express = require('express');
 > const app = express();
@@ -246,16 +244,17 @@ const express = require('express'); const app = express(); app.get('/', (req, re
 >
 > **Explanation:** `express()` creates an Express application instance listening on specified port.
 
+---
+
 ### Exercise 3: Express 5 Async Route Support
 
 **Problem:** How does Express 5 improve async route error handling compared to Express 4?
 
 **Expected output:**
-```text
-Express 5 automatically handles rejected promises in async route handlers, passing them to error middleware without requiring try/catch.
-```
-
 > [!check]- Answer
+> ```text
+> Express 5 automatically handles rejected promises in async route handlers, passing them to error middleware without requiring try/catch.
+> ```
 > ```text
 > Express 5 automatically handles rejected promises in async route handlers, passing them to error middleware without requiring try/catch.
 > ```

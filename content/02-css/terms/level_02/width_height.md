@@ -115,11 +115,10 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 **Problem:** You have a `<main>` container that is `1000px` wide. Inside it, you put a `<div style="width: 50%;">`. How many pixels wide will the `<div>` be?
 
 **Expected output:**
-```text
-500px! Percentages are always calculated relative to the *parent* container, not necessarily the whole screen.
-```
-
 > [!check]- Answer
+> ```text
+> 500px! Percentages are always calculated relative to the *parent* container, not necessarily the whole screen.
+> ```
 > - What is 50% of 1000?
 
 ---
@@ -131,11 +130,10 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 **Problem:** Write CSS for `.wrapper` occupying 100% width on mobile, capped at max 1200px on desktop, centered horizontally.
 
 **Expected output:**
-```text
-.wrapper { width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
-```
-
 > [!check]- Answer
+> ```text
+> .wrapper { width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto; }
+> ```
 > ```css
 > .wrapper {
 >   width: 100%;
@@ -147,16 +145,17 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 >
 > **Explanation:** `width: 100%` + `max-width` + `margin: auto` creates responsive fluid page containers.
 
+---
+
 ### Exercise 3: Percentage Height Requirement
 
 **Problem:** Why does `height: 100%` fail on a child `<div>` when its parent container has no explicit height set?
 
 **Expected output:**
-```text
-Percentage heights require parent elements to have a defined explicit height to calculate percentages against.
-```
-
 > [!check]- Answer
+> ```text
+> Percentage heights require parent elements to have a defined explicit height to calculate percentages against.
+> ```
 > ```text
 > Percentage heights require parent elements to have a defined explicit height to calculate percentages against.
 > ```

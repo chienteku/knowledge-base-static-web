@@ -122,11 +122,10 @@ PORT=8080 NODE_ENV=production node .output/server/index.mjs
 **Problem:** You have compiled your application using `npm run build`. Write the command to launch the standalone production server locally using Node.js.
 
 **Expected output:**
-```bash
-node .output/server/index.mjs
-```
-
 > [!check]- Answer
+> ```bash
+> node .output/server/index.mjs
+> ```
 > - Execute the entrypoint javascript module located inside the compiled server directory.
 
 ---
@@ -136,20 +135,19 @@ node .output/server/index.mjs
 **Problem:** Write multi-stage Dockerfile compiling `.output/` and launching `node .output/server/index.mjs` in lightweight `node:18-alpine` runtime.
 
 **Expected output:**
-```dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN npm install && npm run build
-
-FROM node:18-alpine AS runner
-WORKDIR /app
-COPY --from=builder /app/.output ./.output
-EXPOSE 3000
-CMD ["node", ".output/server/index.mjs"]
-```
-
 > [!check]- Answer
+> ```dockerfile
+> FROM node:18-alpine AS builder
+> WORKDIR /app
+> COPY . .
+> RUN npm install && npm run build
+> 
+> FROM node:18-alpine AS runner
+> WORKDIR /app
+> COPY --from=builder /app/.output ./.output
+> EXPOSE 3000
+> CMD ["node", ".output/server/index.mjs"]
+> ```
 > - Standalone `.output/` requires zero external `node_modules` in production containers.
 > 
 > ```dockerfile
@@ -173,11 +171,10 @@ CMD ["node", ".output/server/index.mjs"]
 **Problem:** Why is the `.output/server/index.mjs` file self-contained without needing `package.json`?
 
 **Expected output:**
-```text
-Nitro bundles and tree-shakes all server dependencies into the single compiled ESM module file at build time.
-```
-
 > [!check]- Answer
+> ```text
+> Nitro bundles and tree-shakes all server dependencies into the single compiled ESM module file at build time.
+> ```
 > - Nitro bundles all server dependencies into the standalone `.output/server` directory.
 > 
 > ```text

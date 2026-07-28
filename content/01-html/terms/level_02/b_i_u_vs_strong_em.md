@@ -272,6 +272,8 @@ Semantic vs presentational markup comparison:
 >
 > **Explanation:** HTML semantic text tags convey explicit acoustic emphasis for screen readers.
 
+---
+
 ### Exercise 3: Screen Reader Acoustic Difference
 
 **Problem:** How do screen readers pronounce `<strong>` vs `<b>`?

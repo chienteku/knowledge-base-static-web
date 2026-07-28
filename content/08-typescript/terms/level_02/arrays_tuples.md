@@ -104,12 +104,11 @@ const point: [number, number] = [10, 20]; // Positional fixed tuple
 **Problem:** You have an array that needs to hold *both* strings and numbers, in any order, with no fixed length. e.g., `["Alice", 5, "Bob", 10]`. How do you type this array?
 
 **Expected output:**
-```typescript
-// You use a Union Type wrapped in parentheses!
-const mixedData: (string | number)[] = ["Alice", 5, "Bob"];
-```
-
 > [!check]- Answer
+> ```typescript
+> // You use a Union Type wrapped in parentheses!
+> const mixedData: (string | number)[] = ["Alice", 5, "Bob"];
+> ```
 > - How do you say "string OR number"?
 
 ---
@@ -121,11 +120,10 @@ const mixedData: (string | number)[] = ["Alice", 5, "Bob"];
 **Problem:** Define a named tuple type `type Response = [status: number, message: string]`.
 
 **Expected output:**
-```text
-Named tuple type defined
-```
-
 > [!check]- Answer
+> ```text
+> Named tuple type defined
+> ```
 > ```typescript
 > type Response = [status: number, message: string];
 > const res: Response = [200, "OK"];
@@ -134,16 +132,17 @@ Named tuple type defined
 >
 > **Explanation:** Named tuple labels improve IDE readability and documentation clarity.
 
+---
+
 ### Exercise 3: Readonly Tuple Protection
 
 **Problem:** Create a readonly tuple `readonly [x: number, y: number]`.
 
 **Expected output:**
-```text
-Readonly tuple prevents mutations
-```
-
 > [!check]- Answer
+> ```text
+> Readonly tuple prevents mutations
+> ```
 > ```typescript
 > const point: readonly [number, number] = [10, 20];
 > console.log("Readonly tuple prevents mutations");

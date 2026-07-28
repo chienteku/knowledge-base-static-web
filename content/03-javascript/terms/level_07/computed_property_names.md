@@ -189,11 +189,10 @@ console.log("Active count:", stats.active_users);
 ```
 
 **Expected output:**
-```text
-Active count: 450
-```
-
 > [!check]- Answer
+> ```text
+> Active count: 450
+> ```
 > - The key expression is `[`${prefix}_${countKey}`]`.
 
 ---
@@ -203,11 +202,10 @@ Active count: 450
 **Problem:** Construct object `{ [prefix + "_id"]: 42 }` where `prefix = "user"`.
 
 **Expected output:**
-```text
-{"user_id":42}
-```
-
 > [!check]- Answer
+> ```text
+> {"user_id":42}
+> ```
 > ```javascript
 > const prefix = "user";
 > const obj = { [prefix + "_id"]: 42 };
@@ -216,16 +214,17 @@ Active count: 450
 >
 > **Explanation:** Computed property names `[expr]` evaluate dynamic expressions during object literal creation.
 
+---
+
 ### Exercise 3: Symbol Computed Property Keys
 
 **Problem:** Use a symbol `const sym = Symbol("key")` as a computed property key `[sym]: "secret"`.
 
 **Expected output:**
-```text
-secret
-```
-
 > [!check]- Answer
+> ```text
+> secret
+> ```
 > ```javascript
 > const sym = Symbol("key");
 > const obj = { [sym]: "secret" };
@@ -234,7 +233,6 @@ secret
 >
 > **Explanation:** Bracketed computed properties permit primitive Symbols as non-string object keys.
 
----
 
 ---
 

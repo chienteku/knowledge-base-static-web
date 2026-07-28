@@ -153,14 +153,13 @@ Serving a desktop image versus a mobile image:
 **Problem:** Write the HTML markup to serve a hero banner: `banner-large.jpg` for screens 800px wide and larger, and `banner-small.jpg` (with description: "Winter clearance sale banner") as the default mobile/fallback image.
 
 **Expected output:**
-```html
-<picture>
-  <source media="(min-width: 800px)" srcset="banner-large.jpg">
-  <img src="banner-small.jpg" alt="Winter clearance sale banner">
-</picture>
-```
-
 > [!check]- Answer
+> ```html
+> <picture>
+>   <source media="(min-width: 800px)" srcset="banner-large.jpg">
+>   <img src="banner-small.jpg" alt="Winter clearance sale banner">
+> </picture>
+> ```
 > - Nest a `<source>` tag with the `media` filter first.
 > - The fallback `<img>` must carry the `src` and `alt` attributes.
 
@@ -173,11 +172,10 @@ Serving a desktop image versus a mobile image:
 **Problem:** Write `<picture>` element offering AVIF first, WebP second, falling back to JPEG `<img>`.
 
 **Expected output:**
-```text
-<picture><source srcset="img.avif" type="image/avif"><source srcset="img.webp" type="image/webp"><img src="img.jpg" alt="Fallback"></picture>
-```
-
 > [!check]- Answer
+> ```text
+> <picture><source srcset="img.avif" type="image/avif"><source srcset="img.webp" type="image/webp"><img src="img.jpg" alt="Fallback"></picture>
+> ```
 > ```html
 > <picture>
 >   <source srcset="img.avif" type="image/avif">
@@ -188,16 +186,17 @@ Serving a desktop image versus a mobile image:
 >
 > **Explanation:** `<picture>` matches `type` formats top-to-bottom, delivering optimal image codec files.
 
+---
+
 ### Exercise 3: Art Direction vs Resolution Switching
 
 **Problem:** When should `<picture>` with media queries be used instead of `srcset` on standard `<img>`?
 
 **Expected output:**
-```text
-Use <picture> for Art Direction (cropping/changing image composition across screen sizes); use img srcset for Resolution Switching (same image, different resolutions).
-```
-
 > [!check]- Answer
+> ```text
+> Use <picture> for Art Direction (cropping/changing image composition across screen sizes); use img srcset for Resolution Switching (same image, different resolutions).
+> ```
 > ```text
 > Use <picture> for Art Direction (cropping/changing image composition across screen sizes); use img srcset for Resolution Switching (same image, different resolutions).
 > ```

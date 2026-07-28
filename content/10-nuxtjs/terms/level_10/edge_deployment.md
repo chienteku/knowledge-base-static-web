@@ -120,12 +120,11 @@ setHeader(event, 'Cache-Control', 'private, no-store'); // Prevents CDN edge cac
 **Problem:** You are deploying a Nuxt application to Vercel Edge and need to query a PostgreSQL database. Which database connection method is edge-compatible: a standard TCP library (`pg`), or Neon's serverless driver using HTTP websockets?
 
 **Expected output:**
-```text
-Neon's serverless driver using HTTP websockets.
-Standard TCP libraries like `pg` require raw TCP socket access, which is blocked by Edge V8 isolates. Neon's driver uses HTTP/websockets to bypass this restriction.
-```
-
 > [!check]- Answer
+> ```text
+> Neon's serverless driver using HTTP websockets.
+> Standard TCP libraries like `pg` require raw TCP socket access, which is blocked by Edge V8 isolates. Neon's driver uses HTTP/websockets to bypass this restriction.
+> ```
 > - Consider which network protocols are allowed inside V8 edge sandboxes.
 
 ---
@@ -135,15 +134,14 @@ Standard TCP libraries like `pg` require raw TCP socket access, which is blocked
 **Problem:** Write `nuxt.config.ts` Nitro preset setting for Cloudflare Workers edge deployment.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  nitro: {
-    preset: 'cloudflare-module'
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   nitro: {
+>     preset: 'cloudflare-module'
+>   }
+> });
+> ```
 > - `nitro.preset` compiles project output for specific edge providers.
 > 
 > ```typescript
@@ -161,11 +159,10 @@ export default defineNuxtConfig({
 **Problem:** How do Edge deployments achieve sub-5ms cold start times compared to standard Node.js serverless functions?
 
 **Expected output:**
-```text
-Edge platforms use V8 isolate contexts instead of spinning up heavy virtualized Node.js container environments.
-```
-
 > [!check]- Answer
+> ```text
+> Edge platforms use V8 isolate contexts instead of spinning up heavy virtualized Node.js container environments.
+> ```
 > - V8 isolates start in sub-5ms by skipping heavy Node container initialization.
 > 
 > ```text

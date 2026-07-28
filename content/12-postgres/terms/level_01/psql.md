@@ -139,12 +139,11 @@ SELECT * FROM users; -- Terminate SQL statements with semicolon
 **Problem:** You are hired to work on a legacy Postgres database. You connect using `psql`, but you have no idea what tables exist or what columns are in the `customers` table. Write the two `psql` backslash commands to discover this structure.
 
 **Expected output:**
-```text
-1. Type `\dt` and press Enter to list all tables in the database.
-2. Type `\d customers` and press Enter to describe the columns, types, and constraints of the `customers` table.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Type `\dt` and press Enter to list all tables in the database.
+> 2. Type `\d customers` and press Enter to describe the columns, types, and constraints of the `customers` table.
+> ```
 > - Use the backslash commands specifically built to inspect metadata inside `psql`.
 > - Do not write standard SQL `SELECT` queries for discovery.
 
@@ -157,27 +156,27 @@ SELECT * FROM users; -- Terminate SQL statements with semicolon
 **Problem:** List `psql` meta-commands for: 1. List databases (`\l`), 2. Connect to database (`\c dbname`), 3. List tables (`\dt`), 4. Quit (`\q`).
 
 **Expected output:**
-```text
-\l, \c dbname, \dt, \q
-```
-
 > [!check]- Answer
+> ```text
+> \l, \c dbname, \dt, \q
+> ```
 > ```text
 > \l, \c dbname, \dt, \q
 > ```
 >
 > **Explanation:** Backslash meta-commands manage connections and inspect catalog schema objects in `psql`.
 
+---
+
 ### Exercise 3: Executing SQL Script File via `psql` CLI
 
 **Problem:** CLI command to execute SQL script `schema.sql` against database `app` using `psql`.
 
 **Expected output:**
-```text
-psql -d app -f schema.sql
-```
-
 > [!check]- Answer
+> ```text
+> psql -d app -f schema.sql
+> ```
 > ```bash
 > psql -d app -f schema.sql
 > ```

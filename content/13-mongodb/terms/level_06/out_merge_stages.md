@@ -155,12 +155,11 @@ db.orders.aggregate([..., { $merge: { into: "sharded_analytics", on: "_id" } }])
 2.  You want to calculate a complete, cold backup table of your catalog into a fresh collection named `catalog_backup_July`, wiping any old backup collection of that name.
 
 **Expected output:**
-```text
-1. $merge: Because you want to perform an incremental update (upsert) that preserves existing records and keeps custom collection indexes active.
-2. $out: Because you want a complete, fresh replacement of the backup collection, wiping any old database files cleanly.
-```
-
 > [!check]- Answer
+> ```text
+> 1. $merge: Because you want to perform an incremental update (upsert) that preserves existing records and keeps custom collection indexes active.
+> 2. $out: Because you want a complete, fresh replacement of the backup collection, wiping any old database files cleanly.
+> ```
 > - Determine if the collection writes must preserve historical indexes.
 > - Relate the task to incremental delta updates vs. complete resets.
 
@@ -173,11 +172,10 @@ db.orders.aggregate([..., { $merge: { into: "sharded_analytics", on: "_id" } }])
 **Problem:** Merge aggregated daily totals into `daily_sales` collection on `_id` using `$merge`.
 
 **Expected output:**
-```text
-db.sales.aggregate([ ..., { $merge: { into: "daily_sales", on: "_id", whenMatched: "merge", whenNotMatched: "insert" } } ]);
-```
-
 > [!check]- Answer
+> ```text
+> db.sales.aggregate([ ..., { $merge: { into: "daily_sales", on: "_id", whenMatched: "merge", whenNotMatched: "insert" } } ]);
+> ```
 > ```javascript
 > db.sales.aggregate([
 >   // aggregation stages ...
@@ -194,16 +192,17 @@ db.sales.aggregate([ ..., { $merge: { into: "daily_sales", on: "_id", whenMatche
 >
 > **Explanation:** `$merge` safely upserts or merges pipeline outputs into target collections.
 
+---
+
 ### Exercise 3: Replacing Collection with `$out`
 
 **Problem:** Write aggregation results to new materialized view collection `active_users_mv` using `$out`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $match: { active: true } }, { $out: "active_users_mv" }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $match: { active: true } }, { $out: "active_users_mv" }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   { $match: { active: true } },

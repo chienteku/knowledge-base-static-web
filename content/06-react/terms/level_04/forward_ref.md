@@ -190,16 +190,17 @@ function App() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Forwarding Ref to Input Component
 
 **Problem:** Wrap `CustomInput` component in `forwardRef` forwarding `ref` to underlying `<input>` element.
 
 **Expected output:**
-```text
-const CustomInput = React.forwardRef((props, ref) => <input ref={ref} {...props} />);
-```
-
 > [!check]- Answer
+> ```text
+> const CustomInput = React.forwardRef((props, ref) => <input ref={ref} {...props} />);
+> ```
 > ```javascript
 > const CustomInput = React.forwardRef((props, ref) => (
 >   <input ref={ref} {...props} />
@@ -208,16 +209,17 @@ const CustomInput = React.forwardRef((props, ref) => <input ref={ref} {...props}
 >
 > **Explanation:** `forwardRef` exposes internal DOM nodes of child components to parent components.
 
+---
+
 ### Exercise 3: React 19 Ref Prop Simplification
 
 **Problem:** How does React 19 simplify passing refs to function components? (In React 19, `ref` is available as a standard prop `props.ref` without requiring `forwardRef`).
 
 **Expected output:**
-```text
-ref is available as a standard prop (props.ref) without requiring forwardRef wrapper
-```
-
 > [!check]- Answer
+> ```text
+> ref is available as a standard prop (props.ref) without requiring forwardRef wrapper
+> ```
 > ```text
 > ref is available as a standard prop (props.ref) without requiring forwardRef wrapper
 > ```

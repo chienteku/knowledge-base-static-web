@@ -192,12 +192,11 @@ Write the exact TOML code that must go in the root `Cargo.toml` to link these tw
 **Problem:** Write a `Cargo.toml` root workspace definition listing `members = ["crate_a", "crate_b"]`.
 
 **Expected output:**
-```
-[workspace]
-members = ["crate_a", "crate_b"]
-```
-
 > [!check]- Answer
+> ```
+> [workspace]
+> members = ["crate_a", "crate_b"]
+> ```
 > ```rust
 > fn main() {
 >     println!("[workspace]\nmembers = [\"crate_a\", \"crate_b\"]");
@@ -206,16 +205,17 @@ members = ["crate_a", "crate_b"]
 >
 > **Explanation:** Root `[workspace]` manifests organize multiple related sub-crates under a shared `target/` directory.
 
+---
+
 ### Exercise 3: Workspace Dependency Inheritance
 
 **Problem:** Inherit a workspace dependency in a sub-crate `serde = { workspace = true }`.
 
 **Expected output:**
-```
-Workspace dependency inherited
-```
-
 > [!check]- Answer
+> ```
+> Workspace dependency inherited
+> ```
 > fn main() {
 >     println!("Workspace dependency inherited");
 > }

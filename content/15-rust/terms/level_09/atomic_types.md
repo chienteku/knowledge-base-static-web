@@ -183,11 +183,10 @@ thread::spawn(move || {
 **Problem:** Toggle an `AtomicBool` using `.store(true, Ordering::SeqCst)` and read with `.load(Ordering::SeqCst)`.
 
 **Expected output:**
-```
-Flag state: true
-```
-
 > [!check]- Answer
+> ```
+> Flag state: true
+> ```
 > ```rust
 > use std::sync::atomic::{AtomicBool, Ordering};
 > fn main() {
@@ -199,16 +198,17 @@ Flag state: true
 >
 > **Explanation:** Atomic types provide lock-free concurrent primitive variable access.
 
+---
+
 ### Exercise 3: Thread-Safe Counter with `fetch_add`
 
 **Problem:** Increment an `AtomicUsize` across 3 threads using `.fetch_add(1, Ordering::SeqCst)`.
 
 **Expected output:**
-```
-Atomic count: 3
-```
-
 > [!check]- Answer
+> ```
+> Atomic count: 3
+> ```
 > use std::sync::atomic::{AtomicUsize, Ordering};
 > use std::sync::Arc;
 > use std::thread;

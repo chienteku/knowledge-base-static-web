@@ -177,11 +177,10 @@ thread::spawn(move || {
 **Problem:** Create `struct Miles(u32)` and `struct Kilometers(u32)`. Write functions preventing accidental unit mixing.
 
 **Expected output:**
-```
-Distance in miles: 100
-```
-
 > [!check]- Answer
+> ```
+> Distance in miles: 100
+> ```
 > ```rust
 > struct Miles(u32);
 > struct Kilometers(u32);
@@ -194,16 +193,17 @@ Distance in miles: 100
 >
 > **Explanation:** Newtypes wrap primitive types into distinct zero-cost domain types enforced at compile time.
 
+---
+
 ### Exercise 3: Implementing `Deref` for Newtypes
 
 **Problem:** Implement `Deref` for `struct Name(String)` to expose `&str` methods directly.
 
 **Expected output:**
-```
-Len: 5
-```
-
 > [!check]- Answer
+> ```
+> Len: 5
+> ```
 > use std::ops::Deref;
 > struct Name(String);
 > impl Deref for Name {

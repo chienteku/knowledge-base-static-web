@@ -223,6 +223,8 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 >
 > **Explanation:** `<span>` is generic inline wrapper; `<div>` is generic block wrapper.
 
+---
+
 ### Exercise 3: Styling Text Substring
 
 **Problem:** Wrap word `'red'` in sentence `'The car is red.'` to color it red with CSS.

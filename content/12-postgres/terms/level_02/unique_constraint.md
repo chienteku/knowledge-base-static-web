@@ -147,18 +147,17 @@ CREATE UNIQUE INDEX idx_users_lower_email ON users (LOWER(email));
 **Problem:** You are building a movie rating database. You have a table `reviews` with columns `user_id`, `movie_id`, and `rating`. You want to allow users to write reviews, but you must prevent a user from writing **more than one review for the same movie**. How do you enforce this constraint in SQL?
 
 **Expected output:**
-```sql
-CREATE TABLE reviews (
-  id INTEGER PRIMARY KEY,
-  user_id INTEGER,
-  movie_id INTEGER,
-  rating INTEGER,
-  -- Enforce unique combination
-  UNIQUE (user_id, movie_id)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE reviews (
+>   id INTEGER PRIMARY KEY,
+>   user_id INTEGER,
+>   movie_id INTEGER,
+>   rating INTEGER,
+>   -- Enforce unique combination
+>   UNIQUE (user_id, movie_id)
+> );
+> ```
 > - You can define a `UNIQUE` constraint at the bottom of the table definition that accepts a list of multiple columns.
 > - This prevents duplicate pairs, while still allowing the same `user_id` or `movie_id` to appear individually on multiple rows.
 
@@ -171,27 +170,27 @@ CREATE TABLE reviews (
 **Problem:** Add UNIQUE constraint on `(user_id, project_id)` on `project_members` table.
 
 **Expected output:**
-```text
-ALTER TABLE project_members ADD CONSTRAINT uq_user_project UNIQUE (user_id, project_id);
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE project_members ADD CONSTRAINT uq_user_project UNIQUE (user_id, project_id);
+> ```
 > ```sql
 > ALTER TABLE project_members ADD CONSTRAINT uq_user_project UNIQUE (user_id, project_id);
 > ```
 >
 > **Explanation:** Multi-column UNIQUE constraints enforce uniqueness across column tuples.
 
+---
+
 ### Exercise 3: Case-Insensitive Unique Expression Index
 
 **Problem:** Create unique index enforcing case-insensitive email uniqueness using `LOWER(email)`.
 
 **Expected output:**
-```text
-CREATE UNIQUE INDEX idx_lower_email ON users (LOWER(email));
-```
-
 > [!check]- Answer
+> ```text
+> CREATE UNIQUE INDEX idx_lower_email ON users (LOWER(email));
+> ```
 > ```sql
 > CREATE UNIQUE INDEX idx_lower_email ON users (LOWER(email));
 > ```

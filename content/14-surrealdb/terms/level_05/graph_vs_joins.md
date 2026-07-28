@@ -178,12 +178,11 @@ Explain how the execution time of these two queries changes as the user count sc
 2.  SurrealQL: `SELECT ->has_profile->profile FROM user:john;`
 
 **Expected output:**
-```text
-1. The SQL query execution time will slow down because the database must perform logarithmic index searches ($O(\log N)$) across a table that is 1,000 times larger.
-2. The SurrealQL query execution time will remain unchanged ($O(1)$ constant time) because it performs a direct pointer lookup to resolve the link, which is unaffected by the size of the surrounding table.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The SQL query execution time will slow down because the database must perform logarithmic index searches ($O(\log N)$) across a table that is 1,000 times larger.
+> 2. The SurrealQL query execution time will remain unchanged ($O(1)$ constant time) because it performs a direct pointer lookup to resolve the link, which is unaffected by the size of the surrounding table.
+> ```
 > - Differentiate between value-matching searches and direct pointer dereferencing.
 > - Consider how table scale impacts B-Tree index heights.
 
@@ -196,27 +195,27 @@ Explain how the execution time of these two queries changes as the user count sc
 **Problem:** Compare algorithmic complexity of relational JOIN index scans ($O(\log N)$) vs SurrealDB pointer traversal ($O(1)$).
 
 **Expected output:**
-```text
-Relational JOIN: O(log N) index scan, SurrealDB Arrow: O(1) direct pointer dereference
-```
-
 > [!check]- Answer
+> ```text
+> Relational JOIN: O(log N) index scan, SurrealDB Arrow: O(1) direct pointer dereference
+> ```
 > ```text
 > Relational JOIN: O(log N) index scan, SurrealDB Arrow: O(1) direct pointer dereference
 > ```
 >
 > **Explanation:** Direct record pointers avoid index lookup scans during graph traversal.
 
+---
+
 ### Exercise 3: Converting SQL JOIN to SurrealQL Arrow Traversal
 
 **Problem:** Convert `SELECT p.title FROM user u JOIN post p ON u.id = p.user_id WHERE u.id = 'alice'` to SurrealQL.
 
 **Expected output:**
-```text
-SELECT ->wrote->post.title AS titles FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ->wrote->post.title AS titles FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ->wrote->post.title AS titles FROM user:alice;
 > ```

@@ -164,14 +164,13 @@ async function processData() {
 4. `NaN`
 
 **Expected output:**
-```text
-1. Truthy (Any non-empty string is truthy, even the word "false"!)
-2. Falsy
-3. Truthy (All objects and arrays are truthy, even if they are empty!)
-4. Falsy
-```
-
 > [!check]- Answer
+> ```text
+> 1. Truthy (Any non-empty string is truthy, even the word "false"!)
+> 2. Falsy
+> 3. Truthy (All objects and arrays are truthy, even if they are empty!)
+> 4. Falsy
+> ```
 > - There are only 6 falsy values in JavaScript: `false`, `0`, `""` (empty string), `null`, `undefined`, and `NaN`. Everything else is Truthy.
 
 ---
@@ -181,11 +180,10 @@ async function processData() {
 **Problem:** Filter an array `[0, "", "hello", null, 42, undefined, NaN, false]` to extract only truthy values.
 
 **Expected output:**
-```text
-["hello",42]
-```
-
 > [!check]- Answer
+> ```text
+> ["hello",42]
+> ```
 > ```javascript
 > const items = [0, "", "hello", null, 42, undefined, NaN, false];
 > const truthy = items.filter(Boolean);
@@ -194,19 +192,20 @@ async function processData() {
 >
 > **Explanation:** `Array.prototype.filter(Boolean)` removes all 8 falsy JavaScript values.
 
+---
+
 ### Exercise 3: Boolean Type Coercion with `Boolean()`
 
 **Problem:** Test truthiness of `"0"`, `"false"`, `[]`, `{}` using `Boolean()`.
 
 **Expected output:**
-```text
-true
-true
-true
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> true
+> true
+> true
+> ```
 > ```javascript
 > console.log(Boolean("0"));
 > console.log(Boolean("false"));
@@ -216,7 +215,6 @@ true
 >
 > **Explanation:** Non-empty strings and object references are always truthy in JavaScript.
 
----
 
 ---
 

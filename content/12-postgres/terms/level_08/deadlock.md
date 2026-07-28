@@ -155,15 +155,14 @@ deadlock_timeout = '1s' -- Fast deadlock detection
 Rewrite the steps of Transaction 2 to prevent deadlocks.
 
 **Expected output:**
-```text
-Refactored Transaction 2 Steps:
-1. Update `users` (id=5) first.
-2. Update `profiles` (user_id=5) second.
-
-By ordering the locks consistently (always updating `users` before `profiles`), Transaction 2 will queue behind Transaction 1's lock on the users table, eliminating the circular wait state.
-```
-
 > [!check]- Answer
+> ```text
+> Refactored Transaction 2 Steps:
+> 1. Update `users` (id=5) first.
+> 2. Update `profiles` (user_id=5) second.
+> 
+> By ordering the locks consistently (always updating `users` before `profiles`), Transaction 2 will queue behind Transaction 1's lock on the users table, eliminating the circular wait state.
+> ```
 > - Match the exact order of the tables modified in Transaction 1.
 > - Ensure no crossover locks can be acquired simultaneously.
 
@@ -176,27 +175,27 @@ By ordering the locks consistently (always updating `users` before `profiles`), 
 **Problem:** Write SQL pattern preventing deadlocks when transferring money between `account_a` and `account_b`.
 
 **Expected output:**
-```text
-SELECT * FROM accounts WHERE id IN (10, 20) ORDER BY id ASC FOR UPDATE;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM accounts WHERE id IN (10, 20) ORDER BY id ASC FOR UPDATE;
+> ```
 > ```sql
 > SELECT * FROM accounts WHERE id IN (10, 20) ORDER BY id ASC FOR UPDATE;
 > ```
 >
 > **Explanation:** Acquiring locks in strict ascending primary key order (`ORDER BY id ASC`) eliminates deadlock circular dependencies.
 
+---
+
 ### Exercise 3: Handling Deadlock Exceptions in Application Code
 
 **Problem:** What PostgreSQL error code indicates a Deadlock detection? (`40P01`).
 
 **Expected output:**
-```text
-40P01 (deadlock_detected)
-```
-
 > [!check]- Answer
+> ```text
+> 40P01 (deadlock_detected)
+> ```
 > ```text
 > 40P01 (deadlock_detected)
 > ```

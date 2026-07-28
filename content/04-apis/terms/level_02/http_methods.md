@@ -127,12 +127,11 @@ PATCH /users/5 HTTP/1.1
 2. The user clicks "Checkout", which finalizes the order in the database. Which HTTP method is sent?
 
 **Expected output:**
-```text
-1. `GET`. You are just reading data.
-2. `POST`. You are creating a new "Order" record in the database.
-```
-
 > [!check]- Answer
+> ```text
+> 1. `GET`. You are just reading data.
+> 2. `POST`. You are creating a new "Order" record in the database.
+> ```
 > - Does the action create something new, or just read existing data?
 
 ---
@@ -146,14 +145,13 @@ PATCH /users/5 HTTP/1.1
 4. Delete a user account.
 
 **Expected output:**
-```text
-1. GET
-2. POST
-3. PUT
-4. DELETE
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET
+> 2. POST
+> 3. PUT
+> 4. DELETE
+> ```
 > ```text
 > 1. GET
 > 2. POST
@@ -168,11 +166,10 @@ PATCH /users/5 HTTP/1.1
 **Problem:** What distinguishes a `HEAD` request from a `GET` request?
 
 **Expected output:**
-```text
-HEAD requests return the exact same HTTP status code and response headers as GET, but omit the response body.
-```
-
 > [!check]- Answer
+> ```text
+> HEAD requests return the exact same HTTP status code and response headers as GET, but omit the response body.
+> ```
 > ```text
 > HEAD requests return the exact same HTTP status code and response headers as GET, but omit the response body.
 > ```

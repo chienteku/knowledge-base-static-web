@@ -172,12 +172,11 @@ student_id INT REFERENCES students(id) ON DELETE CASCADE
 2.  How many tables are required to model this database relationship in SQL?
 
 **Expected output:**
-```text
-1. Many-to-Many Relationship (M:N).
-2. 3 tables (doctors, patients, and a junction table to map the visits).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Many-to-Many Relationship (M:N).
+> 2. 3 tables (doctors, patients, and a junction table to map the visits).
+> ```
 > - Check if doctor-patient assignments are strictly one-to-one or if they cross over.
 > - Decouple assignments by counting parent tables vs connection tables.
 
@@ -190,11 +189,10 @@ student_id INT REFERENCES students(id) ON DELETE CASCADE
 **Problem:** Create 3 tables for Many-to-Many relationship between `articles` and `tags` using junction table `article_tags`.
 
 **Expected output:**
-```text
-CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT ); CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE article_tags ( article_id INT REFERENCES articles(id) ON DELETE CASCADE, tag_id INT REFERENCES tags(id) ON DELETE CASCADE, PRIMARY KEY (article_id, tag_id) );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT ); CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE article_tags ( article_id INT REFERENCES articles(id) ON DELETE CASCADE, tag_id INT REFERENCES tags(id) ON DELETE CASCADE, PRIMARY KEY (article_id, tag_id) );
+> ```
 > ```sql
 > CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT );
 > CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT );
@@ -207,16 +205,17 @@ CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT ); CREATE TABLE tags (
 >
 > **Explanation:** Junction tables model Many-to-Many relationships using foreign key pairs.
 
+---
+
 ### Exercise 3: Deleting Junction Entries
 
 **Problem:** Remove tag `tag_id = 5` from article `article_id = 10`.
 
 **Expected output:**
-```text
-DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
-```
-
 > [!check]- Answer
+> ```text
+> DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
+> ```
 > ```sql
 > DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
 > ```

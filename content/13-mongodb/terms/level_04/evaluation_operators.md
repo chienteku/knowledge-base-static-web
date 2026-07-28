@@ -156,13 +156,12 @@ db.orders.find({ $expr: { $gt: ["$price", "$cost"] } }); // Compares document fi
 Write the query to locate all users who have exceeded their budget (where `monthly_spending` is strictly greater than `monthly_budget`).
 
 **Expected output:**
-```javascript
-db.users.find({
-  $expr: { $gt: [ "$monthly_spending", "$monthly_budget" ] }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.users.find({
+>   $expr: { $gt: [ "$monthly_spending", "$monthly_budget" ] }
+> });
+> ```
 > - The query compares two fields in the same document, requiring the `$expr` operator.
 > - Prefix both fields with the dollar sign `$` inside the comparison array.
 
@@ -175,11 +174,10 @@ db.users.find({
 **Problem:** Query orders where `spent` amount exceeds `budget` field using `$expr`.
 
 **Expected output:**
-```text
-db.orders.find({ $expr: { $gt: ["$spent", "$budget"] } });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.find({ $expr: { $gt: ["$spent", "$budget"] } });
+> ```
 > ```javascript
 > db.orders.find({
 >   $expr: { $gt: ["$spent", "$budget"] }
@@ -188,16 +186,17 @@ db.orders.find({ $expr: { $gt: ["$spent", "$budget"] } });
 >
 > **Explanation:** `$expr` allows using aggregation expressions inside standard `find()` query filters.
 
+---
+
 ### Exercise 3: Modulus Evaluation with `$mod`
 
 **Problem:** Query documents where `qty` is divisible by 5 using `$mod: [5, 0]`.
 
 **Expected output:**
-```text
-db.inventory.find({ qty: { $mod: [5, 0] } });
-```
-
 > [!check]- Answer
+> ```text
+> db.inventory.find({ qty: { $mod: [5, 0] } });
+> ```
 > ```javascript
 > db.inventory.find({ qty: { $mod: [5, 0] } });
 > ```

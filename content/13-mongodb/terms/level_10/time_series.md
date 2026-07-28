@@ -170,17 +170,16 @@ Design time-series collections for append-only data ingestion workflows
 -   The write frequency is configured to the level of seconds.
 
 **Expected output:**
-```javascript
-db.createCollection("stock_ticks", {
-  timeseries: {
-    timeField: "trade_time",
-    metaField: "ticker_symbol",
-    granularity: "seconds"
-  }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.createCollection("stock_ticks", {
+>   timeseries: {
+>     timeField: "trade_time",
+>     metaField: "ticker_symbol",
+>     granularity: "seconds"
+>   }
+> });
+> ```
 > - The collection creator helper is `db.createCollection`.
 > - Declare the `timeseries` configurations inside the options object argument.
 
@@ -193,11 +192,10 @@ db.createCollection("stock_ticks", {
 **Problem:** Create Time-Series Collection `weather` with `timeField: "timestamp"` and `metaField: "stationId"`.
 
 **Expected output:**
-```text
-db.createCollection("weather", { timeseries: { timeField: "timestamp", metaField: "stationId", granularity: "minutes" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.createCollection("weather", { timeseries: { timeField: "timestamp", metaField: "stationId", granularity: "minutes" } });
+> ```
 > ```javascript
 > db.createCollection("weather", {
 >   timeseries: {
@@ -210,16 +208,17 @@ db.createCollection("weather", { timeseries: { timeField: "timestamp", metaField
 >
 > **Explanation:** `timeseries: { timeField, metaField }` creates columnar-compressed time-series storage.
 
+---
+
 ### Exercise 3: Time-Series Granularity Options
 
 **Problem:** List 3 granularity settings for Time-Series Collections (`"seconds"`, `"minutes"`, `"hours"`).
 
 **Expected output:**
-```text
-"seconds", "minutes", "hours"
-```
-
 > [!check]- Answer
+> ```text
+> "seconds", "minutes", "hours"
+> ```
 > ```text
 > "seconds", "minutes", "hours"
 > ```

@@ -190,11 +190,10 @@ async fn main() {
 **Problem:** Write a `#[tokio::main]` entry point printing `"Tokio runtime initialized"`.
 
 **Expected output:**
-```
-Tokio runtime initialized
-```
-
 > [!check]- Answer
+> ```
+> Tokio runtime initialized
+> ```
 > ```rust
 > fn main() {
 >     println!("Tokio runtime initialized");
@@ -203,16 +202,17 @@ Tokio runtime initialized
 >
 > **Explanation:** `#[tokio::main]` expands into runtime initialization and `block_on` execution.
 
+---
+
 ### Exercise 3: Async Sleep with `tokio::time::sleep`
 
 **Problem:** Demonstrate non-blocking sleep concept `tokio::time::sleep(Duration::from_millis(100)).await`.
 
 **Expected output:**
-```
-Slept asynchronously
-```
-
 > [!check]- Answer
+> ```
+> Slept asynchronously
+> ```
 > fn main() {
 >     println!("Slept asynchronously");
 > }

@@ -176,11 +176,10 @@ Comparing focus properties:
 **Problem:** You are building a mobile dropdown menu. When the menu is collapsed (hidden), the links inside it are off-screen but still focusable via the keyboard, which confuses blind users. What attribute should you apply to the hidden menu links to solve this?
 
 **Expected output:**
-```html
-Set `tabindex="-1"` on the links when the menu is collapsed.
-```
-
 > [!check]- Answer
+> ```html
+> Set `tabindex="-1"` on the links when the menu is collapsed.
+> ```
 > - Which tabindex value completely removes an element from the keyboard tab sequence?
 
 ---
@@ -195,13 +194,12 @@ Set `tabindex="-1"` on the links when the menu is collapsed.
 3. `tabindex="5"` 
 
 **Expected output:**
-```text
-1. Adds non-native element to natural tab order
-2. Programmatically focusable via JS (.focus()) but excluded from Tab key
-3. Overrides natural DOM order (Anti-pattern)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Adds non-native element to natural tab order
+> 2. Programmatically focusable via JS (.focus()) but excluded from Tab key
+> 3. Overrides natural DOM order (Anti-pattern)
+> ```
 > ```text
 > 1. tabindex="0": Adds non-native element to natural tab order
 > 2. tabindex="-1": Programmatically focusable via JS (.focus()) but excluded from Tab key
@@ -210,16 +208,17 @@ Set `tabindex="-1"` on the links when the menu is collapsed.
 >
 > **Explanation:** `tabindex="0"` inserts into tab flow; `-1` enables JS focus only.
 
+---
+
 ### Exercise 3: Focusing Modal Containers
 
 **Problem:** Which `tabindex` value should be assigned to a modal dialog overlay `<div>` so JavaScript can call `.focus()` when opened?
 
 **Expected output:**
-```text
-tabindex="-1"
-```
-
 > [!check]- Answer
+> ```text
+> tabindex="-1"
+> ```
 > ```html
 > <div id="modal" tabindex="-1" role="dialog">...</div>
 > ```

@@ -183,11 +183,10 @@ thread::spawn(move || {
 **Problem:** Write a function returning `Result<(), Box<dyn std::error::Error>>` that uses `?` on both `ParseIntError` and `IoError`.
 
 **Expected output:**
-```
-Dynamic error handled
-```
-
 > [!check]- Answer
+> ```
+> Dynamic error handled
+> ```
 > ```rust
 > fn run() -> Result<(), Box<dyn std::error::Error>> {
 >     let _val: u32 = "42".parse()?;
@@ -201,16 +200,17 @@ Dynamic error handled
 >
 > **Explanation:** `Box<dyn Error>` converts any error type implementing `std::error::Error` into a single trait object.
 
+---
+
 ### Exercise 3: Downcasting Dynamic Errors
 
 **Problem:** Downcast a `Box<dyn std::error::Error>` to `std::num::ParseIntError` using `.downcast_ref()`.
 
 **Expected output:**
-```
-Downcast parse error verified
-```
-
 > [!check]- Answer
+> ```
+> Downcast parse error verified
+> ```
 > use std::error::Error;
 > use std::num::ParseIntError;
 > fn main() {

@@ -133,12 +133,11 @@ CREATE INDEX idx_users_email ON users (email);
 2.  Explain why a query filtering `WHERE logged_at > '2020-01-01'` (all logs, returning 9.9 million rows) runs a **Seq Scan**, completely ignoring the index.
 
 **Expected output:**
-```text
-1. The first query returns a tiny fraction of the table (500 rows). An Index Scan is highly efficient because it jumps directly to those 500 records.
-2. The second query returns almost the entire table (99%). If Postgres used the index, it would have to read 9.9 million index entries, and then jump 9.9 million times to read the table heap. The "double read penalty" would make this extremely slow. A sequential scan reads the table file once from start to finish, which is much faster.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The first query returns a tiny fraction of the table (500 rows). An Index Scan is highly efficient because it jumps directly to those 500 records.
+> 2. The second query returns almost the entire table (99%). If Postgres used the index, it would have to read 9.9 million index entries, and then jump 9.9 million times to read the table heap. The "double read penalty" would make this extremely slow. A sequential scan reads the table file once from start to finish, which is much faster.
+> ```
 > - Evaluate the percentage of matching rows returned by each filter.
 > - Consider the disk read overhead of jumping between index and heap files.
 
@@ -151,27 +150,27 @@ CREATE INDEX idx_users_email ON users (email);
 **Problem:** Compare: `Seq Scan` (Scans all table pages sequentially); `Index Scan` (Navigates B-Tree index pointers to fetch matching heap pages).
 
 **Expected output:**
-```text
-Seq Scan: reads all table pages sequentially; Index Scan: navigates B-Tree pointers to fetch target heap pages
-```
-
 > [!check]- Answer
+> ```text
+> Seq Scan: reads all table pages sequentially; Index Scan: navigates B-Tree pointers to fetch target heap pages
+> ```
 > ```text
 > Seq Scan: reads all table pages sequentially; Index Scan: navigates B-Tree pointers to fetch target heap pages
 > ```
 >
 > **Explanation:** `Index Scan` accelerates selective queries matching small fractions of table rows.
 
+---
+
 ### Exercise 3: Selectivity Threshold for Index Scans
 
 **Problem:** At what result set threshold percentage does the query planner switch from `Index Scan` to `Seq Scan`? (When query matches > ~5-15% of table rows).
 
 **Expected output:**
-```text
-When matching > ~5-15% of total table rows
-```
-
 > [!check]- Answer
+> ```text
+> When matching > ~5-15% of total table rows
+> ```
 > ```text
 > When matching > ~5-15% of total table rows
 > ```

@@ -173,14 +173,13 @@ An FAQ section for a service:
 **Problem:** Create an interactive details-summary widget. The visible label should read "Spoiler Warning: Click to reveal ending of Hamlet." and the hidden content should be a paragraph: "Hamlet dies at the end of the play."
 
 **Expected output:**
-```html
-<details>
-  <summary>Spoiler Warning: Click to reveal ending of Hamlet.</summary>
-  <p>Hamlet dies at the end of the play.</p>
-</details>
-```
-
 > [!check]- Answer
+> ```html
+> <details>
+>   <summary>Spoiler Warning: Click to reveal ending of Hamlet.</summary>
+>   <p>Hamlet dies at the end of the play.</p>
+> </details>
+> ```
 > - The parent container is `<details>`.
 > - The title text must be wrapped in `<summary>`.
 > - The hidden content is a standard `<p>`.
@@ -194,11 +193,10 @@ An FAQ section for a service:
 **Problem:** Write an expanded-by-default `<details>` element with `<summary>` `'What is HTML5?'` and paragraph answer.
 
 **Expected output:**
-```text
-<details open><summary>What is HTML5?</summary><p>HTML5 is the standard markup language.</p></details>
-```
-
 > [!check]- Answer
+> ```text
+> <details open><summary>What is HTML5?</summary><p>HTML5 is the standard markup language.</p></details>
+> ```
 > ```html
 > <details open>
 >   <summary>What is HTML5?</summary>
@@ -208,16 +206,17 @@ An FAQ section for a service:
 >
 > **Explanation:** `open` attribute sets initial expanded visibility state.
 
+---
+
 ### Exercise 3: Styling Summary Disclosure Triangle
 
 **Problem:** Which CSS pseudo-element targets the default summary disclosure arrow marker for custom styling?
 
 **Expected output:**
-```text
-summary::marker (or summary::-webkit-details-marker)
-```
-
 > [!check]- Answer
+> ```text
+> summary::marker (or summary::-webkit-details-marker)
+> ```
 > ```css
 > summary::marker {
 >   color: blue;

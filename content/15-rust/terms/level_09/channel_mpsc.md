@@ -194,12 +194,11 @@ thread::spawn(move || {
 **Problem:** Clone `tx` sender to transmit messages from two threads into a single `mpsc::channel`.
 
 **Expected output:**
-```
-Received message
-Received message
-```
-
 > [!check]- Answer
+> ```
+> Received message
+> Received message
+> ```
 > ```rust
 > use std::sync::mpsc;
 > use std::thread;
@@ -220,16 +219,17 @@ Received message
 >
 > **Explanation:** `mpsc::channel` allows multiple sender handle clones (`tx.clone()`) routing to one receiver (`rx`).
 
+---
+
 ### Exercise 3: Synchronous Bounded Channels (`sync_channel`)
 
 **Problem:** Create a `sync_channel(1)` bounded channel and show that sending blocks when full.
 
 **Expected output:**
-```
-Bounded channel sent
-```
-
 > [!check]- Answer
+> ```
+> Bounded channel sent
+> ```
 > use std::sync::mpsc;
 > fn main() {
 >     let (tx, rx) = mpsc::sync_channel(1);

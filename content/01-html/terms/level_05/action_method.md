@@ -184,14 +184,13 @@ Comparing GET and POST form definitions:
 4.  A user is filtering a list of shirts by color (red, blue).
 
 **Expected output:**
-```text
-1. GET (Search filters should be shareable and bookmarkable)
-2. POST (Changing profile details modifies database records)
-3. POST (Financial transaction requires data security and payload size)
-4. GET (Filters can be bookmarked)
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET (Search filters should be shareable and bookmarkable)
+> 2. POST (Changing profile details modifies database records)
+> 3. POST (Financial transaction requires data security and payload size)
+> 4. GET (Filters can be bookmarked)
+> ```
 > - If bookmarking the resulting page is useful, choose GET.
 > - If data changes a database state or contains private details, choose POST.
 
@@ -208,14 +207,13 @@ Comparing GET and POST form definitions:
 4. Pagination page switching (`GET`)
 
 **Expected output:**
-```text
-1. GET
-2. POST
-3. POST
-4. GET
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET
+> 2. POST
+> 3. POST
+> 4. GET
+> ```
 > ```text
 > 1. GET (idempotent search query parameter)
 > 2. POST (secure data creation payload)
@@ -225,16 +223,17 @@ Comparing GET and POST form definitions:
 >
 > **Explanation:** Use `GET` for safe, bookmarkable read queries; use `POST` for state mutations and sensitive data.
 
+---
+
 ### Exercise 3: Default Form Action and Method
 
 **Problem:** What are default values for `action` and `method` attributes if omitted on `<form>`?
 
 **Expected output:**
-```text
-action defaults to current page URL; method defaults to GET.
-```
-
 > [!check]- Answer
+> ```text
+> action defaults to current page URL; method defaults to GET.
+> ```
 > ```text
 > action defaults to current page URL; method defaults to GET.
 > ```

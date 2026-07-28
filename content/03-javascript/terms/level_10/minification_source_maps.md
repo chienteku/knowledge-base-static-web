@@ -172,34 +172,33 @@ async function processData() {
 **Problem:** Name 3 minification steps (variable name mangling, dead-code elimination, whitespace removal).
 
 **Expected output:**
-```text
-Mangling, Dead-code elimination, Whitespace removal
-```
-
 > [!check]- Answer
+> ```text
+> Mangling, Dead-code elimination, Whitespace removal
+> ```
 > ```javascript
 > console.log("Mangling, Dead-code elimination, Whitespace removal");
 > ```
 >
 > **Explanation:** Minifiers compress bundle byte sizes by stripping unnecessary syntax characters.
 
+---
+
 ### Exercise 3: Debugging Minified Production Code with Source Maps
 
 **Problem:** Explain how `//# sourceMappingURL=bundle.js.map` maps minified stack traces back to raw source files.
 
 **Expected output:**
-```text
-Source maps map minified lines to original source
-```
-
 > [!check]- Answer
+> ```text
+> Source maps map minified lines to original source
+> ```
 > ```javascript
 > console.log("Source maps map minified lines to original source");
 > ```
 >
 > **Explanation:** Source maps bridge production minified code execution back to original un-compiled developer files.
 
----
 
 ---
 

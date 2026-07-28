@@ -181,15 +181,10 @@ db.users.find({ age: { $gt: 18, $lt: 30 } }); // Correct single field object
 2.  Write the refactored, safe query filter.
 
 **Expected output:**
-```text
-1. The query actually evaluates: `{ qty: { $lt: 20 }, status: "active" }`. The first check `qty: { $gt: 5 }` is silently overwritten in memory by the second `qty` key.
-```
-```javascript
-// 2. Refactored query filter
-const filter = { qty: { $gt: 5, $lt: 20 }, status: "active" };
-```
-
 > [!check]- Answer
+> ```text
+> 1. The query actually evaluates: `{ qty: { $lt: 20 }, status: "active" }`. The first check `qty: { $gt: 5 }` is silently overwritten in memory by the second `qty` key.
+> ```
 > - Identify the duplicate key path.
 > - Merge the operators inside a single sub-document.
 
@@ -202,11 +197,10 @@ const filter = { qty: { $gt: 5, $lt: 20 }, status: "active" };
 **Problem:** Query products where `category = "tech"` and `price` is between 50 and 200 using implicit AND syntax.
 
 **Expected output:**
-```text
-db.products.find({ category: "tech", price: { $gte: 50, $lte: 200 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.products.find({ category: "tech", price: { $gte: 50, $lte: 200 } });
+> ```
 > ```javascript
 > db.products.find({
 >   category: "tech",
@@ -216,16 +210,17 @@ db.products.find({ category: "tech", price: { $gte: 50, $lte: 200 } });
 >
 > **Explanation:** Top-level comma-separated fields implicitly evaluate using AND logic.
 
+---
+
 ### Exercise 3: Combining `$or` and Implicit `$and`
 
 **Problem:** Query active users (`active: true`) whose role is either `"admin"` or `"mod"`.
 
 **Expected output:**
-```text
-db.users.find({ active: true, role: { $in: ["admin", "mod"] } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ active: true, role: { $in: ["admin", "mod"] } });
+> ```
 > ```javascript
 > db.users.find({
 >   active: true,

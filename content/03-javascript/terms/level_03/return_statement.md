@@ -157,12 +157,11 @@ async function processData() {
 **Problem:** Write a function `checkAge(age)`. If the age is less than 18, use an early `return` to return `"Too young"`. If they are 18 or older, return `"Welcome"`. Do not use an `else` block!
 
 **Expected output:**
-```text
-checkAge(16) -> "Too young"
-checkAge(20) -> "Welcome"
-```
-
 > [!check]- Answer
+> ```text
+> checkAge(16) -> "Too young"
+> checkAge(20) -> "Welcome"
+> ```
 > - `if (age < 18) { return "Too young"; }`
 > - Since `return` exits the function immediately, any code written *after* the `if` block will only run if they are 18 or older. No `else` needed!
 
@@ -173,12 +172,11 @@ checkAge(20) -> "Welcome"
 **Problem:** Write `findUser(id)` returning `null` if `id <= 0`, else `{ id }` object.
 
 **Expected output:**
-```text
-null
-{"id":5}
-```
-
 > [!check]- Answer
+> ```text
+> null
+> {"id":5}
+> ```
 > ```javascript
 > function findUser(id) {
 >   if (id <= 0) return null;
@@ -190,16 +188,17 @@ null
 >
 > **Explanation:** `return` immediately halts function execution and passes values back to callers.
 
+---
+
 ### Exercise 3: Bare Return Defaulting to `undefined`
 
 **Problem:** Demonstrate that bare `return;` evaluates to `undefined`.
 
 **Expected output:**
-```text
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ```
 > ```javascript
 > function emptyReturn() { return; }
 > console.log(emptyReturn());
@@ -207,7 +206,6 @@ undefined
 >
 > **Explanation:** Functions exiting via bare `return;` return primitive `undefined`.
 
----
 
 ---
 

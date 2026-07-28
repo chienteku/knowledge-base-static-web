@@ -97,13 +97,12 @@ fetch('https://api.example.com/data'); // Absolute URL with scheme
 **Problem:** Identify the Protocol, the Domain, and the Path in this URL: `http://localhost:8080/images/cat.jpg`
 
 **Expected output:**
-```text
-Protocol: http://
-Domain: localhost:8080 (the host and the port!)
-Path: /images/cat.jpg
-```
-
 > [!check]- Answer
+> ```text
+> Protocol: http://
+> Domain: localhost:8080 (the host and the port!)
+> Path: /images/cat.jpg
+> ```
 > - The protocol comes before the `://`.
 > - The domain is everything up to the first single slash `/`.
 
@@ -119,15 +118,14 @@ Path: /images/cat.jpg
 5. Query Parameters
 
 **Expected output:**
-```text
-1. Scheme: https
-2. Hostname: api.example.com
-3. Port: 8080
-4. Path: /v1/items
-5. Query Params: page=2
-```
-
 > [!check]- Answer
+> ```text
+> 1. Scheme: https
+> 2. Hostname: api.example.com
+> 3. Port: 8080
+> 4. Path: /v1/items
+> 5. Query Params: page=2
+> ```
 > ```text
 > Scheme: https
 > Hostname: api.example.com
@@ -144,11 +142,10 @@ Path: /images/cat.jpg
 **Problem:** True or False: All URLs are URIs, but not all URIs are URLs.
 
 **Expected output:**
-```text
-True. URI is the umbrella category containing both URLs and URNs.
-```
-
 > [!check]- Answer
+> ```text
+> True. URI is the umbrella category containing both URLs and URNs.
+> ```
 > ```text
 > True. URI is the umbrella category containing both URLs and URNs.
 > ```

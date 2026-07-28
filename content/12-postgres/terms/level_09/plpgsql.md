@@ -172,20 +172,19 @@ PERFORM pg_advisory_xact_lock(1); -- Correct PL/pgSQL void execution
 If the `denominator` is `0`, catch the exception using the PL/pgSQL `EXCEPTION WHEN division_by_zero` block, log a warning message, and return `0.00`.
 
 **Expected output:**
-```sql
-CREATE FUNCTION safe_divide(numerator NUMERIC, denominator NUMERIC)
-RETURNS NUMERIC AS $$
-BEGIN
-  RETURN numerator / denominator;
-EXCEPTION
-  WHEN division_by_zero THEN
-    RAISE WARNING 'Attempted to divide by zero.';
-    RETURN 0.00;
-END;
-$$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE FUNCTION safe_divide(numerator NUMERIC, denominator NUMERIC)
+> RETURNS NUMERIC AS $$
+> BEGIN
+>   RETURN numerator / denominator;
+> EXCEPTION
+>   WHEN division_by_zero THEN
+>     RAISE WARNING 'Attempted to divide by zero.';
+>     RETURN 0.00;
+> END;
+> $$ LANGUAGE plpgsql;
+> ```
 > - Write the division calculation inside the main `BEGIN/END` block.
 > - Append the `EXCEPTION` block at the bottom before the closing `END;` statement.
 
@@ -198,11 +197,10 @@ $$ LANGUAGE plpgsql;
 **Problem:** Create PL/pgSQL function `add_numbers(a INT, b INT)` returning integer sum `a + b`.
 
 **Expected output:**
-```text
-CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT) RETURNS INT AS $$ BEGIN RETURN a + b; END; $$ LANGUAGE plpgsql;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT) RETURNS INT AS $$ BEGIN RETURN a + b; END; $$ LANGUAGE plpgsql;
+> ```
 > ```sql
 > CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT)
 > RETURNS INT AS $$
@@ -214,16 +212,17 @@ CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT) RETURNS INT AS $$ BEGIN RET
 >
 > **Explanation:** PL/pgSQL functions define procedural logic executing inside the PostgreSQL engine.
 
+---
+
 ### Exercise 3: SELECT INTO Variable Assignment
 
 **Problem:** Assign user `email` to variable `v_email` inside PL/pgSQL block.
 
 **Expected output:**
-```text
-SELECT email INTO v_email FROM users WHERE id = p_user_id;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT email INTO v_email FROM users WHERE id = p_user_id;
+> ```
 > ```sql
 > SELECT email INTO v_email FROM users WHERE id = p_user_id;
 > ```

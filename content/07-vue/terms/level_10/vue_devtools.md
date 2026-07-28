@@ -95,15 +95,14 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 **Problem:** You are looking at a massive application you didn't write. You see a strange button on the screen. How can Vue DevTools help you find the code for that button instantly?
 
 **Expected output:**
-```text
-1. Open Vue DevTools.
-2. Click the "Inspect Component" crosshair icon.
-3. Click the strange button on the actual webpage.
-4. DevTools instantly jumps to that exact Component in the tree.
-5. Click the "Open in Editor" button in DevTools, and your VS Code will instantly open the exact `.vue` file!
-```
-
 > [!check]- Answer
+> ```text
+> 1. Open Vue DevTools.
+> 2. Click the "Inspect Component" crosshair icon.
+> 3. Click the strange button on the actual webpage.
+> 4. DevTools instantly jumps to that exact Component in the tree.
+> 5. Click the "Open in Editor" button in DevTools, and your VS Code will instantly open the exact `.vue` file!
+> ```
 > - DevTools has a bridge directly to your IDE!
 
 ---
@@ -113,13 +112,12 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 **Problem:** List 3 primary debugging features provided by the Vue DevTools browser extension.
 
 **Expected output:**
-```text
-1. Component Tree Inspection & Props/State editing
-2. Pinia State & Actions Timeline tracking
-3. Vue Router Route inspection and navigation timeline
-```
-
 > [!check]- Answer
+> ```text
+> 1. Component Tree Inspection & Props/State editing
+> 2. Pinia State & Actions Timeline tracking
+> 3. Vue Router Route inspection and navigation timeline
+> ```
 > - Component tree & reactive state inspection.
 > - Pinia store state & action timeline.
 > - Vue Router history and route inspection.
@@ -135,11 +133,10 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 **Problem:** Which package embeds Vue DevTools directly into the browser window during Vite development?
 
 **Expected output:**
-```text
-vite-plugin-vue-devtools
-```
-
 > [!check]- Answer
+> ```text
+> vite-plugin-vue-devtools
+> ```
 > - `vite-plugin-vue-devtools` embeds DevTools directly in Vite app window.
 > 
 > ```javascript

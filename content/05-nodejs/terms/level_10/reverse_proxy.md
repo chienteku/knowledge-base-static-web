@@ -155,16 +155,17 @@ Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ]
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Configuring Nginx Reverse Proxy Location Block
 
 **Problem:** Write Nginx `location /` directive proxying requests to local Node server on port 3000.
 
 **Expected output:**
-```text
-location / { proxy_pass http://127.0.0.1:3000; }
-```
-
 > [!check]- Answer
+> ```text
+> location / { proxy_pass http://127.0.0.1:3000; }
+> ```
 > ```nginx
 > location / {
 >     proxy_pass http://127.0.0.1:3000;
@@ -175,18 +176,19 @@ location / { proxy_pass http://127.0.0.1:3000; }
 >
 > **Explanation:** `proxy_pass` forwards HTTP requests from Nginx to Node.js backend ports.
 
+---
+
 ### Exercise 3: Benefits of Reverse Proxy
 
 **Problem:** List 3 primary benefits of placing Nginx in front of Node.js servers.
 
 **Expected output:**
-```text
-1. SSL/TLS Termination
-2. High-performance static asset serving
-3. Request rate-limiting and DDoS mitigation
-```
-
 > [!check]- Answer
+> ```text
+> 1. SSL/TLS Termination
+> 2. High-performance static asset serving
+> 3. Request rate-limiting and DDoS mitigation
+> ```
 > ```text
 > 1. SSL/TLS Termination
 > 2. High-performance static asset serving

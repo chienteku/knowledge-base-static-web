@@ -94,14 +94,13 @@ Assign Component.displayName = 'AuthWrapper(Profile)'
 **Problem:** You install the React DevTools extension. When you visit your local app (`localhost:3000`), the extension icon turns **Red**. When you visit Netflix.com, the icon turns **Black**. Why?
 
 **Expected output:**
-```text
-The color tells you the environment!
-Red = Development Build (contains all the extra debugging code and strict mode).
-Black/Dark Blue = Production Build (minified, optimized, debugging removed).
-(Netflix uses React, but they are serving the optimized Production build).
-```
-
 > [!check]- Answer
+> ```text
+> The color tells you the environment!
+> Red = Development Build (contains all the extra debugging code and strict mode).
+> Black/Dark Blue = Production Build (minified, optimized, debugging removed).
+> (Netflix uses React, but they are serving the optimized Production build).
+> ```
 > - Think about what you would want exposed on a live website versus your local machine.
 
 ---
@@ -113,27 +112,27 @@ Black/Dark Blue = Production Build (minified, optimized, debugging removed).
 **Problem:** Which React DevTools tab displays current component props, state, and context values? (Components Tab).
 
 **Expected output:**
-```text
-Components Tab
-```
-
 > [!check]- Answer
+> ```text
+> Components Tab
+> ```
 > ```text
 > Components Tab
 > ```
 >
 > **Explanation:** The Components Tab provides live inspection of component props, state, and context.
 
+---
+
 ### Exercise 3: DevTools $r Console Shortcut
 
 **Problem:** What does `$r` represent in browser console when a component is selected in React DevTools? (The currently selected React component instance).
 
 **Expected output:**
-```text
-The currently selected React component instance
-```
-
 > [!check]- Answer
+> ```text
+> The currently selected React component instance
+> ```
 > ```text
 > The currently selected React component instance
 > ```

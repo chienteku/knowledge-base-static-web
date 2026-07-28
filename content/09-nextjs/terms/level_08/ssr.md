@@ -228,12 +228,11 @@ export default async function Page({ params }) {
 ```
 
 **Expected output:**
-```text
-It uses SSG (Static Generation)!
-There are no dynamic functions here. `params` are known at build time (if using `generateStaticParams`), and the database call does not rely on cookies or headers. Next.js will pre-build this page.
-```
-
 > [!check]- Answer
+> ```text
+> It uses SSG (Static Generation)!
+> There are no dynamic functions here. `params` are known at build time (if using `generateStaticParams`), and the database call does not rely on cookies or headers. Next.js will pre-build this page.
+> ```
 > - Look closely at the Triggers for SSR list above.
 
 ---
@@ -243,11 +242,10 @@ There are no dynamic functions here. `params` are known at build time (if using 
 **Problem:** Write App Router segment config line explicitly enforcing dynamic request-time SSR for a page.
 
 **Expected output:**
-```typescript
-export const dynamic = 'force-dynamic';
-```
-
 > [!check]- Answer
+> ```typescript
+> export const dynamic = 'force-dynamic';
+> ```
 > - `export const dynamic = 'force-dynamic'` forces dynamic SSR rendering.
 > 
 > ```typescript
@@ -266,11 +264,10 @@ export const dynamic = 'force-dynamic';
 **Problem:** Why is data fetching in SSR safer than CSR for private API tokens?
 
 **Expected output:**
-```text
-SSR data fetching occurs entirely on the private backend server environment. API tokens remain on the server and are never exposed to browser client bundles.
-```
-
 > [!check]- Answer
+> ```text
+> SSR data fetching occurs entirely on the private backend server environment. API tokens remain on the server and are never exposed to browser client bundles.
+> ```
 > - Server environment isolates private API keys from browser client bundles.
 > 
 > ```text

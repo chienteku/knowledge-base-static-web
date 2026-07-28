@@ -120,12 +120,11 @@ type StringKeysOnly<T> = Extract<keyof T, string>;
 **Problem:** You have an interface with an Index Signature: `interface Dictionary { [key: string]: number; }`. What is the result of `type DictKeys = keyof Dictionary;`?
 
 **Expected output:**
-```text
-The result is `string | number`.
-Because the object can accept ANY string as a key, `keyof` simply returns `string`. (It also returns `number` because JS allows you to access object properties via numbers, like `arr[0]`, which are coerced to strings).
-```
-
 > [!check]- Answer
+> ```text
+> The result is `string | number`.
+> Because the object can accept ANY string as a key, `keyof` simply returns `string`. (It also returns `number` because JS allows you to access object properties via numbers, like `arr[0]`, which are coerced to strings).
+> ```
 > - If the keys are infinite, the result must represent infinity!
 
 ---
@@ -137,11 +136,10 @@ Because the object can accept ANY string as a key, `keyof` simply returns `strin
 **Problem:** Extract key union from `interface User { id: number; name: string }` using `keyof User`.
 
 **Expected output:**
-```text
-"id" | "name"
-```
-
 > [!check]- Answer
+> ```text
+> "id" | "name"
+> ```
 > ```typescript
 > interface User { id: number; name: string }
 > type UserKeys = keyof User;
@@ -150,16 +148,17 @@ Because the object can accept ANY string as a key, `keyof` simply returns `strin
 >
 > **Explanation:** `keyof T` returns a union of string/number/symbol key literal types.
 
+---
+
 ### Exercise 3: Safely Accessing Property Values with `keyof`
 
 **Problem:** Write `function getProp<T>(obj: T, key: keyof T)`.
 
 **Expected output:**
-```text
-Type-safe property access verified
-```
-
 > [!check]- Answer
+> ```text
+> Type-safe property access verified
+> ```
 > ```typescript
 > function getProp<T>(obj: T, key: keyof T) {
 >   return obj[key];

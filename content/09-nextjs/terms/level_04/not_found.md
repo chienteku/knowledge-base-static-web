@@ -133,14 +133,13 @@ export default function NotFound() {
 **Problem:** You have a `app/not-found.tsx` file at the root. A user types a completely random URL into their browser: `yoursite.com/asdf123`. You don't have a folder for `asdf123`. What happens?
 
 **Expected output:**
-```text
-Next.js automatically renders `app/not-found.tsx`!
-The `not-found.tsx` file serves two purposes:
-1. It catches programmatic `notFound()` function calls.
-2. It automatically acts as the fallback UI for any URLs that do not match your folder structure.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js automatically renders `app/not-found.tsx`!
+> The `not-found.tsx` file serves two purposes:
+> 1. It catches programmatic `notFound()` function calls.
+> 2. It automatically acts as the fallback UI for any URLs that do not match your folder structure.
+> ```
 > - Think about what happens when the router can't find a matching folder.
 
 ---
@@ -150,11 +149,10 @@ The `not-found.tsx` file serves two purposes:
 **Problem:** Write async Server Component `app/posts/[id]/page.tsx` fetching post and calling `notFound()` if post is null.
 
 **Expected output:**
-```tsx
-import { notFound } from 'next/navigation'; export default async function Page({ params }: { params: { id: string } }) { const post = await getPost(params.id); if (!post) notFound(); return <h1>{post.title}</h1>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> import { notFound } from 'next/navigation'; export default async function Page({ params }: { params: { id: string } }) { const post = await getPost(params.id); if (!post) notFound(); return <h1>{post.title}</h1>; }
+> ```
 > - `notFound()` throws a 404 rendering exception.
 > 
 > ```tsx
@@ -179,11 +177,10 @@ import { notFound } from 'next/navigation'; export default async function Page({
 **Problem:** How does Next.js handle 404 UI when a sub-folder lacks a local `not-found.tsx` file?
 
 **Expected output:**
-```text
-Next.js bubbles up the directory tree until it finds the nearest parent not-found.tsx boundary (or root app/not-found.tsx).
-```
-
 > [!check]- Answer
+> ```text
+> Next.js bubbles up the directory tree until it finds the nearest parent not-found.tsx boundary (or root app/not-found.tsx).
+> ```
 > - 404 exceptions bubble up to the nearest parent `not-found.tsx` boundary.
 > 
 > ```text

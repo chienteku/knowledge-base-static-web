@@ -207,11 +207,10 @@ export default function WindowTracker() {
 **Problem:** Identify 1 valid scenario where `useEffect` is required inside a Next.js App Router Client Component.
 
 **Expected output:**
-```text
-Synchronizing third-party browser DOM libraries (e.g. D3.js charts, Mapbox maps, or browser localStorage synchronization).
-```
-
 > [!check]- Answer
+> ```text
+> Synchronizing third-party browser DOM libraries (e.g. D3.js charts, Mapbox maps, or browser localStorage synchronization).
+> ```
 > - `useEffect` is intended for browser DOM synchronization and third-party widgets.
 > 
 > ```tsx
@@ -229,11 +228,10 @@ Synchronizing third-party browser DOM libraries (e.g. D3.js charts, Mapbox maps,
 **Problem:** Why is omitting referenced variables from the `useEffect` dependency array (`[dept]`) dangerous in React?
 
 **Expected output:**
-```text
-The effect callback will capture stale closures of un-tracked variables, failing to re-run when dependencies change.
-```
-
 > [!check]- Answer
+> ```text
+> The effect callback will capture stale closures of un-tracked variables, failing to re-run when dependencies change.
+> ```
 > - Missing dependencies create stale closure bugs.
 > 
 > ```typescript

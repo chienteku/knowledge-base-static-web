@@ -116,13 +116,12 @@ export async function POST(req: Request) {
 **Problem:** You have a "Contact Us" form on your website. Should you build a `POST` Route Handler for it, or use a Server Action?
 
 **Expected output:**
-```text
-You should use a Server Action!
-In the App Router era, Route Handlers (`route.ts`) should primarily be used for interacting with EXTERNAL systems (like webhooks from Stripe, or building an API for a mobile app). 
-If you are just mutating data from your own Next.js React UI, Server Actions are the officially recommended and vastly superior approach.
-```
-
 > [!check]- Answer
+> ```text
+> You should use a Server Action!
+> In the App Router era, Route Handlers (`route.ts`) should primarily be used for interacting with EXTERNAL systems (like webhooks from Stripe, or building an API for a mobile app). 
+> If you are just mutating data from your own Next.js React UI, Server Actions are the officially recommended and vastly superior approach.
+> ```
 > - Think about what we learned in Level 6 regarding form submissions.
 
 ---
@@ -132,11 +131,10 @@ If you are just mutating data from your own Next.js React UI, Server Actions are
 **Problem:** Write complete `app/api/items/route.ts` handling `POST` request, reading JSON body `{ title }`, creating item in DB, returning HTTP 201 response.
 
 **Expected output:**
-```typescript
-import { NextResponse } from 'next/server'; export async function POST(req: Request) { const body = await req.json(); const item = await db.item.create({ data: { title: body.title } }); return NextResponse.json(item, { status: 201 }); }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { NextResponse } from 'next/server'; export async function POST(req: Request) { const body = await req.json(); const item = await db.item.create({ data: { title: body.title } }); return NextResponse.json(item, { status: 201 }); }
+> ```
 > - Route Handlers parse JSON bodies and return `NextResponse.json()`.
 > 
 > ```typescript
@@ -163,11 +161,10 @@ import { NextResponse } from 'next/server'; export async function POST(req: Requ
 **Problem:** What is the mandatory reserved filename for Route Handlers in Next.js App Router?
 
 **Expected output:**
-```text
-route.ts (or route.js)
-```
-
 > [!check]- Answer
+> ```text
+> route.ts (or route.js)
+> ```
 > - `route.ts` defines backend API endpoints in the App Router.
 > 
 > ```text

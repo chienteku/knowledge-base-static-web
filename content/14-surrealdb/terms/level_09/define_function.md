@@ -169,11 +169,10 @@ Write a `DEFINE FUNCTION` statement named `fn::is_adult` that accepts an `$age: 
 **Problem:** Define function `fn::greet($name: string)` returning `"Hello, " + $name`.
 
 **Expected output:**
-```text
-DEFINE FUNCTION fn::greet($name: string) { RETURN string::concat("Hello, ", $name); };
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FUNCTION fn::greet($name: string) { RETURN string::concat("Hello, ", $name); };
+> ```
 > ```surrealql
 > DEFINE FUNCTION fn::greet($name: string) {
 >   RETURN string::concat("Hello, ", $name);
@@ -182,16 +181,17 @@ DEFINE FUNCTION fn::greet($name: string) { RETURN string::concat("Hello, ", $nam
 >
 > **Explanation:** `DEFINE FUNCTION fn::name($param: type)` declares reusable custom functions.
 
+---
+
 ### Exercise 3: Invoking Custom Function
 
 **Problem:** Invoke custom function `fn::greet("Alice")` in SurrealQL query.
 
 **Expected output:**
-```text
-RETURN fn::greet("Alice");
-```
-
 > [!check]- Answer
+> ```text
+> RETURN fn::greet("Alice");
+> ```
 > ```surrealql
 > RETURN fn::greet("Alice");
 > ```

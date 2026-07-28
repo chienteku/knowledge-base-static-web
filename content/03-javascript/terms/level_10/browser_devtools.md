@@ -181,11 +181,10 @@ async function processData() {
 **Problem:** Use `debugger;` keyword to pause execution inside browser DevTools.
 
 **Expected output:**
-```text
-Programmatic breakpoint executed
-```
-
 > [!check]- Answer
+> ```text
+> Programmatic breakpoint executed
+> ```
 > ```javascript
 > function debugMe() {
 >   // debugger; // Pauses execution when DevTools is open
@@ -196,23 +195,23 @@ Programmatic breakpoint executed
 >
 > **Explanation:** The `debugger;` statement invokes active browser developer tools breakpoints.
 
+---
+
 ### Exercise 3: Inspecting Performance Profiles
 
 **Problem:** State which DevTools tab records Flamecharts and Memory Heap Snapshots (Performance & Memory tabs).
 
 **Expected output:**
-```text
-Performance tab & Memory tab
-```
-
 > [!check]- Answer
+> ```text
+> Performance tab & Memory tab
+> ```
 > ```javascript
 > console.log("Performance tab & Memory tab");
 > ```
 >
 > **Explanation:** DevTools Performance and Memory tabs profile CPU flamecharts and memory allocations.
 
----
 
 ---
 

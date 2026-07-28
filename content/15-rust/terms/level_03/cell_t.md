@@ -187,11 +187,10 @@ fn main() {
 **Problem:** Create a struct `Logger { count: Cell<u32> }` with an `&self` method `fn log(&self)` that increments `count`.
 
 **Expected output:**
-```
-Log count: 1
-```
-
 > [!check]- Answer
+> ```
+> Log count: 1
+> ```
 > use std::cell::Cell;
 > struct Logger { count: Cell<u32> }
 > impl Logger {
@@ -208,16 +207,17 @@ Log count: 1
 >
 > **Explanation:** `Cell<T>` provides zero-overhead interior mutability for `Copy` types behind immutable `&self` references.
 
+---
+
 ### Exercise 3: Swapping Cell Values with `replace`
 
 **Problem:** Use `cell.replace(100)` to swap values in a `Cell<i32>` and print the previous value.
 
 **Expected output:**
-```
-Old: 42, New: 100
-```
-
 > [!check]- Answer
+> ```
+> Old: 42, New: 100
+> ```
 > use std::cell::Cell;
 > fn main() {
 >     let cell = Cell::new(42);

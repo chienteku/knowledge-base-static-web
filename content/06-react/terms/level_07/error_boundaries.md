@@ -151,11 +151,10 @@ class ErrorBoundary extends React.Component { componentDidCatch(error) { ... } }
 **Problem:** Write basic class `ErrorBoundary` implementing `getDerivedStateFromError` and `componentDidCatch`.
 
 **Expected output:**
-```text
-class ErrorBoundary extends React.Component { state = { hasError: false }; static getDerivedStateFromError(error) { return { hasError: true }; } componentDidCatch(error, info) { console.error(error, info); } render() { return this.state.hasError ? <h1>Something went wrong.</h1> : this.props.children; } }
-```
-
 > [!check]- Answer
+> ```text
+> class ErrorBoundary extends React.Component { state = { hasError: false }; static getDerivedStateFromError(error) { return { hasError: true }; } componentDidCatch(error, info) { console.error(error, info); } render() { return this.state.hasError ? <h1>Something went wrong.</h1> : this.props.children; } }
+> ```
 > ```javascript
 > class ErrorBoundary extends React.Component {
 >   state = { hasError: false };
@@ -176,34 +175,34 @@ class ErrorBoundary extends React.Component { state = { hasError: false }; stati
 >
 > **Explanation:** `static getDerivedStateFromError` updates fallback UI state when child render errors occur.
 
+---
+
 ### Exercise 2: Where Error Boundaries Should Be Placed
 
 **Problem:** Where should Error Boundaries be placed in app trees? (Wrap top-level app roots or individual heavy widget features to isolate UI crashes).
 
 **Expected output:**
-```text
-Wrap top-level app roots or individual heavy feature widgets to isolate crashes
-```
-
 > [!check]- Answer
+> ```text
+> Wrap top-level app roots or individual heavy feature widgets to isolate crashes
+> ```
 > ```text
 > Wrap top-level app roots or individual heavy feature widgets to isolate crashes
 > ```
 >
 > **Explanation:** Isolating feature widgets inside Error Boundaries prevents single component crashes from unmounting the whole app UI.
 
-
+---
 
 ### Exercise 3: Error Boundary Reset Functionality
 
 **Problem:** Add `resetError` method to `ErrorBoundary` class resetting `hasError` state to false.
 
 **Expected output:**
-```text
-resetError = () => { this.setState({ hasError: false }); };
-```
-
 > [!check]- Answer
+> ```text
+> resetError = () => { this.setState({ hasError: false }); };
+> ```
 > ```javascript
 > resetError = () => {
 >   this.setState({ hasError: false });

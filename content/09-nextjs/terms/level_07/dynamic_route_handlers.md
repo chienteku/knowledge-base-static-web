@@ -128,16 +128,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 **Problem:** You are building `app/api/posts/[slug]/route.ts`. You don't need to read any headers or query strings, you ONLY need the `slug`. Can you just omit the `request` parameter?
 
 **Expected output:**
-```ts
-// You must still accept the request parameter, even if you don't use it!
-// Or, use an underscore convention to mark it as ignored.
-export async function GET(_request: Request, { params }: { params: { slug: string } }) {
-  const post = await fetchPost(params.slug);
-  return Response.json(post);
-}
-```
-
 > [!check]- Answer
+> ```ts
+> // You must still accept the request parameter, even if you don't use it!
+> // Or, use an underscore convention to mark it as ignored.
+> export async function GET(_request: Request, { params }: { params: { slug: string } }) {
+>   const post = await fetchPost(params.slug);
+>   return Response.json(post);
+> }
+> ```
 > - JavaScript function parameters are positional. If you skip the first one, the second one shifts into the first position!
 
 ---
@@ -147,11 +146,10 @@ export async function GET(_request: Request, { params }: { params: { slug: strin
 **Problem:** Write dynamic Route Handler `app/api/products/[id]/route.ts` handling `GET` request and returning JSON `{ id, product }`.
 
 **Expected output:**
-```typescript
-import { NextResponse } from 'next/server'; export async function GET(req: Request, { params }: { params: { id: string } }) { return NextResponse.json({ id: params.id, name: 'Sample Product' }); }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { NextResponse } from 'next/server'; export async function GET(req: Request, { params }: { params: { id: string } }) { return NextResponse.json({ id: params.id, name: 'Sample Product' }); }
+> ```
 > - Dynamic Route Handlers receive route segment parameters via `{ params }`.
 > 
 > ```typescript
@@ -173,11 +171,10 @@ import { NextResponse } from 'next/server'; export async function GET(req: Reque
 **Problem:** Write `NextResponse.json()` line returning 404 Not Found error payload.
 
 **Expected output:**
-```typescript
-return NextResponse.json({ error: 'Product Not Found' }, { status: 404 });
-```
-
 > [!check]- Answer
+> ```typescript
+> return NextResponse.json({ error: 'Product Not Found' }, { status: 404 });
+> ```
 > - Pass options object `{ status: 404 }` to set HTTP response status.
 > 
 > ```typescript

@@ -200,11 +200,10 @@ console.log("Unlock correct:", lock.unlock("secret123")); // true
 **Problem:** Define `class BankAccount` with `#balance = 0;` and public methods `deposit(val)` and `getBalance()`.
 
 **Expected output:**
-```text
-100
-```
-
 > [!check]- Answer
+> ```text
+> 100
+> ```
 > ```javascript
 > class BankAccount {
 >   #balance = 0;
@@ -218,16 +217,17 @@ console.log("Unlock correct:", lock.unlock("secret123")); // true
 >
 > **Explanation:** Private class fields `#field` prevent unauthorized external access and mutation.
 
+---
+
 ### Exercise 3: Private Methods and Getters
 
 **Problem:** Define a private method `#secretCalc()` callable only inside class methods.
 
 **Expected output:**
-```text
-Secret: 42
-```
-
 > [!check]- Answer
+> ```text
+> Secret: 42
+> ```
 > ```javascript
 > class Vault {
 >   #secretCalc() { return 42; }

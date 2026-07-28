@@ -136,12 +136,11 @@ export default async function Page({
 **Problem:** You have a `app/dashboard/page.tsx` file. You want to extract the complicated header into a separate component. Where is the best place to put `DashboardHeader.tsx`?
 
 **Expected output:**
-```text
-Right next to it! `app/dashboard/DashboardHeader.tsx`.
-Because only `page.tsx` files are publicly routable, you can safely co-locate your components, styles, and tests directly inside the route folders without worrying about them becoming public URLs.
-```
-
 > [!check]- Answer
+> ```text
+> Right next to it! `app/dashboard/DashboardHeader.tsx`.
+> Because only `page.tsx` files are publicly routable, you can safely co-locate your components, styles, and tests directly inside the route folders without worrying about them becoming public URLs.
+> ```
 > - Think about what makes a folder publicly accessible.
 
 ---
@@ -151,11 +150,10 @@ Because only `page.tsx` files are publicly routable, you can safely co-locate yo
 **Problem:** Write TypeScript interface for `PageProps` matching dynamic route `params: { slug: string }` and optional `searchParams: { query?: string }`.
 
 **Expected output:**
-```tsx
-interface PageProps { params: { slug: string }; searchParams: { query?: string }; } export default async function Page({ params, searchParams }: PageProps) { return <div>{params.slug}</div>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> interface PageProps { params: { slug: string }; searchParams: { query?: string }; } export default async function Page({ params, searchParams }: PageProps) { return <div>{params.slug}</div>; }
+> ```
 > - `params` contains dynamic URL route segments.
 > - `searchParams` contains URL query string key-values.
 > 
@@ -177,11 +175,10 @@ interface PageProps { params: { slug: string }; searchParams: { query?: string }
 **Problem:** Why does accessing the `searchParams` prop in an App Router `page.tsx` automatically opt that page into dynamic SSR rendering?
 
 **Expected output:**
-```text
-URL query search parameters change on every HTTP request and cannot be known at static build time.
-```
-
 > [!check]- Answer
+> ```text
+> URL query search parameters change on every HTTP request and cannot be known at static build time.
+> ```
 > - Query parameters are request-time dynamic data.
 > 
 > ```text

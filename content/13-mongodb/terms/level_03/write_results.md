@@ -194,12 +194,11 @@ if (res.acknowledged) { console.log('Write acknowledged by cluster'); }
 2.  What does this output tell you about the database state?
 
 **Expected output:**
-```text
-1. No, the query did not fail (the `acknowledged: true` flag indicates the database server successfully parsed and executed the command).
-2. The output indicates that no documents matched the query filter you provided. Therefore, zero documents were deleted from the collection.
-```
-
 > [!check]- Answer
+> ```text
+> 1. No, the query did not fail (the `acknowledged: true` flag indicates the database server successfully parsed and executed the command).
+> 2. The output indicates that no documents matched the query filter you provided. Therefore, zero documents were deleted from the collection.
+> ```
 > - Differentiate network execution safety from matching filters counts.
 > - Relate the metrics back to the delete filters.
 
@@ -212,27 +211,27 @@ if (res.acknowledged) { console.log('Write acknowledged by cluster'); }
 **Problem:** List 3 standard properties on MongoDB driver `UpdateResult` objects (`acknowledged`, `matchedCount`, `modifiedCount`).
 
 **Expected output:**
-```text
-acknowledged, matchedCount, modifiedCount
-```
-
 > [!check]- Answer
+> ```text
+> acknowledged, matchedCount, modifiedCount
+> ```
 > ```text
 > acknowledged, matchedCount, modifiedCount
 > ```
 >
 > **Explanation:** Write result objects detail acknowledgement status and affected document metrics.
 
+---
+
 ### Exercise 3: Delete Result Inspection
 
 **Problem:** Inspect number of deleted documents on `DeleteResult` object (`res.deletedCount`).
 
 **Expected output:**
-```text
-res.deletedCount
-```
-
 > [!check]- Answer
+> ```text
+> res.deletedCount
+> ```
 > ```javascript
 > const res = await db.users.deleteMany({ active: false });
 > console.log(res.deletedCount);

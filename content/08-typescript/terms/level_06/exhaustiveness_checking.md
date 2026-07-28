@@ -209,14 +209,13 @@ function handlePayment(state: PaymentState) {
 ```
 
 **Expected output:**
-```text
-The compilation passes after adding:
-case 'refunded':
-  console.log('Money returned');
-  break;
-```
-
 > [!check]- Answer
+> ```text
+> The compilation passes after adding:
+> case 'refunded':
+>   console.log('Money returned');
+>   break;
+> ```
 > - The compiler checks if any possible payment states enter the `default` block.
 > - Adding a `case 'refunded'` handles the final state, so the type of `state` inside `default` successfully falls back to `never`.
 
@@ -229,11 +228,10 @@ case 'refunded':
 **Problem:** Write `function assertNever(x: never): never { throw new Error("Unexpected: " + x); }`.
 
 **Expected output:**
-```text
-assertNever helper created
-```
-
 > [!check]- Answer
+> ```text
+> assertNever helper created
+> ```
 > ```typescript
 > function assertNever(x: never): never {
 >   throw new Error(`Unexpected object: ${x}`);
@@ -243,16 +241,17 @@ assertNever helper created
 >
 > **Explanation:** `assertNever` verifies that all union variants have been handled at compile time.
 
+---
+
 ### Exercise 3: Exhaustiveness Compiler Diagnostics
 
 **Problem:** What compile error occurs when passing an unhandled union member to `assertNever(x)`?
 
 **Expected output:**
-```text
-Argument of type 'T' is not assignable to parameter of type 'never'
-```
-
 > [!check]- Answer
+> ```text
+> Argument of type 'T' is not assignable to parameter of type 'never'
+> ```
 > ```typescript
 > console.log("Argument of type 'T' is not assignable to parameter of type 'never'");
 > ```

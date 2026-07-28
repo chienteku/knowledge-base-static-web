@@ -117,15 +117,14 @@ The user navigates to `/blog/2023/10/react-hooks`.
 What will `useParams()` return inside the `<BlogPost />` component?
 
 **Expected output:**
-```javascript
-{
-  year: "2023",
-  month: "10",
-  slug: "react-hooks"
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   year: "2023",
+>   month: "10",
+>   slug: "react-hooks"
+> }
+> ```
 > - Every segment with a `:` becomes a key in the object.
 
 ---
@@ -137,11 +136,10 @@ What will `useParams()` return inside the `<BlogPost />` component?
 **Problem:** Extract `userId` from route path `/users/:userId` using `useParams()` hook in React Router.
 
 **Expected output:**
-```text
-import { useParams } from 'react-router-dom'; function UserProfile() { const { userId } = useParams(); return <h1>User ID: {userId}</h1>; }
-```
-
 > [!check]- Answer
+> ```text
+> import { useParams } from 'react-router-dom'; function UserProfile() { const { userId } = useParams(); return <h1>User ID: {userId}</h1>; }
+> ```
 > ```javascript
 > import { useParams } from 'react-router-dom';
 >
@@ -153,16 +151,17 @@ import { useParams } from 'react-router-dom'; function UserProfile() { const { u
 >
 > **Explanation:** `useParams()` extracts key-value string parameters matched by dynamic route path segments.
 
+---
+
 ### Exercise 3: Multiple Dynamic Route Segments
 
 **Problem:** Define route path with 2 dynamic segments matching `/categories/tech/products/42`.
 
 **Expected output:**
-```text
-<Route path="/categories/:category/products/:productId" element={<Product />} />
-```
-
 > [!check]- Answer
+> ```text
+> <Route path="/categories/:category/products/:productId" element={<Product />} />
+> ```
 > ```javascript
 > <Route path="/categories/:category/products/:productId" element={<Product />} />
 > ```

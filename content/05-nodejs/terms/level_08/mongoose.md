@@ -176,16 +176,17 @@ const Product = mongoose.model('Product', ProductSchema);
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Defining Mongoose Schema and Model
 
 **Problem:** Define Mongoose schema for `User` with required string `email` and default boolean `isActive: true`.
 
 **Expected output:**
-```text
-const userSchema = new mongoose.Schema({ email: { type: String, required: true }, isActive: { type: Boolean, default: true } }); const User = mongoose.model('User', userSchema);
-```
-
 > [!check]- Answer
+> ```text
+> const userSchema = new mongoose.Schema({ email: { type: String, required: true }, isActive: { type: Boolean, default: true } }); const User = mongoose.model('User', userSchema);
+> ```
 > ```javascript
 > const userSchema = new mongoose.Schema({
 >   email: { type: String, required: true },
@@ -196,16 +197,17 @@ const userSchema = new mongoose.Schema({ email: { type: String, required: true }
 >
 > **Explanation:** Mongoose schemas define MongoDB document structures, validations, and default values.
 
+---
+
 ### Exercise 3: Populating Mongoose References
 
 **Problem:** Use Mongoose `.populate()` to load `author` reference on `Post.find()` query.
 
 **Expected output:**
-```text
-const posts = await Post.find().populate('author');
-```
-
 > [!check]- Answer
+> ```text
+> const posts = await Post.find().populate('author');
+> ```
 > ```javascript
 > const posts = await Post.find().populate('author');
 > ```

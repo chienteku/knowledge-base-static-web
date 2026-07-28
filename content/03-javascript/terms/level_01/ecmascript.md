@@ -131,11 +131,10 @@ async function processData() {
 **Problem:** Filter a list `["Array", "document", "Promise", "window", "Map"]` to include only core ECMAScript global objects.
 
 **Expected output:**
-```text
-["Array", "Promise", "Map"]
-```
-
 > [!check]- Answer
+> ```text
+> ["Array", "Promise", "Map"]
+> ```
 > ```javascript
 > const globals = ["Array", "document", "Promise", "window", "Map"];
 > const esBuiltins = globals.filter(g => typeof globalThis[g] !== "undefined" && g !== "document" && g !== "window");
@@ -144,17 +143,18 @@ async function processData() {
 >
 > **Explanation:** `Array`, `Promise`, and `Map` are defined in the ECMAScript standard, whereas `document` and `window` are host environment DOM APIs.
 
+---
+
 ### Exercise 2: ES6+ Feature Detection with `globalThis`
 
 **Problem:** Check if `globalThis.BigInt` and `globalThis.globalThis` exist in the current environment.
 
 **Expected output:**
-```text
-true
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> true
+> ```
 > ```javascript
 > console.log(typeof globalThis.BigInt === "function");
 > console.log(typeof globalThis.globalThis !== "undefined");
@@ -169,18 +169,16 @@ true
 **Problem:** State which organization standardizes ECMAScript.
 
 **Expected output:**
-```text
-TC39 / ECMA International
-```
-
 > [!check]- Answer
+> ```text
+> TC39 / ECMA International
+> ```
 > ```javascript
 > console.log("TC39 / ECMA International");
 > ```
 >
 > **Explanation:** Technical Committee 39 (TC39) standardizes ECMAScript.
 
----
 
 ---
 

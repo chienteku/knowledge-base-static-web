@@ -125,13 +125,12 @@ provide(themeKey, state);
 **Problem:** You are building a massive application. You need to share the `currentUser` object across 50 different components. Should you use Provide/Inject in the `App.vue`?
 
 **Expected output:**
-```text
-No!
-While Provide/Inject works for simple things like a UI theme or a localization language, complex global state (like user auth, shopping carts, etc.) should be managed by a dedicated State Management tool like Pinia or Vuex.
-Provide/Inject is hard to debug at scale because there are no DevTools to track exactly who is providing and injecting what.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> While Provide/Inject works for simple things like a UI theme or a localization language, complex global state (like user auth, shopping carts, etc.) should be managed by a dedicated State Management tool like Pinia or Vuex.
+> Provide/Inject is hard to debug at scale because there are no DevTools to track exactly who is providing and injecting what.
+> ```
 > - Is Provide/Inject meant to replace Redux/Pinia?
 
 ---
@@ -141,11 +140,10 @@ Provide/Inject is hard to debug at scale because there are no DevTools to track 
 **Problem:** Write `inject()` statement specifying default fallback value `'light'` if key `'theme'` is not provided by ancestors.
 
 **Expected output:**
-```javascript
-const theme = inject('theme', 'light');
-```
-
 > [!check]- Answer
+> ```javascript
+> const theme = inject('theme', 'light');
+> ```
 > - The 2nd argument of `inject()` specifies default fallback values.
 > 
 > ```javascript
@@ -159,11 +157,10 @@ const theme = inject('theme', 'light');
 **Problem:** Write TypeScript `InjectionKey<User>` declaration for a strongly-typed `userKey`.
 
 **Expected output:**
-```typescript
-import type { InjectionKey } from 'vue'; export const userKey = Symbol() as InjectionKey<User>;
-```
-
 > [!check]- Answer
+> ```typescript
+> import type { InjectionKey } from 'vue'; export const userKey = Symbol() as InjectionKey<User>;
+> ```
 > - `InjectionKey<T>` binds type definitions to Symbol keys.
 > 
 > ```typescript

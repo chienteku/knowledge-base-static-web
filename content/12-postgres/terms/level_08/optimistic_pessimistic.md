@@ -150,13 +150,12 @@ UPDATE products SET price = 100, version = version + 1 WHERE id = 1 AND version 
 3.  A user settings page to change profile avatars.
 
 **Expected output:**
-```text
-1. Optimistic Locking: Writing a blog post takes minutes. Locking the database during drafting would block other processes. If two editors write simultaneously, show a merge warning.
-2. Pessimistic Locking: Warehouse checkout is a high-conflict machine process. You must lock the shelf box immediately to prevent two robots from grabbing the same physical box.
-3. Optimistic Locking: Setting adjustments are low-conflict. Two users changing an avatar at the same millisecond is rare, so version validation at save is sufficient.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Optimistic Locking: Writing a blog post takes minutes. Locking the database during drafting would block other processes. If two editors write simultaneously, show a merge warning.
+> 2. Pessimistic Locking: Warehouse checkout is a high-conflict machine process. You must lock the shelf box immediately to prevent two robots from grabbing the same physical box.
+> 3. Optimistic Locking: Setting adjustments are low-conflict. Two users changing an avatar at the same millisecond is rare, so version validation at save is sufficient.
+> ```
 > - Identify if the task involves human editing delays.
 > - Evaluate the cost and frequency of concurrent conflicts.
 
@@ -169,11 +168,10 @@ UPDATE products SET price = 100, version = version + 1 WHERE id = 1 AND version 
 **Problem:** Write SQL statement implementing optimistic locking update on `products` checking `version = 3`.
 
 **Expected output:**
-```text
-UPDATE products SET price = 29.99, version = version + 1 WHERE id = 1 AND version = 3;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE products SET price = 29.99, version = version + 1 WHERE id = 1 AND version = 3;
+> ```
 > ```sql
 > UPDATE products
 > SET price = 29.99, version = version + 1
@@ -182,16 +180,17 @@ UPDATE products SET price = 29.99, version = version + 1 WHERE id = 1 AND versio
 >
 > **Explanation:** Optimistic locking fails safely if `version` was mutated by another concurrent request.
 
+---
+
 ### Exercise 3: Optimistic vs Pessimistic Locking Choice
 
 **Problem:** Select locking strategy: 1. Low contention web applications (Optimistic Locking); 2. High contention automated financial queue processing (Pessimistic Locking `SELECT FOR UPDATE`).
 
 **Expected output:**
-```text
-1. Optimistic Locking, 2. Pessimistic Locking
-```
-
 > [!check]- Answer
+> ```text
+> 1. Optimistic Locking, 2. Pessimistic Locking
+> ```
 > ```text
 > 1. Optimistic Locking, 2. Pessimistic Locking
 > ```

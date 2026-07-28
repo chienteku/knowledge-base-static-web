@@ -159,12 +159,11 @@ const downloadStream = bucket.openDownloadStream(fileId);
 2.  State the number of documents that will be created in the `fs.files` collection.
 
 **Expected output:**
-```text
-1. Total Chunks Documents: ceil(10,485,760 / 261,120) = ceil(40.15) = 41 documents. (40 chunks of 255KB and 1 remaining chunk of 40KB).
-2. Total Files Documents: 1 document. (The master metadata manifest index file).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Total Chunks Documents: ceil(10,485,760 / 261,120) = ceil(40.15) = 41 documents. (40 chunks of 255KB and 1 remaining chunk of 40KB).
+> 2. Total Files Documents: 1 document. (The master metadata manifest index file).
+> ```
 > - Divide the total file bytes by the default chunk size of 261,120 bytes.
 > - Round up to the nearest whole integer to account for the trailing chunk.
 
@@ -177,11 +176,10 @@ const downloadStream = bucket.openDownloadStream(fileId);
 **Problem:** Create GridFSBucket upload stream for file `video.mp4`.
 
 **Expected output:**
-```text
-const bucket = new GridFSBucket(db); fs.createReadStream('video.mp4').pipe(bucket.openUploadStream('video.mp4'));
-```
-
 > [!check]- Answer
+> ```text
+> const bucket = new GridFSBucket(db); fs.createReadStream('video.mp4').pipe(bucket.openUploadStream('video.mp4'));
+> ```
 > ```javascript
 > const { GridFSBucket } = require('mongodb');
 > const bucket = new GridFSBucket(db);
@@ -191,16 +189,17 @@ const bucket = new GridFSBucket(db); fs.createReadStream('video.mp4').pipe(bucke
 >
 > **Explanation:** `GridFSBucket` streams large binary files into 255KB chunk documents.
 
+---
+
 ### Exercise 3: GridFS Collections List
 
 **Problem:** List 2 standard collections created by GridFS (`fs.files`, `fs.chunks`).
 
 **Expected output:**
-```text
-fs.files, fs.chunks
-```
-
 > [!check]- Answer
+> ```text
+> fs.files, fs.chunks
+> ```
 > ```text
 > fs.files, fs.chunks
 > ```

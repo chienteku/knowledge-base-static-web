@@ -111,12 +111,11 @@ function log(msg: string, ...tags: string[]) {} // Correct position
 **Problem:** You have a function `function add(...nums: number[])`. You also have an array `const myNums = [1, 2, 3]`. How do you pass `myNums` into the `add` function?
 
 **Expected output:**
-```typescript
-// You use the Spread operator!
-add(...myNums);
-```
-
 > [!check]- Answer
+> ```typescript
+> // You use the Spread operator!
+> add(...myNums);
+> ```
 > - The Spread operator is the exact opposite of the Rest operator, but it uses the exact same `...` syntax!
 
 ---
@@ -128,11 +127,10 @@ add(...myNums);
 **Problem:** Define rest parameter using tuple type `...args: [name: string, age: number]`.
 
 **Expected output:**
-```text
-Tuple rest parameters verified
-```
-
 > [!check]- Answer
+> ```text
+> Tuple rest parameters verified
+> ```
 > ```typescript
 > function createUser(...args: [name: string, age: number]) {
 >   console.log(`${args[0]}, ${args[1]}`);
@@ -143,16 +141,17 @@ Tuple rest parameters verified
 >
 > **Explanation:** Rest tuple parameters enforce strong positional argument validation.
 
+---
+
 ### Exercise 3: Rest Parameters in Function Type Aliases
 
 **Problem:** Define type `type Handler = (...args: unknown[]) => void`.
 
 **Expected output:**
-```text
-Handler type created
-```
-
 > [!check]- Answer
+> ```text
+> Handler type created
+> ```
 > ```typescript
 > type Handler = (...args: unknown[]) => void;
 > const h: Handler = (a, b) => {};

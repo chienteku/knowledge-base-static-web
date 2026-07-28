@@ -127,12 +127,11 @@ function area(s: Shape) {
 **Problem:** Advanced TypeScript developers use the `never` type to create "Exhaustive Switch Statements". How does assigning a value to a `never` variable help catch bugs?
 
 **Expected output:**
-```text
-The `never` type represents an impossible state. Nothing can be assigned to `never`.
-If you have a Switch statement handling "Red" and "Blue", you put a `never` assignment in the `default` block. If someone later adds "Green" to the type, the Switch drops down to the `default` block, tries to assign "Green" to the `never` variable, and causes a Compile Error! It forces the developer to update the Switch statement.
-```
-
 > [!check]- Answer
+> ```text
+> The `never` type represents an impossible state. Nothing can be assigned to `never`.
+> If you have a Switch statement handling "Red" and "Blue", you put a `never` assignment in the `default` block. If someone later adds "Green" to the type, the Switch drops down to the `default` block, tries to assign "Green" to the `never` variable, and causes a Compile Error! It forces the developer to update the Switch statement.
+> ```
 > - Can a string be assigned to a type that represents impossibility?
 
 ---
@@ -144,11 +143,10 @@ If you have a Switch statement handling "Red" and "Blue", you put a `never` assi
 **Problem:** Implement an exhaustive switch default check assigning unhandled variants to `const _check: never = s`.
 
 **Expected output:**
-```text
-Exhaustiveness check pattern verified
-```
-
 > [!check]- Answer
+> ```text
+> Exhaustiveness check pattern verified
+> ```
 > ```typescript
 > type Direction = "North" | "South";
 > function move(d: Direction) {
@@ -163,16 +161,17 @@ Exhaustiveness check pattern verified
 >
 > **Explanation:** Assigning unhandled cases to `never` triggers compile errors if new union members are added.
 
+---
+
 ### Exercise 3: `void` Callback Return Flexibility
 
 **Problem:** State why TS permits callbacks returning numbers `() => number` to be passed to `() => void` parameters.
 
 **Expected output:**
-```text
-void parameters ignore returned callback values
-```
-
 > [!check]- Answer
+> ```text
+> void parameters ignore returned callback values
+> ```
 > ```typescript
 > console.log("void parameters ignore returned callback values");
 > ```

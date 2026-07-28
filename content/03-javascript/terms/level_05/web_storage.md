@@ -205,11 +205,10 @@ if (typeof localStorage !== "undefined") {
 **Problem:** Store `{ a: 1 }` in localStorage with `JSON.stringify` and parse back with `JSON.parse`.
 
 **Expected output:**
-```text
-1
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> ```
 > ```javascript
 > const data = { a: 1 };
 > const serialized = JSON.stringify(data);
@@ -219,16 +218,17 @@ if (typeof localStorage !== "undefined") {
 >
 > **Explanation:** `JSON.stringify` and `JSON.parse` serialize JavaScript objects for Web Storage.
 
+---
+
 ### Exercise 3: LocalStorage vs SessionStorage Scope
 
 **Problem:** State difference between `localStorage` (persists across browser restarts) and `sessionStorage` (cleared on tab close).
 
 **Expected output:**
-```text
-localStorage: Persistent, sessionStorage: Tab lifetime
-```
-
 > [!check]- Answer
+> ```text
+> localStorage: Persistent, sessionStorage: Tab lifetime
+> ```
 > ```javascript
 > console.log("localStorage: Persistent, sessionStorage: Tab lifetime");
 > ```

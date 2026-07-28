@@ -162,25 +162,23 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 **Problem:** Using only the raw `http` module, how do you send different text depending on if the user visits `/` versus `/about`?
 
 **Expected output:**
-```javascript
-const http = require('http');
-
-const server = http.createServer((req, res) => {
-  if (req.url === '/') {
-    res.end('Home Page');
-  } else if (req.url === '/about') {
-    res.end('About Page');
-  } else {
-    res.statusCode = 404;
-    res.end('Not Found');
-  }
-});
-
-server.listen(3000);
-```
-*Explanation: You have to manually write massive `if/else` statements to check the `req.url`. This is why we use Express!*
-
 > [!check]- Answer
+> ```javascript
+> const http = require('http');
+> 
+> const server = http.createServer((req, res) => {
+>   if (req.url === '/') {
+>     res.end('Home Page');
+>   } else if (req.url === '/about') {
+>     res.end('About Page');
+>   } else {
+>     res.statusCode = 404;
+>     res.end('Not Found');
+>   }
+> });
+> 
+> server.listen(3000);
+> ```
 > - You need an `if` statement checking `req.url`.
 
 ---
@@ -196,14 +194,13 @@ server.listen(3000);
 4. 5xx
 
 **Expected output:**
-```text
-1. 2xx: Success
-2. 3xx: Redirection
-3. 4xx: Client Error
-4. 5xx: Server Error
-```
-
 > [!check]- Answer
+> ```text
+> 1. 2xx: Success
+> 2. 3xx: Redirection
+> 3. 4xx: Client Error
+> 4. 5xx: Server Error
+> ```
 > ```text
 > 1. 2xx -> Success (e.g. 200 OK, 201 Created)
 > 2. 3xx -> Redirection (e.g. 301 Moved, 304 Not Modified)
@@ -213,16 +210,17 @@ server.listen(3000);
 >
 > **Explanation:** Standard HTTP status categories designate response outcome states.
 
+---
+
 ### Exercise 3: Setting HTTP Response Status & Headers
 
 **Problem:** Write native Node HTTP response lines setting status 201 Created and JSON content-type header.
 
 **Expected output:**
-```text
-res.writeHead(201, { 'Content-Type': 'application/json' });
-```
-
 > [!check]- Answer
+> ```text
+> res.writeHead(201, { 'Content-Type': 'application/json' });
+> ```
 > ```javascript
 > res.writeHead(201, { 'Content-Type': 'application/json' });
 > ```

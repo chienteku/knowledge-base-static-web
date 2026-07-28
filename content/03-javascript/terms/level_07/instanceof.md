@@ -161,11 +161,10 @@ try {
 ```
 
 **Expected output:**
-```text
-Database error caught
-```
-
 > [!check]- Answer
+> ```text
+> Database error caught
+> ```
 > - Check using `error instanceof DatabaseError`.
 
 ---
@@ -175,12 +174,11 @@ Database error caught
 **Problem:** Test `new Date() instanceof Date` and `new Date() instanceof Object`.
 
 **Expected output:**
-```text
-true
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> true
+> ```
 > ```javascript
 > const d = new Date();
 > console.log(d instanceof Date);
@@ -189,16 +187,17 @@ true
 >
 > **Explanation:** `instanceof` tests whether constructor `.prototype` properties appear anywhere along object prototype chains.
 
+---
+
 ### Exercise 3: Custom `Symbol.hasInstance` Overriding
 
 **Problem:** Override `instanceof` behavior using static `[Symbol.hasInstance](instance)`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > class EvenNumber {
 >   static [Symbol.hasInstance](instance) {

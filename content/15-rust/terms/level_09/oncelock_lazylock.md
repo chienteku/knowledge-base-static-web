@@ -180,11 +180,10 @@ static mut START_TIME: Option<Instant> = None;
 **Problem:** Define a global `static CONFIG: LazyLock<Vec<String>> = LazyLock::new(|| vec!["a".into()]);`.
 
 **Expected output:**
-```
-Lazy config: ["a"]
-```
-
 > [!check]- Answer
+> ```
+> Lazy config: ["a"]
+> ```
 > ```rust
 > use std::sync::LazyLock;
 > static CONFIG: LazyLock<Vec<String>> = LazyLock::new(|| {
@@ -197,16 +196,17 @@ Lazy config: ["a"]
 >
 > **Explanation:** `LazyLock` initializes static thread-safe data lazily upon first dereference.
 
+---
+
 ### Exercise 3: Explicit One-Time Setup with `OnceLock`
 
 **Problem:** Initialize a global `static CACHE: OnceLock<String> = OnceLock::new();` via `get_or_init`.
 
 **Expected output:**
-```
-Cache val: initialized
-```
-
 > [!check]- Answer
+> ```
+> Cache val: initialized
+> ```
 > use std::sync::OnceLock;
 > static CACHE: OnceLock<String> = OnceLock::new();
 > fn main() {

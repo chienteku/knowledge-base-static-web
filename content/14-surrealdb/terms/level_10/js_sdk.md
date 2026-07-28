@@ -205,11 +205,10 @@ What NPM command is used to install the official SurrealDB JavaScript/TypeScript
 **Problem:** Write full JS SDK startup sequence: 1. Instantiate `Surreal`, 2. Connect, 3. Select NS/DB, 4. Signin.
 
 **Expected output:**
-```text
-const db = new Surreal(); await db.connect(uri); await db.use({ ns, db }); await db.signin(creds);
-```
-
 > [!check]- Answer
+> ```text
+> const db = new Surreal(); await db.connect(uri); await db.use({ ns, db }); await db.signin(creds);
+> ```
 > ```javascript
 > const db = new Surreal();
 > await db.connect("ws://127.0.0.1:8000/rpc");
@@ -219,16 +218,17 @@ const db = new Surreal(); await db.connect(uri); await db.use({ ns, db }); await
 >
 > **Explanation:** Modern SurrealDB JS SDK workflow requires connecting, setting scope, and signing in.
 
+---
+
 ### Exercise 3: SDK Package Name
 
 **Problem:** Official npm package name for SurrealDB JavaScript SDK (`surrealdb` or `@surrealdb/surrealdb`).
 
 **Expected output:**
-```text
-surrealdb
-```
-
 > [!check]- Answer
+> ```text
+> surrealdb
+> ```
 > ```text
 > surrealdb
 > ```

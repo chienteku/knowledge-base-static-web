@@ -127,12 +127,11 @@ SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 -   `Session 1:` Runs `SELECT count FROM store WHERE id = 1;` -> returns `20`.
 
 **Expected output:**
-```text
-Non-Repeatable Read!
-Session 1 queried the exact same row (id = 1) twice inside the same transaction block, but the value changed between reads due to Session 2's committed update.
-```
-
 > [!check]- Answer
+> ```text
+> Non-Repeatable Read!
+> Session 1 queried the exact same row (id = 1) twice inside the same transaction block, but the value changed between reads due to Session 2's committed update.
+> ```
 > - The target row remains the same, but the inner value shifts.
 > - Identify if the transaction completed its commit sequence.
 
@@ -145,27 +144,27 @@ Session 1 queried the exact same row (id = 1) twice inside the same transaction 
 **Problem:** Match anomalies: 1. Dirty Read (Reads uncommitted data); 2. Non-Repeatable Read (Re-read returns modified values); 3. Phantom Read (Re-read returns newly inserted rows).
 
 **Expected output:**
-```text
-1. Dirty Read, 2. Non-Repeatable Read, 3. Phantom Read
-```
-
 > [!check]- Answer
+> ```text
+> 1. Dirty Read, 2. Non-Repeatable Read, 3. Phantom Read
+> ```
 > ```text
 > 1. Dirty Read, 2. Non-Repeatable Read, 3. Phantom Read
 > ```
 >
 > **Explanation:** Concurrency anomalies describe data inconsistencies caused by un-isolated concurrent transactions.
 
+---
+
 ### Exercise 3: Preventing Lost Updates
 
 **Problem:** Write atomic SQL statement preventing Lost Update anomaly when incrementing user `points`.
 
 **Expected output:**
-```text
-UPDATE users SET points = points + 10 WHERE id = 1;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE users SET points = points + 10 WHERE id = 1;
+> ```
 > ```sql
 > UPDATE users SET points = points + 10 WHERE id = 1;
 > ```

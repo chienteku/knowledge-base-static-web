@@ -220,11 +220,10 @@ fn main() {
 **Problem:** Define `trait Greet { fn name(&self) -> &str; fn hello(&self) { println!("Hello {}", self.name()); } }`.
 
 **Expected output:**
-```
-Hello Alice
-```
-
 > [!check]- Answer
+> ```
+> Hello Alice
+> ```
 > ```rust
 > trait Greet {
 >     fn name(&self) -> &str;
@@ -242,16 +241,17 @@ Hello Alice
 >
 > **Explanation:** Trait default methods provide fallback behavior built on required abstract method calls.
 
+---
+
 ### Exercise 3: Supertraits Dependency Contract
 
 **Problem:** Define `trait Person: std::fmt::Display` requiring implementors to implement `Display` first.
 
 **Expected output:**
-```
-Person displayed: Bob
-```
-
 > [!check]- Answer
+> ```
+> Person displayed: Bob
+> ```
 > use std::fmt;
 > trait Person: fmt::Display {}
 > struct Man(&'static str);

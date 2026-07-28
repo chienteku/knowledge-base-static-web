@@ -147,16 +147,15 @@ Store timezone string in separate field: { date: new Date(), tz: "Asia/Taipei" }
 **Problem:** You have a `transactions` collection. Write the query to select all transactions created between Jan 1, 2026 (inclusive) and Jan 2, 2026 (exclusive).
 
 **Expected output:**
-```javascript
-db.transactions.find({
-  created_at: {
-    $gte: new Date("2026-01-01T00:00:00Z"),
-    $lt: new Date("2026-01-02T00:00:00Z")
-  }
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> db.transactions.find({
+>   created_at: {
+>     $gte: new Date("2026-01-01T00:00:00Z"),
+>     $lt: new Date("2026-01-02T00:00:00Z")
+>   }
+> });
+> ```
 > - Combine the greater-than-or-equal `$gte` and less-than `$lt` operators in a single filter sub-document.
 > - Instantiate two date constructors wrapping ISO strings.
 
@@ -169,27 +168,27 @@ db.transactions.find({
 **Problem:** Query logs created after `2026-01-01T00:00:00Z` using `ISODate()` or `new Date()`.
 
 **Expected output:**
-```text
-db.logs.find({ createdAt: { $gte: ISODate("2026-01-01T00:00:00Z") } });
-```
-
 > [!check]- Answer
+> ```text
+> db.logs.find({ createdAt: { $gte: ISODate("2026-01-01T00:00:00Z") } });
+> ```
 > ```javascript
 > db.logs.find({ createdAt: { $gte: ISODate("2026-01-01T00:00:00Z") } });
 > ```
 >
 > **Explanation:** `ISODate()` constructs BSON Date objects from ISO 8601 strings in mongosh.
 
+---
+
 ### Exercise 3: Current Timestamp Date Insertion
 
 **Problem:** Insert user document with `createdAt` field set to current date timestamp (`new Date()`).
 
 **Expected output:**
-```text
-db.users.insertOne({ name: "Alice", createdAt: new Date() });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.insertOne({ name: "Alice", createdAt: new Date() });
+> ```
 > ```javascript
 > db.users.insertOne({ name: "Alice", createdAt: new Date() });
 > ```

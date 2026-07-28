@@ -119,14 +119,13 @@ user = "Alice";
 ```
 
 **Expected output:**
-```text
-No! It will completely break the reactivity.
-By reassigning the `user` variable to a raw string ("Alice"), you have destroyed the reactive Object wrapper! 
-You must write: `user.value = "Alice"`. 
-(This is why you should always declare refs with `const`, not `let`).
-```
-
 > [!check]- Answer
+> ```text
+> No! It will completely break the reactivity.
+> By reassigning the `user` variable to a raw string ("Alice"), you have destroyed the reactive Object wrapper! 
+> You must write: `user.value = "Alice"`. 
+> (This is why you should always declare refs with `const`, not `let`).
+> ```
 > - `user` is the tracking object. You should never overwrite the tracking object itself.
 
 ---
@@ -136,11 +135,10 @@ You must write: `user.value = "Alice"`.
 **Problem:** Write JS snippet initializing `ref` array `todos` with `['Task 1']`, and a function `addTodo(task)` pushing to `todos`.
 
 **Expected output:**
-```javascript
-const todos = ref(['Task 1']); function addTodo(task) { todos.value.push(task); }
-```
-
 > [!check]- Answer
+> ```javascript
+> const todos = ref(['Task 1']); function addTodo(task) { todos.value.push(task); }
+> ```
 > - `ref()` wraps arrays and primitives.
 > - Mutate `.value` inside JavaScript.
 > 
@@ -158,11 +156,10 @@ const todos = ref(['Task 1']); function addTodo(task) { todos.value.push(task); 
 **Problem:** Can you replace an entire array wrapped in a `ref` by assigning `todos.value = newArray`?
 
 **Expected output:**
-```text
-Yes. Unlike reactive(), refs support complete object/array reassignment via .value while preserving reactivity.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Unlike reactive(), refs support complete object/array reassignment via .value while preserving reactivity.
+> ```
 > - Reassigning `.value` maintains reactivity tracking.
 > 
 > ```javascript

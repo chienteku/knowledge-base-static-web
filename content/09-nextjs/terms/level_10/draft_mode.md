@@ -170,11 +170,10 @@ export async function GET() {
 **Problem:** Write App Router Route Handler `app/api/draft/route.ts` checking secret and calling `draftMode().enable()`.
 
 **Expected output:**
-```typescript
-import { draftMode } from 'next/headers'; import { redirect } from 'next/navigation'; export async function GET(request: Request) { draftMode().enable(); redirect('/posts/slug'); }
-```
-
 > [!check]- Answer
+> ```typescript
+> import { draftMode } from 'next/headers'; import { redirect } from 'next/navigation'; export async function GET(request: Request) { draftMode().enable(); redirect('/posts/slug'); }
+> ```
 > - `draftMode().enable()` sets a cookie bypassing static page cache.
 > 
 > ```typescript
@@ -202,11 +201,10 @@ import { draftMode } from 'next/headers'; import { redirect } from 'next/navigat
 **Problem:** Write line in Server Component checking if Draft Mode is currently enabled.
 
 **Expected output:**
-```typescript
-import { draftMode } from 'next/headers'; const { isEnabled } = draftMode();
-```
-
 > [!check]- Answer
+> ```typescript
+> import { draftMode } from 'next/headers'; const { isEnabled } = draftMode();
+> ```
 > - `draftMode().isEnabled` indicates active draft mode status.
 > 
 > ```typescript

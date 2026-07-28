@@ -118,12 +118,11 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
 **Problem:** You have `app/error.tsx` and `app/dashboard/error.tsx`. An error is thrown inside `app/dashboard/settings/page.tsx`. Which error boundary catches it?
 
 **Expected output:**
-```text
-`app/dashboard/error.tsx` catches it.
-Errors "bubble up" to the closest parent Error Boundary. If you don't have one in `/settings`, it bubbles up to `/dashboard`. If you don't have one there, it bubbles up to the root `/error.tsx`.
-```
-
 > [!check]- Answer
+> ```text
+> `app/dashboard/error.tsx` catches it.
+> Errors "bubble up" to the closest parent Error Boundary. If you don't have one in `/settings`, it bubbles up to `/dashboard`. If you don't have one there, it bubbles up to the root `/error.tsx`.
+> ```
 > - Think about nested safety nets.
 
 ---
@@ -133,11 +132,10 @@ Errors "bubble up" to the closest parent Error Boundary. If you don't have one i
 **Problem:** Write `error.tsx` Client Component rendering error message and a retry `<button>` invoking `reset()`.
 
 **Expected output:**
-```tsx
-'use client'; export default function Error({ error, reset }: { error: Error; reset: () => void }) { return ( <div> <h2>{error.message}</h2> <button onClick={() => reset()}>Try Again</button> </div> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; export default function Error({ error, reset }: { error: Error; reset: () => void }) { return ( <div> <h2>{error.message}</h2> <button onClick={() => reset()}>Try Again</button> </div> ); }
+> ```
 > - `error.tsx` receives `error` object and `reset()` function prop.
 > 
 > ```tsx
@@ -167,11 +165,10 @@ Errors "bubble up" to the closest parent Error Boundary. If you don't have one i
 **Problem:** Which special error boundary file catches errors thrown inside the root `app/layout.tsx`?
 
 **Expected output:**
-```text
-app/global-error.tsx (Must render its own <html> and <body> tags)
-```
-
 > [!check]- Answer
+> ```text
+> app/global-error.tsx (Must render its own <html> and <body> tags)
+> ```
 > - `global-error.tsx` catches errors from root layout.
 > 
 > ```tsx

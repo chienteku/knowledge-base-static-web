@@ -200,12 +200,11 @@ module.exports = {
 **Problem:** What is the difference between standard Streaming (Level 5) and PPR? They both use `<Suspense>`.
 
 **Expected output:**
-```text
-Standard Streaming (SSR): The server still receives the request, waits for the Node process to boot, renders the static parts dynamically, and sends them. It just doesn't wait for the slow data.
-PPR: The static parts are pre-rendered at BUILD TIME into an actual HTML file stored on a CDN. The CDN instantly serves the shell without the Node server doing any work. The Node server ONLY boots up to fill in the Suspense holes.
-```
-
 > [!check]- Answer
+> ```text
+> Standard Streaming (SSR): The server still receives the request, waits for the Node process to boot, renders the static parts dynamically, and sends them. It just doesn't wait for the slow data.
+> PPR: The static parts are pre-rendered at BUILD TIME into an actual HTML file stored on a CDN. The CDN instantly serves the shell without the Node server doing any work. The Node server ONLY boots up to fill in the Suspense holes.
+> ```
 > - Think about where the initial HTML comes from (CDN vs Node.js).
 
 ---
@@ -215,11 +214,10 @@ PPR: The static parts are pre-rendered at BUILD TIME into an actual HTML file st
 **Problem:** Describe how Partial Prerendering (PPR) combines SSG and SSR into a single page HTTP response.
 
 **Expected output:**
-```text
-PPR pre-renders the static HTML shell at build time (SSG), serving it instantly, while streaming dynamic Suspense holes from the server in parallel (SSR).
-```
-
 > [!check]- Answer
+> ```text
+> PPR pre-renders the static HTML shell at build time (SSG), serving it instantly, while streaming dynamic Suspense holes from the server in parallel (SSR).
+> ```
 > - PPR combines instant static HTML shell + dynamic Suspense streaming.
 > 
 > ```text
@@ -233,11 +231,10 @@ PPR pre-renders the static HTML shell at build time (SSG), serving it instantly,
 **Problem:** Write `next.config.js` snippet enabling incremental PPR support.
 
 **Expected output:**
-```javascript
-module.exports = { experimental: { ppr: 'incremental' } };
-```
-
 > [!check]- Answer
+> ```javascript
+> module.exports = { experimental: { ppr: 'incremental' } };
+> ```
 > - `experimental.ppr = 'incremental'` enables route-level PPR opt-in.
 > 
 > ```javascript

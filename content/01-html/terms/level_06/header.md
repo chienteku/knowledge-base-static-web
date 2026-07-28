@@ -160,11 +160,10 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 **Problem:** Is it valid HTML5 to have more than one `<header>` element on a single webpage?
 
 **Expected output:**
-```text
-Yes! While you typically have one main `<header>` for the whole page (the top nav bar), you can also have a `<header>` inside every single `<article>` or `<section>` to contain their specific titles and introductory text.
-```
-
 > [!check]- Answer
+> ```text
+> Yes! While you typically have one main `<header>` for the whole page (the top nav bar), you can also have a `<header>` inside every single `<article>` or `<section>` to contain their specific titles and introductory text.
+> ```
 > - Look closely at the "Fuller Example" code snippet above.
 
 ---
@@ -176,11 +175,10 @@ Yes! While you typically have one main `<header>` for the whole page (the top na
 **Problem:** Write document `<header>` containing logo `<img>`, `<h1>` site title, and `<nav>` navigation links.
 
 **Expected output:**
-```text
-<header><img src="logo.png" alt="Logo"><h1>Acme Inc</h1><nav><a href="/">Home</a></nav></header>
-```
-
 > [!check]- Answer
+> ```text
+> <header><img src="logo.png" alt="Logo"><h1>Acme Inc</h1><nav><a href="/">Home</a></nav></header>
+> ```
 > ```html
 > <header>
 >   <img src="logo.png" alt="Logo">
@@ -193,16 +191,17 @@ Yes! While you typically have one main `<header>` for the whole page (the top na
 >
 > **Explanation:** `<header>` groups introductory branding, headings, and site navigation.
 
+---
+
 ### Exercise 3: Header Landmark Role
 
 **Problem:** Which implicit ARIA landmark role does a top-level `<header>` element convey?
 
 **Expected output:**
-```text
-banner landmark role.
-```
-
 > [!check]- Answer
+> ```text
+> banner landmark role.
+> ```
 > ```text
 > banner landmark role.
 > ```

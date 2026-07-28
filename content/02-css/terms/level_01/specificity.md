@@ -145,11 +145,10 @@ p { color: black; }
 ```
 
 **Expected output:**
-```text
-Rule B wins! The text will be red. Rule B uses a Class selector (10 points), while Rule A only uses an Element selector (1 point).
-```
-
 > [!check]- Answer
+> ```text
+> Rule B wins! The text will be red. Rule B uses a Class selector (10 points), while Rule A only uses an Element selector (1 point).
+> ```
 > - Review the poker metaphor. Is a class or an element worth more?
 
 ---
@@ -165,14 +164,13 @@ Rule B wins! The text will be red. Rule B uses a Class selector (10 points), whi
 4. `style="color: red;"` 
 
 **Expected output:**
-```text
-1. (0, 0, 0, 1)
-2. (0, 0, 1, 1)
-3. (0, 1, 1, 1)
-4. (1, 0, 0, 0)
-```
-
 > [!check]- Answer
+> ```text
+> 1. (0, 0, 0, 1)
+> 2. (0, 0, 1, 1)
+> 3. (0, 1, 1, 1)
+> 4. (1, 0, 0, 0)
+> ```
 > ```text
 > 1. p -> (0, 0, 0, 1)
 > 2. .card p -> (0, 0, 1, 1)
@@ -182,16 +180,17 @@ Rule B wins! The text will be red. Rule B uses a Class selector (10 points), whi
 >
 > **Explanation:** Specificity tuple values compare Inline > ID > Class > Type.
 
+---
+
 ### Exercise 3: :is() vs :where() Specificity Difference
 
 **Problem:** What is the difference in specificity calculation between pseudo-classes `:is(.a, #b)` and `:where(.a, #b)`?
 
 **Expected output:**
-```text
-:is() takes the specificity of its highest argument (#b = 1-0-0); :where() ALWAYS has 0 specificity (0-0-0).
-```
-
 > [!check]- Answer
+> ```text
+> :is() takes the specificity of its highest argument (#b = 1-0-0); :where() ALWAYS has 0 specificity (0-0-0).
+> ```
 > ```text
 > :is() takes the specificity of its highest argument (#b = 1-0-0); :where() ALWAYS has 0 specificity (0-0-0).
 > ```

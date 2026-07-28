@@ -145,12 +145,11 @@ SELECT first_name || ' ' || last_name AS full_name FROM users;
 **Problem:** You have a table `articles` with columns `id`, `title`, `body_text`, `author_id`, and `published_at`. Write a SQL query to retrieve the `title` and `published_at` columns of all articles. Rename the `published_at` column to `date_posted` in the output.
 
 **Expected output:**
-```sql
-SELECT title, published_at AS date_posted 
-FROM articles;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT title, published_at AS date_posted 
+> FROM articles;
+> ```
 > - Start the statement with `SELECT`.
 > - Apply the renaming alias keyword `AS`.
 
@@ -163,27 +162,27 @@ FROM articles;
 **Problem:** Select `id`, `name`, and computed column `price * 1.1` as `taxed_price` from `products`.
 
 **Expected output:**
-```text
-SELECT id, name, price * 1.1 AS taxed_price FROM products;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT id, name, price * 1.1 AS taxed_price FROM products;
+> ```
 > ```sql
 > SELECT id, name, price * 1.1 AS taxed_price FROM products;
 > ```
 >
 > **Explanation:** Column aliases (`AS name`) provide clean field identifiers for calculated expressions.
 
+---
+
 ### Exercise 3: Evaluating Expressions Without Tables
 
 **Problem:** Execute SQL statement evaluating mathematical expression `2 * 3` (`SELECT 2 * 3;`).
 
 **Expected output:**
-```text
-SELECT 2 * 3;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT 2 * 3;
+> ```
 > ```sql
 > SELECT 2 * 3;
 > ```

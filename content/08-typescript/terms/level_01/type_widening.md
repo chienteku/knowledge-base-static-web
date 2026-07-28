@@ -163,14 +163,13 @@ const z = { greeting: 'Hello' };
 ```
 
 **Expected output:**
-```text
-Inferred Types:
-- x: "Hello" (Literal type)
-- y: string (Widened primitive)
-- z: { greeting: string } (Object property widened)
-```
-
 > [!check]- Answer
+> ```text
+> Inferred Types:
+> - x: "Hello" (Literal type)
+> - y: string (Widened primitive)
+> - z: { greeting: string } (Object property widened)
+> ```
 > - `x` is a constant string, so its value cannot change.
 > - `y` is a variable string, meaning it can change.
 > - The property of `z` can be reassigned (e.g. `z.greeting = 'Hi'`), even though `z` is a constant reference.
@@ -184,11 +183,10 @@ Inferred Types:
 **Problem:** Prevent type widening on array `const colors = ["red", "green"] as const`.
 
 **Expected output:**
-```text
-readonly ["red", "green"]
-```
-
 > [!check]- Answer
+> ```text
+> readonly ["red", "green"]
+> ```
 > ```typescript
 > const colors = ["red", "green"] as const;
 > console.log("readonly [\"red\", \"green\"]");
@@ -196,16 +194,17 @@ readonly ["red", "green"]
 >
 > **Explanation:** `as const` creates immutable literal tuple/object types.
 
+---
+
 ### Exercise 3: Const vs Let Widening Behavior
 
 **Problem:** State inferred types for `const x = 10` vs `let y = 10`.
 
 **Expected output:**
-```text
-x: 10 (literal), y: number (widened)
-```
-
 > [!check]- Answer
+> ```text
+> x: 10 (literal), y: number (widened)
+> ```
 > ```typescript
 > console.log("x: 10 (literal), y: number (widened)");
 > ```

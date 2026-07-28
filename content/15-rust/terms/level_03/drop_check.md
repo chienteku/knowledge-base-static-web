@@ -180,12 +180,11 @@ fn broken() {
 **Problem:** Demonstrate that variables declared in local scopes are dropped in reverse order of declaration.
 
 **Expected output:**
-```
-Dropping B
-Dropping A
-```
-
 > [!check]- Answer
+> ```
+> Dropping B
+> Dropping A
+> ```
 > ```rust
 > struct CustomDrop(&'static str);
 > impl Drop for CustomDrop {
@@ -201,17 +200,18 @@ Dropping A
 >
 > **Explanation:** Local variables in Rust are dropped in strict LIFO (last-in, first-out) order.
 
+---
+
 ### Exercise 3: Explicit Early Drops with `std::mem::drop`
 
 **Problem:** Use `drop(resource)` to release a resource before a long-running computation.
 
 **Expected output:**
-```
-Resource dropped
-Computation done
-```
-
 > [!check]- Answer
+> ```
+> Resource dropped
+> Computation done
+> ```
 > ```rust
 > struct Guard;
 > impl Drop for Guard { fn drop(&mut self) { println!("Resource dropped"); } }

@@ -147,11 +147,10 @@ Write the SurrealQL query to:
 3.  Add an additional filter where the `price` is less than `100.00dec`.
 
 **Expected output:**
-```sql
-SELECT * FROM products WHERE status = "instock" AND price < 100.00dec;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT * FROM products WHERE status = "instock" AND price < 100.00dec;
+> ```
 > - The table target is `products`.
 > - Use the `AND` keyword to connect both checks.
 
@@ -164,27 +163,27 @@ SELECT * FROM products WHERE status = "instock" AND price < 100.00dec;
 **Problem:** Query users with `age` between 18 and 65 inclusive using `WHERE` clause.
 
 **Expected output:**
-```text
-SELECT * FROM user WHERE age >= 18 AND age <= 65;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM user WHERE age >= 18 AND age <= 65;
+> ```
 > ```surrealql
 > SELECT * FROM user WHERE age >= 18 AND age <= 65;
 > ```
 >
 > **Explanation:** `WHERE cond1 AND cond2` filters records by numeric range predicates.
 
+---
+
 ### Exercise 3: Checking Record Link Existence in WHERE
 
 **Problem:** Query articles where `author` record link is not `NONE`.
 
 **Expected output:**
-```text
-SELECT * FROM article WHERE author IS NOT NONE;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM article WHERE author IS NOT NONE;
+> ```
 > ```surrealql
 > SELECT * FROM article WHERE author IS NOT NONE;
 > ```

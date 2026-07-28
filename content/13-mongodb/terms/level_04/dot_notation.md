@@ -149,11 +149,10 @@ Write the query path string (wrapped in quotes) using dot notation to target:
 1.  The `role` field of the **second** employee in the array (hint: arrays are zero-indexed, so the second index is `1`).
 
 **Expected output:**
-```javascript
-"employees.1.role"
-```
-
 > [!check]- Answer
+> ```javascript
+> "employees.1.role"
+> ```
 > - The array index acts as a key in the path traversal.
 > - Separate the collection key, index number, and field key with dots.
 
@@ -166,27 +165,27 @@ Write the query path string (wrapped in quotes) using dot notation to target:
 **Problem:** Query users where nested `contact.phone.mobile` equals `"555-1234"`.
 
 **Expected output:**
-```text
-db.users.find({ "contact.phone.mobile": "555-1234" });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ "contact.phone.mobile": "555-1234" });
+> ```
 > ```javascript
 > db.users.find({ "contact.phone.mobile": "555-1234" });
 > ```
 >
 > **Explanation:** Dot-notation in quotes `"a.b.c"` traverses deeply nested sub-documents.
 
+---
+
 ### Exercise 3: Positional Array Dot-Notation Query
 
 **Problem:** Query posts where 2nd comment author `"comments.1.author"` equals `"alice"`.
 
 **Expected output:**
-```text
-db.posts.find({ "comments.1.author": "alice" });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ "comments.1.author": "alice" });
+> ```
 > ```javascript
 > db.posts.find({ "comments.1.author": "alice" });
 > ```

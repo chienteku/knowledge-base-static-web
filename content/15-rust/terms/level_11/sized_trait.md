@@ -185,11 +185,10 @@ thread::spawn(move || {
 **Problem:** Write a generic function `fn print_ref<T: ?Sized + std::fmt::Display>(val: &T)` accepting `str` slices.
 
 **Expected output:**
-```
-Printed DST: hello
-```
-
 > [!check]- Answer
+> ```
+> Printed DST: hello
+> ```
 > ```rust
 > fn print_ref<T: ?Sized + std::fmt::Display>(val: &T) {
 >     println!("Printed DST: {}", val);
@@ -202,16 +201,17 @@ Printed DST: hello
 >
 > **Explanation:** `?Sized` opts out of implicit compile-time size requirements.
 
+---
+
 ### Exercise 3: Checking Memory Sizes with `std::mem::size_of`
 
 **Problem:** Print `size_of::<i32>()` and explain why `Sized` types have compile-time known memory layout sizes.
 
 **Expected output:**
-```
-Size of i32: 4 bytes
-```
-
 > [!check]- Answer
+> ```
+> Size of i32: 4 bytes
+> ```
 > use std::mem::size_of;
 > fn main() {
 >     println!("Size of i32: {} bytes", size_of::<i32>());

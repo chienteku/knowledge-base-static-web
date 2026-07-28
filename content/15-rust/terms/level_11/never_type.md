@@ -177,11 +177,10 @@ thread::spawn(move || {
 **Problem:** Demonstrate using `continue` inside match arms where arms coerce into generic type `T` due to never type `!` divergence.
 
 **Expected output:**
-```
-Parsed num: 42
-```
-
 > [!check]- Answer
+> ```
+> Parsed num: 42
+> ```
 > ```rust
 > fn main() {
 >     let input = "42";
@@ -195,16 +194,17 @@ Parsed num: 42
 >
 > **Explanation:** The never type `!` coercible into any type allows `break`, `continue`, `return`, and `panic!` in match expressions.
 
+---
+
 ### Exercise 3: Diverging Function Signatures
 
 **Problem:** Write a diverging function `fn fatal_error(msg: &str) -> !` executing `panic!()`.
 
 **Expected output:**
-```
-Diverging function compiled
-```
-
 > [!check]- Answer
+> ```
+> Diverging function compiled
+> ```
 > fn fatal_error(msg: &str) -> ! { panic!("{}", msg); }
 > fn main() {
 >     println!("Diverging function compiled");

@@ -221,13 +221,12 @@ export const dynamic = 'force-static'; // Ensure static pre-rendering
 **Problem:** You have a `console.log("Fetching users")` inside an SSG `page.tsx` component. You deploy the app. 1,000 users visit the page. How many times will that log appear in your production server logs?
 
 **Expected output:**
-```text
-Zero!
-The component executed, and the `console.log` fired exactly ONCE during the build process (`npm run build`) on your CI/CD pipeline. 
-When the 1,000 users visit, they are just receiving static HTML. The React component itself does not execute on the production server.
-```
-
 > [!check]- Answer
+> ```text
+> Zero!
+> The component executed, and the `console.log` fired exactly ONCE during the build process (`npm run build`) on your CI/CD pipeline. 
+> When the 1,000 users visit, they are just receiving static HTML. The React component itself does not execute on the production server.
+> ```
 > - Think about when and where the HTML is generated.
 
 ---
@@ -237,11 +236,10 @@ When the 1,000 users visit, they are just receiving static HTML. The React compo
 **Problem:** Which build output symbol in `npm run build` console logs indicates that a route segment was compiled as a static SSG route?
 
 **Expected output:**
-```text
-○ (Static) or ● (SSG / Prerendered)
-```
-
 > [!check]- Answer
+> ```text
+> ○ (Static) or ● (SSG / Prerendered)
+> ```
 > - `○ (Static)` indicates static SSG pre-rendered HTML.
 > - `ƒ (Dynamic)` indicates dynamic request-time SSR.
 > 
@@ -256,12 +254,11 @@ When the 1,000 users visit, they are just receiving static HTML. The React compo
 **Problem:** State 2 major technical advantages of Static Site Generation (SSG).
 
 **Expected output:**
-```text
-1. Ultrafast global CDN caching and response speeds (TTFB)
-2. High server cost efficiency (Zero Node.js server computation per request)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Ultrafast global CDN caching and response speeds (TTFB)
+> 2. High server cost efficiency (Zero Node.js server computation per request)
+> ```
 > - Instant global CDN delivery.
 > - Zero server compute cost per request.
 > 

@@ -173,11 +173,10 @@ The compiler throws an error: `no method named 'par_iter' found for struct 'Vec'
 **Problem:** Demonstrate converting a vector iteration into parallel iteration using `.par_iter()` concept.
 
 **Expected output:**
-```
-Parallel sum completed
-```
-
 > [!check]- Answer
+> ```
+> Parallel sum completed
+> ```
 > ```rust
 > fn main() {
 >     let nums: Vec<i64> = (1..=1000).collect();
@@ -188,16 +187,17 @@ Parallel sum completed
 >
 > **Explanation:** Rayon's `.par_iter()` splits work across global thread pool workers automatically.
 
+---
+
 ### Exercise 3: Parallel Sorting
 
 **Problem:** Demonstrate parallel vector sorting concept.
 
 **Expected output:**
-```
-Parallel sort completed
-```
-
 > [!check]- Answer
+> ```
+> Parallel sort completed
+> ```
 > fn main() {
 >     let mut data = vec![5, 3, 1, 4, 2];
 >     data.sort(); // Conceptual par_sort

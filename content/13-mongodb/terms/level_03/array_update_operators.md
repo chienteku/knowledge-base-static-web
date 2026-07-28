@@ -195,14 +195,13 @@ Write the MongoDB query to update a single user where the `username` is `"design
 1.  Add the string `"purple"` and `"yellow"` to the `favorite_colors` array, ensuring no duplicates are created.
 
 **Expected output:**
-```javascript
-db.users.updateOne(
-  { username: "designer_1" },
-  { $addToSet: { favorite_colors: { $each: ["purple", "yellow"] } } }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.users.updateOne(
+>   { username: "designer_1" },
+>   { $addToSet: { favorite_colors: { $each: ["purple", "yellow"] } } }
+> );
+> ```
 > - Choose the unique insert operator `$addToSet`.
 > - Combine it with the `$each` modifier to process multiple items in the list parameter.
 
@@ -215,11 +214,10 @@ db.users.updateOne(
 **Problem:** Add `"admin"` to `roles` array of `user:1` ensuring no duplicate role is added.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $addToSet: { roles: "admin" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $addToSet: { roles: "admin" } });
+> ```
 > ```javascript
 > db.users.updateOne({
 >   _id: 1
@@ -230,16 +228,17 @@ db.users.updateOne({ _id: 1 }, { $addToSet: { roles: "admin" } });
 >
 > **Explanation:** `$addToSet` appends elements to array fields only if they do not already exist.
 
+---
+
 ### Exercise 3: Removing Array Items with `$pull`
 
 **Problem:** Remove tag `"deprecated"` from `tags` array across all documents.
 
 **Expected output:**
-```text
-db.posts.updateMany({}, { $pull: { tags: "deprecated" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.updateMany({}, { $pull: { tags: "deprecated" } });
+> ```
 > ```javascript
 > db.posts.updateMany({}, {
 >   $pull: { tags: "deprecated" }

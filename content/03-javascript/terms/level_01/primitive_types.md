@@ -146,15 +146,14 @@ async function processData() {
 **Problem:** Create five variables, assigning one of each of the five most common primitive types (String, Number, Boolean, Undefined, Null) to them. Use the `typeof` operator to log the type of each variable.
 
 **Expected output:**
-```text
-string
-number
-boolean
-undefined
-object (Note: typeof null is an infamous historical bug!)
-```
-
 > [!check]- Answer
+> ```text
+> string
+> number
+> boolean
+> undefined
+> object (Note: typeof null is an infamous historical bug!)
+> ```
 > - `undefined` is the default value for an uninitialized variable.
 > - To use `typeof`, simply type `typeof variableName`.
 
@@ -165,11 +164,10 @@ object (Note: typeof null is an infamous historical bug!)
 **Problem:** List all 7 primitive types in JavaScript and test their `typeof` outputs.
 
 **Expected output:**
-```text
-string, number, boolean, undefined, object, symbol, bigint
-```
-
 > [!check]- Answer
+> ```text
+> string, number, boolean, undefined, object, symbol, bigint
+> ```
 > ```javascript
 > console.log(typeof "text");
 > console.log(typeof 42);
@@ -182,16 +180,17 @@ string, number, boolean, undefined, object, symbol, bigint
 >
 > **Explanation:** JavaScript contains 7 primitive types: string, number, boolean, undefined, null, symbol, and bigint.
 
+---
+
 ### Exercise 3: Primitive Copy-by-Value Behavior
 
 **Problem:** Demonstrate that assigning `let b = a` for primitives copies the value, leaving `a` unaffected when `b` changes.
 
 **Expected output:**
-```text
-a: 10, b: 20
-```
-
 > [!check]- Answer
+> ```text
+> a: 10, b: 20
+> ```
 > ```javascript
 > let a = 10;
 > let b = a;
@@ -201,7 +200,6 @@ a: 10, b: 20
 >
 > **Explanation:** Primitive values are passed and assigned by value, creating independent copies.
 
----
 
 ---
 

@@ -169,11 +169,10 @@ What two pieces of feedback should you give them?
 **Problem:** Command line instruction to update only the `serde` package in `Cargo.lock`.
 
 **Expected output:**
-```
-cargo update -p serde
-```
-
 > [!check]- Answer
+> ```
+> cargo update -p serde
+> ```
 > ```rust
 > fn main() {
 >     println!("cargo update -p serde");
@@ -182,16 +181,17 @@ cargo update -p serde
 >
 > **Explanation:** `cargo update -p <pkg>` updates specified dependency entries in `Cargo.lock` to latest semver-compatible versions.
 
+---
+
 ### Exercise 3: Library vs Binary Lockfile Commit Practices
 
 **Problem:** State whether `Cargo.lock` should be committed for libraries vs binaries.
 
 **Expected output:**
-```
-Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.
-```
-
 > [!check]- Answer
+> ```
+> Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.
+> ```
 > fn main() {
 >     println!("Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.");
 > }

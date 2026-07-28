@@ -177,11 +177,10 @@ thread::spawn(move || {
 **Problem:** Annotate a test function with `#[should_panic(expected = "out of bounds")]`.
 
 **Expected output:**
-```
-Expected panic test configured
-```
-
 > [!check]- Answer
+> ```
+> Expected panic test configured
+> ```
 > ```rust
 > #[test]
 > #[should_panic(expected = "out of bounds")]
@@ -195,16 +194,17 @@ Expected panic test configured
 >
 > **Explanation:** `expected` verifies that panic messages contain the target substring.
 
+---
+
 ### Exercise 3: Testing Division by Zero Panics
 
 **Problem:** Test integer division by zero using `#[should_panic]`.
 
 **Expected output:**
-```
-Div zero panic test verified
-```
-
 > [!check]- Answer
+> ```
+> Div zero panic test verified
+> ```
 > fn main() {
 >     println!("Div zero panic test verified");
 > }

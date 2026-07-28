@@ -179,11 +179,10 @@ export default function SettingsPage() {
 **Problem:** Write async Server Component reading cookie `'session'` using `cookies()` and displaying user status.
 
 **Expected output:**
-```tsx
-import { cookies } from 'next/headers'; export default async function Page() { const cookieStore = cookies(); const session = cookieStore.get('session')?.value; return <div>Session: {session ?? 'Guest'}</div>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> import { cookies } from 'next/headers'; export default async function Page() { const cookieStore = cookies(); const session = cookieStore.get('session')?.value; return <div>Session: {session ?? 'Guest'}</div>; }
+> ```
 > - `cookies()` from `next/headers` accesses incoming request cookies.
 > 
 > ```tsx
@@ -204,11 +203,10 @@ import { cookies } from 'next/headers'; export default async function Page() { c
 **Problem:** What effect does calling `cookies()` or `headers()` have on a static route segment?
 
 **Expected output:**
-```text
-It automatically opts the route segment out of static caching, switching rendering to dynamic request-time SSR.
-```
-
 > [!check]- Answer
+> ```text
+> It automatically opts the route segment out of static caching, switching rendering to dynamic request-time SSR.
+> ```
 > - `cookies()` and `headers()` trigger dynamic SSR rendering.
 > 
 > ```text

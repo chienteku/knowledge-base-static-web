@@ -249,11 +249,10 @@ export default {
 ```
 
 **Expected output:**
-```text
-The script block rewritten in under 15 lines of clean, modern <script setup> code, omitting any 'return' or 'export default' blocks.
-```
-
 > [!check]- Answer
+> ```text
+> The script block rewritten in under 15 lines of clean, modern <script setup> code, omitting any 'return' or 'export default' blocks.
+> ```
 > - Start your script block with `<script setup>`.
 > - Replace `props` declaration with `const props = defineProps(...)`.
 > - Replace `emit` extraction with `const emit = defineEmits(...)`.
@@ -266,11 +265,10 @@ The script block rewritten in under 15 lines of clean, modern <script setup> cod
 **Problem:** Write child component `<script setup>` exposing method `resetForm()` to parent template refs using `defineExpose()`.
 
 **Expected output:**
-```vue
-<script setup> function resetForm() { /* reset */ } defineExpose({ resetForm }); </script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> function resetForm() { /* reset */ } defineExpose({ resetForm }); </script>
+> ```
 > - `<script setup>` components are closed by default.
 > - `defineExpose()` exposes public instance methods.
 > 
@@ -291,11 +289,10 @@ The script block rewritten in under 15 lines of clean, modern <script setup> cod
 **Problem:** Which compiler macro allows declaring Options API options (like `name` or `inheritAttrs`) directly inside `<script setup>`?
 
 **Expected output:**
-```text
-defineOptions({ name: 'CustomName', inheritAttrs: false })
-```
-
 > [!check]- Answer
+> ```text
+> defineOptions({ name: 'CustomName', inheritAttrs: false })
+> ```
 > ```javascript
 > defineOptions({
 > name: 'CustomButton',

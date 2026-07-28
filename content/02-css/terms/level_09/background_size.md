@@ -192,16 +192,15 @@ div { background-size: cover; }
 **Problem:** You are styling a homepage header section. You want to place a background image on it. The header should show the background image scaled to fill the entire space, centered vertically and horizontally, and the image should never duplicate. Write the CSS declaration block.
 
 **Expected output:**
-```css
-.hero-header {
-  background-image: url('banner.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-```
-
 > [!check]- Answer
+> ```css
+> .hero-header {
+>   background-image: url('banner.jpg');
+>   background-size: cover;
+>   background-position: center;
+>   background-repeat: no-repeat;
+> }
+> ```
 > - Use the three classic background properties to lock cover scaling, centering, and no repeat.
 
 ---
@@ -213,11 +212,10 @@ div { background-size: cover; }
 **Problem:** Write CSS ruleset for `.bg-hero` setting background image `hero.jpg`, centered, covering full container without repeating.
 
 **Expected output:**
-```text
-.bg-hero { background-image: url('hero.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover; }
-```
-
 > [!check]- Answer
+> ```text
+> .bg-hero { background-image: url('hero.jpg'); background-repeat: no-repeat; background-position: center; background-size: cover; }
+> ```
 > ```css
 > .bg-hero {
 >   background-image: url('hero.jpg');
@@ -229,16 +227,17 @@ div { background-size: cover; }
 >
 > **Explanation:** Combining `no-repeat`, `center`, and `cover` ensures optimal responsive background rendering.
 
+---
+
 ### Exercise 3: Background Size Shorthand Syntax
 
 **Problem:** Write `background` shorthand specifying `center / cover` size.
 
 **Expected output:**
-```text
-background: url('hero.jpg') center / cover no-repeat;
-```
-
 > [!check]- Answer
+> ```text
+> background: url('hero.jpg') center / cover no-repeat;
+> ```
 > ```css
 > .hero {
 >   background: url('hero.jpg') center / cover no-repeat;

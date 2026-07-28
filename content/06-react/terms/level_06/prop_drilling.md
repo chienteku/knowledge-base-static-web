@@ -111,12 +111,11 @@ Pass props directly for 1-2 component levels
 Which components are the "middlemen" suffering from prop drilling?
 
 **Expected output:**
-```text
-`<ArticleList />` and `<ArticleCard />`. 
-They probably don't use the Theme themselves; they are just passing it down so the `<CardButton />` can change its color.
-```
-
 > [!check]- Answer
+> ```text
+> `<ArticleList />` and `<ArticleCard />`. 
+> They probably don't use the Theme themselves; they are just passing it down so the `<CardButton />` can change its color.
+> ```
 > - Which components accept the prop but never actually use it in their own JSX?
 
 ---
@@ -128,11 +127,10 @@ They probably don't use the Theme themselves; they are just passing it down so t
 **Problem:** Refactor `<Page user={user} />` passing `user` down to `<Header>` by passing `<Header user={user} />` as a `children` prop.
 
 **Expected output:**
-```text
-function Page({ header }) { return <main>{header}<Content /></main>; } // In parent: <Page header={<Header user={user} />} />
-```
-
 > [!check]- Answer
+> ```text
+> function Page({ header }) { return <main>{header}<Content /></main>; } // In parent: <Page header={<Header user={user} />} />
+> ```
 > ```javascript
 > function Page({ header }) {
 >   return (
@@ -148,16 +146,17 @@ function Page({ header }) { return <main>{header}<Content /></main>; } // In par
 >
 > **Explanation:** Component Composition solves prop drilling without adding global state overhead.
 
+---
+
 ### Exercise 3: Identifying Prop Drilling Threshold
 
 **Problem:** When does prop passing become problematic 'prop drilling'? (When 4+ intermediate components pass props without using them).
 
 **Expected output:**
-```text
-When 4+ intermediate container components pass props without using them
-```
-
 > [!check]- Answer
+> ```text
+> When 4+ intermediate container components pass props without using them
+> ```
 > ```text
 > When 4+ intermediate container components pass props without using them
 > ```

@@ -150,11 +150,10 @@ DEFINE INDEX idx_composite ON TABLE user FIELDS tenant, status;
 Write the SurrealQL statement to create the optimal composite index named `idx_author_published_date`.
 
 **Expected output:**
-```sql
-DEFINE INDEX idx_author_published_date ON posts COLUMNS author, published, created_at;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX idx_author_published_date ON posts COLUMNS author, published, created_at;
+> ```
 > - Order the columns matching the filter and sort query pattern: `author`, `published`, `created_at`.
 
 ---
@@ -166,27 +165,27 @@ DEFINE INDEX idx_author_published_date ON posts COLUMNS author, published, creat
 **Problem:** Define composite index `order_tenant_date` on `order` table covering `tenant_id` and `created_at`.
 
 **Expected output:**
-```text
-DEFINE INDEX order_tenant_date ON TABLE order FIELDS tenant_id, created_at;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX order_tenant_date ON TABLE order FIELDS tenant_id, created_at;
+> ```
 > ```surrealql
 > DEFINE INDEX order_tenant_date ON TABLE order FIELDS tenant_id, created_at;
 > ```
 >
 > **Explanation:** Composite indexes optimize multi-column filter and sort queries.
 
+---
+
 ### Exercise 3: Composite Unique Index Enforcement
 
 **Problem:** Define unique composite index on `organization_id` and `slug` fields of `project` table.
 
 **Expected output:**
-```text
-DEFINE INDEX project_org_slug ON TABLE project FIELDS organization_id, slug UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX project_org_slug ON TABLE project FIELDS organization_id, slug UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX project_org_slug ON TABLE project FIELDS organization_id, slug UNIQUE;
 > ```

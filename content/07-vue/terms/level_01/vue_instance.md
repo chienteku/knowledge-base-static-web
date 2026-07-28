@@ -111,14 +111,13 @@ app2.mount('#app-two'); // Mount to distinct DOM containers
 **Problem:** You are migrating a legacy jQuery application to Vue. You want Vue to manage the Navigation Bar at the top of the page, and the Chat Box at the bottom, but the middle of the page must remain legacy PHP HTML. Can you do this?
 
 **Expected output:**
-```text
-Yes! You can create MULTIPLE Vue instances on the same page.
-`createApp(Navbar).mount('#nav')`
-`createApp(Chatbox).mount('#chat')`
-They will operate completely independently of each other.
-```
-
 > [!check]- Answer
+> ```text
+> Yes! You can create MULTIPLE Vue instances on the same page.
+> `createApp(Navbar).mount('#nav')`
+> `createApp(Chatbox).mount('#chat')`
+> They will operate completely independently of each other.
+> ```
 > - Vue is a "Progressive Framework", meaning it can control as much or as little of the page as you want.
 
 ---
@@ -128,11 +127,10 @@ They will operate completely independently of each other.
 **Problem:** Write JavaScript code creating a Vue 3 application instance from `App.vue`, adding Pinia plugin, and mounting to `#app`.
 
 **Expected output:**
-```javascript
-import { createApp } from 'vue'; import { createPinia } from 'pinia'; import App from './App.vue'; const app = createApp(App); app.use(createPinia()); app.mount('#app');
-```
-
 > [!check]- Answer
+> ```javascript
+> import { createApp } from 'vue'; import { createPinia } from 'pinia'; import App from './App.vue'; const app = createApp(App); app.use(createPinia()); app.mount('#app');
+> ```
 > - `createApp(RootComponent)` creates application context.
 > - Install plugins with `.use()`.
 > - Mount instance with `.mount('#app')`.
@@ -154,11 +152,10 @@ import { createApp } from 'vue'; import { createPinia } from 'pinia'; import App
 **Problem:** Which method on the Vue application instance registers a component globally across the app?
 
 **Expected output:**
-```text
-app.component('MyComponent', MyComponent)
-```
-
 > [!check]- Answer
+> ```text
+> app.component('MyComponent', MyComponent)
+> ```
 > - `app.component(name, Component)` registers global components.
 > 
 > ```javascript

@@ -198,13 +198,12 @@ fn main() {
 **Problem:** Demonstrate that `.map(|x| println!("Mapped: {}", x))` outputs nothing until `.collect()` is called.
 
 **Expected output:**
-```
-Before collect
-Mapped: 1
-After collect
-```
-
 > [!check]- Answer
+> ```
+> Before collect
+> Mapped: 1
+> After collect
+> ```
 > ```rust
 > fn main() {
 >     let iter = (1..=1).map(|x| println!("Mapped: {}", x));
@@ -216,16 +215,17 @@ After collect
 >
 > **Explanation:** Iterator transformation steps execute lazily during consumer traversal.
 
+---
+
 ### Exercise 3: Short-Circuiting Lazy Computations with `any()`
 
 **Problem:** Show that `.any(|x| x == 2)` on `vec![1, 2, 3, 4]` stops evaluating remaining elements once `2` is found.
 
 **Expected output:**
-```
-Found: true
-```
-
 > [!check]- Answer
+> ```
+> Found: true
+> ```
 > fn main() {
 >     let nums = vec![1, 2, 3, 4];
 >     let found = nums.into_iter().any(|x| x == 2);

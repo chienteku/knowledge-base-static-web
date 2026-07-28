@@ -101,12 +101,11 @@ declare global {
 **Problem:** You are writing a library in TypeScript, and you want to publish it to NPM so other people can use it. How do you generate the `.d.ts` files automatically so developers who download your library get autocomplete?
 
 **Expected output:**
-```text
-You enable the `"declaration": true` flag in your `tsconfig.json`!
-When you run `tsc`, it will compile your `.ts` files into `.js` files (for runtime), AND it will automatically generate `.d.ts` files alongside them (for compile-time typing).
-```
-
 > [!check]- Answer
+> ```text
+> You enable the `"declaration": true` flag in your `tsconfig.json`!
+> When you run `tsc`, it will compile your `.ts` files into `.js` files (for runtime), AND it will automatically generate `.d.ts` files alongside them (for compile-time typing).
+> ```
 > - Check the `tsconfig.json` options!
 
 ---
@@ -118,11 +117,10 @@ When you run `tsc`, it will compile your `.ts` files into `.js` files (for runti
 **Problem:** Augment external module `'express'` to add `user: User` property to `Request` interface.
 
 **Expected output:**
-```text
-Express Request augmented
-```
-
 > [!check]- Answer
+> ```text
+> Express Request augmented
+> ```
 > ```typescript
 > declare module 'express' {
 >   interface Request {
@@ -134,16 +132,17 @@ Express Request augmented
 >
 > **Explanation:** `declare module 'pkg'` extends type definitions for third-party libraries.
 
+---
+
 ### Exercise 3: Ambient Window Global Property Declaration
 
 **Problem:** Declare global variable `declare const __VERSION__: string`.
 
 **Expected output:**
-```text
-Ambient global variable declared
-```
-
 > [!check]- Answer
+> ```text
+> Ambient global variable declared
+> ```
 > ```typescript
 > declare const __VERSION__: string;
 > console.log("Ambient global variable declared");

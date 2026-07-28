@@ -206,11 +206,10 @@ fn main() {
 **Problem:** Implement `fmt::Debug` manually for `User { username: String, secret_key: String }` to redact `secret_key`.
 
 **Expected output:**
-```
-User { username: "alice", secret_key: "***" }
-```
-
 > [!check]- Answer
+> ```
+> User { username: "alice", secret_key: "***" }
+> ```
 > ```rust
 > use std::fmt;
 > struct User { username: String, secret_key: String }
@@ -230,16 +229,17 @@ User { username: "alice", secret_key: "***" }
 >
 > **Explanation:** Manual `Debug` implementations allow customized formatting outputs using `f.debug_struct()` helpers.
 
+---
+
 ### Exercise 3: Pretty-Printing Debug Output
 
 **Problem:** Print a nested struct using `{:#?}` pretty-print formatting.
 
 **Expected output:**
-```
-Pretty debug printed
-```
-
 > [!check]- Answer
+> ```
+> Pretty debug printed
+> ```
 > #[derive(Debug)]
 > struct Config { port: u16, host: String }
 > fn main() {

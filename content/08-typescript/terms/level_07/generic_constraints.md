@@ -110,13 +110,12 @@ function getProp<T, K extends keyof T>(obj: T, key: K) { return obj[key]; }
 **Problem:** You are writing a generic `merge` function that combines two things together. You want to strictly enforce that both things passed in are Objects (not strings, not numbers). How do you constrain the generics?
 
 **Expected output:**
-```typescript
-function merge<T extends object, U extends object>(obj1: T, obj2: U) {
-  return { ...obj1, ...obj2 };
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> function merge<T extends object, U extends object>(obj1: T, obj2: U) {
+>   return { ...obj1, ...obj2 };
+> }
+> ```
 > - `object` is a valid type in TS!
 
 ---
@@ -128,11 +127,10 @@ function merge<T extends object, U extends object>(obj1: T, obj2: U) {
 **Problem:** Constrain function `function merge<T extends object, U extends object>(a: T, b: U): T & U`.
 
 **Expected output:**
-```text
-Generic objects merged
-```
-
 > [!check]- Answer
+> ```text
+> Generic objects merged
+> ```
 > ```typescript
 > function merge<T extends object, U extends object>(a: T, b: U): T & U {
 >   return { ...a, ...b };
@@ -142,16 +140,17 @@ Generic objects merged
 >
 > **Explanation:** `extends object` restricts generic type arguments to non-primitive objects.
 
+---
+
 ### Exercise 3: Keyof Constraint Pattern
 
 **Problem:** Write generic helper `function getProperty<T, K extends keyof T>(obj: T, key: K): T[K]`.
 
 **Expected output:**
-```text
-Alice
-```
-
 > [!check]- Answer
+> ```text
+> Alice
+> ```
 > ```typescript
 > function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
 >   return obj[key];

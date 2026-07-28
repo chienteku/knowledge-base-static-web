@@ -112,11 +112,10 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 **Problem:** You apply `opacity: 0;` to a giant image in the middle of a paragraph of text. The image becomes completely invisible. Does the text slide up to fill the empty space where the image used to be?
 
 **Expected output:**
-```text
-No! `opacity: 0` just makes the element perfectly clear (like a clean window). The physical box still exists, and it still pushes the text out of the way. If you want the element to actually disappear and give its space back, you must use `display: none;`.
-```
-
 > [!check]- Answer
+> ```text
+> No! `opacity: 0` just makes the element perfectly clear (like a clean window). The physical box still exists, and it still pushes the text out of the way. If you want the element to actually disappear and give its space back, you must use `display: none;`.
+> ```
 > - A perfectly clean glass door is invisible, but can you walk through it?
 
 ---
@@ -128,11 +127,10 @@ No! `opacity: 0` just makes the element perfectly clear (like a clean window). T
 **Problem:** Write CSS fading in `.tooltip` from `opacity: 0` to `opacity: 1` over 0.3 seconds on hover.
 
 **Expected output:**
-```text
-.tooltip { opacity: 0; transition: opacity 0.3s; } .container:hover .tooltip { opacity: 1; }
-```
-
 > [!check]- Answer
+> ```text
+> .tooltip { opacity: 0; transition: opacity 0.3s; } .container:hover .tooltip { opacity: 1; }
+> ```
 > ```css
 > .tooltip {
 >   opacity: 0;
@@ -145,16 +143,17 @@ No! `opacity: 0` just makes the element perfectly clear (like a clean window). T
 >
 > **Explanation:** `opacity` transitions execute smoothly on GPU compositor layers.
 
+---
+
 ### Exercise 3: Opacity vs Alpha Channel Color Difference
 
 **Problem:** Explain difference between `opacity: 0.5` vs `background-color: rgb(0 0 0 / 0.5)`.
 
 **Expected output:**
-```text
-opacity affects the element and ALL child elements recursively; rgb alpha affects ONLY the background color layer.
-```
-
 > [!check]- Answer
+> ```text
+> opacity affects the element and ALL child elements recursively; rgb alpha affects ONLY the background color layer.
+> ```
 > ```text
 > opacity affects the element and ALL child elements recursively; rgb alpha affects ONLY the background color layer.
 > ```

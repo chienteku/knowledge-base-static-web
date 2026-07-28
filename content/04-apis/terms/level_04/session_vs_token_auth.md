@@ -151,13 +151,12 @@ if (await redis.sismember('blacklisted_tokens', jti)) return res.status(401).sen
 3. Cross-Domain Mobile API Support
 
 **Expected output:**
-```text
-1. Sessions require DB/RAM storage; Tokens require zero server memory
-2. Sessions support instant revocation; Tokens require expiration or blacklist
-3. Tokens easily support mobile/cross-domain APIs; Sessions require cookie domain alignment
-```
-
 > [!check]- Answer
+> ```text
+> 1. Sessions require DB/RAM storage; Tokens require zero server memory
+> 2. Sessions support instant revocation; Tokens require expiration or blacklist
+> 3. Tokens easily support mobile/cross-domain APIs; Sessions require cookie domain alignment
+> ```
 > ```text
 > 1. Server Memory -> Sessions: High (DB/Redis), Tokens: Zero (Stateless)
 > 2. Revocation      -> Sessions: Instant (Delete row), Tokens: Difficult (Wait for exp)
@@ -171,11 +170,10 @@ if (await redis.sismember('blacklisted_tokens', jti)) return res.status(401).sen
 **Problem:** Which 3 cookie security flags should be applied to session cookies in production?
 
 **Expected output:**
-```text
-HttpOnly, Secure, SameSite=Strict (or Lax)
-```
-
 > [!check]- Answer
+> ```text
+> HttpOnly, Secure, SameSite=Strict (or Lax)
+> ```
 > ```http
 > Set-Cookie: sid=abc123; HttpOnly; Secure; SameSite=Strict
 > ```

@@ -147,11 +147,10 @@ async function processData() {
 **Problem:** Create an array called `todos` with two strings: `"Wake up"` and `"Eat breakfast"`. Use an array method to add `"Go to work"` to the end of the array. Then log the entire array.
 
 **Expected output:**
-```text
-["Wake up", "Eat breakfast", "Go to work"]
-```
-
 > [!check]- Answer
+> ```text
+> ["Wake up", "Eat breakfast", "Go to work"]
+> ```
 > - Use `todos.push("Go to work");` to add an item to the end of the array.
 
 ---
@@ -161,11 +160,10 @@ async function processData() {
 **Problem:** Create a 5-element array filled with number `0` using `Array(5).fill(0)`.
 
 **Expected output:**
-```text
-[ 0, 0, 0, 0, 0 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 0, 0, 0, 0, 0 ]
+> ```
 > ```javascript
 > const arr = Array(5).fill(0);
 > console.log(arr);
@@ -173,16 +171,17 @@ async function processData() {
 >
 > **Explanation:** `Array(n).fill(val)` populates empty sparse array slots with default initial values.
 
+---
+
 ### Exercise 3: Array Reference Comparison
 
 **Problem:** Compare `[1, 2] === [1, 2]` and explain why array equality checks return `false`.
 
 **Expected output:**
-```text
-false
-```
-
 > [!check]- Answer
+> ```text
+> false
+> ```
 > ```javascript
 > console.log([1, 2] === [1, 2]);
 > ```

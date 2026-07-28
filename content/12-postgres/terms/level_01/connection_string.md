@@ -154,11 +154,10 @@ postgresql://user:pass@db.cloud.com:5432/production?sslmode=require
 Construct the correct, URL-safe connection string to connect your application. Refer to standard URL encoding tables: `@` is `%40`, `#` is `%23`.
 
 **Expected output:**
-```text
-postgresql://webapp_user:p%40ss%23word@db-instance.neon.tech:5432/users_db
-```
-
 > [!check]- Answer
+> ```text
+> postgresql://webapp_user:p%40ss%23word@db-instance.neon.tech:5432/users_db
+> ```
 > - Start with the scheme `postgresql://`.
 > - URL-encode the special characters in the password.
 > - Assemble the parts using `@`, `:`, and `/` separators.
@@ -172,27 +171,27 @@ postgresql://webapp_user:p%40ss%23word@db-instance.neon.tech:5432/users_db
 **Problem:** Construct PostgreSQL URI connecting user `app_user` with password `secret` to database `prod` on host `db.example.com`.
 
 **Expected output:**
-```text
-postgresql://app_user:secret@db.example.com:5432/prod?sslmode=require
-```
-
 > [!check]- Answer
+> ```text
+> postgresql://app_user:secret@db.example.com:5432/prod?sslmode=require
+> ```
 > ```text
 > postgresql://app_user:secret@db.example.com:5432/prod?sslmode=require
 > ```
 >
 > **Explanation:** Standard PostgreSQL URIs specify scheme, user, password, host, port, database, and query options.
 
+---
+
 ### Exercise 3: PostgreSQL URI Schemes
 
 **Problem:** List 2 valid connection URI schemes for PostgreSQL (`postgres://`, `postgresql://`).
 
 **Expected output:**
-```text
-postgres://, postgresql://
-```
-
 > [!check]- Answer
+> ```text
+> postgres://, postgresql://
+> ```
 > ```text
 > postgres://, postgresql://
 > ```

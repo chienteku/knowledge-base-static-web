@@ -247,18 +247,17 @@ onErrorCaptured((err) => { logError(err); return true; });
 ```
 
 **Expected output:**
-```html
-<Suspense>
-  <template #default>
-    <AsyncCard />
-  </template>
-  <template #fallback>
-    <div>Loading card...</div>
-  </template>
-</Suspense>
-```
-
 > [!check]- Answer
+> ```html
+> <Suspense>
+>   <template #default>
+>     <AsyncCard />
+>   </template>
+>   <template #fallback>
+>     <div>Loading card...</div>
+>   </template>
+> </Suspense>
+> ```
 > - The `<Suspense>` component relies on two specific named slots: `#default` and `#fallback`.
 > - The loading indicator goes in the `#fallback` slot.
 
@@ -269,11 +268,10 @@ onErrorCaptured((err) => { logError(err); return true; });
 **Problem:** What makes a Vue 3 SFC component automatically async and compatible with `<Suspense>`?
 
 **Expected output:**
-```text
-Having a top-level await statement inside <script setup> (e.g. const res = await fetch(...)).
-```
-
 > [!check]- Answer
+> ```text
+> Having a top-level await statement inside <script setup> (e.g. const res = await fetch(...)).
+> ```
 > - Top-level `await` turns a component into an async dependency for `<Suspense>`.
 > 
 > ```vue
@@ -289,12 +287,11 @@ Having a top-level await statement inside <script setup> (e.g. const res = await
 **Problem:** Identify the 2 required slot names for the `<Suspense>` component.
 
 **Expected output:**
-```text
-1. #default (Renders when async dependencies resolve)
-2. #fallback (Renders while async dependencies are pending)
-```
-
 > [!check]- Answer
+> ```text
+> 1. #default (Renders when async dependencies resolve)
+> 2. #fallback (Renders while async dependencies are pending)
+> ```
 > - `#default` -> Target async content
 > - `#fallback` -> Loading placeholder UI
 > 

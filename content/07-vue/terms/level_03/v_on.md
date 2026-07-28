@@ -119,11 +119,10 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 **Problem:** You have an input field for a search bar. You want to trigger the `search()` function *only* when the user presses the 'Escape' key. How do you write this in Vue?
 
 **Expected output:**
-```html
-<input @keyup.escape="search" />
-```
-
 > [!check]- Answer
+> ```html
+> <input @keyup.escape="search" />
+> ```
 > - Use `v-on` (the `@` shorthand), listen to `keyup`, and apply a modifier for the specific key!
 
 ---
@@ -133,11 +132,10 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 **Problem:** Write `@click` template binding passing user ID `42` AND the native DOM event `$event` to method `removeUser(id, event)`.
 
 **Expected output:**
-```html
-<button @click="removeUser(42, $event)">Delete</button>
-```
-
 > [!check]- Answer
+> ```html
+> <button @click="removeUser(42, $event)">Delete</button>
+> ```
 > - Use `$event` special keyword to pass native DOM event in inline handlers.
 > 
 > ```html
@@ -151,11 +149,10 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 **Problem:** Write template binding triggering `saveDoc()` ONLY when user presses `Ctrl + S` (`@keydown.ctrl.s.prevent`).
 
 **Expected output:**
-```html
-<input @keydown.ctrl.s.prevent="saveDoc" />
-```
-
 > [!check]- Answer
+> ```html
+> <input @keydown.ctrl.s.prevent="saveDoc" />
+> ```
 > - System modifier keys: `.ctrl`, `.alt`, `.shift`, `.meta`.
 > 
 > ```html

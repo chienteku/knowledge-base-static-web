@@ -135,12 +135,11 @@ Provision identical hardware and storage IOPS across all primary and secondary n
 2.  State whether a client query using `readPreference: "secondary"` at `15:30:01` will see a write that was committed on the primary at `15:29:55`.
 
 **Expected output:**
-```text
-1. Replication Lag: 15:30:00 - 15:29:45 = 15 seconds.
-2. No: The write was committed on the primary at `15:29:55`. Because the secondary has only synced up to `15:29:45` (representing a 15-second lag), the write has not reached it yet, and the query will read stale data.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Replication Lag: 15:30:00 - 15:29:45 = 15 seconds.
+> 2. No: The write was committed on the primary at `15:29:55`. Because the secondary has only synced up to `15:29:45` (representing a 15-second lag), the write has not reached it yet, and the query will read stale data.
+> ```
 > - Subtract the secondary optime timestamp from the primary optime timestamp.
 > - Compare the write commit time with the secondary's current synchronization mark.
 
@@ -153,11 +152,10 @@ Provision identical hardware and storage IOPS across all primary and secondary n
 **Problem:** Configure ReadPreference with `maxStalenessSeconds: 90` to block reading from secondaries lagging > 90 seconds.
 
 **Expected output:**
-```text
-new ReadPreference("secondaryPreferred", [], { maxStalenessSeconds: 90 })
-```
-
 > [!check]- Answer
+> ```text
+> new ReadPreference("secondaryPreferred", [], { maxStalenessSeconds: 90 })
+> ```
 > ```javascript
 > const { ReadPreference } = require('mongodb');
 > const rp = new ReadPreference("secondaryPreferred", [], { maxStalenessSeconds: 90 });
@@ -165,16 +163,17 @@ new ReadPreference("secondaryPreferred", [], { maxStalenessSeconds: 90 })
 >
 > **Explanation:** `maxStalenessSeconds` prevents read operations from executing against severely lagging secondaries.
 
+---
+
 ### Exercise 3: Monitoring Replication Lag metric
 
 **Problem:** What command inspects secondary lag metrics in mongosh? (`rs.printSecondaryReplicationInfo()`).
 
 **Expected output:**
-```text
-rs.printSecondaryReplicationInfo();
-```
-
 > [!check]- Answer
+> ```text
+> rs.printSecondaryReplicationInfo();
+> ```
 > ```javascript
 > rs.printSecondaryReplicationInfo();
 > ```

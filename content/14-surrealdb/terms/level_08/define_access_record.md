@@ -171,11 +171,10 @@ Write a `DEFINE ACCESS` statement named `mobile_app` on the current database tha
 **Problem:** Write full `DEFINE ACCESS account_access ON DATABASE TYPE RECORD` with SIGNUP and SIGNIN.
 
 **Expected output:**
-```text
-DEFINE ACCESS account_access ON DATABASE TYPE RECORD SIGNUP (...) SIGNIN (...);
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ACCESS account_access ON DATABASE TYPE RECORD SIGNUP (...) SIGNIN (...);
+> ```
 > ```surrealql
 > DEFINE ACCESS account_access ON DATABASE TYPE RECORD
 >   SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
@@ -184,16 +183,17 @@ DEFINE ACCESS account_access ON DATABASE TYPE RECORD SIGNUP (...) SIGNIN (...);
 >
 > **Explanation:** RECORD access definitions specify signin and signup database handlers.
 
+---
+
 ### Exercise 3: Session Expiration Setting
 
 **Problem:** Set RECORD access token duration to 12 hours (`12h`).
 
 **Expected output:**
-```text
-DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 12h ...
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 12h ...
+> ```
 > ```surrealql
 > DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 12h;
 > ```

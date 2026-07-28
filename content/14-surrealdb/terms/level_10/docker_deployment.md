@@ -184,27 +184,27 @@ In the Docker flag `-p 8000:8000`, identify which number represents the host por
 **Problem:** Write `docker run` command running SurrealDB with persistent volume `-v /data:/data` on port `8000`.
 
 **Expected output:**
-```text
-docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
-```
-
 > [!check]- Answer
+> ```text
+> docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
+> ```
 > ```text
 > docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
 > ```
 >
 > **Explanation:** `-p` forwards host ports; `-v` mounts persistent disk volumes into containers.
 
+---
+
 ### Exercise 3: Docker Compose Configuration
 
 **Problem:** Specify essential SurrealDB environment variables in Docker Compose (`SURREAL_USER`, `SURREAL_PASS`).
 
 **Expected output:**
-```text
-SURREAL_USER=root, SURREAL_PASS=root
-```
-
 > [!check]- Answer
+> ```text
+> SURREAL_USER=root, SURREAL_PASS=root
+> ```
 > ```text
 > SURREAL_USER=root, SURREAL_PASS=root
 > ```

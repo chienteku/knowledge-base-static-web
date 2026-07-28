@@ -209,11 +209,10 @@ fn main() {
 **Problem:** Define `struct Config { host: String, port: u16, max_conn: u32 }` deriving `Default`. Construct a config overriding only `port: 9000`.
 
 **Expected output:**
-```
-Port: 9000, Max conn: 100
-```
-
 > [!check]- Answer
+> ```
+> Port: 9000, Max conn: 100
+> ```
 > ```rust
 > #[derive(Debug)]
 > struct Config {
@@ -234,16 +233,17 @@ Port: 9000, Max conn: 100
 >
 > **Explanation:** Combining struct update syntax with `Default::default()` supplies default fallbacks for unassigned fields.
 
+---
+
 ### Exercise 3: Deriving Default for Custom Enums
 
 **Problem:** Use `#[default]` attribute on an enum variant `#[derive(Default)] enum Status { #[default] Idle, Active }`.
 
 **Expected output:**
-```
-Default status: Idle
-```
-
 > [!check]- Answer
+> ```
+> Default status: Idle
+> ```
 > #[derive(Default, Debug, PartialEq)]
 > enum Status {
 >     #[default]

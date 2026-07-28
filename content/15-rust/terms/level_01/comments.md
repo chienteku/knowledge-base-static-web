@@ -171,11 +171,10 @@ fn can_survive(health: i32, damage: i32) -> bool {
 **Problem:** Write a Rust file with module-level documentation describing a math utility module using inner doc comments (`//!`). Add a documented function `add` inside.
 
 **Expected output:**
-```
-Math utility ready
-```
-
 > [!check]- Answer
+> ```
+> Math utility ready
+> ```
 > ```rust
 > //! Math Utilities Module
 > //! Provides basic arithmetic helper functions.
@@ -192,16 +191,17 @@ Math utility ready
 >
 > **Explanation:** `//!` documents the containing item (the module file itself), while `///` documents the item that follows it (`pub fn add`).
 
+---
+
 ### Exercise 3: Hiding Setup Code in Doc Tests
 
 **Problem:** Write a function doc comment with a runnable code example where the `fn main()` header and imports are hidden from generated docs using `#` prefix.
 
 **Expected output:**
-```
-Doc example structured properly
-```
-
 > [!check]- Answer
+> ```
+> Doc example structured properly
+> ```
 > ```rust
 > /// Computes the square of a number.
 > ///

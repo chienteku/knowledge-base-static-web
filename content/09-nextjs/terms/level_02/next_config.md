@@ -169,11 +169,10 @@ export default nextConfig;
 **Problem:** Write `next.config.js` `redirects()` async function permanently redirecting `/old-about` to `/about` (HTTP 301).
 
 **Expected output:**
-```javascript
-module.exports = { async redirects() { return [{ source: '/old-about', destination: '/about', permanent: true }]; } };
-```
-
 > [!check]- Answer
+> ```javascript
+> module.exports = { async redirects() { return [{ source: '/old-about', destination: '/about', permanent: true }]; } };
+> ```
 > - `redirects()` configures server-level URL redirection rules.
 > 
 > ```javascript
@@ -193,11 +192,10 @@ module.exports = { async redirects() { return [{ source: '/old-about', destinati
 **Problem:** Can `next.config.js` be written using ES Module syntax as `next.config.mjs`?
 
 **Expected output:**
-```text
-Yes. Next.js natively supports ESM configuration files named next.config.mjs.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Next.js natively supports ESM configuration files named next.config.mjs.
+> ```
 > - `next.config.mjs` allows using `export default defineConfig({...})`.
 > 
 > ```javascript

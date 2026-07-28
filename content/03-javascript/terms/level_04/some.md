@@ -146,11 +146,10 @@ async function processData() {
 **Problem:** You have an array of words from a user's comment: `["I", "really", "love", "JavaScript"]`. You also have a list of banned words: `["hate", "stupid", "dumb"]`. Use `some()` on the comment array to check if it includes any banned words. (Hint: use `bannedWords.includes(word)` inside the callback).
 
 **Expected output:**
-```text
-false
-```
-
 > [!check]- Answer
+> ```text
+> false
+> ```
 > - `commentWords.some(word => bannedWords.includes(word))`
 
 ---
@@ -160,11 +159,10 @@ false
 **Problem:** Check if `[1, -2, 3]` contains any negative numbers using `.some()`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const nums = [1, -2, 3];
 > console.log(nums.some(x => x < 0));
@@ -172,18 +170,19 @@ true
 >
 > **Explanation:** `.some()` returns `true` if at least one element passes the predicate test.
 
+---
+
 ### Exercise 3: Short-Circuiting Behavior of `.some()`
 
 **Problem:** Demonstrate that `.some()` halts iteration immediately upon finding the first `true` match.
 
 **Expected output:**
-```text
-Checked: 1
-Checked: 2
-true
-```
-
 > [!check]- Answer
+> ```text
+> Checked: 1
+> Checked: 2
+> true
+> ```
 > ```javascript
 > const res = [1, 2, 3].some(x => {
 >   console.log(`Checked: ${x}`);
@@ -194,7 +193,6 @@ true
 >
 > **Explanation:** `.some()` short-circuits execution as soon as any truthy condition is encountered.
 
----
 
 ---
 

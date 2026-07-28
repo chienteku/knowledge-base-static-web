@@ -173,11 +173,10 @@ thread::spawn(move || {
 **Problem:** Use `#` prefix to hide setup statements inside doc test markdown blocks.
 
 **Expected output:**
-```
-Doc test compiled
-```
-
 > [!check]- Answer
+> ```
+> Doc test compiled
+> ```
 > ```rust
 > /// ```
 > /// # let x = 5;
@@ -189,16 +188,17 @@ Doc test compiled
 >
 > **Explanation:** `#` hides boilerplate setup lines from rendered HTML while preserving code execution in tests.
 
+---
+
 ### Exercise 3: Annotating Expect Panics in Doc Tests
 
 **Problem:** Annotate a doc test block with ```` ```should_panic ````.
 
 **Expected output:**
-```
-Should panic doc test verified
-```
-
 > [!check]- Answer
+> ```
+> Should panic doc test verified
+> ```
 > fn main() {
 >     println!("Should panic doc test verified");
 > }

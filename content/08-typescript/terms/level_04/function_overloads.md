@@ -125,12 +125,11 @@ function parse(x: string | number): any {} // Accepts all overload variants
 **Problem:** If you hover over the `formatData` function call in your IDE, how many signatures will it show you? Will it show you the implementation signature?
 
 **Expected output:**
-```text
-It will show you exactly TWO signatures (1/2: string -> string, and 2/2: string[] -> string[]).
-It will completely hide the implementation signature from the IDE tooltip. The implementation is just the "engine"; the overloads are the "interface".
-```
-
 > [!check]- Answer
+> ```text
+> It will show you exactly TWO signatures (1/2: string -> string, and 2/2: string[] -> string[]).
+> It will completely hide the implementation signature from the IDE tooltip. The implementation is just the "engine"; the overloads are the "interface".
+> ```
 > - Overloads exist to create a clean developer experience.
 
 ---
@@ -142,11 +141,10 @@ It will completely hide the implementation signature from the IDE tooltip. The i
 **Problem:** Create overloads for `makeList(item: string): string[]` and `makeList(items: string[]): string[]`.
 
 **Expected output:**
-```text
-Overload signatures created
-```
-
 > [!check]- Answer
+> ```text
+> Overload signatures created
+> ```
 > ```typescript
 > function makeList(item: string): string[];
 > function makeList(items: string[]): string[];
@@ -158,16 +156,17 @@ Overload signatures created
 >
 > **Explanation:** Function overloads specify precise input/output mapping contracts.
 
+---
+
 ### Exercise 3: Overload Order Precedence
 
 **Problem:** Explain why specific overload signatures must be ordered BEFORE generic overload signatures.
 
 **Expected output:**
-```text
-TypeScript evaluates overload signatures in top-to-bottom order
-```
-
 > [!check]- Answer
+> ```text
+> TypeScript evaluates overload signatures in top-to-bottom order
+> ```
 > ```typescript
 > console.log("TypeScript evaluates overload signatures in top-to-bottom order");
 > ```

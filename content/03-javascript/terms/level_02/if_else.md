@@ -155,11 +155,10 @@ async function processData() {
 **Problem:** Write an `if / else` statement that checks if a variable `const num = 7;` is even or odd. Log "Even" if it's even, and "Odd" if it's odd.
 
 **Expected output:**
-```text
-Odd
-```
-
 > [!check]- Answer
+> ```text
+> Odd
+> ```
 > - Use the modulo operator `%` to find the remainder of division.
 > - If `num % 2 === 0`, the number is even.
 
@@ -170,11 +169,10 @@ Odd
 **Problem:** Write an `if...else if...else` structure classifying grade numbers into `"A"` (>=90), `"B"` (>=80), `"C"` (>=70), or `"F"`.
 
 **Expected output:**
-```text
-B
-```
-
 > [!check]- Answer
+> ```text
+> B
+> ```
 > ```javascript
 > const score = 85;
 > let grade;
@@ -187,16 +185,17 @@ B
 >
 > **Explanation:** `else if` chains evaluate conditions top-to-bottom, executing the first matching condition block.
 
+---
+
 ### Exercise 3: Early Return Pattern Refactoring
 
 **Problem:** Refactor nested `if` statements using early `return` guards.
 
 **Expected output:**
-```text
-Invalid user
-```
-
 > [!check]- Answer
+> ```text
+> Invalid user
+> ```
 > ```javascript
 > function processUser(user) {
 >   if (!user) return "Invalid user";

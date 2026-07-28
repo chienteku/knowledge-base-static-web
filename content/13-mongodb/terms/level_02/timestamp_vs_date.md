@@ -154,18 +154,10 @@ new Date(1700000000 * 1000); // Correct millisecond conversion
 2.  Write the corrected document write statement.
 
 **Expected output:**
-```text
-1. The schema violates standards because it uses the internal `Timestamp` type instead of `Date` for application tracking. This causes the join time to lose millisecond precision and risk unexpected updates due to replication counters.
-```
-```javascript
-// 2. Corrected insert query
-db.users.insertOne({
-  username: "coder",
-  joined_at: new Date()
-});
-```
-
 > [!check]- Answer
+> ```text
+> 1. The schema violates standards because it uses the internal `Timestamp` type instead of `Date` for application tracking. This causes the join time to lose millisecond precision and risk unexpected updates due to replication counters.
+> ```
 > - The BSON `Timestamp` type is reserved for database engine log syncing.
 > - Call the standard JavaScript date constructor using the `new` keyword.
 
@@ -178,27 +170,27 @@ db.users.insertOne({
 **Problem:** State use case difference: BSON `Date` (Application wall-clock date), BSON `Timestamp` (Internal replication oplog ordering).
 
 **Expected output:**
-```text
-Date: application code timestamps; Timestamp: internal oplog replication sequence
-```
-
 > [!check]- Answer
+> ```text
+> Date: application code timestamps; Timestamp: internal oplog replication sequence
+> ```
 > ```text
 > Date: application code timestamps; Timestamp: internal oplog replication sequence
 > ```
 >
 > **Explanation:** `Date` stores 64-bit UTC wall-clock time; `Timestamp` stores internal oplog sequence numbers.
 
+---
+
 ### Exercise 3: Date to Milliseconds Epoch Conversion
 
 **Problem:** Convert BSON Date to Unix epoch milliseconds using `.getTime()`.
 
 **Expected output:**
-```text
-new Date().getTime();
-```
-
 > [!check]- Answer
+> ```text
+> new Date().getTime();
+> ```
 > ```javascript
 > new Date().getTime();
 > ```

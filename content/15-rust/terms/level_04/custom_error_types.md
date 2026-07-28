@@ -211,11 +211,10 @@ fn main() {
 **Problem:** Define `enum DatabaseError { NotFound, PermissionDenied }`. Implement `Display` and `std::error::Error` for it.
 
 **Expected output:**
-```
-Error: Record not found
-```
-
 > [!check]- Answer
+> ```
+> Error: Record not found
+> ```
 > ```rust
 > use std::fmt;
 > #[derive(Debug)]
@@ -237,16 +236,17 @@ Error: Record not found
 >
 > **Explanation:** Idiomatic custom error types implement `Debug`, `Display`, and `std::error::Error`.
 
+---
+
 ### Exercise 3: Wrapping Lower-Level Errors with `From`
 
 **Problem:** Implement `From<std::num::ParseIntError>` for custom `AppError` enum.
 
 **Expected output:**
-```
-Wrapped parse error
-```
-
 > [!check]- Answer
+> ```
+> Wrapped parse error
+> ```
 > use std::num::ParseIntError;
 > #[derive(Debug)]
 > enum AppError { Parse(ParseIntError) }

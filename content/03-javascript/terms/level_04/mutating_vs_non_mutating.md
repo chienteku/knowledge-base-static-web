@@ -183,13 +183,12 @@ items.reverse();
 ```
 
 **Expected output:**
-```text
-Action 1 (.pop()): Mutating (modifies size of 'items' in-place).
-Action 2 (.slice()): Non-mutating (returns a new sub-array, 'items' unchanged).
-Action 3 (.reverse()): Mutating (reverses order of 'items' in-place).
-```
-
 > [!check]- Answer
+> ```text
+> Action 1 (.pop()): Mutating (modifies size of 'items' in-place).
+> Action 2 (.slice()): Non-mutating (returns a new sub-array, 'items' unchanged).
+> Action 3 (.reverse()): Mutating (reverses order of 'items' in-place).
+> ```
 > - Methods that add, remove, or reorder elements of the calling array in-place are mutating.
 > - Methods that extract sections or map values into new instances are non-mutating.
 
@@ -200,32 +199,32 @@ Action 3 (.reverse()): Mutating (reverses order of 'items' in-place).
 **Problem:** Classify `push`, `map`, `sort`, `filter`, `splice`, `slice` as Mutating or Non-Mutating.
 
 **Expected output:**
-```text
-push: Mutating
-map: Non-Mutating
-sort: Mutating
-filter: Non-Mutating
-splice: Mutating
-slice: Non-Mutating
-```
-
 > [!check]- Answer
+> ```text
+> push: Mutating
+> map: Non-Mutating
+> sort: Mutating
+> filter: Non-Mutating
+> splice: Mutating
+> slice: Non-Mutating
+> ```
 > ```javascript
 > console.log("push: Mutating\nmap: Non-Mutating\nsort: Mutating\nfilter: Non-Mutating\nsplice: Mutating\nslice: Non-Mutating");
 > ```
 >
 > **Explanation:** Mutating methods alter target array memory directly; non-mutating methods return new collection references.
 
+---
+
 ### Exercise 3: Non-Mutating Array Sorting with `toSorted()`
 
 **Problem:** Sort `[3, 1, 2]` without mutating original using `.toSorted()` concept or `[...arr].sort()`.
 
 **Expected output:**
-```text
-Original: [3, 1, 2], Sorted: [1, 2, 3]
-```
-
 > [!check]- Answer
+> ```text
+> Original: [3, 1, 2], Sorted: [1, 2, 3]
+> ```
 > ```javascript
 > const orig = [3, 1, 2];
 > const sorted = [...orig].sort();
@@ -235,7 +234,6 @@ Original: [3, 1, 2], Sorted: [1, 2, 3]
 >
 > **Explanation:** Copying arrays before sorting prevents collateral mutation side effects.
 
----
 
 ---
 

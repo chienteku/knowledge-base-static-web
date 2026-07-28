@@ -137,12 +137,11 @@ CREATE TABLE users ( first_name VARCHAR(50) ); -- Idiomatic snake_case column na
 **Problem:** You are building an user profile table. You want to store user phone numbers. Should you define the phone number column as an `INTEGER` type or a `VARCHAR` (text) type, and why?
 
 **Expected output:**
-```text
-`VARCHAR` (text)! 
-Phone numbers contain leading zeros (which would be stripped away in an integer type, e.g. `09123` becomes `9123`), and they often contain formatting symbols like spaces, dashes, or the plus sign (e.g. `+1-555-0199`). Also, you never perform math operations (like addition or averaging) on phone numbers.
-```
-
 > [!check]- Answer
+> ```text
+> `VARCHAR` (text)! 
+> Phone numbers contain leading zeros (which would be stripped away in an integer type, e.g. `09123` becomes `9123`), and they often contain formatting symbols like spaces, dashes, or the plus sign (e.g. `+1-555-0199`). Also, you never perform math operations (like addition or averaging) on phone numbers.
+> ```
 > - Think about what happens to the number `0123` if you save it as a math integer.
 > - Consider if you ever need to sum or average user phone numbers.
 
@@ -155,27 +154,27 @@ Phone numbers contain leading zeros (which would be stripped away in an integer 
 **Problem:** Write SQL statement adding `status` column defaulting to `'active'` to `users` table.
 
 **Expected output:**
-```text
-ALTER TABLE users ADD COLUMN status VARCHAR(20) DEFAULT 'active';
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE users ADD COLUMN status VARCHAR(20) DEFAULT 'active';
+> ```
 > ```sql
 > ALTER TABLE users ADD COLUMN status VARCHAR(20) DEFAULT 'active';
 > ```
 >
 > **Explanation:** `ALTER TABLE ... ADD COLUMN` appends new columns to existing table schemas.
 
+---
+
 ### Exercise 3: Renaming Table Column
 
 **Problem:** Rename column `uname` to `username` on table `users`.
 
 **Expected output:**
-```text
-ALTER TABLE users RENAME COLUMN uname TO username;
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE users RENAME COLUMN uname TO username;
+> ```
 > ```sql
 > ALTER TABLE users RENAME COLUMN uname TO username;
 > ```

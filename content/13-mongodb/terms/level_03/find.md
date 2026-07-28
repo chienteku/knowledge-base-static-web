@@ -177,15 +177,14 @@ db.users.findOne({ _id: id }, { projection: { name: 1 } });
 2.  Find all documents where the `status` field is exactly `"active"`.
 
 **Expected output:**
-```javascript
-// 1. Single match lookup
-db.products.findOne({ sku: "SKU-990" });
-
-// 2. Multiple match lookup
-db.products.find({ status: "active" });
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Single match lookup
+> db.products.findOne({ sku: "SKU-990" });
+> 
+> // 2. Multiple match lookup
+> db.products.find({ status: "active" });
+> ```
 > - Choose `findOne` for unique keys where you only need one document.
 > - Choose `find` for general status filters where multiple rows can match.
 
@@ -198,11 +197,10 @@ db.products.find({ status: "active" });
 **Problem:** Find active users returning ONLY `name` and `email` fields (excluding `_id`).
 
 **Expected output:**
-```text
-db.users.find({ active: true }, { projection: { name: 1, email: 1, _id: 0 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ active: true }, { projection: { name: 1, email: 1, _id: 0 } });
+> ```
 > ```javascript
 > db.users.find({ active: true }, {
 >   projection: { name: 1, email: 1, _id: 0 }
@@ -211,16 +209,17 @@ db.users.find({ active: true }, { projection: { name: 1, email: 1, _id: 0 } });
 >
 > **Explanation:** Projection objects restrict returned document fields.
 
+---
+
 ### Exercise 3: Find Single Document by ID
 
 **Problem:** Find single user document matching `_id` using `findOne()`.
 
 **Expected output:**
-```text
-db.users.findOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.findOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
+> ```
 > ```javascript
 > db.users.findOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
 > ```

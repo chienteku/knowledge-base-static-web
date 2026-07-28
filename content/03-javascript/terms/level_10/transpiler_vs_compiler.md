@@ -170,34 +170,33 @@ async function processData() {
 **Problem:** Classify Babel (Transpiler: JS -> JS) vs GCC (Compiler: C -> Machine Code).
 
 **Expected output:**
-```text
-Babel: Transpiler, GCC: Compiler
-```
-
 > [!check]- Answer
+> ```text
+> Babel: Transpiler, GCC: Compiler
+> ```
 > ```javascript
 > console.log("Babel: Transpiler, GCC: Compiler");
 > ```
 >
 > **Explanation:** Transpilers convert source code to another high-level source language; compilers generate low-level machine code.
 
+---
+
 ### Exercise 3: TypeScript Compiler (`tsc`) Source Generation
 
 **Problem:** Explain how `tsc` transpiles TypeScript source into JavaScript output.
 
 **Expected output:**
-```text
-tsc transpiles TS into target JS
-```
-
 > [!check]- Answer
+> ```text
+> tsc transpiles TS into target JS
+> ```
 > ```javascript
 > console.log("tsc transpiles TS into target JS");
 > ```
 >
 > **Explanation:** `tsc` performs type checking before generating clean target JavaScript output.
 
----
 
 ---
 

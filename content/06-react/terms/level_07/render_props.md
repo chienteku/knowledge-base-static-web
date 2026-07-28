@@ -131,11 +131,10 @@ Use custom hooks to unwrap state values sequentially without nesting
 **Problem:** Create `MouseTracker` component passing `{ x, y }` coordinates to a `render` function prop.
 
 **Expected output:**
-```text
-function MouseTracker({ render }) { const [pos, setPos] = useState({ x: 0, y: 0 }); const handleMouseMove = e => setPos({ x: e.clientX, y: e.clientY }); return <div onMouseMove={handleMouseMove}>{render(pos)}</div>; }
-```
-
 > [!check]- Answer
+> ```text
+> function MouseTracker({ render }) { const [pos, setPos] = useState({ x: 0, y: 0 }); const handleMouseMove = e => setPos({ x: e.clientX, y: e.clientY }); return <div onMouseMove={handleMouseMove}>{render(pos)}</div>; }
+> ```
 > ```javascript
 > function MouseTracker({ render }) {
 >   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -150,34 +149,34 @@ function MouseTracker({ render }) { const [pos, setPos] = useState({ x: 0, y: 0 
 >
 > **Explanation:** The Render Props pattern delegates UI rendering to a callback function passed as a prop.
 
+---
+
 ### Exercise 2: Render Props vs Custom Hooks Transition
 
 **Problem:** Why have Custom Hooks largely superseded Render Props in modern React? (Custom Hooks share stateful logic without adding nested function callback wrappers).
 
 **Expected output:**
-```text
-Custom Hooks share stateful logic without adding nested function callback wrappers
-```
-
 > [!check]- Answer
+> ```text
+> Custom Hooks share stateful logic without adding nested function callback wrappers
+> ```
 > ```text
 > Custom Hooks share stateful logic without adding nested function callback wrappers
 > ```
 >
 > **Explanation:** Custom Hooks simplify component trees by returning values directly.
 
-
+---
 
 ### Exercise 3: Toggle Component with Render Prop
 
 **Problem:** Build `Toggle` component maintaining `on` boolean state and exposing `{ on, toggle }` via render prop.
 
 **Expected output:**
-```text
-function Toggle({ children }) { const [on, setOn] = useState(false); const toggle = () => setOn(!on); return children({ on, toggle }); }
-```
-
 > [!check]- Answer
+> ```text
+> function Toggle({ children }) { const [on, setOn] = useState(false); const toggle = () => setOn(!on); return children({ on, toggle }); }
+> ```
 > ```javascript
 > function Toggle({ children }) {
 >   const [on, setOn] = useState(false);

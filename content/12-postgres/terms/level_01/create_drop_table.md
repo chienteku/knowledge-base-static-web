@@ -131,17 +131,16 @@ CREATE TABLE IF NOT EXISTS users ( id INT PRIMARY KEY ); -- Safe idempotent crea
 2.  Create the `comments` table with three columns: `id` (integer primary key), `author_name` (text, cannot be empty), and `body_text` (text).
 
 **Expected output:**
-```sql
-DROP TABLE IF EXISTS comments;
-
-CREATE TABLE comments (
-  id INTEGER PRIMARY KEY,
-  author_name VARCHAR(100) NOT NULL,
-  body_text TEXT
-);
-```
-
 > [!check]- Answer
+> ```sql
+> DROP TABLE IF EXISTS comments;
+> 
+> CREATE TABLE comments (
+>   id INTEGER PRIMARY KEY,
+>   author_name VARCHAR(100) NOT NULL,
+>   body_text TEXT
+> );
+> ```
 > - Execute the safe drop operation first to clean any leftovers.
 > - Declare columns with their matching type mappings and constraint rules.
 
@@ -154,11 +153,10 @@ CREATE TABLE comments (
 **Problem:** Create table `logs` with auto-incrementing `id`, string `message`, and `created_at` defaulting to `NOW()`.
 
 **Expected output:**
-```text
-CREATE TABLE IF NOT EXISTS logs ( id SERIAL PRIMARY KEY, message TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW() );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE IF NOT EXISTS logs ( id SERIAL PRIMARY KEY, message TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW() );
+> ```
 > ```sql
 > CREATE TABLE IF NOT EXISTS logs (
 >   id SERIAL PRIMARY KEY,
@@ -169,16 +167,17 @@ CREATE TABLE IF NOT EXISTS logs ( id SERIAL PRIMARY KEY, message TEXT NOT NULL, 
 >
 > **Explanation:** `CREATE TABLE IF NOT EXISTS` defines primary key constraints and column defaults safely.
 
+---
+
 ### Exercise 3: Dropping Table Safely
 
 **Problem:** Drop table `temp_records` if it exists.
 
 **Expected output:**
-```text
-DROP TABLE IF EXISTS temp_records;
-```
-
 > [!check]- Answer
+> ```text
+> DROP TABLE IF EXISTS temp_records;
+> ```
 > ```sql
 > DROP TABLE IF EXISTS temp_records;
 > ```

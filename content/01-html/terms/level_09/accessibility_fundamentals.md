@@ -181,13 +181,12 @@ button:focus-visible {
 ```
 
 **Expected output:**
-```text
-1. The header uses a generic `<div class="header">` instead of the semantic `<header>` landmark tag.
-2. The image `<img src="banner.png">` is missing a required `alt` attribute.
-3. The text field uses a generic `<span>` instead of a semantic `<label>` tag, meaning screen readers will not link "Enter Age" to the input.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The header uses a generic `<div class="header">` instead of the semantic `<header>` landmark tag.
+> 2. The image `<img src="banner.png">` is missing a required `alt` attribute.
+> 3. The text field uses a generic `<span>` instead of a semantic `<label>` tag, meaning screen readers will not link "Enter Age" to the input.
+> ```
 > - Think about semantic landmarks, form label bindings, and image fallback descriptions.
 
 ---
@@ -199,14 +198,13 @@ button:focus-visible {
 **Problem:** List the 4 foundational principles of the Web Content Accessibility Guidelines (WCAG).
 
 **Expected output:**
-```text
-1. Perceivable
-2. Operable
-3. Understandable
-4. Robust
-```
-
 > [!check]- Answer
+> ```text
+> 1. Perceivable
+> 2. Operable
+> 3. Understandable
+> 4. Robust
+> ```
 > ```text
 > 1. Perceivable
 > 2. Operable
@@ -216,16 +214,17 @@ button:focus-visible {
 >
 > **Explanation:** POUR principles guide accessible web content design.
 
+---
+
 ### Exercise 3: WCAG Minimum Color Contrast Ratio
 
 **Problem:** What is the WCAG AA minimum required color contrast ratio for normal body text against background?
 
 **Expected output:**
-```text
-4.5:1 ratio (3:1 for large text).
-```
-
 > [!check]- Answer
+> ```text
+> 4.5:1 ratio (3:1 for large text).
+> ```
 > ```text
 > 4.5:1 ratio (3:1 for large text).
 > ```

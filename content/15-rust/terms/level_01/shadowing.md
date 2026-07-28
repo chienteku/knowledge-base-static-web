@@ -155,11 +155,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Final price: $80
-```
-
 > [!check]- Answer
+> ```text
+> Final price: $80
+> ```
 > - Before the `discounted` line, add `let price: i32 = price.parse().unwrap();`.
 > - This creates a new `price` variable that hides the string version, allowing the math to work.
 
@@ -170,11 +169,10 @@ Final price: $80
 **Problem:** Take a user input string `"42"`, parse it into a `u32` using shadowing with `let input = input.trim().parse::<u32>().unwrap();`, and print the doubled number.
 
 **Expected output:**
-```
-84
-```
-
 > [!check]- Answer
+> ```
+> 84
+> ```
 > ```rust
 > fn main() {
 >     let input = " 42 \n";
@@ -185,16 +183,17 @@ Final price: $80
 >
 > **Explanation:** Shadowing allows transforming raw input representations into validated domain types without inventing throwaway variable names like `input_str` and `input_int`.
 
+---
+
 ### Exercise 3: Scope Boundary Shadowing
 
 **Problem:** Trace variable values across nested blocks when `x` is shadowed twice: `let x = 1; { let x = 2; { let x = 3; } }`.
 
 **Expected output:**
-```
-Outer: 1
-```
-
 > [!check]- Answer
+> ```
+> Outer: 1
+> ```
 > ```rust
 > fn main() {
 >     let x = 1;

@@ -148,15 +148,14 @@ db.users.find().limit(10); // Controlled limit
 3.  List the names of all collections inside `analytics`.
 
 **Expected output:**
-```javascript
-show dbs
-
-use analytics
-
-show collections
-```
-
 > [!check]- Answer
+> ```javascript
+> show dbs
+> 
+> use analytics
+> 
+> show collections
+> ```
 > - The command `show dbs` audits the server namespaces.
 > - The active database focus determines what `show collections` reads.
 
@@ -169,27 +168,27 @@ show collections
 **Problem:** Format mongosh JSON output clearly using `db.coll.find().pretty()`.
 
 **Expected output:**
-```text
-db.users.find().pretty();
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find().pretty();
+> ```
 > ```javascript
 > db.users.find().pretty();
 > ```
 >
 > **Explanation:** `pretty()` indents BSON documents for clear terminal viewing.
 
+---
+
 ### Exercise 3: Evaluating JavaScript Code in mongosh
 
 **Problem:** Run a JS loop inside `mongosh` inserting 3 documents into `test` collection.
 
 **Expected output:**
-```text
-for (let i = 1; i <= 3; i++) { db.test.insertOne({ val: i }); }
-```
-
 > [!check]- Answer
+> ```text
+> for (let i = 1; i <= 3; i++) { db.test.insertOne({ val: i }); }
+> ```
 > ```javascript
 > for (let i = 1; i <= 3; i++) {
 >   db.test.insertOne({ val: i });

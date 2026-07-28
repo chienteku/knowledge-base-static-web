@@ -174,11 +174,10 @@ thread::spawn(move || {
 **Problem:** Declare an inline module `mod utils { pub fn ping() {} }` and call `utils::ping()`.
 
 **Expected output:**
-```
-Pinged
-```
-
 > [!check]- Answer
+> ```
+> Pinged
+> ```
 > ```rust
 > mod utils {
 >     pub fn ping() { println!("Pinged"); }
@@ -190,16 +189,17 @@ Pinged
 >
 > **Explanation:** `mod name { ... }` defines inline submodules without separate file creation.
 
+---
+
 ### Exercise 3: Nested Submodule Hierarchy Declarations
 
 **Problem:** Access `net::http::client::connect()` through nested module paths.
 
 **Expected output:**
-```
-Connected
-```
-
 > [!check]- Answer
+> ```
+> Connected
+> ```
 > mod net { pub mod http { pub mod client { pub fn connect() { println!("Connected"); } } } }
 > fn main() { net::http::client::connect(); }
 > ```

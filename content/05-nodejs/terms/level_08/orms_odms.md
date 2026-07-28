@@ -116,12 +116,11 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 **Problem:** You are starting a new project. You decided to use a Relational PostgreSQL database because your data is highly structured. Should you install `Mongoose` or `Prisma`?
 
 **Expected output:**
-```text
-Prisma.
-Mongoose is an ODM built exclusively for MongoDB (NoSQL). Prisma is an ORM built for Relational SQL databases like PostgreSQL.
-```
-
 > [!check]- Answer
+> ```text
+> Prisma.
+> Mongoose is an ODM built exclusively for MongoDB (NoSQL). Prisma is an ORM built for Relational SQL databases like PostgreSQL.
+> ```
 > - Which database does Mongoose talk to?
 
 ---
@@ -133,12 +132,11 @@ Mongoose is an ODM built exclusively for MongoDB (NoSQL). Prisma is an ORM built
 **Problem:** Distinguish ORM vs ODM data mapping targets.
 
 **Expected output:**
-```text
-ORM (Object-Relational Mapping): Relational SQL databases (PostgreSQL, MySQL)
-ODM (Object-Document Mapping): Document NoSQL databases (MongoDB)
-```
-
 > [!check]- Answer
+> ```text
+> ORM (Object-Relational Mapping): Relational SQL databases (PostgreSQL, MySQL)
+> ODM (Object-Document Mapping): Document NoSQL databases (MongoDB)
+> ```
 > ```text
 > ORM: Relational SQL databases (PostgreSQL, MySQL)
 > ODM: Document NoSQL databases (MongoDB)
@@ -146,16 +144,17 @@ ODM (Object-Document Mapping): Document NoSQL databases (MongoDB)
 >
 > **Explanation:** ORMs map SQL tables/rows to objects; ODMs map NoSQL collections/documents to objects.
 
+---
+
 ### Exercise 3: Preventing N+1 Queries in Prisma
 
 **Problem:** Write Prisma `findMany` query eager-loading `posts` relation on `user` queries.
 
 **Expected output:**
-```text
-const users = await prisma.user.findMany({ include: { posts: true } });
-```
-
 > [!check]- Answer
+> ```text
+> const users = await prisma.user.findMany({ include: { posts: true } });
+> ```
 > ```javascript
 > const users = await prisma.user.findMany({
 >   include: { posts: true }

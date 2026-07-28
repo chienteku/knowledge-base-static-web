@@ -118,11 +118,10 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 `<div id="navigation-menu"> <ul>...</ul> </div>`
 
 **Expected output:**
-```text
-The `<nav>` tag.
-```
-
 > [!check]- Answer
+> ```text
+> The `<nav>` tag.
+> ```
 > - "nav" is short for "navigation"!
 
 ---
@@ -134,13 +133,12 @@ The `<nav>` tag.
 **Problem:** List 3 primary technical advantages of using Semantic HTML5 elements over `<div>` tags.
 
 **Expected output:**
-```text
-1. Accessibility (Screen readers navigate landmarks)
-2. SEO (Search engines understand page content hierarchy)
-3. Maintainability (Code is clean and self-documenting)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Accessibility (Screen readers navigate landmarks)
+> 2. SEO (Search engines understand page content hierarchy)
+> 3. Maintainability (Code is clean and self-documenting)
+> ```
 > ```text
 > 1. Accessibility (Screen readers navigate landmarks)
 > 2. SEO (Search engines understand page content hierarchy)
@@ -149,16 +147,17 @@ The `<nav>` tag.
 >
 > **Explanation:** Semantic HTML provides machine-readable structure for devices and search crawlers.
 
+---
+
 ### Exercise 3: Semantic Refactoring Challenge
 
 **Problem:** Refactor `<div class="nav-link"><a href="/">Home</a></div>` to clean semantic HTML.
 
 **Expected output:**
-```text
-<nav><a href="/">Home</a></nav>
-```
-
 > [!check]- Answer
+> ```text
+> <nav><a href="/">Home</a></nav>
+> ```
 > ```html
 > <nav>
 >   <a href="/">Home</a>

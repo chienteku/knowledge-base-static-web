@@ -181,11 +181,10 @@ thread::spawn(move || {
 **Problem:** Demonstrate transferring ownership of a `Vec<u8>` from `v1` to `v2` and explain why `v1` is invalid.
 
 **Expected output:**
-```
-v2 len: 3
-```
-
 > [!check]- Answer
+> ```
+> v2 len: 3
+> ```
 > ```rust
 > fn main() {
 >     let v1 = vec![1, 2, 3];
@@ -196,16 +195,17 @@ v2 len: 3
 >
 > **Explanation:** Assigning non-`Copy` types moves ownership, invalidating previous binding names.
 
+---
+
 ### Exercise 3: Returning Owned Values from Functions
 
 **Problem:** Write a function `build_data() -> Vec<i32>` that creates a vector locally and returns ownership to `main`.
 
 **Expected output:**
-```
-Built len: 5
-```
-
 > [!check]- Answer
+> ```
+> Built len: 5
+> ```
 > fn build_data() -> Vec<i32> { vec![1, 2, 3, 4, 5] }
 > fn main() {
 >     let data = build_data();

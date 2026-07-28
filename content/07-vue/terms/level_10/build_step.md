@@ -98,13 +98,12 @@ import cloneDeep from 'lodash-es/cloneDeep'; // Tree-shakable ES module import
 **Problem:** Is it absolutely mandatory to have a Build Step to use Vue? Can I just drop Vue into an old HTML file like jQuery?
 
 **Expected output:**
-```text
-Yes, you can use Vue without a build step!
-You can import Vue directly from a CDN using a `<script>` tag in a standard `.html` file. This is called the "Global Build".
-However, without a build step, you cannot use `.vue` Single-File Components, you cannot use `<style scoped>`, and your templates are compiled in the browser (which is slower). It is only recommended for tiny enhancements to legacy pages, never for full Single-Page Apps.
-```
-
 > [!check]- Answer
+> ```text
+> Yes, you can use Vue without a build step!
+> You can import Vue directly from a CDN using a `<script>` tag in a standard `.html` file. This is called the "Global Build".
+> However, without a build step, you cannot use `.vue` Single-File Components, you cannot use `<style scoped>`, and your templates are compiled in the browser (which is slower). It is only recommended for tiny enhancements to legacy pages, never for full Single-Page Apps.
+> ```
 > - Think about the "Global Build" vs the "ES Module Build".
 
 ---
@@ -114,11 +113,10 @@ However, without a build step, you cannot use `.vue` Single-File Components, you
 **Problem:** Which npm script command compiles a Vue 3 Vite application for production distribution?
 
 **Expected output:**
-```text
-npm run build (executes vite build)
-```
-
 > [!check]- Answer
+> ```text
+> npm run build (executes vite build)
+> ```
 > - `vite build` bundles assets into `dist/` directory.
 > 
 > ```bash
@@ -132,11 +130,10 @@ npm run build (executes vite build)
 **Problem:** What module format is required for JavaScript bundlers to perform automatic Tree Shaking (dead code elimination)?
 
 **Expected output:**
-```text
-ES Modules (ESM syntax using import / export).
-```
-
 > [!check]- Answer
+> ```text
+> ES Modules (ESM syntax using import / export).
+> ```
 > - Tree shaking relies on static ES module `import`/`export` analysis.
 > 
 > ```text

@@ -147,18 +147,17 @@ console.log(config.public.apiBase); // Access public runtimeConfig properties on
 **Problem:** You have a Stripe Publishable Key (`STRIPE_PUB_KEY`) that is safe for the browser, and a Stripe Secret Key (`STRIPE_SEC_KEY`) that must never leave the server. Write the `runtimeConfig` block in `nuxt.config.ts` to accommodate both.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  runtimeConfig: {
-    stripeSecKey: process.env.STRIPE_SEC_KEY,
-    public: {
-      stripePubKey: process.env.STRIPE_PUB_KEY
-    }
-  }
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   runtimeConfig: {
+>     stripeSecKey: process.env.STRIPE_SEC_KEY,
+>     public: {
+>       stripePubKey: process.env.STRIPE_PUB_KEY
+>     }
+>   }
+> })
+> ```
 > - Define private variables directly under `runtimeConfig` and public ones under `runtimeConfig.public` using process env references.
 
 ---
@@ -168,22 +167,21 @@ export default defineNuxtConfig({
 **Problem:** Write `nuxt.config.ts` `runtimeConfig` defining private `stripeSecretKey` and public `apiBaseUrl`, and a Server API handler reading `stripeSecretKey`.
 
 **Expected output:**
-```typescript
-// nuxt.config.ts
-export default defineNuxtConfig({
-  runtimeConfig: {
-    stripeSecretKey: '',
-    public: { apiBaseUrl: '/api' }
-  }
-});
-// Server handler:
-export default defineEventHandler((event) => {
-  const config = useRuntimeConfig(event);
-  return config.stripeSecretKey;
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> // nuxt.config.ts
+> export default defineNuxtConfig({
+>   runtimeConfig: {
+>     stripeSecretKey: '',
+>     public: { apiBaseUrl: '/api' }
+>   }
+> });
+> // Server handler:
+> export default defineEventHandler((event) => {
+>   const config = useRuntimeConfig(event);
+>   return config.stripeSecretKey;
+> });
+> ```
 > - `useRuntimeConfig()` accesses server and client environment variables.
 > 
 > ```typescript
@@ -205,11 +203,10 @@ export default defineEventHandler((event) => {
 **Problem:** How can environment variable `NUXT_STRIPE_SECRET` override `runtimeConfig.stripeSecret` at runtime without re-building?
 
 **Expected output:**
-```text
-Nitro automatically overrides matching runtimeConfig keys using NUXT_ pre-fixed environment variables at application startup.
-```
-
 > [!check]- Answer
+> ```text
+> Nitro automatically overrides matching runtimeConfig keys using NUXT_ pre-fixed environment variables at application startup.
+> ```
 > - `NUXT_KEY` environment variables override `runtimeConfig.key` dynamically.
 > 
 > ```bash

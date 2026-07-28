@@ -161,22 +161,21 @@ Write the SQL queries to:
 2.  Create a `BEFORE INSERT OR UPDATE` trigger named `trg_clean_username` on the `users` table to enforce this logic.
 
 **Expected output:**
-```sql
-CREATE FUNCTION clean_username()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.username := LOWER(NEW.username);
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_clean_username
-BEFORE INSERT OR UPDATE ON users
-FOR EACH ROW
-EXECUTE FUNCTION clean_username();
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE FUNCTION clean_username()
+> RETURNS TRIGGER AS $$
+> BEGIN
+>   NEW.username := LOWER(NEW.username);
+>   RETURN NEW;
+> END;
+> $$ LANGUAGE plpgsql;
+> 
+> CREATE TRIGGER trg_clean_username
+> BEFORE INSERT OR UPDATE ON users
+> FOR EACH ROW
+> EXECUTE FUNCTION clean_username();
+> ```
 > - In BEFORE triggers, returning `NEW` is required to proceed with the insert.
 > - Chain the trigger events using `INSERT OR UPDATE` in the trigger binding statement.
 
@@ -189,11 +188,10 @@ EXECUTE FUNCTION clean_username();
 **Problem:** Create `BEFORE UPDATE` trigger function `set_updated_at()` assigning `NEW.updated_at = NOW()` and attach to `users` table.
 
 **Expected output:**
-```text
-CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql; CREATE TRIGGER trg_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-```
-
 > [!check]- Answer
+> ```text
+> CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql; CREATE TRIGGER trg_users_updated_at BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+> ```
 > ```sql
 > CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$
 > BEGIN
@@ -209,16 +207,17 @@ CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NO
 >
 > **Explanation:** `BEFORE UPDATE` triggers modify row attributes on `NEW` before disk write.
 
+---
+
 ### Exercise 3: Trigger Timing Types
 
 **Problem:** List 3 trigger execution timing modes in PostgreSQL (`BEFORE`, `AFTER`, `INSTEAD OF`).
 
 **Expected output:**
-```text
-BEFORE, AFTER, INSTEAD OF
-```
-
 > [!check]- Answer
+> ```text
+> BEFORE, AFTER, INSTEAD OF
+> ```
 > ```text
 > BEFORE, AFTER, INSTEAD OF
 > ```

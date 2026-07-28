@@ -173,12 +173,11 @@ async function processData() {
 ```
 
 **Expected output:**
-```text
-(500ms passes...)
-Welcome back!
-```
-
 > [!check]- Answer
+> ```text
+> (500ms passes...)
+> Welcome back!
+> ```
 > - The syntax for setTimeout is `setTimeout(callbackFunction, delayMs)`.
 > - Write an anonymous arrow function `() => { ... }` as the first argument.
 
@@ -189,11 +188,10 @@ Welcome back!
 **Problem:** Use a named function expression `const factorial = function fact(n) { ... }` to calculate `fact(4)`.
 
 **Expected output:**
-```text
-24
-```
-
 > [!check]- Answer
+> ```text
+> 24
+> ```
 > ```javascript
 > const factorial = function fact(n) {
 >   return n <= 1 ? 1 : n * fact(n - 1);
@@ -203,16 +201,17 @@ Welcome back!
 >
 > **Explanation:** Named function expressions bind function names (`fact`) inside their own local scope for recursive self-invocations.
 
+---
+
 ### Exercise 3: Anonymous Callback Event Listener Removal
 
 **Problem:** Explain why `elem.removeEventListener('click', function() {})` fails to remove an inline anonymous click handler.
 
 **Expected output:**
-```text
-Anonymous listeners cannot be un-bound
-```
-
 > [!check]- Answer
+> ```text
+> Anonymous listeners cannot be un-bound
+> ```
 > ```javascript
 > console.log("Anonymous listeners cannot be un-bound");
 > ```

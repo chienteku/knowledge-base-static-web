@@ -132,12 +132,11 @@ app.get('/users', async (req, res) => { const client = await pool.connect(); try
 Explain what this error means in terms of the client-server model, and what you must do to fix it.
 
 **Expected output:**
-```text
-The error `ECONNREFUSED` means that your Node.js application (the client) tried to connect to port 5432 on your local machine, but no background service was listening on that port. 
-To fix this, you need to verify if the PostgreSQL server process is installed and start it (e.g. running `brew services start postgresql` or starting your Postgres Docker container).
-```
-
 > [!check]- Answer
+> ```text
+> The error `ECONNREFUSED` means that your Node.js application (the client) tried to connect to port 5432 on your local machine, but no background service was listening on that port. 
+> To fix this, you need to verify if the PostgreSQL server process is installed and start it (e.g. running `brew services start postgresql` or starting your Postgres Docker container).
+> ```
 > - Differentiate between client code errors and server running states.
 > - Identify what service listens on port 5432.
 
@@ -150,11 +149,10 @@ To fix this, you need to verify if the PostgreSQL server process is installed an
 **Problem:** Initialize PostgreSQL connection pool in Node.js `pg` module connecting to `localhost:5432`.
 
 **Expected output:**
-```text
-const { Pool } = require('pg'); const pool = new Pool({ host: 'localhost', port: 5432, database: 'main' });
-```
-
 > [!check]- Answer
+> ```text
+> const { Pool } = require('pg'); const pool = new Pool({ host: 'localhost', port: 5432, database: 'main' });
+> ```
 > ```javascript
 > const { Pool } = require('pg');
 > const pool = new Pool({
@@ -166,16 +164,17 @@ const { Pool } = require('pg'); const pool = new Pool({ host: 'localhost', port:
 >
 > **Explanation:** Connection pools manage reusable TCP client sockets efficiently.
 
+---
+
 ### Exercise 3: Default PostgreSQL Port
 
 **Problem:** What is the default TCP listening port for PostgreSQL server daemons? (`5432`).
 
 **Expected output:**
-```text
-5432
-```
-
 > [!check]- Answer
+> ```text
+> 5432
+> ```
 > ```text
 > 5432
 > ```

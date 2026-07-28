@@ -178,13 +178,12 @@ const ws = new WebSocket('wss://api.example.com');
 3. A collaborative Google Doc where you see other people typing.
 
 **Expected output:**
-```text
-1. HTTP (REST API). It only happens once.
-2. WebSockets. Data needs to stream continuously.
-3. WebSockets. Users need to instantly receive keystrokes from other users without refreshing.
-```
-
 > [!check]- Answer
+> ```text
+> 1. HTTP (REST API). It only happens once.
+> 2. WebSockets. Data needs to stream continuously.
+> 3. WebSockets. Users need to instantly receive keystrokes from other users without refreshing.
+> ```
 > - Is it a one-time request, or a continuous flow of live updates?
 
 ---
@@ -194,11 +193,10 @@ const ws = new WebSocket('wss://api.example.com');
 **Problem:** What is the minimum frame header overhead size for a WebSocket message frame?
 
 **Expected output:**
-```text
-2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
-```
-
 > [!check]- Answer
+> ```text
+> 2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
+> ```
 > ```text
 > 2 to 10 bytes per frame (extremely lightweight framing overhead).
 > ```
@@ -210,11 +208,10 @@ const ws = new WebSocket('wss://api.example.com');
 **Problem:** Why do WebSocket handshake requests require Sticky Sessions (session affinity) on HTTP/1.1 load balancers?
 
 **Expected output:**
-```text
-Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-```
-
 > [!check]- Answer
+> ```text
+> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
+> ```
 > ```text
 > Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
 > ```
@@ -226,11 +223,10 @@ Initial HTTP upgrade requests and subsequent TCP socket frames must reach the sa
 **Problem:** What is the minimum frame header overhead size for a WebSocket message frame?
 
 **Expected output:**
-```text
-2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
-```
-
 > [!check]- Answer
+> ```text
+> 2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
+> ```
 > ```text
 > 2 to 10 bytes per frame (extremely lightweight framing overhead).
 > ```
@@ -242,11 +238,10 @@ Initial HTTP upgrade requests and subsequent TCP socket frames must reach the sa
 **Problem:** Why do WebSocket handshake requests require Sticky Sessions (session affinity) on HTTP/1.1 load balancers?
 
 **Expected output:**
-```text
-Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-```
-
 > [!check]- Answer
+> ```text
+> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
+> ```
 > ```text
 > Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
 > ```
@@ -258,11 +253,10 @@ Initial HTTP upgrade requests and subsequent TCP socket frames must reach the sa
 **Problem:** What is the minimum frame header overhead size for a WebSocket message frame?
 
 **Expected output:**
-```text
-2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
-```
-
 > [!check]- Answer
+> ```text
+> 2 to 10 bytes (compared to 500-1000 bytes per HTTP request header).
+> ```
 > ```text
 > 2 to 10 bytes per frame (extremely lightweight framing overhead).
 > ```
@@ -274,11 +268,10 @@ Initial HTTP upgrade requests and subsequent TCP socket frames must reach the sa
 **Problem:** Why do WebSocket handshake requests require Sticky Sessions (session affinity) on HTTP/1.1 load balancers?
 
 **Expected output:**
-```text
-Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
-```
-
 > [!check]- Answer
+> ```text
+> Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
+> ```
 > ```text
 > Initial HTTP upgrade requests and subsequent TCP socket frames must reach the same backend server instance to complete connection establishment.
 > ```

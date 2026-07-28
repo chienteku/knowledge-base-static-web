@@ -155,11 +155,10 @@ db.users.updateOne({ _id: id }, { $set: { "address.city": "Boston" } }); // Upda
 Write the MongoDB query to find all companies where the nested contact email is `'sales@startup.co'`.
 
 **Expected output:**
-```javascript
-db.companies.find({ "contact.email": "sales@startup.co" });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.companies.find({ "contact.email": "sales@startup.co" });
+> ```
 > - Construct the key using dot notation: `contact.email`.
 > - Always wrap dot-notation keys in quotes (`""`) inside the query filter.
 
@@ -172,27 +171,27 @@ db.companies.find({ "contact.email": "sales@startup.co" });
 **Problem:** Update `zip` code inside `address` sub-document for `user:1` using dot-notation.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $set: { "address.zip": "90210" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $set: { "address.zip": "90210" } });
+> ```
 > ```javascript
 > db.users.updateOne({ _id: 1 }, { $set: { "address.zip": "90210" } });
 > ```
 >
 > **Explanation:** `"parent.child"` dot-notation updates sub-document fields without overwriting siblings.
 
+---
+
 ### Exercise 3: Querying Deeply Embedded Fields
 
 **Problem:** Query users where `company.location.country` equals `"Canada"`.
 
 **Expected output:**
-```text
-db.users.find({ "company.location.country": "Canada" });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ "company.location.country": "Canada" });
+> ```
 > ```javascript
 > db.users.find({ "company.location.country": "Canada" });
 > ```

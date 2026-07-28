@@ -159,13 +159,12 @@ const res = await client.query('UPDATE users SET active = true RETURNING *'); co
 **Problem:** You are building a user registration API in Node.js. When a user registers, you insert their email. The database generates a unique ID. You must redirect the user to `/users/` followed by their new ID. Write the SQL insert statement that yields the ID in a single query.
 
 **Expected output:**
-```sql
-INSERT INTO users (email) 
-VALUES ('new_user@example.com') 
-RETURNING id;
-```
-
 > [!check]- Answer
+> ```sql
+> INSERT INTO users (email) 
+> VALUES ('new_user@example.com') 
+> RETURNING id;
+> ```
 > - Start with a standard `INSERT INTO` parameters syntax.
 > - Append the PostgreSQL target returning command specifying the ID column.
 
@@ -178,27 +177,27 @@ RETURNING id;
 **Problem:** Insert order document returning generated `id` and computed `created_at` timestamp.
 
 **Expected output:**
-```text
-INSERT INTO orders (total) VALUES (99.95) RETURNING id, created_at;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO orders (total) VALUES (99.95) RETURNING id, created_at;
+> ```
 > ```sql
 > INSERT INTO orders (total) VALUES (99.95) RETURNING id, created_at;
 > ```
 >
 > **Explanation:** `RETURNING col1, col2` projects generated defaults immediately upon insertion.
 
+---
+
 ### Exercise 3: Capturing Deleted Rows with RETURNING
 
 **Problem:** Delete expired tokens returning deleted `token_str` values.
 
 **Expected output:**
-```text
-DELETE FROM tokens WHERE expires_at < NOW() RETURNING token_str;
-```
-
 > [!check]- Answer
+> ```text
+> DELETE FROM tokens WHERE expires_at < NOW() RETURNING token_str;
+> ```
 > ```sql
 > DELETE FROM tokens WHERE expires_at < NOW() RETURNING token_str;
 > ```

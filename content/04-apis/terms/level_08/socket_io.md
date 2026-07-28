@@ -192,12 +192,11 @@ io.adapter(createAdapter(pubClient, subClient)); // Redis adapter syncs rooms ac
 **Problem:** Your manager tells you to build a live dashboard. They say, "Don't install any third-party NPM packages, just use the native browser `WebSocket` object." You know the users will be driving through tunnels and losing cell service frequently. What is your argument for installing `socket.io-client` instead?
 
 **Expected output:**
-```text
-Auto-reconnection! 
-If we use the native WebSocket object, the second the user loses cell service, the connection drops permanently. I would have to write hundreds of lines of complex logic to detect the drop, set a timer, try to reconnect, and sync missing data. Socket.io handles all of this automatically out-of-the-box.
-```
-
 > [!check]- Answer
+> ```text
+> Auto-reconnection! 
+> If we use the native WebSocket object, the second the user loses cell service, the connection drops permanently. I would have to write hundreds of lines of complex logic to detect the drop, set a timer, try to reconnect, and sync missing data. Socket.io handles all of this automatically out-of-the-box.
+> ```
 > - Does the native WebSocket API automatically try to reconnect if it fails?
 
 ---
@@ -207,13 +206,12 @@ If we use the native WebSocket object, the second the user loses cell service, t
 **Problem:** List 3 features provided out-of-the-box by Socket.IO that raw WebSockets lack.
 
 **Expected output:**
-```text
-1. HTTP Long-Polling fallback (Engine.IO)
-2. Automatic reconnection with backoff
-3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
-```
-
 > [!check]- Answer
+> ```text
+> 1. HTTP Long-Polling fallback (Engine.IO)
+> 2. Automatic reconnection with backoff
+> 3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
+> ```
 > ```text
 > 1. HTTP Long-Polling fallback transport
 > 2. Automatic reconnection management
@@ -227,11 +225,10 @@ If we use the native WebSocket object, the second the user loses cell service, t
 **Problem:** Write Socket.IO event emission with server-side acknowledgment callback.
 
 **Expected output:**
-```text
-socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
-```
-
 > [!check]- Answer
+> ```text
+> socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
+> ```
 > ```javascript
 > socket.emit('createOrder', { item: 'book' }, (res) => {
 > console.log('Server acknowledged creation status:', res.status);
@@ -245,13 +242,12 @@ socket.emit('createOrder', { item: 'book' }, (response) => { console.log(respons
 **Problem:** List 3 features provided out-of-the-box by Socket.IO that raw WebSockets lack.
 
 **Expected output:**
-```text
-1. HTTP Long-Polling fallback (Engine.IO)
-2. Automatic reconnection with backoff
-3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
-```
-
 > [!check]- Answer
+> ```text
+> 1. HTTP Long-Polling fallback (Engine.IO)
+> 2. Automatic reconnection with backoff
+> 3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
+> ```
 > ```text
 > 1. HTTP Long-Polling fallback transport
 > 2. Automatic reconnection management
@@ -265,11 +261,10 @@ socket.emit('createOrder', { item: 'book' }, (response) => { console.log(respons
 **Problem:** Write Socket.IO event emission with server-side acknowledgment callback.
 
 **Expected output:**
-```text
-socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
-```
-
 > [!check]- Answer
+> ```text
+> socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
+> ```
 > ```javascript
 > socket.emit('createOrder', { item: 'book' }, (res) => {
 > console.log('Server acknowledged creation status:', res.status);
@@ -283,13 +278,12 @@ socket.emit('createOrder', { item: 'book' }, (response) => { console.log(respons
 **Problem:** List 3 features provided out-of-the-box by Socket.IO that raw WebSockets lack.
 
 **Expected output:**
-```text
-1. HTTP Long-Polling fallback (Engine.IO)
-2. Automatic reconnection with backoff
-3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
-```
-
 > [!check]- Answer
+> ```text
+> 1. HTTP Long-Polling fallback (Engine.IO)
+> 2. Automatic reconnection with backoff
+> 3. Rooms and Namespaces abstractions (or built-in JSON acknowledgment callbacks)
+> ```
 > ```text
 > 1. HTTP Long-Polling fallback transport
 > 2. Automatic reconnection management
@@ -303,11 +297,10 @@ socket.emit('createOrder', { item: 'book' }, (response) => { console.log(respons
 **Problem:** Write Socket.IO event emission with server-side acknowledgment callback.
 
 **Expected output:**
-```text
-socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
-```
-
 > [!check]- Answer
+> ```text
+> socket.emit('createOrder', { item: 'book' }, (response) => { console.log(response.status); });
+> ```
 > ```javascript
 > socket.emit('createOrder', { item: 'book' }, (res) => {
 > console.log('Server acknowledged creation status:', res.status);

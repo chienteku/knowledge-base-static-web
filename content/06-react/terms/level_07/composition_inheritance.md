@@ -198,16 +198,17 @@ function ProductCard({ product }) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Slot Composition Pattern
 
 **Problem:** Create `SplitPane` layout component accepting `left` and `right` JSX slot props.
 
 **Expected output:**
-```text
-function SplitPane({ left, right }) { return <div className="split-pane"><div className="left">{left}</div><div className="right">{right}</div></div>; }
-```
-
 > [!check]- Answer
+> ```text
+> function SplitPane({ left, right }) { return <div className="split-pane"><div className="left">{left}</div><div className="right">{right}</div></div>; }
+> ```
 > ```javascript
 > function SplitPane({ left, right }) {
 >   return (
@@ -221,16 +222,17 @@ function SplitPane({ left, right }) { return <div className="split-pane"><div cl
 >
 > **Explanation:** Slot props pass custom JSX elements as named properties for flexible layout composition.
 
+---
+
 ### Exercise 3: Composition over Inheritance Principle
 
 **Problem:** State primary React architecture principle regarding code reuse (Use Component Composition and Custom Hooks instead of OOP class inheritance).
 
 **Expected output:**
-```text
-Use Component Composition and Custom Hooks instead of Class Inheritance
-```
-
 > [!check]- Answer
+> ```text
+> Use Component Composition and Custom Hooks instead of Class Inheritance
+> ```
 > ```text
 > Use Component Composition and Custom Hooks instead of Class Inheritance
 > ```

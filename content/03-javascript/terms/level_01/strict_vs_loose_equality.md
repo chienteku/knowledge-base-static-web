@@ -163,14 +163,13 @@ console.log([] === false);
 ```
 
 **Expected output:**
-```text
-true
-false
-true
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> false
+> true
+> false
+> ```
 > - The boolean `true` coerces to the number `1` during loose comparison.
 > - An empty array `[]` is coerced to an empty string `""` which then coerces to the number `0`, matching the number representation of `false`.
 > - Strict equality (`===`) checks the types first, evaluating immediately to `false` if types differ.
@@ -182,14 +181,13 @@ false
 **Problem:** Predict `0 == "0"`, `0 === "0"`, `null == undefined`, and `null === undefined`.
 
 **Expected output:**
-```text
-true
-false
-true
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> false
+> true
+> false
+> ```
 > ```javascript
 > console.log(0 == "0");        // true (coerces "0" to number 0)
 > console.log(0 === "0");       // false (different types)
@@ -199,17 +197,18 @@ false
 >
 > **Explanation:** `==` performs implicit type coercion if types differ; `===` checks both value and type without coercion.
 
+---
+
 ### Exercise 3: Object Reference Comparison Trap
 
 **Problem:** Compare `{} == {}` and `[] === []` and explain why both return `false`.
 
 **Expected output:**
-```text
-false
-false
-```
-
 > [!check]- Answer
+> ```text
+> false
+> false
+> ```
 > ```javascript
 > console.log({} == {});
 > console.log([] === []);
@@ -217,7 +216,6 @@ false
 >
 > **Explanation:** Objects and arrays are compared by memory reference. Two distinct object literals occupy different memory locations.
 
----
 
 ---
 

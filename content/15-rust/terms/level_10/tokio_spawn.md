@@ -186,11 +186,10 @@ thread::spawn(move || {
 **Problem:** Spawn a background task with `tokio::spawn(async move { ... })` and await its `JoinHandle`.
 
 **Expected output:**
-```
-Spawned task completed: 100
-```
-
 > [!check]- Answer
+> ```
+> Spawned task completed: 100
+> ```
 > ```rust
 > fn main() {
 >     println!("Spawned task completed: 100");
@@ -199,16 +198,17 @@ Spawned task completed: 100
 >
 > **Explanation:** `tokio::spawn` submits green tasks to the multi-threaded Tokio executor.
 
+---
+
 ### Exercise 3: Handling Task Join Errors
 
 **Problem:** Handle task panics by checking `JoinHandle` return `Result` for `JoinError`.
 
 **Expected output:**
-```
-Task panic caught in join handle
-```
-
 > [!check]- Answer
+> ```
+> Task panic caught in join handle
+> ```
 > fn main() {
 >     println!("Task panic caught in join handle");
 > }

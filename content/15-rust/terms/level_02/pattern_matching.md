@@ -165,11 +165,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-X: 10, Y: 20, Z: 30
-```
-
 > [!check]- Answer
+> ```text
+> X: 10, Y: 20, Z: 30
+> ```
 > - Write `let (x, y, z) = coordinates;`
 
 ---
@@ -179,11 +178,10 @@ X: 10, Y: 20, Z: 30
 **Problem:** Destructure a struct `Point { x, y }` in a match arm: `Point { x: 0, y } => ...`.
 
 **Expected output:**
-```
-Y axis: 10
-```
-
 > [!check]- Answer
+> ```
+> Y axis: 10
+> ```
 > ```rust
 > struct Point { x: i32, y: i32 }
 > fn main() {
@@ -198,16 +196,17 @@ Y axis: 10
 >
 > **Explanation:** Struct patterns extract named fields into local bindings during match evaluation.
 
+---
+
 ### Exercise 3: @ Binding Patterns
 
 **Problem:** Use `@` pattern binding `n @ 1..=5` to bind and test integer range membership.
 
 **Expected output:**
-```
-Matched small number: 3
-```
-
 > [!check]- Answer
+> ```
+> Matched small number: 3
+> ```
 > ```rust
 > fn main() {
 >     let num = 3;

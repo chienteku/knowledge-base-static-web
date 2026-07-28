@@ -205,16 +205,17 @@ test('dismisses the warning message', () => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Testing User Click Interaction with userEvent
 
 **Problem:** Test button click incrementing counter in `Counter` component using `screen.getByRole` and `userEvent.click`.
 
 **Expected output:**
-```text
-test('increments counter', async () => { render(<Counter />); const btn = screen.getByRole('button', { name: /increment/i }); await userEvent.click(btn); expect(screen.getByText('Count: 1')).toBeInTheDocument(); });
-```
-
 > [!check]- Answer
+> ```text
+> test('increments counter', async () => { render(<Counter />); const btn = screen.getByRole('button', { name: /increment/i }); await userEvent.click(btn); expect(screen.getByText('Count: 1')).toBeInTheDocument(); });
+> ```
 > ```javascript
 > test('increments counter', async () => {
 >   render(<Counter />);
@@ -226,16 +227,17 @@ test('increments counter', async () => { render(<Counter />); const btn = screen
 >
 > **Explanation:** `@testing-library/user-event` simulates realistic browser user interactions.
 
+---
+
 ### Exercise 3: Query Priority Order in RTL
 
 **Problem:** List top 3 recommended query priorities in React Testing Library (1. `getByRole`; 2. `getByLabelText`; 3. `getByText` / `getByTestId`).
 
 **Expected output:**
-```text
-1. getByRole, 2. getByLabelText, 3. getByText / getByTestId
-```
-
 > [!check]- Answer
+> ```text
+> 1. getByRole, 2. getByLabelText, 3. getByText / getByTestId
+> ```
 > ```text
 > 1. getByRole, 2. getByLabelText, 3. getByText / getByTestId
 > ```

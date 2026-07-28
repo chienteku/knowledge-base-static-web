@@ -156,13 +156,12 @@ CREATE INDEX idx_fts ON articles USING GIN (to_tsvector('english', body));
 Write the SQL query to search for and select the `title` of all articles where the body contains both the word `'tutorial'` and the word `'postgres'`.
 
 **Expected output:**
-```sql
-SELECT title 
-FROM articles 
-WHERE to_tsvector('english', body) @@ to_tsquery('english', 'tutorial & postgres');
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT title 
+> FROM articles 
+> WHERE to_tsvector('english', body) @@ to_tsquery('english', 'tutorial & postgres');
+> ```
 > - Use the match operator `@@`.
 > - Format the `tsquery` search terms using the logical AND operator `&`.
 
@@ -175,11 +174,10 @@ WHERE to_tsvector('english', body) @@ to_tsquery('english', 'tutorial & postgres
 **Problem:** Add `tsv` column as `TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED` and create GIN index.
 
 **Expected output:**
-```text
-ALTER TABLE articles ADD COLUMN tsv TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED; CREATE INDEX idx_articles_tsv ON articles USING GIN (tsv);
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE articles ADD COLUMN tsv TSVECTOR GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED; CREATE INDEX idx_articles_tsv ON articles USING GIN (tsv);
+> ```
 > ```sql
 > ALTER TABLE articles ADD COLUMN tsv TSVECTOR
 >   GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED;
@@ -188,16 +186,17 @@ ALTER TABLE articles ADD COLUMN tsv TSVECTOR GENERATED ALWAYS AS (to_tsvector('e
 >
 > **Explanation:** Stored `TSVECTOR` columns with GIN indexes accelerate multi-column full-text document searches.
 
+---
+
 ### Exercise 3: Full-Text Search Ranking with `TS_RANK`
 
 **Problem:** Query articles matching `'postgres & search'` ranked by relevancy score using `ts_rank(tsv, query)`.
 
 **Expected output:**
-```text
-SELECT title, ts_rank(tsv, q) AS rank FROM articles, to_tsquery('english', 'postgres & search') q WHERE tsv @@ q ORDER BY rank DESC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT title, ts_rank(tsv, q) AS rank FROM articles, to_tsquery('english', 'postgres & search') q WHERE tsv @@ q ORDER BY rank DESC;
+> ```
 > ```sql
 > SELECT title, ts_rank(tsv, q) AS rank
 > FROM articles, to_tsquery('english', 'postgres & search') q

@@ -154,12 +154,11 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 ```
 
 **Expected output:**
-```text
-`"I am feeling HAPPY today."`
-Because `${}` accepts ANY valid JavaScript expression, the engine will execute the function, run `.toUpperCase()`, and inject the final result!
-```
-
 > [!check]- Answer
+> ```text
+> `"I am feeling HAPPY today."`
+> Because `${}` accepts ANY valid JavaScript expression, the engine will execute the function, run `.toUpperCase()`, and inject the final result!
+> ```
 > - If it returns a value, you can put it inside `${}`!
 
 ---
@@ -169,11 +168,10 @@ Because `${}` accepts ANY valid JavaScript expression, the engine will execute t
 **Problem:** Write a tagged template function `highlight` that wraps interpolated values in `<b>` tags.
 
 **Expected output:**
-```text
-Hello <b>Alice</b>!
-```
-
 > [!check]- Answer
+> ```text
+> Hello <b>Alice</b>!
+> ```
 > ```javascript
 > function highlight(strings, ...values) {
 >   return strings.reduce((acc, str, i) => {
@@ -187,16 +185,17 @@ Hello <b>Alice</b>!
 >
 > **Explanation:** Tagged template functions receive raw string arrays and evaluated expression parameters for custom string parsing.
 
+---
+
 ### Exercise 3: Raw String Access with `String.raw`
 
 **Problem:** Use `String.raw` to print backslashes `"C:\Program Files\Node"` without escaping.
 
 **Expected output:**
-```text
-C:\Program Files\Node
-```
-
 > [!check]- Answer
+> ```text
+> C:\Program Files\Node
+> ```
 > ```javascript
 > console.log(String.raw`C:\Program Files\Node`);
 > ```
@@ -210,12 +209,11 @@ C:\Program Files\Node
 **Problem:** Create a multi-line string using template literal backticks.
 
 **Expected output:**
-```text
-Line 1
-Line 2
-```
-
 > [!check]- Answer
+> ```text
+> Line 1
+> Line 2
+> ```
 > ```javascript
 > const multi = `Line 1
 > Line 2`;
@@ -224,16 +222,17 @@ Line 2
 >
 > **Explanation:** Backtick template literals support embedded multi-line text without concatenation.
 
+---
+
 ### Exercise 5: Inline Mathematical Expression Evaluation
 
 **Problem:** Evaluate `${2 + 2}` inside a template literal string.
 
 **Expected output:**
-```text
-Sum: 4
-```
-
 > [!check]- Answer
+> ```text
+> Sum: 4
+> ```
 > ```javascript
 > console.log(`Sum: ${2 + 2}`);
 > ```

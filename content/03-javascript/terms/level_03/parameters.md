@@ -136,12 +136,11 @@ async function processData() {
 **Problem:** Create a function `calculateTax` with two parameters: `price` and `taxRate`. Give `taxRate` a default parameter value of `0.05`. Return `price + (price * taxRate)`. Call it once with just `(100)` and once with `(100, 0.10)`.
 
 **Expected output:**
-```text
-105
-110
-```
-
 > [!check]- Answer
+> ```text
+> 105
+> 110
+> ```
 > - `function calculateTax(price, taxRate = 0.05) { ... }`
 
 ---
@@ -151,11 +150,10 @@ async function processData() {
 **Problem:** Write `function greet(name = "Guest", msg = `Hello ${name}`)` and test `greet("Alice")`.
 
 **Expected output:**
-```text
-Hello Alice
-```
-
 > [!check]- Answer
+> ```text
+> Hello Alice
+> ```
 > ```javascript
 > function greet(name = "Guest", msg = `Hello ${name}`) {
 >   console.log(msg);
@@ -165,17 +163,18 @@ Hello Alice
 >
 > **Explanation:** Default parameters evaluate left-to-right in an intermediate parameter scope frame.
 
+---
+
 ### Exercise 3: Destructured Parameter Defaults
 
 **Problem:** Destructure options parameter `function config({ port = 8080, host = "localhost" } = {})`.
 
 **Expected output:**
-```text
-8080
-localhost
-```
-
 > [!check]- Answer
+> ```text
+> 8080
+> localhost
+> ```
 > ```javascript
 > function config({ port = 8080, host = "localhost" } = {}) {
 >   console.log(port);
@@ -186,7 +185,6 @@ localhost
 >
 > **Explanation:** Destructured default parameters accept defaulted object configurations safely.
 
----
 
 ---
 

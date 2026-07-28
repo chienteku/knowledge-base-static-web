@@ -98,12 +98,11 @@ const CACHE_NAME = 'app-cache-v2'; // Versioned cache name for invalidation
 2. Where should you store the actual `.mp3` audio files and the `.css` file for the dark theme?
 
 **Expected output:**
-```text
-1. IndexedDB. It is perfect for structured JSON data and querying lists.
-2. Cache API. It is perfectly optimized for storing large, raw HTTP File responses (like MP3s, Images, and CSS).
-```
-
 > [!check]- Answer
+> ```text
+> 1. IndexedDB. It is perfect for structured JSON data and querying lists.
+> 2. Cache API. It is perfectly optimized for storing large, raw HTTP File responses (like MP3s, Images, and CSS).
+> ```
 > - Which one stores Data? Which one stores Files?
 
 ---
@@ -113,11 +112,10 @@ const CACHE_NAME = 'app-cache-v2'; // Versioned cache name for invalidation
 **Problem:** Write JS snippet opening cache `v1` and matching requested URL `/api/data`.
 
 **Expected output:**
-```text
-const cache = await caches.open('v1'); const res = await cache.match('/api/data');
-```
-
 > [!check]- Answer
+> ```text
+> const cache = await caches.open('v1'); const res = await cache.match('/api/data');
+> ```
 > ```javascript
 > const cache = await caches.open('v1');
 > const response = await cache.match('/api/data');
@@ -133,11 +131,10 @@ const cache = await caches.open('v1'); const res = await cache.match('/api/data'
 **Problem:** Is Cache API accessible from both main browser window JavaScript AND Service Worker scripts? (Yes/No).
 
 **Expected output:**
-```text
-Yes. Cache API is available in window, web workers, and service workers.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Cache API is available in window, web workers, and service workers.
+> ```
 > ```text
 > Yes. Cache API is exposed globally in window and worker contexts.
 > ```

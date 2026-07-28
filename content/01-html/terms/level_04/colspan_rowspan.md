@@ -198,11 +198,10 @@ A calendar schedule using both column and row spans:
 **Problem:** You are building a table with 3 columns and 3 rows. The cell in Row 1, Column 1 has `rowspan="3"`. How many total cell tags (`<td>` or `<th>`) will you write inside Row 2?
 
 **Expected output:**
-```text
-2 cells. (Column 1 is occupied by the rowspan from Row 1, so Row 2 only needs tags for Column 2 and Column 3).
-```
-
 > [!check]- Answer
+> ```text
+> 2 cells. (Column 1 is occupied by the rowspan from Row 1, so Row 2 only needs tags for Column 2 and Column 3).
+> ```
 > - Sketch a 3x3 grid on paper and shade in the merged block starting from cell 1,1.
 
 ---
@@ -214,27 +213,27 @@ A calendar schedule using both column and row spans:
 **Problem:** Write a `<th>` cell spanning 3 columns with text `'Quarterly Performance'`. 
 
 **Expected output:**
-```text
-<th colspan="3">Quarterly Performance</th>
-```
-
 > [!check]- Answer
+> ```text
+> <th colspan="3">Quarterly Performance</th>
+> ```
 > ```html
 > <th colspan="3">Quarterly Performance</th>
 > ```
 >
 > **Explanation:** `colspan="N"` merges N horizontal column cells together.
 
+---
+
 ### Exercise 3: Combining Colspan and Rowspan
 
 **Problem:** Write a `<td>` cell spanning 2 rows vertically and 2 columns horizontally.
 
 **Expected output:**
-```text
-<td rowspan="2" colspan="2">Merged Block</td>
-```
-
 > [!check]- Answer
+> ```text
+> <td rowspan="2" colspan="2">Merged Block</td>
+> ```
 > ```html
 > <td rowspan="2" colspan="2">Merged Block</td>
 > ```

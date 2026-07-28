@@ -145,12 +145,11 @@ Denormalize essential user details (e.g. userName) directly into order documents
 2.  You are building a stock exchange platform where account balance safety is critical. You must ensure that if User A buys stock from User B, the balance deduction on A and addition on B happen immediately and atomically with zero risk of inconsistent data.
 
 **Expected output:**
-```text
-1. Document Model (MongoDB): Ideal for dynamic schemas and horizontal scaling (sharding). It allows nesting posts and comments inside documents, and scales writes across nodes easily.
-2. Relational Model (PostgreSQL): Ideal for strict transaction security (ACID). It guarantees immediate consistency across accounts, ensuring balance updates are safe and consistent.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Document Model (MongoDB): Ideal for dynamic schemas and horizontal scaling (sharding). It allows nesting posts and comments inside documents, and scales writes across nodes easily.
+> 2. Relational Model (PostgreSQL): Ideal for strict transaction security (ACID). It guarantees immediate consistency across accounts, ensuring balance updates are safe and consistent.
+> ```
 > - Balance horizontal write scaling priorities against strict transaction consistency needs.
 > - Consider which model maps best to dynamic JSON objects.
 
@@ -163,27 +162,27 @@ Denormalize essential user details (e.g. userName) directly into order documents
 **Problem:** When should data be embedded vs referenced in MongoDB? (Embed data accessed together; reference large or unbounded data).
 
 **Expected output:**
-```text
-Embed data queried together; reference large, unbounded, or independently accessed data
-```
-
 > [!check]- Answer
+> ```text
+> Embed data queried together; reference large, unbounded, or independently accessed data
+> ```
 > ```text
 > Embed data queried together; reference large, unbounded, or independently accessed data
 > ```
 >
 > **Explanation:** Embedding optimizes read performance for co-located data.
 
+---
+
 ### Exercise 3: Impedance Mismatch Resolution
 
 **Problem:** How does document storage solve Object-Relational Impedance Mismatch? (Matches application object structure natively without splitting rows).
 
 **Expected output:**
-```text
-Stores nested objects directly matching backend programming language data models
-```
-
 > [!check]- Answer
+> ```text
+> Stores nested objects directly matching backend programming language data models
+> ```
 > ```text
 > Stores nested objects directly matching backend programming language data models
 > ```

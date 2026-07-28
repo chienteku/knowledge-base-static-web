@@ -136,13 +136,12 @@ import { useFormStatus } from 'react-dom'; // Correct import module
 **Problem:** You disable the Submit button while `pending` is true. Should you also disable the text `<input>` fields?
 
 **Expected output:**
-```text
-Yes, absolutely!
-If a user submits a form, and the Server Action takes 3 seconds, the user could rapidly type new text into the input field during those 3 seconds. The data sent to the server would be the old data, but the UI would show the new data.
-Always pass `disabled={pending}` to your `<input>` and `<select>` elements using `useFormStatus` as well.
-```
-
 > [!check]- Answer
+> ```text
+> Yes, absolutely!
+> If a user submits a form, and the Server Action takes 3 seconds, the user could rapidly type new text into the input field during those 3 seconds. The data sent to the server would be the old data, but the UI would show the new data.
+> Always pass `disabled={pending}` to your `<input>` and `<select>` elements using `useFormStatus` as well.
+> ```
 > - Think about what happens if a user keeps typing during a slow network request.
 
 ---
@@ -152,11 +151,10 @@ Always pass `disabled={pending}` to your `<input>` and `<select>` elements using
 **Problem:** Write child `SubmitButton` Client Component using `useFormStatus()` disabling button and displaying `'Loading...'` while pending.
 
 **Expected output:**
-```tsx
-'use client'; import { useFormStatus } from 'react-dom'; export function SubmitButton() { const { pending } = useFormStatus(); return <button type="submit" disabled={pending}>{pending ? 'Loading...' : 'Submit'}</button>; }
-```
-
 > [!check]- Answer
+> ```tsx
+> 'use client'; import { useFormStatus } from 'react-dom'; export function SubmitButton() { const { pending } = useFormStatus(); return <button type="submit" disabled={pending}>{pending ? 'Loading...' : 'Submit'}</button>; }
+> ```
 > - `useFormStatus()` exposes `pending`, `data`, `method`, and `action` of parent form.
 > 
 > ```tsx
@@ -181,13 +179,12 @@ Always pass `disabled={pending}` to your `<input>` and `<select>` elements using
 **Problem:** List 3 properties returned by the `useFormStatus()` hook object.
 
 **Expected output:**
-```text
-1. pending (boolean)
-2. data (FormData submitted)
-3. method (HTTP method string)
-```
-
 > [!check]- Answer
+> ```text
+> 1. pending (boolean)
+> 2. data (FormData submitted)
+> 3. method (HTTP method string)
+> ```
 > - `pending` -> Form submission active boolean
 > - `data` -> Submitted FormData object
 > - `method` -> HTTP verb ('get' or 'post')

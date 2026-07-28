@@ -181,14 +181,13 @@ await session.withTransaction(async () => {
 State how to fix the code.
 
 **Expected output:**
-```text
-The code is broken because the `findOne` query does not receive the `{ session }` parameter. 
-This means it reads the user outside the transaction snapshot, risking a dirty read of stale user data. 
-To fix it, add the session parameter to `findOne`:
-`const user = await db.collection('users').findOne({ _id: 10 }, { session });`
-```
-
 > [!check]- Answer
+> ```text
+> The code is broken because the `findOne` query does not receive the `{ session }` parameter. 
+> This means it reads the user outside the transaction snapshot, risking a dirty read of stale user data. 
+> To fix it, add the session parameter to `findOne`:
+> `const user = await db.collection('users').findOne({ _id: 10 }, { session });`
+> ```
 > - Check all database read and write commands in the block.
 > - Look for the presence of the `{ session }` parameter.
 
@@ -201,11 +200,10 @@ To fix it, add the session parameter to `findOne`:
 **Problem:** Write safe session creation pattern using `try ... finally` and `session.endSession()`.
 
 **Expected output:**
-```text
-const session = client.startSession(); try { await session.withTransaction(fn); } finally { await session.endSession(); }
-```
-
 > [!check]- Answer
+> ```text
+> const session = client.startSession(); try { await session.withTransaction(fn); } finally { await session.endSession(); }
+> ```
 > ```javascript
 > const session = client.startSession();
 > try {
@@ -219,16 +217,17 @@ const session = client.startSession(); try { await session.withTransaction(fn); 
 >
 > **Explanation:** `finally { session.endSession(); }` guarantees session resource cleanup.
 
+---
+
 ### Exercise 3: Passing Session Option to Driver Operations
 
 **Problem:** Pass `session` option to `insertOne` call inside transaction.
 
 **Expected output:**
-```text
-await db.users.insertOne({ name: "Alice" }, { session });
-```
-
 > [!check]- Answer
+> ```text
+> await db.users.insertOne({ name: "Alice" }, { session });
+> ```
 > ```javascript
 > await db.users.insertOne({ name: "Alice" }, { session });
 > ```

@@ -273,32 +273,34 @@ app.post('/submit', (req, res) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Parsing URL-Encoded Form Submissions
 
 **Problem:** Write middleware line to parse traditional HTML form submissions (`application/x-www-form-urlencoded`).
 
 **Expected output:**
-```text
-app.use(express.urlencoded({ extended: true }));
-```
-
 > [!check]- Answer
+> ```text
+> app.use(express.urlencoded({ extended: true }));
+> ```
 > ```javascript
 > app.use(express.urlencoded({ extended: true }));
 > ```
 >
 > **Explanation:** `express.urlencoded()` parses URL-encoded body payloads from standard HTML `<form>` submissions.
 
+---
+
 ### Exercise 3: Multipart Form Upload Parsing
 
 **Problem:** Which middleware library is standard in Express for parsing `multipart/form-data` file uploads? (`multer`).
 
 **Expected output:**
-```text
-multer
-```
-
 > [!check]- Answer
+> ```text
+> multer
+> ```
 > ```text
 > multer
 > ```

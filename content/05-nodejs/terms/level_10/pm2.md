@@ -96,12 +96,11 @@ pm2 reload my-app # Zero-downtime rolling reload
 **Problem:** In development, you use a tool called `nodemon` to restart your server every time you save a file. In production, you use `pm2`. Both of them restart the server. Why don't we just use `nodemon` in production?
 
 **Expected output:**
-```text
-`nodemon` restarts the server when FILES change. (Great for coding).
-`pm2` restarts the server when the APP CRASHES, and provides Load Balancing, logging, and performance monitoring. (Great for production).
-```
-
 > [!check]- Answer
+> ```text
+> `nodemon` restarts the server when FILES change. (Great for coding).
+> `pm2` restarts the server when the APP CRASHES, and provides Load Balancing, logging, and performance monitoring. (Great for production).
+> ```
 > - What is the trigger that causes the restart in each tool?
 
 ---
@@ -113,27 +112,27 @@ pm2 reload my-app # Zero-downtime rolling reload
 **Problem:** Write PM2 CLI command to start `server.js` in cluster mode using all available CPU cores.
 
 **Expected output:**
-```text
-pm2 start server.js -i max
-```
-
 > [!check]- Answer
+> ```text
+> pm2 start server.js -i max
+> ```
 > ```bash
 > pm2 start server.js -i max
 > ```
 >
 > **Explanation:** `-i max` launches PM2 cluster workers matching available CPU core count.
 
+---
+
 ### Exercise 3: PM2 Ecosystem File Generation
 
 **Problem:** Which PM2 command generates an `ecosystem.config.js` template file?
 
 **Expected output:**
-```text
-pm2 init (or pm2 ecosystem)
-```
-
 > [!check]- Answer
+> ```text
+> pm2 init (or pm2 ecosystem)
+> ```
 > ```bash
 > pm2 init
 > ```

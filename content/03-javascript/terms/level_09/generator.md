@@ -161,12 +161,11 @@ async function processData() {
 **Problem:** When you call `gen.next()`, it doesn't just return the number. It returns an object. What two properties does that object contain?
 
 **Expected output:**
-```javascript
-{ value: "the yielded data", done: false }
-// 'done' becomes true when the generator has finished running.
-```
-
 > [!check]- Answer
+> ```javascript
+> { value: "the yielded data", done: false }
+> // 'done' becomes true when the generator has finished running.
+> ```
 > - We accessed `.value` in the examples above!
 
 ---
@@ -176,12 +175,11 @@ async function processData() {
 **Problem:** Create a generator `function* idGen()` producing auto-incrementing IDs `1, 2, 3...`.
 
 **Expected output:**
-```text
-1
-2
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> 2
+> ```
 > ```javascript
 > function* idGen() {
 >   let id = 1;
@@ -194,17 +192,18 @@ async function processData() {
 >
 > **Explanation:** Generators pause execution at `yield` statements, resuming upon `.next()` calls.
 
+---
+
 ### Exercise 3: Delegating Generators with `yield*`
 
 **Problem:** Delegate iteration to another generator using `yield* innerGen()`.
 
 **Expected output:**
-```text
-a
-b
-```
-
 > [!check]- Answer
+> ```text
+> a
+> b
+> ```
 > function* inner() { yield "a"; yield "b"; }
 > function* outer() { yield* inner(); }
 > for (const val of outer()) console.log(val);
@@ -212,7 +211,6 @@ b
 >
 > **Explanation:** `yield*` delegates generator iteration to another iterable or generator function.
 
----
 
 ---
 

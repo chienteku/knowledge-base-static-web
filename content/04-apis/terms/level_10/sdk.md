@@ -166,16 +166,17 @@ class UserServiceSDK {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: SDK vs API Distinction
 
 **Problem:** Distinguish between an API and an SDK (Software Development Kit).
 
 **Expected output:**
-```text
-API is the raw network interface protocol contract (HTTP/gRPC); SDK is a language-specific code library wrapping the API with helper methods, authentication, and error handling.
-```
-
 > [!check]- Answer
+> ```text
+> API is the raw network interface protocol contract (HTTP/gRPC); SDK is a language-specific code library wrapping the API with helper methods, authentication, and error handling.
+> ```
 > ```text
 > API -> The raw network interface protocol (REST/HTTP endpoints).
 > SDK -> Language-specific client library wrapping the API with native code methods.
@@ -188,11 +189,10 @@ API is the raw network interface protocol contract (HTTP/gRPC); SDK is a languag
 **Problem:** Which open-source tool generates client SDK libraries in 40+ programming languages from an OpenAPI spec?
 
 **Expected output:**
-```text
-OpenAPI Generator (or Swagger Codegen)
-```
-
 > [!check]- Answer
+> ```text
+> OpenAPI Generator (or Swagger Codegen)
+> ```
 > ```bash
 > npx @openapitools/openapi-generator-cli generate -i openapi.yaml -g typescript-fetch -o ./sdk
 > ```

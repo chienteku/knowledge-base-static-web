@@ -164,11 +164,10 @@ trait Comparable {
 **Problem:** Add `where Self: Sized` to a method `fn duplicate(&self) -> Self` so the overall trait remains object-safe as `dyn Trait`.
 
 **Expected output:**
-```
-Trait object executed
-```
-
 > [!check]- Answer
+> ```
+> Trait object executed
+> ```
 > ```rust
 > trait Widget {
 >     fn render(&self);
@@ -187,16 +186,17 @@ Trait object executed
 >
 > **Explanation:** Adding `where Self: Sized` excludes specific non-object-safe methods from vtables.
 
+---
+
 ### Exercise 3: Verifying Trait Object Safety Rules
 
 **Problem:** Identify why `fn new() -> Self` breaks trait object safety unless restricted with `where Self: Sized`.
 
 **Expected output:**
-```
-Vtable size check verified
-```
-
 > [!check]- Answer
+> ```
+> Vtable size check verified
+> ```
 > ```rust
 > fn main() {
 >     println!("Vtable size check verified");

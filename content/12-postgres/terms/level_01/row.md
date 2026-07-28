@@ -126,12 +126,11 @@ SELECT * FROM users WHERE id = 1; -- Permanent primary key lookup
 How many rows will the query return?
 
 **Expected output:**
-```text
-45 rows! 
-Deleting 5 rows reduces the count from 50 to 45. Updating the price of 10 rows modifies the values *inside* those existing rows, but does not change the total row count of the table.
-```
-
 > [!check]- Answer
+> ```text
+> 45 rows! 
+> Deleting 5 rows reduces the count from 50 to 45. Updating the price of 10 rows modifies the values *inside* those existing rows, but does not change the total row count of the table.
+> ```
 > - Differentiate between modifying columns inside a row and deleting the row entirely.
 > - Calculate total rows remaining.
 
@@ -144,27 +143,27 @@ Deleting 5 rows reduces the count from 50 to 45. Updating the price of 10 rows m
 **Problem:** Count total rows in `users` table (`SELECT COUNT(*) FROM users;`).
 
 **Expected output:**
-```text
-SELECT COUNT(*) FROM users;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT COUNT(*) FROM users;
+> ```
 > ```sql
 > SELECT COUNT(*) FROM users;
 > ```
 >
 > **Explanation:** `COUNT(*)` counts total matching tuple rows in target tables.
 
+---
+
 ### Exercise 3: Row Construction Constructor in SQL
 
 **Problem:** Construct Row Constructor tuple literal comparing two columns `(a, b) = (1, 2)`.
 
 **Expected output:**
-```text
-SELECT * FROM t WHERE (a, b) = (1, 2);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM t WHERE (a, b) = (1, 2);
+> ```
 > ```sql
 > SELECT * FROM t WHERE (a, b) = (1, 2);
 > ```

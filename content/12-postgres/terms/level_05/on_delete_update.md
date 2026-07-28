@@ -188,15 +188,14 @@ user_id INT REFERENCES users(id) ON DELETE SET NULL -- Allow NULLs
 3.  An integer column `assigned_employee_id` referencing `employees(id)`. If an employee is deleted from the company, keep the task active but set the assigned employee to `NULL`.
 
 **Expected output:**
-```sql
-CREATE TABLE tasks (
-  id INT PRIMARY KEY,
-  description TEXT,
-  assigned_employee_id INT REFERENCES employees(id) ON DELETE SET NULL
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE tasks (
+>   id INT PRIMARY KEY,
+>   description TEXT,
+>   assigned_employee_id INT REFERENCES employees(id) ON DELETE SET NULL
+> );
+> ```
 > - The column `assigned_employee_id` must allow null values (do not add `NOT NULL`).
 > - Append the specific referential delete action rule at the end of the foreign key constraint.
 
@@ -209,11 +208,10 @@ CREATE TABLE tasks (
 **Problem:** Add foreign key specifying `ON DELETE SET NULL` and `ON UPDATE CASCADE`.
 
 **Expected output:**
-```text
-ALTER TABLE orders ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE;
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE orders ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE;
+> ```
 > ```sql
 > ALTER TABLE orders
 > ADD CONSTRAINT fk_user
@@ -223,16 +221,17 @@ ALTER TABLE orders ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users
 >
 > **Explanation:** Foreign key action rules dictate cascading behavior for parent updates and deletions.
 
+---
+
 ### Exercise 3: Foreign Key Action Options List
 
 **Problem:** List 4 foreign key ON DELETE / ON UPDATE actions (`NO ACTION`, `RESTRICT`, `CASCADE`, `SET NULL`, `SET DEFAULT`).
 
 **Expected output:**
-```text
-NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
-```
-
 > [!check]- Answer
+> ```text
+> NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
+> ```
 > ```text
 > NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
 > ```

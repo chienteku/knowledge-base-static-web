@@ -169,11 +169,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-The quick brown fox jumps over the lazy dog.
-```
-
 > [!check]- Answer
+> ```text
+> The quick brown fox jumps over the lazy dog.
+> ```
 > - You cannot use `.push_str()` on a `&str`.
 > - Change line 2 to initialize `start` as a `String` using `String::from("The quick brown fox ")` or `"The quick brown fox ".to_string()`.
 
@@ -184,12 +183,11 @@ The quick brown fox jumps over the lazy dog.
 **Problem:** Write a function `greeting(name: &str) -> String` that accepts both `&str` literals and `&String` references via deref coercion.
 
 **Expected output:**
-```
-Hello, Alice!
-Hello, Bob!
-```
-
 > [!check]- Answer
+> ```
+> Hello, Alice!
+> Hello, Bob!
+> ```
 > ```rust
 > fn greeting(name: &str) -> String {
 >     format!("Hello, {}!", name)
@@ -204,16 +202,17 @@ Hello, Bob!
 >
 > **Explanation:** Accept `&str` in function parameters to maximize flexibility, allowing callers to pass string literals, slices, or owned `String` references cleanly.
 
+---
+
 ### Exercise 3: Appending Text to Heap Strings
 
 **Problem:** Create a mutable `String`, push a char `'!'` using `.push()`, append a string slice `" World"` using `.push_str()`, and print the result.
 
 **Expected output:**
-```
-Hello World!
-```
-
 > [!check]- Answer
+> ```
+> Hello World!
+> ```
 > ```rust
 > fn main() {
 >     let mut s = String::from("Hello");

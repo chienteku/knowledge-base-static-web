@@ -145,11 +145,10 @@ INSERT INTO user { id: user:1, name: "New" } ON DUPLICATE KEY UPDATE name = $inp
 4.  If the record already exists, add `50` to the existing `quantity` value.
 
 **Expected output:**
-```sql
-INSERT INTO store { id: store:item_05, quantity: 100 } ON DUPLICATE KEY UPDATE quantity += 50;
-```
-
 > [!check]- Answer
+> ```sql
+> INSERT INTO store { id: store:item_05, quantity: 100 } ON DUPLICATE KEY UPDATE quantity += 50;
+> ```
 > - The table target is `store`.
 > - Use `ON DUPLICATE KEY UPDATE` followed by the increment operator `+=`.
 
@@ -162,27 +161,27 @@ INSERT INTO store { id: store:item_05, quantity: 100 } ON DUPLICATE KEY UPDATE q
 **Problem:** Write `INSERT INTO user:alice` that updates `login_count = login_count + 1` on duplicate key.
 
 **Expected output:**
-```text
-INSERT INTO user:alice { name: "Alice", login_count: 1 } ON DUPLICATE KEY UPDATE login_count += 1;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO user:alice { name: "Alice", login_count: 1 } ON DUPLICATE KEY UPDATE login_count += 1;
+> ```
 > ```surrealql
 > INSERT INTO user:alice { name: "Alice", login_count: 1 } ON DUPLICATE KEY UPDATE login_count += 1;
 > ```
 >
 > **Explanation:** `ON DUPLICATE KEY UPDATE` modifies existing fields upon primary key collision.
 
+---
+
 ### Exercise 3: $input Variable Usage
 
 **Problem:** Explain what `$input` represents inside `ON DUPLICATE KEY UPDATE` clauses.
 
 **Expected output:**
-```text
-$input represents the incoming record data payload attempted in the INSERT statement
-```
-
 > [!check]- Answer
+> ```text
+> $input represents the incoming record data payload attempted in the INSERT statement
+> ```
 > ```text
 > $input represents the incoming record data payload attempted in the INSERT statement
 > ```

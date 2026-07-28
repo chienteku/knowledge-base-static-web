@@ -180,11 +180,10 @@ export default function UserStatus({ id }: { id: string | null }) {
 **Problem:** Write custom hook `useDebounce(value, delay)` returning debounced value using `useState` and `useEffect`.
 
 **Expected output:**
-```typescript
-export function useDebounce(value, delay) { const [debounced, setDebounced] = useState(value); useEffect(() => { const timer = setTimeout(() => setDebounced(value), delay); return () => clearTimeout(timer); }, [value, delay]); return debounced; }
-```
-
 > [!check]- Answer
+> ```typescript
+> export function useDebounce(value, delay) { const [debounced, setDebounced] = useState(value); useEffect(() => { const timer = setTimeout(() => setDebounced(value), delay); return () => clearTimeout(timer); }, [value, delay]); return debounced; }
+> ```
 > - Custom hooks encapsulate reusable stateful hook logic.
 > 
 > ```typescript
@@ -209,12 +208,11 @@ export function useDebounce(value, delay) { const [debounced, setDebounced] = us
 **Problem:** State the 2 primary Rules of Hooks in React.
 
 **Expected output:**
-```text
-1. Call hooks ONLY at the top level (never inside loops, conditions, or nested functions).
-2. Call hooks ONLY from React function components or custom hooks.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Call hooks ONLY at the top level (never inside loops, conditions, or nested functions).
+> 2. Call hooks ONLY from React function components or custom hooks.
+> ```
 > - Rule 1: Call hooks ONLY at top level.
 > - Rule 2: Call hooks ONLY from React functions.
 > 

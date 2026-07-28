@@ -112,12 +112,10 @@ stream.pipe(res); // Pipe before ending response
 **Problem:** You are building an Express API. A user hits `GET /download/video`. You want to stream `video.mp4` directly to their browser using `.pipe()`. Write the one line of code that connects the file to the user.
 
 **Expected output:**
-```javascript
-fs.createReadStream('video.mp4').pipe(res);
-```
-*Explanation: `createReadStream` is the Readable source. The Express `res` object is the Writable destination. Piping them together sends the video chunk-by-chunk to the user's browser!*
-
 > [!check]- Answer
+> ```javascript
+> fs.createReadStream('video.mp4').pipe(res);
+> ```
 > - Source `.pipe(` Destination `)`
 
 ---
@@ -129,11 +127,10 @@ fs.createReadStream('video.mp4').pipe(res);
 **Problem:** Write code to pipe read stream of `video.mp4` to HTTP response `res`.
 
 **Expected output:**
-```text
-fs.createReadStream('video.mp4').pipe(res);
-```
-
 > [!check]- Answer
+> ```text
+> fs.createReadStream('video.mp4').pipe(res);
+> ```
 > ```javascript
 > const stream = fs.createReadStream('video.mp4');
 > stream.pipe(res);
@@ -141,16 +138,17 @@ fs.createReadStream('video.mp4').pipe(res);
 >
 > **Explanation:** `.pipe()` streams file chunks directly to the network socket with minimal RAM usage.
 
+---
+
 ### Exercise 3: Chaining Gzip Compression Pipe
 
 **Problem:** Pipe read stream `file.txt` through `zlib.createGzip()` to write stream `file.txt.gz`.
 
 **Expected output:**
-```text
-fs.createReadStream('file.txt').pipe(zlib.createGzip()).pipe(fs.createWriteStream('file.txt.gz'));
-```
-
 > [!check]- Answer
+> ```text
+> fs.createReadStream('file.txt').pipe(zlib.createGzip()).pipe(fs.createWriteStream('file.txt.gz'));
+> ```
 > ```javascript
 > const zlib = require('zlib');
 > fs.createReadStream('file.txt')

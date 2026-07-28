@@ -148,13 +148,12 @@ await db.users.updateOne(...); // Single-document updates are natively atomic
 3.  A flight ticket booking checkout system where seats are reserved.
 
 **Expected output:**
-```text
-1. ACID: Balance transfers require strict all-or-nothing atomicity and immediate consistency to prevent double-spending or money loss.
-2. BASE: Views and likes counters can drift (soft state) and sync later (eventual consistency) without impacting user experience, prioritizing write throughput over strict balance.
-3. ACID: Reservation checkouts require immediate consistency to prevent double-booking the same physical seat.
-```
-
 > [!check]- Answer
+> ```text
+> 1. ACID: Balance transfers require strict all-or-nothing atomicity and immediate consistency to prevent double-spending or money loss.
+> 2. BASE: Views and likes counters can drift (soft state) and sync later (eventual consistency) without impacting user experience, prioritizing write throughput over strict balance.
+> 3. ACID: Reservation checkouts require immediate consistency to prevent double-booking the same physical seat.
+> ```
 > - Determine if temporary data drift has negative financial or business consequences.
 > - Relate double-booking risks to strict isolation needs.
 
@@ -167,27 +166,27 @@ await db.users.updateOne(...); // Single-document updates are natively atomic
 **Problem:** State difference: ACID (Atomicity, Consistency, Isolation, Durability for transactions); BASE (Basically Available, Soft-state, Eventual consistency for distributed scaling).
 
 **Expected output:**
-```text
-ACID guarantees strict transactional isolation; BASE favors distributed availability and eventual consistency
-```
-
 > [!check]- Answer
+> ```text
+> ACID guarantees strict transactional isolation; BASE favors distributed availability and eventual consistency
+> ```
 > ```text
 > ACID guarantees strict transactional isolation; BASE favors distributed availability and eventual consistency
 > ```
 >
 > **Explanation:** MongoDB provides ACID transactions within sessions while supporting BASE replica availability.
 
+---
+
 ### Exercise 3: Single-Document Atomicity Guarantee
 
 **Problem:** Are updates modifying multiple array elements in a single document atomic? (Yes, single-document updates are strictly atomic).
 
 **Expected output:**
-```text
-Yes, single-document updates are strictly atomic
-```
-
 > [!check]- Answer
+> ```text
+> Yes, single-document updates are strictly atomic
+> ```
 > ```text
 > Yes, single-document updates are strictly atomic
 > ```

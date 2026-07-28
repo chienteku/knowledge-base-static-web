@@ -184,11 +184,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Radius squared: 9
-```
-
 > [!check]- Answer
+> ```text
+> Radius squared: 9
+> ```
 > ```rust
 > impl Circle {
 >     fn radius_squared(&self) -> f64 {
@@ -204,11 +203,10 @@ Radius squared: 9
 **Problem:** Implement core constructors in one `impl Struct` block and helper methods in a second `impl Struct` block.
 
 **Expected output:**
-```
-Value: 42
-```
-
 > [!check]- Answer
+> ```
+> Value: 42
+> ```
 > ```rust
 > struct Item { val: i32 }
 > impl Item {
@@ -225,16 +223,17 @@ Value: 42
 >
 > **Explanation:** Rust allows splitting method definitions for a single type across multiple `impl` blocks.
 
+---
+
 ### Exercise 3: Generic `impl` Blocks
 
 **Problem:** Write an `impl<T> Container<T>` block providing `fn new(value: T) -> Self` and `fn value(&self) -> &T`.
 
 **Expected output:**
-```
-Contained: Hello
-```
-
 > [!check]- Answer
+> ```
+> Contained: Hello
+> ```
 > ```rust
 > struct Container<T> { value: T }
 > impl<T> Container<T> {

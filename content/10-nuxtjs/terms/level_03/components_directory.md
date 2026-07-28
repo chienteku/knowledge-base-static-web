@@ -116,11 +116,10 @@ If you have a deeply nested folder structure (e.g., `components/ui/forms/inputs/
 **Problem:** You create a file at `components/admin/dashboard/Chart.vue`. What HTML tag must you write in your template to render this component using Nuxt's default auto-import behavior?
 
 **Expected output:**
-```vue
-<AdminDashboardChart />
-```
-
 > [!check]- Answer
+> ```vue
+> <AdminDashboardChart />
+> ```
 > - Combine the folder paths in PascalCase and append the component filename.
 
 ---
@@ -133,13 +132,12 @@ If you have a deeply nested folder structure (e.g., `components/ui/forms/inputs/
 3. `components/user/profile/Header.vue` 
 
 **Expected output:**
-```text
-1. <AppHeader />
-2. <BaseCard />
-3. <UserProfileHeader />
-```
-
 > [!check]- Answer
+> ```text
+> 1. <AppHeader />
+> 2. <BaseCard />
+> 3. <UserProfileHeader />
+> ```
 > - `components/AppHeader.vue` -> `<AppHeader />`
 > - `components/base/Card.vue` -> `<BaseCard />`
 > - `components/user/profile/Header.vue` -> `<UserProfileHeader />`
@@ -155,11 +153,10 @@ If you have a deeply nested folder structure (e.g., `components/ui/forms/inputs/
 **Problem:** Which file naming suffix forces a component in `components/` to be registered globally as an async component chunk?
 
 **Expected output:**
-```text
-Component.global.vue (e.g. Modal.global.vue)
-```
-
 > [!check]- Answer
+> ```text
+> Component.global.vue (e.g. Modal.global.vue)
+> ```
 > - `.global.vue` registers components globally for dynamic slots.
 > 
 > ```text

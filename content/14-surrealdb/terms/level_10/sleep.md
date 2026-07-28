@@ -162,27 +162,27 @@ d. All of the above.
 **Problem:** Pause SurrealQL script execution for 500 milliseconds using `sleep()`.
 
 **Expected output:**
-```text
-sleep(500ms);
-```
-
 > [!check]- Answer
+> ```text
+> sleep(500ms);
+> ```
 > ```surrealql
 > sleep(500ms);
 > ```
 >
 > **Explanation:** `sleep(duration)` pauses script execution for specified duration intervals.
 
+---
+
 ### Exercise 3: Simulating Rate Limiting Delays
 
 **Problem:** Use `sleep(1s)` inside a loop to rate-limit batch operations.
 
 **Expected output:**
-```text
-FOR $id IN $ids { UPDATE $id SET processed = true; sleep(1s); };
-```
-
 > [!check]- Answer
+> ```text
+> FOR $id IN $ids { UPDATE $id SET processed = true; sleep(1s); };
+> ```
 > ```surrealql
 > FOR $id IN $ids {
 >   UPDATE $id SET processed = true;

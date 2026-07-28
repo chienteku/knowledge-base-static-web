@@ -123,11 +123,10 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 **Problem:** If you write `<audio src="song.mp3"></audio>` (without the `controls` attribute), what will the user see on the screen?
 
 **Expected output:**
-```text
-Absolutely nothing! Without the `controls` attribute, the audio element is completely invisible. The user will have no way to play the song. (This is sometimes used intentionally by game developers who want to trigger sounds using JavaScript instead of a UI).
-```
-
 > [!check]- Answer
+> ```text
+> Absolutely nothing! Without the `controls` attribute, the audio element is completely invisible. The user will have no way to play the song. (This is sometimes used intentionally by game developers who want to trigger sounds using JavaScript instead of a UI).
+> ```
 > - Think about what the word `controls` actually renders on the screen.
 
 ---
@@ -139,11 +138,10 @@ Absolutely nothing! Without the `controls` attribute, the audio element is compl
 **Problem:** Write `<audio>` element with `controls` offering MP3 and OGG fallback sources and fallback text.
 
 **Expected output:**
-```text
-<audio controls><source src="audio.mp3" type="audio/mpeg"><source src="audio.ogg" type="audio/ogg">Your browser does not support audio.</audio>
-```
-
 > [!check]- Answer
+> ```text
+> <audio controls><source src="audio.mp3" type="audio/mpeg"><source src="audio.ogg" type="audio/ogg">Your browser does not support audio.</audio>
+> ```
 > ```html
 > <audio controls>
 >   <source src="podcast.mp3" type="audio/mpeg">
@@ -154,16 +152,17 @@ Absolutely nothing! Without the `controls` attribute, the audio element is compl
 >
 > **Explanation:** `<source>` tags provide fallback audio formats for browser compatibility.
 
+---
+
 ### Exercise 3: Loop and Mute Attributes
 
 **Problem:** Write `<audio>` attributes to loop playback continuously and start muted.
 
 **Expected output:**
-```text
-<audio controls loop muted src="sound.mp3"></audio>
-```
-
 > [!check]- Answer
+> ```text
+> <audio controls loop muted src="sound.mp3"></audio>
+> ```
 > ```html
 > <audio controls loop muted src="sound.mp3"></audio>
 > ```

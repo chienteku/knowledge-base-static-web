@@ -154,12 +154,11 @@ IF type::of($val) = "string" { ... }; // Lowercase type string
 Write the SurrealQL expression using `type::*` to dynamically construct a Record ID and select that record.
 
 **Expected output:**
-```sql
-LET $target = type::thing($collection, $code);
-SELECT * FROM $target;
-```
-
 > [!check]- Answer
+> ```sql
+> LET $target = type::thing($collection, $code);
+> SELECT * FROM $target;
+> ```
 > - Construct the ID using `type::thing(table, id)`.
 > - Select from the resulting variable.
 
@@ -172,27 +171,27 @@ SELECT * FROM $target;
 **Problem:** Inspect type of Record ID `user:alice` using `type::of(user:alice)`.
 
 **Expected output:**
-```text
-"record"
-```
-
 > [!check]- Answer
+> ```text
+> "record"
+> ```
 > ```surrealql
 > RETURN type::of(user:alice);
 > ```
 >
 > **Explanation:** `type::of(val)` returns the SurrealDB data type string of any value.
 
+---
+
 ### Exercise 3: Type Validation Functions
 
 **Problem:** Validate if `$val` is a valid email using `type::is::email($val)`.
 
 **Expected output:**
-```text
-type::is::email($val)
-```
-
 > [!check]- Answer
+> ```text
+> type::is::email($val)
+> ```
 > ```surrealql
 > RETURN type::is::email($val);
 > ```

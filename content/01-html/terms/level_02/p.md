@@ -271,6 +271,8 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 >
 > **Explanation:** Paragraphs can contain inline phrasing content (`<span>`, `<strong>`, `<a>`), but cannot contain block containers (`<div>`, `<h2>`).
 
+---
+
 ### Exercise 3: Default Paragraph CSS Margins
 
 **Problem:** What default CSS top and bottom margin spacing do browsers apply to `<p>` elements?

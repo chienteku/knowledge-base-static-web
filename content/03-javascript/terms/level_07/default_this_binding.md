@@ -208,13 +208,12 @@ machine.run.call(customMachine);
 ```
 
 **Expected output:**
-```text
-Model X
-Call 2: Failed
-Model Y
-```
-
 > [!check]- Answer
+> ```text
+> Model X
+> Call 2: Failed
+> Model Y
+> ```
 > - Call 1 uses **Implicit Binding** (prints `"Model X"`).
 > - Call 2 uses **Default Binding**, which resolves to `undefined` in strict mode, crashing when trying to read `.brand`.
 > - Call 3 uses **Explicit Binding**, overriding context to `customMachine` (prints `"Model Y"`).
@@ -226,11 +225,10 @@ Model Y
 **Problem:** Verify `this === undefined` inside strict mode standalone function calls.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > function checkThis() {
 >   "use strict";
@@ -241,16 +239,17 @@ true
 >
 > **Explanation:** Strict mode prevents default fallback binding of `this` to global window objects.
 
+---
+
 ### Exercise 3: Detached Method Default Binding
 
 **Problem:** Extract `obj.func` to variable `const f = obj.func` and call `f()`, demonstrating `this` reverts to default binding.
 
 **Expected output:**
-```text
-Default binding active
-```
-
 > [!check]- Answer
+> ```text
+> Default binding active
+> ```
 > const obj = { func() { console.log("Default binding active"); } };
 > const f = obj.func;
 > f();
@@ -258,7 +257,6 @@ Default binding active
 >
 > **Explanation:** Calling detached methods directly loses object context, reverting `this` to default binding.
 
----
 
 ---
 

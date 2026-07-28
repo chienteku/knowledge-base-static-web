@@ -196,11 +196,10 @@ fn main() {
 **Problem:** Clone an `Rc<String>` twice and print `Rc::strong_count(&rc)`.
 
 **Expected output:**
-```
-Strong count: 3
-```
-
 > [!check]- Answer
+> ```
+> Strong count: 3
+> ```
 > ```rust
 > use std::rc::Rc;
 > fn main() {
@@ -213,16 +212,17 @@ Strong count: 3
 >
 > **Explanation:** `Rc::strong_count` returns the active number of shared ownership references.
 
+---
+
 ### Exercise 3: Cyclic Reference Memory Leaks with `Rc`
 
 **Problem:** Explain how reference cycles using `Rc` and `RefCell` cause memory leaks if not broken using `Weak` pointers.
 
 **Expected output:**
-```
-Weak pointer breaks cycles
-```
-
 > [!check]- Answer
+> ```
+> Weak pointer breaks cycles
+> ```
 > ```rust
 > fn main() {
 >     println!("Weak pointer breaks cycles");

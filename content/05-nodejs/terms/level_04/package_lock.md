@@ -91,14 +91,12 @@ git checkout --ours package-lock.json && npm install # Regenerates clean lockfil
 **Problem:** Your `package-lock.json` has locked Express to version `4.18.0`. A security patch is released as `4.18.2`. How do you safely force the lock file to update to the new version?
 
 **Expected output:**
-```bash
-npm update express
-# or
-npm install express@4.18.2
-```
-*Explanation: If you run an update or explicit install command in the terminal, NPM will download the new version, verify it works, and automatically overwrite the lock file with the new exact version number.*
-
 > [!check]- Answer
+> ```bash
+> npm update express
+> # or
+> npm install express@4.18.2
+> ```
 > - Should you open the lock file and edit the numbers by hand? (Never!)
 
 ---
@@ -110,27 +108,27 @@ npm install express@4.18.2
 **Problem:** What field in `package-lock.json` verifies that installed package contents haven't been tampered with? (`integrity` SHA-512 hash).
 
 **Expected output:**
-```text
-integrity (SHA-512 cryptographic hash)
-```
-
 > [!check]- Answer
+> ```text
+> integrity (SHA-512 cryptographic hash)
+> ```
 > ```text
 > integrity (SHA-512 cryptographic hash)
 > ```
 >
 > **Explanation:** `integrity` stores sub-resource integrity hashes to prevent supply chain code tampering.
 
+---
+
 ### Exercise 3: package-lock.json Source Control Rule
 
 **Problem:** Should `package-lock.json` be committed to git source control? (Yes/No). Explain.
 
 **Expected output:**
-```text
-Yes. It guarantees exact, deterministic dependency installations across all environments.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. It guarantees exact, deterministic dependency installations across all environments.
+> ```
 > ```text
 > Yes. It guarantees exact, deterministic dependency installations across all environments.
 > ```

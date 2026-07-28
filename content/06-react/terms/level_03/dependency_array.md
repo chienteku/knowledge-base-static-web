@@ -114,12 +114,11 @@ useEffect(() => { ... }, [options]);
 **Problem:** You have a component with a `searchQuery` state and a `theme` state (dark/light). You have a `useEffect` that fetches search results from an API. How do you configure the dependency array so it fetches when they type, but DOES NOT fetch when they toggle the dark mode theme?
 
 **Expected output:**
-```text
-You use a populated array: `[searchQuery]`
-When `theme` changes, React will see `searchQuery` hasn't changed, and will skip the fetch effect!
-```
-
 > [!check]- Answer
+> ```text
+> You use a populated array: `[searchQuery]`
+> When `theme` changes, React will see `searchQuery` hasn't changed, and will skip the fetch effect!
+> ```
 > - Only put the variables the effect *actually cares about* in the array.
 
 ---
@@ -131,27 +130,27 @@ When `theme` changes, React will see `searchQuery` hasn't changed, and will skip
 **Problem:** Match behaviors: 1. No dependency array (`useEffect(fn)` -> Runs after every render); 2. Empty array `[]` (`useEffect(fn, [])` -> Runs once on mount); 3. `[val]` (`useEffect(fn, [val])` -> Runs on mount and when `val` changes).
 
 **Expected output:**
-```text
-1. Runs after every render, 2. Runs once on mount, 3. Runs when val changes
-```
-
 > [!check]- Answer
+> ```text
+> 1. Runs after every render, 2. Runs once on mount, 3. Runs when val changes
+> ```
 > ```text
 > 1. Runs after every render, 2. Runs once on mount, 3. Runs when val changes
 > ```
 >
 > **Explanation:** The dependency array controls effect execution frequency.
 
+---
+
 ### Exercise 3: Primitive vs Object Dependencies
 
 **Problem:** Why is `[options.id]` safer in dependency arrays than `[options]`? (`options.id` is a primitive scalar compared by value rather than object reference).
 
 **Expected output:**
-```text
-options.id is a primitive scalar compared by value rather than object reference
-```
-
 > [!check]- Answer
+> ```text
+> options.id is a primitive scalar compared by value rather than object reference
+> ```
 > ```text
 > options.id is a primitive scalar compared by value rather than object reference
 > ```

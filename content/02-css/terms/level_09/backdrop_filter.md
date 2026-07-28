@@ -198,18 +198,17 @@ Comparing `filter` vs `backdrop-filter`:
 **Problem:** You are building a fixed navigation bar that sits at the top of the screen as the user scrolls. You want the navigation bar to look glassy: have a semi-transparent black background (`rgba(0,0,0,0.5)`) and blur the page content scrolling behind it. Write the CSS layout ruleset.
 
 **Expected output:**
-```css
-.glass-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-}
-```
-
 > [!check]- Answer
+> ```css
+> .glass-nav {
+>   position: fixed;
+>   top: 0;
+>   left: 0;
+>   width: 100%;
+>   background: rgba(0, 0, 0, 0.5);
+>   backdrop-filter: blur(10px);
+> }
+> ```
 > - Position the bar statically at the top.
 > - Blend transparency and backdrop filters.
 
@@ -222,11 +221,10 @@ Comparing `filter` vs `backdrop-filter`:
 **Problem:** Write CSS for `.glass-card` with semi-transparent dark background (`rgb(0 0 0 / 50%)`), 12px blur backdrop filter, and subtle white border.
 
 **Expected output:**
-```text
-.glass-card { background: rgb(0 0 0 / 50%); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgb(255 255 255 / 20%); }
-```
-
 > [!check]- Answer
+> ```text
+> .glass-card { background: rgb(0 0 0 / 50%); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgb(255 255 255 / 20%); }
+> ```
 > ```css
 > .glass-card {
 >   background: rgb(0 0 0 / 50%);
@@ -238,16 +236,17 @@ Comparing `filter` vs `backdrop-filter`:
 >
 > **Explanation:** Glassmorphism combines semi-transparent background color, backdrop blur, and subtle border highlights.
 
+---
+
 ### Exercise 3: filter vs backdrop-filter Difference
 
 **Problem:** Distinguish `filter` vs `backdrop-filter`.
 
 **Expected output:**
-```text
-filter applies visual effects to the element ITSELF and its children; backdrop-filter applies visual effects to content BEHIND the element.
-```
-
 > [!check]- Answer
+> ```text
+> filter applies visual effects to the element ITSELF and its children; backdrop-filter applies visual effects to content BEHIND the element.
+> ```
 > ```text
 > filter applies visual effects to the element ITSELF and its children; backdrop-filter applies visual effects to content BEHIND the element.
 > ```

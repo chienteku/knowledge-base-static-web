@@ -145,12 +145,11 @@ async function doMath() {
 ```
 
 **Expected output:**
-```text
-1, 3, 4.
-It logs 1. The fetch fails, so it instantly skips line 2 and jumps directly into the catch block, logging 3. After the catch block finishes, the function continues normally, logging 4.
-```
-
 > [!check]- Answer
+> ```text
+> 1, 3, 4.
+> It logs 1. The fetch fails, so it instantly skips line 2 and jumps directly into the catch block, logging 3. After the catch block finishes, the function continues normally, logging 4.
+> ```
 > - As soon as an error happens, execution immediately jumps to the catch block!
 
 ---
@@ -160,16 +159,15 @@ It logs 1. The fetch fails, so it instantly skips line 2 and jumps directly into
 **Problem:** Write RFC 7807 compliant error JSON payload for a 400 Bad Request invalid email error.
 
 **Expected output:**
-```json
-{
-  "type": "https://example.com/errors/invalid-email",
-  "title": "Invalid Email Address",
-  "status": 400,
-  "detail": "The provided email format is invalid."
-}
-```
-
 > [!check]- Answer
+> ```json
+> {
+>   "type": "https://example.com/errors/invalid-email",
+>   "title": "Invalid Email Address",
+>   "status": 400,
+>   "detail": "The provided email format is invalid."
+> }
+> ```
 > ```json
 > {
 > "type": "https://example.com/errors/invalid-email",
@@ -186,11 +184,10 @@ It logs 1. The fetch fails, so it instantly skips line 2 and jumps directly into
 **Problem:** Write custom JavaScript `APIError` class extending `Error` holding `statusCode` property.
 
 **Expected output:**
-```text
-class APIError extends Error { constructor(message, statusCode) { super(message); this.statusCode = statusCode; } }
-```
-
 > [!check]- Answer
+> ```text
+> class APIError extends Error { constructor(message, statusCode) { super(message); this.statusCode = statusCode; } }
+> ```
 > ```javascript
 > class APIError extends Error {
 > constructor(message, statusCode) {

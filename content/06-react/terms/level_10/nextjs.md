@@ -98,12 +98,11 @@ export default function Page() {
 **Problem:** You are building a Next.js (App Router) application. You need a URL for `/dashboard/settings`. Where exactly do you create the React component file in your folder structure?
 
 **Expected output:**
-```text
-`app/dashboard/settings/page.js`
-In Next.js, folders define the URL path, and the special filename `page.js` defines the actual UI for that path.
-```
-
 > [!check]- Answer
+> ```text
+> `app/dashboard/settings/page.js`
+> In Next.js, folders define the URL path, and the special filename `page.js` defines the actual UI for that path.
+> ```
 > - No `react-router-dom` needed!
 
 ---
@@ -115,27 +114,27 @@ In Next.js, folders define the URL path, and the special filename `page.js` defi
 **Problem:** List Next.js App Router special file names for: 1. Main Page (`page.tsx`); 2. Layout Wrapper (`layout.tsx`); 3. Loading Boundary (`loading.tsx`); 4. Error Boundary (`error.tsx`).
 
 **Expected output:**
-```text
-1. page.tsx, 2. layout.tsx, 3. loading.tsx, 4. error.tsx
-```
-
 > [!check]- Answer
+> ```text
+> 1. page.tsx, 2. layout.tsx, 3. loading.tsx, 4. error.tsx
+> ```
 > ```text
 > 1. page.tsx, 2. layout.tsx, 3. loading.tsx, 4. error.tsx
 > ```
 >
 > **Explanation:** Next.js App Router uses file system conventions to define routes and UI boundaries.
 
+---
+
 ### Exercise 3: Data Caching Options in Next.js fetch
 
 **Problem:** Replicate SSG behavior in Next.js `fetch()` using cache option (`fetch(url, { cache: 'force-cache' })`). Replicate SSR behavior (`fetch(url, { cache: 'no-store' })`).
 
 **Expected output:**
-```text
-SSG: cache: 'force-cache'; SSR: cache: 'no-store'
-```
-
 > [!check]- Answer
+> ```text
+> SSG: cache: 'force-cache'; SSR: cache: 'no-store'
+> ```
 > ```javascript
 > // SSG (static cached):
 > fetch(url, { cache: 'force-cache' });

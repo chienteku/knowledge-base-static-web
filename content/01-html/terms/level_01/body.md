@@ -123,11 +123,10 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 **Problem:** If you apply CSS background color (e.g., `background-color: blue;`) to the `<body>` element, what happens?
 
 **Expected output:**
-```text
-The entire visible background of the webpage (the browser viewport) will turn blue, because the `<body>` element represents the entire canvas that the user looks at.
-```
-
 > [!check]- Answer
+> ```text
+> The entire visible background of the webpage (the browser viewport) will turn blue, because the `<body>` element represents the entire canvas that the user looks at.
+> ```
 > - Think about what the `<body>` represents in our theatrical stage metaphor.
 
 ---
@@ -147,11 +146,10 @@ The entire visible background of the webpage (the browser viewport) will turn bl
 ```
 
 **Expected output:**
-```text
-The <p> element is placed before the <head> and outside the <body>. All visible elements must be inside <body>.
-```
-
 > [!check]- Answer
+> ```text
+> The <p> element is placed before the <head> and outside the <body>. All visible elements must be inside <body>.
+> ```
 > ```html
 > <!DOCTYPE html>
 > <html>
@@ -166,16 +164,17 @@ The <p> element is placed before the <head> and outside the <body>. All visible 
 >
 > **Explanation:** Document structure strictly orders `<head>` followed by `<body>` containing all visible content.
 
+---
+
 ### Exercise 3: Body Event Handlers
 
 **Problem:** Which global event listener attributes can be placed on the `<body>` tag to detect document load and unload?
 
 **Expected output:**
-```text
-onload and onunload
-```
-
 > [!check]- Answer
+> ```text
+> onload and onunload
+> ```
 > ```html
 > <body onload="initApp()" onunload="cleanup()">
 > ```

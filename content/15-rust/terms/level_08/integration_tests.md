@@ -173,11 +173,10 @@ fn check_hashing() {
 **Problem:** Explain why `tests/common/mod.rs` prevents Cargo from treating helper modules as test binaries.
 
 **Expected output:**
-```
-tests/common/mod.rs avoids test runner overhead
-```
-
 > [!check]- Answer
+> ```
+> tests/common/mod.rs avoids test runner overhead
+> ```
 > ```rust
 > fn main() {
 >     println!("tests/common/mod.rs avoids test runner overhead");
@@ -186,16 +185,17 @@ tests/common/mod.rs avoids test runner overhead
 >
 > **Explanation:** Subdirectories with `mod.rs` are ignored as independent test binary targets by Cargo.
 
+---
+
 ### Exercise 3: Importing Public Library Crates in Integration Tests
 
 **Problem:** Write an integration test function in `tests/integration_test.rs` importing `use my_crate::*;`.
 
 **Expected output:**
-```
-Integration test executed
-```
-
 > [!check]- Answer
+> ```
+> Integration test executed
+> ```
 > #[test]
 > fn test_pub_api() {
 >     println!("Integration test executed");

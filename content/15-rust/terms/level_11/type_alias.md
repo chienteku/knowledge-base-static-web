@@ -178,11 +178,10 @@ B) `struct Kilometers(f64);`
 **Problem:** Create a type alias `type Result<T> = std::result::Result<T, MyError>;`.
 
 **Expected output:**
-```
-Type alias result verified
-```
-
 > [!check]- Answer
+> ```
+> Type alias result verified
+> ```
 > ```rust
 > type Result<T> = std::result::Result<T, &'static str>;
 > fn compute() -> Result<i32> { Ok(42) }
@@ -195,16 +194,17 @@ Type alias result verified
 >
 > **Explanation:** Type aliases reduce repetitive generic parameter boilerplate in function signatures.
 
+---
+
 ### Exercise 3: Type Alias for Function Pointers
 
 **Problem:** Define `type Callback = fn(i32) -> i32;` and use it in function signatures.
 
 **Expected output:**
-```
-Callback result: 20
-```
-
 > [!check]- Answer
+> ```
+> Callback result: 20
+> ```
 > type Callback = fn(i32) -> i32;
 > fn run(val: i32, cb: Callback) -> i32 { cb(val) }
 > fn main() {

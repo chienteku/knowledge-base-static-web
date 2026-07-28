@@ -194,12 +194,11 @@ const myDog: Dog = new Cat();
 ```
 
 **Expected output:**
-```text
-It will compile successfully! 
-Because both `Dog` and `Cat` have a shape containing a single method `bark(): string`, the TypeScript compiler considers their structures completely compatible, even though they represent different animals.
-```
-
 > [!check]- Answer
+> ```text
+> It will compile successfully! 
+> Because both `Dog` and `Cat` have a shape containing a single method `bark(): string`, the TypeScript compiler considers their structures completely compatible, even though they represent different animals.
+> ```
 > - Does `Cat` possess every property and method shape declared in `Dog`?
 > - Remember, the class name does not matter during structural type comparisons.
 
@@ -212,11 +211,10 @@ Because both `Dog` and `Cat` have a shape containing a single method `bark(): st
 **Problem:** Verify whether `{ name: "Alice", age: 30, role: "admin" }` is assignable to `{ name: string }`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```typescript
 > type Named = { name: string };
 > const user = { name: "Alice", age: 30, role: "admin" };
@@ -226,16 +224,17 @@ true
 >
 > **Explanation:** Structural typing requires target properties to exist, permitting extra properties on indirect object assignments.
 
+---
+
 ### Exercise 3: Structural vs Nominal Typing
 
 **Problem:** State whether TypeScript (Structural) or Java/C# (Nominal) matches types by shape rather than declared name.
 
 **Expected output:**
-```text
-TypeScript matches by shape (Structural)
-```
-
 > [!check]- Answer
+> ```text
+> TypeScript matches by shape (Structural)
+> ```
 > ```typescript
 > console.log("TypeScript matches by shape (Structural)");
 > ```

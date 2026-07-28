@@ -168,17 +168,10 @@ SELECT name, email FROM contacts;
 2.  Write the refactored SQL query to safely merge the names from both tables.
 
 **Expected output:**
-```text
-1. The query fails because the columns are not type-compatible: the first query selects an integer `id` in column 1, whereas the second query selects a text `name` in column 1. SQL set operations require matching data types in corresponding columns.
-```
-```sql
--- 2. Refactored query (matching column types)
-SELECT name FROM users
-UNION ALL
-SELECT name FROM contacts;
-```
-
 > [!check]- Answer
+> ```text
+> 1. The query fails because the columns are not type-compatible: the first query selects an integer `id` in column 1, whereas the second query selects a text `name` in column 1. SQL set operations require matching data types in corresponding columns.
+> ```
 > - Adjust the select list to ensure both sides of the `UNION ALL` return the exact same column structures.
 > - Match strings to strings.
 
@@ -191,27 +184,27 @@ SELECT name FROM contacts;
 **Problem:** Query user IDs in `users` table that do NOT exist in `orders` table using `EXCEPT`.
 
 **Expected output:**
-```text
-SELECT id FROM users EXCEPT SELECT user_id FROM orders;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT id FROM users EXCEPT SELECT user_id FROM orders;
+> ```
 > ```sql
 > SELECT id FROM users EXCEPT SELECT user_id FROM orders;
 > ```
 >
 > **Explanation:** `EXCEPT` returns distinct rows present in LHS query that do not exist in RHS query.
 
+---
+
 ### Exercise 3: Intersecting Datasets with INTERSECT
 
 **Problem:** Query email addresses present in BOTH `customers` and `employees` tables using `INTERSECT`.
 
 **Expected output:**
-```text
-SELECT email FROM customers INTERSECT SELECT email FROM employees;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT email FROM customers INTERSECT SELECT email FROM employees;
+> ```
 > ```sql
 > SELECT email FROM customers INTERSECT SELECT email FROM employees;
 > ```

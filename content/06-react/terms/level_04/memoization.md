@@ -161,32 +161,34 @@ const handleClick = useCallback(() => alert('hi'), []);
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: 3 Core Memoization APIs in React
 
 **Problem:** List 3 core memoization tools in React (1. `React.memo`: Component memoization; 2. `useMemo`: Value calculation memoization; 3. `useCallback`: Function reference memoization).
 
 **Expected output:**
-```text
-1. React.memo (component), 2. useMemo (value), 3. useCallback (function)
-```
-
 > [!check]- Answer
+> ```text
+> 1. React.memo (component), 2. useMemo (value), 3. useCallback (function)
+> ```
 > ```text
 > 1. React.memo (component), 2. useMemo (value), 3. useCallback (function)
 > ```
 >
 > **Explanation:** React memoization APIs cache components, computed values, and callback references.
 
+---
+
 ### Exercise 3: React Compiler (React 19) Auto-Memoization
 
 **Problem:** What is the primary role of the React Compiler in React 19? (Automatically memoizes values, functions, and components at compile-time without manual `useMemo`/`useCallback`).
 
 **Expected output:**
-```text
-Automatically memoizes values, functions, and components at compile-time without manual hooks
-```
-
 > [!check]- Answer
+> ```text
+> Automatically memoizes values, functions, and components at compile-time without manual hooks
+> ```
 > ```text
 > Automatically memoizes values, functions, and components at compile-time without manual hooks
 > ```

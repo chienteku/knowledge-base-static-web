@@ -124,13 +124,12 @@ expect(wrapper.text()).toContain('Count: 1');
 **Problem:** You want to test the entire checkout flow: User logs in, adds item to cart, goes to Stripe, and pays. Should you use Vue Test Utils for this?
 
 **Expected output:**
-```text
-No!
-Vue Test Utils is strictly for Unit Testing (testing a *single* component in complete isolation). 
-For testing entire multi-page user flows that interact with real databases or third-party APIs, you should use an End-to-End (E2E) testing framework like Cypress or Playwright.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Vue Test Utils is strictly for Unit Testing (testing a *single* component in complete isolation). 
+> For testing entire multi-page user flows that interact with real databases or third-party APIs, you should use an End-to-End (E2E) testing framework like Cypress or Playwright.
+> ```
 > - Review the difference between Unit testing and E2E testing.
 
 ---
@@ -140,11 +139,10 @@ For testing entire multi-page user flows that interact with real databases or th
 **Problem:** Write Vue Test Utils test mounting `UserCard.vue` with prop `username: 'Alice'` and asserting `wrapper.text()` contains `'Alice'`. 
 
 **Expected output:**
-```javascript
-const wrapper = mount(UserCard, { props: { username: 'Alice' } }); expect(wrapper.text()).toContain('Alice');
-```
-
 > [!check]- Answer
+> ```javascript
+> const wrapper = mount(UserCard, { props: { username: 'Alice' } }); expect(wrapper.text()).toContain('Alice');
+> ```
 > - Pass props to `mount(Comp, { props })` options object.
 > 
 > ```javascript
@@ -166,11 +164,10 @@ const wrapper = mount(UserCard, { props: { username: 'Alice' } }); expect(wrappe
 **Problem:** How do you assert that a component emitted a custom event `'submit'` with payload `{ id: 1 }` using Vue Test Utils?
 
 **Expected output:**
-```text
-expect(wrapper.emitted('submit')[0]).toEqual([{ id: 1 }]);
-```
-
 > [!check]- Answer
+> ```text
+> expect(wrapper.emitted('submit')[0]).toEqual([{ id: 1 }]);
+> ```
 > - `wrapper.emitted('eventName')` returns an array of emitted event payloads.
 > 
 > ```javascript

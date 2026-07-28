@@ -151,12 +151,11 @@ async function processData() {
 **Problem:** You have an object mapping user IDs to their status: `const users = { u1: "offline", u2: "online", u3: "offline" }`. Using `Object.values()` and the array `.includes()` method, write a single line of code to check if ANY user is "online".
 
 **Expected output:**
-```javascript
-const isAnyoneOnline = Object.values(users).includes("online");
-console.log(isAnyoneOnline); // true
-```
-
 > [!check]- Answer
+> ```javascript
+> const isAnyoneOnline = Object.values(users).includes("online");
+> console.log(isAnyoneOnline); // true
+> ```
 > - Extract the values into an array, then immediately chain `.includes()`.
 
 ---
@@ -166,11 +165,10 @@ console.log(isAnyoneOnline); // true
 **Problem:** Sum values of `{ apples: 5, oranges: 10 }` using `Object.values()` and `.reduce()`.
 
 **Expected output:**
-```text
-15
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> ```
 > ```javascript
 > const inventory = { apples: 5, oranges: 10 };
 > const total = Object.values(inventory).reduce((a, b) => a + b, 0);
@@ -179,16 +177,17 @@ console.log(isAnyoneOnline); // true
 >
 > **Explanation:** `Object.values()` extracts an array of own property values for reduction.
 
+---
+
 ### Exercise 3: Checking Value Inclusion with `.includes()`
 
 **Problem:** Check if value `"admin"` exists in `{ role: "admin" }` using `Object.values(obj).includes(...)`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const user = { role: "admin" };
 > console.log(Object.values(user).includes("admin"));
@@ -196,7 +195,6 @@ true
 >
 > **Explanation:** `Object.values()` enables array search methods over object value fields.
 
----
 
 ---
 

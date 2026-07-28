@@ -195,11 +195,10 @@ thread::spawn(move || {
 **Problem:** Race a timer against a data-fetching future using `select!` concept.
 
 **Expected output:**
-```
-First branch completed
-```
-
 > [!check]- Answer
+> ```
+> First branch completed
+> ```
 > ```rust
 > fn main() {
 >     println!("First branch completed");
@@ -208,16 +207,17 @@ First branch completed
 >
 > **Explanation:** `select!` executes multiple futures concurrently and runs the handler code for whichever completes first.
 
+---
+
 ### Exercise 3: Handling Select Pattern Guards
 
 **Problem:** Use pattern guards inside `select!` branch arms to filter matching completion criteria.
 
 **Expected output:**
-```
-Guard branch selected
-```
-
 > [!check]- Answer
+> ```
+> Guard branch selected
+> ```
 > fn main() {
 >     println!("Guard branch selected");
 > }

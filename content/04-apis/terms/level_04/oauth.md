@@ -111,12 +111,11 @@ app.get('/oauth/callback', (req, res) => {
 **Problem:** You grant an app "Read" access to your GitHub repositories via OAuth. Later, you realize the app is malicious and trying to delete your code. Why will the malicious app fail to delete your code, even though they hold a valid OAuth token?
 
 **Expected output:**
-```text
-Because of "Scopes"!
-When Google/GitHub issues the token, they embed the "Scope" (permissions) directly into the token's signature. The token literally says `scope: read_only`. When the malicious app sends a `DELETE` request, GitHub reads the token's scope and blocks the action.
-```
-
 > [!check]- Answer
+> ```text
+> Because of "Scopes"!
+> When Google/GitHub issues the token, they embed the "Scope" (permissions) directly into the token's signature. The token literally says `scope: read_only`. When the malicious app sends a `DELETE` request, GitHub reads the token's scope and blocks the action.
+> ```
 > - What kind of "Valet Key" did you give them?
 
 ---
@@ -130,14 +129,13 @@ When Google/GitHub issues the token, they embed the "Scope" (permissions) direct
 4. Resource Server
 
 **Expected output:**
-```text
-1. The User (human approving access)
-2. The App requesting access (e.g. Spotify app)
-3. Auth Provider issuing tokens (e.g. Google Login)
-4. API hosting protected resources (e.g. Google Drive API)
-```
-
 > [!check]- Answer
+> ```text
+> 1. The User (human approving access)
+> 2. The App requesting access (e.g. Spotify app)
+> 3. Auth Provider issuing tokens (e.g. Google Login)
+> 4. API hosting protected resources (e.g. Google Drive API)
+> ```
 > ```text
 > 1. Resource Owner -> The End User
 > 2. Client -> The Third-Party Application
@@ -152,11 +150,10 @@ When Google/GitHub issues the token, they embed the "Scope" (permissions) direct
 **Problem:** What does PKCE stand for and what security vulnerability does it solve?
 
 **Expected output:**
-```text
-Proof Key for Code Exchange. It prevents authorization code interception attacks on public SPA and mobile clients.
-```
-
 > [!check]- Answer
+> ```text
+> Proof Key for Code Exchange. It prevents authorization code interception attacks on public SPA and mobile clients.
+> ```
 > ```text
 > Proof Key for Code Exchange. It prevents authorization code interception attacks on public SPA and mobile clients.
 > ```

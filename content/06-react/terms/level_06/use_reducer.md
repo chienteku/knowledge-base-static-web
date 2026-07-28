@@ -170,6 +170,8 @@ const handleFetch = async () => {
 >
 > **Explanation:** Reducer functions compute next state based on current state and dispatched action object.
 
+---
+
 ### Exercise 3: useReducer Signature
 
 **Problem:** What array tuple does `const [state, dispatch] = useReducer(reducer, initialState)` return? (Current state snapshot and dispatch function).

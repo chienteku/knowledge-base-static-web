@@ -145,16 +145,15 @@ email TEXT NOT NULL -- Guarantees presence of value
 **Problem:** You are building a table `products`. Every product must have an ID, a title, and a price. The description field is optional. Write the complete `CREATE TABLE` SQL query enforcing these rules.
 
 **Expected output:**
-```sql
-CREATE TABLE products (
-  id INTEGER PRIMARY KEY,
-  title VARCHAR(100) NOT NULL,
-  price NUMERIC(10,2) NOT NULL,
-  description TEXT
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE products (
+>   id INTEGER PRIMARY KEY,
+>   title VARCHAR(100) NOT NULL,
+>   price NUMERIC(10,2) NOT NULL,
+>   description TEXT
+> );
+> ```
 > - The `PRIMARY KEY` constraint inherently includes `NOT NULL` properties, so you don't need to specify both on the ID column.
 > - Apply `NOT NULL` to required fields.
 
@@ -167,11 +166,10 @@ CREATE TABLE products (
 **Problem:** Create table `accounts` requiring `username` and `password_hash` to be NOT NULL.
 
 **Expected output:**
-```text
-CREATE TABLE accounts ( id SERIAL PRIMARY KEY, username TEXT NOT NULL, password_hash TEXT NOT NULL );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE accounts ( id SERIAL PRIMARY KEY, username TEXT NOT NULL, password_hash TEXT NOT NULL );
+> ```
 > ```sql
 > CREATE TABLE accounts (
 >   id SERIAL PRIMARY KEY,
@@ -182,16 +180,17 @@ CREATE TABLE accounts ( id SERIAL PRIMARY KEY, username TEXT NOT NULL, password_
 >
 > **Explanation:** `NOT NULL` constraints guarantee columns cannot store NULL missing values.
 
+---
+
 ### Exercise 3: Removing NOT NULL Constraint
 
 **Problem:** Remove `NOT NULL` constraint from `phone` column on `users` table.
 
 **Expected output:**
-```text
-ALTER TABLE users ALTER COLUMN phone DROP NOT NULL;
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE users ALTER COLUMN phone DROP NOT NULL;
+> ```
 > ```sql
 > ALTER TABLE users ALTER COLUMN phone DROP NOT NULL;
 > ```

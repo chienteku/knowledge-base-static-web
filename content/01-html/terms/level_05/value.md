@@ -187,11 +187,10 @@ const liveText = inputElement.value; // Accesses current live DOM property
 If the user clicks "Submit" immediately without changing the dropdown, what key-value pair will the server receive?
 
 **Expected output:**
-```text
-tier=t2
-```
-
 > [!check]- Answer
+> ```text
+> tier=t2
+> ```
 > - The key is defined by the `name` attribute of the container.
 > - The value is the selected option's `value` attribute.
 
@@ -204,27 +203,27 @@ tier=t2
 **Problem:** Write text `<input>` named `country` with default initial value `'USA'`. 
 
 **Expected output:**
-```text
-<input type="text" name="country" value="USA">
-```
-
 > [!check]- Answer
+> ```text
+> <input type="text" name="country" value="USA">
+> ```
 > ```html
 > <input type="text" name="country" value="USA">
 > ```
 >
 > **Explanation:** `value` sets initial field input content.
 
+---
+
 ### Exercise 3: Reading Value Property in JavaScript
 
 **Problem:** Write JavaScript line extracting current text from input with ID `'email-field'`. 
 
 **Expected output:**
-```text
-const val = document.getElementById('email-field').value;
-```
-
 > [!check]- Answer
+> ```text
+> const val = document.getElementById('email-field').value;
+> ```
 > ```javascript
 > const val = document.getElementById('email-field').value;
 > ```

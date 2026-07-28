@@ -241,16 +241,17 @@ function App() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Compound Select Component Pattern
 
 **Problem:** Build compound `Select` component with `Select.Option` sub-component using Context.
 
 **Expected output:**
-```text
-const SelectContext = createContext(); function Select({ value, onChange, children }) { return <SelectContext.Provider value={{ value, onChange }}>{children}</SelectContext.Provider>; } Select.Option = function Option({ val, children }) { const { value, onChange } = useContext(SelectContext); return <div onClick={() => onChange(val)} className={value === val ? 'active' : ''}>{children}</div>; };
-```
-
 > [!check]- Answer
+> ```text
+> const SelectContext = createContext(); function Select({ value, onChange, children }) { return <SelectContext.Provider value={{ value, onChange }}>{children}</SelectContext.Provider>; } Select.Option = function Option({ val, children }) { const { value, onChange } = useContext(SelectContext); return <div onClick={() => onChange(val)} className={value === val ? 'active' : ''}>{children}</div>; };
+> ```
 > ```javascript
 > const SelectContext = createContext();
 >
@@ -277,16 +278,17 @@ const SelectContext = createContext(); function Select({ value, onChange, childr
 >
 > **Explanation:** Compound components share implicit state via Context while exposing expressive declarative markup.
 
+---
+
 ### Exercise 3: Benefits of Compound Component Pattern
 
 **Problem:** List 2 benefits of Compound Component design pattern (1. Expressive declarative API; 2. Flexible layout sub-component positioning).
 
 **Expected output:**
-```text
-1. Expressive declarative API; 2. Flexible layout sub-component positioning
-```
-
 > [!check]- Answer
+> ```text
+> 1. Expressive declarative API; 2. Flexible layout sub-component positioning
+> ```
 > ```text
 > 1. Expressive declarative API; 2. Flexible layout sub-component positioning
 > ```

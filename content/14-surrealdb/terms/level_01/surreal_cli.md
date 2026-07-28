@@ -149,11 +149,10 @@ Write the terminal command to pipe this file into a local SurrealDB server liste
 Admin credentials are `"admin"` / `"admin"`.
 
 **Expected output:**
-```bash
-cat db_setup.surql | surreal sql --endpoint http://localhost:8000 --user admin --pass admin --ns app --db dev
-```
-
 > [!check]- Answer
+> ```bash
+> cat db_setup.surql | surreal sql --endpoint http://localhost:8000 --user admin --pass admin --ns app --db dev
+> ```
 > - Use the Unix `cat` utility to read the setup file.
 > - Pipe the output using the `|` operator into the `surreal sql` client command with configuration arguments.
 
@@ -166,11 +165,10 @@ cat db_setup.surql | surreal sql --endpoint http://localhost:8000 --user admin -
 **Problem:** Write `surreal` CLI commands to export database to `dump.surql` and import it back.
 
 **Expected output:**
-```text
-surreal export dump.surql & surreal import dump.surql
-```
-
 > [!check]- Answer
+> ```text
+> surreal export dump.surql & surreal import dump.surql
+> ```
 > ```text
 > surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app dump.surql
 > surreal import --endpoint http://localhost:8000 -u root -p root --ns main --db app dump.surql
@@ -178,16 +176,17 @@ surreal export dump.surql & surreal import dump.surql
 >
 > **Explanation:** `surreal export` and `import` manage database schema and record SQL backups.
 
+---
+
 ### Exercise 3: CLI Version Verification
 
 **Problem:** Command to print installed SurrealDB CLI version.
 
 **Expected output:**
-```text
-surreal version
-```
-
 > [!check]- Answer
+> ```text
+> surreal version
+> ```
 > ```text
 > surreal version
 > ```

@@ -126,11 +126,10 @@ If you have a component that should *never* be server-rendered anywhere in your 
 **Problem:** You created a third-party charting component. It throws a 500 server error because the library relies on `window.innerWidth`. Instead of using the `<ClientOnly>` tag in your templates, how can you rename the component file `Chart.vue` to force Nuxt to always render it on the client?
 
 **Expected output:**
-```text
-Chart.client.vue
-```
-
 > [!check]- Answer
+> ```text
+> Chart.client.vue
+> ```
 > - You can append a suffix before the file extension to mark the component as client-only.
 
 ---
@@ -140,18 +139,17 @@ Chart.client.vue
 **Problem:** Write Vue template wrapping browser-only canvas component `<CanvasEditor />` inside `<ClientOnly>` with a fallback skeleton element.
 
 **Expected output:**
-```vue
-<template>
-  <ClientOnly>
-    <CanvasEditor />
-    <template #fallback>
-      <div class="h-64 bg-gray-100 animate-pulse" />
-    </template>
-  </ClientOnly>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <ClientOnly>
+>     <CanvasEditor />
+>     <template #fallback>
+>       <div class="h-64 bg-gray-100 animate-pulse" />
+>     </template>
+>   </ClientOnly>
+> </template>
+> ```
 > - `<template #fallback>` provides smooth skeleton rendering during SSR.
 > 
 > ```vue
@@ -174,11 +172,10 @@ Chart.client.vue
 **Problem:** Which file naming suffix automatically restricts a component in `components/` to client-side execution without requiring `<ClientOnly>` tags?
 
 **Expected output:**
-```text
-Component.client.vue (e.g. Chart.client.vue)
-```
-
 > [!check]- Answer
+> ```text
+> Component.client.vue (e.g. Chart.client.vue)
+> ```
 > - `.client.vue` suffix restricts component rendering to the browser.
 > 
 > ```text

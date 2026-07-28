@@ -131,13 +131,12 @@ Complete the comparative analysis by stating whether **Replication** or **Shardi
 3.  We want to scale read queries geographically by routing them to local secondary nodes.
 
 **Expected output:**
-```text
-1. Sharding: Splitting data across multiple shards allows you to bypass the storage limits of a single machine by distributing the disk footprint.
-2. Replication: Replica sets maintain identical copies of the database, enabling automatic failover when a node crashes.
-3. Replication: Replica sets allow you to configure Read Preferences to route reads to secondary nodes.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Sharding: Splitting data across multiple shards allows you to bypass the storage limits of a single machine by distributing the disk footprint.
+> 2. Replication: Replica sets maintain identical copies of the database, enabling automatic failover when a node crashes.
+> 3. Replication: Replica sets allow you to configure Read Preferences to route reads to secondary nodes.
+> ```
 > - Determine if the issue is a physical storage limit or a high-availability backup requirement.
 > - Consider if data partitioning is necessary.
 
@@ -150,11 +149,10 @@ Complete the comparative analysis by stating whether **Replication** or **Shardi
 **Problem:** Enable sharding on database `saas_db` and shard `users` collection on `{ tenantId: 1, userId: 1 }`.
 
 **Expected output:**
-```text
-sh.enableSharding("saas_db"); sh.shardCollection("saas_db.users", { tenantId: 1, userId: 1 });
-```
-
 > [!check]- Answer
+> ```text
+> sh.enableSharding("saas_db"); sh.shardCollection("saas_db.users", { tenantId: 1, userId: 1 });
+> ```
 > ```javascript
 > sh.enableSharding("saas_db");
 > sh.shardCollection("saas_db.users", { tenantId: 1, userId: 1 });
@@ -162,16 +160,17 @@ sh.enableSharding("saas_db"); sh.shardCollection("saas_db.users", { tenantId: 1,
 >
 > **Explanation:** Sharding requires enabling sharding on the parent database before sharding target collections.
 
+---
+
 ### Exercise 3: Sharded Cluster Architecture Components
 
 **Problem:** List 3 core components of a MongoDB Sharded Cluster (`mongos` routers, `Config Servers` CSRS, `Shard` replica sets).
 
 **Expected output:**
-```text
-mongos routers, Config Servers (CSRS), Shard replica sets
-```
-
 > [!check]- Answer
+> ```text
+> mongos routers, Config Servers (CSRS), Shard replica sets
+> ```
 > ```text
 > mongos routers, Config Servers (CSRS), Shard replica sets
 > ```

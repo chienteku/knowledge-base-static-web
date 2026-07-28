@@ -181,15 +181,14 @@ Keep name and email in single users table
 3.  A unique foreign key column `user_id` pointing to `users(id)`.
 
 **Expected output:**
-```sql
-CREATE TABLE user_settings (
-  settings_id INT PRIMARY KEY,
-  dark_mode_enabled BOOLEAN DEFAULT FALSE,
-  user_id INT UNIQUE REFERENCES users(id)
-);
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE TABLE user_settings (
+>   settings_id INT PRIMARY KEY,
+>   dark_mode_enabled BOOLEAN DEFAULT FALSE,
+>   user_id INT UNIQUE REFERENCES users(id)
+> );
+> ```
 > - Combine the `UNIQUE` and `REFERENCES` inline parameters inside the `user_id` declaration.
 > - Ensure the default value is properly declared using `DEFAULT`.
 
@@ -202,11 +201,10 @@ CREATE TABLE user_settings (
 **Problem:** Create `user_settings` table establishing 1-to-1 relationship with `users` table.
 
 **Expected output:**
-```text
-CREATE TABLE user_settings ( user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, theme TEXT DEFAULT 'dark' );
-```
-
 > [!check]- Answer
+> ```text
+> CREATE TABLE user_settings ( user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, theme TEXT DEFAULT 'dark' );
+> ```
 > ```sql
 > CREATE TABLE user_settings (
 >   user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
@@ -216,16 +214,17 @@ CREATE TABLE user_settings ( user_id INT PRIMARY KEY REFERENCES users(id) ON DEL
 >
 > **Explanation:** Using the foreign key as primary key (`user_id INT PRIMARY KEY`) guarantees 1-to-1 uniqueness.
 
+---
+
 ### Exercise 3: When to Split 1-to-1 Tables
 
 **Problem:** List 2 valid reasons for splitting 1-to-1 data into separate tables (1. Isolating rare/large blob columns; 2. Strict column-level security permissions).
 
 **Expected output:**
-```text
-Isolating rare/large blob columns; strict column-level security permissions
-```
-
 > [!check]- Answer
+> ```text
+> Isolating rare/large blob columns; strict column-level security permissions
+> ```
 > ```text
 > Isolating rare/large blob columns; strict column-level security permissions
 > ```

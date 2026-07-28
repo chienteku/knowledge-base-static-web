@@ -131,13 +131,12 @@ const double = computed({
 **Problem:** You need to reverse a string. You write `const reversed = computed(() => text.value.split('').reverse().join(''))`. Your coworker tells you to just use a function: `function getReversed() { return text.value... }`. Why is your coworker wrong?
 
 **Expected output:**
-```text
-Performance!
-A method `getReversed()` will execute every single time the component re-renders, regardless of whether `text` changed.
-The `computed` property will execute exactly ONCE, cache the result, and only execute again if `text.value` actually changes.
-```
-
 > [!check]- Answer
+> ```text
+> Performance!
+> A method `getReversed()` will execute every single time the component re-renders, regardless of whether `text` changed.
+> The `computed` property will execute exactly ONCE, cache the result, and only execute again if `text.value` actually changes.
+> ```
 > - Think about caching.
 
 ---
@@ -147,11 +146,10 @@ The `computed` property will execute exactly ONCE, cache the result, and only ex
 **Problem:** Write a Vue computed property `activeUsers` filtering array `users` (`ref`) where `user.isActive === true`.
 
 **Expected output:**
-```javascript
-const activeUsers = computed(() => users.value.filter(u => u.isActive));
-```
-
 > [!check]- Answer
+> ```javascript
+> const activeUsers = computed(() => users.value.filter(u => u.isActive));
+> ```
 > - Computed properties cache results based on reactive dependencies.
 > 
 > ```javascript
@@ -167,11 +165,10 @@ const activeUsers = computed(() => users.value.filter(u => u.isActive));
 **Problem:** Why is a computed property `fullName` superior to calling a method `getFullName()` inside a template loop?
 
 **Expected output:**
-```text
-Computed properties cache their result based on reactive dependencies and re-evaluate ONLY when dependencies change; methods execute on every single component re-render.
-```
-
 > [!check]- Answer
+> ```text
+> Computed properties cache their result based on reactive dependencies and re-evaluate ONLY when dependencies change; methods execute on every single component re-render.
+> ```
 > - Computed = Cached until dependency changes.
 > - Method = Executes on every re-render.
 > 

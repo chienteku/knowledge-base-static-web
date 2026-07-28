@@ -146,11 +146,10 @@ Place restrictive specific IP rules at top; broad fallback rules at bottom
 Write the exact line that you must append to `pg_hba.conf` to authorize this connection securely using scram passwords.
 
 **Expected output:**
-```text
-host    store_db    store_app    192.168.1.45/32    scram-sha-256
-```
-
 > [!check]- Answer
+> ```text
+> host    store_db    store_app    192.168.1.45/32    scram-sha-256
+> ```
 > - A single IP address in CIDR notation uses the subnet mask `/32`.
 > - Order the columns correctly: Type, Database, User, Address, Method.
 
@@ -163,27 +162,27 @@ host    store_db    store_app    192.168.1.45/32    scram-sha-256
 **Problem:** Write `pg_hba.conf` line granting `app_user` access to `prod_db` from `10.0.1.0/24` subnet using `scram-sha-256`.
 
 **Expected output:**
-```text
-host prod_db app_user 10.0.1.0/24 scram-sha-256
-```
-
 > [!check]- Answer
+> ```text
+> host prod_db app_user 10.0.1.0/24 scram-sha-256
+> ```
 > ```text
 > host prod_db app_user 10.0.1.0/24 scram-sha-256
 > ```
 >
 > **Explanation:** `pg_hba.conf` rules specify connection type, database, user, address subnet, and authentication method.
 
+---
+
 ### Exercise 3: Reloading pg_hba.conf Configuration
 
 **Problem:** SQL command reloading `pg_hba.conf` without restarting PostgreSQL server (`SELECT pg_reload_conf();`).
 
 **Expected output:**
-```text
-SELECT pg_reload_conf();
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pg_reload_conf();
+> ```
 > ```sql
 > SELECT pg_reload_conf();
 > ```

@@ -159,11 +159,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Area is: 50
-```
-
 > [!check]- Answer
+> ```text
+> Area is: 50
+> ```
 > - The very last line of the block (`width * height * multiplier;`) ends with a semicolon.
 > - This turns it into a statement, meaning the block evaluates to nothing.
 > - Remove the semicolon from that final line!
@@ -175,11 +174,10 @@ Area is: 50
 **Problem:** Refactor a multi-step `let status = if ...` assignment into a single clean block expression returning a string slice.
 
 **Expected output:**
-```
-Active
-```
-
 > [!check]- Answer
+> ```
+> Active
+> ```
 > ```rust
 > fn main() {
 >     let score = 85;
@@ -194,16 +192,17 @@ Active
 >
 > **Explanation:** Rust's `if` is an expression. Omitting trailing semicolons inside block branches lets the evaluated value flow directly into the `status` variable binding.
 
+---
+
 ### Exercise 3: Block Expression Unit Evaluation
 
 **Problem:** Explain what `{ let a = 5; let b = 10; a + b; }` evaluates to and fix it to evaluate to `15`.
 
 **Expected output:**
-```
-15
-```
-
 > [!check]- Answer
+> ```
+> 15
+> ```
 > ```rust
 > fn main() {
 >     let val = { let a = 5; let b = 10; a + b }; // Omit semicolon on a + b

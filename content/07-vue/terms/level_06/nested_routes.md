@@ -149,13 +149,12 @@ children: [
 What URL actually triggers the billing component?
 
 **Expected output:**
-```text
-The URL is exactly `/billing`, NOT `/settings/billing`!
-If a nested path starts with a `/`, Vue Router treats it as an absolute root path. 
-To nest it correctly under the parent, it must not have a leading slash: `{ path: 'billing' }`.
-```
-
 > [!check]- Answer
+> ```text
+> The URL is exactly `/billing`, NOT `/settings/billing`!
+> If a nested path starts with a `/`, Vue Router treats it as an absolute root path. 
+> To nest it correctly under the parent, it must not have a leading slash: `{ path: 'billing' }`.
+> ```
 > - A slash `/` means "Start at the very beginning of the domain".
 
 ---
@@ -165,11 +164,10 @@ To nest it correctly under the parent, it must not have a leading slash: `{ path
 **Problem:** Write routes definition array for parent `/settings` containing 2 nested child routes: `profile` (`SettingsProfile`) and `security` (`SettingsSecurity`).
 
 **Expected output:**
-```javascript
-[{ path: '/settings', component: SettingsLayout, children: [{ path: 'profile', component: SettingsProfile }, { path: 'security', component: SettingsSecurity }] }]
-```
-
 > [!check]- Answer
+> ```javascript
+> [{ path: '/settings', component: SettingsLayout, children: [{ path: 'profile', component: SettingsProfile }, { path: 'security', component: SettingsSecurity }] }]
+> ```
 > - `children` array defines nested child route routes.
 > - Omit leading slashes for nested child paths.
 > 
@@ -193,11 +191,10 @@ To nest it correctly under the parent, it must not have a leading slash: `{ path
 **Problem:** How do you specify a default nested child route that renders when the user visits the parent path `/settings` directly?
 
 **Expected output:**
-```text
-By adding a child route with an empty path: { path: '', component: DefaultChild }.
-```
-
 > [!check]- Answer
+> ```text
+> By adding a child route with an empty path: { path: '', component: DefaultChild }.
+> ```
 > - Empty string `path: ''` defines default child route.
 > 
 > ```javascript

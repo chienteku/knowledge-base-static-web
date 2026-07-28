@@ -149,11 +149,10 @@ LET $str = "hi"; RETURN string::slice($str, 0, string::len($str));
 **Problem:** Write a SurrealQL query to update a `user` record (`user:alice`), setting their `website_slug` to the URL slug version of their `company_name` field (lowercased and hyphenated).
 
 **Expected output:**
-```sql
-UPDATE user:alice SET website_slug = string::slug(company_name);
-```
-
 > [!check]- Answer
+> ```sql
+> UPDATE user:alice SET website_slug = string::slug(company_name);
+> ```
 > - The slug generator function is `string::slug()`.
 > - Pass the target field `company_name` directly into the function.
 
@@ -166,27 +165,27 @@ UPDATE user:alice SET website_slug = string::slug(company_name);
 **Problem:** Trim whitespace and convert `"  Hello World  "` to lowercase.
 
 **Expected output:**
-```text
-string::lowercase(string::trim("  Hello World  "))
-```
-
 > [!check]- Answer
+> ```text
+> string::lowercase(string::trim("  Hello World  "))
+> ```
 > ```surrealql
 > RETURN string::lowercase(string::trim("  Hello World  "));
 > ```
 >
 > **Explanation:** Chaining `string::trim()` and `string::lowercase()` cleanses text input.
 
+---
+
 ### Exercise 3: String Replacement
 
 **Problem:** Replace `"foo"` with `"bar"` in string `"foo test"` using `string::replace()`.
 
 **Expected output:**
-```text
-string::replace("foo test", "foo", "bar")
-```
-
 > [!check]- Answer
+> ```text
+> string::replace("foo test", "foo", "bar")
+> ```
 > ```surrealql
 > RETURN string::replace("foo test", "foo", "bar");
 > ```

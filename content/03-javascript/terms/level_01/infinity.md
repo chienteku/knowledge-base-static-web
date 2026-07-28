@@ -171,11 +171,10 @@ console.log("Is infinite:", isInfinite);
 ```
 
 **Expected output:**
-```text
-Is infinite: true
-```
-
 > [!check]- Answer
+> ```text
+> Is infinite: true
+> ```
 > - You can check if a value is strictly equal to `Infinity`.
 > - Alternatively, you can use the global `isFinite(value)` function (which returns false for infinity).
 
@@ -186,13 +185,12 @@ Is infinite: true
 **Problem:** Calculate `1 / 0`, `-1 / 0`, and `0 / 0`.
 
 **Expected output:**
-```text
-Infinity
--Infinity
-NaN
-```
-
 > [!check]- Answer
+> ```text
+> Infinity
+> -Infinity
+> NaN
+> ```
 > ```javascript
 > console.log(1 / 0);   // Infinity
 > console.log(-1 / 0);  // -Infinity
@@ -201,19 +199,20 @@ NaN
 >
 > **Explanation:** Division by zero in JS yields positive or negative `Infinity` for non-zero numerators, and `NaN` for zero numerators.
 
+---
+
 ### Exercise 3: Checking Falsy vs Finite Numbers
 
 **Problem:** Use `Number.isFinite()` to check `100`, `Infinity`, `"100"`, and `NaN`.
 
 **Expected output:**
-```text
-true
-false
-false
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> false
+> false
+> false
+> ```
 > ```javascript
 > console.log(Number.isFinite(100));     // true
 > console.log(Number.isFinite(Infinity));// false
@@ -223,7 +222,6 @@ false
 >
 > **Explanation:** `Number.isFinite()` checks if a value is of type `number` and is neither `Infinity`, `-Infinity`, nor `NaN`.
 
----
 
 ---
 

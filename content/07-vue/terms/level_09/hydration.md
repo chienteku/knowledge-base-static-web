@@ -108,13 +108,12 @@ onMounted(() => {
 Why will this cause a Hydration Mismatch in an SSR app?
 
 **Expected output:**
-```text
-On the Server, `window` does not exist. So the Server evaluates this to `false` and renders NOTHING.
-On the Client (Browser), `window` does exist, and if it's a mobile phone, it evaluates to `true`. Vue expects to see a `<div>` in the Virtual DOM, but the HTML on the screen has no `<div>`. Mismatch!
-(To fix this, you must only check the `window` width *after* the component has hydrated, inside `onMounted`).
-```
-
 > [!check]- Answer
+> ```text
+> On the Server, `window` does not exist. So the Server evaluates this to `false` and renders NOTHING.
+> On the Client (Browser), `window` does exist, and if it's a mobile phone, it evaluates to `true`. Vue expects to see a `<div>` in the Virtual DOM, but the HTML on the screen has no `<div>`. Mismatch!
+> (To fix this, you must only check the `window` width *after* the component has hydrated, inside `onMounted`).
+> ```
 > - Does the server know the width of the user's screen when it renders the HTML?
 
 ---
@@ -124,11 +123,10 @@ On the Client (Browser), `window` does exist, and if it's a mobile phone, it eva
 **Problem:** Which built-in Nuxt wrapper component forces child component templates to render exclusively on the client, avoiding hydration mismatches?
 
 **Expected output:**
-```text
-<ClientOnly><ThirdPartyChart /></ClientOnly>
-```
-
 > [!check]- Answer
+> ```text
+> <ClientOnly><ThirdPartyChart /></ClientOnly>
+> ```
 > - `<ClientOnly>` skips server rendering for client-specific components.
 > 
 > ```html
@@ -144,11 +142,10 @@ On the Client (Browser), `window` does exist, and if it's a mobile phone, it eva
 **Problem:** Define the term "Hydration" in Vue SSR applications.
 
 **Expected output:**
-```text
-Hydration is the process where client-side Vue JavaScript attaches event listeners and reactive state to pre-rendered server HTML DOM nodes.
-```
-
 > [!check]- Answer
+> ```text
+> Hydration is the process where client-side Vue JavaScript attaches event listeners and reactive state to pre-rendered server HTML DOM nodes.
+> ```
 > - Hydration attaches JS reactive bindings to server-rendered HTML.
 > 
 > ```text

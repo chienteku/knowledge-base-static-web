@@ -155,12 +155,11 @@ makeGreeting("Bob");
 ```
 
 **Expected output:**
-```text
-Yes! It will print `"Hello Bob"`.
-Default parameters are evaluated sequentially from left to right, so later parameters have full access to earlier ones.
-```
-
 > [!check]- Answer
+> ```text
+> Yes! It will print `"Hello Bob"`.
+> Default parameters are evaluated sequentially from left to right, so later parameters have full access to earlier ones.
+> ```
 > - The parameters exist in their own little mini-scope.
 
 ---
@@ -170,11 +169,10 @@ Default parameters are evaluated sequentially from left to right, so later param
 **Problem:** Demonstrate that default parameters evaluate at invocation time: `function add(a, b = a * 2)`.
 
 **Expected output:**
-```text
-15
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> ```
 > ```javascript
 > function add(a, b = a * 2) { return a + b; }
 > console.log(add(5));
@@ -182,16 +180,17 @@ Default parameters are evaluated sequentially from left to right, so later param
 >
 > **Explanation:** Default parameter expressions evaluate in parameter scope at runtime when invoked.
 
+---
+
 ### Exercise 3: Destructured Parameter Defaults
 
 **Problem:** Provide defaults `{ port = 8080 } = {}` for destructured object parameters.
 
 **Expected output:**
-```text
-8080
-```
-
 > [!check]- Answer
+> ```text
+> 8080
+> ```
 > ```javascript
 > function start({ port = 8080 } = {}) { return port; }
 > console.log(start());
@@ -199,7 +198,6 @@ Default parameters are evaluated sequentially from left to right, so later param
 >
 > **Explanation:** Combining parameter destructuring with default initializers safely handles omitted arguments.
 
----
 
 ---
 

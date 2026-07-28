@@ -174,14 +174,13 @@ fetch('/upload', {
 4. Binary PNG image
 
 **Expected output:**
-```text
-1. application/json
-2. text/html
-3. application/x-www-form-urlencoded
-4. image/png
-```
-
 > [!check]- Answer
+> ```text
+> 1. application/json
+> 2. text/html
+> 3. application/x-www-form-urlencoded
+> 4. image/png
+> ```
 > ```text
 > 1. application/json
 > 2. text/html
@@ -196,11 +195,10 @@ fetch('/upload', {
 **Problem:** Write `Content-Type` header value for UTF-8 encoded JSON payload.
 
 **Expected output:**
-```text
-Content-Type: application/json; charset=utf-8
-```
-
 > [!check]- Answer
+> ```text
+> Content-Type: application/json; charset=utf-8
+> ```
 > ```http
 > Content-Type: application/json; charset=utf-8
 > ```

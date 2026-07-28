@@ -188,11 +188,10 @@ fn main() {
 **Problem:** Define a custom struct `UserId(u64)` deriving `Hash`, `PartialEq`, and `Eq`. Insert it as a key in a `HashMap`.
 
 **Expected output:**
-```
-User found: Alice
-```
-
 > [!check]- Answer
+> ```
+> User found: Alice
+> ```
 > ```rust
 > use std::collections::HashMap;
 > #[derive(Hash, PartialEq, Eq, Debug)]
@@ -206,16 +205,17 @@ User found: Alice
 >
 > **Explanation:** Deriving `Hash`, `PartialEq`, and `Eq` allows custom structs to serve as valid `HashMap` and `HashSet` keys.
 
+---
+
 ### Exercise 3: Custom Hash Implementation for Field Selection
 
 **Problem:** Write a manual `Hash` implementation for `User { id: u64, cache: String }` that hashes only the `id` field.
 
 **Expected output:**
-```
-Custom hash executed
-```
-
 > [!check]- Answer
+> ```
+> Custom hash executed
+> ```
 > ```rust
 > use std::hash::{Hash, Hasher};
 > struct User { id: u64, cache: String }

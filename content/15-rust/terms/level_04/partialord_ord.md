@@ -214,11 +214,10 @@ fn main() {
 **Problem:** Implement `Ord` for `Person { name: String, age: u32 }` sorting primarily by `age` descending.
 
 **Expected output:**
-```
-Oldest: 40
-```
-
 > [!check]- Answer
+> ```
+> Oldest: 40
+> ```
 > ```rust
 > use std::cmp::Ordering;
 > #[derive(Eq, PartialEq)]
@@ -243,16 +242,17 @@ Oldest: 40
 >
 > **Explanation:** Reversing `cmp` operands (`other.age.cmp(&self.age)`) implements descending sort order.
 
+---
+
 ### Exercise 3: Float Ordering Fallbacks with `partial_cmp`
 
 **Problem:** Sort a vector of floats `vec![3.14, 1.0, 2.5]` using `.sort_by(|a, b| a.partial_cmp(b).unwrap())`.
 
 **Expected output:**
-```
-[1.0, 2.5, 3.14]
-```
-
 > [!check]- Answer
+> ```
+> [1.0, 2.5, 3.14]
+> ```
 > fn main() {
 >     let mut nums = vec![3.14, 1.0, 2.5];
 >     nums.sort_by(|a, b| a.partial_cmp(b).unwrap());

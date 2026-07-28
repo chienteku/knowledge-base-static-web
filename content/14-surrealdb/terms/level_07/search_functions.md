@@ -155,16 +155,15 @@ Write the SurrealQL query to:
 3. Order results by `rank` descending.
 
 **Expected output:**
-```sql
-SELECT 
-  title, 
-  search::score(1) AS rank 
-FROM documents 
-WHERE title @1@ "machine learning" 
-ORDER BY rank DESC;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   title, 
+>   search::score(1) AS rank 
+> FROM documents 
+> WHERE title @1@ "machine learning" 
+> ORDER BY rank DESC;
+> ```
 > - Match terms using `@1@ "machine learning"`.
 > - Retrieve scores using `search::score(1)`.
 
@@ -177,27 +176,27 @@ ORDER BY rank DESC;
 **Problem:** Project `search::score(0)` as `relevance` searching `article` for `'rust'`.
 
 **Expected output:**
-```text
-SELECT *, search::score(0) AS relevance FROM article WHERE title SEARCH 'rust' ORDER BY relevance DESC;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT *, search::score(0) AS relevance FROM article WHERE title SEARCH 'rust' ORDER BY relevance DESC;
+> ```
 > ```surrealql
 > SELECT *, search::score(0) AS relevance FROM article WHERE title SEARCH 'rust' ORDER BY relevance DESC;
 > ```
 >
 > **Explanation:** `search::score(0)` returns BM25 full-text search relevance scores.
 
+---
+
 ### Exercise 3: Full-Text Highlight Snippets
 
 **Problem:** Extract highlighted text snippets using search highlight functions.
 
 **Expected output:**
-```text
-SELECT search::highlight('<b>', '</b>', 0) AS snippet FROM article WHERE body SEARCH 'database';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT search::highlight('<b>', '</b>', 0) AS snippet FROM article WHERE body SEARCH 'database';
+> ```
 > ```surrealql
 > SELECT search::highlight('<b>', '</b>', 0) AS snippet FROM article WHERE body SEARCH 'database';
 > ```

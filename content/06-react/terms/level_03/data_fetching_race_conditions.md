@@ -220,16 +220,17 @@ function SearchAutoComplete() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Ignore Flag Race Condition Cleanup Pattern
 
 **Problem:** Write data fetching `useEffect` using `let ignore = false` to prevent race conditions when `id` changes.
 
 **Expected output:**
-```text
-useEffect(() => { let ignore = false; fetchUser(id).then(res => { if (!ignore) setUser(res); }); return () => { ignore = true; }; }, [id]);
-```
-
 > [!check]- Answer
+> ```text
+> useEffect(() => { let ignore = false; fetchUser(id).then(res => { if (!ignore) setUser(res); }); return () => { ignore = true; }; }, [id]);
+> ```
 > ```javascript
 > useEffect(() => {
 >   let ignore = false;
@@ -244,16 +245,17 @@ useEffect(() => { let ignore = false; fetchUser(id).then(res => { if (!ignore) s
 >
 > **Explanation:** The `ignore` boolean flag invalidates stale async callbacks if `id` changes before fetch resolves.
 
+---
+
 ### Exercise 3: Why Manual Data Fetching is Discouraged
 
 **Problem:** Why use libraries like React Query or SWR instead of writing manual `useEffect` data fetching? (Handles race conditions, caching, revalidation, and loading states out of the box).
 
 **Expected output:**
-```text
-Handles race conditions, caching, revalidation, and deduplication out of the box
-```
-
 > [!check]- Answer
+> ```text
+> Handles race conditions, caching, revalidation, and deduplication out of the box
+> ```
 > ```text
 > Handles race conditions, caching, revalidation, and deduplication out of the box
 > ```

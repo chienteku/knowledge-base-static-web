@@ -153,17 +153,16 @@ UPDATE user:alice MERGE { age: 31 }; // Merges new fields without overwriting
 Write the equivalent query using the `CONTENT` syntax style.
 
 **Expected output:**
-```sql
-CREATE product:pro CONTENT {
-  title: "Phone",
-  specs: {
-    color: "black",
-    memory: "128GB"
-  }
-};
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE product:pro CONTENT {
+>   title: "Phone",
+>   specs: {
+>     color: "black",
+>     memory: "128GB"
+>   }
+> };
+> ```
 > - Replace the `SET` keyword with `CONTENT`.
 > - Convert the key-value sequence into a single enclosed JSON object block using colons (`:`).
 
@@ -176,27 +175,27 @@ CREATE product:pro CONTENT {
 **Problem:** Match clauses: 1. Assign individual fields (`SET`), 2. Replace entire record (`CONTENT`), 3. Shallow merge object (`MERGE`).
 
 **Expected output:**
-```text
-1. SET, 2. CONTENT, 3. MERGE
-```
-
 > [!check]- Answer
+> ```text
+> 1. SET, 2. CONTENT, 3. MERGE
+> ```
 > ```text
 > 1. SET, 2. CONTENT, 3. MERGE
 > ```
 >
 > **Explanation:** `SET` modifies individual fields; `CONTENT` replaces records; `MERGE` updates nested fields.
 
+---
+
 ### Exercise 3: Patch Updates with `PATCH`
 
 **Problem:** Update `user:alice` using JSON Patch syntax `PATCH [{ op: "replace", path: "/age", value: 31 }]`.
 
 **Expected output:**
-```text
-UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 31 }];
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 31 }];
+> ```
 > ```surrealql
 > UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 31 }];
 > ```

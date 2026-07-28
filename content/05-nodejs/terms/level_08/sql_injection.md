@@ -114,13 +114,12 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = '${color}'`);
 ```
 
 **Expected output:**
-```javascript
-const color = req.query.color;
-// Use $1 placeholder and pass the variable in an array!
-const data = await pool.query(`SELECT * FROM cars WHERE color = $1`, [color]);
-```
-
 > [!check]- Answer
+> ```javascript
+> const color = req.query.color;
+> // Use $1 placeholder and pass the variable in an array!
+> const data = await pool.query(`SELECT * FROM cars WHERE color = $1`, [color]);
+> ```
 > - Separate the code from the data. Use `$1` for the query, and an array for the data.
 
 ---
@@ -132,27 +131,27 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = $1`, [color]);
 **Problem:** If query is `SELECT * FROM users WHERE user = 'INPUT' AND pass = 'INPUT'`, what happens if user enters `' OR '1'='1`?
 
 **Expected output:**
-```text
-The query evaluates to true for all rows, returning all users and bypassing authentication.
-```
-
 > [!check]- Answer
+> ```text
+> The query evaluates to true for all rows, returning all users and bypassing authentication.
+> ```
 > ```text
 > The query evaluates to true for all rows, returning all users and bypassing authentication.
 > ```
 >
 > **Explanation:** `' OR '1'='1` manipulates boolean logic to force the WHERE clause to evaluate to true.
 
+---
+
 ### Exercise 3: Preventing SQLi in Dynamic ORDER BY Clauses
 
 **Problem:** Parameter placeholders cannot be used for SQL column names in `ORDER BY $1`. How do you safely handle dynamic sorting?
 
 **Expected output:**
-```text
-Validate user input against an allowed whitelist of valid column names before querying.
-```
-
 > [!check]- Answer
+> ```text
+> Validate user input against an allowed whitelist of valid column names before querying.
+> ```
 > ```javascript
 > const allowed = ['name', 'created_at', 'price'];
 > const sortColumn = allowed.includes(req.query.sort) ? req.query.sort : 'created_at';

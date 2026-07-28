@@ -97,12 +97,11 @@ node -e 'runMigrations()'
 **Problem:** You write a migration to add a `birthdate` column to the database (The "Up" migration). What exact command must you write in the "Down" (rollback) section of the migration file?
 
 **Expected output:**
-```text
-You must write the code to DELETE the `birthdate` column. 
-If "Up" adds the column, "Down" must drop the column.
-```
-
 > [!check]- Answer
+> ```text
+> You must write the code to DELETE the `birthdate` column. 
+> If "Up" adds the column, "Down" must drop the column.
+> ```
 > - The "Down" migration must perfectly reverse whatever the "Up" migration did.
 
 ---
@@ -114,28 +113,28 @@ If "Up" adds the column, "Down" must drop the column.
 **Problem:** What are the roles of `up` vs `down` functions in database migration files?
 
 **Expected output:**
-```text
-up applies schema changes; down reverses/rolls back schema changes.
-```
-
 > [!check]- Answer
+> ```text
+> up applies schema changes; down reverses/rolls back schema changes.
+> ```
 > ```text
 > up applies schema changes; down reverses/rolls back schema changes.
 > ```
 >
 > **Explanation:** `up` migrates forward; `down` provides rollback capability.
 
+---
+
 ### Exercise 3: Prisma Migration Commands
 
 **Problem:** Which Prisma command generates and applies migrations in development vs applying in production?
 
 **Expected output:**
-```text
-Development: npx prisma migrate dev
-Production: npx prisma migrate deploy
-```
-
 > [!check]- Answer
+> ```text
+> Development: npx prisma migrate dev
+> Production: npx prisma migrate deploy
+> ```
 > ```bash
 > # Development:
 > npx prisma migrate dev

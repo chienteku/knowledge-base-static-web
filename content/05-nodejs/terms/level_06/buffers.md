@@ -102,13 +102,12 @@ res.send(buf);
 **Problem:** How do you manually create a Buffer containing the word "Node"?
 
 **Expected output:**
-```javascript
-const buf = Buffer.from("Node", "utf8");
-console.log(buf); 
-// Output: <Buffer 4e 6f 64 65>
-```
-
 > [!check]- Answer
+> ```javascript
+> const buf = Buffer.from("Node", "utf8");
+> console.log(buf); 
+> // Output: <Buffer 4e 6f 64 65>
+> ```
 > - Use the `Buffer.from()` method.
 
 ---
@@ -120,11 +119,10 @@ console.log(buf);
 **Problem:** Create a zero-filled Buffer of size 8 and write string `'Node'` into it.
 
 **Expected output:**
-```text
-const buf = Buffer.alloc(8); buf.write('Node');
-```
-
 > [!check]- Answer
+> ```text
+> const buf = Buffer.alloc(8); buf.write('Node');
+> ```
 > ```javascript
 > const buf = Buffer.alloc(8);
 > buf.write('Node');
@@ -132,16 +130,17 @@ const buf = Buffer.alloc(8); buf.write('Node');
 >
 > **Explanation:** `Buffer.alloc(size)` creates zero-initialized binary memory space.
 
+---
+
 ### Exercise 3: Buffer Concatenation
 
 **Problem:** Concatenate array of 2 buffers `[buf1, buf2]` into a single Buffer.
 
 **Expected output:**
-```text
-const total = Buffer.concat([buf1, buf2]);
-```
-
 > [!check]- Answer
+> ```text
+> const total = Buffer.concat([buf1, buf2]);
+> ```
 > ```javascript
 > const total = Buffer.concat([buf1, buf2]);
 > ```

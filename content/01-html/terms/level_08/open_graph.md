@@ -166,14 +166,13 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 **Problem:** You are building an article page on "https://codeacademy.com/blog/html-basics". Write the `<meta>` tags required to show a social card with the title "Mastering HTML5 Basics", a description "A simple layout guide for beginners", and a preview image located at "https://codeacademy.com/images/basics-banner.png".
 
 **Expected output:**
-```html
-<meta property="og:url" content="https://codeacademy.com/blog/html-basics">
-<meta property="og:title" content="Mastering HTML5 Basics">
-<meta property="og:description" content="A simple layout guide for beginners">
-<meta property="og:image" content="https://codeacademy.com/images/basics-banner.png">
-```
-
 > [!check]- Answer
+> ```html
+> <meta property="og:url" content="https://codeacademy.com/blog/html-basics">
+> <meta property="og:title" content="Mastering HTML5 Basics">
+> <meta property="og:description" content="A simple layout guide for beginners">
+> <meta property="og:image" content="https://codeacademy.com/images/basics-banner.png">
+> ```
 > - Match each parameter to its correct Open Graph `property`.
 > - Check that the image path is absolute.
 
@@ -186,11 +185,10 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 **Problem:** Write 4 core Open Graph meta tags: `og:title`, `og:description`, `og:image` (absolute URL), and `og:url`.
 
 **Expected output:**
-```text
-<meta property="og:title" content="Title"><meta property="og:description" content="Desc"><meta property="og:image" content="https://site.com/img.jpg"><meta property="og:url" content="https://site.com/page">
-```
-
 > [!check]- Answer
+> ```text
+> <meta property="og:title" content="Title"><meta property="og:description" content="Desc"><meta property="og:image" content="https://site.com/img.jpg"><meta property="og:url" content="https://site.com/page">
+> ```
 > ```html
 > <meta property="og:title" content="Title">
 > <meta property="og:description" content="Desc">
@@ -200,16 +198,17 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 >
 > **Explanation:** Open Graph tags configure rich social card previews on Facebook, Twitter, and Slack.
 
+---
+
 ### Exercise 3: Twitter Card Type Tag
 
 **Problem:** Write `<meta>` tag specifying large image summary Twitter card format (`twitter:card`).
 
 **Expected output:**
-```text
-<meta name="twitter:card" content="summary_large_image">
-```
-
 > [!check]- Answer
+> ```text
+> <meta name="twitter:card" content="summary_large_image">
+> ```
 > ```html
 > <meta name="twitter:card" content="summary_large_image">
 > ```

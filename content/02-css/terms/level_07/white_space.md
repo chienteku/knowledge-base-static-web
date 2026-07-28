@@ -114,11 +114,10 @@ The W3C created the **`white-space`** property to allow developers to override t
 **Problem:** You apply `white-space: nowrap;` to a very long paragraph inside a 300px wide box. What happens to the text?
 
 **Expected output:**
-```text
-The text refuses to wrap to a second line. It will blast straight through the right wall of the 300px box and keep going horizontally, forcing the user to scroll sideways to read it.
-```
-
 > [!check]- Answer
+> ```text
+> The text refuses to wrap to a second line. It will blast straight through the right wall of the 300px box and keep going horizontally, forcing the user to scroll sideways to read it.
+> ```
 > - Does `nowrap` respect the width of the container?
 
 ---
@@ -130,11 +129,10 @@ The text refuses to wrap to a second line. It will blast straight through the ri
 **Problem:** Write CSS rule preserving user line breaks and spaces entered into `<textarea>` when rendered on page `.user-bio`.
 
 **Expected output:**
-```text
-.user-bio { white-space: pre-wrap; }
-```
-
 > [!check]- Answer
+> ```text
+> .user-bio { white-space: pre-wrap; }
+> ```
 > ```css
 > .user-bio {
 >   white-space: pre-wrap;
@@ -142,6 +140,8 @@ The text refuses to wrap to a second line. It will blast straight through the ri
 > ```
 >
 > **Explanation:** `white-space: pre-wrap` preserves source newlines while allowing normal line wrapping.
+
+---
 
 ### Exercise 3: White Space Property Matrix
 
@@ -152,14 +152,13 @@ The text refuses to wrap to a second line. It will blast straight through the ri
 4. `pre-wrap` 
 
 **Expected output:**
-```text
-1. Collapses whitespace, wraps lines (default)
-2. Collapses whitespace, suppresses line wrapping
-3. Preserves whitespace, suppresses line wrapping
-4. Preserves whitespace, allows line wrapping
-```
-
 > [!check]- Answer
+> ```text
+> 1. Collapses whitespace, wraps lines (default)
+> 2. Collapses whitespace, suppresses line wrapping
+> 3. Preserves whitespace, suppresses line wrapping
+> 4. Preserves whitespace, allows line wrapping
+> ```
 > ```text
 > 1. normal -> Collapses spaces, wraps text (default)
 > 2. nowrap -> Collapses spaces, no line wrapping

@@ -136,14 +136,13 @@ const userId = computed(() => route.params.id); // Reactive computed property up
 **Problem:** You are building a blog. You want URLs to look like `/blog/2023/my-post`. What exact file and folder structure do you need to capture the year as `year` and the post name as `slug`?
 
 **Expected output:**
-```text
-pages/
-└── blog/
-    └── [year]/
-        └── [slug].vue
-```
-
 > [!check]- Answer
+> ```text
+> pages/
+> └── blog/
+>     └── [year]/
+>         └── [slug].vue
+> ```
 > - You can mix static folders (`blog/`) and dynamic parameter folders (`[year]/`) in your pages directory hierarchy.
 
 ---
@@ -153,14 +152,13 @@ pages/
 **Problem:** Write `<script setup>` reading route parameter `id` from `useRoute()` and fetching product details via `useFetch()`.
 
 **Expected output:**
-```vue
-<script setup>
-const route = useRoute();
-const { data: product } = await useFetch(`/api/products/${route.params.id}`);
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const route = useRoute();
+> const { data: product } = await useFetch(`/api/products/${route.params.id}`);
+> </script>
+> ```
 > - `useRoute().params` exposes dynamic route parameters.
 > 
 > ```vue
@@ -181,11 +179,10 @@ const { data: product } = await useFetch(`/api/products/${route.params.id}`);
 **Problem:** Which file naming convention defines an optional catch-all dynamic route in Nuxt 3?
 
 **Expected output:**
-```text
-[[...slug]].vue (Double square brackets)
-```
-
 > [!check]- Answer
+> ```text
+> [[...slug]].vue (Double square brackets)
+> ```
 > - `[[...slug]].vue` matches both root path `/` and nested paths `/a/b/c`.
 > 
 > ```text

@@ -212,11 +212,10 @@ fn main() {
 **Problem:** Take strings `vec!["a", "b", "c", "d"]`, enumerate them, filter even indices, and map to uppercase.
 
 **Expected output:**
-```
-["A", "C"]
-```
-
 > [!check]- Answer
+> ```
+> ["A", "C"]
+> ```
 > ```rust
 > fn main() {
 >     let items = vec!["a", "b", "c", "d"];
@@ -232,16 +231,17 @@ fn main() {
 >
 > **Explanation:** Combining iterator adapters builds efficient, single-pass processing pipelines.
 
+---
+
 ### Exercise 3: Zipping Two Parallel Iterators
 
 **Problem:** Combine `vec!["one", "two"]` and `vec![1, 2]` into tuples using `.zip()`.
 
 **Expected output:**
-```
-[("one", 1), ("two", 2)]
-```
-
 > [!check]- Answer
+> ```
+> [("one", 1), ("two", 2)]
+> ```
 > fn main() {
 >     let keys = vec!["one", "two"];
 >     let vals = vec![1, 2];

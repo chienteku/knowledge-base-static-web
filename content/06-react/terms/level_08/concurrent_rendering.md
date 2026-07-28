@@ -155,27 +155,27 @@ onChange={e => {
 **Problem:** List 3 Concurrent Rendering features in React 18+ (`useTransition`, `useDeferredValue`, `<Suspense>`).
 
 **Expected output:**
-```text
-useTransition, useDeferredValue, Suspense
-```
-
 > [!check]- Answer
+> ```text
+> useTransition, useDeferredValue, Suspense
+> ```
 > ```text
 > useTransition, useDeferredValue, Suspense
 > ```
 >
 > **Explanation:** Concurrent features allow React to interrupt low-priority renders for urgent user input events.
 
+---
+
 ### Exercise 3: Urgent vs Non-Urgent Update Priority
 
 **Problem:** Categorize update priority: 1. Text input typing (Urgent); 2. Filtering 5,000 data rows (Non-Urgent Transition); 3. Clicking tabs (Urgent UI feedback).
 
 **Expected output:**
-```text
-1. Urgent, 2. Non-Urgent Transition, 3. Urgent
-```
-
 > [!check]- Answer
+> ```text
+> 1. Urgent, 2. Non-Urgent Transition, 3. Urgent
+> ```
 > ```text
 > 1. Urgent, 2. Non-Urgent Transition, 3. Urgent
 > ```

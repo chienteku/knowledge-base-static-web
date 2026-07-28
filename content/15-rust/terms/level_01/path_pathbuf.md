@@ -172,11 +172,10 @@ fn config_path(dir: &str, name: &str) -> String {
 **Problem:** Write a function `get_extension(path_str: &str) -> Option<String>` that parses a string into a `Path`, extracts its file extension, and converts it to a lowercase `String`.
 
 **Expected output:**
-```
-Some("rs")
-```
-
 > [!check]- Answer
+> ```
+> Some("rs")
+> ```
 > ```rust
 > use std::path::Path;
 > fn get_extension(path_str: &str) -> Option<String> {
@@ -192,19 +191,20 @@ Some("rs")
 >
 > **Explanation:** `Path::extension` inspects filename components and returns `Option<&OsStr>`, which is safely parsed into UTF-8 text.
 
+---
+
 ### Exercise 3: Navigating Parent Directories
 
 **Problem:** Given `Path::new("/a/b/c/file.txt")`, iterate upward printing all parent directories until reaching the root.
 
 **Expected output:**
-```
-/a/b/c
-/a/b
-/a
-/
-```
-
 > [!check]- Answer
+> ```
+> /a/b/c
+> /a/b
+> /a
+> /
+> ```
 > ```rust
 > use std::path::Path;
 > fn main() {

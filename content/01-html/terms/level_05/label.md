@@ -132,15 +132,14 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 **Problem:** There is a second, valid way to bind a label to an input without using the `for` and `id` attributes. Can you guess how you might achieve this structurally?
 
 **Expected output:**
-```html
-You can physically place the `<input>` INSIDE the `<label>` tags! This is called "implicit binding."
-<label>
-  Email Address:
-  <input type="email" name="email">
-</label>
-```
-
 > [!check]- Answer
+> ```html
+> You can physically place the `<input>` INSIDE the `<label>` tags! This is called "implicit binding."
+> <label>
+>   Email Address:
+>   <input type="email" name="email">
+> </label>
+> ```
 > - Think about nesting. How do you group things together in HTML?
 
 ---
@@ -152,12 +151,11 @@ You can physically place the `<input>` INSIDE the `<label>` tags! This is called
 **Problem:** Write HTML demonstrating both Explicit (`for`/`id`) and Implicit (Nesting) label association.
 
 **Expected output:**
-```text
-Explicit: <label for="a">A</label><input id="a">
-Implicit: <label>B <input></label>
-```
-
 > [!check]- Answer
+> ```text
+> Explicit: <label for="a">A</label><input id="a">
+> Implicit: <label>B <input></label>
+> ```
 > ```html
 > <!-- Explicit association -->
 > <label for="user-id">Username</label>
@@ -172,16 +170,17 @@ Implicit: <label>B <input></label>
 >
 > **Explanation:** Explicit binding uses `for`/`id`; implicit binding wraps `<input>` inside `<label>`.
 
+---
+
 ### Exercise 3: Click Target Enlargement Benefit
 
 **Problem:** How do `<label>` elements improve user experience for checkboxes and radio buttons on touch screens?
 
 **Expected output:**
-```text
-Clicking the label text toggles the checkbox/radio, expanding the clickable touch target area.
-```
-
 > [!check]- Answer
+> ```text
+> Clicking the label text toggles the checkbox/radio, expanding the clickable touch target area.
+> ```
 > ```text
 > Clicking the label text toggles the checkbox/radio, expanding the clickable touch target area.
 > ```

@@ -133,13 +133,12 @@ watch(() => state.count, (newVal, oldVal) => {
 **Problem:** You are watching a deeply nested object: `const user = reactive({ profile: { age: 30 } })`. You set up `watch(user, () => console.log("Changed!"))`. You change `user.profile.age = 31`. The console log does NOT fire! Why?
 
 **Expected output:**
-```text
-By default, watchers are "shallow". They only trigger if the variable itself is completely replaced. 
-To watch for mutations deep inside a nested object, you must pass the `{ deep: true }` option to the watcher!
-`watch(user, () => console.log("Changed!"), { deep: true })`
-```
-
 > [!check]- Answer
+> ```text
+> By default, watchers are "shallow". They only trigger if the variable itself is completely replaced. 
+> To watch for mutations deep inside a nested object, you must pass the `{ deep: true }` option to the watcher!
+> `watch(user, () => console.log("Changed!"), { deep: true })`
+> ```
 > - How far down does the watcher look?
 
 ---
@@ -149,11 +148,10 @@ To watch for mutations deep inside a nested object, you must pass the `{ deep: t
 **Problem:** Write `watch()` listening to `searchQuery` ref, logging `newVal` when changed, with `{ immediate: true }` option.
 
 **Expected output:**
-```javascript
-watch(searchQuery, (newVal) => { console.log(newVal); }, { immediate: true });
-```
-
 > [!check]- Answer
+> ```javascript
+> watch(searchQuery, (newVal) => { console.log(newVal); }, { immediate: true });
+> ```
 > - `watch(source, callback, options)` allows explicit tracking.
 > - `immediate: true` triggers callback on initial setup.
 > 
@@ -172,11 +170,10 @@ watch(searchQuery, (newVal) => { console.log(newVal); }, { immediate: true });
 **Problem:** Which option must be passed to `watch(() => state, callback)` to listen for nested property changes inside a ref object?
 
 **Expected output:**
-```text
-{ deep: true }
-```
-
 > [!check]- Answer
+> ```text
+> { deep: true }
+> ```
 > - `{ deep: true }` forces deep object traversal for ref objects.
 > 
 > ```javascript

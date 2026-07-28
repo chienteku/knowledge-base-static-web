@@ -176,13 +176,12 @@ console.log("C");
 ```
 
 **Expected output:**
-```text
-A
-C
-B
-```
-
 > [!check]- Answer
+> ```text
+> A
+> C
+> B
+> ```
 > - Even with a 0ms delay, `setTimeout` pushes the callback to the background. JavaScript *always* finishes its current synchronous tasks before checking on background async tasks!
 
 ---
@@ -192,13 +191,12 @@ B
 **Problem:** Trace output sequence of `console.log("1"); setTimeout(() => console.log("2"), 0); console.log("3");`.
 
 **Expected output:**
-```text
-1
-3
-2
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> 3
+> 2
+> ```
 > ```javascript
 > console.log("1");
 > setTimeout(() => console.log("2"), 0);
@@ -207,16 +205,17 @@ B
 >
 > **Explanation:** `setTimeout` yields execution to the event loop macrotask queue, running after synchronous code finishes.
 
+---
+
 ### Exercise 3: Async Callback Delegation
 
 **Problem:** Demonstrate delegating a delayed computation using `setTimeout`.
 
 **Expected output:**
-```text
-Async computation finished
-```
-
 > [!check]- Answer
+> ```text
+> Async computation finished
+> ```
 > ```javascript
 > function computeAsync(cb) {
 >   setTimeout(() => cb("Async computation finished"), 10);
@@ -226,7 +225,6 @@ Async computation finished
 >
 > **Explanation:** Asynchronous functions execute callbacks out-of-band without blocking main execution lines.
 
----
 
 ---
 

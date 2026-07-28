@@ -156,11 +156,10 @@ thread::spawn(move || {
 **Problem:** Pass `&mut *ref_val` into a helper function and demonstrate using `ref_val` again after the function completes.
 
 **Expected output:**
-```
-Final value: 30
-```
-
 > [!check]- Answer
+> ```
+> Final value: 30
+> ```
 > ```rust
 > fn add_five(x: &mut i32) { *x += 5; }
 > fn main() {
@@ -174,16 +173,17 @@ Final value: 30
 >
 > **Explanation:** Reborrowing `&mut *r` suspends `r` temporarily, allowing inner function calls without moving ownership of `r`.
 
+---
+
 ### Exercise 3: Implicit Reborrowing on Method Calls
 
 **Problem:** Call a `&mut self` method twice on a mutable reference `&mut Struct`.
 
 **Expected output:**
-```
-Count: 2
-```
-
 > [!check]- Answer
+> ```
+> Count: 2
+> ```
 > struct Counter(u32);
 > impl Counter { fn bump(&mut self) { self.0 += 1; } }
 > fn main() {

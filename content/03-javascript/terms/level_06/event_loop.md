@@ -145,13 +145,12 @@ console.log("C");
 *(Hint: Promises go to a special VIP waiting room called the Microtask Queue, which the Event Loop checks before the standard Macrotask Queue).*
 
 **Expected output:**
-```text
-C (Synchronous Call Stack)
-B (Microtask Queue)
-A (Macrotask Queue)
-```
-
 > [!check]- Answer
+> ```text
+> C (Synchronous Call Stack)
+> B (Microtask Queue)
+> A (Macrotask Queue)
+> ```
 > - Synchronous always wins.
 > - Promises (Microtasks) have VIP priority over `setTimeout` (Macrotasks).
 
@@ -162,14 +161,13 @@ A (Macrotask Queue)
 **Problem:** Trace execution order: `script start`, `setTimeout`, `Promise`, `script end`.
 
 **Expected output:**
-```text
-script start
-script end
-Promise
-setTimeout
-```
-
 > [!check]- Answer
+> ```text
+> script start
+> script end
+> Promise
+> setTimeout
+> ```
 > ```javascript
 > console.log("script start");
 > setTimeout(() => console.log("setTimeout"), 0);
@@ -179,23 +177,23 @@ setTimeout
 >
 > **Explanation:** Microtasks (`Promise.then`) execute immediately after current synchronous script execution before macrotasks (`setTimeout`).
 
+---
+
 ### Exercise 3: QueueMicrotask API
 
 **Problem:** Schedule a microtask using `queueMicrotask(() => ...)`.
 
 **Expected output:**
-```text
-Microtask executed
-```
-
 > [!check]- Answer
+> ```text
+> Microtask executed
+> ```
 > ```javascript
 > queueMicrotask(() => console.log("Microtask executed"));
 > ```
 >
 > **Explanation:** `queueMicrotask()` schedules callbacks on the microtask queue explicitly.
 
----
 
 ---
 

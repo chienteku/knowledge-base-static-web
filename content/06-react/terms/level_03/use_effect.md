@@ -124,12 +124,11 @@ function App() {
 ```
 
 **Expected output:**
-```text
-The order will be: 1, 3, 2.
-The component function runs, the JSX evaluates, the screen is painted, and ONLY THEN does the `useEffect` run!
-```
-
 > [!check]- Answer
+> ```text
+> The order will be: 1, 3, 2.
+> The component function runs, the JSX evaluates, the screen is painted, and ONLY THEN does the `useEffect` run!
+> ```
 > - `useEffect` is designed specifically to not block the UI from painting.
 
 ---
@@ -141,11 +140,10 @@ The component function runs, the JSX evaluates, the screen is painted, and ONLY 
 **Problem:** Update `document.title` to `"Count: ${count}"` whenever `count` updates using `useEffect`.
 
 **Expected output:**
-```text
-useEffect(() => { document.title = `Count: ${count}`; }, [count]);
-```
-
 > [!check]- Answer
+> ```text
+> useEffect(() => { document.title = `Count: ${count}`; }, [count]);
+> ```
 > ```javascript
 > useEffect(() => {
 >   document.title = `Count: ${count}`;
@@ -154,16 +152,17 @@ useEffect(() => { document.title = `Count: ${count}`; }, [count]);
 >
 > **Explanation:** `useEffect` synchronizes component state with external browser APIs like `document.title`.
 
+---
+
 ### Exercise 3: When NOT to Use useEffect
 
 **Problem:** List 2 scenarios where `useEffect` should NOT be used (1. Transforming data for rendering; 2. Handling user event responses).
 
 **Expected output:**
-```text
-1. Transforming data for rendering; 2. Handling user event responses
-```
-
 > [!check]- Answer
+> ```text
+> 1. Transforming data for rendering; 2. Handling user event responses
+> ```
 > ```text
 > 1. Transforming data for rendering; 2. Handling user event responses
 > ```

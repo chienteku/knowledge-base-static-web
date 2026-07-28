@@ -170,16 +170,15 @@ Void elements in action alongside standard container elements:
 6. `<h1>`
 
 **Expected output:**
-```text
-1. Container Element (requires </p>)
-2. Void Element (no closing tag)
-3. Container Element (requires </a>)
-4. Void Element (no closing tag)
-5. Void Element (no closing tag)
-6. Container Element (requires </h1>)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Container Element (requires </p>)
+> 2. Void Element (no closing tag)
+> 3. Container Element (requires </a>)
+> 4. Void Element (no closing tag)
+> 5. Void Element (no closing tag)
+> 6. Container Element (requires </h1>)
+> ```
 > - Does the element wrap around text or other tags?
 > - Standard links and paragraphs hold content, while line breaks, inputs, and images are single-tag directives.
 
@@ -198,27 +197,27 @@ Void elements in action alongside standard container elements:
 6. `<meta>` 
 
 **Expected output:**
-```text
-1. img, 3. br, 4. input, 6. meta
-```
-
 > [!check]- Answer
+> ```text
+> 1. img, 3. br, 4. input, 6. meta
+> ```
 > ```text
 > 1. img, 3. br, 4. input, 6. meta
 > ```
 >
 > **Explanation:** `img`, `br`, `input`, `meta`, `hr`, `link`, `source` are HTML void elements.
 
+---
+
 ### Exercise 3: XHTML Trailing Slash Syntax in HTML5
 
 **Problem:** Is `<img src="a.jpg" />` with trailing slash `/` valid in modern HTML5? (Yes/No).
 
 **Expected output:**
-```text
-Yes. Trailing slashes on void elements are permitted in HTML5 (ignored by HTML5 parser).
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Trailing slashes on void elements are permitted in HTML5 (ignored by HTML5 parser).
+> ```
 > ```text
 > Yes. Trailing slashes on void elements are permitted in HTML5 (ignored by HTML5 parser).
 > ```

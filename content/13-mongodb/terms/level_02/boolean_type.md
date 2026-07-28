@@ -135,11 +135,10 @@ db.users.find({ $or: [{ active: true }, { active: 1 }] });
 Write the MongoDB query.
 
 **Expected output:**
-```javascript
-db.products.find({ in_stock: true, on_sale: false });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find({ in_stock: true, on_sale: false });
+> ```
 > - Combine query filters inside a single document object separated by commas.
 > - Use unquoted `true` and `false` literals in JavaScript.
 
@@ -152,27 +151,27 @@ db.products.find({ in_stock: true, on_sale: false });
 **Problem:** Query all documents in `users` collection where `verified` is `false`.
 
 **Expected output:**
-```text
-db.users.find({ verified: false });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ verified: false });
+> ```
 > ```javascript
 > db.users.find({ verified: false });
 > ```
 >
 > **Explanation:** Passing boolean `false` matches documents with boolean false fields.
 
+---
+
 ### Exercise 3: Filtering Missing vs False Booleans
 
 **Problem:** Query users where `isBan` is either `false` or field does not exist (`$exists: false`).
 
 **Expected output:**
-```text
-db.users.find({ $or: [{ isBan: false }, { isBan: { $exists: false } }] });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ $or: [{ isBan: false }, { isBan: { $exists: false } }] });
+> ```
 > ```javascript
 > db.users.find({ $or: [{ isBan: false }, { isBan: { $exists: false } }] });
 > ```

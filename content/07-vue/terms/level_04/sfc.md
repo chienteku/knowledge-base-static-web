@@ -121,15 +121,14 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 **Problem:** Does Vue care what order the `<script>`, `<template>`, and `<style>` blocks are written in within the `.vue` file?
 
 **Expected output:**
-```text
-No! The Vue compiler doesn't care.
-However, the official Vue Style Guide strongly recommends a specific order for consistency across projects:
-1. `<script setup>`
-2. `<template>`
-3. `<style scoped>`
-```
-
 > [!check]- Answer
+> ```text
+> No! The Vue compiler doesn't care.
+> However, the official Vue Style Guide strongly recommends a specific order for consistency across projects:
+> 1. `<script setup>`
+> 2. `<template>`
+> 3. `<style scoped>`
+> ```
 > - Technically no, culturally yes.
 
 ---
@@ -139,13 +138,12 @@ However, the official Vue Style Guide strongly recommends a specific order for c
 **Problem:** Identify the 3 top-level block tags that compose a standard Vue Single File Component (`.vue`).
 
 **Expected output:**
-```text
-1. <script> (or <script setup>)
-2. <template>
-3. <style> (or <style scoped>)
-```
-
 > [!check]- Answer
+> ```text
+> 1. <script> (or <script setup>)
+> 2. <template>
+> 3. <style> (or <style scoped>)
+> ```
 > - `<script>` -> Component logic
 > - `<template>` -> HTML layout structure
 > - `<style>` -> CSS styling
@@ -163,11 +161,10 @@ However, the official Vue Style Guide strongly recommends a specific order for c
 **Problem:** Write CSS rule inside `<style scoped>` consuming dynamic JavaScript reactive variable `themeColor` using `v-bind()`.
 
 **Expected output:**
-```css
-<style scoped> .text { color: v-bind(themeColor); } </style>
-```
-
 > [!check]- Answer
+> ```css
+> <style scoped> .text { color: v-bind(themeColor); } </style>
+> ```
 > - SFC styles support `v-bind()` to consume script setup variables directly in CSS.
 > 
 > ```vue

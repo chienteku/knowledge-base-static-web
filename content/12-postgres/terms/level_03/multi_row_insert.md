@@ -171,14 +171,13 @@ INSERT INTO t (a) VALUES (1), (2);
 ```
 
 **Expected output:**
-```sql
-INSERT INTO newsletter_subscribers (sub_email, subscribed_at)
-SELECT email, registered_at 
-FROM registrations 
-WHERE marketing_consent;
-```
-
 > [!check]- Answer
+> ```sql
+> INSERT INTO newsletter_subscribers (sub_email, subscribed_at)
+> SELECT email, registered_at 
+> FROM registrations 
+> WHERE marketing_consent;
+> ```
 > - Map source `email` to target `sub_email`.
 > - Apply the boolean `WHERE` filter.
 
@@ -191,11 +190,10 @@ WHERE marketing_consent;
 **Problem:** Insert 3 tags (`'web'`, `'db'`, `'sql'`) in a single statement returning generated `id`s.
 
 **Expected output:**
-```text
-INSERT INTO tags (name) VALUES ('web'), ('db'), ('sql') RETURNING id;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO tags (name) VALUES ('web'), ('db'), ('sql') RETURNING id;
+> ```
 > ```sql
 > INSERT INTO tags (name)
 > VALUES ('web'), ('db'), ('sql')
@@ -204,16 +202,17 @@ INSERT INTO tags (name) VALUES ('web'), ('db'), ('sql') RETURNING id;
 >
 > **Explanation:** Multi-row `INSERT ... RETURNING` returns generated primary keys for all inserted tuples.
 
+---
+
 ### Exercise 3: Multi-Row Upsert Handling
 
 **Problem:** Insert multi-row batch using `ON CONFLICT (email) DO NOTHING`.
 
 **Expected output:**
-```text
-INSERT INTO users (email) VALUES ('a@ex.com'), ('b@ex.com') ON CONFLICT (email) DO NOTHING;
-```
-
 > [!check]- Answer
+> ```text
+> INSERT INTO users (email) VALUES ('a@ex.com'), ('b@ex.com') ON CONFLICT (email) DO NOTHING;
+> ```
 > ```sql
 > INSERT INTO users (email)
 > VALUES ('a@ex.com'), ('b@ex.com')

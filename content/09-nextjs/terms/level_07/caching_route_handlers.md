@@ -127,12 +127,11 @@ export async function GET(request: Request) {
 ```
 
 **Expected output:**
-```text
-You just destroyed your cache!
-Merely referencing the `request` parameter in a `GET` handler automatically opts the entire route into Dynamic Rendering. Next.js assumes that if you are looking at the request, the response must depend on the specific user making the request.
-```
-
 > [!check]- Answer
+> ```text
+> You just destroyed your cache!
+> Merely referencing the `request` parameter in a `GET` handler automatically opts the entire route into Dynamic Rendering. Next.js assumes that if you are looking at the request, the response must depend on the specific user making the request.
+> ```
 > - Read "The Rules of Static vs Dynamic" above.
 
 ---
@@ -142,13 +141,12 @@ Merely referencing the `request` parameter in a `GET` handler automatically opts
 **Problem:** List 3 factors that automatically convert a GET Route Handler from static cached to dynamic request-time execution.
 
 **Expected output:**
-```text
-1. Accessing `request.url` or request headers/cookies
-2. Using non-GET HTTP verbs (POST, PUT, DELETE)
-3. Setting `export const dynamic = 'force-dynamic'` (or `revalidate = 0`)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Accessing `request.url` or request headers/cookies
+> 2. Using non-GET HTTP verbs (POST, PUT, DELETE)
+> 3. Setting `export const dynamic = 'force-dynamic'` (or `revalidate = 0`)
+> ```
 > - Accessing `request` object (cookies, headers, searchParams).
 > - Using non-GET verbs (`POST`, `PUT`, `DELETE`).
 > - Segment config: `export const dynamic = 'force-dynamic'`.
@@ -164,11 +162,10 @@ Merely referencing the `request` parameter in a `GET` handler automatically opts
 **Problem:** Write segment config line setting a GET Route Handler cache revalidation interval to 60 seconds.
 
 **Expected output:**
-```typescript
-export const revalidate = 60;
-```
-
 > [!check]- Answer
+> ```typescript
+> export const revalidate = 60;
+> ```
 > - `export const revalidate = N` configures ISR timer for Route Handlers.
 > 
 > ```typescript

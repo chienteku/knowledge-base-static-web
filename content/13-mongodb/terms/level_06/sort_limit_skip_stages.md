@@ -145,15 +145,14 @@ db.posts.aggregate([{ $sort: { createdAt: -1 } }, { $unwind: "$comments" }]);
 -   Limit the output to `10` orders (Page 2).
 
 **Expected output:**
-```javascript
-[
-  { $sort: { total_revenue: -1 } },
-  { $skip: 10 },
-  { $limit: 10 }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   { $sort: { total_revenue: -1 } },
+>   { $skip: 10 },
+>   { $limit: 10 }
+> ]
+> ```
 > - The sequence of stages in aggregation is executed from first index to last.
 > - Order the stages: Sort first, then Skip, then Limit.
 
@@ -166,11 +165,10 @@ db.posts.aggregate([{ $sort: { createdAt: -1 } }, { $unwind: "$comments" }]);
 **Problem:** Sort products by `salesCount` descending and return top 10 items using `$sort` and `$limit`.
 
 **Expected output:**
-```text
-db.products.aggregate([{ $sort: { salesCount: -1 } }, { $limit: 10 }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.products.aggregate([{ $sort: { salesCount: -1 } }, { $limit: 10 }]);
+> ```
 > ```javascript
 > db.products.aggregate([
 >   { $sort: { salesCount: -1 } },
@@ -180,16 +178,17 @@ db.products.aggregate([{ $sort: { salesCount: -1 } }, { $limit: 10 }]);
 >
 > **Explanation:** `$sort: { field: -1 }` sorts descending; `$limit: N` caps result output.
 
+---
+
 ### Exercise 3: Optimization Rule for `$sort` and `$limit`
 
 **Problem:** How does MongoDB optimize `$sort` followed immediately by `$limit: N`? (Maintains top-N items in memory without sorting full collection).
 
 **Expected output:**
-```text
-Maintains top-N items in memory during scan without sorting the full dataset
-```
-
 > [!check]- Answer
+> ```text
+> Maintains top-N items in memory during scan without sorting the full dataset
+> ```
 > ```text
 > Maintains top-N items in memory during scan without sorting the full dataset
 > ```

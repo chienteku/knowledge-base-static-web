@@ -196,11 +196,10 @@ thread::spawn(move || {
 **Problem:** Implement `Future` for `struct ReadyValue(i32)` returning `Poll::Ready(val)` immediately.
 
 **Expected output:**
-```
-Poll::Ready(42)
-```
-
 > [!check]- Answer
+> ```
+> Poll::Ready(42)
+> ```
 > ```rust
 > use std::future::Future;
 > use std::pin::Pin;
@@ -219,16 +218,17 @@ Poll::Ready(42)
 >
 > **Explanation:** Manual `Future` implementations define `type Output` and the `poll` execution driver.
 
+---
+
 ### Exercise 3: Waker Signal Notification Pattern
 
 **Problem:** Explain how `cx.waker().wake_by_ref()` signals the executor to re-poll a pending future.
 
 **Expected output:**
-```
-Waker notification verified
-```
-
 > [!check]- Answer
+> ```
+> Waker notification verified
+> ```
 > fn main() {
 >     println!("Waker notification verified");
 > }

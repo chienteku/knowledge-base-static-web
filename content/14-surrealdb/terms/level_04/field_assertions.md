@@ -155,12 +155,11 @@ Write the SurrealQL commands to:
 2.  Add an assertion ensuring that the length of `sku` is exactly `8` characters. (Hint: Use `string::len()`).
 
 **Expected output:**
-```sql
-DEFINE FIELD sku ON products TYPE string
-  ASSERT string::len($value) = 8;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE FIELD sku ON products TYPE string
+>   ASSERT string::len($value) = 8;
+> ```
 > - Anchor the field to the `products` table using the `ON` keyword.
 > - Reference the input string length using the `$value` variable inside the helper function: `string::len($value)`.
 
@@ -173,27 +172,27 @@ DEFINE FIELD sku ON products TYPE string
 **Problem:** Define field `age` on `user` table as integer asserting `$value >= 18 AND $value <= 100`.
 
 **Expected output:**
-```text
-DEFINE FIELD age ON TABLE user TYPE int ASSERT $value >= 18 AND $value <= 100;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD age ON TABLE user TYPE int ASSERT $value >= 18 AND $value <= 100;
+> ```
 > ```surrealql
 > DEFINE FIELD age ON TABLE user TYPE int ASSERT $value >= 18 AND $value <= 100;
 > ```
 >
 > **Explanation:** `ASSERT $value ...` validates numeric range boundaries on field assignments.
 
+---
+
 ### Exercise 3: URL Format Assertion
 
 **Problem:** Assert field `website` on `company` is a valid URL using `is::url()`.
 
 **Expected output:**
-```text
-DEFINE FIELD website ON TABLE company TYPE string ASSERT is::url($value);
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD website ON TABLE company TYPE string ASSERT is::url($value);
+> ```
 > ```surrealql
 > DEFINE FIELD website ON TABLE company TYPE string ASSERT is::url($value);
 > ```

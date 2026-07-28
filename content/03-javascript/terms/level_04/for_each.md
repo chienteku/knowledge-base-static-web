@@ -150,13 +150,12 @@ async function processData() {
 **Problem:** Create an array of strings: `["Apple", "Banana", "Cherry"]`. Use `forEach` to log a string in the format `"Item X: [Fruit]"` where X is the 1-based index (e.g., "Item 1: Apple").
 
 **Expected output:**
-```text
-Item 1: Apple
-Item 2: Banana
-Item 3: Cherry
-```
-
 > [!check]- Answer
+> ```text
+> Item 1: Apple
+> Item 2: Banana
+> Item 3: Cherry
+> ```
 > - `fruits.forEach((fruit, index) => { console.log(`Item ${index + 1}: ${fruit}`); });`
 
 ---
@@ -166,12 +165,11 @@ Item 3: Cherry
 **Problem:** Log elements of `["a", "b"]` with their 0-indexed positions using `forEach`.
 
 **Expected output:**
-```text
-0: a
-1: b
-```
-
 > [!check]- Answer
+> ```text
+> 0: a
+> 1: b
+> ```
 > ```javascript
 > ["a", "b"].forEach((item, index) => {
 >   console.log(`${index}: ${item}`);
@@ -180,16 +178,17 @@ Item 3: Cherry
 >
 > **Explanation:** `forEach` passes `(element, index, array)` parameters to callback iterators.
 
+---
+
 ### Exercise 3: Array Index Mutation in `forEach`
 
 **Problem:** Mutate array elements in-place using `forEach((val, idx, arr) => arr[idx] = val * 2)`.
 
 **Expected output:**
-```text
-[ 2, 4, 6 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 2, 4, 6 ]
+> ```
 > ```javascript
 > const nums = [1, 2, 3];
 > nums.forEach((val, i, arr) => arr[i] = val * 2);
@@ -198,7 +197,6 @@ Item 3: Cherry
 >
 > **Explanation:** The 3rd parameter `arr` allows targeted in-place index mutation during iteration.
 
----
 
 ---
 

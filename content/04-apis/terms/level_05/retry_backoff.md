@@ -161,11 +161,10 @@ await new Promise(r => setTimeout(r, delay));
 **Problem:** Calculate backoff delay for attempt #3 using formula `delay = 100ms * 2^attempt`.
 
 **Expected output:**
-```text
-800ms (100ms * 2^3 = 100 * 8 = 800ms).
-```
-
 > [!check]- Answer
+> ```text
+> 800ms (100ms * 2^3 = 100 * 8 = 800ms).
+> ```
 > ```text
 > 800ms (100ms * 2^3 = 100 * 8 = 800ms).
 > ```
@@ -177,11 +176,10 @@ await new Promise(r => setTimeout(r, delay));
 **Problem:** Why is random "Jitter" added to exponential backoff delay calculations?
 
 **Expected output:**
-```text
-Jitter introduces random variation to prevent thousands of retrying clients from executing retries at the exact same synchronized timestamp (thundering herd problem).
-```
-
 > [!check]- Answer
+> ```text
+> Jitter introduces random variation to prevent thousands of retrying clients from executing retries at the exact same synchronized timestamp (thundering herd problem).
+> ```
 > ```text
 > Jitter introduces random variation to prevent thousands of retrying clients from executing retries at the exact same synchronized timestamp (thundering herd problem).
 > ```

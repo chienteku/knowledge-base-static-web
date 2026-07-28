@@ -157,11 +157,10 @@ The MongoDB query is:
 Write the equivalent query in SurrealQL.
 
 **Expected output:**
-```sql
-SELECT * FROM products WHERE specifications.weight < 50 AND status = 'instock';
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT * FROM products WHERE specifications.weight < 50 AND status = 'instock';
+> ```
 > - Translate the document query to a standard `SELECT * FROM table` layout.
 > - Access the nested weight value using dot notation: `specifications.weight`.
 
@@ -174,11 +173,10 @@ SELECT * FROM products WHERE specifications.weight < 50 AND status = 'instock';
 **Problem:** Write SurrealQL batch: 1. Set variable `$u`, 2. Create user, 3. Return user.
 
 **Expected output:**
-```text
-LET $u = user:alice; CREATE $u SET name = "Alice"; RETURN $u;
-```
-
 > [!check]- Answer
+> ```text
+> LET $u = user:alice; CREATE $u SET name = "Alice"; RETURN $u;
+> ```
 > ```surrealql
 > LET $u = user:alice;
 > CREATE $u SET name = "Alice";
@@ -187,16 +185,17 @@ LET $u = user:alice; CREATE $u SET name = "Alice"; RETURN $u;
 >
 > **Explanation:** SurrealQL batch scripts execute statements sequentially, sharing `$var` parameter state.
 
+---
+
 ### Exercise 3: SurrealQL Future Values (`<future>`)
 
 **Problem:** What construct in SurrealQL computes field values dynamically upon every read query? (`<future> { ... }`).
 
 **Expected output:**
-```text
-<future> { ... }
-```
-
 > [!check]- Answer
+> ```text
+> <future> { ... }
+> ```
 > ```surrealql
 > DEFINE FIELD total ON TABLE invoice VALUE <future> { count * price };
 > ```

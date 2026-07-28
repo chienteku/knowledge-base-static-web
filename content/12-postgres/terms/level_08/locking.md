@@ -142,12 +142,11 @@ CREATE INDEX idx_users_category ON users (category);
 2.  `UPDATE accounts SET balance = 100 WHERE id = 5;`
 
 **Expected output:**
-```text
-1. Proceed. Under MVCC, readers do not block writers, and writers do not block readers. Transaction B's read query will read the old snapshot version of Row 5 without waiting.
-2. Blocked. Transaction B is attempting to acquire an Exclusive Write Lock on the same row. It must wait until Transaction A commits or rolls back to release its lock.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Proceed. Under MVCC, readers do not block writers, and writers do not block readers. Transaction B's read query will read the old snapshot version of Row 5 without waiting.
+> 2. Blocked. Transaction B is attempting to acquire an Exclusive Write Lock on the same row. It must wait until Transaction A commits or rolls back to release its lock.
+> ```
 > - Differentiate read queries (shared/snapshot) from write queries (exclusive).
 > - Recall the MVCC rule: "readers never block writers, writers never block readers".
 
@@ -160,27 +159,27 @@ CREATE INDEX idx_users_category ON users (category);
 **Problem:** Query active granted and waiting locks from `pg_locks` and `pg_stat_activity`.
 
 **Expected output:**
-```text
-SELECT pid, locktype, mode, granted FROM pg_locks;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pid, locktype, mode, granted FROM pg_locks;
+> ```
 > ```sql
 > SELECT pid, locktype, mode, granted FROM pg_locks;
 > ```
 >
 > **Explanation:** `pg_locks` details active lock types, modes, and process wait statuses.
 
+---
+
 ### Exercise 3: Lock Compatibility Matrix Rule
 
 **Problem:** Do `SELECT` queries (`ACCESS SHARE` locks) block concurrent `UPDATE` queries (`ROW EXCLUSIVE` locks)? (No, reads do not block writes in PostgreSQL).
 
 **Expected output:**
-```text
-No, reads do not block writes in PostgreSQL MVCC
-```
-
 > [!check]- Answer
+> ```text
+> No, reads do not block writes in PostgreSQL MVCC
+> ```
 > ```text
 > No, reads do not block writes in PostgreSQL MVCC
 > ```

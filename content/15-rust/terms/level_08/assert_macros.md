@@ -182,11 +182,10 @@ thread::spawn(move || {
 **Problem:** Assert `val == 10` with custom error message `assert_eq!(val, 10, "Expected 10, got {}", val)`.
 
 **Expected output:**
-```
-Assertion passed
-```
-
 > [!check]- Answer
+> ```
+> Assertion passed
+> ```
 > ```rust
 > fn main() {
 >     let val = 10;
@@ -197,16 +196,17 @@ Assertion passed
 >
 > **Explanation:** Assertion macros accept optional format strings and arguments for diagnostic failure messages.
 
+---
+
 ### Exercise 3: Release-Omitted Checks with `debug_assert!`
 
 **Problem:** Write a `debug_assert!(x > 0)` check that is compiled out in `--release` mode.
 
 **Expected output:**
-```
-Debug assert checked
-```
-
 > [!check]- Answer
+> ```
+> Debug assert checked
+> ```
 > fn main() {
 >     let x = 5;
 >     debug_assert!(x > 0);

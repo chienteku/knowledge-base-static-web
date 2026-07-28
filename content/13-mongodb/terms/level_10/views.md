@@ -162,17 +162,16 @@ Index underlying source collection fields or build Materialized Views via $merge
 **Problem:** You have a `sales` collection. Write the mongosh command to create a View named `"active_high_value_sales"` pointing to the `sales` collection, filtering only documents where the `amount` is greater than `1000` and the `status` is `"active"`.
 
 **Expected output:**
-```javascript
-db.createView(
-  "active_high_value_sales",
-  "sales",
-  [
-    { $match: { amount: { $gt: 1000 }, status: "active" } }
-  ]
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.createView(
+>   "active_high_value_sales",
+>   "sales",
+>   [
+>     { $match: { amount: { $gt: 1000 }, status: "active" } }
+>   ]
+> );
+> ```
 > - The creator helper is `db.createView(viewName, sourceCollection, pipeline)`.
 > - Use the `$match` aggregation stage for the filter query object.
 
@@ -185,11 +184,10 @@ db.createView(
 **Problem:** Create view `active_users` on `users` collection filtering for `active: true` using `db.createView()`.
 
 **Expected output:**
-```text
-db.createView("active_users", "users", [{ $match: { active: true } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.createView("active_users", "users", [{ $match: { active: true } }]);
+> ```
 > ```javascript
 > db.createView(
 >   "active_users",
@@ -200,16 +198,17 @@ db.createView("active_users", "users", [{ $match: { active: true } }]);
 >
 > **Explanation:** `db.createView(viewName, sourceColl, pipeline)` builds read-only virtual collections.
 
+---
+
 ### Exercise 3: On-Demand Views vs Materialized Views
 
 **Problem:** Compare: On-Demand Views (computed dynamically on query); Materialized Views (persisted to disk via `$merge`).
 
 **Expected output:**
-```text
-On-Demand Views: computed dynamically; Materialized Views: persisted on disk via $merge
-```
-
 > [!check]- Answer
+> ```text
+> On-Demand Views: computed dynamically; Materialized Views: persisted on disk via $merge
+> ```
 > ```text
 > On-Demand Views: computed dynamically; Materialized Views: persisted on disk via $merge
 > ```

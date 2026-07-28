@@ -141,12 +141,11 @@ defineStore('counter', () => {
 **Problem:** When you define a store, you must pass a string ID: `defineStore('auth', () => {})`. What happens if you create a second store and accidentally name it `'auth'` as well?
 
 **Expected output:**
-```text
-Pinia will throw an error or overwrite the store.
-The string ID (e.g., 'auth') is how Pinia registers the store internally and connects it to the Vue DevTools. Every single store in your application MUST have a globally unique string ID.
-```
-
 > [!check]- Answer
+> ```text
+> Pinia will throw an error or overwrite the store.
+> The string ID (e.g., 'auth') is how Pinia registers the store internally and connects it to the Vue DevTools. Every single store in your application MUST have a globally unique string ID.
+> ```
 > - Think about database Primary Keys.
 
 ---
@@ -156,11 +155,10 @@ The string ID (e.g., 'auth') is how Pinia registers the store internally and con
 **Problem:** Write `store.$subscribe()` statement persisting store state to `localStorage` whenever state updates.
 
 **Expected output:**
-```javascript
-cartStore.$subscribe((mutation, state) => { localStorage.setItem('cart', JSON.stringify(state)); });
-```
-
 > [!check]- Answer
+> ```javascript
+> cartStore.$subscribe((mutation, state) => { localStorage.setItem('cart', JSON.stringify(state)); });
+> ```
 > - `store.$subscribe()` listens to all state changes.
 > 
 > ```javascript
@@ -176,11 +174,10 @@ cartStore.$subscribe((mutation, state) => { localStorage.setItem('cart', JSON.st
 **Problem:** Write a custom Pinia plugin adding a global `$router` property to all stores.
 
 **Expected output:**
-```javascript
-pinia.use(({ store }) => { store.$router = markRaw(router); });
-```
-
 > [!check]- Answer
+> ```javascript
+> pinia.use(({ store }) => { store.$router = markRaw(router); });
+> ```
 > - `pinia.use()` extends all store instances with custom properties.
 > 
 > ```javascript

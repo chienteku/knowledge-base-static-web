@@ -168,21 +168,20 @@ db.posts.aggregate([{ $unwind: "$tags" }]); // Correct $tags path
 2.  A stage to group the results by ingredient name (`_id`), counting the total number of recipes that use each ingredient (using `$sum`).
 
 **Expected output:**
-```javascript
-[
-  {
-    $unwind: "$ingredients"
-  },
-  {
-    $group: {
-      _id: "$ingredients",
-      recipe_count: { $sum: 1 }
-    }
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $unwind: "$ingredients"
+>   },
+>   {
+>     $group: {
+>       _id: "$ingredients",
+>       recipe_count: { $sum: 1 }
+>     }
+>   }
+> ]
+> ```
 > - Prefix the array field path with `$` inside the `$unwind` stage.
 > - The grouped identifier key `_id` must match the unwound value path.
 
@@ -195,11 +194,10 @@ db.posts.aggregate([{ $unwind: "$tags" }]); // Correct $tags path
 **Problem:** Deconstruct `items` array in `orders` collection into individual document streams.
 
 **Expected output:**
-```text
-db.orders.aggregate([{ $unwind: "$items" }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([{ $unwind: "$items" }]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   { $unwind: "$items" }
@@ -208,16 +206,17 @@ db.orders.aggregate([{ $unwind: "$items" }]);
 >
 > **Explanation:** `$unwind` outputs one document for each element in the specified array field.
 
+---
+
 ### Exercise 3: Preserving Empty Arrays and Index Tracking
 
 **Problem:** Unwind `comments` array preserving empty arrays and tracking index numbers in `commentIndex`.
 
 **Expected output:**
-```text
-db.posts.aggregate([{ $unwind: { path: "$comments", includeArrayIndex: "commentIndex", preserveNullAndEmptyArrays: true } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.aggregate([{ $unwind: { path: "$comments", includeArrayIndex: "commentIndex", preserveNullAndEmptyArrays: true } }]);
+> ```
 > ```javascript
 > db.posts.aggregate([
 >   {

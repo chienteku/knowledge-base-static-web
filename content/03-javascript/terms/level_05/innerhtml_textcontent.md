@@ -185,34 +185,33 @@ if (typeof document !== "undefined") {
 **Problem:** Safely escape `<script>alert(1)</script>` by setting `elem.textContent`.
 
 **Expected output:**
-```text
-Renders literal text tags without script execution
-```
-
 > [!check]- Answer
+> ```text
+> Renders literal text tags without script execution
+> ```
 > ```javascript
 > console.log("Renders literal text tags without script execution");
 > ```
 >
 > **Explanation:** `textContent` escapes HTML entities, treating inputs purely as text strings.
 
+---
+
 ### Exercise 3: Parsing Performance: `textContent` vs `innerText`
 
 **Problem:** Explain why `textContent` is faster than `innerText` (innerText triggers layout reflow to check element visibility).
 
 **Expected output:**
-```text
-textContent avoids reflow layout checks
-```
-
 > [!check]- Answer
+> ```text
+> textContent avoids reflow layout checks
+> ```
 > ```javascript
 > console.log("textContent avoids reflow layout checks");
 > ```
 >
 > **Explanation:** `innerText` is aware of CSS styling and layout visibility, triggering reflow overhead.
 
----
 
 ---
 

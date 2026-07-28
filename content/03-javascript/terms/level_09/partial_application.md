@@ -168,11 +168,10 @@ fetchUsers({ method: "GET" });
 ```
 
 **Expected output:**
-```text
-Calling https://api.example.com/users with options: { method: 'GET' }
-```
-
 > [!check]- Answer
+> ```text
+> Calling https://api.example.com/users with options: { method: 'GET' }
+> ```
 > - Bind the first two arguments by writing `fetchApi.bind(null, "https://api.example.com", "/users")`.
 
 ---
@@ -182,11 +181,10 @@ Calling https://api.example.com/users with options: { method: 'GET' }
 **Problem:** Use `fn.bind(null, 10)` to fix the first argument of `function add(a, b) { return a + b; }`.
 
 **Expected output:**
-```text
-15
-```
-
 > [!check]- Answer
+> ```text
+> 15
+> ```
 > ```javascript
 > function add(a, b) { return a + b; }
 > const addTen = add.bind(null, 10);
@@ -195,16 +193,17 @@ Calling https://api.example.com/users with options: { method: 'GET' }
 >
 > **Explanation:** `.bind(thisArg, ...preboundArgs)` partially applies leading function arguments.
 
+---
+
 ### Exercise 3: Custom `partial(fn, ...preset)` Helper
 
 **Problem:** Write a `partial(fn, ...preset)` helper function.
 
 **Expected output:**
-```text
-Hello Alice
-```
-
 > [!check]- Answer
+> ```text
+> Hello Alice
+> ```
 > ```javascript
 > function partial(fn, ...preset) {
 >   return (...later) => fn(...preset, ...later);
@@ -216,7 +215,6 @@ Hello Alice
 >
 > **Explanation:** Partial application pre-binds specific parameter values ahead of time.
 
----
 
 ---
 

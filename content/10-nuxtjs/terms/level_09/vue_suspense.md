@@ -245,12 +245,11 @@ const req2 = useLazyFetch('/api/slow');
 Which of these two requests actually causes the Nuxt Suspense boundary to pause the page rendering?
 
 **Expected output:**
-```text
-req1.
-Because it uses `await useFetch`, it registers as an asynchronous dependency that Suspense must wait for. `useLazyFetch` intentionally tells Suspense to ignore it.
-```
-
 > [!check]- Answer
+> ```text
+> req1.
+> Because it uses `await useFetch`, it registers as an asynchronous dependency that Suspense must wait for. `useLazyFetch` intentionally tells Suspense to ignore it.
+> ```
 > - Only functions prefixed with `await` halt execution synchronous compiler flows inside setup blocks.
 
 ---
@@ -260,20 +259,19 @@ Because it uses `await useFetch`, it registers as an asynchronous dependency tha
 **Problem:** Write Vue template wrapping async component `<AsyncUserCard />` in `<Suspense>` with `<template #fallback>` spinner.
 
 **Expected output:**
-```vue
-<template>
-  <Suspense>
-    <template #default>
-      <AsyncUserCard />
-    </template>
-    <template #fallback>
-      <div>Loading user...</div>
-    </template>
-  </Suspense>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <Suspense>
+>     <template #default>
+>       <AsyncUserCard />
+>     </template>
+>     <template #fallback>
+>       <div>Loading user...</div>
+>     </template>
+>   </Suspense>
+> </template>
+> ```
 > - `<Suspense>` handles async top-level `<script setup>` dependencies.
 > 
 > ```vue
@@ -296,11 +294,10 @@ Because it uses `await useFetch`, it registers as an asynchronous dependency tha
 **Problem:** What triggers a component to activate a parent `<Suspense>` boundary in Vue 3?
 
 **Expected output:**
-```text
-Having a top-level await statement inside <script setup> or returning a Promise from setup().
-```
-
 > [!check]- Answer
+> ```text
+> Having a top-level await statement inside <script setup> or returning a Promise from setup().
+> ```
 > - Top-level `await` inside `<script setup>` activates `<Suspense>`.
 > 
 > ```vue

@@ -133,11 +133,10 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 **Problem:** If you look at the source code of a news article, you might see a tag like `<meta property="og:image" content="article-thumbnail.jpg">`. What does "og" mean and what is it doing?
 
 **Expected output:**
-```text
-"og" stands for Open Graph. This is a specific type of meta tag invented by Facebook. It tells social media platforms exactly which image to display as the large thumbnail when a user shares the link on Facebook, Twitter, or LinkedIn!
-```
-
 > [!check]- Answer
+> ```text
+> "og" stands for Open Graph. This is a specific type of meta tag invented by Facebook. It tells social media platforms exactly which image to display as the large thumbnail when a user shares the link on Facebook, Twitter, or LinkedIn!
+> ```
 > - Have you ever wondered how iMessage knows which picture to show when you text a link?
 
 ---
@@ -149,11 +148,10 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 **Problem:** Write `<head>` section with 3 core meta tags: UTF-8 charset, responsive viewport, and 150-char SEO description.
 
 **Expected output:**
-```text
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Learn web dev."></head>
-```
-
 > [!check]- Answer
+> ```text
+> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Learn web dev."></head>
+> ```
 > ```html
 > <head>
 >   <meta charset="UTF-8">
@@ -164,16 +162,17 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 >
 > **Explanation:** Essential meta tags configure character encoding, mobile viewport scaling, and SEO search snippets.
 
+---
+
 ### Exercise 3: Robots Noindex Meta Tag
 
 **Problem:** Write `<meta>` tag instructing search engine crawlers NOT to index a private admin page.
 
 **Expected output:**
-```text
-<meta name="robots" content="noindex, nofollow">
-```
-
 > [!check]- Answer
+> ```text
+> <meta name="robots" content="noindex, nofollow">
+> ```
 > ```html
 > <meta name="robots" content="noindex, nofollow">
 > ```

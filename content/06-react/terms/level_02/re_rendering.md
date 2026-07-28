@@ -110,11 +110,10 @@ const options = useMemo(() => ({ theme: 'dark' }), []);
 **Problem:** A component has a prop `name="Alice"`. The parent changes the prop to `name="Alice"`. Does the child component re-render?
 
 **Expected output:**
-```text
-Yes! Even though the value didn't visually change, if the Parent component re-rendered to send that prop, the Child is forced to re-render. (Unless you wrap the child in `React.memo`!).
-```
-
 > [!check]- Answer
+> ```text
+> Yes! Even though the value didn't visually change, if the Parent component re-rendered to send that prop, the Child is forced to re-render. (Unless you wrap the child in `React.memo`!).
+> ```
 > - Remember the third trigger of a re-render.
 
 ---
@@ -126,27 +125,27 @@ Yes! Even though the value didn't visually change, if the Parent component re-re
 **Problem:** List 3 events that trigger a React component re-render (1. State update via `setState`; 2. Parent component re-renders; 3. Custom Hook state changes).
 
 **Expected output:**
-```text
-1. State update via setState; 2. Parent component re-renders; 3. Hook state changes
-```
-
 > [!check]- Answer
+> ```text
+> 1. State update via setState; 2. Parent component re-renders; 3. Hook state changes
+> ```
 > ```text
 > 1. State update via setState; 2. Parent component re-renders; 3. Hook state changes
 > ```
 >
 > **Explanation:** Component re-renders execute when local state mutates or parent trees re-render.
 
+---
+
 ### Exercise 3: Preventing Un-Necessary Re-Renders via Component Composition
 
 **Problem:** How can passing heavy child trees as `children` prop prevent parent re-render cascades? (Children passed as props are evaluated in parent scope and don't re-render when wrapper state changes).
 
 **Expected output:**
-```text
-Children passed as props don't re-render when wrapper component state changes
-```
-
 > [!check]- Answer
+> ```text
+> Children passed as props don't re-render when wrapper component state changes
+> ```
 > ```javascript
 > function ScrollWrapper({ children }) {
 >   const [pos, setPos] = useState(0);

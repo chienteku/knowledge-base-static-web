@@ -190,13 +190,12 @@ console.log("Log method exists?", typeof result.log === "function");
 ```
 
 **Expected output:**
-```text
-Fallback to shallow copy.
-Port: 8080
-Log method exists? true
-```
-
 > [!check]- Answer
+> ```text
+> Fallback to shallow copy.
+> Port: 8080
+> Log method exists? true
+> ```
 > - Inside `try`, return `structuredClone(config)`.
 
 ---
@@ -206,11 +205,10 @@ Log method exists? true
 **Problem:** Deep clone object `{ date: new Date(), set: new Set([1, 2]) }`.
 
 **Expected output:**
-```text
-True deep copy with Date and Set intact
-```
-
 > [!check]- Answer
+> ```text
+> True deep copy with Date and Set intact
+> ```
 > ```javascript
 > const orig = { date: new Date(), set: new Set([1, 2]) };
 > const copy = structuredClone(orig);
@@ -219,16 +217,17 @@ True deep copy with Date and Set intact
 >
 > **Explanation:** `structuredClone` natively handles complex built-in types like `Date`, `Set`, `Map`, `RegExp`, `ArrayBuffer`.
 
+---
+
 ### Exercise 3: Transferring ArrayBuffer Ownership with `structuredClone`
 
 **Problem:** Transfer ownership of an `ArrayBuffer` using `structuredClone(buffer, { transfer: [buffer] })`.
 
 **Expected output:**
-```text
-Original buffer detached
-```
-
 > [!check]- Answer
+> ```text
+> Original buffer detached
+> ```
 > ```javascript
 > console.log("Original buffer detached");
 > ```

@@ -188,15 +188,14 @@ button { color: red; } /* Valid CSS comment */
 ```
 
 **Expected output:**
-```css
-.profile {
-  /* border: 1px solid black; */
-  color: blue;
-  /* padding: 10px; inner comment */
-}
-```
-
 > [!check]- Answer
+> ```css
+> .profile {
+>   /* border: 1px solid black; */
+>   color: blue;
+>   /* padding: 10px; inner comment */
+> }
+> ```
 > - Replace `//` with `/* ... */`.
 > - Remove the nested `/*` inside the padding comment.
 
@@ -209,13 +208,12 @@ button { color: red; } /* Valid CSS comment */
 **Problem:** Write multi-line CSS comment describing section header styles.
 
 **Expected output:**
-```text
-/* 
- * Header Navigation Styles
- */
-```
-
 > [!check]- Answer
+> ```text
+> /* 
+>  * Header Navigation Styles
+>  */
+> ```
 > ```css
 > /* 
 >  * Header Navigation Styles
@@ -224,16 +222,17 @@ button { color: red; } /* Valid CSS comment */
 >
 > **Explanation:** CSS comments begin with `/*` and end with `*/`.
 
+---
+
 ### Exercise 3: Commenting Out CSS Rules
 
 **Problem:** Comment out `background: red;` property declaration inside `.box { background: red; color: white; }`.
 
 **Expected output:**
-```text
-.box { /* background: red; */ color: white; }
-```
-
 > [!check]- Answer
+> ```text
+> .box { /* background: red; */ color: white; }
+> ```
 > ```css
 > .box {
 >   /* background: red; */

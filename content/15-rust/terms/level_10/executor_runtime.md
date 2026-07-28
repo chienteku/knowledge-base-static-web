@@ -169,11 +169,10 @@ thread::spawn(move || {
 **Problem:** Demonstrate the concept of executing top-level futures using `runtime.block_on(...)`.
 
 **Expected output:**
-```
-Runtime executed future to completion
-```
-
 > [!check]- Answer
+> ```
+> Runtime executed future to completion
+> ```
 > ```rust
 > fn main() {
 >     println!("Runtime executed future to completion");
@@ -182,16 +181,17 @@ Runtime executed future to completion
 >
 > **Explanation:** Async runtimes drive top-level futures to completion by polling them on executor threads.
 
+---
+
 ### Exercise 3: Offloading Heavy Computations with `spawn_blocking`
 
 **Problem:** Explain why `tokio::task::spawn_blocking` offloads heavy CPU work to a dedicated blocking thread pool.
 
 **Expected output:**
-```
-Offloaded blocking CPU task
-```
-
 > [!check]- Answer
+> ```
+> Offloaded blocking CPU task
+> ```
 > fn main() {
 >     println!("Offloaded blocking CPU task");
 > }

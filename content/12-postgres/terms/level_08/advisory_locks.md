@@ -143,11 +143,10 @@ SELECT pg_advisory_xact_lock(hashtext('billing_job_123'));
 **Problem:** You are writing a database cleanup script that runs once an hour. You want to ensure that if a previous run is still active, the new run aborts immediately instead of waiting in line. Write the SQL query to accomplish this using lock key `77777`.
 
 **Expected output:**
-```sql
-SELECT pg_try_advisory_lock(77777);
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT pg_try_advisory_lock(77777);
+> ```
 > - The term "abort immediately instead of waiting" indicates a non-blocking check is required.
 > - Look for the prefix `try` in the advisory lock functions.
 
@@ -160,27 +159,27 @@ SELECT pg_try_advisory_lock(77777);
 **Problem:** Acquire transaction-level advisory lock using `hashtext('cron_job')`.
 
 **Expected output:**
-```text
-SELECT pg_advisory_xact_lock(hashtext('cron_job'));
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pg_advisory_xact_lock(hashtext('cron_job'));
+> ```
 > ```sql
 > SELECT pg_advisory_xact_lock(hashtext('cron_job'));
 > ```
 >
 > **Explanation:** `pg_advisory_xact_lock` acquires application locks released automatically upon transaction commit.
 
+---
+
 ### Exercise 3: Try Advisory Lock Non-Blocking Check
 
 **Problem:** Attempt non-blocking lock acquisition using `pg_try_advisory_xact_lock(key)` returning boolean success.
 
 **Expected output:**
-```text
-SELECT pg_try_advisory_xact_lock(100);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT pg_try_advisory_xact_lock(100);
+> ```
 > ```sql
 > SELECT pg_try_advisory_xact_lock(100);
 > ```

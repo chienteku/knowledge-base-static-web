@@ -155,12 +155,11 @@ Content-Type: text/html; charset=utf-8
 **Problem:** How many bytes does a single character consume in UTF-8 encoding for ASCII characters vs Emojis?
 
 **Expected output:**
-```text
-ASCII characters: 1 byte
-Emojis / Special characters: Up to 4 bytes
-```
-
 > [!check]- Answer
+> ```text
+> ASCII characters: 1 byte
+> Emojis / Special characters: Up to 4 bytes
+> ```
 > ```text
 > ASCII characters -> 1 byte (0x00 to 0x7F)
 > Emojis / Asian characters -> 3 to 4 bytes
@@ -173,11 +172,10 @@ Emojis / Special characters: Up to 4 bytes
 **Problem:** What does the term "Mojibake" describe in character encoding context?
 
 **Expected output:**
-```text
-Garbled unreadable text resulting from decoding a character string using an incorrect character encoding standard.
-```
-
 > [!check]- Answer
+> ```text
+> Garbled unreadable text resulting from decoding a character string using an incorrect character encoding standard.
+> ```
 > ```text
 > Garbled unreadable text resulting from decoding a character string using an incorrect character encoding standard.
 > ```

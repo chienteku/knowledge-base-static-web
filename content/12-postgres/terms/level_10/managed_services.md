@@ -128,13 +128,12 @@ Combine automated daily snapshots with cross-region streaming read replicas
 Should they host PostgreSQL on a self-managed virtual machine or use a managed service? Explain why.
 
 **Expected output:**
-```text
-They should use a Managed Service (like Supabase or Neon)!
-Because the team lacks a dedicated DevOps/DBA employee, the time spent setting up backups, configuring replication, and managing OS patches on a self-managed VM would distract them from building their core product. 
-A managed service automates these operational chores out-of-the-box, allowing the 3 developers to focus 100% of their efforts on writing application features.
-```
-
 > [!check]- Answer
+> ```text
+> They should use a Managed Service (like Supabase or Neon)!
+> Because the team lacks a dedicated DevOps/DBA employee, the time spent setting up backups, configuring replication, and managing OS patches on a self-managed VM would distract them from building their core product. 
+> A managed service automates these operational chores out-of-the-box, allowing the 3 developers to focus 100% of their efforts on writing application features.
+> ```
 > - Evaluate the staffing resources of the startup.
 > - Consider the time cost of writing manual backup cron jobs.
 
@@ -147,27 +146,27 @@ A managed service automates these operational chores out-of-the-box, allowing th
 **Problem:** List 3 major cloud managed PostgreSQL offerings (AWS RDS / Aurora, GCP Cloud SQL, Azure Database for PostgreSQL, Supabase).
 
 **Expected output:**
-```text
-AWS RDS/Aurora, GCP Cloud SQL, Azure Database for PostgreSQL, Supabase
-```
-
 > [!check]- Answer
+> ```text
+> AWS RDS/Aurora, GCP Cloud SQL, Azure Database for PostgreSQL, Supabase
+> ```
 > ```text
 > AWS RDS/Aurora, GCP Cloud SQL, Azure Database for PostgreSQL, Supabase
 > ```
 >
 > **Explanation:** Managed services automate server provisioning, OS patching, and automated backups.
 
+---
+
 ### Exercise 3: RPO vs RTO Definitions
 
 **Problem:** Define RPO (Recovery Point Objective - max tolerable data loss duration) vs RTO (Recovery Time Objective - max tolerable downtime duration).
 
 **Expected output:**
-```text
-RPO: max tolerable data loss duration; RTO: max tolerable downtime duration
-```
-
 > [!check]- Answer
+> ```text
+> RPO: max tolerable data loss duration; RTO: max tolerable downtime duration
+> ```
 > ```text
 > RPO: max tolerable data loss duration; RTO: max tolerable downtime duration
 > ```

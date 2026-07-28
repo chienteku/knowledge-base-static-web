@@ -264,6 +264,8 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 >
 > **Explanation:** Heading tags construct a nested outline tree for accessibility and search engines.
 
+---
+
 ### Exercise 3: Styling Headings vs Heading Semantics
 
 **Problem:** Should you change `<h2>` to `<h4>` because the font size looks too big on screen? (Yes/No). Explain.

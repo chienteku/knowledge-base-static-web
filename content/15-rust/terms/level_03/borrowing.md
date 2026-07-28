@@ -184,11 +184,10 @@ fn main() {
 **Problem:** Refactor a function taking `String` by value to take `&str` reference instead, avoiding `.clone()` calls.
 
 **Expected output:**
-```
-Processed: rust
-```
-
 > [!check]- Answer
+> ```
+> Processed: rust
+> ```
 > ```rust
 > fn process(s: &str) {
 >     println!("Processed: {}", s);
@@ -202,16 +201,17 @@ Processed: rust
 >
 > **Explanation:** Borrowing `&str` avoids unnecessary heap allocations and cloning while keeping ownership with the caller.
 
+---
+
 ### Exercise 3: Multiple Simultaneous Immutable Borrows
 
 **Problem:** Create three simultaneous immutable references `r1`, `r2`, `r3` pointing to a single `String` and read all three in `println!`.
 
 **Expected output:**
-```
-r1: hi, r2: hi, r3: hi
-```
-
 > [!check]- Answer
+> ```
+> r1: hi, r2: hi, r3: hi
+> ```
 > ```rust
 > fn main() {
 >     let s = String::from("hi");

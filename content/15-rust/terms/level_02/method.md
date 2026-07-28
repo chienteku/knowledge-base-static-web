@@ -178,11 +178,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Plant height is now: 6
-```
-
 > [!check]- Answer
+> ```text
+> Plant height is now: 6
+> ```
 > - The method must modify data, so it needs to take `&mut self`.
 > - Use `self.height += 1;` inside the method.
 
@@ -193,11 +192,10 @@ Plant height is now: 6
 **Problem:** Implement a `Counter` struct with `count: u32` and a method `fn increment(&mut self)`.
 
 **Expected output:**
-```
-Count: 1
-```
-
 > [!check]- Answer
+> ```
+> Count: 1
+> ```
 > ```rust
 > struct Counter { count: u32 }
 > impl Counter {
@@ -212,16 +210,17 @@ Count: 1
 >
 > **Explanation:** `&mut self` methods allow modifying instance fields in-place.
 
+---
+
 ### Exercise 3: Chaining Methods via Builder Pattern
 
 **Problem:** Implement a builder method `fn set_name(mut self, name: String) -> Self` that returns `self` for chaining.
 
 **Expected output:**
-```
-User: Alice
-```
-
 > [!check]- Answer
+> ```
+> User: Alice
+> ```
 > struct User { name: String }
 > impl User {
 >     fn new() -> Self { Self { name: String::new() } }

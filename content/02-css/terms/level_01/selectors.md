@@ -150,11 +150,10 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 ```
 
 **Expected output:**
-```text
-An `id` attribute! The `#` symbol indicates an ID selector. The HTML would look like `<img id="hero-image" src="...">`.
-```
-
 > [!check]- Answer
+> ```text
+> An `id` attribute! The `#` symbol indicates an ID selector. The HTML would look like `<img id="hero-image" src="...">`.
+> ```
 > - Does it start with a dot, a hash, or a letter?
 
 ---
@@ -170,14 +169,13 @@ An `id` attribute! The `#` symbol indicates an ID selector. The HTML would look 
 4. Universal selector (`*`)
 
 **Expected output:**
-```text
-1. button
-2. .card
-3. #app
-4. *
-```
-
 > [!check]- Answer
+> ```text
+> 1. button
+> 2. .card
+> 3. #app
+> 4. *
+> ```
 > ```text
 > 1. button -> Type selector
 > 2. .card -> Class selector
@@ -187,16 +185,17 @@ An `id` attribute! The `#` symbol indicates an ID selector. The HTML would look 
 >
 > **Explanation:** CSS selectors target elements by tag name, class, ID, or universal patterns.
 
+---
+
 ### Exercise 3: Chaining Multiple Class Selectors
 
 **Problem:** Write CSS selector targeting an element that has BOTH `btn` AND `primary` classes (`<button class="btn primary">`).
 
 **Expected output:**
-```text
-.btn.primary { color: white; }
-```
-
 > [!check]- Answer
+> ```text
+> .btn.primary { color: white; }
+> ```
 > ```css
 > .btn.primary {
 >   color: white;

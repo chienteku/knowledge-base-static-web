@@ -150,11 +150,10 @@ window.addEventListener("scroll", () => {
 ```
 
 **Expected output:**
-```text
-"scroll"
-```
-
 > [!check]- Answer
+> ```text
+> "scroll"
+> ```
 > - The event name is always a string, passed as the first argument.
 
 ---
@@ -164,11 +163,10 @@ window.addEventListener("scroll", () => {
 **Problem:** Create and dispatch a `CustomEvent('userLogin', { detail: { id: 42 } })`.
 
 **Expected output:**
-```text
-Custom event received: 42
-```
-
 > [!check]- Answer
+> ```text
+> Custom event received: 42
+> ```
 > ```javascript
 > const detail = { id: 42 };
 > console.log(`Custom event received: ${detail.id}`);
@@ -176,23 +174,23 @@ Custom event received: 42
 >
 > **Explanation:** `CustomEvent` transmits arbitrary data payloads via event listeners.
 
+---
+
 ### Exercise 3: Event Once Parameter Flag
 
 **Problem:** Attach an event listener that executes only once using `{ once: true }`.
 
 **Expected output:**
-```text
-Listener executed once
-```
-
 > [!check]- Answer
+> ```text
+> Listener executed once
+> ```
 > ```javascript
 > console.log("Listener executed once");
 > ```
 >
 > **Explanation:** `{ once: true }` automatically removes event listeners after initial execution.
 
----
 
 ---
 

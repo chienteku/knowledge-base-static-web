@@ -180,11 +180,10 @@ fn main() {
 **Problem:** Fix compiler error `E0515` by returning owned `String` instead of `&String`.
 
 **Expected output:**
-```
-Hello World
-```
-
 > [!check]- Answer
+> ```
+> Hello World
+> ```
 > ```rust
 > fn create_text() -> String {
 >     let s = String::from("Hello World");
@@ -197,16 +196,17 @@ Hello World
 >
 > **Explanation:** Returning owned types transfers heap data ownership to the caller safely without dangling references.
 
+---
+
 ### Exercise 3: Static Reference Lifetime Extension
 
 **Problem:** Return a string slice reference `&'static str` from a function safely.
 
 **Expected output:**
-```
-Static slice: Constant
-```
-
 > [!check]- Answer
+> ```
+> Static slice: Constant
+> ```
 > ```rust
 > fn static_text() -> &'static str {
 >     "Constant"

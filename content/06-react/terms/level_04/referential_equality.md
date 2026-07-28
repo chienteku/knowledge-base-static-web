@@ -196,32 +196,34 @@ function ThemeDisplay() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Object.is Equality Comparison in React
 
 **Problem:** Evaluate `Object.is()` for: 1. `Object.is(5, 5)` (`true`); 2. `Object.is({}, {})` (`false`); 3. `Object.is(NaN, NaN)` (`true`).
 
 **Expected output:**
-```text
-1. true, 2. false, 3. true
-```
-
 > [!check]- Answer
+> ```text
+> 1. true, 2. false, 3. true
+> ```
 > ```text
 > 1. true, 2. false, 3. true
 > ```
 >
 > **Explanation:** React uses `Object.is` for state change and dependency array comparisons.
 
+---
+
 ### Exercise 3: Preserving Reference with useMemo
 
 **Problem:** Preserve object reference `options = { theme: 'dark' }` across renders using `useMemo`.
 
 **Expected output:**
-```text
-const options = useMemo(() => ({ theme: 'dark' }), []);
-```
-
 > [!check]- Answer
+> ```text
+> const options = useMemo(() => ({ theme: 'dark' }), []);
+> ```
 > ```javascript
 > const options = useMemo(() => ({ theme: 'dark' }), []);
 > ```

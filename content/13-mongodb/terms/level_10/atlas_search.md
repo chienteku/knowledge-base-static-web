@@ -147,19 +147,18 @@ Create Search Index 'default' in Atlas UI before running $search aggregation pip
 Write the aggregation pipeline stage utilizing the `$search` operator to search the `"title"` path using the term `"aven"` with autocomplete parameters. Assume your autocomplete index is named `"movie-autocomplete"`.
 
 **Expected output:**
-```javascript
-{
-  $search: {
-    index: "movie-autocomplete",
-    autocomplete: {
-      query: "aven",
-      path: "title"
-    }
-  }
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> {
+>   $search: {
+>     index: "movie-autocomplete",
+>     autocomplete: {
+>       query: "aven",
+>       path: "title"
+>     }
+>   }
+> }
+> ```
 > - The target stage is `$search`.
 > - Replace the `text` field object with `autocomplete` configurations.
 
@@ -172,11 +171,10 @@ Write the aggregation pipeline stage utilizing the `$search` operator to search 
 **Problem:** Construct `$search` pipeline stage querying text `"database"` in field `title` using `default` index.
 
 **Expected output:**
-```text
-db.posts.aggregate([{ $search: { index: "default", text: { query: "database", path: "title" } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.aggregate([{ $search: { index: "default", text: { query: "database", path: "title" } } }]);
+> ```
 > ```javascript
 > db.posts.aggregate([
 >   {
@@ -190,16 +188,17 @@ db.posts.aggregate([{ $search: { index: "default", text: { query: "database", pa
 >
 > **Explanation:** `$search` invokes full-text Lucene search indexing in MongoDB Atlas.
 
+---
+
 ### Exercise 3: Atlas Search Score Projection
 
 **Problem:** Project relevance score in Atlas Search results using `score: { $meta: "searchScore" }`.
 
 **Expected output:**
-```text
-db.posts.aggregate([{ $search: { ... } }, { $project: { title: 1, score: { $meta: "searchScore" } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.aggregate([{ $search: { ... } }, { $project: { title: 1, score: { $meta: "searchScore" } } }]);
+> ```
 > ```javascript
 > db.posts.aggregate([
 >   { $search: { index: "default", text: { query: "database", path: "title" } } },

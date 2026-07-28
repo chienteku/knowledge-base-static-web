@@ -125,13 +125,12 @@ button:focus-visible {
 **Problem:** You have a text `<input>` field. When the user clicks into the field to start typing, you want the background to turn light yellow. Which pseudo-class do you use?
 
 **Expected output:**
-```text
-`:focus`! 
-`input:focus { background-color: lightyellow; }`
-When they click away (losing focus), it will revert to white.
-```
-
 > [!check]- Answer
+> ```text
+> `:focus`! 
+> `input:focus { background-color: lightyellow; }`
+> When they click away (losing focus), it will revert to white.
+> ```
 > - Is the user just moving their mouse over it, or are they actively interacting with it?
 
 ---
@@ -143,11 +142,10 @@ When they click away (losing focus), it will revert to white.
 **Problem:** Write CSS applying custom 3px solid blue focus ring with 2px offset ONLY when focused via keyboard (`:focus-visible`).
 
 **Expected output:**
-```text
-button:focus-visible { outline: 3px solid blue; outline-offset: 2px; }
-```
-
 > [!check]- Answer
+> ```text
+> button:focus-visible { outline: 3px solid blue; outline-offset: 2px; }
+> ```
 > ```css
 > button:focus-visible {
 >   outline: 3px solid blue;
@@ -157,16 +155,17 @@ button:focus-visible { outline: 3px solid blue; outline-offset: 2px; }
 >
 > **Explanation:** `:focus-visible` triggers focus outlines for keyboard navigation while suppressing them on mouse clicks.
 
+---
+
 ### Exercise 3: Hover Touch Screen Caveat
 
 **Problem:** Why can `:hover` styles cause sticky hover bugs on mobile touchscreen devices?
 
 **Expected output:**
-```text
-Mobile touchscreens tap triggers hover state and retains it until user taps another element.
-```
-
 > [!check]- Answer
+> ```text
+> Mobile touchscreens tap triggers hover state and retains it until user taps another element.
+> ```
 > ```css
 > @media (hover: hover) {
 >   button:hover { background: blue; } /* Applies hover only on devices supporting true mouse hover */

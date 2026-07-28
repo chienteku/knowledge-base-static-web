@@ -159,14 +159,13 @@ Predict the exact JSON output returned by this query:
 `SELECT VALUE tags FROM members;`
 
 **Expected output:**
-```json
-[
-  ["active", "vip"],
-  ["new"]
-]
-```
-
 > [!check]- Answer
+> ```json
+> [
+>   ["active", "vip"],
+>   ["new"]
+> ]
+> ```
 > - Check if `SELECT VALUE` flattens inner array elements, or only removes the outer JSON keys.
 > - The return shape will be an array containing the direct values of the `tags` field.
 
@@ -179,27 +178,27 @@ Predict the exact JSON output returned by this query:
 **Problem:** Extract flat array of all user email strings from `user` table using `SELECT VALUE`.
 
 **Expected output:**
-```text
-SELECT VALUE email FROM user;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT VALUE email FROM user;
+> ```
 > ```surrealql
 > SELECT VALUE email FROM user;
 > ```
 >
 > **Explanation:** `SELECT VALUE field` unwraps field values into a flat primitive array.
 
+---
+
 ### Exercise 3: Combining `ONLY` and `VALUE` for Single Scalar Returns
 
 **Problem:** Extract a single scalar email string from `user:alice` using `SELECT ONLY VALUE email FROM user:alice`.
 
 **Expected output:**
-```text
-SELECT ONLY VALUE email FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ONLY VALUE email FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ONLY VALUE email FROM user:alice;
 > ```

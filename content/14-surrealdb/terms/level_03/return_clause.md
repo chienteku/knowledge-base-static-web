@@ -145,14 +145,13 @@ DELETE user WHERE active = false RETURN BEFORE; // Returns array of deleted reco
 4.  A profile edit form that needs to display the updated profile data on screen immediately.
 
 **Expected output:**
-```text
-1. RETURN DIFF (returns the exact changes in JSON Patch format)
-2. RETURN BEFORE (returns the old state, ensuring the new password is not exposed in the result)
-3. RETURN NONE (prevents network payload bloat)
-4. RETURN AFTER (returns the updated document state to display on the UI)
-```
-
 > [!check]- Answer
+> ```text
+> 1. RETURN DIFF (returns the exact changes in JSON Patch format)
+> 2. RETURN BEFORE (returns the old state, ensuring the new password is not exposed in the result)
+> 3. RETURN NONE (prevents network payload bloat)
+> 4. RETURN AFTER (returns the updated document state to display on the UI)
+> ```
 > - Determine if the application needs the old state, the new state, or just the list of changes.
 > - Consider which option minimizes network overhead.
 
@@ -165,27 +164,27 @@ DELETE user WHERE active = false RETURN BEFORE; // Returns array of deleted reco
 **Problem:** Update `user:alice` setting `status = "active"` returning JSON Patch differences using `RETURN DIFF`.
 
 **Expected output:**
-```text
-UPDATE user:alice SET status = "active" RETURN DIFF;
-```
-
 > [!check]- Answer
+> ```text
+> UPDATE user:alice SET status = "active" RETURN DIFF;
+> ```
 > ```surrealql
 > UPDATE user:alice SET status = "active" RETURN DIFF;
 > ```
 >
 > **Explanation:** `RETURN DIFF` returns JSON Patch operations detailing changes made during updates.
 
+---
+
 ### Exercise 3: Returning Specific Field Projection
 
 **Problem:** Create user returning ONLY the generated `id` field using `RETURN id`.
 
 **Expected output:**
-```text
-CREATE user SET name = "Alice" RETURN id;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE user SET name = "Alice" RETURN id;
+> ```
 > ```surrealql
 > CREATE user SET name = "Alice" RETURN id;
 > ```

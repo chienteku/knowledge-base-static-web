@@ -188,12 +188,11 @@ In modern web development, we write the CSS for Mobile Phones *first* (the defau
 A user views the site on an iPad that is `800px` wide. What size is the button text?
 
 **Expected output:**
-```text
-`1rem`. 
-The iPad is 800px wide, which is NOT "at least 1024px wide". Therefore, the media query is completely ignored, and the default Mobile CSS is used.
-```
-
 > [!check]- Answer
+> ```text
+> `1rem`. 
+> The iPad is 800px wide, which is NOT "at least 1024px wide". Therefore, the media query is completely ignored, and the default Mobile CSS is used.
+> ```
 > - Is 800 greater than or equal to 1024?
 
 ---
@@ -205,11 +204,10 @@ The iPad is 800px wide, which is NOT "at least 1024px wide". Therefore, the medi
 **Problem:** Write modern CSS range media query triggering between 600px and 1024px viewport width.
 
 **Expected output:**
-```text
-@media (600px <= width <= 1024px) { ... }
-```
-
 > [!check]- Answer
+> ```text
+> @media (600px <= width <= 1024px) { ... }
+> ```
 > ```css
 > @media (600px <= width <= 1024px) {
 >   .sidebar { display: block; }
@@ -218,16 +216,17 @@ The iPad is 800px wide, which is NOT "at least 1024px wide". Therefore, the medi
 >
 > **Explanation:** Modern CSS Media Queries Level 4 syntax simplifies range queries.
 
+---
+
 ### Exercise 3: Dark Mode Media Query
 
 **Problem:** Write media query detecting system dark mode preference (`prefers-color-scheme`).
 
 **Expected output:**
-```text
-@media (prefers-color-scheme: dark) { body { background: #121212; color: #fff; } }
-```
-
 > [!check]- Answer
+> ```text
+> @media (prefers-color-scheme: dark) { body { background: #121212; color: #fff; } }
+> ```
 > ```css
 > @media (prefers-color-scheme: dark) {
 >   body {

@@ -107,12 +107,11 @@ Instead of asking the server for new HTML pages, the server just sends one empty
 **Problem:** You open the Chrome DevTools Network tab and load a Vue SPA. You right-click the very first request (`index.html`) and click "View Response". What do you see?
 
 **Expected output:**
-```text
-You see a nearly empty HTML document with a `<div id="app"></div>` and a `<script>` tag. 
-You will NOT see any of your actual content (no headings, no paragraphs, no buttons) because that content hasn't been rendered by the Javascript yet!
-```
-
 > [!check]- Answer
+> ```text
+> You see a nearly empty HTML document with a `<div id="app"></div>` and a `<script>` tag. 
+> You will NOT see any of your actual content (no headings, no paragraphs, no buttons) because that content hasn't been rendered by the Javascript yet!
+> ```
 > - Think about what the server actually sends in a CSR architecture.
 
 ---
@@ -123,14 +122,13 @@ You will NOT see any of your actual content (no headings, no paragraphs, no butt
 `Execute JS Bundle`, `Download JS Bundle`, `Fetch API Data & Render DOM`, `Download Empty HTML Shell`
 
 **Expected output:**
-```text
-1. Download Empty HTML Shell
-2. Download JS Bundle
-3. Execute JS Bundle
-4. Fetch API Data & Render DOM
-```
-
 > [!check]- Answer
+> ```text
+> 1. Download Empty HTML Shell
+> 2. Download JS Bundle
+> 3. Execute JS Bundle
+> 4. Fetch API Data & Render DOM
+> ```
 > - CSR page loading relies on client-side JS bundle execution.
 > 
 > ```text
@@ -147,11 +145,10 @@ You will NOT see any of your actual content (no headings, no paragraphs, no butt
 **Problem:** State 1 major advantage of CSR over SSR.
 
 **Expected output:**
-```text
-Lower server hosting infrastructure cost (CSR static assets can be served cheaply via CDN without Node.js server overhead).
-```
-
 > [!check]- Answer
+> ```text
+> Lower server hosting infrastructure cost (CSR static assets can be served cheaply via CDN without Node.js server overhead).
+> ```
 > - CSR apps can be deployed directly to static CDN storage (S3, Cloudflare Pages).
 > 
 > ```text

@@ -143,12 +143,11 @@ SELECT 'CREATE DATABASE app' WHERE NOT EXISTS (SELECT FROM pg_database WHERE dat
 **Problem:** You are writing an automated testing script. Before running tests, the script must ensure a clean database named `test_db` is created. If `test_db` already exists from a previous failed run, it should be wiped first. Write the sequence of SQL commands to achieve this.
 
 **Expected output:**
-```sql
-DROP DATABASE IF EXISTS test_db;
-CREATE DATABASE test_db;
-```
-
 > [!check]- Answer
+> ```sql
+> DROP DATABASE IF EXISTS test_db;
+> CREATE DATABASE test_db;
+> ```
 > - Use the `IF EXISTS` clause to prevent the script from crashing if it is the first time running.
 > - Execute the create command after the drop command.
 
@@ -161,27 +160,27 @@ CREATE DATABASE test_db;
 **Problem:** Check if database `analytics` exists in `pg_database` catalog table.
 
 **Expected output:**
-```text
-SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = 'analytics');
-```
-
 > [!check]- Answer
+> ```text
+> SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = 'analytics');
+> ```
 > ```sql
 > SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = 'analytics');
 > ```
 >
 > **Explanation:** Querying `pg_database` system catalog verifies database existence safely.
 
+---
+
 ### Exercise 3: Dropping Database Forcefully
 
 **Problem:** Drop database `temp_db` with `WITH (FORCE)` in PostgreSQL 13+ to terminate active connections.
 
 **Expected output:**
-```text
-DROP DATABASE IF EXISTS temp_db WITH (FORCE);
-```
-
 > [!check]- Answer
+> ```text
+> DROP DATABASE IF EXISTS temp_db WITH (FORCE);
+> ```
 > ```sql
 > DROP DATABASE IF EXISTS temp_db WITH (FORCE);
 > ```

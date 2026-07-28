@@ -187,13 +187,12 @@ export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for ent
 **Problem:** A user is navigating around your app. They see stale data on a page because of the Client Router Cache. They press `Cmd+R` (hard refresh the browser window). What happens to the Router Cache?
 
 **Expected output:**
-```text
-It is completely wiped!
-The Router Cache only exists in the browser's JavaScript memory. A hard refresh resets the memory state, forcing the browser to request fresh HTML and RSC Payloads from the server.
-(However, if the server's Data Cache is still holding stale data, the user will still see stale data!).
-```
-
 > [!check]- Answer
+> ```text
+> It is completely wiped!
+> The Router Cache only exists in the browser's JavaScript memory. A hard refresh resets the memory state, forcing the browser to request fresh HTML and RSC Payloads from the server.
+> (However, if the server's Data Cache is still holding stale data, the user will still see stale data!).
+> ```
 > - Think about what happens to React state when you refresh a page.
 
 ---
@@ -207,14 +206,13 @@ The Router Cache only exists in the browser's JavaScript memory. A hard refresh 
 4. Router Cache
 
 **Expected output:**
-```text
-1. Server (Single request scope)
-2. Server (Persistent across requests)
-3. Server (HTML & RSC payload)
-4. Client (Browser memory)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Server (Single request scope)
+> 2. Server (Persistent across requests)
+> 3. Server (HTML & RSC payload)
+> 4. Client (Browser memory)
+> ```
 > - Request Memoization -> Server (Single request)
 > - Data Cache -> Server (Persistent data store)
 > - Full Route Cache -> Server (HTML & RSC payload)
@@ -231,11 +229,10 @@ The Router Cache only exists in the browser's JavaScript memory. A hard refresh 
 **Problem:** Which `next.config.js` property configures client Router Cache stale times in Next.js 14.2+?
 
 **Expected output:**
-```text
-experimental.staleTimes (e.g. staleTimes: { dynamic: 30, static: 180 })
-```
-
 > [!check]- Answer
+> ```text
+> experimental.staleTimes (e.g. staleTimes: { dynamic: 30, static: 180 })
+> ```
 > - `experimental.staleTimes` configures client Router Cache durations.
 > 
 > ```javascript

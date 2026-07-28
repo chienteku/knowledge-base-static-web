@@ -194,18 +194,17 @@ Basic selector templates:
 **Problem:** Write the HTML markup for a checkbox checklist asking the user to "Agree to the Privacy Policy" (value: "privacy_ok") and "Agree to the Cookie Policy" (value: "cookies_ok"). Ensure the entire label text is clickable for both.
 
 **Expected output:**
-```html
-<p>
-  <input type="checkbox" id="privacy" name="agree_privacy" value="privacy_ok">
-  <label for="privacy">Agree to the Privacy Policy</label>
-</p>
-<p>
-  <input type="checkbox" id="cookies" name="agree_cookies" value="cookies_ok">
-  <label for="cookies">Agree to the Cookie Policy</label>
-</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p>
+>   <input type="checkbox" id="privacy" name="agree_privacy" value="privacy_ok">
+>   <label for="privacy">Agree to the Privacy Policy</label>
+> </p>
+> <p>
+>   <input type="checkbox" id="cookies" name="agree_cookies" value="cookies_ok">
+>   <label for="cookies">Agree to the Cookie Policy</label>
+> </p>
+> ```
 > - Create two separate checkbox `<input>` elements.
 > - Assign unique `id` values and connect them to `<label>` tags.
 
@@ -218,11 +217,10 @@ Basic selector templates:
 **Problem:** Create radio button group for selecting plan (`'free'`, `'pro'`) with `'free'` checked by default.
 
 **Expected output:**
-```text
-<label><input type="radio" name="plan" value="free" checked> Free</label><label><input type="radio" name="plan" value="pro"> Pro</label>
-```
-
 > [!check]- Answer
+> ```text
+> <label><input type="radio" name="plan" value="free" checked> Free</label><label><input type="radio" name="plan" value="pro"> Pro</label>
+> ```
 > ```html
 > <label>
 >   <input type="radio" name="plan" value="free" checked> Free
@@ -234,16 +232,17 @@ Basic selector templates:
 >
 > **Explanation:** Shared `name="plan"` creates a radio group; `checked` sets default selection.
 
+---
+
 ### Exercise 3: Checkbox Checked State In JavaScript
 
 **Problem:** Which JavaScript property reads the boolean selection status of a checkbox element (`input.value` or `input.checked`)?
 
 **Expected output:**
-```text
-input.checked (returns boolean true/false).
-```
-
 > [!check]- Answer
+> ```text
+> input.checked (returns boolean true/false).
+> ```
 > ```javascript
 > const isAgree = checkboxElement.checked; // boolean true/false
 > ```

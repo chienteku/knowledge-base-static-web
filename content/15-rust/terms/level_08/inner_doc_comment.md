@@ -184,11 +184,10 @@ pub struct DatabaseConnection {
 **Problem:** Use `//!` at the top of a file to document module purpose.
 
 **Expected output:**
-```
-Module documented via //!
-```
-
 > [!check]- Answer
+> ```
+> Module documented via //!
+> ```
 > ```rust
 > //! Math utility module.
 > fn main() {
@@ -198,16 +197,17 @@ Module documented via //!
 >
 > **Explanation:** `//!` inner doc comments document enclosing file modules.
 
+---
+
 ### Exercise 3: Inner Doc Comments inside Crate Root
 
 **Problem:** Document `src/lib.rs` root using `//!`.
 
 **Expected output:**
-```
-Crate root docs verified
-```
-
 > [!check]- Answer
+> ```
+> Crate root docs verified
+> ```
 > fn main() {
 >     println!("Crate root docs verified");
 > }

@@ -161,18 +161,17 @@ WHERE avg_price > 100.00;
 Rewrite this query using a clean `WITH` CTE block named `product_averages`.
 
 **Expected output:**
-```sql
-WITH product_averages AS (
-  SELECT product_id, AVG(unit_price) AS avg_price
-  FROM order_items
-  GROUP BY product_id
-)
-SELECT product_id, avg_price
-FROM product_averages
-WHERE avg_price > 100.00;
-```
-
 > [!check]- Answer
+> ```sql
+> WITH product_averages AS (
+>   SELECT product_id, AVG(unit_price) AS avg_price
+>   FROM order_items
+>   GROUP BY product_id
+> )
+> SELECT product_id, avg_price
+> FROM product_averages
+> WHERE avg_price > 100.00;
+> ```
 > - Start the script with the `WITH` keyword followed by the CTE name `product_averages`.
 > - Write the inner aggregation query inside the parentheses.
 
@@ -185,11 +184,10 @@ WHERE avg_price > 100.00;
 **Problem:** Write CTE `regional_sales` summarizing total sales per region, then main query selecting regions with `total > 10000`.
 
 **Expected output:**
-```text
-WITH regional_sales AS (SELECT region, SUM(amount) AS total FROM sales GROUP BY region) SELECT * FROM regional_sales WHERE total > 10000;
-```
-
 > [!check]- Answer
+> ```text
+> WITH regional_sales AS (SELECT region, SUM(amount) AS total FROM sales GROUP BY region) SELECT * FROM regional_sales WHERE total > 10000;
+> ```
 > ```sql
 > WITH regional_sales AS (
 >   SELECT region, SUM(amount) AS total
@@ -201,16 +199,17 @@ WITH regional_sales AS (SELECT region, SUM(amount) AS total FROM sales GROUP BY 
 >
 > **Explanation:** Common Table Expressions (CTEs) modularize complex SQL query pipelines.
 
+---
+
 ### Exercise 3: Data-Modifying CTE with RETURNING
 
 **Problem:** Move deleted inactive users into `archived_users` in a single query using data-modifying CTE.
 
 **Expected output:**
-```text
-WITH deleted AS (DELETE FROM users WHERE active IS FALSE RETURNING *) INSERT INTO archived_users SELECT * FROM deleted;
-```
-
 > [!check]- Answer
+> ```text
+> WITH deleted AS (DELETE FROM users WHERE active IS FALSE RETURNING *) INSERT INTO archived_users SELECT * FROM deleted;
+> ```
 > ```sql
 > WITH deleted AS (
 >   DELETE FROM users WHERE active IS FALSE RETURNING *

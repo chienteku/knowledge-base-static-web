@@ -159,13 +159,12 @@ function focusInput() {
 ```
 
 **Expected output:**
-```typescript
-function focusInput() {
-  inputRef.current!.focus();
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> function focusInput() {
+>   inputRef.current!.focus();
+> }
+> ```
 > - In frameworks, refs are initialised as `null` but are guaranteed to be populated once mounting occurs.
 > - Append the non-null assertion operator `!` to the `current` property before accessing `.focus()`.
 
@@ -178,11 +177,10 @@ function focusInput() {
 **Problem:** Replace `document.getElementById("app")!` with an explicit guard and error throw.
 
 **Expected output:**
-```text
-Element safely asserted with explicit runtime exception
-```
-
 > [!check]- Answer
+> ```text
+> Element safely asserted with explicit runtime exception
+> ```
 > ```typescript
 > const el = document.getElementById("app");
 > if (!el) throw new Error("Missing #app element");
@@ -191,16 +189,17 @@ Element safely asserted with explicit runtime exception
 >
 > **Explanation:** Explicit runtime checks catch missing values with informative error messages.
 
+---
+
 ### Exercise 3: Definite Assignment Assertions in Classes
 
 **Problem:** Use `!` in class field `name!: string` to declare definite initialization by framework.
 
 **Expected output:**
-```text
-Definite assignment assertion applied
-```
-
 > [!check]- Answer
+> ```text
+> Definite assignment assertion applied
+> ```
 > ```typescript
 > class Component {
 >   name!: string;

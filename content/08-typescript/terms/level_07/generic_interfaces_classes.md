@@ -123,15 +123,14 @@ class UserRepo implements Repository<string> { find() { return "user"; } }
 **Problem:** How would you write a Generic Interface for a Redux/Vuex application state wrapper that tracks `loading` (boolean), `error` (string | null), and `data` (which is the Generic part)?
 
 **Expected output:**
-```typescript
-interface StateWrapper<T> {
-  isLoading: boolean;
-  error: string | null;
-  data: T | null; // Nullable because it might not be loaded yet!
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> interface StateWrapper<T> {
+>   isLoading: boolean;
+>   error: string | null;
+>   data: T | null; // Nullable because it might not be loaded yet!
+> }
+> ```
 > - Just structure it exactly like the API response example.
 
 ---
@@ -143,11 +142,10 @@ interface StateWrapper<T> {
 **Problem:** Create `class Stack<T>` with methods `push(item: T)` and `pop(): T | undefined`.
 
 **Expected output:**
-```text
-Stack class created
-```
-
 > [!check]- Answer
+> ```text
+> Stack class created
+> ```
 > ```typescript
 > class Stack<T> {
 >   private items: T[] = [];
@@ -161,16 +159,17 @@ Stack class created
 >
 > **Explanation:** Generic classes store and manipulate type-safe internal collections.
 
+---
+
 ### Exercise 3: Generic Data Key-Value Pair Interface
 
 **Problem:** Define `interface KeyValuePair<K, V> { key: K; value: V }`.
 
 **Expected output:**
-```text
-KeyValuePair interface created
-```
-
 > [!check]- Answer
+> ```text
+> KeyValuePair interface created
+> ```
 > ```typescript
 > interface KeyValuePair<K, V> {
 >   key: K;

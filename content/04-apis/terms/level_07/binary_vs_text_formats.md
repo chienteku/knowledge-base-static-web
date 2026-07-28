@@ -171,14 +171,13 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 4. MessagePack
 
 **Expected output:**
-```text
-1. Text
-2. Binary
-3. Text
-4. Binary
-```
-
 > [!check]- Answer
+> ```text
+> 1. Text
+> 2. Binary
+> 3. Text
+> 4. Binary
+> ```
 > ```text
 > 1. JSON -> Text-based
 > 2. Protobuf -> Binary-based
@@ -193,11 +192,10 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 **Problem:** Why do binary formats consume significantly less network bandwidth than JSON for numeric data?
 
 **Expected output:**
-```text
-Binary formats store numbers in fixed bit representations (e.g. 4 bytes for 32-bit int), whereas JSON serializes numbers into ASCII character strings (e.g. "123456789" consumes 9 bytes).
-```
-
 > [!check]- Answer
+> ```text
+> Binary formats store numbers in fixed bit representations (e.g. 4 bytes for 32-bit int), whereas JSON serializes numbers into ASCII character strings (e.g. "123456789" consumes 9 bytes).
+> ```
 > ```text
 > Binary formats store numbers in fixed bit representations (e.g. 4 bytes for 32-bit int), whereas JSON serializes numbers into ASCII character strings (e.g. "123456789" consumes 9 bytes).
 > ```

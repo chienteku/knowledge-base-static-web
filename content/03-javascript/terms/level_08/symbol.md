@@ -183,12 +183,11 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 **Problem:** Create two symbols `const s1 = Symbol("id"); const s2 = Symbol("id");`. Compare `s1 === s2` and use `s1` as an object key.
 
 **Expected output:**
-```text
-false
-123
-```
-
 > [!check]- Answer
+> ```text
+> false
+> 123
+> ```
 > ```javascript
 > const s1 = Symbol("id");
 > const s2 = Symbol("id");
@@ -199,16 +198,17 @@ false
 >
 > **Explanation:** Every `Symbol()` call creates a unique, guaranteed non-colliding primitive value.
 
+---
+
 ### Exercise 3: Global Symbol Registry with `Symbol.for()`
 
 **Problem:** Demonstrate that `Symbol.for("key") === Symbol.for("key")` returns `true` using the global registry.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const sym1 = Symbol.for("app.id");
 > const sym2 = Symbol.for("app.id");
@@ -224,11 +224,10 @@ true
 **Problem:** Customize object string conversion using `[Symbol.toPrimitive](hint)`.
 
 **Expected output:**
-```text
-42
-```
-
 > [!check]- Answer
+> ```text
+> 42
+> ```
 > ```javascript
 > const obj = {
 >   [Symbol.toPrimitive](hint) { return 42; }
@@ -238,16 +237,17 @@ true
 >
 > **Explanation:** Well-known Symbols like `Symbol.toPrimitive` hook into core JavaScript engine conversion routines.
 
+---
+
 ### Exercise 5: Global Symbol Registry Lookup
 
 **Problem:** Retrieve symbol key string from registry using `Symbol.keyFor(Symbol.for("app.id"))`.
 
 **Expected output:**
-```text
-app.id
-```
-
 > [!check]- Answer
+> ```text
+> app.id
+> ```
 > ```javascript
 > const sym = Symbol.for("app.id");
 > console.log(Symbol.keyFor(sym));

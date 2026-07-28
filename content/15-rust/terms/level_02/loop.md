@@ -175,11 +175,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Sensor warmed up to: 100 degrees
-```
-
 > [!check]- Answer
+> ```text
+> Sensor warmed up to: 100 degrees
+> ```
 > - Change `break;` to `break current_temp;`.
 > - Now, when the loop breaks, it hands `100` back to be stored in `final_temp`.
 
@@ -190,11 +189,10 @@ Sensor warmed up to: 100 degrees
 **Problem:** Use a `loop` with `counter += 1` that returns `counter * 2` using `break counter * 2;` when `counter == 10`.
 
 **Expected output:**
-```
-Result: 20
-```
-
 > [!check]- Answer
+> ```
+> Result: 20
+> ```
 > ```rust
 > fn main() {
 >     let mut counter = 0;
@@ -210,16 +208,17 @@ Result: 20
 >
 > **Explanation:** `break expression;` inside `loop` returns values directly to variable bindings.
 
+---
+
 ### Exercise 3: Loop Labels for Nested Loops
 
 **Problem:** Use a labelled loop `'outer: loop` to break out of nested loops directly when inner condition `x * y == 6` is met.
 
 **Expected output:**
-```
-Broken out at x=2, y=3
-```
-
 > [!check]- Answer
+> ```
+> Broken out at x=2, y=3
+> ```
 > ```rust
 > fn main() {
 >     'outer: for x in 1..=5 {

@@ -255,16 +255,17 @@ const postSchema = z.object({
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Validating Input with Zod
 
 **Problem:** Define Zod schema for `loginSchema` requiring valid `email` string and `password` string of min length 8.
 
 **Expected output:**
-```text
-const loginSchema = z.object({ email: z.string().email(), password: z.string().min(8) });
-```
-
 > [!check]- Answer
+> ```text
+> const loginSchema = z.object({ email: z.string().email(), password: z.string().min(8) });
+> ```
 > ```javascript
 > const { z } = require('zod');
 > const loginSchema = z.object({
@@ -275,16 +276,17 @@ const loginSchema = z.object({ email: z.string().email(), password: z.string().m
 >
 > **Explanation:** Zod schemas validate input types and constraints at runtime.
 
+---
+
 ### Exercise 3: Sanitizing HTML Input
 
 **Problem:** Which attack type is prevented by sanitizing user input against embedded `<script>` tags? (Cross-Site Scripting / XSS).
 
 **Expected output:**
-```text
-Cross-Site Scripting (XSS)
-```
-
 > [!check]- Answer
+> ```text
+> Cross-Site Scripting (XSS)
+> ```
 > ```text
 > Cross-Site Scripting (XSS)
 > ```

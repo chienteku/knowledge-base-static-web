@@ -128,12 +128,11 @@ app.get('/healthz', (req, res) => res.status(200).send('OK'));
 **Problem:** Distinguish Layer 4 (Transport) vs Layer 7 (Application) Load Balancing.
 
 **Expected output:**
-```text
-Layer 4: Balances traffic at IP/TCP level without inspecting packet payload content (faster, high throughput).
-Layer 7: Balances traffic inspecting HTTP headers, URIs, and cookies (content-aware routing).
-```
-
 > [!check]- Answer
+> ```text
+> Layer 4: Balances traffic at IP/TCP level without inspecting packet payload content (faster, high throughput).
+> Layer 7: Balances traffic inspecting HTTP headers, URIs, and cookies (content-aware routing).
+> ```
 > ```text
 > Layer 4 (Network/TCP) -> IP & Port routing (Fast, high throughput, payload agnostic).
 > Layer 7 (Application) -> HTTP header, URL path, and cookie routing (Content aware).
@@ -149,11 +148,10 @@ Layer 7: Balances traffic inspecting HTTP headers, URIs, and cookies (content-aw
 3. IP Hash
 
 **Expected output:**
-```text
-Least Connections (routes new connections to the server currently handling the fewest active sockets).
-```
-
 > [!check]- Answer
+> ```text
+> Least Connections (routes new connections to the server currently handling the fewest active sockets).
+> ```
 > ```text
 > Least Connections (routes new connections to the server currently handling the fewest active sockets).
 > ```

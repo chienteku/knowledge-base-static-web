@@ -160,14 +160,13 @@ Nesting alternative sources inside a video container:
 **Problem:** Write the HTML markup for an audio player that supports two formats: `music.ogg` (type: `audio/ogg`) and `music.mp3` (type: `audio/mpeg`). Ensure controls are displayed.
 
 **Expected output:**
-```html
-<audio controls>
-  <source src="music.ogg" type="audio/ogg">
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-```
-
 > [!check]- Answer
+> ```html
+> <audio controls>
+>   <source src="music.ogg" type="audio/ogg">
+>   <source src="music.mp3" type="audio/mpeg">
+> </audio>
+> ```
 > - The outer container must be `<audio>` with the `controls` attribute.
 > - Nest two `<source>` tags inside the container.
 
@@ -180,11 +179,10 @@ Nesting alternative sources inside a video container:
 **Problem:** Write `<video>` with 2 `<source>` elements for MP4 (`video/mp4`) and WebM (`video/webm`).
 
 **Expected output:**
-```text
-<video controls><source src="clip.webm" type="video/webm"><source src="clip.mp4" type="video/mp4"></video>
-```
-
 > [!check]- Answer
+> ```text
+> <video controls><source src="clip.webm" type="video/webm"><source src="clip.mp4" type="video/mp4"></video>
+> ```
 > ```html
 > <video controls>
 >   <source src="clip.webm" type="video/webm">
@@ -194,16 +192,17 @@ Nesting alternative sources inside a video container:
 >
 > **Explanation:** Browsers evaluate `<source>` choices sequentially and play the first supported format.
 
+---
+
 ### Exercise 3: srcset Descriptor Types
 
 **Problem:** What 2 width/density descriptor units can be used in `srcset` (e.g. `2x`, `800w`)?
 
 **Expected output:**
-```text
-x (pixel density descriptor e.g. 2x) and w (width descriptor e.g. 800w).
-```
-
 > [!check]- Answer
+> ```text
+> x (pixel density descriptor e.g. 2x) and w (width descriptor e.g. 800w).
+> ```
 > ```text
 > x (pixel density descriptor e.g. 2x) and w (width descriptor e.g. 800w).
 > ```

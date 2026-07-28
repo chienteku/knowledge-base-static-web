@@ -211,12 +211,11 @@ ws.onopen = () => {
 **Problem:** Why did we have to run `JSON.stringify()` on `myMessage` before passing it into `socket.send()`?
 
 **Expected output:**
-```text
-Because WebSockets only transmit raw Text strings or raw Binary blobs! 
-A WebSocket has no concept of a "JavaScript Object." If you try to run `socket.send({ text: "Hi" })`, the browser will forcefully convert it to `"[object Object]"` and the server won't be able to read it.
-```
-
 > [!check]- Answer
+> ```text
+> Because WebSockets only transmit raw Text strings or raw Binary blobs! 
+> A WebSocket has no concept of a "JavaScript Object." If you try to run `socket.send({ text: "Hi" })`, the browser will forcefully convert it to `"[object Object]"` and the server won't be able to read it.
+> ```
 > - Think back to the rules of Serialization.
 
 ---
@@ -230,14 +229,13 @@ A WebSocket has no concept of a "JavaScript Object." If you try to run `socket.s
 4. CLOSED
 
 **Expected output:**
-```text
-0: CONNECTING
-1: OPEN
-2: CLOSING
-3: CLOSED
-```
-
 > [!check]- Answer
+> ```text
+> 0: CONNECTING
+> 1: OPEN
+> 2: CLOSING
+> 3: CLOSED
+> ```
 > ```text
 > 0 -> CONNECTING
 > 1 -> OPEN
@@ -252,11 +250,10 @@ A WebSocket has no concept of a "JavaScript Object." If you try to run `socket.s
 **Problem:** Which property on a browser `WebSocket` instance specifies whether binary messages are received as `Blob` or `ArrayBuffer`?
 
 **Expected output:**
-```text
-ws.binaryType = 'arraybuffer'; (or 'blob')
-```
-
 > [!check]- Answer
+> ```text
+> ws.binaryType = 'arraybuffer'; (or 'blob')
+> ```
 > ```javascript
 > ws.binaryType = 'arraybuffer';
 > ```
@@ -272,14 +269,13 @@ ws.binaryType = 'arraybuffer'; (or 'blob')
 4. CLOSED
 
 **Expected output:**
-```text
-0: CONNECTING
-1: OPEN
-2: CLOSING
-3: CLOSED
-```
-
 > [!check]- Answer
+> ```text
+> 0: CONNECTING
+> 1: OPEN
+> 2: CLOSING
+> 3: CLOSED
+> ```
 > ```text
 > 0 -> CONNECTING
 > 1 -> OPEN
@@ -294,11 +290,10 @@ ws.binaryType = 'arraybuffer'; (or 'blob')
 **Problem:** Which property on a browser `WebSocket` instance specifies whether binary messages are received as `Blob` or `ArrayBuffer`?
 
 **Expected output:**
-```text
-ws.binaryType = 'arraybuffer'; (or 'blob')
-```
-
 > [!check]- Answer
+> ```text
+> ws.binaryType = 'arraybuffer'; (or 'blob')
+> ```
 > ```javascript
 > ws.binaryType = 'arraybuffer';
 > ```
@@ -314,14 +309,13 @@ ws.binaryType = 'arraybuffer'; (or 'blob')
 4. CLOSED
 
 **Expected output:**
-```text
-0: CONNECTING
-1: OPEN
-2: CLOSING
-3: CLOSED
-```
-
 > [!check]- Answer
+> ```text
+> 0: CONNECTING
+> 1: OPEN
+> 2: CLOSING
+> 3: CLOSED
+> ```
 > ```text
 > 0 -> CONNECTING
 > 1 -> OPEN
@@ -336,11 +330,10 @@ ws.binaryType = 'arraybuffer'; (or 'blob')
 **Problem:** Which property on a browser `WebSocket` instance specifies whether binary messages are received as `Blob` or `ArrayBuffer`?
 
 **Expected output:**
-```text
-ws.binaryType = 'arraybuffer'; (or 'blob')
-```
-
 > [!check]- Answer
+> ```text
+> ws.binaryType = 'arraybuffer'; (or 'blob')
+> ```
 > ```javascript
 > ws.binaryType = 'arraybuffer';
 > ```

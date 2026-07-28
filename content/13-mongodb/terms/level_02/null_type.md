@@ -141,11 +141,10 @@ db.users.find({ middleName: { $type: "null" } }); // Matches ONLY explicit BSON 
 **Problem:** You have a `products` collection. Write the query to select all products that are missing the `discount_rate` field entirely (meaning the field does not exist).
 
 **Expected output:**
-```javascript
-db.products.find({ discount_rate: { $exists: false } });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find({ discount_rate: { $exists: false } });
+> ```
 > - Use the query operator `$exists`.
 > - Pass the boolean value `false` to the operator to select non-existent keys.
 
@@ -158,27 +157,27 @@ db.products.find({ discount_rate: { $exists: false } });
 **Problem:** Query documents where `bio` is explicitly assigned BSON `null` using `{ $type: "null" }`.
 
 **Expected output:**
-```text
-db.users.find({ bio: { $type: "null" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ bio: { $type: "null" } });
+> ```
 > ```javascript
 > db.users.find({ bio: { $type: "null" } });
 > ```
 >
 > **Explanation:** `{ $type: "null" }` matches explicit BSON null values while ignoring missing fields.
 
+---
+
 ### Exercise 3: Finding Missing Fields with `$exists`
 
 **Problem:** Query documents where `deletedAt` field is absent (`$exists: false`).
 
 **Expected output:**
-```text
-db.users.find({ deletedAt: { $exists: false } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ deletedAt: { $exists: false } });
+> ```
 > ```javascript
 > db.users.find({ deletedAt: { $exists: false } });
 > ```

@@ -168,24 +168,10 @@ The primary key is `id`.
 2.  Write the SQL queries to normalize this schema into 3NF.
 
 **Expected output:**
-```text
-1. Transitive Dependency: `id -> manufacturer_name -> manufacturer_country` (The product ID determines the manufacturer, which then determines the manufacturer's country).
-```
-```sql
-CREATE TABLE manufacturers (
-  id INT PRIMARY KEY,
-  name VARCHAR(100) UNIQUE NOT NULL,
-  country VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE products (
-  id INT PRIMARY KEY,
-  title VARCHAR(100) NOT NULL,
-  manufacturer_id INT REFERENCES manufacturers(id)
-);
-```
-
 > [!check]- Answer
+> ```text
+> 1. Transitive Dependency: `id -> manufacturer_name -> manufacturer_country` (The product ID determines the manufacturer, which then determines the manufacturer's country).
+> ```
 > - Remove `manufacturer_country` from the products table because it depends on the manufacturer name, not the product ID.
 > - Create a separate lookup table for manufacturers.
 
@@ -198,11 +184,10 @@ CREATE TABLE products (
 **Problem:** Normalize `employees (id, dept_id, dept_name)` into 3NF by creating `departments` table.
 
 **Expected output:**
-```text
-departments (dept_id PRIMARY KEY, dept_name) and employees (id PRIMARY KEY, dept_id REFERENCES departments)
-```
-
 > [!check]- Answer
+> ```text
+> departments (dept_id PRIMARY KEY, dept_name) and employees (id PRIMARY KEY, dept_id REFERENCES departments)
+> ```
 > ```sql
 > CREATE TABLE departments ( dept_id INT PRIMARY KEY, dept_name TEXT );
 > CREATE TABLE employees (
@@ -213,16 +198,17 @@ departments (dept_id PRIMARY KEY, dept_name) and employees (id PRIMARY KEY, dept
 >
 > **Explanation:** Removing transitive dependency `dept_name` into `departments` satisfies 3NF.
 
+---
+
 ### Exercise 3: 3NF Definition Summary
 
 **Problem:** State 3NF rule (Table must be in 2NF and contain no transitive functional dependencies).
 
 **Expected output:**
-```text
-Must be in 2NF and contain no non-key attribute dependent on another non-key attribute
-```
-
 > [!check]- Answer
+> ```text
+> Must be in 2NF and contain no non-key attribute dependent on another non-key attribute
+> ```
 > ```text
 > Must be in 2NF and contain no non-key attribute dependent on another non-key attribute
 > ```

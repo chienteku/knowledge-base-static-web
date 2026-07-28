@@ -181,11 +181,10 @@ thread::spawn(move || {
 **Problem:** Explain how `async fn fetch() -> u32` transforms into a state machine implementing `Future<Output = u32>`.
 
 **Expected output:**
-```
-State machine transformation verified
-```
-
 > [!check]- Answer
+> ```
+> State machine transformation verified
+> ```
 > ```rust
 > fn main() {
 >     println!("State machine transformation verified");
@@ -194,16 +193,17 @@ State machine transformation verified
 >
 > **Explanation:** `async fn` syntax compiles into an anonymous state machine type implementing `Future`.
 
+---
+
 ### Exercise 3: Async Function Parameters Across Yield Points
 
 **Problem:** Demonstrate holding non-`Send` data across `.await` points causing `Send` bound compile errors.
 
 **Expected output:**
-```
-Send bound check acknowledged
-```
-
 > [!check]- Answer
+> ```
+> Send bound check acknowledged
+> ```
 > fn main() {
 >     println!("Send bound check acknowledged");
 > }

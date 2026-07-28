@@ -168,21 +168,20 @@ COMMIT;
 Write the corresponding MongoDB transaction pseudocode using the `session` object variables.
 
 **Expected output:**
-```javascript
-const session = db.getMongo().startSession();
-session.startTransaction();
-try {
-  db.logs.insertOne({ msg: "Transfer Started" }, { session });
-  db.balances.updateOne({ user_id: 5 }, { $inc: { usd: -50 } }, { session });
-  session.commitTransaction();
-} catch (error) {
-  session.abortTransaction();
-} finally {
-  session.endSession();
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> const session = db.getMongo().startSession();
+> session.startTransaction();
+> try {
+>   db.logs.insertOne({ msg: "Transfer Started" }, { session });
+>   db.balances.updateOne({ user_id: 5 }, { $inc: { usd: -50 } }, { session });
+>   session.commitTransaction();
+> } catch (error) {
+>   session.abortTransaction();
+> } finally {
+>   session.endSession();
+> }
+> ```
 > - Initialize a session using `startSession()`.
 > - Pass the `{ session }` parameter object to every write query inside the try block.
 
@@ -195,11 +194,10 @@ try {
 **Problem:** Write `withTransaction()` block transferring $100 from `acc1` to `acc2` atomically.
 
 **Expected output:**
-```text
-await session.withTransaction(async () => { await accounts.updateOne({ _id: 1 }, { $inc: { balance: -100 } }, { session }); await accounts.updateOne({ _id: 2 }, { $inc: { balance: 100 } }, { session }); });
-```
-
 > [!check]- Answer
+> ```text
+> await session.withTransaction(async () => { await accounts.updateOne({ _id: 1 }, { $inc: { balance: -100 } }, { session }); await accounts.updateOne({ _id: 2 }, { $inc: { balance: 100 } }, { session }); });
+> ```
 > ```javascript
 > const session = client.startSession();
 > try {
@@ -214,16 +212,17 @@ await session.withTransaction(async () => { await accounts.updateOne({ _id: 1 },
 >
 > **Explanation:** `withTransaction()` handles automatic transaction start, commit, and retry logic.
 
+---
+
 ### Exercise 3: Transaction Execution Limit
 
 **Problem:** What is MongoDB's default maximum transaction runtime limit? (60 seconds).
 
 **Expected output:**
-```text
-60 seconds
-```
-
 > [!check]- Answer
+> ```text
+> 60 seconds
+> ```
 > ```text
 > 60 seconds
 > ```

@@ -194,11 +194,10 @@ Write the SurrealQL query to:
 3.  Filter only connections where the `closeness_score` on the `follows` edge is greater than `5`.
 
 **Expected output:**
-```sql
-SELECT ->follows->user.username FROM user:alice WHERE ->follows.closeness_score > 5;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT ->follows->user.username FROM user:alice WHERE ->follows.closeness_score > 5;
+> ```
 > - The source node is `user:alice`.
 > - Check if `closeness_score` lives on the `follows` edge or the target `user` record, and format your `WHERE` path accordingly.
 
@@ -211,27 +210,27 @@ SELECT ->follows->user.username FROM user:alice WHERE ->follows.closeness_score 
 **Problem:** Select posts liked by `user:alice` where edge property `weight >= 8` using `->like[WHERE weight >= 8]->post`.
 
 **Expected output:**
-```text
-SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
 > ```
 >
 > **Explanation:** `->edge[WHERE condition]->node` filters graph traversals by edge properties.
 
+---
+
 ### Exercise 3: Filtering Graph Traversals by Target Node Property
 
 **Problem:** Select products purchased by `user:alice` where `price > 100` using `->purchased->(product WHERE price > 100)`.
 
 **Expected output:**
-```text
-SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
 > ```

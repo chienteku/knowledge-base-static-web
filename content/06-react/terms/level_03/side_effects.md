@@ -103,12 +103,11 @@ const handleSubmit = async () => { await postFormData(); }; // Trigger in event 
 4. Subscribing to a chat room WebSocket.
 
 **Expected output:**
-```text
-2 and 4 are Side Effects. They reach outside the component (talking to the browser's storage and talking to a network server).
-1 and 3 are Pure operations. They only rely on local data and math.
-```
-
 > [!check]- Answer
+> ```text
+> 2 and 4 are Side Effects. They reach outside the component (talking to the browser's storage and talking to a network server).
+> 1 and 3 are Pure operations. They only rely on local data and math.
+> ```
 > - If it touches the network, the DOM, or the Browser APIs, it's a side effect.
 
 ---
@@ -120,27 +119,27 @@ const handleSubmit = async () => { await postFormData(); }; // Trigger in event 
 **Problem:** Categorize as Render or Side-Effect: 1. `document.title = 'New'` (Side-Effect); 2. `const double = count * 2` (Render); 3. `fetch('/api/data')` (Side-Effect).
 
 **Expected output:**
-```text
-1. Side-Effect, 2. Render, 3. Side-Effect
-```
-
 > [!check]- Answer
+> ```text
+> 1. Side-Effect, 2. Render, 3. Side-Effect
+> ```
 > ```text
 > 1. Side-Effect, 2. Render, 3. Side-Effect
 > ```
 >
 > **Explanation:** Side-effects touch systems outside React (DOM, storage, network).
 
+---
+
 ### Exercise 3: Event Handler vs Effect Placement Rule
 
 **Problem:** Should user-triggered actions (like clicking a Buy button) be handled in event handlers or `useEffect`? (Event handlers).
 
 **Expected output:**
-```text
-Event handlers
-```
-
 > [!check]- Answer
+> ```text
+> Event handlers
+> ```
 > ```text
 > Event handlers
 > ```

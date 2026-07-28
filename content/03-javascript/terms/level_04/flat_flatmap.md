@@ -178,11 +178,10 @@ console.log(usernames);
 ```
 
 **Expected output:**
-```text
-[ 'Alice', 'Bob', 'Charlie' ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 'Alice', 'Bob', 'Charlie' ]
+> ```
 > - Map each thread to its comments array, extracting the user string.
 > - Within `flatMap`, you can chain `.map(c => c.user)` on the `comments` array.
 > - e.g., `threads.flatMap(thread => thread.comments.map(c => c.user))`
@@ -194,11 +193,10 @@ console.log(usernames);
 **Problem:** Flatten a deeply nested array `[1, [2, [3, [4]]]]` using `.flat(Infinity)`.
 
 **Expected output:**
-```text
-[ 1, 2, 3, 4 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3, 4 ]
+> ```
 > ```javascript
 > const nested = [1, [2, [3, [4]]]];
 > console.log(nested.flat(Infinity));
@@ -206,16 +204,17 @@ console.log(usernames);
 >
 > **Explanation:** `flat(Infinity)` recurses through all nested array levels to produce a 1D array.
 
+---
+
 ### Exercise 3: Mapping and Flattening with `flatMap`
 
 **Problem:** Use `.flatMap(x => [x, x * 2])` on `[1, 2]`.
 
 **Expected output:**
-```text
-[ 1, 2, 2, 4 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 2, 4 ]
+> ```
 > ```javascript
 > const nums = [1, 2];
 > console.log(nums.flatMap(x => [x, x * 2]));

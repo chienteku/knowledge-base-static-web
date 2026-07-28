@@ -152,12 +152,11 @@ DB_PASSWORD=secret123 # Omit framework public prefix for server-only secrets
 **Problem:** What 2 actions must be taken immediately if a production database secret is committed to a public Git repo?
 
 **Expected output:**
-```text
-1. Immediately revoke and rotate the secret on the database server
-2. Purge secret from Git history (using BFG Repo-Cleaner or git filter-repo) and update .gitignore
-```
-
 > [!check]- Answer
+> ```text
+> 1. Immediately revoke and rotate the secret on the database server
+> 2. Purge secret from Git history (using BFG Repo-Cleaner or git filter-repo) and update .gitignore
+> ```
 > ```text
 > 1. Immediately revoke/rotate the leaked secret.
 > 2. Purge secret from Git commit history and add .env to .gitignore.
@@ -170,11 +169,10 @@ DB_PASSWORD=secret123 # Omit framework public prefix for server-only secrets
 **Problem:** Write JavaScript line reading environment variable `PORT` with fallback default to `3000`.
 
 **Expected output:**
-```text
-const PORT = process.env.PORT || 3000;
-```
-
 > [!check]- Answer
+> ```text
+> const PORT = process.env.PORT || 3000;
+> ```
 > ```javascript
 > const PORT = process.env.PORT || 3000;
 > ```

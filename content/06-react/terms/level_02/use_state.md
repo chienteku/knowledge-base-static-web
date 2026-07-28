@@ -124,21 +124,20 @@ const [data, setData] = useState(() => parseHeavyData()); // Lazy initial state
 **Problem:** Write a component called `LightSwitch`. It should have a boolean state called `isOn`, starting as `false`. It should return a button. When clicked, it toggles the state. Use the "Updater Function Pattern" (`prev => ...`).
 
 **Expected output:**
-```javascript
-import { useState } from 'react';
-
-function LightSwitch() {
-  const [isOn, setIsOn] = useState(false);
-
-  return (
-    <button onClick={() => setIsOn(prevIsOn => !prevIsOn)}>
-      {isOn ? 'Turn Off' : 'Turn On'}
-    </button>
-  );
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> import { useState } from 'react';
+> 
+> function LightSwitch() {
+>   const [isOn, setIsOn] = useState(false);
+> 
+>   return (
+>     <button onClick={() => setIsOn(prevIsOn => !prevIsOn)}>
+>       {isOn ? 'Turn Off' : 'Turn On'}
+>     </button>
+>   );
+> }
+> ```
 > - `!prevIsOn` flips `true` to `false` and vice versa.
 
 ---
@@ -150,11 +149,10 @@ function LightSwitch() {
 **Problem:** Initialize `items` state lazily reading from `localStorage.getItem('saved_items')`.
 
 **Expected output:**
-```text
-const [items, setItems] = useState(() => { const saved = localStorage.getItem('saved_items'); return saved ? JSON.parse(saved) : []; });
-```
-
 > [!check]- Answer
+> ```text
+> const [items, setItems] = useState(() => { const saved = localStorage.getItem('saved_items'); return saved ? JSON.parse(saved) : []; });
+> ```
 > ```javascript
 > const [items, setItems] = useState(() => {
 >   const saved = localStorage.getItem('saved_items');
@@ -164,16 +162,17 @@ const [items, setItems] = useState(() => { const saved = localStorage.getItem('s
 >
 > **Explanation:** Passing a function `() => initialValue` to `useState` executes initialization code ONLY on initial mount.
 
+---
+
 ### Exercise 3: Updating Object State with Functional Updaters
 
 **Problem:** Increment `user.score` immutably using functional updater `setUser(prev => ...)`.
 
 **Expected output:**
-```text
-setUser(prev => ({ ...prev, score: prev.score + 1 }));
-```
-
 > [!check]- Answer
+> ```text
+> setUser(prev => ({ ...prev, score: prev.score + 1 }));
+> ```
 > ```javascript
 > setUser(prev => ({ ...prev, score: prev.score + 1 }));
 > ```

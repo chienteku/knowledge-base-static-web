@@ -156,12 +156,11 @@ async function processData() {
 **Problem:** Does the JavaScript engine *require* Constructor Functions to start with a capital letter? What happens if you use lowercase?
 
 **Expected output:**
-```text
-No, the engine doesn't care about capitalization. It will work perfectly fine. 
-However, it is a strict community convention to capitalize them so that human developers instantly know they MUST use the `new` keyword when calling it.
-```
-
 > [!check]- Answer
+> ```text
+> No, the engine doesn't care about capitalization. It will work perfectly fine. 
+> However, it is a strict community convention to capitalize them so that human developers instantly know they MUST use the `new` keyword when calling it.
+> ```
 > - Capitalization is for humans, not for the compiler!
 
 ---
@@ -171,11 +170,10 @@ However, it is a strict community convention to capitalize them so that human de
 **Problem:** Create constructor `function Car(make)` and attach `Car.prototype.getMake = function() { return this.make; }`.
 
 **Expected output:**
-```text
-Toyota
-```
-
 > [!check]- Answer
+> ```text
+> Toyota
+> ```
 > ```javascript
 > function Car(make) {
 >   this.make = make;
@@ -189,16 +187,17 @@ Toyota
 >
 > **Explanation:** Attaching methods to constructor `.prototype` shares 1 function instance across all created instances.
 
+---
+
 ### Exercise 3: Guarding Constructors Against Omitted `new`
 
 **Problem:** Write a self-correcting constructor `function Point(x)` using `new.target`.
 
 **Expected output:**
-```text
-10
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> ```
 > ```javascript
 > function Point(x) {
 >   if (!new.target) return new Point(x);
@@ -210,7 +209,6 @@ Toyota
 >
 > **Explanation:** `new.target` evaluates to the constructor function if called with `new`, and `undefined` if called normally.
 
----
 
 ---
 

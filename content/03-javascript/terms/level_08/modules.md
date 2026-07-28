@@ -158,11 +158,10 @@ async function processData() {
 **Problem:** If you link `main.js` to your HTML file using `<script src="main.js"></script>`, and `main.js` contains `import` statements, the browser will throw an error. Why?
 
 **Expected output:**
-```text
-The browser assumes scripts are old-school, globally-scoped scripts by default. To unlock the `import` and `export` keywords, you MUST tell the browser it is a module: `<script type="module" src="main.js"></script>`.
-```
-
 > [!check]- Answer
+> ```text
+> The browser assumes scripts are old-school, globally-scoped scripts by default. To unlock the `import` and `export` keywords, you MUST tell the browser it is a module: `<script type="module" src="main.js"></script>`.
+> ```
 > - Browsers are backwards compatible to the 1990s. You have to opt-in to modern features!
 
 ---
@@ -172,34 +171,33 @@ The browser assumes scripts are old-school, globally-scoped scripts by default. 
 **Problem:** Write export syntax `export const add = (a, b) => a + b;`.
 
 **Expected output:**
-```text
-Export syntax validated
-```
-
 > [!check]- Answer
+> ```text
+> Export syntax validated
+> ```
 > ```javascript
 > console.log("Export syntax validated");
 > ```
 >
 > **Explanation:** ES modules export explicit public API surfaces using `export` syntax.
 
+---
+
 ### Exercise 3: Module Top-Level Scope Isolation
 
 **Problem:** State whether top-level variables in ES modules pollute `window` / `globalThis`.
 
 **Expected output:**
-```text
-ES modules do not pollute global scope
-```
-
 > [!check]- Answer
+> ```text
+> ES modules do not pollute global scope
+> ```
 > ```javascript
 > console.log("ES modules do not pollute global scope");
 > ```
 >
 > **Explanation:** ES modules enforce module-level scope isolation for top-level variables.
 
----
 
 ---
 

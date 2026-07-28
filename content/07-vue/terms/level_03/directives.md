@@ -108,13 +108,12 @@ const attributeName = ref('href'); // Dynamic attribute name
 `<input type="text" class="input-box" v-model="username" v-on:keyup.enter="login" />`
 
 **Expected output:**
-```text
-Standard HTML attributes: `type`, `class`
-Vue Directives: `v-model`, `v-on`
-(Vue will evaluate the directives using JavaScript, and pass the standard HTML attributes straight to the browser untouched).
-```
-
 > [!check]- Answer
+> ```text
+> Standard HTML attributes: `type`, `class`
+> Vue Directives: `v-model`, `v-on`
+> (Vue will evaluate the directives using JavaScript, and pass the standard HTML attributes straight to the browser untouched).
+> ```
 > - Look for the `v-` prefix!
 
 ---
@@ -128,14 +127,13 @@ Vue Directives: `v-model`, `v-on`
 4. `v-cloak` 
 
 **Expected output:**
-```text
-1. Updates element textContent
-2. Updates element innerHTML
-3. Skips compilation for element and children
-4. Hides un-compiled mustache templates until Vue mounts
-```
-
 > [!check]- Answer
+> ```text
+> 1. Updates element textContent
+> 2. Updates element innerHTML
+> 3. Skips compilation for element and children
+> 4. Hides un-compiled mustache templates until Vue mounts
+> ```
 > - `v-text` sets textContent safely.
 > - `v-html` sets raw innerHTML.
 > - `v-pre` skips template compilation.
@@ -153,11 +151,10 @@ Vue Directives: `v-model`, `v-on`
 **Problem:** What performance benefit does `v-once` provide when placed on a static HTML element tree?
 
 **Expected output:**
-```text
-v-once renders the element tree once and skips all future updates, optimizing rendering performance for static content.
-```
-
 > [!check]- Answer
+> ```text
+> v-once renders the element tree once and skips all future updates, optimizing rendering performance for static content.
+> ```
 > - `v-once` caches rendered static DOM subtrees.
 > 
 > ```html

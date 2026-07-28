@@ -155,12 +155,11 @@ function greet() {
 ```
 
 **Expected output:**
-```text
-Welcome!
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> Welcome!
+> undefined
+> ```
 > - The function declaration is hoisted completely, so `greet()` works perfectly.
 > - Only the `var` *declaration* is hoisted, not the assignment (`= 30`). So `age` exists, but it is `undefined`.
 
@@ -171,11 +170,10 @@ undefined
 **Problem:** Trace output of `console.log(typeof foo); function foo() {} var foo = 10;`.
 
 **Expected output:**
-```text
-function
-```
-
 > [!check]- Answer
+> ```text
+> function
+> ```
 > ```javascript
 > console.log(typeof foo);
 > function foo() {}
@@ -184,16 +182,17 @@ function
 >
 > **Explanation:** Function declarations hoist before variable declarations (`var`), giving functions precedence during initial allocation.
 
+---
+
 ### Exercise 3: Temporal Dead Zone Block Hoisting
 
 **Problem:** Demonstrate that an outer `let x = 1` is shadowed by inner `let x = 2` TDZ inside an `if` block.
 
 **Expected output:**
-```text
-ReferenceError caught
-```
-
 > [!check]- Answer
+> ```text
+> ReferenceError caught
+> ```
 > ```javascript
 > let x = 1;
 > if (true) {
@@ -208,7 +207,6 @@ ReferenceError caught
 >
 > **Explanation:** Inner block `let` declarations hoist to top of block scope, masking outer scope variables in TDZ.
 
----
 
 ---
 

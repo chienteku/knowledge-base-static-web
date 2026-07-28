@@ -140,14 +140,13 @@ export async function OPTIONS() {
 4. Process a credit card payment transaction.
 
 **Expected output:**
-```text
-1. PATCH (partial update of a user record).
-2. GET (read-only search query).
-3. DELETE (removal of a resource).
-4. POST (non-idempotent state change mutation).
-```
-
 > [!check]- Answer
+> ```text
+> 1. PATCH (partial update of a user record).
+> 2. GET (read-only search query).
+> 3. DELETE (removal of a resource).
+> 4. POST (non-idempotent state change mutation).
+> ```
 > - Choose PATCH for partial updates, and POST for payment submissions.
 
 ---
@@ -157,15 +156,14 @@ export async function OPTIONS() {
 **Problem:** List 5 uppercase HTTP verb function names supported out-of-the-box by Next.js Route Handlers.
 
 **Expected output:**
-```text
-1. GET
-2. POST
-3. PUT
-4. PATCH
-5. DELETE (or HEAD, OPTIONS)
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET
+> 2. POST
+> 3. PUT
+> 4. PATCH
+> 5. DELETE (or HEAD, OPTIONS)
+> ```
 > - `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS`.
 > 
 > ```typescript
@@ -181,11 +179,10 @@ export async function OPTIONS() {
 **Problem:** What HTTP status code does Next.js automatically return if a client sends a `DELETE` request to a `route.ts` that exports only `GET` and `POST`?
 
 **Expected output:**
-```text
-HTTP 451 / 405 Method Not Allowed
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 451 / 405 Method Not Allowed
+> ```
 > - Next.js returns HTTP 405 Method Not Allowed for un-exported HTTP verbs.
 > 
 > ```text

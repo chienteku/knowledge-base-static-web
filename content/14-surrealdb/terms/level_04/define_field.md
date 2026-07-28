@@ -151,13 +151,12 @@ Write the SurrealQL commands to:
 3.  Define a field `ratings` as an array of decimals (`decimal`).
 
 **Expected output:**
-```sql
-DEFINE TABLE post SCHEMAFULL;
-DEFINE FIELD title ON post TYPE string;
-DEFINE FIELD ratings ON post TYPE array<decimal>;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE TABLE post SCHEMAFULL;
+> DEFINE FIELD title ON post TYPE string;
+> DEFINE FIELD ratings ON post TYPE array<decimal>;
+> ```
 > - Anchored field statements require the `ON` keyword pointing to the `post` table.
 > - Declare container arrays with type arguments: `array<T>`.
 
@@ -170,27 +169,27 @@ DEFINE FIELD ratings ON post TYPE array<decimal>;
 **Problem:** Define field `created_at` on `article` as `datetime` defaulting to `time::now()`.
 
 **Expected output:**
-```text
-DEFINE FIELD created_at ON TABLE article TYPE datetime DEFAULT time::now();
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD created_at ON TABLE article TYPE datetime DEFAULT time::now();
+> ```
 > ```surrealql
 > DEFINE FIELD created_at ON TABLE article TYPE datetime DEFAULT time::now();
 > ```
 >
 > **Explanation:** `DEFAULT` sets initial values when fields are omitted during creation.
 
+---
+
 ### Exercise 3: Defining Record Link Field
 
 **Problem:** Define field `author` on `post` table as record link to `user` table.
 
 **Expected output:**
-```text
-DEFINE FIELD author ON TABLE post TYPE record<user>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD author ON TABLE post TYPE record<user>;
+> ```
 > ```surrealql
 > DEFINE FIELD author ON TABLE post TYPE record<user>;
 > ```

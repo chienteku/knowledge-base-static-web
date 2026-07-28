@@ -220,11 +220,10 @@ Modify this `tsconfig.json` block to resolve the compiler warning.
 ```
 
 **Expected output:**
-```text
-The compiler compiles files containing decorators without throwing experimental warnings.
-```
-
 > [!check]- Answer
+> ```text
+> The compiler compiles files containing decorators without throwing experimental warnings.
+> ```
 > - NestJS relies on experimental legacy decorators.
 > - Add `"experimentalDecorators": true` to the `compilerOptions` field.
 
@@ -237,11 +236,10 @@ The compiler compiles files containing decorators without throwing experimental 
 **Problem:** Write method decorator `log(target: any, key: string, descriptor: PropertyDescriptor)`.
 
 **Expected output:**
-```text
-Method decorator created
-```
-
 > [!check]- Answer
+> ```text
+> Method decorator created
+> ```
 > ```typescript
 > function log(target: any, key: string, descriptor: PropertyDescriptor) {
 >   const orig = descriptor.value;
@@ -254,35 +252,35 @@ Method decorator created
 > ```
 >
 > **Explanation:** Method decorators intercept and wrap target function executions.
+
+---
 
 ### Exercise 3: Decorator Evaluation Order
 
 **Problem:** State evaluation order when multiple decorators `@g @f x` are applied to a single target (Right to left / Bottom to top).
 
 **Expected output:**
-```text
-Evaluated right-to-left (f then g)
-```
-
 > [!check]- Answer
+> ```text
+> Evaluated right-to-left (f then g)
+> ```
 > ```typescript
 > console.log("Evaluated right-to-left (f then g)");
 > ```
 >
 > **Explanation:** Decorators compose in right-to-left mathematical function composition order.
 
-
+---
 
 ### Exercise 4: Class Method Decorator Signature
 
 **Problem:** Write method decorator `log(target: any, key: string, descriptor: PropertyDescriptor)`.
 
 **Expected output:**
-```text
-Method decorator created
-```
-
 > [!check]- Answer
+> ```text
+> Method decorator created
+> ```
 > ```typescript
 > function log(target: any, key: string, descriptor: PropertyDescriptor) {
 >   const orig = descriptor.value;
@@ -296,16 +294,17 @@ Method decorator created
 >
 > **Explanation:** Method decorators intercept and wrap target function executions.
 
+---
+
 ### Exercise 5: Decorator Evaluation Order
 
 **Problem:** State evaluation order when multiple decorators `@g @f x` are applied to a single target (Right to left / Bottom to top).
 
 **Expected output:**
-```text
-Evaluated right-to-left (f then g)
-```
-
 > [!check]- Answer
+> ```text
+> Evaluated right-to-left (f then g)
+> ```
 > ```typescript
 > console.log("Evaluated right-to-left (f then g)");
 > ```

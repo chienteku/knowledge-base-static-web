@@ -105,12 +105,11 @@ app.get('/data', async (req, res, next) => {
 2. `alert("Welcome to the website!");`
 
 **Expected output:**
-```text
-1. Node.js only. The Browser cannot read text files directly from the hard drive (huge security risk).
-2. Browser only. Node.js doesn't have a screen to show popup alerts.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Node.js only. The Browser cannot read text files directly from the hard drive (huge security risk).
+> 2. Browser only. Node.js doesn't have a screen to show popup alerts.
+> ```
 
 ---
 
@@ -125,14 +124,13 @@ app.get('/data', async (req, res, next) => {
 4. `Buffer`
 
 **Expected output:**
-```text
-1. Both (Node 18+ & Browser)
-2. Node.js only
-3. Browser only
-4. Node.js only
-```
-
 > [!check]- Answer
+> ```text
+> 1. Both (Node 18+ & Browser)
+> 2. Node.js only
+> 3. Browser only
+> 4. Node.js only
+> ```
 > ```text
 > 1. Both (Node 18+ native fetch & Browser)
 > 2. Node.js only
@@ -142,16 +140,17 @@ app.get('/data', async (req, res, next) => {
 >
 > **Explanation:** `process.env` and `Buffer` are Node.js core globals; `document` is browser DOM; `fetch` is standardized web spec available in modern Node.
 
+---
+
 ### Exercise 3: Reading Environment Variables in Node.js
 
 **Problem:** Write code to read port from `process.env.PORT` defaulting to `3000`.
 
 **Expected output:**
-```text
-const PORT = process.env.PORT || 3000;
-```
-
 > [!check]- Answer
+> ```text
+> const PORT = process.env.PORT || 3000;
+> ```
 > ```javascript
 > const PORT = process.env.PORT || 3000;
 > ```

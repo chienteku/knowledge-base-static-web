@@ -122,13 +122,12 @@ function App() { return <Suspense fallback={<Spinner />}><LazyComp /></Suspense>
 **Problem:** Your homepage is a simple text blog. However, there is a tiny button that says "Open 3D Model". When clicked, it renders a `<ThreeDViewer>` component that imports `three.js` (a massive 1MB library). How do you prevent `three.js` from ruining the initial load time of the homepage?
 
 **Expected output:**
-```text
-You use `React.lazy()` on the `<ThreeDViewer>` component!
-Because the component isn't rendered until the button is clicked, Webpack will chop it (and the massive three.js library) into a separate chunk. 
-The homepage will load instantly. When they click the button, the 1MB chunk will download.
-```
-
 > [!check]- Answer
+> ```text
+> You use `React.lazy()` on the `<ThreeDViewer>` component!
+> Because the component isn't rendered until the button is clicked, Webpack will chop it (and the massive three.js library) into a separate chunk. 
+> The homepage will load instantly. When they click the button, the 1MB chunk will download.
+> ```
 > - Code Splitting isn't just for Routes; it can be used for any heavy component that isn't immediately visible!
 
 ---
@@ -140,11 +139,10 @@ The homepage will load instantly. When they click the button, the 1MB chunk will
 **Problem:** Implement route-based code-splitting for `AdminDashboard` using `React.lazy()` and `<Suspense>`.
 
 **Expected output:**
-```text
-const AdminDashboard = React.lazy(() => import('./AdminDashboard')); function App() { return <Suspense fallback={<div>Loading Route...</div>}><AdminDashboard /></Suspense>; }
-```
-
 > [!check]- Answer
+> ```text
+> const AdminDashboard = React.lazy(() => import('./AdminDashboard')); function App() { return <Suspense fallback={<div>Loading Route...</div>}><AdminDashboard /></Suspense>; }
+> ```
 > ```javascript
 > const AdminDashboard = React.lazy(() => import('./AdminDashboard'));
 >
@@ -159,16 +157,17 @@ const AdminDashboard = React.lazy(() => import('./AdminDashboard')); function Ap
 >
 > **Explanation:** Route-based code splitting splits application bundles into on-demand dynamic JavaScript chunks.
 
+---
+
 ### Exercise 3: Dynamic `import()` Statement Return Type
 
 **Problem:** What data type does `import('./module')` return? (A JavaScript Promise resolving to the ES module).
 
 **Expected output:**
-```text
-A JavaScript Promise resolving to the ES module object
-```
-
 > [!check]- Answer
+> ```text
+> A JavaScript Promise resolving to the ES module object
+> ```
 > ```text
 > A JavaScript Promise resolving to the ES module object
 > ```

@@ -174,11 +174,10 @@ console.log("Result:", Calculator.add(5, 10));
 ```
 
 **Expected output:**
-```text
-Result: 15
-```
-
 > [!check]- Answer
+> ```text
+> Result: 15
+> ```
 > - Prefix the method with the `static` keyword: `static add(a, b) { ... }`.
 
 ---
@@ -188,11 +187,10 @@ Result: 15
 **Problem:** Define `static createGuest()` returning a `new User("Guest")` instance.
 
 **Expected output:**
-```text
-Guest
-```
-
 > [!check]- Answer
+> ```text
+> Guest
+> ```
 > ```javascript
 > class User {
 >   constructor(name) { this.name = name; }
@@ -203,16 +201,17 @@ Guest
 >
 > **Explanation:** Static factory methods construct pre-configured class instances.
 
+---
+
 ### Exercise 3: Static Class Fields
 
 **Problem:** Define static field `static count = 0;` incremented in constructor.
 
 **Expected output:**
-```text
-Instances: 2
-```
-
 > [!check]- Answer
+> ```text
+> Instances: 2
+> ```
 > ```javascript
 > class Item {
 >   static count = 0;
@@ -224,7 +223,6 @@ Instances: 2
 >
 > **Explanation:** Static fields store shared global state attached directly to class constructors.
 
----
 
 ---
 

@@ -190,21 +190,20 @@ $primary-color: #ff007f;
 ```
 
 **Expected output:**
-```scss
-.card {
-  padding: 20px;
-
-  &__header {
-    font-weight: bold;
-
-    &:hover {
-      color: red;
-    }
-  }
-}
-```
-
 > [!check]- Answer
+> ```scss
+> .card {
+>   padding: 20px;
+> 
+>   &__header {
+>     font-weight: bold;
+> 
+>     &:hover {
+>       color: red;
+>     }
+>   }
+> }
+> ```
 > - Nest the `__header` class inside `.card`.
 > - Use the parent reference operator `&` to join the strings together.
 > - Nest the `:hover` rule inside `__header`.
@@ -218,11 +217,10 @@ $primary-color: #ff007f;
 **Problem:** Write SCSS using parent selector `&` to generate `.btn` and `.btn--active` modifier.
 
 **Expected output:**
-```text
-.btn { color: red; &--active { color: blue; } }
-```
-
 > [!check]- Answer
+> ```text
+> .btn { color: red; &--active { color: blue; } }
+> ```
 > ```scss
 > .btn {
 >   color: red;
@@ -234,18 +232,19 @@ $primary-color: #ff007f;
 >
 > **Explanation:** Parent selector `&` concatenates parent BEM class prefixes in SCSS.
 
+---
+
 ### Exercise 3: Sass vs Native CSS Features
 
 **Problem:** List 2 features historically requiring Sass preprocessors that are now natively supported in modern CSS.
 
 **Expected output:**
-```text
-1. Native CSS Variables (var())
-2. Native CSS Nesting (& selector)
-(or calc(), color functions)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Native CSS Variables (var())
+> 2. Native CSS Nesting (& selector)
+> (or calc(), color functions)
+> ```
 > ```text
 > 1. Native CSS Variables (var())
 > 2. Native CSS Nesting (& selector)

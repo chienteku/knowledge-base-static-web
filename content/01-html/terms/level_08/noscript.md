@@ -182,14 +182,13 @@ A simple warning banner in the body:
 **Problem:** Build an HTML fragment containing a heading "Daily Weather Portal" and a paragraph warning users "This site is best viewed with JavaScript enabled" that is *only* visible to users who are blocking script files.
 
 **Expected output:**
-```html
-<h1>Daily Weather Portal</h1>
-<noscript>
-  <p>This site is best viewed with JavaScript enabled</p>
-</noscript>
-```
-
 > [!check]- Answer
+> ```html
+> <h1>Daily Weather Portal</h1>
+> <noscript>
+>   <p>This site is best viewed with JavaScript enabled</p>
+> </noscript>
+> ```
 > - The heading should be outside the `<noscript>` block (it is plain HTML that should always display).
 > - Wrap the warning paragraph in `<noscript>` tags.
 
@@ -202,11 +201,10 @@ A simple warning banner in the body:
 **Problem:** Write `<noscript>` banner inside `<body>` warning users that JavaScript is disabled.
 
 **Expected output:**
-```text
-<noscript><div class="warning">Please enable JavaScript for full functionality.</div></noscript>
-```
-
 > [!check]- Answer
+> ```text
+> <noscript><div class="warning">Please enable JavaScript for full functionality.</div></noscript>
+> ```
 > ```html
 > <noscript>
 >   <div class="warning">
@@ -217,16 +215,17 @@ A simple warning banner in the body:
 >
 > **Explanation:** `<noscript>` renders fallback markup only when browser JavaScript is disabled.
 
+---
+
 ### Exercise 3: Noscript CSS Fallback Loading
 
 **Problem:** Write `<noscript>` element inside `<head>` loading `no-js.css` when scripts are disabled.
 
 **Expected output:**
-```text
-<head><noscript><link rel="stylesheet" href="no-js.css"></noscript></head>
-```
-
 > [!check]- Answer
+> ```text
+> <head><noscript><link rel="stylesheet" href="no-js.css"></noscript></head>
+> ```
 > ```html
 > <head>
 >   <noscript>

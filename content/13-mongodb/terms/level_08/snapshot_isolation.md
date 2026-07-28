@@ -135,12 +135,11 @@ At `10:00:10`, Transaction A reads that user's address.
 2.  Explain why.
 
 **Expected output:**
-```text
-1. Transaction A will see the old address.
-2. Under Snapshot Isolation, Transaction A reads from a consistent snapshot frozen at its start time (`10:00:00`). Any updates committed by other queries after this start time are invisible to the transaction until it terminates.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Transaction A will see the old address.
+> 2. Under Snapshot Isolation, Transaction A reads from a consistent snapshot frozen at its start time (`10:00:00`). Any updates committed by other queries after this start time are invisible to the transaction until it terminates.
+> ```
 > - Apply the snapshot freezing rule relative to transaction start times.
 > - Consider if concurrent commits can bleed into active snapshots.
 
@@ -153,27 +152,27 @@ At `10:00:10`, Transaction A reads that user's address.
 **Problem:** Explain what Snapshot Isolation guarantees during a transaction (All reads reflect a consistent point-in-time snapshot of the database).
 
 **Expected output:**
-```text
-All reads within the transaction reflect a single point-in-time database snapshot
-```
-
 > [!check]- Answer
+> ```text
+> All reads within the transaction reflect a single point-in-time database snapshot
+> ```
 > ```text
 > All reads within the transaction reflect a single point-in-time database snapshot
 > ```
 >
 > **Explanation:** Snapshot isolation prevents dirty reads, non-repeatable reads, and phantom reads.
 
+---
+
 ### Exercise 3: Transient Transaction Error Retries
 
 **Problem:** Why does `withTransaction()` automatically retry transactions on `TransientTransactionError`? (Retries transient write conflict aborts under concurrency).
 
 **Expected output:**
-```text
-Automatically retries transactions aborting due to concurrent write conflicts
-```
-
 > [!check]- Answer
+> ```text
+> Automatically retries transactions aborting due to concurrent write conflicts
+> ```
 > ```text
 > Automatically retries transactions aborting due to concurrent write conflicts
 > ```

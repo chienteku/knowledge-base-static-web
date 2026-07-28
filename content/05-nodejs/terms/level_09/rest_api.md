@@ -177,13 +177,12 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 3. `app.get('/delete-all-books')`
 
 **Expected output:**
-```text
-1. app.get('/books')        // Use GET to read. Noun is plural.
-2. app.patch('/books/5')    // Use PATCH for partial updates. 
-3. app.delete('/books')     // Use DELETE to destroy.
-```
-
 > [!check]- Answer
+> ```text
+> 1. app.get('/books')        // Use GET to read. Noun is plural.
+> 2. app.patch('/books/5')    // Use PATCH for partial updates. 
+> 3. app.delete('/books')     // Use DELETE to destroy.
+> ```
 > - Match the HTTP Method (GET, POST, PATCH, DELETE) to the action.
 > - Remove all verbs from the URL.
 
@@ -200,14 +199,13 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 4. Delete single article
 
 **Expected output:**
-```text
-1. GET /articles
-2. POST /articles
-3. PUT (or PATCH) /articles/:id
-4. DELETE /articles/:id
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET /articles
+> 2. POST /articles
+> 3. PUT (or PATCH) /articles/:id
+> 4. DELETE /articles/:id
+> ```
 > ```text
 > 1. GET /articles
 > 2. POST /articles
@@ -217,17 +215,18 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 >
 > **Explanation:** REST APIs map standard HTTP CRUD methods to noun resource paths.
 
+---
+
 ### Exercise 3: Idempotent HTTP Methods
 
 **Problem:** Which of these HTTP methods are Idempotent?
 `GET`, `POST`, `PUT`, `DELETE`
 
 **Expected output:**
-```text
-GET, PUT, DELETE are Idempotent (POST is NOT idempotent).
-```
-
 > [!check]- Answer
+> ```text
+> GET, PUT, DELETE are Idempotent (POST is NOT idempotent).
+> ```
 > ```text
 > GET, PUT, DELETE are Idempotent. POST is NOT idempotent.
 > ```

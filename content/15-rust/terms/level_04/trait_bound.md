@@ -189,11 +189,10 @@ fn get_larger<T>(a: T, b: T) -> T {
 **Problem:** Write a function `fn print_copy<T: std::fmt::Debug + Copy>(val: T)`.
 
 **Expected output:**
-```
-Val: 100
-```
-
 > [!check]- Answer
+> ```
+> Val: 100
+> ```
 > ```rust
 > fn print_copy<T: std::fmt::Debug + Copy>(val: T) {
 >     println!("Val: {:?}", val);
@@ -205,16 +204,17 @@ Val: 100
 >
 > **Explanation:** The `+` syntax combines multiple required trait bounds on generic parameters.
 
+---
+
 ### Exercise 3: Generic Struct Field Trait Bounds
 
 **Problem:** Constrain a generic struct `struct DisplayBox<T: std::fmt::Display> { item: T }`.
 
 **Expected output:**
-```
-Boxed item: Hello
-```
-
 > [!check]- Answer
+> ```
+> Boxed item: Hello
+> ```
 > struct DisplayBox<T: std::fmt::Display> { item: T }
 > fn main() {
 >     let b = DisplayBox { item: "Hello" };

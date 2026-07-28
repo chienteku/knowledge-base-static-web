@@ -177,11 +177,10 @@ thread::spawn(move || {
 **Problem:** Execute two futures `f1` and `f2` concurrently using `join!` concept and unpack results.
 
 **Expected output:**
-```
-Results: 10, 20
-```
-
 > [!check]- Answer
+> ```
+> Results: 10, 20
+> ```
 > ```rust
 > fn main() {
 >     let res = (10, 20); // Conceptual join!(f1(), f2())
@@ -191,16 +190,17 @@ Results: 10, 20
 >
 > **Explanation:** `join!` polls multiple futures concurrently on the current thread, returning tuple results when all finish.
 
+---
+
 ### Exercise 3: Short-Circuiting Try Join with `try_join!`
 
 **Problem:** Explain how `try_join!(f1(), f2())` short-circuits and returns `Err` immediately if any future fails.
 
 **Expected output:**
-```
-Try join short-circuit verified
-```
-
 > [!check]- Answer
+> ```
+> Try join short-circuit verified
+> ```
 > fn main() {
 >     println!("Try join short-circuit verified");
 > }

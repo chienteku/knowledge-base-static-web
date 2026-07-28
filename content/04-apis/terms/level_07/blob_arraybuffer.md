@@ -181,11 +181,10 @@ const reader = res.body.getReader(); // Stream chunked binary reader
 **Problem:** Distinguish between a `Blob` and an `ArrayBuffer` in Web APIs.
 
 **Expected output:**
-```text
-Blob represents immutable raw file-like blob data (with MIME type metadata); ArrayBuffer represents mutable raw byte memory in RAM.
-```
-
 > [!check]- Answer
+> ```text
+> Blob represents immutable raw file-like blob data (with MIME type metadata); ArrayBuffer represents mutable raw byte memory in RAM.
+> ```
 > ```text
 > Blob -> Immutable file-like data with MIME type (e.g. image/png).
 > ArrayBuffer -> Raw in-memory byte buffer manipulated via TypedArrays.
@@ -198,11 +197,10 @@ Blob represents immutable raw file-like blob data (with MIME type metadata); Arr
 **Problem:** Write JavaScript line creating temporary DOM URL string for a image `Blob`.
 
 **Expected output:**
-```text
-const url = URL.createObjectURL(blob);
-```
-
 > [!check]- Answer
+> ```text
+> const url = URL.createObjectURL(blob);
+> ```
 > ```javascript
 > const url = URL.createObjectURL(blob);
 > // Remember to revoke URL when done:

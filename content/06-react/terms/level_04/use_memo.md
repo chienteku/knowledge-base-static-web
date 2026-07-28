@@ -112,13 +112,12 @@ const sorted = useMemo(() => [...items].sort(), [items]); // Pure sorted copy
 **Problem:** You have an expensive calculation: `const total = useMemo(() => price * quantity, [])`. The user clicks a button that increments `quantity`. What happens to `total`?
 
 **Expected output:**
-```text
-The `total` will NEVER update! It will be stuck on the initial value forever.
-Because the dependency array is empty `[]`, `useMemo` assumes the calculation never needs to be re-run.
-You must put `[price, quantity]` in the array so it recalculates when they change.
-```
-
 > [!check]- Answer
+> ```text
+> The `total` will NEVER update! It will be stuck on the initial value forever.
+> Because the dependency array is empty `[]`, `useMemo` assumes the calculation never needs to be re-run.
+> You must put `[price, quantity]` in the array so it recalculates when they change.
+> ```
 > - `useMemo` uses the exact same array rules as `useEffect`.
 
 ---
@@ -130,11 +129,10 @@ You must put `[price, quantity]` in the array so it recalculates when they chang
 **Problem:** Memoize filtering 50,000 products based on `category` and `searchQuery` using `useMemo`.
 
 **Expected output:**
-```text
-const filteredProducts = useMemo(() => { return products.filter(p => p.category === category && p.name.includes(searchQuery)); }, [products, category, searchQuery]);
-```
-
 > [!check]- Answer
+> ```text
+> const filteredProducts = useMemo(() => { return products.filter(p => p.category === category && p.name.includes(searchQuery)); }, [products, category, searchQuery]);
+> ```
 > ```javascript
 > const filteredProducts = useMemo(() => {
 >   return products.filter(p =>
@@ -145,16 +143,17 @@ const filteredProducts = useMemo(() => { return products.filter(p => p.category 
 >
 > **Explanation:** `useMemo` caches computed calculation outputs until dependencies change.
 
+---
+
 ### Exercise 3: Semantic Guarantee of useMemo
 
 **Problem:** Does React guarantee `useMemo` will NEVER clear its cache? (No, `useMemo` is for performance optimization; React may clear memory cache under high memory pressure).
 
 **Expected output:**
-```text
-No, React may clear cached values under memory pressure
-```
-
 > [!check]- Answer
+> ```text
+> No, React may clear cached values under memory pressure
+> ```
 > ```text
 > No, React may clear cached values under memory pressure
 > ```

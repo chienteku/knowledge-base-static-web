@@ -124,13 +124,12 @@ Use Context API or state management store if shared state across components is r
 **Problem:** The `<Navbar />` and `<Footer />` components both call `const isOnline = useNetworkStatus()`. If the Navbar somehow forcefully changes the `isOnline` state to false, does the Footer's state also change to false?
 
 **Expected output:**
-```text
-No! 
-Custom Hooks share STATEFUL LOGIC, not the STATE ITSELF.
-Every time you call a custom hook, a completely independent instance of `useState` is created for that specific component. The Navbar and Footer have completely separate state variables.
-```
-
 > [!check]- Answer
+> ```text
+> No! 
+> Custom Hooks share STATEFUL LOGIC, not the STATE ITSELF.
+> Every time you call a custom hook, a completely independent instance of `useState` is created for that specific component. The Navbar and Footer have completely separate state variables.
+> ```
 > - Calling a hook is just like calling `useState` normally in two different components.
 
 ---
@@ -142,11 +141,10 @@ Every time you call a custom hook, a completely independent instance of `useStat
 **Problem:** Create custom hook `useOnlineStatus()` tracking `navigator.onLine` window event listeners.
 
 **Expected output:**
-```text
-function useOnlineStatus() { const [isOnline, setIsOnline] = useState(navigator.onLine); useEffect(() => { const handleOnline = () => setIsOnline(true); const handleOffline = () => setIsOnline(false); window.addEventListener('online', handleOnline); window.addEventListener('offline', handleOffline); return () => { window.removeEventListener('online', handleOnline); window.removeEventListener('offline', handleOffline); }; }, []); return isOnline; }
-```
-
 > [!check]- Answer
+> ```text
+> function useOnlineStatus() { const [isOnline, setIsOnline] = useState(navigator.onLine); useEffect(() => { const handleOnline = () => setIsOnline(true); const handleOffline = () => setIsOnline(false); window.addEventListener('online', handleOnline); window.addEventListener('offline', handleOffline); return () => { window.removeEventListener('online', handleOnline); window.removeEventListener('offline', handleOffline); }; }, []); return isOnline; }
+> ```
 > ```javascript
 > function useOnlineStatus() {
 >   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -166,16 +164,17 @@ function useOnlineStatus() { const [isOnline, setIsOnline] = useState(navigator.
 >
 > **Explanation:** Custom hooks encapsulate stateful event listener logic into reusable functions.
 
+---
+
 ### Exercise 3: Custom Hook Return Types
 
 **Problem:** What data types can custom hooks return? (Any data type: arrays `[state, setter]`, objects `{ data, loading }`, or primitive values).
 
 **Expected output:**
-```text
-Any data type: arrays, objects, or primitive scalar values
-```
-
 > [!check]- Answer
+> ```text
+> Any data type: arrays, objects, or primitive scalar values
+> ```
 > ```text
 > Any data type: arrays, objects, or primitive scalar values
 > ```

@@ -188,13 +188,12 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 **Problem:** You are building a form. You want to highlight all input elements that are marked as `required` AND currently contain an invalid email format (`type="email"`), drawing a red border around them. Write the CSS selector.
 
 **Expected output:**
-```css
-input[type="email"][required] {
-  /* target styles go here */
-}
-```
-
 > [!check]- Answer
+> ```css
+> input[type="email"][required] {
+>   /* target styles go here */
+> }
+> ```
 > - You can chain attribute selectors together without spaces to target elements matching both criteria simultaneously!
 
 ---
@@ -209,13 +208,12 @@ input[type="email"][required] {
 3. Required input fields (`[required]`)
 
 **Expected output:**
-```text
-1. a[href^="https://"]
-2. a[href$=".pdf" i]
-3. input[required]
-```
-
 > [!check]- Answer
+> ```text
+> 1. a[href^="https://"]
+> 2. a[href$=".pdf" i]
+> 3. input[required]
+> ```
 > ```css
 > a[href^="https://"] { color: green; }
 > a[href$=".pdf" i]::after { content: " (PDF)"; }
@@ -224,16 +222,17 @@ input[type="email"][required] {
 >
 > **Explanation:** Attribute selectors target elements by presence, prefix (`^=`), or suffix (`$=`).
 
+---
+
 ### Exercise 3: Space-Separated List Matcher
 
 **Problem:** Which attribute selector operator (`~=` or `|=`) matches a word in a space-separated list of values?
 
 **Expected output:**
-```text
-~= (matches word in space-separated list).
-```
-
 > [!check]- Answer
+> ```text
+> ~= (matches word in space-separated list).
+> ```
 > ```css
 > [class~="btn"] {
 >   display: inline-block;

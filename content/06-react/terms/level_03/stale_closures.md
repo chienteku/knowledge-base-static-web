@@ -215,16 +215,17 @@ function AlertButton() {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Fixing Stale Closure with useRef
 
 **Problem:** Use `useRef` to store latest state value accessible inside long-lived callback without re-subscribing.
 
 **Expected output:**
-```text
-const countRef = useRef(count); useEffect(() => { countRef.current = count; }, [count]); useEffect(() => { const id = setInterval(() => console.log(countRef.current), 1000); return () => clearInterval(id); }, []);
-```
-
 > [!check]- Answer
+> ```text
+> const countRef = useRef(count); useEffect(() => { countRef.current = count; }, [count]); useEffect(() => { const id = setInterval(() => console.log(countRef.current), 1000); return () => clearInterval(id); }, []);
+> ```
 > ```javascript
 > const countRef = useRef(count);
 > useEffect(() => {
@@ -239,16 +240,17 @@ const countRef = useRef(count); useEffect(() => { countRef.current = count; }, [
 >
 > **Explanation:** `useRef` mutable container objects persist across renders, allowing callbacks to read `.current` without capturing stale closure values.
 
+---
+
 ### Exercise 3: Definition of Stale Closure in React
 
 **Problem:** Define Stale Closure in React (A closure function capturing variable state values from a previous render frame that have since updated).
 
 **Expected output:**
-```text
-A closure function capturing variable state values from a previous render frame that have since updated
-```
-
 > [!check]- Answer
+> ```text
+> A closure function capturing variable state values from a previous render frame that have since updated
+> ```
 > ```text
 > A closure function capturing variable state values from a previous render frame that have since updated
 > ```

@@ -131,14 +131,13 @@ balance NUMERIC(12, 2) -- Exact fixed-point decimal precision
 4.  Date the product was added to inventory.
 
 **Expected output:**
-```text
-1. Rating: Numeric
-2. Description: Text
-3. In Stock: Boolean
-4. Inventory Date: Temporal
-```
-
 > [!check]- Answer
+> ```text
+> 1. Rating: Numeric
+> 2. Description: Text
+> 3. In Stock: Boolean
+> 4. Inventory Date: Temporal
+> ```
 > - Determine if the field represents a count, character details, a flag, or a point in time.
 
 ---
@@ -150,27 +149,27 @@ balance NUMERIC(12, 2) -- Exact fixed-point decimal precision
 **Problem:** Choose optimal PostgreSQL data types for: 1. User ID (`BIGINT` / `UUID`), 2. Price (`NUMERIC(10,2)`), 3. Bio text (`TEXT`), 4. Active status (`BOOLEAN`).
 
 **Expected output:**
-```text
-1. BIGINT/UUID, 2. NUMERIC(10,2), 3. TEXT, 4. BOOLEAN
-```
-
 > [!check]- Answer
+> ```text
+> 1. BIGINT/UUID, 2. NUMERIC(10,2), 3. TEXT, 4. BOOLEAN
+> ```
 > ```text
 > 1. BIGINT/UUID, 2. NUMERIC(10,2), 3. TEXT, 4. BOOLEAN
 > ```
 >
 > **Explanation:** Selecting domain-appropriate data types optimizes storage efficiency and precision.
 
+---
+
 ### Exercise 3: Inspecting Column Data Types in Catalog
 
 **Problem:** Query column data types for table `users` from `information_schema.columns`.
 
 **Expected output:**
-```text
-SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'users';
-```
-
 > [!check]- Answer
+> ```text
+> SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'users';
+> ```
 > ```sql
 > SELECT column_name, data_type
 > FROM information_schema.columns

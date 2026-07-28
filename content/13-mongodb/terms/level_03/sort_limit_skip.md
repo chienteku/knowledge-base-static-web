@@ -189,14 +189,13 @@ MongoDB engine always applies sort -> skip -> limit internally
 (Include the projection mapping to only select the `name` field, hiding `_id`).
 
 **Expected output:**
-```javascript
-db.products.find({}, { name: 1, _id: 0 })
-  .sort({ qty: -1 })
-  .skip(30)
-  .limit(15);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find({}, { name: 1, _id: 0 })
+>   .sort({ qty: -1 })
+>   .skip(30)
+>   .limit(15);
+> ```
 > - The projection document is passed as the second argument to `find()`.
 > - Order the descending query using `-1` for the `qty` field key.
 > - Chain the cursor methods `.sort()`, `.skip()`, and `.limit()`.
@@ -210,11 +209,10 @@ db.products.find({}, { name: 1, _id: 0 })
 **Problem:** Get top 5 youngest active users sorted by `age` ascending.
 
 **Expected output:**
-```text
-db.users.find({ active: true }).sort({ age: 1 }).limit(5);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ active: true }).sort({ age: 1 }).limit(5);
+> ```
 > ```javascript
 > db.users.find({ active: true })
 >   .sort({ age: 1 })
@@ -223,16 +221,17 @@ db.users.find({ active: true }).sort({ age: 1 }).limit(5);
 >
 > **Explanation:** `.sort({ field: 1 })` sorts ascending; `.limit(N)` caps returned document counts.
 
+---
+
 ### Exercise 3: Cursor-Based Range Pagination Pattern
 
 **Problem:** Query next 10 posts created before `lastId` ObjectId using range-based pagination.
 
 **Expected output:**
-```text
-db.posts.find({ _id: { $lt: lastId } }).sort({ _id: -1 }).limit(10);
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ _id: { $lt: lastId } }).sort({ _id: -1 }).limit(10);
+> ```
 > ```javascript
 > db.posts.find({
 >   _id: { $lt: lastId }

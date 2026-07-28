@@ -158,12 +158,11 @@ SELECT name AS "User Name" FROM users; -- Double quotes for spaces in aliases
 **Problem:** You have a table `invoices` with columns `id`, `unit_price`, `quantity`, and `shipping_fee`. Write a SQL query that calculates the total invoice cost as `(unit_price * quantity) + shipping_fee` and returns it as a column named `total_invoice_cost`.
 
 **Expected output:**
-```sql
-SELECT (unit_price * quantity) + shipping_fee AS total_invoice_cost 
-FROM invoices;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT (unit_price * quantity) + shipping_fee AS total_invoice_cost 
+> FROM invoices;
+> ```
 > - Construct the mathematical formula inside the `SELECT` projection.
 > - Append the `AS` keyword followed by the requested target column label.
 
@@ -176,11 +175,10 @@ FROM invoices;
 **Problem:** Join `users` (alias `u`) and `orders` (alias `o`) selecting `u.name` and `o.total` as `order_total`.
 
 **Expected output:**
-```text
-SELECT u.name, o.total AS order_total FROM users u JOIN orders o ON u.id = o.user_id;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT u.name, o.total AS order_total FROM users u JOIN orders o ON u.id = o.user_id;
+> ```
 > ```sql
 > SELECT u.name, o.total AS order_total
 > FROM users u
@@ -189,16 +187,17 @@ SELECT u.name, o.total AS order_total FROM users u JOIN orders o ON u.id = o.use
 >
 > **Explanation:** Table aliases (`users u`) simplify qualified column references in JOIN queries.
 
+---
+
 ### Exercise 3: Referencing Aliases in `ORDER BY`
 
 **Problem:** Can column aliases created in `SELECT` be referenced in `ORDER BY`? (Yes, ORDER BY evaluates after SELECT).
 
 **Expected output:**
-```text
-Yes, ORDER BY evaluates after SELECT in SQL logical execution order
-```
-
 > [!check]- Answer
+> ```text
+> Yes, ORDER BY evaluates after SELECT in SQL logical execution order
+> ```
 > ```text
 > Yes, ORDER BY evaluates after SELECT in SQL logical execution order
 > ```

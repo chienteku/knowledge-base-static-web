@@ -140,13 +140,12 @@ async function load() {
 **Problem:** In Vuex/Redux, directly mutating state outside of an Action (`userStore.name = "Bob"`) was strictly forbidden and would throw an error. Is it forbidden in Pinia?
 
 **Expected output:**
-```text
-No!
-Pinia allows you to mutate state directly from components. `userStore.name = "Bob"` is perfectly valid and will work.
-However, for complex updates involving multiple variables or side effects, you should always use an Action to keep the logic centralized and readable.
-```
-
 > [!check]- Answer
+> ```text
+> No!
+> Pinia allows you to mutate state directly from components. `userStore.name = "Bob"` is perfectly valid and will work.
+> However, for complex updates involving multiple variables or side effects, you should always use an Action to keep the logic centralized and readable.
+> ```
 > - Pinia removed the strict "Mutations" requirement.
 
 ---
@@ -156,11 +155,10 @@ However, for complex updates involving multiple variables or side effects, you s
 **Problem:** Write an async Pinia Setup store action `fetchItems()` wrapped in `try/catch` updating `items` and setting `isLoading` boolean state.
 
 **Expected output:**
-```javascript
-async function fetchItems() { isLoading.value = true; try { items.value = await api.getItems(); } catch (err) { error.value = err; } finally { isLoading.value = false; } }
-```
-
 > [!check]- Answer
+> ```javascript
+> async function fetchItems() { isLoading.value = true; try { items.value = await api.getItems(); } catch (err) { error.value = err; } finally { isLoading.value = false; } }
+> ```
 > - Wrap async actions in `try/catch/finally` blocks.
 > 
 > ```javascript
@@ -187,11 +185,10 @@ async function fetchItems() { isLoading.value = true; try { items.value = await 
 **Problem:** Which Pinia store method allows subscribing to action executions to log performance timings or handle global errors?
 
 **Expected output:**
-```text
-store.$onAction(({ name, store, args, after, onError }) => {})
-```
-
 > [!check]- Answer
+> ```text
+> store.$onAction(({ name, store, args, after, onError }) => {})
+> ```
 > - `store.$onAction()` listens to action executions.
 > 
 > ```javascript

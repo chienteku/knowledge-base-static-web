@@ -99,12 +99,11 @@ App A: A banking application where financial transactions, account balances, and
 App B: A web scraper that collects arbitrary, constantly changing JSON metadata from 10,000 different websites every minute.
 
 **Expected output:**
-```text
-App A: SQL (Relational). The data is strict, highly structured, and cannot afford errors or missing columns.
-App B: NoSQL. The data is unstructured (every website's JSON looks different), and we need to just dump it into storage quickly.
-```
-
 > [!check]- Answer
+> ```text
+> App A: SQL (Relational). The data is strict, highly structured, and cannot afford errors or missing columns.
+> App B: NoSQL. The data is unstructured (every website's JSON looks different), and we need to just dump it into storage quickly.
+> ```
 > - Which app has strict rules, and which app needs flexibility?
 
 ---
@@ -120,14 +119,13 @@ App B: NoSQL. The data is unstructured (every website's JSON looks different), a
 4. Scaled horizontally across clusters easily
 
 **Expected output:**
-```text
-1. SQL
-2. NoSQL
-3. SQL
-4. NoSQL
-```
-
 > [!check]- Answer
+> ```text
+> 1. SQL
+> 2. NoSQL
+> 3. SQL
+> 4. NoSQL
+> ```
 > ```text
 > 1. SQL
 > 2. NoSQL
@@ -137,16 +135,17 @@ App B: NoSQL. The data is unstructured (every website's JSON looks different), a
 >
 > **Explanation:** SQL databases prioritize relational integrity; NoSQL databases prioritize horizontal scalability and flexible schemas.
 
+---
+
 ### Exercise 3: Selecting Database for E-Commerce Catalog
 
 **Problem:** Which database type is better for an e-commerce catalog with thousands of diverse product categories each having unique dynamic attributes?
 
 **Expected output:**
-```text
-NoSQL (Document database like MongoDB) or PostgreSQL JSONB.
-```
-
 > [!check]- Answer
+> ```text
+> NoSQL (Document database like MongoDB) or PostgreSQL JSONB.
+> ```
 > ```text
 > NoSQL (Document database like MongoDB) or PostgreSQL JSONB.
 > ```

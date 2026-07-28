@@ -196,11 +196,10 @@ class User {
 **Problem:** Create `class User` with `static createGuest()` returning a new `User("Guest")`.
 
 **Expected output:**
-```text
-Guest
-```
-
 > [!check]- Answer
+> ```text
+> Guest
+> ```
 > ```typescript
 > class User {
 >   constructor(public name: string) {}
@@ -211,16 +210,17 @@ Guest
 >
 > **Explanation:** Static factory methods instantiate pre-configured class objects.
 
+---
+
 ### Exercise 2: Static Initialization Blocks (`static {}`)
 
 **Problem:** Use ES2022 `static {}` initialization block to configure static state.
 
 **Expected output:**
-```text
-Static block executed
-```
-
 > [!check]- Answer
+> ```text
+> Static block executed
+> ```
 > ```typescript
 > class App {
 >   static config: object;
@@ -233,16 +233,17 @@ Static block executed
 >
 > **Explanation:** Static initialization blocks execute code logic when class constructors are defined.
 
+---
+
 ### Exercise 3: Static Property Inheritance
 
 **Problem:** Are static members inherited by derived subclass constructors? (Yes)
 
 **Expected output:**
-```text
-Yes, static members are inherited along class prototype chains
-```
-
 > [!check]- Answer
+> ```text
+> Yes, static members are inherited along class prototype chains
+> ```
 > ```typescript
 > class Base { static id = 1; }
 > class Child extends Base {}
@@ -252,18 +253,17 @@ Yes, static members are inherited along class prototype chains
 >
 > **Explanation:** Derived classes inherit static properties from parent class constructors.
 
-
+---
 
 ### Exercise 4: Static Class Factory Pattern
 
 **Problem:** Create `class User` with `static createGuest()` returning a new `User("Guest")`.
 
 **Expected output:**
-```text
-Guest
-```
-
 > [!check]- Answer
+> ```text
+> Guest
+> ```
 > ```typescript
 > class User {
 >   constructor(public name: string) {}
@@ -274,16 +274,17 @@ Guest
 >
 > **Explanation:** Static factory methods instantiate pre-configured class objects.
 
+---
+
 ### Exercise 5: Static Initialization Blocks (`static {}`)
 
 **Problem:** Use ES2022 `static {}` initialization block to configure static state.
 
 **Expected output:**
-```text
-Static block executed
-```
-
 > [!check]- Answer
+> ```text
+> Static block executed
+> ```
 > ```typescript
 > class App {
 >   static config: object;
@@ -296,16 +297,17 @@ Static block executed
 >
 > **Explanation:** Static initialization blocks execute code logic when class constructors are defined.
 
+---
+
 ### Exercise 6: Static Property Inheritance
 
 **Problem:** Are static members inherited by derived subclass constructors? (Yes)
 
 **Expected output:**
-```text
-Yes, static members are inherited along class prototype chains
-```
-
 > [!check]- Answer
+> ```text
+> Yes, static members are inherited along class prototype chains
+> ```
 > ```typescript
 > class Base { static id = 1; }
 > class Child extends Base {}

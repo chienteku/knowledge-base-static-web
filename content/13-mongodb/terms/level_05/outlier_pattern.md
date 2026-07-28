@@ -154,22 +154,21 @@ if (user.hasOutlier) { const extra = await db.followers_overflow.find({ userId }
 Write the pseudo-code logic steps (using `if/else` checks) to describe how your controller will retrieve the full list of reviews for a given `bookId`.
 
 **Expected output:**
-```text
-1. Fetch the book document matching bookId:
-   `const book = db.books.findOne({ _id: bookId });`
-2. Initialize the final reviews list with the embedded reviews:
-   `let allReviews = book.reviews;`
-3. Check if the overflow flag is active:
-   `if (book.has_overflow === true) {`
-4. Fetch the remaining reviews from the overflow collection:
-   `const overflowReviews = db.reviews_overflow.find({ book_id: bookId }).toArray();`
-5. Merge the results:
-   `allReviews = allReviews.concat(overflowReviews);`
-   `}`
-6. Return `allReviews` to the client.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Fetch the book document matching bookId:
+>    `const book = db.books.findOne({ _id: bookId });`
+> 2. Initialize the final reviews list with the embedded reviews:
+>    `let allReviews = book.reviews;`
+> 3. Check if the overflow flag is active:
+>    `if (book.has_overflow === true) {`
+> 4. Fetch the remaining reviews from the overflow collection:
+>    `const overflowReviews = db.reviews_overflow.find({ book_id: bookId }).toArray();`
+> 5. Merge the results:
+>    `allReviews = allReviews.concat(overflowReviews);`
+>    `}`
+> 6. Return `allReviews` to the client.
+> ```
 > - The first database read gets the parent document and checks the overflow boolean.
 > - Execute a second read to the overflow collection only if the flag evaluates to true.
 
@@ -182,11 +181,10 @@ Write the pseudo-code logic steps (using `if/else` checks) to describe how your 
 **Problem:** Model celebrity user document holding top 1,000 followers and `hasOutlier: true` flag.
 
 **Expected output:**
-```text
-{ name: "Celebrity", hasOutlier: true, followers: [ ... 1000 items ] }
-```
-
 > [!check]- Answer
+> ```text
+> { name: "Celebrity", hasOutlier: true, followers: [ ... 1000 items ] }
+> ```
 > ```javascript
 > const user = {
 >   _id: new ObjectId(),
@@ -198,16 +196,17 @@ Write the pseudo-code logic steps (using `if/else` checks) to describe how your 
 >
 > **Explanation:** Outlier Pattern embeds standard items in primary document and offloads overflow to separate records.
 
+---
+
 ### Exercise 3: Outlier Pattern Use Case
 
 **Problem:** Describe ideal use case for Outlier Pattern (Social network accounts with extreme follower count distributions).
 
 **Expected output:**
-```text
-Power-law data distributions where a few outlier documents exceed standard array thresholds
-```
-
 > [!check]- Answer
+> ```text
+> Power-law data distributions where a few outlier documents exceed standard array thresholds
+> ```
 > ```text
 > Power-law data distributions where a few outlier documents exceed standard array thresholds
 > ```

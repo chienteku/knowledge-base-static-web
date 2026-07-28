@@ -150,12 +150,11 @@ SELECT SUBSTRING('Postgres' FROM 1 FOR 3); -- Extracts 3 chars ('Pos')
 Write the SQL query.
 
 **Expected output:**
-```sql
-SELECT SUBSTRING(LOWER(TRIM(email)) FROM 1 FOR 8) AS system_username 
-FROM subscribers;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT SUBSTRING(LOWER(TRIM(email)) FROM 1 FOR 8) AS system_username 
+> FROM subscribers;
+> ```
 > - Nest string functions inside each other (e.g. `FUNCTION_A(FUNCTION_B(col))`).
 > - Apply `TRIM`, then `LOWER`, and finally `SUBSTRING` from index `1` for length `8`.
 
@@ -168,11 +167,10 @@ FROM subscribers;
 **Problem:** Select concatenated `UPPER(last_name) || ', ' || first_name` as `formal_name` and `LOWER(email)`.
 
 **Expected output:**
-```text
-SELECT UPPER(last_name) || ', ' || first_name AS formal_name, LOWER(email) FROM users;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT UPPER(last_name) || ', ' || first_name AS formal_name, LOWER(email) FROM users;
+> ```
 > ```sql
 > SELECT UPPER(last_name) || ', ' || first_name AS formal_name, LOWER(email)
 > FROM users;
@@ -180,16 +178,17 @@ SELECT UPPER(last_name) || ', ' || first_name AS formal_name, LOWER(email) FROM 
 >
 > **Explanation:** `UPPER()`, `LOWER()`, and `||` transform and concatenate string expressions.
 
+---
+
 ### Exercise 3: Trimming Whitespace with `TRIM()`
 
 **Problem:** Trim leading and trailing whitespace from input string `input_str` using `TRIM()`.
 
 **Expected output:**
-```text
-SELECT TRIM(input_str) FROM t;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT TRIM(input_str) FROM t;
+> ```
 > ```sql
 > SELECT TRIM(input_str) FROM t;
 > ```

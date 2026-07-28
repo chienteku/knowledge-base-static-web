@@ -209,11 +209,10 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 `rgb(255, 255, 0)`
 
 **Expected output:**
-```text
-#ffff00 (Red is max/ff, Green is max/ff, Blue is zero/00). Can be shortened to #ff0.
-```
-
 > [!check]- Answer
+> ```text
+> #ffff00 (Red is max/ff, Green is max/ff, Blue is zero/00). Can be shortened to #ff0.
+> ```
 > - Translate the number 255 into hexadecimal base-16 (it becomes `ff`).
 > - Translate 0 into hexadecimal (it becomes `00`).
 
@@ -228,12 +227,11 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 2. Modern `rgb()` space-separated syntax (`rgb(255 0 0 / 0.5)`)
 
 **Expected output:**
-```text
-1. #ff000080
-2. rgb(255 0 0 / 0.5)
-```
-
 > [!check]- Answer
+> ```text
+> 1. #ff000080
+> 2. rgb(255 0 0 / 0.5)
+> ```
 > ```css
 > .color-hex { color: #ff000080; }
 > .color-rgb { color: rgb(255 0 0 / 0.5); }
@@ -241,16 +239,17 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 >
 > **Explanation:** Modern CSS supports 8-digit hex (#RRGGBBAA) and space-separated `/ alpha` notation.
 
+---
+
 ### Exercise 3: currentColor Keyword Function
 
 **Problem:** What value does the `currentColor` CSS keyword resolve to?
 
 **Expected output:**
-```text
-Resolves to the computed value of the element's current CSS `color` property.
-```
-
 > [!check]- Answer
+> ```text
+> Resolves to the computed value of the element's current CSS `color` property.
+> ```
 > ```css
 > button {
 >   color: blue;

@@ -144,14 +144,13 @@ Set-Cookie: token=xyz; SameSite=None; Secure
 4. `Domain` 
 
 **Expected output:**
-```text
-1. Blocks JavaScript access (document.cookie) to prevent XSS theft
-2. Restricts cookie transmission to HTTPS requests only
-3. Blocks cross-site cookie transmission to prevent CSRF
-4. Defines hostnames permitted to receive the cookie
-```
-
 > [!check]- Answer
+> ```text
+> 1. Blocks JavaScript access (document.cookie) to prevent XSS theft
+> 2. Restricts cookie transmission to HTTPS requests only
+> 3. Blocks cross-site cookie transmission to prevent CSRF
+> 4. Defines hostnames permitted to receive the cookie
+> ```
 > ```text
 > 1. HttpOnly -> Protects against XSS token extraction.
 > 2. Secure -> Protects against HTTP plaintext packet sniffing.
@@ -166,11 +165,10 @@ Set-Cookie: token=xyz; SameSite=None; Secure
 **Problem:** Which attribute parameter takes precedence if both `Expires` and `Max-Age` are present on a cookie?
 
 **Expected output:**
-```text
-Max-Age takes precedence in modern browsers.
-```
-
 > [!check]- Answer
+> ```text
+> Max-Age takes precedence in modern browsers.
+> ```
 > ```text
 > Max-Age (takes relative lifetime in seconds and overrides Expires).
 > ```

@@ -161,11 +161,10 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 ```
 
 **Expected output:**
-```text
-"Bird"
-```
-
 > [!check]- Answer
+> ```text
+> "Bird"
+> ```
 > - The first `<tr>` is row 1. The second `<tr>` is row 2. The first `<td>` inside that row is column 1.
 
 ---
@@ -177,11 +176,10 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 **Problem:** Write CSS rule aligning numbers right inside `<td>` data cells.
 
 **Expected output:**
-```text
-td.number { text-align: right; }
-```
-
 > [!check]- Answer
+> ```text
+> td.number { text-align: right; }
+> ```
 > ```css
 > td.number {
 >   text-align: right;
@@ -190,16 +188,17 @@ td.number { text-align: right; }
 >
 > **Explanation:** Numerical table data cells should be right-aligned for column readability.
 
+---
+
 ### Exercise 3: Empty Cell Display
 
 **Problem:** Which CSS property controls whether borders and backgrounds are rendered for empty `<td>` cells?
 
 **Expected output:**
-```text
-empty-cells: show; (or empty-cells: hide;)
-```
-
 > [!check]- Answer
+> ```text
+> empty-cells: show; (or empty-cells: hide;)
+> ```
 > ```css
 > table {
 >   empty-cells: hide;

@@ -192,11 +192,10 @@ Promise.resolve(10)
 ```
 
 **Expected output:**
-```text
-Result: 25
-```
-
 > [!check]- Answer
+> ```text
+> Result: 25
+> ```
 > - The first `.then()` should return `val * 3`.
 > - The second `.then()` should return `val - 5`.
 
@@ -207,11 +206,10 @@ Result: 25
 **Problem:** Chain `.then(x => x + 1).then(x => x * 2)` starting from `Promise.resolve(5)`.
 
 **Expected output:**
-```text
-12
-```
-
 > [!check]- Answer
+> ```text
+> 12
+> ```
 > ```javascript
 > Promise.resolve(5)
 >   .then(x => x + 1)
@@ -221,16 +219,17 @@ Result: 25
 >
 > **Explanation:** Each `.then()` returns a new promise resolving to the return value of its handler.
 
+---
+
 ### Exercise 3: Propagating Errors in Promise Chains
 
 **Problem:** Catch an error thrown in step 1 using a single downstream `.catch()` at chain end.
 
 **Expected output:**
-```text
-Caught error in chain: Step 1 failed
-```
-
 > [!check]- Answer
+> ```text
+> Caught error in chain: Step 1 failed
+> ```
 > ```javascript
 > Promise.resolve()
 >   .then(() => { throw new Error("Step 1 failed"); })

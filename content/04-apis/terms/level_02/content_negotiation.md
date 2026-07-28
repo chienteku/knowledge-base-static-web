@@ -158,13 +158,12 @@ Content-Type: application/json
 **Problem:** Given header `Accept: application/json; q=0.8, text/html; q=1.0, */*; q=0.1`, order client format preference from highest to lowest.
 
 **Expected output:**
-```text
-1. text/html (q=1.0)
-2. application/json (q=0.8)
-3. */* (q=0.1)
-```
-
 > [!check]- Answer
+> ```text
+> 1. text/html (q=1.0)
+> 2. application/json (q=0.8)
+> 3. */* (q=0.1)
+> ```
 > ```text
 > 1. text/html (q=1.0 - Default highest priority)
 > 2. application/json (q=0.8)
@@ -178,11 +177,10 @@ Content-Type: application/json
 **Problem:** Which HTTP header does a client send to request localized response content in Spanish or French?
 
 **Expected output:**
-```text
-Accept-Language: es, fr;q=0.8, en;q=0.5
-```
-
 > [!check]- Answer
+> ```text
+> Accept-Language: es, fr;q=0.8, en;q=0.5
+> ```
 > ```http
 > Accept-Language: es, fr;q=0.8, en;q=0.5
 > ```

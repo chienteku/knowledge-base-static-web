@@ -180,11 +180,10 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 ```
 
 **Expected output:**
-```text
-[ 'Apple', 'Bread', 'Water', 'Cheese' ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 'Apple', 'Bread', 'Water', 'Cheese' ]
+> ```
 > - Check existence using `cart.includes("Soda")`.
 > - Find index using `const index = cart.indexOf("Soda")`.
 > - Replace using `cart.splice(index, 1, "Water")`.
@@ -196,11 +195,10 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 **Problem:** Find the index of user `{ id: 2 }` in `[{ id: 1 }, { id: 2 }]` using `findIndex`.
 
 **Expected output:**
-```text
-1
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> ```
 > ```javascript
 > const users = [{ id: 1 }, { id: 2 }];
 > console.log(users.findIndex(u => u.id === 2));
@@ -208,16 +206,17 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 >
 > **Explanation:** `findIndex` uses predicate callbacks, enabling object property search.
 
+---
+
 ### Exercise 3: Checking Element Inclusion with `includes`
 
 **Problem:** Check if array `[1, 2, NaN]` contains `NaN` using `.includes(NaN)`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const arr = [1, 2, NaN];
 > console.log(arr.includes(NaN));

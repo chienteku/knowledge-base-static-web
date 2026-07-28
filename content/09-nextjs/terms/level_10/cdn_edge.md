@@ -103,13 +103,12 @@ res.headers.set('Cache-Control', 'private, no-store'); // Prevents public CDN ca
 **Problem:** A user visits a page `/dashboard` that is cached at a CDN edge in London. However, the request passes through your `middleware.ts` first. Explain why redirecting the user to `/login` from middleware is faster than redirecting from a Server Component:
 
 **Expected output:**
-```text
-Middleware runs directly on the Edge server in London. 
-Because the middleware intercepts the request at the edge, it can read the cookies and trigger the redirect to /login immediately without sending the request across the network to the central origin server. 
-Redirecting from a Server Component requires routing the request to the origin server, compiling the component, and returning the response, wasting time and network resources.
-```
-
 > [!check]- Answer
+> ```text
+> Middleware runs directly on the Edge server in London. 
+> Because the middleware intercepts the request at the edge, it can read the cookies and trigger the redirect to /login immediately without sending the request across the network to the central origin server. 
+> Redirecting from a Server Component requires routing the request to the origin server, compiling the component, and returning the response, wasting time and network resources.
+> ```
 > - Think about the physical travel path of the network request.
 
 ---
@@ -119,11 +118,10 @@ Redirecting from a Server Component requires routing the request to the origin s
 **Problem:** Which HTTP response header allows Next.js static pages to be cached on global Vercel Edge CDN nodes with background revalidation?
 
 **Expected output:**
-```text
-s-maxage (e.g. Cache-Control: s-maxage=60, stale-while-revalidate)
-```
-
 > [!check]- Answer
+> ```text
+> s-maxage (e.g. Cache-Control: s-maxage=60, stale-while-revalidate)
+> ```
 > - `s-maxage` directs shared CDN edge caches.
 > 
 > ```http
@@ -137,11 +135,10 @@ s-maxage (e.g. Cache-Control: s-maxage=60, stale-while-revalidate)
 **Problem:** How does executing Edge Functions at CDN edge nodes reduce TTFB latency for international users?
 
 **Expected output:**
-```text
-Edge functions execute in PoP data centers physically closest to the user, eliminating round-trip latency to a distant central origin server.
-```
-
 > [!check]- Answer
+> ```text
+> Edge functions execute in PoP data centers physically closest to the user, eliminating round-trip latency to a distant central origin server.
+> ```
 > - Executes in CDN PoP data centers closest to the user.
 > 
 > ```text

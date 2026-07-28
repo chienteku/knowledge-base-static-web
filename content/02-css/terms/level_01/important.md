@@ -198,11 +198,10 @@ p {
 ```
 
 **Expected output:**
-```text
-Blue! The element selector (`p`) has the lowest specificity, but because it has the `!important` flag, it overrides the standard class and ID selectors.
-```
-
 > [!check]- Answer
+> ```text
+> Blue! The element selector (`p`) has the lowest specificity, but because it has the `!important` flag, it overrides the standard class and ID selectors.
+> ```
 > - Standard selectors cannot override a selector containing `!important`, regardless of their point values.
 
 ---
@@ -214,11 +213,10 @@ Blue! The element selector (`p`) has the lowest specificity, but because it has 
 **Problem:** How can a CSS rule override an existing `.btn { color: red !important; }` declaration?
 
 **Expected output:**
-```text
-By using another rule with higher specificity that ALSO uses !important (or later in source order if specificity matches).
-```
-
 > [!check]- Answer
+> ```text
+> By using another rule with higher specificity that ALSO uses !important (or later in source order if specificity matches).
+> ```
 > ```css
 > #main .btn {
 >   color: blue !important; /* Higher specificity + !important overrides lower selector */
@@ -227,16 +225,17 @@ By using another rule with higher specificity that ALSO uses !important (or late
 >
 > **Explanation:** Rules with `!important` are compared against each other using standard selector specificity.
 
+---
+
 ### Exercise 3: Valid !important Use Case
 
 **Problem:** Name 1 valid architectural use case for `!important` in CSS frameworks.
 
 **Expected output:**
-```text
-Utility helper classes (e.g. .hidden { display: none !important; }).
-```
-
 > [!check]- Answer
+> ```text
+> Utility helper classes (e.g. .hidden { display: none !important; }).
+> ```
 > ```css
 > .d-none {
 >   display: none !important;

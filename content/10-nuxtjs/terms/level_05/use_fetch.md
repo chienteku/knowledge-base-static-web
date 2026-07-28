@@ -145,19 +145,18 @@ const { data } = await useFetch('/api/items', { query: { page }, watch: [page] }
 **Problem:** You have a `useFetch` call getting a list of products. The user clicks a "Refresh" button. How do you trigger the `useFetch` to fire again without reloading the page?
 
 **Expected output:**
-```vue
-<script setup lang="ts">
-// Extract the refresh function
-const { data: products, refresh } = await useFetch('/api/products');
-</script>
-
-<template>
-  <!-- Call the function on click -->
-  <button @click="refresh()">Refresh Products</button>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts">
+> // Extract the refresh function
+> const { data: products, refresh } = await useFetch('/api/products');
+> </script>
+> 
+> <template>
+>   <!-- Call the function on click -->
+>   <button @click="refresh()">Refresh Products</button>
+> </template>
+> ```
 > - You can destructure the `refresh` method returned by `useFetch()` and trigger it inside a click listener.
 
 ---
@@ -167,16 +166,15 @@ const { data: products, refresh } = await useFetch('/api/products');
 **Problem:** Write `useFetch` call querying `/api/search` with reactive `searchQuery` ref, setting `watch: [searchQuery]` and `pick: ['results']`.
 
 **Expected output:**
-```typescript
-const searchQuery = ref('');
-const { data } = await useFetch('/api/search', {
-  query: { q: searchQuery },
-  watch: [searchQuery],
-  pick: ['results']
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> const searchQuery = ref('');
+> const { data } = await useFetch('/api/search', {
+>   query: { q: searchQuery },
+>   watch: [searchQuery],
+>   pick: ['results']
+> });
+> ```
 > - `query`, `watch`, and `pick` options optimize reactive fetching.
 > 
 > ```typescript
@@ -196,11 +194,10 @@ const { data } = await useFetch('/api/search', {
 **Problem:** How does `pick: ['id', 'title']` improve Nuxt 3 performance?
 
 **Expected output:**
-```text
-It extracts ONLY specified properties from API responses, reducing payload serialization size and client memory overhead.
-```
-
 > [!check]- Answer
+> ```text
+> It extracts ONLY specified properties from API responses, reducing payload serialization size and client memory overhead.
+> ```
 > - `pick` reduces payload serialization network size.
 > 
 > ```typescript

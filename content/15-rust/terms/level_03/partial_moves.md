@@ -176,11 +176,10 @@ fn main() {
 **Problem:** Demonstrate moving a non-`Copy` field `name` out of `User` while continuing to use remaining `Copy` field `age`.
 
 **Expected output:**
-```
-Moved name: Alice, Age: 30
-```
-
 > [!check]- Answer
+> ```
+> Moved name: Alice, Age: 30
+> ```
 > ```rust
 > struct User { name: String, age: u32 }
 > fn main() {
@@ -192,16 +191,17 @@ Moved name: Alice, Age: 30
 >
 > **Explanation:** Unmoved `Copy` fields (`age`) remain valid and readable after partial moves of non-`Copy` fields (`name`).
 
+---
+
 ### Exercise 3: Preventing Partial Moves with `ref` Keywords
 
 **Problem:** Use `ref name` in pattern matching `let Person { ref name, age } = p;` to borrow fields without partial moves.
 
 **Expected output:**
-```
-Borrowed name: Bob, Person still valid: Bob
-```
-
 > [!check]- Answer
+> ```
+> Borrowed name: Bob, Person still valid: Bob
+> ```
 > struct Person { name: String, age: u32 }
 > fn main() {
 >     let p = Person { name: "Bob".into(), age: 25 };

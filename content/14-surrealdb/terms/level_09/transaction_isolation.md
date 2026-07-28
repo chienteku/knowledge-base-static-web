@@ -192,27 +192,27 @@ What isolation level does SurrealDB provide by default for transaction execution
 **Problem:** State ACID transaction guarantees provided by SurrealDB (Atomic, Consistent, Isolated, Durable).
 
 **Expected output:**
-```text
-Full ACID transaction guarantees
-```
-
 > [!check]- Answer
+> ```text
+> Full ACID transaction guarantees
+> ```
 > ```text
 > Full ACID transaction guarantees
 > ```
 >
 > **Explanation:** SurrealDB executes transactional query blocks with strict ACID guarantees.
 
+---
+
 ### Exercise 3: Optimistic Concurrency Control (OCC) Handling
 
 **Problem:** Why should transactional writes be kept short in distributed clusters? (Minimizes OCC lock contention and transaction abort retries).
 
 **Expected output:**
-```text
-Minimizes OCC lock contention and transaction abort retries
-```
-
 > [!check]- Answer
+> ```text
+> Minimizes OCC lock contention and transaction abort retries
+> ```
 > ```text
 > Minimizes OCC lock contention and transaction abort retries
 > ```

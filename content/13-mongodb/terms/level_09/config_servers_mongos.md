@@ -131,15 +131,14 @@ Deploy 3-node Config Server Replica Set (CSRS)
 Trace the physical path of this query across the cluster components (write the names of the components in the correct, sequential execution order).
 
 **Expected output:**
-```text
-1. Node.js Application (Sends query to the `mongos` router).
-2. `mongos` Router (Intercepts query, checks its cached map from the Config Servers to locate the shard owning "alice").
-3. Shard Replica Set (mongos forwards the query to the Primary node of that specific shard).
-4. `mongos` Router (Shard returns document to mongos).
-5. Node.js Application (mongos returns document to client).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Node.js Application (Sends query to the `mongos` router).
+> 2. `mongos` Router (Intercepts query, checks its cached map from the Config Servers to locate the shard owning "alice").
+> 3. Shard Replica Set (mongos forwards the query to the Primary node of that specific shard).
+> 4. `mongos` Router (Shard returns document to mongos).
+> 5. Node.js Application (mongos returns document to client).
+> ```
 > - The client application never communicates directly with config servers or shards.
 > - The stateless router acts as the coordinator middleman.
 
@@ -152,27 +151,27 @@ Trace the physical path of this query across the cluster components (write the n
 **Problem:** Construct URI connecting client driver to 2 `mongos` instances (`mongos1:27017`, `mongos2:27017`).
 
 **Expected output:**
-```text
-mongodb://mongos1:27017,mongos2:27017/app
-```
-
 > [!check]- Answer
+> ```text
+> mongodb://mongos1:27017,mongos2:27017/app
+> ```
 > ```text
 > mongodb://mongos1:27017,mongos2:27017/app
 > ```
 >
 > **Explanation:** Connection URIs specify `mongos` router pools for automatic failover and load balancing.
 
+---
+
 ### Exercise 3: Config Server Replica Set Role
 
 **Problem:** What metadata is stored by Config Server Replica Sets (CSRS)? (Metadata mapping chunks to specific cluster shards).
 
 **Expected output:**
-```text
-Cluster metadata mapping dataset chunks to specific storage shards
-```
-
 > [!check]- Answer
+> ```text
+> Cluster metadata mapping dataset chunks to specific storage shards
+> ```
 > ```text
 > Cluster metadata mapping dataset chunks to specific storage shards
 > ```

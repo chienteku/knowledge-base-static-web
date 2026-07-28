@@ -286,6 +286,8 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 >
 > **Explanation:** Nested lists must be placed inside an `<li>` element of the parent list.
 
+---
+
 ### Exercise 3: Reversing Ordered List Numbers
 
 **Problem:** Which attribute on `<ol>` reverses number ordering (e.g. 3, 2, 1)?

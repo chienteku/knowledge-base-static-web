@@ -258,11 +258,10 @@ function addSearch() {
 ```
 
 **Expected output:**
-```text
-The refs are declared with exact generic type constraints: `ref<string[]>` and `ref<HTMLInputElement | null>`.
-```
-
 > [!check]- Answer
+> ```text
+> The refs are declared with exact generic type constraints: `ref<string[]>` and `ref<HTMLInputElement | null>`.
+> ```
 > - Add `<string[]>` to the history ref call.
 > - Add `<HTMLInputElement | null>` to the DOM template ref call.
 
@@ -273,11 +272,10 @@ The refs are declared with exact generic type constraints: `ref<string[]>` and `
 **Problem:** Write Vue 3 `<script setup lang="ts">` `defineEmits` declaration for typed events: `'change'` (id: number) and `'update'` (text: string).
 
 **Expected output:**
-```vue
-<script setup lang="ts"> const emit = defineEmits<{ (e: 'change', id: number): void; (e: 'update', text: string): void; }>(); </script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts"> const emit = defineEmits<{ (e: 'change', id: number): void; (e: 'update', text: string): void; }>(); </script>
+> ```
 > - Call signature syntax in `defineEmits<T>()` provides strong event payload typing.
 > 
 > ```vue
@@ -296,11 +294,10 @@ The refs are declared with exact generic type constraints: `ref<string[]>` and `
 **Problem:** Which CLI tool performs command-line TypeScript type checking across `.vue` Single File Components during CI/CD builds?
 
 **Expected output:**
-```text
-vue-tsc (Vue TypeScript Compiler)
-```
-
 > [!check]- Answer
+> ```text
+> vue-tsc (Vue TypeScript Compiler)
+> ```
 > - `vue-tsc --noEmit` validates TypeScript types across all `.vue` templates.
 > 
 > ```bash

@@ -179,17 +179,16 @@ DEFINE FIELD metadata ON TABLE log TYPE object FLEXIBLE; // Permits nested keys
 3.  Define a field `discount_percent` as an optional integer. If provided, it must be between `1` and `99` (inclusive).
 
 **Expected output:**
-```sql
-DEFINE TABLE products SCHEMAFULL;
-
-DEFINE FIELD category ON products TYPE string
-  ASSERT $value INSIDE ["books", "clothing", "electronics"];
-
-DEFINE FIELD discount_percent ON products TYPE option<int>
-  ASSERT $value = NONE OR ($value >= 1 AND $value <= 99);
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE TABLE products SCHEMAFULL;
+> 
+> DEFINE FIELD category ON products TYPE string
+>   ASSERT $value INSIDE ["books", "clothing", "electronics"];
+> 
+> DEFINE FIELD discount_percent ON products TYPE option<int>
+>   ASSERT $value = NONE OR ($value >= 1 AND $value <= 99);
+> ```
 > - Use the `INSIDE` operator to enforce enum checks.
 > - For the optional `discount_percent` field, ensure your assertion starts with the `$value = NONE OR` bypass.
 
@@ -202,11 +201,10 @@ DEFINE FIELD discount_percent ON products TYPE option<int>
 **Problem:** Define `SCHEMAFULL` table `user` with required `name` (string) and `email` (string with `is::email` assertion).
 
 **Expected output:**
-```text
-DEFINE TABLE user SCHEMAFULL; DEFINE FIELD name ON user TYPE string; DEFINE FIELD email ON user TYPE string ASSERT is::email($value);
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE TABLE user SCHEMAFULL; DEFINE FIELD name ON user TYPE string; DEFINE FIELD email ON user TYPE string ASSERT is::email($value);
+> ```
 > ```surrealql
 > DEFINE TABLE user SCHEMAFULL;
 > DEFINE FIELD name ON TABLE user TYPE string;
@@ -215,16 +213,17 @@ DEFINE TABLE user SCHEMAFULL; DEFINE FIELD name ON user TYPE string; DEFINE FIEL
 >
 > **Explanation:** `SCHEMAFULL` table schema definitions strictly validate fields and assertions.
 
+---
+
 ### Exercise 3: Schema Validation Rejection Behavior
 
 **Problem:** What occurs when inserting an invalid data type into a `SCHEMAFULL` table field? (Fails with schema validation error).
 
 **Expected output:**
-```text
-Transaction rejects insert with schema validation error
-```
-
 > [!check]- Answer
+> ```text
+> Transaction rejects insert with schema validation error
+> ```
 > ```text
 > Transaction rejects insert with schema validation error
 > ```

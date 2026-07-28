@@ -178,11 +178,10 @@ button { margin-left: 15px; }
 **Problem:** You have an empty `<div>` with `position: absolute;`. You add `top: 0; bottom: 0; left: 0; right: 0;` and a blue background color. What does it look like?
 
 **Expected output:**
-```text
-The box will stretch to completely cover the entire parent container! Because you pinned all four edges to the walls of the parent, the blue background will fill the entire space.
-```
-
 > [!check]- Answer
+> ```text
+> The box will stretch to completely cover the entire parent container! Because you pinned all four edges to the walls of the parent, the blue background will fill the entire space.
+> ```
 > - What happens when you pin a rubber sheet to all four corners of a frame?
 
 ---
@@ -194,11 +193,10 @@ The box will stretch to completely cover the entire parent container! Because yo
 **Problem:** Write CSS stretching an absolute overlay `.overlay` to fill 100% of its relative parent using offset properties.
 
 **Expected output:**
-```text
-.overlay { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
-```
-
 > [!check]- Answer
+> ```text
+> .overlay { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+> ```
 > ```css
 > .overlay {
 >   position: absolute;
@@ -211,16 +209,17 @@ The box will stretch to completely cover the entire parent container! Because yo
 >
 > **Explanation:** Setting `top: 0; bottom: 0; left: 0; right: 0` stretches absolute elements across parent boundaries.
 
+---
+
 ### Exercise 3: Logical Inset Property
 
 **Problem:** Which modern shorthand CSS property replaces setting `top: 0; right: 0; bottom: 0; left: 0;`?
 
 **Expected output:**
-```text
-inset: 0;
-```
-
 > [!check]- Answer
+> ```text
+> inset: 0;
+> ```
 > ```css
 > .overlay {
 >   position: absolute;

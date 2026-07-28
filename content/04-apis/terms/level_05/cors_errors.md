@@ -164,11 +164,10 @@ fetch('https://api.com/data', {
 **Problem:** Identify the root cause for DevTools error: `No 'Access-Control-Allow-Origin' header is present on the requested resource.`
 
 **Expected output:**
-```text
-The backend server did not include the Access-Control-Allow-Origin response header matching the frontend requesting origin.
-```
-
 > [!check]- Answer
+> ```text
+> The backend server did not include the Access-Control-Allow-Origin response header matching the frontend requesting origin.
+> ```
 > ```text
 > The backend server did not include the Access-Control-Allow-Origin response header matching the frontend requesting origin.
 > ```
@@ -180,11 +179,10 @@ The backend server did not include the Access-Control-Allow-Origin response head
 **Problem:** How does setting a development proxy (`"proxy": "http://localhost:5000"` in React/Vite) eliminate CORS errors during local development?
 
 **Expected output:**
-```text
-The frontend dev server proxies API calls server-to-server. Browser communicates with same-origin dev server, bypassing CORS rules.
-```
-
 > [!check]- Answer
+> ```text
+> The frontend dev server proxies API calls server-to-server. Browser communicates with same-origin dev server, bypassing CORS rules.
+> ```
 > ```text
 > The frontend dev server proxies API calls server-to-server. Browser communicates with same-origin dev server, bypassing CORS rules.
 > ```

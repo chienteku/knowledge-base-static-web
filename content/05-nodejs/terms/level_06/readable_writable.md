@@ -120,12 +120,11 @@ writable.on('finish', () => console.log('Write complete'));
 **Problem:** In a standard Node.js Express server, you have `req` (the incoming request) and `res` (the outgoing response). Which one is the Readable Stream, and which one is the Writable Stream?
 
 **Expected output:**
-```text
-- `req` is a Readable Stream. (Data is coming FROM the user TO your server).
-- `res` is a Writable Stream. (Data is going FROM your server TO the user).
-```
-
 > [!check]- Answer
+> ```text
+> - `req` is a Readable Stream. (Data is coming FROM the user TO your server).
+> - `res` is a Writable Stream. (Data is going FROM your server TO the user).
+> ```
 > - Where is the data originating, and where is it landing?
 
 ---
@@ -141,14 +140,13 @@ writable.on('finish', () => console.log('Write complete'));
 4. `http.ServerResponse` (`res`)
 
 **Expected output:**
-```text
-1. Readable
-2. Writable
-3. Readable
-4. Writable
-```
-
 > [!check]- Answer
+> ```text
+> 1. Readable
+> 2. Writable
+> 3. Readable
+> 4. Writable
+> ```
 > ```text
 > 1. process.stdin -> Readable
 > 2. process.stdout -> Writable
@@ -158,16 +156,17 @@ writable.on('finish', () => console.log('Write complete'));
 >
 > **Explanation:** Requests and stdin are readable inputs; responses and stdout are writable outputs.
 
+---
+
 ### Exercise 3: Writing Data to Writable Stream
 
 **Problem:** Write string `'Log'` to writable file stream and close it.
 
 **Expected output:**
-```text
-writer.write('Log'); writer.end();
-```
-
 > [!check]- Answer
+> ```text
+> writer.write('Log'); writer.end();
+> ```
 > ```javascript
 > const writer = fs.createWriteStream('log.txt');
 > writer.write('Log');

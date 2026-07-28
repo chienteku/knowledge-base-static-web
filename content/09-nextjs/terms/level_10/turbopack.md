@@ -103,16 +103,15 @@ next dev --turbo # Fast development server powered by Turbopack
 **Problem:** How do you launch the Next.js development server with Turbopack enabled?
 
 **Expected output:**
-```json
-// Inside package.json scripts:
-{
-  "scripts": {
-    "dev": "next dev --turbo"
-  }
-}
-```
-
 > [!check]- Answer
+> ```json
+> // Inside package.json scripts:
+> {
+>   "scripts": {
+>     "dev": "next dev --turbo"
+>   }
+> }
+> ```
 > - Add the `--turbo` option flag to the standard `next dev` command.
 
 ---
@@ -122,11 +121,10 @@ next dev --turbo # Fast development server powered by Turbopack
 **Problem:** Write `package.json` script command launching Next.js dev server with Turbopack acceleration.
 
 **Expected output:**
-```json
-"dev": "next dev --turbo"
-```
-
 > [!check]- Answer
+> ```json
+> "dev": "next dev --turbo"
+> ```
 > - `--turbo` flag enables Turbopack in development.
 > 
 > ```json
@@ -144,11 +142,10 @@ next dev --turbo # Fast development server powered by Turbopack
 **Problem:** Which programming language powers Turbopack, and which bundler is it designed to replace?
 
 **Expected output:**
-```text
-Written in Rust; designed to replace Webpack (up to 700x faster updates).
-```
-
 > [!check]- Answer
+> ```text
+> Written in Rust; designed to replace Webpack (up to 700x faster updates).
+> ```
 > - Rust-based incremental bundler replacing Webpack.
 > 
 > ```text

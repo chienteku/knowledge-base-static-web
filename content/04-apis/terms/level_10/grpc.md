@@ -109,15 +109,14 @@ message User {
 Where do you use REST, and where do you use gRPC?
 
 **Expected output:**
-```text
-React Frontend  --(REST/JSON)-->  Node.js Gateway
-Node.js Gateway --(gRPC)------->  Python Microservices
-Python to Python --(gRPC)-------> Python Microservices
-
-The Browser uses standard REST to talk to the public-facing Gateway. But behind the scenes, all the heavy lifting and data passing between the 50 internal servers is done using ultra-fast gRPC binary streams!
-```
-
 > [!check]- Answer
+> ```text
+> React Frontend  --(REST/JSON)-->  Node.js Gateway
+> Node.js Gateway --(gRPC)------->  Python Microservices
+> Python to Python --(gRPC)-------> Python Microservices
+> 
+> The Browser uses standard REST to talk to the public-facing Gateway. But behind the scenes, all the heavy lifting and data passing between the 50 internal servers is done using ultra-fast gRPC binary streams!
+> ```
 > - Which protocol is best for internal, computer-to-computer chatter?
 
 ---
@@ -127,14 +126,13 @@ The Browser uses standard REST to talk to the public-facing Gateway. But behind 
 **Problem:** Identify the 4 RPC streaming modes supported by gRPC.
 
 **Expected output:**
-```text
-1. Unary RPC (Single request -> Single response)
-2. Server Streaming RPC (Single request -> Stream of responses)
-3. Client Streaming RPC (Stream of requests -> Single response)
-4. Bi-directional Streaming RPC (Stream of requests <-> Stream of responses)
-```
-
 > [!check]- Answer
+> ```text
+> 1. Unary RPC (Single request -> Single response)
+> 2. Server Streaming RPC (Single request -> Stream of responses)
+> 3. Client Streaming RPC (Stream of requests -> Single response)
+> 4. Bi-directional Streaming RPC (Stream of requests <-> Stream of responses)
+> ```
 > ```text
 > 1. Unary RPC
 > 2. Server Streaming RPC
@@ -149,11 +147,10 @@ The Browser uses standard REST to talk to the public-facing Gateway. But behind 
 **Problem:** Which network protocol version is strictly required as the transport foundation for gRPC?
 
 **Expected output:**
-```text
-HTTP/2 (for binary multiplexing and header compression).
-```
-
 > [!check]- Answer
+> ```text
+> HTTP/2 (for binary multiplexing and header compression).
+> ```
 > ```text
 > HTTP/2 (for binary multiplexing, streams, and HPACK header compression).
 > ```

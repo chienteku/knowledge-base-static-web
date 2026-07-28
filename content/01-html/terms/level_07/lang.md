@@ -157,11 +157,10 @@ Root declaration on the HTML tag:
 **Problem:** Write the HTML markup for a paragraph where the main sentence is in English, but it contains the Spanish phrase "Hasta la vista" wrapped in a span with the correct language attribute.
 
 **Expected output:**
-```html
-<p>He waved goodbye and said, <span lang="es">Hasta la vista</span>, before walking away.</p>
-```
-
 > [!check]- Answer
+> ```html
+> <p>He waved goodbye and said, <span lang="es">Hasta la vista</span>, before walking away.</p>
+> ```
 > - The parent paragraph tag does not need a language override (it inherits English from the root).
 > - Wrap the Spanish phrase in a `<span>` element.
 > - Set `lang="es"` on that span.
@@ -175,27 +174,27 @@ Root declaration on the HTML tag:
 **Problem:** Write paragraph in English (`lang="en"`) containing a French phrase `'c\'est la vie'` marked up with `lang="fr"`.
 
 **Expected output:**
-```text
-<p>That is life, or as the French say, <span lang="fr">c'est la vie</span>.</p>
-```
-
 > [!check]- Answer
+> ```text
+> <p>That is life, or as the French say, <span lang="fr">c'est la vie</span>.</p>
+> ```
 > ```html
 > <p>That is life, or as the French say, <span lang="fr">c'est la vie</span>.</p>
 > ```
 >
 > **Explanation:** The `lang` attribute can be applied to inline elements to override language pronunciation for screen readers.
 
+---
+
 ### Exercise 3: CSS :lang Pseudo-Class Selector
 
 **Problem:** Write CSS rule styling quotes for elements with `lang="fr"` using French guillemets (`« »`).
 
 **Expected output:**
-```text
-:lang(fr) q { quotes: "« " " »"; }
-```
-
 > [!check]- Answer
+> ```text
+> :lang(fr) q { quotes: "« " " »"; }
+> ```
 > ```css
 > :lang(fr) q {
 >   quotes: "« " " »";

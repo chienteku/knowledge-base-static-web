@@ -182,11 +182,10 @@ thread::spawn(move || {
 **Problem:** Use `anyhow::Context` (`.with_context(...)`) to attach descriptive failure context when parsing string to int.
 
 **Expected output:**
-```
-Failed to parse port
-```
-
 > [!check]- Answer
+> ```
+> Failed to parse port
+> ```
 > ```rust
 > fn parse_port(s: &str) -> Result<u16, String> {
 >     s.parse::<u16>().map_err(|_| "Failed to parse port".to_string())
@@ -200,16 +199,17 @@ Failed to parse port
 >
 > **Explanation:** Attaching context enriches error backtraces with application-specific domain diagnostics.
 
+---
+
 ### Exercise 3: Domain Error Definition with `thiserror`
 
 **Problem:** Define an error enum `DataError` with `#[error("io failed")] Io` and `#[error("parse error: {0}")] Parse(String)` variants.
 
 **Expected output:**
-```
-Error: parse error: invalid digit
-```
-
 > [!check]- Answer
+> ```
+> Error: parse error: invalid digit
+> ```
 > ```rust
 > enum DataError {
 >     Parse(String),

@@ -156,11 +156,10 @@ async function processData() {
 **Problem:** Call a function `multiply(a, b)` and pass it three arguments: `5`, `10`, and `15`. What happens?
 
 **Expected output:**
-```text
-50
-```
-
 > [!check]- Answer
+> ```text
+> 50
+> ```
 > - The function will map `5` to `a`, `10` to `b`, and completely ignore the `15`.
 
 ---
@@ -170,11 +169,10 @@ async function processData() {
 **Problem:** Convert `arguments` to a real array using `Array.from(arguments)` and call `.reduce()` to sum inputs `add(10, 20, 30)`.
 
 **Expected output:**
-```text
-60
-```
-
 > [!check]- Answer
+> ```text
+> 60
+> ```
 > ```javascript
 > function sumAll() {
 >   const args = Array.from(arguments);
@@ -185,16 +183,17 @@ async function processData() {
 >
 > **Explanation:** `Array.from()` creates a true `Array` instance from array-like objects.
 
+---
+
 ### Exercise 3: Rest Parameters vs `arguments`
 
 **Problem:** Rewrite a function using modern ES6 rest parameters `function multiply(factor, ...numbers)`.
 
 **Expected output:**
-```text
-[ 10, 20, 30 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 10, 20, 30 ]
+> ```
 > ```javascript
 > function multiply(factor, ...numbers) {
 >   return numbers.map(n => n * factor);

@@ -162,14 +162,13 @@ Implement UI business logic in application code; use functions for heavy DB comp
 **Problem:** Write the SQL query to create a stored function named `get_initials` that accepts two text parameters (`first_name` and `last_name`) and returns a text containing their upper-case initials combined (e.g., input `'john'`, `'doe'` returns `'J.D.'`). Use the standard `sql` language.
 
 **Expected output:**
-```sql
-CREATE FUNCTION get_initials(first_name TEXT, last_name TEXT)
-RETURNS TEXT AS $$
-  SELECT UPPER(SUBSTRING(first_name FROM 1 FOR 1)) || '.' || UPPER(SUBSTRING(last_name FROM 1 FOR 1)) || '.';
-$$ LANGUAGE sql;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE FUNCTION get_initials(first_name TEXT, last_name TEXT)
+> RETURNS TEXT AS $$
+>   SELECT UPPER(SUBSTRING(first_name FROM 1 FOR 1)) || '.' || UPPER(SUBSTRING(last_name FROM 1 FOR 1)) || '.';
+> $$ LANGUAGE sql;
+> ```
 > - Use the `SUBSTRING` function to grab the first letter of each text string.
 > - Concatenate the strings using `||`.
 > - Wrap the output in `UPPER()`.
@@ -183,27 +182,27 @@ $$ LANGUAGE sql;
 **Problem:** List 3 function volatility categories in PostgreSQL (`VOLATILE`, `STABLE`, `IMMUTABLE`).
 
 **Expected output:**
-```text
-VOLATILE, STABLE, IMMUTABLE
-```
-
 > [!check]- Answer
+> ```text
+> VOLATILE, STABLE, IMMUTABLE
+> ```
 > ```text
 > VOLATILE, STABLE, IMMUTABLE
 > ```
 >
 > **Explanation:** Volatility categories inform the PostgreSQL query planner when function outputs can be cached.
 
+---
+
 ### Exercise 3: Table-Valued Stored Function
 
 **Problem:** Create stored function `get_active_users()` returning `TABLE (id INT, name TEXT)`.
 
 **Expected output:**
-```text
-CREATE OR REPLACE FUNCTION get_active_users() RETURNS TABLE (id INT, name TEXT) AS $$ BEGIN RETURN QUERY SELECT u.id, u.name FROM users u WHERE u.active IS TRUE; END; $$ LANGUAGE plpgsql STABLE;
-```
-
 > [!check]- Answer
+> ```text
+> CREATE OR REPLACE FUNCTION get_active_users() RETURNS TABLE (id INT, name TEXT) AS $$ BEGIN RETURN QUERY SELECT u.id, u.name FROM users u WHERE u.active IS TRUE; END; $$ LANGUAGE plpgsql STABLE;
+> ```
 > ```sql
 > CREATE OR REPLACE FUNCTION get_active_users()
 > RETURNS TABLE (id INT, name TEXT) AS $$

@@ -121,16 +121,15 @@ const { data } = await useAsyncData('key', async () => 'plain string');
 **Problem:** You are fetching an array of 100 users, but your UI only needs the first 3 usernames. Sending 100 full user objects from the server to the client wastes massive payload size. How can you use the `transform` option in `useAsyncData` to only return the necessary data?
 
 **Expected output:**
-```typescript
-const { data } = await useAsyncData('users', 
-  () => $fetch('/api/users'), 
-  {
-    transform: (users) => users.slice(0, 3).map(u => u.username)
-  }
-);
-```
-
 > [!check]- Answer
+> ```typescript
+> const { data } = await useAsyncData('users', 
+>   () => $fetch('/api/users'), 
+>   {
+>     transform: (users) => users.slice(0, 3).map(u => u.username)
+>   }
+> );
+> ```
 > - The `transform` configuration property accepts a mapping function that receives the raw resolved API result and returns the sliced format.
 
 ---
@@ -140,13 +139,12 @@ const { data } = await useAsyncData('users',
 **Problem:** Write `useAsyncData` call with custom `transform` function mapping array of user objects to extract only user names.
 
 **Expected output:**
-```typescript
-const { data: names } = await useAsyncData('users-names', () => $fetch('/api/users'), {
-  transform: (users) => users.map(u => u.name)
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> const { data: names } = await useAsyncData('users-names', () => $fetch('/api/users'), {
+>   transform: (users) => users.map(u => u.name)
+> });
+> ```
 > - `transform` option sanitizes data payload before payload serialization.
 > 
 > ```typescript
@@ -167,11 +165,10 @@ const { data: names } = await useAsyncData('users-names', () => $fetch('/api/use
 **Problem:** What effect does setting `{ lazy: true }` have on `useAsyncData` during navigation?
 
 **Expected output:**
-```text
-It prevents navigation blocking, resolving the async data in background while page transition renders immediately.
-```
-
 > [!check]- Answer
+> ```text
+> It prevents navigation blocking, resolving the async data in background while page transition renders immediately.
+> ```
 > - `{ lazy: true }` renders page immediately without blocking router navigation.
 > 
 > ```typescript

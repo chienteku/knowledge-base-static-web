@@ -113,13 +113,12 @@ state.count++; // Mutate Proxy wrapper to trigger reactive reactivity traps
 **Problem:** You learned in Level 2 that destructuring a `reactive()` object destroys its reactivity (`let { name } = user`). Based on how Proxies work, explain *why* this destroys reactivity.
 
 **Expected output:**
-```text
-A Proxy is a wrapper around an object. 
-When you destructure `let { name } = user`, JavaScript copies the raw string value ("Alice") out of the Proxy and puts it into a brand new, standalone variable. 
-The new `name` variable is just a string; it has no Proxy wrapper, so it has no `get` or `set` traps to intercept changes!
-```
-
 > [!check]- Answer
+> ```text
+> A Proxy is a wrapper around an object. 
+> When you destructure `let { name } = user`, JavaScript copies the raw string value ("Alice") out of the Proxy and puts it into a brand new, standalone variable. 
+> The new `name` variable is just a string; it has no Proxy wrapper, so it has no `get` or `set` traps to intercept changes!
+> ```
 > - Does the extracted primitive value still have the `set` trap attached to it?
 
 ---
@@ -129,11 +128,10 @@ The new `name` variable is just a string; it has no Proxy wrapper, so it has no 
 **Problem:** Which Vue utility function extracts the underlying raw non-reactive target object from a `reactive()` or `readonly()` proxy?
 
 **Expected output:**
-```text
-toRaw(proxyObject)
-```
-
 > [!check]- Answer
+> ```text
+> toRaw(proxyObject)
+> ```
 > - `toRaw()` retrieves the original un-proxied object.
 > 
 > ```javascript
@@ -149,11 +147,10 @@ toRaw(proxyObject)
 **Problem:** Why does Vue 3 ES6 Proxy reactivity detect newly added object properties (`state.newProp = 5`), whereas Vue 2 required `Vue.set()`?
 
 **Expected output:**
-```text
-Vue 2 Object.defineProperty required pre-defining property getters/setters; Vue 3 Proxy intercepts target object property additions dynamically.
-```
-
 > [!check]- Answer
+> ```text
+> Vue 2 Object.defineProperty required pre-defining property getters/setters; Vue 3 Proxy intercepts target object property additions dynamically.
+> ```
 > - ES6 Proxy traps intercept dynamic property additions/deletions.
 > 
 > ```text

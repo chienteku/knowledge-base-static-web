@@ -109,12 +109,11 @@ import fs from 'fs'; // ❌ Build Error: Node.js module 'fs' not supported in Ed
 **Problem:** You need to verify a JSON Web Token in your `middleware.ts`. You normally use the `jsonwebtoken` npm package, but it relies on the Node.js `crypto` module. What do you do?
 
 **Expected output:**
-```text
-You cannot use `jsonwebtoken`. 
-Instead, you must use a library specifically built for the Edge Runtime that utilizes the standard Web `crypto.subtle` API, such as the `jose` npm package.
-```
-
 > [!check]- Answer
+> ```text
+> You cannot use `jsonwebtoken`. 
+> Instead, you must use a library specifically built for the Edge Runtime that utilizes the standard Web `crypto.subtle` API, such as the `jose` npm package.
+> ```
 > - The Edge only has access to browser-like Web APIs.
 
 ---
@@ -124,11 +123,10 @@ Instead, you must use a library specifically built for the Edge Runtime that uti
 **Problem:** Write Edge Route Handler using Web Standard `crypto.subtle` or `crypto.randomUUID()`.
 
 **Expected output:**
-```typescript
-export const runtime = 'edge'; export async function GET() { const id = crypto.randomUUID(); return Response.json({ id }); }
-```
-
 > [!check]- Answer
+> ```typescript
+> export const runtime = 'edge'; export async function GET() { const id = crypto.randomUUID(); return Response.json({ id }); }
+> ```
 > - Edge Runtime relies on Web Standard APIs (`crypto`, `fetch`, `Headers`).
 > 
 > ```typescript
@@ -150,13 +148,12 @@ export const runtime = 'edge'; export async function GET() { const id = crypto.r
 3. Maximum execution time
 
 **Expected output:**
-```text
-1. Edge: Near-zero (sub-5ms); Node.js: 100-500ms cold starts
-2. Edge: Web Standards only; Node.js: Full C++ API modules (fs, net)
-3. Edge: Short (30s max); Node.js: Up to 15 minutes
-```
-
 > [!check]- Answer
+> ```text
+> 1. Edge: Near-zero (sub-5ms); Node.js: 100-500ms cold starts
+> 2. Edge: Web Standards only; Node.js: Full C++ API modules (fs, net)
+> 3. Edge: Short (30s max); Node.js: Up to 15 minutes
+> ```
 > - Edge -> Zero cold start, Web APIs only, short execution.
 > - Node.js -> Cold start latency, full Node C++ modules, long execution.
 > 

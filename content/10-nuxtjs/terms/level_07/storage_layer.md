@@ -127,21 +127,20 @@ await useStorage().setItem('cache:key', value); // Await storage operation
 **Problem:** You want `useStorage('data')` to save to a local folder named `.data/` when running in development, but you want it to use Redis in production. How do you configure `nuxt.config.ts`? (Hint: Use `devStorage`).
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  nitro: {
-    storage: {
-      data: { driver: 'redis', url: process.env.REDIS_URL }
-    },
-    // Overrides the driver during `npm run dev`
-    devStorage: {
-      data: { driver: 'fs', base: './.data' }
-    }
-  }
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   nitro: {
+>     storage: {
+>       data: { driver: 'redis', url: process.env.REDIS_URL }
+>     },
+>     // Overrides the driver during `npm run dev`
+>     devStorage: {
+>       data: { driver: 'fs', base: './.data' }
+>     }
+>   }
+> })
+> ```
 > - You can configure a production-ready key-value driver inside `nitro.storage`, then override it for dev runs using the `devStorage` configuration block.
 
 ---
@@ -151,19 +150,18 @@ export default defineNuxtConfig({
 **Problem:** Write Nitro server handler retrieving cached data with `useStorage().getItem('cache:item')` or setting item if null.
 
 **Expected output:**
-```typescript
-export default defineEventHandler(async (event) => {
-  const storage = useStorage();
-  let data = await storage.getItem('cache:item');
-  if (!data) {
-    data = { time: Date.now() };
-    await storage.setItem('cache:item', data);
-  }
-  return data;
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler(async (event) => {
+>   const storage = useStorage();
+>   let data = await storage.getItem('cache:item');
+>   if (!data) {
+>     data = { time: Date.now() };
+>     await storage.setItem('cache:item', data);
+>   }
+>   return data;
+> });
+> ```
 > - `useStorage()` provides unified key-value storage across drivers.
 > 
 > ```typescript
@@ -187,11 +185,10 @@ export default defineEventHandler(async (event) => {
 **Problem:** Which underlying open-source library powers Nitro's unified storage layer?
 
 **Expected output:**
-```text
-unstorage (by Unjs)
-```
-
 > [!check]- Answer
+> ```text
+> unstorage (by Unjs)
+> ```
 > - `unstorage` powers Nitro's multi-driver storage layer.
 > 
 > ```text

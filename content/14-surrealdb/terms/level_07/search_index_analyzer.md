@@ -152,12 +152,11 @@ DEFINE ANALYZER custom_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
 2. Create a search index named `idx_kb_search` on the `knowledge_base` table covering the `title` and `body` fields using `tech_analyzer` and `BM25`.
 
 **Expected output:**
-```sql
-DEFINE ANALYZER tech_analyzer TOKENIZERS class FILTERS lowercase, snowball(english);
-DEFINE INDEX idx_kb_search ON knowledge_base COLUMNS title, body SEARCH ANALYZER tech_analyzer BM25;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE ANALYZER tech_analyzer TOKENIZERS class FILTERS lowercase, snowball(english);
+> DEFINE INDEX idx_kb_search ON knowledge_base COLUMNS title, body SEARCH ANALYZER tech_analyzer BM25;
+> ```
 > - Define the analyzer first with `DEFINE ANALYZER`.
 > - Include `SEARCH ANALYZER tech_analyzer BM25` inside `DEFINE INDEX`.
 
@@ -170,27 +169,27 @@ DEFINE INDEX idx_kb_search ON knowledge_base COLUMNS title, body SEARCH ANALYZER
 **Problem:** Define custom analyzer `my_analyzer` with `blank` tokenizer and `lowercase`, `ascii` filters.
 
 **Expected output:**
-```text
-DEFINE ANALYZER my_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE ANALYZER my_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
+> ```
 > ```surrealql
 > DEFINE ANALYZER my_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
 > ```
 >
 > **Explanation:** `DEFINE ANALYZER` configures custom tokenizers and filters for text indexing.
 
+---
+
 ### Exercise 3: Using Custom Analyzer in Search Index
 
 **Problem:** Attach custom analyzer `my_analyzer` to search index `doc_search` on `doc` table.
 
 **Expected output:**
-```text
-DEFINE INDEX doc_search ON TABLE doc FIELDS content SEARCH BM25 ANALYZER my_analyzer;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX doc_search ON TABLE doc FIELDS content SEARCH BM25 ANALYZER my_analyzer;
+> ```
 > ```surrealql
 > DEFINE INDEX doc_search ON TABLE doc FIELDS content SEARCH BM25 ANALYZER my_analyzer;
 > ```

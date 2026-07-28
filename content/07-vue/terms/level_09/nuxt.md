@@ -105,13 +105,12 @@ const count = ref(0);
 **Problem:** You are building an e-commerce website for shoes. Why is Nuxt better than a standard `create-vue` Vite application for this specific project?
 
 **Expected output:**
-```text
-Because an e-commerce site relies entirely on SEO (Search Engine Optimization). 
-A standard Vue app (CSR) sends a blank HTML file, meaning Google bots might not index your shoes. 
-Nuxt provides SSR out of the box, meaning the server sends fully populated HTML files with shoe names, prices, and images baked in. Google easily indexes this, driving traffic to the store.
-```
-
 > [!check]- Answer
+> ```text
+> Because an e-commerce site relies entirely on SEO (Search Engine Optimization). 
+> A standard Vue app (CSR) sends a blank HTML file, meaning Google bots might not index your shoes. 
+> Nuxt provides SSR out of the box, meaning the server sends fully populated HTML files with shoe names, prices, and images baked in. Google easily indexes this, driving traffic to the store.
+> ```
 > - Review the benefits of SSR vs CSR.
 
 ---
@@ -124,13 +123,12 @@ Nuxt provides SSR out of the box, meaning the server sends fully populated HTML 
 3. `pages/users/[id].vue` 
 
 **Expected output:**
-```text
-1. /
-2. /about
-3. /users/:id
-```
-
 > [!check]- Answer
+> ```text
+> 1. /
+> 2. /about
+> 3. /users/:id
+> ```
 > - `pages/index.vue` -> `/`
 > - `pages/about.vue` -> `/about`
 > - `pages/users/[id].vue` -> `/users/:id`
@@ -146,11 +144,10 @@ Nuxt provides SSR out of the box, meaning the server sends fully populated HTML 
 **Problem:** Write Nuxt 3 `useSeoMeta()` snippet configuring page `title` ('Dashboard') and `description` ('User analytics').
 
 **Expected output:**
-```javascript
-useSeoMeta({ title: 'Dashboard', description: 'User analytics' });
-```
-
 > [!check]- Answer
+> ```javascript
+> useSeoMeta({ title: 'Dashboard', description: 'User analytics' });
+> ```
 > - `useSeoMeta()` manages page meta tags in Nuxt 3.
 > 
 > ```javascript

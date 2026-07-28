@@ -190,14 +190,13 @@ db.users.find({}, { name: 1, _id: 0 }); // Explicitly excludes _id
 **Problem:** You have a `products` collection. Write the query to find all products where `qty` is greater than 10, returning only the `name` and `price` fields, while explicitly hiding the `_id` field.
 
 **Expected output:**
-```javascript
-db.products.find(
-  { qty: { $gt: 10 } },
-  { name: 1, price: 1, _id: 0 }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.find(
+>   { qty: { $gt: 10 } },
+>   { name: 1, price: 1, _id: 0 }
+> );
+> ```
 > - The first argument is the query filter.
 > - The second argument is the projection.
 > - Explicitly mark `_id` as `0` to exclude it from the whitelist.
@@ -211,11 +210,10 @@ db.products.find(
 **Problem:** Project ONLY `title` and `author` fields from `posts` collection excluding `_id`.
 
 **Expected output:**
-```text
-db.posts.find({}, { projection: { title: 1, author: 1, _id: 0 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({}, { projection: { title: 1, author: 1, _id: 0 } });
+> ```
 > ```javascript
 > db.posts.find({}, {
 >   projection: { title: 1, author: 1, _id: 0 }
@@ -224,16 +222,17 @@ db.posts.find({}, { projection: { title: 1, author: 1, _id: 0 } });
 >
 > **Explanation:** `{ field: 1, _id: 0 }` includes specified fields while excluding `_id`.
 
+---
+
 ### Exercise 3: Positional Array Projection Operator `$`
 
 **Problem:** Project first matching array element from `comments` using positional `$` operator.
 
 **Expected output:**
-```text
-db.posts.find({ "comments.user": "alice" }, { projection: { "comments.$": 1 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.posts.find({ "comments.user": "alice" }, { projection: { "comments.$": 1 } });
+> ```
 > ```javascript
 > db.posts.find({
 >   "comments.user": "alice"

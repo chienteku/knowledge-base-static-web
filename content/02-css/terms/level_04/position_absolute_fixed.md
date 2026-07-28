@@ -237,12 +237,11 @@ To place an absolute element exactly where you want it inside a container, you M
 **Problem:** You are building a "Chat with us!" bubble. You want it to sit exactly 20px from the bottom-right corner of the user's screen. If the user scrolls down to read a long article, the chat bubble must remain on the screen at all times. Do you use `absolute` or `fixed`?
 
 **Expected output:**
-```text
-`position: fixed;` (with `bottom: 20px; right: 20px;`). 
-Fixed locks the element to the viewport glass so it survives scrolling. Absolute would scroll away with the article.
-```
-
 > [!check]- Answer
+> ```text
+> `position: fixed;` (with `bottom: 20px; right: 20px;`). 
+> Fixed locks the element to the viewport glass so it survives scrolling. Absolute would scroll away with the article.
+> ```
 > - Does the element need to survive scrolling?
 
 ---
@@ -254,11 +253,10 @@ Fixed locks the element to the viewport glass so it survives scrolling. Absolute
 **Problem:** Write CSS positioning `.badge` at top-right corner (`top: 10px`, `right: 10px`) inside `.card` container.
 
 **Expected output:**
-```text
-.card { position: relative; } .badge { position: absolute; top: 10px; right: 10px; }
-```
-
 > [!check]- Answer
+> ```text
+> .card { position: relative; } .badge { position: absolute; top: 10px; right: 10px; }
+> ```
 > ```css
 > .card {
 >   position: relative;
@@ -272,16 +270,17 @@ Fixed locks the element to the viewport glass so it survives scrolling. Absolute
 >
 > **Explanation:** Parent `position: relative` creates positioning boundary for absolute child.
 
+---
+
 ### Exercise 3: Absolute vs Fixed Containing Block Boundary
 
 **Problem:** What is the containing block boundary for `position: absolute` vs `position: fixed`?
 
 **Expected output:**
-```text
-absolute positions relative to nearest positioned ancestor; fixed positions relative to the browser viewport window.
-```
-
 > [!check]- Answer
+> ```text
+> absolute positions relative to nearest positioned ancestor; fixed positions relative to the browser viewport window.
+> ```
 > ```text
 > absolute positions relative to nearest positioned ancestor; fixed positions relative to the browser viewport window.
 > ```

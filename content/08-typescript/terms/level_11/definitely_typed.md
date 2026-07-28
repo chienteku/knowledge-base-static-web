@@ -111,43 +111,44 @@ $ npm install lodash@4 @types/lodash@4 # Matching major versions
 **Problem:** What npm organization scope prefix hosts community DefinitelyTyped definitions?
 
 **Expected output:**
-```text
-@types/
-```
-
 > [!check]- Answer
+> ```text
+> @types/
+> ```
 > ```typescript
 > console.log("@types/");
 > ```
 >
 > **Explanation:** DefinitelyTyped packages are published under the `@types/` npm scope.
 
+---
+
 ### Exercise 2: Inspecting `types` Field in `package.json`
 
 **Problem:** Which field in a library `package.json` points to built-in type declarations?
 
 **Expected output:**
-```text
-types (or typings)
-```
-
 > [!check]- Answer
+> ```text
+> types (or typings)
+> ```
 > ```typescript
 > console.log("types (or typings)");
 > ```
 >
 > **Explanation:** The `types` field points module resolvers to `.d.ts` declaration entry files.
 
+---
+
 ### Exercise 3: Type Declaration Search Path
 
 **Problem:** Where does TS look for types when importing `import _ from 'lodash'`? (`node_modules/@types/lodash` or `node_modules/lodash/package.json`).
 
 **Expected output:**
-```text
-node_modules/@types/lodash or native package.json types field
-```
-
 > [!check]- Answer
+> ```text
+> node_modules/@types/lodash or native package.json types field
+> ```
 > ```typescript
 > console.log("node_modules/@types/lodash or native package.json types field");
 > ```

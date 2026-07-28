@@ -181,11 +181,10 @@ Should this batch endpoint be configured as **Transactional** (all or nothing) o
 **Problem:** Which WebDAV-extended HTTP status code specifically represents partial success across multiple batch sub-requests?
 
 **Expected output:**
-```text
-HTTP 207 Multi-Status
-```
-
 > [!check]- Answer
+> ```text
+> HTTP 207 Multi-Status
+> ```
 > ```http
 > HTTP/1.1 207 Multi-Status
 > ```
@@ -197,11 +196,10 @@ HTTP 207 Multi-Status
 **Problem:** When is creating a dedicated Batch API endpoint preferred over executing parallel HTTP requests?
 
 **Expected output:**
-```text
-When HTTP connection setup overhead, network RTT latency, or mobile bandwidth constraints make sending multiple separate HTTP requests too costly.
-```
-
 > [!check]- Answer
+> ```text
+> When HTTP connection setup overhead, network RTT latency, or mobile bandwidth constraints make sending multiple separate HTTP requests too costly.
+> ```
 > ```text
 > When HTTP connection setup overhead, network RTT latency, or mobile bandwidth constraints make sending multiple separate HTTP requests too costly.
 > ```

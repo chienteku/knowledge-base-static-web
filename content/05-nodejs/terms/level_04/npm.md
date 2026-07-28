@@ -97,13 +97,11 @@ npm install --save-dev jest # --save-dev (development dependency)
 What is the difference in how you install them?
 
 **Expected output:**
-```bash
-npm install express
-npm install --save-dev eslint
-```
-*Explanation: `express` is required for the app to actually run, so it's a normal dependency. `eslint` is only used by you on your laptop to catch typos; the live production server doesn't need it. Therefore, it is a Dev Dependency.*
-
 > [!check]- Answer
+> ```bash
+> npm install express
+> npm install --save-dev eslint
+> ```
 > - Which package is required for the server to literally turn on and accept traffic?
 
 ---
@@ -115,27 +113,27 @@ npm install --save-dev eslint
 **Problem:** How do you run custom script `"build": "tsc"` declared in `package.json` using npm CLI?
 
 **Expected output:**
-```text
-npm run build
-```
-
 > [!check]- Answer
+> ```text
+> npm run build
+> ```
 > ```bash
 > npm run build
 > ```
 >
 > **Explanation:** `npm run <script-name>` executes script commands defined in `package.json` `scripts` object.
 
+---
+
 ### Exercise 3: Auditing Vulnerable Dependencies
 
 **Problem:** Which npm CLI command scans project dependencies for security vulnerabilities?
 
 **Expected output:**
-```text
-npm audit (and npm audit fix to resolve)
-```
-
 > [!check]- Answer
+> ```text
+> npm audit (and npm audit fix to resolve)
+> ```
 > ```bash
 > npm audit
 > ```

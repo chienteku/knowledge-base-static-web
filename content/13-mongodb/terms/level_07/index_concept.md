@@ -172,12 +172,11 @@ Index high-cardinality unique fields or compound ESR fields
 2.  Explain why you should not build an index on the message `body_text` field.
 
 **Expected output:**
-```text
-1. You should index `recipient_id` because users constantly query their inbox matching this field. The index enables instant lookups, preventing slow collection scans during peak user reads.
-2. You should not index the message `body_text` because messages are written at a high volume (thousands per second). Indexing long text bodies consumes massive RAM, bloats index storage, and slows down database inserts as the B-Tree must constantly be re-balanced with heavy text payloads.
-```
-
 > [!check]- Answer
+> ```text
+> 1. You should index `recipient_id` because users constantly query their inbox matching this field. The index enables instant lookups, preventing slow collection scans during peak user reads.
+> 2. You should not index the message `body_text` because messages are written at a high volume (thousands per second). Indexing long text bodies consumes massive RAM, bloats index storage, and slows down database inserts as the B-Tree must constantly be re-balanced with heavy text payloads.
+> ```
 > - Assess the frequency and requirement of reads vs the cost of writes.
 > - Consider the size footprint of indexing long string bodies.
 
@@ -190,27 +189,27 @@ Index high-cardinality unique fields or compound ESR fields
 **Problem:** What underlying data structure powers standard MongoDB single and compound indexes? (B-Tree).
 
 **Expected output:**
-```text
-B-Tree (Balanced Tree)
-```
-
 > [!check]- Answer
+> ```text
+> B-Tree (Balanced Tree)
+> ```
 > ```text
 > B-Tree (Balanced Tree)
 > ```
 >
 > **Explanation:** B-Tree index structures enable $O(\log N)$ key search and range traversal times.
 
+---
+
 ### Exercise 3: Index Storage Location
 
 **Problem:** Where are collection indexes stored on disk and memory? (Stored in WiredTiger cache RAM and persisted on disk).
 
 **Expected output:**
-```text
-Cached in WiredTiger RAM and persisted in index storage files
-```
-
 > [!check]- Answer
+> ```text
+> Cached in WiredTiger RAM and persisted in index storage files
+> ```
 > ```text
 > Cached in WiredTiger RAM and persisted in index storage files
 > ```

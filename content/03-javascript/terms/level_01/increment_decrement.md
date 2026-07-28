@@ -166,13 +166,12 @@ const result = a++ + --b;
 ```
 
 **Expected output:**
-```text
-a: 11
-b: 19
-result: 29
-```
-
 > [!check]- Answer
+> ```text
+> a: 11
+> b: 19
+> result: 29
+> ```
 > - `a++` returns the current value `10` first, then increments `a` to `11`.
 > - `--b` decrements `b` to `19` first, and returns `19`.
 > - Add the returned values: `10 + 19`.
@@ -184,11 +183,10 @@ result: 29
 **Problem:** Trace variables `a` and `b`: `let x = 5; let a = x++; let b = ++x;`.
 
 **Expected output:**
-```text
-a: 5, b: 7, x: 7
-```
-
 > [!check]- Answer
+> ```text
+> a: 5, b: 7, x: 7
+> ```
 > ```javascript
 > let x = 5;
 > let a = x++; // a gets 5, x becomes 6
@@ -198,16 +196,17 @@ a: 5, b: 7, x: 7
 >
 > **Explanation:** `x++` evaluates to `5` before mutating `x` to `6`; `++x` mutates `x` to `7` before evaluating to `7`.
 
+---
+
 ### Exercise 3: Incrementing String Numbers
 
 **Problem:** Predict `let str = "5"; str++; console.log(typeof str, str);`.
 
 **Expected output:**
-```text
-number 6
-```
-
 > [!check]- Answer
+> ```text
+> number 6
+> ```
 > ```javascript
 > let str = "5";
 > str++;

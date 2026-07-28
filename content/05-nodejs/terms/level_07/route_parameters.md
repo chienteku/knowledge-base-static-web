@@ -258,16 +258,17 @@ app.get('/api/products/:category', (req, res) => {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Defining Multi-Param Route Path
 
 **Problem:** Define Express route path matching `/books/category/science/id/101` extracting `category` and `bookId`.
 
 **Expected output:**
-```text
-app.get('/books/category/:category/id/:bookId', (req, res) => { ... });
-```
-
 > [!check]- Answer
+> ```text
+> app.get('/books/category/:category/id/:bookId', (req, res) => { ... });
+> ```
 > ```javascript
 > app.get('/books/category/:category/id/:bookId', (req, res) => {
 >   const { category, bookId } = req.params;
@@ -277,16 +278,17 @@ app.get('/books/category/:category/id/:bookId', (req, res) => { ... });
 >
 > **Explanation:** Colons (`:name`) define named path parameter placeholders in Express route definitions.
 
+---
+
 ### Exercise 3: Optional Route Parameters
 
 **Problem:** Write route path for `/posts/:id?` making `id` optional.
 
 **Expected output:**
-```text
-app.get('/posts/:id?', (req, res) => { ... });
-```
-
 > [!check]- Answer
+> ```text
+> app.get('/posts/:id?', (req, res) => { ... });
+> ```
 > ```javascript
 > app.get('/posts/:id?', (req, res) => {
 >   const id = req.params.id;

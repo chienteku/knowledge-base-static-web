@@ -149,12 +149,11 @@ async function processData() {
 **Problem:** Whenever you install a package, npm creates a second file called `package-lock.json`. What is the purpose of the lockfile?
 
 **Expected output:**
-```text
-The `package.json` allows flexible versions (e.g., "Give me any version of Express 4.x"). 
-The `package-lock.json` writes down the EXACT, down-to-the-millisecond version that was actually downloaded (e.g., "Exactly 4.18.2"). This guarantees that everyone on your team gets the exact same bytes of code, preventing "It works on my machine" bugs.
-```
-
 > [!check]- Answer
+> ```text
+> The `package.json` allows flexible versions (e.g., "Give me any version of Express 4.x"). 
+> The `package-lock.json` writes down the EXACT, down-to-the-millisecond version that was actually downloaded (e.g., "Exactly 4.18.2"). This guarantees that everyone on your team gets the exact same bytes of code, preventing "It works on my machine" bugs.
+> ```
 > - One is a blueprint, the other is a strict contract.
 
 ---
@@ -164,34 +163,33 @@ The `package-lock.json` writes down the EXACT, down-to-the-millisecond version t
 **Problem:** Specify main CJS entry `"main": "index.js"` and ESM entry `"module": "index.mjs"`.
 
 **Expected output:**
-```text
-Main: CJS entry, Module: ESM entry
-```
-
 > [!check]- Answer
+> ```text
+> Main: CJS entry, Module: ESM entry
+> ```
 > ```javascript
 > console.log("Main: CJS entry, Module: ESM entry");
 > ```
 >
 > **Explanation:** Package manifests configure entry points for module resolvers.
 
+---
+
 ### Exercise 3: Enabling Native ES Modules in Node.js
 
 **Problem:** Add `"type": "module"` to `package.json` to treat `.js` files as ES modules.
 
 **Expected output:**
-```text
-type: module configured
-```
-
 > [!check]- Answer
+> ```text
+> type: module configured
+> ```
 > ```javascript
 > console.log("type: module configured");
 > ```
 >
 > **Explanation:** `"type": "module"` instructs Node.js to parse all `.js` files as native ES modules.
 
----
 
 ---
 

@@ -208,11 +208,10 @@ console.log([...evens]);
 ```
 
 **Expected output:**
-```text
-[ 2, 4, 6 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 2, 4, 6 ]
+> ```
 > - Inside the `next()` method, check if `current <= limit`. If true, return `{ value: current, done: false }` and increment `current` by `2`. Else, return `{ done: true }`.
 
 ---
@@ -222,13 +221,12 @@ console.log([...evens]);
 **Problem:** Implement `Symbol.iterator` on an object yielding numbers `1` to `3`.
 
 **Expected output:**
-```text
-1
-2
-3
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> 2
+> 3
+> ```
 > ```javascript
 > const range = {
 >   [Symbol.iterator]() {
@@ -245,17 +243,18 @@ console.log([...evens]);
 >
 > **Explanation:** Objects implementing `[Symbol.iterator]()` protocol can be iterated via `for...of` loops.
 
+---
+
 ### Exercise 3: Generator Functions as Iterable Iterators
 
 **Problem:** Write a generator function `function* numGen()` yielding `10` and `20`.
 
 **Expected output:**
-```text
-10
-20
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> 20
+> ```
 > ```javascript
 > function* numGen() {
 >   yield 10;
@@ -266,7 +265,6 @@ console.log([...evens]);
 >
 > **Explanation:** Generators return iterator objects complying with iterator/iterable protocols.
 
----
 
 ---
 

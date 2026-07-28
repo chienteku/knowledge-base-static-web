@@ -161,11 +161,10 @@ const clean = DOMPurify.sanitize(input); // Robust HTML sanitization
 **Problem:** Distinguish Stored XSS vs Reflected XSS.
 
 **Expected output:**
-```text
-Stored XSS saves malicious scripts permanently in the database (affecting all viewers); Reflected XSS reflects script payloads instantly from URL parameters in a single response.
-```
-
 > [!check]- Answer
+> ```text
+> Stored XSS saves malicious scripts permanently in the database (affecting all viewers); Reflected XSS reflects script payloads instantly from URL parameters in a single response.
+> ```
 > ```text
 > Stored XSS -> Saved in DB (e.g. comment field), executes for all users who view page.
 > Reflected XSS -> Injected via URL parameter, executes only when victim clicks link.
@@ -178,11 +177,10 @@ Stored XSS saves malicious scripts permanently in the database (affecting all vi
 **Problem:** Which HTTP response header restricts inline script execution to mitigate XSS attacks?
 
 **Expected output:**
-```text
-Content-Security-Policy: default-src 'self'
-```
-
 > [!check]- Answer
+> ```text
+> Content-Security-Policy: default-src 'self'
+> ```
 > ```http
 > Content-Security-Policy: default-src 'self'; script-src 'self'
 > ```

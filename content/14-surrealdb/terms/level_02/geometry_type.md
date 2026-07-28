@@ -162,13 +162,12 @@ Explain why the following Polygon coordinate insert query will fail to compile o
 `area = { type: "Polygon", coordinates: [[ [-74.0, 40.0], [-73.5, 40.0], [-73.5, 40.5], [-74.0, 40.5] ]] }`
 
 **Expected output:**
-```text
-The query will fail because the Polygon ring coordinates list is not closed. 
-Under GeoJSON rules, the final coordinate pair in a Polygon path must match the starting coordinate pair exactly to close the boundary loop. 
-To fix it, append the starting coordinate `[-74.0, 40.0]` to the end of the array.
-```
-
 > [!check]- Answer
+> ```text
+> The query will fail because the Polygon ring coordinates list is not closed. 
+> Under GeoJSON rules, the final coordinate pair in a Polygon path must match the starting coordinate pair exactly to close the boundary loop. 
+> To fix it, append the starting coordinate `[-74.0, 40.0]` to the end of the array.
+> ```
 > - Check the start and end coordinates of the inner array.
 > - A polygon requires an enclosed loop to calculate space boundaries.
 
@@ -181,27 +180,27 @@ To fix it, append the starting coordinate `[-74.0, 40.0]` to the end of the arra
 **Problem:** Define field `location` on `store` table as geometry point `TYPE geometry<feature>` or `TYPE geometry<point>`.
 
 **Expected output:**
-```text
-DEFINE FIELD location ON TABLE store TYPE geometry<point>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD location ON TABLE store TYPE geometry<point>;
+> ```
 > ```surrealql
 > DEFINE FIELD location ON TABLE store TYPE geometry<point>;
 > ```
 >
 > **Explanation:** `TYPE geometry<point>` restricts spatial fields to GeoJSON points.
 
+---
+
 ### Exercise 3: Checking Spatial Containment with `<inside>` Operator
 
 **Problem:** Check if `$point` is inside `$polygon` using `<inside>` spatial operator.
 
 **Expected output:**
-```text
-SELECT * FROM store WHERE location <inside> $polygon;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM store WHERE location <inside> $polygon;
+> ```
 > ```surrealql
 > SELECT * FROM store WHERE location <inside> $polygon;
 > ```

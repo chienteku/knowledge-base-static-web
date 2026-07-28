@@ -160,11 +160,10 @@ fn main() {
 **Problem:** Create a `pub mod prelude` re-exporting common library traits and types `pub use crate::core::*;`.
 
 **Expected output:**
-```
-Custom prelude imported
-```
-
 > [!check]- Answer
+> ```
+> Custom prelude imported
+> ```
 > ```rust
 > mod my_crate {
 >     pub mod core { pub fn run() { println!("Custom prelude imported"); } }
@@ -178,16 +177,17 @@ Custom prelude imported
 >
 > **Explanation:** Library preludes group common types and traits into single wildcard import modules.
 
+---
+
 ### Exercise 3: Standard Prelude Default Imports
 
 **Problem:** Name 5 items automatically imported into every Rust file via standard prelude (e.g. `Option`, `Result`, `Vec`, `String`, `Box`).
 
 **Expected output:**
-```
-Prelude items: Option, Result, Vec, String, Box
-```
-
 > [!check]- Answer
+> ```
+> Prelude items: Option, Result, Vec, String, Box
+> ```
 > fn main() {
 >     println!("Prelude items: Option, Result, Vec, String, Box");
 > }

@@ -176,11 +176,10 @@ console.log(sortedNames);
 ```
 
 **Expected output:**
-```text
-[ 'Alice', 'Bob', 'David' ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 'Alice', 'Bob', 'David' ]
+> ```
 > - Pass `uniqueNames` into `Array.from()`.
 > - Call `.sort()` on the resulting array to order the names alphabetically.
 
@@ -191,11 +190,10 @@ console.log(sortedNames);
 **Problem:** Create an array `[1, 2, 3, 4, 5]` using `Array.from({ length: 5 }, (_, i) => i + 1)`.
 
 **Expected output:**
-```text
-[ 1, 2, 3, 4, 5 ]
-```
-
 > [!check]- Answer
+> ```text
+> [ 1, 2, 3, 4, 5 ]
+> ```
 > ```javascript
 > const range = Array.from({ length: 5 }, (_, i) => i + 1);
 > console.log(range);
@@ -203,16 +201,17 @@ console.log(sortedNames);
 >
 > **Explanation:** `Array.from` accepts length objects and mapping callbacks to generate collections dynamically.
 
+---
+
 ### Exercise 3: Converting NodeList to Array
 
 **Problem:** Use `Array.from()` to convert an array-like object `{ 0: 'a', 1: 'b', length: 2 }` into a real array.
 
 **Expected output:**
-```text
-[ "a", "b" ]
-```
-
 > [!check]- Answer
+> ```text
+> [ "a", "b" ]
+> ```
 > ```javascript
 > const arrayLike = { 0: "a", 1: "b", length: 2 };
 > const arr = Array.from(arrayLike);

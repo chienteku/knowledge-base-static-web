@@ -122,11 +122,10 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 **Problem:** You are building a navigation menu with 5 links. When the user hovers over any of the links, they should turn blue. Should you use an `id` or a `class` to apply this style?
 
 **Expected output:**
-```text
-A `class`! Because you want to apply the exact same style to 5 different elements. IDs must be unique and can only be used once.
-```
-
 > [!check]- Answer
+> ```text
+> A `class`! Because you want to apply the exact same style to 5 different elements. IDs must be unique and can only be used once.
+> ```
 > - Are there multiple elements that need to share this behavior?
 
 ---
@@ -138,27 +137,27 @@ A `class`! Because you want to apply the exact same style to 5 different element
 **Problem:** Apply classes `card`, `card-featured`, and `shadow` to a `<div>` element.
 
 **Expected output:**
-```text
-<div class="card card-featured shadow">Content</div>
-```
-
 > [!check]- Answer
+> ```text
+> <div class="card card-featured shadow">Content</div>
+> ```
 > ```html
 > <div class="card card-featured shadow">Content</div>
 > ```
 >
 > **Explanation:** Multiple CSS classes are declared in a space-delimited list.
 
+---
+
 ### Exercise 3: JavaScript classList API
 
 **Problem:** Which JavaScript DOM API method adds a class to an element without overwriting existing classes?
 
 **Expected output:**
-```text
-element.classList.add('className')
-```
-
 > [!check]- Answer
+> ```text
+> element.classList.add('className')
+> ```
 > ```javascript
 > element.classList.add('active');
 > ```

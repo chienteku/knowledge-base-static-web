@@ -166,27 +166,27 @@ Write a `SHOW CHANGES` query to retrieve changes for a table named `inventory` s
 **Problem:** Query changefeed deltas for `article` table since `$last_timestamp`.
 
 **Expected output:**
-```text
-SHOW CHANGES FOR TABLE article SINCE $last_timestamp;
-```
-
 > [!check]- Answer
+> ```text
+> SHOW CHANGES FOR TABLE article SINCE $last_timestamp;
+> ```
 > ```surrealql
 > SHOW CHANGES FOR TABLE article SINCE $last_timestamp;
 > ```
 >
 > **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` streams delta history records.
 
+---
+
 ### Exercise 3: Changefeed Version Sequence Tracking
 
 **Problem:** Query changes for `user` table since version sequence number 100 (`SINCE 100`).
 
 **Expected output:**
-```text
-SHOW CHANGES FOR TABLE user SINCE 100;
-```
-
 > [!check]- Answer
+> ```text
+> SHOW CHANGES FOR TABLE user SINCE 100;
+> ```
 > ```surrealql
 > SHOW CHANGES FOR TABLE user SINCE 100;
 > ```

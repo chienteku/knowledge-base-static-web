@@ -175,11 +175,10 @@ app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 **Problem:** You are building a frontend React app. You fetch data from a public API, but suddenly the API stops returning data and instead returns a `429` status code. What should your React app do?
 
 **Expected output:**
-```text
-A 429 status code means "Too Many Requests". Your React app should immediately stop sending requests, show a message to the user ("Please wait a moment"), and wait a few minutes before trying again. If you keep sending requests immediately, the API might ban your IP address permanently.
-```
-
 > [!check]- Answer
+> ```text
+> A 429 status code means "Too Many Requests". Your React app should immediately stop sending requests, show a message to the user ("Please wait a moment"), and wait a few minutes before trying again. If you keep sending requests immediately, the API might ban your IP address permanently.
+> ```
 > - Does a 429 mean the server is broken, or does it mean YOU need to slow down?
 
 ---
@@ -191,11 +190,10 @@ A 429 status code means "Too Many Requests". Your React app should immediately s
 **Problem:** Configure `express-rate-limit` allowing max 100 requests per 15 minutes per IP.
 
 **Expected output:**
-```text
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }); app.use(limiter);
-```
-
 > [!check]- Answer
+> ```text
+> const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }); app.use(limiter);
+> ```
 > ```javascript
 > const rateLimit = require('express-rate-limit');
 > const limiter = rateLimit({
@@ -207,16 +205,17 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }); app.use(limit
 >
 > **Explanation:** `windowMs` sets time window duration; `max` specifies maximum allowed requests per window.
 
+---
+
 ### Exercise 3: Rate Limit Exceeded Status Code
 
 **Problem:** What standard HTTP status code is returned when a client exceeds rate limits? (`429 Too Many Requests`).
 
 **Expected output:**
-```text
-429 Too Many Requests
-```
-
 > [!check]- Answer
+> ```text
+> 429 Too Many Requests
+> ```
 > ```text
 > 429 Too Many Requests
 > ```

@@ -128,12 +128,11 @@ function printNum(n: number | null) {
 **Problem:** You have `const user: User | null`. You write `if (!user) return;`. What is the narrowed type of `user` on the very next line after the `if` block?
 
 **Expected output:**
-```text
-The narrowed type is strictly `User`.
-Because you used an early return (`return;`) when the user is falsy (`null`), the TypeScript compiler knows that any code executing *after* that `if` block is guaranteed to have a valid `User` object! This is a massive part of TS Control Flow Analysis.
-```
-
 > [!check]- Answer
+> ```text
+> The narrowed type is strictly `User`.
+> Because you used an early return (`return;`) when the user is falsy (`null`), the TypeScript compiler knows that any code executing *after* that `if` block is guaranteed to have a valid `User` object! This is a massive part of TS Control Flow Analysis.
+> ```
 > - Think about early returns!
 
 ---
@@ -145,11 +144,10 @@ Because you used an early return (`return;`) when the user is falsy (`null`), th
 **Problem:** Trace narrowed types of `val: string | number | boolean` after `typeof` checks.
 
 **Expected output:**
-```text
-if string -> else if number -> else boolean
-```
-
 > [!check]- Answer
+> ```text
+> if string -> else if number -> else boolean
+> ```
 > ```typescript
 > function check(val: string | number | boolean) {
 >   if (typeof val === "string") return "string";
@@ -161,16 +159,17 @@ if string -> else if number -> else boolean
 >
 > **Explanation:** Control flow analysis narrows union types sequentially along execution paths.
 
+---
+
 ### Exercise 3: Array Filtering Type Narrowing
 
 **Problem:** Filter `(string | null)[]` using `.filter((x): x is string => x !== null)`.
 
 **Expected output:**
-```text
-Array narrowed to string[]
-```
-
 > [!check]- Answer
+> ```text
+> Array narrowed to string[]
+> ```
 > ```typescript
 > const items: (string | null)[] = ["a", null, "b"];
 > const clean: string[] = items.filter((x): x is string => x !== null);

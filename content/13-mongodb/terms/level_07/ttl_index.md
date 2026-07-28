@@ -176,14 +176,13 @@ db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
 Write the MongoDB command to build the appropriate TTL index.
 
 **Expected output:**
-```javascript
-db.tasks.createIndex(
-  { delete_time: 1 },
-  { expireAfterSeconds: 0 }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.tasks.createIndex(
+>   { delete_time: 1 },
+>   { expireAfterSeconds: 0 }
+> );
+> ```
 > - The target field path is `delete_time`.
 > - Set `expireAfterSeconds` to `0` to execute absolute calendar expiration.
 
@@ -196,27 +195,27 @@ db.tasks.createIndex(
 **Problem:** Create TTL index expiring documents 1 hour (3600 seconds) after `createdAt` date.
 
 **Expected output:**
-```text
-db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
-```
-
 > [!check]- Answer
+> ```text
+> db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
+> ```
 > ```javascript
 > db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
 > ```
 >
 > **Explanation:** `expireAfterSeconds` automatically deletes documents N seconds after target BSON Dates.
 
+---
+
 ### Exercise 3: Dynamic Expiry Date Pattern with `expireAfterSeconds: 0`
 
 **Problem:** Configure TTL index to expire documents at exact date stored in `expireAt` field.
 
 **Expected output:**
-```text
-db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
-```
-
 > [!check]- Answer
+> ```text
+> db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
+> ```
 > ```javascript
 > db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
 > ```

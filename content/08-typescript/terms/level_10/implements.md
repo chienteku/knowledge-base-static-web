@@ -172,13 +172,12 @@ class Child extends Base {} // Inherits runtime code implementation
 Can you still pass `new MyLogger()` into a function `function run(logger: Logger)`?
 
 **Expected output:**
-```text
-Yes, you absolutely can!
-Because TypeScript is Structurally Typed (Duck Typing), it checks if the class instance has a `log()` method. It does! So it accepts it.
-The `implements` keyword is purely a developer tool to catch errors *early* while writing the class. It does not magically change the identity of the class at runtime.
-```
-
 > [!check]- Answer
+> ```text
+> Yes, you absolutely can!
+> Because TypeScript is Structurally Typed (Duck Typing), it checks if the class instance has a `log()` method. It does! So it accepts it.
+> The `implements` keyword is purely a developer tool to catch errors *early* while writing the class. It does not magically change the identity of the class at runtime.
+> ```
 > - Remember the Duck Test from earlier levels!
 
 ---
@@ -190,11 +189,10 @@ The `implements` keyword is purely a developer tool to catch errors *early* whil
 **Problem:** Implement `class Service implements Loggable, Serializable`.
 
 **Expected output:**
-```text
-Class implements multiple interfaces
-```
-
 > [!check]- Answer
+> ```text
+> Class implements multiple interfaces
+> ```
 > ```typescript
 > interface Loggable { log(): void }
 > interface Serializable { serialize(): string }
@@ -206,35 +204,35 @@ Class implements multiple interfaces
 > ```
 >
 > **Explanation:** Classes can implement multiple interface contracts separated by commas.
+
+---
 
 ### Exercise 3: `implements` Runtime Code Emission
 
 **Problem:** State how many lines of JavaScript code the `implements` clause emits during `tsc` compilation (Zero lines).
 
 **Expected output:**
-```text
-Zero lines emitted; implements is compile-time only
-```
-
 > [!check]- Answer
+> ```text
+> Zero lines emitted; implements is compile-time only
+> ```
 > ```typescript
 > console.log("Zero lines emitted; implements is compile-time only");
 > ```
 >
 > **Explanation:** `implements` is a compile-time check erased during JavaScript output generation.
 
-
+---
 
 ### Exercise 4: Implementing Multiple Interfaces
 
 **Problem:** Implement `class Service implements Loggable, Serializable`.
 
 **Expected output:**
-```text
-Class implements multiple interfaces
-```
-
 > [!check]- Answer
+> ```text
+> Class implements multiple interfaces
+> ```
 > ```typescript
 > interface Loggable { log(): void }
 > interface Serializable { serialize(): string }
@@ -247,16 +245,17 @@ Class implements multiple interfaces
 >
 > **Explanation:** Classes can implement multiple interface contracts separated by commas.
 
+---
+
 ### Exercise 5: `implements` Runtime Code Emission
 
 **Problem:** State how many lines of JavaScript code the `implements` clause emits during `tsc` compilation (Zero lines).
 
 **Expected output:**
-```text
-Zero lines emitted; implements is compile-time only
-```
-
 > [!check]- Answer
+> ```text
+> Zero lines emitted; implements is compile-time only
+> ```
 > ```typescript
 > console.log("Zero lines emitted; implements is compile-time only");
 > ```

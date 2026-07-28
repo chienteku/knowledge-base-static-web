@@ -118,19 +118,18 @@ console.log("4. Sync Code End");
 ```
 
 **Expected output:**
-```text
-1. Sync Code
-4. Sync Code End
-3. Microtask (Promise)
-2. Macrotask (Timeout)
-
-Explanation: 
-- Synchronous code always runs first (1, 4).
-- The Event Loop checks the VIP Microtask line (Promises) and runs them (3).
-- Finally, it checks the normal Macrotask line (Timeout) and runs it (2).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Sync Code
+> 4. Sync Code End
+> 3. Microtask (Promise)
+> 2. Macrotask (Timeout)
+> 
+> Explanation: 
+> - Synchronous code always runs first (1, 4).
+> - The Event Loop checks the VIP Microtask line (Promises) and runs them (3).
+> - Finally, it checks the normal Macrotask line (Timeout) and runs it (2).
+> ```
 > - Sync first. VIPs second. Regulars last.
 
 ---
@@ -146,14 +145,13 @@ Explanation:
 4. `queueMicrotask()`
 
 **Expected output:**
-```text
-1. Microtask
-2. Macrotask
-3. Macrotask
-4. Microtask
-```
-
 > [!check]- Answer
+> ```text
+> 1. Microtask
+> 2. Macrotask
+> 3. Macrotask
+> 4. Microtask
+> ```
 > ```text
 > 1. Microtask
 > 2. Macrotask
@@ -162,6 +160,8 @@ Explanation:
 > ```
 >
 > **Explanation:** Promises and `queueMicrotask` are Microtasks; timers and `setImmediate` are Macrotasks.
+
+---
 
 ### Exercise 3: Tracing Mixed Task Execution Order
 
@@ -174,14 +174,13 @@ console.log('4');
 ```
 
 **Expected output:**
-```text
-1
-4
-3
-2
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> 4
+> 3
+> 2
+> ```
 > ```text
 > 1
 > 4

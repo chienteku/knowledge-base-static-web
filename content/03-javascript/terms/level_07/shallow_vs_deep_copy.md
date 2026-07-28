@@ -178,12 +178,11 @@ console.log("Copy Port:", configCopy.settings.port);
 ```
 
 **Expected output:**
-```text
-Original Port: 5432
-Copy Port: 8080
-```
-
 > [!check]- Answer
+> ```text
+> Original Port: 5432
+> Copy Port: 8080
+> ```
 > - Call `structuredClone(databaseConfig)` to duplicate the config.
 
 ---
@@ -193,11 +192,10 @@ Copy Port: 8080
 **Problem:** Perform a deep copy of `{ a: [1, 2] }` using `structuredClone()`.
 
 **Expected output:**
-```text
-Original array length: 2, Copy array length: 3
-```
-
 > [!check]- Answer
+> ```text
+> Original array length: 2, Copy array length: 3
+> ```
 > ```javascript
 > const orig = { a: [1, 2] };
 > const copy = structuredClone(orig);
@@ -207,16 +205,17 @@ Original array length: 2, Copy array length: 3
 >
 > **Explanation:** `structuredClone` recursively clones nested objects and arrays into fresh memory allocations.
 
+---
+
 ### Exercise 3: JSON Serialization Deep Copy Limitations
 
 **Problem:** Explain why `JSON.parse(JSON.stringify(obj))` drops Functions, Symbols, and `undefined` properties.
 
 **Expected output:**
-```text
-JSON drops functions, undefined, and symbols
-```
-
 > [!check]- Answer
+> ```text
+> JSON drops functions, undefined, and symbols
+> ```
 > ```javascript
 > console.log("JSON drops functions, undefined, and symbols");
 > ```

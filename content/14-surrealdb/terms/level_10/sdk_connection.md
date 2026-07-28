@@ -225,11 +225,10 @@ d. `use()`
 **Problem:** Write async function connecting to `ws://localhost:8000/rpc` and closing connection cleanly with `db.close()`.
 
 **Expected output:**
-```text
-const db = new Surreal(); await db.connect(uri); ... await db.close();
-```
-
 > [!check]- Answer
+> ```text
+> const db = new Surreal(); await db.connect(uri); ... await db.close();
+> ```
 > ```javascript
 > const db = new Surreal();
 > try {
@@ -242,16 +241,17 @@ const db = new Surreal(); await db.connect(uri); ... await db.close();
 >
 > **Explanation:** `db.close()` closes active WebSocket connections cleanly.
 
+---
+
 ### Exercise 3: SDK Automatic Reconnection Configuration
 
 **Problem:** How do SurrealDB SDKs handle temporary network drops? (Automatically reconnects over WebSockets).
 
 **Expected output:**
-```text
-SDKs manage automatic WebSocket reconnection and query state resubscription
-```
-
 > [!check]- Answer
+> ```text
+> SDKs manage automatic WebSocket reconnection and query state resubscription
+> ```
 > ```text
 > SDKs manage automatic WebSocket reconnection and query state resubscription
 > ```

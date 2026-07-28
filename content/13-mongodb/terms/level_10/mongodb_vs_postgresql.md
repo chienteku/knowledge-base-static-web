@@ -139,13 +139,12 @@ Recommend the optimal database (**PostgreSQL** or **MongoDB**) for each requirem
 3.  A modern IoT dashboard logging telemetry streams from 100,000 devices.
 
 **Expected output:**
-```text
-1. MongoDB: The feed data maps naturally to document trees (nested comments, tags, media arrays). It avoids complex SQL joins and allows rapid updates as post types evolve.
-2. PostgreSQL: Car inventory is highly relational (parts lead to assemblies which tie to suppliers and billing ledgers). Strict constraints, foreign keys, and immediate consistency are required to prevent double-spending or inventory mismatch bugs.
-3. MongoDB (or Time-Series): High write throughput from 100,000 devices scales horizontally using MongoDB sharding, and metrics fit column-based chronological compression models.
-```
-
 > [!check]- Answer
+> ```text
+> 1. MongoDB: The feed data maps naturally to document trees (nested comments, tags, media arrays). It avoids complex SQL joins and allows rapid updates as post types evolve.
+> 2. PostgreSQL: Car inventory is highly relational (parts lead to assemblies which tie to suppliers and billing ledgers). Strict constraints, foreign keys, and immediate consistency are required to prevent double-spending or inventory mismatch bugs.
+> 3. MongoDB (or Time-Series): High write throughput from 100,000 devices scales horizontally using MongoDB sharding, and metrics fit column-based chronological compression models.
+> ```
 > - Assess if the data structures are hierarchical or tabular.
 > - Consider the importance of strict constraints and foreign keys for inventory calculations.
 
@@ -158,27 +157,27 @@ Recommend the optimal database (**PostgreSQL** or **MongoDB**) for each requirem
 **Problem:** Compare: MongoDB (Document BSON, Schema-flexible, Native Sharding), PostgreSQL (Relational SQL, Strict 3NF, JSONB support).
 
 **Expected output:**
-```text
-MongoDB: document-oriented native sharding; PostgreSQL: relational SQL strict normalization
-```
-
 > [!check]- Answer
+> ```text
+> MongoDB: document-oriented native sharding; PostgreSQL: relational SQL strict normalization
+> ```
 > ```text
 > MongoDB: document-oriented native sharding; PostgreSQL: relational SQL strict normalization
 > ```
 >
 > **Explanation:** Paradigm selection depends on relational normalization vs document co-location requirements.
 
+---
+
 ### Exercise 3: Horizontal Scaling Comparison
 
 **Problem:** How does MongoDB scale out write throughput horizontally vs PostgreSQL? (Native Sharding across cluster shards).
 
 **Expected output:**
-```text
-MongoDB natively shards collections across multi-node clusters
-```
-
 > [!check]- Answer
+> ```text
+> MongoDB natively shards collections across multi-node clusters
+> ```
 > ```text
 > MongoDB natively shards collections across multi-node clusters
 > ```

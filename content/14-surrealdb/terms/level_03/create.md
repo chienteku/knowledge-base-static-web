@@ -145,11 +145,10 @@ CREATE user SET name = "Alice"; // Specifies target table 'user'
 -   The field `price` must be set to `1200.00dec`.
 
 **Expected output:**
-```sql
-CREATE product:laptop_pro SET name = "Laptop Pro", price = 1200.00dec;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE product:laptop_pro SET name = "Laptop Pro", price = 1200.00dec;
+> ```
 > - The target record address is `product:laptop_pro`.
 > - Use the `SET` keyword followed by comma-separated field assignments.
 
@@ -162,27 +161,27 @@ CREATE product:laptop_pro SET name = "Laptop Pro", price = 1200.00dec;
 **Problem:** Create new record in `article` table setting `title = "New Post"` letting SurrealDB generate ID.
 
 **Expected output:**
-```text
-CREATE article SET title = "New Post";
-```
-
 > [!check]- Answer
+> ```text
+> CREATE article SET title = "New Post";
+> ```
 > ```surrealql
 > CREATE article SET title = "New Post";
 > ```
 >
 > **Explanation:** `CREATE table` automatically generates a unique Record ID.
 
+---
+
 ### Exercise 3: Creating Multiple Records in One Statement
 
 **Problem:** Create two records in `category` table using array content `[{ name: "Tech" }, { name: "Design" }]`.
 
 **Expected output:**
-```text
-CREATE category CONTENT [{ name: "Tech" }, { name: "Design" }];
-```
-
 > [!check]- Answer
+> ```text
+> CREATE category CONTENT [{ name: "Tech" }, { name: "Design" }];
+> ```
 > ```surrealql
 > CREATE category CONTENT [{ name: "Tech" }, { name: "Design" }];
 > ```

@@ -179,13 +179,12 @@ Join on indexed primary and foreign key columns: ON u.id = o.user_id
 **Problem:** You have a `products` table (columns: `product_name`, `manufacturer_id`) and a `manufacturers` table (columns: `id`, `company_name`). Write the SQL query to select the `product_name` and `company_name` columns. Only return records where the product has a matching manufacturer registered.
 
 **Expected output:**
-```sql
-SELECT products.product_name, manufacturers.company_name 
-FROM products
-INNER JOIN manufacturers ON products.manufacturer_id = manufacturers.id;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT products.product_name, manufacturers.company_name 
+> FROM products
+> INNER JOIN manufacturers ON products.manufacturer_id = manufacturers.id;
+> ```
 > - The default `JOIN` acts as an `INNER JOIN`.
 > - Align the child's foreign key (`manufacturer_id`) to the parent's primary key (`id`).
 
@@ -198,11 +197,10 @@ INNER JOIN manufacturers ON products.manufacturer_id = manufacturers.id;
 **Problem:** Join `orders` (o), `users` (u), and `products` (p) selecting `u.name`, `p.title`, `o.created_at`.
 
 **Expected output:**
-```text
-SELECT u.name, p.title, o.created_at FROM orders o JOIN users u ON o.user_id = u.id JOIN products p ON o.product_id = p.id;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT u.name, p.title, o.created_at FROM orders o JOIN users u ON o.user_id = u.id JOIN products p ON o.product_id = p.id;
+> ```
 > ```sql
 > SELECT u.name, p.title, o.created_at
 > FROM orders o
@@ -212,16 +210,17 @@ SELECT u.name, p.title, o.created_at FROM orders o JOIN users u ON o.user_id = u
 >
 > **Explanation:** `INNER JOIN` matches rows present in both LHS and RHS tables.
 
+---
+
 ### Exercise 3: USING Clause Join Shorthand
 
 **Problem:** Rewrite `JOIN orders ON users.user_id = orders.user_id` using `USING (user_id)`.
 
 **Expected output:**
-```text
-SELECT * FROM users JOIN orders USING (user_id);
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users JOIN orders USING (user_id);
+> ```
 > ```sql
 > SELECT * FROM users JOIN orders USING (user_id);
 > ```

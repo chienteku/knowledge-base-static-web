@@ -202,14 +202,13 @@ div { order: 1; } /* ❌ Ignored on normal document flow elements! */
 In what visual order (from left to right) will they render on the screen?
 
 **Expected output:**
-```text
-Box C, Box A, Box B!
-- Box C has the lowest score (-2) and goes first.
-- Box A has no declaration, defaulting to 0, and goes second.
-- Box B has the highest score (5) and goes last.
-```
-
 > [!check]- Answer
+> ```text
+> Box C, Box A, Box B!
+> - Box C has the lowest score (-2) and goes first.
+> - Box A has no declaration, defaulting to 0, and goes second.
+> - Box B has the highest score (5) and goes last.
+> ```
 > - Sort the values from lowest to highest: `-2`, `0`, `5`.
 
 ---
@@ -221,11 +220,10 @@ Box C, Box A, Box B!
 **Problem:** Write CSS property moving `.featured-card` flex item to the very first visual position regardless of DOM order.
 
 **Expected output:**
-```text
-.featured-card { order: -1; }
-```
-
 > [!check]- Answer
+> ```text
+> .featured-card { order: -1; }
+> ```
 > ```css
 > .featured-card {
 >   order: -1;
@@ -234,16 +232,17 @@ Box C, Box A, Box B!
 >
 > **Explanation:** Default `order` is 0. Setting `order: -1` places item before default items.
 
+---
+
 ### Exercise 3: Order Property Default Value
 
 **Problem:** What is default `order` value for all flex items?
 
 **Expected output:**
-```text
-order: 0;
-```
-
 > [!check]- Answer
+> ```text
+> order: 0;
+> ```
 > ```text
 > order: 0;
 > ```

@@ -159,11 +159,10 @@ export default function AdminPage() {
 **Problem:** Write Node.js Server Component helper reading file path `content/posts/slug.md` from `process.cwd()` using `path.join()`.
 
 **Expected output:**
-```typescript
-import path from 'path'; const filePath = path.join(process.cwd(), 'content', 'posts', `${slug}.md`);
-```
-
 > [!check]- Answer
+> ```typescript
+> import path from 'path'; const filePath = path.join(process.cwd(), 'content', 'posts', `${slug}.md`);
+> ```
 > - `path.join()` safely normalizes cross-platform file paths.
 > 
 > ```typescript
@@ -183,11 +182,10 @@ import path from 'path'; const filePath = path.join(process.cwd(), 'content', 'p
 **Problem:** Why is `process.cwd()` preferred over `__dirname` when referencing project root files in Next.js Server Components?
 
 **Expected output:**
-```text
-`process.cwd()` returns the root working directory of the Next.js project execution, whereas `__dirname` resolves to compiled build target folders (.next/server).
-```
-
 > [!check]- Answer
+> ```text
+> `process.cwd()` returns the root working directory of the Next.js project execution, whereas `__dirname` resolves to compiled build target folders (.next/server).
+> ```
 > - `process.cwd()` reliably points to project root across dev and production builds.
 > 
 > ```typescript

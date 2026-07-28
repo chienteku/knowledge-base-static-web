@@ -142,6 +142,8 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Load Balancing Algorithms
 
 **Problem:** Match load balancing algorithm to description:
@@ -150,13 +152,12 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 3. Hashes client IP to assign fixed target server (IP Hash)
 
 **Expected output:**
-```text
-1. Round Robin
-2. Least Connections
-3. IP Hash
-```
-
 > [!check]- Answer
+> ```text
+> 1. Round Robin
+> 2. Least Connections
+> 3. IP Hash
+> ```
 > ```text
 > 1. Round Robin
 > 2. Least Connections
@@ -165,16 +166,17 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 >
 > **Explanation:** Load balancing algorithms optimize request distribution based on traffic patterns.
 
+---
+
 ### Exercise 3: Layer 4 vs Layer 7 Load Balancing
 
 **Problem:** Distinguish Layer 4 (Transport) vs Layer 7 (Application) load balancing.
 
 **Expected output:**
-```text
-Layer 4 routes packets based on IP/Port (TCP/UDP); Layer 7 routes requests based on HTTP headers, URLs, and cookies.
-```
-
 > [!check]- Answer
+> ```text
+> Layer 4 routes packets based on IP/Port (TCP/UDP); Layer 7 routes requests based on HTTP headers, URLs, and cookies.
+> ```
 > ```text
 > Layer 4 routes packets based on IP/Port (TCP/UDP); Layer 7 routes requests based on HTTP headers, URLs, and cookies.
 > ```

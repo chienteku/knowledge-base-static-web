@@ -148,12 +148,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 **Problem:** A teammate wrote a Nuxt plugin that provides a global currency formatter accessible at `$formatCurrency`. How do you access and use this formatter to format the number `500` inside a component?
 
 **Expected output:**
-```typescript
-const { $formatCurrency } = useNuxtApp();
-const price = $formatCurrency(500);
-```
-
 > [!check]- Answer
+> ```typescript
+> const { $formatCurrency } = useNuxtApp();
+> const price = $formatCurrency(500);
+> ```
 > - Call `useNuxtApp()` and destructure the `$formatCurrency` variable from the returned object.
 
 ---
@@ -163,16 +162,15 @@ const price = $formatCurrency(500);
 **Problem:** Write Vue component using `useNuxtApp().hook('page:finish', callback)` executing function when page navigation finishes.
 
 **Expected output:**
-```vue
-<script setup>
-const nuxtApp = useNuxtApp();
-nuxtApp.hook('page:finish', () => {
-  console.log('Page transition complete');
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const nuxtApp = useNuxtApp();
+> nuxtApp.hook('page:finish', () => {
+>   console.log('Page transition complete');
+> });
+> </script>
+> ```
 > - `nuxtApp.hook()` listens to internal Nuxt lifecycle events.
 > 
 > ```vue
@@ -192,13 +190,12 @@ nuxtApp.hook('page:finish', () => {
 **Problem:** List 3 built-in properties attached to the `useNuxtApp()` instance object.
 
 **Expected output:**
-```text
-1. $fetch (Universal fetch helper)
-2. payload (Serialized Nuxt payload)
-3. ssrContext (Node.js server request context)
-```
-
 > [!check]- Answer
+> ```text
+> 1. $fetch (Universal fetch helper)
+> 2. payload (Serialized Nuxt payload)
+> 3. ssrContext (Node.js server request context)
+> ```
 > - `$fetch` -> Universal fetch utility
 > - `payload` -> Serialized SSR state payload
 > - `ssrContext` -> Nitro server request context

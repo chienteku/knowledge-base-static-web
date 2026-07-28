@@ -167,12 +167,11 @@ thread::spawn(move || {
 **Problem:** Write a function `safe_deposit(balance: u32, amount: u32) -> Option<u32>` using `checked_add` to prevent balance overflow.
 
 **Expected output:**
-```
-Some(150)
-None
-```
-
 > [!check]- Answer
+> ```
+> Some(150)
+> None
+> ```
 > ```rust
 > fn safe_deposit(balance: u32, amount: u32) -> Option<u32> {
 >     balance.checked_add(amount)
@@ -185,16 +184,17 @@ None
 >
 > **Explanation:** `checked_add` returns `Some(result)` on success or `None` on overflow in both debug and release builds.
 
+---
+
 ### Exercise 3: Explicit Wrapping Math
 
 **Problem:** Demonstrate intentional modular arithmetic using `wrapping_add` on `u8::MAX` with `5`.
 
 **Expected output:**
-```
-4
-```
-
 > [!check]- Answer
+> ```
+> 4
+> ```
 > ```rust
 > fn main() {
 >     let start: u8 = 255;

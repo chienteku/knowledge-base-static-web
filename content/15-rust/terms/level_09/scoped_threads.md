@@ -175,11 +175,10 @@ fn broken() {
 **Problem:** Borrow a local slice `&str` inside a `std::thread::scope` thread without cloning or `'static` bounds.
 
 **Expected output:**
-```
-Scoped thread read: stack data
-```
-
 > [!check]- Answer
+> ```
+> Scoped thread read: stack data
+> ```
 > ```rust
 > use std::thread;
 > fn main() {
@@ -194,16 +193,17 @@ Scoped thread read: stack data
 >
 > **Explanation:** `std::thread::scope` guarantees all spawned threads join before scope exit, enabling safe borrowing of non-`'static` stack variables.
 
+---
+
 ### Exercise 3: Mutating Stack Data Across Scoped Threads
 
 **Problem:** Mutate separate elements of a local slice concurrently across scoped threads using `split_at_mut`.
 
 **Expected output:**
-```
-Mutated slice: [10, 20]
-```
-
 > [!check]- Answer
+> ```
+> Mutated slice: [10, 20]
+> ```
 > use std::thread;
 > fn main() {
 >     let mut data = vec![1, 2];

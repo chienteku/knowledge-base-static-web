@@ -143,14 +143,13 @@ SELECT * FROM user WHERE role = $unassigned_var;
 3. Update `$target_product`, setting its `sale_price` to `price - (price * $discount_rate)`.
 
 **Expected output:**
-```sql
-LET $discount_rate = 0.15dec;
-LET $target_product = product:keyboard;
-
-UPDATE $target_product SET sale_price = price - (price * $discount_rate);
-```
-
 > [!check]- Answer
+> ```sql
+> LET $discount_rate = 0.15dec;
+> LET $target_product = product:keyboard;
+> 
+> UPDATE $target_product SET sale_price = price - (price * $discount_rate);
+> ```
 > - Prefix variable names with `$`.
 > - Target `$target_product` directly as the target of the `UPDATE` statement.
 
@@ -163,27 +162,27 @@ UPDATE $target_product SET sale_price = price - (price * $discount_rate);
 **Problem:** Bind count of active users to `$active_count` using `LET` and subquery.
 
 **Expected output:**
-```text
-LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
-```
-
 > [!check]- Answer
+> ```text
+> LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
+> ```
 > ```surrealql
 > LET $active_count = (SELECT VALUE count() FROM user WHERE active = true GROUP ALL)[0];
 > ```
 >
 > **Explanation:** `LET $var = (subquery)` binds subquery results to reusable parameter variables.
 
+---
+
 ### Exercise 3: Using Variables in Graph Edge Creation
 
 **Problem:** Set `$u = user:alice`, `$p = post:10`, and execute `RELATE $u->wrote->$p`.
 
 **Expected output:**
-```text
-LET $u = user:alice; LET $p = post:10; RELATE $u->wrote->$p;
-```
-
 > [!check]- Answer
+> ```text
+> LET $u = user:alice; LET $p = post:10; RELATE $u->wrote->$p;
+> ```
 > ```surrealql
 > LET $u = user:alice;
 > LET $p = post:10;

@@ -147,15 +147,14 @@ db.users.aggregate([{ $replaceWith: "$profile" }]); // Alias syntax
 Write the aggregation pipeline containing a single `$replaceWith` stage to promote the `address` fields to the top level.
 
 **Expected output:**
-```javascript
-[
-  {
-    $replaceWith: "$address"
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $replaceWith: "$address"
+>   }
+> ]
+> ```
 > - Prefix the target subdocument field path with the dollar sign `$`.
 > - Use the `$replaceWith` stage operator to execute the promotion.
 
@@ -168,11 +167,10 @@ Write the aggregation pipeline containing a single `$replaceWith` stage to promo
 **Problem:** Promote embedded sub-document `address` to become the top-level document using `$replaceRoot`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $replaceRoot: { newRoot: "$address" } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $replaceRoot: { newRoot: "$address" } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   { $replaceRoot: { newRoot: "$address" } }
@@ -181,16 +179,17 @@ db.users.aggregate([{ $replaceRoot: { newRoot: "$address" } }]);
 >
 > **Explanation:** `$replaceRoot` replaces top-level documents with specified sub-document objects.
 
+---
+
 ### Exercise 3: Using Simplified `$replaceWith` Alias
 
 **Problem:** Promote joined object `userInfo` using `$replaceWith: "$userInfo"`.
 
 **Expected output:**
-```text
-db.orders.aggregate([{ $replaceWith: "$userInfo" }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.aggregate([{ $replaceWith: "$userInfo" }]);
+> ```
 > ```javascript
 > db.orders.aggregate([
 >   { $replaceWith: "$userInfo" }

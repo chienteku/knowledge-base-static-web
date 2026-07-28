@@ -187,12 +187,11 @@ console.log("baseUser keys count:", Object.keys(baseUser).length);
 ```
 
 **Expected output:**
-```text
-completeUser: { id: 1, name: 'Alice', role: 'admin', verified: true }
-baseUser keys count: 2
-```
-
 > [!check]- Answer
+> ```text
+> completeUser: { id: 1, name: 'Alice', role: 'admin', verified: true }
+> baseUser keys count: 2
+> ```
 > - Write `Object.assign({}, baseUser, roleDetails)`.
 
 ---
@@ -202,11 +201,10 @@ baseUser keys count: 2
 **Problem:** Merge `{ a: 1 }` and `{ b: 2 }` into `{}` using `Object.assign()`.
 
 **Expected output:**
-```text
-{"a":1,"b":2}
-```
-
 > [!check]- Answer
+> ```text
+> {"a":1,"b":2}
+> ```
 > ```javascript
 > const merged = Object.assign({}, { a: 1 }, { b: 2 });
 > console.log(JSON.stringify(merged));
@@ -214,16 +212,17 @@ baseUser keys count: 2
 >
 > **Explanation:** `Object.assign(target, ...sources)` copies own enumerable properties from sources into target.
 
+---
+
 ### Exercise 3: Mutating Target Objects in `Object.assign`
 
 **Problem:** Demonstrate that `Object.assign(target, src)` mutates `target` directly.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const target = { a: 1 };
 > const res = Object.assign(target, { b: 2 });
@@ -232,7 +231,6 @@ true
 >
 > **Explanation:** `Object.assign` mutates and returns the first argument `target` reference.
 
----
 
 ---
 

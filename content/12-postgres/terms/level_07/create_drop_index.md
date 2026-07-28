@@ -151,13 +151,12 @@ CREATE INDEX CONCURRENTLY idx ON t (a); -- Run outside transaction blocks
 2.  Write the query to delete a legacy, unused index named `idx_articles_old_tags`.
 
 **Expected output:**
-```sql
-CREATE INDEX CONCURRENTLY idx_articles_pub_date ON articles(published_date);
-
-DROP INDEX idx_articles_old_tags;
-```
-
 > [!check]- Answer
+> ```sql
+> CREATE INDEX CONCURRENTLY idx_articles_pub_date ON articles(published_date);
+> 
+> DROP INDEX idx_articles_old_tags;
+> ```
 > - Remember that concurrent indexing cannot run inside transaction blocks.
 > - Ensure index names are correctly spelled in the drop clause.
 
@@ -170,27 +169,27 @@ DROP INDEX idx_articles_old_tags;
 **Problem:** Create index `idx_logs_date` on `logs(created_at)` concurrently without blocking table writes.
 
 **Expected output:**
-```text
-CREATE INDEX CONCURRENTLY idx_logs_date ON logs (created_at);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX CONCURRENTLY idx_logs_date ON logs (created_at);
+> ```
 > ```sql
 > CREATE INDEX CONCURRENTLY idx_logs_date ON logs (created_at);
 > ```
 >
 > **Explanation:** `CONCURRENTLY` builds indexes without acquiring write-blocking locks.
 
+---
+
 ### Exercise 3: Dropping Invalid Index Concurrently
 
 **Problem:** Drop failed index `idx_failed` concurrently using `DROP INDEX CONCURRENTLY`.
 
 **Expected output:**
-```text
-DROP INDEX CONCURRENTLY IF EXISTS idx_failed;
-```
-
 > [!check]- Answer
+> ```text
+> DROP INDEX CONCURRENTLY IF EXISTS idx_failed;
+> ```
 > ```sql
 > DROP INDEX CONCURRENTLY IF EXISTS idx_failed;
 > ```

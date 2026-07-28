@@ -170,11 +170,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Not a number!
-```
-
 > [!check]- Answer
+> ```text
+> Not a number!
+> ```
 > ```rust
 > match parsed {
 >     Ok(number) => println!("The number is: {}", number),
@@ -189,12 +188,11 @@ Not a number!
 **Problem:** Convert `Ok(42)` to `Some(42)` and `Err("fail")` to `None` using `.ok()`.
 
 **Expected output:**
-```
-Some(42)
-None
-```
-
 > [!check]- Answer
+> ```
+> Some(42)
+> None
+> ```
 > ```rust
 > fn main() {
 >     let ok_res: Result<i32, &str> = Ok(42);
@@ -206,16 +204,17 @@ None
 >
 > **Explanation:** `.ok()` converts `Result<T, E>` into `Option<T>`, discarding error values.
 
+---
+
 ### Exercise 3: Error Recovery with `unwrap_or_else`
 
 **Problem:** Use `.unwrap_or_else(|err| err.len() as i32)` to supply dynamic fallback values for errors.
 
 **Expected output:**
-```
-Error length: 4
-```
-
 > [!check]- Answer
+> ```
+> Error length: 4
+> ```
 > ```rust
 > fn main() {
 >     let res: Result<i32, &str> = Err("fail");

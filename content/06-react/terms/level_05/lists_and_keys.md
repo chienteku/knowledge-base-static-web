@@ -122,13 +122,12 @@ Use persistent unique item data IDs: key={item.id}
 ```
 
 **Expected output:**
-```text
-The `key` belongs on the `<div>`.
-It must ALWAYS be attached to the outermost element returned inside the map function.
-`<div key={post.id}>`
-```
-
 > [!check]- Answer
+> ```text
+> The `key` belongs on the `<div>`.
+> It must ALWAYS be attached to the outermost element returned inside the map function.
+> `<div key={post.id}>`
+> ```
 > - React needs to track the entire "block" returned by the map.
 
 ---
@@ -140,11 +139,10 @@ It must ALWAYS be attached to the outermost element returned inside the map func
 **Problem:** Map array `products` returning `<li>` tags showing `name` and `price` with `key={product.id}`.
 
 **Expected output:**
-```text
-function ProductList({ products }) { return <ul>{products.map(p => <li key={p.id}>{p.name} - ${p.price}</li>)}</ul>; }
-```
-
 > [!check]- Answer
+> ```text
+> function ProductList({ products }) { return <ul>{products.map(p => <li key={p.id}>{p.name} - ${p.price}</li>)}</ul>; }
+> ```
 > ```javascript
 > function ProductList({ products }) {
 >   return (
@@ -159,16 +157,17 @@ function ProductList({ products }) { return <ul>{products.map(p => <li key={p.id
 >
 > **Explanation:** Stable item keys allow React reconciliation to track item insertions and re-orders.
 
+---
+
 ### Exercise 3: Where Key Props Must Be Placed
 
 **Problem:** Where must `key` props be specified when extracting list items into custom child components? (Directly on the custom child component tag inside the `.map()` callback).
 
 **Expected output:**
-```text
-Directly on the custom child component tag inside the .map() callback
-```
-
 > [!check]- Answer
+> ```text
+> Directly on the custom child component tag inside the .map() callback
+> ```
 > ```javascript
 > // Correct:
 > items.map(item => <ListItem key={item.id} item={item} />)

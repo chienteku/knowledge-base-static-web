@@ -113,13 +113,12 @@ function updateTitle(newTitle) {
 **Problem:** You want a `<p>` tag to show "Loading..." while fetching data, and then show the data once it arrives. How do the mental models differ between jQuery (Imperative) and Vue (Declarative)?
 
 **Expected output:**
-```text
-Imperative (jQuery): "Hide the data paragraph. Show the loading paragraph. Fetch the data. When it arrives, inject the data into the data paragraph. Hide the loading paragraph. Show the data paragraph."
-
-Declarative (Vue): "Create an `isLoading` boolean. I declare that the loading paragraph only exists if `isLoading` is true. I declare the data paragraph exists if `isLoading` is false. I fetch the data. When it arrives, I set `isLoading = false`. Vue does the rest."
-```
-
 > [!check]- Answer
+> ```text
+> Imperative (jQuery): "Hide the data paragraph. Show the loading paragraph. Fetch the data. When it arrives, inject the data into the data paragraph. Hide the loading paragraph. Show the data paragraph."
+> 
+> Declarative (Vue): "Create an `isLoading` boolean. I declare that the loading paragraph only exists if `isLoading` is true. I declare the data paragraph exists if `isLoading` is false. I fetch the data. When it arrives, I set `isLoading = false`. Vue does the rest."
+> ```
 > - Imperative = Step-by-step commands. Declarative = Defining rules based on state.
 
 ---
@@ -129,14 +128,13 @@ Declarative (Vue): "Create an `isLoading` boolean. I declare that the loading pa
 **Problem:** Write a Vue template rendering message `<h1>Hello {{ user }}</h1>` with a dynamic button toggling `isLoggedIn` boolean state.
 
 **Expected output:**
-```html
-<template>
-  <h1>{{ isLoggedIn ? 'Hello ' + user : 'Please log in' }}</h1>
-  <button @click="isLoggedIn = !isLoggedIn">Toggle</button>
-</template>
-```
-
 > [!check]- Answer
+> ```html
+> <template>
+>   <h1>{{ isLoggedIn ? 'Hello ' + user : 'Please log in' }}</h1>
+>   <button @click="isLoggedIn = !isLoggedIn">Toggle</button>
+> </template>
+> ```
 > - Use mustache `{{ }}` syntax for text expressions.
 > - Bind click handlers declaratively with `@click`.
 > 
@@ -154,11 +152,10 @@ Declarative (Vue): "Create an `isLoading` boolean. I declare that the loading pa
 **Problem:** Distinguish between Imperative UI programming and Vue Declarative Rendering.
 
 **Expected output:**
-```text
-Imperative programming explicitly describes HOW to update the DOM step-by-step; Declarative rendering describes WHAT the UI should look like based on current state.
-```
-
 > [!check]- Answer
+> ```text
+> Imperative programming explicitly describes HOW to update the DOM step-by-step; Declarative rendering describes WHAT the UI should look like based on current state.
+> ```
 > - Imperative: Manual DOM step commands.
 > - Declarative: Data-driven UI template mapping.
 > 

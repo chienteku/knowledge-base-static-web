@@ -186,15 +186,14 @@ definePageMeta({
 **Problem:** Write `<script setup>` function toggling layout between `'default'` and `'dark'` using `setPageLayout()`.
 
 **Expected output:**
-```vue
-<script setup>
-function toggleLayout() {
-  setPageLayout('dark');
-}
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> function toggleLayout() {
+>   setPageLayout('dark');
+> }
+> </script>
+> ```
 > - `setPageLayout()` dynamically changes the active layout at runtime.
 > 
 > ```vue
@@ -219,11 +218,10 @@ function toggleLayout() {
 **Problem:** How do you pass custom slot props from `<NuxtLayout>` to layout templates?
 
 **Expected output:**
-```text
-Via named or default slots on <NuxtLayout :name="layoutName">.
-```
-
 > [!check]- Answer
+> ```text
+> Via named or default slots on <NuxtLayout :name="layoutName">.
+> ```
 > - `<NuxtLayout>` accepts props passed down to layout components.
 > 
 > ```vue

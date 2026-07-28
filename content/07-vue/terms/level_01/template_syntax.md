@@ -122,13 +122,12 @@ C) `let x = 5`
 D) `message.length`
 
 **Expected output:**
-```text
-C is invalid.
-Template mustaches can only contain single JavaScript EXPRESSIONS (things that resolve to a value). 
-They cannot contain JavaScript STATEMENTS (like `let`, `if`, `for`, or `return`).
-```
-
 > [!check]- Answer
+> ```text
+> C is invalid.
+> Template mustaches can only contain single JavaScript EXPRESSIONS (things that resolve to a value). 
+> They cannot contain JavaScript STATEMENTS (like `let`, `if`, `for`, or `return`).
+> ```
 > - If you can't put it on the right side of an equals sign (`const result = ...`), you can't put it in a mustache.
 
 ---
@@ -141,13 +140,12 @@ They cannot contain JavaScript STATEMENTS (like `let`, `if`, `for`, or `return`)
 3. `v-slot:header` 
 
 **Expected output:**
-```text
-1. :src="imgUrl"
-2. @click="submitForm"
-3. #header
-```
-
 > [!check]- Answer
+> ```text
+> 1. :src="imgUrl"
+> 2. @click="submitForm"
+> 3. #header
+> ```
 > - `:` shorthand for `v-bind`
 > - `@` shorthand for `v-on`
 > - `#` shorthand for `v-slot`
@@ -165,11 +163,10 @@ They cannot contain JavaScript STATEMENTS (like `let`, `if`, `for`, or `return`)
 **Problem:** Which of the following is valid inside mustache `{{ }}`: A single JS expression or a multi-line JS statement?
 
 **Expected output:**
-```text
-Only single JavaScript expressions (e.g. {{ ok ? 'YES' : 'NO' }}). Statements (var a = 1) or control flow (if/else) are invalid.
-```
-
 > [!check]- Answer
+> ```text
+> Only single JavaScript expressions (e.g. {{ ok ? 'YES' : 'NO' }}). Statements (var a = 1) or control flow (if/else) are invalid.
+> ```
 > - Mustaches accept expressions that evaluate to a value.
 > 
 > ```html

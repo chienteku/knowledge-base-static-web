@@ -147,11 +147,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Congratulations! You are now level 2
-```
-
 > [!check]- Answer
+> ```text
+> Congratulations! You are now level 2
+> ```
 > - You are trying to modify `level` on line 3.
 > - To modify a variable, it must be declared with explicit mutability on line 2.
 > - Add the `mut` keyword between `let` and `level`.
@@ -163,11 +162,10 @@ Congratulations! You are now level 2
 **Problem:** Contrast mutability with shadowing by taking an immutable integer `let x = 5;`, re-binding it with `let x = x + 10;`, and explaining why this compiles without `mut`.
 
 **Expected output:**
-```
-15
-```
-
 > [!check]- Answer
+> ```
+> 15
+> ```
 > ```rust
 > fn main() {
 >     let x = 5;
@@ -178,16 +176,17 @@ Congratulations! You are now level 2
 >
 > **Explanation:** `let x = ...` creates an entirely new variable binding that shadows the previous `x`. No mutation of the original memory location took place.
 
+---
+
 ### Exercise 3: Mutable References in Functions
 
 **Problem:** Write a function `increment(num: &mut i32)` that adds `1` to the dereferenced integer value in-place.
 
 **Expected output:**
-```
-11
-```
-
 > [!check]- Answer
+> ```
+> 11
+> ```
 > ```rust
 > fn increment(num: &mut i32) {
 >     *num += 1;

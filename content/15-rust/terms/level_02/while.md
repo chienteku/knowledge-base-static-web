@@ -167,15 +167,14 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Draining... Level is 50
-Draining... Level is 40
-...
-Draining... Level is 10
-The pool is empty!
-```
-
 > [!check]- Answer
+> ```text
+> Draining... Level is 50
+> Draining... Level is 40
+> ...
+> Draining... Level is 10
+> The pool is empty!
+> ```
 > - Add `water_level -= 10;` inside the loop block.
 > - This ensures the condition `water_level > 0` eventually becomes false.
 
@@ -186,11 +185,10 @@ The pool is empty!
 **Problem:** Count down from `5` to `1` using a `while` loop.
 
 **Expected output:**
-```
-5 4 3 2 1 
-```
-
 > [!check]- Answer
+> ```
+> 5 4 3 2 1 
+> ```
 > ```rust
 > fn main() {
 >     let mut count = 5;
@@ -204,18 +202,19 @@ The pool is empty!
 >
 > **Explanation:** `while` evaluates its boolean condition before every iteration.
 
+---
+
 ### Exercise 3: Processing Items with While Condition
 
 **Problem:** Process elements in `mut vec = vec![1, 2, 3]` using `while !vec.is_empty() { println!("{}", vec.pop().unwrap()); }`.
 
 **Expected output:**
-```
-3
-2
-1
-```
-
 > [!check]- Answer
+> ```
+> 3
+> 2
+> 1
+> ```
 > ```rust
 > fn main() {
 >     let mut v = vec![1, 2, 3];

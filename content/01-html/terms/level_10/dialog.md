@@ -279,26 +279,25 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 **Problem:** Create a simple HTML document structure containing a button "View Terms". When clicked, a native modal `<dialog>` should open displaying terms text and a button "Accept" that closes the modal.
 
 **Expected output:**
-```html
-<button id="viewBtn">View Terms</button>
-
-<dialog id="termsDialog">
-  <p>Terms of service details go here...</p>
-  <button id="acceptBtn">Accept</button>
-</dialog>
-
-<script>
-  const terms = document.getElementById('termsDialog');
-  document.getElementById('viewBtn').addEventListener('click', () => {
-    terms.showModal();
-  });
-  document.getElementById('acceptBtn').addEventListener('click', () => {
-    terms.close();
-  });
-</script>
-```
-
 > [!check]- Answer
+> ```html
+> <button id="viewBtn">View Terms</button>
+> 
+> <dialog id="termsDialog">
+>   <p>Terms of service details go here...</p>
+>   <button id="acceptBtn">Accept</button>
+> </dialog>
+> 
+> <script>
+>   const terms = document.getElementById('termsDialog');
+>   document.getElementById('viewBtn').addEventListener('click', () => {
+>     terms.showModal();
+>   });
+>   document.getElementById('acceptBtn').addEventListener('click', () => {
+>     terms.close();
+>   });
+> </script>
+> ```
 > - Nest the click events within script triggers.
 > - Call `showModal()` to open, and `close()` to exit.
 
@@ -311,11 +310,10 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 **Problem:** Write `<dialog id="my-modal">` with heading, close button, and JS call to open it as a modal.
 
 **Expected output:**
-```text
-<dialog id="my-modal"><h2>Modal Title</h2><button onclick="document.getElementById('my-modal').close()">Close</button></dialog>
-```
-
 > [!check]- Answer
+> ```text
+> <dialog id="my-modal"><h2>Modal Title</h2><button onclick="document.getElementById('my-modal').close()">Close</button></dialog>
+> ```
 > ```html
 > <dialog id="my-modal">
 >   <h2>Modal Title</h2>
@@ -328,16 +326,17 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 >
 > **Explanation:** `.showModal()` opens modal dialogs; `.close()` closes them natively.
 
+---
+
 ### Exercise 3: Dialog Backdrop Styling
 
 **Problem:** Write CSS rule styling native `<dialog>` backdrop overlay to semi-transparent black (`rgba(0,0,0,0.5)`).
 
 **Expected output:**
-```text
-dialog::backdrop { background-color: rgba(0, 0, 0, 0.5); }
-```
-
 > [!check]- Answer
+> ```text
+> dialog::backdrop { background-color: rgba(0, 0, 0, 0.5); }
+> ```
 > ```css
 > dialog::backdrop {
 >   background-color: rgba(0, 0, 0, 0.5);

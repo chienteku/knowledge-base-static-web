@@ -144,14 +144,10 @@ Inspect WAL logs or pgBackRest info before setting recovery_target_time
 2.  Write the recovery target parameter value you would set to resolve this with PITR.
 
 **Expected output:**
-```text
-1. pg_dump is insufficient because it only captures daily snapshots (e.g. at midnight). If we restored the midnight dump, we would lose all valid customer transactions that occurred between midnight and 10:30 AM.
-```
-```text
-2. recovery_target_time = '2026-07-21 10:30:14' -- Replay stopped exactly one second before the corruption.
-```
-
 > [!check]- Answer
+> ```text
+> 1. pg_dump is insufficient because it only captures daily snapshots (e.g. at midnight). If we restored the midnight dump, we would lose all valid customer transactions that occurred between midnight and 10:30 AM.
+> ```
 > - Evaluate the time gaps of data loss.
 > - Target the timestamp immediately preceding the developer's update.
 
@@ -164,27 +160,27 @@ Inspect WAL logs or pgBackRest info before setting recovery_target_time
 **Problem:** Set PITR target recovery timestamp to `'2026-07-24 14:00:00 UTC'`.
 
 **Expected output:**
-```text
-recovery_target_time = '2026-07-24 14:00:00 UTC'
-```
-
 > [!check]- Answer
+> ```text
+> recovery_target_time = '2026-07-24 14:00:00 UTC'
+> ```
 > ```text
 > recovery_target_time = '2026-07-24 14:00:00 UTC'
 > ```
 >
 > **Explanation:** `recovery_target_time` specifies the exact point-in-time boundary for WAL replay.
 
+---
+
 ### Exercise 3: Core Components of PITR
 
 **Problem:** List 2 essential prerequisites for Point-in-Time Recovery (1. Physical Base Backup; 2. Continuous Write-Ahead Log WAL Archives).
 
 **Expected output:**
-```text
-1. Physical Base Backup; 2. Continuous Write-Ahead Log (WAL) Archives
-```
-
 > [!check]- Answer
+> ```text
+> 1. Physical Base Backup; 2. Continuous Write-Ahead Log (WAL) Archives
+> ```
 > ```text
 > 1. Physical Base Backup; 2. Continuous Write-Ahead Log (WAL) Archives
 > ```

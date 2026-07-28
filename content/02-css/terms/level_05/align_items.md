@@ -108,12 +108,11 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 **Problem:** You build a Flex row of buttons. You set the Flex Container to `height: 150px`. Suddenly, all your buttons stretch and become massive 150px tall rectangles, which looks terrible. What property/value caused this, and how do you fix it?
 
 **Expected output:**
-```text
-The default value of `align-items` is `stretch`! Because the container grew to 150px, the default behavior forced the children to stretch to match it.
-You fix it by setting `align-items: flex-start;` or `align-items: center;` to stop the stretching behavior.
-```
-
 > [!check]- Answer
+> ```text
+> The default value of `align-items` is `stretch`! Because the container grew to 150px, the default behavior forced the children to stretch to match it.
+> You fix it by setting `align-items: flex-start;` or `align-items: center;` to stop the stretching behavior.
+> ```
 > - What is the default value of `align-items`?
 
 ---
@@ -125,11 +124,10 @@ You fix it by setting `align-items: flex-start;` or `align-items: center;` to st
 **Problem:** Write CSS for `.hero` centering child items both horizontally AND vertically in flex row mode.
 
 **Expected output:**
-```text
-.hero { display: flex; justify-content: center; align-items: center; }
-```
-
 > [!check]- Answer
+> ```text
+> .hero { display: flex; justify-content: center; align-items: center; }
+> ```
 > ```css
 > .hero {
 >   display: flex;
@@ -140,16 +138,17 @@ You fix it by setting `align-items: flex-start;` or `align-items: center;` to st
 >
 > **Explanation:** Combining `justify-content: center` and `align-items: center` achieves perfect 2D centering.
 
+---
+
 ### Exercise 3: align-items Baseline Alignment
 
 **Problem:** Which `align-items` value aligns text content inside flex items along their shared typographic baseline?
 
 **Expected output:**
-```text
-align-items: baseline;
-```
-
 > [!check]- Answer
+> ```text
+> align-items: baseline;
+> ```
 > ```css
 > .nav {
 >   display: flex;

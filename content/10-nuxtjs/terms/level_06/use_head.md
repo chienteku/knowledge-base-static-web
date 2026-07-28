@@ -148,15 +148,14 @@ useHead({ script: [{ key: 'my-script', children: 'console.log(1)' }] }); // Key 
 **Problem:** Write the `useHead` block required to inject an external stylesheet (`https://example.com/styles.css`) into the document head.
 
 **Expected output:**
-```typescript
-useHead({
-  link: [
-    { rel: 'stylesheet', href: 'https://example.com/styles.css' }
-  ]
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> useHead({
+>   link: [
+>     { rel: 'stylesheet', href: 'https://example.com/styles.css' }
+>   ]
+> });
+> ```
 > - Link elements inside `useHead` are passed as an array of objects inside the `link` key.
 
 ---
@@ -166,18 +165,17 @@ useHead({
 **Problem:** Write `<script setup>` using `useHead()` setting reactive `<title>`, `<meta name="description">`, and `<link rel="canonical">`.
 
 **Expected output:**
-```vue
-<script setup>
-const route = useRoute();
-useHead({
-  title: 'Dynamic Page',
-  meta: [{ name: 'description', content: 'Page description' }],
-  link: [{ rel: 'canonical', href: () => `https://example.com${route.path}` }]
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> const route = useRoute();
+> useHead({
+>   title: 'Dynamic Page',
+>   meta: [{ name: 'description', content: 'Page description' }],
+>   link: [{ rel: 'canonical', href: () => `https://example.com${route.path}` }]
+> });
+> </script>
+> ```
 > - `useHead()` manages reactive HTML head elements.
 > 
 > ```vue
@@ -201,11 +199,10 @@ useHead({
 **Problem:** Write `useHead()` line setting `titleTemplate` so page title `'About'` formats as `'About - My Store'`.
 
 **Expected output:**
-```typescript
-useHead({ titleTemplate: '%s - My Store' });
-```
-
 > [!check]- Answer
+> ```typescript
+> useHead({ titleTemplate: '%s - My Store' });
+> ```
 > - `titleTemplate` applies a global string format template to titles.
 > 
 > ```typescript

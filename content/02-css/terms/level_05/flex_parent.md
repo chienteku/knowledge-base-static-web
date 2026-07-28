@@ -115,11 +115,10 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 **Problem:** You have a `<section>` containing two `<article>` tags. You want the articles to sit side-by-side. Which tag do you target in CSS to write `display: flex;`?
 
 **Expected output:**
-```text
-The `<section>`! You must target the Parent container to control the Children.
-```
-
 > [!check]- Answer
+> ```text
+> The `<section>`! You must target the Parent container to control the Children.
+> ```
 > - Flexbox is a robotic organizer. Do you put the robot inside the toys, or do you make the toybox the robot?
 
 ---
@@ -135,14 +134,13 @@ The `<section>`! You must target the Parent container to control the Children.
 4. `align-self` 
 
 **Expected output:**
-```text
-1. Flex Parent
-2. Flex Item
-3. Flex Parent
-4. Flex Item
-```
-
 > [!check]- Answer
+> ```text
+> 1. Flex Parent
+> 2. Flex Item
+> 3. Flex Parent
+> 4. Flex Item
+> ```
 > ```text
 > 1. justify-content -> Flex Parent
 > 2. flex-grow -> Flex Item
@@ -152,16 +150,17 @@ The `<section>`! You must target the Parent container to control the Children.
 >
 > **Explanation:** Parent properties control container layout; item properties control individual item sizing.
 
+---
+
 ### Exercise 3: Inline Flex Parent Syntax
 
 **Problem:** Which `display` value creates an inline-level container with flexbox inner layout formatting?
 
 **Expected output:**
-```text
-display: inline-flex;
-```
-
 > [!check]- Answer
+> ```text
+> display: inline-flex;
+> ```
 > ```css
 > .badge-container {
 >   display: inline-flex;

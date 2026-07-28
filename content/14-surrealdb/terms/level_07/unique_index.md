@@ -138,11 +138,10 @@ INSERT INTO user [ { email: "a@b.com" } ] ON DUPLICATE KEY UPDATE email = $input
 Write the SurrealQL statement to create a composite unique index named `idx_one_review` on the `reviews` table covering the `user` and `product` fields.
 
 **Expected output:**
-```sql
-DEFINE INDEX idx_one_review ON reviews COLUMNS user, product UNIQUE;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX idx_one_review ON reviews COLUMNS user, product UNIQUE;
+> ```
 > - Specify both fields in `COLUMNS user, product`.
 > - Append the keyword `UNIQUE` to the end of the statement.
 
@@ -155,27 +154,27 @@ DEFINE INDEX idx_one_review ON reviews COLUMNS user, product UNIQUE;
 **Problem:** Define unique index `user_email_unique` on `user` table for `email` field.
 
 **Expected output:**
-```text
-DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX user_email_unique ON TABLE user FIELDS email UNIQUE;
 > ```
 >
 > **Explanation:** `UNIQUE` enforces that no two records share identical indexed field values.
 
+---
+
 ### Exercise 3: Composite Unique Index
 
 **Problem:** Define composite unique index on `tenant_id` and `user_code` fields of `account` table.
 
 **Expected output:**
-```text
-DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
+> ```
 > ```surrealql
 > DEFINE INDEX account_tenant_code ON TABLE account FIELDS tenant_id, user_code UNIQUE;
 > ```

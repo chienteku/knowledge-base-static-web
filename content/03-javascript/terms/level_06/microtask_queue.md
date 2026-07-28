@@ -165,17 +165,16 @@ async function processData() {
 `fetch().then()`, `setTimeout()`, `setInterval()`, `MutationObserver`
 
 **Expected output:**
-```text
-Microtask Queue (VIP):
-- fetch().then() (Promises)
-- MutationObserver
-
-Macrotask Queue (Economy):
-- setTimeout()
-- setInterval()
-```
-
 > [!check]- Answer
+> ```text
+> Microtask Queue (VIP):
+> - fetch().then() (Promises)
+> - MutationObserver
+> 
+> Macrotask Queue (Economy):
+> - setTimeout()
+> - setInterval()
+> ```
 > - Promises and DOM mutations are VIPs. Timers are economy.
 
 ---
@@ -185,29 +184,29 @@ Macrotask Queue (Economy):
 **Problem:** Name 2 microtask APIs in JavaScript (`Promise.then`/`catch`/`finally`, `queueMicrotask`, `MutationObserver`).
 
 **Expected output:**
-```text
-Promise callbacks, queueMicrotask
-```
-
 > [!check]- Answer
+> ```text
+> Promise callbacks, queueMicrotask
+> ```
 > ```javascript
 > console.log("Promise callbacks, queueMicrotask");
 > ```
 >
 > **Explanation:** Promises and `queueMicrotask` enqueue tasks onto the high-priority microtask queue.
 
+---
+
 ### Exercise 3: Microtask Queue Draining
 
 **Problem:** Demonstrate that multiple queued microtasks run back-to-back before any timer macrotask.
 
 **Expected output:**
-```text
-Micro 1
-Micro 2
-Macro 1
-```
-
 > [!check]- Answer
+> ```text
+> Micro 1
+> Micro 2
+> Macro 1
+> ```
 > ```javascript
 > setTimeout(() => console.log("Macro 1"), 0);
 > Promise.resolve().then(() => console.log("Micro 1")).then(() => console.log("Micro 2"));
@@ -215,7 +214,6 @@ Macro 1
 >
 > **Explanation:** The event loop drains the entire microtask queue before executing the next macrotask.
 
----
 
 ---
 

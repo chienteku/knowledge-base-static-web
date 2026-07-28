@@ -185,11 +185,10 @@ thread::spawn(move || {
 **Problem:** Downgrade an `Rc<i32>` to `Weak<i32>`, upgrade it, and print value.
 
 **Expected output:**
-```
-Upgraded value: 42
-```
-
 > [!check]- Answer
+> ```
+> Upgraded value: 42
+> ```
 > ```rust
 > use std::rc::Rc;
 > fn main() {
@@ -203,16 +202,17 @@ Upgraded value: 42
 >
 > **Explanation:** `.upgrade()` returns `Some(Rc<T>)` if the target memory allocation is still active.
 
+---
+
 ### Exercise 3: Handling Dropped Weak Pointers
 
 **Problem:** Drop strong reference `strong` and verify `weak.upgrade()` returns `None`.
 
 **Expected output:**
-```
-Weak upgrade returned None
-```
-
 > [!check]- Answer
+> ```
+> Weak upgrade returned None
+> ```
 > use std::rc::Rc;
 > fn main() {
 >     let strong = Rc::new(42);

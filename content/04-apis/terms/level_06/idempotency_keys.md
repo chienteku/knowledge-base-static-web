@@ -175,13 +175,12 @@ await redis.set(`idempotency:${key}`, JSON.stringify(response), 'EX', 86400);
 3. Cache storing
 
 **Expected output:**
-```text
-1. Check Redis for uuid-abc
-2. If key exists: Return cached response immediately without re-executing logic
-3. If key missing: Lock key, execute business logic, store response in Redis with TTL, return response
-```
-
 > [!check]- Answer
+> ```text
+> 1. Check Redis for uuid-abc
+> 2. If key exists: Return cached response immediately without re-executing logic
+> 3. If key missing: Lock key, execute business logic, store response in Redis with TTL, return response
+> ```
 > ```text
 > 1. Search Redis for key uuid-abc.
 > 2. If present -> Return cached HTTP status and body payload instantly.
@@ -195,11 +194,10 @@ await redis.set(`idempotency:${key}`, JSON.stringify(response), 'EX', 86400);
 **Problem:** What is the standard IETF draft header name for idempotency keys?
 
 **Expected output:**
-```text
-Idempotency-Key
-```
-
 > [!check]- Answer
+> ```text
+> Idempotency-Key
+> ```
 > ```http
 > Idempotency-Key: 7b9b8b08-8e65-4f36-a363-2287f3b5f903
 > ```

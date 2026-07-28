@@ -193,12 +193,11 @@ Custom key bindings in HTML:
 What are the corresponding JavaScript keys to read these values from the element's `dataset` object?
 
 **Expected output:**
-```text
-1. element.dataset.profileStatus
-2. element.dataset.points
-```
-
 > [!check]- Answer
+> ```text
+> 1. element.dataset.profileStatus
+> 2. element.dataset.points
+> ```
 > - The prefix `data-` is stripped.
 > - Hyphenated keys (`profile-status`) must be converted to camelCase (`profileStatus`).
 
@@ -211,27 +210,27 @@ What are the corresponding JavaScript keys to read these values from the element
 **Problem:** For `<button id="btn" data-product-id="99" data-category="tech">`, write JS code to access `product-id`.
 
 **Expected output:**
-```text
-const id = document.getElementById('btn').dataset.productId;
-```
-
 > [!check]- Answer
+> ```text
+> const id = document.getElementById('btn').dataset.productId;
+> ```
 > ```javascript
 > const id = document.getElementById('btn').dataset.productId;
 > ```
 >
 > **Explanation:** `dataset` maps hyphenated `data-product-id` to camelCase `dataset.productId`.
 
+---
+
 ### Exercise 3: Styling with CSS Attribute Selectors
 
 **Problem:** Write CSS rule targeting elements with attribute `data-status="active"`.
 
 **Expected output:**
-```text
-[data-status="active"] { color: green; }
-```
-
 > [!check]- Answer
+> ```text
+> [data-status="active"] { color: green; }
+> ```
 > ```css
 > [data-status="active"] {
 >   color: green;

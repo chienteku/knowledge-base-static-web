@@ -169,11 +169,10 @@ export function filterScores(threshold: number, ...scores: number[]): number[] {
 **Problem:** Write TypeScript function `combinePaths(base: string, ...segments: string[])` returning concatenated path string.
 
 **Expected output:**
-```typescript
-function combinePaths(base: string, ...segments: string[]): string { return [base, ...segments].join('/'); }
-```
-
 > [!check]- Answer
+> ```typescript
+> function combinePaths(base: string, ...segments: string[]): string { return [base, ...segments].join('/'); }
+> ```
 > - Rest parameters capture variable arguments as typed arrays.
 > 
 > ```typescript
@@ -189,11 +188,10 @@ function combinePaths(base: string, ...segments: string[]): string { return [bas
 **Problem:** Distinguish between ES6 Rest parameters vs Spread operator.
 
 **Expected output:**
-```text
-Rest parameters collect multiple function arguments into a single array (...args); Spread operator expands an array or object into individual elements (...arr).
-```
-
 > [!check]- Answer
+> ```text
+> Rest parameters collect multiple function arguments into a single array (...args); Spread operator expands an array or object into individual elements (...arr).
+> ```
 > - Rest collects arguments: `function(...args)`
 > - Spread expands arrays: `[...items]`
 > 

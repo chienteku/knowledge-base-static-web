@@ -157,11 +157,10 @@ fn main() {
 ```
 
 **Expected output:**
-```text
-Handler size: 0 bytes
-```
-
 > [!check]- Answer
+> ```text
+> Handler size: 0 bytes
+> ```
 > ```rust
 > struct StatelessHandler;
 >
@@ -176,11 +175,10 @@ Handler size: 0 bytes
 **Problem:** Define a unit struct `struct Kilograms;` as a type marker for generic unit conversion.
 
 **Expected output:**
-```
-Marker size: 0 bytes
-```
-
 > [!check]- Answer
+> ```
+> Marker size: 0 bytes
+> ```
 > struct Kilograms;
 > fn main() {
 >     println!("Marker size: {} bytes", std::mem::size_of::<Kilograms>());
@@ -189,16 +187,17 @@ Marker size: 0 bytes
 >
 > **Explanation:** Unit structs compile to zero-sized marker types.
 
+---
+
 ### Exercise 3: Implementing Traits on Unit Structs
 
 **Problem:** Implement a `Formatter` trait on a unit struct `struct JsonFormatter;`.
 
 **Expected output:**
-```
-Formatted JSON
-```
-
 > [!check]- Answer
+> ```
+> Formatted JSON
+> ```
 > trait Formatter { fn format(&self) -> &'static str; }
 > struct JsonFormatter;
 > impl Formatter for JsonFormatter {

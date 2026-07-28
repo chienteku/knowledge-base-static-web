@@ -213,11 +213,10 @@ fn main() {
 **Problem:** Implement `From<u32>` for `struct Seconds(u32)`. Convert a number using `.into()`.
 
 **Expected output:**
-```
-Seconds: 60
-```
-
 > [!check]- Answer
+> ```
+> Seconds: 60
+> ```
 > ```rust
 > struct Seconds(u32);
 > impl From<u32> for Seconds {
@@ -231,16 +230,17 @@ Seconds: 60
 >
 > **Explanation:** Implementing `From` automatically grants reciprocal `.into()` conversions.
 
+---
+
 ### Exercise 3: Converting Error Enums with `From`
 
 **Problem:** Implement `From<std::io::Error>` for a custom `AppError` enum.
 
 **Expected output:**
-```
-Converted IO error
-```
-
 > [!check]- Answer
+> ```
+> Converted IO error
+> ```
 > enum AppError { Io(String) }
 > impl From<std::io::Error> for AppError {
 >     fn from(e: std::io::Error) -> Self { AppError::Io(e.to_string()) }

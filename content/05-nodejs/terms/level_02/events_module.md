@@ -171,16 +171,17 @@ emitter.emit('error', new Error('Timeout error'));            // Ignored
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Creating Custom EventEmitter Class
 
 **Problem:** Create a `OrderProcessor` class extending `EventEmitter` that emits `'orderPlaced'` with order ID.
 
 **Expected output:**
-```text
-class OrderProcessor extends EventEmitter { placeOrder(id) { this.emit('orderPlaced', id); } }
-```
-
 > [!check]- Answer
+> ```text
+> class OrderProcessor extends EventEmitter { placeOrder(id) { this.emit('orderPlaced', id); } }
+> ```
 > ```javascript
 > class OrderProcessor extends EventEmitter {
 >   placeOrder(id) {
@@ -191,16 +192,17 @@ class OrderProcessor extends EventEmitter { placeOrder(id) { this.emit('orderPla
 >
 > **Explanation:** Extending `EventEmitter` grants custom domain objects event publish/subscribe features.
 
+---
+
 ### Exercise 3: Once vs On Listeners
 
 **Problem:** Which method subscribes a listener that automatically removes itself after firing once? (`emitter.once()`).
 
 **Expected output:**
-```text
-emitter.once()
-```
-
 > [!check]- Answer
+> ```text
+> emitter.once()
+> ```
 > ```text
 > emitter.once()
 > ```

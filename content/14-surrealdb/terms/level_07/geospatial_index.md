@@ -143,15 +143,14 @@ Write the SurrealQL statements to:
 2. Write a query to select `driver_id` from `drivers` where `geo::distance(location, $client_loc)` is less than or equal to `2000` meters.
 
 **Expected output:**
-```sql
--- 1. Define Index
-DEFINE INDEX idx_driver_loc ON drivers COLUMNS location;
-
--- 2. Radius Query
-SELECT driver_id FROM drivers WHERE geo::distance(location, $client_loc) <= 2000;
-```
-
 > [!check]- Answer
+> ```sql
+> -- 1. Define Index
+> DEFINE INDEX idx_driver_loc ON drivers COLUMNS location;
+> 
+> -- 2. Radius Query
+> SELECT driver_id FROM drivers WHERE geo::distance(location, $client_loc) <= 2000;
+> ```
 > - Define the spatial index with `DEFINE INDEX idx_driver_loc ON drivers COLUMNS location;`.
 > - Distance comparison is in meters (`<= 2000`).
 
@@ -164,27 +163,27 @@ SELECT driver_id FROM drivers WHERE geo::distance(location, $client_loc) <= 2000
 **Problem:** Define MTREE spatial index `store_geo_idx` on `store` table for `location` geometry field.
 
 **Expected output:**
-```text
-DEFINE INDEX store_geo_idx ON TABLE store FIELDS location MTREE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX store_geo_idx ON TABLE store FIELDS location MTREE;
+> ```
 > ```surrealql
 > DEFINE INDEX store_geo_idx ON TABLE store FIELDS location MTREE;
 > ```
 >
 > **Explanation:** `MTREE` indexes spatial geometry fields for `<inside>` spatial queries.
 
+---
+
 ### Exercise 3: Spatial Polygon Containment Query
 
 **Problem:** Select all stores whose `location` is inside `$boundary_polygon`.
 
 **Expected output:**
-```text
-SELECT * FROM store WHERE location <inside> $boundary_polygon;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM store WHERE location <inside> $boundary_polygon;
+> ```
 > ```surrealql
 > SELECT * FROM store WHERE location <inside> $boundary_polygon;
 > ```

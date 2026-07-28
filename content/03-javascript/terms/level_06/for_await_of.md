@@ -197,11 +197,10 @@ sumStream();
 ```
 
 **Expected output:**
-```text
-Total: 60
-```
-
 > [!check]- Answer
+> ```text
+> Total: 60
+> ```
 > - Write `for await (const num of numberStream())`.
 > - Inside the loop, increment total: `total += num;`.
 
@@ -212,12 +211,11 @@ Total: 60
 **Problem:** Create an async generator `async function* gen()` yielding `1` and `2`, and iterate with `for await...of`.
 
 **Expected output:**
-```text
-1
-2
-```
-
 > [!check]- Answer
+> ```text
+> 1
+> 2
+> ```
 > ```javascript
 > async function* gen() {
 >   yield 1;
@@ -233,17 +231,18 @@ Total: 60
 >
 > **Explanation:** `for await...of` awaits promised values yielded by async generator streams.
 
+---
+
 ### Exercise 3: Iterating Arrays of Promises with `for await...of`
 
 **Problem:** Iterate an array of resolved promises `[Promise.resolve(10), Promise.resolve(20)]` using `for await...of`.
 
 **Expected output:**
-```text
-10
-20
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> 20
+> ```
 > ```javascript
 > async function processPromises() {
 >   const promises = [Promise.resolve(10), Promise.resolve(20)];
@@ -256,7 +255,6 @@ Total: 60
 >
 > **Explanation:** `for await...of` automatically awaits items when iterating collections containing promises.
 
----
 
 ---
 

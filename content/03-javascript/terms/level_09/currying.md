@@ -155,12 +155,11 @@ async function processData() {
 **Problem:** In the `curriedMultiply` example above, when the inner function `function(b)` finally runs, how does it still remember what `a` was?
 
 **Expected output:**
-```text
-Through Closure! 
-Even though the outer function finished executing, the inner function maintains a "backpack" of memory containing the variables (like `a`) from its parent's scope.
-```
-
 > [!check]- Answer
+> ```text
+> Through Closure! 
+> Even though the outer function finished executing, the inner function maintains a "backpack" of memory containing the variables (like `a`) from its parent's scope.
+> ```
 > - Currying relies 100% on this memory mechanic.
 
 ---
@@ -170,11 +169,10 @@ Even though the outer function finished executing, the inner function maintains 
 **Problem:** Write a curried function `curriedAdd(a)(b)(c)` returning the sum.
 
 **Expected output:**
-```text
-6
-```
-
 > [!check]- Answer
+> ```text
+> 6
+> ```
 > ```javascript
 > const curriedAdd = a => b => c => a + b + c;
 > console.log(curriedAdd(1)(2)(3));
@@ -182,16 +180,17 @@ Even though the outer function finished executing, the inner function maintains 
 >
 > **Explanation:** Currying transforms multi-argument functions into unary function chains.
 
+---
+
 ### Exercise 3: Auto-Currying Utility Function
 
 **Problem:** Write a generic `curry(fn)` wrapper that auto-curries any $N$-arity function.
 
 **Expected output:**
-```text
-10
-```
-
 > [!check]- Answer
+> ```text
+> 10
+> ```
 > ```javascript
 > function curry(fn) {
 >   return function curried(...args) {
@@ -206,7 +205,6 @@ Even though the outer function finished executing, the inner function maintains 
 >
 > **Explanation:** Auto-currying checks argument length against `fn.length` arity.
 
----
 
 ---
 

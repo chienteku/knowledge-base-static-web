@@ -183,27 +183,27 @@ if (typeof document !== "undefined") {
 **Problem:** Retrieve element by ID `"main-header"` using `document.getElementById()`.
 
 **Expected output:**
-```text
-Fast ID selection completed
-```
-
 > [!check]- Answer
+> ```text
+> Fast ID selection completed
+> ```
 > ```javascript
 > console.log("Fast ID selection completed");
 > ```
 >
 > **Explanation:** `getElementById` is the fastest optimized DOM selection method.
 
+---
+
 ### Exercise 3: Handling Missing ID Queries
 
 **Problem:** Check return value when `getElementById('non-existent')` finds no match.
 
 **Expected output:**
-```text
-null
-```
-
 > [!check]- Answer
+> ```text
+> null
+> ```
 > ```javascript
 > const elem = null;
 > console.log(elem);

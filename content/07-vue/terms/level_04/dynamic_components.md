@@ -221,11 +221,10 @@ const tagType = ref('p') // can be 'p', 'h1', or 'h2'
 ```
 
 **Expected output:**
-```text
-Changing the dropdown correctly swaps the container wrapper between <p>, <h1>, and <h2> tags.
-```
-
 > [!check]- Answer
+> ```text
+> Changing the dropdown correctly swaps the container wrapper between <p>, <h1>, and <h2> tags.
+> ```
 > - The built-in `<component>` element accepts native HTML string tags (like `'h1'`) inside `:is`.
 > - Bind the `tagType` variable directly to the `:is` attribute.
 
@@ -236,11 +235,10 @@ Changing the dropdown correctly swaps the container wrapper between <p>, <h1>, a
 **Problem:** Write template code using `<component :is="activeTab">` and `<button>` toggling between `TabA` and `TabB` (`shallowRef`).
 
 **Expected output:**
-```vue
-<script setup> import { shallowRef } from 'vue'; import TabA from './TabA.vue'; import TabB from './TabB.vue'; const activeTab = shallowRef(TabA); </script> <template> <button @click="activeTab = TabA">Tab A</button> <button @click="activeTab = TabB">Tab B</button> <component :is="activeTab" /> </template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup> import { shallowRef } from 'vue'; import TabA from './TabA.vue'; import TabB from './TabB.vue'; const activeTab = shallowRef(TabA); </script> <template> <button @click="activeTab = TabA">Tab A</button> <button @click="activeTab = TabB">Tab B</button> <component :is="activeTab" /> </template>
+> ```
 > - Use `shallowRef()` for active component variables.
 > - `<component :is="...">` renders dynamic component targets.
 > 
@@ -267,11 +265,10 @@ Changing the dropdown correctly swaps the container wrapper between <p>, <h1>, a
 **Problem:** Which built-in Vue wrapper component preserves state of unmounted dynamic components when toggling tabs?
 
 **Expected output:**
-```text
-<KeepAlive><component :is="activeTab" /></KeepAlive>
-```
-
 > [!check]- Answer
+> ```text
+> <KeepAlive><component :is="activeTab" /></KeepAlive>
+> ```
 > - `<KeepAlive>` caches inactive component instances in memory.
 > 
 > ```html

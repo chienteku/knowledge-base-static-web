@@ -140,13 +140,12 @@ export default {
 **Problem:** You are starting a brand new Vue 3 project today. Should you use the Options API?
 
 **Expected output:**
-```text
-Probably not. 
-While Vue 3 still fully supports the Options API, the industry standard and official recommendation for all new Vue 3 projects is the Composition API (`<script setup>`).
-You primarily need to know the Options API to maintain older Vue 2 codebases.
-```
-
 > [!check]- Answer
+> ```text
+> Probably not. 
+> While Vue 3 still fully supports the Options API, the industry standard and official recommendation for all new Vue 3 projects is the Composition API (`<script setup>`).
+> You primarily need to know the Options API to maintain older Vue 2 codebases.
+> ```
 > - Read the documentation guidelines for this knowledge base!
 
 ---
@@ -156,11 +155,10 @@ You primarily need to know the Options API to maintain older Vue 2 codebases.
 **Problem:** Write an Options API component with `data` `items: []`, `computed` `itemCount`, and `method` `addItem(item)`.
 
 **Expected output:**
-```javascript
-export default { data() { return { items: [] }; }, computed: { itemCount() { return this.items.length; } }, methods: { addItem(item) { this.items.push(item); } } }
-```
-
 > [!check]- Answer
+> ```javascript
+> export default { data() { return { items: [] }; }, computed: { itemCount() { return this.items.length; } }, methods: { addItem(item) { this.items.push(item); } } }
+> ```
 > - Return `data` from factory function.
 > - Access component state using `this`.
 > 
@@ -185,11 +183,10 @@ export default { data() { return { items: [] }; }, computed: { itemCount() { ret
 **Problem:** How do you access a method `fetchUser()` from inside another method `init()` in the Options API?
 
 **Expected output:**
-```text
-By calling `this.fetchUser()`.
-```
-
 > [!check]- Answer
+> ```text
+> By calling `this.fetchUser()`.
+> ```
 > - Component options are bound to the component instance via `this`.
 > 
 > ```javascript

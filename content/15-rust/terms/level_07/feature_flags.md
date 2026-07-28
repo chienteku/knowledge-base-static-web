@@ -178,11 +178,10 @@ thread::spawn(move || {
 **Problem:** Configure `[features] default = ["json"] json = ["dep:serde_json"]` in `Cargo.toml`.
 
 **Expected output:**
-```
-Default feature defined
-```
-
 > [!check]- Answer
+> ```
+> Default feature defined
+> ```
 > ```rust
 > fn main() {
 >     println!("Default feature defined");
@@ -191,16 +190,17 @@ Default feature defined
 >
 > **Explanation:** `default` lists features enabled automatically unless `default-features = false` is passed.
 
+---
+
 ### Exercise 3: Conditional Feature Code Gating
 
 **Problem:** Gate a function with `#[cfg(feature = "extra")]`.
 
 **Expected output:**
-```
-Extra feature code compiled
-```
-
 > [!check]- Answer
+> ```
+> Extra feature code compiled
+> ```
 > #[cfg(feature = "extra")]
 > fn extra() { println!("Extra feature code compiled"); }
 > fn main() {

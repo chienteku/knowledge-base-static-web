@@ -161,16 +161,15 @@ Use SCRAM-SHA-256 as default authentication mechanism
 **Problem:** You have a database named `ecom`. Write the mongosh command to create a user named `"appWorker"` with password `"workerPass"` who has full read and write access strictly to the `ecom` database.
 
 **Expected output:**
-```javascript
-use ecom;
-db.createUser({
-  user: "appWorker",
-  pwd: "workerPass",
-  roles: [ { role: "readWrite", db: "ecom" } ]
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> use ecom;
+> db.createUser({
+>   user: "appWorker",
+>   pwd: "workerPass",
+>   roles: [ { role: "readWrite", db: "ecom" } ]
+> });
+> ```
 > - Switch to the target database context before running the command.
 > - The role name for read/write access is `"readWrite"`.
 
@@ -183,11 +182,10 @@ db.createUser({
 **Problem:** Create user `appUser` with password `secret` and `readWrite` role on `production` database.
 
 **Expected output:**
-```text
-db.createUser({ user: "appUser", pwd: "secret", roles: [{ role: "readWrite", db: "production" }] });
-```
-
 > [!check]- Answer
+> ```text
+> db.createUser({ user: "appUser", pwd: "secret", roles: [{ role: "readWrite", db: "production" }] });
+> ```
 > ```javascript
 > db.createUser({
 >   user: "appUser",
@@ -198,16 +196,17 @@ db.createUser({ user: "appUser", pwd: "secret", roles: [{ role: "readWrite", db:
 >
 > **Explanation:** `db.createUser()` creates database users with RBAC role privileges.
 
+---
+
 ### Exercise 3: MongoDB Built-In Security Roles List
 
 **Problem:** List 3 built-in MongoDB roles (`read`, `readWrite`, `dbAdmin`, `userAdmin`, `root`).
 
 **Expected output:**
-```text
-read, readWrite, dbAdmin, userAdmin, root
-```
-
 > [!check]- Answer
+> ```text
+> read, readWrite, dbAdmin, userAdmin, root
+> ```
 > ```text
 > read, readWrite, dbAdmin, userAdmin, root
 > ```

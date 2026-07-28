@@ -121,16 +121,15 @@ routeRules: { '/live-ticker': { ssr: false } } // Disable SSR for real-time clie
 2. Ensure requests to `/api/v1/public` include CORS headers.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  routeRules: {
-    '/app/**': { ssr: false },
-    '/api/v1/public/**': { cors: true }
-  }
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   routeRules: {
+>     '/app/**': { ssr: false },
+>     '/api/v1/public/**': { cors: true }
+>   }
+> })
+> ```
 > - Map glob patterns to specific rule targets: `/app/**` maps to `{ ssr: false }` and `/api/v1/public/**` maps to `{ cors: true }`.
 
 ---
@@ -144,18 +143,17 @@ export default defineNuxtConfig({
 4. `/old-path` -> Redirect to `/new-path` (301)
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  routeRules: {
-    '/': { prerender: true },
-    '/blog/**': { swr: 3600 },
-    '/admin/**': { ssr: false },
-    '/old-path': { redirect: { to: '/new-path', statusCode: 301 } }
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   routeRules: {
+>     '/': { prerender: true },
+>     '/blog/**': { swr: 3600 },
+>     '/admin/**': { ssr: false },
+>     '/old-path': { redirect: { to: '/new-path', statusCode: 301 } }
+>   }
+> });
+> ```
 > - `routeRules` configures per-route hybrid rendering and caching.
 > 
 > ```typescript
@@ -176,11 +174,10 @@ export default defineNuxtConfig({
 **Problem:** Write `routeRules` snippet applying `cors: true` headers to all API endpoints under `/api/**`.
 
 **Expected output:**
-```typescript
-routeRules: { '/api/**': { cors: true } }
-```
-
 > [!check]- Answer
+> ```typescript
+> routeRules: { '/api/**': { cors: true } }
+> ```
 > - `cors: true` adds CORS headers to matching route patterns.
 > 
 > ```typescript

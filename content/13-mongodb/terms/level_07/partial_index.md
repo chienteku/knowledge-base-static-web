@@ -188,16 +188,15 @@ Use partialFilterExpression for expression-based conditional indexing
 Write the `createIndex` command.
 
 **Expected output:**
-```javascript
-db.products.createIndex(
-  { price: 1 },
-  {
-    partialFilterExpression: { price: { $gt: 100 } }
-  }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.products.createIndex(
+>   { price: 1 },
+>   {
+>     partialFilterExpression: { price: { $gt: 100 } }
+>   }
+> );
+> ```
 > - The keys target `{ price: 1 }`.
 > - Declare the query operator check inside the `partialFilterExpression` object.
 
@@ -210,11 +209,10 @@ db.products.createIndex(
 **Problem:** Create partial unique index on `email` where `email` exists and is not null.
 
 **Expected output:**
-```text
-db.users.createIndex({ email: 1 }, { unique: true, partialFilterExpression: { email: { $type: "string" } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.createIndex({ email: 1 }, { unique: true, partialFilterExpression: { email: { $type: "string" } } });
+> ```
 > ```javascript
 > db.users.createIndex(
 >   { email: 1 },
@@ -227,16 +225,17 @@ db.users.createIndex({ email: 1 }, { unique: true, partialFilterExpression: { em
 >
 > **Explanation:** `partialFilterExpression` creates conditional indexes for specific document subsets.
 
+---
+
 ### Exercise 3: Partial Index RAM Saving Benefit
 
 **Problem:** Why use partial indexes for soft-deleted documents (`deleted: false`)? (Reduces index size by omitting deleted documents from RAM).
 
 **Expected output:**
-```text
-Saves RAM and index size by excluding deleted documents from the index B-Tree
-```
-
 > [!check]- Answer
+> ```text
+> Saves RAM and index size by excluding deleted documents from the index B-Tree
+> ```
 > ```text
 > Saves RAM and index size by excluding deleted documents from the index B-Tree
 > ```

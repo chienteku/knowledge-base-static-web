@@ -136,12 +136,11 @@ await $fetch('/api/save', {
 **Problem:** You have a login form. When the user clicks "Submit", you want to send a POST request to `/api/login` with their `email` and `password`. Should you use `$fetch` or `useFetch` for this specific action?
 
 **Expected output:**
-```text
-$fetch. 
-Because the form submission happens exclusively on the client (triggered by a user click), there is no SSR double-fetching issue.
-```
-
 > [!check]- Answer
+> ```text
+> $fetch. 
+> Because the form submission happens exclusively on the client (triggered by a user click), there is no SSR double-fetching issue.
+> ```
 > - Actions triggered by user clicks or form submissions in browser memory only happen in client environments and do not require SSR serialization.
 
 ---
@@ -151,18 +150,17 @@ Because the form submission happens exclusively on the client (triggered by a us
 **Problem:** Write Vue `<script setup>` method `submitForm(formData)` calling `$fetch('/api/submit', { method: 'POST', body: formData })`.
 
 **Expected output:**
-```vue
-<script setup>
-async function submitForm(payload) {
-  const res = await $fetch('/api/submit', {
-    method: 'POST',
-    body: payload
-  });
-}
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> async function submitForm(payload) {
+>   const res = await $fetch('/api/submit', {
+>     method: 'POST',
+>     body: payload
+>   });
+> }
+> </script>
+> ```
 > - `$fetch` is the recommended fetch helper inside event handlers and user actions.
 > 
 > ```vue
@@ -188,11 +186,10 @@ async function submitForm(payload) {
 **Problem:** State the rule for when to use `useFetch` vs `$fetch` in Nuxt 3.
 
 **Expected output:**
-```text
-Use useFetch in top-level <script setup> component initialization (SSR safe); Use $fetch inside event handlers, user submit functions, or server routes.
-```
-
 > [!check]- Answer
+> ```text
+> Use useFetch in top-level <script setup> component initialization (SSR safe); Use $fetch inside event handlers, user submit functions, or server routes.
+> ```
 > - `useFetch` -> Component setup initialization (prevents double fetch).
 > - `$fetch` -> Event handlers, user button clicks, server API handlers.
 > 

@@ -136,13 +136,12 @@ WiredTiger stores documents as optimized binary BSON structures
 3.  Loaded inside the backend Node.js application memory.
 
 **Expected output:**
-```text
-1. Stored on disk: BSON (Binary bytes, specifically the BSON Date type representing a 64-bit UTC integer).
-2. Transmitted over network: BSON (Serialized binary packets).
-3. Loaded in Node.js application: JSON / JavaScript Object (A native JavaScript `Date` object translated by the MongoDB driver).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Stored on disk: BSON (Binary bytes, specifically the BSON Date type representing a 64-bit UTC integer).
+> 2. Transmitted over network: BSON (Serialized binary packets).
+> 3. Loaded in Node.js application: JSON / JavaScript Object (A native JavaScript `Date` object translated by the MongoDB driver).
+> ```
 > - The database engine and network transfer operate on binary representations.
 > - The application layer converts binary types to standard programming language objects.
 
@@ -155,27 +154,27 @@ WiredTiger stores documents as optimized binary BSON structures
 **Problem:** Compare JSON vs BSON: 1. Format (JSON: Text, BSON: Binary), 2. Types (BSON adds Date, ObjectId, BinData, Decimal128).
 
 **Expected output:**
-```text
-JSON: Text string, BSON: Binary format with rich data types
-```
-
 > [!check]- Answer
+> ```text
+> JSON: Text string, BSON: Binary format with rich data types
+> ```
 > ```text
 > JSON: Text string, BSON: Binary format with rich data types
 > ```
 >
 > **Explanation:** BSON extends JSON with binary encoding, fast traversal headers, and extra data types.
 
+---
+
 ### Exercise 3: BSON Parsing Performance Advantage
 
 **Problem:** Why is BSON faster to traverse than JSON text? (BSON embeds length prefixes allowing elements to be skipped without scanning text).
 
 **Expected output:**
-```text
-BSON includes length prefixes to skip elements without string parsing
-```
-
 > [!check]- Answer
+> ```text
+> BSON includes length prefixes to skip elements without string parsing
+> ```
 > ```text
 > BSON includes length prefixes to skip elements without string parsing
 > ```

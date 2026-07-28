@@ -142,11 +142,10 @@ SELECT * FROM post WHERE author = user:alice; // Fast index lookup
 Write the SurrealQL statement to define an index named `idx_order_customer` to optimize queries searching for orders placed by a specific customer.
 
 **Expected output:**
-```sql
-DEFINE INDEX idx_order_customer ON order COLUMNS customer;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE INDEX idx_order_customer ON order COLUMNS customer;
+> ```
 > - Target table is `order`.
 > - Index column is `customer`.
 
@@ -159,27 +158,27 @@ DEFINE INDEX idx_order_customer ON order COLUMNS customer;
 **Problem:** Define index `post_author_idx` on `post` table for record link field `author`.
 
 **Expected output:**
-```text
-DEFINE INDEX post_author_idx ON TABLE post FIELDS author;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX post_author_idx ON TABLE post FIELDS author;
+> ```
 > ```surrealql
 > DEFINE INDEX post_author_idx ON TABLE post FIELDS author;
 > ```
 >
 > **Explanation:** Indexing record link fields accelerates foreign key pointer lookups.
 
+---
+
 ### Exercise 3: Composite Record Link Index
 
 **Problem:** Define composite index on `tenant` (record link) and `created_at` (datetime) fields of `log` table.
 
 **Expected output:**
-```text
-DEFINE INDEX log_tenant_date ON TABLE log FIELDS tenant, created_at;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE INDEX log_tenant_date ON TABLE log FIELDS tenant, created_at;
+> ```
 > ```surrealql
 > DEFINE INDEX log_tenant_date ON TABLE log FIELDS tenant, created_at;
 > ```

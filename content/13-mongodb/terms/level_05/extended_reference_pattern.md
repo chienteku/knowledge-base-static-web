@@ -147,12 +147,11 @@ Embed point-in-time address snapshot directly inside order document
 2.  If the author changes their biography text, do you need to update the books collection? Explain why.
 
 **Expected output:**
-```text
-1. The design is appropriate because the author's name is always displayed on the book cover and search list page. Since author names change very rarely, copying this field inside the book document eliminates slow join queries without causing sync issues.
-2. No, because the author's full biography text is not copied inside the book document (only the name is). The biography is stored exclusively in the authors collection and queried only on the author's profile page, avoiding unnecessary data duplication and cascade write updates.
-```
-
 > [!check]- Answer
+> ```text
+> 1. The design is appropriate because the author's name is always displayed on the book cover and search list page. Since author names change very rarely, copying this field inside the book document eliminates slow join queries without causing sync issues.
+> 2. No, because the author's full biography text is not copied inside the book document (only the name is). The biography is stored exclusively in the authors collection and queried only on the author's profile page, avoiding unnecessary data duplication and cascade write updates.
+> ```
 > - Assess the stability of author names.
 > - Identify which fields are copied versus which are kept normalized.
 
@@ -165,11 +164,10 @@ Embed point-in-time address snapshot directly inside order document
 **Problem:** Model `order` document embedding customer ID, `customerName`, and `customerEmail` alongside foreign key reference.
 
 **Expected output:**
-```text
-customer: { id: ObjectId("..."), name: "Alice", email: "alice@ex.com" }
-```
-
 > [!check]- Answer
+> ```text
+> customer: { id: ObjectId("..."), name: "Alice", email: "alice@ex.com" }
+> ```
 > ```javascript
 > const order = {
 >   _id: new ObjectId(),
@@ -184,16 +182,17 @@ customer: { id: ObjectId("..."), name: "Alice", email: "alice@ex.com" }
 >
 > **Explanation:** Extended Reference Pattern copies frequently read fields to eliminate `$lookup` joins.
 
+---
+
 ### Exercise 3: Point-in-Time Historic Data Copy
 
 **Problem:** Why should product price at purchase time be copied into order line items? (Preserves historic transaction audit integrity).
 
 **Expected output:**
-```text
-Preserves historic transaction price at purchase time even if product catalog prices change
-```
-
 > [!check]- Answer
+> ```text
+> Preserves historic transaction price at purchase time even if product catalog prices change
+> ```
 > ```text
 > Preserves historic transaction price at purchase time even if product catalog prices change
 > ```

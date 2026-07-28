@@ -157,12 +157,11 @@ Predict the exact JSON array output returned for the `tags` field under these tw
 2.  The `tags` field is defined as `TYPE set<string>`.
 
 **Expected output:**
-```text
-1. Array: ["rust", "database", "rust"] (Duplicates are preserved, order is maintained).
-2. Set: ["database", "rust"] (The duplicate "rust" is discarded, and elements are sorted/unordered).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Array: ["rust", "database", "rust"] (Duplicates are preserved, order is maintained).
+> 2. Set: ["database", "rust"] (The duplicate "rust" is discarded, and elements are sorted/unordered).
+> ```
 > - Check which container type enforces uniqueness.
 > - Consider how duplicates are discarded on writes.
 
@@ -175,27 +174,27 @@ Predict the exact JSON array output returned for the `tags` field under these tw
 **Problem:** Define field `categories` on `product` table as a set of strings.
 
 **Expected output:**
-```text
-DEFINE FIELD categories ON TABLE product TYPE set<string>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD categories ON TABLE product TYPE set<string>;
+> ```
 > ```surrealql
 > DEFINE FIELD categories ON TABLE product TYPE set<string>;
 > ```
 >
 > **Explanation:** `TYPE set<type>` enforces unique element collections.
 
+---
+
 ### Exercise 3: Automatic Set Deduplication
 
 **Problem:** What happens when `[1, 1, 2]` is inserted into a `set<number>` field? (`[1, 2]`).
 
 **Expected output:**
-```text
-[1, 2]
-```
-
 > [!check]- Answer
+> ```text
+> [1, 2]
+> ```
 > ```text
 > [1, 2]
 > ```

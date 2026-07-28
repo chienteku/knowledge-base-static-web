@@ -195,11 +195,10 @@ Write a SurrealQL block that starts a transaction, deletes record `product:old`,
 **Problem:** Write ACID transaction transferring $50 from `account:1` to `account:2`.
 
 **Expected output:**
-```text
-BEGIN TRANSACTION; UPDATE account:1 SET balance -= 50; UPDATE account:2 SET balance += 50; COMMIT TRANSACTION;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN TRANSACTION; UPDATE account:1 SET balance -= 50; UPDATE account:2 SET balance += 50; COMMIT TRANSACTION;
+> ```
 > ```surrealql
 > BEGIN TRANSACTION;
 >   UPDATE account:1 SET balance -= 50;
@@ -209,16 +208,17 @@ BEGIN TRANSACTION; UPDATE account:1 SET balance -= 50; UPDATE account:2 SET bala
 >
 > **Explanation:** `BEGIN TRANSACTION ... COMMIT TRANSACTION` executes atomic multi-record mutations.
 
+---
+
 ### Exercise 3: Cancelling Transaction on Guard Failure
 
 **Problem:** Roll back transaction using `CANCEL TRANSACTION` when conditions fail.
 
 **Expected output:**
-```text
-BEGIN TRANSACTION; UPDATE account:1 SET balance -= 500; CANCEL TRANSACTION;
-```
-
 > [!check]- Answer
+> ```text
+> BEGIN TRANSACTION; UPDATE account:1 SET balance -= 500; CANCEL TRANSACTION;
+> ```
 > ```surrealql
 > BEGIN TRANSACTION;
 >   UPDATE account:1 SET balance -= 500;

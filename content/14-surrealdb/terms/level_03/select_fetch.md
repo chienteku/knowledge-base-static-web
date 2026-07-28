@@ -171,11 +171,10 @@ You have an `orders` table containing these fields:
 Write the SurrealQL query to retrieve all orders, replacing the customer and billing pointers with their full record documents.
 
 **Expected output:**
-```sql
-SELECT * FROM orders FETCH customer, billing;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT * FROM orders FETCH customer, billing;
+> ```
 > - The source table is `orders`.
 > - Specify both link fields in the `FETCH` clause, separated by a comma.
 
@@ -188,27 +187,27 @@ SELECT * FROM orders FETCH customer, billing;
 **Problem:** Select all `order` records and fetch `customer` and nested `customer.address`.
 
 **Expected output:**
-```text
-SELECT * FROM order FETCH customer, customer.address;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM order FETCH customer, customer.address;
+> ```
 > ```surrealql
 > SELECT * FROM order FETCH customer, customer.address;
 > ```
 >
 > **Explanation:** Specifying dot paths in `FETCH` unwraps nested foreign record pointers.
 
+---
+
 ### Exercise 3: Fetching Array of Record Links
 
 **Problem:** Fetch array of record links `tags` on `article` table (`FETCH tags`).
 
 **Expected output:**
-```text
-SELECT * FROM article FETCH tags;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM article FETCH tags;
+> ```
 > ```surrealql
 > SELECT * FROM article FETCH tags;
 > ```

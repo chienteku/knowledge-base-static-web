@@ -140,13 +140,12 @@ val NUMERIC(10, 2) -- Allows up to 8 digits before decimal point
 **Problem:** You are creating a column to store percentages (e.g. `98.75%`). The values can range from `0.000%` to `100.000%`. What is the optimal `NUMERIC(precision, scale)` setting for this column, and what is the maximum number it can store?
 
 **Expected output:**
-```text
-Setting: `NUMERIC(6, 3)`
-Reason: The maximum value `100.000` has 6 total digits (precision of 6) with exactly 3 digits after the decimal point (scale of 3).
-Maximum Number: `999.999` (Though your application logic would limit it to 100.000, the database column structure allows up to 999.999).
-```
-
 > [!check]- Answer
+> ```text
+> Setting: `NUMERIC(6, 3)`
+> Reason: The maximum value `100.000` has 6 total digits (precision of 6) with exactly 3 digits after the decimal point (scale of 3).
+> Maximum Number: `999.999` (Though your application logic would limit it to 100.000, the database column structure allows up to 999.999).
+> ```
 > - Count the total digits in `100.000`.
 > - Count the digits to the right of the decimal point.
 
@@ -159,27 +158,27 @@ Maximum Number: `999.999` (Though your application logic would limit it to 100.0
 **Problem:** Define `price` column using `NUMERIC` holding up to $99,999,999.99$ (10 total digits, 2 scale).
 
 **Expected output:**
-```text
-price NUMERIC(10, 2)
-```
-
 > [!check]- Answer
+> ```text
+> price NUMERIC(10, 2)
+> ```
 > ```sql
 > price NUMERIC(10, 2)
 > ```
 >
 > **Explanation:** `NUMERIC(10, 2)` stores up to 8 digits before and 2 digits after the decimal.
 
+---
+
 ### Exercise 3: Precision and Scale Definition
 
 **Problem:** Define Precision vs Scale in `NUMERIC(P, S)` (Precision: total number of digits; Scale: number of decimal digits after point).
 
 **Expected output:**
-```text
-Precision: total number of digits; Scale: number of decimal digits after point
-```
-
 > [!check]- Answer
+> ```text
+> Precision: total number of digits; Scale: number of decimal digits after point
+> ```
 > ```text
 > Precision: total number of digits; Scale: number of decimal digits after point
 > ```

@@ -119,22 +119,20 @@ function get() {
 **Problem:** How does `util.promisify` actually work under the hood? Write a function that takes an old callback function `getUser(id, callback)` and manually wraps it in a Promise.
 
 **Expected output:**
-```javascript
-function getUserPromise(id) {
-  // 1. Return a new Promise
-  return new Promise((resolve, reject) => {
-    // 2. Call the old function
-    getUser(id, (err, data) => {
-      // 3. Reject if error, Resolve if success
-      if (err) return reject(err);
-      resolve(data);
-    });
-  });
-}
-```
-*Explanation: This is literally all `util.promisify` does behind the scenes! It abstracts this boilerplate code away from you.*
-
 > [!check]- Answer
+> ```javascript
+> function getUserPromise(id) {
+>   // 1. Return a new Promise
+>   return new Promise((resolve, reject) => {
+>     // 2. Call the old function
+>     getUser(id, (err, data) => {
+>       // 3. Reject if error, Resolve if success
+>       if (err) return reject(err);
+>       resolve(data);
+>     });
+>   });
+> }
+> ```
 > - You need to return `new Promise(...)`.
 > - If `err` exists, what do you call? `resolve` or `reject`?
 
@@ -147,11 +145,10 @@ function getUserPromise(id) {
 **Problem:** Promisify `fs.readFile` using `util.promisify`.
 
 **Expected output:**
-```text
-const readFileAsync = util.promisify(fs.readFile); const data = await readFileAsync('file.txt', 'utf-8');
-```
-
 > [!check]- Answer
+> ```text
+> const readFileAsync = util.promisify(fs.readFile); const data = await readFileAsync('file.txt', 'utf-8');
+> ```
 > ```javascript
 > const util = require('util');
 > const fs = require('fs');
@@ -161,16 +158,17 @@ const readFileAsync = util.promisify(fs.readFile); const data = await readFileAs
 >
 > **Explanation:** `util.promisify` converts standard Node error-first callback functions into Promise functions.
 
+---
+
 ### Exercise 3: Native Promise Alternatives in Node.js Core
 
 **Problem:** Which built-in Node.js module namespace provides pre-promisified file system methods?
 
 **Expected output:**
-```text
-node:fs/promises (or fs.promises)
-```
-
 > [!check]- Answer
+> ```text
+> node:fs/promises (or fs.promises)
+> ```
 > ```text
 > node:fs/promises
 > ```

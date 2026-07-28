@@ -184,11 +184,10 @@ export default function Page() {
 **Problem:** Write JSX layout streaming 2 independent async server components (`HeaderData` and `FeedData`) in parallel using 2 separate `<Suspense>` boundaries.
 
 **Expected output:**
-```tsx
-<div> <Suspense fallback={<HeaderSkeleton />}><HeaderData /></Suspense> <Suspense fallback={<FeedSkeleton />}><FeedData /></Suspense> </div>
-```
-
 > [!check]- Answer
+> ```tsx
+> <div> <Suspense fallback={<HeaderSkeleton />}><HeaderData /></Suspense> <Suspense fallback={<FeedSkeleton />}><FeedData /></Suspense> </div>
+> ```
 > - Multiple `<Suspense>` boundaries stream independently in parallel.
 > 
 > ```tsx
@@ -213,11 +212,10 @@ export default function Page() {
 **Problem:** How does Next.js `loading.tsx` relate to React Suspense?
 
 **Expected output:**
-```text
-Next.js automatically wraps the page.tsx component tree in a React Suspense boundary using loading.tsx as the fallback prop.
-```
-
 > [!check]- Answer
+> ```text
+> Next.js automatically wraps the page.tsx component tree in a React Suspense boundary using loading.tsx as the fallback prop.
+> ```
 > - `loading.tsx` is an automated file-convention wrapper for `<Suspense>`.
 > 
 > ```text

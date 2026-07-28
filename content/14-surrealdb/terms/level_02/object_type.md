@@ -156,11 +156,10 @@ UPDATE user:alice SET settings = { theme: "dark", notifications: true };
 Write the SurrealQL query to retrieve only the `name` and the nested `office` phone number of all companies.
 
 **Expected output:**
-```sql
-SELECT name, contact.phones.office FROM companies;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name, contact.phones.office FROM companies;
+> ```
 > - Traverse multiple levels of objects by chaining dots: `contact.phones.office`.
 > - Do not include SQL `JOIN` operators; simply list the paths in the `SELECT` clause.
 
@@ -173,27 +172,27 @@ SELECT name, contact.phones.office FROM companies;
 **Problem:** Define field `metadata` on `article` as flexible object `TYPE object FLEXIBLE`.
 
 **Expected output:**
-```text
-DEFINE FIELD metadata ON TABLE article TYPE object FLEXIBLE;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD metadata ON TABLE article TYPE object FLEXIBLE;
+> ```
 > ```surrealql
 > DEFINE FIELD metadata ON TABLE article TYPE object FLEXIBLE;
 > ```
 >
 > **Explanation:** `FLEXIBLE` permits arbitrary nested keys inside object fields.
 
+---
+
 ### Exercise 3: Nested Field Path Queries
 
 **Problem:** Select `settings.theme` from `user:alice`.
 
 **Expected output:**
-```text
-SELECT settings.theme FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT settings.theme FROM user:alice;
+> ```
 > ```surrealql
 > SELECT settings.theme FROM user:alice;
 > ```

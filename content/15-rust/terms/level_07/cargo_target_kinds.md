@@ -160,11 +160,10 @@ thread::spawn(move || {
 **Problem:** Write a `[[bin]]` configuration for `src/bin/cli.rs` named `"my-cli"`.
 
 **Expected output:**
-```
-[[bin]] name = "my-cli" path = "src/bin/cli.rs"
-```
-
 > [!check]- Answer
+> ```
+> [[bin]] name = "my-cli" path = "src/bin/cli.rs"
+> ```
 > ```rust
 > fn main() {
 >     println!("[[bin]] name = \"my-cli\" path = \"src/bin/cli.rs\"");
@@ -173,16 +172,17 @@ thread::spawn(move || {
 >
 > **Explanation:** `[[bin]]` targets specify custom binary target metadata in `Cargo.toml`.
 
+---
+
 ### Exercise 3: Building Example Targets
 
 **Problem:** Command to run an example file located at `examples/demo.rs`.
 
 **Expected output:**
-```
-cargo run --example demo
-```
-
 > [!check]- Answer
+> ```
+> cargo run --example demo
+> ```
 > fn main() {
 >     println!("cargo run --example demo");
 > }

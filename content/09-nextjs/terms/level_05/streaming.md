@@ -126,12 +126,11 @@ export default function Page() {
 **Problem:** If you have `<FastComponent />` and `<SlowComponent />` rendered next to each other, and neither is wrapped in Suspense, what happens?
 
 **Expected output:**
-```text
-The entire page is blocked.
-Next.js Server Components render sequentially by default. The server will not send any HTML to the client until both the fast and slow components have finished fetching their data. This is why wrapping slow components in `<Suspense>` is critical for UX!
-```
-
 > [!check]- Answer
+> ```text
+> The entire page is blocked.
+> Next.js Server Components render sequentially by default. The server will not send any HTML to the client until both the fast and slow components have finished fetching their data. This is why wrapping slow components in `<Suspense>` is critical for UX!
+> ```
 > - A chain is only as fast as its slowest link.
 
 ---
@@ -141,11 +140,10 @@ Next.js Server Components render sequentially by default. The server will not se
 **Problem:** Write Page component rendering instant header text, wrapping slow `<Recommendations />` component in `<Suspense fallback={<Skeleton />}>`.
 
 **Expected output:**
-```tsx
-export default function Page() { return ( <div> <h1>Dashboard</h1> <Suspense fallback={<Skeleton />}><Recommendations /></Suspense> </div> ); }
-```
-
 > [!check]- Answer
+> ```tsx
+> export default function Page() { return ( <div> <h1>Dashboard</h1> <Suspense fallback={<Skeleton />}><Recommendations /></Suspense> </div> ); }
+> ```
 > - Inline `<Suspense>` streams slow components without delaying instant layout text.
 > 
 > ```tsx
@@ -171,11 +169,10 @@ export default function Page() { return ( <div> <h1>Dashboard</h1> <Suspense fal
 **Problem:** Which network feature allows Next.js servers to stream HTML chunks progressively over a single HTTP connection?
 
 **Expected output:**
-```text
-HTTP/1.1 Chunked Transfer Encoding (Transfer-Encoding: chunked)
-```
-
 > [!check]- Answer
+> ```text
+> HTTP/1.1 Chunked Transfer Encoding (Transfer-Encoding: chunked)
+> ```
 > - Transfer-Encoding: chunked streams partial HTML response chunks.
 > 
 > ```text

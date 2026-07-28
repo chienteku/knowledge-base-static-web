@@ -168,14 +168,13 @@ await db.users.insertOne({ name: "Alice" }); // Collection implicitly created on
 4.  Database
 
 **Expected output:**
-```text
-1. Collection -> Table
-2. Document -> Row
-3. Field -> Column
-4. Database -> Database
-```
-
 > [!check]- Answer
+> ```text
+> 1. Collection -> Table
+> 2. Document -> Row
+> 3. Field -> Column
+> 4. Database -> Database
+> ```
 > - Identify which object acts as the parent container on disk.
 > - Relate single record entries to their grid counterparts.
 
@@ -188,27 +187,27 @@ await db.users.insertOne({ name: "Alice" }); // Collection implicitly created on
 **Problem:** Create a capped collection `system_logs` capped at 5MB (5242880 bytes).
 
 **Expected output:**
-```text
-db.createCollection("system_logs", { capped: true, size: 5242880 });
-```
-
 > [!check]- Answer
+> ```text
+> db.createCollection("system_logs", { capped: true, size: 5242880 });
+> ```
 > ```javascript
 > db.createCollection("system_logs", { capped: true, size: 5242880 });
 > ```
 >
 > **Explanation:** Capped collections maintain fixed-size circular buffers that overwrite oldest documents automatically.
 
+---
+
 ### Exercise 3: Dropping Collection Safely
 
 **Problem:** Drop collection `temp_data` from database.
 
 **Expected output:**
-```text
-db.temp_data.drop();
-```
-
 > [!check]- Answer
+> ```text
+> db.temp_data.drop();
+> ```
 > ```javascript
 > db.temp_data.drop();
 > ```

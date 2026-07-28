@@ -146,14 +146,13 @@ Select the queries below that will execute successfully and return documents whe
 3.  `SELECT * FROM products WHERE in_stock;`
 
 **Expected output:**
-```text
-Queries 2 and 3 will execute successfully.
-- Query 1 fails to find matches because `"true"` is a string, not a boolean literal.
-- Query 2 is a standard boolean equality check.
-- Query 3 is a valid SQL shortcut that automatically filters for truthy boolean values.
-```
-
 > [!check]- Answer
+> ```text
+> Queries 2 and 3 will execute successfully.
+> - Query 1 fails to find matches because `"true"` is a string, not a boolean literal.
+> - Query 2 is a standard boolean equality check.
+> - Query 3 is a valid SQL shortcut that automatically filters for truthy boolean values.
+> ```
 > - Determine if string quotes change the data type of the filter value.
 > - Recall the shortcut rules for evaluating boolean fields in SQL.
 
@@ -166,27 +165,27 @@ Queries 2 and 3 will execute successfully.
 **Problem:** Define field `is_admin` on `user` as boolean type defaulting to `false`.
 
 **Expected output:**
-```text
-DEFINE FIELD is_admin ON TABLE user TYPE bool DEFAULT false;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD is_admin ON TABLE user TYPE bool DEFAULT false;
+> ```
 > ```surrealql
 > DEFINE FIELD is_admin ON TABLE user TYPE bool DEFAULT false;
 > ```
 >
 > **Explanation:** `TYPE bool DEFAULT false` sets boolean field constraints and default values.
 
+---
+
 ### Exercise 3: Explicit Boolean Type Casting
 
 **Problem:** Cast string `"true"` to boolean using `<bool>` or `type::bool()`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```surrealql
 > RETURN <bool> "true";
 > ```

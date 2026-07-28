@@ -114,15 +114,14 @@ definePageMeta({
 **Problem:** You have a file `pages/login.vue`. Write the script block required to apply a custom layout named `minimal` to this specific page.
 
 **Expected output:**
-```vue
-<script setup lang="ts">
-definePageMeta({
-  layout: 'minimal'
-});
-</script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts">
+> definePageMeta({
+>   layout: 'minimal'
+> });
+> </script>
+> ```
 > - The `definePageMeta` macro is auto-imported globally and can accept a configuration object with a `layout` string key matching the layout filename.
 
 ---
@@ -132,11 +131,10 @@ definePageMeta({
 **Problem:** What simple project structure action automatically enables Vue Router in a Nuxt 3 project?
 
 **Expected output:**
-```text
-Creating a pages/ directory containing at least 1 .vue page file (e.g. pages/index.vue).
-```
-
 > [!check]- Answer
+> ```text
+> Creating a pages/ directory containing at least 1 .vue page file (e.g. pages/index.vue).
+> ```
 > - Creating the `pages/` directory automatically activates Vue Router.
 > 
 > ```text
@@ -150,11 +148,10 @@ Creating a pages/ directory containing at least 1 .vue page file (e.g. pages/ind
 **Problem:** Which file in project root allows customizing Vue Router options (e.g. scrollBehavior)?
 
 **Expected output:**
-```text
-app/router.options.ts
-```
-
 > [!check]- Answer
+> ```text
+> app/router.options.ts
+> ```
 > - `app/router.options.ts` configures custom Vue Router options.
 > 
 > ```typescript

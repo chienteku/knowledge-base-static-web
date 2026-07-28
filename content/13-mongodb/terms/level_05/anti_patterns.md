@@ -151,12 +151,11 @@ The metric is logged every second.
 2.  State the correct design pattern to resolve this.
 
 **Expected output:**
-```text
-1. Unbounded Array Growth: Storing cpu_metrics inside a nested array that appends data every second will quickly cause the server document to bloat, eventually exceeding the 16MB limit and throwing BSON size errors.
-2. The Bucket Pattern: Group the metrics into fixed daily or hourly documents, capping the array size to prevent bloat.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Unbounded Array Growth: Storing cpu_metrics inside a nested array that appends data every second will quickly cause the server document to bloat, eventually exceeding the 16MB limit and throwing BSON size errors.
+> 2. The Bucket Pattern: Group the metrics into fixed daily or hourly documents, capping the array size to prevent bloat.
+> ```
 > - Assess the document growth over a 24-hour period.
 > - Identify the pattern designed for time-series aggregation.
 
@@ -169,27 +168,27 @@ The metric is logged every second.
 **Problem:** Identify anti-pattern: Storing 100,000 product reviews inside a single `product.reviews` array (Unbounded Array Anti-Pattern).
 
 **Expected output:**
-```text
-Unbounded Array Anti-Pattern
-```
-
 > [!check]- Answer
+> ```text
+> Unbounded Array Anti-Pattern
+> ```
 > ```text
 > Unbounded Array Anti-Pattern
 > ```
 >
 > **Explanation:** Storing unbounded arrays inside parent documents risks hitting the 16MB document limit.
 
+---
+
 ### Exercise 3: Fixing Field Name Data Anti-Pattern
 
 **Problem:** Refactor `{ "user_123": "admin", "user_456": "editor" }` into an array of sub-documents.
 
 **Expected output:**
-```text
-roles: [{ userId: "user_123", role: "admin" }, { userId: "user_456", role: "editor" }]
-```
-
 > [!check]- Answer
+> ```text
+> roles: [{ userId: "user_123", role: "admin" }, { userId: "user_456", role: "editor" }]
+> ```
 > ```javascript
 > const refactored = {
 >   roles: [

@@ -207,15 +207,14 @@ routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for liv
 **Problem:** Hybrid rendering applies to API routes too! Write a route rule that caches all requests to `/api/public-stats` for exactly 1 hour (3600 seconds) using the Stale-While-Revalidate (SWR) strategy.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  routeRules: {
-    '/api/public-stats': { swr: 3600 }
-  }
-})
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   routeRules: {
+>     '/api/public-stats': { swr: 3600 }
+>   }
+> })
+> ```
 > - SWR caching is applied using the `swr` configuration property, passing the duration in seconds.
 
 ---
@@ -228,17 +227,16 @@ export default defineNuxtConfig({
 3. `/dashboard/**` -> Client SPA (`ssr: false`)
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  routeRules: {
-    '/': { prerender: true },
-    '/blog/**': { swr: 3600 },
-    '/dashboard/**': { ssr: false }
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   routeRules: {
+>     '/': { prerender: true },
+>     '/blog/**': { swr: 3600 },
+>     '/dashboard/**': { ssr: false }
+>   }
+> });
+> ```
 > - `routeRules` mixes SSG, SWR, SSR, and SPA in a single application.
 > 
 > ```typescript
@@ -258,12 +256,11 @@ export default defineNuxtConfig({
 **Problem:** Contrast `swr: 60` vs `prerender: true` in `routeRules`.
 
 **Expected output:**
-```text
-swr: 60: Serves cached static page and revalidates in background on server every 60 seconds;
-prerender: true: Generates static page ONCE during build time.
-```
-
 > [!check]- Answer
+> ```text
+> swr: 60: Serves cached static page and revalidates in background on server every 60 seconds;
+> prerender: true: Generates static page ONCE during build time.
+> ```
 > - `swr: 60` -> Background server revalidation on timer.
 > - `prerender: true` -> Static build-time generation.
 > 

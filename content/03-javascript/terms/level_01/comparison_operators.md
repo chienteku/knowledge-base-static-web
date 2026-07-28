@@ -173,11 +173,10 @@ console.log("Eligible:", isEligibleForFreeShipping);
 ```
 
 **Expected output:**
-```text
-Eligible: false
-```
-
 > [!check]- Answer
+> ```text
+> Eligible: false
+> ```
 > - Use the `>=` operator to test if a value is greater than or equal to a target.
 
 ---
@@ -187,15 +186,14 @@ Eligible: false
 **Problem:** Predict `5 > "3"`, `"5" > 3`, `null >= 0`, `null > 0`, and `undefined >= 0`.
 
 **Expected output:**
-```text
-true
-true
-true
-false
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> true
+> true
+> false
+> false
+> ```
 > ```javascript
 > console.log(5 > "3");     // true ("3" -> 3)
 > console.log("5" > 3);     // true ("5" -> 5)
@@ -206,16 +204,17 @@ false
 >
 > **Explanation:** Relational operators (`>`, `>=`, `<`, `<=`) coerce nullish/string operands to numbers. `null` becomes `0`, while `undefined` becomes `NaN` (making all comparisons `false`).
 
+---
+
 ### Exercise 3: Object Relational ValueOf Coercion
 
 **Problem:** Create an object `{ valueOf() { return 10; } }` and compare it with number `5` using `>`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const obj = { valueOf() { return 10; } };
 > console.log(obj > 5);

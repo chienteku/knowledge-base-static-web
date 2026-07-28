@@ -146,14 +146,13 @@ db.users.updateOne({ _id: 1 }, { $set: { "grades.$[elem].score": 100 } }, { arra
 Write the update query to find the company with `_id: 10` and replace its `"IT"` department string value with `"Information Technology"` (hint: target the first match using the `$` operator).
 
 **Expected output:**
-```javascript
-db.companies.updateOne(
-  { _id: 10, departments: "IT" },
-  { $set: { "departments.$": "Information Technology" } }
-);
-```
-
 > [!check]- Answer
+> ```javascript
+> db.companies.updateOne(
+>   { _id: 10, departments: "IT" },
+>   { $set: { "departments.$": "Information Technology" } }
+> );
+> ```
 > - Add the target array element check `departments: "IT"` in the query filter.
 > - Use the positional placeholder `$` in the update path.
 
@@ -166,11 +165,10 @@ db.companies.updateOne(
 **Problem:** Update score to 100 for the first grade in `grades` array where `score < 60`.
 
 **Expected output:**
-```text
-db.students.updateOne({ _id: 1, "grades.score": { $lt: 60 } }, { $set: { "grades.$.score": 100 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.students.updateOne({ _id: 1, "grades.score": { $lt: 60 } }, { $set: { "grades.$.score": 100 } });
+> ```
 > ```javascript
 > db.students.updateOne(
 >   { _id: 1, "grades.score": { $lt: 60 } },
@@ -180,16 +178,17 @@ db.students.updateOne({ _id: 1, "grades.score": { $lt: 60 } }, { $set: { "grades
 >
 > **Explanation:** `"array.$.field"` updates the first array element matching the query filter.
 
+---
+
 ### Exercise 3: All Elements Operator `$[ ]`
 
 **Problem:** Increment `views` by 1 for all items in `posts` array using `$[ ]`.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $inc: { "posts.$[].views": 1 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $inc: { "posts.$[].views": 1 } });
+> ```
 > ```javascript
 > db.users.updateOne(
 >   { _id: 1 },

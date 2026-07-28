@@ -181,27 +181,27 @@ Write a `DEFINE EVENT` named `audit_order_cancel` on table `order` that triggers
 **Problem:** Define event `user_created` on `user` table creating an `audit` record when `$event = "CREATE"`.
 
 **Expected output:**
-```text
-DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
+> ```
 > ```surrealql
 > DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
 > ```
 >
 > **Explanation:** `DEFINE EVENT` triggers asynchronous or transactional event handlers.
 
+---
+
 ### Exercise 3: Event Action Filter
 
 **Problem:** Trigger event `on_delete` ONLY when `$event = "DELETE"`.
 
 **Expected output:**
-```text
-DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (...);
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (...);
+> ```
 > ```surrealql
 > DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (CREATE deleted_log CONTENT { user: $before.id });
 > ```

@@ -177,34 +177,33 @@ if (typeof window !== "undefined") {
 **Problem:** Read `window.location.href` and `window.location.search` query parameters.
 
 **Expected output:**
-```text
-Location API inspected
-```
-
 > [!check]- Answer
+> ```text
+> Location API inspected
+> ```
 > ```javascript
 > console.log("Location API inspected");
 > ```
 >
 > **Explanation:** `window.location` supplies URL metadata and navigation methods.
 
+---
+
 ### Exercise 3: Detecting Window Inner Dimensions
 
 **Problem:** Access `window.innerWidth` and `window.innerHeight` viewport dimensions.
 
 **Expected output:**
-```text
-Viewport dimensions retrieved
-```
-
 > [!check]- Answer
+> ```text
+> Viewport dimensions retrieved
+> ```
 > ```javascript
 > console.log("Viewport dimensions retrieved");
 > ```
 >
 > **Explanation:** `window.innerWidth` and `innerHeight` measure active browser viewport sizes.
 
----
 
 ---
 

@@ -130,17 +130,16 @@ defineProps({
 **Problem:** You have a `<Button>` component that takes a `color` prop. If the Parent forgets to pass the `color` prop, you want the button to default to "blue". How do you define this?
 
 **Expected output:**
-```javascript
-// You use the object syntax for defineProps to provide a default!
-const props = defineProps({
-  color: {
-    type: String,
-    default: 'blue'
-  }
-})
-```
-
 > [!check]- Answer
+> ```javascript
+> // You use the object syntax for defineProps to provide a default!
+> const props = defineProps({
+>   color: {
+>     type: String,
+>     default: 'blue'
+>   }
+> })
+> ```
 > - `defineProps` accepts a configuration object.
 
 ---
@@ -150,11 +149,10 @@ const props = defineProps({
 **Problem:** Write Vue 3 `<script setup lang="ts">` `defineProps` declaration for optional `title?: string` and required `count: number`.
 
 **Expected output:**
-```vue
-<script setup lang="ts"> interface Props { title?: string; count: number; } defineProps<Props>(); </script>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup lang="ts"> interface Props { title?: string; count: number; } defineProps<Props>(); </script>
+> ```
 > - Generic type argument `defineProps<Props>()` provides compile-time prop validation.
 > 
 > ```vue
@@ -175,11 +173,10 @@ const props = defineProps({
 **Problem:** Write `withDefaults` wrapper providing default value `title: 'Default'` for TypeScript props interface.
 
 **Expected output:**
-```text
-withDefaults(defineProps<Props>(), { title: 'Default' });
-```
-
 > [!check]- Answer
+> ```text
+> withDefaults(defineProps<Props>(), { title: 'Default' });
+> ```
 > - `withDefaults()` supplies default prop values in TS `<script setup>`.
 > 
 > ```typescript

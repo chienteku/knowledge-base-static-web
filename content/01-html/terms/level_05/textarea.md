@@ -140,12 +140,11 @@ textarea {
 **Problem:** By default, users can click and drag the corner of a `<textarea>` to resize it in any direction. How can you use CSS to restrict them so they can only drag it taller, but not wider?
 
 **Expected output:**
-```text
-You use the CSS resize property: 
-`textarea { resize: vertical; }`
-```
-
 > [!check]- Answer
+> ```text
+> You use the CSS resize property: 
+> `textarea { resize: vertical; }`
+> ```
 > - Search for "CSS textarea resize".
 
 ---
@@ -157,27 +156,27 @@ You use the CSS resize property:
 **Problem:** Write `<textarea>` named `bio` with 4 rows, 50 columns, and max length 200 characters.
 
 **Expected output:**
-```text
-<textarea name="bio" rows="4" cols="50" maxlength="200"></textarea>
-```
-
 > [!check]- Answer
+> ```text
+> <textarea name="bio" rows="4" cols="50" maxlength="200"></textarea>
+> ```
 > ```html
 > <textarea name="bio" rows="4" cols="50" maxlength="200"></textarea>
 > ```
 >
 > **Explanation:** `rows`/`cols` specify initial box dimensions; `maxlength` enforces character limits.
 
+---
+
 ### Exercise 3: Preserving Textarea Line Breaks
 
 **Problem:** Which CSS property preserves multi-line line breaks entered inside a `<textarea>` when displaying text on a web page?
 
 **Expected output:**
-```text
-white-space: pre-wrap;
-```
-
 > [!check]- Answer
+> ```text
+> white-space: pre-wrap;
+> ```
 > ```css
 > .output {
 >   white-space: pre-wrap;

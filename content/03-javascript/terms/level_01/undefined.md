@@ -138,11 +138,10 @@ async function processData() {
 **Problem:** Declare a variable using `let` without assigning a value. Write an `if` statement that strictly checks if the variable is equal to `undefined` and logs a message if true.
 
 **Expected output:**
-```text
-The variable is undefined.
-```
-
 > [!check]- Answer
+> ```text
+> The variable is undefined.
+> ```
 > - Use strict equality `===` to check against the keyword `undefined`.
 
 ---
@@ -152,28 +151,28 @@ The variable is undefined.
 **Problem:** Use `void 0` to generate a guaranteed `undefined` value.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > console.log(void 0 === undefined);
 > ```
 >
 > **Explanation:** `void expression` evaluates the expression and returns pure `undefined` under all runtime environments.
 
+---
+
 ### Exercise 3: Default Parameter Activation
 
 **Problem:** Write a function `greet(name = "Guest")` and demonstrate calling it with `undefined` vs `null`.
 
 **Expected output:**
-```text
-Hello Guest
-Hello null
-```
-
 > [!check]- Answer
+> ```text
+> Hello Guest
+> Hello null
+> ```
 > ```javascript
 > function greet(name = "Guest") {
 >   console.log(`Hello ${name}`);
@@ -184,7 +183,6 @@ Hello null
 >
 > **Explanation:** Default function parameters trigger only when arguments are omitted or passed as `undefined` (not `null`).
 
----
 
 ---
 

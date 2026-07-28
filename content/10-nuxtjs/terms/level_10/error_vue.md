@@ -116,18 +116,17 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 **Problem:** Write the `<template>` block for an `error.vue` file that shows a picture of a lost dog if the `statusCode` is `404`, but shows a picture of a broken robot for any other error code.
 
 **Expected output:**
-```vue
-<template>
-  <div>
-    <img v-if="error.statusCode === 404" src="/lost-dog.jpg" alt="Not Found" />
-    <img v-else src="/broken-robot.jpg" alt="Server Error" />
-    
-    <button @click="clearError({ redirect: '/' })">Home</button>
-  </div>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <div>
+>     <img v-if="error.statusCode === 404" src="/lost-dog.jpg" alt="Not Found" />
+>     <img v-else src="/broken-robot.jpg" alt="Server Error" />
+>     
+>     <button @click="clearError({ redirect: '/' })">Home</button>
+>   </div>
+> </template>
+> ```
 > - Read the `statusCode` property on the `error` object inside a conditional template block.
 
 ---
@@ -137,20 +136,19 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 **Problem:** Write root `error.vue` component accepting `error` prop and displaying `error.statusCode`, `error.message`, and a button invoking `clearError({ redirect: '/' })`.
 
 **Expected output:**
-```vue
-<script setup>
-defineProps(['error']);
-</script>
-<template>
-  <div>
-    <h1>{{ error.statusCode }}</h1>
-    <p>{{ error.message }}</p>
-    <button @click="clearError({ redirect: '/' })">Clear Error</button>
-  </div>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <script setup>
+> defineProps(['error']);
+> </script>
+> <template>
+>   <div>
+>     <h1>{{ error.statusCode }}</h1>
+>     <p>{{ error.message }}</p>
+>     <button @click="clearError({ redirect: '/' })">Clear Error</button>
+>   </div>
+> </template>
+> ```
 > - `error.vue` is the top-level error boundary component.
 > 
 > ```vue
@@ -181,11 +179,10 @@ defineProps(['error']);
 **Problem:** Which option object property passed to `clearError({ redirect: '/url' })` redirects the user while clearing error state?
 
 **Expected output:**
-```text
-redirect: '/url'
-```
-
 > [!check]- Answer
+> ```text
+> redirect: '/url'
+> ```
 > - `redirect` specifies the target URL after clearing error state.
 > 
 > ```typescript

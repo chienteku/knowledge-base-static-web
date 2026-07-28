@@ -104,12 +104,11 @@ DELETE /api/notifications/45 HTTP/1.1 ; Idempotent target deletion
 2. "Set the living room light to ON."
 
 **Expected output:**
-```text
-1. Non-Idempotent. (If it was off, 1 call turns it on, 2 calls turns it off. The state changes every time).
-2. Idempotent. (No matter how many times you tell it to turn ON, the end result is simply that the light is ON).
-```
-
 > [!check]- Answer
+> ```text
+> 1. Non-Idempotent. (If it was off, 1 call turns it on, 2 calls turns it off. The state changes every time).
+> 2. Idempotent. (No matter how many times you tell it to turn ON, the end result is simply that the light is ON).
+> ```
 > - If you run the command 1 time vs 100 times, is the final state of the house exactly the same?
 
 ---
@@ -123,14 +122,13 @@ DELETE /api/notifications/45 HTTP/1.1 ; Idempotent target deletion
 4. `INSERT INTO logs VALUES ('login')` 
 
 **Expected output:**
-```text
-1. Yes
-2. No
-3. Yes
-4. No
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes
+> 2. No
+> 3. Yes
+> 4. No
+> ```
 > ```text
 > 1. SET score = 100               -> Yes (State is 100 regardless of N runs)
 > 2. SET score = score + 1         -> No  (State increments on every run)
@@ -145,11 +143,10 @@ DELETE /api/notifications/45 HTTP/1.1 ; Idempotent target deletion
 **Problem:** Why is idempotency critical in "At-Least-Once" event delivery systems (e.g. Kafka/RabbitMQ)?
 
 **Expected output:**
-```text
-At-Least-Once queues may deliver duplicate event messages. Consumers must process events idempotently to avoid duplicate charges or database mutations.
-```
-
 > [!check]- Answer
+> ```text
+> At-Least-Once queues may deliver duplicate event messages. Consumers must process events idempotently to avoid duplicate charges or database mutations.
+> ```
 > ```text
 > At-Least-Once queues may deliver duplicate event messages. Consumers must process events idempotently to avoid duplicate charges or database mutations.
 > ```

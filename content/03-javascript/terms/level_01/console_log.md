@@ -149,11 +149,10 @@ async function processData() {
 **Problem:** You have two variables: `const x = 10;` and `const y = 20;`. Write a single `console.log` statement that prints both of them separated by a space.
 
 **Expected output:**
-```text
-10 20
-```
-
 > [!check]- Answer
+> ```text
+> 10 20
+> ```
 > - `console.log()` can take multiple arguments separated by commas (e.g., `console.log(var1, var2)`).
 
 ---
@@ -163,27 +162,27 @@ async function processData() {
 **Problem:** Use console format specifiers `%s`, `%d`, and `%o` to print string `"Alice"`, score `100`, and object `{ active: true }`.
 
 **Expected output:**
-```text
-User Alice scored 100 on { active: true }
-```
-
 > [!check]- Answer
+> ```text
+> User Alice scored 100 on { active: true }
+> ```
 > ```javascript
 > console.log("User %s scored %d on %o", "Alice", 100, { active: true });
 > ```
 >
 > **Explanation:** `console.log` supports ANSI/C-style format specifiers: `%s` (string), `%d` (integer), `%o` (object).
 
+---
+
 ### Exercise 3: Console Timing and Table Operations
 
 **Problem:** Use `console.time('op')` / `console.timeEnd('op')` to measure execution time of a 1,000,000 iteration loop.
 
 **Expected output:**
-```text
-op: time elapsed
-```
-
 > [!check]- Answer
+> ```text
+> op: time elapsed
+> ```
 > ```javascript
 > console.time("op");
 > for (let i = 0; i < 1000000; i++) {}
@@ -192,7 +191,6 @@ op: time elapsed
 >
 > **Explanation:** `console.time` and `console.timeEnd` benchmark execution duration between matching label strings.
 
----
 
 ---
 

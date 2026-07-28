@@ -181,11 +181,10 @@ Basic base URL definition:
 What is the absolute URL the browser will navigate to when the user clicks the "Pay Now" link?
 
 **Expected output:**
-```text
-https://secure.myshop.com/store/checkout/pay.html
-```
-
 > [!check]- Answer
+> ```text
+> https://secure.myshop.com/store/checkout/pay.html
+> ```
 > - Combine the `base` URL and the link's `href` string.
 
 ---
@@ -197,27 +196,27 @@ https://secure.myshop.com/store/checkout/pay.html
 **Problem:** If `<base href="https://cdn.example.com/assets/">` is set, what absolute URL does `<img src="logo.png">` resolve to?
 
 **Expected output:**
-```text
-https://cdn.example.com/assets/logo.png
-```
-
 > [!check]- Answer
+> ```text
+> https://cdn.example.com/assets/logo.png
+> ```
 > ```text
 > https://cdn.example.com/assets/logo.png
 > ```
 >
 > **Explanation:** Relative URL paths prepend the `<base href>` prefix.
 
+---
+
 ### Exercise 3: Base Target Attribute
 
 **Problem:** Write `<base>` tag setting base URL `https://example.com/` and default target `_blank` for all links.
 
 **Expected output:**
-```text
-<base href="https://example.com/" target="_blank">
-```
-
 > [!check]- Answer
+> ```text
+> <base href="https://example.com/" target="_blank">
+> ```
 > ```html
 > <base href="https://example.com/" target="_blank">
 > ```

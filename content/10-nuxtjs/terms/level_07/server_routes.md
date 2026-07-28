@@ -123,14 +123,13 @@ export default defineEventHandler((event) => {
 **Problem:** Stripe requires a webhook endpoint to be located exactly at `https://yoursite.com/webhooks/stripe`. What exact file and folder structure must you create in Nuxt to handle this POST request?
 
 **Expected output:**
-```text
-server/
-└── routes/
-    └── webhooks/
-        └── stripe.post.ts
-```
-
 > [!check]- Answer
+> ```text
+> server/
+> └── routes/
+>     └── webhooks/
+>         └── stripe.post.ts
+> ```
 > - Since the webhook is mapped directly to `/webhooks/stripe` without `/api`, place the directories inside the `routes` parent directory and name the file `stripe.post.ts`.
 
 ---
@@ -140,14 +139,13 @@ server/
 **Problem:** Write `server/routes/sitemap.xml.ts` returning XML string and setting `Content-Type: application/xml` header.
 
 **Expected output:**
-```typescript
-export default defineEventHandler((event) => {
-  setHeader(event, 'Content-Type', 'application/xml');
-  return '<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>';
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineEventHandler((event) => {
+>   setHeader(event, 'Content-Type', 'application/xml');
+>   return '<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>';
+> });
+> ```
 > - `setHeader` configures custom response MIME types for non-JSON routes.
 > 
 > ```typescript
@@ -168,11 +166,10 @@ export default defineEventHandler((event) => {
 **Problem:** Which file naming syntax in `server/routes/` captures all un-handled server routes as a fallback?
 
 **Expected output:**
-```text
-server/routes/[...slug].ts
-```
-
 > [!check]- Answer
+> ```text
+> server/routes/[...slug].ts
+> ```
 > - `[...slug].ts` matches catch-all server routes.
 > 
 > ```text

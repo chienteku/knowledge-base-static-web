@@ -115,12 +115,11 @@ while (true) {
 ```
 
 **Expected output:**
-```text
-The console.log will NEVER print. 
-The Event Loop is completely broken. The `while (true)` loop hogs the single Main Thread forever. The background timer finishes after 1 second, and the Event Loop tries to push the callback to the Main Thread, but the Main Thread is busy running the `while` loop. The server is dead.
-```
-
 > [!check]- Answer
+> ```text
+> The console.log will NEVER print. 
+> The Event Loop is completely broken. The `while (true)` loop hogs the single Main Thread forever. The background timer finishes after 1 second, and the Event Loop tries to push the callback to the Main Thread, but the Main Thread is busy running the `while` loop. The server is dead.
+> ```
 
 ---
 
@@ -135,11 +134,10 @@ The Event Loop is completely broken. The `while (true)` loop hogs the single Mai
 - Pending callbacks phase
 
 **Expected output:**
-```text
-1. Timers phase -> 2. Pending callbacks phase -> 3. Poll phase -> 4. Check phase
-```
-
 > [!check]- Answer
+> ```text
+> 1. Timers phase -> 2. Pending callbacks phase -> 3. Poll phase -> 4. Check phase
+> ```
 > ```text
 > 1. Timers phase
 > 2. Pending callbacks phase
@@ -148,6 +146,8 @@ The Event Loop is completely broken. The `while (true)` loop hogs the single Mai
 > ```
 >
 > **Explanation:** Node.js event loop cycles through Timers -> Pending Callbacks -> Idle/Prepare -> Poll -> Check -> Close Callbacks.
+
+---
 
 ### Exercise 3: Predicting Async Console Output
 
@@ -160,13 +160,12 @@ Promise.resolve().then(() => console.log('D'));
 ```
 
 **Expected output:**
-```text
-C
-D
-A (or B depending on timer threshold, usually A then B in main module)
-```
-
 > [!check]- Answer
+> ```text
+> C
+> D
+> A (or B depending on timer threshold, usually A then B in main module)
+> ```
 > ```text
 > C
 > D

@@ -146,12 +146,11 @@ Flatten object hierarchies into top-level or shallow 2-3 level fields
 2.  What is nested inside that field?
 
 **Expected output:**
-```text
-1. The `items` field is an Array.
-2. Inside the array are two nested Embedded Documents (representing order items).
-```
-
 > [!check]- Answer
+> ```text
+> 1. The `items` field is an Array.
+> 2. Inside the array are two nested Embedded Documents (representing order items).
+> ```
 > - Square brackets `[]` define arrays.
 > - Curly braces `{}` define documents.
 
@@ -164,11 +163,10 @@ Flatten object hierarchies into top-level or shallow 2-3 level fields
 **Problem:** Calculate size in bytes of document using `Object.bsonsize(doc)` in mongosh.
 
 **Expected output:**
-```text
-Object.bsonsize(doc)
-```
-
 > [!check]- Answer
+> ```text
+> Object.bsonsize(doc)
+> ```
 > ```javascript
 > const doc = db.users.findOne();
 > Object.bsonsize(doc);
@@ -176,16 +174,17 @@ Object.bsonsize(doc)
 >
 > **Explanation:** `Object.bsonsize(doc)` evaluates exact BSON byte sizes of documents.
 
+---
+
 ### Exercise 3: Top-Level Document Identifiers
 
 **Problem:** What mandatory field is required on all top-level MongoDB documents? (`_id`).
 
 **Expected output:**
-```text
-_id
-```
-
 > [!check]- Answer
+> ```text
+> _id
+> ```
 > ```text
 > _id
 > ```

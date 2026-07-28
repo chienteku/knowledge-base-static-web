@@ -200,11 +200,10 @@ fn main() {
 **Problem:** Write a function `double_values(v: &mut Vec<i32>)` that doubles every element in-place.
 
 **Expected output:**
-```
-[2, 4, 6]
-```
-
 > [!check]- Answer
+> ```
+> [2, 4, 6]
+> ```
 > ```rust
 > fn double_values(v: &mut Vec<i32>) {
 >     for x in v.iter_mut() {
@@ -220,16 +219,17 @@ fn main() {
 >
 > **Explanation:** `&mut` references grant exclusive access to iterate and mutate collection elements in-place.
 
+---
+
 ### Exercise 3: Reborrowing Mutable References
 
 **Problem:** Pass a mutable reference `&mut val` into a function that modifies `val`, and demonstrate using `&mut val` again afterwards.
 
 **Expected output:**
-```
-Final val: 30
-```
-
 > [!check]- Answer
+> ```
+> Final val: 30
+> ```
 > fn add_ten(x: &mut i32) { *x += 10; }
 > fn main() {
 >     let mut val = 10;

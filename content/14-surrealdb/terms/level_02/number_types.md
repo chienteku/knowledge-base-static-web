@@ -156,14 +156,13 @@ LET $val = 9223372036854775808dec; // Arbitrary precision decimal
 4.  `<decimal> 150`
 
 **Expected output:**
-```text
-1. decimal (explicitly declared via suffix)
-2. int (no decimal point)
-3. float (contains decimal point, defaults to float double)
-4. decimal (explicitly cast using <decimal> operator)
-```
-
 > [!check]- Answer
+> ```text
+> 1. decimal (explicitly declared via suffix)
+> 2. int (no decimal point)
+> 3. float (contains decimal point, defaults to float double)
+> 4. decimal (explicitly cast using <decimal> operator)
+> ```
 > - Literals with decimal points default to floats unless overridden.
 > - Cast blocks and suffixes force exact data types.
 
@@ -176,27 +175,27 @@ LET $val = 9223372036854775808dec; // Arbitrary precision decimal
 **Problem:** Create exact decimal number literal using `dec` suffix (e.g. `10.50dec`).
 
 **Expected output:**
-```text
-10.50dec
-```
-
 > [!check]- Answer
+> ```text
+> 10.50dec
+> ```
 > ```surrealql
 > RETURN 10.50dec;
 > ```
 >
 > **Explanation:** The `dec` suffix creates arbitrary precision decimal numbers.
 
+---
+
 ### Exercise 3: Number Type Casting
 
 **Problem:** Cast string `"42"` to integer using `<int>` casting.
 
 **Expected output:**
-```text
-42
-```
-
 > [!check]- Answer
+> ```text
+> 42
+> ```
 > ```surrealql
 > RETURN <int> "42";
 > ```

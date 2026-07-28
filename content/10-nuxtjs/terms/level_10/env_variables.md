@@ -133,11 +133,10 @@ runtimeConfig: {
 What is the exact name of the environment variable you must place in your `.env` file to auto-populate this value?
 
 **Expected output:**
-```text
-NUXT_REDIS_PASSWORD="my_password"
-```
-
 > [!check]- Answer
+> ```text
+> NUXT_REDIS_PASSWORD="my_password"
+> ```
 > - Uppercase snake_case prefix with double underscores `NUXT_REDIS_PASSWORD` maps to `runtimeConfig.redis.password` using uppercase-to-camelcase conversion.
 
 ---
@@ -147,15 +146,14 @@ NUXT_REDIS_PASSWORD="my_password"
 **Problem:** Write `runtimeConfig` in `nuxt.config.ts` matching `.env` variable `NUXT_API_SECRET=123`.
 
 **Expected output:**
-```typescript
-export default defineNuxtConfig({
-  runtimeConfig: {
-    apiSecret: ''
-  }
-});
-```
-
 > [!check]- Answer
+> ```typescript
+> export default defineNuxtConfig({
+>   runtimeConfig: {
+>     apiSecret: ''
+>   }
+> });
+> ```
 > - `NUXT_API_SECRET` automatically overrides `runtimeConfig.apiSecret`.
 > 
 > ```typescript
@@ -174,11 +172,10 @@ export default defineNuxtConfig({
 **Problem:** Which property scope on `useRuntimeConfig()` can be safely accessed inside client Vue components?
 
 **Expected output:**
-```text
-useRuntimeConfig().public
-```
-
 > [!check]- Answer
+> ```text
+> useRuntimeConfig().public
+> ```
 > - `useRuntimeConfig().public` is accessible on both server and client.
 > 
 > ```typescript

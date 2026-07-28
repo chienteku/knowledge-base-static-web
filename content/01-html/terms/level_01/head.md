@@ -133,14 +133,13 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 4. `<link rel="stylesheet" href="style.css">`
 
 **Expected output:**
-```text
-1. <body> (It's a visible image)
-2. <head> (It's invisible metadata for Google)
-3. <body> (It's visible text)
-4. <head> (It's behind-the-scenes styling instructions)
-```
-
 > [!check]- Answer
+> ```text
+> 1. <body> (It's a visible image)
+> 2. <head> (It's invisible metadata for Google)
+> 3. <body> (It's visible text)
+> 4. <head> (It's behind-the-scenes styling instructions)
+> ```
 > - Ask yourself: "Does the user need to look directly at this on the page?"
 
 ---
@@ -152,11 +151,10 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 **Problem:** Write a standard `<head>` section containing UTF-8 charset meta, viewport meta, and page title `'Home'`. 
 
 **Expected output:**
-```text
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Home</title></head>
-```
-
 > [!check]- Answer
+> ```text
+> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Home</title></head>
+> ```
 > ```html
 > <head>
 >   <meta charset="UTF-8">
@@ -167,16 +165,17 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 >
 > **Explanation:** Standard `<head>` metadata includes character set, responsive viewport scaling, and page title.
 
+---
+
 ### Exercise 3: Head vs Body Display Rule
 
 **Problem:** Do elements inside the `<head>` section render as visible UI components on the webpage screen? (Yes/No).
 
 **Expected output:**
-```text
-No (head elements provide machine-readable metadata, styles, and scripts; body handles visible rendering).
-```
-
 > [!check]- Answer
+> ```text
+> No (head elements provide machine-readable metadata, styles, and scripts; body handles visible rendering).
+> ```
 > ```text
 > No (head elements provide machine-readable metadata, styles, and scripts; body handles visible rendering).
 > ```

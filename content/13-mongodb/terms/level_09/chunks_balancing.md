@@ -153,12 +153,11 @@ sh.setBalancerWindow("01:00", "05:00"); // Restrict balancer to off-peak hours
 2.  Explain why this split does not involve moving physical documents on disk.
 
 **Expected output:**
-```text
-1. MongoDB will execute a Chunk Split, dividing the range `[90000, 91000)` into two smaller ranges, for example: `[90000, 90210)` and `[90210, 91000)`.
-2. A chunk split is a metadata-only operation. MongoDB simply updates the range boundary definitions stored on the Config Servers; the actual documents remain untouched on the same physical disks of the shard.
-```
-
 > [!check]- Answer
+> ```text
+> 1. MongoDB will execute a Chunk Split, dividing the range `[90000, 91000)` into two smaller ranges, for example: `[90000, 90210)` and `[90210, 91000)`.
+> 2. A chunk split is a metadata-only operation. MongoDB simply updates the range boundary definitions stored on the Config Servers; the actual documents remain untouched on the same physical disks of the shard.
+> ```
 > - Check how chunk limits trigger splits.
 > - Consider where chunk range boundary metadata is stored.
 
@@ -171,27 +170,27 @@ sh.setBalancerWindow("01:00", "05:00"); // Restrict balancer to off-peak hours
 **Problem:** Configure chunk balancer active window between `02:00` and `06:00` UTC.
 
 **Expected output:**
-```text
-sh.setBalancerWindow("02:00", "06:00");
-```
-
 > [!check]- Answer
+> ```text
+> sh.setBalancerWindow("02:00", "06:00");
+> ```
 > ```javascript
 > sh.setBalancerWindow("02:00", "06:00");
 > ```
 >
 > **Explanation:** `sh.setBalancerWindow()` restricts chunk migration background traffic to off-peak hours.
 
+---
+
 ### Exercise 3: Inspecting Jumbo Chunks
 
 **Problem:** Command to inspect sharding status and jumbo chunk warnings (`sh.status()`).
 
 **Expected output:**
-```text
-sh.status();
-```
-
 > [!check]- Answer
+> ```text
+> sh.status();
+> ```
 > ```javascript
 > sh.status();
 > ```

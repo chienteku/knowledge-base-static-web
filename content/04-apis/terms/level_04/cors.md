@@ -108,12 +108,11 @@ app.use(cors({ origin: 'https://app.example.com' }));
 **Problem:** You build an API. You test it in Postman, and it works perfectly! You then write a React app to call the API, and you immediately get a `CORS error`. Why did Postman work, but React failed?
 
 **Expected output:**
-```text
-Because CORS is a *Browser* security feature! 
-Postman is a desktop application; it doesn't care about the Same-Origin Policy. It just sends raw HTTP text over the network. Only web browsers (Chrome, Safari, Firefox) actively enforce CORS rules to protect users from malicious websites.
-```
-
 > [!check]- Answer
+> ```text
+> Because CORS is a *Browser* security feature! 
+> Postman is a desktop application; it doesn't care about the Same-Origin Policy. It just sends raw HTTP text over the network. Only web browsers (Chrome, Safari, Firefox) actively enforce CORS rules to protect users from malicious websites.
+> ```
 > - Who enforces CORS? The server, the network, or the browser?
 
 ---
@@ -126,11 +125,10 @@ Postman is a desktop application; it doesn't care about the Same-Origin Policy. 
 3. `DELETE /api/items/5` with `Authorization: Bearer xyz`
 
 **Expected output:**
-```text
-Requests 2 and 3 trigger preflight OPTIONS requests.
-```
-
 > [!check]- Answer
+> ```text
+> Requests 2 and 3 trigger preflight OPTIONS requests.
+> ```
 > ```text
 > Request 2 -> Content-Type application/json is not a simple Content-Type.
 > Request 3 -> DELETE verb and custom Authorization header trigger preflight.
@@ -143,11 +141,10 @@ Requests 2 and 3 trigger preflight OPTIONS requests.
 **Problem:** Do `https://example.com:443` and `http://example.com:443` share the same origin?
 
 **Expected output:**
-```text
-No. Origin comparison checks Protocol, Hostname, AND Port. Different protocol schemes mean different origins.
-```
-
 > [!check]- Answer
+> ```text
+> No. Origin comparison checks Protocol, Hostname, AND Port. Different protocol schemes mean different origins.
+> ```
 > ```text
 > No. Origin requires exact match of Scheme (https vs http), Hostname, and Port.
 > ```

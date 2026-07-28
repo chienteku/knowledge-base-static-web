@@ -138,11 +138,10 @@ new Binary(uuidBuffer, Binary.SUBTYPE_UUID); // Explicit UUID Subtype 4
 **Problem:** You are querying a device registry. Write the MongoDB query to select all documents where the `gateway_uuid` field matches the standard UUID `'9f3e4567-e89b-12d3-a456-426614174000'`.
 
 **Expected output:**
-```javascript
-db.devices.find({ gateway_uuid: UUID("9f3e4567-e89b-12d3-a456-426614174000") });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.devices.find({ gateway_uuid: UUID("9f3e4567-e89b-12d3-a456-426614174000") });
+> ```
 > - Wrap the hex string inside the built-in shell helper constructor `UUID()`.
 > - Specify the exact field name target in the match filter.
 
@@ -155,11 +154,10 @@ db.devices.find({ gateway_uuid: UUID("9f3e4567-e89b-12d3-a456-426614174000") });
 **Problem:** Create BSON `Binary` instance from Node.js `Buffer.from('hello')`.
 
 **Expected output:**
-```text
-new Binary(Buffer.from('hello'))
-```
-
 > [!check]- Answer
+> ```text
+> new Binary(Buffer.from('hello'))
+> ```
 > ```javascript
 > const { Binary } = require('mongodb');
 > const bin = new Binary(Buffer.from('hello'));
@@ -168,16 +166,17 @@ new Binary(Buffer.from('hello'))
 >
 > **Explanation:** `Binary` wraps Node.js buffers into BSON BinData objects.
 
+---
+
 ### Exercise 3: GridFS vs BinData Threshold
 
 **Problem:** What is the recommended size threshold for using GridFS instead of `BinData` in documents? (16MB or >16MB).
 
 **Expected output:**
-```text
-16MB threshold (use GridFS for files exceeding 16MB)
-```
-
 > [!check]- Answer
+> ```text
+> 16MB threshold (use GridFS for files exceeding 16MB)
+> ```
 > ```text
 > 16MB threshold (use GridFS for files exceeding 16MB)
 > ```

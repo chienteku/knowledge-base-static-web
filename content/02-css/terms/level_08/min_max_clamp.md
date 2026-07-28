@@ -258,14 +258,13 @@ font-size: clamp(1rem, 5vw, 3rem); /* Min: 1rem, Preferred: 5vw, Max: 3rem */
 If a user opens the page on a mobile device where the viewport width is `300px`, what is the evaluated font size in pixels?
 
 **Expected output:**
-```text
-16px!
-- 4vw of 300px = 12px (300 * 0.04).
-- The lower clamp limit is 16px.
-- Since the evaluated fluid size (12px) falls below the minimum (16px), the browser locks the font size to the floor value of 16px.
-```
-
 > [!check]- Answer
+> ```text
+> 16px!
+> - 4vw of 300px = 12px (300 * 0.04).
+> - The lower clamp limit is 16px.
+> - Since the evaluated fluid size (12px) falls below the minimum (16px), the browser locks the font size to the floor value of 16px.
+> ```
 > - Calculate `4vw` of `300px` first.
 > - Verify if the calculated value breaches the minimum bound boundary.
 
@@ -278,11 +277,10 @@ If a user opens the page on a mobile device where the viewport width is `300px`,
 **Problem:** Write CSS `font-size` rule for `<h1>` clamping size between minimum `2rem`, preferred `5vw`, and maximum `4rem`.
 
 **Expected output:**
-```text
-h1 { font-size: clamp(2rem, 5vw, 4rem); }
-```
-
 > [!check]- Answer
+> ```text
+> h1 { font-size: clamp(2rem, 5vw, 4rem); }
+> ```
 > ```css
 > h1 {
 >   font-size: clamp(2rem, 5vw, 4rem);
@@ -291,16 +289,17 @@ h1 { font-size: clamp(2rem, 5vw, 4rem); }
 >
 > **Explanation:** `clamp(2rem, 5vw, 4rem)` creates fluid typography scaling smoothly across viewport sizes.
 
+---
+
 ### Exercise 3: Responsive Padding using min()
 
 **Problem:** Write CSS `padding` rule setting padding to 5% of viewport width, capped at max 40px.
 
 **Expected output:**
-```text
-padding: min(5vw, 40px);
-```
-
 > [!check]- Answer
+> ```text
+> padding: min(5vw, 40px);
+> ```
 > ```css
 > .container {
 >   padding: min(5vw, 40px);

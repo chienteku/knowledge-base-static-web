@@ -129,16 +129,15 @@ function isStr(val: any): val is string { return typeof val === "string"; }
 **Problem:** Write a Custom Type Guard function named `isBird` that accepts an `animal: unknown` and narrows it to the `Bird` interface (assuming Bird requires a `fly` method).
 
 **Expected output:**
-```typescript
-interface Bird { fly(): void; }
-
-function isBird(animal: unknown): animal is Bird {
-  // We have to assert animal to any/object first to safely check the property
-  return typeof animal === "object" && animal !== null && "fly" in animal;
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> interface Bird { fly(): void; }
+> 
+> function isBird(animal: unknown): animal is Bird {
+>   // We have to assert animal to any/object first to safely check the property
+>   return typeof animal === "object" && animal !== null && "fly" in animal;
+> }
+> ```
 > - Remember to return `animal is Bird`.
 > - Check if it's an object before using the `in` operator!
 
@@ -151,11 +150,10 @@ function isBird(animal: unknown): animal is Bird {
 **Problem:** Implement type guard `isStringArray(arr: unknown): arr is string[]`.
 
 **Expected output:**
-```text
-isStringArray type guard created
-```
-
 > [!check]- Answer
+> ```text
+> isStringArray type guard created
+> ```
 > ```typescript
 > function isStringArray(arr: unknown): arr is string[] {
 >   return Array.isArray(arr) && arr.every(item => typeof item === "string");
@@ -165,16 +163,17 @@ isStringArray type guard created
 >
 > **Explanation:** Array guards validate both array container and item types.
 
+---
+
 ### Exercise 3: Type Guard Predicate Syntax
 
 **Problem:** Syntax format for custom type guard return annotation (`paramName is TargetType`).
 
 **Expected output:**
-```text
-paramName is TargetType
-```
-
 > [!check]- Answer
+> ```text
+> paramName is TargetType
+> ```
 > ```typescript
 > console.log("paramName is TargetType");
 > ```

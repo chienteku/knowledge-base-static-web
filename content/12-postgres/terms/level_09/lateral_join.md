@@ -166,19 +166,18 @@ Compare execution plans of LATERAL JOIN vs ROW_NUMBER() PARTITION BY
 2.  The `event` and `logged_at` timestamp of **only the single most recent log entry** made by that user.
 
 **Expected output:**
-```sql
-SELECT u.username, log.event, log.logged_at
-FROM users u
-LEFT JOIN LATERAL (
-  SELECT event, logged_at
-  FROM user_logs
-  WHERE user_id = u.id
-  ORDER BY logged_at DESC
-  LIMIT 1
-) log ON TRUE;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT u.username, log.event, log.logged_at
+> FROM users u
+> LEFT JOIN LATERAL (
+>   SELECT event, logged_at
+>   FROM user_logs
+>   WHERE user_id = u.id
+>   ORDER BY logged_at DESC
+>   LIMIT 1
+> ) log ON TRUE;
+> ```
 > - Use the `LEFT JOIN LATERAL` syntax targeting the subquery.
 > - Order logs by `logged_at` descending and apply `LIMIT 1` inside the lateral block.
 > - Append `ON TRUE` at the end of the lateral join statement to satisfy syntax rules.
@@ -192,11 +191,10 @@ LEFT JOIN LATERAL (
 **Problem:** Query each user's top 2 latest orders using `LEFT JOIN LATERAL`.
 
 **Expected output:**
-```text
-SELECT u.name, o.id, o.created_at FROM users u LEFT JOIN LATERAL (SELECT id, created_at FROM orders WHERE user_id = u.id ORDER BY created_at DESC LIMIT 2) o ON true;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT u.name, o.id, o.created_at FROM users u LEFT JOIN LATERAL (SELECT id, created_at FROM orders WHERE user_id = u.id ORDER BY created_at DESC LIMIT 2) o ON true;
+> ```
 > ```sql
 > SELECT u.name, o.id, o.created_at
 > FROM users u
@@ -209,16 +207,17 @@ SELECT u.name, o.id, o.created_at FROM users u LEFT JOIN LATERAL (SELECT id, cre
 >
 > **Explanation:** `LATERAL` subqueries execute per LHS row, supporting correlated top-N per group queries.
 
+---
+
 ### Exercise 3: Expanding JSONB Array Elements with LATERAL
 
 **Problem:** Unnest JSONB array column `items` for each `orders` row using `LEFT JOIN LATERAL jsonb_array_elements()`.
 
 **Expected output:**
-```text
-SELECT o.id, item FROM orders o, LATERAL jsonb_array_elements(o.items) AS item;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT o.id, item FROM orders o, LATERAL jsonb_array_elements(o.items) AS item;
+> ```
 > ```sql
 > SELECT o.id, item
 > FROM orders o,

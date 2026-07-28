@@ -172,11 +172,10 @@ fn main() {
 **Problem:** Take `1..=10`, filter even numbers using `.filter()`, square them with `.map()`, and collect into `Vec<i32>`.
 
 **Expected output:**
-```
-[4, 16, 36, 64, 100]
-```
-
 > [!check]- Answer
+> ```
+> [4, 16, 36, 64, 100]
+> ```
 > ```rust
 > fn main() {
 >     let result: Vec<i32> = (1..=10)
@@ -189,16 +188,17 @@ fn main() {
 >
 > **Explanation:** `.filter()` retains elements matching predicates; `.map()` transforms retained elements.
 
+---
+
 ### Exercise 3: Flattening Nested Iterators
 
 **Problem:** Use `.flat_map()` to turn a vector of words `vec!["hi", "bye"]` into an iterator of individual chars.
 
 **Expected output:**
-```
-['h', 'i', 'b', 'y', 'e']
-```
-
 > [!check]- Answer
+> ```
+> ['h', 'i', 'b', 'y', 'e']
+> ```
 > ```rust
 > fn main() {
 >     let words = vec!["hi", "bye"];

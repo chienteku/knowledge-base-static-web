@@ -160,11 +160,10 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 **Problem:** Write the `<link>` tag to set a favicon using a PNG image file located in the root directory named "brand-icon.png". The image is 32x32 pixels.
 
 **Expected output:**
-```html
-<link rel="icon" type="image/png" href="/brand-icon.png" sizes="32x32">
-```
-
 > [!check]- Answer
+> ```html
+> <link rel="icon" type="image/png" href="/brand-icon.png" sizes="32x32">
+> ```
 > - The link relationship is `icon`.
 > - Set the MIME `type` to `image/png`.
 > - Include the `sizes` attribute.
@@ -178,27 +177,27 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 **Problem:** Write `<link>` tag specifying vector SVG favicon `icon.svg`.
 
 **Expected output:**
-```text
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-```
-
 > [!check]- Answer
+> ```text
+> <link rel="icon" href="icon.svg" type="image/svg+xml">
+> ```
 > ```html
 > <link rel="icon" href="icon.svg" type="image/svg+xml">
 > ```
 >
 > **Explanation:** `image/svg+xml` declares sharp, scalable vector favicons for all resolutions.
 
+---
+
 ### Exercise 3: Apple Touch Icon Syntax
 
 **Problem:** Write `<link>` tag declaring Apple iOS home screen bookmark icon `apple-touch-icon.png`.
 
 **Expected output:**
-```text
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-```
-
 > [!check]- Answer
+> ```text
+> <link rel="apple-touch-icon" href="apple-touch-icon.png">
+> ```
 > ```html
 > <link rel="apple-touch-icon" href="apple-touch-icon.png">
 > ```

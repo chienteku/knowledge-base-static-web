@@ -118,12 +118,11 @@ CREATE SCHEMA tenant_123; -- Isolated schemas inside shared database
 **Problem:** You are building an ticketing site. Two customers click the "Buy Ticket" button for the last remaining seat at the exact same millisecond. If you are storing ticket counts in a simple text file (`tickets.txt`), what visual bug will occur, and how does a database prevent this?
 
 **Expected output:**
-```text
-In a text file, both requests would open the file, see "1 ticket left," write "0 tickets left," and both users would be charged and issued the same seat, causing a double-booking bug. 
-A database prevents this using "transactions" and "write locks." It locks the row containing the seat when User A accesses it, forcing User B's request to wait until A's purchase completes. Once A buys the seat, B's query is re-evaluated and fails safely with "No seats available."
-```
-
 > [!check]- Answer
+> ```text
+> In a text file, both requests would open the file, see "1 ticket left," write "0 tickets left," and both users would be charged and issued the same seat, causing a double-booking bug. 
+> A database prevents this using "transactions" and "write locks." It locks the row containing the seat when User A accesses it, forcing User B's request to wait until A's purchase completes. Once A buys the seat, B's query is re-evaluated and fails safely with "No seats available."
+> ```
 > - Think about what happens when two separate processes read and write to the same text file simultaneously.
 > - Look up the difference between a write lock and plain file writing.
 
@@ -136,27 +135,27 @@ A database prevents this using "transactions" and "write locks." It locks the ro
 **Problem:** Can two different databases inside the same PostgreSQL server instance share tables in a single JOIN query? (No, databases are isolated).
 
 **Expected output:**
-```text
-No, cross-database SQL JOIN queries are not supported without Foreign Data Wrappers
-```
-
 > [!check]- Answer
+> ```text
+> No, cross-database SQL JOIN queries are not supported without Foreign Data Wrappers
+> ```
 > ```text
 > No, cross-database SQL JOIN queries are not supported without Foreign Data Wrappers
 > ```
 >
 > **Explanation:** Databases provide hard administrative isolation in PostgreSQL.
 
+---
+
 ### Exercise 3: Inspecting Active Database
 
 **Problem:** SQL function returning name of current active database (`SELECT current_database();`).
 
 **Expected output:**
-```text
-SELECT current_database();
-```
-
 > [!check]- Answer
+> ```text
+> SELECT current_database();
+> ```
 > ```sql
 > SELECT current_database();
 > ```

@@ -165,11 +165,10 @@ thread::spawn(move || {
 **Problem:** Use `.fold()` on `vec![1, 2, 3, 4]` to calculate the product of all elements starting with initial seed `1`.
 
 **Expected output:**
-```
-Product: 24
-```
-
 > [!check]- Answer
+> ```
+> Product: 24
+> ```
 > ```rust
 > fn main() {
 >     let nums = vec![1, 2, 3, 4];
@@ -180,16 +179,17 @@ Product: 24
 >
 > **Explanation:** `.fold(init, f)` consumes iterators by reducing elements into an accumulator state.
 
+---
+
 ### Exercise 3: Short-Circuiting Search with `.find()`
 
 **Problem:** Find the first number in `vec![1, 5, 8, 12]` that is greater than `7` using `.find()`.
 
 **Expected output:**
-```
-Found: 8
-```
-
 > [!check]- Answer
+> ```
+> Found: 8
+> ```
 > ```rust
 > fn main() {
 >     let nums = vec![1, 5, 8, 12];

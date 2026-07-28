@@ -172,21 +172,22 @@ message Product {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Protobuf Definition File Syntax
 
 **Problem:** Write Protobuf 3 syntax for `User` message containing string `name` (tag 1) and int32 `age` (tag 2).
 
 **Expected output:**
-```text
-syntax = "proto3";
-
-message User {
-  string name = 1;
-  int32 age = 2;
-}
-```
-
 > [!check]- Answer
+> ```text
+> syntax = "proto3";
+> 
+> message User {
+>   string name = 1;
+>   int32 age = 2;
+> }
+> ```
 > ```text
 > syntax = "proto3";
 > message User {
@@ -202,11 +203,10 @@ message User {
 **Problem:** What is the name of the official Google compiler CLI used to generate code from `.proto` files?
 
 **Expected output:**
-```text
-protoc (Protocol Buffer Compiler)
-```
-
 > [!check]- Answer
+> ```text
+> protoc (Protocol Buffer Compiler)
+> ```
 > ```bash
 > protoc --js_out=import_style=commonjs,binary:. user.proto
 > ```

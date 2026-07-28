@@ -126,13 +126,12 @@ onMounted(() => {
 ```
 
 **Expected output:**
-```text
-The line `const token = localStorage.getItem('auth')` violates Universal Code. 
-`localStorage` is a Browser API. Because it is in the root of `setup()`, the Node.js server will try to execute it, fail to find `localStorage`, and crash.
-The `document.title` line is perfectly fine because it is safely tucked inside `onMounted`, which the server ignores.
-```
-
 > [!check]- Answer
+> ```text
+> The line `const token = localStorage.getItem('auth')` violates Universal Code. 
+> `localStorage` is a Browser API. Because it is in the root of `setup()`, the Node.js server will try to execute it, fail to find `localStorage`, and crash.
+> The `document.title` line is perfectly fine because it is safely tucked inside `onMounted`, which the server ignores.
+> ```
 > - Where is it safe to use Browser APIs in a Vue component?
 
 ---
@@ -142,11 +141,10 @@ The `document.title` line is perfectly fine because it is safely tucked inside `
 **Problem:** Which global boolean constants in Nuxt 3 allow conditional execution for server vs client environments?
 
 **Expected output:**
-```text
-process.server (or import.meta.server) and process.client (or import.meta.client)
-```
-
 > [!check]- Answer
+> ```text
+> process.server (or import.meta.server) and process.client (or import.meta.client)
+> ```
 > - `import.meta.server` / `import.meta.client` detect execution context.
 > 
 > ```javascript
@@ -162,11 +160,10 @@ process.server (or import.meta.server) and process.client (or import.meta.client
 **Problem:** Define Isomorphic / Universal JavaScript code.
 
 **Expected output:**
-```text
-Code written in a standard format that executes seamlessly in both Node.js server and Browser client environments.
-```
-
 > [!check]- Answer
+> ```text
+> Code written in a standard format that executes seamlessly in both Node.js server and Browser client environments.
+> ```
 > - Universal code runs identically on server and client.
 > 
 > ```text

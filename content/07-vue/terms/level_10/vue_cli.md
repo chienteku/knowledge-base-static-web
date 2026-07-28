@@ -97,13 +97,12 @@ module.exports = {
 **Problem:** You join a company and are assigned to fix a bug in a Vue project. You look at the root folder and see a `vue.config.js` file. What build tool is this project using?
 
 **Expected output:**
-```text
-It is using the legacy Vue CLI (Webpack)!
-A modern Vite project will have a `vite.config.js` or `vite.config.ts` file instead. 
-Seeing `vue.config.js` is the immediate giveaway that you are working in an older codebase.
-```
-
 > [!check]- Answer
+> ```text
+> It is using the legacy Vue CLI (Webpack)!
+> A modern Vite project will have a `vite.config.js` or `vite.config.ts` file instead. 
+> Seeing `vue.config.js` is the immediate giveaway that you are working in an older codebase.
+> ```
 > - Which config file belongs to which tool?
 
 ---
@@ -113,11 +112,10 @@ Seeing `vue.config.js` is the immediate giveaway that you are working in an olde
 **Problem:** Which modern CLI command scaffolds a new Vue 3 project using Vite and create-vue?
 
 **Expected output:**
-```text
-npm create vue@latest
-```
-
 > [!check]- Answer
+> ```text
+> npm create vue@latest
+> ```
 > - `npm create vue@latest` is the official modern starter tool.
 > 
 > ```bash
@@ -131,12 +129,11 @@ npm create vue@latest
 **Problem:** What underlying bundler powered Vue CLI vs Vite?
 
 **Expected output:**
-```text
-Vue CLI: Webpack
-Vite: Esbuild (Dev) + Rollup (Prod)
-```
-
 > [!check]- Answer
+> ```text
+> Vue CLI: Webpack
+> Vite: Esbuild (Dev) + Rollup (Prod)
+> ```
 > - Vue CLI -> Webpack
 > - Vite -> Esbuild & Rollup
 > 

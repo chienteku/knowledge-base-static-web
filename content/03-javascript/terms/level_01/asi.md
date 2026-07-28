@@ -167,13 +167,12 @@ let y = x
 ```
 
 **Expected output:**
-```text
-The parser does NOT insert a semicolon after 'let y = x'. 
-It attempts to evaluate the code as: let y = x(x + y).toString(); 
-resulting in a TypeError because x is not a function.
-```
-
 > [!check]- Answer
+> ```text
+> The parser does NOT insert a semicolon after 'let y = x'. 
+> It attempts to evaluate the code as: let y = x(x + y).toString(); 
+> resulting in a TypeError because x is not a function.
+> ```
 > - The parser will see `let x = 5` and insert a semicolon because the next line `let` starts a new declaration statement.
 > - The parser will look at `let y = x` and the next line starting with `(`. Since parentheses denote function invocation, it attempts to execute `x(...)` rather than inserting a semicolon.
 
@@ -184,11 +183,10 @@ resulting in a TypeError because x is not a function.
 **Problem:** Fix the function `createConfig` so it correctly returns an object `{ status: 200 }` instead of returning `undefined` due to ASI.
 
 **Expected output:**
-```text
-{ status: 200 }
-```
-
 > [!check]- Answer
+> ```text
+> { status: 200 }
+> ```
 > ```javascript
 > function createConfig() {
 >   return {
@@ -200,16 +198,17 @@ resulting in a TypeError because x is not a function.
 >
 > **Explanation:** Placing the opening brace `{` on the same line as `return` prevents ASI from inserting a semicolon after `return`.
 
+---
+
 ### Exercise 3: IIFE Paren Syntax ASI Pitfall
 
 **Problem:** Explain why `const a = 1\n(function() {})()` causes a TypeError without semicolons.
 
 **Expected output:**
-```text
-TypeError: 1 is not a function
-```
-
 > [!check]- Answer
+> ```text
+> TypeError: 1 is not a function
+> ```
 > ```javascript
 > // Without semicolon, JS parses this as const a = 1(function() {})()
 > const a = 1;

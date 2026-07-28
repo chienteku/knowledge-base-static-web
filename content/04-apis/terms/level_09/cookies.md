@@ -99,12 +99,11 @@ console.log(cookie.value);
 **Problem:** You are building an ultra-secure banking app. When the user logs in, the Server returns a JWT token. You need to store it in the browser. Do you put it in `localStorage` or an `HttpOnly` Cookie?
 
 **Expected output:**
-```text
-An `HttpOnly` Cookie!
-If you put it in `localStorage`, any malicious JavaScript code (perhaps from a compromised NPM package or a browser extension) can easily read `localStorage.getItem('token')` and steal the user's bank access. An `HttpOnly` Cookie is physically hidden from JavaScript, making it immune to XSS (Cross-Site Scripting) theft.
-```
-
 > [!check]- Answer
+> ```text
+> An `HttpOnly` Cookie!
+> If you put it in `localStorage`, any malicious JavaScript code (perhaps from a compromised NPM package or a browser extension) can easily read `localStorage.getItem('token')` and steal the user's bank access. An `HttpOnly` Cookie is physically hidden from JavaScript, making it immune to XSS (Cross-Site Scripting) theft.
+> ```
 > - Which storage mechanism can be hidden from Frontend JavaScript entirely?
 
 ---
@@ -114,11 +113,10 @@ If you put it in `localStorage`, any malicious JavaScript code (perhaps from a c
 **Problem:** Write HTTP `Set-Cookie` header for session ID `sid123`, expiring in 86400s, HttpOnly, Secure, SameSite Lax.
 
 **Expected output:**
-```text
-Set-Cookie: sid=sid123; Max-Age=86400; HttpOnly; Secure; SameSite=Lax
-```
-
 > [!check]- Answer
+> ```text
+> Set-Cookie: sid=sid123; Max-Age=86400; HttpOnly; Secure; SameSite=Lax
+> ```
 > ```http
 > Set-Cookie: sid=sid123; Max-Age=86400; HttpOnly; Secure; SameSite=Lax
 > ```
@@ -130,11 +128,10 @@ Set-Cookie: sid=sid123; Max-Age=86400; HttpOnly; Secure; SameSite=Lax
 **Problem:** Why can storing multiple large cookies degrade HTTP request performance?
 
 **Expected output:**
-```text
-Browsers send ALL matching cookies in the `Cookie` header on EVERY SINGLE HTTP request (including images, CSS, JS), swelling request header size.
-```
-
 > [!check]- Answer
+> ```text
+> Browsers send ALL matching cookies in the `Cookie` header on EVERY SINGLE HTTP request (including images, CSS, JS), swelling request header size.
+> ```
 > ```text
 > Browsers send ALL matching cookies in the `Cookie` header on EVERY SINGLE HTTP request (including images, CSS, JS), swelling request header size.
 > ```

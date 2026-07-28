@@ -133,16 +133,15 @@ Drop unused replication slots: SELECT pg_drop_replication_slot('replica1');
 Explain the step-by-step actions the database engine takes upon rebooting to recover the data.
 
 **Expected output:**
-```text
-PostgreSQL Recovery Steps:
-1. The engine reboots and identifies the last valid Checkpoint record at 12:00 PM.
-2. It scans the WAL files starting from the 12:00 PM log offset forward to the end of the file (12:04 PM).
-3. It replays (applies) the modifications from the 500 committed purchases to the table files on disk.
-4. Any uncommitted transaction writes active during the crash are rolled back.
-5. The database opens for connections, restored to a consistent state.
-```
-
 > [!check]- Answer
+> ```text
+> PostgreSQL Recovery Steps:
+> 1. The engine reboots and identifies the last valid Checkpoint record at 12:00 PM.
+> 2. It scans the WAL files starting from the 12:00 PM log offset forward to the end of the file (12:04 PM).
+> 3. It replays (applies) the modifications from the 500 committed purchases to the table files on disk.
+> 4. Any uncommitted transaction writes active during the crash are rolled back.
+> 5. The database opens for connections, restored to a consistent state.
+> ```
 > - The database restarts at the last saved checkpoint.
 > - Relate the log entries back to the tables on disk.
 
@@ -155,27 +154,27 @@ PostgreSQL Recovery Steps:
 **Problem:** What is the primary role of the Write-Ahead Log (WAL)? (Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages).
 
 **Expected output:**
-```text
-Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages
-```
-
 > [!check]- Answer
+> ```text
+> Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages
+> ```
 > ```text
 > Guarantees Atomicity and Durability by logging data changes to disk BEFORE modifying data heap pages
 > ```
 >
 > **Explanation:** WAL protocol ensures transaction durability and enables crash recovery.
 
+---
+
 ### Exercise 3: Inspecting Replication Slots
 
 **Problem:** Query active replication slots from `pg_replication_slots` to identify abandoned WAL retainers.
 
 **Expected output:**
-```text
-SELECT slot_name, active, wal_status FROM pg_replication_slots;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT slot_name, active, wal_status FROM pg_replication_slots;
+> ```
 > ```sql
 > SELECT slot_name, active, wal_status FROM pg_replication_slots;
 > ```

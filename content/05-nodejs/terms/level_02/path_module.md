@@ -105,14 +105,13 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 **Problem:** You are building an image upload API. You want to reject the upload if the file is not a `.jpg` or `.png`. You receive a string representing the uploaded file path: `C:\Users\Downloads\vacation.pdf`. Which method should you use to easily extract the `.pdf` part?
 
 **Expected output:**
-```javascript
-const ext = path.extname('C:\\Users\\Downloads\\vacation.pdf');
-if (ext !== '.jpg' && ext !== '.png') {
-  throw new Error("Invalid file type!");
-}
-```
-
 > [!check]- Answer
+> ```javascript
+> const ext = path.extname('C:\\Users\\Downloads\\vacation.pdf');
+> if (ext !== '.jpg' && ext !== '.png') {
+>   throw new Error("Invalid file type!");
+> }
+> ```
 > - Which `path` method specifically targets the file extension?
 
 ---
@@ -124,12 +123,11 @@ if (ext !== '.jpg' && ext !== '.png') {
 **Problem:** Use `path` module to extract file extension and base name from `/var/www/image.png`.
 
 **Expected output:**
-```text
-path.extname('/var/www/image.png') -> '.png'
-path.basename('/var/www/image.png') -> 'image.png'
-```
-
 > [!check]- Answer
+> ```text
+> path.extname('/var/www/image.png') -> '.png'
+> path.basename('/var/www/image.png') -> 'image.png'
+> ```
 > ```javascript
 > const ext = path.extname('/var/www/image.png'); // '.png'
 > const base = path.basename('/var/www/image.png'); // 'image.png'
@@ -137,16 +135,17 @@ path.basename('/var/www/image.png') -> 'image.png'
 >
 > **Explanation:** `path.extname()` returns file extensions including leading dot; `path.basename()` returns final path segment.
 
+---
+
 ### Exercise 3: Safe Path Joining
 
 **Problem:** Join `__dirname`, `'public'`, and `'index.html'` safely across OS platforms.
 
 **Expected output:**
-```text
-const filepath = path.join(__dirname, 'public', 'index.html');
-```
-
 > [!check]- Answer
+> ```text
+> const filepath = path.join(__dirname, 'public', 'index.html');
+> ```
 > ```javascript
 > const filepath = path.join(__dirname, 'public', 'index.html');
 > ```

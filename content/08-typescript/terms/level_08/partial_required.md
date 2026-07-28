@@ -124,13 +124,12 @@ type StrictUser = { [K in keyof User]-?: NonNullable<User[K]> }; // Strips optio
 **Problem:** There is a third utility type that acts exactly like `Partial` and `Required`, but instead of modifying the `?` symbol, it modifies the `readonly` keyword. What is it called?
 
 **Expected output:**
-```typescript
-// Readonly<T>
-// It takes all properties and locks them down so they cannot be reassigned!
-type ImmutableUser = Readonly<UserProfile>;
-```
-
 > [!check]- Answer
+> ```typescript
+> // Readonly<T>
+> // It takes all properties and locks them down so they cannot be reassigned!
+> type ImmutableUser = Readonly<UserProfile>;
+> ```
 > - It shares its name with the keyword!
 
 ---
@@ -142,11 +141,10 @@ type ImmutableUser = Readonly<UserProfile>;
 **Problem:** Create update type `UserPatch` from `interface User { id: number; name: string; age: number }`.
 
 **Expected output:**
-```text
-Partial user properties created
-```
-
 > [!check]- Answer
+> ```text
+> Partial user properties created
+> ```
 > ```typescript
 > interface User { id: number; name: string; age: number }
 > type UserPatch = Partial<User>;
@@ -156,16 +154,17 @@ Partial user properties created
 >
 > **Explanation:** `Partial<T>` makes all top-level properties optional for patch updates.
 
+---
+
 ### Exercise 3: Enforcing All Properties with `Required`
 
 **Problem:** Convert `interface Config { host?: string; port?: number }` to require all keys.
 
 **Expected output:**
-```text
-Required<Config> forces host and port presence
-```
-
 > [!check]- Answer
+> ```text
+> Required<Config> forces host and port presence
+> ```
 > ```typescript
 > interface Config { host?: string; port?: number }
 > type StrictConfig = Required<Config>;

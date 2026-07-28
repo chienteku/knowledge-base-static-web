@@ -158,11 +158,10 @@ Basic date wrapping:
 **Problem:** Wrap the text "Christmas Day at 8 PM" in a `<time>` tag. Ensure the machine value is set to December 25th, 2026 at 20:00 (8:00 PM).
 
 **Expected output:**
-```html
-<time datetime="2026-12-25T20:00">Christmas Day at 8 PM</time>
-```
-
 > [!check]- Answer
+> ```html
+> <time datetime="2026-12-25T20:00">Christmas Day at 8 PM</time>
+> ```
 > - The date prefix is `2026-12-25`.
 > - Use a capital `T` to separate the date from the time.
 > - The time suffix is `20:00` (8 PM in 24-hour time).
@@ -176,27 +175,27 @@ Basic date wrapping:
 **Problem:** Write `<time>` element displaying text `'3:00 PM'` with machine-readable `datetime` for 15:00 UTC.
 
 **Expected output:**
-```text
-<time datetime="15:00">3:00 PM</time>
-```
-
 > [!check]- Answer
+> ```text
+> <time datetime="15:00">3:00 PM</time>
+> ```
 > ```html
 > <time datetime="15:00">3:00 PM</time>
 > ```
 >
 > **Explanation:** `datetime="15:00"` provides machine-readable 24-hour time format.
 
+---
+
 ### Exercise 3: ISO 8601 Timestamp Formats
 
 **Problem:** Write valid ISO 8601 `datetime` string for July 25, 2026 at 9:30 AM.
 
 **Expected output:**
-```text
-2026-07-25T09:30
-```
-
 > [!check]- Answer
+> ```text
+> 2026-07-25T09:30
+> ```
 > ```html
 > <time datetime="2026-07-25T09:30">July 25, 2026 at 9:30 AM</time>
 > ```

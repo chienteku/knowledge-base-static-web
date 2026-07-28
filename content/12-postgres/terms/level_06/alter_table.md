@@ -157,15 +157,14 @@ Upgrade to PostgreSQL 11+ or add column without default first, then populate in 
 2.  Add a check constraint named `chk_price_positive` ensuring `price` is greater than or equal to `0`.
 
 **Expected output:**
-```sql
-ALTER TABLE products 
-ADD COLUMN sku_code VARCHAR(50) NOT NULL DEFAULT 'GENERIC-SKU';
-
-ALTER TABLE products 
-ADD CONSTRAINT chk_price_positive CHECK (price >= 0);
-```
-
 > [!check]- Answer
+> ```sql
+> ALTER TABLE products 
+> ADD COLUMN sku_code VARCHAR(50) NOT NULL DEFAULT 'GENERIC-SKU';
+> 
+> ALTER TABLE products 
+> ADD CONSTRAINT chk_price_positive CHECK (price >= 0);
+> ```
 > - Run the alterations using separate `ALTER TABLE` statements or chain them using commas.
 > - Match the syntax for adding columns vs adding constraints.
 
@@ -178,11 +177,10 @@ ADD CONSTRAINT chk_price_positive CHECK (price >= 0);
 **Problem:** Configure `lock_timeout` to 2 seconds and add `status` column to `orders` table.
 
 **Expected output:**
-```text
-SET lock_timeout = '2s'; ALTER TABLE orders ADD COLUMN status VARCHAR(20) DEFAULT 'pending';
-```
-
 > [!check]- Answer
+> ```text
+> SET lock_timeout = '2s'; ALTER TABLE orders ADD COLUMN status VARCHAR(20) DEFAULT 'pending';
+> ```
 > ```sql
 > SET lock_timeout = '2s';
 > ALTER TABLE orders ADD COLUMN status VARCHAR(20) DEFAULT 'pending';
@@ -190,16 +188,17 @@ SET lock_timeout = '2s'; ALTER TABLE orders ADD COLUMN status VARCHAR(20) DEFAUL
 >
 > **Explanation:** Setting `lock_timeout` prevents DDL operations from waiting indefinitely for exclusive locks.
 
+---
+
 ### Exercise 3: Changing Column Data Type
 
 **Problem:** Alter column `code` type from `INT` to `VARCHAR(50)` using `USING` clause.
 
 **Expected output:**
-```text
-ALTER TABLE products ALTER COLUMN code TYPE VARCHAR(50) USING code::VARCHAR;
-```
-
 > [!check]- Answer
+> ```text
+> ALTER TABLE products ALTER COLUMN code TYPE VARCHAR(50) USING code::VARCHAR;
+> ```
 > ```sql
 > ALTER TABLE products ALTER COLUMN code TYPE VARCHAR(50) USING code::VARCHAR;
 > ```

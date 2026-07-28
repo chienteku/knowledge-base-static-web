@@ -165,25 +165,10 @@ The primary key is `(order_id, product_id)`.
 2.  Write the SQL queries to normalize this schema into 2NF.
 
 **Expected output:**
-```text
-1. Partial Dependencies: `product_name` and `unit_price` depend only on `product_id` (not `order_id`).
-```
-```sql
-CREATE TABLE products (
-  product_id INT PRIMARY KEY,
-  product_name VARCHAR(100) NOT NULL,
-  unit_price NUMERIC(10,2) NOT NULL
-);
-
-CREATE TABLE order_items (
-  order_id INT,
-  product_id INT REFERENCES products(product_id),
-  quantity INT NOT NULL,
-  PRIMARY KEY (order_id, product_id)
-);
-```
-
 > [!check]- Answer
+> ```text
+> 1. Partial Dependencies: `product_name` and `unit_price` depend only on `product_id` (not `order_id`).
+> ```
 > - The `quantity` column depends on both order and product, so it stays in the bridge table.
 > - Split product names and prices to a dedicated catalog table.
 
@@ -196,11 +181,10 @@ CREATE TABLE order_items (
 **Problem:** Decompose `student_courses (student_id, course_id, course_name, grade)` into 2NF tables.
 
 **Expected output:**
-```text
-courses (course_id, course_name) and student_courses (student_id, course_id, grade)
-```
-
 > [!check]- Answer
+> ```text
+> courses (course_id, course_name) and student_courses (student_id, course_id, grade)
+> ```
 > ```sql
 > CREATE TABLE courses ( course_id INT PRIMARY KEY, course_name TEXT );
 > CREATE TABLE student_courses (
@@ -213,16 +197,17 @@ courses (course_id, course_name) and student_courses (student_id, course_id, gra
 >
 > **Explanation:** Removing partial dependency `course_name` into `courses` satisfies 2NF.
 
+---
+
 ### Exercise 3: 2NF Rule Definition
 
 **Problem:** State 2NF rule (Table must be in 1NF and all non-key attributes must be fully functionally dependent on the entire primary key).
 
 **Expected output:**
-```text
-Must be in 1NF and no non-key attribute can depend on part of a composite primary key
-```
-
 > [!check]- Answer
+> ```text
+> Must be in 1NF and no non-key attribute can depend on part of a composite primary key
+> ```
 > ```text
 > Must be in 1NF and no non-key attribute can depend on part of a composite primary key
 > ```

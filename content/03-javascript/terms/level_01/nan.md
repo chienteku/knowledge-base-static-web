@@ -161,13 +161,12 @@ console.log(isValidScore("95"));
 ```
 
 **Expected output:**
-```text
-true
-false
-false
-```
-
 > [!check]- Answer
+> ```text
+> true
+> false
+> false
+> ```
 > - First check if `typeof score === "number"`.
 > - Then check if it is not `NaN` using `!Number.isNaN(score)`.
 
@@ -178,11 +177,10 @@ false
 **Problem:** Validate user input `"abc"` to check if `Number(input)` yields `NaN`.
 
 **Expected output:**
-```text
-Is NaN: true
-```
-
 > [!check]- Answer
+> ```text
+> Is NaN: true
+> ```
 > ```javascript
 > const val = Number("abc");
 > console.log(`Is NaN: ${Number.isNaN(val)}`);
@@ -197,11 +195,10 @@ Is NaN: true
 **Problem:** Show that `parseInt("abc")` returns `NaN` and verify with `Number.isNaN()`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const res = parseInt("abc", 10);
 > console.log(Number.isNaN(res));

@@ -185,13 +185,12 @@ How many items should the database `take` (LIMIT)?
 How many items should the database `skip` (OFFSET)?
 
 **Expected output:**
-```text
-Take (LIMIT): 10 items.
-Skip (OFFSET): 30 items.
-(Explanation: They want page 4. That means they already saw Page 1, 2, and 3. Since each page has 10 items, 3 pages * 10 items = 30 skipped items).
-```
-
 > [!check]- Answer
+> ```text
+> Take (LIMIT): 10 items.
+> Skip (OFFSET): 30 items.
+> (Explanation: They want page 4. That means they already saw Page 1, 2, and 3. Since each page has 10 items, 3 pages * 10 items = 30 skipped items).
+> ```
 > - The formula is `(page - 1) * limit`.
 
 ---
@@ -203,27 +202,27 @@ Skip (OFFSET): 30 items.
 **Problem:** Write formula to calculate SQL `offset` given 1-based `page` number and `limit` size.
 
 **Expected output:**
-```text
-const offset = (page - 1) * limit;
-```
-
 > [!check]- Answer
+> ```text
+> const offset = (page - 1) * limit;
+> ```
 > ```javascript
 > const offset = (page - 1) * limit;
 > ```
 >
 > **Explanation:** Standard offset formula skips `(page - 1) * limit` rows.
 
+---
+
 ### Exercise 3: Cursor-Based vs Offset Pagination Tradeoff
 
 **Problem:** Which pagination method supports jumping directly to arbitrary page 50? (Offset pagination). Which method handles real-time data insertions without duplicate item bugs? (Cursor-based pagination).
 
 **Expected output:**
-```text
-Arbitrary page jump: Offset pagination; Real-time insertions: Cursor-based pagination.
-```
-
 > [!check]- Answer
+> ```text
+> Arbitrary page jump: Offset pagination; Real-time insertions: Cursor-based pagination.
+> ```
 > ```text
 > Arbitrary page jump: Offset pagination
 > Real-time insertions: Cursor-based pagination

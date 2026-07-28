@@ -198,32 +198,34 @@ async function getAssetsParallel(urls) {
 > [!check]- Answer
 > - Complete problem steps as outlined above.
 
+---
+
 ### Exercise 2: Parallelizing Independent Async Requests
 
 **Problem:** Refactor sequential requests `const a = await getA(); const b = await getB();` using `Promise.all`.
 
 **Expected output:**
-```text
-const [a, b] = await Promise.all([getA(), getB()]);
-```
-
 > [!check]- Answer
+> ```text
+> const [a, b] = await Promise.all([getA(), getB()]);
+> ```
 > ```javascript
 > const [a, b] = await Promise.all([getA(), getB()]);
 > ```
 >
 > **Explanation:** `Promise.all` executes independent promises concurrently in parallel.
 
+---
+
 ### Exercise 3: Async Function Return Value
 
 **Problem:** What data type does an `async function` ALWAYS return, regardless of what value is returned inside?
 
 **Expected output:**
-```text
-A Promise object.
-```
-
 > [!check]- Answer
+> ```text
+> A Promise object.
+> ```
 > ```text
 > A Promise object.
 > ```

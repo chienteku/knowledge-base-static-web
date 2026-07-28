@@ -170,11 +170,10 @@ thread::spawn(move || {
 **Problem:** Annotate a test function with `#[test]` and `#[ignore = "slow integration test"]`.
 
 **Expected output:**
-```
-Ignored test configured
-```
-
 > [!check]- Answer
+> ```
+> Ignored test configured
+> ```
 > ```rust
 > #[test]
 > #[ignore = "slow integration test"]
@@ -186,16 +185,17 @@ Ignored test configured
 >
 > **Explanation:** `#[ignore]` skips annotated test functions during standard `cargo test` runs.
 
+---
+
 ### Exercise 3: Executing Ignored Tests via Cargo
 
 **Problem:** Command line flag to run only ignored tests in Cargo.
 
 **Expected output:**
-```
-cargo test -- --ignored
-```
-
 > [!check]- Answer
+> ```
+> cargo test -- --ignored
+> ```
 > fn main() {
 >     println!("cargo test -- --ignored");
 > }

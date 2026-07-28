@@ -152,15 +152,14 @@ Write the SurrealQL query to:
 3. Group by `day`.
 
 **Expected output:**
-```sql
-SELECT 
-  time::floor(timestamp, 1d) AS day, 
-  count() AS event_count 
-FROM analytics 
-GROUP BY day;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT 
+>   time::floor(timestamp, 1d) AS day, 
+>   count() AS event_count 
+> FROM analytics 
+> GROUP BY day;
+> ```
 > - The duration argument for 1 day is `1d`.
 > - Truncate using `time::floor(timestamp, 1d)`.
 
@@ -173,27 +172,27 @@ GROUP BY day;
 **Problem:** Extract year, month, and day from `time::now()` using `time::year()`, `time::month()`, `time::day()`.
 
 **Expected output:**
-```text
-time::year(time::now()), time::month(time::now()), time::day(time::now())
-```
-
 > [!check]- Answer
+> ```text
+> time::year(time::now()), time::month(time::now()), time::day(time::now())
+> ```
 > ```surrealql
 > RETURN [time::year(time::now()), time::month(time::now()), time::day(time::now())];
 > ```
 >
 > **Explanation:** `time::` component functions extract date parts from `datetime` primitives.
 
+---
+
 ### Exercise 3: Time Difference Calculation
 
 **Problem:** Calculate time duration difference between `$start` and `$end` using `time::from::unix()` or arithmetic subtraction.
 
 **Expected output:**
-```text
-RETURN $end - $start;
-```
-
 > [!check]- Answer
+> ```text
+> RETURN $end - $start;
+> ```
 > ```surrealql
 > RETURN $end - $start;
 > ```

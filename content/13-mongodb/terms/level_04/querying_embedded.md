@@ -147,11 +147,10 @@ db.users.updateOne({ _id: id }, { $set: { "address.city": "Boston" } });
 Refactor this query using dot notation to make it robust.
 
 **Expected output:**
-```javascript
-db.companies.find({ "location.city": "New York", "location.state": "NY" });
-```
-
 > [!check]- Answer
+> ```javascript
+> db.companies.find({ "location.city": "New York", "location.state": "NY" });
+> ```
 > - Split the nested document keys into separate dot-notation paths.
 > - Wrap the paths in string quotes (`""`).
 > - Combine the fields inside a single match filter object.
@@ -165,27 +164,27 @@ db.companies.find({ "location.city": "New York", "location.state": "NY" });
 **Problem:** Query users where embedded `specs.ram` is greater than or equal to `16`.
 
 **Expected output:**
-```text
-db.devices.find({ "specs.ram": { $gte: 16 } });
-```
-
 > [!check]- Answer
+> ```text
+> db.devices.find({ "specs.ram": { $gte: 16 } });
+> ```
 > ```javascript
 > db.devices.find({ "specs.ram": { $gte: 16 } });
 > ```
 >
 > **Explanation:** Dot-notation `"specs.ram"` queries fields inside embedded sub-documents.
 
+---
+
 ### Exercise 3: Updating Embedded Sub-Document Field
 
 **Problem:** Update `profile.avatar` URL for `user:1` using dot-notation `$set`.
 
 **Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $set: { "profile.avatar": "http://img.png" } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.updateOne({ _id: 1 }, { $set: { "profile.avatar": "http://img.png" } });
+> ```
 > ```javascript
 > db.users.updateOne({
 >   _id: 1

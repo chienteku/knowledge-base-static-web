@@ -188,16 +188,15 @@ class User {
 **Problem:** You want to create a `DatabaseId` class. You want the ID string to be publicly accessible, but absolutely immutable (read-only) once instantiated. Write the class using the Parameter Property shorthand.
 
 **Expected output:**
-```typescript
-class DatabaseId {
-  constructor(public readonly id: string) {}
-}
-
-// Alternatively, just `readonly` works too (it assumes public):
-// constructor(readonly id: string) {}
-```
-
 > [!check]- Answer
+> ```typescript
+> class DatabaseId {
+>   constructor(public readonly id: string) {}
+> }
+> 
+> // Alternatively, just `readonly` works too (it assumes public):
+> // constructor(readonly id: string) {}
+> ```
 > - You can combine modifiers!
 
 ---
@@ -209,11 +208,10 @@ class DatabaseId {
 **Problem:** Create `class Config` using `constructor(private readonly apiKey: string)` shorthand.
 
 **Expected output:**
-```text
-Parameter property shorthand implemented
-```
-
 > [!check]- Answer
+> ```text
+> Parameter property shorthand implemented
+> ```
 > ```typescript
 > class Config {
 >   constructor(private readonly apiKey: string) {}
@@ -224,35 +222,35 @@ Parameter property shorthand implemented
 > ```
 >
 > **Explanation:** `private readonly` parameter properties declare, restrict, and initialize fields automatically.
+
+---
 
 ### Exercise 3: Compiled JS Parameter Property Expansion
 
 **Problem:** What JS code does `constructor(public id: number) {}` compile to?
 
 **Expected output:**
-```text
-constructor(id) { this.id = id; }
-```
-
 > [!check]- Answer
+> ```text
+> constructor(id) { this.id = id; }
+> ```
 > ```typescript
 > console.log("constructor(id) { this.id = id; }");
 > ```
 >
 > **Explanation:** TS compiler expands parameter property shorthand into explicit constructor assignments.
 
-
+---
 
 ### Exercise 4: Readonly Private Parameter Property Shorthand
 
 **Problem:** Create `class Config` using `constructor(private readonly apiKey: string)` shorthand.
 
 **Expected output:**
-```text
-Parameter property shorthand implemented
-```
-
 > [!check]- Answer
+> ```text
+> Parameter property shorthand implemented
+> ```
 > ```typescript
 > class Config {
 >   constructor(private readonly apiKey: string) {}
@@ -264,16 +262,17 @@ Parameter property shorthand implemented
 >
 > **Explanation:** `private readonly` parameter properties declare, restrict, and initialize fields automatically.
 
+---
+
 ### Exercise 5: Compiled JS Parameter Property Expansion
 
 **Problem:** What JS code does `constructor(public id: number) {}` compile to?
 
 **Expected output:**
-```text
-constructor(id) { this.id = id; }
-```
-
 > [!check]- Answer
+> ```text
+> constructor(id) { this.id = id; }
+> ```
 > ```typescript
 > console.log("constructor(id) { this.id = id; }");
 > ```

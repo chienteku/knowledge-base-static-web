@@ -184,11 +184,10 @@ getMockProduct().then(product => console.log("Product:", product.name));
 ```
 
 **Expected output:**
-```text
-Product: Book
-```
-
 > [!check]- Answer
+> ```text
+> Product: Book
+> ```
 > - Use the static method `Promise.resolve(value)`.
 > - Pass the object as the value argument.
 
@@ -199,11 +198,10 @@ Product: Book
 **Problem:** Pass `[Promise.reject("fail"), Promise.resolve("success")]` to `Promise.any()`.
 
 **Expected output:**
-```text
-success
-```
-
 > [!check]- Answer
+> ```text
+> success
+> ```
 > ```javascript
 > const p1 = Promise.reject("fail");
 > const p2 = Promise.resolve("success");
@@ -212,16 +210,17 @@ success
 >
 > **Explanation:** `Promise.any` fulfills with the value of the first promise that fulfills, ignoring rejections unless all reject.
 
+---
+
 ### Exercise 3: `AggregateError` in `Promise.any`
 
 **Problem:** Catch `AggregateError` when all promises in `Promise.any()` reject.
 
 **Expected output:**
-```text
-All promises were rejected
-```
-
 > [!check]- Answer
+> ```text
+> All promises were rejected
+> ```
 > ```javascript
 > Promise.any([Promise.reject(1), Promise.reject(2)])
 >   .catch(err => console.log(err.message));
@@ -229,7 +228,6 @@ All promises were rejected
 >
 > **Explanation:** `Promise.any` throws `AggregateError` when every input promise rejects.
 
----
 
 ---
 

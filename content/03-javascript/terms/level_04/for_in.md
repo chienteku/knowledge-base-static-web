@@ -160,11 +160,10 @@ async function processData() {
 **Problem:** You have an object: `const scores = { math: 90, english: 85, science: 95 };`. Write a `for...in` loop that adds up all the values and logs the total score.
 
 **Expected output:**
-```text
-270
-```
-
 > [!check]- Answer
+> ```text
+> 270
+> ```
 > - Create `let total = 0;` before the loop.
 > - Inside the loop: `total += scores[key];`
 
@@ -175,12 +174,11 @@ async function processData() {
 **Problem:** Iterate over `{ a: 1, b: 2 }` using `for...in` and log key-value pairs.
 
 **Expected output:**
-```text
-a: 1
-b: 2
-```
-
 > [!check]- Answer
+> ```text
+> a: 1
+> b: 2
+> ```
 > ```javascript
 > const obj = { a: 1, b: 2 };
 > for (const key in obj) {
@@ -190,16 +188,17 @@ b: 2
 >
 > **Explanation:** `for...in` iterates over all enumerable string property keys of objects.
 
+---
+
 ### Exercise 3: Filtering Prototype Properties in `for...in`
 
 **Problem:** Use `Object.hasOwn(obj, key)` inside `for...in` to ignore prototype chain keys.
 
 **Expected output:**
-```text
-own: x
-```
-
 > [!check]- Answer
+> ```text
+> own: x
+> ```
 > ```javascript
 > const proto = { inherited: true };
 > const obj = Object.create(proto);
@@ -213,7 +212,6 @@ own: x
 >
 > **Explanation:** `Object.hasOwn` guards `for...in` loops against processing inherited prototype properties.
 
----
 
 ---
 

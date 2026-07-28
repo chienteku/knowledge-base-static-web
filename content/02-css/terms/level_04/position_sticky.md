@@ -270,16 +270,15 @@ A navigation bar that sticks to the top of the browser:
 **Problem:** You are styling a long table (`<table>`) and want the table header row (`<tr>`) to remain visible at the top of the viewport when scrolling. What ruleset do you write?
 
 **Expected output:**
-```css
-/* Note: You must target the <th> tags directly, as <tr> tags do not support sticky positioning natively on some browsers. */
-th {
-  position: sticky;
-  top: 0;
-  background-color: white; /* Prevent background rows from bleeding through text */
-}
-```
-
 > [!check]- Answer
+> ```css
+> /* Note: You must target the <th> tags directly, as <tr> tags do not support sticky positioning natively on some browsers. */
+> th {
+>   position: sticky;
+>   top: 0;
+>   background-color: white; /* Prevent background rows from bleeding through text */
+> }
+> ```
 > - Target table headers `<th>`, not parent table elements.
 > - Give them a solid background color so overlapping rows don't show through.
 
@@ -292,11 +291,10 @@ th {
 **Problem:** Write CSS pinning `.navbar` to the top of the viewport when scrolled, with `z-index: 100`.
 
 **Expected output:**
-```text
-.navbar { position: sticky; top: 0; z-index: 100; }
-```
-
 > [!check]- Answer
+> ```text
+> .navbar { position: sticky; top: 0; z-index: 100; }
+> ```
 > ```css
 > .navbar {
 >   position: sticky;
@@ -307,16 +305,17 @@ th {
 >
 > **Explanation:** `position: sticky; top: 0` sticks the navbar to the top viewport edge during page scroll.
 
+---
+
 ### Exercise 3: Sticky Positioning Container Boundary
 
 **Problem:** What limits how far down a sticky element will scroll before stopping?
 
 **Expected output:**
-```text
-A sticky element scrolls ONLY within the boundary of its immediate parent container element.
-```
-
 > [!check]- Answer
+> ```text
+> A sticky element scrolls ONLY within the boundary of its immediate parent container element.
+> ```
 > ```text
 > A sticky element scrolls ONLY within the boundary of its immediate parent container element.
 > ```

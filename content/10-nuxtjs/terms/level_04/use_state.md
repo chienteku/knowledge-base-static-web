@@ -125,11 +125,10 @@ export const useUserState = () => useState('user-state', () => null);
 **Problem:** You want to store a user's chosen language code (e.g., `'en'` or `'fr'`). Write the `useState` declaration using the key `'lang'` and a default value of `'en'`.
 
 **Expected output:**
-```typescript
-const language = useState('lang', () => 'en');
-```
-
 > [!check]- Answer
+> ```typescript
+> const language = useState('lang', () => 'en');
+> ```
 > - Use the `useState` function, pass the unique string key `'lang'` as the first parameter, and a factory function returning `'en'` as the second parameter.
 
 ---
@@ -139,16 +138,15 @@ const language = useState('lang', () => 'en');
 **Problem:** Write composable `useCounter()` using `useState('counter', () => 0)` exporting `count`, `inc()`, and `dec()`.
 
 **Expected output:**
-```typescript
-export const useCounter = () => {
-  const count = useState('counter', () => 0);
-  const inc = () => count.value++;
-  const dec = () => count.value--;
-  return { count, inc, dec };
-};
-```
-
 > [!check]- Answer
+> ```typescript
+> export const useCounter = () => {
+>   const count = useState('counter', () => 0);
+>   const inc = () => count.value++;
+>   const dec = () => count.value--;
+>   return { count, inc, dec };
+> };
+> ```
 > - `useState` preserves reactive state between SSR server render and client hydration.
 > 
 > ```typescript
@@ -169,11 +167,10 @@ export const useCounter = () => {
 **Problem:** Does state initialized via `useState()` automatically get serialized into `window.__NUXT__` payload during SSR?
 
 **Expected output:**
-```text
-Yes. useState automatically serializes its value into the server HTML payload, hydrating client state seamlessly.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. useState automatically serializes its value into the server HTML payload, hydrating client state seamlessly.
+> ```
 > - `useState` values are serialized into server HTML payload automatically.
 > 
 > ```text

@@ -124,11 +124,10 @@ setUser({
 Write the `setPerson` code to change her city to 'LA' without mutating the original object.
 
 **Expected output:**
-```javascript
-setPerson({ ...person, city: 'LA' });
-```
-
 > [!check]- Answer
+> ```javascript
+> setPerson({ ...person, city: 'LA' });
+> ```
 > - Create a new object `{}`. 
 > - Spread the old properties `...person`.
 > - Overwrite the specific property.
@@ -142,11 +141,10 @@ setPerson({ ...person, city: 'LA' });
 **Problem:** Immutably update `user.address.city` to `'Tokyo'` using spread syntax.
 
 **Expected output:**
-```text
-setUser(prev => ({ ...prev, address: { ...prev.address, city: 'Tokyo' } }));
-```
-
 > [!check]- Answer
+> ```text
+> setUser(prev => ({ ...prev, address: { ...prev.address, city: 'Tokyo' } }));
+> ```
 > ```javascript
 > setUser(prev => ({
 >   ...prev,
@@ -159,16 +157,17 @@ setUser(prev => ({ ...prev, address: { ...prev.address, city: 'Tokyo' } }));
 >
 > **Explanation:** Immutably updating nested objects requires spreading every object level in the path.
 
+---
+
 ### Exercise 3: Immutable Array Item Removal
 
 **Problem:** Remove item with `id = targetId` from `items` array immutably using `.filter()`.
 
 **Expected output:**
-```text
-setItems(prev => prev.filter(item => item.id !== targetId));
-```
-
 > [!check]- Answer
+> ```text
+> setItems(prev => prev.filter(item => item.id !== targetId));
+> ```
 > ```javascript
 > setItems(prev => prev.filter(item => item.id !== targetId));
 > ```

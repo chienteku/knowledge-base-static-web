@@ -118,11 +118,10 @@ Do not make *everything* lazy. If a component is visible immediately on the scre
 **Problem:** You have a component located at `components/admin/UserTable.vue`. You want to render it only when the user clicks a "Load Data" button. What is the exact HTML tag you should use in your template?
 
 **Expected output:**
-```vue
-<LazyAdminUserTable v-if="showData" />
-```
-
 > [!check]- Answer
+> ```vue
+> <LazyAdminUserTable v-if="showData" />
+> ```
 > - Prepend the PascalCase component name path with `Lazy` and pair it with a conditional display directive.
 
 ---
@@ -132,16 +131,15 @@ Do not make *everything* lazy. If a component is visible immediately on the scre
 **Problem:** Write Vue template rendering `<LazyAuthModal />` conditionally when `showModal` boolean ref is true.
 
 **Expected output:**
-```vue
-<template>
-  <div>
-    <button @click="showModal = true">Login</button>
-    <LazyAuthModal v-if="showModal" @close="showModal = false" />
-  </div>
-</template>
-```
-
 > [!check]- Answer
+> ```vue
+> <template>
+>   <div>
+>     <button @click="showModal = true">Login</button>
+>     <LazyAuthModal v-if="showModal" @close="showModal = false" />
+>   </div>
+> </template>
+> ```
 > - `Lazy` prefix code-splits components until `v-if` evaluates to true.
 > 
 > ```vue
@@ -164,11 +162,10 @@ Do not make *everything* lazy. If a component is visible immediately on the scre
 **Problem:** How does using `<LazyHeavyChart v-if="showChart" />` impact initial page JS bundle size?
 
 **Expected output:**
-```text
-It strips HeavyChart JS code from the initial page bundle, moving it into an on-demand async JS chunk fetched when showChart becomes true.
-```
-
 > [!check]- Answer
+> ```text
+> It strips HeavyChart JS code from the initial page bundle, moving it into an on-demand async JS chunk fetched when showChart becomes true.
+> ```
 > - Reduces initial page JS bundle size by splitting code into async chunks.
 > 
 > ```text

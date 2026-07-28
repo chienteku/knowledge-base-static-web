@@ -183,20 +183,19 @@ const myCar: Car = {
 ```
 
 **Expected output:**
-```typescript
-// Solved via intermediate variable:
-const carData = { make: 'Toyota', model: 'Corolla', year: 2022 };
-const myCar: Car = carData;
-
-// Solved via index signature:
-interface Car {
-  make: string;
-  model: string;
-  [key: string]: any;
-}
-```
-
 > [!check]- Answer
+> ```typescript
+> // Solved via intermediate variable:
+> const carData = { make: 'Toyota', model: 'Corolla', year: 2022 };
+> const myCar: Car = carData;
+> 
+> // Solved via index signature:
+> interface Car {
+>   make: string;
+>   model: string;
+>   [key: string]: any;
+> }
+> ```
 > - The intermediate variable loses literal freshness, so the compiler only checks that `make` and `model` are present.
 > - An index signature looks like `[key: string]: any` or `[key: string]: unknown` inside the interface.
 
@@ -209,27 +208,27 @@ interface Car {
 **Problem:** Explain why `{ name: "Alice", age: 30 }` fails when directly assigned to `type Person = { name: string }`.
 
 **Expected output:**
-```text
-Direct object literal assignment triggers excess property check
-```
-
 > [!check]- Answer
+> ```text
+> Direct object literal assignment triggers excess property check
+> ```
 > ```typescript
 > console.log("Direct object literal assignment triggers excess property check");
 > ```
 >
 > **Explanation:** Fresh object literals are checked for typos by rejecting unlisted extra properties.
 
+---
+
 ### Exercise 3: Disabling Excess Property Warnings with Index Signatures
 
 **Problem:** Add index signature `[key: string]: any` to interface to permit excess properties on direct literals.
 
 **Expected output:**
-```text
-Index signature permits excess properties
-```
-
 > [!check]- Answer
+> ```text
+> Index signature permits excess properties
+> ```
 > ```typescript
 > interface Flexible {
 >   name: string;

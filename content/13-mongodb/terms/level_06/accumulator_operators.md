@@ -145,19 +145,18 @@ Write the aggregation pipeline containing a single `$group` stage that groups st
 2.  An array of all student scores in that class under the field name `all_scores` (duplicates allowed).
 
 **Expected output:**
-```javascript
-[
-  {
-    $group: {
-      _id: "$class_name",
-      average_score: { $avg: "$score" },
-      all_scores: { $push: "$score" }
-    }
-  }
-]
-```
-
 > [!check]- Answer
+> ```javascript
+> [
+>   {
+>     $group: {
+>       _id: "$class_name",
+>       average_score: { $avg: "$score" },
+>       all_scores: { $push: "$score" }
+>     }
+>   }
+> ]
+> ```
 > - The grouping key is `"class_name"`.
 > - Use `$avg` for the average math score.
 > - Use `$push` to compile all scores into the array field `all_scores`.
@@ -171,11 +170,10 @@ Write the aggregation pipeline containing a single `$group` stage that groups st
 **Problem:** Group sales by `category` and calculate total revenue sum using `$sum: "$amount"`.
 
 **Expected output:**
-```text
-db.sales.aggregate([{ $group: { _id: "$category", totalRevenue: { $sum: "$amount" } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.sales.aggregate([{ $group: { _id: "$category", totalRevenue: { $sum: "$amount" } } }]);
+> ```
 > ```javascript
 > db.sales.aggregate([
 >   { $group: { _id: "$category", totalRevenue: { $sum: "$amount" } } }
@@ -184,16 +182,17 @@ db.sales.aggregate([{ $group: { _id: "$category", totalRevenue: { $sum: "$amount
 >
 > **Explanation:** `{ $sum: "$field" }` accumulates total field values within group buckets.
 
+---
+
 ### Exercise 3: Collecting Unique Values with `$addToSet`
 
 **Problem:** Group users by `country` collecting array of unique `roles` using `$addToSet`.
 
 **Expected output:**
-```text
-db.users.aggregate([{ $group: { _id: "$country", roles: { $addToSet: "$role" } } }]);
-```
-
 > [!check]- Answer
+> ```text
+> db.users.aggregate([{ $group: { _id: "$country", roles: { $addToSet: "$role" } } }]);
+> ```
 > ```javascript
 > db.users.aggregate([
 >   { $group: { _id: "$country", roles: { $addToSet: "$role" } } }

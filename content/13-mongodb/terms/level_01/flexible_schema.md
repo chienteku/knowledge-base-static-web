@@ -146,12 +146,11 @@ Handle multi-schema versions using Polymorphic Schema Patterns in code
 2.  Explain why.
 
 **Expected output:**
-```text
-1. Schema-on-Write (PostgreSQL / SQL) is safer.
-2. In a financial system, data consistency is critical. You must guarantee that every transaction contains a valid account ID, matching currency codes, and positive balances. Having the database engine enforce these rules at write-time prevents bugs in application code from saving corrupted financial ledgers.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Schema-on-Write (PostgreSQL / SQL) is safer.
+> 2. In a financial system, data consistency is critical. You must guarantee that every transaction contains a valid account ID, matching currency codes, and positive balances. Having the database engine enforce these rules at write-time prevents bugs in application code from saving corrupted financial ledgers.
+> ```
 > - Evaluate the cost of structural data mistakes.
 > - Consider which database engine enforces constraints at write-time.
 
@@ -164,11 +163,10 @@ Handle multi-schema versions using Polymorphic Schema Patterns in code
 **Problem:** Create collection `user` with `$jsonSchema` requiring string `email`.
 
 **Expected output:**
-```text
-db.createCollection("user", { validator: { $jsonSchema: { required: ["email"] } } });
-```
-
 > [!check]- Answer
+> ```text
+> db.createCollection("user", { validator: { $jsonSchema: { required: ["email"] } } });
+> ```
 > ```javascript
 > db.createCollection("user", {
 >   validator: {
@@ -185,16 +183,17 @@ db.createCollection("user", { validator: { $jsonSchema: { required: ["email"] } 
 >
 > **Explanation:** `$jsonSchema` enforces data validation rules on flexible document collections.
 
+---
+
 ### Exercise 3: Checking Field Existence with `$exists`
 
 **Problem:** Query documents possessing field `middleName` using `$exists: true`.
 
 **Expected output:**
-```text
-db.users.find({ middleName: { $exists: true } });
-```
-
 > [!check]- Answer
+> ```text
+> db.users.find({ middleName: { $exists: true } });
+> ```
 > ```javascript
 > db.users.find({ middleName: { $exists: true } });
 > ```

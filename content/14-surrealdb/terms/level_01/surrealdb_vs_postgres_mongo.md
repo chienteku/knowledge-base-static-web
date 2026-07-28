@@ -140,13 +140,12 @@ SELECT * FROM post FETCH author;
 3.  A static logging database storing 50 million server request logs per day for archival purposes.
 
 **Expected output:**
-```text
-1. SurrealDB: Toggles between SCHEMALESS and SCHEMAFULL schema modes dynamically, and natively supports real-time Live Queries (WebSockets) for doctor locations.
-2. PostgreSQL: Enforces strict data constraints and transactional integrity natively, which is critical for government tax audits.
-3. MongoDB: A mature document database with robust indexing and compression for large log archives.
-```
-
 > [!check]- Answer
+> ```text
+> 1. SurrealDB: Toggles between SCHEMALESS and SCHEMAFULL schema modes dynamically, and natively supports real-time Live Queries (WebSockets) for doctor locations.
+> 2. PostgreSQL: Enforces strict data constraints and transactional integrity natively, which is critical for government tax audits.
+> 3. MongoDB: A mature document database with robust indexing and compression for large log archives.
+> ```
 > - Match real-time updates and schema flexibility to the target engine strengths.
 > - Consider which database has the most mature transactional auditing tools.
 
@@ -159,27 +158,27 @@ SELECT * FROM post FETCH author;
 **Problem:** Identify database engine supporting: 1. Native Graph Arrows (SurrealDB), 2. Traditional Relational JOINs (Postgres), 3. BSON Documents ($lookup) (MongoDB).
 
 **Expected output:**
-```text
-1. SurrealDB, 2. PostgreSQL, 3. MongoDB
-```
-
 > [!check]- Answer
+> ```text
+> 1. SurrealDB, 2. PostgreSQL, 3. MongoDB
+> ```
 > ```text
 > 1. SurrealDB, 2. PostgreSQL, 3. MongoDB
 > ```
 >
 > **Explanation:** SurrealDB merges relational and document models with native graph arrows.
 
+---
+
 ### Exercise 3: Real-Time Query Comparison
 
 **Problem:** How does SurrealDB `LIVE SELECT` differ from MongoDB Change Streams or Postgres LISTEN/NOTIFY?
 
 **Expected output:**
-```text
-LIVE SELECT pushes live record diff updates directly over WebSockets filtered by SurrealQL WHERE clauses
-```
-
 > [!check]- Answer
+> ```text
+> LIVE SELECT pushes live record diff updates directly over WebSockets filtered by SurrealQL WHERE clauses
+> ```
 > ```text
 > LIVE SELECT pushes live record diff updates directly over WebSockets filtered by SurrealQL WHERE clauses
 > ```

@@ -155,11 +155,10 @@ async function processData() {
 **Problem:** The word "Polyfill" was coined by developer Remy Sharp in 2009. What physical product was it named after?
 
 **Expected output:**
-```text
-It was named after "Polyfilla", a brand of spackling paste used in the UK to fill holes and cracks in walls before painting. Just like the paste fills holes in walls to make them smooth, a polyfill fills holes in an old browser's feature set to make the API surface smooth and uniform!
-```
-
 > [!check]- Answer
+> ```text
+> It was named after "Polyfilla", a brand of spackling paste used in the UK to fill holes and cracks in walls before painting. Just like the paste fills holes in walls to make them smooth, a polyfill fills holes in an old browser's feature set to make the API surface smooth and uniform!
+> ```
 > - Think about home improvement and fixing drywall!
 
 ---
@@ -169,11 +168,10 @@ It was named after "Polyfilla", a brand of spackling paste used in the UK to fil
 **Problem:** Write feature detection for `Array.prototype.flat` and supply polyfill if missing.
 
 **Expected output:**
-```text
-Polyfill condition checked
-```
-
 > [!check]- Answer
+> ```text
+> Polyfill condition checked
+> ```
 > ```javascript
 > if (!Array.prototype.flat) {
 >   Array.prototype.flat = function() { return this.reduce((a, b) => a.concat(b), []); };
@@ -183,23 +181,23 @@ Polyfill condition checked
 >
 > **Explanation:** Conditional polyfills inspect global prototypes before patching missing APIs.
 
+---
+
 ### Exercise 3: Polyfill vs Transpiler Distinction
 
 **Problem:** State whether `Promise` requires a Polyfill or Transpiler in legacy browsers.
 
 **Expected output:**
-```text
-Promise requires a Polyfill
-```
-
 > [!check]- Answer
+> ```text
+> Promise requires a Polyfill
+> ```
 > ```javascript
 > console.log("Promise requires a Polyfill");
 > ```
 >
 > **Explanation:** Missing global classes and prototype methods require polyfill library implementations.
 
----
 
 ---
 

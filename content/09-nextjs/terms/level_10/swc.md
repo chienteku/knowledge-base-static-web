@@ -124,11 +124,10 @@ module.exports = {
 **Problem:** What programming language powers the SWC compiler, and how much faster is it than Babel?
 
 **Expected output:**
-```text
-Written in Rust; up to 17x faster compilation than Babel.
-```
-
 > [!check]- Answer
+> ```text
+> Written in Rust; up to 17x faster compilation than Babel.
+> ```
 > - Rust-based compiler engine, 17x faster than Babel.
 > 
 > ```text
@@ -142,11 +141,10 @@ Written in Rust; up to 17x faster compilation than Babel.
 **Problem:** Write `next.config.js` compiler configuration enabling styled-components SWC transform.
 
 **Expected output:**
-```javascript
-module.exports = { compiler: { styledComponents: true } };
-```
-
 > [!check]- Answer
+> ```javascript
+> module.exports = { compiler: { styledComponents: true } };
+> ```
 > - `compiler.styledComponents` enables fast SWC transforms.
 > 
 > ```javascript

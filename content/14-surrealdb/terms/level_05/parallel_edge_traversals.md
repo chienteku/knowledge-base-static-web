@@ -200,11 +200,10 @@ Write the SurrealQL query starting from `student:alice` to retrieve the student'
 2.  `books`: List of book titles she has borrowed.
 
 **Expected output:**
-```sql
-SELECT name, ->enrolled_in->class.name AS classes, ->borrowed->book.title AS books FROM student:alice;
-```
-
 > [!check]- Answer
+> ```sql
+> SELECT name, ->enrolled_in->class.name AS classes, ->borrowed->book.title AS books FROM student:alice;
+> ```
 > - The source node is `student:alice`.
 > - Project the two relationship paths as separate, comma-separated fields in the `SELECT` statement.
 
@@ -217,27 +216,27 @@ SELECT name, ->enrolled_in->class.name AS classes, ->borrowed->book.title AS boo
 **Problem:** Query user `user:alice` projecting both `wrote` posts and `liked` posts in a single statement.
 
 **Expected output:**
-```text
-SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
+> ```
 > ```surrealql
 > SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
 > ```
 >
 > **Explanation:** Projecting multiple arrow paths retrieves parallel edge relationship targets.
 
+---
+
 ### Exercise 3: Deduplicating Multi-Edge Traversals
 
 **Problem:** Combine and deduplicate post IDs from both `wrote` and `liked` edges.
 
 **Expected output:**
-```text
-SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
+> ```
 > ```surrealql
 > SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
 > ```

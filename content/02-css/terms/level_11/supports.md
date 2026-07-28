@@ -203,20 +203,19 @@ Checking modern display properties:
 **Problem:** You want to use a modern visual filter `filter: blur(5px);`. However, you want to write a fallback style that simply lowers the opacity (`opacity: 0.5;`) for older browsers that do not support filters. Write the CSS.
 
 **Expected output:**
-```css
-.card {
-  opacity: 0.5;
-}
-
-@supports (filter: blur(5px)) {
-  .card {
-    opacity: 1;
-    filter: blur(5px);
-  }
-}
-```
-
 > [!check]- Answer
+> ```css
+> .card {
+>   opacity: 0.5;
+> }
+> 
+> @supports (filter: blur(5px)) {
+>   .card {
+>     opacity: 1;
+>     filter: blur(5px);
+>   }
+> }
+> ```
 > - Start by applying the opacity fallback as the default style.
 > - Wrap the filter properties inside a `@supports (filter: blur(5px))` feature query block and reset opacity to 1.
 
@@ -229,11 +228,10 @@ Checking modern display properties:
 **Problem:** Write `@supports` rule checking if browser supports `backdrop-filter: blur(10px)`.
 
 **Expected output:**
-```text
-@supports (backdrop-filter: blur(10px)) { .glass { backdrop-filter: blur(10px); } }
-```
-
 > [!check]- Answer
+> ```text
+> @supports (backdrop-filter: blur(10px)) { .glass { backdrop-filter: blur(10px); } }
+> ```
 > ```css
 > @supports (backdrop-filter: blur(10px)) {
 >   .glass {
@@ -244,16 +242,17 @@ Checking modern display properties:
 >
 > **Explanation:** `@supports` provides progressive enhancement Feature Queries.
 
+---
+
 ### Exercise 3: Negated supports Condition
 
 **Problem:** Write `@supports` rule using `not` keyword checking if browser does NOT support CSS Grid.
 
 **Expected output:**
-```text
-@supports not (display: grid) { .col { float: left; } }
-```
-
 > [!check]- Answer
+> ```text
+> @supports not (display: grid) { .col { float: left; } }
+> ```
 > ```css
 > @supports not (display: grid) {
 >   .col {

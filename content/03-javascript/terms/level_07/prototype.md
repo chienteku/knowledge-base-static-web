@@ -156,11 +156,10 @@ async function processData() {
 **Problem:** If you create a simple object `const obj = {}`, and you try to call `obj.toString()`, it works! Where does `toString()` come from?
 
 **Expected output:**
-```text
-It comes from `Object.prototype`, which is the ultimate master object at the very top of the JavaScript hierarchy. Every object you create inherently links to it.
-```
-
 > [!check]- Answer
+> ```text
+> It comes from `Object.prototype`, which is the ultimate master object at the very top of the JavaScript hierarchy. Every object you create inherently links to it.
+> ```
 > - `Object.create()` without arguments defaults to this ultimate master object.
 
 ---
@@ -170,11 +169,10 @@ It comes from `Object.prototype`, which is the ultimate master object at the ver
 **Problem:** Add `greet` method to `User.prototype` and invoke on new instance.
 
 **Expected output:**
-```text
-Hello Alice
-```
-
 > [!check]- Answer
+> ```text
+> Hello Alice
+> ```
 > ```javascript
 > function User(name) { this.name = name; }
 > User.prototype.greet = function() { return `Hello ${this.name}`; };
@@ -183,23 +181,23 @@ Hello Alice
 >
 > **Explanation:** Prototype methods are shared across all instances, saving memory allocations.
 
+---
+
 ### Exercise 3: Modifying Built-in Prototypes Anti-Pattern
 
 **Problem:** Explain why monkey-patching `Array.prototype.customMethod` causes global collision risks.
 
 **Expected output:**
-```text
-Patched built-ins cause collision risks
-```
-
 > [!check]- Answer
+> ```text
+> Patched built-ins cause collision risks
+> ```
 > ```javascript
 > console.log("Patched built-ins cause collision risks");
 > ```
 >
 > **Explanation:** Modifying native prototypes introduces library conflicts and breaks future specification compatibility.
 
----
 
 ---
 

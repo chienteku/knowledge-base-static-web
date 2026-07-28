@@ -147,11 +147,10 @@ if (ObjectId.isValid(str)) { new ObjectId(str); }
 Write the `mongosh` shell command to extract and view the exact year and date this document was inserted into the database.
 
 **Expected output:**
-```javascript
-ObjectId("60c72b2f9b1d8b2e88a8d1a1").getTimestamp()
-```
-
 > [!check]- Answer
+> ```javascript
+> ObjectId("60c72b2f9b1d8b2e88a8d1a1").getTimestamp()
+> ```
 > - The helper method `getTimestamp()` is built into the `ObjectId` object prototype.
 > - Call the method directly on the hexadecimal string wrapped in `ObjectId()`.
 
@@ -164,27 +163,27 @@ ObjectId("60c72b2f9b1d8b2e88a8d1a1").getTimestamp()
 **Problem:** Extract creation date timestamp from `_id` using `_id.getTimestamp()` in mongosh.
 
 **Expected output:**
-```text
-db.users.findOne()._id.getTimestamp();
-```
-
 > [!check]- Answer
+> ```text
+> db.users.findOne()._id.getTimestamp();
+> ```
 > ```javascript
 > db.users.findOne()._id.getTimestamp();
 > ```
 >
 > **Explanation:** The first 4 bytes of a 12-byte BSON ObjectId store a Unix epoch timestamp.
 
+---
+
 ### Exercise 3: ObjectId Structure Breakdown
 
 **Problem:** State byte composition of 12-byte BSON ObjectId (4-byte timestamp, 5-byte random, 3-byte incrementing counter).
 
 **Expected output:**
-```text
-4-byte timestamp, 5-byte random value, 3-byte incrementing counter
-```
-
 > [!check]- Answer
+> ```text
+> 4-byte timestamp, 5-byte random value, 3-byte incrementing counter
+> ```
 > ```text
 > 4-byte timestamp, 5-byte random value, 3-byte incrementing counter
 > ```

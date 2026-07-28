@@ -115,11 +115,10 @@ a {
 **Problem:** You write a paragraph: `<p style="text-align: center;">Hello</p>`. You test it, but the word "Hello" is sitting perfectly on the left side of the screen. Why didn't it center?
 
 **Expected output:**
-```text
-The `<p>` container is probably only exactly as wide as the word "Hello" (maybe due to Flexbox or inline display). If the box is exactly the size of the word, there is no empty space for the word to slide into! `text-align: center` only works if the container is wider than the text.
-```
-
 > [!check]- Answer
+> ```text
+> The `<p>` container is probably only exactly as wide as the word "Hello" (maybe due to Flexbox or inline display). If the box is exactly the size of the word, there is no empty space for the word to slide into! `text-align: center` only works if the container is wider than the text.
+> ```
 > - If you stand inside a closet that is exactly as wide as your shoulders, can you step to the "center" of the room?
 
 ---
@@ -131,11 +130,10 @@ The `<p>` container is probably only exactly as wide as the word "Hello" (maybe 
 **Problem:** Write CSS `text-decoration` shorthand applying wavy red underline with 2px thickness to `.error-link`.
 
 **Expected output:**
-```text
-.error-link { text-decoration: underline wavy red 2px; }
-```
-
 > [!check]- Answer
+> ```text
+> .error-link { text-decoration: underline wavy red 2px; }
+> ```
 > ```css
 > .error-link {
 >   text-decoration: underline wavy red 2px;
@@ -144,16 +142,17 @@ The `<p>` container is probably only exactly as wide as the word "Hello" (maybe 
 >
 > **Explanation:** Modern `text-decoration` combines line type, style, color, and thickness.
 
+---
+
 ### Exercise 3: Removing Default Anchor Underlines
 
 **Problem:** Write CSS rule removing default underline decoration from `<a>` anchor tags.
 
 **Expected output:**
-```text
-a { text-decoration: none; }
-```
-
 > [!check]- Answer
+> ```text
+> a { text-decoration: none; }
+> ```
 > ```css
 > a {
 >   text-decoration: none;

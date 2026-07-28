@@ -143,11 +143,10 @@ Monitor index bloat via pgstatindex before executing REINDEX CONCURRENTLY
 **Problem:** You have a high-volume database table `session_store` containing indexes `idx_sessions_token` and `idx_sessions_expiry`. The indexes have become bloated from daily session deletes. Write the SQL query to rebuild all indexes on the `session_store` table in the background without locking database traffic.
 
 **Expected output:**
-```sql
-REINDEX TABLE CONCURRENTLY session_store;
-```
-
 > [!check]- Answer
+> ```sql
+> REINDEX TABLE CONCURRENTLY session_store;
+> ```
 > - Specify the table target rather than individual index files.
 > - Append the concurrency modifier.
 
@@ -160,27 +159,27 @@ REINDEX TABLE CONCURRENTLY session_store;
 **Problem:** Reindex table `users` concurrently without blocking queries in Postgres 12+.
 
 **Expected output:**
-```text
-REINDEX TABLE CONCURRENTLY users;
-```
-
 > [!check]- Answer
+> ```text
+> REINDEX TABLE CONCURRENTLY users;
+> ```
 > ```sql
 > REINDEX TABLE CONCURRENTLY users;
 > ```
 >
 > **Explanation:** `REINDEX TABLE CONCURRENTLY` rebuilds bloated indexes without acquiring write locks.
 
+---
+
 ### Exercise 3: Re-Indexing Specific Index
 
 **Problem:** Reindex specific bloated index `idx_orders_user_id` concurrently.
 
 **Expected output:**
-```text
-REINDEX INDEX CONCURRENTLY idx_orders_user_id;
-```
-
 > [!check]- Answer
+> ```text
+> REINDEX INDEX CONCURRENTLY idx_orders_user_id;
+> ```
 > ```sql
 > REINDEX INDEX CONCURRENTLY idx_orders_user_id;
 > ```

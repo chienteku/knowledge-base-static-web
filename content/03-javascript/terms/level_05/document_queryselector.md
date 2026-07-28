@@ -152,13 +152,12 @@ async function processData() {
 **Problem:** You have the following HTML: `<div id="app"><span class="highlight">Hello</span></div>`. Write the `querySelector` command needed to select the span.
 
 **Expected output:**
-```javascript
-document.querySelector("#app .highlight");
-// or just
-document.querySelector(".highlight");
-```
-
 > [!check]- Answer
+> ```javascript
+> document.querySelector("#app .highlight");
+> // or just
+> document.querySelector(".highlight");
+> ```
 > - Pass the exact CSS selector as a string inside the parentheses.
 
 ---
@@ -168,27 +167,27 @@ document.querySelector(".highlight");
 **Problem:** Select input with `[type="password"]` using `querySelector` syntax.
 
 **Expected output:**
-```text
-input[type="password"]
-```
-
 > [!check]- Answer
+> ```text
+> input[type="password"]
+> ```
 > ```javascript
 > console.log('input[type="password"]');
 > ```
 >
 > **Explanation:** `querySelector` accepts full CSS3 selector queries.
 
+---
+
 ### Exercise 3: Handling Null Query Selector Matches
 
 **Problem:** Safely chain property access on `document.querySelector('.missing')?.textContent`.
 
 **Expected output:**
-```text
-undefined
-```
-
 > [!check]- Answer
+> ```text
+> undefined
+> ```
 > ```javascript
 > const elem = null; // Simulated missing query result
 > console.log(elem?.textContent);
@@ -196,7 +195,6 @@ undefined
 >
 > **Explanation:** `querySelector` returns `null` if no matching element exists in DOM trees.
 
----
 
 ---
 

@@ -186,28 +186,28 @@ app.get('/download-good', (req, res) => {
 **Problem:** Which stream event notifies code that a Writable stream's buffer has emptied after returning `false` from `write()`?
 
 **Expected output:**
-```text
-'drain' event
-```
-
 > [!check]- Answer
+> ```text
+> 'drain' event
+> ```
 > ```text
 > 'drain' event
 > ```
 >
 > **Explanation:** The `'drain'` event signals that a Writable stream is ready to receive more data.
 
+---
+
 ### Exercise 3: pipeline Utility Benefit
 
 **Problem:** List 2 primary advantages of using `stream.pipeline` over `.pipe()`.
 
 **Expected output:**
-```text
-1. Automatic error handling and cleanup across all streams
-2. Automatic backpressure management
-```
-
 > [!check]- Answer
+> ```text
+> 1. Automatic error handling and cleanup across all streams
+> 2. Automatic backpressure management
+> ```
 > ```text
 > 1. Automatic error handling and cleanup across all streams
 > 2. Automatic backpressure management

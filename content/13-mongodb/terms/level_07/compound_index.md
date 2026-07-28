@@ -199,13 +199,12 @@ Analyze if the index can optimize these queries (answer **Yes** or **No**):
 3.  `db.users.find({ country: "CA" }).sort({ score: 1 })`
 
 **Expected output:**
-```text
-1. Yes: The query filters on the prefix field `country` and sorts in the exact match direction `{ country: 1, score: -1 }`.
-2. No: The query filters on `score` only, missing the prefix field `country`.
-3. Yes: The sort request `{ country: 1, score: 1 }` is the exact opposite of the index keys `{ country: -1, score: 1 }` after negating both fields, allowing a backward index scan.
-```
-
 > [!check]- Answer
+> ```text
+> 1. Yes: The query filters on the prefix field `country` and sorts in the exact match direction `{ country: 1, score: -1 }`.
+> 2. No: The query filters on `score` only, missing the prefix field `country`.
+> 3. Yes: The sort request `{ country: 1, score: 1 }` is the exact opposite of the index keys `{ country: -1, score: 1 }` after negating both fields, allowing a backward index scan.
+> ```
 > - A reverse scan negates all field directions: `-( { country: 1, score: -1 } ) = { country: -1, score: 1 }`.
 > - Check if the prefix field is present in the query filters.
 
@@ -218,11 +217,10 @@ Analyze if the index can optimize these queries (answer **Yes** or **No**):
 **Problem:** Create compound index `status_createdAt_idx` on `status` ascending and `createdAt` descending.
 
 **Expected output:**
-```text
-db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_createdAt_idx" });
-```
-
 > [!check]- Answer
+> ```text
+> db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_createdAt_idx" });
+> ```
 > ```javascript
 > db.orders.createIndex(
 >   { status: 1, createdAt: -1 },
@@ -232,16 +230,17 @@ db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_createdAt_id
 >
 > **Explanation:** Compound indexes support queries filtering and sorting on multiple fields.
 
+---
+
 ### Exercise 3: Compound Index Prefix Matching
 
 **Problem:** Given index `{ a: 1, b: 1, c: 1 }`, list 3 supported query field combinations (`{ a }`, `{ a, b }`, `{ a, b, c }`).
 
 **Expected output:**
-```text
-{ a }, { a, b }, { a, b, c }
-```
-
 > [!check]- Answer
+> ```text
+> { a }, { a, b }, { a, b, c }
+> ```
 > ```text
 > { a }, { a, b }, { a, b, c }
 > ```

@@ -107,12 +107,11 @@ fetch('https://api.example.com/data');
 **Problem:** You are sitting in a Starbucks using their free public Wi-Fi. You log into your bank account. Why can't the malicious hacker sitting in the corner with a packet-sniffer read your banking password as it travels through the Wi-Fi airwaves?
 
 **Expected output:**
-```text
-Because your bank uses HTTPS! 
-The password is mathematically encrypted before it ever leaves your laptop's Wi-Fi antenna. The hacker captures the packet, but they only see scrambled nonsense.
-```
-
 > [!check]- Answer
+> ```text
+> Because your bank uses HTTPS! 
+> The password is mathematically encrypted before it ever leaves your laptop's Wi-Fi antenna. The hacker captures the packet, but they only see scrambled nonsense.
+> ```
 > - What does the 'S' stand for?
 
 ---
@@ -122,11 +121,10 @@ The password is mathematically encrypted before it ever leaves your laptop's Wi-
 **Problem:** Which HTTP response header forces browsers to automatically upgrade all future requests to HTTPS for a given domain?
 
 **Expected output:**
-```text
-Strict-Transport-Security: max-age=31536000; includeSubDomains
-```
-
 > [!check]- Answer
+> ```text
+> Strict-Transport-Security: max-age=31536000; includeSubDomains
+> ```
 > ```http
 > Strict-Transport-Security: max-age=31536000; includeSubDomains
 > ```
@@ -138,12 +136,11 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 **Problem:** What are the standard default TCP port numbers for HTTP and HTTPS traffic?
 
 **Expected output:**
-```text
-HTTP: Port 80
-HTTPS: Port 443
-```
-
 > [!check]- Answer
+> ```text
+> HTTP: Port 80
+> HTTPS: Port 443
+> ```
 > ```text
 > HTTP: Port 80
 > HTTPS: Port 443

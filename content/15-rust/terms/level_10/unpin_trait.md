@@ -175,11 +175,10 @@ thread::spawn(move || {
 **Problem:** Create a self-referential struct containing `_pin: PhantomPinned` to make it `!Unpin`.
 
 **Expected output:**
-```
-Struct is !Unpin
-```
-
 > [!check]- Answer
+> ```
+> Struct is !Unpin
+> ```
 > ```rust
 > use std::marker::PhantomPinned;
 > struct Unmovable {
@@ -193,16 +192,17 @@ Struct is !Unpin
 >
 > **Explanation:** `PhantomPinned` marker fields remove automatic `Unpin` implementations from structs.
 
+---
+
 ### Exercise 3: Safe Deref Mutability for `Unpin` Types
 
 **Problem:** Move values out of `Pin<&mut T>` when `T: Unpin` using `Pin::into_inner`.
 
 **Expected output:**
-```
-Extracted Unpin value: 42
-```
-
 > [!check]- Answer
+> ```
+> Extracted Unpin value: 42
+> ```
 > use std::pin::Pin;
 > fn main() {
 >     let mut val = 42;

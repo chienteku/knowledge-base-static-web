@@ -185,12 +185,11 @@ console.log(loggerProxy.name);
 ```
 
 **Expected output:**
-```text
-Reading property name
-Screwdriver
-```
-
 > [!check]- Answer
+> ```text
+> Reading property name
+> Screwdriver
+> ```
 > - Inside the trap, write `console.log("Reading property " + prop);` and return `Reflect.get(target, prop, receiver);`.
 
 ---
@@ -200,11 +199,10 @@ Screwdriver
 **Problem:** Use `Reflect.get(target, prop, receiver)` inside Proxy `get` trap.
 
 **Expected output:**
-```text
-Reflect returned: Alice
-```
-
 > [!check]- Answer
+> ```text
+> Reflect returned: Alice
+> ```
 > ```javascript
 > const target = { name: "Alice" };
 > const proxy = new Proxy(target, {
@@ -217,16 +215,17 @@ Reflect returned: Alice
 >
 > **Explanation:** `Reflect` methods mirror internal engine operations, safely forwarding Proxy traps.
 
+---
+
 ### Exercise 3: Safe Property Deletion with `Reflect.deleteProperty`
 
 **Problem:** Delete property `a` using `Reflect.deleteProperty(obj, "a")`.
 
 **Expected output:**
-```text
-true
-```
-
 > [!check]- Answer
+> ```text
+> true
+> ```
 > ```javascript
 > const obj = { a: 1 };
 > console.log(Reflect.deleteProperty(obj, "a"));
@@ -234,7 +233,6 @@ true
 >
 > **Explanation:** `Reflect.deleteProperty` returns boolean success status indicators.
 
----
 
 ---
 

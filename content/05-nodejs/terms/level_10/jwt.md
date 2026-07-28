@@ -95,12 +95,11 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 **Problem:** You are an evil hacker. You steal a regular user's JWT. You decode the Base64 payload, change `"isAdmin": false` to `"isAdmin": true`, and re-encode it. You send it to the server. What happens, and why?
 
 **Expected output:**
-```text
-The server will throw a "Signature Verification Failed" error and reject the request.
-Because you changed the payload, the original signature no longer matches the data. You cannot generate a new, matching signature because you don't know the server's secret `.env` key.
-```
-
 > [!check]- Answer
+> ```text
+> The server will throw a "Signature Verification Failed" error and reject the request.
+> Because you changed the payload, the original signature no longer matches the data. You cannot generate a new, matching signature because you don't know the server's secret `.env` key.
+> ```
 > - What is the 3rd part of the JWT used for?
 
 ---
@@ -112,11 +111,10 @@ Because you changed the payload, the original signature no longer matches the da
 **Problem:** Sign JWT token containing `{ userId: 101 }` with secret `'secretKey'` expiring in 1 hour.
 
 **Expected output:**
-```text
-const token = jwt.sign({ userId: 101 }, 'secretKey', { expiresIn: '1h' });
-```
-
 > [!check]- Answer
+> ```text
+> const token = jwt.sign({ userId: 101 }, 'secretKey', { expiresIn: '1h' });
+> ```
 > ```javascript
 > const jwt = require('jsonwebtoken');
 > const token = jwt.sign({ userId: 101 }, 'secretKey', { expiresIn: '1h' });
@@ -124,16 +122,17 @@ const token = jwt.sign({ userId: 101 }, 'secretKey', { expiresIn: '1h' });
 >
 > **Explanation:** `jwt.sign` signs payloads with secret keys and sets expiration claims (`exp`).
 
+---
+
 ### Exercise 3: Verifying JWT Token
 
 **Problem:** Verify incoming token string `req.headers.authorization` using `jwt.verify`.
 
 **Expected output:**
-```text
-const decoded = jwt.verify(token, 'secretKey');
-```
-
 > [!check]- Answer
+> ```text
+> const decoded = jwt.verify(token, 'secretKey');
+> ```
 > ```javascript
 > try {
 >   const decoded = jwt.verify(token, 'secretKey');

@@ -232,6 +232,8 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 >
 > **Explanation:** Replace generic `<div>` wrappers with semantic layout elements (`<header>`, `<footer>`, `<main>`).
 
+---
+
 ### Exercise 3: Valid Div Usage
 
 **Problem:** When IS a `<div>` element the correct semantic choice in HTML?

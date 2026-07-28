@@ -169,14 +169,13 @@ DELETE /api/queue/items/item-123 HTTP/1.1 ; Targeted item deletion is idempotent
 4. DELETE
 
 **Expected output:**
-```text
-1. GET: Safe=Yes, Idempotent=Yes
-2. POST: Safe=No, Idempotent=No
-3. PUT: Safe=No, Idempotent=Yes
-4. DELETE: Safe=No, Idempotent=Yes
-```
-
 > [!check]- Answer
+> ```text
+> 1. GET: Safe=Yes, Idempotent=Yes
+> 2. POST: Safe=No, Idempotent=No
+> 3. PUT: Safe=No, Idempotent=Yes
+> 4. DELETE: Safe=No, Idempotent=Yes
+> ```
 > ```text
 > 1. GET    -> Safe: Yes, Idempotent: Yes
 > 2. POST   -> Safe: No,  Idempotent: No
@@ -191,11 +190,10 @@ DELETE /api/queue/items/item-123 HTTP/1.1 ; Targeted item deletion is idempotent
 **Problem:** If `DELETE /users/5` returns 200 OK on first call and 404 Not Found on second call, is the endpoint still idempotent?
 
 **Expected output:**
-```text
-Yes. Idempotency guarantees the underlying server state is identical after N calls (the user remains deleted), even if the HTTP status code changes.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Idempotency guarantees the underlying server state is identical after N calls (the user remains deleted), even if the HTTP status code changes.
+> ```
 > ```text
 > Yes. Idempotency guarantees the underlying server state is identical after N calls (the user remains deleted), even if the HTTP status code changes.
 > ```

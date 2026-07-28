@@ -185,12 +185,11 @@ POST /api/checkout/step2 HTTP/1.1
 **Problem:** The user clicks "Add to Cart". The server saves the cart item to a database table called `ShoppingCarts` linked to the user's ID. Is this a violation of statelessness?
 
 **Expected output:**
-```text
-No! 
-Statelessness means the server doesn't remember the *connection context* or *session state* in its RAM. Saving business data (like a shopping cart) to a permanent Database is perfectly fine and required. The "State" in stateless refers to the session, not the database.
-```
-
 > [!check]- Answer
+> ```text
+> No! 
+> Statelessness means the server doesn't remember the *connection context* or *session state* in its RAM. Saving business data (like a shopping cart) to a permanent Database is perfectly fine and required. The "State" in stateless refers to the session, not the database.
+> ```
 > - Does the server know who the user is without a token? No.
 > - Is it okay for databases to store data? Yes!
 
@@ -201,12 +200,11 @@ Statelessness means the server doesn't remember the *connection context* or *ses
 **Problem:** State the primary requirement of REST Statelessness and its core architectural benefit.
 
 **Expected output:**
-```text
-Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
-Benefit: Horizontal scalability (any server instance can handle any incoming request).
-```
-
 > [!check]- Answer
+> ```text
+> Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
+> Benefit: Horizontal scalability (any server instance can handle any incoming request).
+> ```
 > ```text
 > Requirement: Every HTTP request must be self-contained.
 > Benefit: Horizontal scalability and simplified server recovery.
@@ -219,11 +217,10 @@ Benefit: Horizontal scalability (any server instance can handle any incoming req
 **Problem:** In a stateless REST architecture, where should session state (e.g. current user ID, permissions) reside?
 
 **Expected output:**
-```text
-Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-```
-
 > [!check]- Answer
+> ```text
+> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
+> ```
 > ```text
 > Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
 > ```
@@ -235,12 +232,11 @@ Entirely on the Client (encapsulated inside JWT access tokens or request credent
 **Problem:** State the primary requirement of REST Statelessness and its core architectural benefit.
 
 **Expected output:**
-```text
-Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
-Benefit: Horizontal scalability (any server instance can handle any incoming request).
-```
-
 > [!check]- Answer
+> ```text
+> Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
+> Benefit: Horizontal scalability (any server instance can handle any incoming request).
+> ```
 > ```text
 > Requirement: Every HTTP request must be self-contained.
 > Benefit: Horizontal scalability and simplified server recovery.
@@ -253,11 +249,10 @@ Benefit: Horizontal scalability (any server instance can handle any incoming req
 **Problem:** In a stateless REST architecture, where should session state (e.g. current user ID, permissions) reside?
 
 **Expected output:**
-```text
-Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-```
-
 > [!check]- Answer
+> ```text
+> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
+> ```
 > ```text
 > Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
 > ```
@@ -269,12 +264,11 @@ Entirely on the Client (encapsulated inside JWT access tokens or request credent
 **Problem:** State the primary requirement of REST Statelessness and its core architectural benefit.
 
 **Expected output:**
-```text
-Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
-Benefit: Horizontal scalability (any server instance can handle any incoming request).
-```
-
 > [!check]- Answer
+> ```text
+> Requirement: Every HTTP request from client to server must contain all contextual information necessary to understand and process the request.
+> Benefit: Horizontal scalability (any server instance can handle any incoming request).
+> ```
 > ```text
 > Requirement: Every HTTP request must be self-contained.
 > Benefit: Horizontal scalability and simplified server recovery.
@@ -287,11 +281,10 @@ Benefit: Horizontal scalability (any server instance can handle any incoming req
 **Problem:** In a stateless REST architecture, where should session state (e.g. current user ID, permissions) reside?
 
 **Expected output:**
-```text
-Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
-```
-
 > [!check]- Answer
+> ```text
+> Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
+> ```
 > ```text
 > Entirely on the Client (encapsulated inside JWT access tokens or request credentials).
 > ```

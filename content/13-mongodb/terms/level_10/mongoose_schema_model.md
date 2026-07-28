@@ -171,19 +171,18 @@ const schema = new Schema({ ... }, { toJSON: { virtuals: true } });
 2.  Compile the schema into a model named `Blog` (state what collection name this model will map to on MongoDB).
 
 **Expected output:**
-```javascript
-// 1. Schema definition
-const blogSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  body: { type: String }
-});
-
-// 2. Model compilation
-const Blog = mongoose.model('Blog', blogSchema);
-// The model will map to the collection "blogs" on MongoDB.
-```
-
 > [!check]- Answer
+> ```javascript
+> // 1. Schema definition
+> const blogSchema = new mongoose.Schema({
+>   title: { type: String, required: true },
+>   body: { type: String }
+> });
+> 
+> // 2. Model compilation
+> const Blog = mongoose.model('Blog', blogSchema);
+> // The model will map to the collection "blogs" on MongoDB.
+> ```
 > - Use the `new mongoose.Schema` constructor for the blueprint.
 > - Pass the model string name `"Blog"` to `mongoose.model` to trigger plural collection mapping.
 
@@ -196,11 +195,10 @@ const Blog = mongoose.model('Blog', blogSchema);
 **Problem:** Define virtual property `fullName` concatenating `first` and `last` name fields.
 
 **Expected output:**
-```text
-userSchema.virtual('fullName').get(function() { return `${this.first} ${this.last}`; });
-```
-
 > [!check]- Answer
+> ```text
+> userSchema.virtual('fullName').get(function() { return `${this.first} ${this.last}`; });
+> ```
 > ```javascript
 > userSchema.virtual('fullName').get(function() {
 >   return `${this.first} ${this.last}`;
@@ -209,16 +207,17 @@ userSchema.virtual('fullName').get(function() { return `${this.first} ${this.las
 >
 > **Explanation:** Virtual properties compute dynamic fields without persisting data to database storage.
 
+---
+
 ### Exercise 3: Schema Instance Methods vs Static Methods
 
 **Problem:** Compare: `methods` (functions attached to document instances); `statics` (functions attached to Model class).
 
 **Expected output:**
-```text
-methods: document instance functions; statics: Model class query helper functions
-```
-
 > [!check]- Answer
+> ```text
+> methods: document instance functions; statics: Model class query helper functions
+> ```
 > ```text
 > methods: document instance functions; statics: Model class query helper functions
 > ```

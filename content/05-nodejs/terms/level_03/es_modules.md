@@ -104,14 +104,13 @@ const { dynamicFn } = cjsPkg;
 **Problem:** By default, if you try to use `import` in a `.js` file, Node.js will crash and tell you "Cannot use import statement outside a module". How do you tell Node.js to use the new ES Modules system instead of the legacy CommonJS system?
 
 **Expected output:**
-```text
-You must open your `package.json` file and add the following line:
-"type": "module"
-
-This single line tells Node.js: "Stop using legacy CommonJS. Treat all my .js files as modern ES Modules."
-```
-
 > [!check]- Answer
+> ```text
+> You must open your `package.json` file and add the following line:
+> "type": "module"
+> 
+> This single line tells Node.js: "Stop using legacy CommonJS. Treat all my .js files as modern ES Modules."
+> ```
 > - Which central configuration file controls the settings for your entire Node project?
 
 ---
@@ -123,11 +122,10 @@ This single line tells Node.js: "Stop using legacy CommonJS. Treat all my .js fi
 **Problem:** What key-value pair in `package.json` enables native ES Module mode (`.js` treated as ESM) across a project?
 
 **Expected output:**
-```text
-type: module
-```
-
 > [!check]- Answer
+> ```text
+> type: module
+> ```
 > ```json
 > {
 >   "type": "module"
@@ -136,16 +134,17 @@ type: module
 >
 > **Explanation:** `"type": "module"` configures Node.js to interpret `.js` files as ES Modules.
 
+---
+
 ### Exercise 3: Top-Level Await in ES Modules
 
 **Problem:** Can `await` be used at the top-level of an ES Module outside an `async` function in Node.js? (Yes/No).
 
 **Expected output:**
-```text
-Yes (Top-Level Await is natively supported in ES Modules).
-```
-
 > [!check]- Answer
+> ```text
+> Yes (Top-Level Await is natively supported in ES Modules).
+> ```
 > ```javascript
 > const res = await fetch('https://api.example.com/data');
 > const data = await res.json();

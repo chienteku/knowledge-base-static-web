@@ -155,11 +155,10 @@ async function processData() {
 **Problem:** You have a function call `launchMissiles();` that you want to temporarily prevent from running while you test something else. How do you do it?
 
 **Expected output:**
-```text
-The function should not run.
-```
-
 > [!check]- Answer
+> ```text
+> The function should not run.
+> ```
 > - Just place `//` at the very beginning of the line. This is called "commenting out" code.
 
 ---
@@ -169,11 +168,10 @@ The function should not run.
 **Problem:** Write a JSDoc comment for a function `add(a, b)` describing parameter types `@param {number}` and return type `@returns {number}`.
 
 **Expected output:**
-```text
-3
-```
-
 > [!check]- Answer
+> ```text
+> 3
+> ```
 > ```javascript
 > /**
 >  * Adds two numbers together.
@@ -189,23 +187,23 @@ The function should not run.
 >
 > **Explanation:** JSDoc comments start with `/**` and provide structured metadata for documentation generators and IDE type checkers.
 
+---
+
 ### Exercise 3: Multi-Line Comment Edge Cases
 
 **Problem:** Demonstrate commenting out code containing string literals with `*/` safely using single-line `//` comments.
 
 **Expected output:**
-```text
-Commented safely
-```
-
 > [!check]- Answer
+> ```text
+> Commented safely
+> ```
 > // const regex = /*/; 
 > console.log("Commented safely");
 > ```
 >
 > **Explanation:** Using single line `//` avoids accidental termination by embedded `*/` text in regex or strings.
 
----
 
 ---
 

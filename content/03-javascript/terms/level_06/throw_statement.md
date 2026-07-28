@@ -197,11 +197,10 @@ try {
 ```
 
 **Expected output:**
-```text
-Error caught: RangeError - Password is too short!
-```
-
 > [!check]- Answer
+> ```text
+> Error caught: RangeError - Password is too short!
+> ```
 > - The condition is `if (pass.length < 8)`.
 > - Raise the error using `throw new RangeError("Password is too short!");`.
 
@@ -212,11 +211,10 @@ Error caught: RangeError - Password is too short!
 **Problem:** Throw `TypeError("Age must be a number")` if `typeof age !== 'number'`.
 
 **Expected output:**
-```text
-TypeError: Age must be a number
-```
-
 > [!check]- Answer
+> ```text
+> TypeError: Age must be a number
+> ```
 > ```javascript
 > function setAge(age) {
 >   if (typeof age !== "number") throw new TypeError("Age must be a number");
@@ -230,16 +228,17 @@ TypeError: Age must be a number
 >
 > **Explanation:** `throw` interrupts execution flow and passes control to the nearest `catch` block.
 
+---
+
 ### Exercise 3: Re-Throwing Caught Exceptions
 
 **Problem:** Catch an error, log it, and `throw err` again to parent callers.
 
 **Expected output:**
-```text
-Logged and re-thrown error
-```
-
 > [!check]- Answer
+> ```text
+> Logged and re-thrown error
+> ```
 > ```javascript
 > try {
 >   try {
@@ -253,7 +252,6 @@ Logged and re-thrown error
 >
 > **Explanation:** Re-throwing caught errors allows logging at local boundaries while delegating failure handling to callers.
 
----
 
 ---
 

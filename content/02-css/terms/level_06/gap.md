@@ -196,11 +196,10 @@ Option B: You give the Flex Container `gap: 30px;`.
 Why is Option B better?
 
 **Expected output:**
-```text
-Option B (`gap`) is better because it is scalable and maintainable. If you later add a third image to the container, `gap` will automatically put 30px between Image 2 and Image 3. If you used `margin`, you would have to go back and manually update the CSS for Image 2!
-```
-
 > [!check]- Answer
+> ```text
+> Option B (`gap`) is better because it is scalable and maintainable. If you later add a third image to the container, `gap` will automatically put 30px between Image 2 and Image 3. If you used `margin`, you would have to go back and manually update the CSS for Image 2!
+> ```
 > - What happens if the layout changes in the future?
 
 ---
@@ -212,11 +211,10 @@ Option B (`gap`) is better because it is scalable and maintainable. If you later
 **Problem:** Write CSS `gap` shorthand applying 10px vertical row gap and 20px horizontal column gap.
 
 **Expected output:**
-```text
-gap: 10px 20px;
-```
-
 > [!check]- Answer
+> ```text
+> gap: 10px 20px;
+> ```
 > ```css
 > .grid {
 >   gap: 10px 20px;
@@ -225,16 +223,17 @@ gap: 10px 20px;
 >
 > **Explanation:** 2-value `gap` shorthand sets `row-gap` (10px) and `column-gap` (20px).
 
+---
+
 ### Exercise 3: Flexbox Gap Support
 
 **Problem:** Does the CSS `gap` property work inside Flexbox (`display: flex`) containers in modern browsers? (Yes/No).
 
 **Expected output:**
-```text
-Yes. Modern browsers natively support gap in Flexbox containers.
-```
-
 > [!check]- Answer
+> ```text
+> Yes. Modern browsers natively support gap in Flexbox containers.
+> ```
 > ```text
 > Yes. Modern browsers natively support gap in Flexbox containers.
 > ```

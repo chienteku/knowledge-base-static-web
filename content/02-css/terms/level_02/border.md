@@ -125,12 +125,11 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 **Problem:** You have a `<div>` with `width: 100px;`. You add `border: 10px solid black;`. What is the total visible width of the element on the screen? (Assuming default Box Sizing).
 
 **Expected output:**
-```text
-120px! The border is a physical wall added to *both* sides (left and right). 
-100px (Content) + 10px (Left Border) + 10px (Right Border) = 120px.
-```
-
 > [!check]- Answer
+> ```text
+> 120px! The border is a physical wall added to *both* sides (left and right). 
+> 100px (Content) + 10px (Left Border) + 10px (Right Border) = 120px.
+> ```
 > - Remember, a box has two sides (left and right).
 
 ---
@@ -142,11 +141,10 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 **Problem:** Write CSS applying 3px solid red border ONLY to bottom edge of `.heading`.
 
 **Expected output:**
-```text
-.heading { border-bottom: 3px solid red; }
-```
-
 > [!check]- Answer
+> ```text
+> .heading { border-bottom: 3px solid red; }
+> ```
 > ```css
 > .heading {
 >   border-bottom: 3px solid red;
@@ -155,16 +153,17 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 >
 > **Explanation:** Longhand side properties (`border-bottom`, `border-top`) target individual edges.
 
+---
+
 ### Exercise 3: Transparent Border Placeholder Technique
 
 **Problem:** Why set `border: 2px solid transparent` on an unfocused button before adding a colored border on focus?
 
 **Expected output:**
-```text
-To pre-allocate border space in the box-model so adding a colored border on focus causes ZERO layout shift.
-```
-
 > [!check]- Answer
+> ```text
+> To pre-allocate border space in the box-model so adding a colored border on focus causes ZERO layout shift.
+> ```
 > ```css
 > button {
 >   border: 2px solid transparent; /* Pre-allocate border layout space */

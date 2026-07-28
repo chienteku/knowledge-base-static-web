@@ -208,22 +208,21 @@ app.use((req, res, next) => {
 **Problem:** Write an Express middleware function called `requireAdmin` that checks if `req.query.role` is exactly equal to `"admin"`. If it is, allow the request to continue. If it is not, return a 403 Forbidden status.
 
 **Expected output:**
-```javascript
-const requireAdmin = (req, res, next) => {
-  if (req.query.role === 'admin') {
-    next(); // Pass the baton!
-  } else {
-    res.status(403).send("Forbidden: Admins only."); // Block them!
-  }
-};
-
-// Usage:
-app.get('/dashboard', requireAdmin, (req, res) => {
-  res.send("Welcome to the secret admin dashboard!");
-});
-```
-
 > [!check]- Answer
+> ```javascript
+> const requireAdmin = (req, res, next) => {
+>   if (req.query.role === 'admin') {
+>     next(); // Pass the baton!
+>   } else {
+>     res.status(403).send("Forbidden: Admins only."); // Block them!
+>   }
+> };
+> 
+> // Usage:
+> app.get('/dashboard', requireAdmin, (req, res) => {
+>   res.send("Welcome to the secret admin dashboard!");
+> });
+> ```
 > - Remember the three arguments: `req, res, next`.
 > - Use `if/else` to decide between `next()` and `res.status().send()`.
 
@@ -236,11 +235,10 @@ app.get('/dashboard', requireAdmin, (req, res) => {
 **Problem:** Write an Express middleware that logs `req.method` and `req.url` before calling `next()`.
 
 **Expected output:**
-```text
-app.use((req, res, next) => { console.log(req.method, req.url); next(); });
-```
-
 > [!check]- Answer
+> ```text
+> app.use((req, res, next) => { console.log(req.method, req.url); next(); });
+> ```
 > ```javascript
 > app.use((req, res, next) => {
 >   console.log(`${req.method} ${req.url}`);
@@ -250,16 +248,17 @@ app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 >
 > **Explanation:** Express middleware functions receive `(req, res, next)` signature.
 
+---
+
 ### Exercise 3: Express Middleware Parameter Count Distinction
 
 **Problem:** How does Express distinguish standard middleware from error-handling middleware? (By parameter count: standard has 3 `(req, res, next)`; error-handling has 4 `(err, req, res, next)`).
 
 **Expected output:**
-```text
-By parameter count: error middleware has 4 arguments (err, req, res, next).
-```
-
 > [!check]- Answer
+> ```text
+> By parameter count: error middleware has 4 arguments (err, req, res, next).
+> ```
 > ```text
 > By parameter count: error middleware has 4 arguments (err, req, res, next).
 > ```

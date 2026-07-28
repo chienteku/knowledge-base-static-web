@@ -180,13 +180,12 @@ Write the SurrealQL commands to:
 3.  Define a field named `authors` that stores an array of record links pointing to the `author` table.
 
 **Expected output:**
-```sql
-DEFINE TABLE book SCHEMAFULL;
-DEFINE FIELD publisher ON book TYPE record<publisher>;
-DEFINE FIELD authors ON book TYPE array<record<author>>;
-```
-
 > [!check]- Answer
+> ```sql
+> DEFINE TABLE book SCHEMAFULL;
+> DEFINE FIELD publisher ON book TYPE record<publisher>;
+> DEFINE FIELD authors ON book TYPE array<record<author>>;
+> ```
 > - Single pointers use `record<table>` type definitions.
 > - Multiple pointers use `array<record<table>>` type definitions.
 
@@ -199,27 +198,27 @@ DEFINE FIELD authors ON book TYPE array<record<author>>;
 **Problem:** Select post title and author's email using Record Link dot-notation (`author.email`).
 
 **Expected output:**
-```text
-SELECT title, author.email AS author_email FROM post;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT title, author.email AS author_email FROM post;
+> ```
 > ```surrealql
 > SELECT title, author.email AS author_email FROM post;
 > ```
 >
 > **Explanation:** Record Links enable direct dot-notation dereferencing of linked foreign records.
 
+---
+
 ### Exercise 3: Record Link Type Constraint
 
 **Problem:** Define field `category` on `product` table restricted to `category` table record links.
 
 **Expected output:**
-```text
-DEFINE FIELD category ON TABLE product TYPE record<category>;
-```
-
 > [!check]- Answer
+> ```text
+> DEFINE FIELD category ON TABLE product TYPE record<category>;
+> ```
 > ```surrealql
 > DEFINE FIELD category ON TABLE product TYPE record<category>;
 > ```

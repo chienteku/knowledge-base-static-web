@@ -192,12 +192,11 @@ coordinates: [-74.0060, 40.7128] // Correct [longitude, latitude]
 2.  A 2D multiplayer video game tracking player coordinates `[x, y]` on a flat virtual board of size $1000 \times 1000$.
 
 **Expected output:**
-```text
-1. 2dsphere: Because food delivery coordinates reside on the curved spherical surface of the Earth, requiring GeoJSON calculations.
-2. 2d: Because the video game maps coordinates onto a flat 2D coordinate grid, requiring Cartesian geometry calculations.
-```
-
 > [!check]- Answer
+> ```text
+> 1. 2dsphere: Because food delivery coordinates reside on the curved spherical surface of the Earth, requiring GeoJSON calculations.
+> 2. 2d: Because the video game maps coordinates onto a flat 2D coordinate grid, requiring Cartesian geometry calculations.
+> ```
 > - Determine if the coordinates exist on a spherical earth or a flat grid coordinate system.
 > - Spherical geometry rules are mandatory for GeoJSON datums.
 
@@ -210,27 +209,27 @@ coordinates: [-74.0060, 40.7128] // Correct [longitude, latitude]
 **Problem:** Create `2dsphere` index on `loc` field of `stores` collection.
 
 **Expected output:**
-```text
-db.stores.createIndex({ loc: "2dsphere" });
-```
-
 > [!check]- Answer
+> ```text
+> db.stores.createIndex({ loc: "2dsphere" });
+> ```
 > ```javascript
 > db.stores.createIndex({ loc: "2dsphere" });
 > ```
 >
 > **Explanation:** `2dsphere` indexes support GeoJSON spatial queries (`$near`, `$geoWithin`).
 
+---
+
 ### Exercise 3: Geospatial Index Type Comparison
 
 **Problem:** State difference between `2d` and `2dsphere` indexes (2d: flat 2D plane; 2dsphere: spherical Earth geometry).
 
 **Expected output:**
-```text
-2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
-```
-
 > [!check]- Answer
+> ```text
+> 2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
+> ```
 > ```text
 > 2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
 > ```

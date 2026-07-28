@@ -144,15 +144,14 @@ Drop duplicate indexes using DROP INDEX
 4.  `WHERE price != 100.00`
 
 **Expected output:**
-```text
-Queries 1, 2, and 3 will leverage the index!
-1. Equality checks are the primary use-case for B-trees.
-2. Range queries (BETWEEN) leverage the sorted node sequence.
-3. PostgreSQL B-trees index NULL values, so IS NULL queries can use them.
-4. Query 4 (inequality !=) usually does NOT use the index, because searching for "everything except 100" forces the database to read almost the entire table, making index scans slower than simple sequential table scans.
-```
-
 > [!check]- Answer
+> ```text
+> Queries 1, 2, and 3 will leverage the index!
+> 1. Equality checks are the primary use-case for B-trees.
+> 2. Range queries (BETWEEN) leverage the sorted node sequence.
+> 3. PostgreSQL B-trees index NULL values, so IS NULL queries can use them.
+> 4. Query 4 (inequality !=) usually does NOT use the index, because searching for "everything except 100" forces the database to read almost the entire table, making index scans slower than simple sequential table scans.
+> ```
 > - B-trees are optimized for sorting and ranges.
 > - Consider how much of the table is returned by the inequality filter.
 
@@ -165,27 +164,27 @@ Queries 1, 2, and 3 will leverage the index!
 **Problem:** Create B-Tree index on `email` column of `users` table.
 
 **Expected output:**
-```text
-CREATE INDEX idx_users_email ON users (email);
-```
-
 > [!check]- Answer
+> ```text
+> CREATE INDEX idx_users_email ON users (email);
+> ```
 > ```sql
 > CREATE INDEX idx_users_email ON users (email);
 > ```
 >
 > **Explanation:** `CREATE INDEX` builds a standard B-Tree index by default in PostgreSQL.
 
+---
+
 ### Exercise 3: B-Tree Supported Comparison Operators
 
 **Problem:** List comparison operators supported by B-Tree indexes (`<`, `<=`, `=`, `>=`, `>`, `BETWEEN`, `IN`).
 
 **Expected output:**
-```text
-<, <=, =, >=, >, BETWEEN, IN
-```
-
 > [!check]- Answer
+> ```text
+> <, <=, =, >=, >, BETWEEN, IN
+> ```
 > ```text
 > <, <=, =, >=, >, BETWEEN, IN
 > ```

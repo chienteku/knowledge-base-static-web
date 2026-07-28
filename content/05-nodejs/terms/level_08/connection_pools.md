@@ -128,12 +128,11 @@ try {
 **Problem:** You have a massive server handling 50,000 requests per second. You think to yourself, "I should increase my Connection Pool size from 20 to 10,000 so everyone gets a connection!" Why is this a terrible idea?
 
 **Expected output:**
-```text
-Every open connection consumes RAM and CPU on the actual Database Server! If you open 10,000 connections, the Database Server will run out of RAM and crash. 
-A small pool (like 20 to 50) is actually faster, because connections are returned to the pool so quickly (in 2ms) that a small number of taxis can easily handle thousands of riders.
-```
-
 > [!check]- Answer
+> ```text
+> Every open connection consumes RAM and CPU on the actual Database Server! If you open 10,000 connections, the Database Server will run out of RAM and crash. 
+> A small pool (like 20 to 50) is actually faster, because connections are returned to the pool so quickly (in 2ms) that a small number of taxis can easily handle thousands of riders.
+> ```
 > - Who has to manage and maintain those open connections? The DB!
 
 ---
@@ -145,11 +144,10 @@ A small pool (like 20 to 50) is actually faster, because connections are returne
 **Problem:** Set max database connection pool limit to 20 connections using `pg` Pool options.
 
 **Expected output:**
-```text
-const pool = new Pool({ max: 20 });
-```
-
 > [!check]- Answer
+> ```text
+> const pool = new Pool({ max: 20 });
+> ```
 > ```javascript
 > const { Pool } = require('pg');
 > const pool = new Pool({ max: 20 });
@@ -157,16 +155,17 @@ const pool = new Pool({ max: 20 });
 >
 > **Explanation:** `max` option restricts maximum concurrent socket connections opened by the pool.
 
+---
+
 ### Exercise 3: Pool Query Shortcut
 
 **Problem:** Why is `pool.query('SELECT...')` safer for single queries than `pool.getConnection()`?
 
 **Expected output:**
-```text
-pool.query() automatically acquires and releases the connection back to the pool in a single call.
-```
-
 > [!check]- Answer
+> ```text
+> pool.query() automatically acquires and releases the connection back to the pool in a single call.
+> ```
 > ```text
 > pool.query() automatically acquires and releases the connection back to the pool in a single call.
 > ```

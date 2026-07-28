@@ -174,27 +174,27 @@ Write a `SIGNIN` clause that authenticates users by `username` instead of `email
 **Problem:** Write JS SDK call signing in to access scope `user_access` with username and password.
 
 **Expected output:**
-```text
-await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
-```
-
 > [!check]- Answer
+> ```text
+> await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
+> ```
 > ```javascript
 > await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
 > ```
 >
 > **Explanation:** `db.signin()` authenticates clients against defined RECORD access scopes.
 
+---
+
 ### Exercise 3: SDK Signup Call Syntax
 
 **Problem:** Write JS SDK call signing up a new user via access scope `user_access`.
 
 **Expected output:**
-```text
-await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
-```
-
 > [!check]- Answer
+> ```text
+> await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
+> ```
 > ```javascript
 > await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
 > ```

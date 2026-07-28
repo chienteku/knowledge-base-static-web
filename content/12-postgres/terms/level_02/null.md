@@ -161,13 +161,12 @@ CREATE UNIQUE INDEX idx_email ON users (email); -- Allows multiple NULL rows
 However, you notice that Alice (whose phone is `NULL`) is missing from the output list. Why was she excluded, and how do you write the query to include her?
 
 **Expected output:**
-```text
-Alice was excluded because `NULL <> '555-0199'` evaluates to `UNKNOWN`. SQL query WHERE clauses only return rows where the condition evaluates strictly to `TRUE`. 
-To fix this, you must explicitly include NULLs using `OR IS NULL`:
-`SELECT * FROM staff WHERE phone <> '555-0199' OR phone IS NULL;`
-```
-
 > [!check]- Answer
+> ```text
+> Alice was excluded because `NULL <> '555-0199'` evaluates to `UNKNOWN`. SQL query WHERE clauses only return rows where the condition evaluates strictly to `TRUE`. 
+> To fix this, you must explicitly include NULLs using `OR IS NULL`:
+> `SELECT * FROM staff WHERE phone <> '555-0199' OR phone IS NULL;`
+> ```
 > - Check how comparative evaluation filters rows.
 > - Ensure the query logic explicitly checks for missing phone markers.
 
@@ -180,27 +179,27 @@ To fix this, you must explicitly include NULLs using `OR IS NULL`:
 **Problem:** Query users whose `deleted_at` timestamp is NOT NULL.
 
 **Expected output:**
-```text
-SELECT * FROM users WHERE deleted_at IS NOT NULL;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT * FROM users WHERE deleted_at IS NOT NULL;
+> ```
 > ```sql
 > SELECT * FROM users WHERE deleted_at IS NOT NULL;
 > ```
 >
 > **Explanation:** `IS NOT NULL` correctly checks for non-null field presence in SQL.
 
+---
+
 ### Exercise 3: Handling NULLs with `COALESCE`
 
 **Problem:** Replace NULL `nickname` values with `'Guest'` using `COALESCE()`.
 
 **Expected output:**
-```text
-SELECT COALESCE(nickname, 'Guest') FROM users;
-```
-
 > [!check]- Answer
+> ```text
+> SELECT COALESCE(nickname, 'Guest') FROM users;
+> ```
 > ```sql
 > SELECT COALESCE(nickname, 'Guest') FROM users;
 > ```
