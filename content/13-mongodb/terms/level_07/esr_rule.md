@@ -244,40 +244,6 @@ Equality, Sort, Range
 >
 > **Explanation:** The ESR Rule defines optimal field ordering in compound B-Tree indexes.
 
-
-
-### Exercise 4: Applying ESR Rule to Complex Query
-
-**Problem:** Apply ESR rule for query `.find({ category: "tech", price: { $gte: 100 } }).sort({ rating: -1 })`.
-
-**Expected output:**
-```text
-Index: { category: 1, rating: -1, price: 1 }
-```
-
-> [!check]- Answer
-> ```javascript
-> db.products.createIndex({ category: 1, rating: -1, price: 1 });
-> ```
->
-> **Explanation:** ESR Rule orders compound index keys: 1. Equality (`category`), 2. Sort (`rating`), 3. Range (`price`).
-
-### Exercise 5: ESR Rule Acronym Breakdown
-
-**Problem:** State what ESR stands for in MongoDB index design (Equality, Sort, Range).
-
-**Expected output:**
-```text
-Equality, Sort, Range
-```
-
-> [!check]- Answer
-> ```text
-> Equality, Sort, Range
-> ```
->
-> **Explanation:** The ESR Rule defines optimal field ordering in compound B-Tree indexes.
-
 ## 7. Related Terms
 - [Compound Index](compound_index.md) — The parent index type.
 - [Index Selectivity & Cardinality](index_selectivity.md) — Index optimization rules.

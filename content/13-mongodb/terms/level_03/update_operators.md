@@ -238,48 +238,6 @@ db.games.updateOne({ _id: 1 }, { $max: { highScore: 500 } });
 >
 > **Explanation:** `$max` updates fields ONLY if the new value is greater than existing field values.
 
-
-
-### Exercise 4: Updating Timestamps with `$currentDate`
-
-**Problem:** Update `updatedAt` to current date timestamp on `user:1` using `$currentDate`.
-
-**Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $currentDate: { updatedAt: true } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $currentDate: { updatedAt: true }
-> });
-> ```
->
-> **Explanation:** `$currentDate` sets target field values to current server dates or timestamps.
-
-### Exercise 5: Setting Min/Max Field Boundaries with `$min` and `$max`
-
-**Problem:** Update `highScore` on `game:1` to 500 ONLY if 500 is greater than current score using `$max`.
-
-**Expected output:**
-```text
-db.games.updateOne({ _id: 1 }, { $max: { highScore: 500 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.games.updateOne({
->   _id: 1
-> }, {
->   $max: { highScore: 500 }
-> });
-> ```
->
-> **Explanation:** `$max` updates fields ONLY if the new value is greater than existing field values.
-
 ## 7. Related Terms
 - [updateOne() / updateMany()](update.md) — The parent update methods.
 - `$set` vs. Whole-Document Replacement](set_vs_replace.md) — The replacement rules.

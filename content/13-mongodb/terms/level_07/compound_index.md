@@ -248,43 +248,6 @@ db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_createdAt_id
 >
 > **Explanation:** Compound indexes support queries matching leading field prefix subsets.
 
-
-
-### Exercise 4: Creating Compound Index
-
-**Problem:** Create compound index `status_createdAt_idx` on `status` ascending and `createdAt` descending.
-
-**Expected output:**
-```text
-db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_createdAt_idx" });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.orders.createIndex(
->   { status: 1, createdAt: -1 },
->   { name: "status_createdAt_idx" }
-> );
-> ```
->
-> **Explanation:** Compound indexes support queries filtering and sorting on multiple fields.
-
-### Exercise 5: Compound Index Prefix Matching
-
-**Problem:** Given index `{ a: 1, b: 1, c: 1 }`, list 3 supported query field combinations (`{ a }`, `{ a, b }`, `{ a, b, c }`).
-
-**Expected output:**
-```text
-{ a }, { a, b }, { a, b, c }
-```
-
-> [!check]- Answer
-> ```text
-> { a }, { a, b }, { a, b, c }
-> ```
->
-> **Explanation:** Compound indexes support queries matching leading field prefix subsets.
-
 ## 7. Related Terms
 - [Single-Field Index](single_field_index.md) — The parent index type.
 - [The ESR Rule (Equality, Sort, Range)](esr_rule.md) — Ordering compound keys.

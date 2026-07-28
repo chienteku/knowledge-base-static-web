@@ -226,42 +226,6 @@ DEFINE EVENT status_change ON TABLE user WHEN $event = "UPDATE" AND $before.stat
 >
 > **Explanation:** Comparing `$before.field != $after.field` detects specific field mutations.
 
-
-
-### Exercise 4: Event Variables Reference Table
-
-**Problem:** State values: 1. `$event` (CREATE/UPDATE/DELETE), 2. `$before` (pre-mutation state), 3. `$after` (post-mutation state).
-
-**Expected output:**
-```text
-$event: mutation type, $before: pre-mutation record, $after: post-mutation record
-```
-
-> [!check]- Answer
-> ```text
-> $event: mutation type, $before: pre-mutation record, $after: post-mutation record
-> ```
->
-> **Explanation:** Event context variables provide mutation details and pre/post record snapshots.
-
-### Exercise 5: Detecting Field Changes in Update Event
-
-**Problem:** Trigger audit event ONLY when `$before.status != $after.status` during UPDATE events.
-
-**Expected output:**
-```text
-DEFINE EVENT status_change ON TABLE user WHEN $event = "UPDATE" AND $before.status != $after.status THEN (...);
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE EVENT status_change ON TABLE user WHEN $event = "UPDATE" AND $before.status != $after.status THEN (
->   CREATE audit CONTENT { user: $after.id, old: $before.status, new: $after.status }
-> );
-> ```
->
-> **Explanation:** Comparing `$before.field != $after.field` detects specific field mutations.
-
 ## 7. Related Terms
 - [`DEFINE EVENT`](define_event.md) — Server-side triggers.
 - [`ASSERT` Clause](../level_04/assert_clause.md) — Field constraint assertions.

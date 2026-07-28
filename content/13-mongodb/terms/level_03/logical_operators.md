@@ -252,44 +252,6 @@ db.users.find({ $nor: [{ status: "inactive" }, { status: "banned" }] });
 >
 > **Explanation:** `$nor: [ ... ]` matches documents failing all specified clause conditions.
 
-
-
-### Exercise 4: Multi-Branch Disjunction Query with `$or`
-
-**Problem:** Query users where `role` is `"admin"` OR `permissions` contains `"all"`.
-
-**Expected output:**
-```text
-db.users.find({ $or: [{ role: "admin" }, { permissions: "all" }] });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({
->   $or: [{ role: "admin" }, { permissions: "all" }]
-> });
-> ```
->
-> **Explanation:** `$or: [ { cond1 }, { cond2 } ]` matches documents satisfying any condition branch.
-
-### Exercise 5: Negation Query with `$nor`
-
-**Problem:** Query users who are neither `inactive` nor `banned` using `$nor`.
-
-**Expected output:**
-```text
-db.users.find({ $nor: [{ status: "inactive" }, { status: "banned" }] });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({
->   $nor: [{ status: "inactive" }, { status: "banned" }]
-> });
-> ```
->
-> **Explanation:** `$nor: [ ... ]` matches documents failing all specified clause conditions.
-
 ## 7. Related Terms
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
 - [Implicit `$eq` & Combining Conditions](implicit_eq_combining.md) — Shorthand logic.

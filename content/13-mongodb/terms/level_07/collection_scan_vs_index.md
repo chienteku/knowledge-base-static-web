@@ -221,40 +221,6 @@ COLLSCAN
 >
 > **Explanation:** An index scan targets only matching documents, avoiding un-necessary document reads.
 
-
-
-### Exercise 4: Identifying Execution Stage in Explain Output
-
-**Problem:** What execution stage in `explain("executionStats")` indicates an un-indexed query? (`COLLSCAN`).
-
-**Expected output:**
-```text
-COLLSCAN
-```
-
-> [!check]- Answer
-> ```text
-> COLLSCAN
-> ```
->
-> **Explanation:** `COLLSCAN` indicates that the database scanned all collection documents sequentially.
-
-### Exercise 5: Ideal `totalDocsExamined` to `nReturned` Ratio
-
-**Problem:** What is the target `totalDocsExamined` to `nReturned` ratio for fully indexed queries? (1:1 ratio or 0 for covered queries).
-
-**Expected output:**
-```text
-1:1 ratio (totalDocsExamined equals nReturned)
-```
-
-> [!check]- Answer
-> ```text
-> 1:1 ratio (totalDocsExamined equals nReturned)
-> ```
->
-> **Explanation:** An index scan targets only matching documents, avoiding un-necessary document reads.
-
 ## 7. Related Terms
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [`explain()` Method](explain.md) — The query planner analyzer.

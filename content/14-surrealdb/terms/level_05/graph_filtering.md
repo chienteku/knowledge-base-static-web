@@ -238,40 +238,6 @@ SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user
 >
 > **Explanation:** `->(node WHERE condition)` filters graph traversals by target node properties.
 
-
-
-### Exercise 4: Filtering Graph Traversals by Edge Property
-
-**Problem:** Select posts liked by `user:alice` where edge property `weight >= 8` using `->like[WHERE weight >= 8]->post`.
-
-**Expected output:**
-```text
-SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->like[WHERE weight >= 8]->post AS top_likes FROM user:alice;
-> ```
->
-> **Explanation:** `->edge[WHERE condition]->node` filters graph traversals by edge properties.
-
-### Exercise 5: Filtering Graph Traversals by Target Node Property
-
-**Problem:** Select products purchased by `user:alice` where `price > 100` using `->purchased->(product WHERE price > 100)`.
-
-**Expected output:**
-```text
-SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->purchased->(product WHERE price > 100) AS expensive_purchases FROM user:alice;
-> ```
->
-> **Explanation:** `->(node WHERE condition)` filters graph traversals by target node properties.
-
 ## 7. Related Terms
 - [Edge Properties](edge_properties.md) — The metadata on edges.
 - [`WHERE` Clause](../level_03/where.md) — The query filter context.

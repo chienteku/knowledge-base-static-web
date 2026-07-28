@@ -243,43 +243,6 @@ Accelerates parent row deletion checks and JOIN queries
 >
 > **Explanation:** B-Tree indexes on foreign keys prevent full collection scans during parent row updates/deletes.
 
-
-
-### Exercise 4: Adding Foreign Key Constraint with Cascade
-
-**Problem:** Add foreign key `fk_orders_users` linking `orders.user_id` to `users.id` with `ON DELETE CASCADE`.
-
-**Expected output:**
-```text
-ALTER TABLE orders ADD CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-```
-
-> [!check]- Answer
-> ```sql
-> ALTER TABLE orders
-> ADD CONSTRAINT fk_orders_users
-> FOREIGN KEY (user_id) REFERENCES users(id)
-> ON DELETE CASCADE;
-> ```
->
-> **Explanation:** `ON DELETE CASCADE` automatically deletes child rows when parent rows are deleted.
-
-### Exercise 5: Foreign Key Indexing Best Practice
-
-**Problem:** Why should foreign key columns in child tables be indexed? (Accelerates parent row deletion checks and JOIN queries).
-
-**Expected output:**
-```text
-Accelerates parent row deletion checks and JOIN queries
-```
-
-> [!check]- Answer
-> ```text
-> Accelerates parent row deletion checks and JOIN queries
-> ```
->
-> **Explanation:** B-Tree indexes on foreign keys prevent full collection scans during parent row updates/deletes.
-
 ## 7. Related Terms
 - [Referential Integrity](referential_integrity.md) — The core database safety standard.
 - [`ON DELETE` / `ON UPDATE` Actions](on_delete_update.md) — Custom parent delete behaviors.

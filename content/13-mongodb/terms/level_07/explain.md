@@ -238,40 +238,6 @@ totalDocsExamined / nReturned
 >
 > **Explanation:** Ideal index scan ratio is 1 (or 0 for covered queries).
 
-
-
-### Exercise 4: Inspecting Query Execution Stats
-
-**Problem:** Run explain query in `executionStats` mode for `db.users.find({ status: "active" })`.
-
-**Expected output:**
-```text
-db.users.find({ status: "active" }).explain("executionStats");
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({ status: "active" }).explain("executionStats");
-> ```
->
-> **Explanation:** `explain("executionStats")` returns detailed execution metrics (`executionTimeMillis`, `totalKeysExamined`, `totalDocsExamined`).
-
-### Exercise 5: Evaluating Index Efficiency Ratio
-
-**Problem:** How to calculate query scan ratio from explain stats? (`totalDocsExamined / nReturned`).
-
-**Expected output:**
-```text
-totalDocsExamined / nReturned
-```
-
-> [!check]- Answer
-> ```text
-> totalDocsExamined / nReturned
-> ```
->
-> **Explanation:** Ideal index scan ratio is 1 (or 0 for covered queries).
-
 ## 7. Related Terms
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The scan types.
 - [Covered Query](covered_query.md) — The optimal index scan.

@@ -200,40 +200,6 @@ SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass
 >
 > **Explanation:** `crypto::argon2::compare(hash, password)` verifies plain passwords against stored Argon2 hashes.
 
-
-
-### Exercise 4: Argon2 Password Hashing in SIGNUP
-
-**Problem:** Write `SIGNUP` scope query storing user email and Argon2 hashed password.
-
-**Expected output:**
-```text
-SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
-```
-
-> [!check]- Answer
-> ```surrealql
-> SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
-> ```
->
-> **Explanation:** `crypto::argon2::generate($pass)` generates salted Argon2 password hashes.
-
-### Exercise 5: Argon2 Password Verification in SIGNIN
-
-**Problem:** Write `SIGNIN` scope query verifying user email and password using `crypto::argon2::compare()`.
-
-**Expected output:**
-```text
-SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
-```
-
-> [!check]- Answer
-> ```surrealql
-> SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass))
-> ```
->
-> **Explanation:** `crypto::argon2::compare(hash, password)` verifies plain passwords against stored Argon2 hashes.
-
 ## 7. Related Terms
 - [`$auth` Variable](auth_variable.md) — The parent authenticated user variable.
 - [PERMISSIONS Clause](permissions_clause.md) — Table and field level permission rules.

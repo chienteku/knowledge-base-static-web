@@ -240,43 +240,6 @@ cursor.batchSize(100)
 >
 > **Explanation:** `batchSize(N)` controls how many documents are fetched per network RPC roundtrip.
 
-
-
-### Exercise 4: Async Iterator Cursor Consumption
-
-**Problem:** Stream cursor documents using Node.js `for await (const doc of cursor)` loop.
-
-**Expected output:**
-```text
-for await (const doc of cursor) { console.log(doc); }
-```
-
-> [!check]- Answer
-> ```javascript
-> const cursor = db.collection("users").find();
-> for await (const doc of cursor) {
->   console.log(doc.name);
-> }
-> ```
->
-> **Explanation:** Async iterators stream cursor documents memory-efficiently without loading whole arrays.
-
-### Exercise 5: Setting Cursor Batch Size
-
-**Problem:** Configure cursor batch size to 100 documents using `cursor.batchSize(100)`.
-
-**Expected output:**
-```text
-cursor.batchSize(100)
-```
-
-> [!check]- Answer
-> ```javascript
-> const cursor = db.collection("logs").find().batchSize(100);
-> ```
->
-> **Explanation:** `batchSize(N)` controls how many documents are fetched per network RPC roundtrip.
-
 ## 7. Related Terms
 - [`find()` / `findOne()`](find.md) — The query methods.
 - [`sort()` / `limit()` / `skip()`](sort_limit_skip.md) — Cursor pagination methods.

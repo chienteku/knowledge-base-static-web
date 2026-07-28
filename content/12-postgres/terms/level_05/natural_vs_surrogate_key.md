@@ -237,40 +237,6 @@ Use surrogate id primary key alongside UNIQUE constraint on natural email
 >
 > **Explanation:** Combining surrogate primary keys with natural unique constraints balances integrity and flexibility.
 
-
-
-### Exercise 4: Natural vs Surrogate Key Comparison
-
-**Problem:** Compare: Natural Key (Data field with real-world business meaning like SSN/ISBN); Surrogate Key (System-generated synthetic key like IDENTITY/UUID).
-
-**Expected output:**
-```text
-Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
-```
-
-> [!check]- Answer
-> ```text
-> Natural Key: business domain data field; Surrogate Key: synthetic system-generated ID
-> ```
->
-> **Explanation:** Surrogate keys provide immutable row identity independent of business domain mutations.
-
-### Exercise 5: Best Practice Schema Pattern
-
-**Problem:** State best practice pattern for user table primary keys (Use surrogate `id` primary key + unique constraint on natural `email`).
-
-**Expected output:**
-```text
-Use surrogate id primary key alongside UNIQUE constraint on natural email
-```
-
-> [!check]- Answer
-> ```text
-> Use surrogate id primary key alongside UNIQUE constraint on natural email
-> ```
->
-> **Explanation:** Combining surrogate primary keys with natural unique constraints balances integrity and flexibility.
-
 ## 7. Related Terms
 - [Primary Key](../level_02/primary_key.md) — The parent unique identifier.
 - [`FOREIGN KEY`](foreign_key.md) — The constraint referencing the keys.

@@ -235,49 +235,6 @@ try { await db.select('secret'); } catch (err) { console.error('Access Denied:',
 >
 > **Explanation:** Unauthorized query executions throw access permission error exceptions.
 
-
-
-### Exercise 4: Safely Parsing `db.query` Response Batches
-
-**Problem:** Write JS helper checking `res.status === 'OK'` on `db.query()` response arrays.
-
-**Expected output:**
-```text
-const [res] = await db.query(sql); if (res.status === 'OK') return res.result;
-```
-
-> [!check]- Answer
-> ```javascript
-> const [res] = await db.query(sql);
-> if (res.status === 'OK') {
->   return res.result;
-> } else {
->   throw new Error(res.result);
-> }
-> ```
->
-> **Explanation:** `db.query()` returns arrays of response objects containing `status` and `result` fields.
-
-### Exercise 5: Handling Permission Denied Exceptions
-
-**Problem:** Catch `PERMISSIONS` denied exception when running unauthorized SDK queries.
-
-**Expected output:**
-```text
-try { await db.select('secret'); } catch (err) { console.error('Access Denied:', err); }
-```
-
-> [!check]- Answer
-> ```javascript
-> try {
->   await db.select('secret');
-> } catch (err) {
->   console.error('Access Denied:', err);
-> }
-> ```
->
-> **Explanation:** Unauthorized query executions throw access permission error exceptions.
-
 ## 7. Related Terms
 - [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Snapshot isolation semantics.
 - [JavaScript / TypeScript SDK](js_sdk.md) — Client package overview.

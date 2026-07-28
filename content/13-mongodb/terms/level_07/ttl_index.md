@@ -223,40 +223,6 @@ db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
 >
 > **Explanation:** Setting `expireAfterSeconds: 0` expires documents at the exact timestamp specified in `expireAt`.
 
-
-
-### Exercise 4: Creating TTL Expiry Index
-
-**Problem:** Create TTL index expiring documents 1 hour (3600 seconds) after `createdAt` date.
-
-**Expected output:**
-```text
-db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
-> ```
->
-> **Explanation:** `expireAfterSeconds` automatically deletes documents N seconds after target BSON Dates.
-
-### Exercise 5: Dynamic Expiry Date Pattern with `expireAfterSeconds: 0`
-
-**Problem:** Configure TTL index to expire documents at exact date stored in `expireAt` field.
-
-**Expected output:**
-```text
-db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.tasks.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
-> ```
->
-> **Explanation:** Setting `expireAfterSeconds: 0` expires documents at the exact timestamp specified in `expireAt`.
-
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Data Lifecycle & TTL Strategies](../../level_05/data_lifecycle.md) — The parent modeling rules.

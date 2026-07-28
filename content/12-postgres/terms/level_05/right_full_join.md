@@ -240,42 +240,6 @@ SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
 >
 > **Explanation:** Swapping table positions converts `RIGHT JOIN` into idiomatic `LEFT JOIN`.
 
-
-
-### Exercise 4: FULL OUTER JOIN for Data Reconciliation
-
-**Problem:** Perform `FULL OUTER JOIN` between `system_a` and `system_b` to identify unmatched records on both sides.
-
-**Expected output:**
-```text
-SELECT a.id AS a_id, b.id AS b_id FROM system_a a FULL OUTER JOIN system_b b ON a.id = b.id;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT a.id AS a_id, b.id AS b_id
-> FROM system_a a
-> FULL OUTER JOIN system_b b ON a.id = b.id;
-> ```
->
-> **Explanation:** `FULL OUTER JOIN` returns all matched and unmatched rows from both tables.
-
-### Exercise 5: Rewriting RIGHT JOIN as LEFT JOIN
-
-**Problem:** Rewrite `SELECT * FROM b RIGHT JOIN a ON b.id = a.b_id` using `LEFT JOIN`.
-
-**Expected output:**
-```text
-SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT * FROM a LEFT JOIN b ON a.b_id = b.id;
-> ```
->
-> **Explanation:** Swapping table positions converts `RIGHT JOIN` into idiomatic `LEFT JOIN`.
-
 ## 7. Related Terms
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — The left-side master default.
 - [`INNER JOIN`](inner_join.md) — The intersection-only match.

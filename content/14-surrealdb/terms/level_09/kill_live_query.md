@@ -232,40 +232,6 @@ await db.kill(queryId);
 >
 > **Explanation:** `db.kill(queryId)` closes real-time WebSocket subscription listeners.
 
-
-
-### Exercise 4: Killing Live Query in SurrealQL
-
-**Problem:** Kill live query subscription with UUID `u"12345678-1234-1234-1234-1234567890ab"`.
-
-**Expected output:**
-```text
-KILL u"12345678-1234-1234-1234-1234567890ab";
-```
-
-> [!check]- Answer
-> ```surrealql
-> KILL u"12345678-1234-1234-1234-1234567890ab";
-> ```
->
-> **Explanation:** `KILL query_uuid` terminates active real-time WebSocket live query subscriptions.
-
-### Exercise 5: SDK Live Query Cleanup
-
-**Problem:** Write JS SDK call cancelling a live query using `db.kill(queryId)`.
-
-**Expected output:**
-```text
-await db.kill(queryId);
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.kill(queryId);
-> ```
->
-> **Explanation:** `db.kill(queryId)` closes real-time WebSocket subscription listeners.
-
 ## 7. Related Terms
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Starting live subscriptions.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — Client SDK lifecycle methods.

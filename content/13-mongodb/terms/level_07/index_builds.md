@@ -219,42 +219,6 @@ db.collection.dropIndex("building_idx");
 >
 > **Explanation:** `dropIndex()` cleanly aborts active index builds on modern MongoDB clusters.
 
-
-
-### Exercise 4: Checking Active Index Build Status
-
-**Problem:** Inspect in-progress index builds using `db.currentOp()` in mongosh.
-
-**Expected output:**
-```text
-db.currentOp({ "command.createIndexes": { $exists: true } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.currentOp({
->   "command.createIndexes": { $exists: true }
-> });
-> ```
->
-> **Explanation:** `db.currentOp()` details active background index build progress.
-
-### Exercise 5: Aborting In-Progress Index Build
-
-**Problem:** Command to cleanly abort an in-progress index build `building_idx`.
-
-**Expected output:**
-```text
-db.collection.dropIndex("building_idx");
-```
-
-> [!check]- Answer
-> ```javascript
-> db.collection.dropIndex("building_idx");
-> ```
->
-> **Explanation:** `dropIndex()` cleanly aborts active index builds on modern MongoDB clusters.
-
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — Cluster architecture.

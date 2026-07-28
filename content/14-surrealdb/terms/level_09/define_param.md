@@ -208,40 +208,6 @@ REMOVE PARAM $OLD_PARAM ON DATABASE;
 >
 > **Explanation:** `REMOVE PARAM` drops global schema parameter definitions.
 
-
-
-### Exercise 4: Defining Global Database Constant
-
-**Problem:** Define global database parameter `$DEFAULT_ROLE` set to `"user"`.
-
-**Expected output:**
-```text
-DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE PARAM $DEFAULT_ROLE ON DATABASE VALUE "user";
-> ```
->
-> **Explanation:** `DEFINE PARAM $var ON DATABASE VALUE val` sets global database constants.
-
-### Exercise 5: Removing Global Schema Parameter
-
-**Problem:** Command to remove global database parameter `$OLD_PARAM` (`REMOVE PARAM $OLD_PARAM ON DATABASE;`).
-
-**Expected output:**
-```text
-REMOVE PARAM $OLD_PARAM ON DATABASE;
-```
-
-> [!check]- Answer
-> ```surrealql
-> REMOVE PARAM $OLD_PARAM ON DATABASE;
-> ```
->
-> **Explanation:** `REMOVE PARAM` drops global schema parameter definitions.
-
 ## 7. Related Terms
 - [Parameters (`$param`)](../level_06/parameters.md) — Query-level parameter syntax.
 - [`LET` Statement](../level_06/let_statement.md) — Transient session variables.

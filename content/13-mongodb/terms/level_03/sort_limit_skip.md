@@ -241,44 +241,6 @@ db.posts.find({ _id: { $lt: lastId } }).sort({ _id: -1 }).limit(10);
 >
 > **Explanation:** Range-based pagination avoids expensive `skip()` offsets by using index predicates.
 
-
-
-### Exercise 4: Sorting and Limiting Query Results
-
-**Problem:** Get top 5 youngest active users sorted by `age` ascending.
-
-**Expected output:**
-```text
-db.users.find({ active: true }).sort({ age: 1 }).limit(5);
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({ active: true })
->   .sort({ age: 1 })
->   .limit(5);
-> ```
->
-> **Explanation:** `.sort({ field: 1 })` sorts ascending; `.limit(N)` caps returned document counts.
-
-### Exercise 5: Cursor-Based Range Pagination Pattern
-
-**Problem:** Query next 10 posts created before `lastId` ObjectId using range-based pagination.
-
-**Expected output:**
-```text
-db.posts.find({ _id: { $lt: lastId } }).sort({ _id: -1 }).limit(10);
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.find({
->   _id: { $lt: lastId }
-> }).sort({ _id: -1 }).limit(10);
-> ```
->
-> **Explanation:** Range-based pagination avoids expensive `skip()` offsets by using index predicates.
-
 ## 7. Related Terms
 - [Cursor](cursor.md) — The parent pointer modified.
 - [Projection](projection.md) — The column filtering argument.

@@ -230,40 +230,6 @@ Navigates a single B-Tree without runtime key intersection overhead
 >
 > **Explanation:** Compound indexes provide pre-sorted multi-field keys in a single B-Tree.
 
-
-
-### Exercise 4: Index Intersection Stage in Explain
-
-**Problem:** Name the explain execution stage indicating index intersection (`AND_SORTED` or `AND_HASH`).
-
-**Expected output:**
-```text
-AND_SORTED or AND_HASH
-```
-
-> [!check]- Answer
-> ```text
-> AND_SORTED or AND_HASH
-> ```
->
-> **Explanation:** `AND_SORTED` stage intersects key streams from multiple single-field indexes.
-
-### Exercise 5: Compound Index vs Index Intersection
-
-**Problem:** Why is a compound index `{ a: 1, b: 1 }` faster than intersecting `{ a: 1 }` and `{ b: 1 }`? (Navigates a single B-Tree instead of intersecting key sets at runtime).
-
-**Expected output:**
-```text
-Navigates a single B-Tree without runtime key intersection overhead
-```
-
-> [!check]- Answer
-> ```text
-> Navigates a single B-Tree without runtime key intersection overhead
-> ```
->
-> **Explanation:** Compound indexes provide pre-sorted multi-field keys in a single B-Tree.
-
 ## 7. Related Terms
 - [Compound Index](compound_index.md) — The optimal multi-field index.
 - [`explain()` Method](explain.md) — The plan analyzer.

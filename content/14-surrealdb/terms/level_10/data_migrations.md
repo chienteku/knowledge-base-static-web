@@ -199,40 +199,6 @@ surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db a
 >
 > **Explanation:** `surreal export` creates text backups of database schemas and data records.
 
-
-
-### Exercise 4: Idempotent Data Migration Pattern
-
-**Problem:** Write idempotent SurrealQL script adding `status` field defaulting to `"active"`.
-
-**Expected output:**
-```text
-DEFINE FIELD IF NOT EXISTS status ON TABLE user TYPE string DEFAULT "active";
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE FIELD IF NOT EXISTS status ON TABLE user TYPE string DEFAULT "active";
-> ```
->
-> **Explanation:** `DEFINE FIELD IF NOT EXISTS` ensures migration scripts execute safely across deployments.
-
-### Exercise 5: SurrealDB Export Backup Command
-
-**Problem:** CLI command to export database schema and records to `backup.surql`.
-
-**Expected output:**
-```text
-surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app backup.surql
-```
-
-> [!check]- Answer
-> ```text
-> surreal export --endpoint http://localhost:8000 -u root -p root --ns main --db app backup.surql
-> ```
->
-> **Explanation:** `surreal export` creates text backups of database schemas and data records.
-
 ## 7. Related Terms
 - [`OVERWRITE` Keyword (Idempotent Definitions)](../level_04/overwrite_keyword.md) — Idempotent syntax details.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight migration validation.

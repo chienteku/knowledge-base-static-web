@@ -229,45 +229,6 @@ db.posts.find({ tags: { $elemMatch: { tag: "tech", score: { $gt: 5 } } } });
 >
 > **Explanation:** `$elemMatch` guarantees multiple predicate conditions match the SAME array element.
 
-
-
-### Exercise 4: Combining Range and Set Filter Predicates
-
-**Problem:** Query users with `age >= 21` whose `status` is in `["active", "pending"]`.
-
-**Expected output:**
-```text
-db.users.find({ age: { $gte: 21 }, status: { $in: ["active", "pending"] } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({
->   age: { $gte: 21 },
->   status: { $in: ["active", "pending"] }
-> });
-> ```
->
-> **Explanation:** Query filter objects combine field predicates using implicit AND logic.
-
-### Exercise 5: Filtering Array Element Criteria
-
-**Problem:** Query posts containing array element matching `{ tag: "tech", score: { $gt: 5 } }` using `$elemMatch`.
-
-**Expected output:**
-```text
-db.posts.find({ tags: { $elemMatch: { tag: "tech", score: { $gt: 5 } } } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.find({
->   tags: { $elemMatch: { tag: "tech", score: { $gt: 5 } } }
-> });
-> ```
->
-> **Explanation:** `$elemMatch` guarantees multiple predicate conditions match the SAME array element.
-
 ## 7. Related Terms
 - [Implicit `$eq` & Combining Conditions](implicit_eq_combining.md) — How fields are combined.
 - [Comparison Query Operators (`$eq`, `$ne`, `$gt`, etc.)](comparison_operators.md) — The value comparison codes.

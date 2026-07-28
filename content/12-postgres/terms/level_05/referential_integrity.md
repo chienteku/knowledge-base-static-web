@@ -250,43 +250,6 @@ Ensures relationship links between tables remain valid and child rows never refe
 >
 > **Explanation:** Referential integrity rules preserve entity relationship graph validity.
 
-
-
-### Exercise 4: Deferrable Foreign Key Constraints
-
-**Problem:** Define foreign key constraint as `DEFERRABLE INITIALLY DEFERRED` to validate integrity at commit time.
-
-**Expected output:**
-```text
-ALTER TABLE child ADD CONSTRAINT fk_parent FOREIGN KEY (p_id) REFERENCES parent(id) DEFERRABLE INITIALLY DEFERRED;
-```
-
-> [!check]- Answer
-> ```sql
-> ALTER TABLE child
-> ADD CONSTRAINT fk_parent
-> FOREIGN KEY (p_id) REFERENCES parent(id)
-> DEFERRABLE INITIALLY DEFERRED;
-> ```
->
-> **Explanation:** Deferred constraints validate referential integrity at transaction commit time instead of per-statement.
-
-### Exercise 5: Referential Integrity Definition
-
-**Problem:** Define Referential Integrity in relational databases (Ensures relationship links between tables remain valid and child rows never reference non-existent parents).
-
-**Expected output:**
-```text
-Ensures relationship links between tables remain valid and child rows never reference non-existent parents
-```
-
-> [!check]- Answer
-> ```text
-> Ensures relationship links between tables remain valid and child rows never reference non-existent parents
-> ```
->
-> **Explanation:** Referential integrity rules preserve entity relationship graph validity.
-
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The physical constraint that enforces integrity.
 - [`ON DELETE` / `ON UPDATE` Actions](on_delete_update.md) — Automating cascades to preserve integrity.

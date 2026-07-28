@@ -232,46 +232,6 @@ db.tasks.findOneAndDelete({}, { sort: { createdAt: 1 } });
 >
 > **Explanation:** `findOneAndDelete()` atomically retrieves and removes queue documents.
 
-
-
-### Exercise 4: Atomic Sequence Generator with `findOneAndUpdate`
-
-**Problem:** Increment counter `seq` on `counters` document `_id: "orderId"` returning updated document.
-
-**Expected output:**
-```text
-db.counters.findOneAndUpdate({ _id: "orderId" }, { $inc: { seq: 1 } }, { returnDocument: "after", upsert: true });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.counters.findOneAndUpdate(
->   { _id: "orderId" },
->   { $inc: { seq: 1 } },
->   { returnDocument: "after", upsert: true }
-> );
-> ```
->
-> **Explanation:** `findOneAndUpdate()` atomically modifies and returns documents without race conditions.
-
-### Exercise 5: Atomic Document Queue Consumption with `findOneAndDelete`
-
-**Problem:** Pop and return oldest task document from `tasks` queue using `findOneAndDelete()`.
-
-**Expected output:**
-```text
-db.tasks.findOneAndDelete({}, { sort: { createdAt: 1 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.tasks.findOneAndDelete({}, {
->   sort: { createdAt: 1 }
-> });
-> ```
->
-> **Explanation:** `findOneAndDelete()` atomically retrieves and removes queue documents.
-
 ## 7. Related Terms
 - [updateOne() / updateMany()](update.md) — Standard non-atomic modifications.
 - [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — Standard write outputs.

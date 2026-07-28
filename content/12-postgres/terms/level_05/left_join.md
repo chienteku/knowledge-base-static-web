@@ -252,46 +252,6 @@ SELECT u.name, COUNT(o.id) AS order_cnt FROM users u LEFT JOIN orders o ON u.id 
 >
 > **Explanation:** `COUNT(o.id)` evaluates to 0 for users with no matching order rows.
 
-
-
-### Exercise 4: Finding Orphaned Rows with LEFT JOIN and IS NULL
-
-**Problem:** Query users who have placed 0 orders using `LEFT JOIN ... WHERE o.id IS NULL`.
-
-**Expected output:**
-```text
-SELECT u.* FROM users u LEFT JOIN orders o ON u.id = o.user_id WHERE o.id IS NULL;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT u.*
-> FROM users u
-> LEFT JOIN orders o ON u.id = o.user_id
-> WHERE o.id IS NULL;
-> ```
->
-> **Explanation:** `LEFT JOIN` paired with `WHERE right_id IS NULL` identifies unmatched left rows.
-
-### Exercise 5: Preserving Unmatched Left Rows with Aggregation
-
-**Problem:** Query user names and total order counts including users with 0 orders using `LEFT JOIN` and `COUNT(o.id)`.
-
-**Expected output:**
-```text
-SELECT u.name, COUNT(o.id) AS order_cnt FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT u.name, COUNT(o.id) AS order_cnt
-> FROM users u
-> LEFT JOIN orders o ON u.id = o.user_id
-> GROUP BY u.id, u.name;
-> ```
->
-> **Explanation:** `COUNT(o.id)` evaluates to 0 for users with no matching order rows.
-
 ## 7. Related Terms
 - [`INNER JOIN`](inner_join.md) — The matching-only join.
 - [`RIGHT JOIN` / `FULL OUTER JOIN`](right_full_join.md) — Reversing sides or joining everything.

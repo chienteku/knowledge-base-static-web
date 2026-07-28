@@ -250,48 +250,6 @@ SELECT p.name, COUNT(b.id) FROM publishers p LEFT JOIN books b ON p.id = b.publi
 >
 > **Explanation:** Aggregating child records summarizes 1-to-Many relationships cleanly.
 
-
-
-### Exercise 4: 1-to-Many Schema Definition
-
-**Problem:** Create parent `publishers` and child `books` tables establishing 1-to-Many relationship.
-
-**Expected output:**
-```text
-CREATE TABLE publishers ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE books ( id SERIAL PRIMARY KEY, title TEXT, publisher_id INT REFERENCES publishers(id) );
-```
-
-> [!check]- Answer
-> ```sql
-> CREATE TABLE publishers ( id SERIAL PRIMARY KEY, name TEXT );
-> CREATE TABLE books (
->   id SERIAL PRIMARY KEY,
->   title TEXT,
->   publisher_id INT REFERENCES publishers(id)
-> );
-> ```
->
-> **Explanation:** The child table `books` stores foreign key `publisher_id` referencing the parent.
-
-### Exercise 5: Querying 1-to-Many Aggregates
-
-**Problem:** Query publishers with total published book counts using `LEFT JOIN` and `GROUP BY`.
-
-**Expected output:**
-```text
-SELECT p.name, COUNT(b.id) FROM publishers p LEFT JOIN books b ON p.id = b.publisher_id GROUP BY p.id, p.name;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT p.name, COUNT(b.id)
-> FROM publishers p
-> LEFT JOIN books b ON p.id = b.publisher_id
-> GROUP BY p.id, p.name;
-> ```
->
-> **Explanation:** Aggregating child records summarizes 1-to-Many relationships cleanly.
-
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The linking constraint.
 - [One-to-One Relationship](one_to_one.md) — Linking exactly two rows.

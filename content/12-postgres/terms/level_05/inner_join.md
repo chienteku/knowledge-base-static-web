@@ -228,43 +228,6 @@ SELECT * FROM users JOIN orders USING (user_id);
 >
 > **Explanation:** `USING (column_name)` simplifies join predicates when column names are identical in both tables.
 
-
-
-### Exercise 4: Multi-Table INNER JOIN
-
-**Problem:** Join `orders` (o), `users` (u), and `products` (p) selecting `u.name`, `p.title`, `o.created_at`.
-
-**Expected output:**
-```text
-SELECT u.name, p.title, o.created_at FROM orders o JOIN users u ON o.user_id = u.id JOIN products p ON o.product_id = p.id;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT u.name, p.title, o.created_at
-> FROM orders o
-> JOIN users u ON o.user_id = u.id
-> JOIN products p ON o.product_id = p.id;
-> ```
->
-> **Explanation:** `INNER JOIN` matches rows present in both LHS and RHS tables.
-
-### Exercise 5: USING Clause Join Shorthand
-
-**Problem:** Rewrite `JOIN orders ON users.user_id = orders.user_id` using `USING (user_id)`.
-
-**Expected output:**
-```text
-SELECT * FROM users JOIN orders USING (user_id);
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT * FROM users JOIN orders USING (user_id);
-> ```
->
-> **Explanation:** `USING (column_name)` simplifies join predicates when column names are identical in both tables.
-
 ## 7. Related Terms
 - [`JOIN` (Concept)](join_concept.md) — The parent operation.
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — Sourcing unmatched left-side elements.

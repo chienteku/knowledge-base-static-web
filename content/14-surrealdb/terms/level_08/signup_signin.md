@@ -201,40 +201,6 @@ await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com"
 >
 > **Explanation:** `db.signup()` invokes the RECORD access `SIGNUP` query block.
 
-
-
-### Exercise 4: SDK Signin Call Syntax
-
-**Problem:** Write JS SDK call signing in to access scope `user_access` with username and password.
-
-**Expected output:**
-```text
-await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.signin({ access: "user_access", ns: "main", db: "app", username: "alice", pass: "secret" });
-> ```
->
-> **Explanation:** `db.signin()` authenticates clients against defined RECORD access scopes.
-
-### Exercise 5: SDK Signup Call Syntax
-
-**Problem:** Write JS SDK call signing up a new user via access scope `user_access`.
-
-**Expected output:**
-```text
-await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.signup({ access: "user_access", ns: "main", db: "app", email: "a@b.com", pass: "secret" });
-> ```
->
-> **Explanation:** `db.signup()` invokes the RECORD access `SIGNUP` query block.
-
 ## 7. Related Terms
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Parent access setup.
 - [JWT Token-Based Auth](jwt_auth.md) — Token generated after `SIGNUP` / `SIGNIN`.

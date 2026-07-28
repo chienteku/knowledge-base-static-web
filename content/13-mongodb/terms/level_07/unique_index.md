@@ -233,46 +233,6 @@ if (err.code === 11000) console.error("Duplicate key error");
 >
 > **Explanation:** Error code 11000 flags unique index primary key constraint violations.
 
-
-
-### Exercise 4: Creating Unique Index
-
-**Problem:** Create unique index on `email` field in `users` collection.
-
-**Expected output:**
-```text
-db.users.createIndex({ email: 1 }, { unique: true });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.createIndex({ email: 1 }, { unique: true });
-> ```
->
-> **Explanation:** `unique: true` prevents duplicate key insertions across collection documents.
-
-### Exercise 5: Handling E11000 Duplicate Key Error in Node.js
-
-**Problem:** Catch MongoDB duplicate key error code in Node.js (`err.code === 11000`).
-
-**Expected output:**
-```text
-if (err.code === 11000) console.error("Duplicate key error");
-```
-
-> [!check]- Answer
-> ```javascript
-> try {
->   await db.users.insertOne({ email: "dup@ex.com" });
-> } catch (err) {
->   if (err.code === 11000) {
->     console.error("Email already exists!");
->   }
-> }
-> ```
->
-> **Explanation:** Error code 11000 flags unique index primary key constraint violations.
-
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Sparse Index](sparse_index.md) — The duplicate null fix.

@@ -258,46 +258,6 @@ SDKs manage automatic WebSocket reconnection and query state resubscription
 >
 > **Explanation:** Official SDKs include built-in automatic WebSocket reconnection handlers.
 
-
-
-### Exercise 4: SDK Connection and Cleanup
-
-**Problem:** Write async function connecting to `ws://localhost:8000/rpc` and closing connection cleanly with `db.close()`.
-
-**Expected output:**
-```text
-const db = new Surreal(); await db.connect(uri); ... await db.close();
-```
-
-> [!check]- Answer
-> ```javascript
-> const db = new Surreal();
-> try {
->   await db.connect("ws://localhost:8000/rpc");
->   // Operations ...
-> } finally {
->   await db.close();
-> }
-> ```
->
-> **Explanation:** `db.close()` closes active WebSocket connections cleanly.
-
-### Exercise 5: SDK Automatic Reconnection Configuration
-
-**Problem:** How do SurrealDB SDKs handle temporary network drops? (Automatically reconnects over WebSockets).
-
-**Expected output:**
-```text
-SDKs manage automatic WebSocket reconnection and query state resubscription
-```
-
-> [!check]- Answer
-> ```text
-> SDKs manage automatic WebSocket reconnection and query state resubscription
-> ```
->
-> **Explanation:** Official SDKs include built-in automatic WebSocket reconnection handlers.
-
 ## 7. Related Terms
 - [JavaScript / TypeScript SDK](js_sdk.md) — SurrealDB npm package overview.
 - [Connection Credentials (`USE NS ... DB ...`)](../level_01/connection_credentials.md) — Scope selection.

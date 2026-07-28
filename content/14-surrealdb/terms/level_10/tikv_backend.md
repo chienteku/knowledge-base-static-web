@@ -200,40 +200,6 @@ Provides distributed ACID key-value storage and Raft consensus replication acros
 >
 > **Explanation:** TiKV enables unlimited horizontal scale and high availability for SurrealDB clusters.
 
-
-
-### Exercise 4: Starting SurrealDB with TiKV Backend
-
-**Problem:** CLI command to start SurrealDB server connected to TiKV PD cluster at `10.0.0.1:2379`.
-
-**Expected output:**
-```text
-surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
-```
-
-> [!check]- Answer
-> ```text
-> surreal start --bind 0.0.0.0:8000 tikv://10.0.0.1:2379
-> ```
->
-> **Explanation:** `tikv://pd_address:2379` connects SurrealDB nodes to distributed TiKV storage clusters.
-
-### Exercise 5: Distributed Scaling Architecture
-
-**Problem:** Explain role of TiKV in SurrealDB multi-node deployments (Provides distributed horizontal key-value storage with Raft consensus).
-
-**Expected output:**
-```text
-Provides distributed ACID key-value storage and Raft consensus replication across nodes
-```
-
-> [!check]- Answer
-> ```text
-> Provides distributed ACID key-value storage and Raft consensus replication across nodes
-> ```
->
-> **Explanation:** TiKV enables unlimited horizontal scale and high availability for SurrealDB clusters.
-
 ## 7. Related Terms
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Storage backend overview.
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server startup flags.

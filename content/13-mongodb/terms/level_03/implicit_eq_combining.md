@@ -235,46 +235,6 @@ db.users.find({ active: true, role: { $in: ["admin", "mod"] } });
 >
 > **Explanation:** Combining implicit AND with `$in` creates concise multi-predicate filters.
 
-
-
-### Exercise 4: Clean Multi-Field Range Query
-
-**Problem:** Query products where `category = "tech"` and `price` is between 50 and 200 using implicit AND syntax.
-
-**Expected output:**
-```text
-db.products.find({ category: "tech", price: { $gte: 50, $lte: 200 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.products.find({
->   category: "tech",
->   price: { $gte: 50, $lte: 200 }
-> });
-> ```
->
-> **Explanation:** Top-level comma-separated fields implicitly evaluate using AND logic.
-
-### Exercise 5: Combining `$or` and Implicit `$and`
-
-**Problem:** Query active users (`active: true`) whose role is either `"admin"` or `"mod"`.
-
-**Expected output:**
-```text
-db.users.find({ active: true, role: { $in: ["admin", "mod"] } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({
->   active: true,
->   role: { $in: ["admin", "mod"] }
-> });
-> ```
->
-> **Explanation:** Combining implicit AND with `$in` creates concise multi-predicate filters.
-
 ## 7. Related Terms
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
 - [Logical Query Operators (`$and`, `$or`, etc.)](logical_operators.md) -- Explicit combining arrays.

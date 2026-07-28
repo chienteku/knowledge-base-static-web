@@ -211,40 +211,6 @@ SURREAL_USER=root, SURREAL_PASS=root
 >
 > **Explanation:** Container environment variables configure initial root credentials.
 
-
-
-### Exercise 4: Docker Container Run Command
-
-**Problem:** Write `docker run` command running SurrealDB with persistent volume `-v /data:/data` on port `8000`.
-
-**Expected output:**
-```text
-docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
-```
-
-> [!check]- Answer
-> ```text
-> docker run -p 8000:8000 -v /data:/data surrealdb/surrealdb:latest start --bind 0.0.0.0:8000 rocksdb:///data/my.db
-> ```
->
-> **Explanation:** `-p` forwards host ports; `-v` mounts persistent disk volumes into containers.
-
-### Exercise 5: Docker Compose Configuration
-
-**Problem:** Specify essential SurrealDB environment variables in Docker Compose (`SURREAL_USER`, `SURREAL_PASS`).
-
-**Expected output:**
-```text
-SURREAL_USER=root, SURREAL_PASS=root
-```
-
-> [!check]- Answer
-> ```text
-> SURREAL_USER=root, SURREAL_PASS=root
-> ```
->
-> **Explanation:** Container environment variables configure initial root credentials.
-
 ## 7. Related Terms
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Startup configuration flags.
 - [SurrealDB Cloud](surrealdb_cloud.md) — Managed cloud alternative.

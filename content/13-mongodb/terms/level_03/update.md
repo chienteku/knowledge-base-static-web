@@ -232,48 +232,6 @@ db.users.updateOne({ _id: 1 }, { $unset: { tempToken: "" } });
 >
 > **Explanation:** `$unset` deletes specified fields from target documents.
 
-
-
-### Exercise 4: Incrementing Field with `$inc`
-
-**Problem:** Increment `loginCount` on `user:1` by 1 using `$inc`.
-
-**Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $inc: { loginCount: 1 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $inc: { loginCount: 1 }
-> });
-> ```
->
-> **Explanation:** `$inc` atomically increments numeric field values.
-
-### Exercise 5: Unsetting Field with `$unset`
-
-**Problem:** Remove field `tempToken` from `user:1` using `$unset`.
-
-**Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $unset: { tempToken: "" } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $unset: { tempToken: "" }
-> });
-> ```
->
-> **Explanation:** `$unset` deletes specified fields from target documents.
-
 ## 7. Related Terms
 - [Update Operators (`$set`, `$unset`, `$inc`, etc.)](update_operators.md) — The modification commands.
 - `$set` vs. Whole-Document Replacement](set_vs_replace.md) — The replacement gotcha.

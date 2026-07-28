@@ -235,43 +235,6 @@ db.coll.bulkWrite(ops, { ordered: false });
 >
 > **Explanation:** `{ ordered: false }` continues executing remaining write operations even if an earlier write fails.
 
-
-
-### Exercise 4: Constructing `bulkWrite()` Operation Payload
-
-**Problem:** Construct `bulkWrite()` array containing an `insertOne` and an `updateOne` operation.
-
-**Expected output:**
-```text
-db.coll.bulkWrite([ { insertOne: { document: { _id: 1 } } }, { updateOne: { filter: { _id: 2 }, update: { $set: { a: 1 } } } } ]);
-```
-
-> [!check]- Answer
-> ```javascript
-> db.coll.bulkWrite([
->   { insertOne: { document: { _id: 1, name: "Alice" } } },
->   { updateOne: { filter: { _id: 2 }, update: { $set: { status: "active" } } } }
-> ]);
-> ```
->
-> **Explanation:** `bulkWrite([ ops ])` executes heterogeneous insert/update/delete operations in a single network batch.
-
-### Exercise 5: Unordered Bulk Write Flag
-
-**Problem:** Execute `bulkWrite()` with `{ ordered: false }` so individual errors do not stop remaining operations.
-
-**Expected output:**
-```text
-db.coll.bulkWrite(ops, { ordered: false });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.coll.bulkWrite(ops, { ordered: false });
-> ```
->
-> **Explanation:** `{ ordered: false }` continues executing remaining write operations even if an earlier write fails.
-
 ## 7. Related Terms
 - [insertOne() / insertMany()](insert.md) — Standard inserts.
 - [updateOne() / updateMany()](update.md) — Standard updates.

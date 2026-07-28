@@ -239,43 +239,6 @@ NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
 >
 > **Explanation:** Action options control referential cascade behavior across relational tables.
 
-
-
-### Exercise 4: Setting Foreign Key Action Rules
-
-**Problem:** Add foreign key specifying `ON DELETE SET NULL` and `ON UPDATE CASCADE`.
-
-**Expected output:**
-```text
-ALTER TABLE orders ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE;
-```
-
-> [!check]- Answer
-> ```sql
-> ALTER TABLE orders
-> ADD CONSTRAINT fk_user
-> FOREIGN KEY (user_id) REFERENCES users(id)
-> ON DELETE SET NULL ON UPDATE CASCADE;
-> ```
->
-> **Explanation:** Foreign key action rules dictate cascading behavior for parent updates and deletions.
-
-### Exercise 5: Foreign Key Action Options List
-
-**Problem:** List 4 foreign key ON DELETE / ON UPDATE actions (`NO ACTION`, `RESTRICT`, `CASCADE`, `SET NULL`, `SET DEFAULT`).
-
-**Expected output:**
-```text
-NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
-```
-
-> [!check]- Answer
-> ```text
-> NO ACTION, RESTRICT, CASCADE, SET NULL, SET DEFAULT
-> ```
->
-> **Explanation:** Action options control referential cascade behavior across relational tables.
-
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The parent constraint.
 - [Referential Integrity](referential_integrity.md) — The parent safety concept.

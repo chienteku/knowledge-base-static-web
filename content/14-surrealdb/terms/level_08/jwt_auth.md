@@ -211,40 +211,6 @@ await db.authenticate(token);
 >
 > **Explanation:** `db.authenticate(token)` establishes SDK session state using a raw JWT string.
 
-
-
-### Exercise 4: SurrealDB JWT Claims Structure
-
-**Problem:** List essential claims in SurrealDB JWT tokens (`NS`, `DB`, `AC` / access scope, `ID` / `$auth.id`).
-
-**Expected output:**
-```text
-NS, DB, AC (access scope), ID ($auth.id)
-```
-
-> [!check]- Answer
-> ```text
-> NS, DB, AC (access scope), ID ($auth.id)
-> ```
->
-> **Explanation:** SurrealDB JWT claims specify target namespace, database, access scope, and user identity.
-
-### Exercise 5: Authenticating SDK with Raw JWT Token
-
-**Problem:** Write JS SDK call authenticating using token `await db.authenticate(token)`.
-
-**Expected output:**
-```text
-await db.authenticate(token);
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.authenticate(token);
-> ```
->
-> **Explanation:** `db.authenticate(token)` establishes SDK session state using a raw JWT string.
-
 ## 7. Related Terms
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in access definition.
 - [`$session` / `$token` Variables](session_token_variables.md) — Accessing decoded JWT claims in SurrealQL.

@@ -192,40 +192,6 @@ SHOW CHANGES FOR TABLE product SINCE $last_sync;
 >
 > **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` retrieves record mutation history.
 
-
-
-### Exercise 4: Defining Changefeed with Retention
-
-**Problem:** Define table `product` with a 14-day changefeed retention window.
-
-**Expected output:**
-```text
-DEFINE TABLE product CHANGEFEED 14d;
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE TABLE product CHANGEFEED 14d;
-> ```
->
-> **Explanation:** `CHANGEFEED duration` maintains historical delta feeds for offline consumers.
-
-### Exercise 5: Streaming Changefeed Deltas
-
-**Problem:** Query changefeed for `product` table since timestamp `$last_sync`.
-
-**Expected output:**
-```text
-SHOW CHANGES FOR TABLE product SINCE $last_sync;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SHOW CHANGES FOR TABLE product SINCE $last_sync;
-> ```
->
-> **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` retrieves record mutation history.
-
 ## 7. Related Terms
 - [`SHOW CHANGES FOR TABLE ... SINCE ...`](show_changes.md) — Querying recorded changefeed logs.
 - [`DEFINE EVENT`](define_event.md) — Real-time server-side triggers.

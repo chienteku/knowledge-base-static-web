@@ -226,40 +226,6 @@ DEFINE FIELD category ON TABLE product TYPE record<category>;
 >
 > **Explanation:** `TYPE record<table>` enforces foreign record link pointer types.
 
-
-
-### Exercise 4: Record Link Dot-Notation Traversal
-
-**Problem:** Select post title and author's email using Record Link dot-notation (`author.email`).
-
-**Expected output:**
-```text
-SELECT title, author.email AS author_email FROM post;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT title, author.email AS author_email FROM post;
-> ```
->
-> **Explanation:** Record Links enable direct dot-notation dereferencing of linked foreign records.
-
-### Exercise 5: Record Link Type Constraint
-
-**Problem:** Define field `category` on `product` table restricted to `category` table record links.
-
-**Expected output:**
-```text
-DEFINE FIELD category ON TABLE product TYPE record<category>;
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE FIELD category ON TABLE product TYPE record<category>;
-> ```
->
-> **Explanation:** `TYPE record<table>` enforces foreign record link pointer types.
-
 ## 7. Related Terms
 - [Record Link Type](../level_02/record_link_type.md) — The data type validation rules.
 - [Graph Connections (Overview: Nodes vs Edges)](graph_overview.md) — Bidirectional mappings.

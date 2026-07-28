@@ -223,40 +223,6 @@ SELECT ->wrote->post.title AS titles FROM user:alice;
 >
 > **Explanation:** SurrealQL arrow paths replace relational JOIN tables and foreign keys.
 
-
-
-### Exercise 4: JOIN vs Graph Traversal Performance Comparison
-
-**Problem:** Compare algorithmic complexity of relational JOIN index scans ($O(\log N)$) vs SurrealDB pointer traversal ($O(1)$).
-
-**Expected output:**
-```text
-Relational JOIN: O(log N) index scan, SurrealDB Arrow: O(1) direct pointer dereference
-```
-
-> [!check]- Answer
-> ```text
-> Relational JOIN: O(log N) index scan, SurrealDB Arrow: O(1) direct pointer dereference
-> ```
->
-> **Explanation:** Direct record pointers avoid index lookup scans during graph traversal.
-
-### Exercise 5: Converting SQL JOIN to SurrealQL Arrow Traversal
-
-**Problem:** Convert `SELECT p.title FROM user u JOIN post p ON u.id = p.user_id WHERE u.id = 'alice'` to SurrealQL.
-
-**Expected output:**
-```text
-SELECT ->wrote->post.title AS titles FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->wrote->post.title AS titles FROM user:alice;
-> ```
->
-> **Explanation:** SurrealQL arrow paths replace relational JOIN tables and foreign keys.
-
 ## 7. Related Terms
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Deep Graph Traversal](deep_graph_traversal.md) — Chaining arrow paths.

@@ -220,42 +220,6 @@ SELECT s.size_name, c.color_name FROM sizes s CROSS JOIN colors c;
 >
 > **Explanation:** Cartesian product row counts equal $N_{	ext{rows}(A)} 	imes N_{	ext{rows}(B)}$.
 
-
-
-### Exercise 4: Generating Combinatorial Matrix with CROSS JOIN
-
-**Problem:** Generate all possible size (`sizes`) and color (`colors`) product combinations using `CROSS JOIN`.
-
-**Expected output:**
-```text
-SELECT s.size_name, c.color_name FROM sizes s CROSS JOIN colors c;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT s.size_name, c.color_name
-> FROM sizes s
-> CROSS JOIN colors c;
-> ```
->
-> **Explanation:** `CROSS JOIN` produces every combination of rows from LHS and RHS tables.
-
-### Exercise 5: Cartesian Row Count Calculation
-
-**Problem:** Calculate output row count for `CROSS JOIN` between Table A (100 rows) and Table B (50 rows) ($100 	imes 50 = 5,000$).
-
-**Expected output:**
-```text
-5,000 rows (100 * 50)
-```
-
-> [!check]- Answer
-> ```text
-> 5,000 rows (100 * 50)
-> ```
->
-> **Explanation:** Cartesian product row counts equal $N_{	ext{rows}(A)} 	imes N_{	ext{rows}(B)}$.
-
 ## 7. Related Terms
 - [`JOIN` (Concept)](join_concept.md) — The parent operation.
 - [Self-Join](self_join.md) — Joining a table to itself.

@@ -223,44 +223,6 @@ err.code, err.message
 >
 > **Explanation:** SDK error objects expose JSON-RPC error codes and detailed diagnostic strings.
 
-
-
-### Exercise 4: Catching SDK Connection Errors
-
-**Problem:** Write JavaScript `try / catch` block handling SDK connection failures.
-
-**Expected output:**
-```text
-try { await db.connect(uri); } catch (err) { console.error("Connection failed:", err); }
-```
-
-> [!check]- Answer
-> ```javascript
-> try {
->   await db.connect(uri);
-> } catch (err) {
->   console.error("Connection failed:", err);
-> }
-> ```
->
-> **Explanation:** `try / catch` handles network and RPC connection exceptions.
-
-### Exercise 5: SurrealDB RPC Error Code Parsing
-
-**Problem:** Inspect error code properties on SDK exception objects (`err.code`, `err.message`).
-
-**Expected output:**
-```text
-err.code, err.message
-```
-
-> [!check]- Answer
-> ```javascript
-> console.log(err.code, err.message);
-> ```
->
-> **Explanation:** SDK error objects expose JSON-RPC error codes and detailed diagnostic strings.
-
 ## 7. Related Terms
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI console.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight syntax validation.

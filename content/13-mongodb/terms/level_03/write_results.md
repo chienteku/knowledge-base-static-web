@@ -240,41 +240,6 @@ res.deletedCount
 >
 > **Explanation:** `res.deletedCount` reports the total number of documents deleted.
 
-
-
-### Exercise 4: Write Result Object Properties
-
-**Problem:** List 3 standard properties on MongoDB driver `UpdateResult` objects (`acknowledged`, `matchedCount`, `modifiedCount`).
-
-**Expected output:**
-```text
-acknowledged, matchedCount, modifiedCount
-```
-
-> [!check]- Answer
-> ```text
-> acknowledged, matchedCount, modifiedCount
-> ```
->
-> **Explanation:** Write result objects detail acknowledgement status and affected document metrics.
-
-### Exercise 5: Delete Result Inspection
-
-**Problem:** Inspect number of deleted documents on `DeleteResult` object (`res.deletedCount`).
-
-**Expected output:**
-```text
-res.deletedCount
-```
-
-> [!check]- Answer
-> ```javascript
-> const res = await db.users.deleteMany({ active: false });
-> console.log(res.deletedCount);
-> ```
->
-> **Explanation:** `res.deletedCount` reports the total number of documents deleted.
-
 ## 7. Related Terms
 - [insertOne() / insertMany()](insert.md) — The insert operations.
 - [updateOne() / updateMany()](update.md) — The modify operations.

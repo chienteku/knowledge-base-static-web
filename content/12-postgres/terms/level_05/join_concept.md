@@ -226,40 +226,6 @@ Nested Loop, Hash Join, Merge Join
 >
 > **Explanation:** The PostgreSQL query planner selects physical join algorithms based on data size and indexes.
 
-
-
-### Exercise 4: Selecting JOIN Type Based on Requirement
-
-**Problem:** Select JOIN type: 1. Match rows present in both tables (`INNER JOIN`), 2. Keep all left rows (`LEFT JOIN`), 3. All combinations (`CROSS JOIN`).
-
-**Expected output:**
-```text
-1. INNER JOIN, 2. LEFT JOIN, 3. CROSS JOIN
-```
-
-> [!check]- Answer
-> ```text
-> 1. INNER JOIN, 2. LEFT JOIN, 3. CROSS JOIN
-> ```
->
-> **Explanation:** JOIN types dictate row preservation and matching semantics.
-
-### Exercise 5: Join Execution Strategy Types in Explain
-
-**Problem:** List 3 internal physical join strategies used by PostgreSQL query planner (`Nested Loop`, `Hash Join`, `Merge Join`).
-
-**Expected output:**
-```text
-Nested Loop, Hash Join, Merge Join
-```
-
-> [!check]- Answer
-> ```text
-> Nested Loop, Hash Join, Merge Join
-> ```
->
-> **Explanation:** The PostgreSQL query planner selects physical join algorithms based on data size and indexes.
-
 ## 7. Related Terms
 - [`INNER JOIN`](inner_join.md) — The default matching join.
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — Sourcing unmatched left-side rows.

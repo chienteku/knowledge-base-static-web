@@ -237,40 +237,6 @@ isMultiKey: true
 >
 > **Explanation:** `isMultiKey: true` flags that an index indexes array element keys.
 
-
-
-### Exercise 4: Creating Multikey Index on Array Field
-
-**Problem:** Create multikey index on array field `tags` in `posts` collection.
-
-**Expected output:**
-```text
-db.posts.createIndex({ tags: 1 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.createIndex({ tags: 1 });
-> ```
->
-> **Explanation:** Indexing an array field automatically creates a Multikey index indexing each array element.
-
-### Exercise 5: Multikey Index Flag in Explain Output
-
-**Problem:** What property in `explain()` indicates a multikey index? (`isMultiKey: true`).
-
-**Expected output:**
-```text
-isMultiKey: true
-```
-
-> [!check]- Answer
-> ```text
-> isMultiKey: true
-> ```
->
-> **Explanation:** `isMultiKey: true` flags that an index indexes array element keys.
-
 ## 7. Related Terms
 - [Array](../level_02/array_type.md) — The data structure.
 - [Compound Index](compound_index.md) — Multi-field index parameters.

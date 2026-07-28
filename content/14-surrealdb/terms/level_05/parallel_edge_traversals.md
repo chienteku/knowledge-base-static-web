@@ -244,40 +244,6 @@ SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FR
 >
 > **Explanation:** `array::distinct()` deduplicates record IDs retrieved across multiple edge paths.
 
-
-
-### Exercise 4: Parallel Graph Edge Projection
-
-**Problem:** Query user `user:alice` projecting both `wrote` posts and `liked` posts in a single statement.
-
-**Expected output:**
-```text
-SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->wrote->post AS wrote, ->liked->post AS liked FROM user:alice;
-> ```
->
-> **Explanation:** Projecting multiple arrow paths retrieves parallel edge relationship targets.
-
-### Exercise 5: Deduplicating Multi-Edge Traversals
-
-**Problem:** Combine and deduplicate post IDs from both `wrote` and `liked` edges.
-
-**Expected output:**
-```text
-SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT array::distinct(array::add(->wrote->post, ->liked->post)) AS all_posts FROM user:alice;
-> ```
->
-> **Explanation:** `array::distinct()` deduplicates record IDs retrieved across multiple edge paths.
-
 ## 7. Related Terms
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Deep Graph Traversal (Chained arrows)](deep_graph_traversal.md) — Sequential path walks.

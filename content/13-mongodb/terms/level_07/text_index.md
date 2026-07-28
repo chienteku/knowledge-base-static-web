@@ -254,43 +254,6 @@ db.posts.find({ $text: { $search: "\"database index\"" } });
 >
 > **Explanation:** Escaped quotes `"\"phrase\""` perform exact phrase full-text searches.
 
-
-
-### Exercise 4: Creating Multi-Field Text Index with Weights
-
-**Problem:** Create text index on `title` (weight 10) and `body` (weight 1).
-
-**Expected output:**
-```text
-db.posts.createIndex({ title: "text", body: "text" }, { weights: { title: 10, body: 1 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.createIndex(
->   { title: "text", body: "text" },
->   { weights: { title: 10, body: 1 } }
-> );
-> ```
->
-> **Explanation:** `weights` assigns higher relevance scores to matches in specified fields.
-
-### Exercise 5: Full-Text Search Phrase Match
-
-**Problem:** Query `$text` search matching exact phrase `"database index"` in quotes.
-
-**Expected output:**
-```text
-db.posts.find({ $text: { $search: "\"database index\"" } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.find({ $text: { $search: "\"database index\"" } });
-> ```
->
-> **Explanation:** Escaped quotes `"\"phrase\""` perform exact phrase full-text searches.
-
 ## 7. Related Terms
 - [Text Search (`$text` / `$search`)](../../level_06/text_search.md) — The query command.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The DDL triggers.

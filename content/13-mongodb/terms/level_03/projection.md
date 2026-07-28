@@ -244,46 +244,6 @@ db.posts.find({ "comments.user": "alice" }, { projection: { "comments.$": 1 } })
 >
 > **Explanation:** `"array.$": 1` projects ONLY the first array element matching query filters.
 
-
-
-### Exercise 4: Projecting Specific Fields
-
-**Problem:** Project ONLY `title` and `author` fields from `posts` collection excluding `_id`.
-
-**Expected output:**
-```text
-db.posts.find({}, { projection: { title: 1, author: 1, _id: 0 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.find({}, {
->   projection: { title: 1, author: 1, _id: 0 }
-> });
-> ```
->
-> **Explanation:** `{ field: 1, _id: 0 }` includes specified fields while excluding `_id`.
-
-### Exercise 5: Positional Array Projection Operator `$`
-
-**Problem:** Project first matching array element from `comments` using positional `$` operator.
-
-**Expected output:**
-```text
-db.posts.find({ "comments.user": "alice" }, { projection: { "comments.$": 1 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.find({
->   "comments.user": "alice"
-> }, {
->   projection: { "comments.$": 1 }
-> });
-> ```
->
-> **Explanation:** `"array.$": 1` projects ONLY the first array element matching query filters.
-
 ## 7. Related Terms
 - [`find()` / `findOne()`](find.md) — The executing methods.
 

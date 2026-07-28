@@ -237,40 +237,6 @@ db.stores.createIndex({ loc: "2dsphere" });
 >
 > **Explanation:** `2dsphere` calculates real-world geodesic Earth distances.
 
-
-
-### Exercise 4: Creating 2dsphere Index
-
-**Problem:** Create `2dsphere` index on `loc` field of `stores` collection.
-
-**Expected output:**
-```text
-db.stores.createIndex({ loc: "2dsphere" });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.stores.createIndex({ loc: "2dsphere" });
-> ```
->
-> **Explanation:** `2dsphere` indexes support GeoJSON spatial queries (`$near`, `$geoWithin`).
-
-### Exercise 5: Geospatial Index Type Comparison
-
-**Problem:** State difference between `2d` and `2dsphere` indexes (2d: flat 2D plane; 2dsphere: spherical Earth geometry).
-
-**Expected output:**
-```text
-2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
-```
-
-> [!check]- Answer
-> ```text
-> 2d: flat Euclidean plane; 2dsphere: spherical Earth geometry
-> ```
->
-> **Explanation:** `2dsphere` calculates real-world geodesic Earth distances.
-
 ## 7. Related Terms
 - [Geospatial Queries (`$near`, `$geoWithin`)](../../level_06/geospatial_queries.md) — The query command.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The DDL triggers.

@@ -217,40 +217,6 @@ Cached in WiredTiger RAM and persisted in index storage files
 >
 > **Explanation:** Active index working sets are kept in RAM for fast key lookups.
 
-
-
-### Exercise 4: B-Tree Index Structure Explanation
-
-**Problem:** What underlying data structure powers standard MongoDB single and compound indexes? (B-Tree).
-
-**Expected output:**
-```text
-B-Tree (Balanced Tree)
-```
-
-> [!check]- Answer
-> ```text
-> B-Tree (Balanced Tree)
-> ```
->
-> **Explanation:** B-Tree index structures enable $O(\log N)$ key search and range traversal times.
-
-### Exercise 5: Index Storage Location
-
-**Problem:** Where are collection indexes stored on disk and memory? (Stored in WiredTiger cache RAM and persisted on disk).
-
-**Expected output:**
-```text
-Cached in WiredTiger RAM and persisted in index storage files
-```
-
-> [!check]- Answer
-> ```text
-> Cached in WiredTiger RAM and persisted in index storage files
-> ```
->
-> **Explanation:** Active index working sets are kept in RAM for fast key lookups.
-
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The search methods.

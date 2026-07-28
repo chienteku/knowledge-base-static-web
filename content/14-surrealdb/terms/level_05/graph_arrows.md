@@ -247,40 +247,6 @@ SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM 
 >
 > **Explanation:** Parentheses inside arrow paths `->(table WHERE condition)` filter target graph nodes.
 
-
-
-### Exercise 4: Graph Arrow Directions Reference
-
-**Problem:** State meaning: `->` (Outgoing), `<-` (Incoming), `<->` (Bidirectional).
-
-**Expected output:**
-```text
-->: Outgoing, <-: Incoming, <->: Bidirectional
-```
-
-> [!check]- Answer
-> ```text
-> ->: Outgoing, <-: Incoming, <->: Bidirectional
-> ```
->
-> **Explanation:** Arrow directions specify graph traversal orientation relative to source nodes.
-
-### Exercise 5: Filtering Traversed Target Nodes with Arrow Clauses
-
-**Problem:** Select posts written by `user:alice` published after `d"2026-01-01T00:00:00Z"` using arrow filter syntax.
-
-**Expected output:**
-```text
-SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->wrote->(post WHERE created_at > d"2026-01-01T00:00:00Z") AS posts FROM user:alice;
-> ```
->
-> **Explanation:** Parentheses inside arrow paths `->(table WHERE condition)` filter target graph nodes.
-
 ## 7. Related Terms
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 - [Bidirectional Relationship Queries](bidirectional_queries.md) — Cross-referencing tables.

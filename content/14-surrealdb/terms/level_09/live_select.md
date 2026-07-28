@@ -217,40 +217,6 @@ const queryId = await db.live('order', (action, result) => console.log(action, r
 >
 > **Explanation:** `db.live(table, callback)` registers real-time event handlers over WebSockets.
 
-
-
-### Exercise 4: Subscribing to Filtered Live Query
-
-**Problem:** Write SurrealQL query subscribing to live updates on `article` table where `published = true`.
-
-**Expected output:**
-```text
-LIVE SELECT * FROM article WHERE published = true;
-```
-
-> [!check]- Answer
-> ```surrealql
-> LIVE SELECT * FROM article WHERE published = true;
-> ```
->
-> **Explanation:** `LIVE SELECT ... WHERE` pushes live delta events for records matching predicates.
-
-### Exercise 5: JS SDK Live Query Listener
-
-**Problem:** Subscribe to `order` table updates using `db.live('order', callback)`.
-
-**Expected output:**
-```text
-const queryId = await db.live('order', (action, result) => console.log(action, result));
-```
-
-> [!check]- Answer
-> ```javascript
-> const queryId = await db.live('order', (action, result) => console.log(action, result));
-> ```
->
-> **Explanation:** `db.live(table, callback)` registers real-time event handlers over WebSockets.
-
 ## 7. Related Terms
 - [`KILL` (Stopping Live Queries)](kill_live_query.md) — Terminating active live query subscriptions.
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Table change history tracking.

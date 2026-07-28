@@ -220,44 +220,6 @@ let db = Surreal::new::<RocksDb>("path/to/db").await?;
 >
 > **Explanation:** `RocksDb` provides embedded local disk storage in Rust.
 
-
-
-### Exercise 4: Rust Embedded In-Memory Instance Initialization
-
-**Problem:** Initialize embedded in-memory SurrealDB instance in Rust using `Surreal::new::<Mem>(())`.
-
-**Expected output:**
-```text
-let db = Surreal::new::<Mem>(()).await?;
-```
-
-> [!check]- Answer
-> ```rust
-> use surrealdb::engine::local::Mem;
-> use surrealdb::Surreal;
-> let db = Surreal::new::<Mem>(()).await?;
-> ```
->
-> **Explanation:** Embedded Rust instances run SurrealDB in-process without network overhead.
-
-### Exercise 5: Rust Embedded RocksDB Storage Initialization
-
-**Problem:** Initialize embedded persistent RocksDB instance in Rust.
-
-**Expected output:**
-```text
-let db = Surreal::new::<RocksDb>("path/to/db").await?;
-```
-
-> [!check]- Answer
-> ```rust
-> use surrealdb::engine::local::RocksDb;
-> use surrealdb::Surreal;
-> let db = Surreal::new::<RocksDb>("path/to/db").await?;
-> ```
->
-> **Explanation:** `RocksDb` provides embedded local disk storage in Rust.
-
 ## 7. Related Terms
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — In-memory and local storage engines.
 - [JavaScript / TypeScript SDK](js_sdk.md) — Web client SDK.

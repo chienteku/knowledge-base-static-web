@@ -202,40 +202,6 @@ DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
 >
 > **Explanation:** `PERMISSIONS NONE` on a field prevents it from being exposed in projection outputs.
 
-
-
-### Exercise 4: Row-Level Security Rule Definition
-
-**Problem:** Define `article` table permissions allowing `select` and `update` ONLY if `author = $auth.id`.
-
-**Expected output:**
-```text
-DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE TABLE article PERMISSIONS FOR select, update WHERE author = $auth.id;
-> ```
->
-> **Explanation:** `PERMISSIONS FOR statement WHERE condition` enforces fine-grained row-level security.
-
-### Exercise 5: Hiding Sensitive Field with PERMISSIONS NONE
-
-**Problem:** Hide field `password_hash` on `user` table from all read queries using `PERMISSIONS NONE`.
-
-**Expected output:**
-```text
-DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE FIELD password_hash ON TABLE user PERMISSIONS NONE;
-> ```
->
-> **Explanation:** `PERMISSIONS NONE` on a field prevents it from being exposed in projection outputs.
-
 ## 7. Related Terms
 - [`$auth` Variable](auth_variable.md) — The bound context user variable.
 - [`$auth.id` vs `$auth.*`](auth_record_fields.md) — Using record properties in permissions.

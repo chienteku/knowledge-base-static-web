@@ -215,40 +215,6 @@ db.temp_data.drop();
 >
 > **Explanation:** `db.collection.drop()` deletes the collection and all its associated indexes.
 
-
-
-### Exercise 4: Capped Collection Creation
-
-**Problem:** Create a capped collection `system_logs` capped at 5MB (5242880 bytes).
-
-**Expected output:**
-```text
-db.createCollection("system_logs", { capped: true, size: 5242880 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.createCollection("system_logs", { capped: true, size: 5242880 });
-> ```
->
-> **Explanation:** Capped collections maintain fixed-size circular buffers that overwrite oldest documents automatically.
-
-### Exercise 5: Dropping Collection Safely
-
-**Problem:** Drop collection `temp_data` from database.
-
-**Expected output:**
-```text
-db.temp_data.drop();
-```
-
-> [!check]- Answer
-> ```javascript
-> db.temp_data.drop();
-> ```
->
-> **Explanation:** `db.collection.drop()` deletes the collection and all its associated indexes.
-
 ## 7. Related Terms
 - [Document](document.md) — The core data record.
 - [Database (MongoDB Context)](database_context.md) — The parent namespace.

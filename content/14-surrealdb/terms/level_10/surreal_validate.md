@@ -201,40 +201,6 @@ Catches SurrealQL syntax errors before executing production database migrations
 >
 > **Explanation:** Static validation prevents partial migration failures caused by syntax typos.
 
-
-
-### Exercise 4: Validating SurrealQL File in CLI
-
-**Problem:** CLI command to validate syntax of `schema.surql` file.
-
-**Expected output:**
-```text
-surreal validate schema.surql
-```
-
-> [!check]- Answer
-> ```text
-> surreal validate schema.surql
-> ```
->
-> **Explanation:** `surreal validate file.surql` checks SurrealQL static syntax correctness.
-
-### Exercise 5: CI/CD Pre-Deployment Validation Step
-
-**Problem:** Why should `surreal validate` be included in CI/CD pipelines? (Catches syntax errors before executing production migrations).
-
-**Expected output:**
-```text
-Catches SurrealQL syntax errors before executing production database migrations
-```
-
-> [!check]- Answer
-> ```text
-> Catches SurrealQL syntax errors before executing production database migrations
-> ```
->
-> **Explanation:** Static validation prevents partial migration failures caused by syntax typos.
-
 ## 7. Related Terms
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — CLI binary tools.
 - [`surreal export` / `surreal import` (Backups)](export_import.md) — Export and import utilities.

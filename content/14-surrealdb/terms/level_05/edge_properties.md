@@ -247,40 +247,6 @@ SELECT * FROM reviewed WHERE rating >= 4;
 >
 > **Explanation:** Graph edge tables (like `reviewed`) can be queried directly like standard tables.
 
-
-
-### Exercise 4: Creating Graph Edge with Custom Properties
-
-**Problem:** Relate `user:alice` to `product:99` with edge `reviewed` setting `rating = 5` and `comment = "Great!"`.
-
-**Expected output:**
-```text
-RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
-```
-
-> [!check]- Answer
-> ```surrealql
-> RELATE user:alice->reviewed->product:99 SET rating = 5, comment = "Great!";
-> ```
->
-> **Explanation:** `RELATE ... SET key = val` attaches rich metadata properties directly to graph edge records.
-
-### Exercise 5: Querying Edge Properties directly
-
-**Problem:** Select all `reviewed` edge records where `rating >= 4`.
-
-**Expected output:**
-```text
-SELECT * FROM reviewed WHERE rating >= 4;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT * FROM reviewed WHERE rating >= 4;
-> ```
->
-> **Explanation:** Graph edge tables (like `reviewed`) can be queried directly like standard tables.
-
 ## 7. Related Terms
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 - [Graph Traversal Filtering (`WHERE` on edges)](graph_filtering.md) — Filtering using edge properties.

@@ -203,40 +203,6 @@ surreal import --endpoint http://localhost:8000 -u root -p root --ns dev --db te
 >
 > **Explanation:** `surreal import` restores database schemas and data records from SQL files.
 
-
-
-### Exercise 4: Exporting Specific Database to SQL Dump
-
-**Problem:** Write CLI command exporting NS `prod` DB `main` to `export.surql`.
-
-**Expected output:**
-```text
-surreal export --endpoint http://localhost:8000 -u root -p root --ns prod --db main export.surql
-```
-
-> [!check]- Answer
-> ```text
-> surreal export --endpoint http://localhost:8000 -u root -p root --ns prod --db main export.surql
-> ```
->
-> **Explanation:** `surreal export` generates portable SQL schema and record text dumps.
-
-### Exercise 5: Importing SQL Dump File
-
-**Problem:** Write CLI command importing `export.surql` into NS `dev` DB `test`.
-
-**Expected output:**
-```text
-surreal import --endpoint http://localhost:8000 -u root -p root --ns dev --db test export.surql
-```
-
-> [!check]- Answer
-> ```text
-> surreal import --endpoint http://localhost:8000 -u root -p root --ns dev --db test export.surql
-> ```
->
-> **Explanation:** `surreal import` restores database schemas and data records from SQL files.
-
 ## 7. Related Terms
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI console.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight syntax validation.

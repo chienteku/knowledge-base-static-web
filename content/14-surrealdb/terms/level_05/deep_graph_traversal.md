@@ -238,40 +238,6 @@ SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner 
 >
 > **Explanation:** SurrealDB executes multi-hop graph traversals in constant pointer time.
 
-
-
-### Exercise 4: 2-Hop Friends-of-Friends Traversal
-
-**Problem:** Query 2-hop friends-of-friends from `user:alice` deduplicating result IDs.
-
-**Expected output:**
-```text
-SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT array::distinct(->knows->user->knows->user) AS fof FROM user:alice;
-> ```
->
-> **Explanation:** Chaining arrow paths `->edge->table->edge->table` traverses multi-hop graph networks.
-
-### Exercise 5: 3-Hop Supply Chain Traversal
-
-**Problem:** Query suppliers 3 hops away: `product:1 -> ->supplied_by->vendor -> ->sourced_from->factory -> ->owned_by->company`.
-
-**Expected output:**
-```text
-SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->supplied_by->vendor->sourced_from->factory->owned_by->company AS owner FROM product:1;
-> ```
->
-> **Explanation:** SurrealDB executes multi-hop graph traversals in constant pointer time.
-
 ## 7. Related Terms
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Graph Traversal vs Relational JOINs](graph_vs_joins.md) — The performance mechanics.

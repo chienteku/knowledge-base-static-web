@@ -230,40 +230,6 @@ RELATE user:alice->likes:alice_post1->post:1;
 >
 > **Explanation:** `RELATE node->edge:id->node` creates graph edges with explicit custom Record IDs.
 
-
-
-### Exercise 4: Graph Engine Fundamentals
-
-**Problem:** Explain what fields every graph edge record contains (`id`, `in` pointer to source node, `out` pointer to target node).
-
-**Expected output:**
-```text
-id, in (source record link), out (target record link)
-```
-
-> [!check]- Answer
-> ```text
-> id, in (source record link), out (target record link)
-> ```
->
-> **Explanation:** Edge records store `in` (source pointer) and `out` (target pointer) record links.
-
-### Exercise 5: Creating Edge Record with Custom ID
-
-**Problem:** Create graph edge with custom ID `likes:alice_post1` relating `user:alice` to `post:1`.
-
-**Expected output:**
-```text
-RELATE user:alice->likes:alice_post1->post:1;
-```
-
-> [!check]- Answer
-> ```surrealql
-> RELATE user:alice->likes:alice_post1->post:1;
-> ```
->
-> **Explanation:** `RELATE node->edge:id->node` creates graph edges with explicit custom Record IDs.
-
 ## 7. Related Terms
 - [Record Link (Concept)](record_link_concept.md) — The single reference link.
 - [`RELATE` Statement](relate.md) — Creating graph edges.

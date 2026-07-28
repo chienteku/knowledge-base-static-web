@@ -230,45 +230,6 @@ SELECT curr.id FROM readings curr JOIN readings prev ON curr.id = prev.id + 1 WH
 >
 > **Explanation:** Self-joins enable comparing adjacent or sequential rows within the same table.
 
-
-
-### Exercise 4: Self-Join Manager Hierarchy Query
-
-**Problem:** Self-join `employees` table (aliases `e` for employee, `m` for manager) selecting `e.name` and `m.name` as `manager_name`.
-
-**Expected output:**
-```text
-SELECT e.name AS employee_name, m.name AS manager_name FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT e.name AS employee_name, m.name AS manager_name
-> FROM employees e
-> LEFT JOIN employees m ON e.manager_id = m.id;
-> ```
->
-> **Explanation:** Self-joins match rows within a single hierarchical table using distinct table aliases.
-
-### Exercise 5: Finding Consecutive Metric Entries with Self-Join
-
-**Problem:** Self-join `readings` table to find rows where current reading `val` is greater than previous reading `val`.
-
-**Expected output:**
-```text
-SELECT curr.id FROM readings curr JOIN readings prev ON curr.id = prev.id + 1 WHERE curr.val > prev.val;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT curr.id
-> FROM readings curr
-> JOIN readings prev ON curr.id = prev.id + 1
-> WHERE curr.val > prev.val;
-> ```
->
-> **Explanation:** Self-joins enable comparing adjacent or sequential rows within the same table.
-
 ## 7. Related Terms
 - [`JOIN` (Concept)](join_concept.md) — The parent operation.
 - [Aliases (`AS`)](../level_04/aliases.md) — The alias renaming syntax.

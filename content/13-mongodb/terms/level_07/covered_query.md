@@ -239,43 +239,6 @@ totalDocsExamined: 0
 >
 > **Explanation:** `totalDocsExamined: 0` proves that zero collection disk documents were read.
 
-
-
-### Exercise 4: Constructing Fully Covered Query
-
-**Problem:** Construct covered query on index `{ status: 1, email: 1 }` returning `email` without fetching documents.
-
-**Expected output:**
-```text
-db.users.find({ status: "active" }, { email: 1, _id: 0 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find(
->   { status: "active" },
->   { email: 1, _id: 0 }
-> );
-> ```
->
-> **Explanation:** Covered queries satisfy all filtered and projected fields directly from index B-Trees (`totalDocsExamined: 0`).
-
-### Exercise 5: Verifying Covered Query in Explain Output
-
-**Problem:** What value of `totalDocsExamined` in `explain()` indicates a covered query? (`0`).
-
-**Expected output:**
-```text
-totalDocsExamined: 0
-```
-
-> [!check]- Answer
-> ```text
-> totalDocsExamined: 0
-> ```
->
-> **Explanation:** `totalDocsExamined: 0` proves that zero collection disk documents were read.
-
 ## 7. Related Terms
 - [`explain()` Method](explain.md) — The plan analyzer.
 - [Compound Index](compound_index.md) — The target multi-key index.

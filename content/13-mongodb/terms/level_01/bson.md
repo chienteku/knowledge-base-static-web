@@ -209,42 +209,6 @@ Extended JSON stringified preserving $date and $oid keys
 >
 > **Explanation:** `ObjectId` values are BSON object primitives in driver APIs.
 
-
-
-### Exercise 4: Extended JSON Serialization
-
-**Problem:** Serialize document `{ date: new Date(), id: new ObjectId() }` using BSON Extended JSON (`EJSON.stringify`).
-
-**Expected output:**
-```text
-Extended JSON stringified preserving $date and $oid keys
-```
-
-> [!check]- Answer
-> ```javascript
-> const { EJSON } = require('bson');
-> const doc = { date: new Date(), id: new ObjectId() };
-> console.log(EJSON.stringify(doc));
-> ```
->
-> **Explanation:** `EJSON` preserves BSON type annotations (`$date`, `$oid`) in JSON strings.
-
-### Exercise 5: BSON Type Inspection in mongosh
-
-**Problem:** Inspect BSON type of `db.coll.findOne()._id` using `typeof` or `bsontype`.
-
-**Expected output:**
-```text
-"object" (ObjectId instance in JS driver)
-```
-
-> [!check]- Answer
-> ```javascript
-> typeof db.coll.findOne()._id;
-> ```
->
-> **Explanation:** `ObjectId` values are BSON object primitives in driver APIs.
-
 ## 7. Related Terms
 - [`_id` Field & ObjectId](objectid.md) — BSON primary keys.
 - [JSON vs BSON](json_vs_bson.md) — The differences in use cases.

@@ -264,47 +264,6 @@ SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user
 >
 > **Explanation:** Joining entities through junction tables resolves Many-to-Many entity relationships.
 
-
-
-### Exercise 4: Defining Junction Table Schema
-
-**Problem:** Create junction table `user_roles` linking `user_id` and `role_id` with composite primary key and foreign keys.
-
-**Expected output:**
-```text
-CREATE TABLE user_roles ( user_id INT REFERENCES users(id) ON DELETE CASCADE, role_id INT REFERENCES roles(id) ON DELETE CASCADE, PRIMARY KEY (user_id, role_id) );
-```
-
-> [!check]- Answer
-> ```sql
-> CREATE TABLE user_roles (
->   user_id INT REFERENCES users(id) ON DELETE CASCADE,
->   role_id INT REFERENCES roles(id) ON DELETE CASCADE,
->   PRIMARY KEY (user_id, role_id)
-> );
-> ```
->
-> **Explanation:** Junction tables establish normalized Many-to-Many relationships between entities.
-
-### Exercise 5: Querying Many-to-Many via Junction Table
-
-**Problem:** Query all role names for user `user_id = 1` by joining `users`, `user_roles`, and `roles`.
-
-**Expected output:**
-```text
-SELECT r.name FROM roles r JOIN user_roles ur ON r.id = ur.role_id WHERE ur.user_id = 1;
-```
-
-> [!check]- Answer
-> ```sql
-> SELECT r.name
-> FROM roles r
-> JOIN user_roles ur ON r.id = ur.role_id
-> WHERE ur.user_id = 1;
-> ```
->
-> **Explanation:** Joining entities through junction tables resolves Many-to-Many entity relationships.
-
 ## 7. Related Terms
 - [Many-to-Many Relationship](many_to_many.md) — The parent logical relationship.
 - [Composite Key](../level_06/composite_key.md) — Forward reference: keys composed of multiple columns.

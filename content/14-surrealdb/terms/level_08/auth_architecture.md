@@ -215,40 +215,6 @@ Through RECORD access authentication tokens evaluated against SurrealQL PERMISSI
 >
 > **Explanation:** SCOPE/ACCESS tokens inject `$auth` identity context into table `PERMISSIONS` rules.
 
-
-
-### Exercise 4: Auth Architecture Level Comparison
-
-**Problem:** List 3 authentication levels in SurrealDB (Root level, Namespace level, Database/Record Access level).
-
-**Expected output:**
-```text
-Root level, Namespace level, Database/Record Access level
-```
-
-> [!check]- Answer
-> ```text
-> Root level, Namespace level, Database/Record Access level
-> ```
->
-> **Explanation:** SurrealDB enforces multi-tenant authentication at root, namespace, and database levels.
-
-### Exercise 5: Direct Client-to-Database Security Model
-
-**Problem:** How does SurrealDB authorize direct web browser query access safely? (Via SCOPE/ACCESS definitions and table PERMISSIONS).
-
-**Expected output:**
-```text
-Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
-```
-
-> [!check]- Answer
-> ```text
-> Through RECORD access authentication tokens evaluated against SurrealQL PERMISSIONS rules
-> ```
->
-> **Explanation:** SCOPE/ACCESS tokens inject `$auth` identity context into table `PERMISSIONS` rules.
-
 ## 7. Related Terms
 - [System Users (`DEFINE USER`)](define_user.md) — Creating Root, NS, and DB admins.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Authenticating end-users as table records.

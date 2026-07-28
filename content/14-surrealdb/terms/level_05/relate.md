@@ -238,40 +238,6 @@ RELATE (SELECT * FROM user)->member_of->organization:main;
 >
 > **Explanation:** Subqueries inside `RELATE` create graph edges in bulk across record sets.
 
-
-
-### Exercise 4: Relating Node Records with Edge Properties
-
-**Problem:** Relate `user:alice` to `group:devs` with edge `member_of` setting `role = "admin"` and `joined_at = time::now()`.
-
-**Expected output:**
-```text
-RELATE user:alice->member_of->group:devs SET role = "admin", joined_at = time::now();
-```
-
-> [!check]- Answer
-> ```surrealql
-> RELATE user:alice->member_of->group:devs SET role = "admin", joined_at = time::now();
-> ```
->
-> **Explanation:** `RELATE node->edge->node SET ...` constructs graph edges with custom properties.
-
-### Exercise 5: Relating Sets of Records
-
-**Problem:** Relate all users in `user` table to `organization:main` using `RELATE (SELECT * FROM user)->member_of->organization:main`.
-
-**Expected output:**
-```text
-RELATE (SELECT * FROM user)->member_of->organization:main;
-```
-
-> [!check]- Answer
-> ```surrealql
-> RELATE (SELECT * FROM user)->member_of->organization:main;
-> ```
->
-> **Explanation:** Subqueries inside `RELATE` create graph edges in bulk across record sets.
-
 ## 7. Related Terms
 - [Graph Connections (Overview: Nodes vs Edges)](graph_overview.md) — The parent paradigm.
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — Querying relationships.

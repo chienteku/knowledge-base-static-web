@@ -192,43 +192,6 @@ FOR $id IN $ids { UPDATE $id SET processed = true; sleep(1s); };
 >
 > **Explanation:** `sleep()` inserts controlled delays between batch iteration steps.
 
-
-
-### Exercise 4: Pausing Query Script Execution
-
-**Problem:** Pause SurrealQL script execution for 500 milliseconds using `sleep()`.
-
-**Expected output:**
-```text
-sleep(500ms);
-```
-
-> [!check]- Answer
-> ```surrealql
-> sleep(500ms);
-> ```
->
-> **Explanation:** `sleep(duration)` pauses script execution for specified duration intervals.
-
-### Exercise 5: Simulating Rate Limiting Delays
-
-**Problem:** Use `sleep(1s)` inside a loop to rate-limit batch operations.
-
-**Expected output:**
-```text
-FOR $id IN $ids { UPDATE $id SET processed = true; sleep(1s); };
-```
-
-> [!check]- Answer
-> ```surrealql
-> FOR $id IN $ids {
->   UPDATE $id SET processed = true;
->   sleep(1s);
-> };
-> ```
->
-> **Explanation:** `sleep()` inserts controlled delays between batch iteration steps.
-
 ## 7. Related Terms
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Duration literals syntax.
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](../level_09/transactions.md) — Multi-statement execution blocks.

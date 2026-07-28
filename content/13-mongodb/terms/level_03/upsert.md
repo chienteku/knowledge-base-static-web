@@ -235,45 +235,6 @@ result.upsertedId
 >
 > **Explanation:** `res.upsertedId` contains generated primary key IDs for upsert insertions.
 
-
-
-### Exercise 4: Idempotent Document Upsert
-
-**Problem:** Upsert user by `email: "a@b.com"` setting `name: "Alice"` and `$setOnInsert` `createdAt: new Date()`.
-
-**Expected output:**
-```text
-db.users.updateOne({ email: "a@b.com" }, { $set: { name: "Alice" }, $setOnInsert: { createdAt: new Date() } }, { upsert: true });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.updateOne(
->   { email: "a@b.com" },
->   { $set: { name: "Alice" }, $setOnInsert: { createdAt: new Date() } },
->   { upsert: true }
-> );
-> ```
->
-> **Explanation:** Combining `{ upsert: true }` with `$setOnInsert` initializes creation timestamps only on insert.
-
-### Exercise 5: Inspecting Upserted Result ID
-
-**Problem:** Inspect `upsertedId` field on MongoDB driver write result objects.
-
-**Expected output:**
-```text
-result.upsertedId
-```
-
-> [!check]- Answer
-> ```javascript
-> const res = await db.users.updateOne({ _id: 99 }, { $set: { a: 1 } }, { upsert: true });
-> console.log(res.upsertedId);
-> ```
->
-> **Explanation:** `res.upsertedId` contains generated primary key IDs for upsert insertions.
-
 ## 7. Related Terms
 - [updateOne() / updateMany()](update.md) — The parent update methods.
 - [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — The query output indicators.

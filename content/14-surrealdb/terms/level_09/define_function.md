@@ -198,42 +198,6 @@ RETURN fn::greet("Alice");
 >
 > **Explanation:** Custom functions are called using `fn::func_name(args)` syntax.
 
-
-
-### Exercise 4: Defining Custom Helper Function
-
-**Problem:** Define function `fn::greet($name: string)` returning `"Hello, " + $name`.
-
-**Expected output:**
-```text
-DEFINE FUNCTION fn::greet($name: string) { RETURN string::concat("Hello, ", $name); };
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE FUNCTION fn::greet($name: string) {
->   RETURN string::concat("Hello, ", $name);
-> };
-> ```
->
-> **Explanation:** `DEFINE FUNCTION fn::name($param: type)` declares reusable custom functions.
-
-### Exercise 5: Invoking Custom Function
-
-**Problem:** Invoke custom function `fn::greet("Alice")` in SurrealQL query.
-
-**Expected output:**
-```text
-RETURN fn::greet("Alice");
-```
-
-> [!check]- Answer
-> ```surrealql
-> RETURN fn::greet("Alice");
-> ```
->
-> **Explanation:** Custom functions are called using `fn::func_name(args)` syntax.
-
 ## 7. Related Terms
 - [RETURN Statement (in Functions / Blocks)](../level_06/return_statement.md) — Flow-control return.
 - [`DEFINE EVENT`](define_event.md) — Event triggers calling custom functions.

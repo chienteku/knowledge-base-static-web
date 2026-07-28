@@ -248,46 +248,6 @@ db.posts.updateMany({}, { $pull: { tags: "deprecated" } });
 >
 > **Explanation:** `$pull` removes all instances of specified elements from array fields.
 
-
-
-### Exercise 4: Pushing Unique Elements with `$addToSet`
-
-**Problem:** Add `"admin"` to `roles` array of `user:1` ensuring no duplicate role is added.
-
-**Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $addToSet: { roles: "admin" } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $addToSet: { roles: "admin" }
-> });
-> ```
->
-> **Explanation:** `$addToSet` appends elements to array fields only if they do not already exist.
-
-### Exercise 5: Removing Array Items with `$pull`
-
-**Problem:** Remove tag `"deprecated"` from `tags` array across all documents.
-
-**Expected output:**
-```text
-db.posts.updateMany({}, { $pull: { tags: "deprecated" } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.updateMany({}, {
->   $pull: { tags: "deprecated" }
-> });
-> ```
->
-> **Explanation:** `$pull` removes all instances of specified elements from array fields.
-
 ## 7. Related Terms
 - [Array](../level_02/array_type.md) — The data structure.
 - [Update Operators (`$set`, `$unset`, etc.)](update_operators.md) — The parent update operators.

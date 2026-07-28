@@ -193,40 +193,6 @@ SHOW CHANGES FOR TABLE user SINCE 100;
 >
 > **Explanation:** `SINCE version_number` streams changefeed deltas relative to sequence offsets.
 
-
-
-### Exercise 4: Streaming Table Delta Changes
-
-**Problem:** Query changefeed deltas for `article` table since `$last_timestamp`.
-
-**Expected output:**
-```text
-SHOW CHANGES FOR TABLE article SINCE $last_timestamp;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SHOW CHANGES FOR TABLE article SINCE $last_timestamp;
-> ```
->
-> **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` streams delta history records.
-
-### Exercise 5: Changefeed Version Sequence Tracking
-
-**Problem:** Query changes for `user` table since version sequence number 100 (`SINCE 100`).
-
-**Expected output:**
-```text
-SHOW CHANGES FOR TABLE user SINCE 100;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SHOW CHANGES FOR TABLE user SINCE 100;
-> ```
->
-> **Explanation:** `SINCE version_number` streams changefeed deltas relative to sequence offsets.
-
 ## 7. Related Terms
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Enabling change logging.
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Real-time push streams.

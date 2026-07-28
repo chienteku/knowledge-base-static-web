@@ -219,40 +219,6 @@ Minimizes OCC lock contention and transaction abort retries
 >
 > **Explanation:** Short transactions reduce write conflict probability in concurrent storage engines.
 
-
-
-### Exercise 4: SurrealDB Transaction Guarantees
-
-**Problem:** State ACID transaction guarantees provided by SurrealDB (Atomic, Consistent, Isolated, Durable).
-
-**Expected output:**
-```text
-Full ACID transaction guarantees
-```
-
-> [!check]- Answer
-> ```text
-> Full ACID transaction guarantees
-> ```
->
-> **Explanation:** SurrealDB executes transactional query blocks with strict ACID guarantees.
-
-### Exercise 5: Optimistic Concurrency Control (OCC) Handling
-
-**Problem:** Why should transactional writes be kept short in distributed clusters? (Minimizes OCC lock contention and transaction abort retries).
-
-**Expected output:**
-```text
-Minimizes OCC lock contention and transaction abort retries
-```
-
-> [!check]- Answer
-> ```text
-> Minimizes OCC lock contention and transaction abort retries
-> ```
->
-> **Explanation:** Short transactions reduce write conflict probability in concurrent storage engines.
-
 ## 7. Related Terms
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](transactions.md) — Transaction commands.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Single-node and distributed storage backends.

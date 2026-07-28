@@ -227,42 +227,6 @@ db.users.findOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
 >
 > **Explanation:** `findOne()` returns the first matching document object directly.
 
-
-
-### Exercise 4: Basic Find Query with Projection
-
-**Problem:** Find active users returning ONLY `name` and `email` fields (excluding `_id`).
-
-**Expected output:**
-```text
-db.users.find({ active: true }, { projection: { name: 1, email: 1, _id: 0 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({ active: true }, {
->   projection: { name: 1, email: 1, _id: 0 }
-> });
-> ```
->
-> **Explanation:** Projection objects restrict returned document fields.
-
-### Exercise 5: Find Single Document by ID
-
-**Problem:** Find single user document matching `_id` using `findOne()`.
-
-**Expected output:**
-```text
-db.users.findOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.findOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-> ```
->
-> **Explanation:** `findOne()` returns the first matching document object directly.
-
 ## 7. Related Terms
 - [Query Filter (Filter Document)](query_filter.md) — The filter parameter.
 - [Cursor](cursor.md) — The pointer returned by `find()`.

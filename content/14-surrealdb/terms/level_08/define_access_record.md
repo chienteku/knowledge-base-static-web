@@ -200,42 +200,6 @@ DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 12h ...
 >
 > **Explanation:** `DURATION FOR SESSION` configures JWT token validity periods.
 
-
-
-### Exercise 4: Complete RECORD Access Definition
-
-**Problem:** Write full `DEFINE ACCESS account_access ON DATABASE TYPE RECORD` with SIGNUP and SIGNIN.
-
-**Expected output:**
-```text
-DEFINE ACCESS account_access ON DATABASE TYPE RECORD SIGNUP (...) SIGNIN (...);
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE ACCESS account_access ON DATABASE TYPE RECORD
->   SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass))
->   SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));
-> ```
->
-> **Explanation:** RECORD access definitions specify signin and signup database handlers.
-
-### Exercise 5: Session Expiration Setting
-
-**Problem:** Set RECORD access token duration to 12 hours (`12h`).
-
-**Expected output:**
-```text
-DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 12h ...
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE ACCESS user_access ON DATABASE TYPE RECORD DURATION FOR SESSION 12h;
-> ```
->
-> **Explanation:** `DURATION FOR SESSION` configures JWT token validity periods.
-
 ## 7. Related Terms
 - [Authentication Architecture](auth_architecture.md) — System auth hierarchy overview.
 - [`SIGNUP` / `SIGNIN` Clauses](signup_signin.md) — Authentication handler expressions.

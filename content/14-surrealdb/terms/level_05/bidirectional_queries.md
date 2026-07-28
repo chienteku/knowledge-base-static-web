@@ -244,41 +244,6 @@ SELECT <->friend_of<->user AS friends FROM user:alice;
 >
 > **Explanation:** `<->` traverses graph relations in both directions simultaneously.
 
-
-
-### Exercise 4: Bidirectional Social Follower Traversal
-
-**Problem:** Write SurrealQL queries to select: 1. Users `user:alice` follows (`->follows->user`), 2. Users following `user:alice` (`<-follows<-user`).
-
-**Expected output:**
-```text
-1. SELECT ->follows->user FROM user:alice; 2. SELECT <-follows<-user FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT ->follows->user FROM user:alice;
-> SELECT <-follows<-user FROM user:alice;
-> ```
->
-> **Explanation:** `->` traverses outgoing edges; `<-` traverses incoming edges.
-
-### Exercise 5: Undirected Friendship Graph Query
-
-**Problem:** Query all friends connected via `friend_of` in either direction using `<->`.
-
-**Expected output:**
-```text
-SELECT <->friend_of<->user AS friends FROM user:alice;
-```
-
-> [!check]- Answer
-> ```surrealql
-> SELECT <->friend_of<->user AS friends FROM user:alice;
-> ```
->
-> **Explanation:** `<->` traverses graph relations in both directions simultaneously.
-
 ## 7. Related Terms
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Graph Traversal vs Relational JOINs](graph_vs_joins.md) — Speed performance trade-offs.

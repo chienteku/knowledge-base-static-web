@@ -196,40 +196,6 @@ OWNER, EDITOR, VIEWER
 >
 > **Explanation:** Built-in system roles specify administrative privilege levels.
 
-
-
-### Exercise 4: Defining Database Editor System User
-
-**Problem:** Define database system user `dev_editor` on database `main` with password `"pass123"` and role `EDITOR`.
-
-**Expected output:**
-```text
-DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE USER dev_editor ON DATABASE PASSWORD "pass123" ROLES EDITOR;
-> ```
->
-> **Explanation:** `DEFINE USER` creates system database administrators with specified role privileges.
-
-### Exercise 5: System User Roles Overview
-
-**Problem:** List 3 built-in system user roles in SurrealDB (`OWNER`, `EDITOR`, `VIEWER`).
-
-**Expected output:**
-```text
-OWNER, EDITOR, VIEWER
-```
-
-> [!check]- Answer
-> ```text
-> OWNER, EDITOR, VIEWER
-> ```
->
-> **Explanation:** Built-in system roles specify administrative privilege levels.
-
 ## 7. Related Terms
 - [Authentication Architecture](auth_architecture.md) — The overall 4-tier security system.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Contrast with end-user table authentication.

@@ -239,44 +239,6 @@ CREATE, UPDATE, DELETE
 >
 > **Explanation:** Live query callbacks receive action strings indicating record mutation type.
 
-
-
-### Exercise 4: Live Query Subscription and Un-subscription
-
-**Problem:** Subscribe to `article` live query, receive updates, and kill query with `db.kill(queryId)`.
-
-**Expected output:**
-```text
-const id = await db.live('article', cb); ... await db.kill(id);
-```
-
-> [!check]- Answer
-> ```javascript
-> const queryId = await db.live('article', (action, result) => {
->   console.log(action, result);
-> });
-> // Later on cleanup:
-> await db.kill(queryId);
-> ```
->
-> **Explanation:** `db.live()` returns a query ID used to cancel subscriptions via `db.kill()`.
-
-### Exercise 5: Handling Live Query Action Types
-
-**Problem:** List 3 action types passed to live query callbacks (`CREATE`, `UPDATE`, `DELETE`).
-
-**Expected output:**
-```text
-CREATE, UPDATE, DELETE
-```
-
-> [!check]- Answer
-> ```text
-> CREATE, UPDATE, DELETE
-> ```
->
-> **Explanation:** Live query callbacks receive action strings indicating record mutation type.
-
 ## 7. Related Terms
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Server-side live query statement.
 - [`KILL` (Stopping Live Queries)](../level_09/kill_live_query.md) — Terminating subscriptions.

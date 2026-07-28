@@ -188,40 +188,6 @@ Automatic scaling, automated backups, zero infrastructure maintenance
 >
 > **Explanation:** SurrealDB Cloud handles database clustering, backups, and security patching.
 
-
-
-### Exercise 4: SurrealDB Cloud Connection Setup
-
-**Problem:** Connect JS SDK to SurrealDB Cloud instance `wss://app.surreal.cloud/rpc`.
-
-**Expected output:**
-```text
-await db.connect("wss://app.surreal.cloud/rpc");
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.connect("wss://app.surreal.cloud/rpc");
-> ```
->
-> **Explanation:** `wss://*.surreal.cloud/rpc` establishes TLS-encrypted WebSocket connections to managed SurrealDB Cloud.
-
-### Exercise 5: SurrealDB Cloud Fully Managed Benefits
-
-**Problem:** List 3 benefits of SurrealDB Cloud (Automatic scaling, automated backups, zero infrastructure maintenance).
-
-**Expected output:**
-```text
-Automatic scaling, automated backups, zero infrastructure maintenance
-```
-
-> [!check]- Answer
-> ```text
-> Automatic scaling, automated backups, zero infrastructure maintenance
-> ```
->
-> **Explanation:** SurrealDB Cloud handles database clustering, backups, and security patching.
-
 ## 7. Related Terms
 - [Surrealist (Web IDE)](../level_01/surrealist.md) — Visual cloud query editor.
 - [Docker Deployment](docker_deployment.md) — Self-hosted container deployment alternative.

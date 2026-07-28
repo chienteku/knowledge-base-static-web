@@ -222,40 +222,6 @@ db.posts.find({ tags: { $type: "array" } });
 >
 > **Explanation:** `$type: "array"` checks if a field contains BSON array data.
 
-
-
-### Exercise 4: Checking Field Existence with `$exists`
-
-**Problem:** Query documents in `users` possessing optional field `middleName`.
-
-**Expected output:**
-```text
-db.users.find({ middleName: { $exists: true } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({ middleName: { $exists: true } });
-> ```
->
-> **Explanation:** `{ $exists: true }` matches documents containing the specified field key.
-
-### Exercise 5: Filtering Array BSON Types with `$type`
-
-**Problem:** Query documents where `tags` field is typed as BSON array (`"array"`).
-
-**Expected output:**
-```text
-db.posts.find({ tags: { $type: "array" } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.posts.find({ tags: { $type: "array" } });
-> ```
->
-> **Explanation:** `$type: "array"` checks if a field contains BSON array data.
-
 ## 7. Related Terms
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The paradigm.
 - [`null`](null_type.md) — The null indicator difference.

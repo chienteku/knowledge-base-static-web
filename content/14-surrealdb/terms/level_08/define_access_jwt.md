@@ -196,40 +196,6 @@ DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.
 >
 > **Explanation:** `URL` fetches public JWKS verification keys for validating asymmetric RS256 JWTs.
 
-
-
-### Exercise 4: Defining HMAC HS256 JWT Access
-
-**Problem:** Define JWT access `app_jwt` on database using `HS256` algorithm and secret `"my_secret"`.
-
-**Expected output:**
-```text
-DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE ACCESS app_jwt ON DATABASE TYPE JWT ALGORITHM HS256 KEY "my_secret";
-> ```
->
-> **Explanation:** `TYPE JWT ALGORITHM HS256 KEY ...` validates external HMAC-SHA256 tokens.
-
-### Exercise 5: JWKS Endpoint RS256 Integration
-
-**Problem:** Define JWT access for Auth0 using RS256 JWKS endpoint URL.
-
-**Expected output:**
-```text
-DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE ACCESS auth0 ON DATABASE TYPE JWT ALGORITHM RS256 URL "https://dev.auth0.com/.well-known/jwks.json";
-> ```
->
-> **Explanation:** `URL` fetches public JWKS verification keys for validating asymmetric RS256 JWTs.
-
 ## 7. Related Terms
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in database user registration.
 - [JWT Token-Based Auth](jwt_auth.md) — JWT structure and verification details.

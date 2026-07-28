@@ -229,40 +229,6 @@ Arbitrary user-defined custom attributes or dynamic key-value sub-documents
 >
 > **Explanation:** Wildcard indexes efficiently index arbitrary user-defined custom document attributes.
 
-
-
-### Exercise 4: Creating Sub-Document Wildcard Index
-
-**Problem:** Create wildcard index on dynamic sub-document `customFields` path `"customFields.$**"`.
-
-**Expected output:**
-```text
-db.products.createIndex({ "customFields.$**": 1 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.products.createIndex({ "customFields.$**": 1 });
-> ```
->
-> **Explanation:** Wildcard index `"subdoc.$**"` indexes all dynamic scalar fields inside `customFields`.
-
-### Exercise 5: Wildcard Indexing Use Case
-
-**Problem:** Describe ideal use case for Wildcard Indexes (Arbitrary user-defined custom attributes or polymorphic dynamic fields).
-
-**Expected output:**
-```text
-Arbitrary user-defined custom attributes or dynamic key-value sub-documents
-```
-
-> [!check]- Answer
-> ```text
-> Arbitrary user-defined custom attributes or dynamic key-value sub-documents
-> ```
->
-> **Explanation:** Wildcard indexes efficiently index arbitrary user-defined custom document attributes.
-
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [The Attribute Pattern](../../level_05/attribute_pattern.md) — The schema design alternative.

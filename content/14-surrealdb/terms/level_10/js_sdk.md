@@ -235,43 +235,6 @@ surrealdb
 >
 > **Explanation:** `npm install surrealdb` installs the official JavaScript/TypeScript SDK.
 
-
-
-### Exercise 4: JavaScript SDK Setup Flow
-
-**Problem:** Write full JS SDK startup sequence: 1. Instantiate `Surreal`, 2. Connect, 3. Select NS/DB, 4. Signin.
-
-**Expected output:**
-```text
-const db = new Surreal(); await db.connect(uri); await db.use({ ns, db }); await db.signin(creds);
-```
-
-> [!check]- Answer
-> ```javascript
-> const db = new Surreal();
-> await db.connect("ws://127.0.0.1:8000/rpc");
-> await db.use({ ns: "main", db: "app" });
-> await db.signin({ user: "root", pass: "root" });
-> ```
->
-> **Explanation:** Modern SurrealDB JS SDK workflow requires connecting, setting scope, and signing in.
-
-### Exercise 5: SDK Package Name
-
-**Problem:** Official npm package name for SurrealDB JavaScript SDK (`surrealdb` or `@surrealdb/surrealdb`).
-
-**Expected output:**
-```text
-surrealdb
-```
-
-> [!check]- Answer
-> ```text
-> surrealdb
-> ```
->
-> **Explanation:** `npm install surrealdb` installs the official JavaScript/TypeScript SDK.
-
 ## 7. Related Terms
 - [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](sdk_connection.md) — Connection sequence details.
 - [SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)](sdk_crud.md) — Ergonomic methods.

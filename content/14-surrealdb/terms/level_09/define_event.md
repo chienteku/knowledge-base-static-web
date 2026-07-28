@@ -208,40 +208,6 @@ DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (...);
 >
 > **Explanation:** `WHEN $event = ...` filters event execution by mutation type.
 
-
-
-### Exercise 4: Creating Audit Log Event
-
-**Problem:** Define event `user_created` on `user` table creating an `audit` record when `$event = "CREATE"`.
-
-**Expected output:**
-```text
-DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE EVENT user_created ON TABLE user WHEN $event = "CREATE" THEN (CREATE audit CONTENT { user: $after.id });
-> ```
->
-> **Explanation:** `DEFINE EVENT` triggers asynchronous or transactional event handlers.
-
-### Exercise 5: Event Action Filter
-
-**Problem:** Trigger event `on_delete` ONLY when `$event = "DELETE"`.
-
-**Expected output:**
-```text
-DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (...);
-```
-
-> [!check]- Answer
-> ```surrealql
-> DEFINE EVENT on_delete ON TABLE user WHEN $event = "DELETE" THEN (CREATE deleted_log CONTENT { user: $before.id });
-> ```
->
-> **Explanation:** `WHEN $event = ...` filters event execution by mutation type.
-
 ## 7. Related Terms
 - [`$before` / `$after` / `$event` / `$value` Variables](event_variables.md) — Event context variables.
 - [`DEFINE FUNCTION`](define_function.md) — Reusable server-side functions.

@@ -218,40 +218,6 @@ db.users.hideIndex("old_idx");
 >
 > **Explanation:** `hideIndex()` hides an index from the query planner to safely test index removal impact.
 
-
-
-### Exercise 4: Creating Single Field Index
-
-**Problem:** Create ascending index on `email` field named `email_asc_idx`.
-
-**Expected output:**
-```text
-db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.createIndex({ email: 1 }, { name: "email_asc_idx" });
-> ```
->
-> **Explanation:** `createIndex({ field: 1 })` builds an ascending B-Tree index.
-
-### Exercise 5: Hiding Index with `hideIndex`
-
-**Problem:** Hide index `old_idx` to test if query performance drops without deleting the index.
-
-**Expected output:**
-```text
-db.users.hideIndex("old_idx");
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.hideIndex("old_idx");
-> ```
->
-> **Explanation:** `hideIndex()` hides an index from the query planner to safely test index removal impact.
-
 ## 7. Related Terms
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [Background / Rolling Index Builds](index_builds.md) — Index construction locks.

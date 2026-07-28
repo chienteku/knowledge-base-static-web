@@ -228,45 +228,6 @@ db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
 >
 > **Explanation:** `{ upsert: true }` inserts the replacement document if no matching document exists.
 
-
-
-### Exercise 4: Replacing Full Document with `replaceOne`
-
-**Problem:** Replace entire user document `_id: 1` with `{ name: "Bob", status: "active" }`.
-
-**Expected output:**
-```text
-db.users.replaceOne({ _id: 1 }, { name: "Bob", status: "active" });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.replaceOne({
->   _id: 1
-> }, {
->   name: "Bob",
->   status: "active"
-> });
-> ```
->
-> **Explanation:** `replaceOne(filter, newDoc)` replaces the document content while preserving `_id`.
-
-### Exercise 5: Upserting with `replaceOne`
-
-**Problem:** Replace or insert document `_id: 2` using `{ upsert: true }` option.
-
-**Expected output:**
-```text
-db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.replaceOne({ _id: 2 }, { name: "Charlie" }, { upsert: true });
-> ```
->
-> **Explanation:** `{ upsert: true }` inserts the replacement document if no matching document exists.
-
 ## 7. Related Terms
 - [updateOne() / updateMany()](update.md) — Partial update methods.
 - [`$set` vs. Whole-Document Replacement](set_vs_replace.md) — Comparative rules.

@@ -216,40 +216,6 @@ Ratio of unique field values to total collection document count
 >
 > **Explanation:** High selectivity (approaching 1.0) maximizes index filtering speed.
 
-
-
-### Exercise 4: High vs Low Selectivity Comparison
-
-**Problem:** Which field has higher selectivity: `email` (unique) or `status` (3 values)? (`email`).
-
-**Expected output:**
-```text
-email (high selectivity unique values)
-```
-
-> [!check]- Answer
-> ```text
-> email (high selectivity unique values)
-> ```
->
-> **Explanation:** High selectivity fields narrow down query candidate sets rapidly.
-
-### Exercise 5: Selectivity Definition
-
-**Problem:** Define index selectivity in MongoDB (The ratio of distinct field values to total collection document count).
-
-**Expected output:**
-```text
-Ratio of unique field values to total collection document count
-```
-
-> [!check]- Answer
-> ```text
-> Ratio of unique field values to total collection document count
-> ```
->
-> **Explanation:** High selectivity (approaching 1.0) maximizes index filtering speed.
-
 ## 7. Related Terms
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree structure.
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The query planner choices.

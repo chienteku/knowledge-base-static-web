@@ -213,40 +213,6 @@ $auth holds the database user record; $token holds decoded JWT claims
 >
 > **Explanation:** `$auth` provides database record state; `$token` provides JWT claim metadata.
 
-
-
-### Exercise 4: Inspecting Token Expiration Claim
-
-**Problem:** Select `$token.exp` to inspect current JWT expiration timestamp.
-
-**Expected output:**
-```text
-RETURN $token.exp;
-```
-
-> [!check]- Answer
-> ```surrealql
-> RETURN $token.exp;
-> ```
->
-> **Explanation:** `$token` exposes decoded JWT claim properties inside queries.
-
-### Exercise 5: Comparing `$auth` and `$token` Variables
-
-**Problem:** State difference between `$auth` (database record object) and `$token` (decoded JWT payload claims).
-
-**Expected output:**
-```text
-$auth holds the database user record; $token holds decoded JWT claims
-```
-
-> [!check]- Answer
-> ```text
-> $auth holds the database user record; $token holds decoded JWT claims
-> ```
->
-> **Explanation:** `$auth` provides database record state; `$token` provides JWT claim metadata.
-
 ## 7. Related Terms
 - [`$auth` Variable](auth_variable.md) — The authenticated record user object.
 - [JWT Token-Based Auth](jwt_auth.md) — JWT validation and claims parsing.

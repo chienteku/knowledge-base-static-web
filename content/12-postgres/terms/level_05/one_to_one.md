@@ -232,43 +232,6 @@ Isolating rare/large blob columns; strict column-level security permissions
 >
 > **Explanation:** Splitting 1-to-1 tables keeps primary tables compact while isolating sensitive fields.
 
-
-
-### Exercise 4: Defining 1-to-1 Relationship Schema
-
-**Problem:** Create `user_settings` table establishing 1-to-1 relationship with `users` table.
-
-**Expected output:**
-```text
-CREATE TABLE user_settings ( user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE, theme TEXT DEFAULT 'dark' );
-```
-
-> [!check]- Answer
-> ```sql
-> CREATE TABLE user_settings (
->   user_id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
->   theme TEXT DEFAULT 'dark'
-> );
-> ```
->
-> **Explanation:** Using the foreign key as primary key (`user_id INT PRIMARY KEY`) guarantees 1-to-1 uniqueness.
-
-### Exercise 5: When to Split 1-to-1 Tables
-
-**Problem:** List 2 valid reasons for splitting 1-to-1 data into separate tables (1. Isolating rare/large blob columns; 2. Strict column-level security permissions).
-
-**Expected output:**
-```text
-Isolating rare/large blob columns; strict column-level security permissions
-```
-
-> [!check]- Answer
-> ```text
-> Isolating rare/large blob columns; strict column-level security permissions
-> ```
->
-> **Explanation:** Splitting 1-to-1 tables keeps primary tables compact while isolating sensitive fields.
-
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The parent reference logic.
 - [One-to-Many Relationship](one_to_many.md) — The hierarchical default link.

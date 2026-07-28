@@ -231,43 +231,6 @@ Omits missing documents from the index B-Tree
 >
 > **Explanation:** Sparse indexes save RAM by omitting documents lacking the target field.
 
-
-
-### Exercise 4: Creating Sparse Index for Optional Field
-
-**Problem:** Create sparse unique index on optional field `passportNumber`.
-
-**Expected output:**
-```text
-db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.createIndex(
->   { passportNumber: 1 },
->   { unique: true, sparse: true }
-> );
-> ```
->
-> **Explanation:** `sparse: true` indexes documents containing `passportNumber`, omitting absent fields.
-
-### Exercise 5: Sparse vs Standard Indexing of Absent Keys
-
-**Problem:** How does a sparse index store documents missing the indexed key? (Omits missing documents from the index B-Tree).
-
-**Expected output:**
-```text
-Omits missing documents from the index B-Tree
-```
-
-> [!check]- Answer
-> ```text
-> Omits missing documents from the index B-Tree
-> ```
->
-> **Explanation:** Sparse indexes save RAM by omitting documents lacking the target field.
-
 ## 7. Related Terms
 - [Unique Index](unique_index.md) — The parent constraint.
 - [Partial Index](partial_index.md) — The modern alternative.

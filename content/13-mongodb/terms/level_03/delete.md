@@ -230,42 +230,6 @@ db.logs.deleteMany({ createdAt: { $lt: new Date("2026-01-01T00:00:00Z") } });
 >
 > **Explanation:** `deleteMany(filter)` deletes all documents satisfying filter criteria.
 
-
-
-### Exercise 4: Deleting Single Document by Primary Key
-
-**Problem:** Delete user document with `_id: ObjectId("60d5ecb8b5c9c22b9c8b4567")`.
-
-**Expected output:**
-```text
-db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.deleteOne({ _id: new ObjectId("60d5ecb8b5c9c22b9c8b4567") });
-> ```
->
-> **Explanation:** `deleteOne({ _id })` deletes a single primary key document.
-
-### Exercise 5: Deleting Inactive Logs with `deleteMany`
-
-**Problem:** Delete all log documents created before `2026-01-01T00:00:00Z`.
-
-**Expected output:**
-```text
-db.logs.deleteMany({ createdAt: { $lt: new Date("2026-01-01T00:00:00Z") } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.logs.deleteMany({
->   createdAt: { $lt: new Date("2026-01-01T00:00:00Z") }
-> });
-> ```
->
-> **Explanation:** `deleteMany(filter)` deletes all documents satisfying filter criteria.
-
 ## 7. Related Terms
 - [Query Filter (Filter Document)](query_filter.md) — The target filters.
 - [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — The outputs containing deleted counts.

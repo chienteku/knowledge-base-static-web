@@ -222,40 +222,6 @@ Yes, single-field indexes traverse both ascending and descending directions
 >
 > **Explanation:** B-Tree pointers allow reverse traversal for single-field index queries.
 
-
-
-### Exercise 4: Creating Single-Field Index
-
-**Problem:** Create ascending single-field index on `username` in `users` collection.
-
-**Expected output:**
-```text
-db.users.createIndex({ username: 1 });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.createIndex({ username: 1 });
-> ```
->
-> **Explanation:** `createIndex({ field: 1 })` indexes a single field in ascending B-Tree order.
-
-### Exercise 5: Single-Field Index Traversal Direction
-
-**Problem:** Can single-field index `{ age: 1 }` satisfy query `.sort({ age: -1 })`? (Yes, single-field indexes traverse both directions).
-
-**Expected output:**
-```text
-Yes, single-field indexes traverse both ascending and descending directions
-```
-
-> [!check]- Answer
-> ```text
-> Yes, single-field indexes traverse both ascending and descending directions
-> ```
->
-> **Explanation:** B-Tree pointers allow reverse traversal for single-field index queries.
-
 ## 7. Related Terms
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [Compound Index](compound_index.md) — Multi-field index structures.

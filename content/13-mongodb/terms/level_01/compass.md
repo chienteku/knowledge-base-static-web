@@ -190,40 +190,6 @@ $match, $group
 >
 > **Explanation:** Compass provides visual stage editors for building `$match`, `$group`, `$project` pipelines.
 
-
-
-### Exercise 4: Compass Explain Plan Inspection
-
-**Problem:** Where in MongoDB Compass can you inspect query execution plans and index utilization? (Explain Plan tab).
-
-**Expected output:**
-```text
-Explain Plan tab in Compass query view
-```
-
-> [!check]- Answer
-> ```text
-> Explain Plan tab in Compass query view
-> ```
->
-> **Explanation:** The Explain Plan tab displays execution stage details (COLLSCAN vs IXSCAN).
-
-### Exercise 5: Compass Aggregation Builder
-
-**Problem:** Name 2 visual aggregation stages available in Compass pipeline builder (`$match`, `$group`).
-
-**Expected output:**
-```text
-$match, $group
-```
-
-> [!check]- Answer
-> ```text
-> $match, $group
-> ```
->
-> **Explanation:** Compass provides visual stage editors for building `$match`, `$group`, `$project` pipelines.
-
 ## 7. Related Terms
 - [mongosh (MongoDB Shell)](mongosh.md) — The command-line client.
 - [MongoDB Atlas](atlas.md) — Cloud dashboard interfaces.

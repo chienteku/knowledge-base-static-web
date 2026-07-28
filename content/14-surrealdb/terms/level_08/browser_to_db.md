@@ -203,40 +203,6 @@ const query = await db.live('article', (action, result) => console.log(action, r
 >
 > **Explanation:** Web browser clients subscribe to real-time WebSocket push updates directly from SurrealDB.
 
-
-
-### Exercise 4: Browser Direct SDK Architecture Flow
-
-**Problem:** List 3 steps of Browser-to-Database flow (1. Browser connects via WSS, 2. Signin to RECORD access, 3. SurrealDB enforces PERMISSIONS).
-
-**Expected output:**
-```text
-1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
-```
-
-> [!check]- Answer
-> ```text
-> 1. WSS Connection, 2. Scoped Signin, 3. Row-level PERMISSIONS evaluation
-> ```
->
-> **Explanation:** Direct browser-to-database connections rely on WSS and scoped row-level security.
-
-### Exercise 5: Browser Live Query Subscriptions
-
-**Problem:** Subscribe to real-time `LIVE SELECT` events directly from web browser SDK.
-
-**Expected output:**
-```text
-const query = await db.live('article', (action, result) => console.log(action, result));
-```
-
-> [!check]- Answer
-> ```javascript
-> const query = await db.live('article', (action, result) => console.log(action, result));
-> ```
->
-> **Explanation:** Web browser clients subscribe to real-time WebSocket push updates directly from SurrealDB.
-
 ## 7. Related Terms
 - [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in end-user authentication.

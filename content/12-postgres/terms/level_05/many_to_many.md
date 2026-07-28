@@ -223,46 +223,6 @@ DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
 >
 > **Explanation:** Deleting rows from junction tables severs Many-to-Many relationships cleanly.
 
-
-
-### Exercise 4: Modeling Many-to-Many Relationship
-
-**Problem:** Create 3 tables for Many-to-Many relationship between `articles` and `tags` using junction table `article_tags`.
-
-**Expected output:**
-```text
-CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT ); CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT ); CREATE TABLE article_tags ( article_id INT REFERENCES articles(id) ON DELETE CASCADE, tag_id INT REFERENCES tags(id) ON DELETE CASCADE, PRIMARY KEY (article_id, tag_id) );
-```
-
-> [!check]- Answer
-> ```sql
-> CREATE TABLE articles ( id SERIAL PRIMARY KEY, title TEXT );
-> CREATE TABLE tags ( id SERIAL PRIMARY KEY, name TEXT );
-> CREATE TABLE article_tags (
->   article_id INT REFERENCES articles(id) ON DELETE CASCADE,
->   tag_id INT REFERENCES tags(id) ON DELETE CASCADE,
->   PRIMARY KEY (article_id, tag_id)
-> );
-> ```
->
-> **Explanation:** Junction tables model Many-to-Many relationships using foreign key pairs.
-
-### Exercise 5: Deleting Junction Entries
-
-**Problem:** Remove tag `tag_id = 5` from article `article_id = 10`.
-
-**Expected output:**
-```text
-DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
-```
-
-> [!check]- Answer
-> ```sql
-> DELETE FROM article_tags WHERE article_id = 10 AND tag_id = 5;
-> ```
->
-> **Explanation:** Deleting rows from junction tables severs Many-to-Many relationships cleanly.
-
 ## 7. Related Terms
 - [One-to-Many Relationship](one_to_many.md) — The single-direction default pattern.
 - [Junction Table (Bridge / Pivot Table)](junction_table.md) — The physical implementation table.

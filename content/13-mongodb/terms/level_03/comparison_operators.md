@@ -233,44 +233,6 @@ db.users.find({ role: { $nin: ["admin", "manager"] } });
 >
 > **Explanation:** `$nin` matches documents whose field value is not contained in the specified array.
 
-
-
-### Exercise 4: Range Predicate Query with `$gte` and `$lte`
-
-**Problem:** Query products with `price` between 20 and 50 inclusive using `$gte` and `$lte`.
-
-**Expected output:**
-```text
-db.products.find({ price: { $gte: 20, $lte: 50 } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.products.find({
->   price: { $gte: 20, $lte: 50 }
-> });
-> ```
->
-> **Explanation:** Combining `$gte` and `$lte` filters documents within numeric range boundaries.
-
-### Exercise 5: Excluding Values with `$nin`
-
-**Problem:** Query users whose `role` is neither `"admin"` nor `"manager"` using `$nin`.
-
-**Expected output:**
-```text
-db.users.find({ role: { $nin: ["admin", "manager"] } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.find({
->   role: { $nin: ["admin", "manager"] }
-> });
-> ```
->
-> **Explanation:** `$nin` matches documents whose field value is not contained in the specified array.
-
 ## 7. Related Terms
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
 - [Logical Query Operators (`$and`, `$or`, etc.)](logical_operators.md) -- Combining filters.

@@ -209,40 +209,6 @@ Query variables are transmitted as isolated binary parameters outside text query
 >
 > **Explanation:** Parameter bindings separate SQL execution code from untrusted data payloads.
 
-
-
-### Exercise 4: Converting Vulnerable Query to Parameterized Call
-
-**Problem:** Convert vulnerable query `` `SELECT * FROM article WHERE id = ${id}` `` to safe parameterized SDK invocation.
-
-**Expected output:**
-```text
-await db.query('SELECT * FROM article WHERE id = $id', { id: id });
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.query('SELECT * FROM article WHERE id = $id', { id: id });
-> ```
->
-> **Explanation:** Passing parameters via query variables prevents query syntax injection.
-
-### Exercise 5: Parameter Binding Protocol Layer
-
-**Problem:** Why are parameterized queries secure against injection? (Variables are transmitted as separated typed binary data payloads outside query syntax parsers).
-
-**Expected output:**
-```text
-Query variables are transmitted as isolated binary parameters outside text query parsing engines
-```
-
-> [!check]- Answer
-> ```text
-> Query variables are transmitted as isolated binary parameters outside text query parsing engines
-> ```
->
-> **Explanation:** Parameter bindings separate SQL execution code from untrusted data payloads.
-
 ## 7. Related Terms
 - [Parameters (`$param`)](../level_06/parameters.md) — SurrealQL query variables.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — SDK query methods.

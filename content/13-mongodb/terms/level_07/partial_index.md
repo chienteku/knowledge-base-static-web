@@ -243,46 +243,6 @@ Saves RAM and index size by excluding deleted documents from the index B-Tree
 >
 > **Explanation:** Partial indexes minimize RAM working sets by indexing active subset records.
 
-
-
-### Exercise 4: Creating Partial Unique Index
-
-**Problem:** Create partial unique index on `email` where `email` exists and is not null.
-
-**Expected output:**
-```text
-db.users.createIndex({ email: 1 }, { unique: true, partialFilterExpression: { email: { $type: "string" } } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.createIndex(
->   { email: 1 },
->   {
->     unique: true,
->     partialFilterExpression: { email: { $type: "string" } }
->   }
-> );
-> ```
->
-> **Explanation:** `partialFilterExpression` creates conditional indexes for specific document subsets.
-
-### Exercise 5: Partial Index RAM Saving Benefit
-
-**Problem:** Why use partial indexes for soft-deleted documents (`deleted: false`)? (Reduces index size by omitting deleted documents from RAM).
-
-**Expected output:**
-```text
-Saves RAM and index size by excluding deleted documents from the index B-Tree
-```
-
-> [!check]- Answer
-> ```text
-> Saves RAM and index size by excluding deleted documents from the index B-Tree
-> ```
->
-> **Explanation:** Partial indexes minimize RAM working sets by indexing active subset records.
-
 ## 7. Related Terms
 - [Sparse Index](sparse_index.md) — The parent existence index.
 - [Unique Index](unique_index.md) — The constraint model.

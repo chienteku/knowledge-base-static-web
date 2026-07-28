@@ -221,44 +221,6 @@ db.users.updateOne({ _id: 1 }, { $set: { "address.city": "Austin" } });
 >
 > **Explanation:** `$set` with dot-notation updates specific nested fields cleanly.
 
-
-
-### Exercise 4: Choosing Between `$set` and Replacement
-
-**Problem:** State difference: `$set` (modifies specific fields, preserving siblings); `replaceOne` (replaces entire document object).
-
-**Expected output:**
-```text
-$set updates specific fields; replaceOne replaces the entire document
-```
-
-> [!check]- Answer
-> ```text
-> $set updates specific fields; replaceOne replaces the entire document
-> ```
->
-> **Explanation:** `$set` preserves existing fields; `replaceOne` overwrites documents.
-
-### Exercise 5: Nested Sub-Document `$set` Update
-
-**Problem:** Update nested field `address.city` using `$set` without touching `address.zip`.
-
-**Expected output:**
-```text
-db.users.updateOne({ _id: 1 }, { $set: { "address.city": "Austin" } });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.updateOne({
->   _id: 1
-> }, {
->   $set: { "address.city": "Austin" }
-> });
-> ```
->
-> **Explanation:** `$set` with dot-notation updates specific nested fields cleanly.
-
 ## 7. Related Terms
 - [updateOne() / updateMany()](update.md) — Partial update methods.
 - [replaceOne()](replace_one.md) — Whole-document replacement.

@@ -226,40 +226,6 @@ await db.merge("user:alice", { age: 31 });
 >
 > **Explanation:** `db.merge(id, patch)` performs shallow object merging without replacing records.
 
-
-
-### Exercise 4: SDK CRUD Methods Overview
-
-**Problem:** List JS SDK methods for: 1. Select all records (`db.select`), 2. Create record (`db.create`), 3. Update fields (`db.merge`), 4. Delete (`db.delete`).
-
-**Expected output:**
-```text
-db.select, db.create, db.merge, db.delete
-```
-
-> [!check]- Answer
-> ```text
-> db.select, db.create, db.merge, db.delete
-> ```
->
-> **Explanation:** SDK CRUD methods wrap SurrealQL statements into simple asynchronous JS calls.
-
-### Exercise 5: Merging Fields with SDK `db.merge`
-
-**Problem:** Update `user:alice` setting `age = 31` without overwriting other fields using `db.merge()`.
-
-**Expected output:**
-```text
-await db.merge("user:alice", { age: 31 });
-```
-
-> [!check]- Answer
-> ```javascript
-> await db.merge("user:alice", { age: 31 });
-> ```
->
-> **Explanation:** `db.merge(id, patch)` performs shallow object merging without replacing records.
-
 ## 7. Related Terms
 - [JavaScript / TypeScript SDK](js_sdk.md) — SDK package overview.
 - [SDK `.query()` with Parameters](sdk_query.md) — Executing complex raw queries.

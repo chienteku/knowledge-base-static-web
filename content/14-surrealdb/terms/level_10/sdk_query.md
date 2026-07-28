@@ -225,47 +225,6 @@ const [usersRes, productsRes] = await db.query(...);
 >
 > **Explanation:** `db.query()` returns array elements corresponding to each semicolon-separated statement.
 
-
-
-### Exercise 4: Parameterized SDK Batch Query
-
-**Problem:** Execute batch query setting `$u` and selecting user with parameter `{ id: "user:alice" }`.
-
-**Expected output:**
-```text
-await db.query('LET $u = $id; SELECT * FROM $u;', { id: "user:alice" });
-```
-
-> [!check]- Answer
-> ```javascript
-> const [letRes, selectRes] = await db.query(
->   'LET $u = $id; SELECT * FROM $u;',
->   { id: "user:alice" }
-> );
-> ```
->
-> **Explanation:** `db.query(sql, params)` executes multi-statement SurrealQL scripts safely.
-
-### Exercise 5: Destructuring Multi-Statement Batch Query Responses
-
-**Problem:** Destructure response array from `db.query('SELECT * FROM user; SELECT * FROM product;')`.
-
-**Expected output:**
-```text
-const [usersRes, productsRes] = await db.query(...);
-```
-
-> [!check]- Answer
-> ```javascript
-> const [usersRes, productsRes] = await db.query(
->   'SELECT * FROM user; SELECT * FROM product;'
-> );
-> const users = usersRes.result;
-> const products = productsRes.result;
-> ```
->
-> **Explanation:** `db.query()` returns array elements corresponding to each semicolon-separated statement.
-
 ## 7. Related Terms
 - [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Security protections.
 - [SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)](sdk_crud.md) — High-level CRUD alternative.

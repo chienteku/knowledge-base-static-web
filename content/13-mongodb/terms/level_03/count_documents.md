@@ -215,40 +215,6 @@ db.logs.estimatedDocumentCount();
 >
 > **Explanation:** `estimatedDocumentCount()` returns collection metadata counts instantly without scanning.
 
-
-
-### Exercise 4: Filtered Document Count
-
-**Problem:** Count verified users in `users` collection using `countDocuments()`.
-
-**Expected output:**
-```text
-db.users.countDocuments({ verified: true });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.countDocuments({ verified: true });
-> ```
->
-> **Explanation:** `countDocuments(filter)` returns accurate counts of documents matching filter predicates.
-
-### Exercise 5: Fast Estimated Collection Count
-
-**Problem:** Get fast estimated document count for `logs` collection using `estimatedDocumentCount()`.
-
-**Expected output:**
-```text
-db.logs.estimatedDocumentCount();
-```
-
-> [!check]- Answer
-> ```javascript
-> db.logs.estimatedDocumentCount();
-> ```
->
-> **Explanation:** `estimatedDocumentCount()` returns collection metadata counts instantly without scanning.
-
 ## 7. Related Terms
 - [`find()` / `findOne()`](find.md) — The query basics.
 

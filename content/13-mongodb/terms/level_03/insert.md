@@ -238,46 +238,6 @@ db.tags.insertMany([ { name: "web" }, { name: "db" } ]);
 >
 > **Explanation:** `insertMany([ docs ])` performs bulk document insertions.
 
-
-
-### Exercise 4: Inserting Single Document with `insertOne`
-
-**Problem:** Insert user document `{ name: "Bob", email: "bob@example.com" }` using `insertOne()`.
-
-**Expected output:**
-```text
-db.users.insertOne({ name: "Bob", email: "bob@example.com" });
-```
-
-> [!check]- Answer
-> ```javascript
-> db.users.insertOne({
->   name: "Bob",
->   email: "bob@example.com"
-> });
-> ```
->
-> **Explanation:** `insertOne()` inserts a single document into the target collection.
-
-### Exercise 5: Bulk Insert with `insertMany`
-
-**Problem:** Insert array of 2 documents into `tags` collection using `insertMany()`.
-
-**Expected output:**
-```text
-db.tags.insertMany([ { name: "web" }, { name: "db" } ]);
-```
-
-> [!check]- Answer
-> ```javascript
-> db.tags.insertMany([
->   { name: "web" },
->   { name: "db" }
-> ]);
-> ```
->
-> **Explanation:** `insertMany([ docs ])` performs bulk document insertions.
-
 ## 7. Related Terms
 - [Collection](../level_01/collection.md) — The parent data container.
 - [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — Understanding the insert outputs.

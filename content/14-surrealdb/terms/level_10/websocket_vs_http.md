@@ -204,40 +204,6 @@ ws:// (local un-encrypted), wss:// (production TLS-encrypted)
 >
 > **Explanation:** `wss://` encrypts WebSocket frames using TLS/SSL in production.
 
-
-
-### Exercise 4: Protocol Selection Decision Matrix
-
-**Problem:** Match protocol with use case: 1. Real-time web browser apps (`WebSockets`), 2. Stateless serverless lambdas (`HTTP`).
-
-**Expected output:**
-```text
-1. WebSockets, 2. HTTP
-```
-
-> [!check]- Answer
-> ```text
-> 1. WebSockets, 2. HTTP
-> ```
->
-> **Explanation:** WebSockets provide real-time bi-directional streaming; HTTP provides stateless request-response execution.
-
-### Exercise 5: WebSocket Scheme Options
-
-**Problem:** List URI schemes for local un-encrypted and production encrypted WebSockets (`ws://`, `wss://`).
-
-**Expected output:**
-```text
-ws:// (local un-encrypted), wss:// (production TLS-encrypted)
-```
-
-> [!check]- Answer
-> ```text
-> ws:// (local un-encrypted), wss:// (production TLS-encrypted)
-> ```
->
-> **Explanation:** `wss://` encrypts WebSocket frames using TLS/SSL in production.
-
 ## 7. Related Terms
 - [Connection URI & Protocols](../level_01/connection_uri.md) — Connection strings.
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Live queries.
