@@ -239,6 +239,7 @@ fn main() {
 > ```
 > Restricted ancestor function called
 > ```
+> ```rust
 > mod outer {
 >     pub mod inner {
 >         pub(in crate::outer) fn secret() { println!("Restricted ancestor function called"); }
@@ -249,8 +250,6 @@ fn main() {
 > ```
 >
 > **Explanation:** `pub(in path)` restricts visibility to designated ancestor module paths.
-
----
 
 ---
 

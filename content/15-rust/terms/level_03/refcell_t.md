@@ -222,6 +222,7 @@ fn main() {
 > ```
 > Val: 100
 > ```
+> ```rust
 > use std::cell::RefCell;
 > fn main() {
 >     let cell = RefCell::new(10);

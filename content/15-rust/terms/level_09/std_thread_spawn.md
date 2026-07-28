@@ -208,6 +208,7 @@ thread::spawn(move || {
 > ```
 > Named thread spawned
 > ```
+> ```rust
 > use std::thread;
 > fn main() {
 >     let handle = thread::Builder::new()

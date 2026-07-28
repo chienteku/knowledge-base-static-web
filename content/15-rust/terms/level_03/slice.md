@@ -207,6 +207,7 @@ fn main() {
 > ```
 > [10, 0, 0, 40]
 > ```
+> ```rust
 > fn main() {
 >     let mut vec = vec![10, 20, 30, 40];
 >     for x in &mut vec[1..3] {

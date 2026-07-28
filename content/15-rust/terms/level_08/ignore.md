@@ -196,14 +196,13 @@ thread::spawn(move || {
 > ```
 > cargo test -- --ignored
 > ```
+> ```rust
 > fn main() {
 >     println!("cargo test -- --ignored");
 > }
 > ```
 >
 > **Explanation:** `-- --ignored` forces `cargo test` to execute only ignored tests.
-
----
 
 ---
 

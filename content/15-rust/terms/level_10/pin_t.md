@@ -200,6 +200,7 @@ thread::spawn(move || {
 > ```
 > Heap pinned future created
 > ```
+> ```rust
 > fn main() {
 >     println!("Heap pinned future created");
 > }

@@ -205,6 +205,7 @@ thread::spawn(move || {
 > ```
 > Type: alloc::string::String
 > ```
+> ```rust
 > use std::any::type_name;
 > fn print_type<T>(_: &T) {
 >     println!("Type: {}", type_name::<T>());

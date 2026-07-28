@@ -207,6 +207,7 @@ thread::spawn(move || {
 > ```
 > Debug assert checked
 > ```
+> ```rust
 > fn main() {
 >     let x = 5;
 >     debug_assert!(x > 0);

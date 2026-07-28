@@ -204,6 +204,7 @@ thread::spawn(move || {
 > ```
 > Filtered stream items
 > ```
+> ```rust
 > fn main() {
 >     println!("Filtered stream items");
 > }

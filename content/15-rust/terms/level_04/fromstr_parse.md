@@ -217,6 +217,7 @@ thread::spawn(move || {
 > ```
 > Parsed red: 255
 > ```
+> ```rust
 > use std::str::FromStr;
 > struct Color(u8, u8, u8);
 > impl FromStr for Color {

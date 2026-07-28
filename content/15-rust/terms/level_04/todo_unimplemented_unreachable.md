@@ -205,6 +205,7 @@ thread::spawn(move || {
 > ```
 > Matched: Even
 > ```
+> ```rust
 > fn check_mod(x: u32) -> &'static str {
 >     match x % 2 {
 >         0 => "Even",

@@ -252,6 +252,7 @@ fn main() {
 > ```
 > Person displayed: Bob
 > ```
+> ```rust
 > use std::fmt;
 > trait Person: fmt::Display {}
 > struct Man(&'static str);

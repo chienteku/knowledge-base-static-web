@@ -230,6 +230,7 @@ fn main() {
 > ```
 > Final val: 30
 > ```
+> ```rust
 > fn add_ten(x: &mut i32) { *x += 10; }
 > fn main() {
 >     let mut val = 10;

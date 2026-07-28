@@ -220,6 +220,7 @@ fn first_three(s: &str) -> &str {
 > ```
 > First: alpha
 > ```
+> ```rust
 > fn pick_first<'a, 'b>(x: &'a str, _y: &'b str) -> &'a str { x }
 > fn main() {
 >     let a = "alpha";

@@ -192,6 +192,7 @@ What two pieces of feedback should you give them?
 > ```
 > Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.
 > ```
+> ```rust
 > fn main() {
 >     println!("Binaries: Commit lockfile. Libraries: Ignore or test minimal versions.");
 > }

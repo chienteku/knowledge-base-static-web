@@ -248,6 +248,7 @@ fn main() {
 > ```
 > First: hello
 > ```
+> ```rust
 > fn print_first<I>(mut iter: I) where I: Iterator<Item = String> {
 >     if let Some(s) = iter.next() {
 >         println!("First: {}", s);

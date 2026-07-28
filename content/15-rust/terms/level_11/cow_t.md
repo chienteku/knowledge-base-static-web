@@ -208,6 +208,7 @@ thread::spawn(move || {
 > ```
 > Modified Cow: hello world
 > ```
+> ```rust
 > use std::borrow::Cow;
 > fn main() {
 >     let mut cow: Cow<'_, str> = Cow::Borrowed("hello");
@@ -217,8 +218,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** `.to_mut()` clones borrowed data into an owned buffer only when mutation occurs.
-
----
 
 ---
 

@@ -235,6 +235,7 @@ fn main() {
 > ```
 > Total equivalence confirmed
 > ```
+> ```rust
 > #[derive(PartialEq, Eq, Debug)]
 > struct UserId(u64);
 > fn main() {

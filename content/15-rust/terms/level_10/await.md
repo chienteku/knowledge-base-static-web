@@ -213,6 +213,7 @@ thread::spawn(move || {
 > Item processed: 1
 > Item processed: 2
 > ```
+> ```rust
 > fn main() {
 >     println!("Item processed: 1\nItem processed: 2");
 > }

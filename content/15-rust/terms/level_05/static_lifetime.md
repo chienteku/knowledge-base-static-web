@@ -193,6 +193,7 @@ thread::spawn(move || {
 > ```
 > Leaked static slice: Dynamic
 > ```
+> ```rust
 > fn main() {
 >     let s = String::from("Dynamic");
 >     let static_slice: &'static str = Box::leak(s.into_boxed_str());

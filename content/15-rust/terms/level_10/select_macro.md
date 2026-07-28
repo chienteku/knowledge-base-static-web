@@ -218,6 +218,7 @@ thread::spawn(move || {
 > ```
 > Guard branch selected
 > ```
+> ```rust
 > fn main() {
 >     println!("Guard branch selected");
 > }

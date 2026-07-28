@@ -226,6 +226,7 @@ fn get_first_word_length(text: Option<String>) -> Option<usize> {
 > ```
 > Parsed len: 42
 > ```
+> ```rust
 > fn parse_file_len(s: &str) -> Result<usize, std::num::ParseIntError> {
 >     let val: usize = s.parse()?;
 >     Ok(val)

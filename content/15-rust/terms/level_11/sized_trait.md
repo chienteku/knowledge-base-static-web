@@ -212,6 +212,7 @@ thread::spawn(move || {
 > ```
 > Size of i32: 4 bytes
 > ```
+> ```rust
 > use std::mem::size_of;
 > fn main() {
 >     println!("Size of i32: {} bytes", size_of::<i32>());

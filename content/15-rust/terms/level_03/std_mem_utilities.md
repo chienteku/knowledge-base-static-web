@@ -209,6 +209,7 @@ thread::spawn(move || {
 > ```
 > Taken: Some("data"), Struct: None
 > ```
+> ```rust
 > use std::mem;
 > struct Buffer { data: Option<String> }
 > fn main() {

@@ -183,6 +183,7 @@ thread::spawn(move || {
 > ```
 > cargo run --example demo
 > ```
+> ```rust
 > fn main() {
 >     println!("cargo run --example demo");
 > }

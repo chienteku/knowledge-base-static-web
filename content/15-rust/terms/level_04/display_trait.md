@@ -241,6 +241,7 @@ fn main() {
 > ```
 > $10.00
 > ```
+
 > use std::fmt;
 > struct Money(u32);
 > impl fmt::Display for Money {

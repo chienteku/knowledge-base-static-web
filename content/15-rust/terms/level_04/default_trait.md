@@ -244,6 +244,7 @@ fn main() {
 > ```
 > Default status: Idle
 > ```
+> ```rust
 > #[derive(Default, Debug, PartialEq)]
 > enum Status {
 >     #[default]

@@ -201,6 +201,7 @@ thread::spawn(move || {
 > ```
 > Extra feature code compiled
 > ```
+> ```rust
 > #[cfg(feature = "extra")]
 > fn extra() { println!("Extra feature code compiled"); }
 > fn main() {

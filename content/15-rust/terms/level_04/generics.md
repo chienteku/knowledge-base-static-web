@@ -237,6 +237,7 @@ fn main() {
 > ```
 > Swapped: (world, 10)
 > ```
+> ```rust
 > fn swap_pair<T, U>(pair: (T, U)) -> (U, T) { (pair.1, pair.0) }
 > fn main() {
 >     let p = swap_pair((10, "world"));

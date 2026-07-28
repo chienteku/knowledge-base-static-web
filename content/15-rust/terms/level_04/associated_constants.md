@@ -207,6 +207,7 @@ thread::spawn(move || {
 > ```
 > Limit: 1024
 > ```
+> ```rust
 > trait Limit { const MAX_SIZE: usize; }
 > struct Buffer;
 > impl Limit for Buffer { const MAX_SIZE: usize = 1024; }

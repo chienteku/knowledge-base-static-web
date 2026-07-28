@@ -191,6 +191,7 @@ enum D { OnlyVariant }
 > ```
 > Vec<()> len: 1000
 > ```
+> ```rust
 > fn main() {
 >     let mut v = Vec::new();
 >     for _ in 0..1000 { v.push(()); }
@@ -199,8 +200,6 @@ enum D { OnlyVariant }
 > ```
 >
 > **Explanation:** `Vec<()>` stores counts without allocating memory for elements.
-
----
 
 ---
 

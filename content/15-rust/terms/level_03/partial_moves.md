@@ -202,6 +202,7 @@ fn main() {
 > ```
 > Borrowed name: Bob, Person still valid: Bob
 > ```
+> ```rust
 > struct Person { name: String, age: u32 }
 > fn main() {
 >     let p = Person { name: "Bob".into(), age: 25 };

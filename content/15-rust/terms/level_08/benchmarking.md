@@ -198,6 +198,7 @@ thread::spawn(move || {
 > ```
 > cargo bench
 > ```
+> ```rust
 > fn main() {
 >     println!("cargo bench");
 > }

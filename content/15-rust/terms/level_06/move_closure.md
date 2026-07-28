@@ -222,6 +222,7 @@ fn main() {
 > ```
 > Original integer valid: 42
 > ```
+> ```rust
 > fn main() {
 >     let x = 42;
 >     let c = move || x + 1;
@@ -231,8 +232,6 @@ fn main() {
 > ```
 >
 > **Explanation:** Moving `Copy` types into `move` closures copies values on stack, leaving originals intact.
-
----
 
 ---
 

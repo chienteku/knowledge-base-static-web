@@ -189,6 +189,7 @@ thread::spawn(move || {
 > ```
 > cargo fix --edition
 > ```
+> ```rust
 > fn main() {
 >     println!("cargo fix --edition");
 > }

@@ -207,6 +207,7 @@ static mut START_TIME: Option<Instant> = None;
 > ```
 > Cache val: initialized
 > ```
+> ```rust
 > use std::sync::OnceLock;
 > static CACHE: OnceLock<String> = OnceLock::new();
 > fn main() {

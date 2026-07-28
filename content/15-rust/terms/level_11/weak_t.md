@@ -213,6 +213,7 @@ thread::spawn(move || {
 > ```
 > Weak upgrade returned None
 > ```
+> ```rust
 > use std::rc::Rc;
 > fn main() {
 >     let strong = Rc::new(42);

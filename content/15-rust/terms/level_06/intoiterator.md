@@ -245,6 +245,7 @@ fn main() {
 > ```
 > Ref member: Alice
 > ```
+> ```rust
 > struct Group { members: Vec<String> }
 > impl<'a> IntoIterator for &'a Group {
 >     type Item = &'a String;
@@ -260,8 +261,6 @@ fn main() {
 > ```
 >
 > **Explanation:** Implementing `IntoIterator` for `&Collection` returns reference iterators without moving collection ownership.
-
----
 
 ---
 

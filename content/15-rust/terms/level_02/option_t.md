@@ -208,6 +208,7 @@ fn main() {
 > ```
 > Some(10)
 > ```
+> ```rust
 > fn check_even(n: i32) -> Option<i32> { if n % 2 == 0 { Some(n) } else { None } }
 > fn main() {
 >     let opt: Option<i32> = Some(10);

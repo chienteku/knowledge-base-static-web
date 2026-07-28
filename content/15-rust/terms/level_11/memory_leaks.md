@@ -200,14 +200,13 @@ thread::spawn(move || {
 > ```
 > Reference cycle memory leak verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Reference cycle memory leak verified");
 > }
 > ```
 >
 > **Explanation:** Cyclic strong references keep ref counts > 0, preventing memory deallocation.
-
----
 
 ---
 

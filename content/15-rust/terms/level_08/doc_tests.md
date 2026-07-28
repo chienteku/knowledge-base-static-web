@@ -199,6 +199,7 @@ thread::spawn(move || {
 > ```
 > Should panic doc test verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Should panic doc test verified");
 > }

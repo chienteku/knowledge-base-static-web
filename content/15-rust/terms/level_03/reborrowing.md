@@ -184,6 +184,7 @@ thread::spawn(move || {
 > ```
 > Count: 2
 > ```
+> ```rust
 > struct Counter(u32);
 > impl Counter { fn bump(&mut self) { self.0 += 1; } }
 > fn main() {

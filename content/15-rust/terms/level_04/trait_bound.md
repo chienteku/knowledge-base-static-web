@@ -215,6 +215,7 @@ fn get_larger<T>(a: T, b: T) -> T {
 > ```
 > Boxed item: Hello
 > ```
+> ```rust
 > struct DisplayBox<T: std::fmt::Display> { item: T }
 > fn main() {
 >     let b = DisplayBox { item: "Hello" };
@@ -223,8 +224,6 @@ fn get_larger<T>(a: T, b: T) -> T {
 > ```
 >
 > **Explanation:** Struct generic type definitions can enforce trait bounds directly.
-
----
 
 ---
 

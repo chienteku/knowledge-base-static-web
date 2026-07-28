@@ -216,14 +216,13 @@ Write the exact TOML code that must go in the root `Cargo.toml` to link these tw
 > ```
 > Workspace dependency inherited
 > ```
+> ```rust
 > fn main() {
 >     println!("Workspace dependency inherited");
 > }
 > ```
 >
 > **Explanation:** `workspace = true` inherits central version specifications defined in root `[workspace.dependencies]`.
-
----
 
 ---
 

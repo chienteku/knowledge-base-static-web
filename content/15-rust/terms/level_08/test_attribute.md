@@ -234,6 +234,7 @@ mod tests {
 > ```
 > Result test passed
 > ```
+> ```rust
 > #[test]
 > fn test_result() -> Result<(), String> {
 >     let val: u32 = "42".parse().map_err(|e| e.to_string())?;
@@ -247,8 +248,6 @@ mod tests {
 > ```
 >
 > **Explanation:** Tests returning `Result<(), E>` allow using `?` for concise error assertions.
-
----
 
 ---
 

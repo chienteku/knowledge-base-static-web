@@ -194,6 +194,7 @@ thread::spawn(move || {
 > ```
 > Unsafe Send implemented
 > ```
+> ```rust
 > struct PtrWrapper(*mut i32);
 > unsafe impl Send for PtrWrapper {}
 > fn main() {

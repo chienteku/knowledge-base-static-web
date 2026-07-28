@@ -188,14 +188,13 @@ fn main() {
 > ```
 > Prelude items: Option, Result, Vec, String, Box
 > ```
+> ```rust
 > fn main() {
 >     println!("Prelude items: Option, Result, Vec, String, Box");
 > }
 > ```
 >
 > **Explanation:** The standard prelude automatically imports ubiquitous types into every Rust module.
-
----
 
 ---
 

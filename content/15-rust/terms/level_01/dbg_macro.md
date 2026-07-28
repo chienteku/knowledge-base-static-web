@@ -198,8 +198,6 @@ thread::spawn(move || {
 
 ---
 
----
-
 ## 6. Related Terms
 
 - [`println!` / `format!`](../level_01/println_format.md) — The formatting macro family `dbg!` is a debug-focused sibling of.

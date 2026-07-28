@@ -191,6 +191,7 @@ thread::spawn(move || {
 > ```
 > Trait object fat ptr size: 16
 > ```
+> ```rust
 > use std::mem::size_of;
 > fn main() {
 >     println!("Trait object fat ptr size: {}", size_of::<&dyn std::fmt::Display>());
@@ -198,8 +199,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** Trait object references store data pointer + vtable pointer.
-
----
 
 ---
 

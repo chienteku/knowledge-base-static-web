@@ -192,6 +192,7 @@ thread::spawn(move || {
 > ```
 > Offloaded blocking CPU task
 > ```
+> ```rust
 > fn main() {
 >     println!("Offloaded blocking CPU task");
 > }

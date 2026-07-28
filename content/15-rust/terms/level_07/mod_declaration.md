@@ -200,6 +200,7 @@ thread::spawn(move || {
 > ```
 > Connected
 > ```
+> ```rust
 > mod net { pub mod http { pub mod client { pub fn connect() { println!("Connected"); } } } }
 > fn main() { net::http::client::connect(); }
 > ```

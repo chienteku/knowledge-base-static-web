@@ -209,6 +209,7 @@ thread::spawn(move || {
 > ```
 > Atomic count: 3
 > ```
+> ```rust
 > use std::sync::atomic::{AtomicUsize, Ordering};
 > use std::sync::Arc;
 > use std::thread;

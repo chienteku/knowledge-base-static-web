@@ -204,6 +204,7 @@ thread::spawn(move || {
 > ```
 > Desktop Unix verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Desktop Unix verified");
 > }

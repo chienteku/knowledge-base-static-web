@@ -204,6 +204,7 @@ thread::spawn(move || {
 > ```
 > Send bound check acknowledged
 > ```
+> ```rust
 > fn main() {
 >     println!("Send bound check acknowledged");
 > }

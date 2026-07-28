@@ -206,6 +206,7 @@ thread::spawn(move || {
 > ```
 > Built len: 5
 > ```
+> ```rust
 > fn build_data() -> Vec<i32> { vec![1, 2, 3, 4, 5] }
 > fn main() {
 >     let data = build_data();

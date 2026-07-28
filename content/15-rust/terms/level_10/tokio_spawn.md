@@ -209,6 +209,7 @@ thread::spawn(move || {
 > ```
 > Task panic caught in join handle
 > ```
+> ```rust
 > fn main() {
 >     println!("Task panic caught in join handle");
 > }

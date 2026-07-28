@@ -242,6 +242,7 @@ fn main() {
 > ```
 > [("one", 1), ("two", 2)]
 > ```
+> ```rust
 > fn main() {
 >     let keys = vec!["one", "two"];
 >     let vals = vec![1, 2];
@@ -251,8 +252,6 @@ fn main() {
 > ```
 >
 > **Explanation:** `.zip()` pairs elements from two iterators into single combined tuple sequences.
-
----
 
 ---
 

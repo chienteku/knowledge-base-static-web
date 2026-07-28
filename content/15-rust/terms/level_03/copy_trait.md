@@ -213,6 +213,7 @@ fn main() {
 > ```
 > Caller retained: 42
 > ```
+> ```rust
 > #[derive(Copy, Clone)]
 > struct Data(i32);
 > fn consume(d: Data) { let _ = d.0; }

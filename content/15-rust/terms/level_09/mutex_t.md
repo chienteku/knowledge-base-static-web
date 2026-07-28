@@ -223,6 +223,7 @@ thread::spawn(move || {
 > ```
 > Try lock succeeded
 > ```
+> ```rust
 > use std::sync::Mutex;
 > fn main() {
 >     let m = Mutex::new(10);

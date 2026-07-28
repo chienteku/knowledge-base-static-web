@@ -234,6 +234,7 @@ thread::spawn(move || {
 > ```
 > Parent function called
 > ```
+> ```rust
 > fn parent_fn() { println!("Parent function called"); }
 > mod child {
 >     pub fn call_parent() { super::parent_fn(); }
@@ -242,8 +243,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** `super` refers to the immediate parent module in relative path lookups.
-
----
 
 ---
 

@@ -208,6 +208,7 @@ thread::spawn(move || {
 > ```
 > Lifetime subtype verified
 > ```
+> ```rust
 > fn tie<'a, 'b: 'a>(_x: &'a str, _y: &'b str) { println!("Lifetime subtype verified"); }
 > fn main() { tie("short", "longer_static"); }
 > ```

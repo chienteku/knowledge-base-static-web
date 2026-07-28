@@ -191,6 +191,7 @@ thread::spawn(move || {
 > ```
 > Race condition logic acknowledged
 > ```
+> ```rust
 > fn main() {
 >     println!("Race condition logic acknowledged");
 > }

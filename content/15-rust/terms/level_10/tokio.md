@@ -213,6 +213,7 @@ async fn main() {
 > ```
 > Slept asynchronously
 > ```
+> ```rust
 > fn main() {
 >     println!("Slept asynchronously");
 > }

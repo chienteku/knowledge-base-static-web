@@ -205,6 +205,7 @@ thread::spawn(move || {
 > ```
 > Notified and resumed
 > ```
+> ```rust
 > use std::sync::{Arc, Mutex, Condvar};
 > fn main() {
 >     let pair = Arc::new((Mutex::new(false), Condvar::new()));

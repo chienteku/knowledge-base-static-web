@@ -196,6 +196,7 @@ fn check_hashing() {
 > ```
 > Integration test executed
 > ```
+> ```rust
 > #[test]
 > fn test_pub_api() {
 >     println!("Integration test executed");
@@ -204,8 +205,6 @@ fn check_hashing() {
 > ```
 >
 > **Explanation:** Integration tests in `tests/` exercise published library APIs externally.
-
----
 
 ---
 

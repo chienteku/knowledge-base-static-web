@@ -240,6 +240,7 @@ fn main() {
 > ```
 > Pretty debug printed
 > ```
+> ```rust
 > #[derive(Debug)]
 > struct Config { port: u16, host: String }
 > fn main() {

@@ -253,6 +253,7 @@ fn main() {
 > ```
 > [1.0, 2.5, 3.14]
 > ```
+> ```rust
 > fn main() {
 >     let mut nums = vec![3.14, 1.0, 2.5];
 >     nums.sort_by(|a, b| a.partial_cmp(b).unwrap());

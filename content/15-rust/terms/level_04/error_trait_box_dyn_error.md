@@ -211,6 +211,7 @@ thread::spawn(move || {
 > ```
 > Downcast parse error verified
 > ```
+> ```rust
 > use std::error::Error;
 > use std::num::ParseIntError;
 > fn main() {

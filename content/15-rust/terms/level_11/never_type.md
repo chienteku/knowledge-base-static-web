@@ -205,6 +205,7 @@ thread::spawn(move || {
 > ```
 > Diverging function compiled
 > ```
+> ```rust
 > fn fatal_error(msg: &str) -> ! { panic!("{}", msg); }
 > fn main() {
 >     println!("Diverging function compiled");
@@ -212,8 +213,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** `-> !` indicates functions that never return to their caller.
-
----
 
 ---
 

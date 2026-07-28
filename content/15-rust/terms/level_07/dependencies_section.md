@@ -199,6 +199,7 @@ rand = 0.8
 > ```
 > Git dependency declared
 > ```
+> ```rust
 > fn main() {
 >     println!("Git dependency declared");
 > }

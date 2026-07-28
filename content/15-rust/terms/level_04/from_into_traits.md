@@ -241,6 +241,7 @@ fn main() {
 > ```
 > Converted IO error
 > ```
+
 > enum AppError { Io(String) }
 > impl From<std::io::Error> for AppError {
 >     fn from(e: std::io::Error) -> Self { AppError::Io(e.to_string()) }

@@ -221,6 +221,7 @@ thread::spawn(move || {
 > ```
 > Lock released safely
 > ```
+> ```rust
 > use std::sync::{Arc, Mutex};
 > fn main() {
 >     let m = Arc::new(Mutex::new(10));

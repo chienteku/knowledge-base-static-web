@@ -214,12 +214,11 @@ pub mod storage {
 > ```
 > Re-exported trait available
 > ```
+> ```rust
 > fn main() { println!("Re-exported trait available"); }
 > ```
 >
 > **Explanation:** Re-exporting dependency types prevents version mismatch issues for downstream consumers.
-
----
 
 ---
 

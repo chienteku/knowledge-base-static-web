@@ -204,6 +204,7 @@ fn broken() {
 > ```
 > Mutated slice: [10, 20]
 > ```
+> ```rust
 > use std::thread;
 > fn main() {
 >     let mut data = vec![1, 2];

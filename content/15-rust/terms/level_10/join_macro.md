@@ -201,6 +201,7 @@ thread::spawn(move || {
 > ```
 > Try join short-circuit verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Try join short-circuit verified");
 > }

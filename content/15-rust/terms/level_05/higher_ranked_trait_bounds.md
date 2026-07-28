@@ -202,6 +202,7 @@ thread::spawn(move || {
 > ```
 > Value: 42
 > ```
+> ```rust
 > fn deref_val(x: &i32) -> i32 { *x }
 > fn exec(f: for<'a> fn(&'a i32) -> i32) {
 >     let val = 42;

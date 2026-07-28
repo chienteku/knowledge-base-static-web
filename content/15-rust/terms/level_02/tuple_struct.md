@@ -183,6 +183,7 @@ fn main() {
 > ```
 > Meters: 15
 > ```
+> ```rust
 > struct Meters(u64);
 > fn main() {
 >     let d1 = Meters(5);

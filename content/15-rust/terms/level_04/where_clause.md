@@ -206,6 +206,7 @@ fn calculate_hash<K: Hash + Eq + Display, V: Default + Clone>(key: &K, value: &V
 > ```
 > Item: 10
 > ```
+> ```rust
 > fn print_items<I>(mut iter: I)
 > where
 >     I: Iterator,
@@ -221,8 +222,6 @@ fn calculate_hash<K: Hash + Eq + Display, V: Default + Clone>(key: &K, value: &V
 > ```
 >
 > **Explanation:** `where` clauses support constraining associated types directly (`I::Item: Display`).
-
----
 
 ---
 

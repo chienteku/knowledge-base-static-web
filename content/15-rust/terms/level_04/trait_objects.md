@@ -245,6 +245,7 @@ fn main() {
 > ```
 > Speaker count: 2
 > ```
+> ```rust
 > trait Speaker { fn speak(&self) -> &str; }
 > struct Dog; impl Speaker for Dog { fn speak(&self) -> &str { "Woof" } }
 > fn main() {

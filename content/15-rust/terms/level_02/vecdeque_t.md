@@ -225,8 +225,6 @@ fn process(mut items: Vec<i32>) {
 
 ---
 
----
-
 ## 6. Related Terms
 
 - [`Vec<T>`](../level_02/vec_t.md) — The single-ended sibling; `VecDeque` is the right choice specifically when front-end operations matter too.

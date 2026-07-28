@@ -205,14 +205,13 @@ thread::spawn(move || {
 > ```
 > Div zero panic test verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Div zero panic test verified");
 > }
 > ```
 >
 > **Explanation:** `#[should_panic]` validates expected panic failures in bounds checks and math zero conditions.
-
----
 
 ---
 

@@ -206,6 +206,7 @@ thread::spawn(move || {
 > ```
 > Initialized: hello
 > ```
+> ```rust
 > use std::mem::MaybeUninit;
 > fn main() {
 >     let mut uninit = MaybeUninit::<String>::uninit();

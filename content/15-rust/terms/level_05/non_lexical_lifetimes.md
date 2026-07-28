@@ -197,6 +197,7 @@ fn first_word(s: &mut String) -> &str {
 > ```
 > Updated map successfully
 > ```
+> ```rust
 > use std::collections::HashMap;
 > fn main() {
 >     let mut map = HashMap::new();

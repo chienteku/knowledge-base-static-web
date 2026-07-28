@@ -205,6 +205,7 @@ B) `struct Kilometers(f64);`
 > ```
 > Callback result: 20
 > ```
+> ```rust
 > type Callback = fn(i32) -> i32;
 > fn run(val: i32, cb: Callback) -> i32 { cb(val) }
 > fn main() {
@@ -213,8 +214,6 @@ B) `struct Kilometers(f64);`
 > ```
 >
 > **Explanation:** Type aliases clean up complex function pointer type declarations.
-
----
 
 ---
 

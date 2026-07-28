@@ -199,6 +199,7 @@ thread::spawn(move || {
 > ```
 > Precondition met
 > ```
+> ```rust
 > fn process(val: i32) {
 >     assert!(val > 0, "Val must be positive");
 >     println!("Precondition met");

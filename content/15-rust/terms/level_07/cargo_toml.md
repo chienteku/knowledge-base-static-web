@@ -199,6 +199,7 @@ thread::spawn(move || {
 > ```
 > Dependency alias configured
 > ```
+> ```rust
 > fn main() {
 >     println!("Dependency alias configured");
 > }

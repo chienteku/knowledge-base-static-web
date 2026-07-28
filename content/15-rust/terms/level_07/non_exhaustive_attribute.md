@@ -200,12 +200,13 @@ thread::spawn(move || {
 > ```
 > Construct via constructor method required
 > ```
-> fn main() { println!("Construct via constructor method required"); }
+> ```rust
+> fn main() { 
+>     println!("Construct via constructor method required");
+> }
 > ```
 >
 > **Explanation:** `#[non_exhaustive]` structs force external crates to use constructor methods instead of direct literal initialization.
-
----
 
 ---
 

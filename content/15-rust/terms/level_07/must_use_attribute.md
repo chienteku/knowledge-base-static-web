@@ -193,6 +193,7 @@ fn main() {
 > ```
 > Guard assigned
 > ```
+> ```rust
 > #[must_use]
 > struct Guard;
 > fn main() {
@@ -202,8 +203,6 @@ fn main() {
 > ```
 >
 > **Explanation:** Annotating types with `#[must_use]` applies warnings to all functions returning instances of that type.
-
----
 
 ---
 

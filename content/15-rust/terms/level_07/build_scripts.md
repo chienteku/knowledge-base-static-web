@@ -196,6 +196,7 @@ What does this directive do, and what existing Rust mechanism would you use in `
 > ```
 > Generated code path retrieved
 > ```
+> ```rust
 > use std::env;
 > fn main() {
 >     if let Ok(out_dir) = env::var("OUT_DIR") {

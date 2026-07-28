@@ -224,6 +224,7 @@ fn main() {
 > ```
 > [1, 2, 3]
 > ```
+> ```rust
 > fn main() {
 >     let v = (1..=3).collect::<Vec<i32>>();
 >     println!("{:?}", v);
@@ -231,8 +232,6 @@ fn main() {
 > ```
 >
 > **Explanation:** Turbofish specifies polymorphic return types for generic collector functions.
-
----
 
 ---
 

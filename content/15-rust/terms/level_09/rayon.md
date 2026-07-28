@@ -198,6 +198,7 @@ The compiler throws an error: `no method named 'par_iter' found for struct 'Vec'
 > ```
 > Parallel sort completed
 > ```
+> ```rust
 > fn main() {
 >     let mut data = vec![5, 3, 1, 4, 2];
 >     data.sort(); // Conceptual par_sort

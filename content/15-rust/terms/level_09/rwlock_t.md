@@ -233,6 +233,7 @@ thread::spawn(move || {
 > ```
 > Writer updated: 100
 > ```
+> ```rust
 > use std::sync::RwLock;
 > fn main() {
 >     let lock = RwLock::new(10);

@@ -202,6 +202,7 @@ thread::spawn(move || {
 > ```
 > Sync relationship verified
 > ```
+> ```rust
 > fn assert_send<T: Send>() {}
 > fn check_sync<T: Sync>() { assert_send::<&T>(); }
 > fn main() {

@@ -190,6 +190,7 @@ thread::spawn(move || {
 > ```
 > cargo doc --document-private-items --open
 > ```
+> ```rust
 > fn main() {
 >     println!("cargo doc --document-private-items --open");
 > }

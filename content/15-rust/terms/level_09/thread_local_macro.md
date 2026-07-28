@@ -200,6 +200,7 @@ thread::spawn(move || {
 > ```
 > Spawned: 100, Main: 0
 > ```
+> ```rust
 > use std::cell::Cell;
 > use std::thread;
 > thread_local! { static VAL: Cell<i32> = Cell::new(0); }

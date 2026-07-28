@@ -221,6 +221,7 @@ fn main() {
 > ```
 > User: Alice
 > ```
+> ```rust
 > struct User { name: String }
 > impl User {
 >     fn new() -> Self { Self { name: String::new() } }

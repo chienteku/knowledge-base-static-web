@@ -179,6 +179,7 @@ fn main() {
 > ```
 > Marker size: 0 bytes
 > ```
+> ```rust
 > struct Kilograms;
 > fn main() {
 >     println!("Marker size: {} bytes", std::mem::size_of::<Kilograms>());
@@ -198,6 +199,7 @@ fn main() {
 > ```
 > Formatted JSON
 > ```
+> ```rust
 > trait Formatter { fn format(&self) -> &'static str; }
 > struct JsonFormatter;
 > impl Formatter for JsonFormatter {

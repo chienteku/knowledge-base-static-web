@@ -212,6 +212,7 @@ fn log_item<T: Display + Debug>(item: T) {
 > ```
 > Printed: Hello
 > ```
+> ```rust
 > fn print_display(val: impl std::fmt::Display) {
 >     println!("Printed: {}", val);
 > }

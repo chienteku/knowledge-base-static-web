@@ -229,6 +229,7 @@ thread::spawn(move || {
 > ```
 > Waker notification verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Waker notification verified");
 > }

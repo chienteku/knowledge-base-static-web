@@ -191,6 +191,7 @@ mod internal {
 > ```
 > Clippy deny configured
 > ```
+> ```rust
 > fn main() {
 >     println!("Clippy deny configured");
 > }

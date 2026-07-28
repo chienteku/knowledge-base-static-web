@@ -205,6 +205,7 @@ fn main() {
 > ```
 > Logged: test
 > ```
+> ```rust
 > fn inner_log(msg: &str) { println!("Logged: {}", msg); }
 > fn log_data<T: std::fmt::Display>(data: T) {
 >     inner_log(&data.to_string());

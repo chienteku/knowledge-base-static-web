@@ -191,6 +191,7 @@ fn main() {
 > ```
 > Log count: 1
 > ```
+> ```rust
 > use std::cell::Cell;
 > struct Logger { count: Cell<u32> }
 > impl Logger {
@@ -218,6 +219,7 @@ fn main() {
 > ```
 > Old: 42, New: 100
 > ```
+> ```rust
 > use std::cell::Cell;
 > fn main() {
 >     let cell = Cell::new(42);

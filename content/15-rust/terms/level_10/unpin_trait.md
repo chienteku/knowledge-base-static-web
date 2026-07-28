@@ -203,6 +203,7 @@ thread::spawn(move || {
 > ```
 > Extracted Unpin value: 42
 > ```
+> ```rust
 > use std::pin::Pin;
 > fn main() {
 >     let mut val = 42;

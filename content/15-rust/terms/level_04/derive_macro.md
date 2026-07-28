@@ -229,6 +229,7 @@ fn main() {
 > ```
 > Sorted priority: 1, 5, 10
 > ```
+> ```rust
 > #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 > struct Task { priority: u32 }
 > fn main() {

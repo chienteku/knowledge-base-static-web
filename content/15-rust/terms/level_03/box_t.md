@@ -183,6 +183,7 @@ fn main() {
 > ```
 > Head: 1
 > ```
+> ```rust
 > enum List {
 >     Cons(i32, Box<List>),
 >     Nil,
@@ -208,6 +209,7 @@ fn main() {
 > ```
 > Boxed text: Rust
 > ```
+> ```rust
 > fn print_slice(s: &str) { println!("Boxed text: {}", s); }
 > fn main() {
 >     let b = Box::new(String::from("Rust"));

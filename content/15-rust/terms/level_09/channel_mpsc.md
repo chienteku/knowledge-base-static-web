@@ -230,6 +230,7 @@ thread::spawn(move || {
 > ```
 > Bounded channel sent
 > ```
+> ```rust
 > use std::sync::mpsc;
 > fn main() {
 >     let (tx, rx) = mpsc::sync_channel(1);

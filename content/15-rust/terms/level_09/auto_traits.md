@@ -185,6 +185,7 @@ struct Wrapper { count: Cell<i32> }
 > ```
 > Raw pointer opts out of Send
 > ```
+> ```rust
 > fn main() {
 >     println!("Raw pointer opts out of Send");
 > }

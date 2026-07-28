@@ -209,6 +209,7 @@ fn greet(name: &str) {
 > ```
 > Written 11 bytes
 > ```
+> ```rust
 > use std::io::{BufWriter, Write};
 > fn main() {
 >     let mut buffer = Vec::new();

@@ -186,6 +186,7 @@ fn make_adder(n: i32) -> fn(i32) -> i32 {
 > ```
 > Result: 10
 > ```
+> ```rust
 > fn apply(val: i32, f: fn(i32) -> i32) -> i32 { f(val) }
 > fn main() {
 >     println!("Result: {}", apply(5, |x| x * 2));
@@ -193,8 +194,6 @@ fn make_adder(n: i32) -> fn(i32) -> i32 {
 > ```
 >
 > **Explanation:** Non-capturing closures automatically coerce into raw function pointers `fn`.
-
----
 
 ---
 

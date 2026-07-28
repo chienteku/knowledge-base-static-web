@@ -186,6 +186,7 @@ thread::spawn(move || {
 > ```
 > Owned vec: [1, 2, 3]
 > ```
+> ```rust
 > fn main() {
 >     let slice: &[i32] = &[1, 2, 3];
 >     let owned: Vec<i32> = slice.to_owned();
@@ -194,8 +195,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** `ToOwned` creates owned `Vec<T>` instances from slice references `&[T]`.
-
----
 
 ---
 

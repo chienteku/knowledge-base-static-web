@@ -201,6 +201,7 @@ thread::spawn(move || {
 > ```
 > RefHolder with DST str verified
 > ```
+> ```rust
 > struct RefHolder<'a, T: ?Sized> { ptr: &'a T }
 > fn main() {
 >     let s: &str = "hello";
@@ -210,8 +211,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** `?Sized` relaxes default `Sized` bounds, permitting generic type parameters to accept DSTs.
-
----
 
 ---
 

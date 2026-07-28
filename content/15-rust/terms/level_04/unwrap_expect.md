@@ -202,6 +202,7 @@ fn main() {
 > ```
 > Default str: ""
 > ```
+> ```rust
 > fn main() {
 >     let empty_opt: Option<String> = None;
 >     let val = empty_opt.unwrap_or_default();

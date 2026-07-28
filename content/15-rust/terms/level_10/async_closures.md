@@ -208,6 +208,7 @@ What is the exact data type of `x`?
 > ```
 > HRTB async borrowing verified
 > ```
+> ```rust
 > fn main() {
 >     println!("HRTB async borrowing verified");
 > }

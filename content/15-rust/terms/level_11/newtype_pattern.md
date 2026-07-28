@@ -204,6 +204,7 @@ thread::spawn(move || {
 > ```
 > Len: 5
 > ```
+> ```rust
 > use std::ops::Deref;
 > struct Name(String);
 > impl Deref for Name {
@@ -217,8 +218,6 @@ thread::spawn(move || {
 > ```
 >
 > **Explanation:** Implementing `Deref` exposes inner wrapped type methods seamlessly.
-
----
 
 ---
 

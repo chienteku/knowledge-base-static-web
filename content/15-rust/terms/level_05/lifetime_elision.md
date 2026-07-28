@@ -201,6 +201,7 @@ thread::spawn(move || {
 > ```
 > Word: Hello
 > ```
+> ```rust
 > fn first_word(s: &str) -> &str { &s[..5] }
 > fn main() { println!("Word: {}", first_word("Hello World")); }
 > ```

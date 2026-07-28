@@ -208,14 +208,13 @@ pub struct DatabaseConnection {
 > ```
 > Crate root docs verified
 > ```
+> ```rust
 > fn main() {
 >     println!("Crate root docs verified");
 > }
 > ```
 >
 > **Explanation:** `//!` comments at `lib.rs` top supply crate-level documentation.
-
----
 
 ---
 

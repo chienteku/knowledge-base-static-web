@@ -218,6 +218,7 @@ thread::spawn(move || {
 > ```
 > Announce: Important
 > ```
+> ```rust
 > struct Highlight<'a> { text: &'a str }
 > impl<'a> Highlight<'a> {
 >     fn announce(&self) -> &str { self.text }

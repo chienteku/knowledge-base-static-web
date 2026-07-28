@@ -224,6 +224,7 @@ fn main() {
 > ```
 > Consumed: hello
 > ```
+> ```rust
 > fn consume<F: FnOnce() -> String>(f: F) -> String { f() }
 > fn main() {
 >     let s = String::from("hello");

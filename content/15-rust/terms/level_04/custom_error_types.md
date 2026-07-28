@@ -247,6 +247,7 @@ fn main() {
 > ```
 > Wrapped parse error
 > ```
+> ```rust
 > use std::num::ParseIntError;
 > #[derive(Debug)]
 > enum AppError { Parse(ParseIntError) }

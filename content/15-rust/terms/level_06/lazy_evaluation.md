@@ -226,6 +226,7 @@ fn main() {
 > ```
 > Found: true
 > ```
+> ```rust
 > fn main() {
 >     let nums = vec![1, 2, 3, 4];
 >     let found = nums.into_iter().any(|x| x == 2);
@@ -234,8 +235,6 @@ fn main() {
 > ```
 >
 > **Explanation:** Short-circuiting consumers stop iterating as soon as matching conditions are met.
-
----
 
 ---
 

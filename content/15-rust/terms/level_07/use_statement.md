@@ -211,6 +211,7 @@ fn main() {
 > ```
 > Nested imports loaded
 > ```
+> ```rust
 > use std::collections::{HashMap, HashSet};
 > fn main() {
 >     let _m: HashMap<i32, i32> = HashMap::new();
@@ -220,8 +221,6 @@ fn main() {
 > ```
 >
 > **Explanation:** Nested braces `{}` condense multiple imports from the same parent module path.
-
----
 
 ---
 
