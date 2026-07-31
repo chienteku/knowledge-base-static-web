@@ -188,64 +188,396 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Bottleneck
+### Exercise 1: Thread-Safe In-Memory Cache with TTL Expiration
 
-**Problem:** You are building a Web Server. 99% of your HTTP requests just read the User's Profile from memory. 1% of requests update the profile. You originally used an `Arc<Mutex<UserProfile>>`, but your server is incredibly slow under high traffic. Why is it slow, and what should you replace it with?
+**Problem:** 
+In high-throughput web applications, in-memory caches handle high read-to-write ratios. Multiple HTTP worker threads frequently read cached data, while a background janitor thread periodically removes expired entries or writes new values. Using a standard `Mutex` would block all reader threads during every read lookup, causing significant latency spikes.
+
+Implement a thread-safe `TtlCache<K, V>` struct using `RwLock` and `HashMap`.
+1. `TtlCache` should store key-value pairs along with an expiration `Instant`.
+2. Implement `get(&self, key: &K) -> Option<V>`: acquires a **read lock** and returns a copy/clone of the value if present and not expired.
+3. Implement `insert(&self, key: K, value: V, ttl: Duration)`: acquires a **write lock** to insert/overwrite the entry.
+4. Implement `prune_expired(&self) -> usize`: acquires a **write lock** to sweep and remove all expired keys, returning the count of pruned items.
+5. Provide a unit test module verifying concurrent reader threads reading valid data simultaneously while a background thread updates entries and prunes expired items without deadlocks or data corruption.
 
 > [!check]- Answer
-> It is slow because a `Mutex` forces all 99% of your Readers to wait in a single-file line! Even though they just want to look at the profile, they have to take turns. 
->
-> You should replace it with **`Arc<RwLock<UserProfile>>`**. This will allow all the Readers to read simultaneously, massively boosting performance!
-
----
-
-### Exercise 2: Multiple Simultaneous Readers with `RwLock`
-
-**Problem:** Acquire two simultaneous read guards `r1 = lock.read()` and `r2 = lock.read()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> r1: 42, r2: 42
-> ```
 > ```rust
-> use std::sync::RwLock;
-> fn main() {
->     let lock = RwLock::new(42);
->     let r1 = lock.read().unwrap();
->     let r2 = lock.read().unwrap();
->     println!("r1: {}, r2: {}", *r1, *r2);
+> use std::collections::HashMap;
+> use std::hash::Hash;
+> use std::sync::{Arc, RwLock};
+> use std::thread;
+> use std::time::{Duration, Instant};
+> 
+> #[derive(Clone)]
+> struct CacheEntry<V> {
+>     value: V,
+>     expires_at: Instant,
 > }
-> ```
->
-> **Explanation:** `RwLock` permits multiple simultaneous reader guards when no writer guard is active.
-
----
-
-### Exercise 3: Exclusive Writer Acquisition
-
-**Problem:** Acquire an exclusive write guard `w = lock.write()` and modify the protected value.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Writer updated: 100
-> ```
-> ```rust
-> use std::sync::RwLock;
-> fn main() {
->     let lock = RwLock::new(10);
->     {
->         let mut w = lock.write().unwrap();
->         *w = 100;
+> 
+> pub struct TtlCache<K, V> {
+>     store: RwLock<HashMap<K, CacheEntry<V>>>,
+> }
+> 
+> impl<K: Eq + Hash + Clone, V: Clone> TtlCache<K, V> {
+>     pub fn new() -> Self {
+>         Self {
+>             store: RwLock::new(HashMap::new()),
+>         }
 >     }
->     println!("Writer updated: {}", *lock.read().unwrap());
+> 
+>     pub fn insert(&self, key: K, value: V, ttl: Duration) {
+>         let entry = CacheEntry {
+>             value,
+>             expires_at: Instant::now() + ttl,
+>         };
+>         let mut guard = self.store.write().expect("RwLock write lock poisoned");
+>         guard.insert(key, entry);
+>     }
+> 
+>     pub fn get(&self, key: &K) -> Option<V> {
+>         let guard = self.store.read().expect("RwLock read lock poisoned");
+>         if let Some(entry) = guard.get(key) {
+>             if Instant::now() < entry.expires_at {
+>                 return Some(entry.value.clone());
+>             }
+>         }
+>         None
+>     }
+> 
+>     pub fn prune_expired(&self) -> usize {
+>         let now = Instant::now();
+>         let mut guard = self.store.write().expect("RwLock write lock poisoned");
+>         let initial_len = guard.len();
+>         guard.retain(|_, entry| entry.expires_at > now);
+>         initial_len - guard.len()
+>     }
+> 
+>     pub fn len(&self) -> usize {
+>         let guard = self.store.read().expect("RwLock read lock poisoned");
+>         guard.len()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_cache_basic_operations() {
+>         let cache = TtlCache::new();
+>         cache.insert("user_1", "Alice".to_string(), Duration::from_secs(10));
+>         assert_eq!(cache.get(&"user_1"), Some("Alice".to_string()));
+>         assert_eq!(cache.get(&"user_2"), None);
+>     }
+> 
+>     #[test]
+>     fn test_cache_ttl_expiration_and_pruning() {
+>         let cache = TtlCache::new();
+>         cache.insert("short_lived", 100, Duration::from_millis(50));
+>         cache.insert("long_lived", 200, Duration::from_secs(10));
+> 
+>         thread::sleep(Duration::from_millis(70));
+>         assert_eq!(cache.get(&"short_lived"), None);
+>         assert_eq!(cache.get(&"long_lived"), Some(200));
+> 
+>         let removed = cache.prune_expired();
+>         assert_eq!(removed, 1);
+>         assert_eq!(cache.len(), 1);
+>     }
+> 
+>     #[test]
+>     fn test_concurrent_read_write_access() {
+>         let cache = Arc::new(TtlCache::new());
+>         cache.insert("config_key", 1000, Duration::from_secs(5));
+> 
+>         let mut handles = vec![];
+> 
+>         // Spawn 5 reader threads
+>         for _ in 0..5 {
+>             let cache_clone = Arc::clone(&cache);
+>             handles.push(thread::spawn(move || {
+>                 for _ in 0..10 {
+>                     let val = cache_clone.get(&"config_key");
+>                     assert!(val == Some(1000) || val == Some(2000));
+>                     thread::sleep(Duration::from_millis(5));
+>                 }
+>             }));
+>         }
+> 
+>         // Spawn 1 writer thread
+>         let cache_writer = Arc::clone(&cache);
+>         handles.push(thread::spawn(move || {
+>             thread::sleep(Duration::from_millis(15));
+>             cache_writer.insert("config_key", 2000, Duration::from_secs(5));
+>         }));
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         assert_eq!(cache.get(&"config_key"), Some(2000));
+>     }
 > }
 > ```
 >
-> **Explanation:** `write()` requests exclusive access, blocking all new readers and writers.
+> **Explanation:**
+> 1. **Read Lock for non-blocking lookup (`.read()`):** Multiple threads calling `get()` acquire shared read guards. They do not block each other, allowing true parallel reads.
+> 2. **Write Lock for modification (`.write()`):** `insert()` and `prune_expired()` obtain exclusive access. All reader threads wait briefly while the map is modified.
+> 3. **Deadlock Prevention:** `get()` releases its read lock as soon as it returns the cloned value, ensuring no read guard is held across write lock calls.
+
+---
+
+### Exercise 2: Hot-Reloadable Application Configuration with Versioning
+
+**Problem:**
+Microservice API gateways often store global configuration settings (such as rate limits, routing rules, and feature flags) that change infrequently. Thousands of incoming requests per second read this configuration concurrently. When an administrator reloads the config, the system must update all values atomically and increment a version number without crashing active readers or serving partially updated state.
+
+Design a `ConfigRegistry` struct:
+1. Wrap the custom configuration type `AppConfig` in `RwLock<AppConfig>` paired with an `AtomicU64` version counter.
+2. Implement `fn get_config<F, R>(&self, reader_fn: F) -> (R, u64)`: acquires a read lock on the config, applies `reader_fn`, and returns both the computed result and the current version counter.
+3. Implement `fn update_config(&self, new_config: AppConfig) -> u64`: acquires a write lock, replaces the configuration atomically, increments the version counter using atomic ordering, and returns the new version.
+4. Implement a comprehensive unit test suite where multiple worker threads continuously read active feature flags while a management thread updates the configuration, verifying that readers always see consistent state matching the reported version.
+
+> [!check]- Answer
+> ```rust
+> use std::sync::atomic::{AtomicU64, Ordering};
+> use std::sync::{Arc, RwLock};
+> use std::thread;
+> use std::time::Duration;
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub struct AppConfig {
+>     pub max_connections: u32,
+>     pub rate_limit_per_sec: u32,
+>     pub maintenance_mode: bool,
+> }
+> 
+> pub struct ConfigRegistry {
+>     config: RwLock<AppConfig>,
+>     version: AtomicU64,
+> }
+> 
+> impl ConfigRegistry {
+>     pub fn new(initial_config: AppConfig) -> Self {
+>         Self {
+>             config: RwLock::new(initial_config),
+>             version: AtomicU64::new(1),
+>         }
+>     }
+> 
+>     pub fn get_config<F, R>(&self, reader_fn: F) -> (R, u64)
+>     where
+>         F: FnOnce(&AppConfig) -> R,
+>     {
+>         let guard = self.config.read().expect("RwLock poisoned during config read");
+>         let result = reader_fn(&*guard);
+>         let ver = self.version.load(Ordering::Acquire);
+>         (result, ver)
+>     }
+> 
+>     pub fn update_config(&self, new_config: AppConfig) -> u64 {
+>         let mut guard = self.config.write().expect("RwLock poisoned during config write");
+>         *guard = new_config;
+>         self.version.fetch_add(1, Ordering::AcqRel) + 1
+>     }
+> 
+>     pub fn current_version(&self) -> u64 {
+>         self.version.load(Ordering::Acquire)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_config_initialization_and_update() {
+>         let initial = AppConfig {
+>             max_connections: 100,
+>             rate_limit_per_sec: 50,
+>             maintenance_mode: false,
+>         };
+>         let registry = ConfigRegistry::new(initial.clone());
+>         assert_eq!(registry.current_version(), 1);
+> 
+>         let (limit, ver) = registry.get_config(|cfg| cfg.rate_limit_per_sec);
+>         assert_eq!(limit, 50);
+>         assert_eq!(ver, 1);
+> 
+>         let updated = AppConfig {
+>             max_connections: 500,
+>             rate_limit_per_sec: 200,
+>             maintenance_mode: false,
+>         };
+>         let new_ver = registry.update_config(updated);
+>         assert_eq!(new_ver, 2);
+> 
+>         let (max_conn, ver_after) = registry.get_config(|cfg| cfg.max_connections);
+>         assert_eq!(max_conn, 500);
+>         assert_eq!(ver_after, 2);
+>     }
+> 
+>     #[test]
+>     fn test_atomic_hot_reload_across_threads() {
+>         let initial = AppConfig {
+>             max_connections: 10,
+>             rate_limit_per_sec: 100,
+>             maintenance_mode: false,
+>         };
+>         let registry = Arc::new(ConfigRegistry::new(initial));
+>         let mut handles = vec![];
+> 
+>         // Spawn 4 worker threads checking config state
+>         for _ in 0..4 {
+>             let reg_clone = Arc::clone(&registry);
+>             handles.push(thread::spawn(move || {
+>                 for _ in 0..20 {
+>                     let (m_mode, ver) = reg_clone.get_config(|cfg| cfg.maintenance_mode);
+>                     if ver == 1 {
+>                         assert!(!m_mode);
+>                     } else if ver == 2 {
+>                         assert!(m_mode);
+>                     }
+>                     thread::sleep(Duration::from_millis(2));
+>                 }
+>             }));
+>         }
+> 
+>         // Spawn reload thread
+>         let reg_reload = Arc::clone(&registry);
+>         handles.push(thread::spawn(move || {
+>             thread::sleep(Duration::from_millis(10));
+>             let new_cfg = AppConfig {
+>                 max_connections: 0,
+>                 rate_limit_per_sec: 0,
+>                 maintenance_mode: true,
+>             };
+>             reg_reload.update_config(new_cfg);
+>         }));
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         assert_eq!(registry.current_version(), 2);
+>     }
+> }
+> ```
+>
+> **Explanation:**
+> 1. **Atomic Configuration Updates:** By acquiring a write lock before replacing `*guard = new_config`, readers never see intermediate or partially initialized states.
+> 2. **Version Synchronization:** Using `AtomicU64` with `Ordering::AcqRel` ensures version counter updates are safely visible across threads alongside the updated data structure.
+> 3. **Closure-based Scoped Access (`get_config`):** Passing a reader closure `FnOnce(&AppConfig) -> R` ensures the read lock guard is automatically dropped when the closure returns, preventing callers from accidentally leaking read guards across long operations.
+> 
+---
+
+### Exercise 3: Resilient Metrics Aggregator & Lock Poisoning Recovery
+
+**Problem:**
+In a production monitoring service, multiple worker threads record diagnostic counts (`HashMap<String, u64>`) while an exporter thread periodically reads metrics to report telemetry data. If a worker thread panics while holding a write lock on the shared `RwLock`, standard acquisition calls like `.read()` or `.write()` return a `PoisonError`. Rather than allowing the entire application to crash, a resilient service must recover from lock poisoning, retain unaffected metrics, and continue operating normally.
+
+Implement a `ResilientMetrics` aggregator:
+1. Wrap `HashMap<String, u64>` inside an `RwLock`.
+2. Implement `fn increment(&self, metric: &str, amount: u64)`: acquires write access. If the lock is poisoned due to a panicked thread, recover the underlying guard using `unwrap_or_else(|e| e.into_inner())` or `match` on `PoisonError` and increment the counter.
+3. Implement `fn snapshot(&self) -> HashMap<String, u64>`: acquires read access, safely handles lock poisoning recovery, and returns a cloned snapshot of all recorded metrics.
+4. Implement `fn is_poisoned(&self) -> bool`: checks whether the internal `RwLock` is currently in a poisoned state.
+5. Write unit tests that deliberately trigger a thread panic inside a write lock guard, verify that subsequent calls successfully recover via `into_inner()`, and assert that metric accumulation resumes seamlessly.
+
+> [!check]- Answer
+> ```rust
+> use std::collections::HashMap;
+> use std::sync::{Arc, RwLock};
+> use std::thread;
+> 
+> pub struct ResilientMetrics {
+>     counters: RwLock<HashMap<String, u64>>,
+> }
+> 
+> impl ResilientMetrics {
+>     pub fn new() -> Self {
+>         Self {
+>             counters: RwLock::new(HashMap::new()),
+>         }
+>     }
+> 
+>     pub fn increment(&self, metric: &str, amount: u64) {
+>         let mut guard = match self.counters.write() {
+>             Ok(g) => g,
+>             Err(poison_err) => poison_err.into_inner(),
+>         };
+>         *guard.entry(metric.to_string()).or_insert(0) += amount;
+>     }
+> 
+>     pub fn snapshot(&self) -> HashMap<String, u64> {
+>         let guard = match self.counters.read() {
+>             Ok(g) => g,
+>             Err(poison_err) => poison_err.into_inner(),
+>         };
+>         guard.clone()
+>     }
+> 
+>     pub fn is_poisoned(&self) -> bool {
+>         self.counters.is_poisoned()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_normal_metrics_aggregation() {
+>         let metrics = ResilientMetrics::new();
+>         metrics.increment("requests_total", 10);
+>         metrics.increment("requests_total", 5);
+>         metrics.increment("errors_total", 1);
+> 
+>         let snap = metrics.snapshot();
+>         assert_eq!(snap.get("requests_total"), Some(&15));
+>         assert_eq!(snap.get("errors_total"), Some(&1));
+>         assert!(!metrics.is_poisoned());
+>     }
+> 
+>     #[test]
+>     fn test_poison_recovery_after_thread_panic() {
+>         let metrics = Arc::new(ResilientMetrics::new());
+>         metrics.increment("system_starts", 1);
+> 
+>         // Spawn a thread that panics while holding the write lock
+>         let metrics_panic = Arc::clone(&metrics);
+>         let handle = thread::spawn(move || {
+>             let mut guard = metrics_panic.counters.write().unwrap();
+>             *guard.entry("in_flight".to_string()).or_insert(0) += 99;
+>             panic!("Simulated worker thread crash!");
+>         });
+> 
+>         // Expect the spawned thread to report a panic error
+>         let join_result = handle.join();
+>         assert!(join_result.is_err());
+> 
+>         // Lock is now poisoned
+>         assert!(metrics.is_poisoned());
+> 
+>         // Resilient increment recovers from poison state
+>         metrics.increment("system_starts", 1);
+>         metrics.increment("recovered_events", 42);
+> 
+>         let snap = metrics.snapshot();
+>         assert_eq!(snap.get("system_starts"), Some(&2));
+>         assert_eq!(snap.get("in_flight"), Some(&99));
+>         assert_eq!(snap.get("recovered_events"), Some(&42));
+>     }
+> }
+> ```
+>
+> **Explanation:**
+> 1. **Understanding Lock Poisoning:** In Rust, if a thread panics while holding an `RwLockWriteGuard` (or `MutexGuard`), Rust marks the lock as *poisoned* to warn other threads that shared data might be in an inconsistent state.
+> 2. **Poison Recovery with `into_inner()`:** Calling `poison_err.into_inner()` extracts the underlying lock guard despite the poison status. This allows application logic to inspect, clean up, or continue using the data safely without aborting the entire process.
+> 3. **Robust Telemetry Systems:** Microservices and telemetry agents rely on poison recovery so isolated worker panics do not cause cascading failures across unrelated API endpoints.
 
 ---
 

@@ -9,7 +9,7 @@
 
 - [`unsafe` Block](../level_13/unsafe_block.md) — Understanding `unsafe` superpowers, safety contracts, and invariant responsibilities.
 - [Traits](../level_04/trait.md) — Understanding standard Rust trait definitions and `impl Trait for Type` blocks.
-- [`Send` & `Sync` Traits](../level_09/send_and_sync.md) — The flagship standard library marker traits that are declared as `unsafe trait`.
+- [`Send`](../level_09/send_trait.md) & [`Sync`](../level_09/sync_trait.md) Traits — The flagship standard library marker traits that are declared as `unsafe trait`.
 
 ---
 
@@ -600,7 +600,7 @@ Requirements:
 ## 7. Related Terms
 
 - [`unsafe` Block](../level_13/unsafe_block.md) — The core unsafe syntax construct.
-- [`Send` & `Sync` Traits](../level_09/send_and_sync.md) — Standard library thread-safety marker traits.
+- [`Send`](../level_09/send_trait.md) & [`Sync`](../level_09/sync_trait.md) Traits — Standard library thread-safety marker traits.
 - [Traits](../level_04/trait.md) — Standard Rust trait abstraction system.
 - [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — The memory safety violations prevented by enforcing `unsafe trait` invariants.
 

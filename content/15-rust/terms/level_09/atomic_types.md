@@ -165,67 +165,469 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Complex Struct
+### Exercise 1: Lock-Free Concurrency Guard and Rate Limiter
 
-**Problem:** You have a massive `User` struct with 50 fields (Name, Email, Age, Address, Password Hash, etc.). You want to share and mutate this User across 10 threads as fast as possible. Can you wrap it in an `AtomicUser`?
+**Problem:** Build a lock-free rate limiter and active connection manager for an API gateway using `AtomicUsize`. The rate limiter must enforce a maximum limit of active concurrent connections (`max_conns`) without using software locks (`Mutex`). 
+
+Implement `LockFreeRateLimiter` with:
+1. `try_acquire(&self) -> Result<AcquiredGuard, RateLimiterError>`: Uses a Compare-And-Swap (CAS) loop with `compare_exchange_weak` to atomically check if `active_conns < max_conns`. If true, it increments `active_conns` and returns an `AcquiredGuard`. If full, it atomically increments `rejected_requests` and returns `Err(RateLimiterError::CapacityExceeded)`.
+2. An `AcquiredGuard` struct implementing `Drop` that atomically decrements `active_conns` via `fetch_sub(1, Ordering::SeqCst)` when it leaves scope.
+3. Thread-safe tracking of total successful requests (`total_requests`) and rejected requests (`rejected_requests`).
+
+Include unit tests in `#[cfg(test)] mod tests` verifying capacity limits, drop cleanup, and multithreaded burst safety using `assert_eq!`, `assert!`, and `assert_ne!`.
 
 > [!check]- Answer
-> **No!** 
->
-> Hardware atomics only exist for very basic, primitive data types (like integers, booleans, and raw pointers). The CPU cannot atomically update a massive 50-field struct in a single instruction. For a complex struct, you *must* use a software lock like a `Mutex<T>` or `RwLock<T>`.
-
----
-
-### Exercise 2: Atomic Flag Toggle with `AtomicBool`
-
-**Problem:** Toggle an `AtomicBool` using `.store(true, Ordering::SeqCst)` and read with `.load(Ordering::SeqCst)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Flag state: true
-> ```
-> ```rust
-> use std::sync::atomic::{AtomicBool, Ordering};
-> fn main() {
->     let flag = AtomicBool::new(false);
->     flag.store(true, Ordering::SeqCst);
->     println!("Flag state: {}", flag.load(Ordering::SeqCst));
-> }
-> ```
->
-> **Explanation:** Atomic types provide lock-free concurrent primitive variable access.
-
----
-
-### Exercise 3: Thread-Safe Counter with `fetch_add`
-
-**Problem:** Increment an `AtomicUsize` across 3 threads using `.fetch_add(1, Ordering::SeqCst)`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Atomic count: 3
-> ```
 > ```rust
 > use std::sync::atomic::{AtomicUsize, Ordering};
 > use std::sync::Arc;
 > use std::thread;
-> fn main() {
->     let cnt = Arc::new(AtomicUsize::new(0));
->     let mut handles = vec![];
->     for _ in 0..3 {
->         let c = Arc::clone(&cnt);
->         handles.push(thread::spawn(move || { c.fetch_add(1, Ordering::SeqCst); }));
+> use std::time::Duration;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum RateLimiterError {
+>     CapacityExceeded,
+> }
+> 
+> pub struct LockFreeRateLimiter {
+>     active_conns: AtomicUsize,
+>     total_requests: AtomicUsize,
+>     rejected_requests: AtomicUsize,
+>     max_conns: usize,
+> }
+> 
+> pub struct AcquiredGuard<'a> {
+>     limiter: &'a LockFreeRateLimiter,
+> }
+> 
+> impl Drop for AcquiredGuard<'_> {
+>     fn drop(&mut self) {
+>         self.limiter.active_conns.fetch_sub(1, Ordering::SeqCst);
 >     }
->     for h in handles { h.join().unwrap(); }
->     println!("Atomic count: {}", cnt.load(Ordering::SeqCst));
+> }
+> 
+> impl LockFreeRateLimiter {
+>     pub fn new(max_conns: usize) -> Self {
+>         Self {
+>             active_conns: AtomicUsize::new(0),
+>             total_requests: AtomicUsize::new(0),
+>             rejected_requests: AtomicUsize::new(0),
+>             max_conns,
+>         }
+>     }
+> 
+>     pub fn try_acquire(&self) -> Result<AcquiredGuard, RateLimiterError> {
+>         let mut current = self.active_conns.load(Ordering::SeqCst);
+>         loop {
+>             if current >= self.max_conns {
+>                 self.rejected_requests.fetch_add(1, Ordering::SeqCst);
+>                 return Err(RateLimiterError::CapacityExceeded);
+>             }
+>             match self.active_conns.compare_exchange_weak(
+>                 current,
+>                 current + 1,
+>                 Ordering::SeqCst,
+>                 Ordering::SeqCst,
+>             ) {
+>                 Ok(_) => {
+>                     self.total_requests.fetch_add(1, Ordering::SeqCst);
+>                     return Ok(AcquiredGuard { limiter: self });
+>                 }
+>                 Err(actual) => {
+>                     current = actual;
+>                 }
+>             }
+>         }
+>     }
+> 
+>     pub fn active_connections(&self) -> usize {
+>         self.active_conns.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn total_requests(&self) -> usize {
+>         self.total_requests.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn rejected_requests(&self) -> usize {
+>         self.rejected_requests.load(Ordering::SeqCst)
+>     }
+> }
+> 
+> fn main() {
+>     let limiter = Arc::new(LockFreeRateLimiter::new(3));
+>     let mut handles = vec![];
+> 
+>     for i in 0..10 {
+>         let limiter_clone = Arc::clone(&limiter);
+>         let h = thread::spawn(move || {
+>             match limiter_clone.try_acquire() {
+>                 Ok(_guard) => {
+>                     thread::sleep(Duration::from_millis(50));
+>                     println!("Thread {} acquired slot successfully", i);
+>                 }
+>                 Err(_) => {
+>                     println!("Thread {} rate limited", i);
+>                 }
+>             }
+>         });
+>         handles.push(h);
+>     }
+> 
+>     for h in handles {
+>         h.join().unwrap();
+>     }
+> 
+>     println!("Total requests: {}", limiter.total_requests());
+>     println!("Rejected requests: {}", limiter.rejected_requests());
+>     println!("Active connections: {}", limiter.active_connections());
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_rate_limiter_capacity_enforcement() {
+>         let limiter = LockFreeRateLimiter::new(2);
+>         let g1 = limiter.try_acquire();
+>         let g2 = limiter.try_acquire();
+>         let g3 = limiter.try_acquire();
+> 
+>         assert!(g1.is_ok());
+>         assert!(g2.is_ok());
+>         assert_eq!(g3.err(), Some(RateLimiterError::CapacityExceeded));
+>         assert_eq!(limiter.active_connections(), 2);
+>         assert_eq!(limiter.rejected_requests(), 1);
+> 
+>         drop(g1);
+>         assert_eq!(limiter.active_connections(), 1);
+> 
+>         let g4 = limiter.try_acquire();
+>         assert!(g4.is_ok());
+>         assert_eq!(limiter.active_connections(), 2);
+>         assert_eq!(limiter.total_requests(), 3);
+>     }
+> 
+>     #[test]
+>     fn test_concurrent_traffic_burst() {
+>         let limiter = Arc::new(LockFreeRateLimiter::new(5));
+>         let mut handles = vec![];
+> 
+>         for _ in 0..20 {
+>             let lim = Arc::clone(&limiter);
+>             handles.push(thread::spawn(move || {
+>                 if let Ok(_guard) = lim.try_acquire() {
+>                     thread::sleep(Duration::from_millis(10));
+>                 }
+>             }));
+>         }
+> 
+>         for h in handles {
+>             h.join().unwrap();
+>         }
+> 
+>         assert_eq!(limiter.active_connections(), 0);
+>         assert_eq!(limiter.total_requests() + limiter.rejected_requests(), 20);
+>     }
 > }
 > ```
 >
-> **Explanation:** `fetch_add` executes atomic read-modify-write operations in a single CPU instruction.
+> **Step-by-Step Explanation:**
+> 1. **Atomic CAS Loop (`compare_exchange_weak`)**: Instead of blocking OS threads with a `Mutex`, `try_acquire` reads the current value into `current`, validates `current < max_conns`, and attempts an atomic swap. If another thread mutated `active_conns` concurrently, `compare_exchange_weak` returns `Err(actual)`, updating `current` to retry immediately.
+> 2. **RAII Guard Cleanup (`Drop`)**: `AcquiredGuard` implements `Drop` to ensure `active_conns.fetch_sub(1, Ordering::SeqCst)` is executed whenever the guard leaves scope, even if worker logic panics.
+> 3. **Lock-Free Request Metrics**: Both `total_requests` and `rejected_requests` are modified using atomic `fetch_add` operations, guaranteeing strict thread safety and lock-free hardware speed.
+
+---
+
+### Exercise 2: Lock-Free State Machine and Optimistic Peak Memory Aggregator
+
+**Problem:** Build an execution task state machine and concurrent memory metric aggregator using `AtomicU8` and `AtomicUsize`.
+
+Implement `TaskStateTracker` with:
+1. State management using `AtomicU8` representing discrete execution states (`STATE_IDLE = 0`, `STATE_RUNNING = 1`, `STATE_PAUSED = 2`, `STATE_STOPPED = 3`).
+2. `try_transition(&self, current: u8, next: u8) -> Result<u8, u8>` using `compare_exchange` to ensure state transitions occur atomically without race conditions.
+3. `update_peak_memory(&self, val: usize)`: Optimistically tracks the maximum memory observed across all threads by executing a CAS retry loop (`compare_exchange_weak`) until `peak_memory_mb` is at least `val`.
+4. Unit tests in `#[cfg(test)] mod tests` verifying transition validity, invalid transition rejections, and lock-free maximum value calculation under concurrent updates.
+
+> [!check]- Answer
+> ```rust
+> use std::sync::atomic::{AtomicU8, AtomicUsize, Ordering};
+> use std::sync::Arc;
+> use std::thread;
+> 
+> pub const STATE_IDLE: u8 = 0;
+> pub const STATE_RUNNING: u8 = 1;
+> pub const STATE_PAUSED: u8 = 2;
+> pub const STATE_STOPPED: u8 = 3;
+> 
+> pub struct TaskStateTracker {
+>     state: AtomicU8,
+>     peak_memory_mb: AtomicUsize,
+>     transition_count: AtomicUsize,
+> }
+> 
+> impl TaskStateTracker {
+>     pub fn new() -> Self {
+>         Self {
+>             state: AtomicU8::new(STATE_IDLE),
+>             peak_memory_mb: AtomicUsize::new(0),
+>             transition_count: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn current_state(&self) -> u8 {
+>         self.state.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn peak_memory(&self) -> usize {
+>         self.peak_memory_mb.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn transition_count(&self) -> usize {
+>         self.transition_count.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn try_transition(&self, current: u8, next: u8) -> Result<u8, u8> {
+>         match self.state.compare_exchange(
+>             current,
+>             next,
+>             Ordering::SeqCst,
+>             Ordering::SeqCst,
+>         ) {
+>             Ok(prev) => {
+>                 self.transition_count.fetch_add(1, Ordering::SeqCst);
+>                 Ok(prev)
+>             }
+>             Err(actual) => Err(actual),
+>         }
+>     }
+> 
+>     pub fn update_peak_memory(&self, val: usize) {
+>         let mut current = self.peak_memory_mb.load(Ordering::SeqCst);
+>         while val > current {
+>             match self.peak_memory_mb.compare_exchange_weak(
+>                 current,
+>                 val,
+>                 Ordering::SeqCst,
+>                 Ordering::SeqCst,
+>             ) {
+>                 Ok(_) => break,
+>                 Err(actual) => current = actual,
+>             }
+>         }
+>     }
+> }
+> 
+> fn main() {
+>     let tracker = Arc::new(TaskStateTracker::new());
+>     
+>     assert!(tracker.try_transition(STATE_IDLE, STATE_RUNNING).is_ok());
+>     
+>     let mut handles = vec![];
+>     for i in 1..=5 {
+>         let tr = Arc::clone(&tracker);
+>         handles.push(thread::spawn(move || {
+>             let memory_used = i * 128;
+>             tr.update_peak_memory(memory_used);
+>         }));
+>     }
+> 
+>     for h in handles {
+>         h.join().unwrap();
+>     }
+> 
+>     println!("Current State: {}", tracker.current_state());
+>     println!("Peak Memory: {} MB", tracker.peak_memory());
+>     println!("Transitions: {}", tracker.transition_count());
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_valid_state_transitions() {
+>         let tracker = TaskStateTracker::new();
+>         assert_eq!(tracker.current_state(), STATE_IDLE);
+> 
+>         let res = tracker.try_transition(STATE_IDLE, STATE_RUNNING);
+>         assert_eq!(res, Ok(STATE_IDLE));
+>         assert_eq!(tracker.current_state(), STATE_RUNNING);
+> 
+>         let invalid_res = tracker.try_transition(STATE_IDLE, STATE_PAUSED);
+>         assert_eq!(invalid_res, Err(STATE_RUNNING));
+>         assert_eq!(tracker.current_state(), STATE_RUNNING);
+> 
+>         let pause_res = tracker.try_transition(STATE_RUNNING, STATE_PAUSED);
+>         assert!(pause_res.is_ok());
+>         assert_eq!(tracker.transition_count(), 2);
+>     }
+> 
+>     #[test]
+>     fn test_concurrent_peak_memory_update() {
+>         let tracker = Arc::new(TaskStateTracker::new());
+>         let mut handles = vec![];
+> 
+>         let values = vec![50, 200, 150, 400, 350, 100];
+>         for val in values {
+>             let tr = Arc::clone(&tracker);
+>             handles.push(thread::spawn(move || {
+>                 tr.update_peak_memory(val);
+>             }));
+>         }
+> 
+>         for h in handles {
+>             h.join().unwrap();
+>         }
+> 
+>         assert_eq!(tracker.peak_memory(), 400);
+>     }
+> }
+> ```
+>
+> **Step-by-Step Explanation:**
+> 1. **Atomic State Machine (`compare_exchange`)**: State transitions check if the current state strictly matches the expected predecessor (`current`). If two threads attempt conflicting transitions, only one succeeds; the other receives `Err(actual)` with the real state.
+> 2. **Optimistic Max Update Loop**: `update_peak_memory` reads the existing peak into `current`. If `val <= current`, no update is needed. If `val > current`, it executes `compare_exchange_weak`. If a concurrent thread sets a higher or equal value, `compare_exchange_weak` fails, updating `current` so the loop re-evaluates whether `val > current`.
+> 3. **Lock-Free Metrics**: Metric updates complete in nanoseconds directly on CPU registers without OS thread unscheduling.
+
+---
+
+### Exercise 3: Multithreaded Worker Pool Shutdown Coordinator
+
+**Problem:** Implement a thread pool lifecycle and metric coordinator using `AtomicBool` and `AtomicUsize`.
+
+Implement `ThreadPoolCoordinator` with:
+1. `shutdown_requested`: An `AtomicBool` flag indicating whether workers should finish their work loops and exit.
+2. `tasks_processed`: An `AtomicUsize` tracking total completed workload units across all threads.
+3. `active_workers`: An `AtomicUsize` tracking currently live worker threads.
+4. `request_shutdown(&self)`: Atomically sets `shutdown_requested` to `true` via `store(true, Ordering::SeqCst)`.
+5. Unit tests in `#[cfg(test)] mod tests` verifying worker creation, task processing count aggregation, and clean shutdown propagation using `assert_eq!` and `assert!`.
+
+> [!check]- Answer
+> ```rust
+> use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+> use std::sync::Arc;
+> use std::thread;
+> use std::time::Duration;
+> 
+> pub struct ThreadPoolCoordinator {
+>     shutdown_requested: AtomicBool,
+>     tasks_processed: AtomicUsize,
+>     active_workers: AtomicUsize,
+> }
+> 
+> impl ThreadPoolCoordinator {
+>     pub fn new() -> Self {
+>         Self {
+>             shutdown_requested: AtomicBool::new(false),
+>             tasks_processed: AtomicUsize::new(0),
+>             active_workers: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn request_shutdown(&self) {
+>         self.shutdown_requested.store(true, Ordering::SeqCst);
+>     }
+> 
+>     pub fn is_shutdown(&self) -> bool {
+>         self.shutdown_requested.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn record_task_completed(&self) {
+>         self.tasks_processed.fetch_add(1, Ordering::SeqCst);
+>     }
+> 
+>     pub fn tasks_processed(&self) -> usize {
+>         self.tasks_processed.load(Ordering::SeqCst)
+>     }
+> 
+>     pub fn active_workers(&self) -> usize {
+>         self.active_workers.load(Ordering::SeqCst)
+>     }
+> }
+> 
+> fn main() {
+>     let coordinator = Arc::new(ThreadPoolCoordinator::new());
+>     let worker_count = 4;
+>     let mut handles = vec![];
+> 
+>     for worker_id in 0..worker_count {
+>         let coord = Arc::clone(&coordinator);
+>         coord.active_workers.fetch_add(1, Ordering::SeqCst);
+> 
+>         let h = thread::spawn(move || {
+>             while !coord.is_shutdown() {
+>                 // Simulate processing a task
+>                 coord.record_task_completed();
+>                 thread::sleep(Duration::from_millis(10));
+>             }
+>             coord.active_workers.fetch_sub(1, Ordering::SeqCst);
+>             println!("Worker {} shut down cleanly.", worker_id);
+>         });
+>         handles.push(h);
+>     }
+> 
+>     // Let workers execute for a brief period
+>     thread::sleep(Duration::from_millis(50));
+>     coordinator.request_shutdown();
+> 
+>     for h in handles {
+>         h.join().unwrap();
+>     }
+> 
+>     println!("Total tasks processed: {}", coordinator.tasks_processed());
+>     println!("Remaining active workers: {}", coordinator.active_workers());
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_shutdown_signal_propagation() {
+>         let coordinator = ThreadPoolCoordinator::new();
+>         assert!(!coordinator.is_shutdown());
+> 
+>         coordinator.request_shutdown();
+>         assert!(coordinator.is_shutdown());
+>     }
+> 
+>     #[test]
+>     fn test_worker_lifecycle_and_metrics() {
+>         let coordinator = Arc::new(ThreadPoolCoordinator::new());
+>         let mut handles = vec![];
+> 
+>         for _ in 0..3 {
+>             let coord = Arc::clone(&coordinator);
+>             coord.active_workers.fetch_add(1, Ordering::SeqCst);
+>             handles.push(thread::spawn(move || {
+>                 for _ in 0..100 {
+>                     if coord.is_shutdown() {
+>                         break;
+>                     }
+>                     coord.record_task_completed();
+>                 }
+>                 coord.active_workers.fetch_sub(1, Ordering::SeqCst);
+>             }));
+>         }
+> 
+>         for h in handles {
+>             h.join().unwrap();
+>         }
+> 
+>         assert_eq!(coordinator.tasks_processed(), 300);
+>         assert_eq!(coordinator.active_workers(), 0);
+>     }
+> }
+> ```
+>
+> **Step-by-Step Explanation:**
+> 1. **Atomic Control Signaling (`AtomicBool`)**: Workers check `coord.is_shutdown()` on every iteration. Setting `shutdown_requested` to `true` via `store(true, Ordering::SeqCst)` provides immediate cross-thread visibility across CPU cache coherency lines.
+> 2. **Concurrent Workers Lifecycle Accounting**: Each worker atomically increments `active_workers` on launch via `fetch_add(1, Ordering::SeqCst)` and atomically decrements `active_workers` on exit via `fetch_sub(1, Ordering::SeqCst)`.
+> 3. **Lock-Free Aggregate Task Counters**: `tasks_processed` aggregates completed work metrics safely across all concurrently executing threads without mutex locks.
 
 ---
 

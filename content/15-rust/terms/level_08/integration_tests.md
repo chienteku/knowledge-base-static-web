@@ -145,122 +145,605 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Cheating Secret Shopper
+### Exercise 1: Multi-Component Service Integration & Shared Fixture Test Harness
 
-**Problem:** You wrote a library with a public `login()` function, and a private `hash_password()` function. You write the following Integration Test in your `tests/` folder. Why does it fail to compile?
+**Problem Requirements:**
+In production microservices built with Rust, integration testing requires validating multi-component workflows (such as an in-memory transactional Event Bus interacting with a User Account Service) strictly through public interfaces while sharing fixture setup patterns (mimicking `tests/common/mod.rs`).
 
-```rust
-use my_auth_lib;
-
-#[test]
-fn check_hashing() {
-    let hash = my_auth_lib::hash_password("password123");
-    assert_ne!(hash, "password123");
-}
-```
+1. Define an `Event` enum representing domain events: `UserCreated { id: u64, email: String }` and `UserDeleted { id: u64 }`.
+2. Define a thread-safe `EventListener` trait with `fn on_event(&self, event: &Event) -> Result<(), String>`.
+3. Implement an `EventBus` struct that maintains registered listeners using `Arc<Mutex<Vec<Box<dyn EventListener>>>>` and dispatches published events to listeners.
+4. Implement a `UserService` struct that manages an internal database `Arc<RwLock<HashMap<u64, User>>>` and publishes lifecycle events to the `EventBus`.
+5. Create a `MockAuditLogger` struct as an integration test fixture that records all received events into a thread-safe log vector.
+6. Write a complete, compilable test module (`#[cfg(test)] mod tests`) containing integration tests that check:
+   - User creation triggers `UserCreated` event dispatching and database persistence.
+   - User deletion cleans up database state and triggers `UserDeleted` event.
+   - Duplicate user creation attempts return an explicit `Err` and emit no events.
+7. Use rigorous assertions (`assert_eq!`, `assert!`).
 
 > [!check]- Answer
-> It fails because `hash_password()` is private! 
->
-> Integration Tests are external. They are exactly like a customer who downloaded your crate from the internet. They can only access functions that are marked with `pub`. If you want to test private internal functions, you must write a Unit Test inside `src/lib.rs`.
+> ```rust
+> use std::collections::HashMap;
+> use std::sync::{Arc, Mutex, RwLock};
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum Event {
+>     UserCreated { id: u64, email: String },
+>     UserDeleted { id: u64 },
+> }
+> 
+> pub trait EventListener: Send + Sync {
+>     fn on_event(&self, event: &Event) -> Result<(), String>;
+> }
+> 
+> #[derive(Default)]
+> pub struct EventBus {
+>     listeners: Arc<Mutex<Vec<Box<dyn EventListener>>>>,
+> }
+> 
+> impl EventBus {
+>     pub fn new() -> Self {
+>         Self {
+>             listeners: Arc::new(Mutex::new(Vec::new())),
+>         }
+>     }
+> 
+>     pub fn register(&self, listener: Box<dyn EventListener>) {
+>         let mut guard = self.listeners.lock().unwrap();
+>         guard.push(listener);
+>     }
+> 
+>     pub fn publish(&self, event: &Event) -> Result<usize, String> {
+>         let guard = self.listeners.lock().unwrap();
+>         let mut success_count = 0;
+>         for listener in guard.iter() {
+>             if listener.on_event(event).is_ok() {
+>                 success_count += 1;
+>             }
+>         }
+>         Ok(success_count)
+>     }
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct User {
+>     pub id: u64,
+>     pub email: String,
+> }
+> 
+> pub struct UserService {
+>     db: Arc<RwLock<HashMap<u64, User>>>,
+>     event_bus: Arc<EventBus>,
+> }
+> 
+> impl UserService {
+>     pub fn new(event_bus: Arc<EventBus>) -> Self {
+>         Self {
+>             db: Arc::new(RwLock::new(HashMap::new())),
+>             event_bus,
+>         }
+>     }
+> 
+>     pub fn create_user(&self, id: u64, email: String) -> Result<User, String> {
+>         let user = User {
+>             id,
+>             email: email.clone(),
+>         };
+>         let mut db_guard = self.db.write().unwrap();
+>         if db_guard.contains_key(&id) {
+>             return Err(format!("User ID {} already exists", id));
+>         }
+>         db_guard.insert(id, user.clone());
+>         drop(db_guard);
+> 
+>         let event = Event::UserCreated { id, email };
+>         self.event_bus.publish(&event)?;
+>         Ok(user)
+>     }
+> 
+>     pub fn delete_user(&self, id: u64) -> Result<(), String> {
+>         let mut db_guard = self.db.write().unwrap();
+>         if db_guard.remove(&id).is_none() {
+>             return Err(format!("User ID {} not found", id));
+>         }
+>         drop(db_guard);
+> 
+>         let event = Event::UserDeleted { id };
+>         self.event_bus.publish(&event)?;
+>         Ok(())
+>     }
+> 
+>     pub fn get_user(&self, id: u64) -> Option<User> {
+>         let db_guard = self.db.read().unwrap();
+>         db_guard.get(&id).cloned()
+>     }
+> }
+> 
+> // Shared Integration Test Fixture (Simulating tests/common/mod.rs helper)
+> pub struct MockAuditLogger {
+>     pub received_events: Arc<Mutex<Vec<Event>>>,
+> }
+> 
+> impl MockAuditLogger {
+>     pub fn new() -> (Self, Arc<Mutex<Vec<Event>>>) {
+>         let storage = Arc::new(Mutex::new(Vec::new()));
+>         let logger = Self {
+>             received_events: Arc::clone(&storage),
+>         };
+>         (logger, storage)
+>     }
+> }
+> 
+> impl EventListener for MockAuditLogger {
+>     fn on_event(&self, event: &Event) -> Result<(), String> {
+>         let mut guard = self.received_events.lock().unwrap();
+>         guard.push(event.clone());
+>         Ok(())
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_user_service_integration_with_event_bus() {
+>         let event_bus = Arc::new(EventBus::new());
+>         let (logger, event_store) = MockAuditLogger::new();
+>         event_bus.register(Box::new(logger));
+> 
+>         let user_service = UserService::new(Arc::clone(&event_bus));
+> 
+>         // 1. Create user and verify returned domain object
+>         let user = user_service.create_user(101, "alice@example.com".to_string()).unwrap();
+>         assert_eq!(user.id, 101);
+>         assert_eq!(user.email, "alice@example.com");
+> 
+>         // 2. Verify state persistence through public query API
+>         let fetched = user_service.get_user(101);
+>         assert!(fetched.is_some());
+>         assert_eq!(fetched.unwrap().email, "alice@example.com");
+> 
+>         // 3. Verify external listener event delivery
+>         let events = event_store.lock().unwrap();
+>         assert_eq!(events.len(), 1);
+>         assert_eq!(
+>             events[0],
+>             Event::UserCreated {
+>                 id: 101,
+>                 email: "alice@example.com".to_string()
+>             }
+>         );
+>         drop(events);
+> 
+>         // 4. Delete user and verify state cleanup & deletion event emission
+>         let delete_res = user_service.delete_user(101);
+>         assert!(delete_res.is_ok());
+>         assert!(user_service.get_user(101).is_none());
+> 
+>         let events = event_store.lock().unwrap();
+>         assert_eq!(events.len(), 2);
+>         assert_eq!(events[1], Event::UserDeleted { id: 101 });
+>     }
+> 
+>     #[test]
+>     fn test_duplicate_user_creation_error_handling() {
+>         let event_bus = Arc::new(EventBus::new());
+>         let (logger, event_store) = MockAuditLogger::new();
+>         event_bus.register(Box::new(logger));
+> 
+>         let user_service = UserService::new(event_bus);
+> 
+>         assert!(user_service.create_user(1, "user1@test.com".to_string()).is_ok());
+>         let err_res = user_service.create_user(1, "user1@test.com".to_string());
+> 
+>         assert!(err_res.is_err());
+>         assert_eq!(err_res.unwrap_err(), "User ID 1 already exists");
+> 
+>         // Verify no duplicate event was dispatched on failure
+>         let events = event_store.lock().unwrap();
+>         assert_eq!(events.len(), 1);
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Technical Explanation:**
+> 1. **Public API Contract**: In integration testing, components communicate through `pub` traits (`EventListener`) and methods (`create_user`, `delete_user`, `get_user`). Private internals are omitted to test real caller behavior.
+> 2. **Shared Fixture Setup**: `MockAuditLogger::new()` provides a fixture that retains shared state via `Arc<Mutex<Vec<Event>>>`. This allows integration test assertions to query side effects without reaching into private service state.
+> 3. **Thread Safety & Mutability**: Rust requires `Send + Sync` bounds on `Box<dyn EventListener>` to allow `EventBus` to share listeners safely across threads. `Arc<RwLock<...>>` inside `UserService` guarantees concurrent read access while isolating exclusive write access during updates.
 
 ---
 
-### Exercise 2: `tests/common/mod.rs` — Sharing Helpers Without Creating a Test Binary
+### Exercise 2: Black-Box Integration Testing of HTTP API Middleware & Rate Limiting
 
-**Problem:**
-You want to share a `setup()` helper function across multiple integration test files in your `tests/` directory. You create `tests/common.rs` with:
-```rust
-pub fn setup() { /* prepare test database */ }
-```
-When you run `cargo test`, you see:
-```
-running 0 tests
-test result: ok. 0 passed
-```
-for a test binary called `common`. Why is Cargo running `tests/common.rs` as its own test binary, and how do you fix it?
+**Problem Requirements:**
+Web services require black-box integration testing to ensure that middleware layers (such as Authentication and Rate Limiting) execute correctly before request handlers are reached.
+
+1. Define a public `Request` struct with `path: String`, `token: Option<String>`, and `client_ip: String`.
+2. Define a public `Response` struct with `status_code: u16` and `body: String`.
+3. Define a `Middleware` trait with `fn handle(&self, req: &Request) -> Result<(), Response>`.
+4. Implement `AuthMiddleware` which inspects `req.token`. If missing or invalid, it returns `Err(Response)` with `401 Unauthorized`.
+5. Implement `RateLimiterMiddleware` which uses `Mutex<HashMap<String, usize>>` to track client IP requests up to `max_requests`. Exceeding the threshold returns `Err(Response)` with `429 Too Many Requests`.
+6. Implement an `ApiPipeline` router struct that stores `Vec<Box<dyn Middleware>>` and dispatches incoming requests through the middleware chain down to endpoint routes (`/api/v1/resource`).
+7. Write a complete test suite (`#[cfg(test)] mod tests`) testing:
+   - Request authentication failure returns HTTP 401.
+   - Sequential requests from a single client IP trigger HTTP 429 when exceeding rate limits.
+   - Valid requests to unknown paths return HTTP 404.
 
 > [!check]- Answer
-> **Why it happens:**
-> Every `.rs` file directly inside `tests/` is compiled by Cargo as an **independent test binary**. Cargo sees `tests/common.rs` and creates a separate test executable for it. Since `common.rs` has no `#[test]` functions, that binary reports "0 tests". This is annoying noise in the output and also means `setup()` is compiled and linked separately rather than being shared.
->
-> **The fix: use `tests/common/mod.rs`:**
-> ```
-> tests/
->   common/
->     mod.rs       ← helper code goes here
->   auth_test.rs   ← uses `mod common;`
->   billing_test.rs
-> ```
-> Subdirectories inside `tests/` are **not** automatically compiled as top-level test binaries. A file at `tests/common/mod.rs` is a module, not an entry point. Each test file that needs the helpers declares:
 > ```rust
-> mod common;  // looks for tests/common/mod.rs
+> use std::collections::HashMap;
+> use std::sync::Mutex;
+> 
+> #[derive(Debug, Clone)]
+> pub struct Request {
+>     pub path: String,
+>     pub token: Option<String>,
+>     pub client_ip: String,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct Response {
+>     pub status_code: u16,
+>     pub body: String,
+> }
+> 
+> pub trait Middleware: Send + Sync {
+>     fn handle(&self, req: &Request) -> Result<(), Response>;
+> }
+> 
+> pub struct AuthMiddleware {
+>     secret_token: String,
+> }
+> 
+> impl AuthMiddleware {
+>     pub fn new(secret_token: &str) -> Self {
+>         Self {
+>             secret_token: secret_token.to_string(),
+>         }
+>     }
+> }
+> 
+> impl Middleware for AuthMiddleware {
+>     fn handle(&self, req: &Request) -> Result<(), Response> {
+>         match &req.token {
+>             Some(token) if token == &self.secret_token => Ok(()),
+>             _ => Err(Response {
+>                 status_code: 401,
+>                 body: "Unauthorized: Invalid or missing token".to_string(),
+>             }),
+>         }
+>     }
+> }
+> 
+> pub struct RateLimiterMiddleware {
+>     max_requests: usize,
+>     request_counts: Mutex<HashMap<String, usize>>,
+> }
+> 
+> impl RateLimiterMiddleware {
+>     pub fn new(max_requests: usize) -> Self {
+>         Self {
+>             max_requests,
+>             request_counts: Mutex::new(HashMap::new()),
+>         }
+>     }
+> }
+> 
+> impl Middleware for RateLimiterMiddleware {
+>     fn handle(&self, req: &Request) -> Result<(), Response> {
+>         let mut counts = self.request_counts.lock().unwrap();
+>         let count = counts.entry(req.client_ip.clone()).or_insert(0);
+>         if *count >= self.max_requests {
+>             Err(Response {
+>                 status_code: 429,
+>                 body: "Too Many Requests: Rate limit exceeded".to_string(),
+>             })
+>         } else {
+>             *count += 1;
+>             Ok(())
+>         }
+>     }
+> }
+> 
+> pub struct ApiPipeline {
+>     middlewares: Vec<Box<dyn Middleware>>,
+> }
+> 
+> impl ApiPipeline {
+>     pub fn new() -> Self {
+>         Self {
+>             middlewares: Vec::new(),
+>         }
+>     }
+> 
+>     pub fn add_middleware(&mut self, middleware: Box<dyn Middleware>) {
+>         self.middlewares.push(middleware);
+>     }
+> 
+>     pub fn dispatch(&self, req: Request) -> Response {
+>         for mw in &self.middlewares {
+>             if let Err(resp) = mw.handle(&req) {
+>                 return resp;
+>             }
+>         }
+> 
+>         match req.path.as_str() {
+>             "/api/v1/resource" => Response {
+>                 status_code: 200,
+>                 body: "{\"data\": \"success\"}".to_string(),
+>             },
+>             _ => Response {
+>                 status_code: 404,
+>                 body: "Not Found".to_string(),
+>             },
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_pipeline_authentication_failure() {
+>         let mut pipeline = ApiPipeline::new();
+>         pipeline.add_middleware(Box::new(AuthMiddleware::new("secret-key")));
+> 
+>         let req = Request {
+>             path: "/api/v1/resource".to_string(),
+>             token: Some("wrong-key".to_string()),
+>             client_ip: "192.168.1.1".to_string(),
+>         };
+> 
+>         let response = pipeline.dispatch(req);
+>         assert_eq!(response.status_code, 401);
+>         assert!(response.body.contains("Unauthorized"));
+>     }
+> 
+>     #[test]
+>     fn test_pipeline_rate_limiting_enforcement() {
+>         let mut pipeline = ApiPipeline::new();
+>         pipeline.add_middleware(Box::new(AuthMiddleware::new("secret-key")));
+>         pipeline.add_middleware(Box::new(RateLimiterMiddleware::new(2)));
+> 
+>         let make_req = || Request {
+>             path: "/api/v1/resource".to_string(),
+>             token: Some("secret-key".to_string()),
+>             client_ip: "10.0.0.5".to_string(),
+>         };
+> 
+>         // First two requests under limit return HTTP 200
+>         let r1 = pipeline.dispatch(make_req());
+>         assert_eq!(r1.status_code, 200);
+> 
+>         let r2 = pipeline.dispatch(make_req());
+>         assert_eq!(r2.status_code, 200);
+> 
+>         // Third request exceeds threshold and returns HTTP 429
+>         let r3 = pipeline.dispatch(make_req());
+>         assert_eq!(r3.status_code, 429);
+>         assert_eq!(r3.body, "Too Many Requests: Rate limit exceeded");
+>     }
+> 
+>     #[test]
+>     fn test_pipeline_not_found_endpoint() {
+>         let mut pipeline = ApiPipeline::new();
+>         pipeline.add_middleware(Box::new(AuthMiddleware::new("secret-key")));
+> 
+>         let req = Request {
+>             path: "/api/v1/nonexistent".to_string(),
+>             token: Some("secret-key".to_string()),
+>             client_ip: "192.168.1.1".to_string(),
+>         };
+> 
+>         let response = pipeline.dispatch(req);
+>         assert_eq!(response.status_code, 404);
+>         assert_eq!(response.body, "Not Found");
+>     }
+> }
 > ```
-> This causes `common/mod.rs` to be compiled as part of *that test file's binary*, not as its own binary. Cargo never sees a standalone `tests/common` executable, so no spurious "0 tests" output appears.
->
-> **Explanation:**
-> This is a Cargo file-discovery quirk: the `tests/` directory uses the same "every top-level `.rs` file is a target" rule as `src/bin/`. The `mod.rs` convention is the standard escape hatch when you need shared helpers.
+> 
+> **Step-by-Step Technical Explanation:**
+> 1. **Short-Circuit Middleware Execution**: `ApiPipeline::dispatch` loops over trait objects `Box<dyn Middleware>`. If any middleware returns `Err(Response)`, the pipeline immediately short-circuits and returns the error HTTP response without processing downstream handlers.
+> 2. **Stateful Rate Limiting**: `RateLimiterMiddleware` protects interior state with `Mutex<HashMap<String, usize>>`. The test verifies client IP tracking across sequential request calls without needing internal struct inspection.
+> 3. **Black-Box API Assertions**: The tests instantiate the pipeline via its public builder methods and submit `Request` values, verifying system behavior through `Response` status codes and payload strings (`assert_eq!(response.status_code, 401)`).
 
 ---
 
-### Exercise 3: Writing a Real Integration Test
+### Exercise 3: Asynchronous Workflow Pipeline Integration & Fault Injection Testing
 
-**Problem:**
-Write the two files needed for a complete, working integration test:
-1. `src/lib.rs` — a public `add(a: i32, b: i32) -> i32` function.
-2. `tests/math_test.rs` — an integration test file that imports the library and tests `add`.
+**Problem Requirements:**
+Integration tests often need to verify transaction boundaries and fault tolerance when coordinating multiple external service traits (e.g. Payment Gateways and Notification Systems).
 
-Then answer:
-- Why does `tests/math_test.rs` use `use my_crate::add;` rather than `mod` to access the function?
-- Why is `#[cfg(test)]` **not** needed in the integration test file?
+1. Define a `PaymentResult` enum with variants `Success { tx_id: String }` and `Failed { reason: String }`.
+2. Define a trait `PaymentGateway: Send + Sync` with `fn charge(&self, account_id: &str, amount_cents: u64) -> PaymentResult`.
+3. Define a trait `NotificationService: Send + Sync` with `fn notify(&self, account_id: &str, message: &str) -> Result<(), String>`.
+4. Create a `PaymentProcessor` pipeline struct holding `Arc<dyn PaymentGateway>` and `Arc<dyn NotificationService>`.
+5. Implement `pub fn process_order(&self, account_id: &str, amount_cents: u64) -> Result<String, String>`:
+   - Calls `gateway.charge()`.
+   - If payment fails, returns an error immediately and does NOT call the notification service.
+   - If payment succeeds, attempts notification. If notification fails, returns a composite fault error.
+6. Create mock implementations (`MockPaymentGateway`, `MockNotifier`) with fault-injection flags (`should_fail`) and thread-safe record vectors.
+7. Write a unit/integration test suite (`#[cfg(test)] mod tests`) using `assert_eq!`, `assert!`, and string matching to test successful processing, payment failure rollbacks, and notification fault injection.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> running 2 tests
-> test test_add_positive ... ok
-> test test_add_negative ... ok
-> test result: ok. 2 passed; 0 failed
-> ```
->
-> - **Hint 1:** In `tests/math_test.rs`, the crate name matches the `[package] name` in `Cargo.toml`. If your package is named `my_math`, the import is `use my_math::add;`. Cargo compiles each integration test file as a separate crate that depends on your library.
-> - **Hint 2:** No `#[cfg(test)]` is needed because the entire `tests/` directory is only compiled during `cargo test`. Cargo never includes integration test files in a normal `cargo build`.
-> - **Hint 3:** No `fn main()` is needed either. Cargo generates its own `main` harness for the test binary that discovers and runs all `#[test]` functions automatically.
->
 > ```rust
-> // src/lib.rs
->
-> /// Adds two integers.
-> pub fn add(a: i32, b: i32) -> i32 {
->     a + b
+> use std::sync::{Arc, Mutex};
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum PaymentResult {
+>     Success { tx_id: String },
+>     Failed { reason: String },
+> }
+> 
+> pub trait PaymentGateway: Send + Sync {
+>     fn charge(&self, account_id: &str, amount_cents: u64) -> PaymentResult;
+> }
+> 
+> pub trait NotificationService: Send + Sync {
+>     fn notify(&self, account_id: &str, message: &str) -> Result<(), String>;
+> }
+> 
+> pub struct PaymentProcessor {
+>     gateway: Arc<dyn PaymentGateway>,
+>     notifier: Arc<dyn NotificationService>,
+> }
+> 
+> impl PaymentProcessor {
+>     pub fn new(
+>         gateway: Arc<dyn PaymentGateway>,
+>         notifier: Arc<dyn NotificationService>,
+>     ) -> Self {
+>         Self { gateway, notifier }
+>     }
+> 
+>     pub fn process_order(&self, account_id: &str, amount_cents: u64) -> Result<String, String> {
+>         let result = self.gateway.charge(account_id, amount_cents);
+>         match result {
+>             PaymentResult::Success { tx_id } => {
+>                 let msg = format!("Payment of ${:.2} processed. Tx: {}", amount_cents as f64 / 100.0, tx_id);
+>                 match self.notifier.notify(account_id, &msg) {
+>                     Ok(_) => Ok(tx_id),
+>                     Err(notify_err) => Err(format!("Payment succeeded but notification failed: {}", notify_err)),
+>                 }
+>             }
+>             PaymentResult::Failed { reason } => Err(format!("Payment failed: {}", reason)),
+>         }
+>     }
+> }
+> 
+> // Fault Injection Mocks for Integration Testing
+> pub struct MockPaymentGateway {
+>     pub should_fail: bool,
+>     pub charges: Mutex<Vec<(String, u64)>>,
+> }
+> 
+> impl MockPaymentGateway {
+>     pub fn new(should_fail: bool) -> Self {
+>         Self {
+>             should_fail,
+>             charges: Mutex::new(Vec::new()),
+>         }
+>     }
+> }
+> 
+> impl PaymentGateway for MockPaymentGateway {
+>     fn charge(&self, account_id: &str, amount_cents: u64) -> PaymentResult {
+>         let mut guard = self.charges.lock().unwrap();
+>         guard.push((account_id.to_string(), amount_cents));
+>         if self.should_fail {
+>             PaymentResult::Failed {
+>                 reason: "Insufficient funds".to_string(),
+>             }
+>         } else {
+>             PaymentResult::Success {
+>                 tx_id: format!("TX-{}-{}", account_id, amount_cents),
+>             }
+>         }
+>     }
+> }
+> 
+> pub struct MockNotificationService {
+>     pub should_fail: bool,
+>     pub notifications: Mutex<Vec<(String, String)>>,
+> }
+> 
+> impl MockNotificationService {
+>     pub fn new(should_fail: bool) -> Self {
+>         Self {
+>             should_fail,
+>             notifications: Mutex::new(Vec::new()),
+>         }
+>     }
+> }
+> 
+> impl NotificationService for MockNotificationService {
+>     fn notify(&self, account_id: &str, message: &str) -> Result<(), String> {
+>         if self.should_fail {
+>             Err("SMS gateway unreachable".to_string())
+>         } else {
+>             let mut guard = self.notifications.lock().unwrap();
+>             guard.push((account_id.to_string(), message.to_string()));
+>             Ok(())
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_successful_payment_and_notification_workflow() {
+>         let gateway = Arc::new(MockPaymentGateway::new(false));
+>         let notifier = Arc::new(MockNotificationService::new(false));
+>         let processor = PaymentProcessor::new(
+>             Arc::clone(&gateway) as Arc<dyn PaymentGateway>,
+>             Arc::clone(&notifier) as Arc<dyn NotificationService>,
+>         );
+> 
+>         let res = processor.process_order("acc_123", 5000);
+>         assert!(res.is_ok());
+>         let tx_id = res.unwrap();
+>         assert_eq!(tx_id, "TX-acc_123-5000");
+> 
+>         // Verify payment gateway charge audit log
+>         let charges = gateway.charges.lock().unwrap();
+>         assert_eq!(charges.len(), 1);
+>         assert_eq!(charges[0], ("acc_123".to_string(), 5000));
+> 
+>         // Verify notification payload and dispatch log
+>         let notifications = notifier.notifications.lock().unwrap();
+>         assert_eq!(notifications.len(), 1);
+>         assert_eq!(notifications[0].0, "acc_123");
+>         assert!(notifications[0].1.contains("Payment of $50.00 processed"));
+>     }
+> 
+>     #[test]
+>     fn test_payment_failure_prevents_notification() {
+>         let gateway = Arc::new(MockPaymentGateway::new(true)); // Inject payment failure
+>         let notifier = Arc::new(MockNotificationService::new(false));
+>         let processor = PaymentProcessor::new(
+>             Arc::clone(&gateway) as Arc<dyn PaymentGateway>,
+>             Arc::clone(&notifier) as Arc<dyn NotificationService>,
+>         );
+> 
+>         let res = processor.process_order("acc_456", 2500);
+>         assert!(res.is_err());
+>         assert_eq!(res.unwrap_err(), "Payment failed: Insufficient funds");
+> 
+>         // Verify notification service was NEVER invoked on payment failure
+>         let notifications = notifier.notifications.lock().unwrap();
+>         assert!(notifications.is_empty());
+>     }
+> 
+>     #[test]
+>     fn test_notification_fault_injection_handling() {
+>         let gateway = Arc::new(MockPaymentGateway::new(false));
+>         let notifier = Arc::new(MockNotificationService::new(true)); // Inject notification fault
+>         let processor = PaymentProcessor::new(
+>             Arc::clone(&gateway) as Arc<dyn PaymentGateway>,
+>             Arc::clone(&notifier) as Arc<dyn NotificationService>,
+>         );
+> 
+>         let res = processor.process_order("acc_789", 10000);
+>         assert!(res.is_err());
+>         let err_msg = res.unwrap_err();
+>         assert!(err_msg.contains("Payment succeeded but notification failed"));
+>         assert!(err_msg.contains("SMS gateway unreachable"));
+>     }
 > }
 > ```
->
-> ```rust
-> // tests/math_test.rs
->
-> // Integration tests import the crate by name, exactly like an external user would.
-> // No `#[cfg(test)]` needed — this file is ONLY compiled during `cargo test`.
-> use my_math::add;
->
-> #[test]
-> fn test_add_positive() {
->     assert_eq!(add(2, 3), 5);
-> }
->
-> #[test]
-> fn test_add_negative() {
->     assert_eq!(add(-1, -4), -5);
-> }
-> ```
->
-> **Answer to the `use` vs `mod` question:**
-> `mod` declares a *submodule* that Cargo looks for as a file in the same directory. `use` imports an item from a *separate crate*. Because each file in `tests/` is compiled as its own independent crate, the library is a *dependency* (Cargo adds it automatically), not a submodule. You import from it with `use`, exactly as an external user would after adding it to their `Cargo.toml`.
->
-> **Answer to the `#[cfg(test)]` question:**
-> `#[cfg(test)]` is needed in `src/` files to gate code that should only exist during testing — because those files are also compiled during normal `cargo build`. Files in `tests/` are *never* compiled by `cargo build`. Cargo only touches them during `cargo test`, so every line in a `tests/` file is implicitly test-only — no annotation required.
+> 
+> **Step-by-Step Technical Explanation:**
+> 1. **Fault Injection Strategy**: The mock structs store a `should_fail` boolean flag. In integration testing, this enables simulating network timeouts, gateway outages, or database errors without depending on unreliable external services.
+> 2. **Transaction Isolation & Invariant Verification**: `test_payment_failure_prevents_notification` asserts that when `charge()` returns `PaymentResult::Failed`, the processor aborts immediately, keeping `notifications` empty (`assert!(notifications.is_empty())`).
+> 3. **Trait Abstraction for Dependency Injection**: The `PaymentProcessor` relies on `Arc<dyn PaymentGateway>` and `Arc<dyn NotificationService>` trait objects. In production, real HTTP/gRPC client implementations are injected; in integration tests, mock structs are injected seamlessly.
 
 ---
 

@@ -159,65 +159,264 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Transformation
+### Exercise 1: Zero-Copy SQL Parameter Sanitizer
 
-**Problem:** You have a variable `let mut my_cow = Cow::Borrowed("Hello");`. You call `my_cow.to_mut()`. What does the `Cow` physically do under the hood, and what `enum` variant does it permanently become?
+**Problem Scenario:**
+You are building a high-performance database proxy layer. To prevent SQL injection, incoming string parameter values must be sanitized by escaping single quotes (`' -> ''`) and redacting comment indicators (`-- -> [REDACTED]`).
+Since over 95% of incoming SQL queries are already sanitized and clean, allocating a new `String` on the heap for every single request creates unnecessary memory pressure and garbage allocation.
+
+Implement a function `pub fn sanitize_sql_param<'a>(input: &'a str) -> Cow<'a, str>` that:
+1. Returns `Cow::Borrowed(input)` directly if no single quotes or comment markers exist (zero allocations).
+2. Upgrades to `Cow::Owned` via `cow.to_mut()` and performs string sanitization if dangerous characters are present.
+
+Write unit tests using `#[test]` and `matches!` to verify both the zero-allocation borrowed path (verifying pointer identity with `assert_eq!(result.as_ptr(), input.as_ptr())`) and the lazily owned mutated path.
 
 > [!check]- Answer
-> Under the hood, the `Cow` asks the Operating System for Heap memory, copies the characters `"Hello"` into that new Heap memory, and permanently transforms its enum variant into a **`Cow::Owned(String)`**!
-
----
-
-### Exercise 2: Zero-Copy String Sanitization with `Cow`
-
-**Problem:** Write a function `sanitize(input: &str) -> Cow<str>` returning borrowed `input` if no changes needed, or owned `Cow::Owned` if modifications occur.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Clean: Borrowed("clean")
-> Dirty: Owned("dirty_clean")
-> ```
 > ```rust
 > use std::borrow::Cow;
-> fn sanitize(s: &str) -> Cow<'_, str> {
->     if s.contains('!') {
->         Cow::Owned(s.replace('!', "_clean"))
->     } else {
->         Cow::Borrowed(s)
+> 
+> /// Sanitizes SQL parameter strings by escaping single quotes (`'`) and redacting comments (`--`).
+> /// Returns `Cow::Borrowed` when no sanitization is needed (zero allocation),
+> /// or `Cow::Owned` when mutations are required.
+> pub fn sanitize_sql_param<'a>(input: &'a str) -> Cow<'a, str> {
+>     if !input.contains('\'') && !input.contains("--") {
+>         return Cow::Borrowed(input);
+>     }
+> 
+>     let mut cow = Cow::Borrowed(input);
+>     // .to_mut() clones the borrowed str into an owned String on the heap only when called
+>     let owned = cow.to_mut();
+>     if owned.contains('\'') {
+>         *owned = owned.replace('\'', "''");
+>     }
+>     if owned.contains("--") {
+>         *owned = owned.replace("--", "[REDACTED]");
+>     }
+>     cow
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_sanitize_sql_param_borrowed() {
+>         let clean_input = "select_user_by_id";
+>         let result = sanitize_sql_param(clean_input);
+> 
+>         // Verify zero allocation: variant is Borrowed and pointer addresses match
+>         assert!(matches!(result, Cow::Borrowed(_)));
+>         assert_eq!(result, "select_user_by_id");
+>         assert_eq!(result.as_ptr(), clean_input.as_ptr());
+>     }
+> 
+>     #[test]
+>     fn test_sanitize_sql_param_owned() {
+>         let dirty_input = "admin' OR 1=1 --";
+>         let result = sanitize_sql_param(dirty_input);
+> 
+>         // Verify lazy heap allocation: variant is Owned with sanitized string content
+>         assert!(matches!(result, Cow::Owned(_)));
+>         assert_eq!(result, "admin'' OR 1=1 [REDACTED]");
 >     }
 > }
-> fn main() {
->     println!("Clean: {:?}", sanitize("clean"));
->     println!("Dirty: {:?}", sanitize("dirty!"));
-> }
 > ```
 >
-> **Explanation:** `Cow` avoids allocations by borrowing data when unmodified and cloning lazily on mutation.
+> **Explanation:**
+> 1. **Zero-Allocation Fast Path**: By checking `!input.contains('\'') && !input.contains("--")` upfront, clean strings bypass heap allocation entirely and return `Cow::Borrowed`.
+> 2. **Lazy Heap Upgrade (`.to_mut()`)**: When sanitization is necessary, `.to_mut()` allocates a new heap `String` containing a copy of the input, morphing the `Cow` enum from `Borrowed` to `Owned`.
+> 3. **Pointer Verification**: In unit tests, `assert_eq!(result.as_ptr(), clean_input.as_ptr())` proves that `Cow::Borrowed` points to the original slice in memory without duplicating bytes.
 
 ---
 
-### Exercise 3: Modifying Cow Data in-place via `to_mut`
+### Exercise 2: Lazily Expanded Environment Variable Template Processor
 
-**Problem:** Call `.to_mut()` on `Cow::Borrowed("hello")` to push extra characters.
+**Problem Scenario:**
+Microservice configuration engines render template configurations containing `${KEY}` variables (e.g. `http://${HOST}:${PORT}/api`). The vast majority of static configuration entries do not contain placeholders.
 
-**Expected output:**
+Implement `pub fn expand_templates<'a>(template: &'a str, env: &std::collections::HashMap<&str, &str>) -> Cow<'a, str>`:
+1. Returns `Cow::Borrowed(template)` if the string contains no `${` delimiter.
+2. If placeholders exist, lazily promotes the `Cow` to `Owned` using `to_mut()` and replaces `${KEY}` with matching values from `env` (or `"UNSET"` if missing).
+
+Write comprehensive unit tests asserting zero allocation on static strings and correct substitution on templated strings.
+
 > [!check]- Answer
-> ```
-> Modified Cow: hello world
-> ```
 > ```rust
 > use std::borrow::Cow;
-> fn main() {
->     let mut cow: Cow<'_, str> = Cow::Borrowed("hello");
->     cow.to_mut().push_str(" world");
->     println!("Modified Cow: {}", cow);
+> use std::collections::HashMap;
+> 
+> /// Expands `${KEY}` template variables in dynamic configuration strings.
+> /// Returns `Cow::Borrowed` if no `${` delimiters exist, avoiding heap allocations.
+> /// If placeholders are found, it promotes to `Cow::Owned` and expands variables in place.
+> pub fn expand_templates<'a>(
+>     template: &'a str,
+>     env: &HashMap<&str, &str>,
+> ) -> Cow<'a, str> {
+>     if !template.contains("${") {
+>         return Cow::Borrowed(template);
+>     }
+> 
+>     let mut result = Cow::Borrowed(template);
+>     let mut cursor = 0;
+> 
+>     while let Some(start) = result[cursor..].find("${") {
+>         let abs_start = cursor + start;
+>         if let Some(end) = result[abs_start..].find('}') {
+>             let abs_end = abs_start + end;
+>             let key = result[abs_start + 2..abs_end].to_string();
+>             let replacement = env.get(key.as_str()).copied().unwrap_or("UNSET");
+>             let placeholder = format!("${{{}}}", key);
+> 
+>             // Promotes Borrowed -> Owned on first mutation; reuses Owned buffer on subsequent passes
+>             let owned_str = result.to_mut();
+>             *owned_str = owned_str.replace(&placeholder, replacement);
+>             cursor = abs_start + replacement.len();
+>         } else {
+>             break;
+>         }
+>     }
+> 
+>     result
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_expand_templates_borrowed() {
+>         let env = HashMap::new();
+>         let static_config = "http://localhost:8080/health";
+>         let result = expand_templates(static_config, &env);
+> 
+>         assert!(matches!(result, Cow::Borrowed(_)));
+>         assert_eq!(result, "http://localhost:8080/health");
+>         assert_eq!(result.as_ptr(), static_config.as_ptr());
+>     }
+> 
+>     #[test]
+>     fn test_expand_templates_owned() {
+>         let mut env = HashMap::new();
+>         env.insert("HOST", "127.0.0.1");
+>         env.insert("PORT", "9000");
+> 
+>         let template = "http://${HOST}:${PORT}/api/${MISSING}";
+>         let result = expand_templates(template, &env);
+> 
+>         assert!(matches!(result, Cow::Owned(_)));
+>         assert_eq!(result, "http://127.0.0.1:9000/api/UNSET");
+>     }
 > }
 > ```
 >
-> **Explanation:** `.to_mut()` clones borrowed data into an owned buffer only when mutation occurs.
+> **Explanation:**
+> 1. **Idempotent `.to_mut()`**: The first call to `.to_mut()` converts `Cow::Borrowed` to `Cow::Owned(String)` by cloning the string to the heap. Subsequent calls to `.to_mut()` on an already owned `Cow` return a mutable reference `&mut String` to the existing heap buffer without reallocating.
+> 2. **Delimiter Search**: Scans slice indices safely with `find("${")` and `find('}')`. Unmatched or static templates immediately return borrowed references.
+> 3. **Assertion Strategy**: Tests verify both memory slice identity (`as_ptr()`) and structural contents across missing and present environment values.
+
+---
+
+### Exercise 3: Network Packet Unescaping for Binary Slices (`Cow<'a, [u8]>`)
+
+**Scenario / Problem Statement:**
+In embedded device networking and serial protocol handling (such as SLIP framing), byte escaping is used to protect control characters inside payload packets.
+Control byte `0xDC` is used as an escape prefix:
+- `[0xDC, 0xDD]` unescapes to `0xDC`.
+- `[0xDC, 0xDE]` unescapes to `0xC0`.
+
+Because 90% of binary packets pass through without containing escape sequences (`0xDC`), cloning every packet payload into a new `Vec<u8>` causes severe memory churn.
+
+Implement `pub fn decode_slip_frame<'a>(frame: &'a [u8]) -> Cow<'a, [u8]>` using `Cow<'a, [u8]>`:
+1. If `frame` contains no `0xDC` byte, return `Cow::Borrowed(frame)`.
+2. If `0xDC` is detected, call `to_mut()` to lazily promote `Cow<'a, [u8]>` to `Cow::Owned(Vec<u8>)` and unescape the bytes in-place.
+
+Write unit tests verifying both clean packet borrowing and escaped packet in-place transformation.
+
+> [!check]- Answer
+> ```rust
+> use std::borrow::Cow;
+> 
+> const SLIP_ESC: u8 = 0xDC;
+> const SLIP_ESC_ESC: u8 = 0xDD;
+> const SLIP_ESC_END: u8 = 0xDE;
+> const SLIP_END: u8 = 0xC0;
+> 
+> /// Decodes a SLIP network binary packet frame.
+> /// Returns `Cow::Borrowed` if no escape bytes (`0xDC`) are detected.
+> /// Upgrades lazily to `Cow::Owned(Vec<u8>)` and unescapes bytes in-place when required.
+> pub fn decode_slip_frame<'a>(frame: &'a [u8]) -> Cow<'a, [u8]> {
+>     if !frame.contains(&SLIP_ESC) {
+>         return Cow::Borrowed(frame);
+>     }
+> 
+>     let mut cow: Cow<'a, [u8]> = Cow::Borrowed(frame);
+>     // .to_mut() converts Cow::Borrowed(&[u8]) -> Cow::Owned(Vec<u8>)
+>     let vec = cow.to_mut();
+> 
+>     let mut write_idx = 0;
+>     let mut read_idx = 0;
+>     let len = vec.len();
+> 
+>     while read_idx < len {
+>         if vec[read_idx] == SLIP_ESC && read_idx + 1 < len {
+>             match vec[read_idx + 1] {
+>                 SLIP_ESC_ESC => {
+>                     vec[write_idx] = SLIP_ESC;
+>                     read_idx += 2;
+>                 }
+>                 SLIP_ESC_END => {
+>                     vec[write_idx] = SLIP_END;
+>                     read_idx += 2;
+>                 }
+>                 _ => {
+>                     vec[write_idx] = vec[read_idx];
+>                     read_idx += 1;
+>                 }
+>             }
+>         } else {
+>             vec[write_idx] = vec[read_idx];
+>             read_idx += 1;
+>         }
+>         write_idx += 1;
+>     }
+> 
+>     vec.truncate(write_idx);
+>     cow
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_decode_slip_frame_borrowed() {
+>         let clean_frame = &[0x01, 0x02, 0x03, 0x04];
+>         let result = decode_slip_frame(clean_frame);
+> 
+>         assert!(matches!(result, Cow::Borrowed(_)));
+>         assert_eq!(&result[..], clean_frame);
+>         assert_eq!(result.as_ptr(), clean_frame.as_ptr());
+>     }
+> 
+>     #[test]
+>     fn test_decode_slip_frame_owned() {
+>         let escaped_frame = &[0x01, 0xDC, 0xDE, 0x05, 0xDC, 0xDD, 0x06];
+>         let result = decode_slip_frame(escaped_frame);
+> 
+>         assert!(matches!(result, Cow::Owned(_)));
+>         assert_eq!(&result[..], &[0x01, 0xC0, 0x05, 0xDC, 0x06]);
+>     }
+> }
+> ```
+>
+> **Explanation:**
+> 1. **Slice `Cow` Handling**: `Cow<'a, [u8]>` works seamlessly with byte slices `[u8]`. Its owned counterpart is `Vec<u8>`.
+> 2. **In-Place Modification**: Calling `.to_mut()` on `Cow<'a, [u8]>` creates a `Vec<u8>` containing the copied bytes. We perform two-pointer unescaping (`read_idx` and `write_idx`) directly on the vector buffer and `truncate` to the unescaped size, minimizing allocations.
+> 3. **Binary Data Assertions**: Unit tests compare byte slices using `&result[..]` and verify pointer identity (`as_ptr()`) for unescaped borrowed frames.
 
 ---
 

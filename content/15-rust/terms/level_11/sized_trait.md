@@ -167,93 +167,365 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Translation
-
-**Problem:** Translate the meaning of `<T: ?Sized>` into plain English.
-
-> [!check]- Answer
-> "The generic type `T` **may or may not be Sized**." 
->
-> It explicitly tells the compiler to remove its default rule that all generics must have a fixed compile-time size, allowing Dynamically Sized Types (DSTs) like `str` and `[T]` to be passed into the function (usually behind a pointer).
-
----
-
-### Exercise 2: Relaxing Sized Bounds with `?Sized`
-
-**Problem:** Write a generic function `fn print_ref<T: ?Sized + std::fmt::Display>(val: &T)` accepting `str` slices.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Printed DST: hello
-> ```
-> ```rust
-> fn print_ref<T: ?Sized + std::fmt::Display>(val: &T) {
->     println!("Printed DST: {}", val);
-> }
-> fn main() {
->     let s: &str = "hello";
->     print_ref(s);
-> }
-> ```
->
-> **Explanation:** `?Sized` opts out of implicit compile-time size requirements.
-
----
-
-### Exercise 3: Proving `Sized` — A Cross-Type Size Survey
+### Exercise 1: Zero-Copy Telemetry Encoder for Unsized Payloads (`?Sized`)
 
 **Problem:**
-The `Sized` trait isn't something you implement; the compiler grants it automatically to types whose byte size is known at compile time. Use `std::mem::size_of` and `std::mem::size_of_val` to answer these questions, then write code to verify:
+You are building a high-performance network telemetry encoder. The system must accept both fixed-size primitive payloads (such as `u64` timestamps) and dynamically sized byte buffers or text strings (such as `[u8]` slices or `str` text) without incurring heap allocations or requiring separate function overloads.
 
-1. Which of these types implement `Sized`? Fill in the table before running the code.
-   | Type | `Sized`? | Size (bytes) |
-   |---|---|---|
-   | `i32` | ? | ? |
-   | `(i32, bool)` | ? | ? |
-   | `[i32; 4]` | ? | ? |
-   | `str` | ? | ? |
-   | `[i32]` | ? | ? |
-2. Why can `size_of::<i32>()` be called but `size_of::<str>()` cannot compile?
-3. How do you measure the size of a DST value at runtime? (Hint: there's a `size_of_val` function.)
+1. Define a trait `TelemetryPayload` with a method `fn write_bytes(&self, buf: &mut Vec<u8>)`.
+2. Implement `TelemetryPayload` for `u64`, `str`, and `[u8]`.
+3. Implement a generic function `encode_telemetry_event<T: ?Sized + TelemetryPayload>(header_id: u16, payload: &T) -> Vec<u8>` that writes the 2-byte big-endian `header_id` followed by the payload bytes.
+4. Explain why omitting `?Sized` causes compile error `E0277` when passing `&str` or `&[u8]`.
+5. Write complete unit tests verifying encoding of `u64`, `str`, and `[u8]` payloads using assertions (`assert_eq!`).
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> i32           : 4 bytes
-> (i32, bool)   : 8 bytes  (4 + 1, padded to alignment of 4)
-> [i32; 4]      : 16 bytes (4 × 4)
-> "hello" (str) : 5 bytes  (runtime, via size_of_val)
-> [1,2,3] (slice): 12 bytes (runtime, via size_of_val)
-> ```
->
-> - **Hint 1:** `size_of::<T>()` is a const generic function — it only compiles when `T: Sized`, because a non-Sized type has no fixed size to return. For DSTs like `str` and `[i32]`, the compiler rejects the call entirely at compile time (`E0277`).
-> - **Hint 2:** `size_of_val(val: &T) -> usize` where `T: ?Sized` works on DSTs because it reads the length metadata from the fat pointer at runtime and multiplies by the element size. This is how you measure a DST's actual byte footprint.
-> - **Hint 3:** The padding in `(i32, bool)` may surprise you: `bool` is 1 byte but the tuple's alignment is `max(align_of::<i32>(), align_of::<bool>()) = 4`, so the compiler inserts 3 bytes of padding after the `bool`, making the total 8.
->
 > ```rust
-> use std::mem::{size_of, size_of_val};
->
+> use std::fmt::Display;
+> 
+> /// Trait implemented by telemetry payloads capable of binary serialization.
+> pub trait TelemetryPayload {
+>     fn write_bytes(&self, buf: &mut Vec<u8>);
+> }
+> 
+> // Implementation for fixed-size scalar type (Sized)
+> impl TelemetryPayload for u64 {
+>     fn write_bytes(&self, buf: &mut Vec<u8>) {
+>         buf.extend_from_slice(&self.to_be_bytes());
+>     }
+> }
+> 
+> // Implementation for unsized string slice DST (str)
+> impl TelemetryPayload for str {
+>     fn write_bytes(&self, buf: &mut Vec<u8>) {
+>         buf.extend_from_slice(self.as_bytes());
+>     }
+> }
+> 
+> // Implementation for unsized byte slice DST ([u8])
+> impl TelemetryPayload for [u8] {
+>     fn write_bytes(&self, buf: &mut Vec<u8>) {
+>         buf.extend_from_slice(self);
+>     }
+> }
+> 
+> /// Encodes telemetry headers and generic payloads.
+> /// `T: ?Sized` allows `T` to be an unsized type (`str` or `[u8]`) passed via reference `&T`.
+> pub fn encode_telemetry_event<T: ?Sized + TelemetryPayload>(header_id: u16, payload: &T) -> Vec<u8> {
+>     let mut buffer = Vec::new();
+>     buffer.extend_from_slice(&header_id.to_be_bytes());
+>     payload.write_bytes(&mut buffer);
+>     buffer
+> }
+> 
 > fn main() {
->     // Sized types: size_of::<T>() works at compile time.
->     println!("i32           : {} bytes", size_of::<i32>());
->     println!("(i32, bool)   : {} bytes  (4 + 1, padded to alignment of 4)", size_of::<(i32, bool)>());
->     println!("[i32; 4]      : {} bytes (4 × 4)", size_of::<[i32; 4]>());
->
->     // DST types: size_of::<str>() won't compile (E0277).
->     // Instead, use size_of_val with a concrete reference at runtime.
->     let s: &str = "hello";
->     println!("\"hello\" (str) : {} bytes  (runtime, via size_of_val)", size_of_val(s));
->
->     let sl: &[i32] = &[1, 2, 3];
->     println!("[1,2,3] (slice): {} bytes (runtime, via size_of_val)", size_of_val(sl));
+>     // Sized payload: u64
+>     let timestamp: u64 = 1700000000;
+>     let bytes_u64 = encode_telemetry_event(0x01, &timestamp);
+>     println!("Sized u64 payload bytes: {:?}", bytes_u64);
+> 
+>     // Unsized payload: str slice
+>     let log_msg: &str = "SYSTEM_OK";
+>     let bytes_str = encode_telemetry_event(0x02, log_msg);
+>     println!("Unsized str payload bytes: {:?}", String::from_utf8_lossy(&bytes_str));
+> 
+>     // Unsized payload: [u8] slice
+>     let raw_slice: &[u8] = &[0xAA, 0xBB, 0xCC];
+>     let bytes_raw = encode_telemetry_event(0x03, raw_slice);
+>     println!("Unsized [u8] payload bytes: {:?}", bytes_raw);
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_encode_sized_u64() {
+>         let ts: u64 = 0x0102030405060708;
+>         let encoded = encode_telemetry_event(100, &ts);
+>         assert_eq!(encoded.len(), 2 + 8);
+>         assert_eq!(&encoded[0..2], &100u16.to_be_bytes());
+>         assert_eq!(&encoded[2..10], &ts.to_be_bytes());
+>     }
+> 
+>     #[test]
+>     fn test_encode_unsized_str() {
+>         let msg: &str = "CRITICAL_ALERT";
+>         let encoded = encode_telemetry_event(500, msg);
+>         assert_eq!(encoded.len(), 2 + msg.len());
+>         assert_eq!(&encoded[0..2], &500u16.to_be_bytes());
+>         assert_eq!(&encoded[2..], msg.as_bytes());
+>     }
+> 
+>     #[test]
+>     fn test_encode_unsized_byte_slice() {
+>         let data: &[u8] = &[1, 2, 3, 4, 5];
+>         let encoded = encode_telemetry_event(999, data);
+>         assert_eq!(encoded.len(), 2 + 5);
+>         assert_eq!(&encoded[2..], &[1, 2, 3, 4, 5]);
+>     }
 > }
 > ```
 >
-> **Explanation:**
-> `Sized` is the dividing line between compile-time and runtime size knowledge. For `Sized` types, the compiler bakes the size into the binary as a constant — `size_of::<i32>()` compiles to the literal `4` with no runtime cost. For DSTs, the size depends on the actual value (how long the string is, how many elements the slice has), so it can only be computed at runtime using the fat pointer's metadata. This distinction is why DSTs must always live behind a pointer: the stack frame for a function is allocated before it starts executing, so the compiler must know the exact byte size of every local variable at compile time.
+> **Detailed Explanation:**
+> 1. **Implicit `Sized` Bounds:** By default, Rust appends `T: Sized` to every generic parameter. If you declare `fn encode<T: TelemetryPayload>(data: &T)`, the compiler interprets `T` as requiring compile-time size knowledge. When passing `&str` or `&[u8]`, `T` resolves to `str` or `[u8]` respectively. Because `str` and `[u8]` are Dynamically Sized Types (DSTs), compilation fails with error `E0277` (`the size for values of type str cannot be known at compilation time`).
+> 2. **Relaxing with `?Sized`:** Specifying `T: ?Sized + TelemetryPayload` informs the compiler that `T` may or may not be sized. Because the function receives `payload: &T` (a reference), the argument itself is a fat pointer (containing pointer + length metadata), which has a fixed byte size on the stack regardless of whether `T` is sized or unsized.
+> 3. **Zero-Allocation Flexibility:** This pattern allows callers to pass references to stack integers (`&u64`), string slices (`&str`), or raw slice views (`&[u8]`) into a single uniform generic function without heap-allocating intermediate container objects.
+
+---
+
+### Exercise 2: Designing a Custom DST Packet Struct with Unsized Coercion
+
+**Problem:**
+In binary protocol parsers, network packets often consist of a fixed-size header followed by a variable-sized payload trailing field. In Rust, a custom struct becomes a Dynamically Sized Type (DST) if its final field is unsized.
+
+1. Define a generic struct `Packet<T: ?Sized>` containing `header_id: u32`, `flags: u8`, and `payload: T`.
+2. Implement methods `id(&self) -> u32` and `payload(&self) -> &T` for `Packet<T>` where `T: ?Sized`.
+3. Construct a concrete sized instance `Packet<[u8; 4]>` on the stack.
+4. Demonstrate unsized coercion by borrowing `&Packet<[u8; 4]>` as `&Packet<[u8]>`.
+5. Use `std::mem::size_of_val` to measure the byte size of both sized and unsized references.
+6. Write unit tests validating property getters, unsized coercion, fat pointer behavior, and `Box<Packet<[u8]>>` dynamic allocation.
+
+> [!check]- Answer
+> ```rust
+> use std::mem::size_of_val;
+> 
+> /// Custom header packet struct where `T` can be sized or unsized (DST).
+> /// Declaring `T: ?Sized` permits `Packet<[u8]>` or `Packet<str>` as custom DSTs.
+> #[derive(Debug)]
+> pub struct Packet<T: ?Sized> {
+>     pub header_id: u32,
+>     pub flags: u8,
+>     pub payload: T,
+> }
+> 
+> impl<T: ?Sized> Packet<T> {
+>     /// Returns the header identifier.
+>     pub fn id(&self) -> u32 {
+>         self.header_id
+>     }
+> 
+>     /// Returns a reference to the payload (works for both Sized types and DSTs).
+>     pub fn payload(&self) -> &T {
+>         &self.payload
+>     }
+> }
+> 
+> fn main() {
+>     // Concrete stack allocation using a fixed-size payload array
+>     let sized_packet: Packet<[u8; 4]> = Packet {
+>         header_id: 101,
+>         flags: 0x01,
+>         payload: [10, 20, 30, 40],
+>     };
+> 
+>     println!("Sized packet ID: {}", sized_packet.id());
+>     println!("Sized packet payload: {:?}", sized_packet.payload());
+>     println!("Sized packet total bytes: {}", size_of_val(&sized_packet));
+> 
+>     // Unsized Coercion: &Packet<[u8; 4]> automatically coerces to &Packet<[u8]>
+>     // The reference becomes a fat pointer storing the start address + payload slice length.
+>     let unsized_ref: &Packet<[u8]> = &sized_packet;
+> 
+>     println!("Unsized ref ID: {}", unsized_ref.id());
+>     println!("Unsized ref payload len: {}", unsized_ref.payload().len());
+>     println!("Unsized ref total bytes (via fat pointer): {}", size_of_val(unsized_ref));
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_sized_packet_properties() {
+>         let pkt = Packet {
+>             header_id: 42,
+>             flags: 0xFF,
+>             payload: [100u8, 200u8],
+>         };
+>         assert_eq!(pkt.id(), 42);
+>         assert_eq!(pkt.payload(), &[100, 200]);
+>         assert!(size_of_val(&pkt) >= 6);
+>     }
+> 
+>     #[test]
+>     fn test_unsized_coercion_and_fat_pointer() {
+>         let concrete_pkt = Packet {
+>             header_id: 99,
+>             flags: 0,
+>             payload: [1u8, 2, 3, 4, 5, 6],
+>         };
+> 
+>         // Coerce reference with fixed array payload into reference with unsized slice payload
+>         let unsized_pkt: &Packet<[u8]> = &concrete_pkt;
+> 
+>         assert_eq!(unsized_pkt.id(), 99);
+>         assert_eq!(unsized_pkt.payload().len(), 6);
+>         assert_eq!(unsized_pkt.payload(), &[1, 2, 3, 4, 5, 6]);
+> 
+>         // Dynamic size checking via size_of_val on fat pointer
+>         assert_eq!(size_of_val(unsized_pkt), size_of_val(&concrete_pkt));
+>     }
+> 
+>     #[test]
+>     fn test_boxed_custom_dst() {
+>         // Unsized coercion works with smart pointers like Box
+>         let boxed_pkt: Box<Packet<[u8]>> = Box::new(Packet {
+>             header_id: 2024,
+>             flags: 0x80,
+>             payload: [7u8, 8, 9],
+>         });
+> 
+>         assert_eq!(boxed_pkt.id(), 2024);
+>         assert_eq!(boxed_pkt.payload(), &[7, 8, 9]);
+>         assert_eq!(boxed_pkt.payload().len(), 3);
+>     }
+> }
+> ```
+>
+> **Detailed Explanation:**
+> 1. **Custom Dynamically Sized Types:** In Rust, if the last field of a struct has type `T` where `T: ?Sized`, the struct itself becomes unsized whenever `T` is an unsized type (e.g. `[u8]` or `str`). `Packet<[u8]>` cannot live directly on the stack because its byte layout depends on the length of the slice payload.
+> 2. **Unsized Coercion:** Rust's compiler supports unsized coercion for structs with trailing unsized fields. A reference to a concrete sized packet `&Packet<[u8; N]>` can be implicitly converted into `&Packet<[u8]>`. During this conversion, the compiler constructs a fat pointer containing both the base memory address of `Packet` and the slice metadata (length `N`).
+> 3. **Smart Pointer Support:** Unsized coercion applies to standard smart pointers such as `Box<T>`, `Rc<T>`, and `Arc<T>`. `Box::new(Packet { payload: [1, 2, 3], ... }) as Box<Packet<[u8]>>` allocates the payload on the heap and returns a fat pointer box.
+
+---
+
+### Exercise 3: In-Memory Cache with `?Sized` Borrowed Query Keys
+
+**Problem:**
+When implementing generic data structures like key-value caches or index tables storing owned keys (`String`, `Vec<u8>`), lookups should accept borrowed query slices (`&str`, `&[u8]`) to eliminate unnecessary heap allocations.
+
+1. Implement a `CacheEngine<K, V>` wrapping `HashMap<K, V>`.
+2. Implement `new()`, `insert(key: K, value: V)`, `len()`, and `is_empty()`.
+3. Implement `get<Q>(&self, key: &Q) -> Option<&V>` bound by `K: Borrow<Q>` and `Q: ?Sized + Hash + Eq`.
+4. Explain why `Q: ?Sized` is required on `Borrow<Q>` for lookups with `&str` and `&[u8]`.
+5. Write unit tests using `assert_eq!`, `assert!`, and test assertions for owned key mutations and zero-allocation slice queries.
+
+> [!check]- Answer
+> ```rust
+> use std::borrow::Borrow;
+> use std::collections::HashMap;
+> use std::hash::Hash;
+> 
+> /// In-memory cache holding owned keys `K` and values `V`.
+> /// Lookup requests accept borrowed references `&Q` where `Q: ?Sized`.
+> pub struct CacheEngine<K, V> {
+>     storage: HashMap<K, V>,
+> }
+> 
+> impl<K, V> CacheEngine<K, V>
+> where
+>     K: Eq + Hash,
+> {
+>     /// Creates a new empty cache.
+>     pub fn new() -> Self {
+>         Self {
+>             storage: HashMap::new(),
+>         }
+>     }
+> 
+>     /// Inserts a key-value pair into the cache.
+>     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
+>         self.storage.insert(key, value)
+>     }
+> 
+>     /// Queries the cache using a reference to a borrowed key form `&Q`.
+>     /// `Q: ?Sized` permits querying with unsized types like `str` or `[u8]`.
+>     pub fn get<Q>(&self, key: &Q) -> Option<&V>
+>     where
+>         K: Borrow<Q>,
+>         Q: ?Sized + Hash + Eq,
+>     {
+>         self.storage.get(key)
+>     }
+> 
+>     /// Returns the number of items stored in the cache.
+>     pub fn len(&self) -> usize {
+>         self.storage.len()
+>     }
+> 
+>     /// Returns true if the cache contains no elements.
+>     pub fn is_empty(&self) -> bool {
+>         self.storage.is_empty()
+>     }
+> }
+> 
+> fn main() {
+>     let mut string_cache = CacheEngine::<String, u32>::new();
+>     string_cache.insert(String::from("user_session_101"), 8080);
+>     string_cache.insert(String::from("user_session_102"), 9090);
+> 
+>     // Query with unsized &str slice — zero String allocations required!
+>     let query_str: &str = "user_session_101";
+>     if let Some(port) = string_cache.get(query_str) {
+>         println!("Found port for '{query_str}': {port}");
+>     }
+> 
+>     let mut bytes_cache = CacheEngine::<Vec<u8>, String>::new();
+>     bytes_cache.insert(vec![0xDE, 0xAD, 0xBE, 0xEF], String::from("ADMIN_FLAG"));
+> 
+>     // Query with unsized &[u8] slice
+>     let query_bytes: &[u8] = &[0xDE, 0xAD, 0xBE, 0xEF];
+>     if let Some(val) = bytes_cache.get(query_bytes) {
+>         println!("Found entry for byte key: {val}");
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_string_key_query_with_str_slice() {
+>         let mut cache = CacheEngine::new();
+>         cache.insert(String::from("alpha"), 100);
+>         cache.insert(String::from("beta"), 200);
+> 
+>         // &str slice querying owned String key (str is ?Sized)
+>         let key_slice: &str = "alpha";
+>         assert_eq!(cache.get(key_slice), Some(&100));
+> 
+>         let missing_slice: &str = "gamma";
+>         assert_eq!(cache.get(missing_slice), None);
+>     }
+> 
+>     #[test]
+>     fn test_vec_key_query_with_byte_slice() {
+>         let mut cache = CacheEngine::new();
+>         cache.insert(vec![1, 2, 3], "payload_a");
+> 
+>         // &[u8] byte slice querying owned Vec<u8> key ([u8] is ?Sized)
+>         let key_bytes: &[u8] = &[1, 2, 3];
+>         assert_eq!(cache.get(key_bytes), Some(&"payload_a"));
+> 
+>         let nonexistent: &[u8] = &[9, 9, 9];
+>         assert_eq!(cache.get(nonexistent), None);
+>     }
+> 
+>     #[test]
+>     fn test_cache_mutations_and_size() {
+>         let mut cache = CacheEngine::new();
+>         assert!(cache.is_empty());
+>         assert_eq!(cache.len(), 0);
+> 
+>         let old_val = cache.insert(String::from("key1"), "val1");
+>         assert_eq!(old_val, None);
+>         assert_eq!(cache.len(), 1);
+> 
+>         let replaced = cache.insert(String::from("key1"), "val2");
+>         assert_eq!(replaced, Some("val1"));
+>         assert_eq!(cache.get("key1"), Some(&"val2"));
+>     }
+> }
+> ```
+>
+> **Detailed Explanation:**
+> 1. **The `std::borrow::Borrow` Trait:** `Borrow<Q>` allows a type `K` (like `String`) to be borrowed as type `Q` (like `str`). The `Borrow` trait definition in `std` is `pub trait Borrow<Borrowed: ?Sized>`. The `Borrowed` type generic is explicitly annotated with `?Sized` because the borrowed form of an owned collection is almost always an unsized slice (`str` for `String`, `[T]` for `Vec<T>`).
+> 2. **Why `Q: ?Sized` is Essential:** If `Q` in `get<Q>` did not have `?Sized`, the compiler would secretly inject `Q: Sized`. Calling `cache.get("alpha")` passes `&str`, which sets `Q = str`. Since `str` does NOT implement `Sized`, the compiler would reject the call!
+> 3. **Performance Optimization:** Relaxing `Sized` on query types allows callers to query maps using slice references (`&str` or `&[u8]`) without allocating temporary heap objects (`String::from(...)` or `vec![...]`).
 
 ---
 

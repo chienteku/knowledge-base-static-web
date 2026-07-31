@@ -174,158 +174,384 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Size
-
-**Problem:** How many bytes of RAM does `PhantomData<String>` take up?
-
-> [!check]- Answer
-> **0 bytes**. 
->
-> Even though a `String` normally takes 24 bytes, `PhantomData<String>` is a Zero-Sized Type that only exists during compilation to satisfy the type checker.
-
----
-
-### Exercise 2: Enforcing Typestate with `PhantomData` — A Lock That Can't Be Misused
+### Exercise 1: Type-Safe HTTP Request Builder via Typestate Pattern
 
 **Problem:**
-`PhantomData<State>` is the building block of the *typestate pattern*: using the type system to make illegal state transitions a compile-time error rather than a runtime panic.
+In network applications, sending an incomplete HTTP request before mandatory configurations (such as setting the target URL and payload body) leads to runtime failures. By employing the **Typestate Pattern** with `PhantomData<State>`, we can make invalid state transitions impossible at compile time with zero runtime overhead.
 
-Build a `Lock<State>` struct where:
-- `Lock<Locked>` can only be unlocked (method `unlock`).
-- `Lock<Unlocked>` can only be locked (method `lock`) or used (method `use_resource`).
-- Calling `use_resource` on a `Lock<Locked>` must be **a compile-time error**, not a runtime check.
+Implement a zero-cost `HttpRequestBuilder<State>` that transitions through three explicit states:
+1. `Unconfigured` (Initial state)
+2. `Configured` (URL set)
+3. `Ready` (URL and payload body set)
 
-Then answer: **why does removing `PhantomData` from the struct cause a compile error on its own?**
+Requirements:
+- Define empty marker structs: `Unconfigured`, `Configured`, and `Ready`.
+- Define `HttpRequestBuilder<State>` with fields for optional URL string, optional byte body, headers vector, and `_state: PhantomData<State>`.
+- Implement `new()` returning `HttpRequestBuilder<Unconfigured>`.
+- Implement `.url(&str)` transitioning from `Unconfigured` to `Configured`.
+- Implement `.header(&str, &str)` available across all states without changing state.
+- Implement `.body(Vec<u8>)` transitioning from `Configured` to `Ready`.
+- Implement `.send()` **only** on `HttpRequestBuilder<Ready>`.
+- Verify with unit tests (`#[test]`) that `send()` returns the built request tuple and that `size_of::<HttpRequestBuilder<Unconfigured>>()` equals `size_of::<HttpRequestBuilder<Ready>>()`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Lock created in Locked state.
-> Lock unlocked.
-> Resource used.
-> Lock re-locked.
-> ```
->
-> - **Hint 1:** Define two empty marker structs: `struct Locked;` and `struct Unlocked;`. These are Zero-Sized Types — they exist only at the type level and take 0 bytes at runtime.
-> - **Hint 2:** Define `struct Lock<State> { _state: PhantomData<State> }`. Without `_state: PhantomData<State>`, Rust gives error `E0392: type parameter State is never used`. The compiler requires every generic parameter to actually appear in the struct's fields — `PhantomData` is the standard way to satisfy this requirement with zero runtime cost.
-> - **Hint 3:** Implement methods on specific state variants: `impl Lock<Locked> { fn unlock(self) -> Lock<Unlocked> }` and `impl Lock<Unlocked> { fn lock(self) -> Lock<Locked>; fn use_resource(&self) }`. Because `use_resource` is only implemented on `Lock<Unlocked>`, calling it on `Lock<Locked>` produces `E0599: no method named use_resource found for type Lock<Locked>`.
->
 > ```rust
 > use std::marker::PhantomData;
->
-> // Marker types — zero bytes at runtime, meaningful only to the type checker.
-> struct Locked;
-> struct Unlocked;
->
-> struct Lock<State> {
->     // PhantomData<State> makes the compiler treat the struct as if it
->     // "owns" a State value, even though no State data exists at runtime.
->     // Without this field: E0392 (unused type parameter).
+> 
+> // State marker structs (Zero-Sized Types)
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Unconfigured;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Configured;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Ready;
+> 
+> pub struct HttpRequestBuilder<State> {
+>     url: Option<String>,
+>     body: Option<Vec<u8>>,
+>     headers: Vec<(String, String)>,
 >     _state: PhantomData<State>,
 > }
->
-> impl Lock<Locked> {
+> 
+> impl HttpRequestBuilder<Unconfigured> {
 >     pub fn new() -> Self {
->         println!("Lock created in Locked state.");
->         Lock { _state: PhantomData }
+>         HttpRequestBuilder {
+>             url: None,
+>             body: None,
+>             headers: Vec::new(),
+>             _state: PhantomData,
+>         }
 >     }
->     // Consuming `self` (not `&self`) means you cannot use the old Locked handle after unlocking.
->     pub fn unlock(self) -> Lock<Unlocked> {
->         println!("Lock unlocked.");
->         Lock { _state: PhantomData }
->     }
-> }
->
-> impl Lock<Unlocked> {
->     pub fn use_resource(&self) {
->         println!("Resource used.");
->     }
->     pub fn lock(self) -> Lock<Locked> {
->         println!("Lock re-locked.");
->         Lock { _state: PhantomData }
+> 
+>     pub fn url(self, url: &str) -> HttpRequestBuilder<Configured> {
+>         HttpRequestBuilder {
+>             url: Some(url.to_string()),
+>             body: self.body,
+>             headers: self.headers,
+>             _state: PhantomData,
+>         }
 >     }
 > }
->
-> fn main() {
->     let locked   = Lock::<Locked>::new();
->     let unlocked = locked.unlock();
->     unlocked.use_resource();
->     let _locked_again = unlocked.lock();
->
->     // This line would NOT compile: E0599
->     // locked_again.use_resource();
+> 
+> impl<State> HttpRequestBuilder<State> {
+>     pub fn header(mut self, key: &str, value: &str) -> Self {
+>         self.headers.push((key.to_string(), value.to_string()));
+>         self
+>     }
+> }
+> 
+> impl HttpRequestBuilder<Configured> {
+>     pub fn body(self, payload: Vec<u8>) -> HttpRequestBuilder<Ready> {
+>         HttpRequestBuilder {
+>             url: self.url,
+>             body: Some(payload),
+>             headers: self.headers,
+>             _state: PhantomData,
+>         }
+>     }
+> }
+> 
+> impl HttpRequestBuilder<Ready> {
+>     pub fn send(self) -> (String, Vec<u8>, Vec<(String, String)>) {
+>         (
+>             self.url.expect("URL must be present in Ready state"),
+>             self.body.expect("Body must be present in Ready state"),
+>             self.headers,
+>         )
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::mem::size_of;
+> 
+>     #[test]
+>     fn test_typestate_builder_flow() {
+>         let builder = HttpRequestBuilder::new()
+>             .header("User-Agent", "Rust-Agent")
+>             .url("https://api.example.com/v1/submit")
+>             .header("Content-Type", "application/json")
+>             .body(b"{\"key\":\"value\"}".to_vec());
+> 
+>         let (url, body, headers) = builder.send();
+> 
+>         assert_eq!(url, "https://api.example.com/v1/submit");
+>         assert_eq!(body, b"{\"key\":\"value\"}");
+>         assert_eq!(headers.len(), 2);
+>         assert_eq!(headers[0], ("User-Agent".to_string(), "Rust-Agent".to_string()));
+>         assert_eq!(headers[1], ("Content-Type".to_string(), "application/json".to_string()));
+>     }
+> 
+>     #[test]
+>     fn test_zero_size_overhead() {
+>         assert_eq!(size_of::<PhantomData<Unconfigured>>(), 0);
+>         assert_eq!(size_of::<PhantomData<Ready>>(), 0);
+>         assert_eq!(
+>             size_of::<HttpRequestBuilder<Unconfigured>>(),
+>             size_of::<HttpRequestBuilder<Ready>>()
+>         );
+>     }
 > }
 > ```
->
-> **Explanation:**
-> Without `PhantomData`, Rust rejects the struct entirely (`E0392`) because a generic parameter that never appears in any field is meaningless — the compiler cannot determine variance or ownership rules for it. `PhantomData<State>` tells the compiler "this struct logically owns a `State`", which both satisfies the unused-parameter check and gives the compiler the information it needs to understand drop order and variance. At runtime, the entire `PhantomData` field compiles away to nothing — it is a compile-time-only annotation.
+> 
+> **Step-by-Step Explanation:**
+> 1. **State Markers as ZSTs:** `Unconfigured`, `Configured`, and `Ready` take 0 bytes of memory. They serve strictly as type parameter tags.
+> 2. **Generic Parameter Enforcement:** `HttpRequestBuilder<State>` declares a generic type `State`. Without `_state: PhantomData<State>`, the Rust compiler raises error `E0392` (parameter `State` is never used).
+> 3. **Selective Method Implementation:** Methods like `.url()` consume `HttpRequestBuilder<Unconfigured>` and return `HttpRequestBuilder<Configured>`, moving the builder into a new state. `.send()` is defined exclusively on `HttpRequestBuilder<Ready>`. Attempting to call `.send()` on an unconfigured or configured builder results in compile-time error `E0599`.
+> 4. **Zero Runtime Cost:** At compile time, `PhantomData<State>` completely vanishes. `size_of::<HttpRequestBuilder<Unconfigured>>()` is identical to `size_of::<HttpRequestBuilder<Ready>>()`.
 
 ---
 
-### Exercise 3: `PhantomData` and Ownership — Telling the Drop Checker You Own a `T`
+### Exercise 2: Zero-Copy Raw Slice Iterator with Lifetime Bounds (`PhantomData<&'a T>`)
 
 **Problem:**
-When you write a struct that holds a raw pointer `*mut T` (common in `unsafe` data structures), the compiler has no way to know whether your struct *owns* the `T` (and should drop it) or merely *borrows* it (and should not drop it). `PhantomData` is how you communicate this.
+When implementing low-level slice iterators or zero-copy parsers over raw pointers (`*const T`), the raw pointer `*const T` does not carry a lifetime or variance information. Without proper lifetime annotations, the Rust borrow checker cannot verify that references handed out by the iterator remain valid for lifetime `'a`.
 
-Answer the following and write the code:
-1. What is the difference between `PhantomData<T>` (owns `T`) and `PhantomData<*const T>` (raw pointer, no ownership)?
-2. Write a struct `OwnedBuffer<T>` that wraps a raw `*mut T` and carries `PhantomData<T>` to signal ownership. Show that `OwnedBuffer<String>` can be used safely with a `Box`-backed allocation.
+Implement a high-performance slice iterator `SliceCursor<'a, T>` backed by a raw pointer `*const T` that uses `PhantomData<&'a T>` to bind lifetime `'a` and establish covariance over `T`.
 
-**Expected output:**
+Requirements:
+- Define `SliceCursor<'a, T>` containing `ptr: *const T`, `len: usize`, `index: usize`, and `_marker: PhantomData<&'a T>`.
+- Implement `from_slice(slice: &'a [T]) -> Self`.
+- Implement `Iterator` for `SliceCursor<'a, T>` returning `Option<&'a T>`.
+- Implement `remaining(&self) -> usize` and `as_remaining_slice(&self) -> &'a [T]`.
+- Provide comprehensive unit tests (`#[test]`) checking iteration bounds, subslice inspection, and zero memory footprint of `PhantomData<&'a T>`.
+
 > [!check]- Answer
-> ```text
-> OwnedBuffer contains: hello from owned buffer
-> ```
->
-> - **Hint 1:** `PhantomData<T>` tells the compiler: "this struct *logically owns* a `T`". This means: (a) the compiler assumes the struct's `Drop` impl may drop a `T`, (b) the struct is covariant over `T` (can substitute subtypes), and (c) `T`'s `Send`/`Sync` requirements propagate to the struct.
-> - **Hint 2:** `PhantomData<*const T>` tells the compiler: "this struct holds a *pointer* to `T` but does not own it". It is *invariant* over `T` (no subtype substitution) and does not make the struct `Send` or `Sync`. Use this for shared-borrow-like semantics.
-> - **Hint 3:** For a safe demo, allocate with `Box::into_raw(Box::new(val))` to get a `*mut T`, then reconstruct with `Box::from_raw(ptr)` inside a custom `Drop` impl. This pair is the only safe way to manage a raw pointer's lifetime manually.
->
 > ```rust
 > use std::marker::PhantomData;
->
-> // PhantomData<T> signals: "we logically own a T and will drop it."
-> // This propagates T's Send/Sync bounds and tells the drop checker
-> // that dropping OwnedBuffer<T> may run T's destructor.
-> struct OwnedBuffer<T> {
->     ptr: *mut T,
->     _owns: PhantomData<T>, // NOT PhantomData<*const T> (that would signal non-owning)
+> 
+> pub struct SliceCursor<'a, T> {
+>     ptr: *const T,
+>     len: usize,
+>     index: usize,
+>     _marker: PhantomData<&'a T>,
 > }
->
-> impl<T> OwnedBuffer<T> {
->     fn new(val: T) -> Self {
->         OwnedBuffer {
->             ptr: Box::into_raw(Box::new(val)),
+> 
+> impl<'a, T> SliceCursor<'a, T> {
+>     pub fn from_slice(slice: &'a [T]) -> Self {
+>         SliceCursor {
+>             ptr: slice.as_ptr(),
+>             len: slice.len(),
+>             index: 0,
+>             _marker: PhantomData,
+>         }
+>     }
+> 
+>     pub fn remaining(&self) -> usize {
+>         self.len.saturating_sub(self.index)
+>     }
+> 
+>     pub fn as_remaining_slice(&self) -> &'a [T] {
+>         if self.index >= self.len {
+>             &[]
+>         } else {
+>             // SAFETY: ptr + index is within the bounds of the original slice of length len.
+>             // Lifetime 'a guarantees the memory remains valid and borrowed.
+>             unsafe {
+>                 std::slice::from_raw_parts(
+>                     self.ptr.add(self.index),
+>                     self.len - self.index,
+>                 )
+>             }
+>         }
+>     }
+> }
+> 
+> impl<'a, T> Iterator for SliceCursor<'a, T> {
+>     type Item = &'a T;
+> 
+>     fn next(&mut self) -> Option<Self::Item> {
+>         if self.index >= self.len {
+>             None
+>         } else {
+>             // SAFETY: index is strictly less than len, so ptr.add(index) points to a valid T.
+>             let item_ptr = unsafe { self.ptr.add(self.index) };
+>             self.index += 1;
+>             unsafe { Some(&*item_ptr) }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::mem::size_of;
+> 
+>     #[test]
+>     fn test_slice_cursor_iteration() {
+>         let data = vec![10, 20, 30, 40, 50];
+>         let mut cursor = SliceCursor::from_slice(&data);
+> 
+>         assert_eq!(cursor.remaining(), 5);
+>         assert_eq!(cursor.next(), Some(&10));
+>         assert_eq!(cursor.next(), Some(&20));
+>         assert_eq!(cursor.remaining(), 3);
+>         assert_eq!(cursor.as_remaining_slice(), &[30, 40, 50]);
+> 
+>         assert_eq!(cursor.next(), Some(&30));
+>         assert_eq!(cursor.next(), Some(&40));
+>         assert_eq!(cursor.next(), Some(&50));
+>         assert_eq!(cursor.next(), None);
+>         assert_eq!(cursor.remaining(), 0);
+>         assert_eq!(cursor.as_remaining_slice(), &[]);
+>     }
+> 
+>     #[test]
+>     fn test_cursor_zero_size_phantom() {
+>         assert_eq!(size_of::<PhantomData<&'static str>>(), 0);
+>         // Cursor layout: raw pointer (1 word) + 2 usize fields (2 words) = 3 words
+>         assert_eq!(
+>             size_of::<SliceCursor<'static, i32>>(),
+>             size_of::<*const i32>() + size_of::<usize>() * 2
+>         );
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation:**
+> 1. **Why `PhantomData<&'a T>` is Required:** Raw pointers (`*const T`) carry neither lifetime constraints nor lifetime covariance. Using `PhantomData<&'a T>` signals to Rust's compiler that `SliceCursor` logically borrows data of type `T` for lifetime `'a`.
+> 2. **Covariance:** Because `&'a T` is covariant over `'a` and `T`, `PhantomData<&'a T>` ensures that `SliceCursor<'a, T>` is also covariant over `'a` and `T`.
+> 3. **Unsafe Operations Guarded by Lifetime:** When dereferencing `&*item_ptr`, the compiler allows returning `&'a T` because `PhantomData<&'a T>` guarantees to the borrow checker that `data` outlives the cursor.
+> 4. **Memory Footprint:** `PhantomData<&'a T>` occupies 0 bytes. The struct size is strictly the sum of `ptr`, `len`, and `index`.
+
+---
+
+### Exercise 3: Custom Safe Heap Slot with Ownership Signaling and Auto Trait Propagation (`PhantomData<T>`)
+
+**Problem:**
+When building custom memory containers or slab allocators wrapping heap pointers (`*mut T`), raw pointers do not signal ownership to Rust's compiler. Consequently:
+1. The **drop checker** cannot automatically infer that dropping the container drops an instance of `T`.
+2. Raw pointers default to `!Send` and `!Sync`, preventing cross-thread movement even when `T: Send`.
+
+Write a custom owned container `OwnedSlot<T>` wrapping a raw `*mut T` pointer and `PhantomData<T>`.
+
+Requirements:
+- Define `OwnedSlot<T>` with `ptr: *mut T` and `_owns: PhantomData<T>`.
+- Implement `new(val: T) -> Self` allocating memory on the heap via `Box::into_raw`.
+- Implement `get(&self) -> &T` and `get_mut(&mut self) -> &mut T`.
+- Implement `into_inner(self) -> T` extracting the owned value without double-dropping.
+- Implement `Drop` for `OwnedSlot<T>` reconstructing the `Box` to free memory and run `T`'s destructor.
+- Implement `Send` and `Sync` conditionally for `OwnedSlot<T>` where `T: Send` and `T: Sync`.
+- Write unit tests (`#[test]`) confirming value access, proper `Drop` invocation via a tracking struct, and `Send` execution across thread boundaries.
+
+> [!check]- Answer
+> ```rust
+> use std::marker::PhantomData;
+> use std::sync::atomic::{AtomicBool, Ordering};
+> use std::sync::Arc;
+> 
+> pub struct OwnedSlot<T> {
+>     ptr: *mut T,
+>     _owns: PhantomData<T>,
+> }
+> 
+> impl<T> OwnedSlot<T> {
+>     pub fn new(val: T) -> Self {
+>         let boxed = Box::new(val);
+>         OwnedSlot {
+>             ptr: Box::into_raw(boxed),
 >             _owns: PhantomData,
 >         }
 >     }
->
->     fn get(&self) -> &T {
->         // SAFETY: ptr was created from Box::into_raw and is still valid
->         // (Drop hasn't run yet, and no other code has freed it).
+> 
+>     pub fn get(&self) -> &T {
+>         // SAFETY: self.ptr was initialized from Box::into_raw and remains valid
+>         // until self is dropped or into_inner is called.
 >         unsafe { &*self.ptr }
 >     }
-> }
->
-> impl<T> Drop for OwnedBuffer<T> {
->     fn drop(&mut self) {
->         // SAFETY: ptr was created from Box::into_raw, so reconstructing
->         // the Box is correct — it will be freed when this Box drops.
->         unsafe { drop(Box::from_raw(self.ptr)); }
+> 
+>     pub fn get_mut(&mut self) -> &mut T {
+>         // SAFETY: Exclusive mutable borrow of self guarantees exclusive access to *self.ptr.
+>         unsafe { &mut *self.ptr }
+>     }
+> 
+>     pub fn into_inner(self) -> T {
+>         // Extract raw pointer, bypass OwnedSlot's Drop impl, and reconstruct Box to move out value.
+>         let ptr = self.ptr;
+>         std::mem::forget(self);
+>         // SAFETY: ptr was created by Box::into_raw and has not been freed.
+>         let boxed = unsafe { Box::from_raw(ptr) };
+>         *boxed
 >     }
 > }
->
-> fn main() {
->     let buf = OwnedBuffer::new(String::from("hello from owned buffer"));
->     println!("OwnedBuffer contains: {}", buf.get());
->     // `buf` drops here — Drop impl frees the heap allocation via Box::from_raw.
+> 
+> impl<T> Drop for OwnedSlot<T> {
+>     fn drop(&mut self) {
+>         // SAFETY: Reconstructing Box frees heap memory and triggers T's Drop destructor.
+>         unsafe {
+>             let _ = Box::from_raw(self.ptr);
+>         }
+>     }
+> }
+> 
+> // Auto trait propagation: OwnedSlot<T> is Send/Sync if T is Send/Sync
+> unsafe impl<T: Send> Send for OwnedSlot<T> {}
+> unsafe impl<T: Sync> Sync for OwnedSlot<T> {}
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     struct DropTracker {
+>         dropped: Arc<AtomicBool>,
+>     }
+> 
+>     impl Drop for DropTracker {
+>         fn drop(&mut self) {
+>             self.dropped.store(true, Ordering::SeqCst);
+>         }
+>     }
+> 
+>     #[test]
+>     fn test_owned_slot_basic_operations() {
+>         let mut slot = OwnedSlot::new(42);
+>         assert_eq!(*slot.get(), 42);
+> 
+>         *slot.get_mut() = 100;
+>         assert_eq!(*slot.get(), 100);
+> 
+>         let val = slot.into_inner();
+>         assert_eq!(val, 100);
+>     }
+> 
+>     #[test]
+>     fn test_owned_slot_drop_behavior() {
+>         let is_dropped = Arc::new(AtomicBool::new(false));
+>         {
+>             let tracker = DropTracker {
+>                 dropped: Arc::clone(&is_dropped),
+>             };
+>             let _slot = OwnedSlot::new(tracker);
+>             assert!(!is_dropped.load(Ordering::SeqCst));
+>         } // _slot goes out of scope here
+>         assert!(is_dropped.load(Ordering::SeqCst));
+>     }
+> 
+>     #[test]
+>     fn test_owned_slot_thread_send() {
+>         let slot = OwnedSlot::new(String::from("Hello from thread"));
+>         let handle = std::thread::spawn(move || {
+>             format!("{}!", slot.get())
+>         });
+> 
+>         let result = handle.join().unwrap();
+>         assert_eq!(result, "Hello from thread!");
+>     }
 > }
 > ```
->
-> **Explanation:**
-> The drop checker in the Rust compiler needs to know, for each struct, which types it logically "contains". For a field `ptr: *mut T`, the compiler sees only a raw address — it cannot infer ownership. `PhantomData<T>` is the explicit annotation: "treat this struct as if it contains a real `T`". With this annotation, the compiler enforces that `T: Send` before allowing `OwnedBuffer<T>: Send`, and it permits the `Drop` impl to assume `*ptr` is valid and owned. Without `PhantomData<T>`, you'd have a silent unsoundness gap: the compiler might allow the struct to be sent across threads even when `T` is not thread-safe.
+> 
+> **Step-by-Step Explanation:**
+> 1. **Ownership Signaling (`PhantomData<T>` vs `PhantomData<*mut T>`):** Using `PhantomData<T>` informs the compiler's drop checker that `OwnedSlot<T>` *owns* an instance of `T`. This ensures correct drop order analysis and strict verification when `T` has non-trivial destructors.
+> 2. **Safely Unwrapping (`into_inner`):** `std::mem::forget(self)` prevents `OwnedSlot::drop` from executing when transferring ownership of `T`. Then `Box::from_raw(ptr)` reconstructs the `Box` so dereferencing `*boxed` moves `T` out safely.
+> 3. **Destructor Execution:** Inside `Drop for OwnedSlot<T>`, `Box::from_raw(self.ptr)` converts the raw pointer back into a `Box`, which immediately goes out of scope, deallocating the heap buffer and invoking `T`'s destructor.
+> 4. **Auto-Trait Safety (`Send` & `Sync`):** Raw pointers `*mut T` are `!Send` and `!Sync` by default to prevent unsafety. `PhantomData<T>` paired with `unsafe impl<T: Send> Send for OwnedSlot<T> {}` safely extends thread-transfer privileges only to types where `T` itself is `Send`.
 
 ---
 

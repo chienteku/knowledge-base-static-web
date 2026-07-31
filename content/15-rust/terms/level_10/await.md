@@ -1,22 +1,25 @@
-# `await`
+# `.await`
 
 > **Level 10 — Async / Await**
-> Suspends execution until a `Future` resolves; only usable inside `async` contexts.
+> Keyword that pauses execution until a `Future` resolves to a value.
 
 ---
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — The function that creates the `Future` you are awaiting.
-- [`Future` Trait](../level_10/future_trait.md) — The underlying state machine that `.await` interacts with.
+- [`async fn`](../level_10/async_fn.md) — Declaring the lazy functions that we `.await`.
+- [`Future` Trait](../level_10/future_trait.md) — The trait whose `Output` type is returned by `.await`.
+- [`Tokio`](../level_10/tokio.md) — The runtime that drives execution while we wait.
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (the play button)**: If an `async fn` creates a paused "video tape" (a lazy `Future`), then **`.await`** is the physical *Play* button. 
+**Rust Language Syntax (the pause button)**: If calling an `async fn` creates a paused `Future` state machine, **`.await`** is the magic keyword that actually starts running it and waits for the final result.
 
-In Rust, `.await` is a special syntax that pauses the current function, hands control back to the Executor (like Tokio), and says, *"I can't go any further until this network request finishes. Go do other work, and wake me up when this Future is done."*
+Crucially, `.await` is **postfix syntax** (written after the expression, like `my_future.await`). 
+
+Unlike synchronous code which freezes the entire thread while waiting, `.await` **yields control back to the Tokio Runtime**, allowing the thread to work on millions of other tasks while this one is waiting!
 
 ---
 
@@ -24,71 +27,75 @@ In Rust, `.await` is a special syntax that pauses the current function, hands co
 
 ### (1) Design Motivation — "Why did we design this?"
 
-In languages like JavaScript or C#, when you call an asynchronous function, it begins executing immediately in the background. In Rust, async functions are **entirely lazy**. Calling them does absolutely nothing. The Rust designers chose this because they wanted to give developers total, zero-cost control over *when* and *where* a Future actually runs. 
+In traditional synchronous code, if you call `database.query()`, your OS thread literally stops executing code and stands idle in RAM for 50 milliseconds waiting for the network packet to arrive. This is called **Blocking I/O**.
 
-To run a Future, you must explicitly `.await` it. This makes control flow highly visible.
+`.await` introduces **Non-Blocking I/O**. When you write `database.query().await`, Rust saves the function's state, pauses it, and tells the Tokio Runtime: *"Hey, I'm waiting for a network packet. Go do other work!"* 
 
-Additionally, Rust made `.await` a **postfix operator** (written at the end). In JavaScript, you write `await my_func()`. In Rust, you write `my_func().await`. Why? Because Rust relies heavily on method chaining! Postfix `.await` allows you to write `my_func().await.unwrap()` cleanly, without wrapping everything in a dozen parentheses.
+The Tokio runtime instantly switches the CPU to process another user's web request. When the network packet finally arrives 50ms later, Tokio wakes your task back up and `.await` evaluates to the database result!
 
-### (2) Reality Metaphor
+### (2) Postfix Syntax — "Why `fut.await` instead of `await fut`?"
 
-Imagine you are a master Mechanic (the Tokio Executor) fixing 5 cars simultaneously. 
+In languages like C#, Python, or JavaScript, you write `await fetch()`. 
 
-You start draining the oil on Car A (`async fn drain_oil()`). The oil will take 10 minutes to drain. You don't stand there staring at the oil pan for 10 minutes! 
-- You put down a sticky note saying *"Wake me up when the oil is done draining"* (**`.await`**). 
-- You walk over to Car B and start changing its tires. 
-- 10 minutes later, the oil finishes draining. The sticky note alerts you, you pause working on Car B, and you resume working on Car A exactly where you left off.
+Rust intentionally chose postfix syntax: `fetch().await`. Why? 
 
-`.await` is the sticky note. It allows the mechanic to instantly switch tasks instead of standing around doing nothing.
+Because in Rust, error handling and method chaining are everywhere (`?` operator, `.unwrap()`, `.map()`). 
+- **Prefix (C#/JS)**: `(await fetch()).map(...)` (Requires ugly nested parentheses!)
+- **Postfix (Rust)**: `fetch().await?.map(...)` (Flows naturally from left to right!)
 
-### (3) Rust Code Examples
+### (3) Reality Metaphor
 
-#### Short Snippet (The Postfix Syntax)
-Notice how `.await` is placed at the end, allowing us to easily chain the `?` error operator!
+Imagine a Doctor's Office.
+
+- **Synchronous (No `.await`)**: The doctor calls a lab to request blood test results. The doctor holds the phone to their ear and stands completely still for 3 hours waiting for the lab technician to find the file. All other patients in the waiting room are forced to wait!
+- **Asynchronous (`.await`)**: The doctor calls the lab, leaves a callback number, hangs up the phone (`.await`), and immediately sees 10 other patients in the waiting room. 3 hours later, the lab calls back. The doctor picks up the phone and reads the results. Zero wasted doctor time!
+
+### (4) Rust Code Examples
+
+#### Short Snippet (Method Chaining with `?`)
+Notice how postfix `.await` combines seamlessly with Rust's `?` error handling operator!
 
 ```rust
-async fn fetch_user_id() -> Result<u32, String> {
-    Ok(100)
+async fn fetch_user_id() -> Result<u32, &'static str> {
+    Ok(42)
 }
 
-async fn run() -> Result<(), String> {
-    // 1. Call the function (Creates a lazy Future)
-    let future = fetch_user_id();
+async fn get_user() -> Result<String, &'static str> {
+    // Postfix syntax allows chaining .await followed immediately by ?
+    let id = fetch_user_id().await?; 
     
-    // 2. Await the future (Executes it) and use `?` to handle the Result
-    let id = future.await?;
-    
-    println!("ID is: {}", id);
-    Ok(())
+    Ok(format!("User #{}", id))
 }
 ```
 
-#### Fuller Example (Sequential vs Concurrent)
-By default, if you `.await` two functions in a row, they run **sequentially** (one after the other). 
+#### Fuller Example (Sequential vs Concurrent `.await`)
+Calling `.await` immediately pauses execution *right there*. If you want two tasks to run concurrently, do **NOT** `.await` them immediately!
 
 ```rust
-async fn download_image(name: &str) {
-    println!("Downloading {}...", name);
-    // Simulate a 2 second download
+use tokio::time::{sleep, Duration};
+
+async fn do_work(id: u32, delay_ms: u64) -> u32 {
+    sleep(Duration::from_millis(delay_ms)).await;
+    println!("Task {} done!", id);
+    id
 }
 
-async fn run_sequential() {
-    // This takes 4 seconds total!
-    // It waits for image 1 to finish entirely before starting image 2.
-    download_image("Image 1").await;
-    download_image("Image 2").await;
-}
-```
+#[tokio::main]
+async fn main() {
+    // ----------------------------------------------------
+    // BAD (Sequential): Takes 100ms + 100ms = 200ms total!
+    // ----------------------------------------------------
+    let a = do_work(1, 100).await; // Pauses main completely right here!
+    let b = do_work(2, 100).await; // Only starts after task 1 is finished!
 
-If you want them to run at the exact same time (**concurrently**), you don't `.await` them immediately. You create the Futures, and then use a macro like `tokio::join!` to `.await` them both simultaneously!
+    // ----------------------------------------------------
+    // GOOD (Concurrent): Takes only 100ms total!
+    // ----------------------------------------------------
+    let fut1 = do_work(3, 100); // Created, but NOT awaited yet!
+    let fut2 = do_work(4, 100); // Created, but NOT awaited yet!
 
-```rust
-async fn run_concurrent() {
-    let f1 = download_image("Image 1"); // Paused!
-    let f2 = download_image("Image 2"); // Paused!
-
-    // This takes 2 seconds total! They both run at the exact same time!
-    tokio::join!(f1, f2); 
+    // Now run them simultaneously using tokio::join!
+    let (c, d) = tokio::join!(fut1, fut2);
 }
 ```
 
@@ -164,144 +171,295 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The JavaScript Comparison
+### Exercise 1: Resilient Async Pipeline with Per-Attempt Timeout & Exponential Backoff
 
-**Problem:** In JavaScript, the await syntax is written as a prefix: `let data = await fetch_data();`. In Rust, it is written as a postfix: `let data = fetch_data().await;`. Why did the Rust designers intentionally choose the postfix syntax?
+**Scenario**: You are developing an asynchronous API client for a cloud telemetry ingestion service. Remote HTTP calls can experience transient packet loss or server throttling. When calling remote endpoints, each attempt must be bounded by a per-attempt deadline using `tokio::time::timeout`. If an attempt fails or times out, the client must apply exponential backoff before `.await`ing the next attempt.
+
+Construct a resilient retry function using `.await` and deadline timeouts.
+
+**Requirements**:
+1. Define a `TelemetryResponse` struct containing `status_code: u16` and `body: String`.
+2. Define a `PipelineError` enum featuring variants `Timeout`, `ServerError(u16)`, and `MaxRetriesExceeded`.
+3. Implement `async fn mock_remote_fetch(attempt: usize, delay: Duration) -> Result<TelemetryResponse, PipelineError>`.
+4. Implement `async fn retry_with_timeout(max_retries: usize, initial_backoff: Duration, per_attempt_timeout: Duration) -> Result<TelemetryResponse, PipelineError>`.
+5. Add unit tests asserting success on retry, failure on timeout, and exponential backoff calculations.
 
 > [!check]- Answer
-> To allow for **clean method chaining**. 
->
-> Rust heavily relies on chaining methods like `.unwrap()`, `.map()`, or the `?` operator. 
->
-> If Rust used prefix syntax, handling errors would look like a nightmare of parentheses:
-> `let data = (await (await fetch()).parse()).unwrap();`
->
-> With postfix syntax, it flows perfectly left-to-right:
-> `let data = fetch().await?.parse().await.unwrap();`
-
----
-
-### Exercise 2: Sequential `.await` — Order Guaranteed
-
-**Problem:**
-When you `.await` two futures one after the other (not with `join!`), they run *sequentially* — the second does not start until the first is fully complete. This is the key behavioural difference from `tokio::join!`.
-
-Write a `#[tokio::main]` program with:
-1. `async fn step_one()` — sleeps 50 ms, then prints `"Step 1 complete"` and returns `"step1"`.
-2. `async fn step_two(prev: &str)` — sleeps 20 ms, then prints `"Step 2 complete (after {prev})"` and returns `"step2"`.
-3. In `main`, call them sequentially: `let r1 = step_one().await;` then `let r2 = step_two(&r1).await;`.
-4. Print the total: `"Both done: {r1}, {r2}"`.
-
-Observe that `"Step 1 complete"` always prints before `"Step 2 complete"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Step 1 complete
-> Step 2 complete (after step1)
-> Both done: step1, step2
-> ```
->
-> - **Hint 1:** `.await` on a future *suspends* the current task until that future resolves. The executor is free to run other tasks during the wait, but in this program there are no other tasks — so it just waits.
-> - **Hint 2:** Because `step_two` takes `prev: &str` as a parameter, it *cannot* even start until `step_one` has returned a value. This is the natural composability of async functions: the output of one becomes the input of the next.
-> - **Hint 3:** The total time is ~70 ms (50 + 20), not ~50 ms — confirming sequential (not concurrent) execution. If you wanted concurrent execution, you'd use `tokio::join!(step_one(), step_two_no_args())`.
->
 > ```rust
-> use tokio::time::{sleep, Duration};
->
-> async fn step_one() -> &'static str {
->     sleep(Duration::from_millis(50)).await;
->     println!("Step 1 complete");
->     "step1"
+> use std::time::Duration;
+> use tokio::time::{sleep, timeout};
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct TelemetryResponse {
+>     pub status_code: u16,
+>     pub body: String,
 > }
->
-> // step_two takes the result of step_one — it can't start until step_one finishes.
-> async fn step_two(prev: &str) -> &'static str {
->     sleep(Duration::from_millis(20)).await;
->     println!("Step 2 complete (after {})", prev);
->     "step2"
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum PipelineError {
+>     Timeout,
+>     ServerError(u16),
+>     MaxRetriesExceeded,
 > }
->
-> #[tokio::main]
-> async fn main() {
->     // Sequential: step_two cannot begin until step_one's Future resolves.
->     let r1 = step_one().await;
->     let r2 = step_two(r1).await;
->     println!("Both done: {}, {}", r1, r2);
-> }
-> ```
->
-> **Explanation:**
-> Sequential `.await` is the default and most readable form of async composition. Each `.await` is a *suspension point*: the current task yields to the executor, which can run other tasks in the meantime (cooperative multitasking). When the awaited future resolves, the executor resumes this task at the point immediately after the `.await`. This is exactly how `async/await` achieves concurrency without threads: tasks voluntarily give up the CPU at `.await` points rather than being preemptively interrupted.
-
----
-
-### Exercise 3: `.await` Inside a Loop — Sequential Pipeline
-
-**Problem:**
-A common async pattern is processing a list of items one by one, where each item requires an async operation (e.g. a database query or HTTP request). Using `.await` inside a `for` loop makes each iteration wait for the previous to complete before starting the next.
-
-Write a `#[tokio::main]` program that:
-1. Defines `async fn process(item: u32) -> String` — simulates work with a 20 ms sleep and returns `format!("processed:{}", item)`.
-2. In `main`, iterates over `[1u32, 2, 3, 4, 5]` with a regular `for` loop, `.await`ing `process(item)` each iteration.
-3. Prints each result as `"Item processed: {result}"`.
-4. After the loop, prints `"All 5 items done."`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Item processed: processed:1
-> Item processed: processed:2
-> Item processed: processed:3
-> Item processed: processed:4
-> Item processed: processed:5
-> All 5 items done.
-> ```
->
-> - **Hint 1:** A regular `for item in items` loop works inside `async fn main()` — you can `.await` inside the loop body just like anywhere else in an `async` context. The loop runs sequentially: item 2 does not start until item 1's future resolves.
-> - **Hint 2:** The total runtime is ~100 ms (5 × 20 ms). If you wanted all 5 to run concurrently (~20 ms total), you'd collect them into a `Vec<JoinHandle<_>>` via `tokio::spawn`, then await the handles — but that sacrifices the sequential ordering guarantee.
-> - **Hint 3:** This pattern is the async equivalent of a blocking `for` loop. It is simple and correct for cases where order matters or where the items depend on each other. Use `tokio::join!` or `futures::future::join_all` only when the items are truly independent.
->
-> ```rust
-> use tokio::time::{sleep, Duration};
->
-> async fn process(item: u32) -> String {
->     sleep(Duration::from_millis(20)).await; // simulate async work
->     format!("processed:{}", item)
-> }
->
-> #[tokio::main]
-> async fn main() {
->     let items = [1u32, 2, 3, 4, 5];
->
->     for item in items {
->         // .await inside a for loop: each iteration waits for the previous.
->         let result = process(item).await;
->         println!("Item processed: {}", result);
+> 
+> pub async fn mock_remote_fetch(
+>     attempt: usize,
+>     delay: Duration,
+> ) -> Result<TelemetryResponse, PipelineError> {
+>     sleep(delay).await;
+>     if attempt < 3 {
+>         Err(PipelineError::ServerError(503))
+>     } else {
+>         Ok(TelemetryResponse {
+>             status_code: 200,
+>             body: "TELEMETRY_OK".into(),
+>         })
 >     }
->
->     println!("All 5 items done.");
+> }
+> 
+> pub async fn retry_with_timeout(
+>     max_retries: usize,
+>     initial_backoff: Duration,
+>     per_attempt_timeout: Duration,
+> ) -> Result<TelemetryResponse, PipelineError> {
+>     let mut backoff = initial_backoff;
+> 
+>     for attempt in 1..=max_retries {
+>         // Wrap async function execution inside a deadline timeout and .await the result
+>         let result = timeout(per_attempt_timeout, mock_remote_fetch(attempt, Duration::from_millis(5))).await;
+
+> 
+>         match result {
+>             Ok(Ok(resp)) => return Ok(resp),
+>             Ok(Err(_err)) => {}
+>             Err(_timeout_err) => {}
+>         }
+> 
+>         if attempt < max_retries {
+>             sleep(backoff).await;
+>             backoff *= 2;
+>         }
+>     }
+> 
+>     Err(PipelineError::MaxRetriesExceeded)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_retry_success_on_third_attempt() {
+>         let res = retry_with_timeout(4, Duration::from_millis(2), Duration::from_millis(50)).await;
+>         assert!(res.is_ok());
+>         let resp = res.unwrap();
+>         assert_eq!(resp.status_code, 200);
+>         assert_eq!(resp.body, "TELEMETRY_OK");
+>     }
+> 
+>     #[tokio::test]
+>     async fn test_retry_max_exceeded() {
+>         let res = retry_with_timeout(2, Duration::from_millis(2), Duration::from_millis(50)).await;
+>         assert_eq!(res, Err(PipelineError::MaxRetriesExceeded));
+>     }
 > }
 > ```
->
-> **Explanation:**
-> `.await` inside a `for` loop is the idiomatic way to process items sequentially in async Rust. At each `.await`, the current task suspends and the executor can run other tasks on the thread. When `process` resolves, the loop advances to the next item. The key insight is that *suspending is not blocking*: even though this looks like a sequential loop, the thread is never actually blocked — it is available to run other tasks during each 20 ms sleep.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Postfix `.await` Composition**: Calling `mock_remote_fetch(...).await` suspends `retry_with_timeout` until the remote fetch future completes. Wrapping it inside `timeout(duration, fut).await` composes timer futures seamlessly.
+> 2. **Non-Blocking Backoff**: `sleep(backoff).await` suspends the async task without blocking Tokio worker threads.
+> 
+> ---
+> 
+> ### Exercise 2: Manual `Future` Waker Mechanics vs `.await` Synchronization
+> 
+> **Scenario**: To understand what `.await` does under the hood, we can build a custom single-slot rendezvous channel `AsyncRendezvous<T>`. When a consumer calls `consume().await`, if data is not ready, `.await` registers the caller's `Waker` and yields `Poll::Pending`. When a producer calls `produce(val)`, it sets the value and invokes `waker.wake()`, signaling Tokio to resume the consumer's `.await` point.
+> 
+> Build a custom rendezvous synchronization primitive implementing `Future`.
+> 
+> **Requirements**:
+> 1. Implement `AsyncRendezvous<T>` with shared `Arc<Mutex<State<T>>>`.
+> 2. Implement `Future` for `ConsumerFuture<T>` returning `Poll::Ready(T)` when populated.
+> 3. Add unit tests asserting produced data reception across task boundaries.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::future::Future;
+> > use std::pin::Pin;
+> > use std::sync::{Arc, Mutex};
+> > use std::task::{Context, Poll, Waker};
+> > 
+> > struct State<T> {
+> >     value: Option<T>,
+> >     waker: Option<Waker>,
+> > }
+> > 
+> > pub struct AsyncRendezvous<T> {
+> >     state: Arc<Mutex<State<T>>>,
+> > }
+> > 
+> > impl<T: Clone> AsyncRendezvous<T> {
+> >     pub fn new() -> Self {
+> >         Self {
+> >             state: Arc::new(Mutex::new(State {
+> >                 value: None,
+> >                 waker: None,
+> >             })),
+> >         }
+> >     }
+> > 
+> >     pub fn produce(&self, val: T) {
+> >         let mut guard = self.state.lock().unwrap();
+> >         guard.value = Some(val);
+> >         if let Some(waker) = guard.waker.take() {
+> >             waker.wake();
+> >         }
+> >     }
+> > 
+> >     pub fn consume(&self) -> ConsumerFuture<T> {
+> >         ConsumerFuture {
+> >             state: Arc::clone(&self.state),
+> >         }
+> >     }
+> > }
+> > 
+> > pub struct ConsumerFuture<T> {
+> >     state: Arc<Mutex<State<T>>>,
+> > }
+> > 
+> > impl<T: Clone> Future for ConsumerFuture<T> {
+> >     type Output = T;
+> > 
+> >     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+> >         let mut guard = self.state.lock().unwrap();
+> >         if let Some(val) = guard.value.clone() {
+> >             Poll::Ready(val)
+> >         } else {
+> >             guard.waker = Some(cx.waker().clone());
+> >             Poll::Pending
+> >         }
+> >     }
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> >     use std::time::Duration;
+> > 
+> >     #[tokio::test]
+> >     async fn test_rendezvous_produce_consume() {
+> >         let channel = AsyncRendezvous::<String>::new();
+> >         let channel_clone = AsyncRendezvous {
+> >             state: Arc::clone(&channel.state),
+> >         };
+> > 
+> >         tokio::spawn(async move {
+> >             tokio::time::sleep(Duration::from_millis(10)).await;
+> >             channel_clone.produce("PAYLOAD_READY".into());
+> >         });
+> > 
+> >         // .await polls ConsumerFuture until producer calls waker.wake()
+> >         let res = channel.consume().await;
+> >         assert_eq!(res, "PAYLOAD_READY");
+> >     }
+> > }
+> > ```
+> > 
+> > **Step-by-Step Explanation**:
+> > 1. **Under the Hood of `.await`**: When `.await` is executed on `ConsumerFuture`, it calls `poll(cx)`. If data is absent, `cx.waker()` is saved and `Poll::Pending` is returned.
+> > 2. **Waker Notification**: When `produce()` supplies data, calling `waker.wake()` notifies Tokio's executor to re-poll the consumer future, causing `.await` to unblock and return `Poll::Ready(val)`.
+> 
+> ---
+> 
+> ### Exercise 3: Cancellation-Safe Event Loop with `tokio::select!` and Async Channels
+> 
+> **Scenario**: Real-time event processors continuously pull messages from async channels using `.await` while racing against shutdown channels and interval tickers. `.await` points inside `tokio::select!` must be cancellation-safe to avoid losing messages.
+> 
+> Build a message processor event loop using `tokio::select!` and `.await`.
+> 
+> **Requirements**:
+> 1. Implement `EventProcessor` accepting `mpsc::Receiver<String>` and `oneshot::Receiver<()>`.
+> 2. Process incoming messages until emergency shutdown signal is received.
+> 3. Add unit tests asserting message processing and cancellation behavior.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use tokio::sync::{mpsc, oneshot};
+> > 
+> > pub async fn run_event_processor(
+> >     mut rx: mpsc::Receiver<String>,
+> >     mut cancel_rx: oneshot::Receiver<()>,
+> > ) -> Vec<String> {
+> >     let mut processed = Vec::new();
+> > 
+> >     loop {
+> >         tokio::select! {
+> >             biased;
 
----
+> 
+>             _ = &mut cancel_rx => {
+>                 break;
+>             }
+>             maybe_msg = rx.recv() => {
+>                 match maybe_msg {
+>                     Some(msg) => processed.push(format!("PROCESSED_{}", msg)),
+>                     None => break,
+>                 }
+>             }
+>         }
+>     }
+> 
+>     processed
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_event_processor_loop() {
+>         let (tx, rx) = mpsc::channel(10);
+>         let (cancel_tx, cancel_rx) = oneshot::channel();
+> 
+>         tx.send("EVENT_1".into()).await.unwrap();
+>         tx.send("EVENT_2".into()).await.unwrap();
+> 
+>         let handle = tokio::spawn(async move { run_event_processor(rx, cancel_rx).await });
+> 
+>         tokio::time::sleep(std::time::Duration::from_millis(10)).await;
+>         let _ = cancel_tx.send(());
 
-## 6. Related Terms
-
-- [`async fn`](../level_10/async_fn.md) — The function that creates the Future you are awaiting.
-- [`tokio`](../level_10/tokio.md) — The runtime that manages all the paused `.await` points and wakes them up when they are ready to resume.
-- [`Future` Trait](../level_10/future_trait.md) — The trait that powers `.await` under the hood.
-
----
-
-## 7. Key Takeaways
-
-- **`.await`** is the "play button" used to execute a `Future` and wait for its result.
-- It pauses the current `async fn`, yielding control back to the Executor so the thread can go do other work instead of sitting idle.
-- It is a **postfix operator** (written at the end), allowing beautiful chaining: `fetch().await.unwrap()`.
-- You can **ONLY** use `.await` inside an `async fn` or `async {}` block!
+> 
+>         let res = handle.await.unwrap();
+>         assert_eq!(res.len(), 2);
+>         assert_eq!(res[0], "PROCESSED_EVENT_1");
+>         assert_eq!(res[1], "PROCESSED_EVENT_2");
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **`tokio::select!` & `.await`**: `rx.recv()` returns a future. `.await`ing it inside `tokio::select!` yields control back to Tokio while awaiting messages.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`async fn`](../level_10/async_fn.md) — The function declaration that creates the Future we `.await`.
+> - [`Future` Trait](../level_10/future_trait.md) — The underlying trait driving `.await`.
+> - [`join!`](../level_10/join_macro.md) — How to `.await` multiple futures concurrently instead of sequentially.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - **`.await`** pauses the current async function until the `Future` yields its final result.
+> - It is **non-blocking** — the host OS thread is released to work on other tasks while waiting!
+> - It uses **postfix syntax** (`future.await`), enabling clean method chaining with `?` and `.map()`.
+> - You can **only** use `.await` inside an `async fn` or `async` block.
+> - Avoid `.await`ing futures sequentially if you want them to run concurrently (use `tokio::join!` instead!).
+> 

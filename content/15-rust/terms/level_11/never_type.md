@@ -159,116 +159,341 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Magic Morph
+### Exercise 1: Resilient Service Router with Diverging Error Fallbacks (`-> !`)
 
-**Problem:** You write `let x: Result<String, i32> = panic!("Oh no!");`. Why doesn't the compiler complain that you didn't provide a `Result`?
+**Problem:**
+In a production microservice gateway, authentication tokens must be parsed into an `AuthContext`. However, when critical parsing failures occur (e.g. invalid format or expired token), the service policy dictates that execution must immediately trigger a fatal security panic via a dedicated diverging logger `fn log_and_terminate(err: AuthError) -> !`.
+
+Implement `RequestRouter::resolve_or_diverge` and `RequestRouter::resolve_with_match`. Show how calling a diverging function returning `!` allows the error closure in `Result::unwrap_or_else` or the `Err` match arm to seamlessly coerce into the expected `AuthContext` type without type-checker errors. Include comprehensive unit tests verifying both successful token resolution and panic behavior on failure.
 
 > [!check]- Answer
-> Because `panic!` returns the **Never Type (`!`)**. 
->
-> Because a crash never yields control back to the program, the compiler allows the Never Type to automatically coerce (morph) into `Result<String, i32>` to keep the type-checker happy!
+> **Implementation:**
+> ```rust
+> use std::fmt;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct AuthContext {
+>     pub user_id: u64,
+>     pub role: String,
+> }
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum AuthError {
+>     MissingHeader,
+>     InvalidTokenFormat,
+>     ExpiredToken,
+> }
+> 
+> impl fmt::Display for AuthError {
+>     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+>         write!(f, "{:?}", self)
+>     }
+> }
+> 
+> // Diverging function: execution terminates here and NEVER returns to caller.
+> pub fn log_and_terminate(err: AuthError) -> ! {
+>     panic!("CRITICAL SECURITY FAILURE: Terminating thread due to {:?}", err);
+> }
+> 
+> pub struct RequestRouter;
+> 
+> impl RequestRouter {
+>     // Parses auth token string into AuthContext.
+>     pub fn parse_token(raw_token: &str) -> Result<AuthContext, AuthError> {
+>         if raw_token.is_empty() {
+>             return Err(AuthError::MissingHeader);
+>         }
+>         let parts: Vec<&str> = raw_token.split(':').collect();
+>         if parts.len() != 2 {
+>             return Err(AuthError::InvalidTokenFormat);
+>         }
+>         let user_id = parts[0].parse::<u64>().map_err(|_| AuthError::InvalidTokenFormat)?;
+>         let role = parts[1].to_string();
+>         if role == "expired" {
+>             return Err(AuthError::ExpiredToken);
+>         }
+>         Ok(AuthContext { user_id, role })
+>     }
+> 
+>     // Resolves context or invokes diverging fallback.
+>     // Notice how `log_and_terminate` (type !) coercively satisfies the `AuthContext` return type!
+>     pub fn resolve_or_diverge(raw_token: &str) -> AuthContext {
+>         Self::parse_token(raw_token).unwrap_or_else(|err| log_and_terminate(err))
+>     }
+> 
+>     // Alternative pattern using match expression where one arm returns `!`
+>     pub fn resolve_with_match(raw_token: &str) -> AuthContext {
+>         match Self::parse_token(raw_token) {
+>             Ok(ctx) => ctx,
+>             Err(err) => log_and_terminate(err), // type `!` coerces to AuthContext
+>         }
+>     }
+> }
+> 
+> fn main() {
+>     let ctx = RequestRouter::resolve_or_diverge("1001:admin");
+>     println!("Successfully resolved context for user: {}", ctx.user_id);
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_valid_token_resolution() {
+>         let raw = "42:developer";
+>         let ctx = RequestRouter::resolve_or_diverge(raw);
+>         assert_eq!(ctx.user_id, 42);
+>         assert_eq!(ctx.role, "developer");
+>     }
+> 
+>     #[test]
+>     fn test_valid_token_match_resolution() {
+>         let raw = "99:operator";
+>         let ctx = RequestRouter::resolve_with_match(raw);
+>         assert_eq!(ctx.user_id, 99);
+>         assert_eq!(ctx.role, "operator");
+>     }
+> 
+>     #[test]
+>     fn test_parse_error_detection() {
+>         let res = RequestRouter::parse_token("invalid_format");
+>         assert!(matches!(res, Err(AuthError::InvalidTokenFormat)));
+>     }
+> 
+>     #[test]
+>     #[should_panic(expected = "CRITICAL SECURITY FAILURE")]
+>     fn test_diverge_on_invalid_token() {
+>         let _ = RequestRouter::resolve_or_diverge("invalid_format");
+>     }
+> }
+> ```
+> 
+> **Step-by-step Explanation:**
+> 1. **Diverging Function Declaration (`-> !`)**: `log_and_terminate` explicitly declares `-> !` as its return type. Because the function body ends in `panic!`, control flow will never exit this function normally.
+> 2. **Type Coercion in Closure & Match Arms**: `Result::unwrap_or_else` expects an error closure returning `AuthContext`. Because `log_and_terminate` returns `!`, the compiler automatically coerces `!` to `AuthContext`.
+> 3. **Mathematical Guarantee**: The Rust type checker enforces that because `!` can never produce an actual runtime value, treating it as `AuthContext` is sound—execution stops before any value inspection takes place.
 
 ---
 
-### Exercise 2: The Never Type Enabling Diverging `match` Arms
+### Exercise 2: Infallible Generic Pipeline Stages & Exhaustive Pattern Matching (`std::convert::Infallible`)
 
 **Problem:**
-In Rust, every arm of a `match` expression must have the same type. The Never Type (`!`) is special: it coerces into *any* type, so a diverging arm (one that panics, breaks, continues, or returns) is accepted by the compiler even if the other arms produce a concrete value.
+In high-throughput ETL pipelines, generic processing stages return `Result<T, E>`. However, certain transformations (such as string uppercase conversion) can mathematically never fail. Rust uses `std::convert::Infallible` (an uninhabited enum conceptually equivalent to the Never Type `!`) as the associated error type `type Error = Infallible;` for infallible operations.
 
-Write a `loop` that reads strings from a hard-coded list and parses each as a `u32`. Use a `match` where:
-- `Ok(n)` yields the parsed number.
-- `Err(_)` calls `continue` (skipping to the next iteration).
-- A value of `0` causes `break`.
+Write a generic `PipelineStage` trait and implement an infallible `UppercaseStage`. Implement an `unwrap_infallible<T>(res: Result<T, Infallible>) -> T` helper function that extracts the inner value using exhaustive pattern matching (`match never {}`) without requiring runtime panic code. Include unit tests asserting correct processing and zero-overhead unwrapping.
 
-Print each successfully parsed non-zero number.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Parsed: 42
-> Parsed: 7
-> Zero encountered — stopping.
-> ```
->
-> - **Hint 1:** `continue` and `break` both have type `!`. Inside a `match` that must produce a `u32`, the arm `Err(_) => continue` is accepted because `!` silently coerces to `u32` (the compiler knows the arm never actually produces a `u32`).
-> - **Hint 2:** The list can be a `&[&str]` array literal iterated with `.iter()`. You need a `'outer` label on the loop if you use nested loops, but a single loop suffices here.
-> - **Hint 3:** Check the parsed `u32` *after* the match: `if n == 0 { println!(...); break; }` — or handle `0` as its own arm that calls `break` directly (which also has type `!`).
->
+> **Implementation:**
 > ```rust
+> use std::convert::Infallible;
+> 
+> pub trait PipelineStage {
+>     type Output;
+>     type Error;
+> 
+>     fn process(&self, input: &str) -> Result<Self::Output, Self::Error>;
+> }
+> 
+> // An infallible stage that converts text to uppercase bytes.
+> pub struct UppercaseStage;
+> 
+> impl PipelineStage for UppercaseStage {
+>     type Output = Vec<u8>;
+>     type Error = Infallible; // Infallible is an uninhabited type representing `!`
+> 
+>     fn process(&self, input: &str) -> Result<Self::Output, Self::Error> {
+>         // Upper-casing string and converting to bytes can never fail!
+>         Ok(input.to_uppercase().into_bytes())
+>     }
+> }
+> 
+> // Unwraps a Result whose error type is uninhabited (Infallible / !).
+> // Because `Infallible` has no variants, the Err branch is statically unreachable.
+> pub fn unwrap_infallible<T>(result: Result<T, Infallible>) -> T {
+>     match result {
+>         Ok(val) => val,
+>         Err(never) => match never {}, // Exhaustive match on uninhabited type
+>     }
+> }
+> 
+> pub fn execute_infallible_pipeline(input: &str) -> Vec<u8> {
+>     let stage = UppercaseStage;
+>     let res = stage.process(input);
+>     unwrap_infallible(res)
+> }
+> 
 > fn main() {
->     let inputs = ["42", "bad", "7", "also_bad", "0", "99"];
->     let mut iter = inputs.iter();
->
->     loop {
->         let Some(raw) = iter.next() else { break };
->
->         // Both `continue` and `break` have type `!`, so they satisfy
->         // the u32 return type the compiler expects from every arm.
->         let n: u32 = match raw.parse() {
->             Ok(0)    => { println!("Zero encountered — stopping."); break }
->             Ok(n)    => n,
->             Err(_)   => continue, // ← type is !, coerces to u32
+>     let output = execute_infallible_pipeline("rust_never_type");
+>     println!("Pipeline output bytes count: {}", output.len());
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_infallible_stage_execution() {
+>         let stage = UppercaseStage;
+>         let result = stage.process("hello_world");
+>         assert!(result.is_ok());
+>         
+>         let bytes = unwrap_infallible(result);
+>         assert_eq!(bytes, b"HELLO_WORLD");
+>     }
+> 
+>     #[test]
+>     fn test_pipeline_helper() {
+>         let bytes = execute_infallible_pipeline("test_data_123");
+>         assert_eq!(String::from_utf8(bytes).unwrap(), "TEST_DATA_123");
+>     }
+> 
+>     #[test]
+>     fn test_exhaustive_unwrapping_matches() {
+>         let res: Result<i32, Infallible> = Ok(42);
+>         let val = match res {
+>             Ok(v) => v,
+>             Err(never) => match never {},
 >         };
->
->         println!("Parsed: {}", n);
+>         assert_eq!(val, 42);
 >     }
 > }
 > ```
->
-> **Explanation:**
-> The Never Type is why Rust allows you to put `continue`, `break`, `return`, `panic!`, or any diverging expression inside a `match` arm that is otherwise expected to produce a concrete value. The compiler's type system says: "this arm diverges — it will never actually hand back a value — so it trivially satisfies whatever type the other arms produce." Without `!`, you'd need to restructure the code into nested `if let` / `else` chains to avoid type mismatches.
+> 
+> **Step-by-step Explanation:**
+> 1. **Uninhabited Types**: `std::convert::Infallible` is defined as `enum Infallible {}` with 0 variants. Because it has no valid constructible instances, it represents the concept of `!`.
+> 2. **Exhaustive Matching (`match never {}`)**: When pattern matching on an uninhabited enum value `never`, Rust recognizes that no branches exist. `match never {}` compiles cleanly and acts as an unreachable control flow statement of type `!`.
+> 3. **Zero-Cost Unwrapping**: Unlike `.unwrap()` or `.expect()`, `unwrap_infallible` guarantees at compile time that panic code generation is entirely omitted, optimizing the compiled machine code.
 
 ---
 
-### Exercise 3: Diverging Functions as a Recovery Pattern
+### Exercise 3: Worker State Machine with Diverging Flow Control (`break`, `continue`, `panic!`)
 
 **Problem:**
-Write a `fn fatal_error(msg: &str) -> !` that panics with the given message, then use it inside a `match` as the error arm — demonstrating that `-> !` coerces into any return type.
+In a multi-threaded event processing system, background worker loops iterate through task commands (`Compute(u32)`, `Skip`, `FatalError(String)`, `Shutdown`).
+Inside a `match` statement expecting a unified result type `u32`:
+- `Command::Compute(val)` yields `val * 2` (`u32`).
+- `Command::Skip` executes `continue` (type `!`).
+- `Command::Shutdown` executes `break` (type `!`).
+- `Command::FatalError(msg)` invokes `handle_fatal(&msg)` (type `!`).
 
-Specifically:
-1. Write `fatal_error`.
-2. Write a function `parse_port(s: &str) -> u16` that parses `s` as a `u16`. On failure, call `fatal_error("invalid port")` instead of returning an error.
-3. In `main`, call `parse_port("8080")` and print the result, then show that calling `parse_port("bad")` would diverge (comment it out with an explanation).
+Implement `WorkerLoop::run_queue` showcasing how `break`, `continue`, and diverging function calls all evaluate to type `!`, allowing them to satisfy the expected `u32` return type of the match expression. Write comprehensive unit tests for normal processing, early shutdown, skips, and panic behavior.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Listening on port: 8080
-> ```
->
-> - **Hint 1:** `fn fatal_error(msg: &str) -> !` is declared with `-> !` in place of the return type. The body must *never return* — `panic!(...)` satisfies this.
-> - **Hint 2:** Inside `parse_port`, the match arm `Err(_) => fatal_error("invalid port")` has type `!`. Because `!` coerces to any type — including `u16` — the compiler accepts it as a valid arm for the `Ok(n) => n` arm that produces `u16`.
-> - **Hint 3:** This pattern is common in CLI tools and startup code where a configuration error is truly unrecoverable. The `-> !` signature advertises to callers that the function is an execution terminator, not a normal function.
->
+> **Implementation:**
 > ```rust
-> // `-> !` means this function NEVER returns to its caller.
-> // The panic macro itself has type `!`, satisfying the return type.
-> fn fatal_error(msg: &str) -> ! {
->     panic!("Fatal: {}", msg);
+> #[derive(Debug, PartialEq, Eq, Clone)]
+> pub enum Command {
+>     Compute(u32),
+>     Skip,
+>     FatalError(String),
+>     Shutdown,
 > }
->
-> fn parse_port(s: &str) -> u16 {
->     // The `Err` arm calls `fatal_error` which has type `!`.
->     // `!` coerces to `u16`, so both arms satisfy the expected return type.
->     match s.parse::<u16>() {
->         Ok(port) => port,
->         Err(_)   => fatal_error("invalid port: expected a number 0–65535"),
+> 
+> #[derive(Debug, Default)]
+> pub struct WorkerStats {
+>     pub processed_count: usize,
+>     pub total_sum: u64,
+> }
+> 
+> pub fn handle_fatal(msg: &str) -> ! {
+>     panic!("WORKER FATAL PANIC: {}", msg);
+> }
+> 
+> pub struct WorkerLoop;
+> 
+> impl WorkerLoop {
+>     // Processes a stream of commands, accumulating results into WorkerStats.
+>     // Demonstrates how `continue`, `break`, and `handle_fatal` (all type `!`)
+>     // coerce into `u32` inside the `match` block!
+>     pub fn run_queue(commands: Vec<Command>) -> WorkerStats {
+>         let mut stats = WorkerStats::default();
+>         let mut iter = commands.into_iter();
+> 
+>         loop {
+>             let cmd = match iter.next() {
+>                 Some(c) => c,
+>                 None => break, // `break` has type `!`, coercing to Command
+>             };
+> 
+>             // Every match arm must unify to `u32`.
+>             // `continue`, `break`, and `handle_fatal` return `!` which coerces to `u32`!
+>             let processed_value: u32 = match cmd {
+>                 Command::Compute(val) => val * 2,
+>                 Command::Skip => continue, // type `!`
+>                 Command::Shutdown => break, // type `!`
+>                 Command::FatalError(msg) => handle_fatal(&msg), // type `!`
+>             };
+> 
+>             stats.processed_count += 1;
+>             stats.total_sum += processed_value as u64;
+>         }
+> 
+>         stats
 >     }
 > }
->
+> 
 > fn main() {
->     let port = parse_port("8080");
->     println!("Listening on port: {}", port);
->
->     // Uncommenting the line below would diverge (panic) instead of returning:
->     // let _ = parse_port("bad");
+>     let cmds = vec![Command::Compute(10), Command::Skip, Command::Compute(20), Command::Shutdown];
+>     let stats = WorkerLoop::run_queue(cmds);
+>     println!("Processed {} tasks, total sum: {}", stats.processed_count, stats.total_sum);
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_worker_normal_and_skip() {
+>         let cmds = vec![
+>             Command::Compute(5),  // processed_value = 10
+>             Command::Skip,        // skipped via `continue` (type !)
+>             Command::Compute(15), // processed_value = 30
+>         ];
+>         let stats = WorkerLoop::run_queue(cmds);
+>         assert_eq!(stats.processed_count, 2);
+>         assert_eq!(stats.total_sum, 40);
+>     }
+> 
+>     #[test]
+>     fn test_worker_early_shutdown() {
+>         let cmds = vec![
+>             Command::Compute(10), // processed_value = 20
+>             Command::Shutdown,    // loop terminates via `break` (type !)
+>             Command::Compute(100),// never reached
+>         ];
+>         let stats = WorkerLoop::run_queue(cmds);
+>         assert_eq!(stats.processed_count, 1);
+>         assert_eq!(stats.total_sum, 20);
+>     }
+> 
+>     #[test]
+>     #[should_panic(expected = "WORKER FATAL PANIC: Memory corrupted")]
+>     fn test_worker_fatal_error_diverges() {
+>         let cmds = vec![
+>             Command::Compute(1),
+>             Command::FatalError("Memory corrupted".to_string()),
+>         ];
+>         let _ = WorkerLoop::run_queue(cmds);
+>     }
+> 
+>     #[test]
+>     fn test_empty_queue() {
+>         let stats = WorkerLoop::run_queue(vec![]);
+>         assert_eq!(stats.processed_count, 0);
+>         assert_eq!(stats.total_sum, 0);
+>     }
 > }
 > ```
->
-> **Explanation:**
-> A function annotated `-> !` is called a *diverging function*. It is part of the type system, not just a documentation convention. The compiler understands that any code after a call to a diverging function is unreachable and will not generate dead-code warnings for it. This is also why `loop {}` has type `!` (it never terminates) and why `std::process::exit()` returns `!`. The coercibility of `!` to any type is what makes diverging arms in `match` expressions work without special-casing them in the compiler.
+> 
+> **Step-by-step Explanation:**
+> 1. **Diverging Control Keywords**: In Rust syntax, `continue`, `break`, and `return` are expressions, and their static type is `!`.
+> 2. **Match Arm Unification**: A `match` expression requires every branch to return the same type (here, `u32`). Because `!` coercively unifies with any type, branches returning `continue`, `break`, or calling `handle_fatal(...)` satisfy the `u32` requirement seamlessly.
+> 3. **Unreachable Code Elimination**: Code located after a `!` expression (such as processing statistics after `continue` or `break`) is skipped at runtime, ensuring strict control flow safety.
 
 ---
 

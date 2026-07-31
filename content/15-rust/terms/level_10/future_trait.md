@@ -1,23 +1,23 @@
 # `Future` Trait
 
 > **Level 10 — Async / Await**
-> The core trait for asynchronous values; defines a `poll` method.
+> The fundamental trait behind every async computation in Rust.
 
 ---
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — The syntax sugar that creates Futures.
-- [`await`](../level_10/await.md) — The magic keyword that interacts with Futures.
-- [Traits](../level_04/trait.md) — The concept of shared interfaces in Rust.
+- [`async fn`](../level_10/async_fn.md) — The syntax that generates types implementing `Future`.
+- [`Trait`](../level_04/trait.md) — The general concept of defining shared behavior in Rust.
+- [`pin!`, `Pin<T>`, and `Unpin`](../level_10/pin_t.md) — The memory guarantee that keeps futures from moving.
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (the state machine)**: In languages like JavaScript, a `Promise` is a concrete object that is allocated on the Heap. 
+**Rust Core Interface (the state machine)**: Underneath the hood, every single `async fn`, `async` block, and timer in Rust is just a struct that implements a single core trait: **`std::future::Future`**.
 
-In Rust, **`Future`** is a *Trait*. When you write an `async fn`, the compiler automatically generates a hidden, complex State Machine `enum` behind the scenes, and implements the `Future` trait on it. This means `Future`s in Rust have zero allocation overhead—they are just highly-optimized state machines stored directly on the Stack!
+A `Future` represents an asynchronous computation that may not have finished yet. It is physically a **State Machine** that is continuously polled by an executor until it returns a final result.
 
 ---
 
@@ -25,86 +25,84 @@ In Rust, **`Future`** is a *Trait*. When you write an `async fn`, the compiler a
 
 ### (1) Design Motivation — "Why did we design this?"
 
-The Rust designers wanted asynchronous programming to be "Zero-Cost". If async required allocating objects on the Heap (like JavaScript Promises), it would be too slow for high-performance systems programming. 
+In JavaScript, Promises are managed by the V8 C++ engine runtime. In Go, Goroutines are managed by a hidden Go runtime scheduler. 
 
-Instead, they designed the `Future` trait. The core of this trait is a single method: **`poll()`**. 
+Rust wanted to be usable on bare-metal microcontrollers where no runtime exists! Therefore, Rust designed **`Future`** as a pure, zero-cost abstraction trait defined in `core::future::Future`. 
 
-When you `.await` a Future, you are handing it to an Executor (like Tokio). The Executor calls `.poll()` on the state machine. 
-- If the network request isn't done, `poll` returns **`Poll::Pending`**. The Executor puts the Future to sleep and goes to do other work. 
-- When the network request finishes, it alerts the Executor. The Executor calls `.poll()` again. This time, it returns **`Poll::Ready(data)`**, and the function resumes!
+It has a single method: `poll()`.
+- If the computation is done, it returns `Poll::Ready(output)`.
+- If the computation is still waiting (e.g., waiting for network I/O), it returns `Poll::Pending` and saves a `Waker` notification callback!
 
 ### (2) Reality Metaphor
 
-Imagine you order a custom pizza (the `Future`). 
+Imagine waiting for your order at a fast-food restaurant.
 
-1. You call the pizzeria and ask, *"Is it done?"* (Calling `.poll()`). 
-2. The baker says, *"No, it's still in the oven."* (**`Poll::Pending`**). 
-3. Instead of standing by the phone for 20 minutes blocking your entire day, you tell the baker, *"Call me when it's done"* (registering a Waker), and you go watch TV. 
-4. 20 minutes later, the baker calls you (Wakes you up). You ask again, *"Is it done?"* (Calling `.poll()` again). 
-5. The baker says, *"Yes, here it is!"* (**`Poll::Ready(Pizza)`**).
+- **`Future`**: Your receipt with an Order Number (e.g. Order #42). Holding the receipt doesn't mean you have the food yet; it represents *future food*.
+- **`poll()`**: You walking up to the counter and asking: *"Is Order #42 ready?"*
+  - **`Poll::Pending`**: The clerk says *"Not yet!"* You hand the clerk your phone number (`Waker`) and go sit down.
+  - **`Poll::Ready(Burger)`**: The clerk hands you the burger! The future is complete!
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Standard Library Definition)
-If you look into the actual Rust Standard Library, you will see exactly how the `Future` trait is defined. It is remarkably simple.
+#### Short Snippet (The Trait Definition)
+Here is the literal definition of the `Future` trait in Rust's standard library:
 
 ```rust
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
 pub trait Future {
-    // The type of data it will eventually produce
+    // The type of the value produced when the future completes!
     type Output;
 
-    // The method the Executor calls to check on the progress!
+    // Driven forward by the Executor
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
-}
-
-pub enum Poll<T> {
-    Ready(T),
-    Pending,
 }
 ```
 
-#### Fuller Example (Pulling Back the Curtain)
-What actually happens when you write an `async fn`? The compiler completely rewrites your code into a State Machine. Let's pull back the curtain!
+#### Fuller Example (Building a Custom `Future` from Scratch)
+Let's build a custom `Future` struct manually without using `async fn`! It will yield `Poll::Pending` twice, and then return `Poll::Ready(100)` on the 3rd attempt.
 
 ```rust
-// YOUR CODE:
-async fn fetch_data() -> u32 {
-    let network_data = download_from_server().await;
-    network_data + 5
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll};
+
+// Our custom state machine struct
+struct CounterFuture {
+    count: u32,
 }
 
-// WHAT THE COMPILER ACTUALLY GENERATES (Pseudocode):
-enum FetchDataStateMachine {
-    Start,
-    WaitingForNetwork,
-    Done,
-}
-
-impl Future for FetchDataStateMachine {
+impl Future for CounterFuture {
     type Output = u32;
 
-    fn poll(...) -> Poll<u32> {
-        match self.state {
-            State::Start => {
-                // Start the download...
-                self.state = State::WaitingForNetwork;
-                Poll::Pending
-            }
-            State::WaitingForNetwork => {
-                if download_is_finished() {
-                    self.state = State::Done;
-                    let result = get_network_data() + 5;
-                    Poll::Ready(result)
-                } else {
-                    Poll::Pending
-                }
-            }
-            State::Done => panic!("You polled a Future after it finished!"),
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        self.count += 1;
+
+        if self.count >= 3 {
+            println!("Count reached 3! Returning Ready.");
+            Poll::Ready(100)
+        } else {
+            println!("Count is {}... Returning Pending.", self.count);
+            
+            // Tell the executor to wake us up again immediately so we get polled again!
+            cx.waker().wake_by_ref();
+            
+            Poll::Pending
         }
     }
 }
+
+#[tokio::main]
+async fn main() {
+    let my_future = CounterFuture { count: 0 };
+
+    // We can .await our manually constructed Future state machine!
+    let result = my_future.await;
+    
+    println!("Final Result: {}", result); // 100
+}
 ```
-This is the magic of Rust! You write simple `async/await` code, and the compiler does the horrific work of generating these massive state machines for you!
 
 ---
 
@@ -178,125 +176,302 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Enum
+### Exercise 1: Polled Exponential Backoff Retry `Future` (`RetryFuture`)
 
-**Problem:** When Tokio (the Executor) calls `.poll()` on your `Future`, it returns an enum. What are the two variants of that enum, and what do they mean?
+**Scenario**: Low-level networking crates often implement custom `Future` state machines to handle retries without allocating extra futures on the heap. Implement a custom `RetryFuture<F>` struct that wraps a fallible closure/operation, tracks remaining attempts, registers wakers when pending, and executes backoff retries manually inside `poll()`.
+
+Build a manual `Future` implementation for retry logic.
+
+**Requirements**:
+1. Implement `RetryFuture<F, T, E>` holding state parameters `max_retries: usize`, `attempts: usize`, and inner function `F: FnMut() -> Result<T, E>`.
+2. Implement `Future` returning `Poll::Ready(Ok(T))` or `Poll::Ready(Err(E))` after exhausting retries.
+3. In `poll`, if the inner operation returns `Err` and `attempts < max_retries`, increment `attempts`, call `cx.waker().wake_by_ref()`, and return `Poll::Pending`.
+4. Add unit tests verifying instant success, success after $K$ attempts, and error return upon retry exhaustion.
 
 > [!check]- Answer
-> The variants are:
-> 1. **`Poll::Ready(T)`** — The Future has completely finished its work and here is the final data.
-> 2. **`Poll::Pending`** — The Future is still waiting on something (like a network request). The Executor should put it to sleep and go do other work.
-
----
-
-### Exercise 2: Manual `Future` Implementation
-
-**Problem:** Implement `Future` for `struct ReadyValue(i32)` returning `Poll::Ready(val)` immediately.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Poll::Ready(42)
-> ```
 > ```rust
 > use std::future::Future;
 > use std::pin::Pin;
 > use std::task::{Context, Poll};
-> struct ReadyValue(i32);
-> impl Future for ReadyValue {
->     type Output = i32;
->     fn poll(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
->         Poll::Ready(self.0)
->     }
+> 
+> pub struct RetryFuture<F, T, E> {
+>     op: F,
+>     max_retries: usize,
+>     attempts: usize,
 > }
-> fn main() {
->     println!("Poll::Ready(42)");
-> }
-> ```
->
-> **Explanation:** Manual `Future` implementations define `type Output` and the `poll` execution driver.
-
----
-
-### Exercise 3: Implementing the Waker Contract — A `CountdownFuture`
-
-**Problem:**
-The `Waker` inside `Context` is how a `Future` tells the executor *"I was polled, I'm not ready yet, but please poll me again when I call wake()"*. Without correctly calling `wake()`, a `Future` that returns `Poll::Pending` will be parked forever — the executor will never re-poll it.
-
-Implement `struct CountdownFuture { remaining: u32 }` that:
-1. On each call to `poll`: if `remaining > 0`, decrements `remaining`, calls `cx.waker().wake_by_ref()` to schedule an immediate re-poll, and returns `Poll::Pending`.
-2. When `remaining == 0`, returns `Poll::Ready("liftoff!")` without calling `wake`.
-3. Drives it to completion using `#[tokio::main]` and `.await`, then print the result.
-
-Then answer: **what would happen if you returned `Poll::Pending` but forgot to call `wake_by_ref()`?**
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Polled! remaining=2, returning Pending
-> Polled! remaining=1, returning Pending
-> Polled! remaining=0, returning Ready
-> CountdownFuture result: liftoff!
-> ```
->
-> - **Hint 1:** `cx.waker().wake_by_ref()` clones the `Waker` and immediately notifies the executor to re-poll this future. This is an artificial "always ready" signal — in real futures, `wake` is called by an I/O driver or timer when the underlying event fires.
-> - **Hint 2:** `wake_by_ref()` vs `wake()`: `wake()` consumes the `Waker` (by value), while `wake_by_ref()` borrows it. Use `wake_by_ref()` when you need to keep using the `Waker` after the call (e.g. inside a reference inside `poll`).
-> - **Hint 3:** The `poll` method signature is `fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>`. You can access and mutate `self.remaining` through the `Pin` because `CountdownFuture` has no self-references (it's `Unpin`).
-> - **Answer to the forgotten-wake question:** The executor would park the future and never re-poll it. Your `.await` would hang forever — an async deadlock. This is the most common bug in hand-written `Future` implementations.
->
-> ```rust
-> use std::future::Future;
-> use std::pin::Pin;
-> use std::task::{Context, Poll};
->
-> struct CountdownFuture {
->     remaining: u32,
-> }
->
-> impl Future for CountdownFuture {
->     type Output = &'static str;
->
->     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
->         if self.remaining > 0 {
->             println!("Polled! remaining={}, returning Pending", self.remaining);
->             self.remaining -= 1;
->             // CRITICAL: tell the executor to poll us again immediately.
->             // Without this call, we'd return Pending and be parked forever.
->             cx.waker().wake_by_ref();
->             Poll::Pending
->         } else {
->             println!("Polled! remaining=0, returning Ready");
->             Poll::Ready("liftoff!")
+> 
+> impl<F, T, E> RetryFuture<F, T, E> {
+>     pub fn new(max_retries: usize, op: F) -> Self {
+>         Self {
+>             op,
+>             max_retries,
+>             attempts: 0,
 >         }
 >     }
 > }
->
-> #[tokio::main]
-> async fn main() {
->     let result = CountdownFuture { remaining: 2 }.await;
->     println!("CountdownFuture result: {}", result);
+> 
+> impl<F, T, E> Future for RetryFuture<F, T, E>
+> where
+>     F: FnMut() -> Result<T, E> + Unpin,
+> {
+>     type Output = Result<T, E>;
+> 
+>     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+>         self.attempts += 1;
+>         match (self.op)() {
+>             Ok(val) => Poll::Ready(Ok(val)),
+>             Err(err) => {
+>                 if self.attempts >= self.max_retries {
+>                     Poll::Ready(Err(err))
+>                 } else {
+>                     cx.waker().wake_by_ref();
+>                     Poll::Pending
+>                 }
+>             }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_retry_future_success() {
+>         let mut count = 0;
+>         let retry_fut = RetryFuture::new(3, move || {
+>             count += 1;
+>             if count == 2 {
+>                 Ok("SUCCESS")
+>             } else {
+>                 Err("TRANSIENT_ERR")
+>             }
+>         });
+> 
+>         let res = retry_fut.await;
+>         assert_eq!(res, Ok("SUCCESS"));
+>     }
+> 
+>     #[tokio::test]
+>     async fn test_retry_future_exhaustion() {
+>         let retry_fut = RetryFuture::new(2, || Err::<(), _>("PERMANENT_ERR"));
+>         let res = retry_fut.await;
+>         assert_eq!(res, Err("PERMANENT_ERR"));
+>     }
 > }
 > ```
->
-> **Explanation:**
-> The executor-future contract has two sides: (1) when the executor calls `poll` and gets `Poll::Pending`, it parks the future; (2) *the future* is responsible for calling `wake()` when it believes it might be ready to make progress. Only then will the executor call `poll` again. In this contrived example, we call `wake_by_ref()` immediately ("I'm always ready to try again") — but in a real I/O future, the OS kernel or a background thread would call `wake()` when the socket becomes readable or the timer fires. The `Waker` is designed to be cheap to clone and thread-safe (`Send + Sync`), so it can be passed to any background event source.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Manual `Future` Mechanics**: Implementing `Future` directly requires defining `type Output` and writing the `poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>` state machine loop.
+> 2. **Waker Notification**: When returning `Poll::Pending`, calling `cx.waker().wake_by_ref()` informs Tokio's executor to reschedule the future for polling again.
+> 
+> ---
+> 
+> ### Exercise 2: Shared Single-Execution Asynchronous Cell (`AsyncOnceCell`)
 
----
+**Scenario**: Database connection pools or configuration loaders use an `AsyncOnceCell<T>` to ensure an expensive initialization future runs only once. If multiple caller tasks `.await` the cell concurrently while initialization is in progress, all callers register their `Waker`s and receive the initialized result once complete.
 
-## 6. Related Terms
+Construct a shared single-execution cell using manual `Future` waker registration.
 
-- [`async fn`](../level_10/async_fn.md) — The syntax sugar that generates a `Future` state machine for you.
-- [`tokio`](../level_10/tokio.md) — The "Mechanic" (Executor) that actually calls `.poll()` repeatedly.
-- [`Pin`](../level_10/pin_t.md) — An advanced topic you noticed in the `poll(self: Pin<&mut Self>)` signature. It prevents the state machine from being moved in memory!
+**Requirements**:
+1. Define `AsyncOnceCell<T>` with shared `Arc<Mutex<CellState<T>>>`.
+2. `CellState<T>` contains `value: Option<T>`, `wakers: Vec<Waker>`, and `is_initializing: bool`.
+3. Implement `get_or_init<F>(&self, init: F)` returning a custom `OnceCellFuture<T>`.
+4. Add unit tests asserting single initialization execution across multiple concurrent task callers.
 
----
+> [!check]- Answer
+> ```rust
+> use std::future::Future;
+> use std::pin::Pin;
+> use std::sync::{Arc, Mutex};
+> use std::task::{Context, Poll, Waker};
+> 
+> struct CellState<T> {
+>     value: Option<T>,
+>     wakers: Vec<Waker>,
+> }
+> 
+> pub struct AsyncOnceCell<T> {
+>     state: Arc<Mutex<CellState<T>>>,
+> }
+> 
+> impl<T: Clone> AsyncOnceCell<T> {
+>     pub fn new() -> Self {
+>         Self {
+>             state: Arc::new(Mutex::new(CellState {
+>                 value: None,
+>                 wakers: Vec::new(),
+>             })),
+>         }
+>     }
+> 
+>     pub fn set(&self, val: T) {
+>         let mut guard = self.state.lock().unwrap();
+>         guard.value = Some(val);
+>         for waker in guard.wakers.drain(..) {
+>             waker.wake();
+>         }
+>     }
+> 
+>     pub fn get(&self) -> OnceCellFuture<T> {
+>         OnceCellFuture {
+>             state: Arc::clone(&self.state),
+>         }
+>     }
+> }
+> 
+> pub struct OnceCellFuture<T> {
+>     state: Arc<Mutex<CellState<T>>>,
+> }
+> 
+> impl<T: Clone> Future for OnceCellFuture<T> {
+>     type Output = T;
+> 
+>     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+>         let mut guard = self.state.lock().unwrap();
+>         if let Some(ref val) = guard.value {
+>             Poll::Ready(val.clone())
+>         } else {
+>             guard.wakers.push(cx.waker().clone());
+>             Poll::Pending
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::time::Duration;
+> 
+>     #[tokio::test]
+>     async fn test_async_once_cell_multi_waiter() {
+>         let cell = Arc::new(AsyncOnceCell::<String>::new());
+>         let cell1 = Arc::clone(&cell);
+>         let cell2 = Arc::clone(&cell);
+> 
+>         let h1 = tokio::spawn(async move { cell1.get().await });
+>         let h2 = tokio::spawn(async move { cell2.get().await });
+> 
+>         tokio::time::sleep(Duration::from_millis(10)).await;
+>         cell.set("CONFIG_DATA".into());
+> 
+>         assert_eq!(h1.await.unwrap(), "CONFIG_DATA");
+>         assert_eq!(h2.await.unwrap(), "CONFIG_DATA");
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Multi-Waiter Waker Tracking**: `CellState` maintains `wakers: Vec<Waker>`. Concurrent callers polling `OnceCellFuture` push their wakers into the list when data is pending.
+> 2. **Fan-Out Waker Notification**: Calling `cell.set(val)` pops all stored wakers via `guard.wakers.drain(..)` and invokes `.wake()` on each, unblocking all `.await`ing tasks simultaneously.
+> 
+> ---
+> 
+> ### Exercise 3: Custom Cancellation-Safe `Select2` Combinator with Safe Pinned Projection
 
-## 7. Key Takeaways
+**Scenario**: `tokio::select!` races two futures. To understand its internal mechanics, build a custom zero-allocation `Select2<F1, F2>` combinator implementing `Future`.
 
-- **`Future` is a Trait**, not a concrete struct or Heap allocation.
-- It represents a value that might not be ready yet.
-- The core of `Future` is the **`.poll()`** method.
-- Executors (like Tokio) call `.poll()`. It returns either **`Poll::Ready(data)`** or **`Poll::Pending`**.
-- Under the hood, `async fn` is just beautiful syntax sugar that forces the compiler to generate a complex State Machine `enum` that implements the `Future` trait!
+Construct a manual `Select2` combinator with pinned projection.
+
+**Requirements**:
+1. Implement `Select2<F1, F2>` struct holding `fut1: F1` and `fut2: F2`.
+2. Implement `Future` returning `Poll::Ready(Either<F1::Output, F2::Output>)`.
+3. Perform structural pin projection using `unsafe { Pin::new_unchecked(...) }`.
+4. Add unit tests asserting branch winning behavior and cancellation of the losing future.
+
+> [!check]- Answer
+> ```rust
+> use std::future::Future;
+> use std::pin::Pin;
+> use std::task::{Context, Poll};
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum Either<A, B> {
+>     Left(A),
+>     Right(B),
+> }
+> 
+> pub struct Select2<F1, F2> {
+>     fut1: F1,
+>     fut2: F2,
+> }
+> 
+> impl<F1, F2> Select2<F1, F2> {
+>     pub fn new(fut1: F1, fut2: F2) -> Self {
+>         Self { fut1, fut2 }
+>     }
+> }
+> 
+> impl<F1: Future, F2: Future> Future for Select2<F1, F2> {
+>     type Output = Either<F1::Output, F2::Output>;
+> 
+>     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+>         // SAFETY: Structural pin projection for fut1 and fut2
+>         let (p1, p2) = unsafe {
+>             let this = self.get_unchecked_mut();
+>             (
+>                 Pin::new_unchecked(&mut this.fut1),
+>                 Pin::new_unchecked(&mut this.fut2),
+>             )
+>         };
+> 
+>         if let Poll::Ready(out1) = p1.poll(cx) {
+>             return Poll::Ready(Either::Left(out1));
+>         }
+> 
+>         if let Poll::Ready(out2) = p2.poll(cx) {
+>             return Poll::Ready(Either::Right(out2));
+>         }
+> 
+>         Poll::Pending
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::time::Duration;
+> 
+>     #[tokio::test]
+>     async fn test_select2_left_wins() {
+>         let f1 = async {
+>             tokio::time::sleep(Duration::from_millis(5)).await;
+>             "LEFT_WIN"
+>         };
+>         let f2 = async {
+>             tokio::time::sleep(Duration::from_millis(100)).await;
+>             "RIGHT_WIN"
+>         };
+> 
+>         let res = Select2::new(f1, f2).await;
+>         assert_eq!(res, Either::Left("LEFT_WIN"));
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Structural Pin Projection**: `Select2` projects `Pin<&mut Select2<F1, F2>>` into `Pin<&mut F1>` and `Pin<&mut F2>`.
+> 2. **First-Completion Resolution**: Polling both projected futures inside `poll` returns `Poll::Ready(Either::Left)` or `Poll::Ready(Either::Right)` for whichever future completes first.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`async fn`](../level_10/async_fn.md) — Generates types that implement `Future`.
+> - [`await`](../level_10/await.md) — The keyword that drives a `Future` to completion.
+> - [`Executor / Runtime`](../level_10/executor_runtime.md) — The engine that calls `.poll()` on Futures.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - Every `async` computation in Rust is a struct implementing **`std::future::Future`**.
+> - A `Future` is a zero-cost **State Machine** — it contains no background threads or hidden runtime cost!
+> - The core method is **`poll()`**, which returns `Poll::Ready(value)` or `Poll::Pending`.
+> - It is **lazy**; it does nothing until polled by an **Executor** (like Tokio).
+> - When `Poll::Pending` is returned, the Future saves a **`Waker`** callback so Tokio knows when to wake it up again.
+> 

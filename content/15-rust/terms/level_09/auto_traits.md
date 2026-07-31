@@ -138,97 +138,430 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Diagnose the Missing Trait
-
-**Problem:** This code fails to compile with `Cell<i32> cannot be shared between threads safely`. Given that `Cell<T>` is intentionally **not** `Sync` (it allows unsynchronized interior mutation), explain *why* `Wrapper` inherits that restriction, using the auto-trait rule.
-
-```rust
-use std::cell::Cell;
-struct Wrapper { count: Cell<i32> }
-```
-
-> [!check]- Answer
-> `Sync` is an **auto trait**: the compiler implements it for `Wrapper` only if *every* field of `Wrapper` is itself `Sync`. Since `Cell<i32>` is deliberately excluded from `Sync` (sharing a `&Cell<T>` across threads with no synchronization would allow a data race on interior mutation), the auto-derivation check fails on that one field, and `Wrapper` **structurally** does not get a `Sync` implementation — with no explicit opt-out code required anywhere.
-
----
-
-### Exercise 2: Auto-Trait `Send` Propagation Verification
-
-**Problem:** Verify that a struct containing only `i32` and `String` automatically implements `Send`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Struct automatically implements Send
-> ```
-> ```rust
-> fn assert_send<T: Send>() {}
-> struct Person { name: String, age: u32 }
-> fn main() {
->     assert_send::<Person>();
->     println!("Struct automatically implements Send");
-> }
-> ```
->
-> **Explanation:** Auto-traits automatically propagate to composite structs if all member fields implement the auto-trait.
-
----
-
-### Exercise 3: Raw Pointer Auto-Trait Opt-Out \u2014 Proving `!Send` at Compile Time
+### Exercise 1: High-Performance Lock-Free Raw Pointer Buffer — Manually Restoring `Send` & `Sync` Auto Traits
 
 **Problem:**
-Raw pointers (`*const T`, `*mut T`) deliberately do **not** implement `Send` \u2014 because the compiler cannot verify whether the pointed-to memory is safe to access from another thread. This `!Send` propagates structurally to any struct that holds one.
+In high-performance concurrent systems, low-level data structures often wrap raw pointers (`*mut T` or `*const T`) to manage memory allocations manually without smart pointer overhead. However, raw pointers inherently do **not** implement `Send` or `Sync` because the compiler cannot automatically verify memory safety across thread boundaries. Consequently, any struct containing a raw pointer automatically loses `Send` and `Sync` auto traits via structural propagation.
 
-Do the following:
-1. Define `struct RawHolder(*const i32)`.
-2. Write `fn assert_send<T: Send>() {}` and call `assert_send::<RawHolder>()`. Show (in a comment) the compile error this produces.
-3. Then manually promise the safety invariant by writing `unsafe impl Send for RawHolder {}` and show the call compiles and the struct can be sent across a thread.
-4. Answer: **what invariant are you personally guaranteeing when you write `unsafe impl Send`?**
+Implement a thread-safe, lock-free heap allocation buffer `ThreadSafeRawBuffer<T>` wrapping a raw memory allocation `*mut T` and atomic write offset counter (`AtomicUsize`).
+1. Define `pub struct ThreadSafeRawBuffer<T>` holding raw allocation pointer `ptr: *mut T`, `capacity: usize`, and atomic tracker `written_count: AtomicUsize`.
+2. Override the auto trait stripping by writing conditional manual impls: `unsafe impl<T: Send> Send for ThreadSafeRawBuffer<T> {}` and `unsafe impl<T: Sync> Sync for ThreadSafeRawBuffer<T> {}`. Explain why the generic bounds `T: Send` and `T: Sync` are strictly required.
+3. Implement `push(&self, value: T) -> Result<usize, T>` using atomic operations (`fetch_add`) to reserve allocation slots safely across concurrent threads, and `get(&self, index: usize) -> Option<&T>` to provide shared reference access.
+4. Implement `Drop` for `ThreadSafeRawBuffer<T>` to properly call `ptr::drop_in_place` on all initialized elements and deallocate the raw backing memory safely.
+5. Write a comprehensive unit test suite in `#[cfg(test)] mod tests` verifying multi-threaded concurrent pushes via `Arc<ThreadSafeRawBuffer<i32>>`, capacity bounds checking, element retrieval, and drop safety.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> RawHolder safely sent to thread: 42
-> ```
->
-> - **Hint 1:** `assert_send::<RawHolder>()` without the `unsafe impl` produces `E0277: RawHolder cannot be sent between threads safely` \u2014 the compiler rejects it because `*const i32` is `!Send`, and the auto-trait rule propagates `!Send` to any struct holding it.
-> - **Hint 2:** `unsafe impl Send for RawHolder {}` is how you override the auto-trait. The `unsafe` keyword signals that *you*, not the compiler, are taking responsibility for correctness. The compiler cannot check whether the raw pointer invariant holds \u2014 it trusts your word.
-> - **Hint 3:** To actually send the struct across a thread with `thread::spawn`, you must use `move ||` \u2014 moving the `RawHolder` into the thread's closure. The spawn itself compiles only because `RawHolder: Send`.
->
 > ```rust
+> use std::alloc::{alloc, dealloc, Layout};
+> use std::ptr;
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> use std::sync::Arc;
 > use std::thread;
->
-> struct RawHolder(*const i32);
->
-> // assert_send::<RawHolder>(); // ❌ E0277 without the line below
->
-> // SAFETY: We guarantee that the pointed-to i32 lives for the entire
-> // duration of the thread and is not concurrently mutated by any other thread.
-> // The compiler cannot verify this — we are taking personal responsibility.
-> unsafe impl Send for RawHolder {}
->
-> fn assert_send<T: Send>() {}
->
-> fn main() {
->     let value: i32 = 42;
->     let holder = RawHolder(&raw const value);
->
->     // Now compiles because RawHolder: Send (via our unsafe impl).
->     assert_send::<RawHolder>();
->
->     let handle = thread::spawn(move || {
->         // SAFETY: `value` is on main's stack, main joins before value drops.
->         let n = unsafe { *holder.0 };
->         println!("RawHolder safely sent to thread: {}", n);
->     });
->     handle.join().unwrap();
+> 
+> pub struct ThreadSafeRawBuffer<T> {
+>     ptr: *mut T,
+>     capacity: usize,
+>     written_count: AtomicUsize,
+> }
+> 
+> // SAFETY: ThreadSafeRawBuffer can be sent across threads if T is Send,
+> // because moving ownership of the buffer transfers ownership of all contained T values.
+> unsafe impl<T: Send> Send for ThreadSafeRawBuffer<T> {}
+> 
+> // SAFETY: ThreadSafeRawBuffer can be shared via & across threads if T is Sync,
+> // because get() only returns immutable references (&T), which is safe if T: Sync.
+> unsafe impl<T: Sync> Sync for ThreadSafeRawBuffer<T> {}
+> 
+> impl<T> ThreadSafeRawBuffer<T> {
+>     pub fn new(capacity: usize) -> Self {
+>         assert!(capacity > 0, "Capacity must be greater than zero");
+>         let layout = Layout::array::<T>(capacity).expect("Failed to create layout");
+>         let raw_ptr = unsafe { alloc(layout) as *mut T };
+>         assert!(!raw_ptr.is_null(), "Memory allocation failed");
+> 
+>         Self {
+>             ptr: raw_ptr,
+>             capacity,
+>             written_count: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn push(&self, value: T) -> Result<usize, T> {
+>         let idx = self.written_count.fetch_add(1, Ordering::SeqCst);
+>         if idx >= self.capacity {
+>             return Err(value);
+>         }
+>         unsafe {
+>             ptr::write(self.ptr.add(idx), value);
+>         }
+>         Ok(idx)
+>     }
+> 
+>     pub fn get(&self, index: usize) -> Option<&T> {
+>         let count = self.written_count.load(Ordering::SeqCst);
+>         if index < count && index < self.capacity {
+>             unsafe { Some(&*self.ptr.add(index)) }
+>         } else {
+>             None
+>         }
+>     }
+> 
+>     pub fn len(&self) -> usize {
+>         let count = self.written_count.load(Ordering::SeqCst);
+>         count.min(self.capacity)
+>     }
+> 
+>     pub fn is_empty(&self) -> bool {
+>         self.len() == 0
+>     }
+> }
+> 
+> impl<T> Drop for ThreadSafeRawBuffer<T> {
+>     fn drop(&mut self) {
+>         let count = self.written_count.load(Ordering::SeqCst).min(self.capacity);
+>         for i in 0..count {
+>             unsafe {
+>                 ptr::drop_in_place(self.ptr.add(i));
+>             }
+>         }
+>         let layout = Layout::array::<T>(self.capacity).expect("Failed to create layout");
+>         unsafe {
+>             dealloc(self.ptr as *mut u8, layout);
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_thread_safe_raw_buffer_concurrent_push() {
+>         let buffer = Arc::new(ThreadSafeRawBuffer::<i32>::new(100));
+>         let mut handles = vec![];
+> 
+>         for i in 0..10 {
+>             let buf_clone = Arc::clone(&buffer);
+>             handles.push(thread::spawn(move || {
+>                 for j in 0..10 {
+>                     let val = i * 10 + j;
+>                     assert!(buf_clone.push(val).is_ok());
+>                 }
+>             }));
+>         }
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         assert_eq!(buffer.len(), 100);
+> 
+>         let mut sum = 0;
+>         for i in 0..100 {
+>             if let Some(&val) = buffer.get(i) {
+>                 sum += val;
+>             }
+>         }
+>         assert_eq!(sum, 4950);
+>     }
+> 
+>     #[test]
+>     fn test_capacity_overflow() {
+>         let buffer = ThreadSafeRawBuffer::<i32>::new(2);
+>         assert!(buffer.push(10).is_ok());
+>         assert!(buffer.push(20).is_ok());
+>         let res = buffer.push(30);
+>         assert!(res.is_err());
+>         assert_eq!(res.unwrap_err(), 30);
+>         assert_eq!(buffer.len(), 2);
+>     }
 > }
 > ```
->
-> **Answer to the invariant question:**
-> When you write `unsafe impl Send for RawHolder`, you are personally promising: *"I guarantee that no other thread will concurrently read or write the pointed-to memory in a way that would cause a data race, and that the memory will remain valid for the entire duration of the receiving thread's lifetime."* The compiler cannot check pointer lifetimes or aliasing across threads \u2014 `unsafe impl Send` is your signature on that contract.
+> 
+> **Explanation & Safety Analysis:**
+> 1. **Auto Trait Stripping:** Standard raw pointers (`*mut T`) do not implement `Send` or `Sync`. When embedded inside `ThreadSafeRawBuffer`, compiler auto-trait synthesis revokes `Send` and `Sync` for `ThreadSafeRawBuffer`.
+> 2. **Manual Auto Trait Restoration:** By writing `unsafe impl<T: Send> Send for ThreadSafeRawBuffer<T>` and `unsafe impl<T: Sync> Sync for ThreadSafeRawBuffer<T>`, we explicitly inform the compiler that transferring or sharing access to this raw allocation is safe across threads.
+> 3. **Conditional Trait Bounds:** We must strictly require `T: Send` for `Send` and `T: Sync` for `Sync`. If we omitted `T: Send`, a user could place non-thread-safe types (like `Rc<i32>`) into `ThreadSafeRawBuffer` and transfer it across threads, causing data races on reference counts.
+> 4. **Atomic Memory Ordering:** `AtomicUsize::fetch_add` guarantees unique array index reservation across worker threads without data races.
+
+---
+
+### Exercise 2: Thread-Bound Resource Confinement via `PhantomData` Auto-Trait Opt-Out (`!Send` / `!Sync`)
+
+**Problem:**
+Certain runtime components—such as thread-local GUI rendering handles, single-threaded database connection sockets, or unsynchronized memory arenas using `RefCell`—must be strictly confined to the OS thread that initialized them. If a struct's fields consist only of `Send`/`Sync` primitives (e.g. `usize`, `RefCell<Vec<T>>`), the compiler automatically implements `Send` and `Sync`, allowing developers to accidentally transfer or share the handle across threads via `std::thread::spawn` or `Arc`.
+
+To prevent accidental cross-thread transfer without depending on unstable nightly features (`impl !Send`), Rust applications utilize `PhantomData<*const ()>`. Because raw pointer `*const ()` is `!Send` and `!Sync`, placing `PhantomData<*const ()>` inside a struct forces the compiler's auto trait mechanism to structurally strip `Send` and `Sync` from the containing type.
+
+Construct a thread-local container `ThreadLocalArena<T>`:
+1. Define `pub struct ThreadLocalArena<T>` containing `data: RefCell<Vec<T>>`, `owner_thread: thread::ThreadId`, and `_marker: PhantomData<*const ()>`.
+2. Implement `new()`, `push(&self, item: T)`, `len(&self)`, and `is_empty(&self)`. In all access methods, verify that `thread::current().id() == self.owner_thread` with assertions.
+3. Write helper functions `fn check_send<T: Send>() -> bool` and `fn check_sync<T: Sync>() -> bool` to document compile-time auto trait bound assertions.
+4. Write a comprehensive unit test module in `#[cfg(test)] mod tests` verifying thread-local mutations, interior mutability via `RefCell`, thread ID verification, and structural `!Send`/`!Sync` auto trait opt-out guarantees.
+
+> [!check]- Answer
+> ```rust
+> use std::cell::RefCell;
+> use std::marker::PhantomData;
+> use std::thread::{self, ThreadId};
+> 
+> pub struct ThreadLocalArena<T> {
+>     data: RefCell<Vec<T>>,
+>     owner_thread: ThreadId,
+>     // PhantomData<*const ()> forces the compiler auto-trait system to strip Send and Sync
+>     _marker: PhantomData<*const ()>,
+> }
+> 
+> impl<T> ThreadLocalArena<T> {
+>     pub fn new() -> Self {
+>         Self {
+>             data: RefCell::new(Vec::new()),
+>             owner_thread: thread::current().id(),
+>             _marker: PhantomData,
+>         }
+>     }
+> 
+>     pub fn push(&self, item: T) {
+>         assert_eq!(
+>             thread::current().id(),
+>             self.owner_thread,
+>             "ThreadLocalArena accessed from un-owned thread!"
+>         );
+>         self.data.borrow_mut().push(item);
+>     }
+> 
+>     pub fn len(&self) -> usize {
+>         assert_eq!(
+>             thread::current().id(),
+>             self.owner_thread,
+>             "ThreadLocalArena accessed from un-owned thread!"
+>         );
+>         self.data.borrow().len()
+>     }
+> 
+>     pub fn is_empty(&self) -> bool {
+>         self.len() == 0
+>     }
+> 
+>     pub fn get_owner_thread(&self) -> ThreadId {
+>         self.owner_thread
+>     }
+> }
+> 
+> impl<T> Default for ThreadLocalArena<T> {
+>     fn default() -> Self {
+>         Self::new()
+>     }
+> }
+> 
+> // Helper compile-time assertion signatures
+> pub fn check_send<T: Send>() -> bool { true }
+> pub fn check_sync<T: Sync>() -> bool { true }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_thread_local_arena_operations() {
+>         let arena = ThreadLocalArena::<String>::new();
+>         arena.push("Rust".to_string());
+>         arena.push("Auto Traits".to_string());
+> 
+>         assert_eq!(arena.len(), 2);
+>         assert!(!arena.is_empty());
+>         assert_eq!(arena.get_owner_thread(), thread::current().id());
+>     }
+> 
+>     #[test]
+>     fn test_auto_trait_opt_out_verification() {
+>         let arena = ThreadLocalArena::<i32>::new();
+>         assert_eq!(arena.owner_thread, thread::current().id());
+> 
+>         // Un-commenting either of the following two lines will fail compilation with error E0277:
+>         // `*const ()` cannot be sent/shared between threads safely:
+>         //
+>         // check_send::<ThreadLocalArena<i32>>();
+>         // check_sync::<ThreadLocalArena<i32>>();
+>     }
+> 
+>     #[test]
+>     fn test_cross_thread_access_prevention() {
+>         let arena = ThreadLocalArena::<i32>::new();
+>         let owner_id = arena.get_owner_thread();
+>         let current_id = thread::current().id();
+>         assert_eq!(owner_id, current_id);
+>     }
+> }
+> ```
+> 
+> **Explanation & Safety Analysis:**
+> 1. **Structural Auto Trait Derivation:** `RefCell<Vec<T>>` is already `!Sync` due to non-atomic interior mutability. However, `RefCell<T>` is `Send` if `T: Send`. If we did not include `PhantomData<*const ()>`, `ThreadLocalArena<T>` would automatically inherit `Send`.
+> 2. **Zero-Cost Marker:** `PhantomData<*const ()>` consumes zero bytes of memory at runtime, but causes the compiler's auto trait resolver to see `*const ()`. Since `*const ()` implements neither `Send` nor `Sync`, the compiler revokes both `Send` and `Sync` from `ThreadLocalArena`.
+> 3. **Thread Safety Enforcement:** Stripping `Send` and `Sync` prevents developers from moving or sharing `ThreadLocalArena` into `thread::spawn` closures, eliminating potential `RefCell` borrow panics or unsynchronized data races across threads.
+> 
+---
+
+### Exercise 3: Multi-Threaded Task Pipeline with Auto Trait (`Send`, `Sync`, `UnwindSafe`) Panic Resilience
+
+**Problem:**
+When constructing multi-threaded asynchronous task processing engines or worker pools, tasks dispatched across thread boundaries must satisfy multiple compiler auto traits:
+- `Send`: Required to transfer task closures and payloads across thread channels.
+- `Sync`: Required when sharing pipeline metadata or task queues wrapped in `Arc<Mutex<T>>`.
+- `UnwindSafe`: Required when executing tasks inside `std::panic::catch_unwind` to prevent panic-induced state corruption.
+
+If a generic closure or field inside a task stage loses `UnwindSafe` auto-trait status (e.g. by capturing mutable references), `catch_unwind` will refuse to compile unless wrapped with `std::panic::AssertUnwindSafe`.
+
+Build a panic-resilient concurrent pipeline `ConcurrentPipeline<T>`:
+1. Define `pub struct ConcurrentPipeline<T>` containing task queue `tasks: Mutex<Vec<Box<dyn FnOnce() -> T + Send + 'static>>>`, `processed_count: AtomicU64`, and `panic_count: AtomicU64`.
+2. Implement `add_task<F>(&self, task: F)` where `F: FnOnce() -> T + Send + 'static`.
+3. Implement `execute_parallel(self: Arc<Self>, worker_count: usize) -> Vec<Result<T, String>>` that spawns `worker_count` OS threads, pops tasks, executes them inside `catch_unwind(AssertUnwindSafe(task_fn))`, and records success/panic metrics atomically.
+4. Implement `stats(&self) -> (u64, u64)` returning `(processed_count, panic_count)`.
+5. Write a comprehensive test module in `#[cfg(test)] mod tests` verifying multi-threaded batch task execution, panic isolation without thread crashing, atomic metrics updates, and auto trait safety bounds (`assert_eq!`, `matches!`).
+
+> [!check]- Answer
+> ```rust
+> use std::panic::{catch_unwind, AssertUnwindSafe};
+> use std::sync::atomic::{AtomicU64, Ordering};
+> use std::sync::{Arc, Mutex};
+> use std::thread;
+> 
+> pub struct ConcurrentPipeline<T> {
+>     tasks: Mutex<Vec<Box<dyn FnOnce() -> T + Send + 'static>>>,
+>     processed_count: AtomicU64,
+>     panic_count: AtomicU64,
+> }
+> 
+> impl<T: Send + 'static> ConcurrentPipeline<T> {
+>     pub fn new() -> Self {
+>         Self {
+>             tasks: Mutex::new(Vec::new()),
+>             processed_count: AtomicU64::new(0),
+>             panic_count: AtomicU64::new(0),
+>         }
+>     }
+> 
+>     pub fn add_task<F>(&self, task: F)
+>     where
+>         F: FnOnce() -> T + Send + 'static,
+>     {
+>         let mut tasks = self.tasks.lock().unwrap();
+>         tasks.push(Box::new(task));
+>     }
+> 
+>     pub fn execute_parallel(self: Arc<Self>, worker_count: usize) -> Vec<Result<T, String>> {
+>         let mut handles = vec![];
+> 
+>         for _ in 0..worker_count {
+>             let pipeline_clone = Arc::clone(&self);
+>             let handle = thread::spawn(move || {
+>                 let mut results = vec![];
+>                 loop {
+>                     let task = {
+>                         let mut tasks = pipeline_clone.tasks.lock().unwrap();
+>                         tasks.pop()
+>                     };
+> 
+>                     match task {
+>                         Some(task_fn) => {
+>                             // UnwindSafe auto trait check: AssertUnwindSafe explicitly asserts
+>                             // that catching panics inside the task function is safe.
+>                             let res = catch_unwind(AssertUnwindSafe(task_fn));
+>                             match res {
+>                                 Ok(val) => {
+>                                     pipeline_clone.processed_count.fetch_add(1, Ordering::SeqCst);
+>                                     results.push(Ok(val));
+>                                 }
+>                                 Err(_) => {
+>                                     pipeline_clone.panic_count.fetch_add(1, Ordering::SeqCst);
+>                                     results.push(Err("Task panicked during execution".to_string()));
+>                                 }
+>                             }
+>                         }
+>                         None => break,
+>                     }
+>                 }
+>                 results
+>             });
+>             handles.push(handle);
+>         }
+> 
+>         let mut all_results = vec![];
+>         for handle in handles {
+>             if let Ok(res_list) = handle.join() {
+>                 all_results.extend(res_list);
+>             }
+>         }
+>         all_results
+>     }
+> 
+>     pub fn stats(&self) -> (u64, u64) {
+>         (
+>             self.processed_count.load(Ordering::SeqCst),
+>             self.panic_count.load(Ordering::SeqCst),
+>         )
+>     }
+> }
+> 
+> impl<T: Send + 'static> Default for ConcurrentPipeline<T> {
+>     fn default() -> Self {
+>         Self::new()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrent_pipeline_execution() {
+>         let pipeline = Arc::new(ConcurrentPipeline::<i32>::new());
+> 
+>         for i in 1..=10 {
+>             pipeline.add_task(move || i * 2);
+>         }
+> 
+>         let results = Arc::clone(&pipeline).execute_parallel(4);
+>         assert_eq!(results.len(), 10);
+> 
+>         let (success_count, panic_count) = pipeline.stats();
+>         assert_eq!(success_count, 10);
+>         assert_eq!(panic_count, 0);
+> 
+>         let sum: i32 = results.into_iter().map(|r| r.unwrap()).sum();
+>         assert_eq!(sum, 110);
+>     }
+> 
+>     #[test]
+>     fn test_pipeline_panic_resilience() {
+>         let pipeline = Arc::new(ConcurrentPipeline::<i32>::new());
+> 
+>         pipeline.add_task(|| 42);
+>         pipeline.add_task(|| panic!("Intentionally panicked task!"));
+>         pipeline.add_task(|| 100);
+> 
+>         let results = Arc::clone(&pipeline).execute_parallel(2);
+>         assert_eq!(results.len(), 3);
+> 
+>         let (success_count, panic_count) = pipeline.stats();
+>         assert_eq!(success_count, 2);
+>         assert_eq!(panic_count, 1);
+> 
+>         let panics: Vec<_> = results.iter().filter(|r| r.is_err()).collect();
+>         assert_eq!(panics.len(), 1);
+>         assert!(matches!(panics[0], Err(ref msg) if msg.contains("panicked")));
+>     }
+> }
+> ```
+> 
+> **Explanation & Safety Analysis:**
+> 1. **Auto Trait Interaction:** `ConcurrentPipeline<T>` relies on auto-derived `Send` and `Sync`. Because `Mutex<T>` is `Send + Sync` when `T: Send`, `AtomicU64` is `Send + Sync`, and task closures carry trait bounds `Send + 'static`, the compiler automatically derives `Send` and `Sync` for `ConcurrentPipeline<T>`.
+> 2. **UnwindSafe Auto Trait:** `std::panic::UnwindSafe` is an auto trait that marks types safe to cross a `catch_unwind` boundary. Closures wrapping arbitrary logic may not automatically implement `UnwindSafe`. Using `AssertUnwindSafe(task_fn)` explicitly satisfies `catch_unwind` bounds while isolating worker threads from task panics.
+> 3. **Concurrency Synchronization:** Worker threads acquire task closures from `Mutex<Vec<...>>` safely and update execution counters atomically (`AtomicU64`), preventing data races under high parallel throughput.
 
 ---
 

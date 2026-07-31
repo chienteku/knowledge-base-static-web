@@ -164,62 +164,366 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Silent Program
+### Exercise 1: Parallel Chunked Task Processing with Panic Safety
 
-**Problem:** You write a program that spawns a thread to calculate a massive prime number. You run the program, and it immediately exits without printing anything. What critical function call did you forget to add to the bottom of your `main()` function?
+**Problem:**
+Build a resilient parallel compute engine `parallel_map_reduce` that splits a dataset `Vec<T>` into worker chunks of size `chunk_size`, spawns OS threads using `std::thread::spawn` to map each chunk concurrently, and joins the threads to aggregate partial results. If any worker thread panics, the engine must safely intercept the panic payload via `JoinHandle::join()`, extract the panic error message, and return `Err(String)` without unwinding the main thread.
 
 > [!check]- Answer
-> You forgot to call **`.join().unwrap()`** on the thread handle! 
->
-> Because you didn't tell the main thread to wait, the main thread instantly hit the end of the file and exited, which automatically kills all spawned threads before they have a chance to finish their math.
+> ```rust
+> use std::sync::Arc;
+> use std::thread;
+> 
+> pub fn parallel_map_reduce<T, R, F, G>(
+>     data: Vec<T>,
+>     chunk_size: usize,
+>     map_fn: F,
+>     reduce_fn: G,
+>     initial: R,
+> ) -> Result<R, String>
+> where
+>     T: Send + 'static,
+>     R: Send + 'static,
+>     F: Fn(Vec<T>) -> R + Send + Sync + 'static,
+>     G: Fn(R, R) -> R,
+> {
+>     if data.is_empty() {
+>         return Ok(initial);
+>     }
+>     if chunk_size == 0 {
+>         return Err("chunk_size must be greater than zero".to_string());
+>     }
+> 
+>     let map_fn = Arc::new(map_fn);
+>     let mut handles = Vec::new();
+> 
+>     let mut current_chunk = Vec::with_capacity(chunk_size);
+>     for item in data {
+>         current_chunk.push(item);
+>         if current_chunk.len() == chunk_size {
+>             let chunk = std::mem::replace(&mut current_chunk, Vec::with_capacity(chunk_size));
+>             let map_ref = Arc::clone(&map_fn);
+>             handles.push(thread::spawn(move || map_ref(chunk)));
+>         }
+>     }
+>     if !current_chunk.is_empty() {
+>         let map_ref = Arc::clone(&map_fn);
+>         handles.push(thread::spawn(move || map_ref(current_chunk)));
+>     }
+> 
+>     let mut acc = initial;
+>     for handle in handles {
+>         match handle.join() {
+>             Ok(partial_res) => {
+>                 acc = reduce_fn(acc, partial_res);
+>             }
+>             Err(panic_payload) => {
+>                 let err_msg = if let Some(s) = panic_payload.downcast_ref::<&str>() {
+>                     s.to_string()
+>                 } else if let Some(s) = panic_payload.downcast_ref::<String>() {
+>                     s.clone()
+>                 } else {
+>                     "Thread panicked with non-string payload".to_string()
+>                 };
+>                 return Err(format!("Worker thread panicked: {}", err_msg));
+>             }
+>         }
+>     }
+> 
+>     Ok(acc)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parallel_map_reduce_success() {
+>         let numbers: Vec<i64> = (1..=100).collect();
+>         let result = parallel_map_reduce(
+>             numbers,
+>             25,
+>             |chunk| chunk.into_iter().map(|x| x * x).sum::<i64>(),
+>             |acc, val| acc + val,
+>             0,
+>         );
+>         assert!(result.is_ok());
+>         assert_eq!(result.unwrap(), 338350);
+>     }
+> 
+>     #[test]
+>     fn test_parallel_map_reduce_panic_propagation() {
+>         let numbers: Vec<i32> = vec![1, 2, 3, 0, 5, 6];
+>         let result = parallel_map_reduce(
+>             numbers,
+>             2,
+>             |chunk| {
+>                 chunk.into_iter().map(|x| {
+>                     if x == 0 {
+>                         panic!("Division by zero encountered!");
+>                     }
+>                     100 / x
+>                 }).sum::<i32>()
+>             },
+>             |acc, val| acc + val,
+>             0,
+>         );
+>         assert!(result.is_err());
+>         let err = result.unwrap_err();
+>         assert!(err.contains("Division by zero encountered!"));
+>     }
+> 
+>     #[test]
+>     fn test_empty_input_and_zero_chunk() {
+>         let empty: Vec<i32> = vec![];
+>         let res_empty = parallel_map_reduce(empty, 5, |c| c.len(), |a, b| a + b, 0);
+>         assert_eq!(res_empty.unwrap(), 0);
+> 
+>         let data = vec![1, 2, 3];
+>         let res_zero = parallel_map_reduce(data, 0, |c| c.len(), |a, b| a + b, 0);
+>         assert!(res_zero.is_err());
+>     }
+> }
+> ```
+> 
+> **Explanation:**
+> 1. **Data Partitioning**: The input vector is dynamically grouped into fixed-size chunks using memory replacement without requiring elements `T` to implement `Clone`.
+> 2. **Thread Spawning with `Arc`**: `Arc::clone` safely shares immutable references to `map_fn` across threads while satisfying `'static` lifetime requirements.
+> 3. **Panic Extraction**: When `handle.join()` returns `Err(Box<dyn Any + Send>)`, `downcast_ref` attempts to downcast the payload first to `&str` and then to `String` to construct a descriptive error message.
 
 ---
 
-### Exercise 2: Waiting for Thread Completion with `.join()`
+### Exercise 2: Multi-Stage Pipeline with Thread Builder & MPSC Streaming
 
-**Problem:** Spawn a thread returning `42` and retrieve the result using `handle.join().unwrap()`.
+**Problem:**
+Design a multi-stage streaming pipeline using `std::thread::Builder` and `std::sync::mpsc` channels. 
+- Stage 1 (`Producer` thread named `"stage-producer"` with 2 MB stack size) processes raw log strings, filters out empty lines, attaches sequence numbers, and streams them into an `mpsc::channel`.
+- Stage 2 (`Aggregator` thread named `"stage-aggregator"` with 2 MB stack size) receives records from the channel, counts total valid records and error instances containing `"[ERROR]"` or `"[FATAL]"`, and returns aggregated metrics.
+- The pipeline function must join both threads and return `PipelineStats`.
 
-**Expected output:**
 > [!check]- Answer
-> ```
-> Thread returned: 42
-> ```
 > ```rust
+> use std::sync::mpsc;
 > use std::thread;
-> fn main() {
->     let handle = thread::spawn(|| 42);
->     let res = handle.join().unwrap();
->     println!("Thread returned: {}", res);
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct PipelineStats {
+>     pub total_processed: usize,
+>     pub error_count: usize,
+>     pub thread_names_verified: bool,
+> }
+> 
+> pub fn run_log_pipeline(logs: Vec<String>) -> Result<PipelineStats, String> {
+>     let (tx_producer, rx_worker) = mpsc::channel::<(usize, String)>();
+> 
+>     let producer_builder = thread::Builder::new()
+>         .name("stage-producer".to_string())
+>         .stack_size(2 * 1024 * 1024);
+> 
+>     let producer_handle = producer_builder
+>         .spawn(move || {
+>             let current_thread = thread::current();
+>             let thread_name = current_thread.name().unwrap_or("").to_string();
+>             
+>             let mut seq = 0;
+>             for log in logs {
+>                 if !log.trim().is_empty() {
+>                     seq += 1;
+>                     if tx_producer.send((seq, log)).is_err() {
+>                         break;
+>                     }
+>                 }
+>             }
+>             thread_name
+>         })
+>         .map_err(|e| format!("Failed to spawn producer thread: {}", e))?;
+> 
+>     let aggregator_builder = thread::Builder::new()
+>         .name("stage-aggregator".to_string())
+>         .stack_size(2 * 1024 * 1024);
+> 
+>     let aggregator_handle = aggregator_builder
+>         .spawn(move || {
+>             let current_thread = thread::current();
+>             let thread_name = current_thread.name().unwrap_or("").to_string();
+> 
+>             let mut total_processed = 0;
+>             let mut error_count = 0;
+> 
+>             for (_seq, log_line) in rx_worker {
+>                 total_processed += 1;
+>                 if log_line.contains("[ERROR]") || log_line.contains("[FATAL]") {
+>                     error_count += 1;
+>                 }
+>             }
+> 
+>             let stats = PipelineStats {
+>                 total_processed,
+>                 error_count,
+>                 thread_names_verified: false,
+>             };
+>             (thread_name, stats)
+>         })
+>         .map_err(|e| format!("Failed to spawn aggregator thread: {}", e))?;
+> 
+>     let prod_name = producer_handle.join().map_err(|_| "Producer thread panicked".to_string())?;
+>     let (agg_name, mut stats) = aggregator_handle.join().map_err(|_| "Aggregator thread panicked".to_string())?;
+> 
+>     stats.thread_names_verified = prod_name == "stage-producer" && agg_name == "stage-aggregator";
+>     Ok(stats)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_log_pipeline_execution() {
+>         let raw_logs = vec![
+>             "[INFO] Service started".to_string(),
+>             "".to_string(),
+>             "[ERROR] Database connection failed".to_string(),
+>             "   ".to_string(),
+>             "[WARN] High memory usage".to_string(),
+>             "[FATAL] System out of memory".to_string(),
+>         ];
+> 
+>         let stats = run_log_pipeline(raw_logs).expect("Pipeline failed");
+> 
+>         assert_eq!(stats.total_processed, 4);
+>         assert_eq!(stats.error_count, 2);
+>         assert!(stats.thread_names_verified);
+>     }
+> 
+>     #[test]
+>     fn test_log_pipeline_empty_logs() {
+>         let raw_logs: Vec<String> = vec![];
+>         let stats = run_log_pipeline(raw_logs).expect("Pipeline failed");
+> 
+>         assert_eq!(stats.total_processed, 0);
+>         assert_eq!(stats.error_count, 0);
+>         assert!(stats.thread_names_verified);
+>     }
 > }
 > ```
->
-> **Explanation:** `JoinHandle::join` blocks until the target thread terminates, returning `Result<T, Box<dyn Any>>`.
+> 
+> **Explanation:**
+> 1. **Thread Customization**: `std::thread::Builder` configures thread OS names and allocates 2 MB custom stack size per worker thread.
+> 2. **Streaming Synchronization**: `tx_producer` sends tuple items `(seq, log)` across the channel. When the producer thread finishes and drops `tx_producer`, the `rx_worker` iterator terminates cleanly.
+> 3. **Validation**: Thread metadata is queried inside worker closures via `thread::current().name()` and verified in unit tests.
 
 ---
 
-### Exercise 3: Setting Custom Thread Names
+### Exercise 3: Dynamic Task Batch Dispatcher with Atomic Metrics and Panic Interception
 
-**Problem:** Use `std::thread::Builder::new().name("worker".into())` to spawn a named thread.
+**Problem:**
+Implement a resilient task dispatch manager `execute_task_batch` that accepts a vector of dynamic heap-allocated task closures (`Box<dyn FnOnce() -> String + Send + 'static>`). Spawn an OS worker thread for each task using `thread::Builder`, track completion status using atomic counters (`AtomicUsize`), capture panicked tasks using `JoinHandle::join()`, and aggregate completed outputs into an `ExecutionReport`.
 
-**Expected output:**
 > [!check]- Answer
-> ```
-> Named thread spawned
-> ```
 > ```rust
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> use std::sync::Arc;
 > use std::thread;
-> fn main() {
->     let handle = thread::Builder::new()
->         .name("worker".into())
->         .spawn(|| println!("Named thread spawned"))
->         .unwrap();
->     handle.join().unwrap();
+> 
+> pub struct ExecutionReport {
+>     pub succeeded_count: usize,
+>     pub failed_count: usize,
+>     pub outputs: Vec<String>,
+>     pub total_tasks: usize,
+> }
+> 
+> pub type TaskClosure = Box<dyn FnOnce() -> String + Send + 'static>;
+> 
+> pub fn execute_task_batch(tasks: Vec<TaskClosure>) -> ExecutionReport {
+>     let total_tasks = tasks.len();
+>     let completed_counter = Arc::new(AtomicUsize::new(0));
+>     let failed_counter = Arc::new(AtomicUsize::new(0));
+> 
+>     let mut handles = Vec::with_capacity(total_tasks);
+> 
+>     for (idx, task) in tasks.into_iter().enumerate() {
+>         let completed_clone = Arc::clone(&completed_counter);
+>         let failed_clone = Arc::clone(&failed_counter);
+> 
+>         let handle = thread::Builder::new()
+>             .name(format!("worker-task-{}", idx))
+>             .spawn(move || {
+>                 let res = task();
+>                 completed_clone.fetch_add(1, Ordering::SeqCst);
+>                 res
+>             })
+>             .expect("Failed to spawn worker thread");
+> 
+>         handles.push((handle, failed_clone));
+>     }
+> 
+>     let mut outputs = Vec::new();
+> 
+>     for (handle, failed_ref) in handles {
+>         match handle.join() {
+>             Ok(output) => {
+>                 outputs.push(output);
+>             }
+>             Err(_) => {
+>                 failed_ref.fetch_add(1, Ordering::SeqCst);
+>             }
+>         }
+>     }
+> 
+>     let succeeded_count = completed_counter.load(Ordering::SeqCst);
+>     let failed_count = failed_counter.load(Ordering::SeqCst);
+> 
+>     ExecutionReport {
+>         succeeded_count,
+>         failed_count,
+>         outputs,
+>         total_tasks,
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_task_batch_execution_success_and_panic() {
+>         let tasks: Vec<TaskClosure> = vec![
+>             Box::new(|| "Task 1 complete".to_string()),
+>             Box::new(|| panic!("Task 2 forced crash")),
+>             Box::new(|| "Task 3 complete".to_string()),
+>         ];
+> 
+>         let report = execute_task_batch(tasks);
+> 
+>         assert_eq!(report.total_tasks, 3);
+>         assert_eq!(report.succeeded_count, 2);
+>         assert_eq!(report.failed_count, 1);
+>         assert_eq!(report.outputs.len(), 2);
+>         assert!(report.outputs.contains(&"Task 1 complete".to_string()));
+>         assert!(report.outputs.contains(&"Task 3 complete".to_string()));
+>     }
+> 
+>     #[test]
+>     fn test_empty_task_batch() {
+>         let tasks: Vec<TaskClosure> = vec![];
+>         let report = execute_task_batch(tasks);
+> 
+>         assert_eq!(report.total_tasks, 0);
+>         assert_eq!(report.succeeded_count, 0);
+>         assert_eq!(report.failed_count, 0);
+>         assert!(report.outputs.is_empty());
+>     }
 > }
 > ```
->
-> **Explanation:** `thread::Builder` configures thread stack sizes and OS thread names.
+> 
+> **Explanation:**
+> 1. **Dynamic Task Trait Objects**: Tasks are boxed closures satisfying `FnOnce() -> String + Send + 'static`, permitting execution of heterogeneous dynamic closures across thread boundaries.
+> 2. **Atomic Synchronization**: `AtomicUsize::fetch_add` with `Ordering::SeqCst` provides thread-safe execution tracking without lock contention overhead.
+> 3. **Fault Isolation**: The caller thread joins worker handles sequentially. If a worker panics, `handle.join()` captures the panic `Err`, incrementing the `failed_counter` while successful outputs are preserved.
 
 ---
 

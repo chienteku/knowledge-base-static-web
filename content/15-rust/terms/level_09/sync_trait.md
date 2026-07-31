@@ -158,75 +158,352 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Thread-Safe Alternative
+### Exercise 1: High-Throughput Telemetry System with Atomic `Sync` Guarantees
 
-**Problem:** `RefCell<T>` allows Interior Mutability (modifying data through an immutable reference). However, it is not `Sync`, so you can't share it across threads. There is another type in Rust that also allows Interior Mutability, but uses OS-level locking mechanisms to ensure only one thread can mutate the data at a time. Because it is safe, the compiler explicitly marks it as `Sync`. What is the name of this type?
+**Problem:**  
+In a multi-threaded web server framework, worker threads concurrently record runtime metrics (request counts, error counters, and status updates) via shared references `&MetricsCollector`. Standard cell types like `RefCell<T>` cannot be shared across threads because `RefCell` does not implement `Sync`. 
+
+Implement a thread-safe telemetry collector `MetricsCollector` that uses atomic types (`AtomicU64`, `AtomicBool`) so that all fields automatically satisfy the compiler's `Sync` auto-trait requirement. Include methods `record_request(&self)`, `record_error(&self)`, `get_metrics(&self) -> (u64, u64)`, and `deactivate(&self)`. Write unit tests verifying that concurrent calls from 10 spawned threads accurately increment counters across shared references without data races or locking overhead.
 
 > [!check]- Answer
-> **`Mutex<T>`**!
->
-> A Mutex (Mutual Exclusion) does exactly what `RefCell` does, but it is thread-safe. When you want to share mutable data across threads, you wrap it in a `Mutex`, which gives it the `Sync` trait!
-
----
-
-### Exercise 2: Verifying `Sync` Trait Bounds
-
-**Problem:** Verify that `Mutex<i32>` implements `Sync` by passing `&Mutex<i32>` to multiple threads.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Mutex implements Sync
-> ```
 > ```rust
-> use std::sync::Mutex;
+> use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+> use std::sync::Arc;
+> use std::thread;
+> 
+> /// A high-throughput telemetry collector safe to share across threads via `&MetricsCollector`.
+> pub struct MetricsCollector {
+>     request_count: AtomicU64,
+>     error_count: AtomicU64,
+>     is_active: AtomicBool,
+> }
+> 
+> impl MetricsCollector {
+>     pub fn new() -> Self {
+>         Self {
+>             request_count: AtomicU64::new(0),
+>             error_count: AtomicU64::new(0),
+>             is_active: AtomicBool::new(true),
+>         }
+>     }
+> 
+>     pub fn record_request(&self) {
+>         if self.is_active.load(Ordering::Relaxed) {
+>             self.request_count.fetch_add(1, Ordering::Relaxed);
+>         }
+>     }
+> 
+>     pub fn record_error(&self) {
+>         if self.is_active.load(Ordering::Relaxed) {
+>             self.error_count.fetch_add(1, Ordering::Relaxed);
+>         }
+>     }
+> 
+>     pub fn get_metrics(&self) -> (u64, u64) {
+>         (
+>             self.request_count.load(Ordering::Relaxed),
+>             self.error_count.load(Ordering::Relaxed),
+>         )
+>     }
+> 
+>     pub fn deactivate(&self) {
+>         self.is_active.store(false, Ordering::Relaxed);
+>     }
+> }
+> 
+> /// Compile-time check asserting that `T` implements `Sync`.
 > fn assert_sync<T: Sync>() {}
-> fn main() {
->     assert_sync::<Mutex<i32>>();
->     println!("Mutex implements Sync");
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrent_metrics_collection() {
+>         // Validate at compile time that MetricsCollector is Sync
+>         assert_sync::<MetricsCollector>();
+> 
+>         let collector = Arc::new(MetricsCollector::new());
+>         let mut handles = vec![];
+> 
+>         // Spawn 10 concurrent worker threads sharing &MetricsCollector via Arc
+>         for i in 0..10 {
+>             let collector_ref = Arc::clone(&collector);
+>             let handle = thread::spawn(move || {
+>                 for _ in 0..100 {
+>                     collector_ref.record_request();
+>                 }
+>                 if i % 2 == 0 {
+>                     collector_ref.record_error();
+>                 }
+>             });
+>             handles.push(handle);
+>         }
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         let (requests, errors) = collector.get_metrics();
+>         assert_eq!(requests, 1000);
+>         assert_eq!(errors, 5);
+> 
+>         // Verify deactivation stops recording
+>         collector.deactivate();
+>         collector.record_request();
+>         let (requests_after, _) = collector.get_metrics();
+>         assert_eq!(requests_after, 1000);
+>     }
 > }
 > ```
->
-> **Explanation:** `Sync` indicates that references `&T` can be safely shared across concurrent threads.
+> 
+> **Explanation:**
+> 1. **Auto-Trait Mechanics:** `MetricsCollector` contains `AtomicU64` and `AtomicBool`. Since all composite fields implement `Sync`, the compiler automatically derives `Sync` for `MetricsCollector`.
+> 2. **Shared Mutation (`&self`):** Atomic types provide lock-free interior mutability using CPU hardware atomic instructions (`fetch_add`, `store`, `load`). Because mutation occurs through immutable references `&self`, sharing `&MetricsCollector` across worker threads is completely thread-safe.
+> 3. **Validation:** `assert_sync::<MetricsCollector>()` statically verifies the trait bound `T: Sync`.
 
 ---
 
-### Exercise 3: Relationship Between `Send` and `Sync`
+### Exercise 2: Concurrent Sharded In-Memory Cache with `RwLock` and `Sync` Bounds
 
-**Problem:** Demonstrate that `&T` implements `Send` if and only if `T` implements `Sync`.
+**Problem:**  
+In read-heavy application services, global locks create lock contention across worker threads. A common pattern is a sharded key-value cache `ShardedCache<K, V, const SHARDS: usize>`, where key-value entries are partitioned across an array of `RwLock<HashMap<K, V>>` shards.
 
-**Expected output:**
+Implement a generic `ShardedCache<K, V, SHARDS>` struct that allows multiple concurrent readers to access different shards via `&ShardedCache`. Explain why `ShardedCache<K, V>` automatically implements `Sync` when `K: Send + Sync` and `V: Send + Sync`. Write a comprehensive unit test suite where 8 parallel threads concurrently read and write entries across shards, using `assert_eq!` to verify stored values and thread safety.
+
 > [!check]- Answer
-> ```
-> Sync relationship verified
-> ```
 > ```rust
-> fn assert_send<T: Send>() {}
-> fn check_sync<T: Sync>() { assert_send::<&T>(); }
-> fn main() {
->     check_sync::<i32>();
->     println!("Sync relationship verified");
+> use std::collections::hash_map::DefaultHasher;
+> use std::collections::HashMap;
+> use std::hash::{Hash, Hasher};
+> use std::sync::{Arc, RwLock};
+> use std::thread;
+> 
+> /// A high-concurrency sharded key-value cache.
+> pub struct ShardedCache<K, V, const SHARDS: usize = 16> {
+>     shards: [RwLock<HashMap<K, V>>; SHARDS],
+> }
+> 
+> impl<K: Hash + Eq, V: Clone, const SHARDS: usize> ShardedCache<K, V, SHARDS> {
+>     pub fn new() -> Self {
+>         let shards = std::array::from_fn(|_| RwLock::new(HashMap::new()));
+>         Self { shards }
+>     }
+> 
+>     fn get_shard_index(&self, key: &K) -> usize {
+>         let mut hasher = DefaultHasher::new();
+>         key.hash(&mut hasher);
+>         (hasher.finish() as usize) % SHARDS
+>     }
+> 
+>     pub fn insert(&self, key: K, value: V) {
+>         let idx = self.get_shard_index(&key);
+>         let mut guard = self.shards[idx].write().expect("RwLock poisoned");
+>         guard.insert(key, value);
+>     }
+> 
+>     pub fn get(&self, key: &K) -> Option<V> {
+>         let idx = self.get_shard_index(key);
+>         let guard = self.shards[idx].read().expect("RwLock poisoned");
+>         guard.get(key).cloned()
+>     }
+> }
+> 
+> fn assert_sync<T: Sync>() {}
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_sharded_cache_sync_concurrency() {
+>         assert_sync::<ShardedCache<String, u64, 8>>();
+> 
+>         let cache = Arc::new(ShardedCache::<String, u64, 8>::new());
+> 
+>         // Pre-populate initial cache state
+>         for i in 0..100 {
+>             cache.insert(format!("key_{i}"), i);
+>         }
+> 
+>         let mut handles = vec![];
+> 
+>         // Spawn 8 reader threads accessing shared references `&ShardedCache`
+>         for thread_idx in 0..8 {
+>             let cache_ref = Arc::clone(&cache);
+>             handles.push(thread::spawn(move || {
+>                 for i in 0..100 {
+>                     let key = format!("key_{i}");
+>                     let val = cache_ref.get(&key);
+>                     assert_eq!(val, Some(i));
+>                 }
+>                 cache_ref.insert(format!("thread_{thread_idx}"), thread_idx as u64);
+>             }));
+>         }
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         for thread_idx in 0..8 {
+>             let val = cache.get(&format!("thread_{thread_idx}"));
+>             assert_eq!(val, Some(thread_idx as u64));
+>             assert_ne!(val, None);
+>         }
+>     }
 > }
 > ```
->
-> **Explanation:** By definition, `T` is `Sync` if and only if `&T` is `Send`.
+> 
+> **Explanation:**
+> 1. **Trait Derivation Requirements:** `RwLock<T>` is `Sync` if and only if `T: Send + Sync`. Because `HashMap<K, V>` stores `K` and `V`, `ShardedCache<K, V>` automatically inherits `Sync` whenever `K: Send + Sync` and `V: Send + Sync`.
+> 2. **Concurrent Reading:** Multiple threads hold immutable references `&ShardedCache` simultaneously. Inside `get()`, acquire `RwLock::read()` allows parallel concurrent read access across threads without exclusive locking.
+> 3. **Reduced Contention:** Partitioning data into `SHARDS` minimizes thread locking bottlenecks under high reader/writer concurrency.
 
 ---
 
-## 6. Related Terms
+### Exercise 3: Manual `Sync` Implementation for an UnsafeCell Sequence Buffer
 
-- [`Send` Trait](../level_09/send_trait.md) — The sister trait for *moving* data.
-- [`Arc<T>`](../level_03/arc_t.md) — Requires its inner type `T` to be both `Send` and `Sync` to safely share data across threads.
-- [`Mutex<T>`](../level_09/mutex_t.md) — The thread-safe alternative to `RefCell` that *is* `Sync`.
+**Problem:**  
+Rust's compiler automatically marks types containing `UnsafeCell<T>` as `!Sync` because `UnsafeCell` provides raw interior mutability without synchronization. However, low-level lock-free data structures can use `UnsafeCell` safely if thread synchronization is enforced via atomic operations and release/acquire memory orderings.
 
----
+Implement a fixed-capacity sequence buffer `AtomicSeqBuffer<T, const N: usize>` backed by `UnsafeCell`. Because `UnsafeCell` disables auto-derived `Sync`, explicitly write `unsafe impl<T: Send, const N: usize> Sync for AtomicSeqBuffer<T, N>`. Explain the exact safety invariants required for this `unsafe impl`. Write a unit test module testing multi-producer insertion across threads, validating index allocation, bounded slot checks (`matches!`), and element retrieval assertions.
 
-## 7. Key Takeaways
-
-- **`Sync`** proves a type can be safely referenced (`&T`) by multiple threads simultaneously.
-- A type `T` is `Sync` if and only if `&T` is `Send`.
-- Most primitive types and immutable structs are automatically `Sync` because immutable reads are always thread-safe.
-- Types with non-thread-safe Interior Mutability (like `RefCell<T>`) are *not* `Sync`.
-- **`Send` is for moving; `Sync` is for sharing.**
+> [!check]- Answer
+> ```rust
+> use std::cell::UnsafeCell;
+> use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+> use std::sync::Arc;
+> use std::thread;
+> 
+> pub struct AtomicSlot<T> {
+>     data: UnsafeCell<Option<T>>,
+>     written: AtomicBool,
+> }
+> 
+> pub struct AtomicSeqBuffer<T, const N: usize> {
+>     slots: [AtomicSlot<T>; N],
+>     next_index: AtomicUsize,
+> }
+> 
+> // SAFETY: UnsafeCell is !Sync by default. We manually implement Sync because:
+> // 1. `next_index` uses AtomicUsize::fetch_add to guarantee each producer thread receives a unique index.
+> // 2. Write synchronization is guarded by `written.store(true, Ordering::Release)`.
+> // 3. Readers check `written.load(Ordering::Acquire)` before dereferencing `UnsafeCell`.
+> // 4. Requirement: T must be Send because values produced by one thread may be read by another.
+> unsafe impl<T: Send, const N: usize> Sync for AtomicSeqBuffer<T, N> {}
+> unsafe impl<T: Send, const N: usize> Send for AtomicSeqBuffer<T, N> {}
+> 
+> impl<T, const N: usize> AtomicSeqBuffer<T, N> {
+>     pub fn new() -> Self {
+>         let slots = std::array::from_fn(|_| AtomicSlot {
+>             data: UnsafeCell::new(None),
+>             written: AtomicBool::new(false),
+>         });
+>         Self {
+>             slots,
+>             next_index: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn push(&self, value: T) -> Result<usize, T> {
+>         let idx = self.next_index.fetch_add(1, Ordering::SeqCst);
+>         if idx >= N {
+>             return Err(value);
+>         }
+> 
+>         // SAFETY: `idx` is unique across threads due to atomic fetch_add. No concurrent writes occur on this slot.
+>         unsafe {
+>             let slot_ptr = self.slots[idx].data.get();
+>             *slot_ptr = Some(value);
+>         }
+> 
+>         // Publish slot initialization to reader threads with Release ordering
+>         self.slots[idx].written.store(true, Ordering::Release);
+>         Ok(idx)
+>     }
+> 
+>     pub fn get(&self, index: usize) -> Option<&T> {
+>         if index >= N {
+>             return None;
+>         }
+> 
+>         // Synchronize with Release store using Acquire load
+>         if self.slots[index].written.load(Ordering::Acquire) {
+>             // SAFETY: The slot has been written and published. No further mutation will occur.
+>             unsafe {
+>                 let slot_ptr = self.slots[index].data.get();
+>                 (*slot_ptr).as_ref()
+>             }
+>         } else {
+>             None
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_atomic_seq_buffer_sync() {
+>         let buffer = Arc::new(AtomicSeqBuffer::<u32, 100>::new());
+>         let mut handles = vec![];
+> 
+>         // Spawn 10 producer threads pushing 10 elements each concurrently
+>         for t in 0..10 {
+>             let buf_ref = Arc::clone(&buffer);
+>             handles.push(thread::spawn(move || {
+>                 for i in 0..10 {
+>                     let val = (t * 10 + i) as u32;
+>                     let res = buf_ref.push(val);
+>                     assert!(res.is_ok());
+>                 }
+>             }));
+>         }
+> 
+>         for h in handles {
+>             h.join().unwrap();
+>         }
+> 
+>         // Verify all 100 slots were safely published and populated
+>         for i in 0..100 {
+>             let val = buffer.get(i);
+>             assert!(val.is_some());
+>         }
+> 
+>         // Test boundary conditions and overflow handling
+>         assert_eq!(buffer.get(100), None);
+>         assert!(matches!(buffer.push(999), Err(999)));
+>     }
+> }
+> ```
+> 
+> **Explanation:**
+> 1. **Why `UnsafeCell` Opts Out of `Sync`:** `UnsafeCell<T>` allows raw interior mutability (`*cell.get() = ...`) without compile-time aliasing checks. Hence, Rust marks it `!Sync` to prevent data races.
+> 2. **Safety Invariants for `unsafe impl Sync`:**
+>    - Unique index allocation via atomic `fetch_add` guarantees no two threads mutate the same slot.
+>    - `Ordering::Release` on `written.store` and `Ordering::Acquire` on `written.load` establish a *happens-before* memory relationship, ensuring reader threads observe the written payload before accessing raw pointers.
+> 3. **Trait Bound `T: Send`:** When sharing `&AtomicSeqBuffer<T>` across threads, data created on producer threads is read on consumer threads. Therefore, `T` must implement `Send`.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`Send` Trait](../level_09/send_trait.md) — The sister trait for *moving* data.
+> - [`Arc<T>`](../level_03/arc_t.md) — Requires its inner type `T` to be both `Send` and `Sync` to safely share data across threads.
+> - [`Mutex<T>`](../level_09/mutex_t.md) — The thread-safe alternative to `RefCell` that *is* `Sync`.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - **`Sync`** proves a type can be safely referenced (`&T`) by multiple threads simultaneously.
+> - A type `T` is `Sync` if and only if `&T` is `Send`.
+> - Most primitive types and immutable structs are automatically `Sync` because immutable reads are always thread-safe.
+> - Types with non-thread-safe Interior Mutability (like `RefCell<T>`) are *not* `Sync`.
+> - **`Send` is for moving; `Sync` is for sharing.**
+> 

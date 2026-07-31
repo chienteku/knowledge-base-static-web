@@ -1,24 +1,23 @@
 # `Tokio`
 
 > **Level 10 — Async / Await**
-> The de facto standard asynchronous runtime for modern, event-driven Rust programs.
+> The industry-standard asynchronous runtime for Rust.
 
 ---
 
 ## 1. Prerequisites
 
-- [`async fn`](./async_fn.md) — How you define asynchronous functions.
-- [`await`](./await.md) — How you yield control back to the Executor.
-- [`Future` Trait](./future_trait.md) — The state machines that Tokio executes.
-- [`Executor / Runtime`](./executor_runtime.md) — The underlying concept that Tokio implements.
+- [`async fn`](../level_10/async_fn.md) — Declaring the lazy functions Tokio executes.
+- [`Future` Trait](../level_10/future_trait.md) — The state machines Tokio polls.
+- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — Contrast with Tokio's green tasks.
 
 ---
 
 ## 2. Term Category
 
-**Rust Ecosystem / Library (the power plant)**: If `async`/`await` in the standard library provides the electrical outlet and wire standards, **Tokio** is the full nuclear power plant, grid operator, and electrical management system!
+**Rust Ecosystem (the async engine)**: Rust's standard library provides the `async`/`await` keywords, but it intentionally does **not** include an event loop or task executor! 
 
-Tokio is an asynchronous runtime for Rust. It provides the Executor, multi-threaded event loop (I/O, timers, channels), and standard library equivalents designed for async (network sockets, files, process management).
+**Tokio** is the defacto standard, battle-tested third-party crate that provides the engine. It includes a multi-threaded work-stealing task scheduler, async timers, non-blocking network sockets (TCP/UDP), async file I/O, and inter-task channels.
 
 ---
 
@@ -26,36 +25,38 @@ Tokio is an asynchronous runtime for Rust. It provides the Executor, multi-threa
 
 ### (1) Design Motivation — "Why did we design this?"
 
-The Rust standard library intentionally does **not** ship with a built-in Async Executor or Network Reactor. 
+In languages like JavaScript (Node.js) or Go, the async runtime (event loop or goroutine scheduler) is built directly into the language runtime itself. 
 
-- Language designers wanted to avoid forcing a heavy runtime on embedded devices or microcontrollers that cannot spare the memory for a multi-threaded work-stealing thread pool.
-- However, writing web servers, database drivers, or distributed systems requires an actual runtime to run futures!
+Rust rejected this design because Rust is a systems language intended for everything from bare-metal microcontrollers to massive cloud servers. Embedded systems cannot afford the memory overhead of a hidden global event loop! 
 
-Tokio steps in to fill this gap. It provides:
-1. **A Multi-threaded Work-Stealing Executor**: Distributes futures across CPU cores dynamically.
-2. **Reactor / Event Loop**: Interacts with the OS kernel (`epoll` on Linux, `kqueue` on macOS, `IOCP` on Windows) to efficiently watch millions of sockets.
-3. **Async I/O Utilities**: Asynchronous TCP/UDP, files, timers, and inter-task communication channels (`mpsc`, `oneshot`, `broadcast`).
+Therefore, Rust left the runtime out of the standard library, allowing crates like **Tokio** to provide ultra-optimized runtimes for servers while embedded systems use custom bare-metal executors.
 
 ### (2) Reality Metaphor
 
-Imagine an efficient restaurant kitchen:
-- **Standard Rust `async/await`**: The menu, recipes, and instructions for cooking meals asynchronously.
-- **Tokio**: The entire kitchen infrastructure! It provides the line cooks (thread pool), the head chef who dispatches orders (work-stealing executor), and the order ticket bell (I/O reactor) that rings when ingredients arrive.
+Imagine a high-tech automated fulfillment warehouse.
+
+- **Rust Standard Library (`async`/`await`)**: The blueprints and standard cardboard boxes. They define *what* a package looks like, but there are no machines to move them!
+- **Tokio**: The entire automated warehouse infrastructure—conveyor belts, robotic forklifts, sorting hubs, and high-speed dispatchers that grab thousands of boxes per second and move them across the warehouse without collision.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Entry Point)
-The `#[tokio::main]` macro sets up the Tokio runtime automatically and starts your `async main()` function.
+#### Short Snippet (The `#[tokio::main]` Macro)
+The `#[tokio::main]` attribute transforms a standard `fn main()` into an `async fn main()`, setting up the multi-threaded runtime under the hood automatically.
 
 ```rust
 #[tokio::main]
 async fn main() {
     println!("Hello from Tokio runtime!");
+    
+    // Non-blocking sleep! The underlying OS thread is NOT blocked!
+    tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+    
+    println!("Woke up 1 second later!");
 }
 ```
 
-#### Fuller Example (Async TCP Listener)
-A complete miniature echo server using Tokio's async TCP socket utilities:
+#### Fuller Example (Non-Blocking TCP Echo Server)
+This snippet shows Tokio's non-blocking network sockets in action, handling incoming connections asynchronously.
 
 ```rust
 use tokio::net::TcpListener;
@@ -63,23 +64,28 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Bind a non-blocking TCP listener to port 8080
     let listener = TcpListener::bind("127.0.0.1:8080").await?;
-    println!("Server running on 127.0.0.1:8080");
+    println!("Echo server listening on 127.0.0.1:8080");
 
     loop {
-        let (mut socket, _) = listener.accept().await?;
+        // Asynchronously wait for a client connection
+        let (mut socket, addr) = listener.accept().await?;
+        println!("New connection from: {}", addr);
 
-        // Spawn a new background task for each incoming client connection
+        // Spawn an independent task for each connection so main loop isn't blocked!
         tokio::spawn(async move {
-            let mut buf = [0; 1024];
+            let mut buf = [0u8; 1024];
 
             loop {
+                // Read from socket non-blockingly
                 let n = match socket.read(&mut buf).await {
                     Ok(0) => return, // Connection closed cleanly
                     Ok(n) => n,
                     Err(_) => return,
                 };
 
+                // Echo data back to client non-blockingly
                 if socket.write_all(&buf[..n]).await.is_err() {
                     return;
                 }
@@ -161,169 +167,355 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Identifying Tokio Violations
+### Exercise 1: Asynchronous Event Pipeline with Backpressure and Graceful Shutdown
 
-Which line in the code snippet below violates Tokio best practices?
+**Scenario**: You are building a production telemetry processing engine in Tokio. High-volume incoming events arrive from network interfaces and must be dispatched through an asynchronous bounded channel (`tokio::sync::mpsc`) to background worker tasks. The worker task processes events, enforces backpressure, prioritizes emergency events using `tokio::select!` with `biased;`, and handles graceful shutdown when a termination signal is received via `tokio::sync::watch`.
 
-```rust
-#[tokio::main]
-async fn main() {
-    let handle = tokio::spawn(async {
-        std::thread::sleep(std::time::Duration::from_secs(5));
-        println!("Done!");
-    });
-    handle.await.unwrap();
-}
-```
+Construct a complete Tokio pipeline with bounded channel backpressure, priority message processing, and graceful shutdown draining.
+
+**Requirements**:
+1. Define a `TelemetryEvent` struct containing `id: u64`, `payload: String`, and `is_emergency: bool`.
+2. Create `AsyncPipelineEngine` with bounded `mpsc::channel(buffer_size)`.
+3. Implement a background worker task using `tokio::select!` with `biased;` to prioritize emergency signals or shutdown notifications.
+4. Implement graceful shutdown: when `watch::Sender` signals shutdown, the worker drains all remaining messages in the `mpsc` queue before exiting.
+5. Add unit tests asserting event processing count, emergency prioritization order, and clean shutdown draining.
 
 > [!check]- Answer
-> `std::thread::sleep(...)` is a **blocking synchronous call**. It blocks the Tokio worker thread for 5 seconds.
->
-> It should be replaced with `tokio::time::sleep(...)`.
-
----
-
-### Exercise 2: Understanding `#[tokio::main]` — Entry Point and `async fn` Calls
-
-**Problem:**
-The `#[tokio::main]` attribute is not magic — it is a *procedural macro* that expands your `async fn main()` into a synchronous `fn main()` that builds a Tokio runtime and calls `runtime.block_on(...)` for you.
-
-Do the following in a single file:
-
-1. Write an `async fn greet(name: &str)` that prints `"Hello, {name}! Running on Tokio."`.
-2. Write the `#[tokio::main] async fn main()` entry point that calls `greet("World").await` and then prints `"Runtime shutting down."`.
-3. **Answer:** If you accidentally wrote `greet("World")` without `.await`, what would the Rust compiler say, and why?
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello, World! Running on Tokio.
-> Runtime shutting down.
-> ```
->
-> - **Hint 1:** `#[tokio::main]` only works on `async fn main()`. If you write plain `fn main()` you cannot use `.await` inside it — the compiler will error with `'await' is only allowed inside 'async' functions`.
-> - **Hint 2:** Every `async fn` call returns a `Future`, not its result. The Future does **no work** until it is `.await`ed (or explicitly polled). Forgetting `.await` means the function body never runs — the compiler will warn `unused implementer of Future that must be used`.
-> - **Hint 3:** What `#[tokio::main]` actually expands to (simplified):
->   ```rust
->   fn main() {
->       tokio::runtime::Builder::new_multi_thread()
->           .enable_all()
->           .build()
->           .unwrap()
->           .block_on(async {
->               // your async main body goes here
->           });
->   }
->   ```
->   Understanding this expansion explains why `#[tokio::main]` can only annotate `async fn main()`, and why any panic inside your async main propagates out through `block_on`.
->
 > ```rust
-> // The async helper — note: no runtime is needed to define async fns,
-> // only to *run* them. `greet` is just a state machine until .await'd.
-> async fn greet(name: &str) {
->     println!("Hello, {}! Running on Tokio.", name);
+> use std::sync::Arc;
+> use tokio::sync::{mpsc, watch, Mutex};
+> use tokio::time::{sleep, Duration};
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct TelemetryEvent {
+>     pub id: u64,
+>     pub payload: String,
+>     pub is_emergency: bool,
 > }
->
-> // #[tokio::main] builds the Tokio runtime and calls block_on(async_main_body).
-> // Without this macro, `async fn main()` is not valid Rust.
-> #[tokio::main]
-> async fn main() {
->     greet("World").await; // .await drives the Future to completion
->     println!("Runtime shutting down.");
+> 
+> #[derive(Debug, Default)]
+> pub struct EngineMetrics {
+>     pub processed_count: usize,
+>     pub emergency_count: usize,
+> }
+> 
+> pub struct AsyncPipelineEngine {
+>     tx: mpsc::Sender<TelemetryEvent>,
+>     shutdown_tx: watch::Sender<bool>,
+>     metrics: Arc<Mutex<EngineMetrics>>,
+> }
+> 
+> impl AsyncPipelineEngine {
+>     pub fn new(buffer_size: usize) -> Self {
+>         let (tx, mut rx) = mpsc::channel::<TelemetryEvent>(buffer_size);
+>         let (shutdown_tx, mut shutdown_rx) = watch::channel(false);
+>         let metrics = Arc::new(Mutex::new(EngineMetrics::default()));
+>         let metrics_clone = Arc::clone(&metrics);
+> 
+>         // Spawn worker task into Tokio runtime
+>         tokio::spawn(async move {
+>             loop {
+>                 tokio::select! {
+>                     biased;
+> 
+>                     // Check shutdown signal first
+>                     _ = shutdown_rx.changed() => {
+>                         if *shutdown_rx.borrow() {
+>                             // Drain remaining messages in queue
+>                             while let Ok(evt) = rx.try_recv() {
+>                                 let mut m = metrics_clone.lock().await;
+>                                 m.processed_count += 1;
+>                                 if evt.is_emergency {
+>                                     m.emergency_count += 1;
+>                                 }
+>                             }
+>                             break;
+>                         }
+>                     }
+> 
+>                     // Process incoming channel events
+>                     maybe_evt = rx.recv() => {
+>                         match maybe_evt {
+>                             Some(evt) => {
+>                                 sleep(Duration::from_millis(5)).await;
+>                                 let mut m = metrics_clone.lock().await;
+>                                 m.processed_count += 1;
+>                                 if evt.is_emergency {
+>                                     m.emergency_count += 1;
+>                                 }
+>                             }
+>                             None => break, // Channel closed
+>                         }
+>                     }
+>                 }
+>             }
+>         });
+> 
+>         Self {
+>             tx,
+>             shutdown_tx,
+>             metrics,
+>         }
+>     }
+> 
+>     pub async fn send_event(&self, evt: TelemetryEvent) -> Result<(), mpsc::error::SendError<TelemetryEvent>> {
+>         self.tx.send(evt).await
+>     }
+> 
+>     pub fn trigger_shutdown(&self) {
+>         let _ = self.shutdown_tx.send(true);
+>     }
+> 
+>     pub fn snapshot_metrics(&self) -> Arc<Mutex<EngineMetrics>> {
+>         Arc::clone(&self.metrics)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_pipeline_backpressure_and_drain() {
+>         let engine = AsyncPipelineEngine::new(10);
+> 
+>         engine
+>             .send_event(TelemetryEvent {
+>                 id: 1,
+>                 payload: "data1".into(),
+>                 is_emergency: false,
+>             })
+>             .await
+>             .unwrap();
+> 
+>         engine
+>             .send_event(TelemetryEvent {
+>                 id: 2,
+>                 payload: "CRITICAL".into(),
+>                 is_emergency: true,
+>             })
+>             .await
+>             .unwrap();
+> 
+>         sleep(Duration::from_millis(20)).await;
+> 
+>         engine.trigger_shutdown();
+>         sleep(Duration::from_millis(20)).await;
+> 
+>         let snap = engine.snapshot_metrics();
+>         let guard = snap.lock().await;
+>         assert_eq!(guard.processed_count, 2);
+>         assert_eq!(guard.emergency_count, 1);
+>     }
 > }
 > ```
->
-> **Answer to the compiler question:**
-> Calling `greet("World")` without `.await` creates the `Future` value but immediately drops it — the function body never executes. The Rust compiler (with the `must_use` lint) emits:
-> ```text
-> warning: unused implementer of `Future` that must be used
->  --> src/main.rs:10:5
->   |
-> 10|     greet("World");
->   |     ^^^^^^^^^^^^^^^
->   = note: futures do nothing unless you `.await` or poll them
-> ```
-> This is the fundamental rule of Rust async: **a Future is lazy**. It is only a description of work, not work itself. The Tokio runtime only executes work that has been handed to it via `.await` (or `tokio::spawn`).
->
-> **Explanation:**
-> `#[tokio::main]` is purely a convenience macro — it has no runtime effect beyond generating the boilerplate `block_on` call. Understanding its expansion matters in two practical situations: (1) when you need to *customise* the runtime (e.g. `Builder::new_current_thread()` for single-threaded mode, or setting `.worker_threads(4)`) you must build the runtime manually and skip the macro; (2) when debugging panics, the stack trace will show `block_on` at the bottom, which is easier to interpret once you know the macro is generating it.
-
----
-
-### Exercise 3: Blocking vs. Non-Blocking Sleep — Observing the Difference
-
-**Problem:**
-You want to run **two independent async tasks** concurrently, each sleeping for 100 ms and then printing its name. The total wall-clock time should be approximately **100 ms** (both sleep in parallel), not 200 ms (sleeping sequentially).
-
-Write a `#[tokio::main]` program that:
-
-1. Spawns two tasks with `tokio::spawn`, where each task sleeps for 100 ms using **`tokio::time::sleep`** and then prints `"Task A done"` / `"Task B done"`.
-2. Awaits both handles with `tokio::join!` so `main` waits for both to finish.
-3. Prints `"Both tasks finished"` after both complete.
-
-Then answer: **why would replacing `tokio::time::sleep` with `std::thread::sleep` break the concurrency**, even though both tasks are spawned separately?
-
-**Expected output:**
-> [!check]- Answer
-> *(Task A and B may print in either order — the runtime decides which completes first.)*
-> ```text
-> Task A done
-> Task B done
-> Both tasks finished
-> ```
-> *(or `Task B done` then `Task A done` — order is not guaranteed)*
->
-> - **Hint 1:** `tokio::spawn` launches a task onto the runtime. It returns a `JoinHandle<T>` — not the result itself. You must `.await` the handle (or use `tokio::join!`) to get the value.
-> - **Hint 2:** `tokio::time::sleep(Duration).await` suspends *only the current task*, handing the worker thread back to the Tokio executor to run other tasks. This is why both sleeps can overlap.
-> - **Hint 3:** `tokio::join!(handle_a, handle_b)` is the idiomatic way to await multiple `JoinHandle`s concurrently. It drives both handles simultaneously rather than awaiting them in sequence.
-> - **Hint 4 (blocking answer):** `std::thread::sleep` is a *synchronous blocking* call. It stalls the OS thread itself, not just the task. Because Tokio's default multi-threaded executor has a limited thread pool, blocking one thread with `thread::sleep` prevents that thread from running *any other* tasks while it sleeps — effectively serialising what was meant to be concurrent work.
->
-> ```rust
-> use std::time::Duration;
-> use tokio::time::sleep;
->
-> #[tokio::main]
-> async fn main() {
->     // Spawn Task A — runs concurrently with Task B on the Tokio thread pool.
->     let handle_a = tokio::spawn(async {
->         sleep(Duration::from_millis(100)).await; // yields back to executor during the wait
->         println!("Task A done");
->     });
->
->     // Spawn Task B — starts immediately alongside Task A, not after it.
->     let handle_b = tokio::spawn(async {
->         sleep(Duration::from_millis(100)).await; // same yield behaviour
->         println!("Task B done");
->     });
->
->     // Drive both handles concurrently; total elapsed time ≈ 100 ms, not 200 ms.
->     tokio::join!(handle_a, handle_b).0.unwrap();
->     // Note: join! returns a tuple of results; we unwrap handle_a's result above.
->
->     println!("Both tasks finished");
-> }
-> ```
->
-> **Explanation:**
-> `tokio::time::sleep(...).await` is *cooperative*: when a task hits `.await`, it suspends itself and returns the worker thread to the Tokio scheduler. The scheduler is then free to poll *other* tasks — including Task B's sleep — on that same thread. Both 100 ms timers run *concurrently*, so the total wall time is ~100 ms.
->
-> `std::thread::sleep`, by contrast, is a raw OS syscall that blocks the calling thread unconditionally. The Tokio scheduler has no visibility into it and cannot reclaim the thread while it blocks. On the default `#[tokio::main]` multi-threaded runtime this may be partially masked by spare threads, but on a single-threaded runtime (`#[tokio::main(flavor = "current_thread")]`) it serialises both sleeps entirely, making the total time ~200 ms. Either way it is an anti-pattern: it starves the executor of threads and is the single most common Tokio performance mistake.
-
----
-
-## 6. Related Terms
-
-- [`tokio::spawn`](./tokio_spawn.md) — How you spawn asynchronous tasks into Tokio's thread pool.
-- [`Executor / Runtime`](./executor_runtime.md) — The broader architecture Tokio belongs to.
-- [`select!`](./select_macro.md) — Tokio macro for racing multiple futures.
-- [`join!`](./join_macro.md) — Tokio macro for executing multiple futures concurrently.
-
----
-
-## 7. Key Takeaways
-
-- **Tokio** is the industry standard async runtime for Rust network services, web backends, and command-line tools.
-- Rust stdlib provides `async/await` syntax and `Future`, but **Tokio** provides the engine that actually runs them.
-- Always use Tokio's non-blocking I/O, timers, and concurrency primitives rather than standard library synchronous blocking primitives inside Tokio tasks.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Bounded Channel Backpressure**: `mpsc::channel(buffer_size)` limits channel memory capacity. If the channel is full, calls to `.send().await` suspend the calling task asynchronously without blocking worker OS threads.
+> 2. **Biased Directive**: `biased;` in `tokio::select!` enforces top-to-bottom branch evaluation, guaranteeing that shutdown signals are checked before processing standard messages.
+> 3. **Watch Channel Shutdown**: `watch::channel` broadcasts shutdown signals across multiple Tokio tasks efficiently.
+> 
+> ---
+> 
+> ### Exercise 2: Resilient Asynchronous Data Aggregator with `select!`, Timeouts, and Cancellation Safety
+> 
+> **Scenario**: A web gateway must fetch data from a primary remote endpoint and a fallback endpoint concurrently. If the primary endpoint does not return data within a deadline timeout, the gateway races the request against the fallback endpoint using `tokio::select!` while ensuring cancellation safety (dropping uncompleted requests).
+> 
+> Build a resilient aggregator function using `tokio::select!` and `tokio::time::timeout`.
+> 
+> **Requirements**:
+> 1. Implement `async fn fetch_primary(url: &str, delay: Duration) -> Result<String, &'static str>`.
+> 2. Implement `async fn fetch_fallback(url: &str, delay: Duration) -> Result<String, &'static str>`.
+> 3. Write `async fn fetch_resilient_data(primary_url: &str, fallback_url: &str, primary_delay: Duration, fallback_delay: Duration, deadline: Duration) -> Result<String, &'static str>`.
+> 4. Add unit tests asserting primary success, fallback invocation on primary timeout, and total failure scenarios.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::time::Duration;
+> > use tokio::time::sleep;
+> > 
+> > pub async fn fetch_primary(url: &str, delay: Duration) -> Result<String, &'static str> {
+> >     sleep(delay).await;
+> >     if url.contains("error") {
+> >         Err("PRIMARY_FAILED")
+> >     } else {
+> >         Ok(format!("PRIMARY_DATA_{}", url))
+> >     }
+> > }
+> > 
+> > pub async fn fetch_fallback(url: &str, delay: Duration) -> Result<String, &'static str> {
+> >     sleep(delay).await;
+> >     if url.contains("error") {
+> >         Err("FALLBACK_FAILED")
+> >     } else {
+> >         Ok(format!("FALLBACK_DATA_{}", url))
+> >     }
+> > }
+> > 
+> > pub async fn fetch_resilient_data(
+> >     primary_url: &'static str,
+> >     fallback_url: &'static str,
+> >     primary_delay: Duration,
+> >     fallback_delay: Duration,
+> >     deadline: Duration,
+> > ) -> Result<String, &'static str> {
+> >     let primary_fut = fetch_primary(primary_url, primary_delay);
+> >     let fallback_fut = fetch_fallback(fallback_url, fallback_delay);
+> > 
+> >     tokio::pin!(primary_fut);
+> >     tokio::pin!(fallback_fut);
+> > 
+> >     let deadline_timer = sleep(deadline);
+> >     tokio::pin!(deadline_timer);
+> > 
+> >     tokio::select! {
+> >         res = &mut primary_fut => {
+> >             match res {
+> >                 Ok(data) => Ok(data),
+> >                 Err(_) => fallback_fut.await,
+> >             }
+> >         }
+> >         _ = &mut deadline_timer => {
+> >             // Primary timed out; fall back immediately
+> >             fallback_fut.await
+> >         }
+> >     }
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> > 
+> >     #[tokio::test]
+> >     async fn test_fetch_primary_success() {
+> >         let res = fetch_resilient_data(
+> >             "http://primary.com",
+> >             "http://fallback.com",
+> >             Duration::from_millis(10),
+> >             Duration::from_millis(50),
+> >             Duration::from_millis(100),
+> >         )
+> >         .await;
+> >         assert_eq!(res, Ok("PRIMARY_DATA_http://primary.com".to_string()));
+> >     }
+> > 
+> >     #[tokio::test]
+> >     async fn test_fallback_on_primary_timeout() {
+> >         let res = fetch_resilient_data(
+> >             "http://slow-primary.com",
+> >             "http://fallback.com",
+> >             Duration::from_millis(200),
+> >             Duration::from_millis(10),
+> >             Duration::from_millis(20),
+> >         )
+> >         .await;
+> >         assert_eq!(res, Ok("FALLBACK_DATA_http://fallback.com".to_string()));
+> >     }
+> > }
+> > ```
+> > 
+> > **Step-by-Step Explanation**:
+> > 1. **Cancellation Safety**: `tokio::select!` polls branches concurrently. When the fastest branch resolves (or deadline expires), uncompleted futures in other branches are dropped, cancelling their pending I/O operations cleanly.
+> > 2. **Stack Pinning**: Using `tokio::pin!` allows borrowing futures inside `select!` so they can be `.await`ed subsequently in fallback branches if needed.
+> 
+> ---
+> 
+> ### Exercise 3: Concurrency Throttler & Panic-Safe Task Dispatcher with Tokio Semaphores
+> 
+> **Scenario**: Microservices processing expensive database migrations or heavy analytical tasks must rate-limit active concurrency to prevent overwhelming CPU/memory resources. Furthermore, if a background task panics, the dispatcher must catch the panic via `JoinHandle` error inspection (`join_err.is_panic()`) without crashing the main application loop.
+> 
+> Construct a panic-safe task dispatcher using Tokio semaphores and task handles.
+> 
+> **Requirements**:
+> 1. Define `JobTask` struct with `id: u64` and `should_panic: bool`.
+> 2. Implement `TaskDispatcher` holding `Arc<tokio::sync::Semaphore>`.
+> 3. Implement `dispatch_job(&self, job: JobTask) -> tokio::task::JoinHandle<Result<String, &'static str>>`.
+> 4. Add unit tests confirming semaphore throttling and verifying panic catching via `handle.await.unwrap_err().is_panic()`.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::sync::Arc;
+> > use std::time::Duration;
+> > use tokio::sync::Semaphore;
+> > use tokio::task::JoinHandle;
+> > 
+> > #[derive(Debug, Clone)]
+> > pub struct JobTask {
+> >     pub id: u64,
+> >     pub should_panic: bool,
+> > }
+> > 
+> > pub struct TaskDispatcher {
+> >     semaphore: Arc<Semaphore>,
+> > }
+> > 
+> > impl TaskDispatcher {
+> >     pub fn new(max_concurrency: usize) -> Self {
+> >         Self {
+> >             semaphore: Arc::new(Semaphore::new(max_concurrency)),
+> >         }
+> >     }
+> > 
+> >     pub fn dispatch_job(&self, job: JobTask) -> JoinHandle<Result<String, &'static str>> {
+> >         let sem = Arc::clone(&self.semaphore);
+> >         tokio::spawn(async move {
+> >             let _permit = sem.acquire_owned().await.unwrap();
+> >             if job.should_panic {
+> >                 panic!("CRITICAL_JOB_PANIC");
+> >             }
+> >             tokio::time::sleep(Duration::from_millis(10)).await;
+> >             Ok(format!("JOB_{}_SUCCESS", job.id))
+> >         })
+> >     }
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> > 
+> >     #[tokio::test]
+> >     async fn test_dispatcher_success() {
+> >         let dispatcher = TaskDispatcher::new(2);
+> >         let handle = dispatcher.dispatch_job(JobTask { id: 1, should_panic: false });
+> >         let res = handle.await.unwrap();
+> >         assert_eq!(res, Ok("JOB_1_SUCCESS".to_string()));
+> >     }
+> > 
+> >     #[tokio::test]
+> >     async fn test_dispatcher_catches_panic() {
+> >         let dispatcher = TaskDispatcher::new(2);
+> >         let handle = dispatcher.dispatch_job(JobTask { id: 2, should_panic: true });
+> >         let join_res = handle.await;
+> >         assert!(join_res.is_err());
+> >         let err = join_res.unwrap_err();
+> >         assert!(err.is_panic());
+> >     }
+> > }
+> > ```
+> > 
+> > **Step-by-Step Explanation**:
+> > 1. **Concurrency Throttling**: `Semaphore::new(max_concurrency)` limits simultaneous task execution, queuing extra tasks asynchronously.
+> > 2. **Panic Isolation**: Tokio task panics are isolated to the spawned task. `.await`ing the `JoinHandle` yields `Err(JoinError)` where `err.is_panic()` returns `true`, allowing safe recovery without crashing the host process.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`async fn`](../level_10/async_fn.md) — The language feature Tokio executes.
+> - [`tokio::spawn`](../level_10/tokio_spawn.md) — How you push tasks onto Tokio's thread pool.
+> - [`select!`](../level_10/select_macro.md) — Tokio's event multiplexing macro.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - **`Tokio`** is the industry-standard async runtime for Rust.
+> - It is **not** part of Rust's standard library, allowing Rust to run on bare-metal systems without runtime bloat.
+> - It provides a multi-threaded, work-stealing task scheduler, async I/O, timers, and channels.
+> - Use **`#[tokio::main]`** to initialize the runtime automatically.
+> - Never run long-blocking synchronous operations (like `std::thread::sleep` or heavy CPU loops) inside Tokio tasks; use `tokio::task::spawn_blocking` instead!
+> 

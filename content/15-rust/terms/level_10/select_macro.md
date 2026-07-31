@@ -1,23 +1,23 @@
 # `select!`
 
 > **Level 10 — Async / Await**
-> Macro that polls multiple futures and executes the branch of the first to complete.
+> Macro that runs multiple futures simultaneously and handles whichever one finishes FIRST.
 
 ---
 
 ## 1. Prerequisites
 
-- [`Tokio`](../level_10/tokio.md) — The async runtime that provides this macro (`tokio::select!`).
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that are being raced against each other.
-- [`await`](../level_10/await.md) — The standard way to run a single Future, which `select!` replaces when running multiple.
+- [`Tokio`](../level_10/tokio.md) — The async runtime providing the `select!` macro.
+- [`join!`](../level_10/join_macro.md) — The opposite of `select!` (waits for *all* futures to finish).
+- [`Future` Trait](../level_10/future_trait.md) — The state machines that `select!` races against each other.
 
 ---
 
 ## 2. Term Category
 
-**Rust Tooling (the async race track)**: The `tokio::select!` macro is one of the most powerful, brilliant, and commonly used tools in asynchronous Rust. 
+**Rust Tooling (the async race)**: If `tokio::join!` is a team project where everyone waits for each other, **`tokio::select!`** is a fast-paced race where **only the winner matters**.
 
-It allows you to run multiple Futures at the exact same time, wait for the *first* one to finish, and immediately **cancel** all the others!
+It takes multiple Futures, polls them all concurrently, and executes the code branch for whichever Future finishes **first**. Crucially, it instantly **cancels and drops** all the losing Futures!
 
 ---
 
@@ -25,83 +25,90 @@ It allows you to run multiple Futures at the exact same time, wait for the *firs
 
 ### (1) Design Motivation — "Why did we design this?"
 
-In high-performance systems, you frequently need **timeouts** or **cancellation**. 
+In networked applications, you constantly need to race operations against deadlines or cancel them when a user disconnects.
 
-For example, if you query a database, you don't want your server to hang forever if the database crashes. You want to query the database, but if 5 seconds pass, you want to instantly abort the query and return an error. How do you "race" a database query against a 5-second timer? 
+For example, when fetching data from a slow remote database:
+- You want to wait for the database response.
+- **BUT**, if the database takes longer than 3 seconds, you want to abort the query and return a "Timeout Error".
 
-In standard multithreading (`std::thread`), this is a nightmare requiring complex channels, shared atomic booleans, and thread abort signals. 
-
-In Async Rust, you just use `tokio::select!`. It polls all the Futures concurrently. As soon as one finishes, it literally just drops the others from memory, instantly canceling them!
+`tokio::select!` handles this effortlessly. You race the `db_query()` future against a `sleep(3 seconds)` timer future. Whichever one finishes first wins, and the other is cancelled immediately.
 
 ### (2) Reality Metaphor
 
-Imagine you are an Art Collector. You tell your two assistants to buy you a specific painting. 
-- Assistant A goes to an auction in New York. 
-- Assistant B goes to an auction in London. 
+Imagine a Game Show with buzzers.
 
-You tell them both: *"Whoever buys the painting first, call me immediately. As soon as one of you buys it, I will instantly text the other one to cancel their auction."* 
-
-`select!` is the Boss who receives the first phone call and instantly fires/cancels the loser!
+- **`join!`**: The host asks 3 contestants a question. The host stands still until *all three* contestants have finished writing down their answers on paper.
+- **`select!`**: The host asks a question. All 3 contestants hover over their buzzers (`select!`). The instant **Contestant A** slaps their buzzer, they get to answer the question (`branch execution`). The other 2 contestants are immediately locked out and ignored!
 
 ### (3) Rust Code Examples
 
 #### Short Snippet (The Classic Timeout)
-The most common use case for `select!` in the world is implementing a timeout. We race a slow network request against a sleep timer. Whichever finishes first executes its block of code!
+Notice how `select!` takes patterns and branches, similar to a `match` statement!
 
 ```rust
 use tokio::time::{sleep, Duration};
 
-async fn fetch_data() -> String {
-    // Simulate a slow database that takes 10 seconds!
-    sleep(Duration::from_secs(10)).await;
-    String::from("Data")
+async fn slow_database_query() -> String {
+    sleep(Duration::from_secs(5)).await;
+    "Database Data".to_string()
 }
 
 #[tokio::main]
 async fn main() {
     tokio::select! {
-        // Branch 1: The Database Query
-        data = fetch_data() => {
-            println!("Success! Got: {}", data);
+        // Branch 1: The database query
+        data = slow_database_query() => {
+            println!("Got data: {}", data);
         }
-        // Branch 2: The Timer
-        _ = sleep(Duration::from_secs(3)) => {
-            println!("Error: The database query timed out!");
+        // Branch 2: The 2-second timeout timer
+        _ = sleep(Duration::from_secs(2)) => {
+            println!("Error: Database timed out after 2 seconds!");
         }
     }
-    // Because the timer finishes in 3 seconds, Branch 2 wins!
-    // The `fetch_data` future is instantly cancelled and destroyed!
 }
 ```
 
-#### Fuller Example (The Shutdown Signal)
-Another incredibly common use case is a server loop that listens for messages, but also listens for a global "Shutdown" signal (like the user pressing `Ctrl+C`).
+#### Fuller Example (Graceful Cancellation in a Server Loop)
+This shows how real-world servers use `select!` to continuously handle network requests until a "Shutdown Signal" (like pressing `Ctrl+C`) arrives.
 
 ```rust
-use tokio::sync::mpsc;
+use tokio::sync::oneshot;
+use tokio::time::{sleep, Duration};
+
+async fn handle_user_request(id: u32) {
+    println!("Handling request #{}", id);
+}
 
 #[tokio::main]
 async fn main() {
-    let (mut msg_tx, mut msg_rx) = mpsc::channel(32);
-    let (mut shutdown_tx, mut shutdown_rx) = mpsc::channel(1);
+    // Create a channel to simulate an emergency shutdown signal
+    let (shutdown_tx, mut shutdown_rx) = oneshot::channel::<()>();
 
+    // Spawn a background task to trigger shutdown after 3 seconds
     tokio::spawn(async move {
-        loop {
-            tokio::select! {
-                // Branch 1: A user sends a chat message
-                Some(msg) = msg_rx.recv() => {
-                    println!("Received chat message: {}", msg);
-                }
-                // Branch 2: The server administrator clicks "Shutdown"
-                _ = shutdown_rx.recv() => {
-                    println!("Shutdown signal received. Stopping server!");
-                    break; // Exits the loop and kills the task!
-                }
-            }
-        }
+        sleep(Duration::from_secs(3)).await;
+        println!(">>> SHUTDOWN SIGNAL RECEIVED <<<");
+        let _ = shutdown_tx.send(());
     });
 
-    // ... code to send messages or trigger shutdown ...
+    let mut request_id = 0;
+
+    // Server loop
+    loop {
+        request_id += 1;
+
+        tokio::select! {
+            // Branch 1: Handle incoming user requests
+            _ = sleep(Duration::from_secs(1)) => {
+                handle_user_request(request_id).await;
+            }
+            // Branch 2: Watch for emergency shutdown
+            _ = &mut shutdown_rx => {
+                println!("Stopping server loop cleanly!");
+                break; // Exit the loop!
+            }
+        }
+    }
 }
 ```
 
@@ -177,150 +184,238 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Losers
+### Exercise 1: Cancellation-Safe Event Stream Multiplexer
 
-**Problem:** You have a `tokio::select!` block with 3 branches: A, B, and C. Branch B finishes first. What exactly happens to Branch A and Branch C?
+**Scenario**: High-throughput microservice event loops continuously process incoming telemetry messages from an `mpsc` channel, periodic interval ticks for batch flushing, and emergency shutdown signals from a `oneshot` channel. `.await` points inside `tokio::select!` must be cancellation-safe to avoid message loss during racing conditions.
+
+Build an event multiplexer loop using `tokio::select!`.
+
+**Requirements**:
+1. Define `TelemetryEvent` with `id: u64` and `payload: String`.
+2. Write `async fn process_events_with_cancellation_safety(rx: &mut mpsc::Receiver<TelemetryEvent>, shutdown_rx: &mut oneshot::Receiver<()>, flush_interval_ms: u64) -> (usize, usize)` returning `(events_processed, flush_count)`.
+3. Use `tokio::select!` to race message reception, interval ticks, and shutdown signals.
+4. Add unit tests asserting processing count and clean exit on shutdown.
 
 > [!check]- Answer
-> They are instantly **dropped** from memory and **cancelled**! 
->
-> Their `.poll()` methods will never be called again, and any progress they made is aborted.
-
----
-
-### Exercise 2: Implementing a Timeout with `select!`
-
-**Problem:**
-You have an async function `fetch_data()` that simulates a slow database query taking **2 seconds**. You want it to fail fast with an error message if it takes longer than **500 ms**.
-
-Write a `#[tokio::main]` program using `tokio::select!` to race `fetch_data()` against a `tokio::time::sleep(Duration::from_millis(500))` timer. Print which branch wins.
-
-Then answer: **after the timer branch wins, is `fetch_data()` still running in the background?**
-
-**Expected output:**
-> [!check]- Answer
-> *(The timer always wins because 500 ms < 2 s)*
-> ```text
-> Timeout! fetch_data took too long.
-> ```
->
-> - **Hint 1:** The `select!` syntax for each branch is `result_binding = future_expression => { handler_block }`. Both branches are polled concurrently on each iteration of the executor loop; whichever resolves first runs its handler and drops the other.
-> - **Hint 2:** If you don't need the value from a branch (e.g. the sleep timer returns `()`), use `_` as the binding: `_ = sleep(...) => { ... }`.
-> - **Hint 3 (cancellation answer):** No. When the timer branch wins, Tokio `drop`s the `fetch_data()` future immediately. Its memory is freed, its `.poll()` will never be called again, and the simulated database query is cancelled. This is the defining feature of `select!` and why the futures inside must be *cancellation-safe*.
->
 > ```rust
-> use tokio::time::{sleep, Duration};
->
-> // Simulates a slow database query: takes 2 seconds to complete.
-> async fn fetch_data() -> &'static str {
->     sleep(Duration::from_secs(2)).await;
->     "database result"
+> use std::time::Duration;
+> use tokio::sync::{mpsc, oneshot};
+> use tokio::time::interval;
+> 
+> #[derive(Debug, Clone)]
+> pub struct TelemetryEvent {
+>     pub id: u64,
+>     pub payload: String,
 > }
->
-> #[tokio::main]
-> async fn main() {
->     tokio::select! {
->         // Branch A: the slow database query.
->         data = fetch_data() => {
->             println!("Got data: {}", data);
->         }
->         // Branch B: 500 ms deadline. Wins because 500 ms < 2 s.
->         // `fetch_data()` is dropped the instant this branch resolves.
->         _ = sleep(Duration::from_millis(500)) => {
->             println!("Timeout! fetch_data took too long.");
->         }
->     }
-> }
-> ```
->
-> **Explanation:**
-> `tokio::select!` compiles into a state machine that calls `poll()` on all listed futures on each executor wake. The first future to return `Poll::Ready` wins: its handler block runs, and all remaining futures in the `select!` are **synchronously dropped** — not cancelled via a signal, but literally deallocated. This is why the timeout takes exactly 500 ms (not 2 s): the executor never waits for the losing branch. The pattern is the idiomatic Rust replacement for callback-based timeout APIs and is far simpler than coordinating threads with `AtomicBool` cancellation flags.
-
----
-
-### Exercise 3: Combining `select!` with Pattern Guards for a Shutdown Loop
-
-**Problem:**
-Pattern guards let you make a `select!` branch *conditionally* active — the branch only "wins" if both its future resolves *and* a boolean guard expression is true. If the guard is false, `select!` skips that branch entirely, even if its future is ready.
-
-Write a `#[tokio::main]` program that:
-
-1. Creates a `tokio::sync::mpsc` channel and spawns a task that sends the integers `1, 2, 3, 99, 4` with a 50 ms gap between each.
-2. In `main`, runs a loop with a `select!` block containing **two branches**:
-   - **Message branch:** `Some(n) = rx.recv() if n != 99 =>` — prints `"Received: {n}"` for all values *except* 99.
-   - **Poison-pill branch:** `Some(n) = rx.recv() if n == 99 =>` — prints `"Poison pill received! Shutting down."` and `break`s the loop.
-3. After the loop, print `"Loop exited cleanly."`
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Received: 1
-> Received: 2
-> Received: 3
-> Poison pill received! Shutting down.
-> Loop exited cleanly.
-> ```
->
-> - **Hint 1:** Pattern guards in `select!` branches use the same `if condition` syntax as `match` arms: `Some(n) = rx.recv() if n != 99 => { ... }`. The future is polled only once per `select!` invocation; if the guard fails on the result, `select!` re-polls other branches or re-enters the next loop iteration.
-> - **Hint 2:** When two branches poll the *same* future (both call `rx.recv()`), there is a subtlety: `select!` internally uses `biased` or random branch ordering. For this exercise, Tokio's `select!` will evaluate branches in a pseudo-random order to avoid starvation, but for a single `mpsc` receiver only one branch can win per value.
-> - **Hint 3:** `mpsc::channel` returns `(Sender<T>, Receiver<T>)`. Use `tx.send(value).await` in the spawned task and `rx.recv().await` (implicitly inside `select!`) in the main loop. The channel's `recv()` returns `Option<T>` — `None` when all senders have dropped.
-> - **Hint 4:** You must `Box::pin` or use `tokio::pin!` if you want to *reuse* a single `Future` across multiple `select!` iterations. However, calling `rx.recv()` inside the `select!` expression each iteration creates a fresh `Future` per loop — which is fine for channels.
->
-> ```rust
-> use tokio::sync::mpsc;
-> use tokio::time::{sleep, Duration};
->
-> #[tokio::main]
-> async fn main() {
->     let (tx, mut rx) = mpsc::channel::<i32>(16);
->
->     // Sender task: emits a sequence with a 99 "poison pill" in the middle.
->     tokio::spawn(async move {
->         for n in [1, 2, 3, 99, 4] {
->             sleep(Duration::from_millis(50)).await;
->             let _ = tx.send(n).await;
->         }
->     });
->
+> 
+> pub async fn process_events_with_cancellation_safety(
+>     rx: &mut mpsc::Receiver<TelemetryEvent>,
+>     shutdown_rx: &mut oneshot::Receiver<()>,
+>     flush_interval_ms: u64,
+> ) -> (usize, usize) {
+>     let mut events_processed = 0;
+>     let mut flush_count = 0;
+>     let mut ticker = interval(Duration::from_millis(flush_interval_ms));
+> 
 >     loop {
 >         tokio::select! {
->             // Branch A: normal values — guard passes for anything that isn't 99.
->             Some(n) = rx.recv(), if n != 99 => {
->                 println!("Received: {}", n);
->             }
->             // Branch B: poison pill — guard passes only for 99.
->             // When this wins, the branch body breaks the loop.
->             Some(n) = rx.recv(), if n == 99 => {
->                 println!("Poison pill received! Shutting down.");
+>             _ = &mut *shutdown_rx => {
 >                 break;
+>             }
+>             _ = ticker.tick() => {
+>                 flush_count += 1;
+>             }
+>             maybe_evt = rx.recv() => {
+>                 match maybe_evt {
+>                     Some(_evt) => events_processed += 1,
+>                     None => break,
+>                 }
 >             }
 >         }
 >     }
->
->     println!("Loop exited cleanly.");
+> 
+>     (events_processed, flush_count)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_event_multiplexer_shutdown() {
+>         let (tx, mut rx) = mpsc::channel(10);
+>         let (shutdown_tx, mut shutdown_rx) = oneshot::channel();
+> 
+>         tx.send(TelemetryEvent { id: 1, payload: "e1".into() }).await.unwrap();
+>         tx.send(TelemetryEvent { id: 2, payload: "e2".into() }).await.unwrap();
+> 
+>         tokio::spawn(async move {
+>             tokio::time::sleep(Duration::from_millis(15)).await;
+>             let _ = shutdown_tx.send(());
+>         });
+> 
+>         let (processed, flushes) = process_events_with_cancellation_safety(&mut rx, &mut shutdown_rx, 10).await;
+>         assert_eq!(processed, 2);
+>         assert!(flushes >= 1);
+>     }
 > }
 > ```
->
-> **Explanation:**
-> Pattern guards inside `select!` are evaluated *after* the future resolves but *before* the branch handler runs. If a guard is false, `select!` treats that branch as if it had returned `Poll::Pending` — it simply doesn't run its handler and continues polling other branches. This gives you fine-grained control over *which* resolved value should win the race, not just *which future* resolved first.
->
-> The poison-pill pattern (sending a sentinel value to signal shutdown) is a standard Rust async idiom. It avoids needing a separate shutdown channel entirely: the control signal travels through the same data channel as normal messages, making the ordering guarantee trivial — the shutdown only fires after all preceding messages have been processed.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Cancellation Safety**: `mpsc::Receiver::recv()` and `Interval::tick()` are cancellation-safe. If one branch finishes first, dropping the uncompleted future of the other branch leaves state consistent without losing data.
+> 2. **Branch Multiplexing**: `tokio::select!` polls all branches simultaneously, executing the branch corresponding to whichever future ready first.
+> 
+> ---
+> 
+> ### Exercise 2: Biased Priority Request Dispatcher
 
----
+**Scenario**: In high-priority microservice routers, high-priority emergency alerts must take precedence over standard background tasks when both are available simultaneously in incoming channels. Tokio's `biased;` directive inside `tokio::select!` forces top-to-bottom branch evaluation order.
 
-## 6. Related Terms
+Construct a priority dispatcher using `tokio::select!` with `biased;`.
 
-- [`tokio::join!`](../level_10/join_macro.md) — The opposite of `select!`. `join!` runs multiple futures concurrently but waits for **ALL** of them to finish, rather than just the first one.
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that `select!` is polling.
+**Requirements**:
+1. Write `async fn run_dispatcher(high_rx: &mut mpsc::Receiver<String>, low_rx: &mut mpsc::Receiver<String>, max_iterations: usize) -> Vec<String>`.
+2. Use `biased;` inside `tokio::select!` to prioritize `high_rx` before `low_rx`.
+3. Add unit tests verifying priority handling order.
 
----
+> [!check]- Answer
+> ```rust
+> use tokio::sync::mpsc;
+> 
+> pub async fn run_dispatcher(
+>     high_rx: &mut mpsc::Receiver<String>,
+>     low_rx: &mut mpsc::Receiver<String>,
+>     max_iterations: usize,
+> ) -> Vec<String> {
+>     let mut processed = Vec::new();
+> 
+>     for _ in 0..max_iterations {
+>         tokio::select! {
+>             biased;
+> 
+>             Some(msg) = high_rx.recv() => {
+>                 processed.push(format!("HIGH_{}", msg));
+>             }
+>             Some(msg) = low_rx.recv() => {
+>                 processed.push(format!("LOW_{}", msg));
+>             }
+>             else => break,
+>         }
+>     }
+> 
+>     processed
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_biased_priority_dispatcher() {
+>         let (high_tx, mut high_rx) = mpsc::channel(10);
+>         let (low_tx, mut low_rx) = mpsc::channel(10);
+> 
+>         low_tx.send("task1".into()).await.unwrap();
+>         high_tx.send("alert1".into()).await.unwrap();
+> 
+>         tokio::time::sleep(std::time::Duration::from_millis(5)).await;
+> 
+>         let results = run_dispatcher(&mut high_rx, &mut low_rx, 2).await;
+>         assert_eq!(results.len(), 2);
+>         assert_eq!(results[0], "HIGH_alert1");
+>         assert_eq!(results[1], "LOW_task1");
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Biased Select**: Standard `tokio::select!` randomizes branch polling order to prevent starvation. Inserting `biased;` enforces strict top-to-bottom declaration order, ensuring `high_rx` is always checked before `low_rx`.
+> 
+> ---
+> 
+> ### Exercise 3: Hedged RPC Request Race with Dynamic Workers & Fallback
 
-## 7. Key Takeaways
+**Scenario**: High-availability systems issue "hedged" parallel requests to multiple redundant RPC nodes. Whichever node responds first provides the result, while slower or hanging requests are cancelled.
 
-- **`tokio::select!`** races multiple Futures concurrently on the same thread.
-- It executes the block of code for the **first** Future to finish.
-- As soon as the winner finishes, all the other losing Futures are instantly **dropped and cancelled**.
-- It is incredibly useful for implementing **Timeouts** (racing a network request against a `tokio::time::sleep` timer) or **Shutdown signals**.
-- You must ensure the Futures inside `select!` are **Cancellation Safe**, because losing the race means being violently aborted mid-execution!
+Build a hedged RPC dispatcher using `futures::future::select_all` combined with `tokio::select!`.
+
+**Requirements**:
+1. Write `async fn mock_rpc(node_id: u32, delay_ms: u64) -> String`.
+2. Write `async fn execute_hedged_rpc(node_delays: Vec<(u32, u64)>, timeout_ms: u64) -> Result<String, &'static str>`.
+3. Add unit tests asserting fastest node response win and timeout handling.
+
+> [!check]- Answer
+> ```rust
+> use std::time::Duration;
+> use futures::future::select_all;
+> use tokio::time::sleep;
+> 
+> pub async fn mock_rpc(node_id: u32, delay_ms: u64) -> String {
+>     sleep(Duration::from_millis(delay_ms)).await;
+>     format!("NODE_{}_RESP", node_id)
+> }
+> 
+> pub async fn execute_hedged_rpc(
+>     node_delays: Vec<(u32, u64)>,
+>     timeout_ms: u64,
+> ) -> Result<String, &'static str> {
+>     let futures: Vec<_> = node_delays
+>         .into_iter()
+>         .map(|(id, delay)| Box::pin(mock_rpc(id, delay)))
+>         .collect();
+> 
+>     let race_fut = select_all(futures);
+>     let timeout_fut = sleep(Duration::from_millis(timeout_ms));
+> 
+>     tokio::select! {
+>         (win_val, _index, _remaining) = race_fut => Ok(win_val),
+>         _ = timeout_fut => Err("ALL_NODES_TIMED_OUT"),
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_hedged_rpc_fastest_wins() {
+>         let nodes = vec![(1, 100), (2, 10), (3, 50)];
+>         let res = execute_hedged_rpc(nodes, 200).await;
+>         assert_eq!(res, Ok("NODE_2_RESP".to_string()));
+>     }
+> 
+>     #[tokio::test]
+>     async fn test_hedged_rpc_timeout() {
+>         let nodes = vec![(1, 100), (2, 150)];
+>         let res = execute_hedged_rpc(nodes, 20).await;
+>         assert_eq!(res, Err("ALL_NODES_TIMED_OUT"));
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Dynamic Future Racing (`select_all`)**: `futures::future::select_all` races a `Vec` of pinned futures dynamically, returning the winner and remaining incomplete futures.
+> 2. **Timeout Wrap**: Wrapping `select_all` inside `tokio::select!` against a `sleep` timer ensures the entire hedged race fails fast if all nodes exceed the deadline.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`join!`](../level_10/join_macro.md) — Waits for *all* futures to complete instead of just the first one.
+> - [`tokio::spawn`](../level_10/tokio_spawn.md) — How to run tasks in the background independently.
+> - [`Future` Trait](../level_10/future_trait.md) — The state machine interface used by `select!`.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - **`tokio::select!`** races multiple Futures and executes the branch for whichever one finishes **first**.
+> - It **instantly cancels and drops** all the losing Futures.
+> - Perfect for setting timeouts, handling emergency shutdown signals, or racing redundant network requests.
+> - Futures passed into `select!` must be **cancellation-safe** so dropping them midway through work doesn't corrupt data or leak memory.
+> - Use the **`biased;`** flag if you want branches evaluated in strict top-to-bottom priority order instead of randomly.
+> 

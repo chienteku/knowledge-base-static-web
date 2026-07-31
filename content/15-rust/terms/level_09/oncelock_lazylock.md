@@ -148,75 +148,326 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Convert `static mut` to `OnceLock`
+### Exercise 1: Microservice Database Connection Pool & Global Config (`LazyLock` & `OnceLock`)
 
-**Problem:** Rewrite this `unsafe` global counter starter to use `OnceLock` instead:
-```rust
-use std::time::Instant;
-
-static mut START_TIME: Option<Instant> = None;
-```
+**Problem Statement:**
+In high-concurrency microservices, initializing database connection pools and parsing service configurations from external sources must happen lazily and exactly once across all worker threads.
+You are tasked with building a thread-safe global connection manager:
+1. Define a global `LazyLock<ServerConfig>` that automatically parses configuration settings on first access.
+2. Define a global `OnceLock<DbConnectionPool>` that encapsulates database connection pool creation.
+3. Implement `get_or_init_pool()` using `OnceLock::get_or_init` to construct the pool, tracking initialization counts via an `AtomicUsize`.
+4. Demonstrate thread safety by spawning 20 concurrent threads that simultaneously call `get_or_init_pool()` and attempt to acquire connections.
+5. Write unit tests in `#[cfg(test)] mod tests` verifying that the initialization closure runs exactly once despite thread contention, connections are distributed up to capacity, and configuration settings match expectations.
 
 > [!check]- Answer
 > ```rust
-> use std::sync::OnceLock;
-> use std::time::Instant;
->
-> static START_TIME: OnceLock<Instant> = OnceLock::new();
->
-> fn start_time() -> Instant {
->     *START_TIME.get_or_init(Instant::now)
+> use std::sync::{LazyLock, OnceLock};
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> use std::thread;
+> 
+> #[derive(Debug, Clone)]
+> pub struct ServerConfig {
+>     pub db_url: String,
+>     pub max_connections: usize,
+> }
+> 
+> // Global configuration loaded lazily upon first access via LazyLock
+> pub static GLOBAL_CONFIG: LazyLock<ServerConfig> = LazyLock::new(|| {
+>     ServerConfig {
+>         db_url: String::from("postgres://admin:secret@db.internal:5432/production"),
+>         max_connections: 10,
+>     }
+> });
+> 
+> #[derive(Debug)]
+> pub struct DbConnectionPool {
+>     pub url: String,
+>     pub capacity: usize,
+>     active_connections: AtomicUsize,
+> }
+> 
+> impl DbConnectionPool {
+>     pub fn new(url: String, capacity: usize) -> Self {
+>         DbConnectionPool {
+>             url,
+>             capacity,
+>             active_connections: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn acquire(&self) -> Option<usize> {
+>         let current = self.active_connections.fetch_add(1, Ordering::SeqCst);
+>         if current < self.capacity {
+>             Some(current + 1)
+>         } else {
+>             self.active_connections.fetch_sub(1, Ordering::SeqCst);
+>             None
+>         }
+>     }
+> 
+>     pub fn active_count(&self) -> usize {
+>         self.active_connections.load(Ordering::SeqCst)
+>     }
+> }
+> 
+> // Global OnceLock instance and atomic initialization counter
+> pub static DB_POOL: OnceLock<DbConnectionPool> = OnceLock::new();
+> pub static POOL_INIT_COUNT: AtomicUsize = AtomicUsize::new(0);
+> 
+> pub fn get_or_init_pool() -> &'static DbConnectionPool {
+>     DB_POOL.get_or_init(|| {
+>         POOL_INIT_COUNT.fetch_add(1, Ordering::SeqCst);
+>         let config = &*GLOBAL_CONFIG; // Dereferencing LazyLock triggers config setup
+>         DbConnectionPool::new(config.db_url.clone(), config.max_connections)
+>     })
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_lazy_and_once_lock_thread_safety() {
+>         let handles: Vec<_> = (0..20)
+>             .map(|_| {
+>                 thread::spawn(|| {
+>                     let pool = get_or_init_pool();
+>                     assert_eq!(pool.url, "postgres://admin:secret@db.internal:5432/production");
+>                     assert_eq!(pool.capacity, 10);
+>                     pool.acquire()
+>                 })
+>             })
+>             .collect();
+> 
+>         let results: Vec<Option<usize>> = handles.into_iter().map(|h| h.join().unwrap()).collect();
+> 
+>         // Verify the initialization closure executed EXACTLY once
+>         assert_eq!(POOL_INIT_COUNT.load(Ordering::SeqCst), 1);
+>         assert!(DB_POOL.get().is_some());
+> 
+>         // Verify connection pooling enforced capacity (10 acquired, 10 denied)
+>         let successful_acquisitions = results.iter().filter(|r| r.is_some()).count();
+>         assert_eq!(successful_acquisitions, 10);
+>     }
 > }
 > ```
->
-> No `unsafe` required anywhere, and it's guaranteed race-free even if `start_time()` is called concurrently from multiple threads.
+> 
+> **Explanation & Key Takeaways:**
+> 1. **Lazy Static Initialization (`LazyLock`)**: `GLOBAL_CONFIG` encapsulates configuration parsing logic. By wrapping it in `LazyLock`, Rust guarantees that no work is done at program startup; the closure evaluates automatically on the first dereference (`&*GLOBAL_CONFIG`).
+> 2. **Explicit Thread-Safe Initialization (`OnceLock`)**: `DB_POOL.get_or_init()` guarantees that even when 20 worker threads concurrently call `get_or_init_pool()`, exactly one thread executes the initialization closure while the remaining threads block until the initialized `&'static DbConnectionPool` reference is available.
+> 3. **Atomic State & Concurrency Safety**: The test verifies atomic initialization counts (`POOL_INIT_COUNT == 1`) and thread connection bounds without requiring `unsafe` code or manual Mutex locking during reads.
 
 ---
 
-### Exercise 2: Thread-Safe Lazy Initialization with `LazyLock`
+### Exercise 2: High-Performance Concurrent Log Masking Pipeline (`LazyLock` & Atomic Metrics)
 
-**Problem:** Define a global `static CONFIG: LazyLock<Vec<String>> = LazyLock::new(|| vec!["a".into()]);`.
+**Problem Statement:**
+In enterprise telemetry pipelines, user audit logs contain sensitive Personally Identifiable Information (PII) such as email tokens, credit card identifiers, and SSN formats. Compiling string redactors or regex rules per incoming request introduces severe latency penalties.
+You are tasked with implementing a zero-overhead, multi-threaded log scrubbing system:
+1. Construct a `PatternRedactor` struct containing masking rules for sensitive tokens.
+2. Initialize a global `static REDACTOR: LazyLock<PatternRedactor>` so redaction patterns are compiled once globally upon first access.
+3. Track overall telemetry metrics across worker threads using `AtomicUsize` counters (`TOTAL_LOGS_PROCESSED` and `TOTAL_REDACTIONS`).
+4. Implement `process_log_line(line: &str) -> String` to sanitize log streams concurrently across worker threads.
+5. Create a complete unit test module `#[cfg(test)] mod tests` verifying pattern replacements, atomic counter accuracy, and thread-safe parallel processing across concurrent worker threads.
 
-**Expected output:**
 > [!check]- Answer
-> ```
-> Lazy config: ["a"]
-> ```
 > ```rust
 > use std::sync::LazyLock;
-> static CONFIG: LazyLock<Vec<String>> = LazyLock::new(|| {
->     vec!["a".to_string()]
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> use std::thread;
+> 
+> pub struct PatternRedactor {
+>     rules: Vec<(&'static str, &'static str)>,
+> }
+> 
+> impl PatternRedactor {
+>     pub fn new() -> Self {
+>         PatternRedactor {
+>             rules: vec![
+>                 ("[EMAIL]", "[REDACTED_EMAIL]"),
+>                 ("[SSN]", "[REDACTED_SSN]"),
+>                 ("[CARD]", "[REDACTED_CARD]"),
+>             ],
+>         }
+>     }
+> 
+>     pub fn redact(&self, input: &str) -> (String, usize) {
+>         let mut output = input.to_string();
+>         let mut replacements = 0;
+> 
+>         for (token, replacement) in &self.rules {
+>             while let Some(pos) = output.find(token) {
+>                 output.replace_range(pos..pos + token.len(), replacement);
+>                 replacements += 1;
+>             }
+>         }
+>         (output, replacements)
+>     }
+> }
+> 
+> // Global pre-compiled pattern redactor loaded lazily on first access
+> pub static REDACTOR: LazyLock<PatternRedactor> = LazyLock::new(|| {
+>     PatternRedactor::new()
 > });
-> fn main() {
->     println!("Lazy config: {:?}", *CONFIG);
+> 
+> pub static TOTAL_LOGS_PROCESSED: AtomicUsize = AtomicUsize::new(0);
+> pub static TOTAL_REDACTIONS: AtomicUsize = AtomicUsize::new(0);
+> 
+> pub fn process_log_line(line: &str) -> String {
+>     TOTAL_LOGS_PROCESSED.fetch_add(1, Ordering::SeqCst);
+>     let (sanitized, count) = REDACTOR.redact(line);
+>     TOTAL_REDACTIONS.fetch_add(count, Ordering::SeqCst);
+>     sanitized
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrent_log_redaction_pipeline() {
+>         let log_samples = vec![
+>             "User login from 10.0.0.1 with [EMAIL] verified.",
+>             "Payment attempt using [CARD] under account [SSN].",
+>             "System health check OK - memory usage stable.",
+>             "Security audit: Account reset requested for [EMAIL] and [SSN].",
+>         ];
+> 
+>         let handles: Vec<_> = (0..8)
+>             .map(|idx| {
+>                 let line = log_samples[idx % log_samples.len()].to_string();
+>                 thread::spawn(move || process_log_line(&line))
+>             })
+>             .collect();
+> 
+>         let redacted_logs: Vec<String> = handles
+>             .into_iter()
+>             .map(|h| h.join().unwrap())
+>             .collect();
+> 
+>         assert_eq!(redacted_logs.len(), 8);
+>         assert_eq!(TOTAL_LOGS_PROCESSED.load(Ordering::SeqCst), 8);
+>         assert!(TOTAL_REDACTIONS.load(Ordering::SeqCst) > 0);
+> 
+>         // Verify redacted pattern replacements
+>         assert!(redacted_logs[0].contains("[REDACTED_EMAIL]"));
+>         assert!(!redacted_logs[0].contains("[EMAIL]"));
+>         assert!(redacted_logs[1].contains("[REDACTED_CARD]"));
+>         assert!(redacted_logs[1].contains("[REDACTED_SSN]"));
+>     }
 > }
 > ```
->
-> **Explanation:** `LazyLock` initializes static thread-safe data lazily upon first dereference.
+> 
+> **Explanation & Key Takeaways:**
+> 1. **Lazy Pre-compilation**: Initializing `REDACTOR` via `LazyLock` defers setup until runtime while ensuring the redactor rules are compiled only once across all worker threads.
+> 2. **Shared Read-Only Access (`Sync`)**: `LazyLock<PatternRedactor>` implements `Sync` because `PatternRedactor` only exposes immutable reference borrows (`&self`), allowing all 8 worker threads to query the exact same memory location without contention or lock acquisitions.
+> 3. **Atomic Operations**: Thread-safe atomic counters (`AtomicUsize`) track metric totals across concurrent worker threads without requiring explicit synchronization primitives like `Mutex`.
 
 ---
 
-### Exercise 3: Explicit One-Time Setup with `OnceLock`
+### Exercise 3: Fallible Thread-Safe Authentication Service (`OnceLock<Result<T, E>>`)
 
-**Problem:** Initialize a global `static CACHE: OnceLock<String> = OnceLock::new();` via `get_or_init`.
+**Problem Statement:**
+In distributed microservice architectures, initializing remote security keys or token validators can fail due to transient network glitches or missing API tokens. Unlike `LazyLock` (which panics if initialization panics), `OnceLock` can hold fallible types such as `Result<T, E>`.
+You are tasked with implementing a fallible thread-safe authentication manager:
+1. Define an `AuthService` struct containing a `OnceLock<Result<String, AuthError>>` token cache and an atomic attempt counter.
+2. Implement `get_or_initialize_token(&self, simulate_success: bool) -> Result<&str, AuthError>` using `OnceLock::get_or_init` to store the result of the initialization attempt.
+3. Write unit tests in `#[cfg(test)] mod tests` demonstrating multi-threaded concurrent access, caching of results (whether `Ok` or `Err`), and verifying that subsequent reads receive cached outcomes without re-invoking initialization.
 
-**Expected output:**
 > [!check]- Answer
-> ```
-> Cache val: initialized
-> ```
 > ```rust
-> use std::sync::OnceLock;
-> static CACHE: OnceLock<String> = OnceLock::new();
-> fn main() {
->     let val = CACHE.get_or_init(|| "initialized".to_string());
->     println!("Cache val: {}", val);
+> use std::sync::{Arc, OnceLock};
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> use std::thread;
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum AuthError {
+>     NetworkTimeout,
+>     InvalidCredentials,
+> }
+> 
+> pub struct AuthService {
+>     token_cache: OnceLock<Result<String, AuthError>>,
+>     attempts: AtomicUsize,
+> }
+> 
+> impl AuthService {
+>     pub fn new() -> Self {
+>         AuthService {
+>             token_cache: OnceLock::new(),
+>             attempts: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn get_or_initialize_token(&self, simulate_success: bool) -> Result<&str, AuthError> {
+>         let res = self.token_cache.get_or_init(|| {
+>             self.attempts.fetch_add(1, Ordering::SeqCst);
+>             if simulate_success {
+>                 Ok(String::from("bearer_token_v9_secure_hash"))
+>             } else {
+>                 Err(AuthError::NetworkTimeout)
+>             }
+>         });
+> 
+>         match res {
+>             Ok(token) => Ok(token.as_str()),
+>             Err(err) => Err(err.clone()),
+>         }
+>     }
+> 
+>     pub fn attempts_count(&self) -> usize {
+>         self.attempts.load(Ordering::SeqCst)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_fallible_oncelock_success_caching() {
+>         let service = Arc::new(AuthService::new());
+>         let handles: Vec<_> = (0..10)
+>             .map(|_| {
+>                 let svc = Arc::clone(&service);
+>                 thread::spawn(move || svc.get_or_initialize_token(true))
+>             })
+>             .collect();
+> 
+>         for handle in handles {
+>             let res = handle.join().unwrap();
+>             assert_eq!(res, Ok("bearer_token_v9_secure_hash"));
+>         }
+> 
+>         // Ensure initialization closure ran exactly once across 10 concurrent threads
+>         assert_eq!(service.attempts_count(), 1);
+>     }
+> 
+>     #[test]
+>     fn test_fallible_oncelock_error_caching() {
+>         let service = AuthService::new();
+> 
+>         // First call initializes with Err
+>         let res1 = service.get_or_initialize_token(false);
+>         assert_eq!(res1, Err(AuthError::NetworkTimeout));
+>         assert_eq!(service.attempts_count(), 1);
+> 
+>         // Subsequent call returns cached Err without re-executing initialization closure
+>         let res2 = service.get_or_initialize_token(true);
+>         assert_eq!(res2, Err(AuthError::NetworkTimeout));
+>         assert_eq!(service.attempts_count(), 1);
+>     }
 > }
 > ```
->
-> **Explanation:** `OnceLock::get_or_init` executes initialization closures once across all threads.
+> 
+> **Explanation & Key Takeaways:**
+> 1. **Fallible Lazy Initialization**: Wrapping `Result<T, E>` inside `OnceLock` allows safe lazy initialization of fallible resources without panicking worker threads.
+> 2. **Single-Execution Guarantee**: `OnceLock::get_or_init` guarantees that the closure runs at most once across all threads. Once computed, the inner `Result` (whether `Ok` or `Err`) is cached for the lifetime of the `OnceLock`.
+> 3. **Thread-Safe Borrowing**: Returning references `Result<&str, AuthError>` directly borrows from the static/heap storage managed inside `OnceLock`, preventing unnecessary allocations on reads.
 
 ---
 

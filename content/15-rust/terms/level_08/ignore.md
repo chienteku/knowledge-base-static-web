@@ -150,85 +150,433 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Specific Marathon
-
-**Problem:** You have 5 tests marked with `#[ignore]`. One of them is named `test_billing_api`. You only want to run that specific ignored test, without running the other 4. What terminal command would you write?
-
-> [!check]- Answer
-> You combine the test name filter with the ignored flag!
->
-> ```bash
-> cargo test test_billing_api -- --ignored
-> ```
-
----
-
-### Exercise 2: Ignoring Slow Test Executions
-
-**Problem:** Annotate a test function with `#[test]` and `#[ignore = "slow integration test"]`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Ignored test configured
-> ```
-> ```rust
-> #[test]
-> #[ignore = "slow integration test"]
-> fn slow_test() {}
-> fn main() {
->     println!("Ignored test configured");
-> }
-> ```
->
-> **Explanation:** `#[ignore]` skips annotated test functions during standard `cargo test` runs.
-
----
-
-### Exercise 3: `--ignored` vs `--include-ignored` \u2014 Choosing the Right Flag
+### Exercise 1: High-Volume Event Aggregator & Heavy Stress Testing
 
 **Problem:**
-After a week of work your CI pipeline has been skipping 5 `#[ignore]`-marked tests. You want to run them now. But there are two different flags and you need to know which one to use:
+In high-throughput financial or metrics ingestion systems, software engineers must ensure that local development TDD runs (`cargo test`) complete in milliseconds. However, heavy soak/stress tests processing millions of transactions are still required to detect memory leaks, boundary errors, or balance drift.
 
-1. **What does `cargo test -- --ignored` do?**
-2. **What does `cargo test -- --include-ignored` do?**
-3. You want to run the nightly suite: all 200 normal tests *plus* the 5 ignored ones in a single command. Which flag is correct?
-4. You only want to run the ignored tests and nothing else (to check them in isolation). Which flag is correct?
+Implement a financial transaction ledger system:
+1. Define a `Transaction` struct containing `id` (`u64`), `amount` (`i64`), and `is_credit` (`bool`).
+2. Define a `LedgerStats` struct holding `total_transactions` (`usize`), `net_balance` (`i64`), and `max_transaction_amount` (`i64`).
+3. Define a `LedgerProcessor` trait with methods `process_transaction(&mut self, tx: Transaction) -> Result<(), &'static str>` and `stats(&self) -> LedgerStats`.
+4. Implement `TransactionLedger` with a bounded transaction capacity limit.
+5. Create a `#[cfg(test)] mod tests` module containing:
+   - A fast unit test (`test_quick_ledger_transaction_balancing`) that verifies credit/debit calculation and zero-amount error checking during normal `cargo test` execution.
+   - An ignored heavy stress test (`test_high_volume_stress_processing`) annotated with `#[ignore = "High-volume stress test processing 1,000,000 records; run with cargo test -- --ignored"]` that ingests 1,000,000 transactions.
+6. Use assertions including `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
-> **1. `cargo test -- --ignored`:**
-> ```bash
-> cargo test -- --ignored
+> ```rust
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct Transaction {
+>     pub id: u64,
+>     pub amount: i64,
+>     pub is_credit: bool,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq, Default)]
+> pub struct LedgerStats {
+>     pub total_transactions: usize,
+>     pub net_balance: i64,
+>     pub max_transaction_amount: i64,
+> }
+> 
+> pub trait LedgerProcessor {
+>     fn process_transaction(&mut self, tx: Transaction) -> Result<(), &'static str>;
+>     fn stats(&self) -> LedgerStats;
+> }
+> 
+> pub struct TransactionLedger {
+>     stats: LedgerStats,
+>     capacity: usize,
+> }
+> 
+> impl TransactionLedger {
+>     pub fn new(capacity: usize) -> Self {
+>         Self {
+>             stats: LedgerStats::default(),
+>             capacity,
+>         }
+>     }
+> }
+> 
+> impl LedgerProcessor for TransactionLedger {
+>     fn process_transaction(&mut self, tx: Transaction) -> Result<(), &'static str> {
+>         if self.stats.total_transactions >= self.capacity {
+>             return Err("Ledger capacity exceeded");
+>         }
+> 
+>         if tx.amount <= 0 {
+>             return Err("Transaction amount must be positive");
+>         }
+> 
+>         self.stats.total_transactions += 1;
+>         if tx.is_credit {
+>             self.stats.net_balance += tx.amount;
+>         } else {
+>             self.stats.net_balance -= tx.amount;
+>         }
+> 
+>         if tx.amount > self.stats.max_transaction_amount {
+>             self.stats.max_transaction_amount = tx.amount;
+>         }
+> 
+>         Ok(())
+>     }
+> 
+>     fn stats(&self) -> LedgerStats {
+>         self.stats.clone()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_quick_ledger_transaction_balancing() {
+>         let mut ledger = TransactionLedger::new(100);
+>         let credit = Transaction { id: 1, amount: 500, is_credit: true };
+>         let debit = Transaction { id: 2, amount: 200, is_credit: false };
+> 
+>         assert!(ledger.process_transaction(credit).is_ok());
+>         assert_eq!(ledger.stats().net_balance, 500);
+> 
+>         assert!(ledger.process_transaction(debit).is_ok());
+>         assert_eq!(ledger.stats().net_balance, 300);
+>         assert_eq!(ledger.stats().total_transactions, 2);
+>         assert_eq!(ledger.stats().max_transaction_amount, 500);
+>         assert_ne!(ledger.stats().net_balance, 0);
+> 
+>         let invalid_tx = Transaction { id: 3, amount: 0, is_credit: true };
+>         let res = ledger.process_transaction(invalid_tx);
+>         assert!(matches!(res, Err("Transaction amount must be positive")));
+>     }
+> 
+>     #[test]
+>     #[ignore = "High-volume stress test processing 1,000,000 records; run with cargo test -- --ignored"]
+>     fn test_high_volume_stress_processing() {
+>         let mut ledger = TransactionLedger::new(1_000_000);
+>         for i in 0..1_000_000 {
+>             let tx = Transaction {
+>                 id: i as u64,
+>                 amount: 10,
+>                 is_credit: i % 2 == 0,
+>             };
+>             assert!(ledger.process_transaction(tx).is_ok());
+>         }
+> 
+>         let stats = ledger.stats();
+>         assert_eq!(stats.total_transactions, 1_000_000);
+>         assert_eq!(stats.net_balance, 0);
+>         assert_eq!(stats.max_transaction_amount, 10);
+>     }
+> }
 > ```
-> Runs **only** the ignored tests, skipping all normal (non-ignored) tests. Use this when you want to audit just the ignored suite in isolation.
->
-> **2. `cargo test -- --include-ignored`:**
-> ```bash
-> cargo test -- --include-ignored
-> ```
-> Runs **all** tests \u2014 both normal tests and ignored tests together. Ignored tests are no longer skipped; they are included in the full run.
->
-> **3. Run everything including ignored:**
-> ```bash
-> cargo test -- --include-ignored
-> ```
->
-> **4. Run only the ignored tests:**
-> ```bash
-> cargo test -- --ignored
-> ```
->
-> **Bonus:** You can combine a name filter with either flag:
-> ```bash
-> cargo test billing -- --ignored
-> ```
-> This runs only ignored tests whose name contains `"billing"`.
->
-> **Explanation:**
-> The `--` separator is required: it tells `cargo test` that everything after it should be passed to the test runner executable, not consumed by Cargo itself. Both flags were introduced because there are two distinct workflows: **isolation** (`--ignored`, only the ignored set, often used for slow integration tests) and **completeness** (`--include-ignored`, the full suite, used in scheduled CI or release gates).
+> 
+> **Technical Explanation:**
+> 1. **Separation of Test Horizons**: Fast unit tests run on every single build step to validate correctness of business logic (e.g., zero-amount handling and net balance calculation).
+> 2. **`#[ignore]` Annotation**: Stacking `#[ignore = "..."]` directly below `#[test]` prevents Cargo from running `test_high_volume_stress_processing` during normal `cargo test`.
+> 3. **Execution Commands**:
+>    - `cargo test`: Executes `test_quick_ledger_transaction_balancing` in < 1 ms and reports `test_high_volume_stress_processing ... ignored`.
+>    - `cargo test -- --ignored`: Executes only the ignored stress test.
+>    - `cargo test -- --include-ignored`: Executes both fast unit tests and the heavy stress test.
+> 
+---
 
+### Exercise 2: Payment Gateway Client & Live Integration Gate
+
+**Problem:**
+Microservice architectures frequently communicate with external HTTP services (e.g., Stripe or PayPal). In-memory mock clients allow instant unit testing, while live sandbox integration tests verify authentication headers and remote server responses. However, executing live integration tests on every local build causes network bottlenecks, rate limiting, and failures when developers are offline.
+
+Design a Payment Gateway module:
+1. Define a `PaymentStatus` enum with variants `Authorized { transaction_id: String }`, `Declined { reason: String }`, and `RateLimited`.
+2. Define `PaymentRequest` and `PaymentResponse` structs.
+3. Define a `PaymentGateway` trait with method `process_payment(&self, req: &PaymentRequest) -> Result<PaymentResponse, &'static str>`.
+4. Implement `MockPaymentGateway` (for fast local tests) and `LivePaymentGateway` (for sandbox environment tests).
+5. Implement unit tests inside `#[cfg(test)] mod tests`:
+   - `test_mock_payment_authorization_and_validation`: Runs in standard test passes to verify request validation and mock authorization matching.
+   - `test_live_payment_gateway_authorization`: Marked with `#[ignore = "Requires live sandbox network connection and remote API credentials"]` to prevent unauthorized or offline build failures.
+6. Verify behavior using `assert_eq!`, `assert!`, `assert_ne!`, `matches!`, and `panic!`.
+
+> [!check]- Answer
+> ```rust
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum PaymentStatus {
+>     Authorized { transaction_id: String },
+>     Declined { reason: String },
+>     RateLimited,
+> }
+> 
+> #[derive(Debug, Clone)]
+> pub struct PaymentRequest {
+>     pub account_id: String,
+>     pub amount_cents: u64,
+>     pub currency: String,
+> }
+> 
+> #[derive(Debug, Clone)]
+> pub struct PaymentResponse {
+>     pub status: PaymentStatus,
+>     pub latency_ms: u64,
+> }
+> 
+> pub trait PaymentGateway {
+>     fn process_payment(&self, req: &PaymentRequest) -> Result<PaymentResponse, &'static str>;
+> }
+> 
+> pub struct MockPaymentGateway {
+>     pub auto_decline: bool,
+> }
+> 
+> impl PaymentGateway for MockPaymentGateway {
+>     fn process_payment(&self, req: &PaymentRequest) -> Result<PaymentResponse, &'static str> {
+>         if req.amount_cents == 0 {
+>             return Err("Invalid payment amount");
+>         }
+>         if self.auto_decline {
+>             Ok(PaymentResponse {
+>                 status: PaymentStatus::Declined {
+>                     reason: "Insufficient funds".into(),
+>                 },
+>                 latency_ms: 5,
+>             })
+>         } else {
+>             Ok(PaymentResponse {
+>                 status: PaymentStatus::Authorized {
+>                     transaction_id: format!("tx_mock_{}", req.account_id),
+>                 },
+>                 latency_ms: 12,
+>             })
+>         }
+>     }
+> }
+> 
+> pub struct LivePaymentGateway {
+>     pub endpoint_url: String,
+>     pub api_key: String,
+> }
+> 
+> impl PaymentGateway for LivePaymentGateway {
+>     fn process_payment(&self, req: &PaymentRequest) -> Result<PaymentResponse, &'static str> {
+>         if self.api_key.is_empty() {
+>             return Err("Missing API Key for live gateway");
+>         }
+>         if req.amount_cents > 10_000_000 {
+>             Ok(PaymentResponse {
+>                 status: PaymentStatus::RateLimited,
+>                 latency_ms: 450,
+>             })
+>         } else {
+>             Ok(PaymentResponse {
+>                 status: PaymentStatus::Authorized {
+>                     transaction_id: format!("tx_live_{}", req.account_id),
+>                 },
+>                 latency_ms: 230,
+>             })
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_mock_payment_authorization_and_validation() {
+>         let gateway = MockPaymentGateway { auto_decline: false };
+>         let req = PaymentRequest {
+>             account_id: "acct_9988".into(),
+>             amount_cents: 2500,
+>             currency: "USD".into(),
+>         };
+> 
+>         let response = gateway.process_payment(&req).unwrap();
+>         assert_eq!(response.latency_ms, 12);
+>         assert!(matches!(
+>             response.status,
+>             PaymentStatus::Authorized { ref transaction_id } if transaction_id == "tx_mock_acct_9988"
+>         ));
+> 
+>         let invalid_req = PaymentRequest {
+>             account_id: "acct_9988".into(),
+>             amount_cents: 0,
+>             currency: "USD".into(),
+>         };
+>         assert!(matches!(gateway.process_payment(&invalid_req), Err("Invalid payment amount")));
+>     }
+> 
+>     #[test]
+>     #[ignore = "Requires live sandbox network connection and remote API credentials"]
+>     fn test_live_payment_gateway_authorization() {
+>         let live_gateway = LivePaymentGateway {
+>             endpoint_url: "https://api.sandbox.paymentservice.com/v1/charge".into(),
+>             api_key: "sk_sandbox_test_key_12345".into(),
+>         };
+> 
+>         let req = PaymentRequest {
+>             account_id: "live_user_101".into(),
+>             amount_cents: 5000,
+>             currency: "USD".into(),
+>         };
+> 
+>         let response = live_gateway.process_payment(&req).expect("Live API call failed");
+>         assert!(response.latency_ms > 0);
+>         assert_ne!(response.latency_ms, 0);
+> 
+>         if let PaymentStatus::Authorized { ref transaction_id } = response.status {
+>             assert!(transaction_id.starts_with("tx_live_"));
+>         } else {
+>             panic!("Expected authorized payment status from live sandbox");
+>         }
+>     }
+> }
+> ```
+> 
+> **Technical Explanation:**
+> 1. **Trait-Based Abstraction**: `PaymentGateway` allows swapping deterministic in-memory implementations (`MockPaymentGateway`) for network-dependent clients (`LivePaymentGateway`).
+> 2. **Protecting CI/CD Pipelines**: Adding `#[ignore = "..."]` to `test_live_payment_gateway_authorization` prevents standard CI builds from failing due to missing API keys or external network downtime.
+> 3. **Targeted Execution**: Developers testing external API integration can target this specific test using:
+>    ```bash
+>    cargo test test_live_payment_gateway_authorization -- --ignored
+>    ```
+> 
+---
+
+### Exercise 3: Database Schema Migration Engine & Destructive Migration Testing
+
+**Problem:**
+Database migration frameworks must run schema structure checks quickly, while isolating tests that alter large production-like database tables or perform destructive column operations.
+
+Design a schema migration engine:
+1. Define a `MigrationStep` struct containing `version` (`u32`), `description` (`String`), `sql_statement` (`String`), and `is_destructive` (`bool`).
+2. Define a `MigrationError` enum with variants `VersionMismatch { expected: u32, found: u32 }` and `ExecutionFailed(String)`.
+3. Define a `MigrationRunner` trait with `apply_migration(&mut self, step: &MigrationStep) -> Result<(), MigrationError>`.
+4. Implement `SchemaMigrator` maintaining current version and execution history.
+5. Create a `#[cfg(test)] mod tests` module featuring:
+   - `test_sequential_schema_migration`: A standard unit test verifying version sequence checks and history logging.
+   - `test_destructive_full_dataset_migration`: An ignored test annotated with `#[ignore = "Destructive migration test on production-sized dataset requiring staging environment"]` to safeguard staging databases during default test runs.
+6. Include assertions: `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
+
+> [!check]- Answer
+> ```rust
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct MigrationStep {
+>     pub version: u32,
+>     pub description: String,
+>     pub sql_statement: String,
+>     pub is_destructive: bool,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum MigrationError {
+>     VersionMismatch { expected: u32, found: u32 },
+>     ExecutionFailed(String),
+> }
+> 
+> pub trait MigrationRunner {
+>     fn apply_migration(&mut self, step: &MigrationStep) -> Result<(), MigrationError>;
+> }
+> 
+> pub struct SchemaMigrator {
+>     pub current_version: u32,
+>     pub executed_history: Vec<u32>,
+> }
+> 
+> impl SchemaMigrator {
+>     pub fn new(initial_version: u32) -> Self {
+>         Self {
+>             current_version: initial_version,
+>             executed_history: Vec::new(),
+>         }
+>     }
+> }
+> 
+> impl MigrationRunner for SchemaMigrator {
+>     fn apply_migration(&mut self, step: &MigrationStep) -> Result<(), MigrationError> {
+>         if step.version != self.current_version + 1 {
+>             return Err(MigrationError::VersionMismatch {
+>                 expected: self.current_version + 1,
+>                 found: step.version,
+>             });
+>         }
+> 
+>         if step.sql_statement.contains("INVALID") {
+>             return Err(MigrationError::ExecutionFailed(
+>                 "SQL syntax error near INVALID".into(),
+>             ));
+>         }
+> 
+>         self.current_version = step.version;
+>         self.executed_history.push(step.version);
+>         Ok(())
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_sequential_schema_migration() {
+>         let mut migrator = SchemaMigrator::new(0);
+>         let step1 = MigrationStep {
+>             version: 1,
+>             description: "Create users table".into(),
+>             sql_statement: "CREATE TABLE users (id INT PRIMARY KEY);".into(),
+>             is_destructive: false,
+>         };
+> 
+>         assert!(migrator.apply_migration(&step1).is_ok());
+>         assert_eq!(migrator.current_version, 1);
+>         assert_eq!(migrator.executed_history, vec![1]);
+> 
+>         let invalid_version_step = MigrationStep {
+>             version: 3,
+>             description: "Skip version test".into(),
+>             sql_statement: "CREATE TABLE posts (id INT);".into(),
+>             is_destructive: false,
+>         };
+> 
+>         let err = migrator.apply_migration(&invalid_version_step);
+>         assert!(matches!(
+>             err,
+>             Err(MigrationError::VersionMismatch { expected: 2, found: 3 })
+>         ));
+>     }
+> 
+>     #[test]
+>     #[ignore = "Destructive migration test on production-sized dataset requiring staging environment"]
+>     fn test_destructive_full_dataset_migration() {
+>         let mut migrator = SchemaMigrator::new(10);
+>         let destructive_step = MigrationStep {
+>             version: 11,
+>             description: "Drop legacy columns and re-index 50M rows".into(),
+>             sql_statement: "ALTER TABLE analytics DROP COLUMN raw_payload;".into(),
+>             is_destructive: true,
+>         };
+> 
+>         assert!(destructive_step.is_destructive);
+>         let result = migrator.apply_migration(&destructive_step);
+>         assert!(result.is_ok());
+>         assert_eq!(migrator.current_version, 11);
+>         assert_ne!(migrator.executed_history.len(), 0);
+>     }
+> }
+> ```
+> 
+> **Technical Explanation:**
+> 1. **Safety and Isolation**: Annotating destructive migration benchmarks with `#[ignore]` ensures developer workstations and shared dev databases are not unintentionally wiped or altered during standard test execution.
+> 2. **Reason Strings**: Including descriptive strings like `#[ignore = "Destructive migration test..."]` provides valuable context when test outputs print ignored test lists.
+> 3. **CI Pipeline Integration**: In scheduled release pipelines, full validation can be triggered using:
+>    ```bash
+>    cargo test -- --include-ignored
+>    ```
+> 
 ---
 
 ## 6. Related Terms

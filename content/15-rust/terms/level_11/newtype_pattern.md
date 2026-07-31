@@ -95,7 +95,7 @@ fn main() {
 
 **The mistake:** Assuming Newtype Pattern instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0106` or `E0515`.
 
 *Incorrect:*
 ```rust
@@ -159,65 +159,377 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Third-Party Problem
+### Exercise 1: Domain-Driven Security & Type-Safe Identifiers
 
-**Problem:** You are building a web server. You want to implement a 3rd-party trait (`Serialize` from the `serde` crate) on a 3rd-party type (`Uuid` from the `uuid` crate). The compiler rejects it because of the Orphan Rule. How do you fix this?
+**Problem:**
+In a multi-tenant web backend, passing raw `u64` primitive types for database IDs (such as `UserId` vs `TenantId`) creates serious security risks if IDs are accidentally swapped in query parameters. Furthermore, accepting raw string user input without type-safe sanitization can lead to Cross-Site Scripting (XSS) vulnerabilities when rendered into HTML.
+
+Create a domain-safe system using the Newtype pattern:
+1. Define distinct tuple struct newtypes `UserId(pub u64)`, `TenantId(pub u64)`, `UnsanitizedHtml(pub String)`, and `SanitizedHtml(pub String)`.
+2. Implement a `sanitize(self) -> SanitizedHtml` method on `UnsanitizedHtml` that converts HTML special characters (`<`, `>`, `&`, `"`, `'`) to their safe entity equivalents (`&lt;`, `&gt;`, `&amp;`, `&quot;`, `&#x27;`).
+3. Write a function `fetch_user_profile(tenant_id: TenantId, user_id: UserId) -> Result<String, String>` that strictly enforces ID separation at compile time and rejects zero values.
+4. Include comprehensive unit tests (`#[test]`) verifying type separation, validation logic, and sanitization correctness using `assert_eq!`, `assert!`, and error assertions.
 
 > [!check]- Answer
-> You use the **Newtype Pattern**! 
->
-> You define a local struct `struct MyUuid(Uuid);`, and then you implement `Serialize` on your local `MyUuid`. Because the struct is defined in your codebase, the compiler allows the implementation!
+> ```rust
+> #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+> pub struct UserId(pub u64);
+> 
+> #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+> pub struct TenantId(pub u64);
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct UnsanitizedHtml(pub String);
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct SanitizedHtml(pub String);
+> 
+> impl UnsanitizedHtml {
+>     pub fn new(raw: impl Into<String>) -> Self {
+>         Self(raw.into())
+>     }
+> 
+>     pub fn sanitize(self) -> SanitizedHtml {
+>         let sanitized = self.0
+>             .replace('&', "&amp;")
+>             .replace('<', "&lt;")
+>             .replace('>', "&gt;")
+>             .replace('"', "&quot;")
+>             .replace('\'', "&#x27;");
+>         SanitizedHtml(sanitized)
+>     }
+> }
+> 
+> impl SanitizedHtml {
+>     pub fn as_str(&self) -> &str {
+>         &self.0
+>     }
+> }
+> 
+> pub fn fetch_user_profile(tenant_id: TenantId, user_id: UserId) -> Result<String, String> {
+>     if tenant_id.0 == 0 || user_id.0 == 0 {
+>         return Err("Invalid Tenant or User ID".to_string());
+>     }
+>     Ok(format!("Profile for User {} in Tenant {}", user_id.0, tenant_id.0))
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_type_safe_id_separation() {
+>         let tenant = TenantId(1001);
+>         let user = UserId(42);
+>         let result = fetch_user_profile(tenant, user);
+>         assert_eq!(result, Ok("Profile for User 42 in Tenant 1001".to_string()));
+>     }
+> 
+>     #[test]
+>     fn test_invalid_ids_returns_error() {
+>         let tenant = TenantId(0);
+>         let user = UserId(42);
+>         let result = fetch_user_profile(tenant, user);
+>         assert!(result.is_err());
+>         assert_eq!(result.unwrap_err(), "Invalid Tenant or User ID");
+>     }
+> 
+>     #[test]
+>     fn test_html_sanitization() {
+>         let unsafe_input = UnsanitizedHtml::new("<script>alert('xss & dangerous');</script>");
+>         let safe_output = unsafe_input.sanitize();
+>         assert_eq!(
+>             safe_output.as_str(),
+>             "&lt;script&gt;alert(&#x27;xss &amp; dangerous&#x27;);&lt;/script&gt;"
+>         );
+>     }
+> }
+> ```
+> 
+> **Explanation:**
+> 1. **Compile-Time Domain Safety:** By wrapping raw `u64` in `UserId` and `TenantId`, the Rust compiler prevents accidentally swapping arguments (e.g., passing a `TenantId` where a `UserId` is expected).
+> 2. **State Transition & Invariant Enforcement:** `UnsanitizedHtml` cannot be rendered directly into HTML components. The only way to obtain a `SanitizedHtml` instance is by consuming the `UnsanitizedHtml` through `.sanitize()`.
+> 3. **Zero-Cost Abstraction:** Rust optimizes single-element tuple structs to have the exact memory layout as the underlying primitive, incurring zero runtime performance penalty.
 
 ---
 
-### Exercise 2: Domain Type Safety with Newtypes
+### Exercise 2: Physical Unit Safety & Operator Overloading
 
-**Problem:** Create `struct Miles(u32)` and `struct Kilometers(u32)`. Write functions preventing accidental unit mixing.
+**Problem:**
+In scientific computing and physics engines, mixing unit types (such as adding distance to time or dividing time by distance instead of distance by time) causes catastrophic errors.
 
-**Expected output:**
+Implement a dimensional unit calculation system using Newtypes and operator overloading:
+1. Define newtypes `Meters(pub f64)`, `Seconds(pub f64)`, and `MetersPerSecond(pub f64)` with `#[repr(transparent)]`.
+2. Implement `std::ops::Add` and `std::ops::Sub` for `Meters` to allow adding and subtracting distances.
+3. Implement `std::ops::Div<Seconds>` for `Meters` (`Meters / Seconds -> MetersPerSecond`) to compute velocity.
+4. Implement `std::ops::Mul<Seconds>` for `MetersPerSecond` (`MetersPerSecond * Seconds -> Meters`) to compute distance.
+5. Implement `std::fmt::Display` formatting for `Meters` and `MetersPerSecond`.
+6. Write unit tests (`#[test]`) using assertions (`assert_eq!`, `assert!`, precision tolerances) testing arithmetic operations, velocity calculation, distance reconstruction, and string formatting.
+
 > [!check]- Answer
-> ```
-> Distance in miles: 100
-> ```
 > ```rust
-> struct Miles(u32);
-> struct Kilometers(u32);
-> fn print_miles(m: Miles) { println!("Distance in miles: {}", m.0); }
-> fn main() {
->     let m = Miles(100);
->     print_miles(m);
+> use std::fmt;
+> use std::ops::{Add, Div, Mul, Sub};
+> 
+> #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+> #[repr(transparent)]
+> pub struct Meters(pub f64);
+> 
+> #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+> #[repr(transparent)]
+> pub struct Seconds(pub f64);
+> 
+> #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+> #[repr(transparent)]
+> pub struct MetersPerSecond(pub f64);
+> 
+> impl Add for Meters {
+>     type Output = Meters;
+>     fn add(self, rhs: Meters) -> Meters {
+>         Meters(self.0 + rhs.0)
+>     }
+> }
+> 
+> impl Sub for Meters {
+>     type Output = Meters;
+>     fn sub(self, rhs: Meters) -> Meters {
+>         Meters(self.0 - rhs.0)
+>     }
+> }
+> 
+> impl Div<Seconds> for Meters {
+>     type Output = MetersPerSecond;
+>     fn div(self, rhs: Seconds) -> MetersPerSecond {
+>         MetersPerSecond(self.0 / rhs.0)
+>     }
+> }
+> 
+> impl Mul<Seconds> for MetersPerSecond {
+>     type Output = Meters;
+>     fn mul(self, rhs: Seconds) -> Meters {
+>         Meters(self.0 * rhs.0)
+>     }
+> }
+> 
+> impl fmt::Display for Meters {
+>     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+>         write!(f, "{:.2} m", self.0)
+>     }
+> }
+> 
+> impl fmt::Display for MetersPerSecond {
+>     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+>         write!(f, "{:.2} m/s", self.0)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_meters_addition_and_subtraction() {
+>         let m1 = Meters(150.5);
+>         let m2 = Meters(49.5);
+>         let sum = m1 + m2;
+>         let diff = m1 - m2;
+> 
+>         assert_eq!(sum, Meters(200.0));
+>         assert_eq!(diff, Meters(101.0));
+>     }
+> 
+>     #[test]
+>     fn test_velocity_calculation() {
+>         let distance = Meters(100.0);
+>         let time = Seconds(9.58);
+>         let speed: MetersPerSecond = distance / time;
+> 
+>         let expected_speed = 100.0 / 9.58;
+>         assert!((speed.0 - expected_speed).abs() < 1e-6);
+>     }
+> 
+>     #[test]
+>     fn test_distance_from_speed_and_time() {
+>         let speed = MetersPerSecond(10.4384);
+>         let time = Seconds(9.58);
+>         let distance = speed * time;
+> 
+>         assert!((distance.0 - 100.0).abs() < 1e-3);
+>     }
+> 
+>     #[test]
+>     fn test_display_formatting() {
+>         let distance = Meters(42.195);
+>         let speed = MetersPerSecond(5.25);
+>         assert_eq!(format!("{}", distance), "42.20 m");
+>         assert_eq!(format!("{}", speed), "5.25 m/s");
+>     }
 > }
 > ```
->
-> **Explanation:** Newtypes wrap primitive types into distinct zero-cost domain types enforced at compile time.
+> 
+> **Explanation:**
+> 1. **Dimensional Analysis in Type System:** Operator trait implementations (`Div<Seconds>` for `Meters`, `Mul<Seconds>` for `MetersPerSecond`) codify physical equations directly into Rust's type system. Attempting `Meters + Seconds` fails at compile time because `Add<Seconds>` is not implemented for `Meters`.
+> 2. **Memory Layout Guarantees:** Using `#[repr(transparent)]` guarantees that each newtype wrapper matches ABI layout and alignment of `f64` precisely, allowing seamless pass-by-value efficiency across function boundaries.
 
 ---
 
-### Exercise 3: Implementing `Deref` for Newtypes
+### Exercise 3: Bypassing the Orphan Rule & Smart Pointer Dereferencing
 
-**Problem:** Implement `Deref` for `struct Name(String)` to expose `&str` methods directly.
+**Problem:**
+Rust's Orphan Rule prevents implementing external traits on external types. When integrating third-party libraries (e.g. an external `ExternalConfig` struct), you cannot directly implement your application crate's traits on `ExternalConfig`. Additionally, manually delegating every method or field access on wrapped types is verbose.
 
-**Expected output:**
+Solve this problem using the Newtype pattern combined with smart pointer dereferencing:
+1. Define a simulated third-party struct `ExternalConfig { pub endpoint: String, pub timeout_ms: u64, pub retries: u32 }`.
+2. Define a local trait `Auditable` with `fn generate_audit_log(&self) -> String`.
+3. Create a local Newtype `AuditConfig(pub ExternalConfig)`.
+4. Write a constructor `AuditConfig::new(config: ExternalConfig) -> Result<Self, &'static str>` that validates domain invariants (`timeout_ms > 0` and `retries <= 10`).
+5. Implement `Auditable` for `AuditConfig` to bypass the Orphan Rule.
+6. Implement `std::ops::Deref` and `std::ops::DerefMut` for `AuditConfig` so callers can seamlessly access and mutate fields of the inner `ExternalConfig`.
+7. Write unit tests (`#[test]`) with `assert_eq!`, `assert!`, and `matches!` validating constructor checks, field dereferencing, in-place field mutation, and audit log generation.
+
 > [!check]- Answer
-> ```
-> Len: 5
-> ```
 > ```rust
-> use std::ops::Deref;
-> struct Name(String);
-> impl Deref for Name {
->     type Target = String;
->     fn deref(&self) -> &Self::Target { &self.0 }
+> use std::ops::{Deref, DerefMut};
+> 
+> // Simulating an external 3rd-party crate type
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct ExternalConfig {
+>     pub endpoint: String,
+>     pub timeout_ms: u64,
+>     pub retries: u32,
 > }
-> fn main() {
->     let n = Name("Alice".into());
->     println!("Len: {}", n.len());
+> 
+> // Local trait defined in our application crate
+> pub trait Auditable {
+>     fn generate_audit_log(&self) -> String;
+> }
+> 
+> // Local Newtype wrapping external type to bypass the Orphan Rule
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct AuditConfig(pub ExternalConfig);
+> 
+> impl AuditConfig {
+>     pub fn new(config: ExternalConfig) -> Result<Self, &'static str> {
+>         if config.timeout_ms == 0 {
+>             return Err("Timeout must be greater than zero");
+>         }
+>         if config.retries > 10 {
+>             return Err("Retries cannot exceed 10");
+>         }
+>         Ok(Self(config))
+>     }
+> }
+> 
+> // Implementing local trait on our local Newtype (bypassing orphan rule)
+> impl Auditable for AuditConfig {
+>     fn generate_audit_log(&self) -> String {
+>         format!(
+>             "AUDIT: endpoint='{}', timeout_ms={}, retries={}",
+>             self.endpoint, self.timeout_ms, self.retries
+>         )
+>     }
+> }
+> 
+> // Implementing Deref to allow transparent access to ExternalConfig methods and fields
+> impl Deref for AuditConfig {
+>     type Target = ExternalConfig;
+> 
+>     fn deref(&self) -> &Self::Target {
+>         &self.0
+>     }
+> }
+> 
+> // Implementing DerefMut to allow transparent mutable access
+> impl DerefMut for AuditConfig {
+>     type Target = ExternalConfig;
+> 
+>     fn deref_mut(&mut self) -> &mut Self::Target {
+>         &mut self.0
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_valid_audit_config_creation() {
+>         let ext_cfg = ExternalConfig {
+>             endpoint: "https://api.service.internal".to_string(),
+>             timeout_ms: 5000,
+>             retries: 3,
+>         };
+>         let audit_cfg = AuditConfig::new(ext_cfg);
+>         assert!(audit_cfg.is_ok());
+>     }
+> 
+>     #[test]
+>     fn test_invalid_audit_config_validation() {
+>         let invalid_timeout = ExternalConfig {
+>             endpoint: "https://api.service.internal".to_string(),
+>             timeout_ms: 0,
+>             retries: 3,
+>         };
+>         assert_eq!(
+>             AuditConfig::new(invalid_timeout),
+>             Err("Timeout must be greater than zero")
+>         );
+> 
+>         let invalid_retries = ExternalConfig {
+>             endpoint: "https://api.service.internal".to_string(),
+>             timeout_ms: 1000,
+>             retries: 15,
+>         };
+>         assert_eq!(
+>             AuditConfig::new(invalid_retries),
+>             Err("Retries cannot exceed 10")
+>         );
+>     }
+> 
+>     #[test]
+>     fn test_deref_transparent_field_access_and_mutation() {
+>         let ext_cfg = ExternalConfig {
+>             endpoint: "https://api.v1.org".to_string(),
+>             timeout_ms: 2000,
+>             retries: 2,
+>         };
+>         let mut audit_cfg = AuditConfig::new(ext_cfg).unwrap();
+> 
+>         // Accessing fields directly via Deref coercion
+>         assert_eq!(audit_cfg.endpoint, "https://api.v1.org");
+>         assert_eq!(audit_cfg.timeout_ms, 2000);
+> 
+>         // Mutating field directly via DerefMut coercion
+>         audit_cfg.endpoint = "https://api.v2.org".to_string();
+>         assert_eq!(audit_cfg.endpoint, "https://api.v2.org");
+>     }
+> 
+>     #[test]
+>     fn test_auditable_trait_implementation() {
+>         let ext_cfg = ExternalConfig {
+>             endpoint: "https://db.internal".to_string(),
+>             timeout_ms: 3000,
+>             retries: 5,
+>         };
+>         let audit_cfg = AuditConfig::new(ext_cfg).unwrap();
+> 
+>         let log = audit_cfg.generate_audit_log();
+>         assert_eq!(
+>             log,
+>             "AUDIT: endpoint='https://db.internal', timeout_ms=3000, retries=5"
+>         );
+>     }
 > }
 > ```
->
-> **Explanation:** Implementing `Deref` exposes inner wrapped type methods seamlessly.
+> 
+> **Explanation:**
+> 1. **Bypassing Orphan Rule:** `AuditConfig` is defined in the local crate, allowing `impl Auditable for AuditConfig` even though `ExternalConfig` originates from an external crate.
+> 2. **Ergonomic Deref Coercion:** Implementing `Deref` and `DerefMut` allows `AuditConfig` to automatically coercion-dereference into `ExternalConfig`. Field access (`audit_cfg.endpoint`) and field mutations transparently pass through to the inner type without boiler-plate getter/setter forwarding methods.
+> 3. **Encapsulated Invariant Check:** Constructor `AuditConfig::new` acts as a validation gate, ensuring that any instance of `AuditConfig` in the system adheres to operational constraints.
 
 ---
 

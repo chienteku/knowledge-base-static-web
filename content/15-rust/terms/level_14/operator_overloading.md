@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Traits](../level_04/trait.md) — Standard trait implementation mechanics (`impl Trait for Type`).
-- [Associated Types](../level_05/associated_types.md) — Standard associated types (`type Output`) used in `std::ops` traits.
+- [Associated Types](../level_04/associated_types.md) — Standard associated types (`type Output`) used in `std::ops` traits.
 - [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md) — Customizing the `*` dereference operator via `std::ops`.
 
 ---
@@ -774,7 +774,7 @@ p += Point2D { x: 2, y: 2 }; // Works!
 
 - [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md) — Overloading the `*` dereference operator.
 - [Traits](../level_04/trait.md) — Trait abstraction mechanism.
-- [Associated Types](../level_05/associated_types.md) — `type Output` used in `std::ops` traits.
+- [Associated Types](../level_04/associated_types.md) — `type Output` used in `std::ops` traits.
 - [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md) — Reference conversion traits.
 
 ---

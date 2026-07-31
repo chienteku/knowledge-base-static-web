@@ -1,23 +1,25 @@
-# `Pin<T>`
+# `pin!`, `Pin<T>`, and `Unpin`
 
 > **Level 10 — Async / Await**
-> Prevents a value from being moved in memory; required for self-referential futures.
+> Guarantees that an object will never move in memory again, essential for self-referential futures.
 
 ---
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — The magic syntax that creates the problem `Pin` solves.
-- [`Future` Trait](../level_10/future_trait.md) — The trait whose `poll` method explicitly requires `Pin`.
-- [Move Semantics](../level_03/move_semantics.md) — The default behavior of Rust that `Pin` explicitly disables.
+- [`Future` Trait](../level_10/future_trait.md) — The state machines that rely on `Pin`.
+- [`async fn`](../level_10/async_fn.md) — How we create self-referential futures.
+- [Smart Pointers (`Box`)](../level_03/box_t.md) — A common container for pinning (`Pin<Box<T>>`).
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (the memory glue)**: `Pin` is widely considered the most notoriously confusing, brain-melting concept in all of Rust. 
+**Rust Memory Model (the anchor)**: `Pin` is one of the most conceptually challenging parts of Rust, but its job is very simple: **It pins an object to a specific memory address so it can never be moved.**
 
-It exists almost entirely to solve a massive memory-safety problem introduced by `async fn`. It is a wrapper type (`Pin<Box<T>>`, `Pin<&mut T>`) that makes an ironclad promise to the compiler: *"I swear that the data inside this wrapper will NEVER be moved to a different memory address for as long as it exists."*
+By default, Rust loves to move things around in memory when you assign them to new variables or pass them into functions (Move semantics). However, Async Futures contain self-referential pointers (pointers that point to other fields *inside the exact same struct*). 
+
+If you move a self-referential struct in memory, its pointers will still point to the *old* memory address, causing horrific memory corruption! `Pin` is the anchor that prevents this.
 
 ---
 
@@ -25,63 +27,65 @@ It exists almost entirely to solve a massive memory-safety problem introduced by
 
 ### (1) Design Motivation — "Why did we design this?"
 
-When you write an `async fn`, the compiler generates a hidden State Machine `enum`. 
+When you write an `async fn`, the Rust compiler compiles your function into a giant `enum`/`struct` state machine. 
 
-Inside your `async fn`, you might declare an array: `let array = [1, 2];`, and then create a reference to it: `let ref_to_array = &array;`. Then, you call `.await`. 
+If your async function creates a variable on the stack, and then creates a reference to that variable across an `.await` point, the generated struct will contain a pointer *pointing directly to another field inside itself*!
 
-Because you called `.await`, the function must pause! The State Machine must save all your local variables (`array` AND `ref_to_array`) inside its hidden `enum` so they survive while the thread sleeps. 
+If a caller moves this `Future` struct to a different location on the Heap or Stack, the pointer inside the struct will now point to a dead, invalid memory address! 
 
-This means the `enum` now contains a reference pointing *to itself*! This is called a **Self-Referential Struct**. 
-
-In standard Rust, you move variables constantly (e.g., returning them from functions, pushing them into a `Vec`). If you moved this `enum` to a new memory address, the internal reference (`ref_to_array`) would still point to the *old, deleted memory address*! If you tried to use it, your program would suffer a catastrophic memory violation (Use-After-Free). 
-
-**`Pin`** was invented to guarantee that these State Machines are "pinned" to their memory address and can physically never be moved.
+To make `async`/`await` safe, Rust needed a way to mathematically guarantee: *"Once this Future starts running, it will NEVER move to a new memory address again."* That guarantee is `Pin`.
 
 ### (2) Reality Metaphor
 
-Imagine you have a whiteboard. You write the word "Data" on the left side, and draw an arrow pointing from the right side to the word "Data" (a self-reference).
+Imagine a snail carrying its house on its back.
 
-- **Unpinned (Standard Rust)**: Someone picks up the word "Data" and moves it to a completely different whiteboard in another room. The arrow is still pointing to the left side of the first whiteboard, which is now empty. The arrow points to garbage.
-- **Pinned (`Pin<T>`)**: You take a literal metal thumbtack and pin the word "Data" to the whiteboard. It is physically impossible to move it. The arrow will always point to the correct data!
+- **Unpinned Data (`Unpin`)**: A standard plastic toy. You can pick it up from the table, put it in your pocket, or ship it to Japan. It doesn't care where it lives (Move semantics).
+- **Self-Referential Data**: Imagine a tree house where the ladder is bolted to a specific root on the ground.
+- **`Pin`**: You drive a massive steel stake through the tree house into the bedrock of the earth (`Pin`). Now, nobody can pick up the tree house and move it to a different location, because doing so would rip the ladder off the root! It is anchored in place forever.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Future Signature)
-In Term #126, we saw the signature for `Future::poll`. Now you finally understand *why* it looks so scary.
+#### Short Snippet (What `Unpin` Means)
+Almost every single standard type in Rust (`i32`, `String`, `Vec`) implements the `Unpin` marker trait automatically. It means: *"I don't care about being pinned! Feel free to move me!"*
+
+Only compiler-generated `Future` structs are `!Unpin` (not Unpin).
 
 ```rust
-pub trait Future {
-    type Output;
+use std::marker::PhantomPinned;
+use std::pin::Pin;
 
-    // The state machine `Self` must be PINNED in memory before 
-    // the Executor is allowed to poll it!
-    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+// Normal types are Unpin. Pinning them does nothing!
+let mut number: i32 = 5;
+let pinned_number: Pin<&mut i32> = Pin::new(&mut number); // Perfectly legal!
+
+// Structs with PhantomPinned are !Unpin (cannot be moved once pinned)
+struct SelfReferential {
+    data: String,
+    _marker: PhantomPinned, // Opt-out of Unpin!
 }
 ```
 
-#### Fuller Example (Using `tokio::pin!`)
-99% of the time, the `async/await` syntax handles all the pinning for you invisibly. You never think about it. But occasionally, if you want to use advanced Tokio macros like `tokio::select!` or manually poll a Future, you must pin it yourself using a macro.
+#### Fuller Example (Stack Pinning with `tokio::pin!`)
+If you want to poll a `Future` manually inside a loop (like using `select!`), you must pin it first! You can pin it to the Heap using `Box::pin()`, or pin it to the Stack using `tokio::pin!`.
 
 ```rust
 use tokio::time::{sleep, Duration};
 
+async fn my_async_task() {
+    sleep(Duration::from_millis(100)).await;
+    println!("Task finished!");
+}
+
 #[tokio::main]
 async fn main() {
-    let my_future = sleep(Duration::from_secs(1));
-    
-    // my_future is currently UNPINNED. We can move it around freely!
-    // But we cannot poll it yet.
-    
-    // We use the macro to permanently pin it to the Stack memory right here!
-    tokio::pin!(my_future);
-    
-    // Now it is a `Pin<&mut Sleep>`. We can pass it into advanced functions!
-    // Note: If we tried to `move` my_future after this line, the compiler would crash!
-    tokio::select! {
-        _ = &mut my_future => {
-            println!("Timer finished first!");
-        }
-    }
+    let fut = my_async_task();
+
+    // tokio::pin! anchors the future to the current stack frame!
+    // It converts `fut` into a `Pin<&mut Future>`
+    tokio::pin!(fut);
+
+    // Now we can pass `fut` safely to methods that require a Pinned Future!
+    (&mut fut).await;
 }
 ```
 
@@ -157,150 +161,277 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Core Problem
+### Exercise 1: Self-Referential Pinned Buffer with Heap Pinning (`Pin<Box<T>>`)
 
-**Problem:** Why exactly does `async fn` generate self-referential structs in the first place?
+**Scenario**: Low-level networking and graphics engines often require self-referential buffers where a slice reference `&[u8]` inside a struct points directly to another heap-allocated buffer stored within the same struct instance. If this struct moves in memory, the raw pointer/slice becomes invalid.
+
+Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` and heap-pinning via `Box::pin`.
+
+**Requirements**:
+1. Struct `SelfReferentialBuffer` must contain `data: Vec<u8>`, `slice_ptr: *const u8`, `slice_len: usize`, and `_pin: PhantomPinned`.
+2. Implement `SelfReferentialBuffer::new(data: Vec<u8>) -> Pin<Box<Self>>` which allocates the struct on the heap, initializes `slice_ptr` to point to `data.as_ptr()`, and pins the `Box`.
+3. Implement `fn get_slice(self: Pin<&Self>) -> &[u8]` safely using `unsafe` pointer dereferencing verified by pinning bounds.
+4. Add unit tests asserting pointer stability, slice content validity, and testing memory assertions.
 
 > [!check]- Answer
-> Because an `async fn` is a state machine that must pause its execution across `.await` points!
->
-> If you declare a local variable, and then declare a reference pointing to that local variable, and *then* you `.await`... the state machine must save both variables so they survive while the thread sleeps. The state machine is now saving a reference that points to data *inside the exact same state machine*. It is self-referential!
-
----
-
-### Exercise 2: Stack Pinning with `tokio::pin!` — Reusing a Future Across `select!`
-
-**Problem:**
-Each iteration of a `select!` loop needs to poll the *same* future — not create a new one. But calling an `async fn` inside `select!` each time creates a fresh future that loses all progress. The solution is to pin the future to the stack with `tokio::pin!` and reuse it.
-
-Write a `#[tokio::main]` program that:
-1. Creates a single `tokio::time::sleep(Duration::from_millis(200))` future and pins it to the stack with `tokio::pin!`.
-2. Runs a loop with a `tokio::select!` that races:
-   - The pinned sleep future against
-   - A `tokio::time::sleep(Duration::from_millis(50))` tick timer.
-3. On each tick, prints `"Tick: {n}"`. When the pinned sleep resolves, prints `"Long sleep done!"` and breaks.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Tick: 1
-> Tick: 2
-> Tick: 3
-> Tick: 4
-> Long sleep done!
-> ```
-> *(4 ticks because 200ms / 50ms = 4)*
->
-> - **Hint 1:** `tokio::pin!(fut)` is a macro that shadows the variable with a `Pin<&mut impl Future>` pointing to the same stack location. You can then pass `&mut fut` into `select!` across multiple iterations without recreating the future.
-> - **Hint 2:** Once a future is pinned, you cannot move it. `select!` borrows `fut` mutably each iteration — it polls it, potentially advances its state, then releases the borrow. This is why pinning is necessary: the future's internal self-references must remain valid between polls.
-> - **Hint 3:** In `select!`, reference pinned futures by name directly (they are already `Pin<&mut F>`). The timer branch needs a fresh `sleep(...)` each iteration (create it inside the `select!` arm expression).
->
 > ```rust
-> use tokio::time::{sleep, Duration};
->
-> #[tokio::main]
-> async fn main() {
->     // Create the long-running future ONCE and pin it to the stack.
->     // tokio::pin! shadows `long_sleep` with Pin<&mut impl Future>.
->     let long_sleep = sleep(Duration::from_millis(200));
->     tokio::pin!(long_sleep);
->
->     let mut tick = 0u32;
->     loop {
->         tokio::select! {
->             // Branch A: the pinned future — reused across iterations.
->             _ = &mut long_sleep => {
->                 println!("Long sleep done!");
->                 break;
->             }
->             // Branch B: a fresh 50ms tick created each iteration.
->             _ = sleep(Duration::from_millis(50)) => {
->                 tick += 1;
->                 println!("Tick: {}", tick);
->             }
->         }
->     }
-> }
-> ```
->
-> **Explanation:**
-> Without `tokio::pin!`, writing `long_sleep` inside `select!` directly would move the future into the macro on the first iteration, making it unavailable for subsequent iterations. `pin!` creates an `in-place` pin: the future stays at its stack address, and `&mut long_sleep` gives a mutable reference to its pinned location that `select!` can borrow repeatedly. This is the canonical pattern for "race a long-running future against a ticker" in Tokio.
-
----
-
-### Exercise 3: Heap Pinning with `Box::pin` — Type-Erased Future Collections
-
-**Problem:**
-Heap-pinning with `Box::pin` serves two purposes: (1) it moves the future to the heap where it has a stable address for its entire lifetime, and (2) combined with `dyn Future`, it erases the concrete type so heterogeneous futures can be stored together.
-
-Write a `#[tokio::main]` program that:
-1. Defines three different async fns: `async fn greet() -> String`, `async fn count() -> String`, `async fn timestamp() -> String` — each returns a different formatted string.
-2. Stores all three in a `Vec<Pin<Box<dyn Future<Output = String>>>>` using `Box::pin(greet())` etc.
-3. Iterates the Vec, `.await`s each future, and prints its result.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Hello, world!
-> Count: 42
-> Timestamp: T+0
-> ```
->
-> - **Hint 1:** `Box::pin(some_future)` moves `some_future` to the heap and returns `Pin<Box<impl Future<Output = T>>>`. The future's address is now stable — it will never move even if the `Box` itself is moved.
-> - **Hint 2:** To store futures of *different concrete types* in the same `Vec`, you need trait objects: `Pin<Box<dyn Future<Output = String>>>`. Each `Box::pin(f)` coerces to this type automatically because `impl Future` implements `Future`.
-> - **Hint 3:** To `.await` a `Pin<Box<dyn Future<Output = String>>>` from a `Vec`, iterate and await each: `for fut in futures { let result = fut.await; }`. This works because `Pin<Box<dyn Future>>` itself implements `Future`.
->
-> ```rust
+> use std::marker::PhantomPinned;
 > use std::pin::Pin;
-> use std::future::Future;
->
-> async fn greet() -> String {
->     String::from("Hello, world!")
+> use std::ptr;
+> 
+> pub struct SelfReferentialBuffer {
+>     data: Vec<u8>,
+>     slice_ptr: *const u8,
+>     slice_len: usize,
+>     _pin: PhantomPinned,
 > }
->
-> async fn count() -> String {
->     String::from("Count: 42")
+> 
+> impl SelfReferentialBuffer {
+>     /// Constructs a heap-pinned self-referential buffer.
+>     pub fn new(data: Vec<u8>) -> Pin<Box<Self>> {
+>         let len = data.len();
+>         let mut unpinned = Box::new(SelfReferentialBuffer {
+>             data,
+>             slice_ptr: ptr::null(),
+>             slice_len: len,
+>             _pin: PhantomPinned,
+>         });
+> 
+>         // Self-reference pointing to data vector inside heap allocation
+>         let ptr = unpinned.data.as_ptr();
+>         unpinned.slice_ptr = ptr;
+> 
+>         // Anchor the allocation on the heap permanently
+>         Box::into_pin(unpinned)
+>     }
+> 
+>     /// Safely accesses the self-referential slice guaranteed by Pinned pointer immutability.
+>     pub fn get_slice(self: Pin<&Self>) -> &[u8] {
+>         // SAFETY: `self` is pinned in heap memory, so `data` will never move or relocate.
+>         unsafe { std::slice::from_raw_parts(self.slice_ptr, self.slice_len) }
+>     }
 > }
->
-> async fn timestamp() -> String {
->     String::from("Timestamp: T+0")
-> }
->
-> #[tokio::main]
-> async fn main() {
->     // Box::pin erases the concrete type: all three fns have different
->     // anonymous Future types, but all coerce to dyn Future<Output = String>.
->     let futures: Vec<Pin<Box<dyn Future<Output = String>>>> = vec![
->         Box::pin(greet()),
->         Box::pin(count()),
->         Box::pin(timestamp()),
->     ];
->
->     for fut in futures {
->         let result = fut.await;
->         println!("{}", result);
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+
+> 
+>     #[test]
+>     fn test_self_referential_buffer() {
+>         let raw_bytes = vec![0xDE, 0xAD, 0xBE, 0xEF];
+>         let pinned_buf = SelfReferentialBuffer::new(raw_bytes);
+> 
+>         // Access pinned reference safely
+>         let slice = pinned_buf.as_ref().get_slice();
+>         assert_eq!(slice, &[0xDE, 0xAD, 0xBE, 0xEF]);
+>         assert_eq!(slice.len(), 4);
+>     }
+> 
+>     #[test]
+>     fn test_pointer_stability_after_pinning() {
+>         let data = vec![1, 2, 3, 4, 5];
+>         let pinned = SelfReferentialBuffer::new(data);
+> 
+>         let ptr1 = pinned.as_ref().get_slice().as_ptr();
+> 
+>         // Moving the Pin<Box<T>> wrapper moves the pointer on stack, NOT the heap data
+>         let moved_pin = pinned;
+>         let ptr2 = moved_pin.as_ref().get_slice().as_ptr();
+> 
+>         assert_eq!(ptr1, ptr2);
 >     }
 > }
 > ```
->
-> **Explanation:**
-> `Box::pin` is the primary way to heap-allocate a future when you need to: (a) store it as a field in a struct without knowing its size at compile time, (b) mix futures of different types in a collection, or (c) return a future from a function whose concrete type you want to hide (e.g. `-> Pin<Box<dyn Future<Output = T>>>`). The `Pin` wrapper ensures the heap allocation is never moved, which is necessary because `async fn` generates self-referential state machines that would be corrupted if their memory address changed mid-execution.
+> 
+> **Step-by-Step Explanation**:
+> 1. **PhantomPinned Marker**: Including `_pin: PhantomPinned` opts out of the default `Unpin` auto-trait implementation for `SelfReferentialBuffer`.
+> 2. **Heap Pinning via `Box::pin` / `Box::into_pin`**: Placing the struct inside a `Box` ensures memory lives on the heap. Converting `Box<T>` into `Pin<Box<T>>` disables APIs that move `T` out of the heap box.
+> 3. **Self-Pointer Safety**: Because `Pin<Box<T>>` guarantees that `T`'s heap address will never change, the internal `slice_ptr` pointer remains permanently valid for the entire lifetime of the pinned box.
+> 
+> ---
+> 
+> ### Exercise 2: Custom Async Timeout Future with Manual Pin Projection
+> 
+> **Scenario**: When implementing custom low-level `Future` primitives (such as combining an inner future with a timer delay), you must manually poll inner futures. If the inner future is `!Unpin`, you must perform **Pin Projection**—safely projecting `Pin<&mut CustomFuture>` into `Pin<&mut InnerFuture>`.
+> 
+> Implement a custom `TimeoutFuture<F>` that wraps an inner generic future `F` and a sleep future.
+> 
+> **Requirements**:
+> 1. Define `TimeoutFuture<F>` holding `future: F` and `delay: tokio::time::Sleep`.
+> 2. Implement `TimeoutFuture<F>::new(future: F, duration: Duration) -> Self`.
+> 3. Manually implement `Future for TimeoutFuture<F>` returning `Poll<Result<F::Output, &'static str>>`.
+> 4. Implement structural pin projection inside `poll` using `unsafe { self.as_mut().map_unchecked_mut(...) }` or `get_unchecked_mut`.
+> 5. Add unit tests verifying completed future execution and timeout triggers.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::future::Future;
+> > use std::pin::Pin;
+> > use std::task::{Context, Poll};
+> > use std::time::Duration;
+> > use tokio::time::Sleep;
+> > 
+> > pub struct TimeoutFuture<F> {
+> >     future: F,
+> >     delay: Sleep,
+> > }
+> > 
+> > impl<F> TimeoutFuture<F> {
+> >     pub fn new(future: F, duration: Duration) -> Self {
+> >         Self {
+> >             future,
+> >             delay: tokio::time::sleep(duration),
+> >         }
+> >     }
+> > }
+> > 
+> > impl<F: Future> Future for TimeoutFuture<F> {
+> >     type Output = Result<F::Output, &'static str>;
+> > 
+> >     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+> >         // SAFETY: Structural pin projection for fields `future` and `delay`.
+> >         // Neither field is moved out of memory; we obtain Pinned references to both.
+> >         let (fut_pin, delay_pin) = unsafe {
+> >             let this = self.get_unchecked_mut();
+> >             (
+> >                 Pin::new_unchecked(&mut this.future),
+> >                 Pin::new_unchecked(&mut this.delay),
+> >             )
+> >         };
+> > 
+> >         // 1. Poll the primary inner future
+> >         if let Poll::Ready(out) = fut_pin.poll(cx) {
+> >             return Poll::Ready(Ok(out));
+> >         }
+> > 
+> >         // 2. Poll the delay timer future
+> >         if let Poll::Ready(_) = delay_pin.poll(cx) {
+> >             return Poll::Ready(Err("TIMED_OUT"));
+> >         }
+> > 
+> >         Poll::Pending
+> >     }
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> > 
+> >     #[tokio::test]
+> >     async fn test_timeout_future_success() {
+> >         let fast_task = async {
+> >             tokio::time::sleep(Duration::from_millis(5)).await;
+> >             42
+> >         };
 
----
-
-## 6. Related Terms
-
-- [`Future` Trait](../level_10/future_trait.md) — The entire reason `Pin` exists.
-- [Move Semantics](../level_03/move_semantics.md) — The default behavior of Rust that `Pin` explicitly disables to prevent memory corruption.
-
----
-
-## 7. Key Takeaways
-
-- **`Pin<T>`** is a wrapper type that prevents a value from ever being moved in memory.
-- It was created specifically to make `async/await` work safely, because `async fn` generates **self-referential state machines**.
-- If a self-referential struct was moved, its internal pointers would point to deleted garbage memory (Use-After-Free). `Pin` mathematically prevents this.
-- The **`Unpin`** trait simply means *"This type has no self-references, so it is perfectly safe to move."* 99% of standard Rust types implement `Unpin`.
-- You rarely have to use `Pin` directly; the `async/await` syntax hides this nightmare from you!
+> 
+>         let timeout_fut = TimeoutFuture::new(fast_task, Duration::from_millis(100));
+>         let res = timeout_fut.await;
+>         assert_eq!(res, Ok(42));
+>     }
+> 
+>     #[tokio::test]
+>     async fn test_timeout_future_expired() {
+>         let slow_task = async {
+>             tokio::time::sleep(Duration::from_millis(100)).await;
+>             99
+>         };
+> 
+>         let timeout_fut = TimeoutFuture::new(slow_task, Duration::from_millis(5));
+>         let res = timeout_fut.await;
+>         assert_eq!(res, Err("TIMED_OUT"));
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Pin Projection Requirements**: When polling a struct field `self.future` inside `poll(self: Pin<&mut Self>, ...)`, you cannot move fields out of `self`. You must project `Pin<&mut TimeoutFuture<F>>` into `Pin<&mut F>`.
+> 2. **`get_unchecked_mut` & `Pin::new_unchecked`**: `this = self.get_unchecked_mut()` obtains mutable access to struct fields. `Pin::new_unchecked(&mut this.future)` re-pins the field reference, guaranteeing structural pinning.
+> 3. **Future Composition**: Polling both projected futures sequentially inside `poll` enables custom async combinators without dynamic heap allocation (`Box::pin`).
+> 
+> ---
+> 
+> ### Exercise 3: Stack Pinning with `tokio::pin!` & Reusable Futures in Multiplexed Event Loops
+> 
+> **Scenario**: When polling an `async fn` or `Future` repeatedly inside an asynchronous event loop (e.g. `tokio::select!`), passing an unpinned future directly into `select!` consumes ownership. To reuse or borrow a `Future` across loop iterations, the future must be pinned on the stack using `tokio::pin!`.
+> 
+> Build a telemetry event processing loop that stack-pins a long-running ticker stream and processes messages cancellation-safely.
+> 
+> **Requirements**:
+> 1. Write an `async fn fetch_sensor_data(id: u32) -> String` simulating sensor I/O.
+> 2. Implement `async fn process_event_stream(sensor_id: u32, iterations: usize) -> Vec<String>`.
+> 3. Use `tokio::pin!` on the sensor future inside the event loop.
+> 4. Add unit tests asserting output vector collection.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::time::Duration;
+> > 
+> > pub async fn fetch_sensor_data(id: u32) -> String {
+> >     tokio::time::sleep(Duration::from_millis(5)).await;
+> >     format!("SENSOR_{}_DATA", id)
+> > }
+> > 
+> > pub async fn process_event_stream(sensor_id: u32, iterations: usize) -> Vec<String> {
+> >     let mut results = Vec::new();
+> > 
+> >     for _ in 0..iterations {
+> >         let fut = fetch_sensor_data(sensor_id);
+> >         // Pin the future to the local stack frame
+> >         tokio::pin!(fut);
+> > 
+> >         tokio::select! {
+> >             data = &mut fut => {
+> >                 results.push(data);
+> >             }
+> >             _ = tokio::time::sleep(Duration::from_millis(100)) => {
+> >                 break;
+> >             }
+> >         }
+> >     }
+> > 
+> >     results
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> > 
+> >     #[tokio::test]
+> >     async fn test_stack_pinning_event_stream() {
+> >         let logs = process_event_stream(7, 3).await;
+> >         assert_eq!(logs.len(), 3);
+> >         assert_eq!(logs[0], "SENSOR_7_DATA");
+> >         assert_eq!(logs[1], "SENSOR_7_DATA");
+> >         assert_eq!(logs[2], "SENSOR_7_DATA");
+> >     }
+> > }
+> > ```
+> > 
+> > **Step-by-Step Explanation**:
+> > 1. **Stack Pinning**: `tokio::pin!(fut)` shadows variable `fut` with `Pin<&mut Future>`, anchoring the future frame to the current function stack.
+> > 2. **Borrowing in `tokio::select!`**: Passing `&mut fut` into `tokio::select!` allows `select!` to poll the future by reference rather than taking ownership, permitting reuse or inspection across branches.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`Future` Trait](../level_10/future_trait.md) — The core trait whose `poll` method requires `Pin<&mut Self>`.
+> - [`async fn`](../level_10/async_fn.md) — Generates the self-referential futures that make `Pin` necessary.
+> - [`Box::pin`](../level_03/box_t.md) — The easiest, heap-allocated way to pin a Future.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - **`Pin`** anchors an object to a specific memory address so it can **never move again**.
+> - It exists specifically to make **self-referential futures** (created by `async`/`await`) safe.
+> - Most normal Rust types implement **`Unpin`** automatically, meaning they ignore pinning and can move freely.
+> - Only compiler-generated `Future`s are **`!Unpin`**.
+> - You can pin a Future to the Heap using `Box::pin()`, or to the Stack using `tokio::pin!`.
+> 

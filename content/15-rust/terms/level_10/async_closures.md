@@ -1,23 +1,23 @@
 # Async Closures
 
 > **Level 10 — Async / Await**
-> Closures that return futures; often expressed as `|| async { ... }`.
+> Closures that return a `Future` or use `async` blocks internally.
 
 ---
 
 ## 1. Prerequisites
 
-- [`Closures`](../level_06/closure.md) — Anonymous, inline functions.
-- [`async fn`](../level_10/async_fn.md) — The standard way to write asynchronous functions.
-- [`Future` Trait](../level_10/future_trait.md) — What an Async Closure actually returns!
+- [Closures (`Fn`, `FnMut`, `FnOnce`)](../level_05/closures.md) — Standard synchronous closures in Rust.
+- [`async fn`](../level_10/async_fn.md) — Asynchronous functions.
+- [`Future` Trait](../level_10/future_trait.md) — The return type of async closure calls.
 
 ---
 
 ## 2. Term Category
 
-**Rust Syntax (the anonymous future)**: Just like standard closures (`|| { ... }`) are anonymous functions, **Async Closures** are anonymous asynchronous functions. 
+**Rust Language Syntax (the async lambda)**: Standard closures in Rust take inputs and return values immediately (`|x| x + 1`). 
 
-They are incredibly common when working with Streams (like `.filter()`), spawning background Tasks in Tokio, or passing tiny blocks of asynchronous logic into web frameworks like Axum or Actix.
+An **Async Closure** is a closure that returns a `Future` (e.g., `|x| async move { x + 1 }` or using experimental `async |x| { x + 1 }` syntax). They allow passing asynchronous callbacks into higher-order functions like iterators, stream adapters, or HTTP route handlers.
 
 ---
 
@@ -25,67 +25,63 @@ They are incredibly common when working with Streams (like `.filter()`), spawnin
 
 ### (1) Design Motivation — "Why did we design this?"
 
-In Level 6, we learned how powerful closures are for functional programming. You can write beautiful code like `vec.iter().map(|x| x + 1)`. 
+In modern async Rust, higher-order functions (like `.filter()`, `.map()`, or custom HTTP middleware frameworks) frequently need to execute asynchronous operations inside callbacks.
 
-But what if the logic inside your `.map()` requires making a database query? 
+For example, when processing a list of User IDs:
+- A synchronous closure `|id| fetch_user(id)` would block the thread!
+- You want an async closure `|id| async move { fetch_user(id).await }` so the callback yields control back to Tokio!
 
-```rust
-// COMPILE ERROR!
-vec.iter().map(|id| {
-    let data = fetch_user_from_db(id).await; // ERROR: `await` is only allowed in `async` blocks!
-    data
-});
-```
-You cannot use `.await` inside a standard closure! The Rust compiler will scream at you because standard closures are synchronous; they cannot yield control back to the Executor. You need a closure that is `async`!
+### (2) Lifetime Complexity — "Why is it tricky?"
 
-### (2) Reality Metaphor
+Standard closures borrow data for the duration of the function call (`fn(&T) -> U`). 
 
-- **Standard Closure**: You hire a temporary worker and hand them a clipboard with instructions. They follow the instructions instantly while you watch.
-- **Async Closure**: You hire a temporary worker and hand them a clipboard with instructions. The first instruction says *"Call the database and wait."* The worker looks at you and says, *"I can't just stand here freezing the entire company while I wait on hold! I'm going to give you a buzzer (`Future`), and I'll buzz you when the database answers!"*
+Async closures are trickier because they return a `Future` state machine. The returned `Future` might live long after the closure function call itself has returned! If the closure borrowed data from its environment, Rust must ensure the borrowed references inside the returned `Future` remain valid until the `Future` is actually `.await`ed.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Workaround Syntax)
-In JavaScript, you can write `async () => {}`. In Rust, the native `async || {}` syntax is currently unstable (as of 2024, it is a massive ongoing project in the compiler). 
-
-Instead, Rust developers use a brilliant workaround: a standard closure that *returns* an `async` block!
+#### Short Snippet (Async Closure with `async move`)
+The standard, fully-stable way to write async closures in Rust today is returning an `async move` block from a standard closure.
 
 ```rust
 #[tokio::main]
 async fn main() {
-    // 1. Standard Closure
-    let sync_closure = || { 5 };
-    let a = sync_closure(); // `a` is 5!
-    
-    // 2. Async Closure Workaround
-    let async_closure = || async { 5 };
-    
-    // Calling it does NOT run the code! It returns a Future!
-    let future = async_closure(); 
-    
-    // We must .await the Future to get the 5!
-    let b = future.await; 
+    // An async closure returning an `async move` block
+    let fetch_data = |id: u32| async move {
+        // Simulating async work
+        tokio::time::sleep(std::time::Duration::from_millis(10)).await;
+        format!("User #{}", id)
+    };
+
+    // Calling the closure creates a Future, which we then .await!
+    let result = fetch_data(42).await;
+    println!("{}", result);
 }
 ```
 
-#### Fuller Example (The `async move` block)
-The most common place you will see this is when spawning background tasks. If you want to spawn a task that uses local variables, you must force the `async` block to take *ownership* of those variables so they survive while the thread sleeps. We do this using `async move {}`.
+#### Fuller Example (Passing Async Closures to Stream Pipeline)
+Passing async closures into stream processing methods like `StreamExt::then`.
 
 ```rust
+use futures::stream::{self, StreamExt};
+use tokio::time::{sleep, Duration};
+
+async fn process_order(id: u32) -> String {
+    sleep(Duration::from_millis(50)).await;
+    format!("Order #{} Processed", id)
+}
+
 #[tokio::main]
 async fn main() {
-    let user_name = String::from("Alice");
+    let order_ids = stream::iter(vec![101, 102, 103]);
 
-    // We pass an async block into tokio::spawn.
-    // The `move` keyword forces the State Machine to take ownership of `user_name`!
-    let handle = tokio::spawn(async move {
-        // We can safely use .await in here!
-        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
-        
-        println!("Hello, {}!", user_name);
+    // We pass an async closure into .then() to process stream items concurrently!
+    let mut processed_stream = order_ids.then(|id| async move {
+        process_order(id).await
     });
 
-    handle.await.unwrap();
+    while let Some(status) = processed_stream.next().await {
+        println!("{}", status);
+    }
 }
 ```
 
@@ -161,133 +157,255 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Return Type
+### Exercise 1: Resilient Async Retry Middleware with Exponential Backoff
 
-**Problem:** You write the following code:
-`let my_closure = || async { 100 };`
-`let x = my_closure();`
+**Scenario**: Higher-order middleware functions in web frameworks accept async closures to wrap business logic with cross-cutting concerns like retries or logging. Construct a generic function `with_async_retry` that accepts an async closure `F: FnMut() -> Fut` and executes exponential backoff retries upon failure.
 
-What is the exact data type of `x`?
+Build a higher-order async closure retry runner.
+
+**Requirements**:
+1. Implement `with_async_retry<F, Fut, T, E>(mut op: F, max_retries: usize, initial_backoff: Duration) -> Result<T, E>` where `F: FnMut() -> Fut`, `Fut: Future<Output = Result<T, E>>`.
+2. Apply exponential backoff between retries.
+3. Add unit tests asserting success on first try, recovery after transient failure, and failure after max retries.
 
 > [!check]- Answer
-> The type is **`impl Future<Output = i32>`**.
->
-> It is absolutely NOT an `i32`! Because you called a closure that returns an `async` block, you just created a lazy State Machine. You must use `let x = my_closure().await;` to actually get the `100`!
-
----
-
-### Exercise 2: Proving That `|| async {}` Returns a Future, Not a Value
-
-**Problem:**
-A closure that returns an `async` block is *not* an async closure — it is a regular closure whose *body* creates and returns a `Future`. This means calling it gives you a lazy state machine, not the final result.
-
-Do the following inside a `#[tokio::main] async fn main()`:
-1. Define `let greet = |name: &str| async move { format!("Hello, {}!", name) };`.
-2. Call `greet("Ferris")` and store the result in `pending`. Print the type description: *"pending is a Future, not a String"*.
-3. `.await` the result and print the actual `String`.
-4. Show what happens if you forget `.await` — use a `let _ = greet("world");` line with a comment explaining the compiler warning.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> pending is a Future, not a String
-> Hello, Ferris!
-> ```
->
-> - **Hint 1:** The closure `|name: &str| async move { ... }` has type `impl Fn(&str) -> impl Future<Output = String>`. Calling it returns the `Future` — it does NOT run the body.
-> - **Hint 2:** You need `async move` (not just `async`) because `name: &str` is a local variable. Without `move`, the async block tries to borrow `name` from the closure's stack frame, which the state machine outlives. `move` transfers ownership of the `String` (after `.to_owned()` or `format!`) into the future.
-> - **Hint 3:** Forgetting `.await` produces a `#[must_use]` warning: `unused implementer of Future that must be used`. The closure body never executes — the `Future` is created and immediately dropped.
->
 > ```rust
-> #[tokio::main]
-> async fn main() {
->     // A regular closure whose body is an async block.
->     // Calling it returns a Future<Output = String>, not a String.
->     let greet = |name: &str| async move {
->         format!("Hello, {}!", name) // name is moved into the state machine
->     };
->
->     // Step 2: calling the closure gives a Future, not the String.
->     let pending = greet("Ferris");
->     println!("pending is a Future, not a String");
->
->     // Step 3: .await drives the state machine to completion.
->     let result = pending.await;
->     println!("{}", result);
->
->     // Step 4: forgetting .await — compiler warns "unused implementer of Future".
->     // The closure body NEVER runs; the String is never formatted.
->     let _ = greet("world"); // ⚠️ Future created and dropped immediately
+> use std::future::Future;
+> use std::time::Duration;
+> use tokio::time::sleep;
+> 
+> pub async fn with_async_retry<F, Fut, T, E>(
+>     mut op: F,
+>     max_retries: usize,
+>     initial_backoff: Duration,
+> ) -> Result<T, E>
+> where
+>     F: FnMut() -> Fut,
+>     Fut: Future<Output = Result<T, E>>,
+> {
+>     let mut backoff = initial_backoff;
+>     let mut attempts = 0;
+> 
+>     loop {
+>         attempts += 1;
+>         match op().await {
+>             Ok(val) => return Ok(val),
+>             Err(err) => {
+>                 if attempts >= max_retries {
+>                     return Err(err);
+>                 }
+>                 sleep(backoff).await;
+>                 backoff *= 2;
+>             }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_async_closure_retry_success() {
+>         let mut count = 0;
+>         let closure = || async {
+>             count += 1;
+>             if count == 2 {
+>                 Ok::<_, &'static str>("SUCCESS")
+>             } else {
+>                 Err("TRANSIENT")
+>             }
+>         };
+> 
+>         let res = with_async_retry(closure, 3, Duration::from_millis(5)).await;
+>         assert_eq!(res, Ok("SUCCESS"));
+>     }
 > }
 > ```
->
-> **Explanation:**
-> `|| async { ... }` is syntactic shorthand for "a closure that, when called, constructs and returns a new `Future` state machine". The distinction from a true `async ||` closure (unstable) is subtle but important: the stable pattern creates a *new* `Future` on every call (each call to `greet(...)` creates a fresh state machine). The `move` keyword is necessary when the async block captures variables from the enclosing scope, because the state machine's lifetime may exceed the closure's call frame.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Higher-Order Async Closures**: Specifying bound `F: FnMut() -> Fut` where `Fut: Future` allows passing closures returning `async move` blocks directly.
+> 2. **Evaluation via `.await`**: Calling `op().await` executes the returned future on each retry iteration.
+> 
+> ---
+> 
+> ### Exercise 2: Bounded Concurrent Stream Mapper Preserving Order
 
----
+**Scenario**: Processing large data batches requires mapping elements using an async closure while bounding concurrent execution using `Arc<tokio::sync::Semaphore>` and preserving original element order.
 
-### Exercise 3: `async move` Captures — Using Closures as Async Task Factories
+Construct a concurrent stream mapper accepting an async closure.
 
-**Problem:**
-A common real-world pattern is passing a `|| async move { ... }` closure as a *factory* that generates tasks — e.g., to `tokio::spawn` in a loop. Each iteration needs its own captured data.
+**Requirements**:
+1. Implement `concurrent_map<T, R, F, Fut>(items: Vec<T>, concurrency: usize, mapper: F) -> Vec<R>` where `F: Fn(T) -> Fut + Send + Sync + 'static`, `Fut: Future<Output = R> + Send + 'static`, `T: Send + 'static`, `R: Send + 'static`.
+2. Order output matching input `Vec<T>`.
+3. Add unit tests asserting order preservation and concurrency bounding.
 
-Write a `#[tokio::main]` program that:
-1. Defines a list of names: `["Alice", "Bob", "Carol"]`.
-2. For each name, spawns a `tokio::spawn` task using `async move { ... }` that formats and returns `"Hello, {name}!"`.
-3. Collects the `JoinHandle`s and awaits them in order, printing each result.
-
-Then answer: **why does each task need its own `move` capture rather than sharing a reference to the original `names` slice?**
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Hello, Alice!
-> Hello, Bob!
-> Hello, Carol!
-> ```
->
-> - **Hint 1:** `tokio::spawn` requires the async block to be `'static`. A `&str` from a local slice is not `'static` — the task might outlive the `main` function's stack frame. Using `async move` moves a copy of the `&'static str` literal (which *is* `'static`) into each task.
-> - **Hint 2:** String literals like `"Alice"` have type `&'static str`, so they can be moved into a `'static` async block directly. If `name` were a `String` from a `Vec<String>`, you'd clone it before the `move`.
-> - **Hint 3:** Collect handles with `let mut handles = Vec::new()` before the loop, push each `tokio::spawn(...)` result, then iterate and `.await` each handle with `handle.await.unwrap()`.
->
 > ```rust
-> #[tokio::main]
-> async fn main() {
->     let names: &[&'static str] = &["Alice", "Bob", "Carol"];
+> use std::future::Future;
+> use std::sync::Arc;
+> use tokio::sync::Semaphore;
+> 
+> pub async fn concurrent_map<T, R, F, Fut>(
+>     items: Vec<T>,
+>     concurrency: usize,
+>     mapper: F,
+> ) -> Vec<R>
+> where
+>     T: Send + 'static,
+>     R: Send + 'static,
+>     F: Fn(T) -> Fut + Send + Sync + 'static,
+>     Fut: Future<Output = R> + Send + 'static,
+> {
+>     let semaphore = Arc::new(Semaphore::new(concurrency));
+>     let mapper = Arc::new(mapper);
 >     let mut handles = Vec::new();
->
->     for &name in names {
->         // `async move` captures `name` (a &'static str copy) into the task.
->         // Each iteration creates a brand-new Future — a fresh state machine.
+> 
+>     for (idx, item) in items.into_iter().enumerate() {
+>         let sem = Arc::clone(&semaphore);
+>         let map_fn = Arc::clone(&mapper);
 >         let handle = tokio::spawn(async move {
->             format!("Hello, {}!", name)
+>             let _permit = sem.acquire_owned().await.unwrap();
+>             let res = map_fn(item).await;
+>             (idx, res)
 >         });
 >         handles.push(handle);
 >     }
->
+> 
+>     let mut indexed_results = Vec::new();
 >     for handle in handles {
->         println!("{}", handle.await.unwrap());
+>         indexed_results.push(handle.await.unwrap());
+>     }
+> 
+>     indexed_results.sort_by_key(|(idx, _)| *idx);
+>     indexed_results.into_iter().map(|(_, res)| res).collect()
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_concurrent_map_order_preservation() {
+>         let inputs = vec![10, 20, 30];
+>         let closure = |x: u64| async move {
+>             tokio::time::sleep(std::time::Duration::from_millis(50 - x)).await;
+>             x * 2
+>         };
+> 
+>         let results = concurrent_map(inputs, 2, closure).await;
+>         assert_eq!(results, vec![20, 40, 60]);
 >     }
 > }
 > ```
->
-> **Answer to the sharing question:**
-> `tokio::spawn` requires `'static` — the task must be self-contained and not hold any references to data on the spawning function's stack. A `&str` pointing into a local `names` slice on `main`'s stack would violate this: if `main` returned while a task was still running, the pointer would dangle. `async move` solves this by *copying* the `&'static str` pointer (which points into the binary's read-only segment, not the stack) into the task, making each task fully independent.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Thread-Safe Async Closures**: `Arc<F>` allows sharing the async closure `F` safely across multiple `tokio::spawn` tasks.
+> 2. **Index Sorting**: Enclosing `(idx, res)` tuple pairs ensures sorting restores original order regardless of completion order.
+> 
+> ---
+> 
+> ### Exercise 3: Dynamic Async Event Router with Trait Objects and Timeout Enforcement
 
----
+**Scenario**: Event routers map string event names to dynamic async closure handlers using trait objects `Box<dyn Fn(String) -> Pin<Box<dyn Future<Output = String> + Send>> + Send + Sync>`.
 
-## 6. Related Terms
+Build a dynamic async event router with timeout enforcement.
 
-- [`Closures`](../level_06/closure.md) — The synchronous version.
-- [`tokio::spawn`](../level_10/tokio_spawn.md) — The most common place you will write `async move { ... }`.
+**Requirements**:
+1. Implement `AsyncEventRouter` mapping event keys to boxed async handlers.
+2. Implement `register_handler` and `dispatch_event(&self, event: &str, payload: String, timeout_duration: Duration)`.
+3. Add unit tests asserting handler dispatch and timeout triggers.
 
----
-
-## 7. Key Takeaways
-
-- You **cannot** use `.await` inside a standard, synchronous closure (`|| { ... }`).
-- Because native `async ||` syntax is currently unstable in Rust, the standard workaround is returning an async block from a normal closure: **`|| async { ... }`**.
-- Calling this closure does NOT execute the code! It instantly returns a **`Future`** that you must `.await`.
-- When capturing local variables for Tokio tasks, you almost always need the **`async move { ... }`** block to force the state machine to take ownership of the data!
+> [!check]- Answer
+> ```rust
+> use std::collections::HashMap;
+> use std::future::Future;
+> use std::pin::Pin;
+> use std::time::Duration;
+> use tokio::time::timeout;
+> 
+> type AsyncHandler = Box<
+>     dyn Fn(String) -> Pin<Box<dyn Future<Output = String> + Send>> + Send + Sync,
+> >;
+> 
+> #[derive(Default)]
+> pub struct AsyncEventRouter {
+>     handlers: HashMap<String, AsyncHandler>,
+> }
+> 
+> impl AsyncEventRouter {
+>     pub fn new() -> Self {
+>         Self::default()
+>     }
+> 
+>     pub fn register_handler<F, Fut>(&mut self, event: &str, handler: F)
+>     where
+>         F: Fn(String) -> Fut + Send + Sync + 'static,
+>         Fut: Future<Output = String> + Send + 'static,
+>     {
+>         let boxed_handler = Box::new(move |payload: String| {
+>             let fut = handler(payload);
+>             Box::pin(fut) as Pin<Box<dyn Future<Output = String> + Send>>
+>         });
+>         self.handlers.insert(event.to_string(), boxed_handler);
+>     }
+> 
+>     pub async fn dispatch_event(
+>         &self,
+>         event: &str,
+>         payload: String,
+>         timeout_duration: Duration,
+>     ) -> Result<String, &'static str> {
+>         let handler = self.handlers.get(event).ok_or("HANDLER_NOT_FOUND")?;
+>         let fut = handler(payload);
+>         match timeout(timeout_duration, fut).await {
+>             Ok(res) => Ok(res),
+>             Err(_) => Err("HANDLER_TIMEOUT"),
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[tokio::test]
+>     async fn test_async_event_router_dispatch() {
+>         let mut router = AsyncEventRouter::new();
+>         router.register_handler("USER_LOGIN", |payload| async move {
+>             format!("HANDLED_{}", payload)
+>         });
+> 
+>         let res = router
+>             .dispatch_event("USER_LOGIN", "alice".into(), Duration::from_millis(50))
+>             .await;
+>         assert_eq!(res, Ok("HANDLED_alice".to_string()));
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Trait Object Erasure**: `Pin<Box<dyn Future<Output = String> + Send>>` erases specific concrete future types generated by async closures, storing handlers inside `HashMap`.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [Closures](../level_05/closures.md) — Synchronous closures in Rust.
+> - [`async fn`](../level_10/async_fn.md) — Asynchronous functions.
+> - [`Future` Trait](../level_10/future_trait.md) — The type returned by async closures.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - **Async Closures** are closures that return a `Future` or use `async move` blocks internally.
+> - They allow passing asynchronous callbacks into higher-order functions like stream combinators and route handlers.
+> - The standard, fully-stable way to write them is `|args| async move { ... }`.
+> - Use `F: Fn(T) -> Fut` where `Fut: Future` bounds when taking async closures as generic function parameters.
+> - Use `Pin<Box<dyn Future<Output = T> + Send>>` trait objects when storing async closures inside dynamic collections.
+> 

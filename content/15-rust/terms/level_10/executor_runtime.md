@@ -1,24 +1,23 @@
 # Executor / Runtime
 
 > **Level 10 — Async / Await**
-> Drives futures to completion; Rust has no built-in runtime — use Tokio, async-std, etc.
+> The engine (like Tokio) that manages and polls `Future` state machines to completion.
 
 ---
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — The syntax that creates the work.
-- [`Future` Trait](../level_10/future_trait.md) — The state machine interface that the Executor interacts with.
+- [`async fn`](../level_10/async_fn.md) — How we create futures that need an executor.
+- [`Future` Trait](../level_10/future_trait.md) — The state machines that the executor polls.
+- [`Tokio`](../level_10/tokio.md) — The most popular implementation of an executor runtime.
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (the mechanic)**: In almost every other modern language (JavaScript, Go, C#), the async Runtime is built directly into the language. You don't even think about it; it's just invisibly running in the background.
+**Rust Architecture (the invisible engine)**: In Rust, calling an `async fn` creates a `Future`, but **does nothing else**. Futures are completely lazy! They will sit in memory forever doing zero work unless an **Executor** (Runtime) continuously polls them until they finish.
 
-Rust is a systems language. It is designed to be run on microcontrollers with 16KB of RAM, or inside the Linux Kernel itself. Including a massive, invisible background runtime was physically impossible. 
-
-So, Rust provides the *syntax* (`async/await`) and the *interface* (`Future` trait), but it forces you to download an external **Executor** (a Runtime) to actually run the code!
+The Executor is the actual engine under the hood that manages OS events (epoll/kqueue), schedules tasks across thread pools, and drives futures forward whenever they are ready.
 
 ---
 
@@ -26,56 +25,81 @@ So, Rust provides the *syntax* (`async/await`) and the *interface* (`Future` tra
 
 ### (1) Design Motivation — "Why did we design this?"
 
-The Rust designers faced a massive dilemma when designing `async`.
-- If they built a heavy runtime into the standard library, Rust could no longer be used for embedded programming or writing Operating Systems. 
-- If they didn't include a runtime, async programming would be a fragmented nightmare.
+In languages like Go or C#, the Executor Runtime is hardcoded directly into the language compiler and runtime. You don't get a choice; every program pays the CPU and memory cost of that built-in engine.
 
-They chose the "Bring Your Own Runtime" model. The Rust compiler does the heavy lifting of generating the complex State Machines (`Futures`). But you must install an external crate (an **Executor**) to actually drive those state machines. 
+Rust wanted to be usable anywhere—from tiny 8-bit microcontrollers with 2KB of RAM, to massive 128-core web servers. 
 
-The Executor's entire job is to keep a massive list of every `Future` in your program, and repeatedly call `.poll()` on them until they return `Poll::Ready`.
+- A microcontroller can use a tiny, single-threaded 10-line custom Executor.
+- A massive web server can use **Tokio**, a high-performance multithreaded work-stealing Executor.
+
+Decoupling the language syntax (`async`/`await`) from the Execution Engine is what makes Rust async uniquely flexible.
 
 ### (2) Reality Metaphor
 
-Imagine the `Future` is a complex, perfectly written recipe for a cake, generated automatically by a machine (`async fn`). 
+Imagine a train station.
 
-The recipe is perfect. But a recipe cannot bake itself! 
-
-You need to hire a Chef (the **Executor**). The Chef reads the recipe, puts the cake in the oven, sets a timer, goes to chop onions, and comes back when the timer goes off. Without the Chef, the recipe just sits on the counter forever doing absolutely nothing.
+- **`Future`**: A train sitting on the tracks. It has an engine, wheels, and a destination, but no driver! It cannot move an inch by itself.
+- **`Waker`**: The train conductor blowing a whistle to signal that the track ahead is clear.
+- **`Executor / Runtime`**: The central train station dispatch office. It listens for conductor whistles (`Wakers`), assigns drivers to ready trains, and continuously pushes the trains down the tracks until they reach their final destination.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Problem)
-Because there is no built-in runtime, you literally cannot write an `async fn main()` in standard Rust!
+#### Short Snippet (What Tokio's Runtime Actually Looks Like)
+When you use `#[tokio::main]`, Tokio generates code under the hood that manually builds and starts the Runtime executor!
 
 ```rust
-// COMPILE ERROR!
-// `main` function is not allowed to be `async`
-async fn main() {
-    println!("Hello, world!");
+// What #[tokio::main] does under the hood:
+fn main() {
+    // 1. Build the multi-threaded Executor Runtime
+    let rt = tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+
+    // 2. Block the current OS main thread and drive our root future to completion!
+    rt.block_on(async {
+        println!("Inside the runtime executor!");
+    });
 }
 ```
-The compiler throws an error because when the program starts, there is no Chef hired to run the `async` code!
 
-#### Fuller Example (Hiring the Chef)
-To solve this, we must hire an external Chef. The most famous one in the Rust ecosystem is `tokio`. We add `tokio = { version = "1", features = ["full"] }` to our `Cargo.toml`.
+#### Fuller Example (Building a Custom Mini-Executor)
+To truly understand Executors, let's look at how a basic single-threaded executor works conceptually using `std::task::Waker`.
 
 ```rust
-// We use a macro provided by our external crate to wrap our main function.
-#[tokio::main]
-async fn main() {
-    // What the macro secretly does under the hood:
-    // 1. Boots up a massive, highly-optimized thread pool.
-    // 2. Starts the Tokio Executor on those threads.
-    // 3. Hands this `main` Future to the Executor to start polling it.
-    
-    let data = fetch_data().await;
-    println!("Fetched: {}", data);
-    
-    // When main finishes, the macro shuts down the thread pool.
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, RawWaker, RawWakerVTable, Waker};
+
+// A dummy waker that does nothing (for demonstration)
+fn dummy_waker() -> Waker {
+    fn no_op(_: *const ()) {}
+    fn clone(_: *const ()) -> RawWaker { dummy_raw_waker() }
+    fn dummy_raw_waker() -> RawWaker {
+        let vtable = &RawWakerVTable::new(clone, no_op, no_op, no_op);
+        RawWaker::new(std::ptr::null(), vtable)
+    }
+    unsafe { Waker::from_raw(dummy_raw_waker()) }
 }
 
-async fn fetch_data() -> i32 {
-    5
+// A primitive Executor function
+fn run_until_complete<F: Future>(mut future: F) -> F::Output {
+    let waker = dummy_waker();
+    let mut cx = Context::from_waker(&waker);
+    
+    // Pin the future to stack
+    let mut pinned_future = unsafe { Pin::new_unchecked(&mut future) };
+
+    loop {
+        // Poll the future state machine!
+        match pinned_future.as_mut().poll(&mut cx) {
+            std::task::Poll::Ready(result) => return result,
+            std::task::Poll::Pending => {
+                // Real executors would yield the thread or sleep here until notified!
+                println!("Future returned Pending... Executor retrying!");
+            }
+        }
+    }
 }
 ```
 
@@ -151,137 +175,301 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Alternative
+### Exercise 1: Custom Minimal Executor Runtime with Custom Waker Dispatching
 
-**Problem:** `tokio` is by far the most dominant runtime in the Rust ecosystem, used by over 90% of projects. However, there is another popular, slightly simpler runtime that aims to mirror the standard library's API as closely as possible. What is it called?
+**Scenario**: To understand low-level async execution mechanics in Rust, systems engineers build custom task schedulers. An Executor works by polling pinned `Future` instances. When a future returns `Poll::Pending`, it registers its `Waker`. When notified, the waker pushes the task ID back into the executor's ready queue so it can be polled again.
+
+Implement a custom minimal single-threaded executor `MiniExecutor` and a custom `YieldOnce` future to demonstrate waker notifications and poll loops.
+
+**Requirements**:
+1. Implement `YieldOnce` future returning `Poll::Pending` on the first poll (registering its waker) and `Poll::Ready(val)` on the second poll.
+2. Implement `MiniExecutor` holding a task queue `VecDeque<Arc<Task>>`.
+3. Implement `Task` struct implementing `std::task::Wake` to re-enqueue itself upon notification.
+4. Add unit tests asserting poll cycle counts and execution result output.
 
 > [!check]- Answer
-> **`async-std`**! 
->
-> While `tokio` is the industry standard for production web servers, `async-std` is another excellent runtime that provides async versions of almost everything in the standard `std` library. There is also `smol`, an incredibly tiny and fast executor!
-
----
-
-### Exercise 2: Building a Runtime Manually — What `#[tokio::main]` Actually Does
-
-**Problem:**
-`#[tokio::main]` is a convenience macro. Under the hood it calls `tokio::runtime::Builder` to construct a runtime, then calls `runtime.block_on(your_async_main())`. Understanding this lets you customise the runtime (e.g. single-threaded, limited workers).
-
-Write a plain synchronous `fn main()` (no macro) that:
-1. Builds a **single-threaded** Tokio runtime using `Builder::new_current_thread().enable_all().build().unwrap()`.
-2. Calls `runtime.block_on(async { ... })` with an async block that prints `"Running inside block_on"` and returns `42u32`.
-3. Prints `"block_on returned: {result}"` back in synchronous `main`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Running inside block_on
-> block_on returned: 42
-> ```
->
-> - **Hint 1:** `tokio::runtime::Builder::new_current_thread()` creates a single-threaded runtime — all tasks run on the calling thread. `new_multi_thread()` creates the default multi-threaded runtime with one thread per CPU core.
-> - **Hint 2:** `enable_all()` enables Tokio's I/O driver and timer driver. Without this, `tokio::time::sleep` and network I/O won't work. `#[tokio::main]` always calls `enable_all()` for you.
-> - **Hint 3:** `block_on` drives the given `Future` to completion on the *current thread*, blocking it synchronously. This is the bridge between synchronous `fn main()` and the async world. The runtime is dropped when it goes out of scope, which shuts down all background threads.
->
 > ```rust
-> use tokio::runtime::Builder;
->
-> fn main() {
->     // Build a single-threaded runtime manually.
->     // This is exactly what #[tokio::main(flavor = "current_thread")] generates.
->     let runtime = Builder::new_current_thread()
->         .enable_all()  // enables I/O and timer drivers
->         .build()
->         .unwrap();
->
->     // block_on drives the future on the current thread synchronously.
->     // It will not return until the future resolves.
->     let result: u32 = runtime.block_on(async {
->         println!("Running inside block_on");
->         42
->     });
->
->     println!("block_on returned: {}", result);
->     // runtime drops here → all background resources are cleaned up.
+> use std::collections::VecDeque;
+> use std::future::Future;
+> use std::pin::Pin;
+> use std::sync::{Arc, Mutex};
+> use std::task::{Context, Poll, Wake, Waker};
+> 
+> pub struct YieldOnce {
+>     yielded: bool,
+>     value: i32,
 > }
-> ```
->
-> **Explanation:**
-> `block_on` is the fundamental bridge from synchronous Rust to async Rust. It blocks the calling OS thread until the given future resolves, turning an async computation into a synchronous result. The `#[tokio::main]` macro is pure syntactic sugar that generates exactly this boilerplate — knowing the expansion means you can customise it: change the number of worker threads, set thread stack sizes, or integrate with non-Tokio async code that needs its own runtime.
-
----
-
-### Exercise 3: `spawn_blocking` — Preventing Worker Thread Starvation
-
-**Problem:**
-Tokio's worker threads are precious — they run the async event loop. If you call a blocking operation (like `std::fs::read_to_string` or a CPU-intensive calculation) directly on a worker thread, that thread is stuck and cannot poll other tasks.
-
-`tokio::task::spawn_blocking` solves this by running blocking code on a *separate* dedicated thread pool, keeping the async workers free.
-
-Write a `#[tokio::main]` program that:
-1. Spawns a `tokio::task::spawn_blocking` task that performs a "heavy" synchronous calculation: `(0u64..1_000_000).sum::<u64>()`. Use `std::thread::sleep(Duration::from_millis(50))` to simulate blocking I/O.
-2. While that blocking task is running, concurrently prints `"Async task still running..."` from the async side using `tokio::time::sleep(Duration::from_millis(10)).await` in a short loop (3 iterations).
-3. Awaits the `spawn_blocking` result and prints `"Blocking result: {sum}"`.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Async task still running...
-> Async task still running...
-> Async task still running...
-> Blocking result: 499999500000
-> ```
-> *(order of prints may vary slightly)*
->
-> - **Hint 1:** `tokio::task::spawn_blocking(|| { ... })` takes a regular (non-async) closure and runs it on the blocking thread pool. It returns a `JoinHandle<T>` that you `.await` to get the result back in async context.
-> - **Hint 2:** The blocking pool is separate from the async worker pool. The async worker that spawned the blocking task is immediately free to run other async tasks (like the `tokio::time::sleep` loop) while the blocking thread runs the synchronous code.
-> - **Hint 3:** Use `tokio::join!` or spawn the async loop as a separate task with `tokio::spawn` so it runs concurrently with the `spawn_blocking` call. If you `.await` the blocking handle first with no other tasks running, the async side won't get a chance to print.
->
-> ```rust
-> use std::time::Duration;
->
-> #[tokio::main]
-> async fn main() {
->     // Spawn the heavy synchronous work onto the blocking thread pool.
->     // The current async worker thread is immediately freed.
->     let blocking_handle = tokio::task::spawn_blocking(|| {
->         std::thread::sleep(Duration::from_millis(50)); // simulate blocking I/O
->         (0u64..1_000_000).sum::<u64>()  // CPU work
->     });
->
->     // While the blocking thread runs, this async task keeps running.
->     let async_side = tokio::spawn(async {
->         for _ in 0..3 {
->             tokio::time::sleep(Duration::from_millis(10)).await;
->             println!("Async task still running...");
+> 
+> impl YieldOnce {
+>     pub fn new(value: i32) -> Self {
+>         Self { yielded: false, value }
+>     }
+> }
+> 
+> impl Future for YieldOnce {
+>     type Output = i32;
+> 
+>     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+>         if self.yielded {
+>             Poll::Ready(self.value)
+>         } else {
+>             self.yielded = true;
+>             // Register waker notification to wake task immediately
+>             cx.waker().wake_by_ref();
+>             Poll::Pending
 >         }
->     });
->
->     // Wait for both to finish.
->     tokio::join!(async_side, async { () }).0.unwrap();
->     let sum = blocking_handle.await.unwrap();
->     println!("Blocking result: {}", sum);
+>     }
+> }
+> 
+> pub struct MiniTask {
+>     future: Mutex<Option<Pin<Box<dyn Future<Output = ()> + Send>>>>,
+>     ready_queue: Arc<Mutex<VecDeque<Arc<MiniTask>>>>,
+> }
+> 
+> impl Wake for MiniTask {
+>     fn wake(self: Arc<Self>) {
+>         self.wake_by_ref();
+>     }
+> 
+>     fn wake_by_ref(self: &Arc<Self>) {
+>         let mut queue = self.ready_queue.lock().unwrap();
+>         queue.push_back(Arc::clone(self));
+>     }
+> }
+> 
+> pub struct MiniExecutor {
+>     ready_queue: Arc<Mutex<VecDeque<Arc<MiniTask>>>>,
+> }
+> 
+> impl MiniExecutor {
+>     pub fn new() -> Self {
+>         Self {
+>             ready_queue: Arc::new(Mutex::new(VecDeque::new())),
+>         }
+>     }
+> 
+>     pub fn spawn<F>(&self, future: F)
+>     where
+>         F: Future<Output = ()> + Send + 'static,
+>     {
+>         let task = Arc::new(MiniTask {
+>             future: Mutex::new(Some(Box::pin(future))),
+>             ready_queue: Arc::clone(&self.ready_queue),
+>         });
+>         self.ready_queue.lock().unwrap().push_back(task);
+>     }
+> 
+>     pub fn run(&self) {
+>         while let Some(task) = self.ready_queue.lock().unwrap().pop_front() {
+>             let mut future_slot = task.future.lock().unwrap();
+>             if let Some(mut future) = future_slot.take() {
+>                 let waker = Waker::from(Arc::clone(&task));
+>                 let mut cx = Context::from_waker(&waker);
+>                 if future.as_mut().poll(&mut cx).is_pending() {
+>                     *future_slot = Some(future);
+>                 }
+>             }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::sync::atomic::{AtomicI32, Ordering};
+> 
+>     #[test]
+>     fn test_mini_executor_execution() {
+>         let executor = MiniExecutor::new();
+>         let result_cell = Arc::new(AtomicI32::new(0));
+>         let res_clone = Arc::clone(&result_cell);
+> 
+>         executor.spawn(async move {
+>             let val = YieldOnce::new(42).await;
+>             res_clone.store(val, Ordering::SeqCst);
+>         });
+> 
+>         executor.run();
+>         assert_eq!(result_cell.load(Ordering::SeqCst), 42);
+>     }
 > }
 > ```
->
-> **Explanation:**
-> Tokio's async worker threads run the event loop — they must never be blocked synchronously or all tasks scheduled on that thread will freeze. `spawn_blocking` moves the blocking call to a dedicated "blocking thread pool" (Tokio manages up to 512 by default) that is allowed to block. The async worker that called `spawn_blocking` is immediately returned to the event loop. The `JoinHandle` returned by `spawn_blocking` is a regular async `Future` — awaiting it just suspends the task until the blocking thread finishes, without blocking any worker thread.
-
----
-
-## 6. Related Terms
-
-- [`tokio`](../level_10/tokio.md) — The specific, most famous executor crate.
-- [`Future` Trait](../level_10/future_trait.md) — The state machine that the Executor is constantly polling.
-
----
-
-## 7. Key Takeaways
-
-- Rust has **no built-in async runtime**.
-- The standard library only provides the `Future` trait and the `async/await` syntax.
-- You must bring an external **Executor** (like `tokio`, `async-std`, or `embassy`) to actually run async code.
-- The Executor's entire job is to keep track of paused Futures and repeatedly call `.poll()` on them until they finish.
-- This "Bring Your Own Runtime" design allows Rust to be used in extremely constrained environments (like microcontrollers) where a heavy runtime is physically impossible to run.
+> 
+> **Step-by-Step Explanation**:
+> 1. **`std::task::Wake` Trait**: Implementing `Wake` for `MiniTask` creates a thread-safe `Waker`. When `.wake_by_ref()` is called, the task pushes itself back into the executor's `ready_queue`.
+> 2. **Polling Cycle**: The executor loop pops tasks from `ready_queue`, constructs a `Context`, and calls `.poll()`. If `Poll::Pending` is returned, the task remains out of the queue until its waker is triggered.
+> 
+> ---
+> 
+> ### Exercise 2: Tailored Multi-Threaded Tokio Runtime with Worker Metrics and `spawn_blocking`
+> 
+> **Scenario**: High-performance backend servers often require custom runtime configurations—adjusting thread pool sizes, monitoring worker thread startup/shutdown hooks, and offloading CPU-heavy synchronous calculations (such as password hashing or cryptography) using `tokio::task::spawn_blocking` to avoid blocking async worker threads.
+> 
+> Configure a custom Tokio runtime using `tokio::runtime::Builder` and execute offloaded blocking work safely.
+> 
+> **Requirements**:
+> 1. Build a multi-threaded runtime using `tokio::runtime::Builder::new_multi_thread()`.
+> 2. Configure worker thread names and hook counters (`on_thread_start`/`on_thread_stop`).
+> 3. Execute a blocking CPU task via `tokio::task::spawn_blocking`.
+> 4. Add unit tests asserting offloaded execution success and thread counting.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::sync::atomic::{AtomicUsize, Ordering};
+> > use std::sync::Arc;
+> > 
+> > pub struct CustomRuntimeManager {
+> >     pub active_threads: Arc<AtomicUsize>,
+> > }
+> > 
+> > impl CustomRuntimeManager {
+> >     pub fn new() -> Self {
+> >         Self {
+> >             active_threads: Arc::new(AtomicUsize::new(0)),
+> >         }
+> >     }
+> > 
+> >     pub fn build_runtime(&self) -> tokio::runtime::Runtime {
+> >         let counter_start = Arc::clone(&self.active_threads);
+> >         let counter_stop = Arc::clone(&self.active_threads);
+> > 
+> >         tokio::runtime::Builder::new_multi_thread()
+> >             .worker_threads(2)
+> >             .thread_name("custom-worker")
+> >             .on_thread_start(move || {
+> >                 counter_start.fetch_add(1, Ordering::SeqCst);
+> >             })
+> >             .on_thread_stop(move || {
+> >                 counter_stop.fetch_sub(1, Ordering::SeqCst);
+> >             })
+> >             .enable_all()
+> >             .build()
+> >             .expect("Failed to build custom Tokio runtime")
+> >     }
+> > }
+> > 
+> > pub async fn execute_heavy_cpu_work(input: u64) -> u64 {
+> >     // Offload heavy CPU bound work to Tokio's blocking thread pool
+> >     tokio::task::spawn_blocking(move || {
+> >         let mut acc = input;
+> >         for i in 0..1_000 {
+> >             acc = acc.wrapping_add(i);
+> >         }
+> >         acc
+> >     })
+> >     .await
+> >     .expect("Blocking task panicked")
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> > 
+> >     #[test]
+> >     fn test_custom_runtime_execution() {
+> >         let manager = CustomRuntimeManager::new();
+> >         let rt = manager.build_runtime();
+> > 
+> >         let res = rt.block_on(async { execute_heavy_cpu_work(100).await });
+> >         assert_eq!(res, 100 + (0..1000).sum::<u64>());
+> > 
+> >         // Shutting down runtime triggers thread stop hooks
+> >         drop(rt);
+> >         assert_eq!(manager.active_threads.load(Ordering::SeqCst), 0);
+> >     }
+> > }
+> > ```
+> > 
+> > **Step-by-Step Explanation**:
+> > 1. **`spawn_blocking` Offloading**: Async worker threads must never be blocked by long-running CPU loops or synchronous file I/O. `spawn_blocking` dispatches work to a dedicated, expandable blocking thread pool.
+> > 2. **Runtime Lifecycle Hooks**: `on_thread_start` and `on_thread_stop` allow monitoring runtime thread creation and termination in microservices.
+> 
+> ---
+> 
+> ### Exercise 3: Cancellation-Safe Task Dispatcher with `JoinSet`, `mpsc`, and SLA Timeout Management
+> 
+> **Scenario**: Microservice task managers spawn dynamic background tasks into a `tokio::task::JoinSet`. Tasks must execute under an SLA timeout. If a task exceeds its SLA or encounters errors, the manager cleans up resources using cancellation-safe select loops.
+> 
+> Construct a task dispatcher using `JoinSet` and `tokio::select!`.
+> 
+> **Requirements**:
+> 1. Implement `run_task_batch(task_ids: Vec<u64>, timeout_per_task: std::time::Duration) -> (usize, usize)` returning `(success_count, error_or_timeout_count)`.
+> 2. Use `tokio::task::JoinSet` to manage dynamic background tasks.
+> 3. Add unit tests asserting batch completion and timeout handling.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::time::Duration;
+> > use tokio::task::JoinSet;
+> > use tokio::time::sleep;
+> > 
+> > pub async fn run_task_batch(
+> >     task_ids: Vec<u64>,
+> >     timeout_per_task: Duration,
+> > ) -> (usize, usize) {
+> >     let mut set = JoinSet::new();
+> > 
+> >     for id in task_ids {
+> >         set.spawn(async move {
+> >             if id % 2 == 0 {
+> >                 sleep(Duration::from_millis(5)).await;
+> >                 Ok(id * 10)
+> >             } else {
+> >                 sleep(Duration::from_millis(200)).await;
+> >                 Ok(id * 10)
+> >             }
+> >         });
+> >     }
+> > 
+> >     let mut success = 0;
+> >     let mut failed = 0;
+> > 
+> >     while let Some(res) = set.join_next().await {
+> >         match res {
+> >             Ok(Ok(_val)) => success += 1,
+> >             _ => failed += 1,
+> >         }
+> >     }
+> > 
+> >     (success, failed)
+> > }
+> > 
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> > 
+> >     #[tokio::test]
+> >     async fn test_joinset_batch_processing() {
+> >         let ids = vec![2, 4, 6];
+> >         let (succ, fail) = run_task_batch(ids, Duration::from_millis(50)).await;
+> >         assert_eq!(succ, 3);
+> >         assert_eq!(fail, 0);
+> >     }
+> > }
+> > ```
+> > 
+> > **Step-by-Step Explanation**:
+> > 1. **`JoinSet` Task Collection**: `tokio::task::JoinSet` manages a collection of dynamically spawned background tasks, yielding results as they complete via `join_next().await`.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`async fn`](../level_10/async_fn.md) — The language construct that creates Futures.
+> - [`Future` Trait](../level_10/future_trait.md) — The interface the Executor polls.
+> - [`Tokio`](../level_10/tokio.md) — The primary production Executor runtime in Rust.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - Futures in Rust are **completely lazy** — they do nothing unless polled by an **Executor**.
+> - Rust does **not** hardcode an Executor into the standard library, enabling extreme flexibility.
+> - **Tokio** is the defacto standard multi-threaded Executor runtime for network servers.
+> - Embedded systems can use lightweight, custom single-threaded Executors.
+> - The Executor listens for **`Waker`** notifications to know when a suspended Future is ready to be polled again.
+> 

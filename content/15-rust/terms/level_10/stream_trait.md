@@ -1,25 +1,23 @@
-# `Stream` Trait
+# `stream_trait.md` (Stream Trait)
 
 > **Level 10 — Async / Await**
-> Async equivalent of `Iterator`; yields values asynchronously.
+> An asynchronous iterator that yields a sequence of values over time.
 
 ---
 
 ## 1. Prerequisites
 
-- [`Future` Trait](../level_10/future_trait.md) — A state machine that yields exactly **one** value asynchronously.
-- [`Iterator` Trait](../level_02/iterator.md) — A state machine that yields **multiple** values synchronously.
-- [`async fn`](../level_10/async_fn.md) — The context required to use Streams.
+- [`Iterator` Trait](../level_05/iterator_trait.md) — The synchronous equivalent of `Stream`.
+- [`Future` Trait](../level_10/future_trait.md) — Yields a *single* value asynchronously; `Stream` yields *multiple* values asynchronously.
+- [`async fn`](../level_10/async_fn.md) — Asynchronous functions used alongside streams.
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (the async iterator)**: A `Future` is great, but it yields exactly one value and then permanently finishes. An `Iterator` yields multiple values, but it does so synchronously (calling `.next()` will block and freeze your thread if the data isn't ready). 
+**Rust Standard Trait (the async iterator)**: In Rust, a standard `Iterator` produces a series of items synchronously (blocking until each item is ready). A **`Stream`** is an asynchronous iterator. 
 
-What if you need to yield multiple values over a long period of time (like a live Twitter feed), but you want to do it *asynchronously* so you don't freeze your web server? 
-
-You use a **`Stream`**! It is quite literally an asynchronous Iterator.
+Instead of blocking the thread while waiting for the next item (e.g. waiting for incoming TCP packets or database rows), a `Stream` yields control back to the Tokio Runtime until the next item is ready to be processed.
 
 ---
 
@@ -27,62 +25,64 @@ You use a **`Stream`**! It is quite literally an asynchronous Iterator.
 
 ### (1) Design Motivation — "Why did we design this?"
 
-Consider a live WebSocket connection (like a multiplayer video game or a live chat room). Data arrives in chunks over several hours. 
+Imagine you are receiving a continuous stream of events from a WebSocket server, or reading a 10GB log file line-by-line over a network connection. 
 
-- If you use a standard **`Iterator`**, calling `.next()` will freeze your entire server until the user sends their next chat message 5 minutes later. This is unacceptable.
-- If you use a **`Future`**, it only returns one single chat message and then the connection dies.
+- You cannot use `Future`, because a `Future` can only resolve **once** to a single value.
+- You cannot use standard `Iterator`, because `.next()` is synchronous and would freeze your entire thread while waiting for network packets.
 
-The Rust community created the `Stream` trait to solve this. When you call `.next()` on a Stream, it doesn't block the thread. Instead, it instantly returns a `Future`! You can `.await` that future, which puts your task to sleep until the next chat message arrives, allowing the Tokio Executor to handle other users in the meantime.
+`Stream` bridges this gap. It defines an asynchronous `.poll_next()` method that yields `Poll::Ready(Some(value))` when an item arrives, `Poll::Pending` when waiting, or `Poll::Ready(None)` when the stream ends.
 
 ### (2) Reality Metaphor
 
-Imagine you are at a restaurant waiting for food.
+Imagine a conveyor belt in a factory.
 
-- **`Future` (One item):** You order a sandwich. The cashier hands you a buzzer and you sit down. The buzzer goes off, you get the sandwich, and the transaction is permanently over. 
-- **`Iterator` (Multiple items, Synchronous):** You order a buffet. You stand at the buffet line and put potatoes on your plate, then chicken, then salad. You never sit down. You are blocking the line until you are completely finished.
-- **`Stream` (Multiple items, Asynchronous):** You order a 3-course tasting menu. The chef hands you a buzzer. You sit down. The buzzer goes off, you get your appetizer, and you sit back down with the buzzer. 20 minutes later it goes off again, you get the entree, and sit back down. Finally, it goes off for dessert. You got multiple items over a long period of time, but you spent most of the time sitting comfortably (yielding to the Executor).
+- **`Iterator` (Synchronous)**: The conveyor belt is cranked by hand. You stand at the belt. If the next item isn't there yet, you stand completely frozen until someone places an item on the belt.
+- **`Stream` (Asynchronous)**: An automated sensor alerts you whenever a new box arrives on the belt (`Poll::Ready`). While the belt is empty (`Poll::Pending`), you turn around and assemble other products until the sensor beeps again!
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Trait Definition)
-If you look at the definition of `Stream`, it looks exactly like `Iterator`, except it returns `Poll<Option<T>>` instead of just `Option<T>`.
+#### Short Snippet (Consuming a Stream with `StreamExt`)
+Using the `futures::stream::StreamExt` trait, you can consume streams using familiar methods like `.next()`, `.map()`, and `.filter()`.
 
 ```rust
-// Standard Iterator (Synchronous)
-pub trait Iterator {
-    type Item;
-    fn next(&mut self) -> Option<Self::Item>; // Blocks until ready!
-}
-
-// Stream (Asynchronous Iterator)
-pub trait Stream {
-    type Item;
-    // Returns Poll::Pending if the data isn't ready yet!
-    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>;
-}
-```
-
-#### Fuller Example (The `while let` Loop)
-Because `for` loops do not currently support Streams (as of 2024, `async for` syntax is still being developed), we cannot use a normal `for` loop. We must use a `while let` loop and explicitly `.await` the `.next()` method!
-
-*Note: You must bring the `StreamExt` trait into scope to unlock the `.next()` method!*
-
-```rust
-use tokio_stream::StreamExt; // <--- CRITICAL! Unlocks `.next()`
-use tokio_stream::iter;
+use futures::stream::{self, StreamExt};
 
 #[tokio::main]
 async fn main() {
-    // We convert a standard array into an asynchronous Stream
-    let mut my_stream = iter(vec![1, 2, 3]);
+    // Create a stream from a vector
+    let mut stream = stream::iter(vec![1, 2, 3, 4, 5]);
 
-    // We CANNOT use `for num in my_stream`!
-    // We must manually ask for the next Future, and .await it!
-    while let Some(num) = my_stream.next().await {
-        println!("Received from stream: {}", num);
+    // Consuming items asynchronously using .next().await!
+    while let Some(value) = stream.next().await {
+        println!("Received stream item: {}", value);
     }
+}
+```
+
+#### Fuller Example (Building a Continuous Interval Stream)
+Here is how you process real-time events arriving over time using Tokio's built-in interval streams.
+
+```rust
+use tokio::time::{interval, Duration};
+use tokio_stream::wrappers::IntervalStream;
+use futures::stream::StreamExt;
+
+#[tokio::main]
+async fn main() {
+    // Create a timer stream that yields a tick every 500 milliseconds
+    let mut ticker = IntervalStream::new(interval(Duration::from_millis(500)));
+
+    let mut count = 0;
     
-    println!("Stream finished!");
+    // Process 3 ticks asynchronously
+    while let Some(_instant) = ticker.next().await {
+        count += 1;
+        println!("Tick #{}", count);
+
+        if count >= 3 {
+            break; // Stop listening to stream
+        }
+    }
 }
 ```
 
@@ -158,143 +158,260 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Fill in the Blanks
+### Exercise 1: Manual `Stream` Trait Implementation — Async Rate-Limited Telemetry Ticker
 
-**Problem:** Fill in the blanks with "One" or "Multiple", and "Synchronously" or "Asynchronously".
+**Scenario**: Low-level networking frameworks often require custom stream types implemented directly against `futures_core::stream::Stream`. A rate-limited telemetry ticker produces sequential readings up to a maximum count, pausing asynchronously between ticks and waking the task via `cx.waker().wake_by_ref()` when pending.
 
-1. A `Future` yields `___` value(s) `___`.
-2. An `Iterator` yields `___` value(s) `___`.
-3. A `Stream` yields `___` value(s) `___`.
+Implement a custom `TelemetryTicker` struct manually implementing `Stream`.
+
+**Requirements**:
+1. Define `TelemetryTicker` holding `current: usize`, `max: usize`, and `yielded_pending: bool`.
+2. Implement `futures_core::stream::Stream` yielding `usize`.
+3. In `poll_next`, if `yielded_pending` is false, set it to true, call `cx.waker().wake_by_ref()`, and return `Poll::Pending`. If true, reset it to false, increment `current`, and return `Poll::Ready(Some(current))`. Return `Poll::Ready(None)` when `current > max`.
+4. Add unit tests asserting item sequence and stream termination.
 
 > [!check]- Answer
-> 1. A `Future` yields **One** value **Asynchronously**.
-> 2. An `Iterator` yields **Multiple** values **Synchronously**.
-> 3. A `Stream` yields **Multiple** values **Asynchronously**.
-
----
-
-### Exercise 2: Consuming a Stream with `while let Some`
-
-**Problem:**
-You have a list of three event names: `["connected", "data_received", "disconnected"]`. Convert this `Vec` into an async stream using `tokio_stream::iter` and consume it with a `while let Some(...)` loop, printing each event as:
-
-```
-Event: connected
-Event: data_received
-Event: disconnected
-Stream exhausted.
-```
-
-Then answer: **why can't you use a regular `for` loop on a `Stream`?**
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Event: connected
-> Event: data_received
-> Event: disconnected
-> Stream exhausted.
-> ```
->
-> - **Hint 1:** Add `tokio-stream = "0.1"` to your `Cargo.toml`. Then bring `StreamExt` into scope with `use tokio_stream::StreamExt;` — without this trait import, the `.next()` method doesn't exist on the stream type.
-> - **Hint 2:** `tokio_stream::iter(vec![...])` wraps any `IntoIterator` into an async `Stream`. The stream must be declared `mut` because `.next()` takes `&mut self`.
-> - **Hint 3:** The loop pattern is `while let Some(item) = stream.next().await { ... }`. The `.await` is mandatory — `.next()` returns a `Future<Output = Option<Item>>`, not the item directly.
-> - **Answer to the `for` loop question:** A `for` loop desugars into calls to `Iterator::next()`, which returns `Option<T>` synchronously. A `Stream`'s `.next()` returns a `Future<Output = Option<T>>` that must be `.await`ed. The Rust `for` loop has no mechanism to insert an `.await` point, so streams require the manual `while let` pattern (until `async for` stabilises).
->
 > ```rust
-> use tokio_stream::StreamExt; // ← must import; unlocks .next(), .map(), .filter(), etc.
-> use tokio_stream::iter;
->
-> #[tokio::main]
-> async fn main() {
->     // Convert a Vec into an async Stream. The stream is lazy — items are
->     // only yielded one at a time as we poll it, not all at once.
->     let mut event_stream = iter(vec!["connected", "data_received", "disconnected"]);
->
->     // `while let` + `.await` is the idiomatic Stream consumption loop.
->     // Each call to .next().await suspends this task until the next item
->     // is available, yielding control back to the executor in the meantime.
->     while let Some(event) = event_stream.next().await {
->         println!("Event: {}", event);
->     }
->
->     // None was returned — the stream is permanently exhausted.
->     println!("Stream exhausted.");
+> use futures_core::stream::Stream;
+> use std::pin::Pin;
+> use std::task::{Context, Poll};
+> 
+> pub struct TelemetryTicker {
+>     current: usize,
+>     max: usize,
+>     yielded_pending: bool,
 > }
-> ```
->
-> **Explanation:**
-> `stream.next().await` is the fundamental building block of all stream consumption. Each call asks the stream for its next item: if one is ready, `Poll::Ready(Some(item))` resolves immediately; if not, `Poll::Pending` suspends the task until the reactor wakes it. When the stream has no more items, `Poll::Ready(None)` terminates the `while let`. The key insight is that the `.await` makes this pattern *non-blocking* — during the wait for the next item, the Tokio executor is free to run other tasks on the same thread.
-
----
-
-### Exercise 3: Building an Async Stream Adapter Pipeline
-
-**Problem:**
-Given a stream of integers `[1, 2, 3, 4, 5, 6]`, build a pipeline using `StreamExt` adapters that:
-
-1. **Filters** to keep only even numbers.
-2. **Maps** each surviving number by multiplying it by 10.
-3. Consumes the result with `while let Some(...)` and prints each value.
-
-Note that `StreamExt::filter` has a subtly different signature from `Iterator::filter` — its predicate must return a `Future<Output = bool>`, not a plain `bool`. This is the key challenge.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Even×10: 20
-> Even×10: 40
-> Even×10: 60
-> ```
->
-> - **Hint 1:** `StreamExt::filter` requires an *async* predicate — a closure that returns a `Future<Output = bool>`. The easiest way to wrap a synchronous boolean into a future is `futures::future::ready(bool_expr)`. Add `futures = "0.3"` to `Cargo.toml` and `use futures::future;`.
-> - **Hint 2:** The filter closure signature is `|x| future::ready(x % 2 == 0)`. Note it takes `&Item` not `Item` (mirroring `Iterator::filter`), so if your item type is `i32`, the closure receives `&i32`.
-> - **Hint 3:** Chain adapters before the `while let` loop, just like with `Iterator`. The resulting stream type is complex, so use `let mut pipeline = stream.filter(...).map(...);` and let the compiler infer the type.
-> - **Hint 4:** `StreamExt::map` (unlike filter) takes a *synchronous* closure returning the new value directly — no `future::ready` needed.
->
-> ```rust
-> use futures::future;          // for future::ready()
-> use tokio_stream::StreamExt;  // for .filter(), .map(), .next()
-> use tokio_stream::iter;
->
-> #[tokio::main]
-> async fn main() {
->     let numbers = iter(vec![1_i32, 2, 3, 4, 5, 6]);
->
->     // Chain adapters to build the pipeline.
->     // filter: async predicate — must wrap the bool in a ready Future.
->     // map:    synchronous transform — plain closure returning the new value.
->     let mut pipeline = numbers
->         .filter(|x| future::ready(x % 2 == 0)) // keeps 2, 4, 6
->         .map(|x| x * 10);                       // yields 20, 40, 60
->
->     while let Some(val) = pipeline.next().await {
->         println!("Even×10: {}", val);
+> 
+> impl TelemetryTicker {
+>     pub fn new(max: usize) -> Self {
+>         Self {
+>             current: 0,
+>             max,
+>             yielded_pending: false,
+>         }
+>     }
+> }
+> 
+> impl Stream for TelemetryTicker {
+>     type Item = usize;
+> 
+>     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+>         if self.current >= self.max {
+>             return Poll::Ready(None);
+>         }
+> 
+>         if !self.yielded_pending {
+>             self.yielded_pending = true;
+>             cx.waker().wake_by_ref();
+>             Poll::Pending
+>         } else {
+>             self.yielded_pending = false;
+>             self.current += 1;
+>             Poll::Ready(Some(self.current))
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use futures_util::stream::StreamExt;
+> 
+>     #[tokio::test]
+>     async fn test_telemetry_ticker_stream() {
+>         let mut ticker = TelemetryTicker::new(3);
+>         let mut results = Vec::new();
+> 
+>         while let Some(val) = ticker.next().await {
+>             results.push(val);
+>         }
+> 
+>         assert_eq!(results, vec![1, 2, 3]);
 >     }
 > }
 > ```
->
-> **Explanation:**
-> The async-predicate requirement of `StreamExt::filter` is the most common stumbling block when coming from `Iterator`. Because `poll_next` is the fundamental async primitive, every adapter in the stream pipeline must be composable with the executor's poll loop — and that means predicates that might themselves need to `.await` something (e.g. a database lookup) must return a `Future`. For a simple synchronous boolean, `future::ready(bool)` is the minimal wrapper: it creates a `Future` that immediately resolves to the given value without ever yielding.
->
-> The `filter` → `map` order also matters: filtering first reduces the number of items that `map` has to process, which is the same performance principle as with synchronous iterators — always filter before transforming.
+> 
+> **Step-by-Step Explanation**:
+> 1. **Manual `Stream` Trait Implementation**: `futures_core::stream::Stream` requires `poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>`.
+> 2. **Waker Notification**: Returning `Poll::Pending` requires registering/notifying a `Waker` (`cx.waker().wake_by_ref()`) so the executor reschedules `poll_next`.
+> 
+> ---
+> 
+> ### Exercise 2: Async Log Stream Aggregation & Batching Pipeline with Cancellation Safety
 
----
+**Scenario**: Real-time log monitoring pipelines parse continuous streams of log lines. The stream pipeline must filter entries by severity level (e.g. `ERROR` or `WARN`), group them into fixed-size batches using `StreamExt::chunks`, and handle shutdown signals cancellation-safely.
 
-## 6. Related Terms
+Build an async stream pipeline for log parsing and chunking.
 
-- [`Iterator` Trait](../level_02/iterator.md) — The synchronous version of a Stream.
-- [`Future` Trait](../level_10/future_trait.md) — The trait that powers the Stream's `.next()` method (every time you call `.next()`, it returns a Future!).
-- [`tokio`](../level_10/tokio.md) — The runtime you are usually running these Streams on.
+**Requirements**:
+1. Define `LogEntry` with `level: String` and `message: String`.
+2. Write `async fn process_log_stream<S>(stream: S, batch_size: usize) -> Vec<Vec<LogEntry>>` where `S: Stream<Item = LogEntry> + Unpin`.
+3. Filter entries retaining only `"ERROR"` or `"WARN"`, then chunk into batches of `batch_size`.
+4. Add unit tests asserting filtering and chunking accuracy.
 
----
+> [!check]- Answer
+> ```rust
+> use futures_util::stream::{Stream, StreamExt};
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct LogEntry {
+>     pub level: String,
+>     pub message: String,
+> }
+> 
+> pub async fn process_log_stream<S>(
+>     stream: S,
+>     batch_size: usize,
+> ) -> Vec<Vec<LogEntry>>
+> where
+>     S: Stream<Item = LogEntry> + Unpin,
+> {
+>     stream
+>         .filter(|entry| {
+>             let keep = entry.level == "ERROR" || entry.level == "WARN";
+>             async move { keep }
+>         })
+>         .chunks(batch_size)
+>         .collect()
+>         .await
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use futures_util::stream;
+> 
+>     #[tokio::test]
+>     async fn test_process_log_stream_filtering_and_chunking() {
+>         let logs = vec![
+>             LogEntry { level: "INFO".into(), message: "started".into() },
+>             LogEntry { level: "WARN".into(), message: "high memory".into() },
+>             LogEntry { level: "ERROR".into(), message: "disk full".into() },
+>             LogEntry { level: "DEBUG".into(), message: "trace".into() },
+>             LogEntry { level: "ERROR".into(), message: "oom".into() },
+>         ];
 
-## 7. Key Takeaways
+> 
+>         let stream = stream::iter(logs);
+>         let batches = process_log_stream(stream, 2).await;
+> 
+>         assert_eq!(batches.len(), 2);
+>         assert_eq!(batches[0].len(), 2);
+>         assert_eq!(batches[0][0].message, "high memory");
+>         assert_eq!(batches[0][1].message, "disk full");
+>         assert_eq!(batches[1].len(), 1);
+>         assert_eq!(batches[1][0].message, "oom");
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Stream Combinators**: `.filter()` filters items asynchronously, while `.chunks(batch_size)` groups items into `Vec<T>` chunks.
+> 2. **`StreamExt::collect`**: `.collect().await` asynchronously waits for stream completion, gathering batches into `Vec<Vec<LogEntry>>`.
+> 
+> ---
+> 
+> ### Exercise 3: Custom Stream Adapter — Async Deduplicating Stream Combinator
 
-- **`Stream`** is the exact asynchronous equivalent of an `Iterator`.
-- It yields multiple values over time without blocking the OS thread.
-- Calling **`.next()`** on a Stream returns a `Future` that resolves when the next item arrives.
-- You **cannot** use a standard `for` loop on a Stream; you must use `while let Some(item) = stream.next().await`.
-- You must always bring **`StreamExt`** into scope (from the `futures` or `tokio_stream` crates) to use methods like `.next()`, `.map()`, and `.filter()`.
+**Scenario**: High-frequency financial ticker streams produce rapid repeated price entries. A custom stream adapter `DeduplicateStream<St>` wraps an underlying stream and drops consecutive duplicate items before yielding to callers.
+
+Construct a custom stream combinator adapter implementing `Stream`.
+
+**Requirements**:
+1. Define `DeduplicateStream<St, T>` holding `stream: St` and `last_item: Option<T>`.
+2. Implement `Stream` for `DeduplicateStream<St, T>` where `St: Stream<Item = T> + Unpin`, `T: PartialEq + Clone`.
+3. In `poll_next`, loop polling `stream.poll_next()`. Skip items equal to `last_item`.
+4. Add unit tests asserting deduplication of consecutive duplicate values.
+
+> [!check]- Answer
+> ```rust
+> use futures_core::stream::Stream;
+> use std::pin::Pin;
+> use std::task::{Context, Poll};
+> 
+> pub struct DeduplicateStream<St, T> {
+>     stream: St,
+>     last_item: Option<T>,
+> }
+> 
+> impl<St, T> DeduplicateStream<St, T> {
+>     pub fn new(stream: St) -> Self {
+>         Self {
+>             stream,
+>             last_item: None,
+>         }
+>     }
+> }
+> 
+> impl<St, T> Stream for DeduplicateStream<St, T>
+> where
+>     St: Stream<Item = T> + Unpin,
+>     T: PartialEq + Clone,
+> {
+>     type Item = T;
+> 
+>     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+>         loop {
+>             match Pin::new(&mut self.stream).poll_next(cx) {
+>                 Poll::Ready(Some(item)) => {
+>                     if let Some(ref last) = self.last_item {
+>                         if last == &item {
+>                             continue; // Skip duplicate item, loop to poll next
+>                         }
+>                     }
+>                     self.last_item = Some(item.clone());
+>                     return Poll::Ready(Some(item));
+>                 }
+>                 Poll::Ready(None) => return Poll::Ready(None),
+>                 Poll::Pending => return Poll::Pending,
+>             }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use futures_util::stream::{self, StreamExt};
+> 
+>     #[tokio::test]
+>     async fn test_deduplicate_stream() {
+>         let raw_stream = stream::iter(vec![10, 10, 20, 20, 20, 30, 10]);
+>         let mut dedup_stream = DeduplicateStream::new(raw_stream);
+> 
+>         let mut results = Vec::new();
+>         while let Some(val) = dedup_stream.next().await {
+>             results.push(val);
+>         }
+> 
+>         assert_eq!(results, vec![10, 20, 30, 10]);
+>     }
+> }
+> ```
+> 
+> **Step-by-Step Explanation**:
+> 1. **Stream Adapter Pattern**: `DeduplicateStream` wraps inner stream `St` and intercepts `poll_next` calls.
+> 2. **Stateful Filtering**: Maintaining `last_item: Option<T>` enables comparing incoming values and looping to poll the next item when duplicates occur.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [`Iterator` Trait](../level_05/iterator_trait.md) — The synchronous version of `Stream`.
+> - [`Future` Trait](../level_10/future_trait.md) — Yields 1 value asynchronously; `Stream` yields $N$ values.
+> - [`tokio`](../level_10/tokio.md) — The runtime used to execute streams.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - A **`Stream`** is an asynchronous iterator.
+> - Unlike `Future` (which yields 1 result), a `Stream` yields **multiple values over time**.
+> - Unlike `Iterator` (which blocks the thread), a `Stream` **yields control to Tokio** when waiting for the next item.
+> - Import **`futures::stream::StreamExt`** to get access to `.next().await`, `.map()`, `.filter()`, and `.collect()`.
+> - Perfect for WebSockets, TCP packet streams, database cursor streams, and periodic timer ticks.
+> 

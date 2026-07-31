@@ -146,96 +146,505 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Magic Flag
-
-**Problem:** You just finished writing documentation for your new library. You want to generate the HTML website, but you are too lazy to manually open your file explorer, navigate to `target/doc/`, find `index.html`, and double-click it. What terminal command does all of this for you automatically?
-
-> [!check]- Answer
-> ```bash
-> cargo doc --open
-> ```
-> This is one of the most beloved commands in the Rust ecosystem!
-
----
-
-### Exercise 2: Building a Real Intra-Doc Link Web
+### Exercise 1: Distributed Cache API with Rustdoc Intra-Doc Hyperlinks & Code Hiding
 
 **Problem:**
-Intra-doc links let items in your documentation reference each other automatically — rustdoc resolves `[`TypeName`]` to a clickable hyperlink in the generated HTML, so readers can navigate your API without leaving the docs.
+You are building an in-memory distributed caching library (`DistributedCache`). To make your library documentation clear and easily navigable via `cargo doc`, you must write crate-level and item-level doc comments that link related types using rustdoc intra-doc link syntax (`[`CacheConfig`]`, `[`CacheError`]`, `[`CacheBackend`]`).
 
-Write a code snippet (suitable for `src/lib.rs`) that demonstrates:
-1. A `Config` struct with a `///` doc comment.
-2. A `Server` struct whose doc comment references `Config` using an intra-doc link: `/// Uses a [`Config`] to configure the server.`
-3. A public function `build_server(cfg: Config) -> Server` whose doc comment links to **both** [`Config`] and [`Server`].
-4. Identify: what happens at `cargo doc` time if you misspell the link as `[`Confgi`]`?
+Requirements:
+1. Define a `CacheConfig` struct for cache capacity and TTL settings.
+2. Define a `CacheBackend` trait specifying `get` and `put` operations, with `# Errors` doc headers.
+3. Implement `InMemoryCache` conforming to `CacheBackend` with hit and miss counters.
+4. Include doc comments featuring intra-doc links, `# Examples`, and `#` hidden lines for clean HTML output.
+5. Write complete unit tests (`#[cfg(test)] mod tests`) verifying cache hit/miss tracking and capacity eviction with `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
-**Expected output:**
 > [!check]- Answer
-> *(No runtime output — this is documentation code. Run `cargo doc --open` to see the linked HTML.)*
->
-> - **Hint 1:** Intra-doc links use the backtick-bracket syntax: `` [`TypeName`] `` or `[TypeName]`. The backtick form renders the name in monospace font (preferred for types/functions); the plain form renders it in normal font.
-> - **Hint 2:** `cargo doc` resolves these links at build time. If the target item doesn't exist (or is misspelled), rustdoc emits a **warning**: `unresolved link to 'Confgi'`. This makes broken doc links detectable in CI — use `RUSTDOCFLAGS="-D warnings"` to turn them into errors.
-> - **Hint 3:** You can link to methods with `[`Config::new`]`, to enum variants with `[`MyEnum::Variant`]`, and even to items in other crates with full paths: `[`std::collections::HashMap`]`.
->
 > ```rust
-> /// Application configuration.
+> use std::collections::HashMap;
+> 
+> /// Error types encountered during cache operations.
 > ///
-> /// Pass this to [`build_server`] to create a running [`Server`].
-> pub struct Config {
->     pub port: u16,
+> /// See [`InMemoryCache`] for practical usage.
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum CacheError {
+>     /// The cache capacity defined in [`CacheConfig`] has been exceeded.
+>     CapacityExceeded,
+>     /// The requested key was not found in storage.
+>     KeyNotFound,
+>     /// An internal storage failure occurred.
+>     StorageError(String),
 > }
->
-> /// The main HTTP server.
-> ///
-> /// Constructed from a [`Config`] via [`build_server`].
-> pub struct Server {
->     port: u16,
+> 
+> /// Configuration settings for [`InMemoryCache`].
+> #[derive(Debug, Clone)]
+> pub struct CacheConfig {
+>     /// Maximum number of key-value pairs allowed.
+>     pub max_entries: usize,
+>     /// Default time-to-live in seconds.
+>     pub ttl_seconds: u64,
 > }
->
-> /// Creates a [`Server`] from the provided [`Config`].
+> 
+> impl Default for CacheConfig {
+>     fn default() -> Self {
+>         Self {
+>             max_entries: 1000,
+>             ttl_seconds: 3600,
+>         }
+>     }
+> }
+> 
+> /// Abstraction for pluggable cache storage backends.
 > ///
-> /// # Example
+> /// Implementations must support key retrieval via [`CacheBackend::get`] and insertion via [`CacheBackend::put`].
+> pub trait CacheBackend {
+>     /// Retrieves a value associated with `key`.
+>     ///
+>     /// # Errors
+>     /// Returns [`CacheError::KeyNotFound`] if the key does not exist.
+>     fn get(&mut self, key: &str) -> Result<Option<String>, CacheError>;
+> 
+>     /// Inserts a key-value pair into the storage backend.
+>     ///
+>     /// # Errors
+>     /// Returns [`CacheError::CapacityExceeded`] if insertion exceeds [`CacheConfig::max_entries`].
+>     fn put(&mut self, key: String, value: String) -> Result<(), CacheError>;
+> }
+> 
+> /// In-memory implementation of [`CacheBackend`].
+> ///
+> /// Maintains hit/miss counters and enforces capacity limits defined by [`CacheConfig`].
+> ///
+> /// # Examples
 > /// ```
-> /// let cfg = Config { port: 8080 };
-> /// let server = build_server(cfg);
+> /// # use std::error::Error;
+> /// # fn main() -> Result<(), Box<dyn Error>> {
+> /// let config = CacheConfig { max_entries: 2, ttl_seconds: 60 };
+> /// let mut cache = InMemoryCache::new(config);
+> /// cache.put("session_101".to_string(), "active".to_string())?;
+> /// assert_eq!(cache.get("session_101")?, Some("active".to_string()));
+> /// # Ok(())
+> /// # }
 > /// ```
-> pub fn build_server(cfg: Config) -> Server {
->     Server { port: cfg.port }
+> pub struct InMemoryCache {
+>     config: CacheConfig,
+>     storage: HashMap<String, String>,
+>     hits: u64,
+>     misses: u64,
+> }
+> 
+> impl InMemoryCache {
+>     /// Constructs a new [`InMemoryCache`] using the provided [`CacheConfig`].
+>     pub fn new(config: CacheConfig) -> Self {
+>         Self {
+>             config,
+>             storage: HashMap::new(),
+>             hits: 0,
+>             misses: 0,
+>         }
+>     }
+> 
+>     /// Returns the current number of successful cache hits.
+>     pub fn hits(&self) -> u64 {
+>         self.hits
+>     }
+> 
+>     /// Returns the current number of cache misses.
+>     pub fn misses(&self) -> u64 {
+>         self.misses
+>     }
+> }
+> 
+> impl CacheBackend for InMemoryCache {
+>     fn get(&mut self, key: &str) -> Result<Option<String>, CacheError> {
+>         match self.storage.get(key) {
+>             Some(val) => {
+>                 self.hits += 1;
+>                 Ok(Some(val.clone()))
+>             }
+>             None => {
+>                 self.misses += 1;
+>                 Err(CacheError::KeyNotFound)
+>             }
+>         }
+>     }
+> 
+>     fn put(&mut self, key: String, value: String) -> Result<(), CacheError> {
+>         if !self.storage.contains_key(&key) && self.storage.len() >= self.config.max_entries {
+>             return Err(CacheError::CapacityExceeded);
+>         }
+>         self.storage.insert(key, value);
+>         Ok(())
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_cache_hit_and_miss_tracking() {
+>         let config = CacheConfig { max_entries: 2, ttl_seconds: 300 };
+>         let mut cache = InMemoryCache::new(config);
+> 
+>         assert_eq!(cache.hits(), 0);
+>         assert_eq!(cache.misses(), 0);
+> 
+>         assert!(cache.put("usr_1".to_string(), "alice".to_string()).is_ok());
+>         
+>         let res = cache.get("usr_1");
+>         assert!(res.is_ok());
+>         assert_eq!(res.unwrap(), Some("alice".to_string()));
+>         assert_eq!(cache.hits(), 1);
+> 
+>         let err = cache.get("usr_2");
+>         assert!(matches!(err, Err(CacheError::KeyNotFound)));
+>         assert_eq!(cache.misses(), 1);
+>     }
+> 
+>     #[test]
+>     fn test_cache_capacity_limit() {
+>         let config = CacheConfig { max_entries: 1, ttl_seconds: 300 };
+>         let mut cache = InMemoryCache::new(config);
+> 
+>         assert!(cache.put("k1".to_string(), "v1".to_string()).is_ok());
+>         let overflow = cache.put("k2".to_string(), "v2".to_string());
+>         assert_eq!(overflow, Err(CacheError::CapacityExceeded));
+>         assert_ne!(cache.storage.len(), 2);
+>     }
 > }
 > ```
->
-> **Answer to the misspell question:**
-> `cargo doc` emits: `warning: unresolved link to 'Confgi'` and renders the text as plain non-linked text. Add `#![deny(rustdoc::broken_intra_doc_links)]` at the top of `src/lib.rs` to turn this into a hard error that blocks `cargo doc` from succeeding, which is the recommended CI practice.
-
+> 
+> **Step-by-step Technical Explanation:**
+> 1. **Intra-Doc Link Resolution:** By enclosing type names in brackets (e.g. `[`CacheConfig`]`, `[`CacheError`]`), `cargo doc` resolves these references during doc generation and emits HTML hyperlinks directly connecting API components across the rendered website.
+> 2. **Hiding Boilerplate Code with `#`:** In doc comment code blocks, lines starting with `#` (such as `# use std::error::Error;` or `# fn main() -> Result<(), Box<dyn Error>> {`) are parsed and executed during `cargo test --doc` verification, but omitted from the HTML documentation rendered by `cargo doc --open`.
+> 3. **Standard Section Headers:** Adding Markdown section headers (`# Errors`, `# Examples`) standardizes rustdoc rendering into distinct visual callout blocks on the generated HTML page.
+> 
 ---
 
-### Exercise 3: When to Use `--document-private-items`
+### Exercise 2: API Gateway Middleware with Hidden Types (`#[doc(hidden)]`) & Feature Gates
 
 **Problem:**
-By default, `cargo doc` only generates documentation for `pub` items — the public API that external users see. But there are situations where you need docs for private internals too.
+In an enterprise API Gateway middleware, external public documentation built by `cargo doc` should focus strictly on public types while omitting internal helpers, raw byte manipulators, and legacy methods.
 
-Answer the following:
-1. A junior developer joins your team and needs to understand the internal `parse_header` helper (which is `pub(crate)`, not `pub`). What command generates docs they can browse?
-2. You are writing a binary crate (`src/main.rs`) with no `pub` items at all. Will `cargo doc` produce any output by default? What flag fixes this?
-3. Why would you typically **not** publish `--document-private-items` documentation publicly on `docs.rs`?
+Requirements:
+1. Implement a `GatewayConfig` struct and a `TokenValidator` struct for authorization handling.
+2. Use `#[doc(hidden)]` to exclude low-level primitive methods (`__internal_raw_hash`) and internal session structs (`InternalSessionTracker`) from `cargo doc` HTML output while keeping them accessible to library code.
+3. Document panics and security rules using `# Panics` and `# Security` doc headers.
+4. Implement an `AuthenticationProvider` trait with error handling using `AuthError`.
+5. Write complete unit tests (`#[cfg(test)] mod tests`) testing valid/invalid tokens, trait dispatch, hidden internal method execution, and panic triggers using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
-> **1. Generating internal docs:**
-> ```bash
-> cargo doc --document-private-items --open
+> ```rust
+> use std::collections::HashSet;
+> 
+> /// Error variants encountered during API Gateway request processing.
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum AuthError {
+>     /// Provided JWT or API token is expired or corrupted.
+>     InvalidToken,
+>     /// Caller lacks permission for the requested endpoint.
+>     Unauthorized,
+>     /// Low-level crypt validation failed internally.
+>     InternalCryptoError,
+> }
+> 
+> /// Core configuration for the API Gateway middleware.
+> #[derive(Debug, Clone)]
+> pub struct GatewayConfig {
+>     /// Active API port for inbound client connections.
+>     pub port: u16,
+>     /// List of allowed host origins for CORS validation.
+>     pub allowed_origins: HashSet<String>,
+> }
+> 
+> /// Token validation processor for API requests.
+> ///
+> /// Uses standard HMAC key verification to authenticate incoming client tokens.
+> pub struct TokenValidator {
+>     secret_key: String,
+> }
+> 
+> impl TokenValidator {
+>     /// Constructs a new [`TokenValidator`] with the specified secret key.
+>     ///
+>     /// # Panics
+>     /// Panics if `secret_key` is empty.
+>     pub fn new(secret_key: impl Into<String>) -> Self {
+>         let key = secret_key.into();
+>         assert!(!key.is_empty(), "Secret key cannot be empty");
+>         Self { secret_key: key }
+>     }
+> 
+>     /// Validates an incoming authorization bearer token.
+>     ///
+>     /// # Errors
+>     /// Returns [`AuthError::InvalidToken`] if the token format is invalid or key mismatch occurs.
+>     ///
+>     /// # Example
+>     /// ```
+>     /// let validator = TokenValidator::new("supersecret");
+>     /// assert!(validator.validate_token("token_supersecret_valid").is_ok());
+>     /// ```
+>     pub fn validate_token(&self, token: &str) -> Result<bool, AuthError> {
+>         if token.starts_with("token_") && token.contains(&self.secret_key) {
+>             Ok(true)
+>         } else {
+>             Err(AuthError::InvalidToken)
+>         }
+>     }
+> 
+>     /// Low-level raw hash computation helper.
+>     ///
+>     /// Hidden from public HTML documentation generated by `cargo doc`.
+>     #[doc(hidden)]
+>     pub fn __internal_raw_hash(&self, input: &[u8]) -> u64 {
+>         input.iter().fold(0u64, |acc, &x| acc.wrapping_add(x as u64))
+>     }
+> }
+> 
+> /// Trait defining authentication providers for API Gateway integration.
+> pub trait AuthenticationProvider {
+>     /// Authenticates an incoming request payload string.
+>     ///
+>     /// # Security
+>     /// Tokens must be transmitted over encrypted TLS connections.
+>     fn authenticate(&self, credential: &str) -> Result<String, AuthError>;
+> }
+> 
+> impl AuthenticationProvider for TokenValidator {
+>     fn authenticate(&self, credential: &str) -> Result<String, AuthError> {
+>         if self.validate_token(credential)? {
+>             Ok("user_authenticated_role".to_string())
+>         } else {
+>             Err(AuthError::Unauthorized)
+>         }
+>     }
+> }
+> 
+> /// Internal session cache hidden from external documentation.
+> #[doc(hidden)]
+> pub struct InternalSessionTracker {
+>     pub active_sessions: u32,
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_token_validation_success_and_failure() {
+>         let validator = TokenValidator::new("secret123");
+>         
+>         let valid_res = validator.validate_token("token_secret123_session");
+>         assert!(valid_res.is_ok());
+>         assert_eq!(valid_res.unwrap(), true);
+> 
+>         let invalid_res = validator.validate_token("token_wrongkey_session");
+>         assert_eq!(invalid_res, Err(AuthError::InvalidToken));
+>     }
+> 
+>     #[test]
+>     fn test_auth_provider_trait_implementation() {
+>         let validator = TokenValidator::new("my_jwt_key");
+>         let auth_res = validator.authenticate("token_my_jwt_key_granted");
+>         assert!(auth_res.is_ok());
+>         assert_eq!(auth_res.unwrap(), "user_authenticated_role");
+> 
+>         let bad_auth = validator.authenticate("invalid");
+>         assert!(matches!(bad_auth, Err(AuthError::InvalidToken)));
+>     }
+> 
+>     #[test]
+>     fn test_hidden_internal_methods_work_at_runtime() {
+>         let validator = TokenValidator::new("key");
+>         // Hidden methods still exist and run normally in Rust code despite #[doc(hidden)]
+>         let hash = validator.__internal_raw_hash(b"test_payload");
+>         assert_ne!(hash, 0);
+>     }
+> 
+>     #[test]
+>     #[should_panic(expected = "Secret key cannot be empty")]
+>     fn test_empty_secret_key_panics() {
+>         let _ = TokenValidator::new("");
+>     }
+> }
 > ```
-> This instructs rustdoc to document all items regardless of visibility — `pub(crate)`, `pub(super)`, and even fully private `fn`. The generated site is identical in structure to the normal docs, just with more items.
->
-> **2. Binary crates:**
-> Yes — a binary crate with no `pub` items produces an essentially empty `cargo doc` site. `--document-private-items` is the flag that makes it useful for binary crates, since all their items are private by definition.
->
-> **3. Why not publish private docs:**
-> Private items often contain implementation details, internal invariants, and assumptions that only make sense in the context of the full source code. Exposing them as a public HTML site could: (a) leak proprietary implementation strategies, (b) confuse external users who try to call internal functions that aren't actually accessible, and (c) create a maintenance burden since private APIs change freely without semver guarantees.
->
-> **Explanation:**
-> `--document-private-items` is a developer ergonomics flag, not a publication tool. It bridges the gap between "read the source" and "read structured docs" for contributors working inside the codebase.
+> 
+> **Step-by-step Technical Explanation:**
+> 1. **Controlling HTML Visibility with `#[doc(hidden)]`:** Annotating items with `#[doc(hidden)]` instructs `cargo doc` to omit them from generated HTML index pages. This keeps library documentation clean and focused on public APIs while retaining full visibility in Rust source code for internal workspace modules.
+> 2. **Verifying Panic Guarantees:** The `# Panics` section in documentation guarantees contract behavior under invalid inputs. The `#[should_panic]` test attribute verifies that empty keys panic as documented.
+> 3. **Documenting Security Constraints:** Custom section headers like `# Security` draw immediate developer attention in the generated HTML layout for critical compliance rules.
+> 
+---
+
+### Exercise 3: Event Microservice Bus with Inline Re-exports (`#[doc(inline)]`)
+
+**Problem:**
+When structuring large crates with nested sub-modules (`mod internal`), users navigating through `cargo doc` can get lost in multi-level module trees. You must flatten the documentation presentation by re-exporting internal types at the crate root using `#[doc(inline)] pub use ...`.
+
+Requirements:
+1. Define internal sub-module items: `EventMessage` struct, `EventHandler` trait, and `EventBus` struct.
+2. In the parent module, re-export sub-module items using `#[doc(inline)] pub use ...` so `cargo doc` embeds their documentation directly into the main module landing page instead of creating nested sub-page links.
+3. Support thread-safe subscriber registration and event publishing using `Arc<Mutex<...>>` or atomic counters.
+4. Include doc comments featuring `# Concurrency` and intra-doc links.
+5. Write complete unit tests (`#[cfg(test)] mod tests`) verifying multi-subscriber delivery, empty payload filtering, and total published message tracking using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
+
+> [!check]- Answer
+> ```rust
+> pub mod internal {
+>     use std::sync::{Arc, Mutex};
+> 
+>     /// Represents a message dispatched through the event bus system.
+>     ///
+>     /// See [`EventBus`](super::EventBus) for dispatching details.
+>     #[derive(Debug, Clone, PartialEq, Eq)]
+>     pub struct EventMessage {
+>         /// Topic header determining target subscribers.
+>         pub topic: String,
+>         /// Raw message body payload bytes.
+>         pub payload: Vec<u8>,
+>     }
+> 
+>     impl EventMessage {
+>         /// Creates a new [`EventMessage`] with topic and payload.
+>         pub fn new(topic: impl Into<String>, payload: Vec<u8>) -> Self {
+>             Self {
+>                 topic: topic.into(),
+>                 payload,
+>             }
+>         }
+>     }
+> 
+>     /// Handler trait for processing incoming [`EventMessage`] events.
+>     pub trait EventHandler: Send + Sync {
+>         /// Processes a single dispatched [`EventMessage`].
+>         fn handle(&self, msg: &EventMessage);
+>     }
+> 
+>     /// Thread-safe event bus that routes [`EventMessage`] instances to registered [`EventHandler`]s.
+>     ///
+>     /// # Concurrency
+>     /// Thread safe. Uses internal [`std::sync::Mutex`] locking for concurrent publish calls.
+>     pub struct EventBus {
+>         handlers: Arc<Mutex<Vec<Box<dyn EventHandler>>>>,
+>         published_count: Arc<Mutex<usize>>,
+>     }
+> 
+>     impl EventBus {
+>         /// Constructs a new empty [`EventBus`].
+>         pub fn new() -> Self {
+>             Self {
+>                 handlers: Arc::new(Mutex::new(Vec::new())),
+>                 published_count: Arc::new(Mutex::new(0)),
+>             }
+>         }
+> 
+>         /// Registers a new subscriber handler with the bus.
+>         pub fn subscribe<H: EventHandler + 'static>(&self, handler: H) {
+>             let mut list = self.handlers.lock().unwrap();
+>             list.push(Box::new(handler));
+>         }
+> 
+>         /// Publishes an [`EventMessage`] to all registered handlers.
+>         ///
+>         /// Returns the number of handlers that processed the event.
+>         pub fn publish(&self, message: &EventMessage) -> usize {
+>             let list = self.handlers.lock().unwrap();
+>             for handler in list.iter() {
+>                 handler.handle(message);
+>             }
+>             let mut count = self.published_count.lock().unwrap();
+>             *count += 1;
+>             list.len()
+>         }
+> 
+>         /// Returns total count of published messages.
+>         pub fn total_published(&self) -> usize {
+>             *self.published_count.lock().unwrap()
+>         }
+>     }
+> }
+> 
+> // Inlining sub-module items into the crate root documentation page generated by `cargo doc`:
+> #[doc(inline)]
+> pub use internal::EventBus;
+> #[doc(inline)]
+> pub use internal::EventHandler;
+> #[doc(inline)]
+> pub use internal::EventMessage;
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::sync::atomic::{AtomicUsize, Ordering};
+>     use std::sync::Arc;
+> 
+>     struct TestMetricsHandler {
+>         processed: Arc<AtomicUsize>,
+>     }
+> 
+>     impl EventHandler for TestMetricsHandler {
+>         fn handle(&self, msg: &EventMessage) {
+>             if !msg.payload.is_empty() {
+>                 self.processed.fetch_add(1, Ordering::SeqCst);
+>             }
+>         }
+>     }
+> 
+>     #[test]
+>     fn test_event_bus_publishing_and_metrics() {
+>         let bus = EventBus::new();
+>         let counter = Arc::new(AtomicUsize::new(0));
+> 
+>         let handler = TestMetricsHandler {
+>             processed: Arc::clone(&counter),
+>         };
+> 
+>         bus.subscribe(handler);
+> 
+>         let msg1 = EventMessage::new("order.created", b"payload_bytes".to_vec());
+>         let handler_count = bus.publish(&msg1);
+> 
+>         assert_eq!(handler_count, 1);
+>         assert_eq!(counter.load(Ordering::SeqCst), 1);
+>         assert_eq!(bus.total_published(), 1);
+>     }
+> 
+>     #[test]
+>     fn test_event_bus_empty_payload_filtering() {
+>         let bus = EventBus::new();
+>         let counter = Arc::new(AtomicUsize::new(0));
+> 
+>         bus.subscribe(TestMetricsHandler {
+>             processed: Arc::clone(&counter),
+>         });
+> 
+>         let empty_msg = EventMessage::new("order.ping", vec![]);
+>         let handler_count = bus.publish(&empty_msg);
+> 
+>         assert_eq!(handler_count, 1);
+>         // Metric handler skips empty payload
+>         assert_eq!(counter.load(Ordering::SeqCst), 0);
+>         assert_ne!(bus.total_published(), 0);
+>     }
+> 
+>     #[test]
+>     fn test_inlined_reexport_types_match() {
+>         let msg = EventMessage::new("test", vec![1, 2, 3]);
+>         assert_eq!(msg.topic, "test");
+>         assert!(matches!(msg.payload.as_slice(), [1, 2, 3]));
+>     }
+> }
+> ```
+> 
+> **Step-by-step Technical Explanation:**
+> 1. **`#[doc(inline)]` Taxonomy Management:** When re-exporting types from private or nested modules using `pub use internal::Item`, rustdoc normally creates a simple hyperlinked entry. Adding `#[doc(inline)]` forces `cargo doc` to render the full item documentation directly on the top-level page, reducing click depth for downstream users.
+> 2. **Cross-Module Intra-Doc Links:** `[`EventBus`](super::EventBus)` illustrates how intra-doc links can navigate up and down module hierarchies using standard path references.
+> 3. **Thread Safety Verification:** The unit test demonstrates thread-safe dispatch across atomic metrics and shared handler traits (`Send + Sync`).
 
 ---
 

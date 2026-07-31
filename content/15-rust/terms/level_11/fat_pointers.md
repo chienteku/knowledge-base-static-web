@@ -143,121 +143,406 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Predict the Metadata
-
-**Problem:** For each type below, is its reference a thin or fat pointer, and if fat, what's the extra metadata word?
-1. `&u64`
-2. `&[u8]`
-3. `&dyn std::fmt::Display`
-4. `&String`
-
-> [!check]- Answer
-> 1. `&u64` → **thin** (8 bytes) — `u64` is `Sized`.
-> 2. `&[u8]` → **fat** (16 bytes) — metadata is a `usize` **length**.
-> 3. `&dyn std::fmt::Display` → **fat** (16 bytes) — metadata is a **vtable pointer**.
-> 4. `&String` → **thin** (8 bytes) — `String` itself is a plain, fixed-size, `Sized` struct (a pointer + length + capacity *inside* it); the reference *to* the struct is just one address. Its *contents* (the underlying `str` data) is a DST, but that's a separate, internal detail — `&String` itself does not need to be fat.
-
----
-
-### Exercise 2: Measuring and Predicting Fat Pointer Sizes
+### Exercise 1: Zero-Copy Slice Fat Pointer Parser & Memory Layout Inspection
 
 **Problem:**
-Before running any code, predict the size in bytes of each reference type below (assume a 64-bit system where a single pointer is 8 bytes). Then write a `main` function that prints the actual sizes to verify your predictions.
+In high-performance networking services, binary packet buffers (`&[u8]`) are parsed without heap allocations. In Rust, a slice reference `&[u8]` is stored as a 16-byte fat pointer (on 64-bit systems) consisting of two words: a raw data pointer (`*const u8`) and a length (`usize`).
 
-| Type | Your prediction |
-|---|---|
-| `&i32` | ? bytes |
-| `&[i32]` | ? bytes |
-| `&str` | ? bytes |
-| `&dyn std::fmt::Debug` | ? bytes |
+Your task is to build a low-level packet buffer viewer `PacketBuffer`:
+1. Define a `SliceRawParts` struct decorated with `#[repr(C)]` containing `data_ptr: *const u8` and `length: usize`.
+2. Implement `PacketBuffer::inspect_fat_pointer<'a>(slice: &'a [u8]) -> SliceRawParts` using `std::mem::transmute` to convert the `&[u8]` fat pointer reference into `SliceRawParts`.
+3. Implement `PacketBuffer::extract_raw_parts(slice: &[u8]) -> (*const u8, usize)` returning the data pointer and length.
+4. Implement `unsafe fn PacketBuffer::reconstruct_slice<'a>(ptr: *const u8, len: usize) -> &'a [u8]` using `std::slice::from_raw_parts` to convert raw components back into a valid slice reference.
+5. Write unit tests verifying:
+   - Memory size assertions (`size_of::<&u8>() == 8` vs `size_of::<&[u8]>() == 16` on 64-bit target).
+   - Correct extraction and reconstruction of payload slices.
+   - Sub-slice pointer arithmetic showing that taking a slice offset advances `data_ptr` by the byte offset while reducing `length` metadata accordingly.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> &i32              : 8 bytes  (thin — 1 pointer word)
-> &[i32]            : 16 bytes (fat  — pointer + length)
-> &str              : 16 bytes (fat  — pointer + length)
-> &dyn Debug        : 16 bytes (fat  — pointer + vtable)
-> ```
->
-> - **Hint 1:** A *thin* pointer carries only a data address — one pointer word (8 bytes on 64-bit). A *fat* pointer carries a data address **plus** one extra metadata word — two pointer words (16 bytes). Any reference to a `Sized` type is thin; any reference to a DST is fat.
-> - **Hint 2:** `str` and `[i32]` are both DSTs: their length isn't known at compile time, so the reference must carry it as metadata. `&str` and `&[i32]` are therefore both fat pointers (16 bytes each), even though `str` and `[i32]` are different types.
-> - **Hint 3:** `&dyn Trait` is also fat (16 bytes), but its metadata word is a **vtable pointer** — not a length. This is the structural difference between the two kinds of fat pointer.
->
 > ```rust
 > use std::mem::size_of;
+> use std::slice;
+>
+> /// Representation of a slice fat pointer layout on 64-bit platforms (data pointer + length).
+> #[repr(C)]
+> #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+> pub struct SliceRawParts {
+>     pub data_ptr: *const u8,
+>     pub length: usize,
+> }
+>
+> pub struct PacketBuffer;
+>
+> impl PacketBuffer {
+>     /// Extracts raw pointer and length components from a byte slice.
+>     pub fn extract_raw_parts(slice: &[u8]) -> (*const u8, usize) {
+>         (slice.as_ptr(), slice.len())
+>     }
+>
+>     /// Transmutes a slice reference into its raw two-word fat pointer structure.
+>     pub fn inspect_fat_pointer(slice: &[u8]) -> SliceRawParts {
+>         // Safety: &[u8] reference is guaranteed to be layout-compatible with `SliceRawParts`
+>         unsafe { std::mem::transmute::<&[u8], SliceRawParts>(slice) }
+>     }
+>
+>     /// Reconstructs a byte slice reference from raw data pointer and length.
+>     ///
+>     /// # Safety
+>     /// `ptr` must be non-null, properly aligned for `u8`, and point to `len` valid initialized bytes.
+>     pub unsafe fn reconstruct_slice<'a>(ptr: *const u8, len: usize) -> &'a [u8] {
+>         slice::from_raw_parts(ptr, len)
+>     }
+> }
 >
 > fn main() {
->     println!("&i32              : {} bytes  (thin — 1 pointer word)",  size_of::<&i32>());
->     println!("&[i32]            : {} bytes (fat  — pointer + length)", size_of::<&[i32]>());
->     println!("&str              : {} bytes (fat  — pointer + length)", size_of::<&str>());
->     println!("&dyn Debug        : {} bytes (fat  — pointer + vtable)", size_of::<&dyn std::fmt::Debug>());
+>     let payload = b"POST /api/v1/ingest HTTP/1.1";
+>     let raw_parts = PacketBuffer::inspect_fat_pointer(payload);
+>     println!("Data Pointer: {:p}, Length: {}", raw_parts.data_ptr, raw_parts.length);
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>
+>     #[test]
+>     fn test_fat_pointer_size_and_layout() {
+>         // A thin reference `&u8` is 1 word (8 bytes on 64-bit architecture)
+>         assert_eq!(size_of::<&u8>(), size_of::<usize>());
+>         // A slice reference `&[u8]` is a fat pointer: 2 words (16 bytes on 64-bit architecture)
+>         assert_eq!(size_of::<&[u8]>(), 2 * size_of::<usize>());
+>         assert_eq!(size_of::<SliceRawParts>(), size_of::<&[u8]>());
+>
+>         let payload = b"GET /api/v1/resource HTTP/1.1";
+>         let slice: &[u8] = &payload[..];
+>
+>         let raw = PacketBuffer::inspect_fat_pointer(slice);
+>         assert_eq!(raw.length, payload.len());
+>         assert_eq!(raw.data_ptr, slice.as_ptr());
+>     }
+>
+>     #[test]
+>     fn test_slice_fat_pointer_decomposition_and_reconstruction() {
+>         let original_data = b"TCP_HANDSHAKE_SYN_ACK";
+>         let (ptr, len) = PacketBuffer::extract_raw_parts(original_data);
+>
+>         assert_eq!(len, 21);
+>         assert_eq!(ptr, original_data.as_ptr());
+>
+>         let reconstructed = unsafe { PacketBuffer::reconstruct_slice(ptr, len) };
+>         assert_eq!(reconstructed, original_data);
+>     }
+>
+>     #[test]
+>     fn test_subslice_pointer_arithmetic() {
+>         let frame = [0xDEADBEEFu32, 0xCAFEBABE, 0x12345678];
+>         let bytes: &[u8] = unsafe {
+>             slice::from_raw_parts(frame.as_ptr() as *const u8, size_of::<[u32; 3]>())
+>         };
+>
+>         // Subslice skipping first 4-byte integer
+>         let sub_slice = &bytes[4..12];
+>
+>         let full_raw = PacketBuffer::inspect_fat_pointer(bytes);
+>         let sub_raw = PacketBuffer::inspect_fat_pointer(sub_slice);
+>
+>         assert_eq!(full_raw.length, 12);
+>         assert_eq!(sub_raw.length, 8);
+>
+>         // Data pointer advances by exactly 4 bytes
+>         let byte_offset = unsafe { sub_raw.data_ptr.offset_from(full_raw.data_ptr) };
+>         assert_eq!(byte_offset, 4);
+>     }
 > }
 > ```
 >
-> **Explanation:**
-> `size_of::<&T>()` measures the size of the *reference itself*, not the data it points to. For `&i32`, the reference is just one 8-byte address. For `&[i32]` and `&str`, the reference is a fat pointer: an 8-byte data address plus an 8-byte `usize` length field. For `&dyn Trait`, the reference is also 16 bytes but structured differently: an 8-byte data address plus an 8-byte pointer to the *vtable* — the lookup table of function pointers for that concrete type's trait implementation.
+> **Step-by-Step Explanation:**
+> 1. **Slice Memory Layout:** In Rust, a slice reference `&[T]` does not point to a struct containing data; it is a two-word fat pointer stored directly on the stack containing `(*const T, usize)`.
+> 2. **Transmutation:** `std::mem::transmute::<&[u8], SliceRawParts>` safely converts the fat pointer reference into a C-compatible raw struct representation, proving that the second word is literally the length of the slice.
+> 3. **Sub-slicing Mechanics:** When you take a slice subset `&buffer[4..12]`, Rust does not copy data or allocate memory. It simply constructs a new fat pointer on the stack whose `data_ptr` is offset by 4 bytes (`ptr + 4`) and whose `length` metadata is updated to `8`.
 
 ---
 
-### Exercise 3: Dissecting a Trait Object Fat Pointer
+### Exercise 2: Trait Object Vtable Inspection & Dynamic Plugin Dispatch
 
 **Problem:**
-A `&dyn Trait` fat pointer is 16 bytes on 64-bit — but what are those two 8-byte words, exactly? Answer the following and then write code to verify the size claim:
+In dynamic plugin engines or extensible microservices, polymorphism is achieved via trait objects (`&dyn Plugin`). A trait object reference is a fat pointer consisting of:
+1. A data pointer (`*const ()`) pointing to the concrete instance in memory.
+2. A vtable pointer (`*const ()`) pointing to the compiler-generated virtual method table containing function pointers and drop glue.
 
-1. What does the **first word** of a `&dyn Trait` fat pointer contain?
-2. What does the **second word** contain? Describe at least three things stored in that structure.
-3. Why does the vtable approach mean Rust can call the *correct* method implementation at runtime, even though the concrete type has been erased?
+Your task is to demonstrate the internal mechanics of `dyn Trait` fat pointers:
+1. Define a `Plugin` trait with methods `name(&self) -> &'static str` and `process(&self, input: u32) -> u32`.
+2. Implement `Plugin` for two distinct structs: `AudioProcessor` (with field `gain: u32`) and `VideoProcessor` (with field `frame_rate: u32`).
+3. Define a `TraitObjectRaw` struct matching `&dyn Plugin` memory layout (`data_ptr: *const ()`, `vtable_ptr: *const ()`).
+4. Write `extract_vtable(trait_obj: &dyn Plugin) -> TraitObjectRaw` using `std::mem::transmute`.
+5. Write unit tests verifying:
+   - Trait object fat pointer size (`size_of::<&dyn Plugin>() == 16` bytes on 64-bit).
+   - Vtable pointer identity: two `&dyn Plugin` references to different `AudioProcessor` instances have **different data pointers** but share the **exact same vtable pointer**, whereas a reference to `VideoProcessor` has a **different vtable pointer**.
+   - Dynamic dispatch execution over a collection of heterogenous plugin pointers (`Vec<&dyn Plugin>`).
 
-Verify the size with `size_of::<&dyn std::fmt::Display>()`.
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> &dyn Display fat pointer: 16 bytes
-> ```
->
-> - **Hint 1:** The first word is a raw data pointer (`*const ()`) — the address of the concrete value on the stack or heap. This is identical to what a thin pointer contains.
-> - **Hint 2:** The second word is a pointer to a **vtable** — a static, read-only table generated by the compiler once per `(ConcreteType, Trait)` pair. It contains: (a) a pointer to the concrete type's `drop` implementation, (b) the concrete type's size and alignment (for the allocator), and (c) one function pointer per trait method (`fmt` in the case of `Display`).
-> - **Hint 3:** At the call site `dyn_ref.fmt(...)`, Rust dereferences the vtable pointer and calls the function pointer at the correct offset — just like a C++ virtual dispatch table. The concrete type's identity has been erased, but the vtable preserves all the method pointers needed to call it correctly.
->
 > ```rust
 > use std::mem::size_of;
 >
-> fn main() {
->     // A &dyn Display is always 16 bytes regardless of what concrete type is behind it.
->     let size = size_of::<&dyn std::fmt::Display>();
->     println!("&dyn Display fat pointer: {} bytes", size);
+> pub trait Plugin {
+>     fn name(&self) -> &'static str;
+>     fn process(&self, input: u32) -> u32;
+> }
 >
->     // To see the vtable in action: both u32 and &str implement Display,
->     // but they have completely different vtables. The fat pointer carries
->     // the right vtable for each, so the correct `fmt` is called.
->     let x: &dyn std::fmt::Display = &42_u32;
->     let y: &dyn std::fmt::Display = &"hello";
->     println!("{}", x); // calls u32::fmt via x's vtable
->     println!("{}", y); // calls str::fmt via y's vtable
+> pub struct AudioProcessor {
+>     pub gain: u32,
+> }
+>
+> impl Plugin for AudioProcessor {
+>     fn name(&self) -> &'static str {
+>         "AudioProcessor"
+>     }
+>     fn process(&self, input: u32) -> u32 {
+>         input * self.gain
+>     }
+> }
+>
+> pub struct VideoProcessor {
+>     pub frame_rate: u32,
+> }
+>
+> impl Plugin for VideoProcessor {
+>     fn name(&self) -> &'static str {
+>         "VideoProcessor"
+>     }
+>     fn process(&self, input: u32) -> u32 {
+>         input + self.frame_rate
+>     }
+> }
+>
+> /// Raw memory layout of a trait object reference `&dyn Plugin` on 64-bit target.
+> #[repr(C)]
+> #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+> pub struct TraitObjectRaw {
+>     pub data_ptr: *const (),
+>     pub vtable_ptr: *const (),
+> }
+>
+> pub fn extract_vtable(trait_obj: &dyn Plugin) -> TraitObjectRaw {
+>     unsafe { std::mem::transmute::<&dyn Plugin, TraitObjectRaw>(trait_obj) }
+> }
+>
+> fn main() {
+>     let audio = AudioProcessor { gain: 4 };
+>     let plugin_ref: &dyn Plugin = &audio;
+>     let raw = extract_vtable(plugin_ref);
+>     println!("Data Pointer: {:p}, Vtable Pointer: {:p}", raw.data_ptr, raw.vtable_ptr);
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>
+>     #[test]
+>     fn test_trait_object_fat_pointer_structure() {
+>         assert_eq!(size_of::<&dyn Plugin>(), 2 * size_of::<usize>());
+>         assert_eq!(size_of::<TraitObjectRaw>(), size_of::<&dyn Plugin>());
+>
+>         let audio = AudioProcessor { gain: 5 };
+>         let audio_ref: &dyn Plugin = &audio;
+>         let raw = extract_vtable(audio_ref);
+>
+>         assert!(!raw.data_ptr.is_null());
+>         assert!(!raw.vtable_ptr.is_null());
+>         assert_eq!(raw.data_ptr, &audio as *const AudioProcessor as *const ());
+>     }
+>
+>     #[test]
+>     fn test_vtable_pointer_identity() {
+>         let audio1 = AudioProcessor { gain: 2 };
+>         let audio2 = AudioProcessor { gain: 10 };
+>         let video = VideoProcessor { frame_rate: 60 };
+>
+>         let ref_audio1: &dyn Plugin = &audio1;
+>         let ref_audio2: &dyn Plugin = &audio2;
+>         let ref_video: &dyn Plugin = &video;
+>
+>         let raw1 = extract_vtable(ref_audio1);
+>         let raw2 = extract_vtable(ref_audio2);
+>         let raw_video = extract_vtable(ref_video);
+>
+>         // Distinct stack/heap instances have unique data pointers
+>         assert_ne!(raw1.data_ptr, raw2.data_ptr);
+>
+>         // Identical concrete types share the EXACT SAME compiler-generated vtable!
+>         assert_eq!(raw1.vtable_ptr, raw2.vtable_ptr);
+>
+>         // Different concrete types point to DIFFERENT vtables!
+>         assert_ne!(raw1.vtable_ptr, raw_video.vtable_ptr);
+>     }
+>
+>     #[test]
+>     fn test_dynamic_plugin_dispatch() {
+>         let audio = AudioProcessor { gain: 3 };
+>         let video = VideoProcessor { frame_rate: 30 };
+>
+>         let plugins: Vec<&dyn Plugin> = vec![&audio, &video];
+>
+>         assert_eq!(plugins[0].name(), "AudioProcessor");
+>         assert_eq!(plugins[0].process(10), 30);
+>
+>         assert_eq!(plugins[1].name(), "VideoProcessor");
+>         assert_eq!(plugins[1].process(10), 40);
+>     }
 > }
 > ```
 >
-> **Explanation:**
-> The vtable is what makes `dyn Trait` dynamic dispatch work. When the compiler monomorphizes a generic `<T: Display>` function, it inlines the exact `Display::fmt` at the call site — zero overhead. When you use `&dyn Display`, the compiler cannot inline because it doesn't know the concrete type at compile time. Instead, every call goes through the vtable pointer in the fat pointer's second word, adding one extra indirection. This is the only performance cost of `dyn Trait` versus generics — the vtable pointer lookup itself.
-
----
-
-## 6. Related Terms
-
-- [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — What fat pointers exist specifically to make usable.
-- [Slice (`&[T]`, `&str`)](../level_03/slice.md) — The length-metadata flavor of fat pointer.
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The vtable-metadata flavor of fat pointer.
-- [Object Safety](../level_04/object_safety.md) — The rule set that keeps a trait's vtable (and thus its fat pointers) well-formed.
-
----
-
-## 7. Key Takeaways
-
-- A fat pointer is twice the size of a normal reference: an address, plus one word of metadata.
-- For slices and `str`, the metadata is a **length**. For trait objects, it's a **vtable pointer** — two structurally different kinds of "extra word."
-- Fat pointers are exactly what makes referencing a Dynamically Sized Type possible at all.
-- `String`, `Vec<T>`, and `Box<T>` (pointing at a `Sized` `T`) are themselves ordinary, thin, `Sized` types — don't confuse an owned collection's own size with the (potentially fat) pointer it holds internally.
+> **Step-by-Step Explanation:**
+> 1. **Vtable Pointer vs Length:** Unlike slice fat pointers whose second word is a numerical length (`usize`), a trait object fat pointer's second word is a memory pointer (`*const ()`) pointing to a read-only vtable created by the compiler for that `(Type, Trait)` pair.
+> 2. **Vtable Sharing:** Every instance of `AudioProcessor` coerced to `&dyn Plugin` shares the exact same static vtable in memory. This is why `raw1.vtable_ptr == raw2.vtable_ptr`.
+> 3. **Dynamic Dispatch Cost:** When `plugins[0].process(10)` is called at runtime, Rust dereferences `raw1.vtable_ptr`, looks up the function pointer corresponding to `Plugin::process`, passes `raw1.data_ptr` as `&self`, and executes the function. This single indirection enables runtime polymorphism.
+> 
+> ---
+> 
+> ### Exercise 3: Custom Dynamically Sized Type (Custom DST with Trailing Payload Slice)
+> 
+> **Problem:**
+> In high-performance kernel modules or binary messaging systems, custom DSTs are defined where a fixed-size header precedes an unsized payload slice (`[u8]`). References to such structs (e.g. `&HeaderPayloadBuffer` or `Box<HeaderPayloadBuffer>`) are also **fat pointers** carrying the length of the trailing payload slice.
+> 
+> Your task is to implement and inspect a custom DST struct:
+> 1. Define a custom DST struct `HeaderPayloadBuffer`:
+>    ```rust
+>    #[repr(C)]
+>    pub struct HeaderPayloadBuffer {
+>        pub header_id: u32,
+>        pub flags: u16,
+>        pub payload: [u8],
+>    }
+>    ```
+> 2. Implement `HeaderPayloadBuffer::new_boxed(header_id: u32, flags: u16, payload_data: &[u8]) -> Box<HeaderPayloadBuffer>` to safely construct a heap-allocated custom DST using `std::ptr::slice_from_raw_parts_mut` and `Box::from_raw`.
+> 3. Write unit tests verifying:
+>    - References and Boxes to custom DSTs (`&HeaderPayloadBuffer`, `Box<HeaderPayloadBuffer>`) are fat pointers (16 bytes on 64-bit target).
+>    - Proper field initialization (`header_id`, `flags`, `payload`, `payload.len()`).
+>    - Dynamic size calculation via `std::mem::size_of_val(&*boxed)` accurately accounting for header size, struct alignment padding, and trailing slice payload length.
+> 
+> > [!check]- Answer
+> > ```rust
+> > use std::mem::{align_of, size_of, size_of_val};
+> > use std::ptr;
+> >
+> > #[repr(C)]
+> > pub struct HeaderPayloadBuffer {
+> >     pub header_id: u32,
+> >     pub flags: u16,
+> >     pub payload: [u8],
+> > }
+> >
+> > impl HeaderPayloadBuffer {
+> >     /// Constructs a heap-allocated `Box<HeaderPayloadBuffer>` custom DST.
+> >     pub fn new_boxed(header_id: u32, flags: u16, payload_data: &[u8]) -> Box<HeaderPayloadBuffer> {
+> >         let payload_len = payload_data.len();
+> >
+> >         // Calculate total memory size: header_id (4 bytes) + flags (2 bytes) + payload_len bytes.
+> >         // Align struct to 4 bytes (max alignment of u32/u16).
+> >         let raw_bytes_len = size_of::<u32>() + size_of::<u16>() + payload_len;
+> >         let align = std::cmp::max(align_of::<u32>(), align_of::<u16>());
+> >         let total_size = (raw_bytes_len + align - 1) & !(align - 1);
+> >
+> >         let mut raw_buf: Vec<u8> = vec![0u8; total_size];
+> >
+> >         unsafe {
+> >             // Write header_id at offset 0
+> >             let ptr_id = raw_buf.as_mut_ptr() as *mut u32;
+> >             ptr_id.write(header_id);
+> >
+> >             // Write flags at offset 4
+> >             let ptr_flags = raw_buf.as_mut_ptr().add(4) as *mut u16;
+> >             ptr_flags.write(flags);
+> >
+> >             // Copy payload bytes starting at offset 6
+> >             let ptr_payload = raw_buf.as_mut_ptr().add(6);
+> >             ptr::copy_nonoverlapping(payload_data.as_ptr(), ptr_payload, payload_len);
+> >         }
+> >
+> >         // Create a raw fat pointer to custom DST using slice_from_raw_parts_mut
+> >         let fat_raw_ptr: *mut HeaderPayloadBuffer = ptr::slice_from_raw_parts_mut(
+> >             raw_buf.as_mut_ptr() as *mut (),
+> >             payload_len,
+> >         ) as *mut HeaderPayloadBuffer;
+> >
+> >         // Prevent Vec from deallocating memory buffer on drop
+> >         std::mem::forget(raw_buf);
+> >
+> >         // Transfer ownership to Box
+> >         unsafe { Box::from_raw(fat_raw_ptr) }
+> >     }
+> > }
+> >
+> > fn main() {
+> >     let boxed = HeaderPayloadBuffer::new_boxed(42, 7, b"HELLO_DST");
+> >     println!("Header ID: {}, Payload: {:?}", boxed.header_id, &boxed.payload);
+> >     println!("Size of Box fat pointer: {} bytes", size_of::<Box<HeaderPayloadBuffer>>());
+> >     println!("Runtime byte size of custom DST: {} bytes", size_of_val(&*boxed));
+> > }
+> >
+> > #[cfg(test)]
+> > mod tests {
+> >     use super::*;
+> >
+> >     #[test]
+> >     fn test_custom_dst_fat_pointer_size() {
+> >         // References and smart pointers to custom DSTs are FAT POINTERS (16 bytes on 64-bit)
+> >         assert_eq!(size_of::<&HeaderPayloadBuffer>(), 2 * size_of::<usize>());
+> >         assert_eq!(size_of::<Box<HeaderPayloadBuffer>>(), 2 * size_of::<usize>());
+> >     }
+> >
+> >     #[test]
+> >     fn test_custom_dst_creation_and_fields() {
+> >         let payload_bytes = b"CUSTOM_DST_PAYLOAD";
+> >         let boxed: Box<HeaderPayloadBuffer> = HeaderPayloadBuffer::new_boxed(
+> >             0x12345678,
+> >             0xABCD,
+> >             payload_bytes,
+> >         );
+> >
+> >         assert_eq!(boxed.header_id, 0x12345678);
+> >         assert_eq!(boxed.flags, 0xABCD);
+> >         assert_eq!(&boxed.payload, payload_bytes);
+> >         assert_eq!(boxed.payload.len(), 18);
+> >     }
+> >
+> >     #[test]
+> >     fn test_custom_dst_size_of_val() {
+> >         let payload_bytes = b"12345"; // 5 bytes payload
+> >         let boxed = HeaderPayloadBuffer::new_boxed(1, 2, payload_bytes);
+> >
+> >         // Header: u32 (4 bytes) + u16 (2 bytes) = 6 bytes
+> >         // Payload: 5 bytes -> Unpadded total = 11 bytes
+> >         // Struct alignment (4 bytes) -> Padded size = 12 bytes
+> >         let computed_size = size_of_val(&*boxed);
+> >         assert_eq!(computed_size, 12);
+> >     }
+> > }
+> > ```
+> >
+> > **Step-by-Step Explanation:**
+> > 1. **Custom DST Structs:** When a struct ends with an unsized type (like `[u8]`), the struct itself becomes a Dynamically Sized Type (`?Sized`). It cannot exist directly on the stack without a pointer.
+> > 2. **Fat Pointer Inheritance:** A pointer to a custom DST containing a trailing slice (`&HeaderPayloadBuffer`) inherits the fat pointer metadata of the unsized slice element — the second word carries `payload.len()`.
+> > 3. **`size_of_val` Calculation:** `size_of_val(&*boxed)` reads the fat pointer's length metadata at runtime, adds the fixed size of `header_id` and `flags`, and pads to alignment boundaries.
+> 
+> ---
+> 
+> ## 6. Related Terms
+> 
+> - [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — What fat pointers exist specifically to make usable.
+> - [Slice (`&[T]`, `&str`)](../level_03/slice.md) — The length-metadata flavor of fat pointer.
+> - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The vtable-metadata flavor of fat pointer.
+> - [Object Safety](../level_04/object_safety.md) — The rule set that keeps a trait's vtable (and thus its fat pointers) well-formed.
+> 
+> ---
+> 
+> ## 7. Key Takeaways
+> 
+> - A fat pointer is twice the size of a normal reference: an address, plus one word of metadata.
+> - For slices and `str`, the metadata is a **length**. For trait objects, it's a **vtable pointer** — two structurally different kinds of "extra word."
+> - Fat pointers are exactly what makes referencing a Dynamically Sized Type possible at all.
+> - `String`, `Vec<T>`, and `Box<T>` (pointing at a `Sized` `T`) are themselves ordinary, thin, `Sized` types — don't confuse an owned collection's own size with the (potentially fat) pointer it holds internally.
+> 

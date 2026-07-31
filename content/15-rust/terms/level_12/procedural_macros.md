@@ -200,31 +200,422 @@ syn = { version = "2.0", features = ["derive"] }
 
 ## 6. Practice Exercises
 
-### Exercise 1: Identify Proc Macro Categories
+### Exercise 1: Derive Procedural Macro — `#[derive(Telemetry)]` for Automatic Field Inspection & Serialization
 
-**Problem:** Match each Rust attribute/invocation to its procedural macro type:
-1. `#[derive(Serialize)]`
-2. `#[tokio::main]`
-3. `sqlx::query!("SELECT * FROM users")`
+**Problem:** In an embedded telemetry gateway monitoring IoT sensors, you need to output diagnostic key-value summaries for data structures without runtime reflection overhead. Implement a custom Derive Procedural Macro named `#[derive(Telemetry)]` that automatically generates an implementation of the `Telemetry` trait for structs with named fields. The `Telemetry` trait provides `field_count() -> usize`, `telemetry_keys() -> &'static [&'static str]`, and `to_telemetry_pairs(&self) -> Vec<(&'static str, String)>`. Write the complete proc-macro crate code, the application usage code, and unit tests with assertions (`assert_eq!`, `assert!`) verifying field inspection and serialization.
 
 > [!check]- Answer
-> **1 -> Derive Macro**, **2 -> Attribute Macro**, **3 -> Function-like Macro**
->
+> ```rust
+> // ===========================================================================
+> // 1. Dedicated Proc-Macro Crate Definition: `my_telemetry_derive`
+> // ===========================================================================
+> // Cargo.toml:
+> // [lib]
+> // proc-macro = true
+> //
+> // [dependencies]
+> // syn = { version = "2.0", features = ["derive", "parsing"] }
+> // quote = "1.0"
+> // proc-macro2 = "1.0"
+> 
+> extern crate proc_macro;
+> use proc_macro::TokenStream;
+> use quote::quote;
+> use syn::{parse_macro_input, Data, DeriveInput, Fields};
+> 
+> /// Custom Derive procedural macro generating `Telemetry` trait implementations
+> #[proc_macro_derive(Telemetry)]
+> pub fn derive_telemetry(input: TokenStream) -> TokenStream {
+>     // Parse the incoming token stream into an AST syntax tree
+>     let input = parse_macro_input!(input as DeriveInput);
+>     let struct_name = &input.ident;
+> 
+>     // Extract named struct fields
+>     let fields = match &input.data {
+>         Data::Struct(data) => match &data.fields {
+>             Fields::Named(fields) => &fields.named,
+>             _ => panic!("Telemetry derive only supports structs with named fields"),
+>         },
+>         _ => panic!("Telemetry derive only supports structs"),
+>     };
+> 
+>     // Collect field identifiers and string representations
+>     let field_idents: Vec<_> = fields.iter().map(|f| f.ident.as_ref().unwrap()).collect();
+>     let field_name_strs: Vec<_> = field_idents.iter().map(|id| id.to_string()).collect();
+>     let field_count = field_idents.len();
+> 
+>     // Generate trait implementation code using quote!
+>     let expanded = quote! {
+>         impl Telemetry for #struct_name {
+>             fn field_count() -> usize {
+>                 #field_count
+>             }
+> 
+>             fn telemetry_keys() -> &'static [&'static str] {
+>                 &[ #( #field_name_strs ),* ]
+>             }
+> 
+>             fn to_telemetry_pairs(&self) -> Vec<(&'static str, String)> {
+>                 vec![
+>                     #(
+>                         ( #field_name_strs, format!("{:?}", self.#field_idents) )
+>                     ),*
+>                 ]
+>             }
+>         }
+>     };
+> 
+>     TokenStream::from(expanded)
+> }
+> 
+> // ===========================================================================
+> // 2. Consuming Application Code & Unit Tests (`src/main.rs`)
+> // ===========================================================================
+> use my_telemetry_derive::Telemetry;
+> 
+> pub trait Telemetry {
+>     fn field_count() -> usize;
+>     fn telemetry_keys() -> &'static [&'static str];
+>     fn to_telemetry_pairs(&self) -> Vec<(&'static str, String)>;
+> }
+> 
+> #[derive(Debug, Telemetry)]
+> struct SensorReading {
+>     temperature_celsius: f32,
+>     humidity_percent: u8,
+>     pressure_hpa: u32,
+> }
+> 
+> fn main() {
+>     let reading = SensorReading {
+>         temperature_celsius: 22.5,
+>         humidity_percent: 55,
+>         pressure_hpa: 1013,
+>     };
+>     println!("Keys: {:?}", SensorReading::telemetry_keys());
+>     println!("Pairs: {:?}", reading.to_telemetry_pairs());
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_telemetry_field_count() {
+>         assert_eq!(SensorReading::field_count(), 3);
+>     }
+> 
+>     #[test]
+>     fn test_telemetry_keys() {
+>         let keys = SensorReading::telemetry_keys();
+>         assert_eq!(keys, &["temperature_celsius", "humidity_percent", "pressure_hpa"]);
+>     }
+> 
+>     #[test]
+>     fn test_telemetry_pairs() {
+>         let reading = SensorReading {
+>             temperature_celsius: 22.5,
+>             humidity_percent: 55,
+>             pressure_hpa: 1013,
+>         };
+> 
+>         let pairs = reading.to_telemetry_pairs();
+>         assert_eq!(pairs.len(), 3);
+>         assert_eq!(pairs[0], ("temperature_celsius", "22.5".to_string()));
+>         assert_eq!(pairs[1], ("humidity_percent", "55".to_string()));
+>         assert_eq!(pairs[2], ("pressure_hpa", "1013".to_string()));
+>     }
+> }
+> ```
+> 
 > **Explanation:**
-> - `#[derive(...)]` is a **Derive Macro** attached to data structures.
-> - `#[tokio::main]` is an **Attribute Macro** transforming function definitions.
-> - `sqlx::query!(...)` is a **Function-like Macro** invoked with bang syntax `!`.
+> 1. **Proc-Macro Crate Configuration**: Procedural macros cannot be defined in standard application binaries; they require a library crate with `proc-macro = true` in `Cargo.toml`.
+> 2. **AST Parsing (`syn`)**: `parse_macro_input!(input as DeriveInput)` parses raw compiler tokens into a structured syntax tree. `input.data` allows matching on `Data::Struct` and accessing `Fields::Named`.
+> 3. **Code Generation (`quote!`)**: The `quote!` macro constructs Rust token streams. Interpolations like `#struct_name` substitute identifiers, while `#(#field_name_strs),*` performs repetition matching over field arrays.
+> 4. **Zero Runtime Reflection Overhead**: The generated `field_count()` and `telemetry_keys()` static functions evaluate at compile time, eliminating runtime inspection penalties.
 
 ---
 
-### Exercise 2: Crate Requirement Verification
+### Exercise 2: Attribute Procedural Macro — `#[retry(max_attempts = N)]` for Fault-Tolerant I/O Operations
 
-**Problem:** Why must procedural macros be declared in a dedicated crate with `proc-macro = true`?
+**Problem:** In hardware register communication (such as I2C/SPI sensor reads), transient bus interference frequently causes transient errors. Writing manual retry loops inside every I/O function creates repetitive boilerplate. Construct an Attribute Procedural Macro named `#[retry]` (accepting an optional integer literal argument like `#[retry(3)]`) that transforms any function returning `Result<T, E>`. The macro rewrites the function body to execute inside a retry loop, retrying up to `max_attempts` times before returning the final error. Write complete proc-macro crate code, usage code with failure simulation, and unit tests with assertions (`assert_eq!`, `assert!`) verifying retry execution counts and success/failure outcomes.
 
 > [!check]- Answer
-> **Because procedural macros must be compiled for host execution during `rustc` compilation.**
->
-> **Explanation:** The host compiler must load dynamic libraries containing macro executable code to transform user code before emitting the final target binary.
+> ```rust
+> // ===========================================================================
+> // 1. Dedicated Proc-Macro Crate Definition: `my_retry_macro`
+> // ===========================================================================
+> // Cargo.toml:
+> // [lib]
+> // proc-macro = true
+> //
+> // [dependencies]
+> // syn = { version = "2.0", features = ["full", "parsing"] }
+> // quote = "1.0"
+> // proc-macro2 = "1.0"
+> 
+> extern crate proc_macro;
+> use proc_macro::TokenStream;
+> use quote::quote;
+> use syn::{parse_macro_input, ItemFn, LitInt};
+> 
+> /// Attribute procedural macro transforming Result-returning functions with retry logic
+> #[proc_macro_attribute]
+> pub fn retry(attr: TokenStream, item: TokenStream) -> TokenStream {
+>     // Parse attribute argument for max attempts (defaulting to 3 if unspecified)
+>     let max_attempts: usize = if attr.is_empty() {
+>         3
+>     } else {
+>         parse_macro_input!(attr as LitInt)
+>             .base10_parse()
+>             .unwrap_or(3)
+>     };
+> 
+>     // Parse target item as a function AST node
+>     let input_fn = parse_macro_input!(item as ItemFn);
+>     let vis = &input_fn.vis;
+>     let sig = &input_fn.sig;
+>     let block = &input_fn.block;
+> 
+>     // Wrap original function body inside a retry loop execution closure
+>     let expanded = quote! {
+>         #vis #sig {
+>             let mut attempts = 0;
+>             loop {
+>                 attempts += 1;
+>                 let body_closure = || #block;
+>                 let result = body_closure();
+>                 match result {
+>                     Ok(val) => return Ok(val),
+>                     Err(err) if attempts >= #max_attempts => return Err(err),
+>                     Err(_) => {
+>                         // Continue retrying up to max_attempts
+>                     }
+>                 }
+>             }
+>         }
+>     };
+> 
+>     TokenStream::from(expanded)
+> }
+> 
+> // ===========================================================================
+> // 2. Consuming Application Code & Unit Tests (`src/main.rs`)
+> // ===========================================================================
+> use my_retry_macro::retry;
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> 
+> static ATTEMPT_COUNTER: AtomicUsize = AtomicUsize::new(0);
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum BusError {
+>     BusBusy,
+>     DeviceTimeout,
+> }
+> 
+> /// Simulated hardware function retried up to 3 times
+> #[retry(3)]
+> pub fn read_bus_register(fail_count: usize) -> Result<u16, BusError> {
+>     let current_attempt = ATTEMPT_COUNTER.fetch_add(1, Ordering::SeqCst) + 1;
+>     if current_attempt <= fail_count {
+>         Err(BusError::BusBusy)
+>     } else {
+>         Ok(0x4242)
+>     }
+> }
+> 
+> fn main() {
+>     ATTEMPT_COUNTER.store(0, Ordering::SeqCst);
+>     let data = read_bus_register(1);
+>     println!("Result: {:?}", data);
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_retry_succeeds_within_limit() {
+>         ATTEMPT_COUNTER.store(0, Ordering::SeqCst);
+>         // Fails on attempt 1, succeeds on attempt 2 (max_attempts = 3)
+>         let res = read_bus_register(1);
+>         assert_eq!(res, Ok(0x4242));
+>         assert_eq!(ATTEMPT_COUNTER.load(Ordering::SeqCst), 2);
+>     }
+> 
+>     #[test]
+>     fn test_retry_fails_exceeding_limit() {
+>         ATTEMPT_COUNTER.store(0, Ordering::SeqCst);
+>         // Fails 5 times, but max_attempts is capped at 3
+>         let res = read_bus_register(5);
+>         assert_eq!(res, Err(BusError::BusBusy));
+>         assert_eq!(ATTEMPT_COUNTER.load(Ordering::SeqCst), 3);
+>     }
+> }
+> ```
+> 
+> **Explanation:**
+> 1. **Attribute Macro Signature**: Attribute procedural macros receive two `TokenStream` parameters: `attr` (tokens inside `#[retry(...)]`) and `item` (the syntax item attached to the attribute, such as `fn`).
+> 2. **Parsing Attribute Literals**: `parse_macro_input!(attr as LitInt)` parses integer literals passed to the attribute macro, providing customizable retry thresholds per function.
+> 3. **AST Reconstruction**: The macro captures visibility (`#vis`), signature (`#sig`), and body (`#block`) of the original function and reconstructs a new function body wrapping `#block` in an escalating attempt loop.
+> 4. **Empirical Verification**: Unit tests verify retry logic using `AtomicUsize` counters to prove that transient errors trigger retries and max attempt boundaries are respected.
+
+---
+
+### Exercise 3: Function-Like Procedural Macro — `register_mask!` for Compile-Time Bitfield Struct Generation
+
+**Problem:** In embedded microcontroller development (`#![no_std]`), peripheral control registers (like UART, SPI, or I2C) rely on bitwise mask constants. Manually calculating bit-shift positions (`1 << 0`, `1 << 1`, `1 << 2`) is prone to off-by-one errors. Implement a function-like procedural macro `register_mask!` that parses syntax like `register_mask!(ControlRegister => TX_EN, RX_EN, INT_EN)` and expands it into a bitfield struct containing `const` mask definitions and type-safe bitwise methods (`empty()`, `set()`, `unset()`, `contains()`). Write complete proc-macro crate code, custom `syn::parse::Parse` implementation, user application code, and unit tests with assertions (`assert!`, `assert_eq!`) verifying bitmask values and bitwise operations.
+
+> [!check]- Answer
+> ```rust
+> // ===========================================================================
+> // 1. Dedicated Proc-Macro Crate Definition: `my_bitmask_macro`
+> // ===========================================================================
+> // Cargo.toml:
+> // [lib]
+> // proc-macro = true
+> //
+> // [dependencies]
+> // syn = { version = "2.0", features = ["full", "parsing"] }
+> // quote = "1.0"
+> // proc-macro2 = "1.0"
+> 
+> extern crate proc_macro;
+> use proc_macro::TokenStream;
+> use quote::quote;
+> use syn::parse::{Parse, ParseStream};
+> use syn::punctuated::Punctuated;
+> use syn::{parse_macro_input, Ident, Token};
+> 
+> /// Custom AST representation for custom macro syntax: StructName => FLAG1, FLAG2
+> struct BitmaskSyntax {
+>     struct_name: Ident,
+>     flags: Vec<Ident>,
+> }
+> 
+> impl Parse for BitmaskSyntax {
+>     fn parse(input: ParseStream) -> syn::Result<Self> {
+>         let struct_name: Ident = input.parse()?;
+>         let _: Token![=>] = input.parse()?;
+>         let flags_punctuated: Punctuated<Ident, Token![,]> =
+>             input.parse_terminated(Ident::parse, Token![,])?;
+> 
+>         Ok(BitmaskSyntax {
+>             struct_name,
+>             flags: flags_punctuated.into_iter().collect(),
+>         })
+>     }
+> }
+> 
+> /// Function-like procedural macro generating bitmask register structs
+> #[proc_macro]
+> pub fn register_mask(input: TokenStream) -> TokenStream {
+>     let BitmaskSyntax { struct_name, flags } = parse_macro_input!(input as BitmaskSyntax);
+> 
+>     // Generate const bitmask declarations with escalating left shifts (1 << 0, 1 << 1, etc.)
+>     let flag_consts = flags.iter().enumerate().map(|(index, flag_ident)| {
+>         let shift = index as u8;
+>         quote! {
+>             pub const #flag_ident: u8 = 1 << #shift;
+>         }
+>     });
+> 
+>     let expanded = quote! {
+>         #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+>         pub struct #struct_name {
+>             bits: u8,
+>         }
+> 
+>         impl #struct_name {
+>             #( #flag_consts )*
+> 
+>             pub const fn empty() -> Self {
+>                 Self { bits: 0 }
+>             }
+> 
+>             pub const fn from_bits(bits: u8) -> Self {
+>                 Self { bits }
+>             }
+> 
+>             pub fn bits(&self) -> u8 {
+>                 self.bits
+>             }
+> 
+>             pub fn set(&mut self, flag: u8) {
+>                 self.bits |= flag;
+>             }
+> 
+>             pub fn unset(&mut self, flag: u8) {
+>                 self.bits &= !flag;
+>             }
+> 
+>             pub fn contains(&self, flag: u8) -> bool {
+>                 (self.bits & flag) == flag
+>             }
+>         }
+>     };
+> 
+>     TokenStream::from(expanded)
+> }
+> 
+> // ===========================================================================
+> // 2. Consuming Application Code & Unit Tests (`src/main.rs`)
+> // ===========================================================================
+> use my_bitmask_macro::register_mask;
+> 
+> // Define peripheral bitmask struct via procedural macro
+> register_mask!(UartControl => TX_ENABLE, RX_ENABLE, PARITY_EVEN, INTERRUPT_ENABLE);
+> 
+> fn main() {
+>     let mut ctrl = UartControl::empty();
+>     ctrl.set(UartControl::TX_ENABLE);
+>     println!("Control register bits: {:#010b}", ctrl.bits());
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_bitmask_const_values() {
+>         assert_eq!(UartControl::TX_ENABLE, 1 << 0);       // 0b0000_0001 = 1
+>         assert_eq!(UartControl::RX_ENABLE, 1 << 1);       // 0b0000_0010 = 2
+>         assert_eq!(UartControl::PARITY_EVEN, 1 << 2);     // 0b0000_0100 = 4
+>         assert_eq!(UartControl::INTERRUPT_ENABLE, 1 << 3); // 0b0000_1000 = 8
+>     }
+> 
+>     #[test]
+>     fn test_bitmask_set_and_contains() {
+>         let mut ctrl = UartControl::empty();
+>         assert_eq!(ctrl.bits(), 0);
+>         assert!(!ctrl.contains(UartControl::TX_ENABLE));
+> 
+>         ctrl.set(UartControl::TX_ENABLE);
+>         ctrl.set(UartControl::INTERRUPT_ENABLE);
+> 
+>         assert!(ctrl.contains(UartControl::TX_ENABLE));
+>         assert!(ctrl.contains(UartControl::INTERRUPT_ENABLE));
+>         assert!(!ctrl.contains(UartControl::RX_ENABLE));
+>         assert_eq!(ctrl.bits(), 0b1001);
+>     }
+> 
+>     #[test]
+>     fn test_bitmask_unset() {
+>         let mut ctrl = UartControl::from_bits(0b1111);
+>         assert!(ctrl.contains(UartControl::PARITY_EVEN));
+> 
+>         ctrl.unset(UartControl::PARITY_EVEN);
+>         assert!(!ctrl.contains(UartControl::PARITY_EVEN));
+>         assert_eq!(ctrl.bits(), 0b1011);
+>     }
+> }
+> ```
+> 
+> **Explanation:**
+> 1. **Function-Like Proc Macro Entrypoint**: `#[proc_macro]` functions receive a single `TokenStream` representing all tokens inside `register_mask!(...)`.
+> 2. **Custom Syntax Parsing**: Implementing `syn::parse::Parse` for custom data structures allows parsing non-standard Rust DSLs (such as matching custom tokens like `Token![=>]` and comma-separated identifier lists using `Punctuated`).
+> 3. **Compile-Time Bit Calculations**: The macro computes bit shifts (`1 << index`) during compilation, embedding zero-cost `const` field values into the emitted struct definition.
+> 4. **Verification via Assertions**: Unit tests prove bitwise operations (`set`, `unset`, `contains`, `from_bits`) match expected binary bitmask representations.
 
 ---
 

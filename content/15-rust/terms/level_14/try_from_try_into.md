@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [From & Into (`From<T>`, `Into<T>`)](../level_05/from_into.md) — Infallible type conversion traits in the standard library.
-- [Result (`Result<T, E>`)](../level_02/result.md) — Error handling container used by `TryFrom` and `TryInto`.
+- [From & Into (`From<T>`, `Into<T>`)](../level_04/from_into_traits.md) — Infallible type conversion traits in the standard library.
+- [Result (`Result<T, E>`)](../level_02/result_t_e.md) — Error handling container used by `TryFrom` and `TryInto`.
 - [Blanket Implementation](../level_14/blanket_implementation.md) — How `TryInto` is automatically derived for all types implementing `TryFrom`.
 
 ---
@@ -429,8 +429,8 @@ Implement `TryFrom<&[u8]>` for `Ipv4Header`. Use `<[u8; 4]>::try_from(...)` slic
 
 ## 7. Related Terms
 
-- [From & Into (`From<T>`, `Into<T>`)](../level_05/from_into.md) — Infallible counterparts to `TryFrom` and `TryInto`.
-- [Result (`Result<T, E>`)](../level_02/result.md) — Error container returned by `try_from`.
+- [From & Into (`From<T>`, `Into<T>`)](../level_04/from_into_traits.md) — Infallible counterparts to `TryFrom` and `TryInto`.
+- [Result (`Result<T, E>`)](../level_02/result_t_e.md) — Error container returned by `try_from`.
 - [Blanket Implementation](../level_14/blanket_implementation.md) — Automatic implementation of `TryInto` for all types implementing `TryFrom`.
 
 ---
