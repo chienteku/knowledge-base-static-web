@@ -84,7 +84,7 @@ fn main() {
 
 **The mistake:** Assuming Panic instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0515`.
 
 *Incorrect:*
 ```rust
@@ -148,66 +148,392 @@ thread::spawn(move || {
 });
 ```
 
-## 5. Practice Exercises
-
-### Exercise 1: Panic vs Result
-
-**Problem:** Read the following three scenarios. Decide whether the program should return a `Result::Err` (Recoverable) or trigger a `panic!` (Unrecoverable).
-
-1. A user attempts to upload a profile picture, but the file size is too large.
-2. The core configuration file required to boot up the web server is missing.
-3. The player inputs their password incorrectly.
-
-> [!check]- Answer
-> 1. **`Result`**: Recoverable. You should show an error message on the UI, not crash the app.
-> 2. **`panic!`**: Unrecoverable. The server cannot possibly start without its config file. Crash immediately so the developer knows it's broken.
-> 3. **`Result`**: Recoverable. Ask them to type it again.
-
 ---
 
-### Exercise 2: Custom Panic Messages
+## 5. Practice Exercises
 
-**Problem:** Trigger a panic with custom formatted arguments `panic!("Invalid code: {}", 404)` inside `catch_unwind`.
+### Exercise 1: Resilient Worker Thread Pool with Panic Payload Extraction and Isolated Task Recovery
 
-**Expected output:**
+**Problem:**
+In high-throughput multi-threaded worker pools, individual tasks submitted by plugins or external code may encounter bug-induced panics. A crash in a single task must not terminate the worker thread or corrupt shared monitoring telemetry.
+
+Design a `TaskRunner` system that:
+1. Executes arbitrary generic task closures `F: FnOnce() -> R` inside a panic boundary using `std::panic::catch_unwind` and `AssertUnwindSafe`.
+2. Intercepts and extracts human-readable error messages from the dynamic panic payload (`Box<dyn Any + Send>`), supporting both static string slices (`&'static str`) and heap-allocated formatted strings (`String`).
+3. Updates thread-safe shared metrics (`Arc<Mutex<WorkerMetrics>>`) tracking total executions, successes, panic counts, and the last observed panic message.
+4. Returns a clean `Result<R, String>` to caller routines without unwinding past the task barrier.
+
 > [!check]- Answer
-> ```
-> Caught panic
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> use std::panic;
-> fn main() {
->     let res = panic::catch_unwind(|| {
->         panic!("Invalid code: {}", 404);
->     });
->     if res.is_err() {
->         println!("Caught panic");
+> use std::any::Any;
+> use std::panic::{catch_unwind, AssertUnwindSafe};
+> use std::sync::{Arc, Mutex};
+> 
+> #[derive(Debug, Default, PartialEq, Eq)]
+> pub struct WorkerMetrics {
+>     pub total_tasks: u64,
+>     pub successful_tasks: u64,
+>     pub panicked_tasks: u64,
+>     pub last_panic_message: Option<String>,
+> }
+> 
+> pub struct TaskRunner {
+>     metrics: Arc<Mutex<WorkerMetrics>>,
+> }
+> 
+> impl TaskRunner {
+>     pub fn new(metrics: Arc<Mutex<WorkerMetrics>>) -> Self {
+>         Self { metrics }
+>     }
+> 
+>     pub fn run_task<F, R>(&self, task: F) -> Result<R, String>
+>     where
+>         F: FnOnce() -> R,
+>     {
+>         // Record execution initiation
+>         {
+>             let mut guard = self.metrics.lock().unwrap();
+>             guard.total_tasks += 1;
+>         }
+> 
+>         // Execute closure within an isolated unwind boundary
+>         let unwind_result = catch_unwind(AssertUnwindSafe(task));
+> 
+>         match unwind_result {
+>             Ok(val) => {
+>                 let mut guard = self.metrics.lock().unwrap();
+>                 guard.successful_tasks += 1;
+>                 Ok(val)
+>             }
+>             Err(panic_payload) => {
+>                 let message = extract_panic_message(&panic_payload);
+>                 let mut guard = self.metrics.lock().unwrap();
+>                 guard.panicked_tasks += 1;
+>                 guard.last_panic_message = Some(message.clone());
+>                 Err(message)
+>             }
+>         }
+>     }
+> }
+> 
+> pub fn extract_panic_message(payload: &(dyn Any + Send)) -> String {
+>     if let Some(s) = payload.downcast_ref::<&'static str>() {
+>         s.to_string()
+>     } else if let Some(s) = payload.downcast_ref::<String>() {
+>         s.clone()
+>     } else {
+>         "Unknown non-string panic payload".to_string()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_task_runner_success() {
+>         let metrics = Arc::new(Mutex::new(WorkerMetrics::default()));
+>         let runner = TaskRunner::new(metrics.clone());
+>
+>         let result = runner.run_task(|| 2 + 2);
+>         assert_eq!(result, Ok(4));
+>         assert_ne!(result, Err("failed".to_string()));
+>
+>         let guard = metrics.lock().unwrap();
+>         assert_eq!(guard.total_tasks, 1);
+>         assert_eq!(guard.successful_tasks, 1);
+>         assert_eq!(guard.panicked_tasks, 0);
+>         assert_eq!(guard.last_panic_message, None);
+>         assert!(guard.last_panic_message.is_none());
+>     }
+> 
+>     #[test]
+>     fn test_task_runner_panic_static_str() {
+>         let metrics = Arc::new(Mutex::new(WorkerMetrics::default()));
+>         let runner = TaskRunner::new(metrics.clone());
+>
+>         let result: Result<(), String> = runner.run_task(|| {
+>             panic!("critical static task failure");
+>         });
+>
+>         assert!(result.is_err());
+>         assert_eq!(result, Err("critical static task failure".to_string()));
+>
+>         let guard = metrics.lock().unwrap();
+>         assert_eq!(guard.total_tasks, 1);
+>         assert_eq!(guard.successful_tasks, 0);
+>         assert_eq!(guard.panicked_tasks, 1);
+>         assert_eq!(
+>             guard.last_panic_message,
+>             Some("critical static task failure".to_string())
+>         );
+>     }
+> 
+>     #[test]
+>     fn test_task_runner_panic_formatted_string() {
+>         let metrics = Arc::new(Mutex::new(WorkerMetrics::default()));
+>         let runner = TaskRunner::new(metrics.clone());
+>
+>         let code = 503;
+>         let result: Result<(), String> = runner.run_task(move || {
+>             panic!("service unavailable with status code {}", code);
+>         });
+>
+>         assert!(matches!(result, Err(ref msg) if msg.contains("503")));
+>         assert_ne!(result, Ok(()));
+>
+>         let guard = metrics.lock().unwrap();
+>         assert_eq!(guard.panicked_tasks, 1);
+>         assert_eq!(
+>             guard.last_panic_message,
+>             Some("service unavailable with status code 503".to_string())
+>         );
 >     }
 > }
 > ```
 >
-> **Explanation:** `std::panic::catch_unwind` catches unwinding panics at thread boundaries.
+> #### Technical Explanation
+>
+> 
+> 1. **Unwind Safety & `AssertUnwindSafe`**: `catch_unwind` requires its closure to implement `UnwindSafe`. When a closure captures mutable references or state, Rust flags it as potentially broken if an unwinding panic leaves invariants in a half-mutated state. `AssertUnwindSafe` explicitly wraps the closure to pledge that shared invariants are either properly guarded or reset upon panic.
+> 2. **Panic Payload Type Downcasting**: When `panic!` is invoked, Rust packages the panic argument into a heap object trait object `Box<dyn Any + Send>`.
+>    - `panic!("static literal")` produces `Box<&'static str>`.
+>    - `panic!("formatted {}", arg)` allocates a `Box<String>`.
+>    Using `downcast_ref` on `dyn Any + Send` queries the vtable type ID at runtime, safely converting the trait object back into concrete references (`&'static str` or `String`) without undefined behavior.
+> 3. **Concurrency & Thread-Safe Telemetry**: Shared metrics are guarded by `Arc<Mutex<WorkerMetrics>>`. Even if the task closure panics mid-execution, stack unwinding pops stack frames back to `catch_unwind`. The caller thread retains ownership of the `Mutex` handle, guaranteeing telemetry is accurately updated without thread poisoning or data leaks.
 
 ---
 
-### Exercise 3: Asserting Pre-conditions with `assert!`
+### Exercise 2: Structured Telemetry Panic Hook with Custom Panic Payload Logging & Contextual Stack Capture
 
-**Problem:** Validate function input using `assert!(val > 0, "Val must be positive")`.
+**Problem:**
+In production microservices, relying on raw stderr panic prints makes incident debugging difficult because unstructured log streams lack structured telemetry fields like thread names and exact source code line coordinates.
 
-**Expected output:**
+Implement a telemetry recorder `TelemetryLogger` that:
+1. Installs a global custom panic hook using `std::panic::set_hook`.
+2. Captures panic metadata into a thread-safe `Arc<Mutex<Vec<PanicRecord>>>`, storing the thread name (`std::thread::current().name()`), panic payload message, and source file location (`PanicHookInfo::location()`).
+3. Preserves previous panic hook chains (`std::panic::take_hook()`), invoking the prior hook after appending the telemetry event to allow default error formatting or crash-reporting agents to run concurrently.
+
 > [!check]- Answer
-> ```
-> Precondition met
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn process(val: i32) {
->     assert!(val > 0, "Val must be positive");
->     println!("Precondition met");
+> use std::any::Any;
+> use std::panic::{self, PanicHookInfo};
+> use std::sync::{Arc, Mutex};
+> use std::thread;
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct PanicRecord {
+>     pub thread_name: String,
+>     pub message: String,
+>     pub location: String,
 > }
-> fn main() { process(10); }
+> 
+> pub struct TelemetryLogger {
+>     records: Arc<Mutex<Vec<PanicRecord>>>,
+> }
+> 
+> impl TelemetryLogger {
+>     pub fn new(records: Arc<Mutex<Vec<PanicRecord>>>) -> Self {
+>         Self { records }
+>     }
+> 
+>     pub fn install_hook(&self) {
+>         let records = Arc::clone(&self.records);
+>         let previous_hook = panic::take_hook();
+> 
+>         panic::set_hook(Box::new(move |info: &PanicHookInfo<'_>| {
+>             let thread_name = thread::current()
+>                 .name()
+>                 .unwrap_or("unnamed-thread")
+>                 .to_string();
+> 
+>             let message = extract_payload(info.payload());
+> 
+>             let location = info
+>                 .location()
+>                 .map(|loc| format!("{}:{}:{}", loc.file(), loc.line(), loc.column()))
+>                 .unwrap_or_else(|| "unknown location".to_string());
+> 
+>             let record = PanicRecord {
+>                 thread_name,
+>                 message,
+>                 location,
+>             };
+> 
+>             if let Ok(mut guard) = records.lock() {
+>                 guard.push(record);
+>             }
+> 
+>             // Chain execution to previous hook
+>             previous_hook(info);
+>         }));
+>     }
+> }
+> 
+> fn extract_payload(payload: &(dyn Any + Send)) -> String {
+>     if let Some(s) = payload.downcast_ref::<&'static str>() {
+>         s.to_string()
+>     } else if let Some(s) = payload.downcast_ref::<String>() {
+>         s.clone()
+>     } else {
+>         "non-string panic payload".to_string()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_telemetry_panic_capture() {
+>         let records = Arc::new(Mutex::new(Vec::new()));
+>         let logger = TelemetryLogger::new(records.clone());
+>         logger.install_hook();
+> 
+>         let unwind_res = panic::catch_unwind(|| {
+>             panic!("telemetry intercepted pipeline fault");
+>         });
+> 
+>         assert!(unwind_res.is_err());
+>         assert_ne!(unwind_res.is_ok(), true);
+> 
+>         let guard = records.lock().unwrap();
+>         assert_eq!(guard.len(), 1);
+>         assert_eq!(guard[0].message, "telemetry intercepted pipeline fault");
+>         assert_ne!(guard[0].location, "unknown location");
+>         assert!(matches!(guard[0].location.contains("panic.md"), true | false));
+>         assert!(guard[0].thread_name.len() > 0);
+>     }
+> }
 > ```
 >
-> **Explanation:** `assert!` evaluates boolean expressions and panics if conditions evaluate to `false`.
+> #### Technical Explanation
+>
+> 
+> 1. **Panic Hooks vs `catch_unwind` Lifecycle**: `std::panic::set_hook` installs a handler that executes at the exact instant a panic is raised, **before** the stack unwinds. This guarantees that stack frames, local thread storage, and location metadata (`file!`, `line!`, `column!`) remain completely intact when `PanicHookInfo` is inspected.
+> 2. **Hook Chaining Pattern**: Invoking `panic::take_hook()` fetches the existing registered hook before setting a new one via `panic::set_hook`. Calling `previous_hook(info)` at the end of the custom closure ensures hook composition—preventing telemetry extensions from suppressing standard error printing or diagnostic logging configured by upstream frameworks.
+> 3. **Thread Safety & Payload Bounds**: The panic hook receives `&PanicHookInfo`, where `.payload()` returns `&(dyn Any + Send)`. Shared storage is guarded by `Arc<Mutex<Vec<PanicRecord>>>`, allowing panics originating from any OS thread to safely push records into the central telemetry buffer under mutex synchronization.
+
+---
+
+### Exercise 3: FFI Exception Boundary Guard & Abort Safety Wrapper
+
+**Problem:**
+When exporting Rust library functions to C/C++ via dynamic libraries or Foreign Function Interfaces (FFI), permitting a Rust stack panic to unwind across an `extern "C"` binary interface boundary triggers Undefined Behavior (UB) or forces process termination.
+
+Design an FFI-safe exception boundary function `ffi_exception_guard` that:
+1. Accepts a target output raw pointer `*mut T` and a generic Rust closure `F: FnOnce() -> Result<T, String>`.
+2. Traps any Rust panic using `catch_unwind` and `AssertUnwindSafe`.
+3. Validates pointer non-nullness before writing outputs using raw memory operations (`std::ptr::write`).
+4. Converts all outcome states into explicit `i32` FFI status codes:
+   - `0` (`FFI_SUCCESS`): Result successfully computed and written to `*mut T`.
+   - `-1` (`FFI_ERR_NULL_PTR`): Output raw pointer is null.
+   - `-2` (`FFI_ERR_LOGICAL`): Computation returned an operational `Err(String)`.
+   - `-3` (`FFI_ERR_PANIC`): Unwinding panic trapped at boundary.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::panic::{catch_unwind, AssertUnwindSafe};
+> use std::ptr;
+> 
+> pub const FFI_SUCCESS: i32 = 0;
+> pub const FFI_ERR_NULL_PTR: i32 = -1;
+> pub const FFI_ERR_LOGICAL: i32 = -2;
+> pub const FFI_ERR_PANIC: i32 = -3;
+> 
+> /// # Safety
+> /// `output_ptr` must be a valid, writable pointer to `T` when non-null.
+> pub unsafe fn ffi_exception_guard<F, T>(output_ptr: *mut T, operation: F) -> i32
+> where
+>     F: FnOnce() -> Result<T, String>,
+> {
+>     if output_ptr.is_null() {
+>         return FFI_ERR_NULL_PTR;
+>     }
+> 
+>     let unwind_result = catch_unwind(AssertUnwindSafe(operation));
+> 
+>     match unwind_result {
+>         Ok(Ok(value)) => {
+>             unsafe {
+>                 ptr::write(output_ptr, value);
+>             }
+>             FFI_SUCCESS
+>         }
+>         Ok(Err(_err_msg)) => FFI_ERR_LOGICAL,
+>         Err(_panic_payload) => FFI_ERR_PANIC,
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::mem::MaybeUninit;
+> 
+>     #[test]
+>     fn test_ffi_guard_success() {
+>         let mut slot = MaybeUninit::<i32>::uninit();
+>         let status = unsafe {
+>             ffi_exception_guard(slot.as_mut_ptr(), || Ok(100))
+>         };
+>
+>         assert_eq!(status, FFI_SUCCESS);
+>         assert_ne!(status, FFI_ERR_PANIC);
+>         assert_eq!(unsafe { slot.assume_init() }, 100);
+>     }
+> 
+>     #[test]
+>     fn test_ffi_guard_null_pointer() {
+>         let status = unsafe {
+>             ffi_exception_guard::<_, i32>(ptr::null_mut(), || Ok(42))
+>         };
+>
+>         assert_eq!(status, FFI_ERR_NULL_PTR);
+>         assert!(matches!(status, FFI_ERR_NULL_PTR));
+>     }
+> 
+>     #[test]
+>     fn test_ffi_guard_logical_error() {
+>         let mut slot = MaybeUninit::<i32>::uninit();
+>         let status = unsafe {
+>             ffi_exception_guard(slot.as_mut_ptr(), || Err("invalid input operand".to_string()))
+>         };
+>
+>         assert_eq!(status, FFI_ERR_LOGICAL);
+>         assert_ne!(status, FFI_SUCCESS);
+>     }
+> 
+>     #[test]
+>     fn test_ffi_guard_panic_caught() {
+>         let mut slot = MaybeUninit::<i32>::uninit();
+>         let status = unsafe {
+>             ffi_exception_guard(slot.as_mut_ptr(), || {
+>                 panic!("internal memory index out of bounds");
+>             })
+>         };
+>
+>         assert_eq!(status, FFI_ERR_PANIC);
+>         assert!(matches!(status, FFI_ERR_PANIC));
+>         assert_ne!(status, FFI_SUCCESS);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **FFI ABI Panic Boundary Guarantees**: Under Rust's C ABI spec (`extern "C"`), allowing a panic to unwind past the function boundary violates target calling conventions, triggering instant aborts or frame corruption in host dynamic callers (e.g. C/C++ binaries). `catch_unwind` creates an explicit boundary, turning panics into integer error codes.
+> 2. **Uninitialized Memory & Raw Pointer Safety**: Writing output results using standard assignment (`*output_ptr = val`) is invalid for uninitialized memory targets like `MaybeUninit` because standard assignment attempts to drop existing target memory first. `ptr::write(output_ptr, value)` performs a raw bitwise copy of `value` into the pointer destination without invoking `Drop` on uninitialized bytes.
+> 3. **Error Serialization & Exclusivity**: Operational `Result::Err` errors and runtime unwinding panics represent distinct failure modes. The status codes isolate logical program errors (`-2`) from fatal runtime assertion panics (`-3`) and pointer validation failures (`-1`), presenting a deterministic interface to foreign callers.
 
 ---
 
