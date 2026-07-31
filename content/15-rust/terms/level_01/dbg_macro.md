@@ -142,59 +142,393 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Predict the Return Type
+### Exercise 1: Financial Telemetry & Non-Copy Type Ownership in Iterator Pipelines
 
-**Problem:** What is the type of `y` in `let y = dbg!(vec![1, 2, 3]);`, and does calling `dbg!` change it?
+**Scenario**: In a high-frequency financial trading system, market data feeds contain transaction batches represented as non-`Copy` structures (`Transaction` containing `account_id: String`, `amount: f64`, `status: TransactionStatus`). A telemetry component filters out invalid or flagged transactions and computes fee-adjusted net volumes. During debugging, developers must inspect intermediate values (such as fee-adjusted totals and status predicates) inside iterator method chains without taking ownership of non-`Copy` `String` fields or causing premature drops.
+
+**Problem**: Implement `process_telemetry_batch(transactions: &[Transaction], fee_rate: f64) -> Vec<TransactionSummary>` using iterator chains. Insert transparent `dbg!` taps to inspect intermediate values without taking ownership of non-`Copy` types or invalidating references.
 
 > [!check]- Answer
-> `y` is still **`Vec<i32>`** — exactly the same type (and value) as if `dbg!(...)` weren't there at all. `dbg!` only requires its argument to implement `Debug` (so it can be printed); it never changes the type or the value, it just prints a side-effect message to `stderr` and passes the value straight through.
-
----
-
-### Exercise 2: Expression Ownership in `dbg!`
-
-**Problem:** Use `dbg!` inline inside an arithmetic expression to inspect intermediate calculation steps without breaking expression flow: `(a + b) * c` where `a=2`, `b=3`, `c=4`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> 5
-> 20
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let a = 2;
->     let b = 3;
->     let c = 4;
->     let result = dbg!(a + b) * c;
->     println!("{}", result);
+> #[derive(Debug, Clone, PartialEq)]
+> pub enum TransactionStatus {
+>     Completed,
+>     Pending,
+>     Flagged,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub struct Transaction {
+>     pub id: String,
+>     pub account_id: String,
+>     pub amount: f64,
+>     pub status: TransactionStatus,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub struct TransactionSummary {
+>     pub account_id: String,
+>     pub net_amount: f64,
+> }
+> 
+> pub fn process_telemetry_batch(
+>     transactions: &[Transaction],
+>     fee_rate: f64,
+> ) -> Vec<TransactionSummary> {
+>     transactions
+>         .iter()
+>         .filter(|tx| {
+>             // Inspect status via reference to avoid moving non-Copy tx
+>             let is_completed = dbg!(&tx.status) == &TransactionStatus::Completed;
+>             is_completed
+>         })
+>         .filter_map(|tx| {
+>             // Inline dbg! inspects fee calculation result and evaluates directly to f64
+>             let net_amount = dbg!(tx.amount * (1.0 - fee_rate));
+>             if net_amount > 0.0 {
+>                 Some(TransactionSummary {
+>                     account_id: tx.account_id.clone(),
+>                     net_amount,
+>                 })
+>             } else {
+>                 None
+>             }
+>         })
+>         .collect()
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_process_telemetry_batch_filtering() {
+>         let batch = vec![
+>             Transaction {
+>                 id: "tx-1".into(),
+>                 account_id: "acc-100".into(),
+>                 amount: 500.0,
+>                 status: TransactionStatus::Completed,
+>             },
+>             Transaction {
+>                 id: "tx-2".into(),
+>                 account_id: "acc-101".into(),
+>                 amount: 200.0,
+>                 status: TransactionStatus::Flagged,
+>             },
+>             Transaction {
+>                 id: "tx-3".into(),
+>                 account_id: "acc-102".into(),
+>                 amount: -50.0,
+>                 status: TransactionStatus::Completed,
+>             },
+>         ];
+> 
+>         let summaries = process_telemetry_batch(&batch, 0.02);
+>         assert_eq!(summaries.len(), 1);
+>         assert_eq!(summaries[0].account_id, "acc-100");
+>         assert!((summaries[0].net_amount - 490.0).abs() < 1e-6);
+>     }
+> 
+>     #[test]
+>     fn test_non_copy_borrow_preservation() {
+>         let tx = Transaction {
+>             id: "tx-4".into(),
+>             account_id: "acc-200".into(),
+>             amount: 1000.0,
+>             status: TransactionStatus::Completed,
+>         };
+>         let batch = vec![tx.clone()];
+>         let summaries = process_telemetry_batch(&batch, 0.05);
+> 
+>         assert!(summaries.len() == 1);
+>         assert_ne!(tx.account_id, "acc-999");
+>         assert_eq!(tx.id, "tx-4");
+>     }
+> 
+>     #[test]
+>     fn test_edge_cases_empty_and_zero_fee() {
+>         let empty_batch: Vec<Transaction> = vec![];
+>         let summaries = process_telemetry_batch(&empty_batch, 0.01);
+>         assert!(summaries.is_empty());
+> 
+>         let pending_tx = Transaction {
+>             id: "tx-5".into(),
+>             account_id: "acc-300".into(),
+>             amount: 100.0,
+>             status: TransactionStatus::Pending,
+>         };
+>         let pending_batch = vec![pending_tx];
+>         let pending_res = process_telemetry_batch(&pending_batch, 0.0);
+>         assert_eq!(pending_res.len(), 0);
+>         assert_ne!(pending_batch[0].status, TransactionStatus::Completed);
+>         assert!(matches!(pending_batch[0].status, TransactionStatus::Pending));
+>     }
 > }
 > ```
 >
-> **Explanation:** `dbg!` takes ownership of the evaluated expression, prints file:line information along with the result, and returns the ownership of that value back to the enclosing expression.
+> #### Technical Explanation
+>
+>
+> 1. **Ownership Semantics of `dbg!`**: The macro signature conceptually acts as `fn dbg<T: Debug>(val: T) -> T`. When passed a value by value, `dbg!(val)` takes ownership of `val` and returns it. For non-`Copy` types like `Transaction` or `String`, invoking `dbg!(tx)` inside a closure moves `tx`, rendering it unavailable to subsequent iterator steps or outer scopes.
+> 2. **Borrowing via `dbg!(&val)`**: To inspect non-`Copy` types without moving them, pass a reference: `dbg!(&tx.status)`. Here, `dbg!` takes `&TransactionStatus` and returns `&TransactionStatus`, leaving ownership of `tx` intact.
+> 3. **Inline Pass-Through in Iterator Chains**: `dbg!` evaluates directly to its inner expression. In `.filter_map(|tx| { let net = dbg!(tx.amount * (1.0 - fee_rate)); ... })`, `dbg!` prints the calculated float to `stderr` while returning the `f64` directly for assignment and conditional filtering.
+> 4. **Lifetime and Memory Safety**: Slicing `transactions: &[Transaction]` grants immutable references tied to the caller's slice lifetime. Borrowing `tx.account_id` via `.clone()` inside `filter_map` allocates new string instances only for valid summary records, while intermediate `dbg!` taps introduce zero heap allocations.
+>
+>
 
 ---
 
-### Exercise 3: Debugging Non-Copy Move Values
+### Exercise 2: AST Expression Evaluator & Control Flow Debugging
 
-**Problem:** Explain why `dbg!(&my_string)` should be used instead of `dbg!(my_string)` when you need to use `my_string` again afterwards.
+**Scenario**: In a domain-specific rule engine, expressions are represented as an Abstract Syntax Tree (`Expr` enum). When debugging recursive tree evaluation (`eval_expr`), developers need to trace intermediate sub-tree evaluation results and variable lookups without breaking recursive pattern matching or error propagation (`?` operator).
 
-**Expected output:**
+**Problem**: Implement `eval_expr(expr: &Expr, env: &HashMap<String, i64>) -> Result<i64, EvalError>` for an arithmetic AST (`Literal`, `Var`, `Add`, `Mul`, `Div`). Insert `dbg!` taps to trace sub-tree evaluation results while maintaining `Result` error short-circuiting with `?`.
+
 > [!check]- Answer
-> ```
-> Borrowed debug successfully
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let s = String::from("Rust");
->     dbg!(&s); // Pass reference so s is not moved
->     println!("Borrowed debug successfully: {}", s);
+> use std::collections::HashMap;
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub enum Expr {
+>     Literal(i64),
+>     Var(String),
+>     Add(Box<Expr>, Box<Expr>),
+>     Mul(Box<Expr>, Box<Expr>),
+>     Div(Box<Expr>, Box<Expr>),
+> }
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub enum EvalError {
+>     UndefinedVariable(String),
+>     DivisionByZero,
+> }
+> 
+> pub fn eval_expr(expr: &Expr, env: &HashMap<String, i64>) -> Result<i64, EvalError> {
+>     match expr {
+>         Expr::Literal(val) => Ok(dbg!(*val)),
+>         Expr::Var(name) => {
+>             let val = env
+>                 .get(name)
+>                 .copied()
+>                 .ok_or_else(|| EvalError::UndefinedVariable(name.clone()));
+>             dbg!(val)
+>         }
+>         Expr::Add(left, right) => {
+>             let l_val = dbg!(eval_expr(left, env))?;
+>             let r_val = dbg!(eval_expr(right, env))?;
+>             Ok(l_val + r_val)
+>         }
+>         Expr::Mul(left, right) => {
+>             let l_val = dbg!(eval_expr(left, env))?;
+>             let r_val = dbg!(eval_expr(right, env))?;
+>             Ok(l_val * r_val)
+>         }
+>         Expr::Div(left, right) => {
+>             let l_val = dbg!(eval_expr(left, env))?;
+>             let r_val = dbg!(eval_expr(right, env))?;
+>             if r_val == 0 {
+>                 Err(EvalError::DivisionByZero)
+>             } else {
+>                 Ok(l_val / r_val)
+>             }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_eval_ast_nested_arithmetic() {
+>         let mut env = HashMap::new();
+>         env.insert("x".to_string(), 10);
+> 
+>         // Expression: (x + 5) * 2 = 30
+>         let ast = Expr::Mul(
+>             Box::new(Expr::Add(
+>                 Box::new(Expr::Var("x".to_string())),
+>                 Box::new(Expr::Literal(5)),
+>             )),
+>             Box::new(Expr::Literal(2)),
+>         );
+> 
+>         let res = eval_expr(&ast, &env);
+>         assert!(res.is_ok());
+>         assert_eq!(res.unwrap(), 30);
+>     }
+> 
+>     #[test]
+>     fn test_eval_ast_undefined_variable() {
+>         let env = HashMap::new();
+>         let ast = Expr::Var("y".to_string());
+>         let res = eval_expr(&ast, &env);
+> 
+>         assert!(res.is_err());
+>         assert_ne!(res, Ok(0));
+>         assert!(matches!(res, Err(EvalError::UndefinedVariable(ref var)) if var == "y"));
+>     }
+> 
+>     #[test]
+>     fn test_eval_ast_division_by_zero() {
+>         let env = HashMap::new();
+>         let ast = Expr::Div(
+>             Box::new(Expr::Literal(10)),
+>             Box::new(Expr::Literal(0)),
+>         );
+>         let res = eval_expr(&ast, &env);
+> 
+>         assert_ne!(res, Ok(0));
+>         assert!(matches!(res, Err(EvalError::DivisionByZero)));
+>     }
 > }
 > ```
 >
-> **Explanation:** `dbg!(val)` takes ownership of `val`. For non-`Copy` types like `String`, passing by value moves the string and invalidates the original variable binding. Passing `&s` borrows it safely.
+> #### Technical Explanation
+>
+>
+> 1. **Transparent Control Flow Preservation**: Wrapping a fallible recursive call like `dbg!(eval_expr(left, env))?` passes the `Result<i64, EvalError>` directly into `dbg!`. The macro prints `Ok(value)` or `Err(error)` to `stderr` and returns the `Result` intact, allowing `?` to unpack `Ok` or early-return `Err`.
+> 2. **Recursive Borrowing and Stack Invariants**: Traversing `&Expr` borrows recursive `Box<Expr>` nodes immutably. Pattern matching on `&Expr::Add(left, right)` yields `&Box<Expr>`, which dereferences to `&Expr` during recursive calls without requiring AST cloning or heap re-allocation.
+> 3. **Error Isolation & Zero-Cost Production Code**: `dbg!` macro calls evaluate solely for side-effect printing. When stripping debug invocations, the code structure `eval_expr(left, env)?` remains functionally identical.
+> 4. **Edge Cases**: Handles undefined variables by mapping `Option::ok_or_else` to `EvalError::UndefinedVariable`, and checks for division by zero before performing integer division.
+>
+>
+
+---
+
+### Exercise 3: Binary Protocol Packet Decoding & Checksum Validation
+
+**Scenario**: A binary network service parses framed binary messages from incoming raw byte slices (`&[u8]`). Frame format: 4-byte header (`magic: 0xAA`, `opcode: u8`, `payload_len: u16` big-endian), followed by payload bytes and a 1-byte XOR checksum. Developers debugging protocol deserialization errors need to inspect slice boundaries and checksum computation inline without breaking zero-copy slice references.
+
+**Problem**: Construct `parse_binary_frame(bytes: &[u8]) -> Result<Frame, FrameParseError>` to parse binary network frames. Use `dbg!` to inspect header fields, decoded lengths, and computed checksums inline without mutating or moving slice references.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> #[derive(Debug, Clone, PartialEq)]
+> pub struct Frame {
+>     pub opcode: u8,
+>     pub payload: Vec<u8>,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub enum FrameParseError {
+>     HeaderTooShort,
+>     InvalidMagic(u8),
+>     BufferTooShort { expected: usize, actual: usize },
+>     ChecksumMismatch { expected: u8, calculated: u8 },
+> }
+> 
+> pub fn parse_binary_frame(bytes: &[u8]) -> Result<Frame, FrameParseError> {
+>     if bytes.len() < 4 {
+>         return Err(FrameParseError::HeaderTooShort);
+>     }
+> 
+>     // Inspect magic byte inline
+>     let magic = dbg!(bytes[0]);
+>     if magic != 0xAA {
+>         return Err(FrameParseError::InvalidMagic(magic));
+>     }
+> 
+>     let opcode = bytes[1];
+>     let payload_len = dbg!(u16::from_be_bytes([bytes[2], bytes[3]]) as usize);
+> 
+>     let total_len = 4 + payload_len + 1; // Header (4) + Payload + Checksum (1)
+>     if bytes.len() < total_len {
+>         return Err(FrameParseError::BufferTooShort {
+>             expected: total_len,
+>             actual: bytes.len(),
+>         });
+>     }
+> 
+>     let payload_slice = &bytes[4..4 + payload_len];
+>     let expected_checksum = bytes[4 + payload_len];
+> 
+>     // Calculate XOR checksum over header and payload
+>     let calculated_checksum = dbg!(bytes[..4 + payload_len]
+>         .iter()
+>         .fold(0u8, |acc, &b| acc ^ b));
+> 
+>     if dbg!(calculated_checksum) != expected_checksum {
+>         return Err(FrameParseError::ChecksumMismatch {
+>             expected: expected_checksum,
+>             calculated: calculated_checksum,
+>         });
+>     }
+> 
+>     Ok(Frame {
+>         opcode,
+>         payload: payload_slice.to_vec(),
+>     })
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parse_valid_frame() {
+>         let header_and_payload = vec![0xAA, 0x01, 0x00, 0x02, 0x10, 0x20];
+>         let chk = header_and_payload.iter().fold(0u8, |acc, &b| acc ^ b);
+>         let mut buffer = header_and_payload;
+>         buffer.push(chk);
+> 
+>         let result = parse_binary_frame(&buffer);
+>         assert!(result.is_ok());
+>         let frame = result.unwrap();
+>         assert_eq!(frame.opcode, 0x01);
+>         assert_eq!(frame.payload, vec![0x10, 0x20]);
+>     }
+> 
+>     #[test]
+>     fn test_parse_invalid_magic_and_truncated() {
+>         let bad_magic_buffer = vec![0xBB, 0x01, 0x00, 0x00, 0xBB];
+>         let res_magic = parse_binary_frame(&bad_magic_buffer);
+>         assert!(matches!(res_magic, Err(FrameParseError::InvalidMagic(0xBB))));
+> 
+>         let short_buffer = vec![0xAA, 0x01];
+>         let res_short = parse_binary_frame(&short_buffer);
+>         assert_eq!(res_short, Err(FrameParseError::HeaderTooShort));
+>         assert_ne!(res_short, Ok(Frame { opcode: 1, payload: vec![] }));
+>     }
+> 
+>     #[test]
+>     fn test_parse_checksum_mismatch() {
+>         let bad_checksum_buffer = vec![0xAA, 0x01, 0x00, 0x01, 0x55, 0x00];
+>         let res = parse_binary_frame(&bad_checksum_buffer);
+>         assert!(res.is_err());
+>         assert_ne!(res, Ok(Frame { opcode: 0x01, payload: vec![0x55] }));
+>         assert!(matches!(
+>             res,
+>             Err(FrameParseError::ChecksumMismatch { .. })
+>         ));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 1. **Zero-Copy Byte Slicing Invariants**: Operating on `&[u8]` borrows slice references directly from incoming buffer memory. Wrapping sub-slice expressions such as `dbg!(&bytes[..4])` prints the slice window without allocating or copying buffer contents.
+> 2. **Endianness Conversion Debugging**: The payload length is encoded as a 2-byte big-endian integer. Wrapping `dbg!(u16::from_be_bytes([bytes[2], bytes[3]]) as usize)` logs the decoded length to `stderr` while returning `usize` straight into length boundary checks.
+> 3. **Inline Stream Fold Inspection**: Calculating XOR checksums via `bytes[..4 + payload_len].iter().fold(0u8, |acc, &b| acc ^ b)` can be wrapped directly in `dbg!(...)`. The macro outputs the final computed byte before comparing against `expected_checksum`.
+> 4. **Boundary & Edge Case Safety**: Enforces explicit length verification for truncated headers (`< 4` bytes), invalid magic headers (`!= 0xAA`), incomplete payload frames (`buffer.len() < total_len`), and checksum mismatches.
+> 5. **Assertion Safety**: The unit test module rigorously checks both success and failure paths using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
+>
+>
 
 ---
 

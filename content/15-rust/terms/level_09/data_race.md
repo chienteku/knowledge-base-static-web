@@ -150,118 +150,410 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Rust Promise
+### Exercise 1: High-Throughput Telemetry Aggregator (Lock-Free Data Race Prevention)
 
-**Problem:** You are writing a multi-threaded Rust application without using any `unsafe` blocks. Your program crashes. Your coworker looks at the code and says, *"Ah, you must have a Data Race somewhere."* Why is your coworker definitely wrong?
+**Problem:**
+You are building a high-throughput telemetry collector for a microservice framework. Hundreds of concurrent worker threads process requests and must record telemetry metrics (total requests, error counts, and active connections) without incurring the heavy locking overhead of a `Mutex`. In C/C++, unsynchronized incrementing of global variables from multiple threads causes severe data races and memory corruption. In Rust, direct mutation through shared references (`&T`) is prohibited by the borrow checker.
+
+Implement a lock-free `TelemetryAggregator` struct using standard library atomic primitives (`std::sync::atomic::{AtomicU64, AtomicI64, Ordering}`) that allows safe concurrent updates behind shared immutable references (`&Self`), preventing data races at the CPU hardware level. Include a method to retrieve a snapshot of current metrics.
+
 
 > [!check]- Answer
-> Because **Data Races are mathematically impossible in Safe Rust!**
->
-> If your program crashed, it might be due to a Deadlock, a `.unwrap()` panic, or an out-of-bounds array access, but the compiler *guarantees* it is not a Data Race.
+> ```rust
+> use std::sync::atomic::{AtomicI64, AtomicU64, Ordering};
+> use std::sync::Arc;
+> use std::thread;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct MetricsSnapshot {
+>     pub total_requests: u64,
+>     pub error_count: u64,
+>     pub active_connections: i64,
+> }
+> 
+> pub struct TelemetryAggregator {
+>     total_requests: AtomicU64,
+>     error_count: AtomicU64,
+>     active_connections: AtomicI64,
+> }
+> 
+> impl TelemetryAggregator {
+>     pub fn new() -> Self {
+>         Self {
+>             total_requests: AtomicU64::new(0),
+>             error_count: AtomicU64::new(0),
+>             active_connections: AtomicI64::new(0),
+>         }
+>     }
+> 
+>     pub fn record_request(&self, is_error: bool) {
+>         self.total_requests.fetch_add(1, Ordering::Relaxed);
+>         if is_error {
+>             self.error_count.fetch_add(1, Ordering::Relaxed);
+>         }
+>     }
+> 
+>     pub fn connection_opened(&self) {
+>         self.active_connections.fetch_add(1, Ordering::Relaxed);
+>     }
+> 
+>     pub fn connection_closed(&self) {
+>         self.active_connections.fetch_sub(1, Ordering::Relaxed);
+>     }
+> 
+>     pub fn snapshot(&self) -> MetricsSnapshot {
+>         MetricsSnapshot {
+>             total_requests: self.total_requests.load(Ordering::Acquire),
+>             error_count: self.error_count.load(Ordering::Acquire),
+>             active_connections: self.active_connections.load(Ordering::Acquire),
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrent_telemetry_aggregation() {
+>         let aggregator = Arc::new(TelemetryAggregator::new());
+>         let mut handles = vec![];
+> 
+>         for thread_idx in 0..10 {
+>             let agg = Arc::clone(&aggregator);
+>             handles.push(thread::spawn(move || {
+>                 for iter in 0..100 {
+>                     agg.connection_opened();
+>                     let is_err = (thread_idx + iter) % 5 == 0;
+>                     agg.record_request(is_err);
+>                     agg.connection_closed();
+>                 }
+>             }));
+>         }
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         let snap = aggregator.snapshot();
+> 
+>         // Comprehensive assertions using assert_eq!, assert!, assert_ne!, and matches!
+>         assert_eq!(snap.total_requests, 1000);
+>         assert_eq!(snap.error_count, 200);
+>         assert_eq!(snap.active_connections, 0);
+> 
+>         assert!(snap.total_requests > snap.error_count);
+>         assert_ne!(snap.total_requests, 0);
+>         assert!(matches!(
+>             snap,
+>             MetricsSnapshot {
+>                 total_requests: 1000,
+>                 active_connections: 0,
+>                 ..
+>             }
+>         ));
+>     }
+> }
+> ```
+> 
+> **Key Concurrency & Memory Safety Analysis:**
+> 1. **Why Normal Mutation Causes Data Races:** In C++, two threads executing `counter++` compile to three hardware instructions (`READ memory -> MODIFY register -> WRITE back memory`). When interleaved, writes overwrite each other (lost updates) or corrupt CPU cache lines. Rust's borrow checker rejects shared mutable references (`&mut T` behind multiple threads) to guarantee at compile time that unsynchronized writes cannot occur.
+> 2. **Interior Mutability via Atomic Types:** `AtomicU64` and `AtomicI64` wrap hardware-level atomic instructions (such as `LOCK XADD` on x86-64). They provide *interior mutability*, allowing state modification through shared immutable references (`&self`) without triggering undefined behavior or data races.
+> 3. **Memory Ordering Selection:**
+>    - `Ordering::Relaxed` is used for individual increments (`fetch_add`) because only atomicity of the single counter is required, avoiding CPU memory bus fences.
+>    - `Ordering::Acquire` is used in `snapshot()` to synchronize loads across cache boundaries so reads reflect preceding atomic writes across threads.
 
 ---
 
-### Exercise 2: The Compiler as Race Detector — Three Rejected Programs
+### Exercise 2: Multi-Account Financial Ledger (Eliminating TOCTOU Race Conditions)
 
 **Problem:**
-A data race requires three things simultaneously: two threads, shared memory, and at least one write. The Rust type system prevents all three combinations from existing in safe code. Study these three attempts and explain *which rule* blocks each one.
+Safe Rust guarantees that low-level *data races* (memory corruption) are impossible. However, it does not automatically prevent high-level *race conditions* (logical bugs stemming from timing and improper synchronization granularity). 
 
-```rust
-// Attempt A: shared mutable reference across threads
-let mut x = 0i32;
-std::thread::spawn(|| { x += 1; }); // borrow of `x`
-println!("{}", x);                  // second use of `x`
+Consider a banking system processing concurrent transfers between accounts. A common flaw is "Time-Of-Check To Time-Of-Use" (TOCTOU): checking an account balance in one lock scope, releasing the lock, and deducting funds in a subsequent lock scope. If another thread alters the balance in between, accounts can end up overdrawn (negative balances).
 
-// Attempt B: sharing a non-Sync type across threads
-use std::cell::RefCell;
-let rc = std::sync::Arc::new(RefCell::new(0));
-let rc2 = rc.clone();
-std::thread::spawn(move || { *rc2.borrow_mut() += 1; }); // RefCell: !Sync
+Implement a thread-safe `AccountLedger` system using `Arc<Mutex<AccountState>>`. Write a `transfer_to` method that acquires mutex locks for *both* accounts in a single atomic scope to eliminate TOCTOU bugs. Additionally, implement strict lock ordering based on unique account IDs to prevent deadlocks when concurrent threads transfer funds in opposite directions.
 
-// Attempt C: moving a non-Send type into a thread
-let rc = std::rc::Rc::new(0);
-std::thread::spawn(move || { println!("{}", rc); }); // Rc: !Send
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> (none — all three attempts are compile errors)
-> ```
->
-> - **Hint 1:** Attempt A is blocked by the **borrow checker**: `x += 1` requires `&mut x` inside the closure. But `println!("{}", x)` on the next line is a simultaneous borrow — the compiler enforces "one `&mut` OR many `&`, never both at once", making it impossible for two concurrent accesses to exist where one writes.
-> - **Hint 2:** Attempt B is blocked by the **`Sync` trait bound**: `Arc<T>: Send` only when `T: Sync`. `RefCell<T>` is deliberately `!Sync` because its borrow counter is not atomic — two threads could corrupt it. The compiler rejects the spawn with `E0277: RefCell<i32> cannot be shared between threads safely`.
-> - **Hint 3:** Attempt C is blocked by the **`Send` trait bound**: `thread::spawn` requires the moved closure to be `Send`. `Rc<T>` is `!Send` because its reference count is a plain `usize` (not atomic) — incrementing/decrementing it from two threads simultaneously would corrupt it. `E0277: Rc<i32> cannot be sent between threads safely`.
->
-> **Explanation:**
-> Safe Rust makes data races structurally impossible through three interlocking mechanisms:
-> 1. **Borrow checker**: enforces `&mut T` exclusivity at compile time — no two code paths can hold a mutable reference to the same data simultaneously, preventing unsynchronized concurrent writes.
-> 2. **`Send` trait**: gates what can be *moved* into a new thread. Types whose internals would be corrupted by concurrent access from different threads (like `Rc`) are `!Send`.
-> 3. **`Sync` trait**: gates what can be *shared by reference* across threads. Types that allow unsynchronized interior mutation (like `RefCell`) are `!Sync`.
->
-> These three checks together cover every possible shape of "two threads touching the same memory".
-
----
-
-### Exercise 3: Data Race vs. Race Condition — A TOCTOU Bug Mutex Cannot Fix
-
-**Problem:**
-Rust eliminates *data races* (memory corruption from unsynchronized concurrent access). But it does **not** eliminate *race conditions* — logical bugs where the *timing* of operations produces wrong results even though each individual memory access is synchronized.
-
-Demonstrate the classic "check-then-act" race condition:
-1. A shared `Arc<Mutex<i32>>` represents a bank balance starting at `100`.
-2. Spawn **two threads** that both:
-   - Lock the mutex, **read** the balance, and **unlock** (drop the guard).
-   - If the balance is ≥ 80, sleep 10 ms (simulating processing time), then lock again and **subtract 80**.
-3. Join both threads and print the final balance.
-4. Explain why the final balance can be **negative** even though `Mutex` is used correctly.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Final balance: -60   (or 20, depending on scheduling)
-> ```
-> *(Both threads see balance=100 ≥ 80, both proceed, both subtract 80: 100 − 80 − 80 = −60)*
->
-> - **Hint 1:** The bug is in the **gap between the read lock and the write lock**. Thread A reads `100`, drops the lock, sleeps. Thread B reads `100` (still 100!), drops the lock, sleeps. Now both believe they have permission to withdraw. Thread A wakes first, subtracts: `100 − 80 = 20`. Thread B wakes, subtracts: `20 − 80 = −60`. No data race occurred — every lock/unlock was correct. But the *logical invariant* ("only withdraw if balance ≥ amount") was violated.
-> - **Hint 2:** The fix is to never release the lock between the check and the act — keep a single guard alive across both operations. This is called a *compare-and-swap* or *atomic transaction* pattern.
-> - **Hint 3:** This pattern is called **TOCTOU (Time Of Check To Time Of Use)**. It is the most common concurrency bug class that `Mutex` alone cannot prevent — because `Mutex` only guarantees each individual lock operation is exclusive, not that the *sequence* of operations is atomic.
->
 > ```rust
 > use std::sync::{Arc, Mutex};
 > use std::thread;
-> use std::time::Duration;
->
-> fn main() {
->     let balance = Arc::new(Mutex::new(100i32));
->     let mut handles = vec![];
->
->     for _ in 0..2 {
->         let bal = Arc::clone(&balance);
->         handles.push(thread::spawn(move || {
->             // Step 1: read the balance and release the lock.
->             let current = *bal.lock().unwrap();
->
->             if current >= 80 {
->                 // GAP: lock is released here. Other thread can read balance too!
->                 thread::sleep(Duration::from_millis(10)); // simulate processing
->
->                 // Step 2: acquire lock again and subtract — but balance may have changed!
->                 let mut guard = bal.lock().unwrap();
->                 *guard -= 80; // both threads do this if both saw current >= 80
->             }
->         }));
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum TransactionError {
+>     InsufficientFunds { balance: u64, requested: u64 },
+>     SameAccount,
+> }
+> 
+> #[derive(Debug)]
+> pub struct AccountState {
+>     pub id: u64,
+>     pub balance: u64,
+> }
+> 
+> #[derive(Clone)]
+> pub struct AccountLedger {
+>     state: Arc<Mutex<AccountState>>,
+> }
+> 
+> impl AccountLedger {
+>     pub fn new(id: u64, initial_balance: u64) -> Self {
+>         Self {
+>             state: Arc::new(Mutex::new(AccountState {
+>                 id,
+>                 balance: initial_balance,
+>             })),
+>         }
 >     }
->
->     for h in handles { h.join().unwrap(); }
->     println!("Final balance: {}", *balance.lock().unwrap());
+> 
+>     pub fn id(&self) -> u64 {
+>         self.state.lock().unwrap().id
+>     }
+> 
+>     pub fn balance(&self) -> u64 {
+>         self.state.lock().unwrap().balance
+>     }
+> 
+>     pub fn transfer_to(&self, target: &AccountLedger, amount: u64) -> Result<(), TransactionError> {
+>         let self_id = self.id();
+>         let target_id = target.id();
+> 
+>         if self_id == target_id {
+>             return Err(TransactionError::SameAccount);
+>         }
+> 
+>         // Ordered lock acquisition based on ID to prevent deadlocks
+>         let (mut source_guard, mut target_guard) = if self_id < target_id {
+>             let g1 = self.state.lock().unwrap();
+>             let g2 = target.state.lock().unwrap();
+>             (g1, g2)
+>         } else {
+>             let g2 = target.state.lock().unwrap();
+>             let g1 = self.state.lock().unwrap();
+>             (g1, g2)
+>         };
+> 
+>         if source_guard.balance < amount {
+>             return Err(TransactionError::InsufficientFunds {
+>                 balance: source_guard.balance,
+>                 requested: amount,
+>             });
+>         }
+> 
+>         source_guard.balance -= amount;
+>         target_guard.balance += amount;
+> 
+>         Ok(())
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrent_transfers_prevent_race_conditions() {
+>         let acc1 = AccountLedger::new(1, 1000);
+>         let acc2 = AccountLedger::new(2, 1000);
+> 
+>         let mut handles = vec![];
+> 
+>         // 10 threads transfer 50 from acc1 to acc2
+>         for _ in 0..10 {
+>             let a1 = acc1.clone();
+>             let a2 = acc2.clone();
+>             handles.push(thread::spawn(move || {
+>                 let _ = a1.transfer_to(&a2, 50);
+>             }));
+>         }
+> 
+>         // 10 threads transfer 30 from acc2 to acc1 concurrently (opposite direction)
+>         for _ in 0..10 {
+>             let a1 = acc1.clone();
+>             let a2 = acc2.clone();
+>             handles.push(thread::spawn(move || {
+>                 let _ = a2.transfer_to(&a1, 30);
+>             }));
+>         }
+> 
+>         for handle in handles {
+>             handle.join().unwrap();
+>         }
+> 
+>         // Net movement: 10 * 50 = 500 (acc1 -> acc2), 10 * 30 = 300 (acc2 -> acc1)
+>         // acc1 final: 1000 - 500 + 300 = 800
+>         // acc2 final: 1000 + 500 - 300 = 1200
+>         assert_eq!(acc1.balance(), 800);
+>         assert_eq!(acc2.balance(), 1200);
+> 
+>         assert_ne!(acc1.balance(), acc2.balance());
+>         assert!(acc1.balance() + acc2.balance() == 2000);
+> 
+>         let failed_transfer = acc1.transfer_to(&acc2, 10000);
+>         assert!(matches!(
+>             failed_transfer,
+>             Err(TransactionError::InsufficientFunds {
+>                 balance: 800,
+>                 requested: 10000
+>             })
+>         ));
+>     }
 > }
 > ```
->
-> **Explanation:**
-> `Mutex` prevents data races: no two threads corrupt the `i32`'s memory. But it cannot prevent *logical* race conditions where the invariant "only withdraw if balance is sufficient" is checked and acted on in two separate lock acquisitions. In between those two operations, another thread can change the world. The fix — holding the lock from check to act — shows why correct lock *granularity* matters as much as correct lock *usage*.
+> 
+> **Key Concurrency & Memory Safety Analysis:**
+> 1. **Data Race vs. Race Condition:** Data races refer strictly to concurrent unsynchronized memory mutation (prevented at compile-time by Rust). Race conditions refer to flaws in execution ordering where individual operations are synchronized (e.g. locking balance, reading balance, unlocking balance, then locking again to withdraw), but the compound operation is non-atomic.
+> 2. **Transactional Lock Scope:** Holding guards for both `source` and `target` inside `transfer_to` ensures that the balance check and subtraction happen atomically within the same critical section, preventing double-spend and TOCTOU bugs.
+> 3. **Deadlock Prevention via ID Ordering:** If Thread A transfers from Account 1 to Account 2 while Thread B transfers from Account 2 to Account 1, un-ordered locking (`lock(1)` then `lock(2)` vs `lock(2)` then `lock(1)`) causes a classic AB-BA deadlock. Sorting lock acquisitions by account ID (`self_id < target_id`) enforces a strict total lock ordering hierarchy across threads.
+
+---
+
+### Exercise 3: Dynamic Parallel Dispatch Pipeline with Auto-Trait Guards (`Send` & `Sync`)
+
+**Problem:**
+You are architecture-designing a parallel worker pool system that processes batch jobs across OS threads. Attempting to share single-threaded types such as `std::rc::Rc` or `std::cell::RefCell` across threads results in compile error `E0277` because they are `!Send` and `!Sync`. Their internal reference counters and borrow flags lack hardware atomic protections; sharing them across threads would cause catastrophic data races.
+
+Build a thread-safe `ParallelPipeline` using `std::sync::mpsc` channels and `Arc<Mutex<Receiver<Task>>>` to distribute tasks across worker threads. Ensure that worker handles exit cleanly when task channels close and results are aggregated back safely.
+
+> [!check]- Answer
+> ```rust
+> use std::sync::mpsc::{self, Receiver, Sender};
+> use std::sync::{Arc, Mutex};
+> use std::thread;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum TaskResult {
+>     Success { task_id: u64, output: String },
+>     Failure { task_id: u64, error: String },
+> }
+> 
+> pub struct Task {
+>     pub id: u64,
+>     pub payload: String,
+> }
+> 
+> pub struct ParallelPipeline {
+>     worker_count: usize,
+> }
+> 
+> impl ParallelPipeline {
+>     pub fn new(worker_count: usize) -> Self {
+>         Self { worker_count }
+>     }
+> 
+>     pub fn execute_batch(&self, tasks: Vec<Task>) -> Vec<TaskResult> {
+>         let (task_tx, task_rx) = mpsc::channel::<Task>();
+>         let (result_tx, result_rx) = mpsc::channel::<TaskResult>();
+> 
+>         let shared_rx = Arc::new(Mutex::new(task_rx));
+>         let mut workers = vec![];
+> 
+>         for _ in 0..self.worker_count {
+>             let rx = Arc::clone(&shared_rx);
+>             let tx = result_tx.clone();
+> 
+>             workers.push(thread::spawn(move || loop {
+>                 let task = {
+>                     let lock = rx.lock().unwrap();
+>                     match lock.recv() {
+>                         Ok(t) => t,
+>                         Err(_) => break, // Channel closed and empty
+>                     }
+>                 };
+> 
+>                 let result = if task.payload.contains("invalid") {
+>                     TaskResult::Failure {
+>                         task_id: task.id,
+>                         error: "Payload contains invalid data".to_string(),
+>                     }
+>                 } else {
+>                     TaskResult::Success {
+>                         task_id: task.id,
+>                         output: task.payload.to_uppercase(),
+>                     }
+>                 };
+> 
+>                 tx.send(result).unwrap();
+>             }));
+>         }
+> 
+>         // Drop the extra result_tx handle owned by main thread
+>         drop(result_tx);
+> 
+>         // Dispatch all tasks to worker threads
+>         for task in tasks {
+>             task_tx.send(task).unwrap();
+>         }
+>         // Dropping task_tx closes the channel, signaling workers to terminate when work is complete
+>         drop(task_tx);
+> 
+>         for worker in workers {
+>             worker.join().unwrap();
+>         }
+> 
+>         let mut results = vec![];
+>         while let Ok(res) = result_rx.recv() {
+>             results.push(res);
+>         }
+> 
+>         results
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parallel_pipeline_execution() {
+>         let pipeline = ParallelPipeline::new(4);
+> 
+>         let tasks = vec![
+>             Task {
+>                 id: 1,
+>                 payload: "alpha_data".to_string(),
+>             },
+>             Task {
+>                 id: 2,
+>                 payload: "invalid_payload".to_string(),
+>             },
+>             Task {
+>                 id: 3,
+>                 payload: "beta_data".to_string(),
+>             },
+>         ];
+> 
+>         let results = pipeline.execute_batch(tasks);
+> 
+>         assert_eq!(results.len(), 3);
+>         assert_ne!(results.len(), 0);
+> 
+>         let success_count = results
+>             .iter()
+>             .filter(|r| matches!(r, TaskResult::Success { .. }))
+>             .count();
+>         let failure_count = results
+>             .iter()
+>             .filter(|r| matches!(r, TaskResult::Failure { .. }))
+>             .count();
+> 
+>         assert_eq!(success_count, 2);
+>         assert_eq!(failure_count, 1);
+>         assert!(results
+>             .iter()
+>             .any(|r| matches!(r, TaskResult::Success { task_id: 1, .. })));
+>     }
+> }
+> ```
+> 
+> **Key Concurrency & Memory Safety Analysis:**
+> 1. **Auto-Traits `Send` and `Sync`:** `Send` indicates a type can transfer ownership across thread boundaries; `Sync` indicates `&T` can be shared between threads safely. Safe Rust uses these marker traits to forbid data races at compile time.
+> 2. **Why `Rc` and `RefCell` fail:** `Rc<T>` non-atomically increments its reference count on clone/drop. If shared across threads, interleaved counter updates cause data races and memory leaks/use-after-free bugs. Rust marks `Rc` as `!Send` and `!Sync`. Replacing `Rc` with `Arc` (atomic reference counting) and `RefCell` with `Mutex` restores `Send` and `Sync` bounds.
+> 3. **Channel Dispatch & Shutdown Invariants:** Wrapping `mpsc::Receiver` in `Arc<Mutex<Receiver<Task>>>` allows workers to pull tasks safely without competing unsynchronized for channel buffers. Dropping `task_tx` on the producer thread closes the channel, allowing worker threads to cleanly exit their `recv()` loop upon `Err(_)` and terminate without deadlocks.
 
 ---
 

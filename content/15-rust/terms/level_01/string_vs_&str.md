@@ -154,75 +154,308 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Upgrade to a String
+### Exercise 1: Zero-Copy Microservice Log Parsing and Canonical String Formatting
 
-**Problem:** The following code tries to build a full sentence but fails because `start` is just a `&str`. Fix the code so it successfully compiles.
+**Scenario:**
+A distributed telemetry service ingests log payloads in the raw format `"LEVEL|TIMESTAMP|SERVICE|MESSAGE"` (e.g., `"WARN|2026-07-31T12:00:00Z|auth_svc|Invalid password attempt"`). To maintain low latency, the parser must borrow string slices (`&'a str`) directly from the input buffer without allocating heap memory during parsing. Heap allocation must be deferred until an owned canonical log record (`String`) is generated.
 
-```rust
-fn main() {
-    let mut start = "The quick brown fox ";
-    start.push_str("jumps over the lazy dog.");
-    println!("{}", start);
-}
-```
+**Task:**
+1. Define an enum `LogLevel` with variants `Info`, `Warn`, and `Error`.
+2. Define a struct `ParsedLog<'a>` with borrowed string slices `timestamp`, `service`, and `message` of lifetime `'a`.
+3. Implement `parse_log<'a>(raw: &'a str) -> Result<ParsedLog<'a>, ParseError>` to extract clean string slices.
+4. Implement `to_canonical_string(&self) -> String` on `ParsedLog<'a>` to produce formatted output: `"[TIMESTAMP] [LEVEL] (SERVICE): MESSAGE"`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The quick brown fox jumps over the lazy dog.
-> ```
-> - You cannot use `.push_str()` on a `&str`.
-> - Change line 2 to initialize `start` as a `String` using `String::from("The quick brown fox ")` or `"The quick brown fox ".to_string()`.
-
----
-
-### Exercise 2: Efficient String Slice Parameters
-
-**Problem:** Write a function `greeting(name: &str) -> String` that accepts both `&str` literals and `&String` references via deref coercion.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Hello, Alice!
-> Hello, Bob!
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn greeting(name: &str) -> String {
->     format!("Hello, {}!", name)
+> #[derive(Debug, PartialEq, Eq, Clone, Copy)]
+> pub enum LogLevel {
+>     Info,
+>     Warn,
+>     Error,
 > }
-> fn main() {
->     let literal = "Alice";
->     let owned = String::from("Bob");
->     println!("{}", greeting(literal));
->     println!("{}", greeting(&owned));
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum ParseError {
+>     InvalidFormat,
+>     UnknownLevel,
+> }
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct ParsedLog<'a> {
+>     pub level: LogLevel,
+>     pub timestamp: &'a str,
+>     pub service: &'a str,
+>     pub message: &'a str,
+> }
+> 
+> pub fn parse_log<'a>(raw: &'a str) -> Result<ParsedLog<'a>, ParseError> {
+>     let parts: Vec<&'a str> = raw.split('|').map(|s| s.trim()).collect();
+>     if parts.len() != 4 {
+>         return Err(ParseError::InvalidFormat);
+>     }
+> 
+>     let level = match parts[0] {
+>         "INFO" => LogLevel::Info,
+>         "WARN" => LogLevel::Warn,
+>         "ERROR" => LogLevel::Error,
+>         _ => return Err(ParseError::UnknownLevel),
+>     };
+> 
+>     if parts[1].is_empty() || parts[2].is_empty() || parts[3].is_empty() {
+>         return Err(ParseError::InvalidFormat);
+>     }
+> 
+>     Ok(ParsedLog {
+>         level,
+>         timestamp: parts[1],
+>         service: parts[2],
+>         message: parts[3],
+>     })
+> }
+> 
+> impl<'a> ParsedLog<'a> {
+>     pub fn to_canonical_string(&self) -> String {
+>         let level_str = match self.level {
+>             LogLevel::Info => "INFO",
+>             LogLevel::Warn => "WARN",
+>             LogLevel::Error => "ERROR",
+>         };
+>         format!(
+>             "[{}] [{}] ({}): {}",
+>             self.timestamp, level_str, self.service, self.message
+>         )
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parse_valid_log() {
+>         let raw = "  WARN  | 2026-07-31T12:00:00Z | auth_svc | Invalid password attempt  ";
+>         let parsed = parse_log(raw).expect("Parsing should succeed");
+> 
+>         assert_eq!(parsed.level, LogLevel::Warn);
+>         assert_eq!(parsed.timestamp, "2026-07-31T12:00:00Z");
+>         assert_eq!(parsed.service, "auth_svc");
+>         assert_eq!(parsed.message, "Invalid password attempt");
+>         assert_ne!(parsed.level, LogLevel::Error);
+> 
+>         let canonical = parsed.to_canonical_string();
+>         assert_eq!(
+>             canonical,
+>             "[2026-07-31T12:00:00Z] [WARN] (auth_svc): Invalid password attempt"
+>         );
+>     }
+> 
+>     #[test]
+>     fn test_parse_invalid_format() {
+>         let missing_fields = "INFO|2026-07-31T12:00:00Z|auth_svc";
+>         let res = parse_log(missing_fields);
+>         assert!(matches!(res, Err(ParseError::InvalidFormat)));
+> 
+>         let empty_field = "INFO|2026-07-31T12:00:00Z||user logged in";
+>         let res_empty = parse_log(empty_field);
+>         assert_eq!(res_empty, Err(ParseError::InvalidFormat));
+>     }
+> 
+>     #[test]
+>     fn test_parse_unknown_level() {
+>         let invalid_level = "TRACE|2026-07-31T12:00:00Z|auth_svc|Trace message";
+>         let res = parse_log(invalid_level);
+>         assert_eq!(res, Err(ParseError::UnknownLevel));
+>     }
 > }
 > ```
 >
-> **Explanation:** Accept `&str` in function parameters to maximize flexibility, allowing callers to pass string literals, slices, or owned `String` references cleanly.
+> #### Technical Explanation
+>
+> - **Zero-Copy Lifetime Binding (`'a`):** The `ParsedLog<'a>` struct borrows slices directly from the input buffer `raw`. The lifetime annotation `'a` ensures that `ParsedLog<'a>` cannot outlive the underlying `raw` string slice, preventing dangling pointer bugs.
+> - **Slice Borrowing (`&str`) vs Heap Ownership (`String`):** Calling `raw.split('|')` and `.trim()` yields sub-slices (`&'a str`) pointing directly to existing memory offsets. No heap memory is allocated during parsing.
+> - **Deferred Allocation:** Allocation occurs only when `to_canonical_string()` is called, which creates a new growable `String` on the heap to construct the canonical log representation.
+>
 
 ---
 
-### Exercise 3: Appending Text to Heap Strings
+### Exercise 2: HTTP Header Extraction and Case Normalization Engine
 
-**Problem:** Create a mutable `String`, push a char `'!'` using `.push()`, append a string slice `" World"` using `.push_str()`, and print the result.
+**Scenario:**
+An API Gateway routes HTTP requests based on header keys. Per RFC 9110, HTTP header names are case-insensitive. Raw header lines like `"   Content-Type  :   application/json  "` must first be parsed zero-copy into raw key/value slices (`&'a str`), and then transformed into normalized lowercase owned `String` keys for hashing and routing table lookups.
 
-**Expected output:**
+**Task:**
+1. Implement `parse_header_raw<'a>(line: &'a str) -> Result<(&'a str, &'a str), HeaderError>` to split a header line at `:` and return trimmed string slices.
+2. Implement `normalize_header(key: &str, value: &str) -> (String, String)` to convert `key` to lowercase and return owned `String` pairs.
+
 > [!check]- Answer
-> ```
-> Hello World!
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let mut s = String::from("Hello");
->     s.push_str(" World");
->     s.push('!');
->     println!("{}", s);
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum HeaderError {
+>     MissingColon,
+>     EmptyKey,
+> }
+> 
+> pub fn parse_header_raw<'a>(line: &'a str) -> Result<(&'a str, &'a str), HeaderError> {
+>     let colon_pos = line.find(':').ok_or(HeaderError::MissingColon)?;
+>     
+>     let key = line[..colon_pos].trim();
+>     let value = line[colon_pos + 1..].trim();
+> 
+>     if key.is_empty() {
+>         return Err(HeaderError::EmptyKey);
+>     }
+> 
+>     Ok((key, value))
+> }
+> 
+> pub fn normalize_header(key: &str, value: &str) -> (String, String) {
+>     let normalized_key = key.to_ascii_lowercase();
+>     let normalized_value = value.to_string();
+>     (normalized_key, normalized_value)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parse_header_raw_valid() {
+>         let raw_line = "   Content-Type  :   application/json; charset=utf-8  ";
+>         let parsed = parse_header_raw(raw_line).expect("Should parse successfully");
+> 
+>         assert_eq!(parsed.0, "Content-Type");
+>         assert_eq!(parsed.1, "application/json; charset=utf-8");
+>         assert_ne!(parsed.0, "content-type");
+> 
+>         let (norm_key, norm_val) = normalize_header(parsed.0, parsed.1);
+>         assert_eq!(norm_key, "content-type");
+>         assert_eq!(norm_val, "application/json; charset=utf-8");
+>     }
+> 
+>     #[test]
+>     fn test_parse_header_raw_missing_colon() {
+>         let invalid_line = "Host localhost:8080";
+>         let res = parse_header_raw(invalid_line);
+>         assert!(matches!(res, Err(HeaderError::MissingColon)));
+>     }
+> 
+>     #[test]
+>     fn test_parse_header_raw_empty_key() {
+>         let invalid_line = "  : authorization_token_xyz ";
+>         let res = parse_header_raw(invalid_line);
+>         assert_eq!(res, Err(HeaderError::EmptyKey));
+>     }
 > }
 > ```
 >
-> **Explanation:** `.push_str()` appends string slices without taking ownership, while `.push()` appends single UTF-8 `char` primitives.
+> #### Technical Explanation
+>
+> - **Zero-Copy Header Extraction:** Slicing `line[..colon_pos]` produces an immutable string slice `&'a str` referencing the existing memory block of `line`. No dynamic allocations take place in `parse_header_raw`.
+> - **Deref Coercion (`&String` to `&str`):** `normalize_header` accepts `&str` as parameters. This idiomatic pattern allows callers to pass string literals (`"Content-Type"`), slices (`&line[..]`), or references to heap strings (`&String`) seamlessly.
+> - **Heap Allocation for String Transformation:** Casing changes (`to_ascii_lowercase()`) alter byte values and may alter length in general UTF-8 cases. Thus, mutating ASCII casing requires allocating a fresh, owned `String` on the heap.
+>
+
+---
+
+### Exercise 3: Financial Query Sanitization and Pre-Allocated Template Binding
+
+**Scenario:**
+A financial compliance audit engine generates SQL query strings dynamically from template patterns. To ensure security against SQL injection, requested table names are validated against a static whitelist slice (`&[&str]`). Query buffer building must manage heap allocations efficiently by using `String::with_capacity` and string slice appends (`.push_str()`).
+
+**Task:**
+1. Define a static slice `ALLOWED_TABLES: &[&str] = &["transactions", "audit_logs", "settlements"];`.
+2. Implement `build_audit_query(template: &str, table_name: &str, min_amount: u64) -> Result<String, QueryError>`.
+3. Validate table names without allocation, check for placeholders `"{TABLE}"` and `"{MIN_AMOUNT}"`, substitute values, and append `"; -- AUDITED QUERY"`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum QueryError {
+>     InvalidTableName,
+>     MissingPlaceholder,
+> }
+> 
+> pub const ALLOWED_TABLES: &[&str] = &["transactions", "audit_logs", "settlements"];
+> 
+> pub fn build_audit_query(
+>     template: &str,
+>     table_name: &str,
+>     min_amount: u64,
+> ) -> Result<String, QueryError> {
+>     if !ALLOWED_TABLES.contains(&table_name) {
+>         return Err(QueryError::InvalidTableName);
+>     }
+> 
+>     if !template.contains("{TABLE}") || !template.contains("{MIN_AMOUNT}") {
+>         return Err(QueryError::MissingPlaceholder);
+>     }
+> 
+>     let mut sql = String::with_capacity(template.len() + 64);
+>     sql.push_str(template);
+> 
+>     let sql = sql.replace("{TABLE}", table_name);
+>     let amount_str = min_amount.to_string();
+>     let mut sql = sql.replace("{MIN_AMOUNT}", &amount_str);
+> 
+>     sql.push_str("; -- AUDITED QUERY");
+> 
+>     Ok(sql)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_build_audit_query_success() {
+>         let template = "SELECT * FROM {TABLE} WHERE amount >= {MIN_AMOUNT}";
+>         let query = build_audit_query(template, "transactions", 5000)
+>             .expect("Should build query successfully");
+> 
+>         assert_eq!(
+>             query,
+>             "SELECT * FROM transactions WHERE amount >= 5000; -- AUDITED QUERY"
+>         );
+>         assert!(query.contains("transactions"));
+>         assert_ne!(query, template);
+>     }
+> 
+>     #[test]
+>     fn test_build_audit_query_invalid_table() {
+>         let template = "SELECT * FROM {TABLE} WHERE amount >= {MIN_AMOUNT}";
+>         let res = build_audit_query(template, "users_credentials", 100);
+>         assert_eq!(res, Err(QueryError::InvalidTableName));
+>         assert!(matches!(res, Err(QueryError::InvalidTableName)));
+>     }
+> 
+>     #[test]
+>     fn test_build_audit_query_missing_placeholder() {
+>         let template = "SELECT * FROM transactions WHERE amount >= 100";
+>         let res = build_audit_query(template, "transactions", 100);
+>         assert_eq!(res, Err(QueryError::MissingPlaceholder));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> - **Slice Whitelisting (`&str`):** Checking if `table_name` is allowed (`ALLOWED_TABLES.contains(&table_name)`) works by comparing string slice references (`&str`) without allocating memory on the heap.
+> - **Memory Capacity Management (`String::with_capacity`):** When building growable `String` objects, allocating insufficient capacity causes reallocations as the buffer grows. Pre-allocating capacity via `String::with_capacity(template.len() + 64)` allocates the heap buffer once.
+> - **Mutation (`push_str`) vs Substitution (`replace`):** Method `.push_str()` appends string slice contents directly to an existing `String` buffer without allocating a new container. Method `.replace()` constructs a new `String` containing the substituted content.
+>
 
 ---
 

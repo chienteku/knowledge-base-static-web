@@ -157,145 +157,367 @@ thread::spawn(move || {
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Misplaced Comment
+### Exercise 1: Asynchronous Distributed Microservice Architecture Documentation
 
-**Problem:** Look at the code below. When `cargo doc` generates the website, what item will the "This module handles all database connections" text be attached to?
+**Problem Statement:**
+You are architecting a distributed microservice framework for real-world transaction streaming. At the crate root (`src/lib.rs`) and within subsystem modules (`mod telemetry`), you must author comprehensive module-level inner doc comments (`//!`) outlining architectural design decisions, concurrency guarantees, and usage examples.
 
-```rust
-// File: src/db.rs
-
-/// This module handles all database connections.
-/// It is highly optimized.
-
-pub struct DatabaseConnection {
-    url: String,
-}
-```
+Requirements:
+1. Write crate-level inner doc comments (`//!`) in `src/lib.rs` detailing module organization and async engine setup.
+2. Implement `TransactionPipeline` with `process_event` handling state mutation.
+3. Write module-level inner doc comments (`//!`) in `pub mod telemetry` documenting observability metrics.
+4. Implement `MetricsCollector` inside `telemetry` tracking processed event counters.
+5. In `#[cfg(test)] mod tests`, write unit tests verifying pipeline event processing, metric counters, and thread safety assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
-> It will be attached to the **`DatabaseConnection` struct**, which is completely wrong! 
->
-> Because the developer used `///` instead of `//!`, the text describing the *module* was incorrectly attached to the *struct* directly beneath it.
+> ```rust
+> //! # Distributed Microservice Event Pipeline Engine
+> //!
+> //! `event_engine` provides high-throughput asynchronous event processing
+> //! and real-world telemetry aggregation across cluster nodes.
+> //!
+> //! ## Core Subsystems
+> //! - [`TransactionPipeline`]: Processes incoming transactional events.
+> //! - [`telemetry`]: Collects metric data and node health diagnostics.
+> //!
+> //! ## Quickstart Example
+> //! ```
+> //! use std::sync::Arc;
+> //! use std::sync::atomic::{AtomicU64, Ordering};
+> //!
+> //! let processed_count = Arc::new(AtomicU64::new(0));
+> //! processed_count.fetch_add(1, Ordering::SeqCst);
+> //! assert_eq!(processed_count.load(Ordering::SeqCst), 1);
+> //! ```
+> 
+> use std::sync::atomic::{AtomicU64, Ordering};
+> use std::sync::Arc;
+> 
+> #[derive(Debug, PartialEq, Eq, Clone)]
+> pub enum EventType {
+>     OrderCreated { order_id: u64, amount: u64 },
+>     OrderCancelled { order_id: u64 },
+> }
+> 
+> /// Core pipeline for executing domain events.
+> #[derive(Debug)]
+> pub struct TransactionPipeline {
+>     pub active_orders: Arc<AtomicU64>,
+> }
+> 
+> impl TransactionPipeline {
+>     pub fn new() -> Self {
+>         Self {
+>             active_orders: Arc::new(AtomicU64::new(0)),
+>         }
+>     }
+> 
+>     pub fn process_event(&self, event: &EventType) -> bool {
+>         match event {
+>             EventType::OrderCreated { amount, .. } => {
+>                 if *amount > 0 {
+>                     self.active_orders.fetch_add(1, Ordering::SeqCst);
+>                     true
+>                 } else {
+>                     false
+>                 }
+>             }
+>             EventType::OrderCancelled { .. } => {
+>                 self.active_orders.fetch_sub(1, Ordering::SeqCst);
+>                 true
+>             }
+>         }
+>     }
+> }
+> 
+> /// Telemetry and Metrics Module
+> //!
+> //! This module manages distributed counter metrics and observability statistics
+> //! across microservice clusters.
+> pub mod telemetry {
+>     //! Subsystem metrics aggregation engine.
+>     //!
+>     //! Tracks total processed events and active connection metrics.
+> 
+>     use super::*;
+> 
+>     /// Metric aggregation struct for cluster node health.
+>     #[derive(Debug, Default)]
+>     pub struct MetricsCollector {
+>         pub total_events: AtomicU64,
+>     }
+> 
+>     impl MetricsCollector {
+>         pub fn new() -> Self {
+>             Self {
+>                 total_events: AtomicU64::new(0),
+>             }
+>         }
+> 
+>         pub fn record_event(&self) {
+>             self.total_events.fetch_add(1, Ordering::SeqCst);
+>         }
+
+>         pub fn get_total(&self) -> u64 {
+>             self.total_events.load(Ordering::SeqCst)
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use telemetry::MetricsCollector;
+> 
+>     #[test]
+>     fn test_transaction_pipeline_event_processing() {
+>         let pipeline = TransactionPipeline::new();
+>         let metrics = MetricsCollector::new();
+> 
+>         let event_valid = EventType::OrderCreated { order_id: 101, amount: 500 };
+>         let event_invalid = EventType::OrderCreated { order_id: 102, amount: 0 };
+> 
+>         assert!(pipeline.process_event(&event_valid));
+>         metrics.record_event();
+> 
+>         assert!(!pipeline.process_event(&event_invalid));
+> 
+>         assert_eq!(pipeline.active_orders.load(Ordering::SeqCst), 1);
+>         assert_eq!(metrics.get_total(), 1);
+>         assert_ne!(metrics.get_total(), 2);
+>         assert!(matches!(event_valid, EventType::OrderCreated { .. }));
+>     }
+> }
+> ```
+> 
+> **Technical Explanation:**
+> 1. **Inner Doc Scope (`//!`)**: Placed at the file header of `src/lib.rs` and inside `pub mod telemetry`, `//!` documents the enclosing crate or module as a unified landing page on `cargo doc`.
+> 2. **Crate Root vs. Module Level**: Outer doc comments (`///`) attach to individual structs (`TransactionPipeline`), whereas inner doc comments (`//!`) form crate-level documentation banners.
+> 3. **Thread Safety Guarantees**: Using atomic counters (`AtomicU64`) verifies concurrent safety inside microservice pipeline execution.
 
 ---
 
-### Exercise 2: `//!` vs `///` — What Each Comment Attaches To
+### Exercise 2: Embedded Hardware HAL Driver Module Documentation
 
-**Problem:**
-The key rule: `///` documents the item *below* it; `//!` documents the item *containing* it. In a module file, `//!` at the top documents the module itself — not any specific item inside it.
+**Problem Statement:**
+You are developing an embedded hardware abstraction layer (HAL) driver for a memory-mapped serial peripheral (UART). Embedded drivers require top-level module documentation (`//!`) specifying peripheral register maps, clock speed requirements, and interrupt safety rules.
 
-Write a `src/math.rs` module that:
-1. Starts with `//!` inner doc comments describing what the module provides.
-2. Has a public function `add(a: i32, b: i32) -> i32` with its own `///` outer doc comments.
-3. Has a public function `multiply(a: i32, b: i32) -> i32` with its own `///` outer doc comments.
+Requirements:
+1. Write module-level inner doc comments (`//!`) at the top of the file describing UART MMIO control registers and baud rate calculations.
+2. Define a `UartConfig` struct with `baud_rate: u32` and `parity: bool`.
+3. Implement `UartDriver` managing transmit/receive ring buffers and status registers.
+4. Implement `write_byte(&mut self, byte: u8) -> Result<(), &'static str>` and `read_byte(&mut self) -> Option<u8>`.
+5. In `#[cfg(test)] mod tests`, write unit tests testing buffer overflow, baud rate initialization, and byte read/write assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
-Then answer: **if you replaced the `//!` lines at the top with `///` lines, what item would those comments be attached to in the generated docs?**
-
-**Expected output:**
 > [!check]- Answer
-> *(No runtime stdout — this is library documentation. Run `cargo doc --open` to see the module page with the `//!` text as the module header and `///` text on each function.)*
->
-> - **Hint 1:** `//!` lines must come *before* any `use`, `pub`, or `fn` declarations. They attach to the enclosing item — in a module file, that means the module itself. In `src/lib.rs`, they attach to the whole crate.
-> - **Hint 2:** `///` lines must immediately precede the item they document (no blank lines between). They attach to the very next `pub fn`, `pub struct`, `pub enum`, etc.
-> - **Hint 3:** The two comment types can coexist freely: `//!` at the top of the file sets the module-level banner, and `///` above each function sets that function's individual docs.
->
 > ```rust
-> // src/math.rs
->
-> //! Basic arithmetic utilities.
+> //! # Embedded UART MMIO Peripheral Driver
 > //!
-> //! This module provides simple integer arithmetic operations
-> //! for use throughout the application.
->
-> /// Adds two integers together.
-> ///
-> /// # Examples
-> /// ```
-> /// assert_eq!(math::add(2, 3), 5);
-> /// ```
-> pub fn add(a: i32, b: i32) -> i32 {
->     a + b
+> //! This module implements low-level hardware control for serial communication
+> //! over UART MMIO registers.
+> //!
+> //! ## Memory Map Layout
+> //! - `0x00`: Control & Baud Rate Register
+> //! - `0x04`: Transmit/Receive Buffer Register
+> //!
+> //! ## Safety & Constraints
+> //! Operates on simulated memory buffers; safe for no_std environments.
+> 
+> #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+> pub struct UartConfig {
+>     pub baud_rate: u32,
+>     pub parity_enable: bool,
 > }
->
-> /// Multiplies two integers.
-> ///
-> /// # Examples
-> /// ```
-> /// assert_eq!(math::multiply(3, 4), 12);
-> /// ```
-> pub fn multiply(a: i32, b: i32) -> i32 {
->     a * b
+> 
+> impl Default for UartConfig {
+>     fn default() -> Self {
+>         Self {
+>             baud_rate: 115_200,
+>             parity_enable: false,
+>         }
+>     }
+> }
+> 
+> /// Serial driver peripheral abstraction.
+> #[derive(Debug)]
+> pub struct UartDriver {
+>     config: UartConfig,
+>     tx_buffer: Vec<u8>,
+>     rx_buffer: Vec<u8>,
+>     capacity: usize,
+> }
+> 
+> impl UartDriver {
+>     pub fn new(config: UartConfig, capacity: usize) -> Self {
+>         Self {
+>             config,
+>             tx_buffer: Vec::with_capacity(capacity),
+>             rx_buffer: Vec::with_capacity(capacity),
+>             capacity,
+>         }
+>     }
+> 
+>     pub fn write_byte(&mut self, byte: u8) -> Result<(), &'static str> {
+>         if self.tx_buffer.len() >= self.capacity {
+>             return Err("TX_BUFFER_FULL");
+>         }
+>         self.tx_buffer.push(byte);
+>         Ok(())
+>     }
+> 
+>     pub fn receive_incoming(&mut self, byte: u8) {
+>         if self.rx_buffer.len() < self.capacity {
+>             self.rx_buffer.push(byte);
+>         }
+>     }
+> 
+>     pub fn read_byte(&mut self) -> Option<u8> {
+>         if self.rx_buffer.is_empty() {
+>             None
+>         } else {
+>             Some(self.rx_buffer.remove(0))
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_uart_driver_tx_rx_flow() {
+>         let config = UartConfig::default();
+>         let mut driver = UartDriver::new(config, 4);
+> 
+>         assert_eq!(config.baud_rate, 115_200);
+>         assert!(!config.parity_enable);
+> 
+>         assert!(driver.write_byte(0x41).is_ok()); // 'A'
+>         assert_eq!(driver.tx_buffer.len(), 1);
+> 
+>         driver.receive_incoming(0x42); // 'B'
+>         let read_val = driver.read_byte();
+> 
+>         assert_eq!(read_val, Some(0x42));
+>         assert_eq!(driver.read_byte(), None);
+>         assert_ne!(read_val, Some(0x41));
+>     }
+> 
+>     #[test]
+>     fn test_uart_tx_buffer_overflow() {
+>         let mut driver = UartDriver::new(UartConfig::default(), 1);
+>         assert!(driver.write_byte(0x01).is_ok());
+>         let err = driver.write_byte(0x02);
+>         assert!(matches!(err, Err("TX_BUFFER_FULL")));
+>     }
 > }
 > ```
->
-> **Answer to the replacement question:**
-> If you replaced `//!` with `///` at the top of `src/math.rs`, those comment lines would attach to the **first item in the file** — in this case, the `add` function. The module itself would have no documentation at all, and `cargo doc` would show an empty module header. This is the mistake shown in Exercise 1: using `///` when you meant `//!` silently moves the description from the module to the first item below the comment block.
+> 
+> **Technical Explanation:**
+> 1. **Embedded Module Guidelines (`//!`)**: Embedded crates use `//!` comments to document MMIO register maps at the top of driver files so hardware engineers can verify register addresses.
+> 2. **Buffer Bounds Checking**: Methods validate capacity constraints before performing vector insertions, simulating hardware register status flags.
 
 ---
 
-### Exercise 3: Documenting a Full Crate in `src/lib.rs`
+### Exercise 3: Plug-in Architecture & Dynamic Extension Registry
 
-**Problem:**
-The `src/lib.rs` file is special: `//!` comments at its top become the **crate-level landing page** on `docs.rs` and in your local `cargo doc` output. This is the first thing users see when they visit your crate's documentation.
+**Problem Statement:**
+You are constructing a modular plugin system for an extensible enterprise gateway. The core crate requires module-level inner doc comments (`//!`) describing how custom plugins implement standard traits and register themselves with the engine.
 
-Write a complete `src/lib.rs` for a crate called `geometry` that:
-1. Starts with a `//!` block describing the crate: what it provides, a brief example.
-2. Declares a `pub struct Point` with `x: f64` and `y: f64` fields, documented with `///`.
-3. Implements a `pub fn distance(a: &Point, b: &Point) -> f64` with a `///` doc comment and a doc test.
+Requirements:
+1. Write top-level inner doc comments (`//!`) explaining plugin lifecycle hooks (`init`, `execute`, `shutdown`).
+2. Define a `Plugin` trait with `name(&self) -> &str`, `execute(&self, data: &str) -> String`.
+3. Implement `PluginRegistry` storing registered `Box<dyn Plugin>`.
+4. Implement `register(&mut self, plugin: Box<dyn Plugin>)` and `execute_all(&self, input: &str) -> Vec<String>`.
+5. In `#[cfg(test)] mod tests`, write unit tests verifying plugin execution order, trait dynamic dispatch, and output assertions (`assert_eq!`, `assert!`, `assert_ne!`).
 
-Then answer: **where in the `cargo doc` output does the `//!` text from `lib.rs` appear?**
-
-**Expected output:**
 > [!check]- Answer
-> *(No runtime stdout — this is library code. Run `cargo doc --open` to see the crate landing page.)*
->
-> - **Hint 1:** The `//!` block is the crate's "README in code". It appears at the very top of the crate's main documentation page — above the list of modules, structs, and functions. Many popular crates put their entire quickstart guide here.
-> - **Hint 2:** Markdown renders fully inside `//!` and `///` blocks: you can use `#` headings, `**bold**`, `` `code` ``, and fenced code blocks. The doc test in a ` ``` ` block inside `///` will be compiled and run by `cargo test`.
-> - **Hint 3:** To reference crate items inside the `//!` block, use the same intra-doc link syntax: `` [`Point`] `` will link to the `Point` struct's documentation page.
->
 > ```rust
-> // src/lib.rs
->
-> //! # Geometry
+> //! # Dynamic Extension & Plugin Registry Engine
 > //!
-> //! A minimal 2D geometry library.
+> //! Provides a decoupled plugin interface for extending gateway request processing pipelines.
 > //!
-> //! ## Quick start
-> //!
-> //! ```
-> //! use geometry::{Point, distance};
-> //!
-> //! let a = Point { x: 0.0, y: 0.0 };
-> //! let b = Point { x: 3.0, y: 4.0 };
-> //! assert_eq!(distance(&a, &b), 5.0);
-> //! ```
->
-> /// A point in 2D space.
-> pub struct Point {
->     /// Horizontal coordinate.
->     pub x: f64,
->     /// Vertical coordinate.
->     pub y: f64,
+> //! ## Plugin Lifecycle
+> //! 1. Registration via [`PluginRegistry::register`].
+> //! 2. Sequential execution across registered instances via [`PluginRegistry::execute_all`].
+> 
+> pub trait Plugin: Send + Sync {
+>     fn name(&self) -> &str;
+>     fn execute(&self, data: &str) -> String;
 > }
->
-> /// Returns the Euclidean distance between two points.
-> ///
-> /// # Examples
-> /// ```
-> /// use geometry::{Point, distance};
-> /// let a = Point { x: 0.0, y: 0.0 };
-> /// let b = Point { x: 3.0, y: 4.0 };
-> /// assert_eq!(distance(&a, &b), 5.0);
-> /// ```
-> pub fn distance(a: &Point, b: &Point) -> f64 {
->     let dx = a.x - b.x;
->     let dy = a.y - b.y;
->     (dx * dx + dy * dy).sqrt()
+> 
+> pub struct PluginRegistry {
+>     plugins: Vec<Box<dyn Plugin>>,
+> }
+> 
+> impl PluginRegistry {
+>     pub fn new() -> Self {
+>         Self { plugins: Vec::new() }
+>     }
+> 
+>     pub fn register(&mut self, plugin: Box<dyn Plugin>) {
+>         self.plugins.push(plugin);
+>     }
+> 
+>     pub fn execute_all(&self, input: &str) -> Vec<String> {
+>         self.plugins.iter().map(|p| p.execute(input)).collect()
+>     }
+> 
+>     pub fn count(&self) -> usize {
+>         self.plugins.len()
+>     }
+> }
+> 
+> struct UppercasePlugin;
+> impl Plugin for UppercasePlugin {
+>     fn name(&self) -> &str {
+>         "UppercasePlugin"
+>     }
+>     fn execute(&self, data: &str) -> String {
+>         data.to_uppercase()
+>     }
+> }
+> 
+> struct PrefixPlugin {
+>     prefix: String,
+> }
+> impl Plugin for PrefixPlugin {
+>     fn name(&self) -> &str {
+>         "PrefixPlugin"
+>     }
+>     fn execute(&self, data: &str) -> String {
+>         format!("{}:{}", self.prefix, data)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_plugin_registration_and_execution() {
+>         let mut registry = PluginRegistry::new();
+>         assert_eq!(registry.count(), 0);
+> 
+>         registry.register(Box::new(UppercasePlugin));
+>         registry.register(Box::new(PrefixPlugin {
+>             prefix: "LOG".to_string(),
+>         }));
+
+>         assert_eq!(registry.count(), 2);
+>         assert_ne!(registry.count(), 0);
+> 
+>         let outputs = registry.execute_all("hello");
+>         assert_eq!(outputs.len(), 2);
+>         assert_eq!(outputs[0], "HELLO");
+>         assert_eq!(outputs[1], "LOG:hello");
+>     }
 > }
 > ```
->
-> **Answer to the location question:**
-> The `//!` text from `src/lib.rs` becomes the content of the **crate root page** in `cargo doc` — the page you land on when you first open the documentation. On `docs.rs`, this is also the crate's main page. The `[package]` `readme` field in `Cargo.toml` can point to a `README.md` that `docs.rs` uses instead, but `//!` in `lib.rs` is what `cargo doc` uses locally.
+> 
+> **Technical Explanation:**
+> 1. **Extensible Architecture (`//!`)**: Inner doc comments at the top of plugin modules outline registration contracts for external contributors.
+> 2. **Trait Objects (`Box<dyn Plugin>`)**: Demonstrates dynamic dispatch while preserving strict compiler lifetime and thread-safety bounds (`Send + Sync`).
 
 ---
 

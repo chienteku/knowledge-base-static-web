@@ -152,77 +152,308 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Invisible Code
+### Exercise 1: Zero-Allocation Binary Parser vs. Allocating Parser Benchmarking Harness
 
-**Problem:** You write a benchmark that calculates `2 + 2`. The compiler sees this and simply replaces the code with `4` at compile time, ruining your benchmark. Where should you place the `black_box` to force the compiler to do the math during the benchmark?
+**Problem Statement:**
+You are benchmarking high-frequency trading binary data packet parsers. You need to compare an allocating parser (`parse_allocating`) that allocates strings against a zero-copy parser (`parse_zero_copy`) that returns string slices. You must implement both parsing strategies, write a benchmark harness leveraging `std::hint::black_box`, and include a unit test suite (`#[cfg(test)] mod tests`) verifying parsing correctness using assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
+
+Requirements:
+1. Define `BinaryPacket` with header magic `0xFA`, key slice/string, and payload slice/vec.
+2. Implement `parse_allocating(input: &[u8]) -> Result<(String, Vec<u8>), &'static str>`.
+3. Implement `parse_zero_copy(input: &[u8]) -> Result<(&str, &[u8]), &'static str>`.
+4. Create `benchmark_parser_harness(iterations: usize, input: &[u8])` utilizing `black_box` for both strategies.
+5. In `#[cfg(test)] mod tests`, write unit tests verifying output parity, error variants on corrupt magic bytes, and allocation differences (`assert_eq!`, `assert!`, `assert_ne!`).
 
 > [!check]- Answer
-> You wrap the inputs!
->
-> ```rust
-> b.iter(|| black_box(2) + black_box(2))
-> ```
-> Because the compiler can no longer "see" inside the black box, it doesn't know the values are `2`, so it is forced to actually run the addition instruction on the CPU.
-
----
-
-### Exercise 2: Preventing Compiler Elimination with `black_box`
-
-**Problem:** Pass inputs and outputs through `std::hint::black_box` inside a benchmark loop.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Black box result: 100
-> ```
 > ```rust
 > use std::hint::black_box;
-> fn main() {
->     let res = black_box(10) * black_box(10);
->     println!("Black box result: {}", black_box(res));
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum ParseError {
+>     InvalidMagic,
+>     BufferTooShort,
+>     Utf8Error,
+> }
+> 
+> /// Allocating binary parser strategy.
+> pub fn parse_allocating(input: &[u8]) -> Result<(String, Vec<u8>), ParseError> {
+>     if input.len() < 5 {
+>         return Err(ParseError::BufferTooShort);
+>     }
+>     if input[0] != 0xFA {
+>         return Err(ParseError::InvalidMagic);
+>     }
+>     let key_len = input[1] as usize;
+>     if input.len() < 2 + key_len {
+>         return Err(ParseError::BufferTooShort);
+>     }
+>     let key_str = std::str::from_utf8(&input[2..2 + key_len]).map_err(|_| ParseError::Utf8Error)?;
+>     let payload = input[2 + key_len..].to_vec();
+>     Ok((key_str.to_string(), payload))
+> }
+> 
+> /// Zero-copy borrowing binary parser strategy.
+> pub fn parse_zero_copy(input: &[u8]) -> Result<(&str, &[u8]), ParseError> {
+>     if input.len() < 5 {
+>         return Err(ParseError::BufferTooShort);
+>     }
+>     if input[0] != 0xFA {
+>         return Err(ParseError::InvalidMagic);
+>     }
+>     let key_len = input[1] as usize;
+>     if input.len() < 2 + key_len {
+>         return Err(ParseError::BufferTooShort);
+>     }
+>     let key_str = std::str::from_utf8(&input[2..2 + key_len]).map_err(|_| ParseError::Utf8Error)?;
+>     let payload = &input[2 + key_len..];
+>     Ok((key_str, payload))
+> }
+> 
+> /// Benchmarking loop runner utilizing black_box compiler barriers.
+> pub fn benchmark_parser_harness(iterations: usize, input: &[u8]) -> (usize, usize) {
+>     let mut alloc_count = 0;
+>     let mut zero_copy_count = 0;
+> 
+>     for _ in 0..iterations {
+>         let res_a = parse_allocating(black_box(input));
+>         if black_box(res_a).is_ok() {
+>             alloc_count += 1;
+>         }
+> 
+>         let res_z = parse_zero_copy(black_box(input));
+>         if black_box(res_z).is_ok() {
+>             zero_copy_count += 1;
+>         }
+>     }
+> 
+>     (alloc_count, zero_copy_count)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parser_correctness_and_parity() {
+>         let mut packet = vec![0xFA, 0x04]; // Magic 0xFA, Key length 4
+>         packet.extend_from_slice(b"AAPL");
+>         packet.extend_from_slice(b"PAYLOAD_DATA");
+> 
+>         let alloc_res = parse_allocating(&packet);
+>         let zero_res = parse_zero_copy(&packet);
+> 
+>         assert!(alloc_res.is_ok());
+>         assert!(zero_res.is_ok());
+> 
+>         let (alloc_key, alloc_payload) = alloc_res.unwrap();
+>         let (zero_key, zero_payload) = zero_res.unwrap();
+> 
+>         assert_eq!(alloc_key, zero_key);
+>         assert_eq!(alloc_payload.as_slice(), zero_payload);
+>         assert_eq!(alloc_key, "AAPL");
+>         assert_ne!(alloc_key, "GOOG");
+>     }
+> 
+>     #[test]
+>     fn test_invalid_magic_error() {
+>         let packet = vec![0xBB, 0x02, b'X', b'Y'];
+>         let res = parse_zero_copy(&packet);
+>         assert!(matches!(res, Err(ParseError::InvalidMagic)));
+>     }
+> 
+>     #[test]
+>     fn test_benchmark_harness_execution() {
+>         let mut packet = vec![0xFA, 0x03];
+>         packet.extend_from_slice(b"KEY");
+>         packet.extend_from_slice(b"BODY");
+> 
+>         let (alloc_runs, zero_runs) = benchmark_parser_harness(100, &packet);
+>         assert_eq!(alloc_runs, 100);
+>         assert_eq!(zero_runs, 100);
+>     }
 > }
 > ```
->
-> **Explanation:** `black_box` prevents the compiler from optimizing away computations based on constant inputs.
+> 
+> **Technical Explanation:**
+> 1. **Compiler Optimization Barriers (`black_box`)**: Wrapping inputs (`black_box(input)`) and outputs in benchmark iteration loops prevents LLVM constant folding from eliminating parsing instructions during benchmark execution.
+> 2. **Zero-Copy Performance**: `parse_zero_copy` avoids heap allocation by borrowing slice lifetimes (`&'a str`, `&'a [u8]`) from the input slice, eliminating memory manager latency.
 
 ---
 
-### Exercise 3: Filtering and Reading Benchmark Output
+### Exercise 2: SIMD Parallel Search vs. Linear Scan Benchmarking Simulation
 
-**Problem:**
-You have a benchmark suite with 10 functions. After running `cargo bench`, criterion prints a wall of results and you notice one benchmark looks unexpectedly slow. Answer the following:
+**Problem Statement:**
+You are benchmarking search algorithms for vector data structures. You must implement a linear search algorithm (`linear_search`) and a chunked parallel SIMD-style search algorithm (`chunked_search`), and create a benchmarking simulation harness using `black_box`.
 
-1. How do you re-run **only** a benchmark named `bench_bubble_sort` without re-running all 10?
-2. Criterion prints the following line. What does each part mean?
-   ```
-   bench_bubble_sort  time:   [4.2134 ms 4.2287 ms 4.2441 ms]
-   ```
-3. If criterion prints `Performance has regressed.`, what happened and what should you investigate?
+Requirements:
+1. Implement `linear_search(haystack: &[u64], target: u64) -> Option<usize>`.
+2. Implement `chunked_search(haystack: &[u64], target: u64) -> Option<usize>` processing 4 elements per iteration loop.
+3. Construct `run_search_benchmarks(haystack: &[u64], target: u64, iterations: usize)`.
+4. Write unit tests in `#[cfg(test)] mod tests` verifying search result equivalence, edge case empty slices, and target missing scenarios (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
-> **1. Filtering by name:**
-> ```bash
-> cargo bench bench_bubble_sort
+> ```rust
+> use std::hint::black_box;
+> 
+> /// Sequential linear search implementation.
+> pub fn linear_search(haystack: &[u64], target: u64) -> Option<usize> {
+>     haystack.iter().position(|&x| x == target)
+> }
+> 
+> /// Unrolled 4-element chunk search simulating SIMD vector lanes.
+> pub fn chunked_search(haystack: &[u64], target: u64) -> Option<usize> {
+>     let chunks = haystack.chunks_exact(4);
+>     let remainder = chunks.remainder();
+> 
+>     for (chunk_idx, chunk) in chunks.enumerate() {
+>         let base_idx = chunk_idx * 4;
+>         if chunk[0] == target { return Some(base_idx); }
+>         if chunk[1] == target { return Some(base_idx + 1); }
+>         if chunk[2] == target { return Some(base_idx + 2); }
+>         if chunk[3] == target { return Some(base_idx + 3); }
+>     }
+> 
+>     let base_idx = haystack.len() - remainder.len();
+>     for (idx, &val) in remainder.iter().enumerate() {
+>         if val == target {
+>             return Some(base_idx + idx);
+>         }
+>     }
+
+>     None
+> }
+> 
+> /// Benchmarking loop measuring search throughput.
+> pub fn run_search_benchmarks(haystack: &[u64], target: u64, iterations: usize) {
+>     for _ in 0..iterations {
+>         let res1 = linear_search(black_box(haystack), black_box(target));
+>         black_box(res1);
+> 
+>         let res2 = chunked_search(black_box(haystack), black_box(target));
+>         black_box(res2);
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_search_parity() {
+>         let data: Vec<u64> = (0..100).collect();
+> 
+>         let target = 42;
+>         let linear_idx = linear_search(&data, target);
+>         let chunked_idx = chunked_search(&data, target);
+> 
+>         assert_eq!(linear_idx, Some(42));
+>         assert_eq!(linear_idx, chunked_idx);
+>         assert_ne!(linear_idx, None);
+>     }
+> 
+>     #[test]
+>     fn test_target_missing_and_remainder() {
+>         let data = vec![10, 20, 30, 40, 50]; // 5 elements: 1 chunk of 4 + 1 remainder
+> 
+>         assert_eq!(chunked_search(&data, 50), Some(4));
+>         assert_eq!(chunked_search(&data, 99), None);
+>         assert_eq!(linear_search(&data, 99), None);
+>     }
+> }
 > ```
-> Any string after `cargo bench` is treated as a substring filter — criterion only runs benchmarks whose name contains that string. You can also filter with a regex.
->
-> **2. Reading the three-number output:**
+> 
+> **Technical Explanation:**
+> 1. **Loop Unrolling & Cache Alignment**: `chunked_search` unrolls loop iterations, allowing instruction pipelining and SIMD vectorization.
+> 2. **Benchmark Integrity**: Using `black_box` ensures the compiler does not optimize search loops away when testing populated slices.
+
+---
+
+### Exercise 3: In-Memory Mutex vs. Atomic Counter Throughput Benchmark
+
+**Problem Statement:**
+You are benchmarking thread synchronization primitives for high-concurrency event telemetry counters. You must compare an `AtomicU64` counter against a `Mutex<u64>` counter under multi-threaded contention.
+
+Requirements:
+1. Implement `benchmark_atomic_counter(threads: usize, ops_per_thread: usize) -> u64`.
+2. Implement `benchmark_mutex_counter(threads: usize, ops_per_thread: usize) -> u64`.
+3. In `#[cfg(test)] mod tests`, write unit tests asserting final counter totals match `threads * ops_per_thread` (`assert_eq!`, `assert!`).
+
+> [!check]- Answer
+> ```rust
+> use std::hint::black_box;
+> use std::sync::atomic::{AtomicU64, Ordering};
+> use std::sync::{Arc, Mutex};
+> use std::thread;
+> 
+> pub fn benchmark_atomic_counter(threads: usize, ops_per_thread: usize) -> u64 {
+>     let counter = Arc::new(AtomicU64::new(0));
+>     let mut handles = Vec::new();
+> 
+>     for _ in 0..threads {
+>         let c = Arc::clone(&counter);
+>         handles.push(thread::spawn(move || {
+>             for _ in 0..ops_per_thread {
+>                 c.fetch_add(black_box(1), Ordering::Relaxed);
+>             }
+>         }));
+>     }
+> 
+>     for handle in handles {
+>         handle.join().unwrap();
+>     }
+> 
+>     counter.load(Ordering::SeqCst)
+> }
+> 
+> pub fn benchmark_mutex_counter(threads: usize, ops_per_thread: usize) -> u64 {
+>     let counter = Arc::new(Mutex::new(0u64));
+>     let mut handles = Vec::new();
+> 
+>     for _ in 0..threads {
+>         let c = Arc::clone(&counter);
+>         handles.push(thread::spawn(move || {
+>             for _ in 0..ops_per_thread {
+>                 let mut guard = c.lock().unwrap();
+>                 *guard += black_box(1);
+>             }
+>         }));
+>     }
+> 
+>     for handle in handles {
+>         handle.join().unwrap();
+>     }
+> 
+>     let val = *counter.lock().unwrap();
+>     val
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrency_counter_correctness() {
+>         let threads = 4;
+>         let ops = 1000;
+>         let expected = (threads * ops) as u64;
+> 
+>         let atomic_total = benchmark_atomic_counter(threads, ops);
+>         let mutex_total = benchmark_mutex_counter(threads, ops);
+> 
+>         assert_eq!(atomic_total, expected);
+>         assert_eq!(mutex_total, expected);
+>         assert_eq!(atomic_total, mutex_total);
+>     }
+> }
 > ```
-> [lower_bound  estimate  upper_bound]
-> [4.2134 ms    4.2287 ms  4.2441 ms]
-> ```
-> - **Lower bound**: the fastest time the benchmark could plausibly be at 95% confidence.
-> - **Estimate**: criterion's best point estimate of the true average time per iteration.
-> - **Upper bound**: the slowest plausible time at 95% confidence.
-> A narrow range (small gap between lower and upper) means a stable, reliable measurement. A wide range means high variance — often caused by background OS activity.
->
-> **3. "Performance has regressed":**
-> Criterion saves baseline measurements in `target/criterion/`. When you run `cargo bench` again, it compares the new measurement to the saved baseline. "Regressed" means the new estimate is **statistically significantly slower** than the baseline — not just noise. You should investigate recent code changes, check for debug assertions being left on, or verify the machine wasn't under unusual load during either run.
->
-> **Explanation:**
-> Criterion doesn't just time one run — it runs the benchmark closure hundreds or thousands of times, applies statistical analysis to remove outliers, and produces a confidence interval. This makes it far more reliable than a single `std::time::Instant` measurement. Always wrap inputs in `black_box` so the compiler cannot constant-fold the benchmark away before criterion even starts timing.
+> 
+> **Technical Explanation:**
+> 1. **Lock Contention Overhead**: Mutex locking involves OS context switches under high contention, whereas `AtomicU64` uses hardware atomic instructions (`LOCK XADD`).
+> 2. **Verification**: Tests confirm both primitives yield identical, mathematically correct results without race conditions.
 
 ---
 

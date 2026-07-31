@@ -143,80 +143,370 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Fix the Platform Bug
+### Exercise 1: Multi-Tenant Storage Sandbox & Path Traversal Guard
 
-**Problem:** This function builds a path with string formatting. Rewrite it using `PathBuf` so it works correctly on both Unix and Windows.
-```rust
-fn config_path(dir: &str, name: &str) -> String {
-    format!("{dir}/{name}.toml")
-}
-```
+**Problem Context:**
+You are building the storage backend for a multi-tenant cloud application. Users can request files via relative paths (e.g., `user_123/documents/report.pdf`). However, untrusted inputs might attempt path traversal attacks using parent directory components (`../../etc/passwd`), absolute paths (`/etc/shadow`), or disallowed extensions (`script.sh`).
+
+Write a production-grade function `sanitize_and_resolve_path` that safely joins a `base_dir` and `user_path` while enforcing the following security guarantees:
+1. Accept generic path-like arguments using `impl AsRef<Path>`.
+2. Reject absolute user paths immediately, guarding against `PathBuf::join`'s behavior where joining an absolute path replaces the base path entirely.
+3. Walk path components via `.components()` to detect and reject `Component::ParentDir` (`..`), `Component::RootDir`, or `Component::Prefix`.
+4. Validate file extensions against a whitelist using `.extension()`.
+5. Verify containment within `base_dir` via `.starts_with()`.
 
 > [!check]- Answer
-> ```rust
-> use std::path::{Path, PathBuf};
 >
-> fn config_path(dir: &str, name: &str) -> PathBuf {
->     Path::new(dir).join(format!("{name}.toml"))
-> }
-> ```
+> #### Implementation
 >
-> `.join()` inserts the platform-correct separator automatically, and returning `PathBuf` (rather than `String`) signals to callers that this is specifically a filesystem path, not arbitrary text.
-
----
-
-### Exercise 2: Extracting File Extensions Safely
-
-**Problem:** Write a function `get_extension(path_str: &str) -> Option<String>` that parses a string into a `Path`, extracts its file extension, and converts it to a lowercase `String`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Some("rs")
-> ```
 > ```rust
-> use std::path::Path;
-> fn get_extension(path_str: &str) -> Option<String> {
->     Path::new(path_str)
->         .extension()
->         .and_then(|ext| ext.to_str())
->         .map(|s| s.to_lowercase())
+> use std::path::{Component, Path, PathBuf};
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum StorageSecurityError {
+>     AbsoluteUserPath,
+>     PathTraversalDetected,
+>     DisallowedExtension,
+>     OutsideBaseDirectory,
 > }
-> fn main() {
->     println!("{:?}", get_extension("src/main.RS"));
+> 
+> pub fn sanitize_and_resolve_path(
+>     base_dir: impl AsRef<Path>,
+>     user_path: impl AsRef<Path>,
+>     allowed_extensions: &[&str],
+> ) -> Result<PathBuf, StorageSecurityError> {
+>     let base = base_dir.as_ref();
+>     let user = user_path.as_ref();
+> 
+>     // 1. Guard against absolute path override invariant in PathBuf::join
+>     if user.is_absolute() {
+>         return Err(StorageSecurityError::AbsoluteUserPath);
+>     }
+> 
+>     // 2. Component-level traversal check
+>     let mut normalized = PathBuf::new();
+>     for comp in user.components() {
+>         match comp {
+>             Component::ParentDir => return Err(StorageSecurityError::PathTraversalDetected),
+>             Component::CurDir => continue,
+>             Component::Normal(c) => normalized.push(c),
+>             Component::RootDir | Component::Prefix(_) => {
+>                 return Err(StorageSecurityError::AbsoluteUserPath);
+>             }
+>         }
+>     }
+> 
+>     // 3. Whitelist extension check
+>     if !allowed_extensions.is_empty() {
+>         let ext_valid = normalized
+>             .extension()
+>             .and_then(|e| e.to_str())
+>             .map(|e| allowed_extensions.iter().any(|&allowed| allowed.eq_ignore_ascii_case(e)))
+>             .unwrap_or(false);
+> 
+>         if !ext_valid {
+>             return Err(StorageSecurityError::DisallowedExtension);
+>         }
+>     }
+> 
+>     let full_path = base.join(&normalized);
+> 
+>     // 4. Invariant containment check
+>     if !full_path.starts_with(base) {
+>         return Err(StorageSecurityError::OutsideBaseDirectory);
+>     }
+> 
+>     Ok(full_path)
 > }
-> ```
->
-> **Explanation:** `Path::extension` inspects filename components and returns `Option<&OsStr>`, which is safely parsed into UTF-8 text.
-
----
-
-### Exercise 3: Navigating Parent Directories
-
-**Problem:** Given `Path::new("/a/b/c/file.txt")`, iterate upward printing all parent directories until reaching the root.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> /a/b/c
-> /a/b
-> /a
-> /
-> ```
-> ```rust
-> use std::path::Path;
-> fn main() {
->     let mut curr = Path::new("/a/b/c/file.txt").parent();
->     while let Some(p) = curr {
->         println!("{}", p.display());
->         curr = p.parent();
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::path::Path;
+> 
+>     #[test]
+>     fn test_valid_path_resolution() {
+>         let base = Path::new("/var/app/storage");
+>         let user = "user_123/documents/report.pdf";
+>         let allowed = ["pdf", "png"];
+> 
+>         let resolved = sanitize_and_resolve_path(base, user, &allowed).unwrap();
+>         assert_eq!(
+>             resolved,
+>             Path::new("/var/app/storage/user_123/documents/report.pdf")
+>         );
+>         assert!(resolved.starts_with(base));
+>         assert_ne!(resolved, Path::new("/var/app/storage/other.pdf"));
+>     }
+> 
+>     #[test]
+>     fn test_reject_traversal_attack() {
+>         let base = Path::new("/var/app/storage");
+>         let user = "user_123/../../etc/passwd";
+>         let allowed = ["pdf"];
+> 
+>         let res = sanitize_and_resolve_path(base, user, &allowed);
+>         assert!(matches!(res, Err(StorageSecurityError::PathTraversalDetected)));
+>     }
+> 
+>     #[test]
+>     fn test_reject_absolute_path() {
+>         let base = Path::new("/var/app/storage");
+>         let user = "/etc/shadow";
+>         let allowed = ["pdf"];
+> 
+>         let res = sanitize_and_resolve_path(base, user, &allowed);
+>         assert!(matches!(res, Err(StorageSecurityError::AbsoluteUserPath)));
+>     }
+> 
+>     #[test]
+>     fn test_disallowed_extension() {
+>         let base = Path::new("/var/app/storage");
+>         let user = "malicious_script.sh";
+>         let allowed = ["pdf", "png"];
+> 
+>         let res = sanitize_and_resolve_path(base, user, &allowed);
+>         assert_eq!(res, Err(StorageSecurityError::DisallowedExtension));
 >     }
 > }
 > ```
 >
-> **Explanation:** `Path::parent` steps up one directory hierarchy level, returning `None` once root directory boundaries are reached.
+> #### Technical Explanation
+>
+>
+> 1. **Path Join Pitfall (`is_absolute`)**: In Rust standard library, calling `base_path.join("/etc/passwd")` returns `PathBuf::from("/etc/passwd")` — the base path is completely discarded! Checking `.is_absolute()` upfront prevents accidental root override.
+> 2. **Component Inspection (`.components()`)**: Rather than inspecting strings for `".."`, we iterate over OS-aware `Component` enums (`Component::ParentDir`, `Component::Normal`, etc.). This correctly handles cross-platform subtleties like backslashes (`\`) on Windows and slashes (`/`) on Unix.
+> 3. **Extension Safety (`.extension()`)**: Using `Path::extension()` yields an `Option<&OsStr>`, avoiding manual string splitting errors with multiple dots (e.g. `archive.tar.gz`).
+> 4. **Containment Verification (`.starts_with()`)**: Performing `.starts_with(base_dir)` provides a final invariant check ensuring the resulting `PathBuf` is hierarchically nested within the intended root directory.
+>
+
+---
+
+### Exercise 2: High-Performance Log Cleanup & Archive Relocation Pipeline
+
+**Problem Context:**
+You are developing an automated log rotation daemon. The daemon scans log directories, identifies active log files, extracts their relative subdirectories, appends timestamp tags, and generates target archive destination paths inside a separate archive storage partition.
+
+Write a production-grade function `plan_log_archive_target` that constructs the target archive path given a `log_root`, an `archive_root`, an `entry_path`, and a `timestamp_tag`.
+
+The function must:
+1. Accept parameters as `impl AsRef<Path>` for flexible ownership and borrowing.
+2. Strip `log_root` from `entry_path` using `.strip_prefix()` to isolate the relative subdirectory hierarchy.
+3. Extract file stem (`.file_stem()`) and extension (`.extension()`, defaulting to `"log"` if missing).
+4. Construct an archive filename formatted as `<file_stem>.<timestamp_tag>.<extension>.gz`.
+5. Join `archive_root`, the relative parent directory, and the new archive filename.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::path::{Path, PathBuf};
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum LogPipelineError {
+>     InvalidRootPrefix,
+>     MissingFileName,
+> }
+> 
+> pub fn plan_log_archive_target(
+>     log_root: impl AsRef<Path>,
+>     archive_root: impl AsRef<Path>,
+>     entry_path: impl AsRef<Path>,
+>     timestamp_tag: &str,
+> ) -> Result<PathBuf, LogPipelineError> {
+>     let log_root = log_root.as_ref();
+>     let archive_root = archive_root.as_ref();
+>     let entry_path = entry_path.as_ref();
+> 
+>     // 1. Isolate relative path from log root
+>     let relative = entry_path
+>         .strip_prefix(log_root)
+>         .map_err(|_| LogPipelineError::InvalidRootPrefix)?;
+> 
+>     // 2. Extract stem and extension
+>     let stem = entry_path
+>         .file_stem()
+>         .and_then(|s| s.to_str())
+>         .ok_or(LogPipelineError::MissingFileName)?;
+> 
+>     let extension = entry_path
+>         .extension()
+>         .and_then(|e| e.to_str())
+>         .unwrap_or("log");
+> 
+>     // 3. Format archive filename
+>     let archive_name = format!("{stem}.{timestamp_tag}.{extension}.gz");
+> 
+>     // 4. Reconstruct destination preserving relative subdirectories
+>     let rel_parent = relative.parent().unwrap_or_else(|| Path::new(""));
+>     let target_path = archive_root.join(rel_parent).join(archive_name);
+> 
+>     Ok(target_path)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::path::Path;
+> 
+>     #[test]
+>     fn test_valid_archive_target_planning() {
+>         let log_root = Path::new("/var/log/app");
+>         let archive_root = Path::new("/mnt/backups/logs");
+>         let entry = Path::new("/var/log/app/services/auth/error.log");
+> 
+>         let target = plan_log_archive_target(log_root, archive_root, entry, "2026-07-31").unwrap();
+>         assert_eq!(
+>             target,
+>             Path::new("/mnt/backups/logs/services/auth/error.2026-07-31.log.gz")
+>         );
+>         assert!(target.starts_with(archive_root));
+>         assert_ne!(target, entry);
+>     }
+> 
+>     #[test]
+>     fn test_invalid_prefix_error() {
+>         let log_root = Path::new("/var/log/app");
+>         let archive_root = Path::new("/mnt/backups");
+>         let entry = Path::new("/etc/nginx/nginx.conf");
+> 
+>         let res = plan_log_archive_target(log_root, archive_root, entry, "2026-07-31");
+>         assert!(matches!(res, Err(LogPipelineError::InvalidRootPrefix)));
+>     }
+> 
+>     #[test]
+>     fn test_root_level_log_file() {
+>         let log_root = Path::new("/var/log");
+>         let archive_root = Path::new("/mnt/archive");
+>         let entry = Path::new("/var/log/syslog");
+> 
+>         let target = plan_log_archive_target(log_root, archive_root, entry, "2026-07-31").unwrap();
+>         assert_eq!(target, Path::new("/mnt/archive/syslog.2026-07-31.log.gz"));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 1. **Prefix Stripping (`strip_prefix`)**: Operating on raw strings to remove parent folders leads to bugs with mismatched path separators (`/` vs `\`). `Path::strip_prefix` returns a borrowed `&Path` slice relative to the root, guaranteeing platform independence.
+> 2. **Component Decomposition (`file_stem` & `extension`)**: `Path::file_stem()` extracts everything prior to the final dot extension. Combining this with `Path::extension()` ensures multi-dot filenames (e.g. `service.auth.log`) correctly separate `service.auth` (stem) and `log` (extension).
+> 3. **Path Composition (`.parent()` & `.join()`)**: To preserve relative folder hierarchies (e.g. `log_root/services/auth/app.log` -> `archive_root/services/auth/app.2026-07-31.log.gz`), we slice the relative path's parent using `.parent()` and chain `.join()`.
+>
+
+---
+
+### Exercise 3: Cross-Platform Compiler Build System Output Artifact Mapper
+
+**Problem Context:**
+In a custom Rust compiler toolchain or code generator, source files inside `src/` must be mapped to corresponding output build artifacts inside `target/dist/` with transformed file extensions (e.g. `src/gfx/pipeline/render_pass.rs` -> `target/dist/gfx/pipeline/render_pass.o`).
+
+Write a production-grade function `map_source_to_build_artifact` that handles this path transformation cleanly and safely.
+
+The function must:
+1. Accept parameters as `impl AsRef<Path>`.
+2. Strip `src_base` from `source_file` using `.strip_prefix()`.
+3. Validate that `source_file` contains a non-empty file stem using `.file_stem()`.
+4. Swap the file extension using `.with_extension()`.
+5. Join the transformed relative path to `target_base`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::path::{Path, PathBuf};
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum BuildArtifactError {
+>     SourceOutsideBase,
+>     MissingFileStem,
+> }
+> 
+> pub fn map_source_to_build_artifact(
+>     src_base: impl AsRef<Path>,
+>     target_base: impl AsRef<Path>,
+>     source_file: impl AsRef<Path>,
+>     target_ext: &str,
+> ) -> Result<PathBuf, BuildArtifactError> {
+>     let src_base = src_base.as_ref();
+>     let target_base = target_base.as_ref();
+>     let source_file = source_file.as_ref();
+> 
+>     // 1. Ensure source file is within src_base
+>     let rel_subpath = source_file
+>         .strip_prefix(src_base)
+>         .map_err(|_| BuildArtifactError::SourceOutsideBase)?;
+> 
+>     // 2. Validate stem presence
+>     if source_file.file_stem().is_none() {
+>         return Err(BuildArtifactError::MissingFileStem);
+>     }
+> 
+>     // 3. Swap extension and prepend target_base
+>     let artifact_path = target_base.join(rel_subpath).with_extension(target_ext);
+> 
+>     Ok(artifact_path)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::path::Path;
+> 
+>     #[test]
+>     fn test_successful_extension_mapping() {
+>         let src_base = Path::new("/projects/engine/src");
+>         let target_base = Path::new("/projects/engine/target/release/build");
+>         let source_file = Path::new("/projects/engine/src/gfx/pipeline/render_pass.rs");
+> 
+>         let artifact =
+>             map_source_to_build_artifact(src_base, target_base, source_file, "o").unwrap();
+> 
+>         assert_eq!(
+>             artifact,
+>             Path::new("/projects/engine/target/release/build/gfx/pipeline/render_pass.o")
+>         );
+>         assert!(artifact.starts_with(target_base));
+>         assert_ne!(artifact, source_file);
+>         assert_eq!(artifact.extension().and_then(|e| e.to_str()), Some("o"));
+>     }
+> 
+>     #[test]
+>     fn test_source_outside_base_err() {
+>         let src_base = Path::new("/projects/engine/src");
+>         let target_base = Path::new("/projects/engine/target");
+>         let source_file = Path::new("/external/lib/vendor.rs");
+> 
+>         let res = map_source_to_build_artifact(src_base, target_base, source_file, "o");
+>         assert!(matches!(res, Err(BuildArtifactError::SourceOutsideBase)));
+>     }
+> 
+>     #[test]
+>     fn test_relative_path_mapping() {
+>         let src_base = Path::new("src");
+>         let target_base = Path::new("dist");
+>         let source_file = Path::new("src/ui/components/button.tsx");
+> 
+>         let artifact =
+>             map_source_to_build_artifact(src_base, target_base, source_file, "js").unwrap();
+>         assert_eq!(artifact, Path::new("dist/ui/components/button.js"));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 1. **Extension Manipulation (`with_extension`)**: Raw string replacement of extensions (e.g., `s.replace(".rs", ".o")`) is highly error-prone if the path contains `.rs` elsewhere in folder names (`src/rs_parser/mod.rs`). `Path::with_extension` mutates only the final extension component in a zero-cost, semantic manner.
+> 2. **Zero Allocation Slicing (`AsRef<Path>`)**: By declaring generic parameters `impl AsRef<Path>`, callers can pass string literals (`&str`), owned `String`, `Path`, or `PathBuf` without upfront allocations.
+> 3. **Ownership and Copy Semantics**: `strip_prefix` produces a borrowed `&Path` slice without copying strings. Calling `.with_extension()` on `Path` allocates a new `PathBuf` holding the modified extension.
+>
 
 ---
 

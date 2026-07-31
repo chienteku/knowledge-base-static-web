@@ -151,73 +151,397 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Why Does This Fail Without `scope`?
+### Exercise 1: In-Place Parallel Image Brightness Processing with Stack Chunking
 
-**Problem:** Explain, in terms of lifetimes, why this code fails to compile with plain `std::thread::spawn`:
-```rust
-fn broken() {
-    let data = vec![1, 2, 3];
-    std::thread::spawn(|| {
-        println!("{:?}", data); // ERROR: closure may outlive the current function
-    });
-}
-```
+**Problem:** A real-time image processing subsystem receives a raw mutable pixel buffer (`&mut [u8]`) residing on the caller's stack frame. To minimize latency and avoid heap allocations (such as `Vec` allocations or `Arc` reference counting), write a thread-safe function `parallel_adjust_brightness(pixels: &mut [u8], factor: i16, num_threads: usize) -> Vec<ChunkStats>` that partitions the mutable slice into non-overlapping chunks using `chunks_mut` and processes each chunk concurrently inside a `std::thread::scope`. 
+
+Each scoped thread must iterate over its assigned chunk, apply the brightness offset to each pixel with saturation clamping (`0..=255`), and collect per-chunk statistics (`ChunkStats { min_val, max_val, pixels_processed }`). Return the collected statistics from all join handles.
 
 > [!check]- Answer
-> `std::thread::spawn` requires its closure to be `'static`, because the returned `JoinHandle` could be dropped (never joined) or joined arbitrarily late — the compiler has no way to guarantee the thread finishes before `data` goes out of scope at the end of `broken()`. Since `data` is a purely local, non-`'static` `Vec<i32>`, borrowing it inside a `'static`-bound closure is rejected. Wrapping the `spawn` call in `std::thread::scope(|s| { s.spawn(|| { ... }); })` fixes this: `scope`'s API contract guarantees the spawned thread joins before `scope()` itself returns, which is *before* `data` could ever be dropped, so the compiler can soundly permit the borrow.
+> ```rust
+> use std::thread;
+> 
+> #[derive(Debug, PartialEq, Eq, Clone, Copy)]
+> pub struct ChunkStats {
+>     pub min_val: u8,
+>     pub max_val: u8,
+>     pub pixels_processed: usize,
+> }
+> 
+> pub fn parallel_adjust_brightness(
+>     pixels: &mut [u8],
+>     factor: i16,
+>     num_threads: usize,
+> ) -> Vec<ChunkStats> {
+>     if pixels.is_empty() || num_threads == 0 {
+>         return Vec::new();
+>     }
+> 
+>     let chunk_size = (pixels.len() + num_threads - 1) / num_threads;
+>     let chunks: Vec<&mut [u8]> = pixels.chunks_mut(chunk_size).collect();
+> 
+>     thread::scope(|s| {
+>         let handles: Vec<_> = chunks
+>             .into_iter()
+>             .map(|chunk| {
+>                 s.spawn(move || {
+>                     let mut min_val = u8::MAX;
+>                     let mut max_val = u8::MIN;
+>                     let count = chunk.len();
+> 
+>                     for pixel in chunk.iter_mut() {
+>                         let new_val = (*pixel as i16 + factor).clamp(0, 255) as u8;
+>                         *pixel = new_val;
+>                         if new_val < min_val {
+>                             min_val = new_val;
+>                         }
+>                         if new_val > max_val {
+>                             max_val = new_val;
+>                         }
+>                     }
+> 
+>                     if count == 0 {
+>                         min_val = 0;
+>                         max_val = 0;
+>                     }
+> 
+>                     ChunkStats {
+>                         min_val,
+>                         max_val,
+>                         pixels_processed: count,
+>                     }
+>                 })
+>             })
+>             .collect();
+> 
+>         handles.into_iter().map(|h| h.join().unwrap()).collect()
+>     })
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parallel_brightness_adjustment() {
+>         let mut pixels = vec![10, 50, 100, 200, 250];
+>         let stats = parallel_adjust_brightness(&mut pixels, 20, 2);
+> 
+>         assert_eq!(pixels, vec![30, 70, 120, 220, 270]);
+>         assert_eq!(stats.len(), 2);
+>         assert_eq!(stats[0].pixels_processed, 3);
+>         assert_eq!(stats[0].min_val, 30);
+>         assert_eq!(stats[0].max_val, 120);
+>         assert_eq!(stats[1].pixels_processed, 2);
+>         assert_eq!(stats[1].min_val, 220);
+>         assert_eq!(stats[1].max_val, 270);
+>         assert_ne!(stats[0].min_val, stats[1].min_val);
+>     }
+> 
+>     #[test]
+>     fn test_parallel_brightness_saturation_clamp() {
+>         let mut pixels = vec![5, 250];
+>         let stats = parallel_adjust_brightness(&mut pixels, -20, 2);
+> 
+>         assert_eq!(pixels, vec![0, 230]);
+>         assert_eq!(stats[0].min_val, 0);
+>         assert_eq!(stats[0].max_val, 0);
+>         assert_eq!(stats[1].min_val, 230);
+>         assert_eq!(stats[1].max_val, 230);
+>     }
+> 
+>     #[test]
+>     fn test_empty_buffer_and_single_thread() {
+>         let mut empty: Vec<u8> = vec![];
+>         let stats_empty = parallel_adjust_brightness(&mut empty, 10, 4);
+>         assert!(stats_empty.is_empty());
+> 
+>         let mut data = vec![100, 150];
+>         let stats_single = parallel_adjust_brightness(&mut data, -50, 1);
+>         assert_eq!(data, vec![50, 100]);
+>         assert_eq!(stats_single.len(), 1);
+>         assert_eq!(stats_single[0].pixels_processed, 2);
+>         assert!(matches!(stats_single[0], ChunkStats { pixels_processed: 2, .. }));
+>     }
+> }
+> ```
+> **Explanation:**
+> 1. **Zero-Allocation Stack Borrowing:** Unscoped `std::thread::spawn` requires `'static` lifetimes, forcing caller data to be copied or wrapped in `Arc`. `std::thread::scope` guarantees that all worker threads join before the function exits, enabling scoped threads to borrow `&mut [u8]` directly from the stack.
+> 2. **Aliasing XOR Mutability:** Rust's borrow checker prohibits multiple threads from borrowing the same `&mut [u8]`. By partitioning the slice into disjoint sub-slices via `chunks_mut`, each worker receives exclusive ownership of a distinct memory region, satisfying Rust's safety rules without locks or atomics.
+> 3. **Thread Return Values:** Thread join handles in `std::thread::scope` return values directly from worker closures (`s.spawn(move || ...)`). Calling `handle.join().unwrap()` collects per-thread `ChunkStats` deterministically without atomic synchronization.
+>
 
 ---
 
-### Exercise 2: Borrowing Local Stack Variables in Scoped Threads
+### Exercise 2: Concurrent Log Audit Pipeline with Scoped Panic & Error Propagation
 
-**Problem:** Borrow a local slice `&str` inside a `std::thread::scope` thread without cloning or `'static` bounds.
+**Problem:** A log monitoring daemon audits large slice collections of log strings (`&[&str]`) stored on the orchestrator's stack frame. Implement `audit_logs_parallel(logs: &[&str], num_workers: usize) -> Result<AuditReport, LogParseError>` using `std::thread::scope`.
 
-**Expected output:**
+The function must split the log slice among worker threads. Workers parse log lines to aggregate log level counts (`total_logs`, `error_count`, `warn_count`, `info_count`). If any thread encounters a log entry containing `"CORRUPTED"`, it immediately returns `Err(LogParseError::CorruptedPayload(String))`. The orchestrator must collect worker results, aggregate reports on success, or short-circuit and return the parsing error.
+
 > [!check]- Answer
-> ```
-> Scoped thread read: stack data
-> ```
 > ```rust
 > use std::thread;
-> fn main() {
->     let msg = String::from("stack data");
+> 
+> #[derive(Debug, PartialEq, Eq, Clone, Default)]
+> pub struct AuditReport {
+>     pub total_logs: usize,
+>     pub error_count: usize,
+>     pub warn_count: usize,
+>     pub info_count: usize,
+> }
+> 
+> #[derive(Debug, PartialEq, Eq, Clone)]
+> pub enum LogParseError {
+>     CorruptedPayload(String),
+> }
+> 
+> pub fn audit_logs_parallel(
+>     logs: &[&str],
+>     num_workers: usize,
+> ) -> Result<AuditReport, LogParseError> {
+>     if logs.is_empty() || num_workers == 0 {
+>         return Ok(AuditReport::default());
+>     }
+> 
+>     let chunk_size = (logs.len() + num_workers - 1) / num_workers;
+> 
 >     thread::scope(|s| {
->         s.spawn(|| {
->             println!("Scoped thread read: {}", msg);
+>         let handles: Vec<_> = logs
+>             .chunks(chunk_size)
+>             .map(|chunk| {
+>                 s.spawn(move || -> Result<AuditReport, LogParseError> {
+>                     let mut report = AuditReport::default();
+>                     for log in chunk {
+>                         if log.contains("CORRUPTED") {
+>                             return Err(LogParseError::CorruptedPayload(log.to_string()));
+>                         }
+>                         report.total_logs += 1;
+>                         if log.starts_with("[ERROR]") {
+>                             report.error_count += 1;
+>                         } else if log.starts_with("[WARN]") {
+>                             report.warn_count += 1;
+>                         } else if log.starts_with("[INFO]") {
+>                             report.info_count += 1;
+>                         }
+>                     }
+>                     Ok(report)
+>                 })
+>             })
+>             .collect();
+> 
+>         let mut combined = AuditReport::default();
+>         for handle in handles {
+>             let res = handle.join().unwrap();
+>             match res {
+>                 Ok(rep) => {
+>                     combined.total_logs += rep.total_logs;
+>                     combined.error_count += rep.error_count;
+>                     combined.warn_count += rep.warn_count;
+>                     combined.info_count += rep.info_count;
+>                 }
+>                 Err(err) => return Err(err),
+>             }
+>         }
+>         Ok(combined)
+>     })
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_audit_logs_success() {
+>         let logs = [
+>             "[INFO] Service started",
+>             "[WARN] Disk space low",
+>             "[ERROR] Connection timeout",
+>             "[INFO] User logged in",
+>             "[ERROR] Database unreachable",
+>         ];
+> 
+>         let result = audit_logs_parallel(&logs, 2);
+>         assert!(result.is_ok());
+>         let report = result.unwrap();
+>         assert_eq!(report.total_logs, 5);
+>         assert_eq!(report.error_count, 2);
+>         assert_eq!(report.warn_count, 1);
+>         assert_eq!(report.info_count, 2);
+>         assert_ne!(report.error_count, report.warn_count);
+>     }
+> 
+>     #[test]
+>     fn test_audit_logs_corrupted_payload() {
+>         let logs = [
+>             "[INFO] Normal payload",
+>             "CORRUPTED log line payload payload",
+>             "[ERROR] Never reached",
+>         ];
+> 
+>         let result = audit_logs_parallel(&logs, 3);
+>         assert!(result.is_err());
+>         assert!(matches!(
+>             result,
+>             Err(LogParseError::CorruptedPayload(ref msg)) if msg.contains("CORRUPTED")
+>         ));
+>     }
+> 
+>     #[test]
+>     fn test_audit_empty_logs() {
+>         let logs: [&str; 0] = [];
+>         let result = audit_logs_parallel(&logs, 4);
+>         assert_eq!(result, Ok(AuditReport::default()));
+>         assert!(result.is_ok());
+>     }
+> }
+> ```
+> **Explanation:**
+> 1. **Scoped Lifetime Propagation:** The log slice `&[&str]` consists of string slices tied to stack lifetimes. Using `std::thread::scope` allows worker threads to capture `chunk: &[&str]` via `move` closures without allocating `Arc<Vec<String>>`.
+> 2. **Panic and Error Safety:** `std::thread::scope` automatically joins all unjoined threads when the scope block exits (even during panics). Handling `Result` returns inside join handles allows graceful error propagation back to the caller function.
+> 3. **Deterministic Aggregation:** Thread join handle results are processed sequentially by the parent thread, producing deterministic aggregate metrics without mutex contention.
+>
+
+---
+
+### Exercise 3: Scoped Multi-Stage Streaming ETL Pipeline with Zero-Copy Stack Borrowing
+
+**Problem:** In a multi-stage streaming data engine, incoming `DataPoint` structs flow through a pipeline across concurrent stages:
+1. **Stage 1 (Filter):** Borrows `data: &[DataPoint]` and `config: &PipelineConfig` from the caller stack frame, filtering data points meeting `min_threshold` and sending them over a channel.
+2. **Stage 2 (Transform):** Receives data from Stage 1, looks up category weights in a stack-allocated lookup table `&HashMap<String, u64>`, computes `score = raw_value * weight * config.multiplier`, and sends scores over a second channel.
+3. **Stage 3 (Aggregate):** Receives transformed scores and aggregates them into `PipelineSummary { processed_count, total_weighted_score }`.
+
+Implement `run_scoped_pipeline(data: &[DataPoint], lookup: &HashMap<String, u64>, config: &PipelineConfig) -> PipelineSummary` using `std::thread::scope` and `std::sync::mpsc::channel`.
+
+> [!check]- Answer
+> ```rust
+> use std::collections::HashMap;
+> use std::sync::mpsc;
+> use std::thread;
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct DataPoint {
+>     pub id: u64,
+>     pub category: String,
+>     pub raw_value: u64,
+> }
+> 
+> #[derive(Debug, Clone)]
+> pub struct PipelineConfig {
+>     pub min_threshold: u64,
+>     pub multiplier: u64,
+> }
+> 
+> #[derive(Debug, Default, PartialEq, Eq)]
+> pub struct PipelineSummary {
+>     pub processed_count: usize,
+>     pub total_weighted_score: u64,
+> }
+> 
+> pub fn run_scoped_pipeline(
+>     data: &[DataPoint],
+>     lookup: &HashMap<String, u64>,
+>     config: &PipelineConfig,
+> ) -> PipelineSummary {
+>     let (tx1, rx1) = mpsc::channel::<(u64, String, u64)>();
+>     let (tx2, rx2) = mpsc::channel::<u64>();
+> 
+>     thread::scope(|s| {
+>         // Stage 1: Ingestion & Filtering (borrows data & config)
+>         s.spawn(move || {
+>             for item in data {
+>                 if item.raw_value >= config.min_threshold {
+>                     if tx1.send((item.id, item.category.clone(), item.raw_value)).is_err() {
+>                         break;
+>                     }
+>                 }
+>             }
 >         });
->     });
+> 
+>         // Stage 2: Transformation & Lookup (borrows lookup & config)
+>         s.spawn(move || {
+>             for (_id, category, raw_val) in rx1 {
+>                 let weight = lookup.get(&category).copied().unwrap_or(1);
+>                 let score = raw_val * weight * config.multiplier;
+>                 if tx2.send(score).is_err() {
+>                     break;
+>                 }
+>             }
+>         });
+> 
+>         // Stage 3: Aggregation (collects into PipelineSummary)
+>         let aggregator_handle = s.spawn(move || {
+>             let mut summary = PipelineSummary::default();
+>             for score in rx2 {
+>                 summary.processed_count += 1;
+>                 summary.total_weighted_score += score;
+>             }
+>             summary
+>         });
+> 
+>         aggregator_handle.join().unwrap()
+>     })
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_scoped_pipeline_flow() {
+>         let data = vec![
+>             DataPoint { id: 1, category: "sensor_a".to_string(), raw_value: 10 },
+>             DataPoint { id: 2, category: "sensor_b".to_string(), raw_value: 5 }, // Below threshold
+>             DataPoint { id: 3, category: "sensor_a".to_string(), raw_value: 20 },
+>             DataPoint { id: 4, category: "unknown".to_string(), raw_value: 15 },
+>         ];
+> 
+>         let mut lookup = HashMap::new();
+>         lookup.insert("sensor_a".to_string(), 3);
+>         lookup.insert("sensor_b".to_string(), 2);
+> 
+>         let config = PipelineConfig {
+>             min_threshold: 10,
+>             multiplier: 2,
+>         };
+> 
+>         // Borrow local stack data directly without Arc
+>         let summary = run_scoped_pipeline(&data, &lookup, &config);
+> 
+>         // Item 1: raw 10 * weight 3 * mult 2 = 60
+>         // Item 3: raw 20 * weight 3 * mult 2 = 120
+>         // Item 4: raw 15 * default_weight 1 * mult 2 = 30
+>         // Total count = 3, Total score = 60 + 120 + 30 = 210
+>         assert_eq!(summary.processed_count, 3);
+>         assert_eq!(summary.total_weighted_score, 210);
+>         assert_ne!(summary.processed_count, data.len());
+>     }
+> 
+>     #[test]
+>     fn test_scoped_pipeline_filtered_all() {
+>         let data = vec![
+>             DataPoint { id: 1, category: "sensor_a".to_string(), raw_value: 2 },
+>         ];
+>         let lookup = HashMap::new();
+>         let config = PipelineConfig {
+>             min_threshold: 10,
+>             multiplier: 2,
+>         };
+> 
+>         let summary = run_scoped_pipeline(&data, &lookup, &config);
+>         assert_eq!(summary, PipelineSummary::default());
+>         assert!(matches!(summary, PipelineSummary { processed_count: 0, total_weighted_score: 0 }));
+>     }
 > }
 > ```
->
-> **Explanation:** `std::thread::scope` guarantees all spawned threads join before scope exit, enabling safe borrowing of non-`'static` stack variables.
-
----
-
-### Exercise 3: Mutating Stack Data Across Scoped Threads
-
-**Problem:** Mutate separate elements of a local slice concurrently across scoped threads using `split_at_mut`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Mutated slice: [10, 20]
-> ```
-> ```rust
-> use std::thread;
-> fn main() {
->     let mut data = vec![1, 2];
->     let (left, right) = data.split_at_mut(1);
->     thread::scope(|s| {
->         s.spawn(|| { left[0] = 10; });
->         s.spawn(|| { right[0] = 20; });
->     });
->     println!("Mutated slice: {:?}", data);
-> }
-> ```
->
-> **Explanation:** Splitting mutable slices allows independent scoped threads to mutate distinct memory regions safely.
+> **Explanation:**
+> 1. **Zero-Copy Multi-Thread Sharing:** Scoped threads allow Stage 1 and Stage 2 to concurrently borrow `config` and `lookup` from the caller's stack frame. No `Arc`, `RwLock`, or deep cloning of lookup tables is required.
+> 2. **Automatic Channel Shutdown:** Senders (`tx1`, `tx2`) are moved into stage closures inside `std::thread::scope`. When Stage 1 finishes iterating over `data`, `tx1` is dropped, causing `rx1` iteration in Stage 2 to terminate cleanly. Likewise, `tx2` drops when Stage 2 finishes, terminating Stage 3 naturally.
+> 3. **Compiler Lifetime Guarantees:** Because `thread::scope` blocks until Stage 1, Stage 2, and Stage 3 complete, the Rust compiler guarantees that `data`, `lookup`, and `config` outlive all three threads.
 
 ---
 

@@ -146,85 +146,530 @@ thread::spawn(move || {
 });
 ```
 
-## 5. Practice Exercises
-
-### Exercise 1: Choose the Right Conversion
-
-**Problem:** You're writing a log message that includes a filename for debugging purposes — a human will read it, and a slightly garbled character in a rare edge case is acceptable. Which method do you use: `.to_str()` or `.to_string_lossy()`?
-
-> [!check]- Answer
-> **`.to_string_lossy()`.** Since the log message just needs to be human-readable and a rare loss of fidelity for unusual filenames is acceptable, the lossy, always-succeeding conversion avoids the need to handle a `None` case (which `.to_str()` would require) just for a debug log line. Reserve `.to_str()` (with proper `None` handling) for situations where correctness of the exact bytes genuinely matters.
-
 ---
 
-### Exercise 2: Converting Environment Variables Safely
+## 5. Practice Exercises
 
-**Problem:**
-Retrieve the `PATH` environment variable as an `OsString` using `std::env::var_os("PATH")`. Convert it to a displayable string using `.to_string_lossy()`, then:
-1. Print the first 60 characters of the value (or the full value if it's shorter).
-2. Handle the case where `PATH` is not set by printing `"PATH not set"`.
+### Exercise 1: Cross-Platform Environment Variable Security Audit & Sanitization Engine
 
-Then answer: **why is `.to_string_lossy()` used instead of `.to_str()` here? What is the difference?**
+**Scenario:**
+In production microservices and cloud infrastructure agents, system environment variables are ingested directly from the operating system via raw OS interfaces (`std::env::vars_os()`). On Unix platforms, environment variable keys and values are arbitrary byte sequences that may not conform to valid UTF-8. On Windows, environment strings can contain unpaired UTF-16 surrogates. Converting environment variables directly into UTF-8 `String` using `std::env::var()` causes runtime panics or error returns when encountering legacy or non-UTF-8 values.
 
-**Expected output:**
+**Task:**
+Implement an `EnvSanitizer` module that processes raw `(OsString, OsString)` key-value pairs without assuming UTF-8 compliance upfront.
+1. Define a struct `EnvAuditEntry` containing:
+   - `key: OsString`
+   - `value: OsString`
+   - `is_valid_utf8: bool`
+   - `sanitized_display: String`
+2. Implement `EnvSanitizer::audit_entry(key: OsString, value: OsString, secret_substrings: &[&str]) -> EnvAuditEntry`:
+   - Inspect both `key` and `value` using `.to_str()`. Set `is_valid_utf8` to `true` if both key and value yield `Some(&str)`, otherwise `false`.
+   - If the key (lossily converted to uppercase string) contains any substring in `secret_substrings` (e.g. `"SECRET"`, `"PASSWORD"`, `"TOKEN"`), redact the value output in `sanitized_display` as `"[REDACTED]"`.
+   - If non-UTF-8 data is present in either key or value, generate a display string using `.to_string_lossy()`, prefixed with `"[NON_UTF8] "` while preserving redaction logic.
+3. Implement `EnvSanitizer::filter_valid_paths(entries: &[EnvAuditEntry], path_key: &OsStr) -> Vec<OsString>`:
+   - Accepts a slice of audit entries and a target `&OsStr` key (e.g., `OsStr::new("PATH")`), filtering and returning the raw owned `OsString` values matching the key using direct `&OsStr` equality comparison.
+
 > [!check]- Answer
-> ```text
-> PATH (first 60 chars): /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/
-> ```
-> *(exact output depends on your system's PATH)*
 >
-> - **Hint 1:** `var_os("PATH")` returns `Option<OsString>`. Use `if let Some(os_val) = ...` to unwrap it, and `else { println!("PATH not set"); }` for the None arm.
-> - **Hint 2:** `.to_string_lossy()` returns a `Cow<str>`. It borrows the data as `&str` if it's valid UTF-8, or allocates a new `String` (replacing invalid bytes with `\u{FFFD}`) if it isn't. In both cases you can treat the result like a `&str`.
-> - **Hint 3:** `&displayable[..displayable.len().min(60)]` slices the first 60 bytes. For a proper char-boundary safe version use `displayable.chars().take(60).collect::<String>()`.
+> #### Implementation
 >
 > ```rust
-> use std::env;
+> use std::ffi::{OsStr, OsString};
 >
-> fn main() {
->     if let Some(os_val) = env::var_os("PATH") {
->         // .to_string_lossy() never fails — invalid UTF-8 bytes are replaced
->         // with the Unicode replacement character U+FFFD.
->         let displayable = os_val.to_string_lossy();
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct EnvAuditEntry {
+>     pub key: OsString,
+>     pub value: OsString,
+>     pub is_valid_utf8: bool,
+>     pub sanitized_display: String,
+> }
 >
->         // Collect the first 60 Unicode chars to avoid slicing mid-char.
->         let preview: String = displayable.chars().take(60).collect();
->         println!("PATH (first 60 chars): {}", preview);
->     } else {
->         println!("PATH not set");
+> pub struct EnvSanitizer;
+>
+> impl EnvSanitizer {
+>     pub fn audit_entry(key: OsString, value: OsString, secret_substrings: &[&str]) -> EnvAuditEntry {
+>         let key_str_opt = key.to_str();
+>         let val_str_opt = value.to_str();
+>         let is_valid_utf8 = key_str_opt.is_some() && val_str_opt.is_some();
+>
+>         let key_lossy = key.to_string_lossy();
+>         let key_upper = key_lossy.to_uppercase();
+>
+>         let is_secret = secret_substrings
+>             .iter()
+>             .any(|secret| key_upper.contains(&secret.to_uppercase()));
+>
+>         let sanitized_display = if is_valid_utf8 {
+>             let val_str = val_str_opt.unwrap();
+>             if is_secret {
+>                 format!("{} = [REDACTED]", key_lossy)
+>             } else {
+>                 format!("{} = {}", key_lossy, val_str)
+>             }
+>         } else {
+>             let val_lossy = value.to_string_lossy();
+>             if is_secret {
+>                 format!("[NON_UTF8] {} = [REDACTED]", key_lossy)
+>             } else {
+>                 format!("[NON_UTF8] {} = {}", key_lossy, val_lossy)
+>             }
+>         };
+>
+>         EnvAuditEntry {
+>             key,
+>             value,
+>             is_valid_utf8,
+>             sanitized_display,
+>         }
+>     }
+>
+>     pub fn filter_valid_paths(entries: &[EnvAuditEntry], path_key: &OsStr) -> Vec<OsString> {
+>         entries
+>             .iter()
+>             .filter(|entry| entry.key.as_os_str() == path_key)
+>             .map(|entry| entry.value.clone())
+>             .collect()
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::ffi::{OsStr, OsString};
+>
+>     #[test]
+>     fn test_audit_clean_utf8_env_var() {
+>         let key = OsString::from("LOG_LEVEL");
+>         let val = OsString::from("INFO");
+>         let entry = EnvSanitizer::audit_entry(key, val, &["SECRET", "PASSWORD", "TOKEN"]);
+>
+>         assert!(entry.is_valid_utf8);
+>         assert!(matches!(entry.is_valid_utf8, true));
+>         assert_eq!(entry.sanitized_display, "LOG_LEVEL = INFO");
+>         assert_ne!(entry.sanitized_display, "LOG_LEVEL = [REDACTED]");
+>     }
+>
+>     #[test]
+>     fn test_audit_sensitive_utf8_redaction() {
+>         let key = OsString::from("DATABASE_PASSWORD");
+>         let val = OsString::from("SuperSecret123!");
+>         let entry = EnvSanitizer::audit_entry(key, val, &["SECRET", "PASSWORD", "TOKEN"]);
+>
+>         assert!(entry.is_valid_utf8);
+>         assert_eq!(entry.sanitized_display, "DATABASE_PASSWORD = [REDACTED]");
+>         assert_ne!(entry.sanitized_display, "DATABASE_PASSWORD = SuperSecret123!");
+>         assert!(!entry.sanitized_display.contains("SuperSecret123!"));
+>     }
+>
+>     #[test]
+>     fn test_audit_non_utf8_environment_variable() {
+>         #[cfg(unix)]
+>         use std::os::unix::ffi::OsStringExt;
+>
+>         #[cfg(unix)]
+>         let non_utf8_val = OsString::from_vec(vec![0x66, 0x6f, 0x6f, 0x80, 0xff]);
+>
+>         #[cfg(not(unix))]
+>         let non_utf8_val = OsString::from("fallback_val");
+>
+>         let key = OsString::from("CUSTOM_SECRET_DATA");
+>         let entry = EnvSanitizer::audit_entry(key, non_utf8_val, &["SECRET"]);
+>
+>         #[cfg(unix)]
+>         assert!(!entry.is_valid_utf8);
+>         #[cfg(unix)]
+>         assert!(matches!(entry.is_valid_utf8, false));
+>
+>         assert!(entry.sanitized_display.contains("[REDACTED]"));
+>         assert_ne!(entry.sanitized_display, "CUSTOM_SECRET_DATA = raw");
+>     }
+>
+>     #[test]
+>     fn test_filter_valid_paths() {
+>         let entry1 = EnvSanitizer::audit_entry(
+>             OsString::from("PATH"),
+>             OsString::from("/usr/bin:/bin"),
+>             &[],
+>         );
+>         let entry2 = EnvSanitizer::audit_entry(
+>             OsString::from("HOME"),
+>             OsString::from("/home/user"),
+>             &[],
+>         );
+>         let entries = vec![entry1, entry2];
+>
+>         let path_key = OsStr::new("PATH");
+>         let paths = EnvSanitizer::filter_valid_paths(&entries, path_key);
+>
+>         assert_eq!(paths.len(), 1);
+>         assert_eq!(paths[0], OsString::from("/usr/bin:/bin"));
+>         assert_ne!(paths[0], OsString::from("/home/user"));
+>         assert!(matches!(paths.first(), Some(_)));
 >     }
 > }
 > ```
 >
-> **Answer — `.to_string_lossy()` vs `.to_str()`:**
+> #### Technical Explanation
 >
-> | Method | Return type | On invalid UTF-8 |
-> |---|---|---|
-> | `.to_str()` | `Option<&str>` | Returns `None` — you get nothing |
-> | `.to_string_lossy()` | `Cow<str>` | Replaces bad bytes with `\u{FFFD}` — you always get a string |
 >
-> Use `.to_str()` when invalid UTF-8 is a logic error (you want to know about it). Use `.to_string_lossy()` for display purposes where showing *something* is better than showing nothing — log lines, progress messages, diagnostics. The `PATH` variable is almost always valid UTF-8 on modern systems, but `to_string_lossy()` is the safer choice for code that must not panic on any OS.
+> 1. **`OsString` vs `OsStr` Semantics & Memory Representation:**
+>    - `OsString` is an owned, heap-allocated string buffer capable of storing native OS key-value data without forced encoding conversions. `OsStr` is its unsized slice counterpart (`&OsStr`).
+>    - Unlike `String`, which guarantees valid UTF-8 invariants enforced at construction, `OsString` encapsulates arbitrary byte sequences (WTF-8 on Windows, null-byte terminated or arbitrary byte sequences on Unix).
+> 2. **Fallible UTF-8 Conversion Invariants (`.to_str()` vs `.to_string_lossy()`):**
+>    - Calling `key.to_str()` yields `Option<&str>`. This is a zero-cost borrowing operation that succeeds (`Some(&str)`) only if all underlying bytes form valid UTF-8 sequences.
+>    - Calling `key.to_string_lossy()` yields a `Cow<str>`. If the underlying data is valid UTF-8, it returns `Cow::Borrowed(&str)` without heap allocation. If invalid bytes are present, it allocates a new `String` replacing invalid byte sequences with the Unicode replacement character `\u{FFFD}`.
+> 3. **OS-Agnostic Comparison (`PartialEq`):**
+>    - `&OsStr` implements `PartialEq<OsStr>`, `PartialEq<str>`, and `PartialEq<String>`. This allows direct equality checks (`entry.key.as_os_str() == path_key`) without incurring UTF-8 string allocation overhead.
+> 4. **Ownership and Lifetime Implications:**
+>    - `audit_entry` takes ownership of `key` and `value` (`OsString`), moving them into `EnvAuditEntry` to avoid defensive cloning of potentially large OS environment blocks.
+>    - `filter_valid_paths` borrows `&[EnvAuditEntry]` and `&OsStr`, returning newly owned `OsString` clones of the matching entries.
+>
 
 ---
 
-### Exercise 3: Building OS Strings
+### Exercise 2: High-Performance Non-UTF-8 Filesystem Indexer & Path Rule Engine
 
-**Problem:** Create an `OsString`, push a file path segment `"/usr/bin"` and append `"/rustc"` using `.push()`. Print the resulting `OsString`.
+**Scenario:**
+High-performance backup systems and disk indices must crawl millions of filesystem entries across multi-platform storage networks. Legacy mounted filesystems (such as NFS, FAT32, or EXT4) often contain file names with non-UTF-8 byte sequences. Standard path manipulation relying on `PathBuf::to_str()` fails (`None`) when encountering these files.
 
-**Expected output:**
+**Task:**
+Implement an `OsPathIndexer` utility:
+1. `OsPathIndexer::extract_extension(path: &OsStr) -> Option<&OsStr>`:
+   - Converts `&OsStr` into `&Path` zero-cost and extracts file extension as `&OsStr`.
+2. `OsPathIndexer::filter_by_extension<'a>(paths: &'a [OsString], target_ext: &OsStr) -> Vec<&'a OsStr>`:
+   - Filters a slice of `OsString` paths, returning borrowed `&'a OsStr` references for paths matching `target_ext`.
+3. `OsPathIndexer::build_backup_filename(original: &OsStr, prefix: &OsStr, timestamp_sec: u64) -> OsString`:
+   - Pre-allocates buffer capacity using `OsString::with_capacity` and appends components via `OsString::push(&OsStr)` to format `<prefix>_<original>_<timestamp>.bak` without UTF-8 lossy conversion of `original`.
+4. `OsPathIndexer::partition_utf8_compliance(paths: &[OsString]) -> (Vec<String>, Vec<OsString>)`:
+   - Partitions a slice of `OsString` paths into valid UTF-8 strings (`Vec<String>`) and non-UTF-8 raw OS strings (`Vec<OsString>`).
+
 > [!check]- Answer
-> ```
-> /usr/bin/rustc
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> use std::ffi::OsString;
-> fn main() {
->     let mut path = OsString::from("/usr/bin");
->     path.push("/rustc");
->     println!("{:?}", path);
+> use std::ffi::{OsStr, OsString};
+> use std::path::Path;
+>
+> pub struct OsPathIndexer;
+>
+> impl OsPathIndexer {
+>     pub fn extract_extension(path: &OsStr) -> Option<&OsStr> {
+>         Path::new(path).extension()
+>     }
+>
+>     pub fn filter_by_extension<'a>(paths: &'a [OsString], target_ext: &OsStr) -> Vec<&'a OsStr> {
+>         paths
+>             .iter()
+>             .map(|p| p.as_os_str())
+>             .filter(|p| Self::extract_extension(p) == Some(target_ext))
+>             .collect()
+>     }
+>
+>     pub fn build_backup_filename(original: &OsStr, prefix: &OsStr, timestamp_sec: u64) -> OsString {
+>         let ts_str = timestamp_sec.to_string();
+>         let capacity = prefix.len() + original.len() + ts_str.len() + 6;
+>         let mut result = OsString::with_capacity(capacity);
+>         result.push(prefix);
+>         result.push("_");
+>         result.push(original);
+>         result.push("_");
+>         result.push(&ts_str);
+>         result.push(".bak");
+>         result
+>     }
+>
+>     pub fn partition_utf8_compliance(paths: &[OsString]) -> (Vec<String>, Vec<OsString>) {
+>         let mut valid_utf8 = Vec::new();
+>         let mut invalid_utf8 = Vec::new();
+>
+>         for path in paths {
+>             match path.to_str() {
+>                 Some(valid_str) => valid_utf8.push(valid_str.to_string()),
+>                 None => invalid_utf8.push(path.clone()),
+>             }
+>         }
+>
+>         (valid_utf8, invalid_utf8)
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::ffi::{OsStr, OsString};
+>
+>     #[test]
+>     fn test_extract_extension_valid_and_missing() {
+>         let p1 = OsStr::new("server_config.toml");
+>         let p2 = OsStr::new("Makefile");
+>         let p3 = OsStr::new("archive.tar.gz");
+>
+>         assert_eq!(OsPathIndexer::extract_extension(p1), Some(OsStr::new("toml")));
+>         assert_eq!(OsPathIndexer::extract_extension(p2), None);
+>         assert_ne!(OsPathIndexer::extract_extension(p1), Some(OsStr::new("txt")));
+>         assert!(matches!(OsPathIndexer::extract_extension(p3), Some(_)));
+>     }
+>
+>     #[test]
+>     fn test_filter_by_extension_os_str() {
+>         let paths = vec![
+>             OsString::from("app.log"),
+>             OsString::from("data.csv"),
+>             OsString::from("error.log"),
+>             OsString::from("binary_exec"),
+>         ];
+>         let target_ext = OsStr::new("log");
+>
+>         let matched = OsPathIndexer::filter_by_extension(&paths, target_ext);
+>         assert_eq!(matched.len(), 2);
+>         assert_eq!(matched[0], OsStr::new("app.log"));
+>         assert_eq!(matched[1], OsStr::new("error.log"));
+>         assert_ne!(matched[0], OsStr::new("data.csv"));
+>         assert!(matches!(matched.as_slice(), [_, _]));
+>     }
+>
+>     #[test]
+>     fn test_build_backup_filename_preserves_raw_bytes() {
+>         let original = OsStr::new("database.db");
+>         let prefix = OsStr::new("snapshot");
+>         let timestamp = 1700000000;
+>
+>         let backup_name = OsPathIndexer::build_backup_filename(original, prefix, timestamp);
+>         assert_eq!(backup_name, OsString::from("snapshot_database.db_1700000000.bak"));
+>         assert_ne!(backup_name, OsString::from("snapshot_database.db"));
+>         assert!(backup_name.to_str().is_some());
+>         assert!(matches!(backup_name.to_str(), Some(_)));
+>     }
+>
+>     #[test]
+>     fn test_partition_utf8_compliance() {
+>         let paths = vec![
+>             OsString::from("valid_path_1.txt"),
+>             OsString::from("valid_path_2.json"),
+>         ];
+>
+>         let (valid, invalid) = OsPathIndexer::partition_utf8_compliance(&paths);
+>         assert_eq!(valid.len(), 2);
+>         assert!(invalid.is_empty());
+>         assert_ne!(valid.len(), 0);
+>         assert_eq!(valid[0], "valid_path_1.txt");
+>         assert!(matches!(invalid.as_slice(), []));
+>     }
 > }
 > ```
 >
-> **Explanation:** `OsString::push` appends `&OsStr` or `&str` slices directly to owned platform string buffers.
+> #### Technical Explanation
+>
+>
+> 1. **Deref Coercion & Zero-Cost Slice Wrappers (`Path` vs `OsStr`):**
+>    - `Path` is a transparent wrapper type (`#[repr(transparent)]`) around `OsStr`. Calling `Path::new(os_str)` performs a zero-cost cast from `&OsStr` to `&Path`.
+>    - Calling `.extension()` on `&Path` returns `Option<&OsStr>`, avoiding string parsing allocations.
+> 2. **Efficient Concatenation with `OsString::push`:**
+>    - `OsString::push` accepts any type implementing `AsRef<OsStr>` (including `&str`, `&OsStr`, and `String`).
+>    - Pre-allocating total capacity via `OsString::with_capacity(capacity)` avoids intermediate reallocation buffers during string assembly.
+> 3. **Lifetime Management (`'a` Lifetime Parameter):**
+>    - In `filter_by_extension<'a>`, the lifetime `'a` ties the returned slice references `&'a OsStr` directly to the input slice `&'a [OsString]`. This guarantees zero copy allocations during path search operations.
+> 4. **Partitioning and Non-UTF-8 Preservation:**
+>    - `.to_str()` acts as the boundary inspector. Valid UTF-8 filenames are safely stored in `Vec<String>`, while non-UTF-8 filenames remain wrapped as `OsString` to prevent data corruption.
+>
+
+---
+
+### Exercise 3: Cross-Platform Subprocess CLI Command Argument Pipeline & Guardrail Validator
+
+**Scenario:**
+When building systems management CLI applications, command execution wrappers (like `std::process::Command`) pass command line arguments directly to kernel system calls (`execve` on Unix, `CreateProcessW` on Windows). Passing arguments as UTF-8 `&str` forces conversion failures when handling arbitrary file paths or raw binary parameters. Security policy engines must inspect and validate raw `&OsStr` command arguments against prohibited security flags (e.g. `--eval`, `-c`, `--exec`) before launching subprocesses.
+
+**Task:**
+Implement a subprocess argument pipeline `OsCommandPipeline`:
+1. Define error type `SecurityError` with variants:
+   - `ForbiddenFlag(OsString)`
+   - `EmptyCommand`
+2. Implement `OsCommandPipeline::new<P: Into<OsString>>(program: P) -> Self`.
+3. Implement `OsCommandPipeline::arg<A: AsRef<OsStr>>(&mut self, arg: A) -> &mut Self` and `args<I, A>(&mut self, args: I) -> &mut Self` to support flexible generic argument pushing (`&str`, `String`, `&OsStr`, `OsString`, `PathBuf`, `&Path`).
+4. Implement `OsCommandPipeline::validate_security(&self, forbidden_flags: &[&OsStr]) -> Result<(), SecurityError>`:
+   - Validates that `program` is non-empty.
+   - Iterates through `args`, returning `Err(SecurityError::ForbiddenFlag)` if any argument matches or starts with a forbidden flag followed by `=`.
+5. Implement `OsCommandPipeline::to_display_cmd(&self) -> String`:
+   - Formats a shell-style log string using `.to_string_lossy()`, enclosing arguments containing spaces in double quotes (`"..."`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::ffi::{OsStr, OsString};
+> use std::fmt;
+>
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum SecurityError {
+>     ForbiddenFlag(OsString),
+>     EmptyCommand,
+> }
+>
+> impl fmt::Display for SecurityError {
+>     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+>         match self {
+>             SecurityError::ForbiddenFlag(flag) => write!(f, "Security policy violation: forbidden flag '{:?}'", flag),
+>             SecurityError::EmptyCommand => write!(f, "Command binary cannot be empty"),
+>         }
+>     }
+> }
+>
+> impl std::error::Error for SecurityError {}
+>
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct OsCommandPipeline {
+>     program: OsString,
+>     args: Vec<OsString>,
+> }
+>
+> impl OsCommandPipeline {
+>     pub fn new<P: Into<OsString>>(program: P) -> Self {
+>         Self {
+>             program: program.into(),
+>             args: Vec::new(),
+>         }
+>     }
+>
+>     pub fn arg<A: AsRef<OsStr>>(&mut self, arg: A) -> &mut Self {
+>         self.args.push(arg.as_ref().to_os_string());
+>         self
+>     }
+>
+>     pub fn args<I, A>(&mut self, args: I) -> &mut Self
+>     where
+>         I: IntoIterator<Item = A>,
+>         A: AsRef<OsStr>,
+>     {
+>         for arg in args {
+>             self.arg(arg);
+>         }
+>         self
+>     }
+>
+>     pub fn validate_security(&self, forbidden_flags: &[&OsStr]) -> Result<(), SecurityError> {
+>         if self.program.is_empty() {
+>             return Err(SecurityError::EmptyCommand);
+>         }
+>
+>         for arg in &self.args {
+>             let arg_os = arg.as_os_str();
+>
+>             for &forbidden in forbidden_flags {
+>                 if arg_os == forbidden {
+>                     return Err(SecurityError::ForbiddenFlag(arg.clone()));
+>                 }
+>
+>                 if let (Some(arg_str), Some(forb_str)) = (arg_os.to_str(), forbidden.to_str()) {
+>                     let prefix_eq = format!("{}=", forb_str);
+>                     if arg_str.starts_with(&prefix_eq) {
+>                         return Err(SecurityError::ForbiddenFlag(arg.clone()));
+>                     }
+>                 }
+>             }
+>         }
+>
+>         Ok(())
+>     }
+>
+>     pub fn to_display_cmd(&self) -> String {
+>         let mut components = Vec::with_capacity(1 + self.args.len());
+>
+>         let prog_lossy = self.program.to_string_lossy();
+>         components.push(if prog_lossy.contains(' ') {
+>             format!("\"{}\"", prog_lossy)
+>         } else {
+>             prog_lossy.into_owned()
+>         });
+>
+>         for arg in &self.args {
+>             let arg_lossy = arg.to_string_lossy();
+>             if arg_lossy.contains(' ') {
+>                 components.push(format!("\"{}\"", arg_lossy));
+>             } else {
+>                 components.push(arg_lossy.into_owned());
+>             }
+>         }
+>
+>         components.join(" ")
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::ffi::{OsStr, OsString};
+>     use std::path::PathBuf;
+>
+>     #[test]
+>     fn test_command_pipeline_builder_generics() {
+>         let mut cmd = OsCommandPipeline::new("tar");
+>         cmd.arg("-czf")
+>            .arg(OsString::from("archive.tar.gz"))
+>            .arg(PathBuf::from("/var/log/syslog"));
+>
+>         let display = cmd.to_display_cmd();
+>         assert_eq!(display, "tar -czf archive.tar.gz /var/log/syslog");
+>         assert_ne!(display, "tar -czf archive.tar.gz");
+>         assert!(display.contains("syslog"));
+>         assert!(matches!(cmd.args.len(), 3));
+>     }
+>
+>     #[test]
+>     fn test_security_validation_catches_forbidden_flag() {
+>         let mut cmd = OsCommandPipeline::new("python3");
+>         cmd.arg("-c").arg("import os; os.system('clear')");
+>
+>         let forbidden = vec![OsStr::new("--eval"), OsStr::new("-c"), OsStr::new("--exec")];
+>         let result = cmd.validate_security(&forbidden);
+>
+>         assert!(result.is_err());
+>         assert_ne!(result, Ok(()));
+>         assert!(matches!(result, Err(SecurityError::ForbiddenFlag(ref flag)) if flag == "-c"));
+>     }
+>
+>     #[test]
+>     fn test_security_validation_passes_clean_args() {
+>         let mut cmd = OsCommandPipeline::new("cargo");
+>         cmd.arg("build").arg("--release");
+>
+>         let forbidden = vec![OsStr::new("--eval"), OsStr::new("-c")];
+>         let result = cmd.validate_security(&forbidden);
+>
+>         assert!(result.is_ok());
+>         assert_ne!(result, Err(SecurityError::EmptyCommand));
+>         assert!(matches!(result, Ok(())));
+>     }
+>
+>     #[test]
+>     fn test_display_cmd_formatting() {
+>         let mut cmd = OsCommandPipeline::new("/usr/bin/custom tool");
+>         cmd.arg("--output dir").arg("file.txt");
+>
+>         let display = cmd.to_display_cmd();
+>         assert_eq!(display, "\"/usr/bin/custom tool\" \"--output dir\" file.txt");
+>         assert_ne!(display, "/usr/bin/custom tool --output dir file.txt");
+>         assert!(display.contains("\"--output dir\""));
+>         assert!(matches!(display.as_str(), s if s.starts_with('"')));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 1. **Generic Trait Bounds (`AsRef<OsStr>` and `Into<OsString>`):**
+>    - `AsRef<OsStr>` is implemented by `&str`, `String`, `&OsStr`, `OsString`, `Path`, and `PathBuf`. By using `AsRef<OsStr>`, `OsCommandPipeline::arg` seamlessly accepts any of Rust's native string or path types without forcing caller-side manual conversions.
+> 2. **Kernel Process Security vs Shell Injection:**
+>    - Operating system kernels accept process arguments as discrete byte/string arrays (`char *const argv[]` on POSIX). Passing arguments as `&OsStr` to `std::process::Command` bypasses shell parsing, eliminating shell injection vulnerabilities.
+> 3. **Raw `&OsStr` Security Inspection:**
+>    - Comparing `arg_os == forbidden` performs a platform-native equality check on raw byte/surrogate sequences without UTF-8 string allocation.
+>    - Prefix checking (`starts_with`) fallibly inspects valid UTF-8 strings via `.to_str()`, handling arguments formatted as `--flag=value`.
+> 4. **Lossy Log Formatting (`.to_string_lossy()`):**
+>    - Subprocess execution itself operates on exact `OsString` parameters. Log display relies on `.to_string_lossy()` to render human-readable diagnostic strings without panicking on non-UTF-8 arguments.
+>
 
 ---
 

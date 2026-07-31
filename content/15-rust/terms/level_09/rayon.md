@@ -150,126 +150,404 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Missing Import
+### Exercise 1: High-Throughput Log Telemetry Aggregator via Custom ThreadPool, Parallel Fold, and Lock-Free Map-Reduce
 
-**Problem:** You copy-pasted some Rayon code from StackOverflow. 
-`let sum: i32 = my_vec.par_iter().sum();`
-The compiler throws an error: `no method named 'par_iter' found for struct 'Vec'`. What line of code did you forget to add to the top of your file?
+**Problem:**
+In a cloud-native web service, millions of access log lines are ingested in large batches. Parsing logs sequentially causes severe CPU bottlenecking. However, using global mutexes inside parallel loops causes lock contention, defeating the purpose of parallelism.
+
+Design a zero-contention parallel log aggregation module using Rayon:
+1. Parse raw log lines formatted as `"STATUS_CODE LATENCY_MS MSG"` (e.g., `"200 45 OK"` or `"500 120 InternalServerError"`). Skip malformed lines.
+2. Build a custom Rayon `ThreadPool` with 4 worker threads to process log batches independently without clogging global worker pools.
+3. Use `par_iter().fold(...)` to accumulate local `LogMetrics` per thread chunk without locks, followed by `.reduce(...)` to merge thread-local metrics into a final aggregate.
+4. Track status code distribution (`2xx`, `4xx`, `5xx`), total valid log count, and maximum recorded latency.
+
+Write the complete code with comprehensive unit tests in `mod tests` asserting total count, status distributions, peak latency, error tolerance on bad logs, and proper custom `ThreadPool` execution.
 
 > [!check]- Answer
-> You forgot the prelude! 
->
 > ```rust
 > use rayon::prelude::*;
+> use rayon::ThreadPoolBuilder;
+> use std::cmp::max;
+> 
+> #[derive(Debug, Default, PartialEq, Eq, Clone)]
+> pub struct LogMetrics {
+>     pub total_logs: usize,
+>     pub status_2xx: usize,
+>     pub status_4xx: usize,
+>     pub status_5xx: usize,
+>     pub max_latency_ms: u64,
+> }
+> 
+> impl LogMetrics {
+>     pub fn merge(mut self, other: Self) -> Self {
+>         self.total_logs += other.total_logs;
+>         self.status_2xx += other.status_2xx;
+>         self.status_4xx += other.status_4xx;
+>         self.status_5xx += other.status_5xx;
+>         self.max_latency_ms = max(self.max_latency_ms, other.max_latency_ms);
+>         self
+>     }
+> }
+> 
+> pub fn parse_log_line(line: &str) -> Option<(u16, u64)> {
+>     let mut parts = line.split_whitespace();
+>     let status: u16 = parts.next()?.parse().ok()?;
+>     let latency: u64 = parts.next()?.parse().ok()?;
+>     Some((status, latency))
+> }
+> 
+> pub fn process_logs_parallel(logs: &[&str], num_threads: usize) -> LogMetrics {
+>     let pool = ThreadPoolBuilder::new()
+>         .num_threads(num_threads)
+>         .build()
+>         .expect("Failed to build custom Rayon ThreadPool");
+> 
+>     pool.install(|| {
+>         logs.par_iter()
+>             .filter_map(|line| parse_log_line(line))
+>             .fold(
+>                 LogMetrics::default,
+>                 |mut acc, (status, latency)| {
+>                     acc.total_logs += 1;
+>                     acc.max_latency_ms = max(acc.max_latency_ms, latency);
+>                     match status {
+>                         200..=299 => acc.status_2xx += 1,
+>                         400..=499 => acc.status_4xx += 1,
+>                         500..=599 => acc.status_5xx += 1,
+>                         _ => {}
+>                     }
+>                     acc
+>                 },
+>             )
+>             .reduce(LogMetrics::default, LogMetrics::merge)
+>     })
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parse_log_line_valid_and_invalid() {
+>         let valid = parse_log_line("200 45 GET /api/v1/health");
+>         assert!(valid.is_some());
+>         assert_eq!(valid, Some((200, 45)));
+> 
+>         let invalid = parse_log_line("BAD_STATUS 45 GET /api/v1/health");
+>         assert_eq!(invalid, None);
+> 
+>         let incomplete = parse_log_line("200");
+>         assert!(incomplete.is_none());
+>     }
+> 
+>     #[test]
+>     fn test_process_logs_parallel_aggregation() {
+>         let logs = vec![
+>             "200 15 OK",
+>             "201 25 Created",
+>             "404 100 NotFound",
+>             "500 450 InternalError",
+>             "503 300 ServiceUnavailable",
+>             "200 80 OK",
+>             "invalid_log_entry",
+>             "401 50 Unauthorized",
+>         ];
+> 
+>         let metrics = process_logs_parallel(&logs, 4);
+> 
+>         assert_eq!(metrics.total_logs, 7);
+>         assert_eq!(metrics.status_2xx, 3);
+>         assert_eq!(metrics.status_4xx, 2);
+>         assert_eq!(metrics.status_5xx, 2);
+>         assert_eq!(metrics.max_latency_ms, 450);
+>         assert_ne!(metrics.total_logs, logs.len());
+>     }
+> 
+>     #[test]
+>     fn test_empty_logs() {
+>         let logs: Vec<&str> = vec![];
+>         let metrics = process_logs_parallel(&logs, 2);
+>         assert_eq!(metrics, LogMetrics::default());
+>         assert!(matches!(metrics.total_logs, 0));
+>     }
+> }
 > ```
-> Traits must be in scope to use their methods. The Rayon prelude brings all the necessary extension traits into scope so that standard library types like `Vec` suddenly gain the `.par_iter()` methods.
+> 
+> **Key Architecture & Synchronization Details:**
+> 1. **Custom `ThreadPoolBuilder` Isolation:** In production applications, running CPU-heavy batch processing on the default global Rayon thread pool can starve critical system tasks. Constructing a custom `ThreadPool` via `ThreadPoolBuilder::new().num_threads(...).build()` ensures resource isolation. The `pool.install(...)` method sets the context so `.par_iter()` executes within that custom pool.
+> 2. **Lock-Free Local Accumulation (`fold`):** Using shared mutable state protected by `Mutex` inside parallel iterators creates severe lock contention. `fold()` initializes thread-local identity accumulators (`LogMetrics::default`), allowing each worker thread to mutate its own isolated metrics struct without acquiring locks.
+> 3. **Hierarchical Reduction (`reduce`):** Once worker threads complete their chunks, `.reduce(...)` hierarchically combines the thread-local `LogMetrics` structs using `LogMetrics::merge`. This pattern reduces lock/atomic overhead from $O(N)$ down to $O(\text{num\_threads})$.
 
 ---
 
-### Exercise 2: Sequential vs. Parallel Sum with `par_iter`
+### Exercise 2: Recursive Divide-and-Conquer AST Evaluation with `rayon::join` and Non-Static Stack Borrowing via `rayon::scope`
 
 **Problem:**
-Rayon's killer feature is that replacing `.iter()` with `.par_iter()` is a one-word change that distributes work across all CPU cores automatically. The interface is identical — the same adapters (`.map`, `.filter`, `.sum`, etc.) work on both.
+A compiler parser generates heavy expression trees (AST) that need evaluation. Evaluating nested expressions sequentially can result in high latency. Moreover, we want to collect live evaluation telemetry (node invocation count) during execution across work-stealing threads without moving owned memory into heap allocations or requiring `'static` lifetime bounds.
 
-Write a program that:
-1. Creates a `Vec<i64>` of 10,000,000 numbers from 1 to 10,000,000.
-2. Computes the sum **sequentially** with `.iter().sum::<i64>()` and prints it.
-3. Computes the sum **in parallel** with `.par_iter().sum::<i64>()` and prints it.
-4. Asserts both results are equal.
+Implement a parallel recursive AST evaluator using `rayon::join` and `rayon::scope`:
+1. Define an `Expr` enum representing numeric literals, binary addition, binary multiplication, and conditional branching.
+2. Write a recursive function `eval_parallel(&Expr, depth: usize) -> i64` that uses `rayon::join` when evaluation depth is below a threshold (e.g. `depth < 4`) to schedule sub-expression evaluations on Rayon's work-stealing deque in parallel. Switch to sequential evaluation when depth exceeds the threshold to avoid excessive task granularity overhead.
+3. Use `rayon::scope` to spawn background monitoring tasks that safely borrow stack variables (e.g., an `AtomicUsize` step counter) across task boundaries without `Arc` wrapping.
+4. Implement a comprehensive unit test suite using `mod tests` checking mathematical correctness, stack reference borrowing, depth cutoff handling, and non-trivial AST branch evaluation.
 
-Then answer: **why will both produce the same result even though parallel order is non-deterministic?**
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Sequential sum: 50000005000000
-> Parallel sum:   50000005000000
-> Results match!
-> ```
->
-> - **Hint 1:** Add `rayon = "1"` to `[dependencies]` in `Cargo.toml`, then `use rayon::prelude::*;` at the top of the file. Without the prelude import, `.par_iter()` does not exist — the method is added to `Vec` via an extension trait that the prelude brings into scope.
-> - **Hint 2:** The one-word change: `nums.iter().sum::<i64>()` → `nums.par_iter().sum::<i64>()`. Rayon splits the slice into chunks, sums each chunk on a separate thread pool worker, then combines the partial sums. The total is always correct because integer addition is associative and commutative — order doesn't affect the final sum.
-> - **Hint 3:** For very small vectors, `.par_iter()` will be *slower* than `.iter()` because thread management overhead exceeds the computation cost. The 10M-element range ensures the parallel version actually benefits from parallelism.
->
 > ```rust
 > use rayon::prelude::*;
->
-> fn main() {
->     let nums: Vec<i64> = (1..=10_000_000).collect();
->
->     // Sequential: single thread, left-to-right
->     let seq_sum: i64 = nums.iter().sum();
->     println!("Sequential sum: {}", seq_sum);
->
->     // Parallel: Rayon splits the slice across all CPU cores.
->     // Each worker sums its chunk; results are combined (reduced) at the end.
->     let par_sum: i64 = nums.par_iter().sum();
->     println!("Parallel sum:   {}", par_sum);
->
->     assert_eq!(seq_sum, par_sum);
->     println!("Results match!");
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> 
+> #[derive(Debug, Clone)]
+> pub enum Expr {
+>     Literal(i64),
+>     Add(Box<Expr>, Box<Expr>),
+>     Mul(Box<Expr>, Box<Expr>),
+>     IfGtZero(Box<Expr>, Box<Expr>, Box<Expr>),
+> }
+> 
+> pub fn eval_parallel(expr: &Expr, depth: usize, atomic_counter: &AtomicUsize) -> i64 {
+>     atomic_counter.fetch_add(1, Ordering::Relaxed);
+> 
+>     match expr {
+>         Expr::Literal(val) => *val,
+>         Expr::Add(left, right) => {
+>             if depth < 4 {
+>                 let (l_res, r_res) = rayon::join(
+>                     || eval_parallel(left, depth + 1, atomic_counter),
+>                     || eval_parallel(right, depth + 1, atomic_counter),
+>                 );
+>                 l_res + r_res
+>             } else {
+>                 eval_parallel(left, depth + 1, atomic_counter)
+>                     + eval_parallel(right, depth + 1, atomic_counter)
+>             }
+>         }
+>         Expr::Mul(left, right) => {
+>             if depth < 4 {
+>                 let (l_res, r_res) = rayon::join(
+>                     || eval_parallel(left, depth + 1, atomic_counter),
+>                     || eval_parallel(right, depth + 1, atomic_counter),
+>                 );
+>                 l_res * r_res
+>             } else {
+>                 eval_parallel(left, depth + 1, atomic_counter)
+>                     * eval_parallel(right, depth + 1, atomic_counter)
+>             }
+>         }
+>         Expr::IfGtZero(cond, then_expr, else_expr) => {
+>             let cond_val = eval_parallel(cond, depth + 1, atomic_counter);
+>             if cond_val > 0 {
+>                 eval_parallel(then_expr, depth + 1, atomic_counter)
+>             } else {
+>                 eval_parallel(else_expr, depth + 1, atomic_counter)
+>             }
+>         }
+>     }
+> }
+> 
+> pub fn evaluate_ast_with_scope(ast: &Expr) -> (i64, usize) {
+>     let node_counter = AtomicUsize::new(0);
+>     let mut result = 0;
+> 
+>     rayon::scope(|s| {
+>         s.spawn(|_| {
+>             // Scoped task executing AST evaluation concurrently while borrowing local stack references
+>             result = eval_parallel(ast, 0, &node_counter);
+>         });
+>     });
+> 
+>     (result, node_counter.load(Ordering::SeqCst))
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_literal_and_simple_arithmetic() {
+>         let counter = AtomicUsize::new(0);
+>         let expr = Expr::Add(
+>             Box::new(Expr::Literal(10)),
+>             Box::new(Expr::Literal(32)),
+>         );
+>         let val = eval_parallel(&expr, 0, &counter);
+>         assert_eq!(val, 42);
+>         assert_eq!(counter.load(Ordering::Relaxed), 3);
+>     }
+> 
+>     #[test]
+>     fn test_complex_ast_evaluation_with_scope() {
+>         // ( (5 * 4) + (10 + 20) ) -> (20 + 30) = 50
+>         let ast = Expr::Add(
+>             Box::new(Expr::Mul(
+>                 Box::new(Expr::Literal(5)),
+>                 Box::new(Expr::Literal(4)),
+>             )),
+>             Box::new(Expr::Add(
+>                 Box::new(Expr::Literal(10)),
+>                 Box::new(Expr::Literal(20)),
+>             )),
+>         );
+> 
+>         let (result, nodes_visited) = evaluate_ast_with_scope(&ast);
+>         assert_eq!(result, 50);
+>         assert!(nodes_visited > 5);
+>         assert_ne!(result, 0);
+>     }
+> 
+>     #[test]
+>     fn test_conditional_branching() {
+>         let counter = AtomicUsize::new(0);
+>         let ast = Expr::IfGtZero(
+>             Box::new(Expr::Literal(1)),
+>             Box::new(Expr::Literal(100)),
+>             Box::new(Expr::Literal(-100)),
+>         );
+> 
+>         let val = eval_parallel(&ast, 0, &counter);
+>         assert_eq!(val, 100);
+>         assert!(matches!(val, 100));
+>     }
 > }
 > ```
->
-> **Answer to the ordering question:**
-> Integer summation is both *associative* (`(a+b)+c == a+(b+c)`) and *commutative* (`a+b == b+a`). Rayon can split the slice into any number of chunks and sum them in any order — the partial sums will always combine to the same total. This is why `.par_iter().sum()` is always correct regardless of thread scheduling. Floating-point operations are **not** fully associative (due to rounding), so `f64` parallel sums may differ slightly from sequential sums.
+> 
+> **Key Architecture & Synchronization Details:**
+> 1. **Work-Stealing Task Splitting via `rayon::join`:** `rayon::join(closure1, closure2)` branches execution into two tasks. If idle worker threads exist in Rayon's pool, one closure is stolen while the current thread runs the other. This divide-and-conquer strategy evaluates binary expression subtrees concurrently without manual thread management.
+> 2. **Sequential Cutoff Threshold:** Spawning tasks for tiny computations (like leaf `Expr::Literal` nodes) creates scheduling overhead that outweighs parallel execution gains. Bounding `join` with a `depth < 4` condition switches execution to sequential evaluation at deeper tree levels.
+> 3. **Non-Static Stack Borrowing with `rayon::scope`:** Standard OS thread spawning (`std::thread::spawn`) requires closures to own data or hold `'static` references. `rayon::scope` guarantees that all spawned tasks complete before the scope block finishes, enabling tasks to safely borrow stack references (like `node_counter` and `result`) without requiring `Arc` or heap allocations.
 
 ---
 
-### Exercise 3: Parallel Sorting and `par_iter().map()` Pipeline
+### Exercise 3: In-Place Parallel Chunk Mutation & Sorting with Atomic Progress Tracking & Custom Ordering
 
 **Problem:**
-Rayon parallelises not just reductions (like `.sum()`) but also transformations (`.map()`, `.filter()`) and sorting (`.par_sort()`). The key rule: operations that are **embarrassingly parallel** — where each element is processed independently — are Rayon's sweet spot.
+A quantitative trading platform processes large arrays of financial transaction records (`Transaction { id: u64, amount: f64, timestamp: u64, flags: u8 }`).
+Before feeding transaction batches into risk models, records must be mutated in-place to apply currency conversions or risk weighting, filtered or marked, and finally sorted by timestamp descending, then amount descending.
 
-Write a program that:
-1. Creates a `Vec<i32>` of 1,000,000 random-ish numbers using `(0..1_000_000).map(|i| (i * 7 + 3) % 997).collect()`.
-2. Uses `.par_sort()` to sort the vector in parallel and verifies it is sorted by checking `data.windows(2).all(|w| w[0] <= w[1])`.
-3. Uses `par_iter().map(|&x| x * x).sum::<i64>()` to compute the sum of squares in parallel.
-4. Prints both results.
+Implement a parallel processing pipeline using Rayon's slice extensions:
+1. Define `Transaction` struct with fields `id`, `amount`, `timestamp`, `flags`.
+2. Use `par_chunks_mut(chunk_size)` to partition a mutable slice of transactions across threads. Each thread updates `amount` by multiplying with a `risk_factor` and sets bit flag `0x01` in `flags` when `amount > threshold`.
+3. Track total processed chunks atomically using `AtomicUsize` with `Ordering::Release` / `Ordering::Acquire`.
+4. Perform parallel in-place sorting using `par_sort_unstable_by()` with custom multi-field sorting rules (timestamp descending, then amount descending).
+5. Include a comprehensive unit test suite in `mod tests` testing chunked parallel mutations, atomic progress counters, sorting correctness, and bitwise flag assertions.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Sorted: true
-> Sum of squares: 330836500000
-> ```
->
-> - **Hint 1:** `.par_sort()` is an in-place parallel sort — it is a drop-in replacement for `.sort()`. It uses a parallel merge sort or introsort variant internally. Like sequential `.sort()`, it requires `T: Ord`. For a custom comparator, use `.par_sort_by(|a, b| a.cmp(b))`.
-> - **Hint 2:** `.par_iter().map(|&x| x * x).sum::<i64>()` is a parallel pipeline: Rayon splits the slice, each worker maps its chunk (squares every element), then all partial sums are reduced. The type annotation `::<i64>` prevents integer overflow for large sums.
-> - **Hint 3:** `.windows(2)` produces overlapping pairs `[a, b]` from the sorted vec. `all(|w| w[0] <= w[1])` checks every consecutive pair — the fastest way to verify a sorted `Vec` without re-sorting.
->
 > ```rust
 > use rayon::prelude::*;
->
-> fn main() {
->     // Generate 1M pseudo-random numbers using a simple formula.
->     let mut data: Vec<i32> = (0..1_000_000)
->         .map(|i| (i * 7 + 3) % 997)
->         .collect();
->
->     // par_sort: parallel in-place sort — drop-in replacement for .sort()
->     data.par_sort();
->     let is_sorted = data.windows(2).all(|w| w[0] <= w[1]);
->     println!("Sorted: {}", is_sorted);
->
->     // Parallel map + sum pipeline: square each element, then sum all squares.
->     let sum_of_squares: i64 = data.par_iter()
->         .map(|&x| x as i64 * x as i64)
->         .sum();
->     println!("Sum of squares: {}", sum_of_squares);
+> use std::cmp::Ordering as CmpOrdering;
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> 
+> #[derive(Debug, Clone, PartialEq)]
+> pub struct Transaction {
+>     pub id: u64,
+>     pub amount: f64,
+>     pub timestamp: u64,
+>     pub flags: u8,
+> }
+> 
+> pub fn process_and_sort_transactions(
+>     txs: &mut [Transaction],
+>     risk_factor: f64,
+>     high_risk_threshold: f64,
+>     chunk_size: usize,
+> ) -> usize {
+>     let chunk_counter = AtomicUsize::new(0);
+> 
+>     // Step 1: In-place parallel chunk processing
+>     txs.par_chunks_mut(chunk_size).for_each(|chunk| {
+>         for tx in chunk.iter_mut() {
+>             tx.amount *= risk_factor;
+>             if tx.amount >= high_risk_threshold {
+>                 tx.flags |= 0x01; // Set high risk flag
+>             }
+>         }
+>         chunk_counter.fetch_add(1, Ordering::Release);
+>     });
+> 
+>     // Step 2: In-place parallel unstable sort by timestamp DESC, then amount DESC
+>     txs.par_sort_unstable_by(|a, b| {
+>         let time_cmp = b.timestamp.cmp(&a.timestamp);
+>         if time_cmp != CmpOrdering::Equal {
+>             time_cmp
+>         } else {
+>             b.amount
+>                 .partial_cmp(&a.amount)
+>                 .unwrap_or(CmpOrdering::Equal)
+>         }
+>     });
+> 
+>     chunk_counter.load(Ordering::Acquire)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_chunk_mutation_and_risk_flag() {
+>         let mut txs = vec![
+>             Transaction { id: 1, amount: 100.0, timestamp: 1000, flags: 0 },
+>             Transaction { id: 2, amount: 50.0, timestamp: 1001, flags: 0 },
+>             Transaction { id: 3, amount: 200.0, timestamp: 1002, flags: 0 },
+>             Transaction { id: 4, amount: 10.0, timestamp: 999, flags: 0 },
+>         ];
+> 
+>         let processed_chunks = process_and_sort_transactions(&mut txs, 2.0, 150.0, 2);
+> 
+>         assert_eq!(processed_chunks, 2);
+> 
+>         // Check high risk flag on mutated amounts:
+>         // tx1: 100 * 2 = 200 >= 150 (flag 0x01)
+>         // tx2: 50 * 2 = 100 < 150 (flag 0x00)
+>         // tx3: 200 * 2 = 400 >= 150 (flag 0x01)
+>         // tx4: 10 * 2 = 20 < 150 (flag 0x00)
+> 
+>         // Sorted by timestamp DESC:
+>         // Index 0: timestamp 1002 (tx3, amount 400.0, flag 1)
+>         // Index 1: timestamp 1001 (tx2, amount 100.0, flag 0)
+>         // Index 2: timestamp 1000 (tx1, amount 200.0, flag 1)
+>         // Index 3: timestamp 999  (tx4, amount 20.0, flag 0)
+> 
+>         assert_eq!(txs[0].id, 3);
+>         assert_eq!(txs[0].amount, 400.0);
+>         assert_eq!(txs[0].flags & 0x01, 1);
+> 
+>         assert_eq!(txs[1].id, 2);
+>         assert_eq!(txs[1].timestamp, 1001);
+> 
+>         assert_ne!(txs[0].timestamp, txs[3].timestamp);
+>         assert!(matches!(txs[0].flags & 0x01, 1));
+>     }
+> 
+>     #[test]
+>     fn test_sorting_tie_breaking_by_amount() {
+>         let mut txs = vec![
+>             Transaction { id: 1, amount: 100.0, timestamp: 1000, flags: 0 },
+>             Transaction { id: 2, amount: 300.0, timestamp: 1000, flags: 0 },
+>         ];
+> 
+>         process_and_sort_transactions(&mut txs, 1.0, 500.0, 1);
+> 
+>         // Timestamps equal (1000), tie broken by amount DESC:
+>         assert_eq!(txs[0].id, 2);
+>         assert_eq!(txs[1].id, 1);
+>     }
 > }
 > ```
->
-> **Explanation:**
-> `.par_sort()` and `.par_iter().map(...).sum()` both follow Rayon's **work-stealing** model: the global thread pool divides the data into chunks. Idle threads "steal" work from busy threads' queues, ensuring all CPU cores stay fully utilised. The result is that both operations run in roughly `O(n log n / cores)` and `O(n / cores)` wall-clock time respectively — the speedup scales with the number of cores. The programmer writes code that *looks* sequential but executes in parallel with zero explicit thread management.
+> 
+> **Key Architecture & Synchronization Details:**
+> 1. **In-Place Parallel Chunk Mutation (`par_chunks_mut`):** `par_chunks_mut(size)` splits a slice into non-overlapping mutable slices processed concurrently by Rayon threads. Because the slice segments are non-overlapping, Rust's borrow checker guarantees data-race freedom without locks.
+> 2. **Parallel Sorting with Custom Comparators (`par_sort_unstable_by`):** `par_sort_unstable_by` uses a parallel sample-sort algorithm, distributing array partitioning across available cores. Using `unstable` sorting avoids allocating extra memory buffers for stability when element identity stability is unneeded.
+> 3. **Atomic Progress Synchronization (`Release` / `Acquire`):** `fetch_add` with `Ordering::Release` ensures all chunk updates are visible to observers reading the atomic variable with `Ordering::Acquire` after completion, preventing instruction reordering across thread synchronization barriers.
 
 ---
 
 ## 6. Related Terms
 
-- [Iterator Adapters](../level_02/iterator_adapters.md) — Rayon provides parallel equivalents for all of these (`.map`, `.filter`, etc.).
+- [Iterator Adapters](../level_02/iterator_adapters.md) — Rayon provides parallel equivalents for all of these (`.map`, `.filter`, `.collect`).
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — What Rayon is actually doing under the hood!
 
 ---

@@ -150,94 +150,246 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Invisible Setup
+### Exercise 1: Asynchronous Database Client Doc Tests with `#` Hidden Hashing & Connection Setup
 
-**Problem:** You are writing a doc test for an `open_file()` function. The test requires you to create a temporary file first, but you don't want the temporary file creation code to clutter up your beautiful documentation example. What specific character do you put at the start of the line to hide it from the reader?
+**Problem Statement:**
+You are authoring library documentation for a high-performance database connection pool (`AsyncDbClient`). The documentation needs to demonstrate how users query database records using doc tests, while using `#` hidden lines to perform mock connection initialization and setup without cluttering the rendered documentation HTML.
+
+Requirements:
+1. Define `DbError` enum with `NotFound` and `ConnectionFailed` variants deriving `Debug` and `PartialEq`.
+2. Struct `AsyncDbClient` storing `url: String` and internal record cache `HashMap<String, String>`.
+3. Implement `AsyncDbClient::connect(url: &str) -> Result<Self, DbError>` and `query_user_role(&self, username: &str) -> Result<String, DbError>`.
+4. Include a comprehensive `///` doc comment on `query_user_role` containing runnable doc tests that hide connection setup boilerplate using `#`.
+5. In `#[cfg(test)] mod tests`, write unit tests verifying query successes, missing users, and assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
 > [!check]- Answer
-> You use the **`#`** symbol (followed by a space)!
->
 > ```rust
-> /// ```
-> /// # std::fs::write("temp.txt", "hello").unwrap();
-> /// let file = open_file("temp.txt");
-> /// ```
-> ```
-
----
-
-### Exercise 2: Hiding Setup Statements in Doc Tests
-
-**Problem:** Use `#` prefix to hide setup statements inside doc test markdown blocks.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Doc test compiled
-> ```
-> ```rust
-> /// ```
-> /// # let x = 5;
-> /// assert_eq!(x, 5);
-> /// ```
-> pub fn check() {}
-> fn main() { println!("Doc test compiled"); }
-> ```
->
-> **Explanation:** `#` hides boilerplate setup lines from rendered HTML while preserving code execution in tests.
-
----
-
-### Exercise 3: `should_panic` in a Doc Test Block
-
-**Problem:**
-Doc tests aren't limited to examples that succeed. Sometimes the most important thing to document is *what panics*. Adding ` ```should_panic ``` ` to the opening fence tells `cargo test` to expect the enclosed code to panic \u2014 the test passes if it panics, and *fails* if it runs successfully.
-
-Write the complete `///` doc comment for a `divide(a: u32, b: u32) -> u32` function that:
-1. Includes a normal working example (` ``` `) showing `divide(10, 2) == 5`.
-2. Includes a `should_panic` example showing that `divide(1, 0)` panics.
-3. Implements the function body with `assert!(b != 0, "division by zero");`.
-
-Then answer: **why is a `should_panic` doc test more valuable than just writing "panics if b is 0" in plain text?**
-
-**Expected output:**
-> [!check]- Answer
-> *(No runtime stdout \u2014 these are `cargo test` doc tests. Both blocks pass: the first returns 5 correctly, the second panics as expected.)*
->
-> - **Hint 1:** The ` ```should_panic ``` ` annotation goes on the *opening* fence line of the second code block: ` ```should_panic `. The closing fence is still just ` ``` `.
-> - **Hint 2:** You can combine annotations: ` ```should_panic,no_run ``` ` marks a block as expected to panic but doesn't actually run it (useful when the panic requires an environment that isn't available in CI).
-> - **Hint 3:** The `# ` prefix trick (from Exercise 1) works inside `should_panic` blocks too. You can hide the function definition so the rendered docs only show the one-line panic call.
->
-> ```rust
-> /// Divides `a` by `b`.
-> ///
-> /// # Examples
-> ///
-> /// Normal usage:
-> /// ```
-> /// # fn divide(a: u32, b: u32) -> u32 { if b == 0 { panic!("division by zero") } a / b }
-> /// assert_eq!(divide(10, 2), 5);
-> /// ```
-> ///
-> /// Panics when `b` is zero:
-> /// ```should_panic
-> /// # fn divide(a: u32, b: u32) -> u32 { if b == 0 { panic!("division by zero") } a / b }
-> /// divide(1, 0); // panics: "division by zero"
-> /// ```
-> ///
-> /// # Panics
-> ///
-> /// Panics if `b` is `0`.
-> pub fn divide(a: u32, b: u32) -> u32 {
->     assert!(b != 0, "division by zero");
->     a / b
+> use std::collections::HashMap;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum DbError {
+>     NotFound(String),
+>     ConnectionFailed,
+> }
+> 
+> /// Client for interacting with remote database clusters.
+> pub struct AsyncDbClient {
+>     url: String,
+>     records: HashMap<String, String>,
+> }
+> 
+> impl AsyncDbClient {
+>     /// Connects to a remote database cluster specified by `url`.
+>     pub fn connect(url: &str) -> Result<Self, DbError> {
+>         if url.is_empty() {
+>             return Err(DbError::ConnectionFailed);
+>         }
+>         let mut records = HashMap::new();
+>         records.insert("alice".to_string(), "admin".to_string());
+>         records.insert("bob".to_string(), "user".to_string());
+>         Ok(Self {
+>             url: url.to_string(),
+>             records,
+>         })
+>     }
+> 
+>     /// Queries the user role for `username`.
+>     ///
+>     /// # Examples
+>     /// ```
+>     /// # use std::error::Error;
+>     /// # fn main() -> Result<(), Box<dyn Error>> {
+>     /// # let client = AsyncDbClient::connect("postgres://localhost:5432/db")?;
+>     /// let role = client.query_user_role("alice")?;
+>     /// assert_eq!(role, "admin");
+>     /// # Ok(())
+>     /// # }
+>     /// ```
+>     pub fn query_user_role(&self, username: &str) -> Result<String, DbError> {
+>         self.records
+>             .get(username)
+>             .cloned()
+>             .ok_or_else(|| DbError::NotFound(username.to_string()))
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_db_client_queries() {
+>         let client = AsyncDbClient::connect("postgres://localhost:5432/db").unwrap();
+> 
+>         let role = client.query_user_role("alice");
+>         assert!(role.is_ok());
+>         assert_eq!(role.unwrap(), "admin");
+> 
+>         let err = client.query_user_role("charlie");
+>         assert!(matches!(err, Err(DbError::NotFound(_))));
+>     }
 > }
 > ```
->
-> **Answer to the "why more valuable" question:**
-> Plain text saying "panics if b is 0" can lie \u2014 maybe the implementation changed and it no longer panics, or it panics with a different message. A `should_panic` doc test is **executable**: `cargo test` runs it every time you run tests. If the function stops panicking (e.g. someone changed the assert to a return), the doc test fails immediately, alerting you that the documentation and the code have diverged. Documentation you can't compile is documentation you can't trust.
+> 
+> **Technical Explanation:**
+> 1. **Hidden Setup Lines (`#`)**: Lines starting with `#` in doc test markdown blocks run during `cargo test --doc`, but are omitted from HTML rendered by `cargo doc`. This keeps user-facing examples clean while ensuring code correctness.
+> 2. **Fallible Doc Tests**: Returning `Result<(), Box<dyn Error>>` inside hidden `main()` blocks allows using `?` operators directly inside documentation examples.
+
+---
+
+### Exercise 2: `should_panic` Doc Tests for Bounded Buffer Invariants
+
+**Problem Statement:**
+Doc tests can verify intentional failure modes. You are implementing a fixed-capacity circular buffer (`BoundedBuffer<T>`) that panics if initialized with zero capacity or when pushing beyond capacity. You must document these panicking behaviors using ```` ```should_panic ```` doc tests.
+
+Requirements:
+1. Struct `BoundedBuffer<T>` holding `storage: Vec<T>` and `capacity: usize`.
+2. Implement `BoundedBuffer::new(capacity: usize) -> Self` (panics with `"Capacity must be non-zero"` if `capacity == 0`).
+3. Implement `push(&mut self, item: T)` (panics with `"Buffer overflow"` if `storage.len() >= capacity`).
+4. Write `///` doc comments for `new` and `push` containing runnable `should_panic` doc tests.
+5. In `#[cfg(test)] mod tests`, write unit tests verifying non-panicking push/pop operations and assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
+
+> [!check]- Answer
+> ```rust
+> /// Fixed-capacity circular element buffer.
+> pub struct BoundedBuffer<T> {
+>     storage: Vec<T>,
+>     capacity: usize,
+> }
+> 
+> impl<T> BoundedBuffer<T> {
+>     /// Creates a new [`BoundedBuffer`] with the specified capacity.
+>     ///
+>     /// # Panics
+>     /// Panics if `capacity` is 0.
+>     ///
+>     /// # Examples
+>     /// ```should_panic
+>     /// # use std::panic;
+>     /// // Panics because capacity is zero
+>     /// let buffer: BoundedBuffer<i32> = BoundedBuffer::new(0);
+>     /// ```
+>     pub fn new(capacity: usize) -> Self {
+>         assert!(capacity > 0, "Capacity must be non-zero");
+>         Self {
+>             storage: Vec::with_capacity(capacity),
+>             capacity,
+>         }
+>     }
+> 
+>     /// Pushes an item into the buffer.
+>     ///
+>     /// # Panics
+>     /// Panics if the buffer is at capacity.
+>     ///
+>     /// # Examples
+>     /// ```should_panic
+>     /// # let mut buffer = BoundedBuffer::new(1);
+>     /// buffer.push(10);
+>     /// buffer.push(20); // Panics due to overflow
+>     /// ```
+>     pub fn push(&mut self, item: T) {
+>         assert!(self.storage.len() < self.capacity, "Buffer overflow");
+>         self.storage.push(item);
+>     }
+> 
+>     /// Removes and returns the last element.
+>     pub fn pop(&mut self) -> Option<T> {
+>         self.storage.pop()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_buffer_operations() {
+>         let mut buf = BoundedBuffer::new(2);
+>         buf.push(100);
+>         buf.push(200);
+> 
+>         assert_eq!(buf.pop(), Some(200));
+>         assert_eq!(buf.pop(), Some(100));
+>         assert_eq!(buf.pop(), None);
+>     }
+> }
+> ```
+> 
+> **Technical Explanation:**
+> 1. **Testing Panic Contracts with `should_panic`**: Adding `should_panic` to a doc test code fence tells `cargo test --doc` to expect a panic. If the example runs without panicking, the doc test fails.
+> 2. **Executable API Contract Verification**: `should_panic` doc tests mathematically guarantee that documentation warnings regarding panics accurately reflect implementation behavior.
+
+---
+
+### Exercise 3: Cross-Crate Intra-Doc Links & Complex Doc Test Verification
+
+**Problem Statement:**
+When writing crate documentation, doc tests often demonstrate complex type interactions while relying on intra-doc links (`[`Token`]`, `[`AuthEngine`]`) to connect related items.
+
+Requirements:
+1. Define struct `Token` with `id: String` and `expires_at: u64`.
+2. Define `AuthEngine` with method `validate(&self, token: &Token) -> bool`.
+3. Document `AuthEngine::validate` with doc comments containing intra-doc links and runnable doc tests demonstrating token validation.
+4. In `#[cfg(test)] mod tests`, write unit tests verifying expired vs active token checks with assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
+
+> [!check]- Answer
+> ```rust
+> /// Authentication security token.
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct Token {
+>     pub id: String,
+>     pub expires_at: u64,
+> }
+> 
+> /// Engine for validating incoming authentication [`Token`] instances.
+> pub struct AuthEngine {
+>     pub current_time: u64,
+> }
+> 
+> impl AuthEngine {
+>     /// Constructs a new [`AuthEngine`] initialized to `current_time`.
+>     pub fn new(current_time: u64) -> Self {
+>         Self { current_time }
+>     }
+> 
+>     /// Validates whether a [`Token`] is valid and not expired.
+>     ///
+>     /// # Examples
+>     /// ```
+>     /// let engine = AuthEngine::new(1000);
+>     /// let token = Token { id: "tok_123".to_string(), expires_at: 2000 };
+>     /// assert!(engine.validate(&token));
+>     /// ```
+>     pub fn validate(&self, token: &Token) -> bool {
+>         !token.id.is_empty() && token.expires_at > self.current_time
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_token_validation() {
+>         let engine = AuthEngine::new(1000);
+>         let valid_token = Token { id: "valid_1".to_string(), expires_at: 1500 };
+>         let expired_token = Token { id: "expired_1".to_string(), expires_at: 500 };
+
+>         assert!(engine.validate(&valid_token));
+>         assert!(!engine.validate(&expired_token));
+>         assert_ne!(valid_token, expired_token);
+>     }
+> }
+> ```
+> 
+> **Technical Explanation:**
+> 1. **Intra-Doc Hyperlinking**: Branded bracket references (e.g. `[`Token`]`) auto-link across HTML generated by `cargo doc`.
+> 2. **Doc Test Execution**: `cargo test --doc` compiles code examples as external consumers, catching missing imports or scope errors.
 
 ---
 
