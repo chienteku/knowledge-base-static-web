@@ -139,79 +139,382 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Stateless Handler
+### Exercise 1: Typestate Pattern for High-Performance Network Protocol Client
 
-**Problem:** You are building a web server and need a type to handle incoming requests, but it doesn't need to store any state. Define a unit struct called `StatelessHandler` and then create an instance of it inside `main`.
+**Problem:**
+You are designing a high-reliability TCP protocol client for an industrial telemetry pipeline. The client connection can exist in three states: `Disconnected`, `Connected`, and `Authenticated`. To eliminate runtime state checks and prevent bugs (such as attempting to transmit data before authenticating), enforce state transitions at compile time using zero-sized Unit Structs as state markers with `PhantomData<State>`.
 
-```rust
-// TODO: Define the StatelessHandler unit struct here
+Requirements:
+1. Define three unit structs representing states: `Disconnected`, `Connected`, and `Authenticated`.
+2. Define a generic struct `Connection<State>` storing an `endpoint: String`, `session_token: Option<String>`, and `_state: PhantomData<State>`.
+3. Implement `Connection::<Disconnected>::new(endpoint: impl Into<String>)`, `connect(self)` to transition to `Connected`, `authenticate(self, token: impl Into<String>)` to transition to `Authenticated`, `send_payload(&self, payload: &str)` on `Authenticated`, and `disconnect(self)` returning to `Disconnected`.
+4. Demonstrate that unit structs occupy `0` bytes in memory (`std::mem::size_of::<Disconnected>() == 0`), guaranteeing zero memory overhead for type-level safety markers.
+5. Provide a complete unit test module `#[cfg(test)] mod tests` with explicit assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
 
-fn main() {
-    // TODO: Create an instance named `handler` here
-    
-    // This is just to prove it compiles and takes 0 bytes!
-    println!("Handler size: {} bytes", std::mem::size_of_val(&handler));
-}
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Handler size: 0 bytes
-> ```
-> ```rust
-> struct StatelessHandler;
 >
-> // Inside main:
-> let handler = StatelessHandler;
+> #### Implementation
+>
+> ```rust
+> use std::marker::PhantomData;
+> 
+> // State markers defined as Zero-Sized Unit Structs
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Disconnected;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Connected;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Authenticated;
+> 
+> // Generic connection client parametric over state
+> pub struct Connection<State> {
+>     endpoint: String,
+>     session_token: Option<String>,
+>     _state: PhantomData<State>,
+> }
+> 
+> impl Connection<Disconnected> {
+>     pub fn new(endpoint: impl Into<String>) -> Self {
+>         Self {
+>             endpoint: endpoint.into(),
+>             session_token: None,
+>             _state: PhantomData,
+>         }
+>     }
+> 
+>     // State transition consuming ownership of Disconnected state
+>     pub fn connect(self) -> Connection<Connected> {
+>         Connection {
+>             endpoint: self.endpoint,
+>             session_token: None,
+>             _state: PhantomData,
+>         }
+>     }
+> }
+> 
+> impl Connection<Connected> {
+>     // State transition consuming ownership of Connected state
+>     pub fn authenticate(self, token: impl Into<String>) -> Connection<Authenticated> {
+>         Connection {
+>             endpoint: self.endpoint,
+>             session_token: Some(token.into()),
+>             _state: PhantomData,
+>         }
+>     }
+> }
+> 
+> impl Connection<Authenticated> {
+>     pub fn send_payload(&self, payload: &str) -> String {
+>         format!(
+>             "[{}] Sent '{}' via token {}",
+>             self.endpoint,
+>             payload,
+>             self.session_token.as_deref().unwrap_or("none")
+>         )
+>     }
+> 
+>     pub fn disconnect(self) -> Connection<Disconnected> {
+>         Connection {
+>             endpoint: self.endpoint,
+>             session_token: None,
+>             _state: PhantomData,
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_typestate_lifecycle() {
+>         let conn = Connection::new("127.0.0.1:8080");
+>         assert_eq!(std::mem::size_of::<Disconnected>(), 0);
+>         assert_eq!(std::mem::size_of::<Connected>(), 0);
+>         assert_eq!(std::mem::size_of::<Authenticated>(), 0);
+> 
+>         // Transition: Disconnected -> Connected
+>         let connected_conn = conn.connect();
+> 
+>         // Transition: Connected -> Authenticated
+>         let auth_conn = connected_conn.authenticate("secret_jwt_token_123");
+>         let response = auth_conn.send_payload("PING");
+> 
+>         assert_eq!(
+>             response,
+>             "[127.0.0.1:8080] Sent 'PING' via token secret_jwt_token_123"
+>         );
+>         assert!(response.contains("secret_jwt_token_123"));
+> 
+>         // Transition: Authenticated -> Disconnected
+>         let disconnected_conn = auth_conn.disconnect();
+>         assert_eq!(disconnected_conn.endpoint, "127.0.0.1:8080");
+>         assert_ne!(disconnected_conn.endpoint, "192.168.1.1");
+>     }
+> 
+>     #[test]
+>     fn test_zero_sized_type_property() {
+>         let disc = Disconnected;
+>         let conn = Connected;
+>         let auth = Authenticated;
+> 
+>         assert_eq!(std::mem::size_of_val(&disc), 0);
+>         assert_eq!(std::mem::size_of_val(&conn), 0);
+>         assert_eq!(std::mem::size_of_val(&auth), 0);
+> 
+>         let option_marker: Option<Disconnected> = None;
+>         assert!(matches!(option_marker, None));
+>     }
+> }
 > ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Zero-Sized Types (ZST)**: The unit structs `Disconnected`, `Connected`, and `Authenticated` take up `0` bytes in memory. Rust compilers optimize ZST instances out entirely during LLVM code generation, creating zero runtime footprint.
+> 2. **Typestate Pattern Mechanics**: By parameterizing `Connection<State>` over unit structs, method availability is controlled at compile time via `impl Connection<State>` blocks. Attempting to call `send_payload` on a `Connection<Disconnected>` causes a compile error (`E0599`), moving invalid state transitions from runtime crashes to compile-time check failures.
+> 3. **Ownership and Move Semantics**: State transition methods consume `self` by value (e.g., `fn connect(self)`). Once transferred, the old instance in the prior state is moved and destroyed, preventing reuse or concurrent access in an invalid state (preventing use-after-move).
+> 4. **`PhantomData` Role**: Because `State` is only used as a type-level marker and not stored in data fields, `PhantomData<State>` informs the Rust compiler's type checker and variance engine that `Connection` owns logical state `State` without allocating memory for it.
 
 ---
 
-### Exercise 2: Marker Traits with Unit Structs
+### Exercise 2: Zero-Cost Strategy Pattern for Telemetry Encoding
 
-**Problem:** Define a unit struct `struct Kilograms;` as a type marker for generic unit conversion.
+**Problem:**
+In a real-time event processing platform, log messages must be formatted and dispatched using different encoding strategies (`JsonFormat`, `CompactTextFormat`, `CsvFormat`). Instead of using dynamic trait objects (`Box<dyn Formatter>`) which introduce runtime vtable lookups and heap allocations, implement a zero-cost strategy pattern using Unit Structs and static trait dispatch.
 
-**Expected output:**
+Requirements:
+1. Define a trait `LogFormatter` with `fn format_log(&self, timestamp: u64, message: &str) -> String`.
+2. Define three unit structs acting as stateless strategies: `JsonFormat`, `CompactTextFormat`, and `CsvFormat`.
+3. Implement `LogFormatter` for each unit struct strategy.
+4. Define `TelemetryLogger<F: LogFormatter>` holding `formatter: F`.
+5. Implement `TelemetryLogger::new(formatter: F)` and `log(&self, timestamp: u64, message: &str) -> String`.
+6. Prove that storing unit struct strategies in `TelemetryLogger` adds zero bytes to the logger instance size (`std::mem::size_of::<TelemetryLogger<JsonFormat>>() == 0`).
+7. Write complete unit tests in `#[cfg(test)] mod tests` using explicit assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
+
 > [!check]- Answer
-> ```
-> Marker size: 0 bytes
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> struct Kilograms;
-> fn main() {
->     println!("Marker size: {} bytes", std::mem::size_of::<Kilograms>());
+> // Strategy trait for log serialization
+> pub trait LogFormatter {
+>     fn format_log(&self, timestamp: u64, message: &str) -> String;
+> }
+> 
+> // Unit structs acting as zero-sized strategy implementations
+> #[derive(Debug, Clone, Copy)]
+> pub struct JsonFormat;
+> 
+> #[derive(Debug, Clone, Copy)]
+> pub struct CompactTextFormat;
+> 
+> #[derive(Debug, Clone, Copy)]
+> pub struct CsvFormat;
+> 
+> impl LogFormatter for JsonFormat {
+>     fn format_log(&self, timestamp: u64, message: &str) -> String {
+>         format!(r#"{{"ts":{},"msg":"{}"}}"#, timestamp, message)
+>     }
+> }
+> 
+> impl LogFormatter for CompactTextFormat {
+>     fn format_log(&self, timestamp: u64, message: &str) -> String {
+>         format!("[{}] {}", timestamp, message)
+>     }
+> }
+> 
+> impl LogFormatter for CsvFormat {
+>     fn format_log(&self, timestamp: u64, message: &str) -> String {
+>         format!("{},\"{}\"", timestamp, message)
+>     }
+> }
+> 
+> pub struct TelemetryLogger<F: LogFormatter> {
+>     formatter: F,
+> }
+> 
+> impl<F: LogFormatter> TelemetryLogger<F> {
+>     pub fn new(formatter: F) -> Self {
+>         Self { formatter }
+>     }
+> 
+>     pub fn log(&self, timestamp: u64, message: &str) -> String {
+>         self.formatter.format_log(timestamp, message)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_zero_cost_strategy_formatting() {
+>         let json_logger = TelemetryLogger::new(JsonFormat);
+>         let compact_logger = TelemetryLogger::new(CompactTextFormat);
+>         let csv_logger = TelemetryLogger::new(CsvFormat);
+> 
+>         assert_eq!(
+>             json_logger.log(1620000000, "System boot"),
+>             r#"{"ts":1620000000,"msg":"System boot"}"#
+>         );
+>         assert_eq!(
+>             compact_logger.log(1620000000, "System boot"),
+>             "[1620000000] System boot"
+>         );
+>         assert_eq!(
+>             csv_logger.log(1620000000, "System boot"),
+>             "1620000000,\"System boot\""
+>         );
+> 
+>         assert_ne!(
+>             json_logger.log(1620000000, "System boot"),
+>             csv_logger.log(1620000000, "System boot")
+>         );
+>     }
+> 
+>     #[test]
+>     fn test_strategy_memory_footprint() {
+>         assert_eq!(std::mem::size_of::<JsonFormat>(), 0);
+>         assert_eq!(std::mem::size_of::<CompactTextFormat>(), 0);
+>         assert_eq!(std::mem::size_of::<CsvFormat>(), 0);
+> 
+>         assert_eq!(std::mem::size_of::<TelemetryLogger<JsonFormat>>(), 0);
+>         assert_eq!(std::mem::size_of::<TelemetryLogger<CompactTextFormat>>(), 0);
+> 
+>         let fmt = JsonFormat;
+>         assert!(matches!(fmt, JsonFormat));
+>     }
 > }
 > ```
 >
-> **Explanation:** Unit structs compile to zero-sized marker types.
+> #### Technical Explanation
+>
+> 
+> 1. **Static Trait Dispatch (Monomorphization)**: Generic type parameters (`TelemetryLogger<F>`) cause Rust to generate concrete specialized code for each strategy type at compile time. Because `JsonFormat`, `CompactTextFormat`, and `CsvFormat` are Unit Structs, methods are directly inlineable without dynamic vtable lookups (`dyn LogFormatter`).
+> 2. **Zero-Overhead Strategy Pattern**: Unlike object-oriented strategy patterns that require storing pointer handles to heap objects or trait vtables (which cost 16 bytes for fat pointers), unit struct strategies cost exactly `0` bytes. The compiler replaces calls with direct static code execution.
+> 3. **Lifetimes and Pass-by-Value**: Because Unit Structs carry no internal state or pointers, passing them by value (`JsonFormat`) consumes zero register space. Unit structs easily derive `Copy` and `Clone` at no performance penalty.
+> 4. **Edge Cases**: Because unit structs contain no fields, instantiating `TelemetryLogger` requires passing the unit struct instance `JsonFormat`. The compiler completely optimizes out storage for `formatter: F` field inside `TelemetryLogger<F>`.
 
 ---
 
-### Exercise 3: Implementing Traits on Unit Structs
+### Exercise 3: Type-Safe Hardware Register Access Control via Capability Tokens
 
-**Problem:** Implement a `Formatter` trait on a unit struct `struct JsonFormatter;`.
+**Problem:**
+In embedded hardware driver design, memory-mapped registers possess explicit access permissions: `ReadOnly` (e.g. hardware status registers), `WriteOnly` (e.g. command trigger registers), and `ReadWrite` (e.g. configuration registers). Using Unit Structs as access capability tokens, build a type-safe register abstraction `Register<T, AccessMode>` that guarantees permission correctness at compile time.
 
-**Expected output:**
+Requirements:
+1. Define zero-sized unit structs representing access rights: `ReadOnly`, `WriteOnly`, and `ReadWrite`.
+2. Define marker traits `Readable` and `Writable`. Implement `Readable` for `ReadOnly` and `ReadWrite`. Implement `Writable` for `WriteOnly` and `ReadWrite`.
+3. Define `Register<T: Copy, AccessMode>` storing `value: T` and `_access: PhantomData<AccessMode>`.
+4. Implement `read(&self) -> T` constrained on `AccessMode: Readable`.
+5. Implement `write(&mut self, val: T)` constrained on `AccessMode: Writable`.
+6. Verify that `Register<T, AccessMode>` size equals `std::mem::size_of::<T>()` exactly, proving unit struct markers add zero runtime size overhead.
+7. Include comprehensive unit tests inside `#[cfg(test)] mod tests` using explicit assertions (`assert_eq!`, `assert!`, `assert_ne!`, `matches!`).
+
 > [!check]- Answer
-> ```
-> Formatted JSON
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> trait Formatter { fn format(&self) -> &'static str; }
-> struct JsonFormatter;
-> impl Formatter for JsonFormatter {
->     fn format(&self) -> &'static str { "Formatted JSON" }
+> use std::marker::PhantomData;
+> 
+> // Zero-sized capability token unit structs
+> #[derive(Debug, Clone, Copy)]
+> pub struct ReadOnly;
+> 
+> #[derive(Debug, Clone, Copy)]
+> pub struct WriteOnly;
+> 
+> #[derive(Debug, Clone, Copy)]
+> pub struct ReadWrite;
+> 
+> // Capability marker traits
+> pub trait Readable {}
+> pub trait Writable {}
+> 
+> impl Readable for ReadOnly {}
+> impl Readable for ReadWrite {}
+> 
+> impl Writable for WriteOnly {}
+> impl Writable for ReadWrite {}
+> 
+> // Type-safe hardware register abstraction
+> pub struct Register<T: Copy, AccessMode> {
+>     value: T,
+>     _access: PhantomData<AccessMode>,
 > }
-> fn main() {
->     let fmt = JsonFormatter;
->     println!("{}", fmt.format());
+> 
+> impl<T: Copy, AccessMode> Register<T, AccessMode> {
+>     pub fn new(initial_value: T) -> Self {
+>         Self {
+>             value: initial_value,
+>             _access: PhantomData,
+>         }
+>     }
+> }
+> 
+> impl<T: Copy, AccessMode: Readable> Register<T, AccessMode> {
+>     pub fn read(&self) -> T {
+>         self.value
+>     }
+> }
+> 
+> impl<T: Copy, AccessMode: Writable> Register<T, AccessMode> {
+>     pub fn write(&mut self, val: T) {
+>         self.value = val;
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_register_access_permissions() {
+>         let ro_reg: Register<u32, ReadOnly> = Register::new(0xDEAD_BEEF);
+>         assert_eq!(ro_reg.read(), 0xDEAD_BEEF);
+> 
+>         let mut wo_reg: Register<u32, WriteOnly> = Register::new(0);
+>         wo_reg.write(0xCAFE_BABE);
+>         // ro_reg.write(0); // ❌ Compile Error: trait bound `ReadOnly: Writable` is not satisfied
+> 
+>         let mut rw_reg: Register<u32, ReadWrite> = Register::new(100);
+>         assert_eq!(rw_reg.read(), 100);
+>         rw_reg.write(200);
+>         assert_eq!(rw_reg.read(), 200);
+> 
+>         assert_ne!(rw_reg.read(), 100);
+>     }
+> 
+>     #[test]
+>     fn test_register_zst_overhead() {
+>         assert_eq!(std::mem::size_of::<ReadOnly>(), 0);
+>         assert_eq!(std::mem::size_of::<WriteOnly>(), 0);
+>         assert_eq!(std::mem::size_of::<ReadWrite>(), 0);
+> 
+>         // Memory footprint of Register<u32, AccessMode> matches size_of::<u32>() exactly (4 bytes)
+>         assert_eq!(std::mem::size_of::<Register<u32, ReadOnly>>(), 4);
+>         assert_eq!(std::mem::size_of::<Register<u64, ReadWrite>>(), 8);
+> 
+>         let cap: Option<ReadOnly> = Some(ReadOnly);
+>         assert!(matches!(cap, Some(ReadOnly)));
+>     }
 > }
 > ```
 >
-> **Explanation:** Unit structs allow instantiating stateless strategy objects implementing behavior traits.
+> #### Technical Explanation
+>
+> 
+> 1. **Capability Traits and Zero-Cost Access Control**: By creating empty marker traits (`Readable`, `Writable`) and implementing them on capability unit structs (`ReadOnly`, `WriteOnly`, `ReadWrite`), method availability on `Register` is strictly governed by trait bounds (`AccessMode: Readable`). Attempting to call `.write()` on a `Register<u32, ReadOnly>` causes a compile error, eliminating invalid hardware bus operations before code reaches hardware.
+> 2. **Struct Layout and Memory Alignment**: Rust's ABI rules specify that zero-sized fields (`PhantomData<AccessMode>`) do not alter the struct layout, size, or alignment requirements of `Register<T, AccessMode>`. Thus, `Register<u32, ReadOnly>` is byte-identical in memory representation to a plain `u32`.
+> 3. **Safety and Low-Level Driver Invariants**: In embedded systems where registers map directly to memory hardware addresses (`volatile` MMIO pointers), Unit Struct markers allow developers to enforce safety constraints at compile time without paying any runtime penalty in code size, memory footprint, or execution cycles.
 
 ---
 

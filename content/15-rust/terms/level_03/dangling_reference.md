@@ -147,76 +147,413 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Dangling Integer
+### Exercise 1: Zero-Copy Log Parser & Lifetime Bounds
 
-**Problem:** The code below attempts to return a reference to a number created inside a function. It will not compile. Fix the code by removing the reference syntax so the function returns the actual number instead.
+**Scenario:** You are building a high-throughput network log analyzer that parses raw log streams into structured `LogEntry<'a>` slices without performing heap allocations. A junior developer tried to store log slices inside a collection that outlives the input string buffer, causing a dangling reference compiler error.
 
-```rust
-// TODO: Fix the return type!
-fn get_lucky_number() -> &i32 {
-    let num = 77;
-    
-    // TODO: Fix the return value!
-    &num 
-}
-
-fn main() {
-    let my_num = get_lucky_number();
-    println!("My lucky number is {}", my_num);
-}
-```
+**Task:**
+1. Implement a zero-copy parser `LogEntry<'a>` containing string slice references `&'a str` for `timestamp`, `level`, and `message`.
+2. Implement `LogEntry::parse<'a>(input: &'a str) -> Result<LogEntry<'a>, &'static str>` that extracts fields zero-copy from formatted lines like `"TIMESTAMP [LEVEL] MESSAGE"`.
+3. Implement `to_owned(&self) -> OwnedLogEntry` to allow explicit heap allocation snapshotting when log data must outlive the input buffer lifecycle.
+4. Include comprehensive unit tests verifying zero-copy parsing, error handling, and owned snapshot retention across scope boundaries.
 
 > [!check]- Answer
-> Remove the `&` symbols!
-> 1. Change `-> &i32` to `-> i32`.
-> 2. Change `&num` to `num`.
-
----
-
-### Exercise 2: Fixing Dangling String References
-
-**Problem:** Fix compiler error `E0515` by returning owned `String` instead of `&String`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Hello World
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn create_text() -> String {
->     let s = String::from("Hello World");
->     s // Return owned String
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct LogEntry<'a> {
+>     pub timestamp: &'a str,
+>     pub level: &'a str,
+>     pub message: &'a str,
 > }
-> fn main() {
->     println!("{}", create_text());
+>
+> #[derive(Debug, PartialEq, Eq, Clone)]
+> pub struct OwnedLogEntry {
+>     pub timestamp: String,
+>     pub level: String,
+>     pub message: String,
+> }
+>
+> impl<'a> LogEntry<'a> {
+>     pub fn parse(input: &'a str) -> Result<Self, &'static str> {
+>         let trimmed = input.trim();
+>         if trimmed.is_empty() {
+>             return Err("Empty log line");
+>         }
+>
+>         let mut parts = trimmed.splitn(2, " [");
+>         let timestamp = parts.next().ok_or("Missing timestamp")?;
+>
+>         let rest = parts.next().ok_or("Missing log level bracket")?;
+>         let mut rest_parts = rest.splitn(2, "] ");
+>         let level = rest_parts.next().ok_or("Missing closing bracket for log level")?;
+>         let message = rest_parts.next().ok_or("Missing message body")?;
+>
+>         Ok(LogEntry {
+>             timestamp,
+>             level,
+>             message,
+>         })
+>     }
+>
+>     pub fn to_owned(&self) -> OwnedLogEntry {
+>         OwnedLogEntry {
+>             timestamp: self.timestamp.to_string(),
+>             level: self.level.to_string(),
+>             message: self.message.to_string(),
+>         }
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>
+>     #[test]
+>     fn test_valid_log_parsing() {
+>         let log_line = String::from("2026-07-31T18:26:00 [INFO] Service started successfully");
+>         let entry = LogEntry::parse(&log_line).unwrap();
+>
+>         assert_eq!(entry.timestamp, "2026-07-31T18:26:00");
+>         assert_eq!(entry.level, "INFO");
+>         assert_eq!(entry.message, "Service started successfully");
+>     }
+>
+>     #[test]
+>     fn test_malformed_log_handling() {
+>         let bad_line = "invalid_log_format_without_brackets";
+>         let result = LogEntry::parse(bad_line);
+>         assert!(result.is_err());
+>         assert_eq!(result.unwrap_err(), "Missing log level bracket");
+>     }
+>
+>     #[test]
+>     fn test_owned_conversion_outlives_buffer() {
+>         let owned_entry = {
+>             let buffer = String::from("2026-07-31T18:26:00 [WARN] High memory usage detected");
+>             let borrowed_entry = LogEntry::parse(&buffer).unwrap();
+>             assert_eq!(borrowed_entry.level, "WARN");
+>             // Convert to owned snapshot before buffer drops
+>             borrowed_entry.to_owned()
+>         }; // buffer drops here!
+>
+>         // owned_entry remains fully valid without dangling references
+>         assert_eq!(owned_entry.timestamp, "2026-07-31T18:26:00");
+>         assert_eq!(owned_entry.level, "WARN");
+>         assert_eq!(owned_entry.message, "High memory usage detected");
+>         assert_ne!(owned_entry.level, "ERROR");
+>     }
 > }
 > ```
 >
-> **Explanation:** Returning owned types transfers heap data ownership to the caller safely without dangling references.
+> #### Technical Explanation
+>
+>
+>
+> 1. **Lifetime Annotation Invariants (`'a`):** The lifetime parameter `'a` in `LogEntry<'a>` ties the borrowed string slices (`&'a str`) directly to the memory buffer passed to `parse(&'a str)`. The Rust borrow checker enforces that no `LogEntry<'a>` instance can outlive the lifetime `'a` of the source `String` or buffer. Attempting to return a `LogEntry<'a>` derived from a local function-scoped `String` causes compile error `E0515` ("returns a value referencing data owned by the current function").
+> 2. **Zero-Copy Memory Layout:** `LogEntry<'a>` consists of three fat pointers (each containing an 8-byte pointer to the underlying buffer and an 8-byte length, totaling 48 bytes on 64-bit architectures). It borrows slices directly from the input buffer without allocating memory on the heap.
+> 3. **Preventing Dangling References via `to_owned()`:** When log data must outlive the transient input buffer (e.g. sent across thread channels or archived), `to_owned()` copies the byte sequences into independent heap allocations (`String`), breaking the lifetime dependency on `'a` and producing an `OwnedLogEntry` that safely outlives the original buffer scope.
 
 ---
 
-### Exercise 3: Static Reference Lifetime Extension
+### Exercise 2: Generational Arena Allocator & Safe Node Handles
 
-**Problem:** Return a string slice reference `&'static str` from a function safely.
+**Scenario:** In complex graph processing engines and game ECS architectures, storing direct Rust references (`&Node` or `&mut Node`) inside collection items leads to dangling references whenever internal storage vectors reallocate or nodes are removed.
 
-**Expected output:**
+**Task:**
+1. Design a generational arena `Arena<T>` that replaces direct Rust references with lightweight, index-based handles `Handle { index: usize, generation: u64 }`.
+2. Implement slot tracking via an internal `Slot<T>` enum (`Occupied` vs `Vacant`) to manage memory recycling and generation counters.
+3. Implement `insert(&mut self, data: T) -> Handle`, `get(&self, handle: Handle) -> Option<&T>`, `get_mut(&mut self, handle: Handle) -> Option<&mut T>`, and `remove(&mut self, handle: Handle) -> Option<T>`.
+4. Include unit tests demonstrating that stale handles pointing to removed or recycled slots safely return `None` (preventing use-after-free and dangling handle bugs).
+
 > [!check]- Answer
-> ```
-> Static slice: Constant
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn static_text() -> &'static str {
->     "Constant"
+> #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+> pub struct Handle {
+>     pub index: usize,
+>     pub generation: u64,
 > }
-> fn main() {
->     println!("Static slice: {}", static_text());
+>
+> #[derive(Debug)]
+> enum Slot<T> {
+>     Occupied { data: T, generation: u64 },
+>     Vacant { generation: u64 },
+> }
+>
+> #[derive(Debug)]
+> pub struct Arena<T> {
+>     slots: Vec<Slot<T>>,
+>     free_list: Vec<usize>,
+> }
+>
+> impl<T> Arena<T> {
+>     pub fn new() -> Self {
+>         Arena {
+>             slots: Vec::new(),
+>             free_list: Vec::new(),
+>         }
+>     }
+>
+>     pub fn insert(&mut self, data: T) -> Handle {
+>         if let Some(index) = self.free_list.pop() {
+>             let current_gen = match &self.slots[index] {
+>                 Slot::Vacant { generation } => *generation,
+>                 Slot::Occupied { .. } => unreachable!("Free list index pointed to occupied slot"),
+>             };
+>             self.slots[index] = Slot::Occupied {
+>                 data,
+>                 generation: current_gen,
+>             };
+>             Handle {
+>                 index,
+>                 generation: current_gen,
+>             }
+>         } else {
+>             let index = self.slots.len();
+>             let generation = 1;
+>             self.slots.push(Slot::Occupied { data, generation });
+>             Handle { index, generation }
+>         }
+>     }
+>
+>     pub fn get(&self, handle: Handle) -> Option<&T> {
+>         match self.slots.get(handle.index)? {
+>             Slot::Occupied { data, generation } if *generation == handle.generation => Some(data),
+>             _ => None,
+>         }
+>     }
+>
+>     pub fn get_mut(&mut self, handle: Handle) -> Option<&mut T> {
+>         match self.slots.get_mut(handle.index)? {
+>             Slot::Occupied { data, generation } if *generation == handle.generation => Some(data),
+>             _ => None,
+>         }
+>     }
+>
+>     pub fn remove(&mut self, handle: Handle) -> Option<T> {
+>         let slot = self.slots.get_mut(handle.index)?;
+>         match slot {
+>             Slot::Occupied { generation, .. } if *generation == handle.generation => {
+>                 let next_gen = *generation + 1;
+>                 let old_slot = std::mem::replace(slot, Slot::Vacant { generation: next_gen });
+>                 self.free_list.push(handle.index);
+>                 if let Slot::Occupied { data, .. } = old_slot {
+>                     Some(data)
+>                 } else {
+>                     unreachable!()
+>                 }
+>             }
+>             _ => None,
+>         }
+>     }
+>
+>     pub fn len(&self) -> usize {
+>         self.slots.len() - self.free_list.len()
+>     }
+>
+>     pub fn is_empty(&self) -> bool {
+>         self.len() == 0
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>
+>     #[test]
+>     fn test_arena_insert_and_get() {
+>         let mut arena = Arena::new();
+>         let h1 = arena.insert("Node Alpha");
+>         let h2 = arena.insert("Node Beta");
+>
+>         assert_eq!(arena.get(h1), Some(&"Node Alpha"));
+>         assert_eq!(arena.get(h2), Some(&"Node Beta"));
+>         assert_eq!(arena.len(), 2);
+>     }
+>
+>     #[test]
+>     fn test_prevent_dangling_handle_use_after_free() {
+>         let mut arena = Arena::new();
+>         let h1 = arena.insert(100);
+>
+>         let removed = arena.remove(h1);
+>         assert_eq!(removed, Some(100));
+>
+>         // Accessing removed item through stale handle returns None safely
+>         assert_eq!(arena.get(h1), None);
+>         assert!(matches!(arena.get(h1), None));
+>     }
+>
+>     #[test]
+>     fn test_generational_index_invalidates_stale_handles() {
+>         let mut arena = Arena::new();
+>         let h1 = arena.insert("First Item");
+>         arena.remove(h1);
+>
+>         // Re-inserting reuses index 0 with incremented generation
+>         let h2 = arena.insert("Second Item");
+>
+>         assert_eq!(h1.index, h2.index);
+>         assert_ne!(h1.generation, h2.generation);
+>
+>         // Stale handle h1 fails generation check, preventing ABA dangling reference errors
+>         assert_eq!(arena.get(h1), None);
+>         assert_eq!(arena.get(h2), Some(&"Second Item"));
+>     }
 > }
 > ```
 >
-> **Explanation:** String literals reside in binary data segments with `'static` lifetime, preventing dangling reference risks.
+> #### Technical Explanation
+>
+>
+>
+> 1. **Decoupling References to Avoid Dangling Pointers:** Storing standard Rust references `&T` across nodes in dynamic collections fails because `Vec` reallocations move heap memory, instantly invalidating raw address pointers. Generational arena indexing replaces direct address pointers with `Handle { index, generation }`, completely bypassing borrow checker ownership cycles while preventing dangling references.
+> 2. **Generational Invalidation:** When slot `index` is freed and re-allocated for a new element, its internal `generation` is incremented. Any old handle `h1` holding the previous generation will fail the `*generation == handle.generation` guard, turning what would be a fatal C/C++ dangling pointer bug into a safe runtime `None`.
+> 3. **Lifetime Safety Guarantees:** When calling `arena.get(handle)`, the returned reference `&'a T` borrows directly from `&'a self` (the `Arena`). Rust enforces that the returned reference `'a` cannot outlive the `Arena` instance itself, ensuring underlying memory is never accessed post-drop.
+
+---
+
+### Exercise 3: Safe Foreign Memory Wrapper with RAII Lifetimes
+
+**Scenario:** When building FFI wrappers around foreign C libraries or shared hardware memory, raw pointers (`*mut u8`) do not possess Rust lifetime bounds. If foreign memory is freed while Rust code holds a raw pointer or converted slice, dereferencing it creates a dangling reference.
+
+**Task:**
+1. Implement a safe wrapper `ForeignBuffer` encapsulating raw pointer state (`ptr: *mut u8`, `capacity: usize`, `len: usize`).
+2. Implement safe slice accessors `as_slice<'a>(&'a self) -> &'a [u8]` and `as_mut_slice<'a>(&'a mut self) -> &'a mut [u8]` that bind slice validity to the `ForeignBuffer` struct lifetime `'a`.
+3. Implement `to_vec(&self) -> Vec<u8>` to allow callers to copy foreign data into an owned Rust `Vec` when data must outlive the buffer.
+4. Implement `Drop` for `ForeignBuffer` to guarantee deterministically cleaning up raw buffer memory upon going out of scope.
+5. Provide unit test assertions covering slice borrowing, mutation, and owned memory retention past buffer drop.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::slice;
+>
+> pub struct ForeignBuffer {
+>     ptr: *mut u8,
+>     capacity: usize,
+>     len: usize,
+> }
+>
+> impl ForeignBuffer {
+>     /// Creates a simulated foreign buffer wrapping heap memory.
+>     /// In production FFI, this encapsulates raw pointers returned from C APIs or hardware drivers.
+>     pub fn from_vec(mut vec: Vec<u8>) -> Self {
+>         vec.shrink_to_fit();
+>         let len = vec.len();
+>         let capacity = vec.capacity();
+>         let ptr = vec.as_mut_ptr();
+>         std::mem::forget(vec); // Hand over memory management responsibility to ForeignBuffer
+>
+>         ForeignBuffer { ptr, capacity, len }
+>     }
+>
+>     /// Safely borrows raw foreign memory as an immutable Rust slice.
+>     /// The returned slice lifetime `'a` is strictly bounded by `&'a self`.
+>     pub fn as_slice<'a>(&'a self) -> &'a [u8] {
+>         if self.ptr.is_null() || self.len == 0 {
+>             &[]
+>         } else {
+>             // SAFETY: `ptr` is non-null and points to `len` valid initialized bytes for lifetime `'a`.
+>             unsafe { slice::from_raw_parts(self.ptr, self.len) }
+>         }
+>     }
+>
+>     /// Safely borrows raw foreign memory as an exclusive mutable Rust slice.
+>     pub fn as_mut_slice<'a>(&'a mut self) -> &'a mut [u8] {
+>         if self.ptr.is_null() || self.len == 0 {
+>             &mut []
+>         } else {
+>             // SAFETY: `ptr` is non-null, valid for `len` bytes, and `&'a mut self` guarantees exclusive access.
+>             unsafe { slice::from_raw_parts_mut(self.ptr, self.len) }
+>         }
+>     }
+>
+>     /// Copies foreign buffer bytes into an owned Rust `Vec<u8>`, allowing caller retention past drop.
+>     pub fn to_vec(&self) -> Vec<u8> {
+>         self.as_slice().to_vec()
+>     }
+>
+>     pub fn len(&self) -> usize {
+>         self.len
+>     }
+>
+>     pub fn is_empty(&self) -> bool {
+>         self.len == 0
+>     }
+> }
+>
+> impl Drop for ForeignBuffer {
+>     fn drop(&mut self) {
+>         if !self.ptr.is_null() && self.capacity > 0 {
+>             // SAFETY: Reconstruct vector representation to trigger proper memory deallocation.
+>             unsafe {
+>                 let _ = Vec::from_raw_parts(self.ptr, self.len, self.capacity);
+>             }
+>         }
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>
+>     #[test]
+>     fn test_foreign_buffer_slice_borrowing() {
+>         let data = vec![0xDE, 0xAD, 0xBE, 0xEF];
+>         let buffer = ForeignBuffer::from_vec(data);
+>
+>         let slice = buffer.as_slice();
+>         assert_eq!(slice, &[0xDE, 0xAD, 0xBE, 0xEF]);
+>         assert_eq!(buffer.len(), 4);
+>     }
+>
+>     #[test]
+>     fn test_foreign_buffer_mutable_slice() {
+>         let data = vec![1, 2, 3, 4];
+>         let mut buffer = ForeignBuffer::from_vec(data);
+>
+>         {
+>             let mut_slice = buffer.as_mut_slice();
+>             mut_slice[0] = 99;
+>         }
+>
+>         assert_eq!(buffer.as_slice(), &[99, 2, 3, 4]);
+>     }
+>
+>     #[test]
+>     fn test_owned_copy_prevents_dangling_reference() {
+>         let owned_data = {
+>             let temp_buffer = ForeignBuffer::from_vec(vec![10, 20, 30]);
+>             assert_eq!(temp_buffer.as_slice()[0], 10);
+>             temp_buffer.to_vec()
+>         }; // temp_buffer drops and deallocates foreign memory here!
+>
+>         // owned_data is owned on the heap and remains valid without dangling raw pointers
+>         assert_eq!(owned_data, vec![10, 20, 30]);
+>         assert_ne!(owned_data.len(), 0);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+>
+> 1. **Raw Pointer Lifetimes & Safety Boundaries:** Raw pointers (`*mut u8`) in Rust lack compiler-enforced lifetimes. Converting a raw pointer into a slice via `slice::from_raw_parts` requires an explicit unsafe block. By signature `as_slice<'a>(&'a self) -> &'a [u8]`, we project the lifetime `'a` of `&self` onto the returned slice, bridging raw pointer operations to Rust's safe lifetime check system.
+> 2. **Preventing Foreign Memory Use-After-Free:** Attempting to store or return `&'a [u8]` beyond the scope of `ForeignBuffer` triggers Rust compile error `E0597` ("borrowed value does not live long enough"). This ensures that safe code can never read foreign memory post-`Drop`.
+> 3. **RAII Deallocation & Heap Safety:** Implementing `Drop` ensures that when `ForeignBuffer` goes out of scope, raw allocated memory is freed deterministically. `to_vec()` provides a safe transition path to clone memory into an owned heap `Vec<u8>`, enabling data persistence across scope boundaries without dangling references.
 
 ---
 

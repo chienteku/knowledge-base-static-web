@@ -152,84 +152,390 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Cloning Solution
+### Exercise 1: High-Performance Zero-Copy Event Pipeline (Sequential Ownership Transfer)
 
-**Problem:** The code below fails to compile because `greeting` is moved into `print_message`, making it invalid when `main` tries to print it. Fix the code by passing a *deep copy* into the function using `.clone()`.
+**Problem:** In real-time event streaming systems and network packet processors, copying payload buffers between processing stages creates severe memory allocation and cache thrashing overhead. By leveraging Rust's move semantics, pipeline stages can transfer ownership of packet buffers sequentially zero-copy.
 
-```rust
-fn print_message(msg: String) {
-    println!("Function says: {}", msg);
-}
+Implement a multi-stage event processing pipeline (`IngestStage` -> `TransformStage` -> `DispatchStage`):
+1. Define a `Header` struct (`stream_id: u32`, `checksum: u8`) and a `PacketBuffer` struct (`header: Header`, `payload: Vec<u8>`).
+2. Implement `IngestStage::new(stream_id: u32)` and `IngestStage::process(self, raw_data: Vec<u8>) -> TransformStage`. The `process` method must consume `IngestStage` by value, calculate an initial wrapping sum checksum of `raw_data`, wrap it in a `PacketBuffer`, and return `TransformStage`.
+3. Implement `TransformStage::apply_transformation(mut self, xor_key: u8) -> DispatchStage`. The method must consume `TransformStage` by value, mutate `payload` in-place by XORing each byte with `xor_key`, update `header.checksum`, and move the buffer into `DispatchStage`.
+4. Implement `DispatchStage::finalize(self) -> (Header, Vec<u8>)`. The method must consume `DispatchStage` by value and return the final header and payload without cloning or reallocating heap memory.
 
-fn main() {
-    let greeting = String::from("Good morning!");
-    
-    // TODO: Fix this line so `greeting` isn't moved!
-    print_message(greeting); 
-    
-    // This line should successfully print if fixed.
-    println!("Main says: {}", greeting);
-}
-```
+Write unit tests confirming that ownership transfers through all stages, payload memory addresses (`as_ptr()`) remain identical across stages, and transformed data matches expected values.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Function says: Good morning!
-> Main says: Good morning!
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> // Use the `.clone()` method to create a deep copy of the String.
-> // This way, the clone is moved into the function, and the original stays alive!
-> print_message(greeting.clone());
-> ```
-
----
-
-### Exercise 2: Moving Ownership Through Functions
-
-**Problem:** Write `fn take_ownership(s: String) -> usize { s.len() }`. Show that calling it moves `s`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Length: 5
-> ```
-> ```rust
-> fn take_ownership(s: String) -> usize { s.len() }
-> fn main() {
->     let text = String::from("hello");
->     let len = take_ownership(text);
->     // text is no longer valid here
->     println!("Length: {}", len);
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Header {
+>     pub stream_id: u32,
+>     pub checksum: u8,
+> }
+> 
+> #[derive(Debug)]
+> pub struct PacketBuffer {
+>     pub header: Header,
+>     pub payload: Vec<u8>,
+> }
+> 
+> pub struct IngestStage {
+>     stream_id: u32,
+> }
+> 
+> pub struct TransformStage {
+>     packet: PacketBuffer,
+> }
+> 
+> pub struct DispatchStage {
+>     packet: PacketBuffer,
+> }
+> 
+> impl IngestStage {
+>     pub fn new(stream_id: u32) -> Self {
+>         Self { stream_id }
+>     }
+> 
+>     pub fn process(self, raw_data: Vec<u8>) -> TransformStage {
+>         let initial_checksum = raw_data.iter().fold(0u8, |acc, &x| acc.wrapping_add(x));
+>         let packet = PacketBuffer {
+>             header: Header {
+>                 stream_id: self.stream_id,
+>                 checksum: initial_checksum,
+>             },
+>             payload: raw_data,
+>         };
+>         TransformStage { packet }
+>     }
+> }
+> 
+> impl TransformStage {
+>     pub fn apply_transformation(mut self, xor_key: u8) -> DispatchStage {
+>         for byte in self.packet.payload.iter_mut() {
+>             *byte ^= xor_key;
+>         }
+>         self.packet.header.checksum = self
+>             .packet
+>             .payload
+>             .iter()
+>             .fold(0u8, |acc, &x| acc.wrapping_add(x));
+>         DispatchStage { packet: self.packet }
+>     }
+> }
+> 
+> impl DispatchStage {
+>     pub fn finalize(self) -> (Header, Vec<u8>) {
+>         (self.packet.header, self.packet.payload)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_zero_copy_pipeline_ownership_transfer() {
+>         let raw_bytes = vec![0x10, 0x20, 0x30, 0x40];
+>         let initial_ptr = raw_bytes.as_ptr();
+> 
+>         let stage1 = IngestStage::new(101);
+>         let stage2 = stage1.process(raw_bytes);
+>         let stage3 = stage2.apply_transformation(0xFF);
+>         let (header, final_bytes) = stage3.finalize();
+> 
+>         // 1. Verify stream metadata and byte transformation
+>         assert_eq!(header.stream_id, 101);
+>         assert_eq!(final_bytes, vec![0xEF, 0xDF, 0xCF, 0xBF]);
+> 
+>         // 2. Verify zero-copy: heap memory pointer remains identical
+>         assert_eq!(final_bytes.as_ptr(), initial_ptr);
+> 
+>         // 3. Verify checksum mutation assertion
+>         assert_ne!(header.checksum, 0);
+> 
+>         // 4. Pattern matching assertion
+>         assert!(matches!(header, Header { stream_id: 101, .. }));
+>     }
 > }
 > ```
 >
-> **Explanation:** Ownership transfers into `take_ownership`, deallocating `text` upon function return.
+> #### Technical Explanation
+>
+> 
+> 1. **Ownership Transfer & Zero-Copy Invariants**: In Rust, passing `raw_data: Vec<u8>` into `IngestStage::process(self, ...)` transfers ownership of the 24-byte stack descriptor (pointer, length, capacity) by value. The underlying heap allocation containing `[0x10, 0x20, 0x30, 0x40]` is never reallocated or copied, as proven by `assert_eq!(final_bytes.as_ptr(), initial_ptr)`.
+> 2. **Affine Type System & Invalidation**: By defining methods that accept `self` by value (e.g. `process(self, ...)` and `finalize(self)`), Rust's move semantics consume the caller's binding. Once `stage1.process(...)` completes, `stage1` becomes an uninitialized binding; attempting to reuse `stage1` or `stage2` results in compile error `E0382` ("use of moved value").
+> 3. **Memory Layout & Performance**: Moving a `PacketBuffer` between `TransformStage` and `DispatchStage` involves a simple bitwise copy (shallow copy) of the stack metadata (32 bytes total: 4-byte `stream_id`, 1-byte `checksum`, padding, and 24-byte `Vec` header). Rust automatically optimizes out stack copies via scalar replacement of aggregates (SRoA) and inline register passing.
+> 4. **Resource Management**: When `DispatchStage::finalize(self)` unpacks `self.packet`, ownership of `Header` and `Vec<u8>` is returned directly to the caller, preventing the `DispatchStage` destructor from dropping the underlying heap payload.
 
 ---
 
-### Exercise 3: Preventing Moves with `.clone()`
+### Exercise 2: Compile-Time Safe Type-State Machine for Database Transactions (Affine Types)
 
-**Problem:** Pass a clone `s.clone()` into `take_ownership` so `s` remains valid in caller scope.
+**Problem:** In database client drivers and financial engines, performing operations on uncommitted, committed, or rolled-back transactions out of order can lead to severe runtime errors. By using Rust move semantics with the Type-State pattern, transition methods consume `self` by value, ensuring that previous transaction handles are invalidated at compile time.
 
-**Expected output:**
+Implement a database transaction manager:
+1. Define zero-sized phantom state types: `Uninitialized`, `Active`, `Committed`, and `RolledBack`.
+2. Define a generic structure `Transaction<State>` containing `tx_id: u64`, `db_name: String`, `log: Vec<String>`, and `_state: std::marker::PhantomData<State>`.
+3. Implement `Transaction<Uninitialized>::new(tx_id: u64, db_name: impl Into<String>) -> Self` and `begin(self) -> Transaction<Active>`.
+4. Implement `Transaction<Active>::record_operation(&mut self, op: impl Into<String>)`, `commit(mut self) -> Transaction<Committed>`, and `rollback(mut self) -> Transaction<RolledBack>`.
+5. Implement accessor methods `get_audit_log(&self) -> &[String]` and `tx_id(&self) -> u64` for `Committed` and `RolledBack` states.
+
+Write unit tests verifying state transitions, log recording, and pattern matching on committed/rolled-back states.
+
 > [!check]- Answer
-> ```
-> Len: 5, Original: hello
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn take_ownership(s: String) -> usize { s.len() }
-> fn main() {
->     let s = String::from("hello");
->     let len = take_ownership(s.clone());
->     println!("Len: {}, Original: {}", len, s);
+> use std::marker::PhantomData;
+> 
+> pub struct Uninitialized;
+> pub struct Active;
+> pub struct Committed;
+> pub struct RolledBack;
+> 
+> pub struct Transaction<State> {
+>     tx_id: u64,
+>     db_name: String,
+>     log: Vec<String>,
+>     _state: PhantomData<State>,
+> }
+> 
+> impl Transaction<Uninitialized> {
+>     pub fn new(tx_id: u64, db_name: impl Into<String>) -> Self {
+>         Self {
+>             tx_id,
+>             db_name: db_name.into(),
+>             log: Vec::new(),
+>             _state: PhantomData,
+>         }
+>     }
+> 
+>     pub fn begin(self) -> Transaction<Active> {
+>         let mut log = self.log;
+>         log.push(format!("TX {} initialized on database '{}'", self.tx_id, self.db_name));
+>         Transaction {
+>             tx_id: self.tx_id,
+>             db_name: self.db_name,
+>             log,
+>             _state: PhantomData,
+>         }
+>     }
+> }
+> 
+> impl Transaction<Active> {
+>     pub fn record_operation(&mut self, op: impl Into<String>) {
+>         self.log.push(op.into());
+>     }
+> 
+>     pub fn commit(mut self) -> Transaction<Committed> {
+>         self.log.push(format!("TX {} committed successfully", self.tx_id));
+>         Transaction {
+>             tx_id: self.tx_id,
+>             db_name: self.db_name,
+>             log: self.log,
+>             _state: PhantomData,
+>         }
+>     }
+> 
+>     pub fn rollback(mut self) -> Transaction<RolledBack> {
+>         self.log.push(format!("TX {} rolled back", self.tx_id));
+>         Transaction {
+>             tx_id: self.tx_id,
+>             db_name: self.db_name,
+>             log: self.log,
+>             _state: PhantomData,
+>         }
+>     }
+> }
+> 
+> impl Transaction<Committed> {
+>     pub fn get_audit_log(&self) -> &[String] {
+>         &self.log
+>     }
+> 
+>     pub fn tx_id(&self) -> u64 {
+>         self.tx_id
+>     }
+> }
+> 
+> impl Transaction<RolledBack> {
+>     pub fn get_audit_log(&self) -> &[String] {
+>         &self.log
+>     }
+> 
+>     pub fn tx_id(&self) -> u64 {
+>         self.tx_id
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_transaction_commit_lifecycle() {
+>         let uninit = Transaction::<Uninitialized>::new(1001, "prod_db");
+>         let mut active = uninit.begin();
+> 
+>         active.record_operation("INSERT INTO users VALUES (1, 'Alice')");
+>         active.record_operation("UPDATE balances SET amount = 500 WHERE user_id = 1");
+> 
+>         let committed = active.commit();
+> 
+>         assert_eq!(committed.tx_id(), 1001);
+>         assert_eq!(committed.get_audit_log().len(), 3);
+>         assert!(committed.get_audit_log()[1].contains("INSERT INTO users"));
+>         assert!(matches!(committed, Transaction { tx_id: 1001, .. }));
+>     }
+> 
+>     #[test]
+>     fn test_transaction_rollback_lifecycle() {
+>         let uninit = Transaction::<Uninitialized>::new(1002, "staging_db");
+>         let mut active = uninit.begin();
+> 
+>         active.record_operation("DELETE FROM temp_logs");
+>         let rolled_back = active.rollback();
+> 
+>         assert_eq!(rolled_back.tx_id(), 1002);
+>         assert_ne!(rolled_back.get_audit_log().len(), 0);
+>         assert!(rolled_back.get_audit_log().last().unwrap().contains("rolled back"));
+>         assert!(matches!(rolled_back, Transaction { tx_id: 1002, .. }));
+>     }
 > }
 > ```
 >
-> **Explanation:** Explicitly cloning duplicates heap contents, creating a second independent owner.
+> #### Technical Explanation
+>
+> 
+> 1. **Compile-Time Invariant Enforcement**: The Type-State pattern combined with move semantics enforces valid state transitions statically. Because `commit(mut self)` consumes `self` by value, the `active` binding is invalidated upon invocation. Calling `active.record_operation(...)` or `active.commit()` a second time generates compile error `E0382`.
+> 2. **Zero-Cost Phantom Data**: `PhantomData<State>` carries zero runtime memory overhead (0 bytes) and zero CPU performance cost. It informs the compiler's type checker about the logical ownership of the generic marker type `State` without affecting memory layout.
+> 3. **Ownership Reuse & Memory Efficiency**: In `commit(mut self)` and `rollback(mut self)`, fields like `log: Vec<String>` and `db_name: String` are moved directly from the old `Transaction<Active>` struct into the new `Transaction<Committed>` struct. No dynamic memory allocations or string duplications take place during state transitions.
+> 4. **Drop Semantics & Clean Destruction**: When `committed` or `rolled_back` eventually leaves scope, Rust runs the destructor for `Transaction<State>`, safely deallocating `db_name` and all log entries in `Vec<String>`.
+
+---
+
+### Exercise 3: Zero-Cost Buffer Recycling & Selective Partial Moves (`std::mem::replace` & `Option::take`)
+
+**Problem:** In custom network buffer pools and ring buffers, extracting heap-allocated payload buffers from wrapper structs via mutable references `&mut Self` is prohibited because Rust forbids partial moves out of borrowed references (compile error `E0507`). Using `Option::take()` and `std::mem::replace`, developers can extract or swap heavy inner heap vectors in $O(1)$ constant time without cloning or reallocating.
+
+Implement a buffer slot recycling system:
+1. Define a `BufferSlot` struct containing `id: u64`, `payload: Option<Vec<u8>>`, and `metadata: String`.
+2. Implement `BufferSlot::new(id: u64, payload: Vec<u8>, metadata: impl Into<String>) -> Self`.
+3. Implement `BufferSlot::extract_payload(&mut self) -> Vec<u8>`: Extract `self.payload` via `Option::take()`, replacing it with `None` while maintaining struct validity.
+4. Implement `BufferSlot::swap_payload(&mut self, new_payload: Vec<u8>) -> Vec<u8>`: Replace `self.payload` in-place using `Option::replace` / `std::mem::replace`, returning the old payload (or empty `Vec` if empty).
+5. Implement a `BufferPool` struct containing `pool: Vec<Vec<u8>>` with methods `new()`, `recycle_slot(&mut self, mut slot: BufferSlot)`, and `pool_size(&self) -> usize`.
+
+Write unit tests verifying pointer preservation (`as_ptr()`), partial moves with `Option::take()`, in-place swaps, and buffer pool recycling.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::mem;
+> 
+> #[derive(Debug)]
+> pub struct BufferSlot {
+>     pub id: u64,
+>     pub payload: Option<Vec<u8>>,
+>     pub metadata: String,
+> }
+> 
+> impl BufferSlot {
+>     pub fn new(id: u64, payload: Vec<u8>, metadata: impl Into<String>) -> Self {
+>         Self {
+>             id,
+>             payload: Some(payload),
+>             metadata: metadata.into(),
+>         }
+>     }
+> 
+>     pub fn extract_payload(&mut self) -> Vec<u8> {
+>         self.payload.take().unwrap_or_default()
+>     }
+> 
+>     pub fn swap_payload(&mut self, new_payload: Vec<u8>) -> Vec<u8> {
+>         let old = self.payload.replace(new_payload);
+>         old.unwrap_or_default()
+>     }
+> }
+> 
+> pub struct BufferPool {
+>     pool: Vec<Vec<u8>>,
+> }
+> 
+> impl BufferPool {
+>     pub fn new() -> Self {
+>         Self { pool: Vec::new() }
+>     }
+> 
+>     pub fn recycle_slot(&mut self, mut slot: BufferSlot) {
+>         if let Some(buf) = slot.payload.take() {
+>             self.pool.push(buf);
+>         }
+>     }
+> 
+>     pub fn pool_size(&self) -> usize {
+>         self.pool.len()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_selective_partial_move_and_take() {
+>         let data = vec![1, 2, 3, 4, 5];
+>         let initial_ptr = data.as_ptr();
+>         let mut slot = BufferSlot::new(42, data, "session_token_alpha");
+> 
+>         // 1. Assert initial state
+>         assert!(slot.payload.is_some());
+> 
+>         // 2. Perform partial move via Option::take()
+>         let extracted = slot.extract_payload();
+>         assert_eq!(extracted.as_ptr(), initial_ptr);
+>         assert_eq!(extracted, vec![1, 2, 3, 4, 5]);
+>         assert!(slot.payload.is_none());
+> 
+>         // 3. Swap payload in-place using Option::replace
+>         let new_data = vec![10, 20, 30];
+>         let new_ptr = new_data.as_ptr();
+>         let previous = slot.swap_payload(new_data);
+> 
+>         assert!(previous.is_empty());
+>         assert!(slot.payload.is_some());
+>         assert_eq!(slot.payload.as_ref().unwrap().as_ptr(), new_ptr);
+>         assert!(matches!(slot, BufferSlot { id: 42, .. }));
+>     }
+> 
+>     #[test]
+>     fn test_buffer_pool_recycling() {
+>         let mut pool = BufferPool::new();
+>         let slot = BufferSlot::new(99, vec![0xFF; 64], "pool_item");
+> 
+>         pool.recycle_slot(slot);
+>         assert_eq!(pool.pool_size(), 1);
+>         assert_ne!(pool.pool_size(), 0);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Partial Move Restriction on Borrowed References**: In Rust, moving a field out of a struct behind a mutable reference `&mut BufferSlot` (e.g. `let p = self.payload;`) is rejected by the compiler (`E0507: cannot move out of dereference of &mut pointer`). Rust requires that every borrowed target remains in a fully valid, initialized state at all times.
+> 2. **`Option::take()` & `std::mem::replace` Mechanics**: `self.payload.take()` executes `std::mem::replace(&mut self.payload, None)`. In assembly, this atomically writes `None` into `self.payload` while returning the original `Some(Vec<u8>)` by value. This satisfies Rust's memory safety invariant without needing expensive heap cloning or buffer duplication.
+> 3. **Null Pointer Optimization (NPO)**: Because `Vec<u8>` contains a non-null pointer descriptor, Rust optimizes `Option<Vec<u8>>` memory representation using Null Pointer Optimization. `None` is represented internally as a zero (null pointer) descriptor, making `Option<Vec<u8>>` occupy the exact same 24 bytes on the stack as `Vec<u8>` alone.
+> 4. **Edge Cases & Invariants**: Calling `extract_payload()` on a slot whose payload has already been extracted returns `Vec::new()` (an empty vector that performs 0 heap allocations). In `recycle_slot`, partial move via `take()` extracts the payload for recycling without destroying the parent `BufferSlot`'s metadata.
 
 ---
 

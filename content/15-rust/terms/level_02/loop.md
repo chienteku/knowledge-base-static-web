@@ -151,88 +151,530 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Break with a Value
+### Exercise 1: Resilient Microservice Network Retry Engine with Exponential Backoff
 
-**Problem:** The loop below simulates waiting for a temperature sensor to warm up. Currently, it just breaks when it reaches 100 degrees. Modify the code so that the `loop` returns the final `current_temp` value when it breaks, allowing the `let final_temp` assignment to work correctly.
+**Scenario:**
+In distributed microservice architectures, downstream remote calls frequently suffer from transient network outages or temporary rate-limiting. A common production pattern is an infinite `loop` expression acting as a stateful retry engine that evaluates to a `Result<Response, NetworkError>` using `break` statements.
 
-```rust
-fn main() {
-    let mut current_temp = 50;
-    
-    let final_temp = loop {
-        current_temp += 10;
-        
-        if current_temp >= 100 {
-            // TODO: Modify this break statement to return `current_temp`
-            break; 
-        }
-    };
-    
-    println!("Sensor warmed up to: {} degrees", final_temp);
-}
-```
+**Task:**
+Implement `execute_with_retry<F>(config: RetryConfig, mut request_fn: F) -> Result<Response, NetworkError>` where `F: FnMut(u32) -> ServiceStatus`.
+- The function must execute an infinite `loop` that increments attempt counters and invokes `request_fn(attempt)`.
+- If `ServiceStatus::Success(resp)` is returned, exit the loop using `break Ok(resp)`.
+- If `ServiceStatus::TransientFailure(reason)` is returned:
+  - If `attempt >= config.max_attempts`, exit the loop using `break Err(NetworkError::MaxRetriesExceeded { attempts: attempt, last_error: reason })`.
+  - Otherwise, update backoff state (`(current_backoff * 2).min(config.max_backoff_ms)`) and invoke `continue` to advance to the next retry attempt.
+- If `ServiceStatus::FatalFailure(reason)` is returned, immediately exit using `break Err(NetworkError::Fatal(reason))`.
 
-**Expected output:**
 > [!check]- Answer
-> ```text
-> Sensor warmed up to: 100 degrees
-> ```
-> - Change `break;` to `break current_temp;`.
-> - Now, when the loop breaks, it hands `100` back to be stored in `final_temp`.
-
----
-
-### Exercise 2: Returning Values from `loop`
-
-**Problem:** Use a `loop` with `counter += 1` that returns `counter * 2` using `break counter * 2;` when `counter == 10`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Result: 20
-> ```
-> ```rust
-> fn main() {
->     let mut counter = 0;
->     let result = loop {
->         counter += 1;
->         if counter == 10 {
->             break counter * 2;
->         }
->     };
->     println!("Result: {}", result);
-> }
-> ```
 >
-> **Explanation:** `break expression;` inside `loop` returns values directly to variable bindings.
-
----
-
-### Exercise 3: Loop Labels for Nested Loops
-
-**Problem:** Use a labelled loop `'outer: loop` to break out of nested loops directly when inner condition `x * y == 6` is met.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Broken out at x=2, y=3
-> ```
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     'outer: for x in 1..=5 {
->         for y in 1..=5 {
->             if x * y == 6 {
->                 println!("Broken out at x={}, y={}", x, y);
->                 break 'outer;
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum NetworkError {
+>     MaxRetriesExceeded { attempts: u32, last_error: String },
+>     Fatal(String),
+> }
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Response {
+>     pub status_code: u16,
+>     pub body: String,
+> }
+> 
+> pub enum ServiceStatus {
+>     Success(Response),
+>     TransientFailure(String),
+>     FatalFailure(String),
+> }
+> 
+> pub struct RetryConfig {
+>     pub max_attempts: u32,
+>     pub initial_backoff_ms: u64,
+>     pub max_backoff_ms: u64,
+> }
+> 
+> pub fn execute_with_retry<F>(config: RetryConfig, mut request_fn: F) -> Result<Response, NetworkError>
+> where
+>     F: FnMut(u32) -> ServiceStatus,
+> {
+>     let mut attempt = 0;
+>     let mut current_backoff = config.initial_backoff_ms;
+> 
+>     let result = loop {
+>         attempt += 1;
+>         match request_fn(attempt) {
+>             ServiceStatus::Success(resp) => {
+>                 break Ok(resp);
+>             }
+>             ServiceStatus::TransientFailure(reason) => {
+>                 if attempt >= config.max_attempts {
+>                     break Err(NetworkError::MaxRetriesExceeded {
+>                         attempts: attempt,
+>                         last_error: reason,
+>                     });
+>                 }
+>                 current_backoff = (current_backoff * 2).min(config.max_backoff_ms);
+>                 continue;
+>             }
+>             ServiceStatus::FatalFailure(reason) => {
+>                 break Err(NetworkError::Fatal(reason));
 >             }
 >         }
+>     };
+> 
+>     result
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_retry_success_first_attempt() {
+>         let config = RetryConfig {
+>             max_attempts: 3,
+>             initial_backoff_ms: 100,
+>             max_backoff_ms: 1000,
+>         };
+> 
+>         let result = execute_with_retry(config, |_attempt| {
+>             ServiceStatus::Success(Response {
+>                 status_code: 200,
+>                 body: "OK".to_string(),
+>             })
+>         });
+> 
+>         assert!(result.is_ok());
+>         let resp = result.unwrap();
+>         assert_eq!(resp.status_code, 200);
+>         assert_eq!(resp.body, "OK");
+>         assert_ne!(resp.status_code, 500);
+>         assert!(matches!(resp, Response { status_code: 200, .. }));
+>     }
+> 
+>     #[test]
+>     fn test_retry_transient_then_success() {
+>         let config = RetryConfig {
+>             max_attempts: 4,
+>             initial_backoff_ms: 50,
+>             max_backoff_ms: 400,
+>         };
+> 
+>         let result = execute_with_retry(config, |attempt| {
+>             if attempt < 3 {
+>                 ServiceStatus::TransientFailure(format!("Timeout on attempt {}", attempt))
+>             } else {
+>                 ServiceStatus::Success(Response {
+>                     status_code: 200,
+>                     body: "Recovered".to_string(),
+>                 })
+>             }
+>         });
+> 
+>         assert!(result.is_ok());
+>         let resp = result.unwrap();
+>         assert_eq!(resp.body, "Recovered");
+>         assert_ne!(resp.body, "Failed");
+>         assert!(matches!(resp.status_code, 200));
+>     }
+> 
+>     #[test]
+>     fn test_retry_max_retries_exceeded() {
+>         let config = RetryConfig {
+>             max_attempts: 3,
+>             initial_backoff_ms: 10,
+>             max_backoff_ms: 50,
+>         };
+> 
+>         let result = execute_with_retry(config, |attempt| {
+>             ServiceStatus::TransientFailure(format!("503 Service Unavailable #{}", attempt))
+>         });
+> 
+>         assert!(result.is_err());
+>         let err = result.unwrap_err();
+>         assert_ne!(err, NetworkError::Fatal("503".to_string()));
+>         assert!(matches!(
+>             err,
+>             NetworkError::MaxRetriesExceeded { attempts: 3, .. }
+>         ));
+>         if let NetworkError::MaxRetriesExceeded { attempts, last_error } = err {
+>             assert_eq!(attempts, 3);
+>             assert!(last_error.contains("503 Service Unavailable #3"));
+>         }
+>     }
+> 
+>     #[test]
+>     fn test_retry_fatal_failure_immediate_break() {
+>         let config = RetryConfig {
+>             max_attempts: 5,
+>             initial_backoff_ms: 10,
+>             max_backoff_ms: 50,
+>         };
+> 
+>         let mut calls = 0;
+>         let result = execute_with_retry(config, |_attempt| {
+>             calls += 1;
+>             ServiceStatus::FatalFailure("401 Unauthorized".to_string())
+>         });
+> 
+>         assert_eq!(calls, 1);
+>         assert_ne!(calls, 5);
+>         assert!(result.is_err());
+>         assert!(matches!(result, Err(NetworkError::Fatal(_))));
 >     }
 > }
 > ```
 >
-> **Explanation:** Loop labels (`'label:`) allow `break` and `continue` to target specific outer loop scopes.
+> #### Technical Explanation
+>
+> 
+> 1. **`loop` as an Expression**: In Rust, `loop` blocks are primary expressions that evaluate to a concrete value supplied by `break expression;`. The variable `result` directly receives the `Result<Response, NetworkError>` evaluated by the `loop` block without requiring intermediate mutable optional containers (`Option<Result<...>>`).
+> 2. **Type Uniformity & Language Invariants**: Every `break` statement inside a typed `loop` expression must return the identical type. In `execute_with_retry`, all three exit arms (`break Ok(resp)`, `break Err(NetworkError::MaxRetriesExceeded { .. })`, and `break Err(NetworkError::Fatal(..))`) evaluate to `Result<Response, NetworkError>`. If any `break` arm returned a mismatched type or omitted a value, the compiler would trigger `E0308`.
+> 3. **Ownership and State Mutation**: The retry state variables (`attempt` and `current_backoff`) are mutated across iterations in the caller frame. The closure `request_fn` is declared with `FnMut(u32)` to allow mutable environment capture across retry iterations.
+> 4. **Edge Cases & Backoff Bounds**: Exponential backoff calculations can overflow integer limits if uncontrolled; `.min(config.max_backoff_ms)` ensures upper bounds are safe. When `FatalFailure` occurs, the engine breaks immediately, guaranteeing zero wasted retry cycles or side effects on unrecoverable errors.
+
+---
+
+### Exercise 2: Labeled Multi-Pass Stream Packet Framing & Validation Parser
+
+**Scenario:**
+High-performance binary network protocols transmit framed packets over contiguous stream buffers. Stream parsing requires resynchronizing corrupted headers and skipping malformed frames using nested loops with loop labels (`'stream: loop` and `'frame: loop`).
+
+**Task:**
+Implement `parse_stream_frames(buffer: &[u8]) -> ParseSummary`.
+- Frame protocol definition:
+  - Header: Magic byte `0xAA` (1 byte).
+  - Length: Payload length `L` (1 byte `u8`).
+  - Payload: `L` bytes.
+  - Checksum: Bitwise XOR sum of payload bytes (1 byte).
+- Control flow rules:
+  - Label the outer loop `'stream: loop`. If remaining buffer bytes `< 2`, break out of `'stream`.
+  - If `remaining[0] != 0xAA`, resynchronize by incrementing cursor by 1 byte and calling `continue 'stream`.
+  - If remaining buffer length is less than the complete frame size (`2 + L + 1`), break out of `'stream` (buffer truncated).
+  - Label the inner validation loop `'frame: loop`. Calculate payload checksum.
+  - If checksum matches, record `Frame { payload: payload.to_vec() }`, advance cursor past the frame, and break out of `'frame`.
+  - If checksum fails, increment corrupted frame counter, advance cursor by 1 byte past corrupt magic header, and call `continue 'stream` to resume stream scanning.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct Frame {
+>     pub payload: Vec<u8>,
+> }
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub struct ParseSummary {
+>     pub frames: Vec<Frame>,
+>     pub bytes_processed: usize,
+>     pub corrupted_frames_skipped: usize,
+> }
+> 
+> pub fn parse_stream_frames(buffer: &[u8]) -> ParseSummary {
+>     let mut frames = Vec::new();
+>     let mut cursor = 0;
+>     let mut corrupt_count = 0;
+> 
+>     'stream: loop {
+>         let remaining = &buffer[cursor..];
+>         if remaining.len() < 2 {
+>             break 'stream;
+>         }
+> 
+>         if remaining[0] != 0xAA {
+>             cursor += 1;
+>             continue 'stream;
+>         }
+> 
+>         let payload_len = remaining[1] as usize;
+>         let total_frame_len = 2 + payload_len + 1;
+> 
+>         if remaining.len() < total_frame_len {
+>             break 'stream;
+>         }
+> 
+>         'frame: loop {
+>             let payload = &remaining[2..2 + payload_len];
+>             let expected_checksum = remaining[2 + payload_len];
+>             let calculated_checksum = payload.iter().fold(0u8, |acc, &b| acc ^ b);
+> 
+>             if calculated_checksum != expected_checksum {
+>                 corrupt_count += 1;
+>                 cursor += 1;
+>                 continue 'stream;
+>             }
+> 
+>             frames.push(Frame {
+>                 payload: payload.to_vec(),
+>             });
+>             cursor += total_frame_len;
+>             break 'frame;
+>         }
+>     }
+> 
+>     ParseSummary {
+>         frames,
+>         bytes_processed: cursor,
+>         corrupted_frames_skipped: corrupt_count,
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_parse_valid_single_frame() {
+>         let data = vec![0xAA, 0x03, 10, 20, 30, 10 ^ 20 ^ 30];
+>         let summary = parse_stream_frames(&data);
+> 
+>         assert!(summary.frames.len() == 1);
+>         assert_eq!(summary.frames[0].payload, vec![10, 20, 30]);
+>         assert_eq!(summary.bytes_processed, 6);
+>         assert_ne!(summary.bytes_processed, 0);
+>         assert!(matches!(
+>             summary,
+>             ParseSummary {
+>                 corrupted_frames_skipped: 0,
+>                 ..
+>             }
+>         ));
+>     }
+> 
+>     #[test]
+>     fn test_parse_multiple_frames_with_noise() {
+>         let data = vec![
+>             0xFF, 0x00,
+>             0xAA, 0x01, 42, 42,
+>             0xBB,
+>             0xAA, 0x02, 1, 2, 1 ^ 2,
+>         ];
+>         let summary = parse_stream_frames(&data);
+> 
+>         assert_eq!(summary.frames.len(), 2);
+>         assert_eq!(summary.frames[0].payload, vec![42]);
+>         assert_eq!(summary.frames[1].payload, vec![1, 2]);
+>         assert_ne!(summary.corrupted_frames_skipped, 99);
+>         assert!(matches!(summary.frames.as_slice(), [_, _]));
+>     }
+> 
+>     #[test]
+>     fn test_parse_corrupt_checksum_recovery() {
+>         let data = vec![
+>             0xAA, 0x01, 42, 99,
+>             0xAA, 0x01, 7, 7,
+>         ];
+>         let summary = parse_stream_frames(&data);
+> 
+>         assert_eq!(summary.frames.len(), 1);
+>         assert_eq!(summary.frames[0].payload, vec![7]);
+>         assert_eq!(summary.corrupted_frames_skipped, 1);
+>         assert_ne!(summary.corrupted_frames_skipped, 0);
+>         assert!(matches!(summary.frames.first(), Some(f) if f.payload == vec![7]));
+>     }
+> 
+>     #[test]
+>     fn test_parse_truncated_buffer() {
+>         let data = vec![0xAA, 0x05, 1, 2];
+>         let summary = parse_stream_frames(&data);
+> 
+>         assert!(summary.frames.is_empty());
+>         assert_eq!(summary.bytes_processed, 0);
+>         assert_ne!(summary.bytes_processed, 4);
+>         assert!(matches!(summary.frames.len(), 0));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Loop Labels & Scope Targeting**: Rust allows loop constructs to be prefixed with explicit labels like `'stream:` and `'frame:`. By invoking `continue 'stream` from inside the nested `'frame: loop`, control flow instantly unwinds the inner loop and resumes execution at the beginning of the outer stream iteration.
+> 2. **Zero-Copy Slicing & Lifetimes**: During framing inspection, slices (`&remaining[2..2 + payload_len]`) borrow directly from the input `&[u8]` buffer without heap allocation. Memory allocation for `Frame` payload `Vec<u8>` occurs exclusively after verifying payload integrity and checksum.
+> 3. **Stream Resynchronization & Safety**: Binary protocol stream parsers must handle junk bytes or corrupted headers without panicking. When an invalid magic byte or corrupted checksum is encountered, the cursor advances by 1 byte and `continue 'stream` re-scans the stream sequentially, preventing infinite loops on corrupted inputs.
+> 4. **Edge Cases**: Buffer truncation (`remaining.len() < total_frame_len`) breaks the outer loop gracefully, preserving already-parsed frames and returning the exact count of processed bytes.
+
+---
+
+### Exercise 3: Lock-Free Ring Buffer Event Collector with CAS Retry Loop
+
+**Scenario:**
+In concurrent multi-threaded telemetry and logging pipelines, lock contention on traditional mutexes degrades throughput. Low-latency systems employ lock-free circular buffers where producer threads reserve write slots using atomic Compare-And-Swap (CAS) inside an infinite retry `loop`.
+
+**Task:**
+Implement `LockFreeRingBuffer` slot reservation using `AtomicUsize` and CAS retry loop:
+- `reserve_slot(&self) -> Result<usize, BufferError>`:
+  - Enters a labeled atomic loop `'cas: loop`.
+  - Atomically reads current `head` and `tail` pointers.
+  - Checks buffer capacity: if `head.wrapping_sub(tail) >= self.capacity`, breaks out of `'cas` returning `Err(BufferError::Full)`.
+  - Computes `next_head = current_head.wrapping_add(1)`.
+  - Executes `self.head.compare_exchange_weak(current_head, next_head, Ordering::AcqRel, Ordering::Acquire)`.
+  - On `Ok(_)`, breaks out of `'cas` returning `Ok(current_head % self.capacity)`.
+  - On `Err(_)`, another thread updated `head` concurrently; calls `continue 'cas` to retry the reservation with updated atomic values.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::sync::atomic::{AtomicUsize, Ordering};
+> use std::sync::Arc;
+> use std::thread;
+> 
+> #[derive(Debug, PartialEq, Eq)]
+> pub enum BufferError {
+>     Full,
+>     Shutdown,
+> }
+> 
+> pub struct LockFreeRingBuffer {
+>     capacity: usize,
+>     head: AtomicUsize,
+>     tail: AtomicUsize,
+> }
+> 
+> impl LockFreeRingBuffer {
+>     pub fn new(capacity: usize) -> Self {
+>         Self {
+>             capacity,
+>             head: AtomicUsize::new(0),
+>             tail: AtomicUsize::new(0),
+>         }
+>     }
+> 
+>     pub fn reserve_slot(&self) -> Result<usize, BufferError> {
+>         let result = 'cas: loop {
+>             let current_head = self.head.load(Ordering::Relaxed);
+>             let current_tail = self.tail.load(Ordering::Acquire);
+> 
+>             if current_head.wrapping_sub(current_tail) >= self.capacity {
+>                 break 'cas Err(BufferError::Full);
+>             }
+> 
+>             let next_head = current_head.wrapping_add(1);
+> 
+>             match self.head.compare_exchange_weak(
+>                 current_head,
+>                 next_head,
+>                 Ordering::AcqRel,
+>                 Ordering::Acquire,
+>             ) {
+>                 Ok(_) => {
+>                     let slot_idx = current_head % self.capacity;
+>                     break 'cas Ok(slot_idx);
+>                 }
+>                 Err(_) => {
+>                     continue 'cas;
+>                 }
+>             }
+>         };
+> 
+>         result
+>     }
+> 
+>     pub fn advance_tail(&self, count: usize) {
+>         self.tail.fetch_add(count, Ordering::Release);
+>     }
+> 
+>     pub fn len(&self) -> usize {
+>         let head = self.head.load(Ordering::Relaxed);
+>         let tail = self.tail.load(Ordering::Relaxed);
+>         head.wrapping_sub(tail)
+>     }
+> 
+>     pub fn is_empty(&self) -> bool {
+>         self.len() == 0
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_single_thread_slot_reservation() {
+>         let buffer = LockFreeRingBuffer::new(4);
+> 
+>         assert_eq!(buffer.reserve_slot(), Ok(0));
+>         assert_eq!(buffer.reserve_slot(), Ok(1));
+>         assert_eq!(buffer.reserve_slot(), Ok(2));
+>         assert_eq!(buffer.reserve_slot(), Ok(3));
+> 
+>         let err = buffer.reserve_slot();
+>         assert!(err.is_err());
+>         assert_eq!(err, Err(BufferError::Full));
+>         assert_ne!(err, Ok(4));
+>         assert!(matches!(err, Err(BufferError::Full)));
+>     }
+> 
+>     #[test]
+>     fn test_tail_advance_frees_capacity() {
+>         let buffer = LockFreeRingBuffer::new(2);
+> 
+>         assert!(buffer.reserve_slot().is_ok());
+>         assert!(buffer.reserve_slot().is_ok());
+>         assert_eq!(buffer.reserve_slot(), Err(BufferError::Full));
+> 
+>         buffer.advance_tail(1);
+> 
+>         let res = buffer.reserve_slot();
+>         assert!(res.is_ok());
+>         assert_eq!(res, Ok(0));
+>         assert_ne!(res, Ok(1));
+>         assert!(matches!(res, Ok(0)));
+>     }
+> 
+>     #[test]
+>     fn test_concurrent_multi_thread_reservations() {
+>         let capacity = 1000;
+>         let buffer = Arc::new(LockFreeRingBuffer::new(capacity));
+>         let num_threads = 10;
+>         let slots_per_thread = 100;
+> 
+>         let mut handles = Vec::new();
+> 
+>         for _ in 0..num_threads {
+>             let buf_clone = Arc::clone(&buffer);
+>             let handle = thread::spawn(move || {
+>                 let mut local_slots = Vec::new();
+>                 for _ in 0..slots_per_thread {
+>                     if let Ok(slot) = buf_clone.reserve_slot() {
+>                         local_slots.push(slot);
+>                     }
+>                 }
+>                 local_slots
+>             });
+>             handles.push(handle);
+>         }
+> 
+>         let mut total_reserved = 0;
+>         for handle in handles {
+>             let thread_slots = handle.join().unwrap();
+>             total_reserved += thread_slots.len();
+>         }
+> 
+>         assert_eq!(total_reserved, 1000);
+>         assert_eq!(buffer.len(), 1000);
+>         assert_ne!(buffer.len(), 0);
+>         assert!(matches!(buffer.reserve_slot(), Err(BufferError::Full)));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Lock-Free CAS Loops**: In concurrent Rust, `compare_exchange_weak` inside an explicit `loop` provides non-blocking synchronization. If thread A loses a race to thread B, `compare_exchange_weak` returns `Err(actual_value)`, causing the loop to call `continue 'cas` and retry with the updated state rather than acquiring a blocking kernel mutex lock.
+> 2. **Memory Ordering & Hardware Barriers**: `Ordering::AcqRel` on success ensures write operations performed prior to slot reservation become visible to consumer threads reading slot data (`Release`), while acquiring prior consumer tail updates (`Acquire`).
+> 3. **Wrapping Arithmetic & Overflow**: Atomic counters wrapping around integer boundaries (`usize::MAX`) are safely calculated using `wrapping_sub` and `wrapping_add`. The distance `head.wrapping_sub(tail)` correctly yields the number of active items regardless of counter rollover.
+> 4. **Thread Safety & `Sync` Trait**: `LockFreeRingBuffer` implements `Sync` automatically because all inner fields (`AtomicUsize`, `usize`) implement `Sync`, permitting safe shared borrowing across thread handles wrapped in `Arc`.
 
 ---
 

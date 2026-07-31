@@ -144,75 +144,363 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Filter the Even Numbers
+### Exercise 1: Real-Time Network Packet Telemetry Aggregator
 
-**Problem:** We have a Vector of numbers. We want to use `.into_iter()` to consume it, `.filter()` to keep only the even numbers, and then collect the result into a new Vector called `evens`. 
+**Problem:**
+In a high-throughput network monitoring service, raw telemetry streams arrive as string records formatted as `"<node_id>:<bytes_transferred>:<latency_ms>"`. Corrupted lines (incorrect field counts or non-numeric values) must be filtered out without breaking stream processing.
 
-*(Note: `|x| x % 2 == 0` is a closure that returns true if a number is even).*
-
-```rust
-fn main() {
-    let numbers = vec![1, 2, 3, 4, 5, 6];
-    
-    // TODO: Write the iterator chain here!
-    // let evens = numbers.into_iter()...
-    
-    // println!("{:?}", evens); // Should print [2, 4, 6]
-}
-```
+Implement a function `parse_and_aggregate_telemetry` that accepts an iterator over raw string slices (`impl IntoIterator<Item = &'a str>`). It must perform the following:
+1. Parse each line into key-value pairs `(String, MetricSample)`. Use `filter_map` and `.collect()` or `fold` to group metric samples by `node_id` into an intermediate `HashMap<String, Vec<MetricSample>>`.
+2. Convert the grouped map into a final `HashMap<String, NodeAggregate>` using `.collect::<HashMap<String, NodeAggregate>>()`, calculating `total_bytes`, `max_latency_ms`, and total `sample_count` per node.
 
 > [!check]- Answer
-> ```rust
-> let evens: Vec<i32> = numbers.into_iter().filter(|x| x % 2 == 0).collect();
 >
-> // OR using the turbofish:
-> // let evens = numbers.into_iter().filter(|x| x % 2 == 0).collect::<Vec<_>>();
-> ```
-
----
-
-### Exercise 2: Collecting into HashSet for Uniqueness
-
-**Problem:** Take a vector with duplicate values `vec![1, 2, 2, 3, 3, 3]` and collect it into a `HashSet<i32>` to remove duplicates.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Unique elements count: 3
-> ```
+> #### Implementation
+>
 > ```rust
-> use std::collections::HashSet;
-> fn main() {
->     let nums = vec![1, 2, 2, 3, 3, 3];
->     let set: HashSet<i32> = nums.into_iter().collect();
->     println!("Unique elements count: {}", set.len());
+> use std::collections::HashMap;
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct MetricSample {
+>     pub bytes: u64,
+>     pub latency_ms: u32,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct NodeAggregate {
+>     pub total_bytes: u64,
+>     pub max_latency_ms: u32,
+>     pub sample_count: usize,
+> }
+> 
+> pub fn parse_and_aggregate_telemetry<'a>(
+>     raw_logs: impl IntoIterator<Item = &'a str>,
+> ) -> HashMap<String, NodeAggregate> {
+>     // Step 1: Filter out invalid lines, parse samples, and group by node_id
+>     let samples_by_node: HashMap<String, Vec<MetricSample>> = raw_logs
+>         .into_iter()
+>         .filter_map(|line| {
+>             let parts: Vec<&str> = line.trim().split(':').collect();
+>             if parts.len() != 3 {
+>                 return None;
+>             }
+>             let node_id = parts[0].to_string();
+>             let bytes = parts[1].parse::<u64>().ok()?;
+>             let latency_ms = parts[2].parse::<u32>().ok()?;
+>             Some((node_id, MetricSample { bytes, latency_ms }))
+>         })
+>         .fold(HashMap::new(), |mut acc, (node_id, sample)| {
+>             acc.entry(node_id).or_default().push(sample);
+>             acc
+>         });
+> 
+>     // Step 2: Transform grouped samples into aggregate statistics map via .collect()
+>     samples_by_node
+>         .into_iter()
+>         .map(|(node_id, samples)| {
+>             let total_bytes: u64 = samples.iter().map(|s| s.bytes).sum();
+>             let max_latency_ms: u32 = samples.iter().map(|s| s.latency_ms).max().unwrap_or(0);
+>             let sample_count = samples.len();
+>             (
+>                 node_id,
+>                 NodeAggregate {
+>                     total_bytes,
+>                     max_latency_ms,
+>                     sample_count,
+>                 },
+>             )
+>         })
+>         .collect::<HashMap<String, NodeAggregate>>()
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_telemetry_aggregation() {
+>         let logs = vec![
+>             "node-1:1024:12",
+>             "node-2:2048:45",
+>             "node-1:512:8",
+>             "corrupted_line_without_colons",
+>             "node-2:1024:90",
+>             "node-3:bad_bytes:15",
+>         ];
+> 
+>         let agg = parse_and_aggregate_telemetry(logs);
+> 
+>         assert_eq!(agg.len(), 2);
+>         assert!(agg.contains_key("node-1"));
+>         assert!(agg.contains_key("node-2"));
+>         assert_ne!(agg.contains_key("node-3"), true);
+> 
+>         let node1 = agg.get("node-1").unwrap();
+>         assert_eq!(node1.total_bytes, 1536);
+>         assert_eq!(node1.max_latency_ms, 12);
+>         assert_eq!(node1.sample_count, 2);
+> 
+>         let node2 = agg.get("node-2").unwrap();
+>         assert_eq!(node2.total_bytes, 3072);
+>         assert_eq!(node2.max_latency_ms, 90);
+> 
+>         assert!(matches!(agg.get("node-1"), Some(NodeAggregate { sample_count: 2, .. })));
+>     }
 > }
 > ```
 >
-> **Explanation:** `HashSet` automatically discards duplicate items when collected from an iterator.
+> #### Technical Explanation
+>
+> 
+> 1. **Data Pipeline & Lazy Execution**: The string parsing step leverages `filter_map`. Each input line is parsed into `Option<(String, MetricSample)>` using `str::split` and `str::parse`. By returning `None` for malformed lines or parse failures, `filter_map` lazily drops invalid items without panicking.
+> 2. **Collecting Key-Value Pairs into HashMaps**: `Iterator::collect()` requires an explicit collection type because `collect()` can produce any type implementing `FromIterator`. In Step 2, calling `.collect::<HashMap<String, NodeAggregate>>()` drives the iterator to consume key-value tuples `(String, NodeAggregate)` and insert them directly into the hash map.
+> 3. **Ownership and Memory Lifetime**: String slices `&'a str` are owned by the caller. When building `HashMap<String, NodeAggregate>`, new owned `String` keys are constructed via `.to_string()`, transferring exclusive heap ownership into the returned `HashMap`.
+> 4. **Edge Cases**: Empty logs or inputs containing only corrupted lines yield an empty `HashMap`. Zero-latency or single-sample cases are handled cleanly by `unwrap_or(0)` and `samples.len()`.
 
 ---
 
-### Exercise 3: Transposing Iterator of Results with `.collect()`
+### Exercise 2: Fail-Fast Financial Batch Processor vs Complete Audit Partition Collector
 
-**Problem:** Collect an iterator of `Result<i32, &str>` containing `[Ok(1), Ok(2), Ok(3)]` into a single `Result<Vec<i32>, &str>`.
+**Problem:**
+A financial transaction engine receives raw batches of incoming payment requests (`RawTransaction`). Each record must be validated against business rules: non-empty account identifier, positive transfer amount in cents, and supported currency code (`"USD"` or `"EUR"`).
 
-**Expected output:**
+The system requires two distinct processing strategies powered by Rust collection idioms:
+1. **Fail-Fast Engine (`process_batch_fail_fast`)**: Collects an iterator of `Result<ValidatedTransaction, ValidationError>` into `Result<Vec<ValidatedTransaction>, ValidationError>`. If any single transaction fails validation, `.collect()` must halt evaluation immediately (fail-fast) and return the first encountered error.
+2. **Audit Partitioning Engine (`process_batch_audit`)**: Uses `Iterator::partition` to separate all results into a tuple `(Vec<ValidatedTransaction>, Vec<ValidationError>)`, capturing all valid transactions for execution while archiving all validation errors for auditing.
+
 > [!check]- Answer
-> ```
-> Ok([1, 2, 3])
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let results = vec![Ok(1), Ok(2), Ok(3)];
->     let combined: Result<Vec<i32>, &str> = results.into_iter().collect();
->     println!("{:?}", combined);
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct RawTransaction {
+>     pub id: u64,
+>     pub account: String,
+>     pub amount_cents: i64,
+>     pub currency: String,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct ValidatedTransaction {
+>     pub id: u64,
+>     pub account: String,
+>     pub amount_cents: u64,
+>     pub currency: String,
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum ValidationError {
+>     EmptyAccount { id: u64 },
+>     InvalidAmount { id: u64, amount: i64 },
+>     UnsupportedCurrency { id: u64, currency: String },
+> }
+> 
+> pub fn validate_transaction(raw: RawTransaction) -> Result<ValidatedTransaction, ValidationError> {
+>     if raw.account.trim().is_empty() {
+>         return Err(ValidationError::EmptyAccount { id: raw.id });
+>     }
+>     if raw.amount_cents <= 0 {
+>         return Err(ValidationError::InvalidAmount { id: raw.id, amount: raw.amount_cents });
+>     }
+>     if raw.currency != "USD" && raw.currency != "EUR" {
+>         return Err(ValidationError::UnsupportedCurrency { id: raw.id, currency: raw.currency });
+>     }
+> 
+>     Ok(ValidatedTransaction {
+>         id: raw.id,
+>         account: raw.account,
+>         amount_cents: raw.amount_cents as u64,
+>         currency: raw.currency,
+>     })
+> }
+> 
+> // Strategy 1: Fail-fast collecting into Result<Vec<T>, E>
+> pub fn process_batch_fail_fast(
+>     batch: Vec<RawTransaction>,
+> ) -> Result<Vec<ValidatedTransaction>, ValidationError> {
+>     batch.into_iter().map(validate_transaction).collect()
+> }
+> 
+> // Strategy 2: Full audit partition into (Vec<T>, Vec<E>)
+> pub fn process_batch_audit(
+>     batch: Vec<RawTransaction>,
+> ) -> (Vec<ValidatedTransaction>, Vec<ValidationError>) {
+>     let (oks, errs): (Vec<_>, Vec<_>) = batch
+>         .into_iter()
+>         .map(validate_transaction)
+>         .partition(Result::is_ok);
+> 
+>     let valid = oks.into_iter().map(Result::unwrap).collect();
+>     let invalid = errs.into_iter().map(Result::unwrap_err).collect();
+> 
+>     (valid, invalid)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_fail_fast_and_audit_collecting() {
+>         let valid_tx1 = RawTransaction { id: 1, account: "acc_101".into(), amount_cents: 5000, currency: "USD".into() };
+>         let invalid_tx2 = RawTransaction { id: 2, account: "".into(), amount_cents: 1000, currency: "USD".into() };
+>         let invalid_tx3 = RawTransaction { id: 3, account: "acc_103".into(), amount_cents: -50, currency: "USD".into() };
+>         let valid_tx4 = RawTransaction { id: 4, account: "acc_104".into(), amount_cents: 2500, currency: "EUR".into() };
+> 
+>         let batch_mixed = vec![valid_tx1.clone(), invalid_tx2.clone(), invalid_tx3.clone(), valid_tx4.clone()];
+> 
+>         // Fail-fast test: stops on first error (id 2)
+>         let fail_fast_res = process_batch_fail_fast(batch_mixed.clone());
+>         assert!(fail_fast_res.is_err());
+>         assert_ne!(fail_fast_res.is_ok(), true);
+>         assert!(matches!(
+>             fail_fast_res,
+>             Err(ValidationError::EmptyAccount { id: 2 })
+>         ));
+> 
+>         // Fail-fast test: all valid transactions
+>         let batch_valid = vec![valid_tx1.clone(), valid_tx4.clone()];
+>         let fail_fast_ok = process_batch_fail_fast(batch_valid);
+>         assert!(fail_fast_ok.is_ok());
+>         let valid_res = fail_fast_ok.unwrap();
+>         assert_eq!(valid_res.len(), 2);
+>         assert_eq!(valid_res[0].id, 1);
+>         assert_eq!(valid_res[1].amount_cents, 2500);
+> 
+>         // Audit mode test: partitions all records into valid and error lists
+>         let (valid_txs, invalid_errors) = process_batch_audit(batch_mixed);
+>         assert_eq!(valid_txs.len(), 2);
+>         assert_eq!(invalid_errors.len(), 2);
+>         assert_eq!(valid_txs[0].id, 1);
+>         assert_eq!(valid_txs[1].id, 4);
+> 
+>         assert!(matches!(invalid_errors[0], ValidationError::EmptyAccount { id: 2 }));
+>         assert!(matches!(invalid_errors[1], ValidationError::InvalidAmount { id: 3, amount: -50 }));
+>     }
 > }
 > ```
 >
-> **Explanation:** Collecting `Iterator<Item = Result<T, E>>` into `Result<Vec<T>, E>` fails fast on the first `Err` or gathers all `Ok` values into a `Vec`.
+> #### Technical Explanation
+>
+> 
+> 1. **Result Short-Circuiting in `FromIterator`**: Rust provides a standard implementation `impl<T, E, V> FromIterator<Result<T, E>> for Result<V, E> where V: FromIterator<T>`. When collecting an iterator of `Result<T, E>`, iteration stops upon the first `Err(e)` encountered. Remaining elements are not evaluated, providing strict $O(k)$ fail-fast guarantees where $k$ is the index of the first failure.
+> 2. **Partitioning Iterators**: `Iterator::partition` splits an iterator into two collections based on a predicate closure (`Result::is_ok`). Because `partition` collects both sides simultaneously into a tuple `(A, B)`, it consumes the source batch in a single pass without extra memory allocations beyond the output vectors.
+> 3. **Ownership and Value Transfer**: `into_iter()` transfers full ownership of `RawTransaction` structs from the input vector. Validated instances wrap owned `String` fields without intermediate string cloning or allocations.
+> 4. **Edge Cases**: Empty transaction batches collect cleanly into `Ok(vec![])` or `(vec![], vec![])`. Large batches short-circuit immediately on early errors, optimizing memory and throughput.
+
+---
+
+### Exercise 3: High-Performance Log Indexer via Custom `FromIterator` Implementation
+
+**Problem:**
+In search engine tokenizers and log indexers, streaming text tokens are frequently parsed and collected into term frequency statistics. Rather than building custom looping constructs across calling code, Rust allows custom types to participate directly in `.collect()` by implementing `std::iter::FromIterator`.
+
+Implement a domain data structure `TokenHistogram` and its `FromIterator<S>` trait for any type `S: Into<String>` (handling string slices `&str` and owned `String`s seamlessly).
+Requirements:
+1. Maintain internal term frequencies in a `HashMap<String, usize>` and track `total_tokens`.
+2. Implement `FromIterator<S>` so calling `stream.collect::<TokenHistogram>()` or `let histogram: TokenHistogram = stream.collect()` populates the struct automatically.
+3. Provide inspectable methods: `total_tokens(&self) -> usize`, `unique_tokens(&self) -> usize`, `frequency(&self, token: &str) -> usize`, and `top_n(&self, n: usize) -> Vec<(&str, usize)>`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::collections::HashMap;
+> use std::iter::FromIterator;
+> 
+> #[derive(Debug, Clone, PartialEq, Eq, Default)]
+> pub struct TokenHistogram {
+>     counts: HashMap<String, usize>,
+>     total_tokens: usize,
+> }
+> 
+> impl TokenHistogram {
+>     pub fn new() -> Self {
+>         Self::default()
+>     }
+> 
+>     pub fn total_tokens(&self) -> usize {
+>         self.total_tokens
+>     }
+> 
+>     pub fn unique_tokens(&self) -> usize {
+>         self.counts.len()
+>     }
+> 
+>     pub fn frequency(&self, token: &str) -> usize {
+>         self.counts.get(token).copied().unwrap_or(0)
+>     }
+> 
+>     pub fn top_n(&self, n: usize) -> Vec<(&str, usize)> {
+>         let mut entries: Vec<(&str, usize)> = self
+>             .counts
+>             .iter()
+>             .map(|(k, v)| (k.as_str(), *v))
+>             .collect();
+>         entries.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(b.0)));
+>         entries.truncate(n);
+>         entries
+>     }
+> }
+> 
+> // Implement FromIterator to allow direct .collect() invocation into TokenHistogram
+> impl<S: Into<String>> FromIterator<S> for TokenHistogram {
+>     fn from_iter<T: IntoIterator<Item = S>>(iter: T) -> Self {
+>         let mut histogram = TokenHistogram::new();
+>         for item in iter {
+>             let token: String = item.into();
+>             if !token.is_empty() {
+>                 *histogram.counts.entry(token).or_insert(0) += 1;
+>                 histogram.total_tokens += 1;
+>             }
+>         }
+>         histogram
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_custom_from_iterator_histogram() {
+>         let raw_text = "rust memory safety concurrency rust performance rust memory";
+> 
+>         // Collect iterator of &str directly into TokenHistogram using collect()
+>         let histogram: TokenHistogram = raw_text.split_whitespace().collect();
+> 
+>         assert_eq!(histogram.total_tokens(), 7);
+>         assert_eq!(histogram.unique_tokens(), 4);
+>         assert_ne!(histogram.total_tokens(), 0);
+> 
+>         assert_eq!(histogram.frequency("rust"), 3);
+>         assert_eq!(histogram.frequency("memory"), 2);
+>         assert_eq!(histogram.frequency("safety"), 1);
+>         assert_eq!(histogram.frequency("missing_word"), 0);
+> 
+>         let top2 = histogram.top_n(2);
+>         assert_eq!(top2.len(), 2);
+>         assert_eq!(top2[0], ("rust", 3));
+>         assert_eq!(top2[1], ("memory", 2));
+> 
+>         assert!(matches!(histogram.top_n(1).first(), Some(&("rust", 3))));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Extending the `.collect()` Capability via `FromIterator`**: In Rust, `.collect()` is a generic method parameterized on `FromIterator::from_iter`. Implementing `FromIterator<S>` for a custom type `TokenHistogram` allows any iterator yielding items convertible to `String` (`S: Into<String>`) to be collected seamlessly.
+> 2. **Generic Flexibility (`S: Into<String>`)**: By using the trait bound `S: Into<String>`, `TokenHistogram` can collect from iterators over borrowed string slices `&str` (such as `split_whitespace()`) as well as owned `String` streams without needing duplicate trait implementations.
+> 3. **Frequency Ranking & Memory Efficiency**: The `top_n` method creates borrowed tuples `(&str, usize)` referencing internal map keys `&String`, avoiding unnecessary allocations when querying rankings. Sorting uses `b.1.cmp(&a.1)` for descending frequency and `a.0.cmp(b.0)` for deterministic alphabetical tie-breaking.
+> 4. **Edge Cases**: Empty tokens (`""`) are skipped during insertion. An empty stream produces a valid `TokenHistogram` with `total_tokens == 0` and `unique_tokens == 0`.
 
 ---
 

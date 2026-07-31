@@ -176,68 +176,445 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: The Right Tool for the Job
+### Exercise 1: Single-Threaded Production Query Engine LRU Cache using `RefCell` and `Cell`
 
-**Problem:** Match the correct Interior Mutability tool to its description.
+**Problem:** You are building a high-throughput, single-threaded query caching wrapper for a read-heavy service interface defined as `pub trait QueryEngine { fn query(&self, key: &str) -> Option<String>; }`. Because the trait interface requires an immutable shared reference (`&self`), directly mutating internal cache data structures causes compile failures under Rust's aliasing XOR mutability rules.
 
-**Tools:** `RefCell<T>`, `Cell<T>`, `Mutex<T>`
-
-1. Provides Interior Mutability for small, `Copy` data (like `i32`) with zero runtime overhead.
-2. Provides Interior Mutability for Heap data (like `String`), but only works on a single thread.
-3. Provides Interior Mutability for Heap data safely across multiple background threads.
+Implement `CachedQueryEngine` wrapping a `Box<dyn QueryEngine>` with the following requirements:
+1. Track overall cache performance metrics `hit_count: Cell<u64>` and `miss_count: Cell<u64>` (using `Cell<T>` for lightweight, zero-overhead primitive mutability without dynamic borrow checks).
+2. Maintain a cached key-value store using `RefCell<HashMap<String, String>>` to allow inserting query results on cache misses through `&self`.
+3. Support dynamic cache capacity enforcement: if cache size reaches `capacity`, clear or evict stale entries before inserting new items.
+4. Implement `fn get_metrics(&self) -> (u64, u64)`, `fn hit_ratio(&self) -> f64`, and `fn clear_cache(&self)` operating strictly through `&self`.
+5. Include a comprehensive unit test suite with explicit assertions verifying hit/miss transitions, cache clearing, and eviction.
 
 > [!check]- Answer
-> 1. `Cell<T>`
-> 2. `RefCell<T>`
-> 3. `Mutex<T>`
-
----
-
-### Exercise 2: Combining `Rc` and `RefCell` for Shared Mutable Graph Nodes
-
-**Problem:** Create a shared node `Rc<RefCell<i32>>` and mutate its inner integer from two independent `Rc` clones.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Val: 100
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> use std::rc::Rc;
-> use std::cell::RefCell;
-> fn main() {
->     let node = Rc::new(RefCell::new(42));
->     let clone = Rc::clone(&node);
->     *clone.borrow_mut() = 100;
->     println!("Val: {}", node.borrow());
+> use std::cell::{Cell, RefCell};
+> use std::collections::HashMap;
+> 
+> pub trait QueryEngine {
+>     fn query(&self, key: &str) -> Option<String>;
+> }
+> 
+> pub struct DummyDatabase {
+>     data: HashMap<String, String>,
+> }
+> 
+> impl DummyDatabase {
+>     pub fn new(entries: Vec<(&str, &str)>) -> Self {
+>         let mut data = HashMap::new();
+>         for (k, v) in entries {
+>             data.insert(k.to_string(), v.to_string());
+>         }
+>         Self { data }
+>     }
+> }
+> 
+> impl QueryEngine for DummyDatabase {
+>     fn query(&self, key: &str) -> Option<String> {
+>         self.data.get(key).cloned()
+>     }
+> }
+> 
+> pub struct CachedQueryEngine {
+>     backend: Box<dyn QueryEngine>,
+>     cache: RefCell<HashMap<String, String>>,
+>     hit_count: Cell<u64>,
+>     miss_count: Cell<u64>,
+>     capacity: usize,
+> }
+> 
+> impl CachedQueryEngine {
+>     pub fn new(backend: Box<dyn QueryEngine>, capacity: usize) -> Self {
+>         Self {
+>             backend,
+>             cache: RefCell::new(HashMap::new()),
+>             hit_count: Cell::new(0),
+>             miss_count: Cell::new(0),
+>             capacity,
+>         }
+>     }
+> 
+>     pub fn get_metrics(&self) -> (u64, u64) {
+>         (self.hit_count.get(), self.miss_count.get())
+>     }
+> 
+>     pub fn hit_ratio(&self) -> f64 {
+>         let hits = self.hit_count.get();
+>         let misses = self.miss_count.get();
+>         let total = hits + misses;
+>         if total == 0 {
+>             0.0
+>         } else {
+>             hits as f64 / total as f64
+>         }
+>     }
+> 
+>     pub fn clear_cache(&self) {
+>         self.cache.borrow_mut().clear();
+>     }
+> }
+> 
+> impl QueryEngine for CachedQueryEngine {
+>     fn query(&self, key: &str) -> Option<String> {
+>         // Check cache first via immutable RefCell borrow
+>         if let Some(val) = self.cache.borrow().get(key) {
+>             self.hit_count.set(self.hit_count.get() + 1);
+>             return Some(val.clone());
+>         }
+> 
+>         // Cache miss: query backend
+>         self.miss_count.set(self.miss_count.get() + 1);
+>         let result = self.backend.query(key)?;
+> 
+>         // Update cache under interior mutability
+>         let mut map = self.cache.borrow_mut();
+>         if map.len() >= self.capacity {
+>             map.clear();
+>         }
+>         map.insert(key.to_string(), result.clone());
+>         Some(result)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_cached_query_engine_hits_and_misses() {
+>         let db = DummyDatabase::new(vec![("user:101", "Alice"), ("user:102", "Bob")]);
+>         let engine = CachedQueryEngine::new(Box::new(db), 10);
+> 
+>         // Verify initial metrics
+>         assert_eq!(engine.get_metrics(), (0, 0));
+> 
+>         // First query: cache miss
+>         let res1 = engine.query("user:101");
+>         assert!(matches!(res1, Some(ref name) if name == "Alice"));
+>         assert_eq!(engine.get_metrics(), (0, 1));
+> 
+>         // Second query: cache hit
+>         let res2 = engine.query("user:101");
+>         assert_eq!(res2, Some("Alice".to_string()));
+>         assert_eq!(engine.get_metrics(), (1, 1));
+>         assert_eq!(engine.hit_ratio(), 0.5);
+> 
+>         // Non-existent key query
+>         let res_none = engine.query("user:999");
+>         assert_eq!(res_none, None);
+>         assert_eq!(engine.get_metrics(), (1, 2));
+> 
+>         // Clear cache and verify metric reset behavior
+>         engine.clear_cache();
+>         let res3 = engine.query("user:101"); // Cache miss after cache clear
+>         assert_eq!(res3, Some("Alice".to_string()));
+>         assert_eq!(engine.get_metrics(), (1, 3));
+>         assert_ne!(engine.hit_ratio(), 0.5);
+>     }
 > }
 > ```
 >
-> **Explanation:** `Rc<RefCell<T>>` combines multiple reference ownership with runtime interior mutability.
+> #### Technical Explanation
+>
+> 
+> 1. **Interior Mutability Mechanics:**
+>    The trait contract `QueryEngine::query(&self, key: &str)` mandates an immutable shared reference `&self`. Standard Rust borrow checker rules prohibit mutating struct fields through `&self`. To fulfill trait expectations while caching results, `CachedQueryEngine` employs interior mutability via `Cell<u64>` and `RefCell<HashMap<String, String>>`.
+> 2. **`Cell<T>` vs. `RefCell<T>` Allocation & Memory Layout:**
+>    - `Cell<u64>` wraps `u64` primitive values directly inside `UnsafeCell<u64>`. Because `u64` implements `Copy`, `Cell::get()` and `Cell::set()` copy bits directly without allocating dynamic borrow flags or risking runtime panic overhead.
+>    - `RefCell<HashMap<String, String>>` wraps complex heap-allocated data. It embeds an internal `isize` borrow counter alongside `UnsafeCell<HashMap<...>>`. Invoking `.borrow()` increments the shared reader count, while `.borrow_mut()` checks that the reader count is zero before setting it to `-1`.
+> 3. **Lifetime & Scope Rules for Borrow Guards:**
+>    In `query()`, `.borrow()` is invoked to check for a cache hit. The resulting `Ref<'_, HashMap<...>>` guard drops at the end of the `if let` block before `.borrow_mut()` is called for insertion. Dropping the shared reader guard prevents triggering a runtime borrow panic (`AlreadyBorrowed`).
+> 4. **Edge Cases:**
+>    If `.backend.query(key)` returned `None`, the cache miss counter is incremented but no entry is saved, preserving memory layout efficiency.
 
 ---
 
-### Exercise 3: Safe Interior Mutability with `Mutex`
+### Exercise 2: Multi-Threaded Reactive Event Bus with Listener Metrics using `Arc`, `RwLock`, and `Mutex`
 
-**Problem:** Mutate a thread-safe `Mutex<u32>` using `.lock().unwrap()`.
+**Problem:** In a multi-threaded telemetry pipeline or event-driven server architecture, event dispatchers pass event references to listeners registered across shared threads. The event bus interface enforces shared read-only dispatching via `&self`:
+```rust
+pub trait EventHandler: Send + Sync {
+    fn handle_event(&self, topic: &str, payload: &str);
+}
+```
+Construct a thread-safe event routing pipeline with thread-safe interior mutability:
+1. Implement `EventBus` holding `listeners: RwLock<HashMap<String, Vec<Arc<dyn EventHandler>>>>`. Allow non-blocking concurrent reads during event dispatch via `read()`, and exclusive thread-safe modifications during listener registration via `write()`.
+2. Create `TelemetryListener` implementing `EventHandler`. Use `AtomicU64` for high-throughput atomic event count tracking and `Mutex<Vec<String>>` for thread-safe message log buffer mutation without needing `&mut self`.
+3. Support concurrent event emissions across worker threads created with `std::thread::spawn`.
+4. Include a unit test module with explicit assertions validating thread synchronization, message order, atomic increments, and pattern matching.
 
-**Expected output:**
 > [!check]- Answer
-> ```
-> Mutex val: 10
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> use std::sync::Mutex;
-> fn main() {
->     let m = Mutex::new(0);
->     *m.lock().unwrap() += 10;
->     println!("Mutex val: {}", m.lock().unwrap());
+> use std::collections::HashMap;
+> use std::sync::atomic::{AtomicU64, Ordering};
+> use std::sync::{Arc, Mutex, RwLock};
+> 
+> pub trait EventHandler: Send + Sync {
+>     fn handle_event(&self, topic: &str, payload: &str);
+> }
+> 
+> pub struct EventBus {
+>     listeners: RwLock<HashMap<String, Vec<Arc<dyn EventHandler>>>>,
+> }
+> 
+> impl EventBus {
+>     pub fn new() -> Self {
+>         Self {
+>             listeners: RwLock::new(HashMap::new()),
+>         }
+>     }
+> 
+>     pub fn register(&self, topic: &str, listener: Arc<dyn EventHandler>) {
+>         let mut map = self.listeners.write().expect("RwLock write lock failed");
+>         map.entry(topic.to_string()).or_default().push(listener);
+>     }
+> 
+>     pub fn dispatch(&self, topic: &str, payload: &str) {
+>         let map = self.listeners.read().expect("RwLock read lock failed");
+>         if let Some(handlers) = map.get(topic) {
+>             for handler in handlers {
+>                 handler.handle_event(topic, payload);
+>             }
+>         }
+>     }
+> }
+> 
+> pub struct TelemetryListener {
+>     processed_count: AtomicU64,
+>     received_logs: Mutex<Vec<String>>,
+> }
+> 
+> impl TelemetryListener {
+>     pub fn new() -> Self {
+>         Self {
+>             processed_count: AtomicU64::new(0),
+>             received_logs: Mutex::new(Vec::new()),
+>         }
+>     }
+> 
+>     pub fn get_count(&self) -> u64 {
+>         self.processed_count.load(Ordering::Relaxed)
+>     }
+> 
+>     pub fn get_logs(&self) -> Vec<String> {
+>         let guard = self.received_logs.lock().expect("Mutex lock failed");
+>         guard.clone()
+>     }
+> }
+> 
+> impl EventHandler for TelemetryListener {
+>     fn handle_event(&self, topic: &str, payload: &str) {
+>         self.processed_count.fetch_add(1, Ordering::SeqCst);
+>         let mut guard = self.received_logs.lock().expect("Mutex lock failed");
+>         guard.push(format!("[{}]: {}", topic, payload));
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::thread;
+> 
+>     #[test]
+>     fn test_event_bus_concurrent_dispatch() {
+>         let bus = Arc::new(EventBus::new());
+>         let listener = Arc::new(TelemetryListener::new());
+> 
+>         bus.register("metrics", listener.clone());
+> 
+>         let mut handles = vec![];
+>         for i in 0..5 {
+>             let bus_clone = bus.clone();
+>             let handle = thread::spawn(move || {
+>                 bus_clone.dispatch("metrics", &format!("event-payload-{}", i));
+>             });
+>             handles.push(handle);
+>         }
+> 
+>         for handle in handles {
+>             handle.join().expect("Thread panicked");
+>         }
+> 
+>         assert_eq!(listener.get_count(), 5);
+>         let logs = listener.get_logs();
+>         assert_eq!(logs.len(), 5);
+>         assert!(logs.iter().any(|l| l.contains("event-payload-0")));
+>         assert_ne!(listener.get_count(), 0);
+>         assert!(matches!(logs.first(), Some(s) if s.starts_with("[metrics]")));
+>     }
 > }
 > ```
 >
-> **Explanation:** `Mutex<T>` enforces thread-safe exclusive access via dynamic lock guards.
+> #### Technical Explanation
+>
+> 
+> 1. **Thread-Safe Interior Mutability Primitive Invariants:**
+>    Single-threaded types like `RefCell<T>` and `Cell<T>` do not implement `Send` or `Sync` because their internal reference counting and unsafety checks are not atomic. Multi-threaded interior mutability relies on `Mutex<T>`, `RwLock<T>`, and atomic types (`AtomicU64`). These types enforce thread safety at compile time via `Send` and `Sync` marker trait bounds.
+> 2. **Concurrency Architecture (`RwLock` vs. `Mutex`):**
+>    - `RwLock` in `EventBus` allows multiple worker threads to execute `dispatch()` concurrently without blocking each other, acquiring shared read locks (`.read()`).
+>    - `Mutex<Vec<String>>` in `TelemetryListener` guarantees mutual exclusion when mutating the shared log buffer across threads during `handle_event()`.
+>    - `AtomicU64` uses hardware-level lock-free atomic instructions (`fetch_add`) to increment numbers across threads with zero mutex overhead.
+> 3. **Memory Layout and Reference Counting:**
+>    `Arc<dyn EventHandler>` provides thread-safe reference-counted shared ownership across threads. Wrapping handlers in `Arc` ensures handlers outlive individual thread dispatches.
+> 4. **Edge Cases & Deadlock Prevention:**
+>    Holding a read lock on `listeners` while invoking `handle_event()` is safe as long as `handle_event()` does not attempt to invoke `bus.register()` (which would attempt to acquire a write lock, causing a deadlock).
+
+---
+
+### Exercise 3: Hierarchical Graph Component Tree with Parent/Child Links using `Rc<RefCell<Node>>` & `Weak<RefCell<Node>>`
+
+**Problem:** UI scene graphs and graph structures require parent-child relationship tracking where parents own children, and children maintain references back to their parents. Shared ownership and cyclic references in Rust present ownership challenges: standard references require explicit lifetimes, while strong `Rc` loops prevent memory from being deallocated.
+
+Build a doubly-linked tree node hierarchy utilizing interior mutability:
+1. Define `GraphNode` containing:
+   - `name: String`
+   - `dirty: Cell<bool>` (lightweight layout invalidation flag)
+   - `parent: RefCell<Option<Weak<RefCell<GraphNode>>>>` (weak pointer to parent to prevent `Rc` cycles)
+   - `children: RefCell<Vec<Rc<RefCell<GraphNode>>>>` (strong shared ownership of child nodes)
+   - `cached_value: RefCell<Option<String>>` (memoized evaluation string)
+2. Implement associated functions and methods:
+   - `add_child(parent_rc: &Rc<RefCell<Self>>, child_rc: &Rc<RefCell<Self>>)`: Connects child to parent via `Weak` downgrade and registers child in parent's children vector.
+   - `mark_dirty(node_rc: &Rc<RefCell<Self>>)`: Mutates `dirty` to `true`, clears `cached_value`, and recursively propagates the dirty status upward to parent nodes.
+   - `evaluate(node_rc: &Rc<RefCell<Self>>, data: &str) -> String`: Returns cached value if clean (`dirty == false`); otherwise computes new result, updates cache, and sets `dirty` to `false`.
+3. Provide helper routines to inspect strong counts and verify cycle prevention.
+4. Include unit tests with explicit assertions checking dirty flag upward propagation, weak reference upgrading, memoization, and cleanup.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::cell::{Cell, RefCell};
+> use std::rc::{Rc, Weak};
+> 
+> pub struct GraphNode {
+>     pub name: String,
+>     dirty: Cell<bool>,
+>     parent: RefCell<Option<Weak<RefCell<GraphNode>>>>,
+>     children: RefCell<Vec<Rc<RefCell<GraphNode>>>>,
+>     cached_value: RefCell<Option<String>>,
+> }
+> 
+> impl GraphNode {
+>     pub fn new(name: &str) -> Rc<RefCell<Self>> {
+>         Rc::new(RefCell::new(Self {
+>             name: name.to_string(),
+>             dirty: Cell::new(true),
+>             parent: RefCell::new(None),
+>             children: RefCell::new(Vec::new()),
+>             cached_value: RefCell::new(None),
+>         }))
+>     }
+> 
+>     pub fn add_child(parent_rc: &Rc<RefCell<Self>>, child_rc: &Rc<RefCell<Self>>) {
+>         // Set parent link in child using Weak downgrade
+>         child_rc.borrow_mut().parent = RefCell::new(Some(Rc::downgrade(parent_rc)));
+>         // Register child in parent's child list
+>         parent_rc.borrow_mut().children.borrow_mut().push(child_rc.clone());
+>     }
+> 
+>     pub fn mark_dirty(node_rc: &Rc<RefCell<Self>>) {
+>         let node = node_rc.borrow();
+>         node.dirty.set(true);
+>         *node.cached_value.borrow_mut() = None;
+> 
+>         // Propagate dirty state upward to parent
+>         if let Some(ref weak_parent) = *node.parent.borrow() {
+>             if let Some(parent_rc) = weak_parent.upgrade() {
+>                 Self::mark_dirty(&parent_rc);
+>             }
+>         }
+>     }
+> 
+>     pub fn evaluate(node_rc: &Rc<RefCell<Self>>, data: &str) -> String {
+>         let node = node_rc.borrow();
+> 
+>         // Return cached value if node is clean
+>         if !node.dirty.get() {
+>             if let Some(ref val) = *node.cached_value.borrow() {
+>                 return val.clone();
+>             }
+>         }
+> 
+>         // Compute new value on dirty cache miss
+>         let computed = format!("{}:[{}]", node.name, data);
+>         *node.cached_value.borrow_mut() = Some(computed.clone());
+>         node.dirty.set(false);
+>         computed
+>     }
+> 
+>     pub fn is_dirty(node_rc: &Rc<RefCell<Self>>) -> bool {
+>         node_rc.borrow().dirty.get()
+>     }
+> 
+>     pub fn child_count(node_rc: &Rc<RefCell<Self>>) -> usize {
+>         node_rc.borrow().children.borrow().len()
+>     }
+> 
+>     pub fn parent_strong_count(node_rc: &Rc<RefCell<Self>>) -> Option<usize> {
+>         let node = node_rc.borrow();
+>         let weak_parent = node.parent.borrow();
+>         weak_parent.as_ref().map(|w| w.strong_count())
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_graph_node_interior_mutability_and_weak_parents() {
+>         let root = GraphNode::new("Root");
+>         let child1 = GraphNode::new("Child1");
+>         let child2 = GraphNode::new("Child2");
+> 
+>         GraphNode::add_child(&root, &child1);
+>         GraphNode::add_child(&root, &child2);
+> 
+>         assert_eq!(GraphNode::child_count(&root), 2);
+>         assert_eq!(GraphNode::parent_strong_count(&child1), Some(1));
+> 
+>         // Evaluate root and child nodes
+>         let val1 = GraphNode::evaluate(&root, "payload");
+>         assert_eq!(val1, "Root:[payload]");
+>         assert!(!GraphNode::is_dirty(&root));
+> 
+>         // Mark child dirty, propagating dirty flag upward to root
+>         GraphNode::mark_dirty(&child1);
+>         assert!(GraphNode::is_dirty(&child1));
+>         assert!(GraphNode::is_dirty(&root));
+>         assert_ne!(GraphNode::evaluate(&root, "new_payload"), val1);
+> 
+>         // Verify Weak pointer upgrading and pattern matching
+>         let weak_child = Rc::downgrade(&child2);
+>         assert!(weak_child.upgrade().is_some());
+>         assert!(matches!(GraphNode::evaluate(&child2, "v"), s if s.contains("Child2")));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Solving Cyclic Reference Memory Leaks with `Rc` and `Weak`:**
+>    If parent nodes held `Rc<RefCell<GraphNode>>` to children, and children held `Rc<RefCell<GraphNode>>` to parents, a strong reference count cycle would form. When the root variable leaves scope, its strong count would drop from 2 to 1, causing a memory leak where neither node is ever dropped. By using `Weak<RefCell<GraphNode>>` for parent pointers, the child holds a non-owning weak reference that increments `weak_count` without preventing `strong_count` from reaching zero during deallocation.
+> 2. **Role of Interior Mutability (`RefCell` & `Cell`) in Dynamic Topology:**
+>    Graph mutations (such as attaching a child or setting dirty flags) occur while nodes are shared across multiple handles (`Rc<RefCell<Node>>`). Without interior mutability, `Rc` only permits shared immutable borrowing (`&Node`). `RefCell` allows modifying `parent`, `children`, and `cached_value` at runtime, while `Cell<bool>` provides copy-based atomic-like flag updates for `dirty`.
+> 3. **Upward Event & State Propagation:**
+>    When `mark_dirty()` is called on a child, it upgrades `Weak<RefCell<GraphNode>>` to an `Option<Rc<RefCell<GraphNode>>>`. If the parent is still alive, `.upgrade()` returns `Some(Rc)`, allowing recursive traversal up the tree to invalidate parent caches without risking dangling pointer access.
+> 4. **Memory Layout and Heap Deallocation:**
+>    The memory layout consists of heap-allocated `RcBox` headers containing `strong: Cell<usize>`, `weak: Cell<usize>`, and the `GraphNode` instance. When all `Rc` strong references drop, `GraphNode` and its `children` vector are dropped immediately. The heap allocation itself is freed once all `Weak` references drop.
 
 ---
 

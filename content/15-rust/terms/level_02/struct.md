@@ -159,80 +159,443 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Build a Rectangle
+### Exercise 1: High-Performance Network Protocol Data Unit (PDU) Frame Assembler
 
-**Problem:** Define a `Rectangle` struct that has two fields: `width` and `height`, both of type `u32`. Then, inside `main`, create an instance of that rectangle with a width of 30 and a height of 50. 
+**Scenario**: In a high-throughput network service, incoming byte streams must be transformed into structured protocol frames (`Header` and `Packet`). You need to design named structs to capture frame headers and payload data, implement constructors using field initialization shorthand, perform frame validation against binary constraints, and create response acknowledgement frames using Rust's struct update syntax (`..`).
 
-```rust
-// TODO: Define the Rectangle struct here
+**Requirements**:
+1. Define a `Header` struct with fields:
+   - `magic: [u8; 2]` (fixed magic bytes `[0xAA, 0x55]`)
+   - `version: u8` (protocol version number, default `1`)
+   - `flags: u8` (bitflag representation: `0x01` = encrypted, `0x02` = compressed, `0x04` = priority)
+   - `sequence_number: u32` (monotonically increasing sequence number)
+   - `payload_len: u16` (byte length of payload)
+2. Define a `Packet` struct holding `header: Header` and `payload: Vec<u8>`.
+3. Implement `create_packet(sequence_number: u32, flags: u8, payload: Vec<u8>) -> Result<Packet, &'static str>`:
+   - Returns `Err("Payload exceeds maximum allowable size of 65535 bytes")` if `payload.len() > u16::MAX as usize`.
+   - Constructs `Header` using field init shorthand.
+4. Implement `derive_ack_packet(original: Packet, ack_seq: u32) -> Packet`:
+   - Generates an acknowledgement packet. The header updates `sequence_number` to `ack_seq`, sets bit 2 (`0x04` priority) in `flags`, resets `payload_len` to `0`, and copies remaining fields from `original.header` using struct update syntax (`..original.header`).
+   - The payload of the ACK packet must be an empty `Vec`.
 
-fn main() {
-    // TODO: Create an instance named `rect` here
-    
-    println!("The rectangle is {} by {}", rect.width, rect.height);
-}
-```
-
-**Expected output:**
 > [!check]- Answer
-> ```text
-> The rectangle is 30 by 50
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> struct Rectangle {
->     width: u32,
->     height: u32,
+> #[derive(Debug, PartialEq, Clone)]
+> pub struct Header {
+>     pub magic: [u8; 2],
+>     pub version: u8,
+>     pub flags: u8,
+>     pub sequence_number: u32,
+>     pub payload_len: u16,
 > }
-> // Inside main:
-> let rect = Rectangle { width: 30, height: 50 };
-> ```
-
----
-
-### Exercise 2: Struct Update Syntax Usage
-
-**Problem:** Create `User { name, email, active: true }`. Construct `user2` with a different name using `..user1` update syntax.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> User2 email: alice@example.com
-> ```
-> ```rust
-> struct User { name: String, email: String, active: bool }
-> fn main() {
->     let u1 = User { name: "Alice".into(), email: "alice@example.com".into(), active: true };
->     let u2 = User { name: "Bob".into(), ..u1 };
->     println!("User2 email: {}", u2.email);
+> 
+> #[derive(Debug, PartialEq, Clone)]
+> pub struct Packet {
+>     pub header: Header,
+>     pub payload: Vec<u8>,
+> }
+> 
+> pub fn create_packet(sequence_number: u32, flags: u8, payload: Vec<u8>) -> Result<Packet, &'static str> {
+>     if payload.len() > u16::MAX as usize {
+>         return Err("Payload exceeds maximum allowable size of 65535 bytes");
+>     }
+> 
+>     let magic = [0xAA, 0x55];
+>     let version = 1;
+>     let payload_len = payload.len() as u16;
+> 
+>     // Field initialization shorthand used for magic, version, flags, sequence_number, payload_len
+>     let header = Header {
+>         magic,
+>         version,
+>         flags,
+>         sequence_number,
+>         payload_len,
+>     };
+> 
+>     Ok(Packet { header, payload })
+> }
+> 
+> pub fn derive_ack_packet(original: Packet, ack_seq: u32) -> Packet {
+>     // Struct update syntax copies primitives (magic, version) while overriding specific fields
+>     let header = Header {
+>         sequence_number: ack_seq,
+>         flags: original.header.flags | 0x04,
+>         payload_len: 0,
+>         ..original.header
+>     };
+> 
+>     Packet {
+>         header,
+>         payload: Vec::new(),
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_valid_packet_creation() {
+>         let payload = vec![0xDE, 0xAD, 0xBE, 0xEF];
+>         let packet_res = create_packet(101, 0x01, payload.clone());
+>         assert!(packet_res.is_ok());
+> 
+>         let packet = packet_res.unwrap();
+>         assert_eq!(packet.header.magic, [0xAA, 0x55]);
+>         assert_eq!(packet.header.version, 1);
+>         assert_eq!(packet.header.sequence_number, 101);
+>         assert_eq!(packet.header.flags, 0x01);
+>         assert_eq!(packet.header.payload_len, 4);
+>         assert_eq!(packet.payload, payload);
+>     }
+> 
+>     #[test]
+>     fn test_oversized_payload_rejection() {
+>         let large_payload = vec![0u8; 65536];
+>         let packet_res = create_packet(102, 0x00, large_payload);
+>         assert!(packet_res.is_err());
+>         assert_eq!(
+>             packet_res.unwrap_err(),
+>             "Payload exceeds maximum allowable size of 65535 bytes"
+>         );
+>     }
+> 
+>     #[test]
+>     fn test_derive_ack_packet_with_struct_update() {
+>         let payload = vec![1, 2, 3];
+>         let original = create_packet(1, 0x01, payload).unwrap();
+>         let ack = derive_ack_packet(original, 200);
+> 
+>         assert_eq!(ack.header.sequence_number, 200);
+>         assert_eq!(ack.header.flags, 0x05); // 0x01 | 0x04
+>         assert_eq!(ack.header.payload_len, 0);
+>         assert_eq!(ack.header.magic, [0xAA, 0x55]);
+>         assert!(ack.payload.is_empty());
+>         assert_ne!(ack.header.sequence_number, 1);
+>         assert!(matches!(ack.header.version, 1));
+>     }
 > }
 > ```
 >
-> **Explanation:** `..u1` copies or moves remaining unassigned fields from `u1` into the new struct instance.
+> #### Technical Explanation
+>
+> 
+> 1. **Field Initialization Shorthand**: In `create_packet`, local variables (`magic`, `version`, `flags`, `sequence_number`, `payload_len`) match the field names of `Header`. Rust allows `Header { magic, version, ... }` instead of repeating `magic: magic`, reducing boilerplate while enforcing compile-time type safety.
+> 2. **Struct Update Syntax (`..`) Semantics**: In `derive_ack_packet`, `..original.header` initializes unmentioned fields (`magic`, `version`) by copying them from `original.header`. Since all fields of `Header` derive `Copy` (arrays of primitives and integers), struct update syntax operates via cheap memory copies without moving heap data.
+> 3. **Ownership and Value Lifetimes**: `derive_ack_packet` takes `original` by value (consuming ownership). The original `payload` (a heap-allocated `Vec<u8>`) is dropped when `original` goes out of scope at the end of `derive_ack_packet`, ensuring zero memory leaks while constructing a minimal ACK frame.
+> 4. **Edge Cases**: Payload bound checking enforces protocol specifications by verifying length against `u16::MAX`. Passing values exceeding 65,535 bytes yields an `Err` result before any memory allocation or struct field assignment takes place.
 
 ---
 
-### Exercise 3: Field Init Shorthand
+### Exercise 2: Financial Market Data Engine Order State Auditor
 
-**Problem:** Construct a struct `Point { x, y }` using field init shorthand when local variable names match struct field names.
+**Scenario**: An order management system (OMS) processes high-frequency stock orders. Regulatory compliance requires generating immutable audit log snapshots whenever an order is partially or fully executed, or cloned for auditing. You must implement order creation, partial/full execution state transitions, and snapshot cloning while observing Rust ownership rules for heap-allocated string identifiers versus `Copy` numeric fields.
 
-**Expected output:**
+**Requirements**:
+1. Define an `Order` struct:
+   - `order_id: String`
+   - `trader_id: String`
+   - `symbol: String`
+   - `price_cents: u64`
+   - `total_quantity: u32`
+   - `filled_quantity: u32`
+   - `is_active: bool`
+2. Implement `create_order(order_id: String, trader_id: String, symbol: String, price_cents: u64, total_quantity: u32) -> Order`:
+   - Instantiates an active order with `filled_quantity: 0` and `is_active: true`.
+3. Implement `execute_fill(mut order: Order, fill_qty: u32) -> Result<Order, &'static str>`:
+   - Returns `Err("Fill quantity exceeds total order quantity")` if `filled_quantity + fill_qty > total_quantity`.
+   - Increments `filled_quantity`. Sets `is_active = false` if `filled_quantity == total_quantity`.
+4. Implement `clone_as_audit_snapshot(order: &Order, new_order_id: String) -> Order`:
+   - Creates a snapshot order with a new `order_id`. Explicitly clones heap-allocated string fields (`trader_id`, `symbol`) while copying primitive fields (`price_cents`, `total_quantity`, `filled_quantity`, `is_active`) via struct update syntax (`..*order`).
+
 > [!check]- Answer
-> ```
-> Point: 10, 20
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> struct Point { x: i32, y: i32 }
-> fn main() {
->     let x = 10;
->     let y = 20;
->     let p = Point { x, y };
->     println!("Point: {}, {}", p.x, p.y);
+> #[derive(Debug, PartialEq, Clone)]
+> pub struct Order {
+>     pub order_id: String,
+>     pub trader_id: String,
+>     pub symbol: String,
+>     pub price_cents: u64,
+>     pub total_quantity: u32,
+>     pub filled_quantity: u32,
+>     pub is_active: bool,
+> }
+> 
+> pub fn create_order(
+>     order_id: String,
+>     trader_id: String,
+>     symbol: String,
+>     price_cents: u64,
+>     total_quantity: u32,
+> ) -> Order {
+>     Order {
+>         order_id,
+>         trader_id,
+>         symbol,
+>         price_cents,
+>         total_quantity,
+>         filled_quantity: 0,
+>         is_active: true,
+>     }
+> }
+> 
+> pub fn execute_fill(mut order: Order, fill_qty: u32) -> Result<Order, &'static str> {
+>     if order.filled_quantity + fill_qty > order.total_quantity {
+>         return Err("Fill quantity exceeds total order quantity");
+>     }
+> 
+>     order.filled_quantity += fill_qty;
+>     if order.filled_quantity == order.total_quantity {
+>         order.is_active = false;
+>     }
+> 
+>     Ok(order)
+> }
+> 
+> pub fn clone_as_audit_snapshot(order: &Order, new_order_id: String) -> Order {
+>     Order {
+>         order_id: new_order_id,
+>         trader_id: order.trader_id.clone(),
+>         symbol: order.symbol.clone(),
+>         ..*order
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_order_creation_and_partial_fill() {
+>         let order = create_order("ORD-001".into(), "TRD-99".into(), "AAPL".into(), 15000, 100);
+>         assert_eq!(order.filled_quantity, 0);
+>         assert!(order.is_active);
+> 
+>         let updated_res = execute_fill(order, 40);
+>         assert!(updated_res.is_ok());
+> 
+>         let updated = updated_res.unwrap();
+>         assert_eq!(updated.filled_quantity, 40);
+>         assert!(updated.is_active);
+>         assert_ne!(updated.filled_quantity, updated.total_quantity);
+>     }
+> 
+>     #[test]
+>     fn test_order_complete_fill_deactivation() {
+>         let order = create_order("ORD-002".into(), "TRD-99".into(), "GOOG".into(), 280000, 50);
+>         let filled_order = execute_fill(order, 50).unwrap();
+> 
+>         assert_eq!(filled_order.filled_quantity, 50);
+>         assert!(!filled_order.is_active);
+>         assert!(matches!(filled_order.is_active, false));
+>     }
+> 
+>     #[test]
+>     fn test_overfill_rejection() {
+>         let order = create_order("ORD-003".into(), "TRD-10".into(), "MSFT".into(), 30000, 20);
+>         let res = execute_fill(order, 25);
+>         assert!(res.is_err());
+>         assert_eq!(res.unwrap_err(), "Fill quantity exceeds total order quantity");
+>     }
+> 
+>     #[test]
+>     fn test_audit_snapshot_isolation() {
+>         let original = create_order("ORD-100".into(), "TRD-01".into(), "TSLA".into(), 25000, 10);
+>         let snapshot = clone_as_audit_snapshot(&original, "AUDIT-100-V1".into());
+> 
+>         assert_eq!(snapshot.order_id, "AUDIT-100-V1");
+>         assert_eq!(snapshot.trader_id, original.trader_id);
+>         assert_eq!(snapshot.price_cents, original.price_cents);
+>         assert_ne!(snapshot.order_id, original.order_id);
+>     }
 > }
 > ```
 >
-> **Explanation:** Field initialization shorthand `Point { x, y }` avoids redundant `x: x` repetition.
+> #### Technical Explanation
+>
+> 
+> 1. **All-or-Nothing Mutability**: In Rust, mutability applies to the entire struct variable binding (`mut order: Order`). Individual fields cannot be declared `mut` independently inside the struct definition. In `execute_fill`, taking ownership of `mut order` allows modifying `order.filled_quantity` and `order.is_active`.
+> 2. **Partial Move vs. Cloning in Struct Update Syntax**: When using struct update syntax (`..*order`) on a struct containing `String` fields, Rust cannot automatically copy non-`Copy` fields. Because `clone_as_audit_snapshot` operates on a shared reference `&Order`, fields that do not implement `Copy` (`trader_id` and `symbol`) must be explicitly `.clone()`ed. The remaining numeric and boolean fields implement `Copy` and are implicitly copied from `*order`.
+> 3. **Ownership Transfer in Pipelines**: `execute_fill` consumes the `Order` struct by value and returns a modified `Order`. This move semantics pattern guarantees that stale, pre-fill versions of the order cannot be accidentally accessed or modified elsewhere in the application without explicit compiler error.
+> 4. **Edge Cases & Invariants**: The state machine strictly prevents execution fills exceeding `total_quantity`. If an invalid fill is attempted, the error branch preserves safety by returning early without corrupting order state.
+
+---
+
+### Exercise 3: Embedded IoT Sensor Suite Component Aggregator & Destructuring Pipeline
+
+**Scenario**: An industrial IoT edge module collects environmental metrics and hardware diagnostics. To organize telemetry data clean and efficiently, metrics are composed into sub-structs (`SensorMetrics` and `SystemStatus`) inside a top-level `DeviceReport` container. You need to handle nested struct mutation, fault tracking thresholds, and full struct destructuring for data export pipelines.
+
+**Requirements**:
+1. Define `SensorMetrics`:
+   - `temperature_celsius: f32`
+   - `humidity_percentage: f32`
+   - `pressure_hpa: f32`
+2. Define `SystemStatus`:
+   - `battery_millivolts: u16`
+   - `error_count: u32`
+   - `is_online: bool`
+3. Define `DeviceReport`:
+   - `device_uuid: String`
+   - `timestamp_epoch_secs: u64`
+   - `metrics: SensorMetrics`
+   - `status: SystemStatus`
+4. Implement `build_report(device_uuid: String, timestamp_epoch_secs: u64, metrics: SensorMetrics, status: SystemStatus) -> DeviceReport` using field init shorthand.
+5. Implement `record_sensor_error(report: &mut DeviceReport)`:
+   - Accesses nested `report.status.error_count` and increments it by 1.
+   - If `report.status.error_count >= 5`, sets `report.status.is_online = false`.
+6. Implement `decompose_report(report: DeviceReport) -> (String, SensorMetrics, SystemStatus)`:
+   - Destructures `report` into its component fields (`device_uuid`, `metrics`, `status`), ignoring `timestamp_epoch_secs` with `_`. Returns the tuple `(device_uuid, metrics, status)`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> #[derive(Debug, PartialEq, Clone)]
+> pub struct SensorMetrics {
+>     pub temperature_celsius: f32,
+>     pub humidity_percentage: f32,
+>     pub pressure_hpa: f32,
+> }
+> 
+> #[derive(Debug, PartialEq, Clone)]
+> pub struct SystemStatus {
+>     pub battery_millivolts: u16,
+>     pub error_count: u32,
+>     pub is_online: bool,
+> }
+> 
+> #[derive(Debug, PartialEq, Clone)]
+> pub struct DeviceReport {
+>     pub device_uuid: String,
+>     pub timestamp_epoch_secs: u64,
+>     pub metrics: SensorMetrics,
+>     pub status: SystemStatus,
+> }
+> 
+> pub fn build_report(
+>     device_uuid: String,
+>     timestamp_epoch_secs: u64,
+>     metrics: SensorMetrics,
+>     status: SystemStatus,
+> ) -> DeviceReport {
+>     DeviceReport {
+>         device_uuid,
+>         timestamp_epoch_secs,
+>         metrics,
+>         status,
+>     }
+> }
+> 
+> pub fn record_sensor_error(report: &mut DeviceReport) {
+>     report.status.error_count += 1;
+>     if report.status.error_count >= 5 {
+>         report.status.is_online = false;
+>     }
+> }
+> 
+> pub fn decompose_report(report: DeviceReport) -> (String, SensorMetrics, SystemStatus) {
+>     let DeviceReport {
+>         device_uuid,
+>         metrics,
+>         status,
+>         timestamp_epoch_secs: _,
+>     } = report;
+> 
+>     (device_uuid, metrics, status)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_device_report_construction() {
+>         let metrics = SensorMetrics {
+>             temperature_celsius: 23.5,
+>             humidity_percentage: 45.0,
+>             pressure_hpa: 1013.25,
+>         };
+>         let status = SystemStatus {
+>             battery_millivolts: 3300,
+>             error_count: 0,
+>             is_online: true,
+>         };
+> 
+>         let report = build_report("DEV-8829".into(), 1600000000, metrics.clone(), status.clone());
+> 
+>         assert_eq!(report.device_uuid, "DEV-8829");
+>         assert_eq!(report.timestamp_epoch_secs, 1600000000);
+>         assert_eq!(report.metrics, metrics);
+>         assert_eq!(report.status.battery_millivolts, 3300);
+>         assert!(report.status.is_online);
+>     }
+> 
+>     #[test]
+>     fn test_record_sensor_error_threshold() {
+>         let metrics = SensorMetrics {
+>             temperature_celsius: 85.0,
+>             humidity_percentage: 10.0,
+>             pressure_hpa: 990.0,
+>         };
+>         let status = SystemStatus {
+>             battery_millivolts: 3100,
+>             error_count: 4,
+>             is_online: true,
+>         };
+> 
+>         let mut report = build_report("DEV-ERR".into(), 1600000100, metrics, status);
+>         assert_eq!(report.status.error_count, 4);
+> 
+>         record_sensor_error(&mut report);
+> 
+>         assert_eq!(report.status.error_count, 5);
+>         assert!(!report.status.is_online);
+>         assert_ne!(report.status.is_online, true);
+>         assert!(matches!(report.status.is_online, false));
+>     }
+> 
+>     #[test]
+>     fn test_decompose_report_destructuring() {
+>         let metrics = SensorMetrics {
+>             temperature_celsius: 20.0,
+>             humidity_percentage: 50.0,
+>             pressure_hpa: 1012.0,
+>         };
+>         let status = SystemStatus {
+>             battery_millivolts: 3200,
+>             error_count: 1,
+>             is_online: true,
+>         };
+> 
+>         let report = build_report("DEV-DEC".into(), 1600000200, metrics.clone(), status.clone());
+>         let (uuid, m, s) = decompose_report(report);
+> 
+>         assert_eq!(uuid, "DEV-DEC");
+>         assert_eq!(m.temperature_celsius, 20.0);
+>         assert_eq!(s.error_count, 1);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 
+> 1. **Struct Composition & Sub-field Access**: Structs can be composed arbitrarily. Accessing nested struct fields (`report.status.error_count`) follows standard dot notation. In Rust, dereferencing through references (such as `&mut DeviceReport`) happens automatically via the `.` operator (auto-dereferencing).
+> 2. **Struct Destructuring & Partial Move**: `decompose_report` uses pattern matching on `DeviceReport` (`let DeviceReport { device_uuid, metrics, status, timestamp_epoch_secs: _ } = report;`). This moves `device_uuid`, `metrics`, and `status` out of `report`. The parent `report` struct is partially moved and cannot be used after destructuring. The `_` wild card ignores `timestamp_epoch_secs` without binding it.
+> 3. **Exclusive Borrowing for Mutation**: `record_sensor_error` accepts `&mut DeviceReport`. Rust's borrow checker ensures that while `record_sensor_error` holds an exclusive reference to `report`, no other part of the program can read or mutate any field inside `DeviceReport` or its nested `SystemStatus` struct.
+> 4. **Memory Layout**: Nested structs in Rust are laid out contiguously in memory by default unless wrapped in pointers like `Box` or `Arc`. The total size of `DeviceReport` on the stack is the sum of its aligned field sizes plus padding, keeping data localized for CPU cache efficiency.
 
 ---
 

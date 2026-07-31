@@ -155,129 +155,328 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Make It Compile
+### Exercise 1: Symmetric Network Flow Table with Field Exclusions
 
-**Problem:** This code fails to compile with `the trait bound Point: Hash is not satisfied`. Fix it with a one-line change to the struct definition.
+**Problem:** In network middleboxes, firewalls, and packet analyzers, packets belonging to the same connection must map to the exact same state table entry regardless of flow direction. For example, a packet from `192.168.1.10:443` to `10.0.0.1:52100` and a reply packet from `10.0.0.1:52100` to `192.168.1.10:443` must hash to the same bucket and evaluate equal (`PartialEq`). Additionally, transient per-packet framing data such as `vlan_tag` must be excluded from flow identity hashing.
 
-```rust
-use std::collections::HashSet;
-
-#[derive(Debug, PartialEq, Eq)]
-struct Point { x: i32, y: i32 }
-
-fn main() {
-    let mut visited: HashSet<Point> = HashSet::new();
-    visited.insert(Point { x: 0, y: 0 });
-}
-```
+Implement `PartialEq`, `Eq`, and `Hash` manually for `FlowKey` to achieve canonical endpoint ordering and selective field hashing.
 
 > [!check]- Answer
-> ```rust
-> #[derive(Debug, PartialEq, Eq, Hash)]
-> struct Point { x: i32, y: i32 }
-> ```
 >
-> Adding `Hash` to the derive list is enough, since `i32` (the field type) already implements `Hash` itself — derived `Hash` just combines the hashes of every field.
-
----
-
-### Exercise 2: Deriving Hash and Eq for Custom Key Structs
-
-**Problem:** Define a custom struct `UserId(u64)` deriving `Hash`, `PartialEq`, and `Eq`. Insert it as a key in a `HashMap`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> User found: Alice
-> ```
-> ```rust
-> use std::collections::HashMap;
-> #[derive(Hash, PartialEq, Eq, Debug)]
-> struct UserId(u64);
-> fn main() {
->     let mut map = HashMap::new();
->     map.insert(UserId(101), "Alice");
->     println!("User found: {}", map.get(&UserId(101)).unwrap());
-> }
-> ```
->
-> **Explanation:** Deriving `Hash`, `PartialEq`, and `Eq` allows custom structs to serve as valid `HashMap` and `HashSet` keys.
-
----
-
-### Exercise 3: Custom Hash Implementation for Field Selection
-
-**Problem:**
-Write a manual `Hash` implementation for `struct User { id: u64, cache: String }` that hashes **only** the `id` field (ignoring `cache`). This models the pattern where an expensive cached string should be irrelevant to identity.
-
-Requirements:
-1. Implement `PartialEq` and `Eq` for `User` — comparing by `id` only.
-2. Implement `Hash` for `User` — hashing `id` only.
-3. In `main`, insert a `User` into a `HashMap<User, &str>` as a key. Then perform a lookup using a **different** `User` instance that has the **same `id`** but a **different `cache`** string. Verify the lookup succeeds, proving both implementations agree.
-
-**Expected output:**
-> [!check]- Answer
-> ```text
-> Role for id=42: admin
-> Two Users with same id are equal: true
-> ```
->
-> - **Hint 1:** The `Hash` contract: if `a == b` then `hash(a) == hash(b)`. Since `PartialEq` only compares `id`, `Hash` must also only hash `id`. Breaking this (e.g. hashing `cache` but comparing only `id`) causes lookup failures that are **silent** — the compiler won't catch it.
-> - **Hint 2:** `HashMap::get` takes a key by reference: `map.get(&lookup_key)`. The lookup key doesn't need to be the exact same object inserted — it just needs to be `==` to an existing key and produce the same hash.
-> - **Hint 3:** To use `User` as a `HashMap` key, the type must implement both `Hash` and `Eq`. Without both, the compiler will refuse with a trait bound error.
+> #### Implementation
 >
 > ```rust
 > use std::collections::HashMap;
 > use std::hash::{Hash, Hasher};
 >
-> struct User {
->     id: u64,
->     cache: String, // ← intentionally ignored in Hash and PartialEq
+> #[derive(Debug, Clone)]
+> pub struct FlowKey {
+>     pub src_ip: [u8; 4],
+>     pub dst_ip: [u8; 4],
+>     pub src_port: u16,
+>     pub dst_port: u16,
+>     pub protocol: u8,
+>     pub vlan_tag: u16, // Ignored in equality and hash
 > }
 >
-> // Compare by id only — cache is considered "hot data", not identity.
-> impl PartialEq for User {
+> impl FlowKey {
+>     pub fn new(
+>         src_ip: [u8; 4],
+>         dst_ip: [u8; 4],
+>         src_port: u16,
+>         dst_port: u16,
+>         protocol: u8,
+>         vlan_tag: u16,
+>     ) -> Self {
+>         Self {
+>             src_ip,
+>             dst_ip,
+>             src_port,
+>             dst_port,
+>             protocol,
+>             vlan_tag,
+>         }
+>     }
+>
+>     /// Returns the endpoint pair in canonical sorted order so (A, B) == (B, A).
+>     fn canonical_endpoints(&self) -> (([u8; 4], u16), ([u8; 4], u16)) {
+>         let ep1 = (self.src_ip, self.src_port);
+>         let ep2 = (self.dst_ip, self.dst_port);
+>         if ep1 <= ep2 {
+>             (ep1, ep2)
+>         } else {
+>             (ep2, ep1)
+>         }
+>     }
+> }
+>
+> impl PartialEq for FlowKey {
 >     fn eq(&self, other: &Self) -> bool {
->         self.id == other.id
+>         self.protocol == other.protocol
+>             && self.canonical_endpoints() == other.canonical_endpoints()
 >     }
 > }
-> impl Eq for User {}
 >
-> // Hash by id only — MUST match the fields used in PartialEq.
-> // If we also hashed `cache`, two equal Users (same id, different cache)
-> // would produce different hashes, silently breaking HashMap lookups.
-> impl Hash for User {
+> impl Eq for FlowKey {}
+>
+> impl Hash for FlowKey {
 >     fn hash<H: Hasher>(&self, state: &mut H) {
->         self.id.hash(state);
+>         self.protocol.hash(state);
+>         self.canonical_endpoints().hash(state);
 >     }
 > }
 >
-> fn main() {
->     let mut map: HashMap<User, &str> = HashMap::new();
+> #[derive(Debug, PartialEq, Eq, Default)]
+> pub struct FlowStats {
+>     pub packets: u64,
+>     pub bytes: u64,
+> }
 >
->     // Insert a User with a warm cache.
->     map.insert(User { id: 42, cache: "warm_data".to_string() }, "admin");
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::collections::hash_map::DefaultHasher;
 >
->     // Look up by a DIFFERENT User instance with the same id but empty cache.
->     // Because Hash and PartialEq both use only `id`, this lookup must succeed.
->     let lookup = User { id: 42, cache: String::new() };
->
->     match map.get(&lookup) {
->         Some(role) => println!("Role for id=42: {}", role),
->         None       => println!("ERROR: lookup failed — Hash/Eq contract broken!"),
+>     fn calculate_hash<T: Hash>(t: &T) -> u64 {
+>         let mut hasher = DefaultHasher::new();
+>         t.hash(&mut hasher);
+>         hasher.finish()
 >     }
 >
->     // Explicitly confirm the equality contract:
->     let a = User { id: 42, cache: "aaa".to_string() };
->     let b = User { id: 42, cache: "bbb".to_string() };
->     println!("Two Users with same id are equal: {}", a == b);
+>     #[test]
+>     fn test_flow_key_bidirectional_symmetry() {
+>         let fwd = FlowKey::new([192, 168, 1, 10], [10, 0, 0, 1], 443, 52100, 6, 100);
+>         let rev = FlowKey::new([10, 0, 0, 1], [192, 168, 1, 10], 52100, 443, 6, 200);
+>         let diff_proto = FlowKey::new([192, 168, 1, 10], [10, 0, 0, 1], 443, 52100, 17, 100);
+>
+>         // Explicit symmetry assertions
+>         assert_eq!(fwd, rev);
+>         assert_eq!(calculate_hash(&fwd), calculate_hash(&rev));
+>         assert_ne!(fwd, diff_proto);
+>         assert_ne!(calculate_hash(&fwd), calculate_hash(&diff_proto));
+>
+>         // HashMap bidirectional routing table integration test
+>         let mut table: HashMap<FlowKey, FlowStats> = HashMap::new();
+>         table.entry(fwd.clone()).or_default().packets += 1;
+>         table.entry(rev.clone()).or_default().packets += 1;
+>
+>         assert_eq!(table.len(), 1);
+>         let stats = table.get(&fwd);
+>         assert!(matches!(stats, Some(s) if s.packets == 2));
+>     }
 > }
 > ```
 >
-> **Explanation:**
-> The `Hash`/`Eq` contract is: **if `a == b`, then `hash(a) == hash(b)`**. This is not enforced by the compiler — breaking it is legal Rust but causes `HashMap` to silently fail lookups (because the bucket is found by hash, then confirmed by equality; if the hashes differ, the bucket is never even checked). The `cache` field is excluded from both traits here because it represents computed state, not identity — like how two `File` handles to the same path should be considered the same regardless of their read buffers.
+> #### Technical Explanation
+>
+>
+> 1. **Canonical Normalization**: The helper method `canonical_endpoints()` orders the tuple of IP address and port numerically using lexicographical comparison on `(([u8; 4], u16), ([u8; 4], u16))`. This guarantees that `(ep_A, ep_B)` and `(ep_B, ep_A)` produce identical tuples without mutating internal struct state.
+> 2. **Trait Contract Enforcement**: The core requirement of the `Hash` and `Eq` contract in Rust is that `a == b => hash(a) == hash(b)`. Both `PartialEq::eq` and `Hash::hash` delegate directly to `protocol` and `canonical_endpoints()`. Because identical data inputs are fed to `Hasher`, hash collisions for symmetric flows are mathematically zero at the key representation layer.
+> 3. **Selective Field Exclusion**: The `vlan_tag` field is deliberately omitted from both `eq` and `hash`. If `vlan_tag` were hashed but omitted from `eq` (or vice versa), two flows arriving on different VLANs would produce different bucket indexes in `HashMap`, breaking lookup mechanics.
+> 4. **Edge Cases**: Differing `protocol` values (e.g., TCP `6` vs UDP `17`) between identical IP/port endpoints evaluate as distinct keys and produce different hash values due to feeding `self.protocol` into the `Hasher` first.
+
+---
+
+### Exercise 2: Quantized Financial Order Book Price Key
+
+**Problem:** In automated trading systems, price levels in an order book are aggregated in a `HashMap`. Primitive `f64` values cannot be directly used as map keys because `f64` does not implement `Eq` or `Hash` (`f64::NAN != f64::NAN` violates total equivalence). Furthermore, slight floating-point representations (such as `100.004` vs `100.001` under a `0.01` tick size) and signed zeroes (`-0.0` vs `+0.0`) must be normalized to identical price ticks.
+
+Implement a wrapper struct `CanonicalPrice` that quantizes prices into integer ticks, handles signed zero normalization, and implements `PartialEq`, `Eq`, and `Hash`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::collections::HashMap;
+> use std::hash::{Hash, Hasher};
+>
+> #[derive(Debug, Clone, Copy)]
+> pub struct CanonicalPrice {
+>     raw_price: f64,
+>     tick_size: f64,
+> }
+>
+> impl CanonicalPrice {
+>     pub fn new(raw_price: f64, tick_size: f64) -> Self {
+>         assert!(tick_size > 0.0 && tick_size.is_finite(), "tick_size must be positive and finite");
+>         Self { raw_price, tick_size }
+>     }
+>
+>     /// Quantizes raw price to integer tick steps, normalizing signed zero and NaN.
+>     pub fn ticks(&self) -> i64 {
+>         if self.raw_price.is_nan() {
+>             return i64::MIN;
+>         }
+>         let ticks = (self.raw_price / self.tick_size).round();
+>         if ticks == 0.0 || ticks == -0.0 {
+>             0
+>         } else {
+>             ticks as i64
+>         }
+>     }
+> }
+>
+> impl PartialEq for CanonicalPrice {
+>     fn eq(&self, other: &Self) -> bool {
+>         self.ticks() == other.ticks()
+>     }
+> }
+>
+> impl Eq for CanonicalPrice {}
+>
+> impl Hash for CanonicalPrice {
+>     fn hash<H: Hasher>(&self, state: &mut H) {
+>         self.ticks().hash(state);
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::collections::hash_map::DefaultHasher;
+>
+>     fn calculate_hash<T: Hash>(t: &T) -> u64 {
+>         let mut hasher = DefaultHasher::new();
+>         t.hash(&mut hasher);
+>         hasher.finish()
+>     }
+>
+>     #[test]
+>     fn test_canonical_price_hashing_and_equality() {
+>         let p1 = CanonicalPrice::new(100.004, 0.01);
+>         let p2 = CanonicalPrice::new(100.001, 0.01);
+>         let p3 = CanonicalPrice::new(100.012, 0.01);
+>         let p_zero_pos = CanonicalPrice::new(0.0, 0.01);
+>         let p_zero_neg = CanonicalPrice::new(-0.0, 0.01);
+>
+>         // Sub-tick floating noise yields equal price and hash
+>         assert_eq!(p1, p2);
+>         assert_eq!(calculate_hash(&p1), calculate_hash(&p2));
+>         assert_ne!(p1, p3);
+>         assert_ne!(calculate_hash(&p1), calculate_hash(&p3));
+>
+>         // Sign zero normalization test
+>         assert_eq!(p_zero_pos, p_zero_neg);
+>         assert_eq!(calculate_hash(&p_zero_pos), calculate_hash(&p_zero_neg));
+>
+>         // Order book hash map aggregation test
+>         let mut book: HashMap<CanonicalPrice, u32> = HashMap::new();
+>         book.insert(p1, 50);
+>
+>         let lookup = book.get(&p2);
+>         assert!(matches!(lookup, Some(&qty) if qty == 50));
+>         assert!(book.contains_key(&p2));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 1. **Why `f64` Lacks `Hash` / `Eq`**: Floating-point numbers implement `PartialEq` but not `Eq` because IEEE 754 specifies `NaN != NaN`. Allowing unconstrained floats in `HashMap` would break internal lookup invariants (inserted `NaN` keys could never be retrieved).
+> 2. **Integer Scaling Transformation**: By dividing `raw_price` by `tick_size` and rounding to the nearest whole integer, continuous floating-point space is mapped into discrete integer ticks (`i64`). Integer types implement total equivalence (`Eq`) and predictable hashing (`Hash`).
+> 3. **Signed Zero Normalization**: IEEE 754 floating-point numbers distinguish between `+0.0` and `-0.0`. In Rust, `+0.0 == -0.0` evaluates to `true`, but converting `-0.0` directly to bits without normalization could risk different internal representations. Normalizing `ticks == -0.0` directly to integer `0` ensures exact equivalence and hash parity.
+> 4. **HashMap Aggregation Guarantee**: Because `p1` (`100.004`) and `p2` (`100.001`) both round to tick integer `10000`, `p1 == p2` is `true` and `hash(p1) == hash(p2)` holds, allowing `HashMap::get` using `p2` to seamlessly retrieve entries inserted using `p1`.
+
+---
+
+### Exercise 3: Zero-Allocation Case-Insensitive AST Symbol Key
+
+**Problem:** Compilers, interpreters, and SQL parsers frequently perform symbol lookups in case-insensitive identifier namespaces. Diagnostic span metadata (`span_start: usize`) stored inside a `SymbolKey` struct must be ignored during symbol table matching. Furthermore, to maximize throughput during compilation, custom hashing must convert string characters to lowercase on the fly without allocating intermediate `String` objects on the heap.
+
+Implement `SymbolKey` with custom `PartialEq`, `Eq`, and `Hash` to perform case-insensitive, scope-aware matching with field-selective hashing.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::collections::HashMap;
+> use std::hash::{Hash, Hasher};
+>
+> #[derive(Debug, Clone)]
+> pub struct SymbolKey {
+>     pub name: String,
+>     pub scope_id: u32,
+>     pub span_start: usize, // Ignored in equality and hash
+> }
+>
+> impl SymbolKey {
+>     pub fn new(name: impl Into<String>, scope_id: u32, span_start: usize) -> Self {
+>         Self {
+>             name: name.into(),
+>             scope_id,
+>             span_start,
+>         }
+>     }
+> }
+>
+> impl PartialEq for SymbolKey {
+>     fn eq(&self, other: &Self) -> bool {
+>         self.scope_id == other.scope_id
+>             && self.name.eq_ignore_ascii_case(&other.name)
+>     }
+> }
+>
+> impl Eq for SymbolKey {}
+>
+> impl Hash for SymbolKey {
+>     fn hash<H: Hasher>(&self, state: &mut H) {
+>         self.scope_id.hash(state);
+>         for byte in self.name.bytes() {
+>             byte.to_ascii_lowercase().hash(state);
+>         }
+>     }
+> }
+>
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::collections::hash_map::DefaultHasher;
+>
+>     fn calculate_hash<T: Hash>(t: &T) -> u64 {
+>         let mut hasher = DefaultHasher::new();
+>         t.hash(&mut hasher);
+>         hasher.finish()
+>     }
+>
+>     #[test]
+>     fn test_symbol_key_case_insensitivity() {
+>         let sym1 = SymbolKey::new("UserCounter", 1, 12);
+>         let sym2 = SymbolKey::new("usercounter", 1, 98);
+>         let sym3 = SymbolKey::new("UserCounter", 2, 12);
+>
+>         // Case insensitivity and span independence assertions
+>         assert_eq!(sym1, sym2);
+>         assert_eq!(calculate_hash(&sym1), calculate_hash(&sym2));
+>
+>         // Scope boundary distinction assertions
+>         assert_ne!(sym1, sym3);
+>         assert_ne!(calculate_hash(&sym1), calculate_hash(&sym3));
+>
+>         // Compiler symbol table lookup test
+>         let mut sym_table: HashMap<SymbolKey, String> = HashMap::new();
+>         sym_table.insert(sym1.clone(), "i32".to_string());
+>
+>         let retrieved = sym_table.get(&sym2);
+>         assert!(matches!(retrieved, Some(type_str) if type_str == "i32"));
+>         assert!(sym_table.contains_key(&sym2));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 1. **Zero-Allocation Stream Hashing**: Instead of calling `self.name.to_lowercase()` (which allocates a new heap-allocated `String`), `Hash::hash` iterates over `self.name.bytes()` and hashes each byte transformed via `byte.to_ascii_lowercase()`. This streams lowercased byte values directly into the `Hasher` with zero temporary heap allocations.
+> 2. **ASCII Case Invariance**: `PartialEq` uses `name.eq_ignore_ascii_case(&other.name)`, which checks ASCII byte equality ignoring case differences without heap allocation. Because both `eq` and `hash` operate byte-by-byte on ASCII-lowercased equivalents, `"UserCounter"` and `"usercounter"` produce identical hash values and compare equal.
+> 3. **Scope Scoping and Metadata Filtering**: The `scope_id` field is explicitly hashed and compared, ensuring that variables with the same identifier in different lexical scopes (e.g. `scope_id: 1` vs `scope_id: 2`) generate distinct hashes and evaluate as unequal. The `span_start` byte offset is omitted entirely from both `eq` and `hash`, preventing AST refactoring or line movement from breaking symbol resolution.
+> 4. **Safety and Soundness**: The type implements `Eq` because ASCII case-insensitive equality is reflexive (`a == a`), symmetric (`a == b => b == a`), and transitive (`a == b && b == c => a == c`). Combined with streaming lowercase byte hashing, the strict invariant `a == b => hash(a) == hash(b)` is fully satisfied.
 
 ---
 

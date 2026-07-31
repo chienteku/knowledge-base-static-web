@@ -144,63 +144,437 @@ thread::spawn(move || {
 });
 ```
 
+---
+
 ## 5. Practice Exercises
 
-### Exercise 1: Predict the Collected Type
+### Exercise 1: High-Throughput Log Tag Aggregator (`TagIndex`)
 
-**Problem:** What does `.collect()` build here, and what happens if any item is `Err`?
+**Problem Statement:**
+In distributed microservice log ingestion pipelines, streaming metadata tags (e.g. `("env", "prod")`, `("service", "auth")`) must be aggregated into tag frequency metrics without unnecessary container reallocations. Design a custom metadata index container `TagIndex` that stores metric tag counts and total processed tag entries.
 
-```rust
-fn parse_all(inputs: &[&str]) -> Result<Vec<i32>, std::num::ParseIntError> {
-    inputs.iter().map(|s| s.parse::<i32>()).collect()
-}
-```
+1. Create a `TagIndex` struct with `counts: HashMap<String, usize>` and `total_tags: usize`.
+2. Implement `FromIterator<(String, String)>` and `FromIterator<(&'a str, &'a str)>` for `TagIndex` so callers can construct an index directly using `.collect()`.
+3. Implement `Extend<(String, String)>` and `Extend<(&'a str, &'a str)>` for `TagIndex` to support appending new tag batches via `.extend()`.
+4. Utilize `Iterator::size_hint()` in your `extend` implementations to reserve appropriate `HashMap` capacity upfront.
+5. Include a comprehensive `#[cfg(test)] mod tests` module with assertions testing `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
 
 > [!check]- Answer
-> It builds a **`Result<Vec<i32>, ParseIntError>`** — `Result` itself implements `FromIterator` over an iterator of `Result`s! If every item is `Ok`, you get `Ok(Vec<i32>)` with all the values unwrapped and collected. If **any** item is `Err`, the whole collect **short-circuits** and returns just that first `Err` immediately, discarding the rest — a surprisingly elegant pattern that falls directly out of the `FromIterator for Result<V, E>` implementation.
-
----
-
-### Exercise 2: Appending Vector Elements with Extend
-
-**Problem:** Create a mutable vector `vec![1, 2]`. Extend it with elements from a second vector `vec![3, 4, 5]` using `.extend()`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> [1, 2, 3, 4, 5]
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let mut v1 = vec![1, 2];
->     let v2 = vec![3, 4, 5];
->     v1.extend(v2);
->     println!("{:?}", v1);
+> use std::collections::HashMap;
+> use std::iter::FromIterator;
+> 
+> #[derive(Debug, Default, PartialEq, Eq)]
+> pub struct TagIndex {
+>     pub counts: HashMap<String, usize>,
+>     pub total_tags: usize,
+> }
+> 
+> impl TagIndex {
+>     pub fn new() -> Self {
+>         Self {
+>             counts: HashMap::new(),
+>             total_tags: 0,
+>         }
+>     }
+> 
+>     pub fn get_count(&self, key: &str, value: &str) -> usize {
+>         let tag = format!("{}:{}", key, value);
+>         self.counts.get(&tag).copied().unwrap_or(0)
+>     }
+> }
+> 
+> // FromIterator for owned (String, String) pairs
+> impl FromIterator<(String, String)> for TagIndex {
+>     fn from_iter<I: IntoIterator<Item = (String, String)>>(iter: I) -> Self {
+>         let mut index = TagIndex::new();
+>         index.extend(iter);
+>         index
+>     }
+> }
+> 
+> // FromIterator for borrowed (&str, &str) pairs
+> impl<'a> FromIterator<(&'a str, &'a str)> for TagIndex {
+>     fn from_iter<I: IntoIterator<Item = (&'a str, &'a str)>>(iter: I) -> Self {
+>         let mut index = TagIndex::new();
+>         index.extend(iter);
+>         index
+>     }
+> }
+> 
+> // Extend for owned (String, String) pairs
+> impl Extend<(String, String)> for TagIndex {
+>     fn extend<I: IntoIterator<Item = (String, String)>>(&mut self, iter: I) {
+>         let iterator = iter.into_iter();
+>         let (lower_bound, _) = iterator.size_hint();
+>         self.counts.reserve(lower_bound);
+> 
+>         for (k, v) in iterator {
+>             let tag = format!("{}:{}", k, v);
+>             *self.counts.entry(tag).or_insert(0) += 1;
+>             self.total_tags += 1;
+>         }
+>     }
+> }
+> 
+> // Extend for borrowed (&'a str, &'a str) pairs
+> impl<'a> Extend<(&'a str, &'a str)> for TagIndex {
+>     fn extend<I: IntoIterator<Item = (&'a str, &'a str)>>(&mut self, iter: I) {
+>         let iterator = iter.into_iter();
+>         let (lower_bound, _) = iterator.size_hint();
+>         self.counts.reserve(lower_bound);
+> 
+>         for (k, v) in iterator {
+>             let tag = format!("{}:{}", k, v);
+>             *self.counts.entry(tag).or_insert(0) += 1;
+>             self.total_tags += 1;
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_from_iterator_owned_and_borrowed() {
+>         let owned_tags = vec![
+>             ("env".to_string(), "prod".to_string()),
+>             ("env".to_string(), "prod".to_string()),
+>             ("service".to_string(), "auth".to_string()),
+>         ];
+> 
+>         let index: TagIndex = owned_tags.into_iter().collect();
+> 
+>         assert_eq!(index.total_tags, 3);
+>         assert_eq!(index.get_count("env", "prod"), 2);
+>         assert_eq!(index.get_count("service", "auth"), 1);
+>         assert_eq!(index.get_count("service", "db"), 0);
+> 
+>         let borrowed_tags = [("region", "us-east-1"), ("env", "prod")];
+>         let index2: TagIndex = borrowed_tags.into_iter().collect();
+>         assert_eq!(index2.total_tags, 2);
+>         assert_eq!(index2.get_count("region", "us-east-1"), 1);
+>     }
+> 
+>     #[test]
+>     fn test_extend_functionality() {
+>         let mut index: TagIndex = [("tier", "frontend")].into_iter().collect();
+>         assert_eq!(index.total_tags, 1);
+> 
+>         index.extend([("tier", "frontend"), ("tier", "backend")]);
+>         assert_eq!(index.total_tags, 3);
+>         assert_eq!(index.get_count("tier", "frontend"), 2);
+>         assert_eq!(index.get_count("tier", "backend"), 1);
+> 
+>         let extra_owned = vec![("tier".to_string(), "db".to_string())];
+>         index.extend(extra_owned);
+> 
+>         assert_eq!(index.total_tags, 4);
+>         assert_ne!(index.total_tags, 0);
+> 
+>         let search_result = index.counts.get("tier:frontend");
+>         assert!(matches!(search_result, Some(&2)));
+>     }
 > }
 > ```
 >
-> **Explanation:** `Extend` appends all items from an iterator into an existing mutable collection without reallocating a brand new container.
+> #### Technical Explanation
+>
+>
+> 
+> 
+> 1. **Delegation Pattern (`FromIterator` calling `Extend`)**: Standard library collections almost universally implement `FromIterator::from_iter` by instantiating a default container and delegating immediately to `Extend::extend`. This avoids code duplication and enforces uniform insertion behavior.
+> 2. **Capacity Reservation Optimization**: By calling `size_hint()` on the iterator before consuming items, `extend` extracts the lower bound of incoming elements and calls `counts.reserve(lower_bound)`. This eliminates multiple expensive hash map reallocations during batch processing.
+> 3. **Lifetime & Flexibility (`String` vs `&str`)**: Providing `Extend` for both `(String, String)` and `(&'a str, &'a str)` allows caller ergonomics — accepting zero-copy borrowed slices or moving owned strings into the method seamlessly.
+> 4. **Invariants & Ownership**: The `extend` method requires `&mut self` exclusive access to update `counts` in-place, consuming the iterator by value (`IntoIterator`) and taking ownership of its elements.
 
 ---
 
-### Exercise 3: Custom Collection `FromIterator` Implementation
+### Exercise 2: Financial Order Book & Price-Level Depth Aggregator (`OrderBookDepth`)
 
-**Problem:** Demonstrate collecting a string iterator into a `String` using `FromIterator` to build a single concatenated string.
+**Problem Statement:**
+High-frequency trading engines require order book data structures that consolidate streams of price-level quotes `(price, volume)` into a sorted depth representation using `BTreeMap<u64, u64>`. Implement `OrderBookDepth` to support both single-quote stream processing and multi-snapshot aggregation.
 
-**Expected output:**
+1. Define `OrderBookDepth` with `levels: BTreeMap<u64, u64>` and `total_volume: u64`.
+2. Implement `FromIterator<(u64, u64)>` to build an order book snapshot using `.collect()`.
+3. Implement `Extend<(u64, u64)>` to incrementally add price levels and aggregate depth via `.extend()`.
+4. Implement `Extend<OrderBookDepth>` to merge another entire `OrderBookDepth` snapshot into an existing instance.
+5. Write unit tests in `#[cfg(test)] mod tests` covering `.collect()`, `.extend()` with tuple streams, and `.extend()` with merged snapshots using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
+
 > [!check]- Answer
-> ```
-> rustlang
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let parts = vec!["rust", "lang"];
->     let full: String = parts.into_iter().collect();
->     println!("{}", full);
+> use std::collections::BTreeMap;
+> use std::iter::FromIterator;
+> 
+> #[derive(Debug, Default, Clone, PartialEq, Eq)]
+> pub struct OrderBookDepth {
+>     pub levels: BTreeMap<u64, u64>,
+>     pub total_volume: u64,
+> }
+> 
+> impl OrderBookDepth {
+>     pub fn new() -> Self {
+>         Self {
+>             levels: BTreeMap::new(),
+>             total_volume: 0,
+>         }
+>     }
+> 
+>     pub fn add_level(&mut self, price: u64, volume: u64) {
+>         *self.levels.entry(price).or_insert(0) += volume;
+>         self.total_volume += volume;
+>     }
+> 
+>     pub fn best_bid(&self) -> Option<(&u64, &u64)> {
+>         self.levels.iter().next_back()
+>     }
+> }
+> 
+> // Build snapshot from price-volume tuples via .collect()
+> impl FromIterator<(u64, u64)> for OrderBookDepth {
+>     fn from_iter<I: IntoIterator<Item = (u64, u64)>>(iter: I) -> Self {
+>         let mut depth = OrderBookDepth::new();
+>         depth.extend(iter);
+>         depth
+>     }
+> }
+> 
+> // Extend depth with stream of price-volume tuples via .extend()
+> impl Extend<(u64, u64)> for OrderBookDepth {
+>     fn extend<I: IntoIterator<Item = (u64, u64)>>(&mut self, iter: I) {
+>         for (price, volume) in iter {
+>             self.add_level(price, volume);
+>         }
+>     }
+> }
+> 
+> // Extend depth by merging another OrderBookDepth snapshot
+> impl Extend<OrderBookDepth> for OrderBookDepth {
+>     fn extend<I: IntoIterator<Item = OrderBookDepth>>(&mut self, iter: I) {
+>         for other in iter {
+>             for (price, volume) in other.levels {
+>                 self.add_level(price, volume);
+>             }
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_order_book_from_iterator() {
+>         let quotes = vec![(100, 50), (105, 30), (100, 20)];
+>         let depth: OrderBookDepth = quotes.into_iter().collect();
+> 
+>         assert_eq!(depth.total_volume, 100);
+>         assert_eq!(depth.levels.get(&100), Some(&70));
+>         assert_eq!(depth.levels.get(&105), Some(&30));
+> 
+>         let best = depth.best_bid();
+>         assert!(matches!(best, Some((&105, &30))));
+>     }
+> 
+>     #[test]
+>     fn test_order_book_extend_tuples() {
+>         let mut depth: OrderBookDepth = vec![(200, 10)].into_iter().collect();
+>         assert_eq!(depth.total_volume, 10);
+> 
+>         depth.extend(vec![(200, 15), (210, 5)]);
+> 
+>         assert_eq!(depth.total_volume, 30);
+>         assert_eq!(depth.levels.get(&200), Some(&25));
+>         assert_eq!(depth.levels.get(&210), Some(&5));
+>         assert_ne!(depth.total_volume, 10);
+>     }
+> 
+>     #[test]
+>     fn test_order_book_extend_snapshot_merge() {
+>         let mut depth_a: OrderBookDepth = vec![(100, 10)].into_iter().collect();
+>         let depth_b: OrderBookDepth = vec![(100, 20), (150, 40)].into_iter().collect();
+> 
+>         depth_a.extend(std::iter::once(depth_b));
+> 
+>         assert_eq!(depth_a.total_volume, 70);
+>         assert_eq!(depth_a.levels.get(&100), Some(&30));
+>         assert_eq!(depth_a.levels.get(&150), Some(&40));
+>     }
 > }
 > ```
 >
-> **Explanation:** `String` implements `FromIterator<&str>`, allowing iterators of string slices to be collected directly into an owned `String`.
+> #### Technical Explanation
+>
+>
+> 
+> 
+> 1. **Overloaded `Extend` Implementations**: Rust permits multiple `impl<A> Extend<A> for Collection` blocks as long as the generic item type `A` differs. Here, `OrderBookDepth` implements `Extend<(u64, u64)>` for raw price updates and `Extend<OrderBookDepth>` for container merging.
+> 2. **Ordered Aggregation with `BTreeMap`**: Unlike `HashMap`, `BTreeMap` maintains keys in strict ascending numerical order. Using `next_back()` on `self.levels.iter()` returns the highest price level (`best_bid`) in $O(\log N)$ time.
+> 3. **Ownership Transfer in Merging**: Implementing `Extend<OrderBookDepth>` consumes the incoming order book instances by value (`for other in iter`), transferring ownership of their internal `BTreeMap` entries directly into the target instance without requiring reference cloning.
+
+---
+
+### Exercise 3: Fallible Route Collector & Network Subnet Router (`RoutingTable`)
+
+**Problem Statement:**
+Network daemons parse routing configurations from file or wire formats where individual route rules may fail validation. A custom collection `RoutingTable` must support building from parsed rules and work seamlessly with Rust's fallible `Result` collecting mechanics (`Result<RoutingTable, RoutingError>`).
+
+1. Define a `RoutingError` enum (`InvalidDestination(String)`, `InvalidGateway(String)`).
+2. Define a `RouteRule` struct (`destination: String`, `gateway: String`) and a fallible validator function `RouteRule::parse(dest: &str, gw: &str) -> Result<RouteRule, RoutingError>`.
+3. Define a `RoutingTable` struct storing `routes: HashMap<String, String>`.
+4. Implement `FromIterator<RouteRule>` and `Extend<RouteRule>` for `RoutingTable`.
+5. Demonstrate how `FromIterator` enables collecting `Result<RouteRule, RoutingError>` into `Result<RoutingTable, RoutingError>` with short-circuiting on validation failures.
+6. Provide unit tests in `#[cfg(test)] mod tests` verifying valid route collection, incremental extension, and fallible error short-circuiting using `assert_eq!`, `assert!`, `assert_ne!`, and `matches!`.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::collections::HashMap;
+> use std::iter::FromIterator;
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub enum RoutingError {
+>     InvalidDestination(String),
+>     InvalidGateway(String),
+> }
+> 
+> #[derive(Debug, Clone, PartialEq, Eq)]
+> pub struct RouteRule {
+>     pub destination: String,
+>     pub gateway: String,
+> }
+> 
+> impl RouteRule {
+>     pub fn parse(dest: &str, gw: &str) -> Result<Self, RoutingError> {
+>         if dest.is_empty() || dest.starts_with("0.0.0.0") {
+>             return Err(RoutingError::InvalidDestination(dest.to_string()));
+>         }
+>         if gw.is_empty() || gw == "0.0.0.0" {
+>             return Err(RoutingError::InvalidGateway(gw.to_string()));
+>         }
+>         Ok(Self {
+>             destination: dest.to_string(),
+>             gateway: gw.to_string(),
+>         })
+>     }
+> }
+> 
+> #[derive(Debug, Default, PartialEq, Eq)]
+> pub struct RoutingTable {
+>     pub routes: HashMap<String, String>,
+> }
+> 
+> impl RoutingTable {
+>     pub fn new() -> Self {
+>         Self {
+>             routes: HashMap::new(),
+>         }
+>     }
+> 
+>     pub fn lookup(&self, dest: &str) -> Option<&str> {
+>         self.routes.get(dest).map(|s| s.as_str())
+>     }
+> }
+> 
+> impl FromIterator<RouteRule> for RoutingTable {
+>     fn from_iter<I: IntoIterator<Item = RouteRule>>(iter: I) -> Self {
+>         let mut table = RoutingTable::new();
+>         table.extend(iter);
+>         table
+>     }
+> }
+> 
+> impl Extend<RouteRule> for RoutingTable {
+>     fn extend<I: IntoIterator<Item = RouteRule>>(&mut self, iter: I) {
+>         let iterator = iter.into_iter();
+>         let (lower, _) = iterator.size_hint();
+>         self.routes.reserve(lower);
+> 
+>         for rule in iterator {
+>             self.routes.insert(rule.destination, rule.gateway);
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_routing_table_collect_and_extend() {
+>         let rules = vec![
+>             RouteRule { destination: "10.0.0.0/8".to_string(), gateway: "10.0.0.1".to_string() },
+>             RouteRule { destination: "192.168.1.0/24".to_string(), gateway: "192.168.1.1".to_string() },
+>         ];
+> 
+>         let mut table: RoutingTable = rules.into_iter().collect();
+>         assert_eq!(table.routes.len(), 2);
+>         assert_eq!(table.lookup("10.0.0.0/8"), Some("10.0.0.1"));
+> 
+>         table.extend(vec![
+>             RouteRule { destination: "172.16.0.0/12".to_string(), gateway: "172.16.0.1".to_string() },
+>         ]);
+> 
+>         assert_eq!(table.routes.len(), 3);
+>         assert_eq!(table.lookup("172.16.0.0/12"), Some("172.16.0.1"));
+>         assert_ne!(table.routes.len(), 2);
+>     }
+> 
+>     #[test]
+>     fn test_fallible_route_collection_success() {
+>         let raw_inputs = [
+>             ("10.0.0.0/8", "10.0.0.1"),
+>             ("192.168.1.0/24", "192.168.1.1"),
+>         ];
+> 
+>         let result: Result<RoutingTable, RoutingError> = raw_inputs
+>             .iter()
+>             .map(|(d, g)| RouteRule::parse(d, g))
+>             .collect();
+> 
+>         assert!(result.is_ok());
+>         let table = result.unwrap();
+>         assert_eq!(table.routes.len(), 2);
+>         assert_eq!(table.lookup("10.0.0.0/8"), Some("10.0.0.1"));
+>     }
+> 
+>     #[test]
+>     fn test_fallible_route_collection_short_circuit() {
+>         let raw_inputs = [
+>             ("10.0.0.0/8", "10.0.0.1"),
+>             ("0.0.0.0/0", "0.0.0.0"), // Invalid destination & gateway
+>             ("192.168.1.0/24", "192.168.1.1"),
+>         ];
+> 
+>         let result: Result<RoutingTable, RoutingError> = raw_inputs
+>             .iter()
+>             .map(|(d, g)| RouteRule::parse(d, g))
+>             .collect();
+> 
+>         assert!(result.is_err());
+>         let err = result.unwrap_err();
+>         assert!(matches!(err, RoutingError::InvalidDestination(_)));
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+>
+> 
+> 
+> 1. **Blanket Trait Implementation for `Result`**: Rust's standard library provides a blanket implementation `impl<A, E, V> FromIterator<Result<A, E>> for Result<V, E> where V: FromIterator<A>`. Because `RoutingTable` implements `FromIterator<RouteRule>`, type inference allows `.collect()` to automatically target `Result<RoutingTable, RoutingError>`.
+> 2. **Short-Circuiting Mechanics**: When collecting an iterator yielding `Result<T, E>`, `FromIterator` iterates until it encounters the first `Err(e)` value, immediately returning `Err(e)` and aborting iterator consumption. If all items are `Ok(v)`, `from_iter` accumulates all unwrapped `v` items into `V` and returns `Ok(V)`.
+> 3. **Error Representation**: Using explicit enum error variants (`RoutingError`) combined with pattern matching (`matches!`) allows robust runtime diagnostics for malformed configuration entries without panicking.
 
 ---
 
