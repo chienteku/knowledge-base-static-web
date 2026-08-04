@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [`match`](../level_02/match.md) — The exhaustive pattern matching tool that `if let` is designed to simplify.
-- [`Option<T>`](../level_02/option_t.md) — (Future reference) `if let` is most commonly used to extract values from `Option` (`Some` / `None`).
 
 ---
 

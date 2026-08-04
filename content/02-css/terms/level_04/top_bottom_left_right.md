@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Positioning (`relative`, `absolute`, `fixed`)](../level_04/position_static_relative.md) — These four properties **do absolutely nothing** unless the element is positioned!
 
 ---
 

@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Module Resolution](../level_03/module_resolution.md) — How Node finds these modules.
 
 ---
 

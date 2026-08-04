@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [Inlining (`#[inline]`)](../level_15/inlining.md) — Cross-function and cross-crate code expansion.
-- [Release Profile](../level_15/release_profile.md) — Cargo compilation profile settings (`[profile.release]`).
 - [Crate (`crate`)](../level_07/crate.md) — Separate compilation units in Rust Cargo builds.
 
 ---

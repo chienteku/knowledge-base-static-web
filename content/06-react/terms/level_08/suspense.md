@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Code Splitting](../level_08/code_splitting.md) — The primary use case for Suspense in modern React.
 - [Conditional Rendering](../level_05/conditional_rendering.md) — What Suspense aims to replace.
 
 ---

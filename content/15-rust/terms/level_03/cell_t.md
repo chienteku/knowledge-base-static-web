@@ -9,7 +9,6 @@
 
 - [`RefCell<T>`](../level_03/refcell_t.md) — The heavy-duty tool that `Cell` is an optimization of.
 - [`Copy` Trait](../level_03/copy_trait.md) — The trait that allows `Cell` to be so incredibly fast.
-- [Interior Mutability](../level_03/interior_mutability.md) — (Future Reference) The design pattern that both `Cell` and `RefCell` enable.
 
 ---
 

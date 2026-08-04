@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that rely on `Pin`.
 - [`async fn`](../level_10/async_fn.md) — How we create self-referential futures.
 - [Smart Pointers (`Box`)](../level_03/box_t.md) — A common container for pinning (`Pin<Box<T>>`).
 

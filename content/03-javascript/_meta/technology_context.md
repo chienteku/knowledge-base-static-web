@@ -29,3 +29,7 @@ All code examples must be valid, modern JavaScript designed for robustness:
   - Avoid polluting the global namespace.
   - Properly handle errors using `try...catch` blocks where appropriate, especially in asynchronous code.
 - **Environment Notes**: Explicitly state the environment (Browser, Node.js, Universal) if the code relies on specific APIs via comments (e.g., `// Environment: Browser`).
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 03-javascript` to check consistency after any edits.

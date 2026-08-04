@@ -14,3 +14,7 @@
 ## 3. Formatting Rules
 (Inherits standard generation rules: Prerequisites, Category, Context, Explanation, Mistakes, Exercises, Related, Takeaways).
 Always explain *why* something exists in Node.js compared to the browser (e.g., why we need the `fs` module, why we need `Buffers`).
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 05-nodejs` to check consistency after any edits.

@@ -13,3 +13,7 @@
 
 ## Content Focus
 - Break down complex networking concepts (like Handshakes or TCP/IP) into high-level, practical mental models rather than deep academic engineering theory, focusing on what web developers actually need to know to consume and build APIs.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 04-apis` to check consistency after any edits.

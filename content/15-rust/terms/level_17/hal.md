@@ -7,8 +7,6 @@
 
 ## 1. Prerequisites
 
-- [PAC (Peripheral Access Crate)](../level_17/pac.md) — The low-level register crate consumed by a HAL.
-- [`embedded-hal`](../level_17/embedded_hal.md) — Standard embedded trait interfaces implemented by a HAL.
 - [Type-State Pattern](../level_14/type_state_pattern.md) — Used by HALs to track GPIO pin modes at compile time.
 
 ---

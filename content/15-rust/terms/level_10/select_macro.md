@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [`Tokio`](../level_10/tokio.md) — The async runtime providing the `select!` macro.
-- [`join!`](../level_10/join_macro.md) — The opposite of `select!` (waits for *all* futures to finish).
 - [`Future` Trait](../level_10/future_trait.md) — The state machines that `select!` races against each other.
 
 ---

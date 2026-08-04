@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 
-- [Rustup](../level_16/rustup.md) — Toolchain manager used to install `clippy`.
 - [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Invokes `clippy` via `cargo clippy`.
 
 ---

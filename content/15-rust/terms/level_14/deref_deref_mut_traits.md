@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [Smart Pointers (`Box<T>`, `Rc<T>`)](../level_10/smart_pointers.md) — Smart pointer wrapper types that use `Deref` to expose inner values.
-- [Operator Overloading](../level_14/operator_overloading.md) — Customizing built-in operators via `std::ops` traits.
 - [References & Borrowing](../level_01/references_and_borrowing.md) — Borrowing mechanics (`&T` and `&mut T`).
 
 ---

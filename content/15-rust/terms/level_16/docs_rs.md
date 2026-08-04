@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 
-- [`crates.io`](../level_16/crates_io.md) — The package registry whose crates are documented on `docs.rs`.
 - [Documentation Comments](../level_07/documentation_comments.md) — Triple-slash `///` doc comments parsed by `docs.rs`.
 - [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Local documentation generator (`cargo doc --open`).
 

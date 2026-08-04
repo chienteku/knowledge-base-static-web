@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Data Caching (`force-cache`)](../level_05/data_caching.md) — One layer of this cache.
 - [Static Site Generation (SSG)](../level_08/ssg.md) — Another layer of this cache.
 
 ---

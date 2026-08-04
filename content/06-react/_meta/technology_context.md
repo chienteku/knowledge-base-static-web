@@ -27,3 +27,7 @@ All code examples must be valid, modern React (v18+):
 - **JSX**: Use semantic HTML where possible. Use `className` instead of `class`.
 - **Props**: Destructure props in the function signature (e.g., `const Button = ({ label, onClick }) => { ... }`).
 - **State Updates**: When updating state based on previous state, always use the updater function pattern: `setCount(prev => prev + 1)`.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 06-react` to check consistency after any edits.

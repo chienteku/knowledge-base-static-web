@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Index (Concept in MongoDB)](index_concept.md) — The B-Tree structures analyzed.
-- [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The execution stages identified.
 
 ---
 

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [updateOne() / updateMany()](update.md) — The partial update alternatives.
-- [`$set` vs. Whole-Document Replacement](set_vs_replace.md) — The comparison rules.
 
 ---
 

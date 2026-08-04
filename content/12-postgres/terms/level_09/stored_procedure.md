@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The transaction-locked inline alternative.
+- [PL/pgSQL](plpgsql.md) — The procedural language code compiled inside the block.
 
 ---
 

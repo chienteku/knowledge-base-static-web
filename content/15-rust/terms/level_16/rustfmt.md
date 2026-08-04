@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 
-- [Rustup](../level_16/rustup.md) — Toolchain manager used to install `rustfmt`.
 - [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Invokes `rustfmt` via `cargo fmt`.
 
 ---

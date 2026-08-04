@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Build Step](../level_10/build_step.md) — Vite is the tool that executes the Build Step.
-- [Vue CLI (Webpack)](../level_10/vue_cli.md) — The older tool that Vite replaces.
 
 ---
 

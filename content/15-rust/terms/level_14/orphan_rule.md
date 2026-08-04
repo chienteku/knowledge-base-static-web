@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [Traits](../level_04/trait.md) — Standard trait definitions and `impl Trait for Type` blocks.
-- [Coherence](../level_14/coherence.md) — The compiler rule guaranteeing that at most one implementation of a trait exists for any given type.
 - [Newtype Pattern](../level_11/newtype_pattern.md) — The primary design pattern used to bypass the Orphan Rule.
 
 ---

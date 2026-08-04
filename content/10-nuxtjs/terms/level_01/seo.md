@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The rendering strategy designed to solve SEO challenges.
 
 ---
 

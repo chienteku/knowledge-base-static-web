@@ -32,3 +32,7 @@ Every term document MUST strictly adhere to the following 8-section format:
 - Use horizontal rules (`---`) to separate the 8 main sections.
 - Markdown links must use relative paths to other term files.
 - Code blocks should be tagged with `typescript` or `json` (for `tsconfig`).
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 08-typescript` to check consistency after any edits.

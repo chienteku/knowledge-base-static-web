@@ -33,3 +33,7 @@ Every term document MUST strictly adhere to the following 8 sections, in this ex
 - Use Markdown formatting extensively (bolding, code blocks, lists).
 - Code blocks must specify the language (e.g., `vue`, `javascript`, `html`).
 - Use standard markdown blockquotes (`>`) for the term's quick definition at the top of the file.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 07-vue` to check consistency after any edits.

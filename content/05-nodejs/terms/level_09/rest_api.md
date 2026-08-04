@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Routing](../level_07/routing.md) — REST dictates exactly how you should name these routes.
 - [JSON](../../../04-apis/terms/level_01/json.md) — The language REST APIs speak.
 
 ---

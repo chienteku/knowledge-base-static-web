@@ -33,3 +33,7 @@ All code examples must be valid HTML5 designed for robustness and accessibility:
   - Use semantic tags (e.g., `<nav>`, `<main>`) instead of generic `<div>`s wherever possible.
   - Include `<label>` elements for all `<input>` examples.
 - **Formatting**: Indent nested elements cleanly (usually 2 spaces) to show the DOM tree structure clearly.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 01-html` to check consistency after any edits.

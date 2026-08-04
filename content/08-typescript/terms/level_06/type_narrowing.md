@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Union Types](../level_05/union_types.md) — The broad type you are usually trying to narrow.
 - [`unknown`](../level_02/unknown.md) — Another broad type that strictly requires narrowing before use.
 
 ---

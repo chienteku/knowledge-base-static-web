@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [HTML](../../../01-html/terms/level_01/html.md) — Vue templates are just extended HTML.
-- [Declarative Rendering](../level_01/declarative_rendering.md) — What the template syntax achieves.
 
 ---
 

@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The rendering process that outputs the static HTML to be hydrated.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The paradigm defining the interactive components.
 
 ---

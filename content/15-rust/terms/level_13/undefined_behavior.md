@@ -7,8 +7,6 @@
 
 ## 1. Prerequisites
 
-- [`unsafe` Block](../level_13/unsafe_block.md) — Understanding `unsafe` blocks and developer responsibilities to avoid UB.
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Understanding unchecked memory pointers.
 - [References & Borrowing](../level_01/references_and_borrowing.md) — Rules regarding reference validity, lifetimes, and aliasing XOR mutability.
 
 ---

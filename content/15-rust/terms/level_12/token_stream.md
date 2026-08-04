@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 
-- [Procedural Macros](../level_12/procedural_macros.md) — Understanding compile-time host execution and procedural macro declarations.
 - [Tokens & Lexing](../level_01/tokens.md) — Basic understanding of source code lexical analysis (identifiers, literals, operators, punctuation).
 - [Iterators (`Iterator`)](../level_05/iterator.md) — `TokenStream` implements `IntoIterator`, producing `TokenTree` elements.
 

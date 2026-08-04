@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Scope](../level_03/scope.md) — Closely related to the execution context.
-- [JavaScript Engine](../level_05/javascript_engine.md) — The program that creates these contexts.
 
 ---
 

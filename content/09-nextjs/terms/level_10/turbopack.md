@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The framework powered by this bundler.
-- [The Next.js Compiler (SWC)](../level_10/swc.md) — The Rust compiler that works alongside Turbopack.
 
 ---
 

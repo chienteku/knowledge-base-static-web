@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 
-- [Stack vs Heap](../level_15/stack_vs_heap.md) — The Stack requires fixed sizes; the Heap allows dynamic sizes.
 - [`String` vs `&str`](../level_01/string_vs_&str.md) — The most famous example of a fixed vs dynamic type.
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The other incredibly common DST.
 

@@ -57,3 +57,7 @@ SurrealDB bridges relational and document paradigms. Link heavily to both prior 
 5. **Real-Time by Default**: Live queries (`LIVE SELECT`) and changefeeds are built-in, not bolted on. Position them as the default way to build reactive applications, contrasting with PostgreSQL's `LISTEN`/`NOTIFY` and MongoDB's change streams.
 6. **SurrealQL ≈ SQL + More**: SurrealQL is intentionally SQL-like to reduce learning curve. Teach it as "SQL you already know, extended with document and graph features." Always note where SurrealQL syntax diverges from standard SQL.
 7. **Honest About Maturity**: SurrealDB is powerful but younger than PostgreSQL (35+ years) and MongoDB (15+ years). Be honest about ecosystem maturity, production readiness, and when a learner might want to choose PostgreSQL or MongoDB instead. This builds trust and prevents cargo-culting.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 14-surrealdb` to check consistency after any edits.

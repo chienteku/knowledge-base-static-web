@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Cache API](../level_09/cache_api.md) — Service workers use this database to make offline apps possible.
 - [Request & Response Lifecycle](../level_01/request_response.md) — Service workers literally hijack this lifecycle before it hits the internet.
 
 ---

@@ -54,3 +54,7 @@ PostgreSQL is the database layer for full-stack applications. Link to other know
 5. **Security by Default**: Every mention of user input must include SQL injection warnings. Always use parameterized queries in application-layer examples.
 6. **EXPLAIN Everything**: Encourage learners to use `EXPLAIN ANALYZE` to understand what the database is actually doing, not just trust that a query "works."
 7. **Real-World Motivation**: Every concept should connect to a real full-stack scenario (e.g., "When a user signs up, you `INSERT` a row into the `users` table").
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 12-postgres` to check consistency after any edits.

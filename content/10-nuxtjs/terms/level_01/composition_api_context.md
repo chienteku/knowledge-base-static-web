@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Nuxt 3 Overview](../level_01/nuxt_3_overview.md) — Nuxt 3 is built entirely on this paradigm.
 - [Vue 3 Composition API Overview](../../../07-vue/terms/level_01/composition_api.md) — The core Vue paradigm.
 - [Reactivity API (`ref`)](../../../07-vue/terms/level_02/ref.md) — The mechanism for primitive values.
 - [Reactivity API (`reactive`)](../../../07-vue/terms/level_02/reactive.md) — The mechanism for object structures.

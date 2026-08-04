@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The wrapper objects compiling PL/pgSQL.
-- [Stored Procedure (`CREATE PROCEDURE` / `CALL`)](stored_procedure.md) — The transaction wrappers compiling PL/pgSQL.
 
 ---
 

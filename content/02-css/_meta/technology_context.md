@@ -13,3 +13,7 @@ When generating documents for CSS terms, always adhere to the following principl
 4. **Predictability**: Treat `box-sizing: border-box` as the absolute gospel for layout math. 
 5. **Responsive Design**: Always approach responsive design from a "Mobile-First" perspective, using `min-width` media queries rather than `max-width` where applicable.
 6. **Separation of Concerns**: Remind the user that HTML is for structure, and CSS is purely for visual presentation. Never use CSS to try to fix semantic HTML errors.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 02-css` to check consistency after any edits.

@@ -56,3 +56,7 @@ MongoDB is the database layer for full-stack JavaScript applications. Link to ot
 5. **Compare to PostgreSQL**: Since the learner has already completed the PostgreSQL curriculum, every major concept should include a "How this compares to PostgreSQL" note. This accelerates learning by building on existing mental models.
 6. **Read Patterns Drive Design**: Unlike relational databases where you normalize first, MongoDB schemas are optimized for the application's query patterns. Always ask: "What queries will this collection serve?"
 7. **Atlas as Default**: While teaching MongoDB fundamentals universally, default to MongoDB Atlas as the recommended deployment for beginners and production. Mention self-hosted only when relevant.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 13-mongodb` to check consistency after any edits.

@@ -62,3 +62,7 @@ Rust is being learned by a JavaScript/TypeScript developer. Link heavily to prio
 6. **Traits Are Not Interfaces**: While Rust traits resemble TypeScript interfaces, they differ fundamentally: traits can have default implementations, can be implemented for types you don't own (coherence rules), enable operator overloading, and provide zero-cost abstraction through monomorphization.
 7. **Zero-Cost Abstractions**: Emphasize that Rust's abstractions (generics, iterators, closures, traits) compile to code as efficient as hand-written C — there is no runtime overhead. This is Rust's core performance promise and the reason to choose it over JavaScript/TypeScript for performance-critical work.
 8. **Cargo Is Better Than npm**: Cargo handles building, testing, benchmarking, documentation, and dependency management in a single tool. It is universally considered the best package manager/build tool in any language ecosystem. Teach it as a significant upgrade from the npm/node experience.
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 15-rust` to check consistency after any edits.

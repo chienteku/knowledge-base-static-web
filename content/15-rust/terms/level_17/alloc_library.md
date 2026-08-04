@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [`#![no_std]`](../level_17/no_std.md) — The crate attribute where `alloc` is explicitly imported.
-- [`core` Library](../level_17/core_library.md) — The base dependency-free library extended by `alloc`.
 - [Allocator API](../level_15/allocator_api.md) — Custom global allocators (`#[global_allocator]`) required by `alloc`.
 
 ---

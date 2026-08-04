@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Reactive State](../level_02/reactive_state.md) — The concept powered by Proxies.
-- [`reactive`](../level_02/reactive.md) — The specific API that creates a Proxy object.
 
 ---
 

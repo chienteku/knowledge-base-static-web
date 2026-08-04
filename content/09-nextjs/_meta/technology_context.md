@@ -90,3 +90,7 @@ Provide deeper context, caching implications, or edge cases.
 - Bullet 2
 - Bullet 3
 ```
+
+## Term Relationships
+See `_meta/relationships.json` for the authoritative relationship graph for this module.
+Use `node validate_relationships.js --module 09-nextjs` to check consistency after any edits.

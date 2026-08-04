@@ -9,7 +9,6 @@
 
 - [`Rc<T>`](../level_03/rc_t.md) — The Reference Counted smart pointer used for shared ownership.
 - [`Arc<T>`](../level_03/arc_t.md) — The thread-safe version of `Rc`.
-- [Memory Leaks](../level_11/memory_leaks.md) — The problem `Weak` is designed to solve.
 
 ---
 

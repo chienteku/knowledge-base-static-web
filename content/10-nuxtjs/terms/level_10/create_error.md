@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [`error.vue` Layout](../level_10/error_vue.md) — The visual UI that is rendered when `showError` is called.
 - [H3 Request Handlers (`defineEventHandler`)](../level_07/h3_handlers.md) — The underlying server engine that formats these errors.
 
 ---

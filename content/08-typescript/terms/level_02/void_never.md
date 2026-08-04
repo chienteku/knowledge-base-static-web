@@ -6,7 +6,6 @@
 ---
 
 ## 1. Prerequisites
-- [Function Types](../level_04/function_types.md) — Where these types are almost exclusively used.
 
 ---
 

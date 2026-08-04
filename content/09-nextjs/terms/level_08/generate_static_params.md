@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — The dynamic parameters we are defining.
-- [Static Rendering (SSG)](../level_08/ssg.md) — The target rendering strategy.
 
 ---
 

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The function that creates threads and strictly requires this trait.
-- [Marker Traits](../level_14/marker_traits.md) — Traits that have no methods; they just tell the compiler a mathematical fact about a type.
 - [`Rc<T>`](../level_03/rc_t.md) — The most famous type that lacks this trait.
 
 ---

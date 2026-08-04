@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query language inside the function.
-- [PL/pgSQL](plpgsql.md) — Forward reference: the procedural language blocks commonly used.
 
 ---
 
