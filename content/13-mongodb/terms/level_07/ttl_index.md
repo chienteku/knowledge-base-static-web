@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation triggers.
-- [Data Lifecycle & TTL Strategies](../../level_05/data_lifecycle.md) — The parent modeling rules.
+- [Data Lifecycle & TTL Strategies](../level_05/data_lifecycle.md) — The parent modeling rules.
 
 ---
 
@@ -224,7 +224,7 @@ Write the MongoDB command to build the appropriate TTL index.
 
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
-- [Data Lifecycle & TTL Strategies](../../level_05/data_lifecycle.md) — The parent modeling rules.
+- [Data Lifecycle & TTL Strategies](../level_05/data_lifecycle.md) — The parent modeling rules.
 
 ---
 

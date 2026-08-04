@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`overflow` (hidden, scroll, auto, visible)](../../level_02/overflow.md) — Creating scrollable parent containers.
+- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Creating scrollable parent containers.
 
 ---
 
@@ -286,7 +286,7 @@ Vertical snap layout:
 > **Explanation:** `mandatory` enforces strict snap points; `proximity` allows free scrolling until near points.
 
 ## 7. Related Terms
-- [`overflow`](../../level_02/overflow.md) — The parent scrolling trigger.
+- [`overflow`](../level_02/overflow.md) — The parent scrolling trigger.
 
 ---
 

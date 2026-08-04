@@ -160,7 +160,7 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 > **Explanation:** Comma-separated `text-shadow` layers multiple glow shadows.
 
 ## 7. Related Terms
-- [`box-shadow`](../level_08/box_shadow.md) — The exact same concept, but applied to the entire Box Model container instead of just the text inside it!
+- [`box-shadow`](../level_09/box_shadow.md) — The exact same concept, but applied to the entire Box Model container instead of just the text inside it!
 
 ---
 

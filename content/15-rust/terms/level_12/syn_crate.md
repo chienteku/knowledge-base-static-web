@@ -9,7 +9,7 @@
 
 - [Token Stream](../level_12/token_stream.md) — Understanding `proc_macro::TokenStream` and `proc_macro2::TokenStream` as raw lexical token input sequences.
 - [Procedural Macros](../level_12/procedural_macros.md) — Proc macro architecture and execution during compilation.
-- [Structs](../level_02/struct.md) / [Enums](../level_03/enum.md) — Rust algebraic data types used by `syn` to represent AST nodes (`syn::ItemStruct`, `syn::DeriveInput`, `syn::Expr`).
+- [Structs](../level_02/struct.md) / [Enums](../level_02/enum.md) — Rust algebraic data types used by `syn` to represent AST nodes (`syn::ItemStruct`, `syn::DeriveInput`, `syn::Expr`).
 
 ---
 

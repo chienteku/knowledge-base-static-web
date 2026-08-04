@@ -174,7 +174,7 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 - [`justify-content`](../level_05/justify_content.md) — Aligns children along the main axis.
 - [`align-items`](../level_05/align_items.md) — Aligns children along the cross axis.
 - [`flex-grow` / `flex-shrink` / `flex-basis`](../level_05/flex_properties.md) — Sizing of child flex items.
-- [CSS Grid (Concept)](../level_05/grid_concept.md) — The 2D layout engine.
+- [CSS Grid (Concept)](../level_06/grid_concept.md) — The 2D layout engine.
 
 ---
 

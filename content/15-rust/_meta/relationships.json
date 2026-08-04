@@ -10292,6 +10292,413 @@
           "description": "Higher-level driver crate built on top of a PAC."
         }
       ]
+    },
+    "array_and_slice": {
+      "file": "terms/level_01/array_and_slice.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "simd"
+        }
+      ]
+    },
+    "expression_vs_statement": {
+      "file": "terms/level_01/expression_vs_statement.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "function": {
+      "file": "terms/level_01/function.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "references_and_borrowing": {
+      "file": "terms/level_01/references_and_borrowing.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "raw_pointers"
+        },
+        {
+          "module": "15-rust",
+          "term": "as_ref_as_mut"
+        }
+      ]
+    },
+    "scope_and_shadowing": {
+      "file": "terms/level_01/scope_and_shadowing.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "hygiene"
+        }
+      ]
+    },
+    "tokens": {
+      "file": "terms/level_01/tokens.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "panic_handling": {
+      "file": "terms/level_04/panic_handling.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "closures": {
+      "file": "terms/level_05/closures.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "hashmap_and_hashset": {
+      "file": "terms/level_05/hashmap_and_hashset.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "borrow_borrow_mut"
+        }
+      ]
+    },
+    "iterator_trait": {
+      "file": "terms/level_05/iterator_trait.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "attributes": {
+      "file": "terms/level_07/attributes.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "attribute_macros"
+        }
+      ]
+    },
+    "build_rs": {
+      "file": "terms/level_07/build_rs.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "bindgen"
+        }
+      ]
+    },
+    "cargo_cli": {
+      "file": "terms/level_07/cargo_cli.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "release_profile"
+        },
+        {
+          "module": "15-rust",
+          "term": "rustup"
+        }
+      ]
+    },
+    "documentation_comments": {
+      "file": "terms/level_07/documentation_comments.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "visibility_and_modules": {
+      "file": "terms/level_07/visibility_and_modules.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "sealed_trait_pattern"
+        }
+      ]
+    },
+    "async_await": {
+      "file": "terms/level_09/async_await.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "channels_mpsc_oneshot": {
+      "file": "terms/level_09/channels_mpsc_oneshot.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "thread_spawn": {
+      "file": "terms/level_09/thread_spawn.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "static_lifetime"
+        }
+      ]
+    },
+    "smart_pointers": {
+      "file": "terms/level_10/smart_pointers.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "deref_deref_mut_traits"
+        },
+        {
+          "module": "15-rust",
+          "term": "stack_vs_heap"
+        }
+      ]
+    },
+    "declarative_macros": {
+      "file": "terms/level_12/declarative_macros.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "as_ref": {
+      "file": "terms/level_14/as_ref.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "path_pathbuf"
+        }
+      ]
+    },
+    "borrow_trait": {
+      "file": "terms/level_14/borrow_trait.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "hash_trait"
+        }
+      ]
+    },
+    "deref_trait": {
+      "file": "terms/level_14/deref_trait.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "newtype_pattern"
+        }
+      ]
+    },
+    "tryfrom_tryinto": {
+      "file": "terms/level_14/tryfrom_tryinto.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "as_casting"
+        },
+        {
+          "module": "15-rust",
+          "term": "any_trait_downcasting"
+        },
+        {
+          "module": "15-rust",
+          "term": "from_into_traits"
+        },
+        {
+          "module": "15-rust",
+          "term": "fromstr_parse"
+        }
+      ]
+    },
+    "std_library": {
+      "file": "terms/level_17/std_library.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "path_pathbuf"
+        },
+        {
+          "module": "15-rust",
+          "term": "read_write_bufread"
+        },
+        {
+          "module": "15-rust",
+          "term": "prelude"
+        }
+      ]
+    },
+    "svd2rust": {
+      "file": "terms/level_17/svd2rust.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "raii": {
+      "file": "terms/level_18/raii.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "scoped_threads"
+        }
+      ]
+    },
+    "builder_pattern": {
+      "file": "terms/level_18/builder_pattern.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "visitor_pattern": {
+      "file": "terms/level_18/visitor_pattern.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "extension_trait": {
+      "file": "terms/level_18/extension_trait.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "enum_dispatch": {
+      "file": "terms/level_18/enum_dispatch.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "error_handling_stack": {
+      "file": "terms/level_18/error_handling_stack.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "dependency_injection": {
+      "file": "terms/level_18/dependency_injection.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "from_for_constructor_overloading": {
+      "file": "terms/level_18/from_for_constructor_overloading.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "cow_for_flexibility": {
+      "file": "terms/level_18/cow_for_flexibility.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "mir_mid_level_ir": {
+      "file": "terms/level_19/mir_mid_level_ir.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "hir_high_level_ir": {
+      "file": "terms/level_19/hir_high_level_ir.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "nightly_compiler": {
+      "file": "terms/level_19/nightly_compiler.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "const_generics": {
+      "file": "terms/level_19/const_generics.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "const_fn": {
+      "file": "terms/level_19/const_fn.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "const_evaluation_ctfe": {
+      "file": "terms/level_19/const_evaluation_ctfe.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "specialization": {
+      "file": "terms/level_19/specialization.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "generators_coroutines": {
+      "file": "terms/level_19/generators_coroutines.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "tait_type_alias_impl_trait": {
+      "file": "terms/level_19/tait_type_alias_impl_trait.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "polonius": {
+      "file": "terms/level_19/polonius.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "cstring_cstr": {
+      "file": "terms/level_13/cstring_cstr.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "miri_ub_detector": {
+      "file": "terms/level_13/miri_ub_detector.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "llvm_codegen_backend": {
+      "file": "terms/level_19/llvm_codegen_backend.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "deref_coercion": {
+      "file": "terms/level_14/deref_coercion.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "index_indexmut_traits": {
+      "file": "terms/level_14/index_indexmut_traits.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "labeled_loops": {
+      "file": "terms/level_02/labeled_loops.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "pattern_features": {
+      "file": "terms/level_02/pattern_features.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "file_bufreadwriter": {
+      "file": "terms/level_04/file_bufreadwriter.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "duration_instant": {
+      "file": "terms/level_01/duration_instant.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "formatting_traits": {
+      "file": "terms/level_04/formatting_traits.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "result_option_combinators": {
+      "file": "terms/level_04/result_option_combinators.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "waker_context": {
+      "file": "terms/level_10/waker_context.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "memory_ordering": {
+      "file": "terms/level_09/memory_ordering.md",
+      "prerequisites": [],
+      "related": []
+    },
+    "inline_assembly": {
+      "file": "terms/level_13/inline_assembly.md",
+      "prerequisites": [],
+      "related": []
     }
   }
 }

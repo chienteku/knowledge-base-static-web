@@ -201,7 +201,7 @@ Write the SurrealQL query to retrieve only the `name` and the nested `office` ph
 
 ## 7. Related Terms
 
-- [SurrealDB](surrealdb.md)
+- [SurrealDB](../level_01/surrealdb.md)
 
 ---
 

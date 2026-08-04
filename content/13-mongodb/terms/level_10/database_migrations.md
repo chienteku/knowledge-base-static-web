@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Schema Validation](../../level_05/schema_validation.md) — Enforcing consistency limits.
+- [Schema Validation](../level_05/schema_validation.md) — Enforcing consistency limits.
 
 ---
 
@@ -201,7 +201,7 @@ The collection is write-heavy and must not experience query degradation.
 > **Explanation:** Lazy Migration avoids downtime and locks by migrating document schemas incrementally.
 
 ## 7. Related Terms
-- [Schema Validation](../../level_05/schema_validation.md) — Enforcing consistency limits.
+- [Schema Validation](../level_05/schema_validation.md) — Enforcing consistency limits.
 
 ---
 

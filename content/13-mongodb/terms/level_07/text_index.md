@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Text Search (`$text` / `$search`)](../../level_06/text_search.md) — The parent query operation.
+- [Text Search (`$text` / `$search`)](../level_04/text_search.md) — The parent query operation.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation triggers.
 
 ---
@@ -254,7 +254,7 @@ Write the MongoDB command to create a text index on all three fields, assigning 
 > **Explanation:** Escaped quotes `"\"phrase\""` perform exact phrase full-text searches.
 
 ## 7. Related Terms
-- [Text Search (`$text` / `$search`)](../../level_06/text_search.md) — The query command.
+- [Text Search (`$text` / `$search`)](../level_04/text_search.md) — The query command.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The DDL triggers.
 
 ---

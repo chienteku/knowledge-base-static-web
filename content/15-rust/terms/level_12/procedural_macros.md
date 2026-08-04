@@ -9,7 +9,7 @@
 
 - [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Understanding macro evaluation and AST-level code generation versus simple function execution.
 - [Token Stream](../level_12/token_stream.md) — The fundamental compiler input/output type (`proc_macro::TokenStream`) manipulated by procedural macros.
-- [Crate (`crate`)](../level_07/crate.md) — Procedural macros MUST be defined in a dedicated separate crate with `proc-macro = true` in `Cargo.toml`.
+- [Crate (`crate`)](../level_01/crate.md) — Procedural macros MUST be defined in a dedicated separate crate with `proc-macro = true` in `Cargo.toml`.
 
 ---
 

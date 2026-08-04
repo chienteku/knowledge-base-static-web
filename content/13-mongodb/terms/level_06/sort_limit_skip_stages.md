@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [`sort()` / `limit()` / `skip()` (CRUD)](../../level_03/sort_limit_skip.md) — The cursor pagination methods.
+- [`sort()` / `limit()` / `skip()` (CRUD)](../level_03/sort_limit_skip.md) — The cursor pagination methods.
 
 ---
 
@@ -197,7 +197,7 @@ db.posts.aggregate([{ $sort: { createdAt: -1 } }, { $unwind: "$comments" }]);
 
 ## 7. Related Terms
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [`sort()` / `limit()` / `skip()` (CRUD)](../../level_03/sort_limit_skip.md) — The cursor pagination.
+- [`sort()` / `limit()` / `skip()` (CRUD)](../level_03/sort_limit_skip.md) — The cursor pagination.
 
 ---
 

@@ -223,7 +223,7 @@ Write the query to locate all products where the `price` field is stored as the 
 
 ## 7. Related Terms
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The paradigm.
-- [`null`](null_type.md) — The null indicator difference.
+- [`null`](../level_02/null_type.md) — The null indicator difference.
 
 ---
 

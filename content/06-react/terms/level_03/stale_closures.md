@@ -258,8 +258,8 @@ function AlertButton() {
 > **Explanation:** Stale closures occur when callbacks reference outdated variable scope snapshots.
 
 ## 7. Related Terms
-- [Rules of Hooks](../../level_04/rules_of_hooks.md) — The guidelines ensuring dependencies match usage.
-- [`useCallback` Hook](../../level_04/use_callback.md) — The hook for caching callback functions, prone to stale closures.
+- [Rules of Hooks](../level_04/rules_of_hooks.md) — The guidelines ensuring dependencies match usage.
+- [`useCallback` Hook](../level_04/use_callback.md) — The hook for caching callback functions, prone to stale closures.
 
 ---
 

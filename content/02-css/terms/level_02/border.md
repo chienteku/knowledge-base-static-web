@@ -179,7 +179,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 - [Padding](../level_02/padding.md) — The space directly inside the border.
 - [Margin](../level_02/margin.md) — The space directly outside the border.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Spilling content boundaries.
-- [`border-radius`](../level_08/border_radius.md) — A later Level 8 property used to curve the corners of the border.
+- [`border-radius`](../level_09/border_radius.md) — A later Level 8 property used to curve the corners of the border.
 
 ---
 

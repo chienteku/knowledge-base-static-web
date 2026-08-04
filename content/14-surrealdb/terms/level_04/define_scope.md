@@ -201,7 +201,7 @@ DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypt
 
 ## 7. Related Terms
 
-- [SurrealDB](surrealdb.md)
+- [SurrealDB](../level_01/surrealdb.md)
 
 ---
 

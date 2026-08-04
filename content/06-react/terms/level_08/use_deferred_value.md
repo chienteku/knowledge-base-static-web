@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Concurrent Rendering](../level_08/concurrent_rendering.md) — The core engine scheduling deferred rendering.
-- [Re-rendering](../../level_02/re_rendering.md) — The process React optimizes by delaying updates.
+- [Re-rendering](../level_02/re_rendering.md) — The process React optimizes by delaying updates.
 
 ---
 

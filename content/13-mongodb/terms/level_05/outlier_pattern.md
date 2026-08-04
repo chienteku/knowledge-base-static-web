@@ -215,7 +215,7 @@ Write the pseudo-code logic steps (using `if/else` checks) to describe how your 
 
 ## 7. Related Terms
 
-- [MongoDB](mongodb.md)
+- [MongoDB](../level_01/mongodb.md)
 
 ---
 

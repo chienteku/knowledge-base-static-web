@@ -266,9 +266,9 @@ padding: 10px 20px 30px 40px;
 
 ## 7. Related Terms
 - [Ruleset (Declaration, Property, Value)](../level_01/ruleset.md) — The wrapper syntax.
-- [Margin](../../level_02/margin.md) — The outer spacing box utilizing shorthand properties.
-- [Padding](../../level_02/padding.md) — The inner spacing box utilizing shorthand properties.
-- [Border](../../level_02/border.md) — The frame border utilizing shorthand properties.
+- [Margin](../level_02/margin.md) — The outer spacing box utilizing shorthand properties.
+- [Padding](../level_02/padding.md) — The inner spacing box utilizing shorthand properties.
+- [Border](../level_02/border.md) — The frame border utilizing shorthand properties.
 
 ---
 

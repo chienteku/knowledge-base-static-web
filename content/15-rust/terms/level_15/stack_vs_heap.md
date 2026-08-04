@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Ownership & Borrowing](../level_01/ownership.md) — Rust's deterministic memory management model without a garbage collector.
+- [Ownership & Borrowing](../level_03/ownership.md) — Rust's deterministic memory management model without a garbage collector.
 - [Smart Pointers (`Box<T>`, `Rc<T>`)](../level_10/smart_pointers.md) — Smart pointer types used to allocate memory on the heap.
 - [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — Types whose size is unknown at compile time, requiring heap storage behind pointers.
 
@@ -628,7 +628,7 @@ Write a benchmark and verification suite containing a `Point3D` struct. Implemen
 
 ## 7. Related Terms
 
-- [Ownership & Borrowing](../level_01/ownership.md) — Memory ownership rules managing stack/heap deallocation.
+- [Ownership & Borrowing](../level_03/ownership.md) — Memory ownership rules managing stack/heap deallocation.
 - [Smart Pointers (`Box<T>`, `Rc<T>`)](../level_10/smart_pointers.md) — Heap allocation wrappers.
 - [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — Types requiring heap pointers due to unknown compile-time size.
 - [Allocator API](../level_15/allocator_api.md) — Custom global heap memory allocators.

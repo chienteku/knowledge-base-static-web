@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Unique Index](unique_index.md) — The parent constraint.
-- [Element Operators (`$exists`)](../../level_03/element_operators.md) — Checking field presence.
+- [Element Operators (`$exists`)](../level_03/element_operators.md) — Checking field presence.
 
 ---
 

@@ -156,7 +156,7 @@ Imagine typing a sentence in Microsoft Word.
 > **Explanation:** `flex-flow` combines `flex-direction` and `flex-wrap` properties.
 
 ## 7. Related Terms
-- [gap](gap.md) — When items wrap to a new line, you need a way to put space between the rows.
+- [gap](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
 - [`align-content`](../level_05/align_content.md) — Distributes multiple rows of wrapped items.
 
 ---

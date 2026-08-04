@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Concurrent Rendering](../level_08/concurrent_rendering.md) — The engine mode that powers transitions.
-- [`useState` Hook](../../level_02/use_state.md) — The hook creating the states being updated.
+- [`useState` Hook](../level_02/use_state.md) — The hook creating the states being updated.
 
 ---
 

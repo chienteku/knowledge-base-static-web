@@ -311,8 +311,8 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 
 ## 7. Related Terms
 - [`z-index`](../level_04/z_index.md) — The numbering sequence sorted within the context.
-- [`opacity`](../../level_08/opacity.md) — One of the visual triggers that creates a context.
-- [`transform`](../../level_09/transform.md) — Another visual trigger that creates a context.
+- [`opacity`](../level_09/opacity.md) — One of the visual triggers that creates a context.
+- [`transform`](../level_10/transform.md) — Another visual trigger that creates a context.
 
 ---
 

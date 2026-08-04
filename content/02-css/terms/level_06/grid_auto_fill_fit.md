@@ -326,7 +326,7 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 ## 7. Related Terms
 - [`repeat()`](../level_06/grid_repeat.md) — The loop container.
 - [`minmax()`](../level_06/grid_minmax.md) — The required track bounds function.
-- [Media Queries](../../level_07/media_queries.md) — The legacy responsive breakpoint method.
+- [Media Queries](../level_08/media_queries.md) — The legacy responsive breakpoint method.
 
 ---
 

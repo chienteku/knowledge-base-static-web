@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [One-to-Many Relationship (Embedding vs Referencing)](one_to_many.md) — The parent cardinality models.
-- [Array Query Operators (`$elemMatch`, `$all`, `$size`)](../../level_04/array_query_operators.md) — Querying reference lists.
+- [Array Query Operators (`$elemMatch`, `$all`, `$size`)](../level_04/array_query_operators.md) — Querying reference lists.
 
 ---
 

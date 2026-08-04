@@ -198,7 +198,7 @@ const handleClick = useCallback(() => alert('hi'), []);
 ## 7. Related Terms
 - [`useMemo` Hook](../level_04/use_memo.md) — The hook implementation of value memoization.
 - [`useCallback` Hook](../level_04/use_callback.md) — The hook implementation of function reference memoization.
-- [React.memo](../../level_08/react_memo.md) — Component render caching.
+- [React.memo](../level_08/react_memo.md) — Component render caching.
 
 ---
 

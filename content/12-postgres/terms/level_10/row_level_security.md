@@ -220,7 +220,7 @@ Write the SQL DDL queries to:
 
 ## 7. Related Terms
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The roles bound.
-- [View](view.md) — Creating simple logical column masks.
+- [View](../level_09/view.md) — Creating simple logical column masks.
 
 ---
 

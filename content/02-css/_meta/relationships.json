@@ -3420,6 +3420,20 @@
           "description": "Related concept: `calc()`."
         }
       ]
+    },
+    "display_flex": {
+      "file": "terms/level_05/display_flex.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "02-css",
+          "term": "display"
+        },
+        {
+          "module": "02-css",
+          "term": "float_clear"
+        }
+      ]
     }
   }
 }

@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling paradigm.
-- [ObjectId Manual Reference](../../level_02/objectid_reference.md) — The referencing implementation.
+- [ObjectId Manual Reference](../level_02/objectid_reference.md) — The referencing implementation.
 
 ---
 

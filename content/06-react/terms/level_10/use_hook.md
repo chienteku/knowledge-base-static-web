@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Context API](../../level_06/context_api.md) — The global data provider that `use()` can consume.
-- [Lazy Loading & Suspense](../../level_08/suspense.md) — The boundary system that catches pending promises.
+- [The Context API](../level_06/context_api.md) — The global data provider that `use()` can consume.
+- [Lazy Loading & Suspense](../level_08/suspense.md) — The boundary system that catches pending promises.
 
 ---
 
@@ -242,8 +242,8 @@ function ProfileCard({ dataPromise, isExpanded }) {
 > **Explanation:** Unlike `useContext`, React 19 `use(Context)` can be called conditionally inside `if` statements.
 
 ## 7. Related Terms
-- [The Context API](../../level_06/context_api.md) — The data sharing mechanism read by `use()`.
-- [Lazy Loading & Suspense](../../level_08/suspense.md) — The UI fallback catcher for pending promises.
+- [The Context API](../level_06/context_api.md) — The data sharing mechanism read by `use()`.
+- [Lazy Loading & Suspense](../level_08/suspense.md) — The UI fallback catcher for pending promises.
 
 ---
 

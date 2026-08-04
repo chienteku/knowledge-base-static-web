@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Color & Background](../../level_03/color_vs_background.md) — The parent container properties.
+- [Color & Background](../level_03/color_vs_background.md) — The parent container properties.
 
 ---
 
@@ -256,7 +256,7 @@ div {
 
 ## 7. Related Terms
 - [`background-size` / `cover` / `contain`](background_size.md) — Scaling backgrounds.
-- [Color & Background](../../level_03/color_vs_background.md) — Base background declarations.
+- [Color & Background](../level_03/color_vs_background.md) — Base background declarations.
 
 ---
 

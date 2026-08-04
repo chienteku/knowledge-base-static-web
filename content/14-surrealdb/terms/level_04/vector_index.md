@@ -192,7 +192,7 @@ Write the SurrealQL query to define a vector index named `image_similarity` usin
 
 ## 7. Related Terms
 - [DEFINE INDEX](define_index.md) — The parent index context.
-- [Vector Search](../level_10/vector_search.md) — Querying vectors.
+- [Vector Search](../level_07/vector_search.md) — Querying vectors.
 
 ---
 

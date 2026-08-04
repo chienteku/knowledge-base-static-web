@@ -1,108 +1,160 @@
-# Next.js: Zero to Hero Roadmap
+# Nextjs Terms: Zero to Hero
 
-A 10-level progression to master the modern Next.js App Router architecture.
+> Auto-generated from `_meta/relationships.json`. **Do not edit manually** — run `sync_zero_hero.js --apply` to regenerate.
 
-## Level 1: Core Concepts & Architecture
-1. **Node.js Runtime** (nodejs_runtime.md)
-2. **Next.js Overview** (nextjs.md)
-3. **React Components** (react_components.md)
-4. **React Server Components (RSC)** (rsc.md)
-5. **React Hooks** (react_hooks.md)
-6. **Client-Side Rendering (CSR) / SPA** (csr_spa.md)
-7. **Hydration** (hydration.md)
-8. **Client Components** (client_components.md)
-9. **Network Boundary** (network_boundary.md)
-10. **File-System Routing** (file_system_routing.md)
-11. **App Router vs Pages Router** (app_router_vs_pages.md)
-12. **SEO (Search Engine Optimization)** (seo.md)
-13. **Server-Side Rendering (SSR) Overview** (ssr.md)
+Total terms: **84**
 
-## Level 2: App Router UI Elements
-14. **React Children Prop** (children_prop.md)
-15. **`layout.tsx`** (layout.md)
-16. **`page.tsx`** (page.md)
-17. **React `useEffect` Hook** (use_effect.md)
-18. **`template.tsx`** (template.md)
-19. **React Suspense** (react_suspense.md)
-20. **`loading.tsx`** (loading.md)
-21. **React Error Boundaries** (error_boundaries.md)
-22. **`error.tsx` & `global-error.tsx`** (error.md)
-23. **`next.config.mjs`** (next_config.md)
+---
 
-## Level 3: Navigation & Routing Fundamentals
-24. **`<Link>` Component** (link.md)
-25. **`useRouter` Hook** (use_router.md)
-26. **Dynamic Routes (`[slug]`)** (dynamic_routes.md)
-27. **JavaScript Rest Parameters (`...`)** (rest_parameters.md)
-28. **Catch-all Segments (`[...slug]`)** (catch_all_segments.md)
-29. **Route Groups (`(group)`)** (route_groups.md)
+## Level 1
 
-## Level 4: Advanced Routing
-30. **Parallel Routes (`@folder`)** (parallel_routes.md)
-31. **Node.js `path` Module** (path_module.md)
-32. **Intercepting Routes (`(..)folder`)** (intercepting_routes.md)
-33. **`not-found.tsx` & `notFound()`** (not_found.md)
-34. **`redirect()` & `permanentRedirect()`** (redirect.md)
-35. **`usePathname` & `useSearchParams`** (use_pathname.md)
+| # | Key | File |
+|---|-----|------|
+| 1 | `app_router_vs_pages` | `terms/level_01/app_router_vs_pages.md` |
+| 2 | `client_components` | `terms/level_01/client_components.md` |
+| 3 | `csr_spa` | `terms/level_01/csr_spa.md` |
+| 4 | `file_system_routing` | `terms/level_01/file_system_routing.md` |
+| 5 | `hydration` | `terms/level_01/hydration.md` |
+| 6 | `network_boundary` | `terms/level_01/network_boundary.md` |
+| 7 | `nextjs` | `terms/level_01/nextjs.md` |
+| 8 | `nodejs_runtime` | `terms/level_01/nodejs_runtime.md` |
+| 9 | `react_components` | `terms/level_01/react_components.md` |
+| 10 | `react_hooks` | `terms/level_01/react_hooks.md` |
+| 11 | `rsc` | `terms/level_01/rsc.md` |
+| 12 | `seo` | `terms/level_01/seo.md` |
 
-## Level 5: Data Fetching
-36. **JavaScript Fetch API** (js_fetch.md)
-37. **Server-side Fetching (Extended `fetch`)** (fetch.md)
-38. **Data Caching (`force-cache`, `no-store`)** (data_caching.md)
-39. **Time-based Revalidation (`next.revalidate`)** (revalidation.md)
-40. **ORM (Object-Relational Mapping) & Prisma** (orm_prisma.md)
-41. **`React.cache()` Function** (react_cache.md)
-42. **`cookies()` and `headers()` from `next/headers`** (cookies_headers.md)
-43. **Client-side Fetching (SWR / React Query)** (client_fetching.md)
-44. **Streaming with `<Suspense>`** (streaming.md)
+---
 
-## Level 6: Server Actions & Mutations
-45. **Server Actions Overview (`"use server"`)** (server_actions.md)
-46. **Form Actions** (form_actions.md)
-47. **Zod (Schema Validation)** (zod_validation.md)
-48. **`useFormState` Hook** (use_form_state.md)
-49. **`useFormStatus` Hook** (use_form_status.md)
-50. **On-Demand Revalidation (`revalidatePath`, `revalidateTag`)** (on_demand_revalidation.md)
+## Level 2
 
-## Level 7: API & Route Handlers
-51. **HTTP Methods (GET, POST, PUT, DELETE)** (http_methods.md)
-52. **Route Handlers (`route.ts`)** (route_handlers.md)
-53. **`NextRequest` & `NextResponse`** (next_request_response.md)
-54. **Dynamic Route Handlers** (dynamic_route_handlers.md)
-55. **Caching Route Handlers** (caching_route_handlers.md)
-56. **Middleware vs Route Handlers** (middleware_vs_route_handlers.md)
+| # | Key | File |
+|---|-----|------|
+| 13 | `children_prop` | `terms/level_02/children_prop.md` |
+| 14 | `error` | `terms/level_02/error.md` |
+| 15 | `error_boundaries` | `terms/level_02/error_boundaries.md` |
+| 16 | `layout` | `terms/level_02/layout.md` |
+| 17 | `loading` | `terms/level_02/loading.md` |
+| 18 | `next_config` | `terms/level_02/next_config.md` |
+| 19 | `page` | `terms/level_02/page.md` |
+| 20 | `react_suspense` | `terms/level_02/react_suspense.md` |
+| 21 | `template` | `terms/level_02/template.md` |
+| 22 | `use_effect` | `terms/level_02/use_effect.md` |
 
-## Level 8: Rendering Strategies & Cache
-57. **Static Rendering (SSG)** (ssg.md)
-58. **`generateStaticParams` Function** (generate_static_params.md)
-59. **Dynamic Rendering (SSR)** (ssr.md)
-60. **Incremental Static Regeneration (ISR)** (isr.md)
-61. **React Server Component Payload (RSC Payload)** (rsc_payload.md)
-62. **The Next.js Cache (The Four Caches)** (next_cache.md)
-63. **Partial Prerendering (PPR)** (ppr.md)
+---
 
-## Level 9: Built-in Optimizations
-64. **Web Core Vitals (FCP, LCP, CLS, TTFB)** (web_core_vitals.md)
-65. **HTML `<img>` Element** (html_img.md)
-66. **`<Image>` Component** (next_image.md)
-67. **`next/font` Optimization** (next_font.md)
-68. **HTML `<script>` Element** (html_script.md)
-69. **`<Script>` Component** (next_script.md)
-70. **Metadata API** (metadata_api.md)
-71. **Open Graph & Twitter Cards (`generateMetadata`)** (generate_metadata.md)
+## Level 3
 
-## Level 10: Advanced Architecture
-72. **Authentication & Session Management** (authentication_concepts.md)
-73. **Middleware (`middleware.ts`)** (middleware.md)
-74. **V8 Engine** (v8_engine.md)
-75. **Edge Runtime vs Node.js Runtime** (edge_runtime.md)
-76. **Node.js Environment Variables (`process_env.md`)** (process_env.md)
-77. **Environment Variables (`.env.local`)** (environment_variables.md)
-78. **Draft Mode** (draft_mode.md)
-79. **Internationalization (i18n)** (i18n.md)
-80. **The Next.js Compiler (SWC)** (swc.md)
-81. **Content Delivery Network (CDN) & Edge Cache** (cdn_edge.md)
-82. **Serverless Functions** (serverless_functions.md)
-83. **Docker & Standalone Build** (standalone_build.md)
-84. **Turbopack** (turbopack.md)
-85. **Deployment (Vercel)** (vercel_deployment.md)
+| # | Key | File |
+|---|-----|------|
+| 23 | `catch_all_segments` | `terms/level_03/catch_all_segments.md` |
+| 24 | `dynamic_routes` | `terms/level_03/dynamic_routes.md` |
+| 25 | `link` | `terms/level_03/link.md` |
+| 26 | `rest_parameters` | `terms/level_03/rest_parameters.md` |
+| 27 | `route_groups` | `terms/level_03/route_groups.md` |
+| 28 | `use_router` | `terms/level_03/use_router.md` |
+
+---
+
+## Level 4
+
+| # | Key | File |
+|---|-----|------|
+| 29 | `intercepting_routes` | `terms/level_04/intercepting_routes.md` |
+| 30 | `not_found` | `terms/level_04/not_found.md` |
+| 31 | `parallel_routes` | `terms/level_04/parallel_routes.md` |
+| 32 | `path_module` | `terms/level_04/path_module.md` |
+| 33 | `redirect` | `terms/level_04/redirect.md` |
+| 34 | `use_pathname` | `terms/level_04/use_pathname.md` |
+
+---
+
+## Level 5
+
+| # | Key | File |
+|---|-----|------|
+| 35 | `client_fetching` | `terms/level_05/client_fetching.md` |
+| 36 | `cookies_headers` | `terms/level_05/cookies_headers.md` |
+| 37 | `data_caching` | `terms/level_05/data_caching.md` |
+| 38 | `fetch` | `terms/level_05/fetch.md` |
+| 39 | `js_fetch` | `terms/level_05/js_fetch.md` |
+| 40 | `orm_prisma` | `terms/level_05/orm_prisma.md` |
+| 41 | `react_cache` | `terms/level_05/react_cache.md` |
+| 42 | `revalidation` | `terms/level_05/revalidation.md` |
+| 43 | `streaming` | `terms/level_05/streaming.md` |
+
+---
+
+## Level 6
+
+| # | Key | File |
+|---|-----|------|
+| 44 | `form_actions` | `terms/level_06/form_actions.md` |
+| 45 | `on_demand_revalidation` | `terms/level_06/on_demand_revalidation.md` |
+| 46 | `server_actions` | `terms/level_06/server_actions.md` |
+| 47 | `use_form_state` | `terms/level_06/use_form_state.md` |
+| 48 | `use_form_status` | `terms/level_06/use_form_status.md` |
+| 49 | `zod_validation` | `terms/level_06/zod_validation.md` |
+
+---
+
+## Level 7
+
+| # | Key | File |
+|---|-----|------|
+| 50 | `caching_route_handlers` | `terms/level_07/caching_route_handlers.md` |
+| 51 | `dynamic_route_handlers` | `terms/level_07/dynamic_route_handlers.md` |
+| 52 | `http_methods` | `terms/level_07/http_methods.md` |
+| 53 | `middleware_vs_route_handlers` | `terms/level_07/middleware_vs_route_handlers.md` |
+| 54 | `next_request_response` | `terms/level_07/next_request_response.md` |
+| 55 | `route_handlers` | `terms/level_07/route_handlers.md` |
+
+---
+
+## Level 8
+
+| # | Key | File |
+|---|-----|------|
+| 56 | `generate_static_params` | `terms/level_08/generate_static_params.md` |
+| 57 | `isr` | `terms/level_08/isr.md` |
+| 58 | `next_cache` | `terms/level_08/next_cache.md` |
+| 59 | `ppr` | `terms/level_08/ppr.md` |
+| 60 | `rsc_payload` | `terms/level_08/rsc_payload.md` |
+| 61 | `ssg` | `terms/level_08/ssg.md` |
+| 62 | `ssr` | `terms/level_08/ssr.md` |
+
+---
+
+## Level 9
+
+| # | Key | File |
+|---|-----|------|
+| 63 | `generate_metadata` | `terms/level_09/generate_metadata.md` |
+| 64 | `html_img` | `terms/level_09/html_img.md` |
+| 65 | `html_script` | `terms/level_09/html_script.md` |
+| 66 | `metadata_api` | `terms/level_09/metadata_api.md` |
+| 67 | `next_font` | `terms/level_09/next_font.md` |
+| 68 | `next_image` | `terms/level_09/next_image.md` |
+| 69 | `next_script` | `terms/level_09/next_script.md` |
+| 70 | `web_core_vitals` | `terms/level_09/web_core_vitals.md` |
+
+---
+
+## Level 10
+
+| # | Key | File |
+|---|-----|------|
+| 71 | `authentication_concepts` | `terms/level_10/authentication_concepts.md` |
+| 72 | `cdn_edge` | `terms/level_10/cdn_edge.md` |
+| 73 | `draft_mode` | `terms/level_10/draft_mode.md` |
+| 74 | `edge_runtime` | `terms/level_10/edge_runtime.md` |
+| 75 | `environment_variables` | `terms/level_10/environment_variables.md` |
+| 76 | `i18n` | `terms/level_10/i18n.md` |
+| 77 | `middleware` | `terms/level_10/middleware.md` |
+| 78 | `process_env` | `terms/level_10/process_env.md` |
+| 79 | `serverless_functions` | `terms/level_10/serverless_functions.md` |
+| 80 | `standalone_build` | `terms/level_10/standalone_build.md` |
+| 81 | `swc` | `terms/level_10/swc.md` |
+| 82 | `turbopack` | `terms/level_10/turbopack.md` |
+| 83 | `v8_engine` | `terms/level_10/v8_engine.md` |
+| 84 | `vercel_deployment` | `terms/level_10/vercel_deployment.md` |
+

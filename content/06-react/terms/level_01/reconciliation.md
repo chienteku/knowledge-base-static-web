@@ -223,8 +223,8 @@ function FormApp() {
 
 ## 7. Related Terms
 - [The Fiber Architecture](./fiber_architecture.md) — The engine executing the reconciliation queue.
-- [Re-rendering](../../level_02/re_rendering.md) — The process that generates the Virtual DOM tree for diffing.
-- [Lists & Keys](../../level_05/lists_and_keys.md) — The developer control hook for reconciliation.
+- [Re-rendering](../level_02/re_rendering.md) — The process that generates the Virtual DOM tree for diffing.
+- [Lists & Keys](../level_05/lists_and_keys.md) — The developer control hook for reconciliation.
 
 ---
 

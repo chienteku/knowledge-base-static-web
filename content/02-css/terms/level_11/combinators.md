@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../../level_01/selectors.md) — Base element and class matching.
-- [Specificity](../../level_01/specificity.md) — How selectors accumulate matching priorities.
+- [CSS Selectors](../level_01/selectors.md) — Base element and class matching.
+- [Specificity](../level_01/specificity.md) — How selectors accumulate matching priorities.
 
 ---
 
@@ -245,7 +245,7 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 
 ## 7. Related Terms
 - [Attribute Selectors](attribute_selectors.md) — Selective attribute matching.
-- [Advanced Pseudo-classes](pseudo_classes_advanced.md) — Positional structural styling hooks.
+- [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — Positional structural styling hooks.
 
 ---
 

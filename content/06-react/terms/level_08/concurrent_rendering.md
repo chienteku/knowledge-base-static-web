@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Fiber Architecture](../../level_01/fiber_architecture.md) — The cooperative scheduling engine enabling chunking.
-- [Render Purity](../../level_01/render_purity.md) — Crucial because paused rendering cycles can be run multiple times before committing.
+- [The Fiber Architecture](../level_01/fiber_architecture.md) — The cooperative scheduling engine enabling chunking.
+- [Render Purity](../level_01/render_purity.md) — Crucial because paused rendering cycles can be run multiple times before committing.
 
 ---
 
@@ -183,7 +183,7 @@ onChange={e => {
 > **Explanation:** Interruptible transitions keep urgent interaction events smooth.
 
 ## 7. Related Terms
-- [The Fiber Architecture](../../level_01/fiber_architecture.md) — The virtual stack frame structure that allows React to pause rendering.
+- [The Fiber Architecture](../level_01/fiber_architecture.md) — The virtual stack frame structure that allows React to pause rendering.
 - [`useTransition` Hook](../level_08/use_transition.md) — The hook used to mark state updates as interruptible transitions.
 
 ---

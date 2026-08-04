@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Oplog (Operations Log)](oplog.md) — The log replicated.
-- [Read Preference](../../level_08/read_preference.md) — The query routing hazard.
+- [Read Preference](../level_08/read_preference.md) — The query routing hazard.
 
 ---
 
@@ -182,7 +182,7 @@ Provision identical hardware and storage IOPS across all primary and secondary n
 
 ## 7. Related Terms
 - [Oplog (Operations Log)](oplog.md) — The log replicated.
-- [Read Preference](../../level_08/read_preference.md) — The query routing hazard.
+- [Read Preference](../level_08/read_preference.md) — The query routing hazard.
 
 ---
 

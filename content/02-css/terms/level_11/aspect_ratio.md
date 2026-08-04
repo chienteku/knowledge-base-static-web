@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Width / Height](../../level_02/width_height.md) — Base HTML sizing properties.
+- [Width / Height](../level_02/width_height.md) — Base HTML sizing properties.
 - [Responsive Design (Concept)](../level_08/responsive_design.md) — Sizing layout blocks dynamically.
 
 ---

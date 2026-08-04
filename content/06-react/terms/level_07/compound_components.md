@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Context API](../../level_06/context_api.md) — The state-sharing mechanism used under the hood.
+- [The Context API](../level_06/context_api.md) — The state-sharing mechanism used under the hood.
 - [Children Prop](../level_07/children_prop.md) — The property enabling flexible subcomponent layout structures.
 
 ---
@@ -296,7 +296,7 @@ function App() {
 > **Explanation:** Compound components allow consumers to arrange child elements flexibly.
 
 ## 7. Related Terms
-- [The Context API](../../level_06/context_api.md) — The state transport vehicle used by compound parent-child pairings.
+- [The Context API](../level_06/context_api.md) — The state transport vehicle used by compound parent-child pairings.
 - [Children Prop](../level_07/children_prop.md) — The JSX container that allows subcomponent markup structures.
 
 ---

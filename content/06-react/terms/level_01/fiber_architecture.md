@@ -218,8 +218,8 @@ function Timer() {
 
 ## 7. Related Terms
 - [Reconciliation](./reconciliation.md) — The diffing process executed by Fiber nodes.
-- [Concurrent Rendering](../../level_08/concurrent_rendering.md) — The feature set made possible by Fiber's interruptible pipeline.
-- [Suspense](../../level_08/suspense.md) — Pausing component tree rendering while waiting for data.
+- [Concurrent Rendering](../level_08/concurrent_rendering.md) — The feature set made possible by Fiber's interruptible pipeline.
+- [Suspense](../level_08/suspense.md) — Pausing component tree rendering while waiting for data.
 
 ---
 

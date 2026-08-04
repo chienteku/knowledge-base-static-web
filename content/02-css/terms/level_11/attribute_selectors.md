@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../../level_01/selectors.md) — Base element and class matching.
-- [Specificity](../../level_01/specificity.md) — How selectors accumulate matching priorities.
+- [CSS Selectors](../level_01/selectors.md) — Base element and class matching.
+- [Specificity](../level_01/specificity.md) — How selectors accumulate matching priorities.
 
 ---
 

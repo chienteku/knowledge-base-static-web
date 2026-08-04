@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [State Management](../../level_06/state_management.md) — The concept of external data stores.
-- [Rules of Hooks](../../level_04/rules_of_hooks.md) — The usage guidelines governing hook execution.
+- [State Management](../level_06/state_management.md) — The concept of external data stores.
+- [Rules of Hooks](../level_04/rules_of_hooks.md) — The usage guidelines governing hook execution.
 
 ---
 
@@ -251,7 +251,7 @@ export default function CounterComponent() {
 > **Explanation:** `useSyncExternalStore` guarantees consistent synchronous store snapshots under Concurrent React.
 
 ## 7. Related Terms
-- [State Management](../../level_06/state_management.md) — The global state container architectures.
+- [State Management](../level_06/state_management.md) — The global state container architectures.
 - [Zustand](../level_11/zustand.md) — The state library that uses this hook under the hood.
 
 ---

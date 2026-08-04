@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Width / Height](../../level_02/width_height.md) — Sizing the media element box.
+- [Width / Height](../level_02/width_height.md) — Sizing the media element box.
 - [`background-size` (cover / contain)](background_size.md) — The background equivalent.
 
 ---

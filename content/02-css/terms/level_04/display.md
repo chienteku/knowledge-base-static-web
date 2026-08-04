@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 - [Document Flow (Normal Flow)](../level_04/document_flow.md) — The baseline page parsing sequence.
-- [The Box Model](../../level_02/box_model.md) — The `display` property determines how this box interacts with the boxes around it.
-- [Width / Height](../../level_02/width_height.md) — The `display` property completely changes how width and height behave!
+- [The Box Model](../level_02/box_model.md) — The `display` property determines how this box interacts with the boxes around it.
+- [Width / Height](../level_02/width_height.md) — The `display` property completely changes how width and height behave!
 
 ---
 
@@ -238,8 +238,8 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 
 ## 7. Related Terms
 - [`display: none` vs `visibility: hidden`](../level_04/display_none_vs_visibility.md) — Hiding elements.
-- [`display: flex`](../../level_05/display_flex.md) — The modern Flexbox layout container.
-- [Margin](../../level_02/margin.md) — Visual box margins.
+- [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.
+- [Margin](../level_02/margin.md) — Visual box margins.
 
 ---
 

@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Oplog (Operations Log)](../../level_09/oplog.md) — The most famous capped collection.
+- [Oplog (Operations Log)](../level_09/oplog.md) — The most famous capped collection.
 
 ---
 
@@ -198,7 +198,7 @@ Evaluate whether the following two update operations will succeed on this docume
 > **Explanation:** Tailable cursors remain open after reaching the end of capped collections, streaming new inserts like `tail -f`.
 
 ## 7. Related Terms
-- [Oplog (Operations Log)](../../level_09/oplog.md) — The most famous capped collection.
+- [Oplog (Operations Log)](../level_09/oplog.md) — The most famous capped collection.
 - [Time-Series Collections](time_series.md) — Chronological metrics.
 
 ---

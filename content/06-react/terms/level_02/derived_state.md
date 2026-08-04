@@ -255,8 +255,8 @@ function SearchList({ users }) {
 > **Explanation:** Simple derived state calculations (string concatenations, array maps of small lists) require zero memoization overhead.
 
 ## 7. Related Terms
-- [`useMemo` Hook](../../level_04/use_memo.md) — Optimization hook used to cache heavy derived state calculations.
-- [Render Purity](../../level_01/render_purity.md) — The rule that calculations during render must remain self-contained.
+- [`useMemo` Hook](../level_04/use_memo.md) — Optimization hook used to cache heavy derived state calculations.
+- [Render Purity](../level_01/render_purity.md) — The rule that calculations during render must remain self-contained.
 
 ---
 

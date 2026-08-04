@@ -172,7 +172,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 ## 7. Related Terms
 - [`font-family`](../level_03/font_family.md) — Defines the actual typeface.
 - [`font-style` & `font-variant`](../level_03/font_style_variant.md) — Styling and small-caps variations.
-- [`rem` and `em`](../level_07/rem_em.md) — Responsive typography units.
+- [`rem` and `em`](../level_08/rem_em.md) — Responsive typography units.
 
 ---
 

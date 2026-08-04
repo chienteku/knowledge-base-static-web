@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The parent paradigm.
-- [Element Query Operators (`$exists`, `$type`)](../../level_03/element_operators.md) — Querying structure differences.
+- [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — Querying structure differences.
 
 ---
 
@@ -197,7 +197,7 @@ Write the query to find all video clips (hint: filter by the discriminator) that
 
 ## 7. Related Terms
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The parent structure paradigm.
-- [Element Query Operators (`$exists`, `$type`)](../../level_03/element_operators.md) — Evaluating structures.
+- [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — Evaluating structures.
 
 ---
 

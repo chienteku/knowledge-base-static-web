@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Embedding vs. Referencing](../../level_05/embedding_vs_referencing.md) — The relational data modeling context.
+- [Embedding vs. Referencing](../level_05/embedding_vs_referencing.md) — The relational data modeling context.
 
 ---
 

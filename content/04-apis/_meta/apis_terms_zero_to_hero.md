@@ -1,180 +1,179 @@
-# 04-APIs: Zero to Hero
+# Apis Terms: Zero to Hero
 
-A progressive glossary of essential APIs, protocols, and network communication terms, ordered from physical connections to advanced tooling.
+> Auto-generated from `_meta/relationships.json`. **Do not edit manually** — run `sync_zero_hero.js --apply` to regenerate.
 
----
-
-## Level 1: The Foundations of the Web
-
-| # | Term | Description |
-|---|------|-------------|
-| 1 | **Client-Server Model** | The basic network model dividing tasks between service providers and requestors. |
-| 2 | **IP Address & Port** | The numeric address + door number that locates a server on the network. |
-| 3 | **DNS (Domain Name System)** | The internet's phonebook: turns `example.com` into an IP address. |
-| 4 | **TCP/IP (high-level)** | The reliable delivery layer HTTP rides on ("guaranteed, in-order packets"). |
-| 5 | **URL / URI (Uniform Resource Identifier)** | Strings specifying resource locations and identifiers on the web. |
-| 6 | **HTTP / HTTPS** | Hypertext Transfer Protocol (Secure) for loading pages and assets. |
-| 7 | **SSL/TLS & the Handshake** | How HTTPS encrypts a connection before any data is sent. |
-| 8 | **Request & Response Lifecycle** | The round-trip flow from client request triggers to server responses. |
-| 9 | **JSON (JavaScript Object Notation)** | Lightweight, standard text-based data interchange format. |
-| 10 | **Latency & Bandwidth** | Why the network is "slow": round-trip time vs throughput. |
+Total terms: **103**
 
 ---
 
-## Level 2: HTTP Anatomy
+## Level 1
 
-| # | Term | Description |
-|---|------|-------------|
-| 11 | **HTTP Methods (Verbs)** | Essential concepts and mechanics. |
-| 12 | **Idempotent vs Safe Methods** | Which verbs are safe (GET) vs idempotent (PUT/DELETE) vs neither (POST). |
-| 13 | **HTTP Status Codes** | Essential concepts and mechanics. |
-| 14 | **HTTP Headers** | Essential concepts and mechanics. |
-| 15 | **Content-Type & MIME Types** | How sender declares payload format (application/json, text/html, multipart/form-data). |
-| 16 | **Content Negotiation (`Accept`)** | How client asks for a preferred response format. |
-| 17 | **Request Body & Payloads** | Essential concepts and mechanics. |
-| 18 | **Query Parameters & Path Variables** | Essential concepts and mechanics. |
-| 19 | **URL Encoding (Percent-Encoding)** | Escaping unsafe characters in query strings and paths. |
-
----
-
-## Level 3: RESTful APIs
-
-| # | Term | Description |
-|---|------|-------------|
-| 20 | **API (Application Programming Interface)** | Essential concepts and mechanics. |
-| 21 | **REST (Representational State Transfer)** | Essential concepts and mechanics. |
-| 22 | **Endpoints & Resources** | Essential concepts and mechanics. |
-| 23 | **Resource Naming & URI Design** | Conventions for clean REST endpoints (/users/42/posts). |
-| 24 | **Statelessness** | Essential concepts and mechanics. |
-| 25 | **CRUD Operations** | Essential concepts and mechanics. |
-| 26 | **HATEOAS** | Responses that embed links to next actions (REST maturity). |
-| 27 | **Richardson Maturity Model** | The 0–3 scale that grades how "RESTful" an API really is. |
+| # | Key | File |
+|---|-----|------|
+| 1 | `client_server_model` | `terms/level_01/client_server_model.md` |
+| 2 | `dns` | `terms/level_01/dns.md` |
+| 3 | `http_https` | `terms/level_01/http_https.md` |
+| 4 | `ip_address_port` | `terms/level_01/ip_address_port.md` |
+| 5 | `json` | `terms/level_01/json.md` |
+| 6 | `latency_bandwidth` | `terms/level_01/latency_bandwidth.md` |
+| 7 | `request_response` | `terms/level_01/request_response.md` |
+| 8 | `ssl_tls_handshake` | `terms/level_01/ssl_tls_handshake.md` |
+| 9 | `tcp_ip` | `terms/level_01/tcp_ip.md` |
+| 10 | `url_uri` | `terms/level_01/url_uri.md` |
 
 ---
 
-## Level 4: Security & Authentication
+## Level 2
 
-| # | Term | Description |
-|---|------|-------------|
-| 28 | **API Keys** | Essential concepts and mechanics. |
-| 29 | **Secrets & Environment Variables** | Keeping API keys out of source code (.env, secret managers). |
-| 30 | **Basic & Bearer Authentication** | Essential concepts and mechanics. |
-| 31 | **Session vs Token Authentication** | Stateful server sessions vs stateless tokens — the core auth trade-off. |
-| 32 | **JWT (JSON Web Tokens)** | Essential concepts and mechanics. |
-| 33 | **Access Token vs Refresh Token** | Short-lived access token + long-lived refresh token pattern. |
-| 34 | **OAuth 2.0** | Essential concepts and mechanics. |
-| 35 | **OAuth Scopes** | Fine-grained permissions granted to a token (read:user). |
-| 36 | **Same-Origin Policy** | The default browser rule isolating one origin from another. |
-| 37 | **CORS (Cross-Origin Resource Sharing)** | Essential concepts and mechanics. |
-| 38 | **Preflight Request (OPTIONS)** | The automatic OPTIONS probe the browser sends before a cross-origin call. |
-| 39 | **CSRF (Cross-Site Request Forgery)** | Attack that rides a logged-in user's cookies; why tokens/SameSite exist. |
-| 40 | **XSS (Cross-Site Scripting)** | Injected script stealing tokens; why you never store JWT carelessly. |
+| # | Key | File |
+|---|-----|------|
+| 11 | `content_negotiation` | `terms/level_02/content_negotiation.md` |
+| 12 | `content_type` | `terms/level_02/content_type.md` |
+| 13 | `http_headers` | `terms/level_02/http_headers.md` |
+| 14 | `http_methods` | `terms/level_02/http_methods.md` |
+| 15 | `idempotent_vs_safe_methods` | `terms/level_02/idempotent_vs_safe_methods.md` |
+| 16 | `query_params` | `terms/level_02/query_params.md` |
+| 17 | `request_body` | `terms/level_02/request_body.md` |
+| 18 | `status_codes` | `terms/level_02/status_codes.md` |
+| 19 | `url_encoding` | `terms/level_02/url_encoding.md` |
 
 ---
 
-## Level 5: Fetching Data (Client-Side)
+## Level 3
 
-| # | Term | Description |
-|---|------|-------------|
-| 41 | **XMLHttpRequest / AJAX** | The legacy request API fetch() replaced; explains fetch's "why". |
-| 42 | **The `fetch()` API** | Essential concepts and mechanics. |
-| 43 | **Promises (in the context of networks)** | Essential concepts and mechanics. |
-| 44 | **`async` / `await`** | Essential concepts and mechanics. |
-| 45 | **`Promise.all` / Parallel Requests** | Firing many requests concurrently and awaiting all. |
-| 46 | **Error Handling (`try` / `catch`)** | Essential concepts and mechanics. |
-| 47 | **The `Response` Object (`res.json()`, `res.ok`)** | Essential concepts and mechanics. |
-| 48 | **Request Timeout** | Aborting a request that hangs too long. |
-| 49 | **AbortController / Cancellation** | Canceling an in-flight fetch. |
-| 50 | **Retry & Exponential Backoff** | Re-attempting failed calls with growing delays. |
-| 51 | **FormData & Multipart Uploads** | Sending files/binary instead of JSON. |
-| 52 | **CORS Errors in the Browser** | Reading and diagnosing a blocked cross-origin fetch. |
+| # | Key | File |
+|---|-----|------|
+| 20 | `api` | `terms/level_03/api.md` |
+| 21 | `crud` | `terms/level_03/crud.md` |
+| 22 | `endpoints_resources` | `terms/level_03/endpoints_resources.md` |
+| 23 | `hateoas` | `terms/level_03/hateoas.md` |
+| 24 | `resource_naming` | `terms/level_03/resource_naming.md` |
+| 25 | `rest` | `terms/level_03/rest.md` |
+| 26 | `richardson_maturity_model` | `terms/level_03/richardson_maturity_model.md` |
+| 27 | `statelessness` | `terms/level_03/statelessness.md` |
 
 ---
 
-## Level 6: Advanced API Concepts
+## Level 4
 
-| # | Term | Description |
-|---|------|-------------|
-| 53 | **Pagination (Offset vs. Cursor)** | Essential concepts and mechanics. |
-| 54 | **Bulk / Batch Requests** | Combining many operations into one call. |
-| 55 | **Rate Limiting (429 Too Many Requests)** | Essential concepts and mechanics. |
-| 56 | **Circuit Breaker** | Failing fast when a downstream API is down. |
-| 57 | **Idempotency** | Essential concepts and mechanics. |
-| 58 | **Idempotency Keys** | Client-supplied key so a retried POST doesn't double-charge. |
-| 59 | **Caching (ETag, Cache-Control)** | Essential concepts and mechanics. |
-| 60 | **Cache Invalidation** | Knowing when cached data is stale (the "hard problem"). |
-| 61 | **Webhooks** | Essential concepts and mechanics. |
-
----
-
-## Level 7: Data Formats & Serialization
-
-| # | Term | Description |
-|---|------|-------------|
-| 62 | **Serialization & Deserialization** | Transforming data structures into storage/transit bytes. |
-| 63 | **Deserialization / Parsing** | Turning a wire string back into a live object (the inverse of serialization). |
-| 64 | **JSON Methods (parse / stringify)** | Built-in functions to convert JS objects to strings and back. |
-| 65 | **XML** | eXtensible Markup Language: legacy markup data format. |
-| 66 | **Character Encoding (UTF-8)** | How text becomes bytes, and why non-ASCII/emoji break naive payloads. |
-| 67 | **Base64 Encoding** | Binary-to-text encoding format using 64 printable characters. |
-| 68 | **Binary vs Text Formats** | When to send bytes (protobuf, files) instead of text (JSON, XML). |
-| 69 | **Blob & ArrayBuffer** | Handling binary response bodies in the browser (res.blob(), res.arrayBuffer()). |
-| 70 | **GraphQL (The REST Alternative)** | A query language and runtime for API data fetching. |
-| 71 | **Over-fetching vs Under-fetching** | The REST pain points GraphQL was built to solve. |
+| # | Key | File |
+|---|-----|------|
+| 28 | `access_refresh_tokens` | `terms/level_04/access_refresh_tokens.md` |
+| 29 | `api_keys` | `terms/level_04/api_keys.md` |
+| 30 | `basic_bearer_auth` | `terms/level_04/basic_bearer_auth.md` |
+| 31 | `cors` | `terms/level_04/cors.md` |
+| 32 | `csrf` | `terms/level_04/csrf.md` |
+| 33 | `jwt` | `terms/level_04/jwt.md` |
+| 34 | `oauth` | `terms/level_04/oauth.md` |
+| 35 | `oauth_scopes` | `terms/level_04/oauth_scopes.md` |
+| 36 | `preflight_request` | `terms/level_04/preflight_request.md` |
+| 37 | `same_origin_policy` | `terms/level_04/same_origin_policy.md` |
+| 38 | `secrets_env` | `terms/level_04/secrets_env.md` |
+| 39 | `session_vs_token_auth` | `terms/level_04/session_vs_token_auth.md` |
+| 40 | `xss` | `terms/level_04/xss.md` |
 
 ---
 
-## Level 8: Real-Time APIs
+## Level 5
 
-| # | Term | Description |
-|---|------|-------------|
-| 72 | **WebSockets** | Essential concepts and mechanics. |
-| 73 | **WebSocket Handshake (Upgrade)** | The HTTP→WS Upgrade request that opens a socket. |
-| 74 | **The WebSocket API (Client-side)** | Essential concepts and mechanics. |
-| 75 | **Heartbeat / Ping-Pong** | Keep-alive frames that detect a dead connection. |
-| 76 | **Reconnection & Backoff** | Re-establishing a dropped real-time connection. |
-| 77 | **Server-Sent Events (SSE)** | Essential concepts and mechanics. |
-| 78 | **Polling vs Long Polling** | Essential concepts and mechanics. |
-| 79 | **Socket.io (Ecosystem tool)** | Essential concepts and mechanics. |
-| 80 | **Pub/Sub & Channels** | The messaging pattern behind rooms/topics in real-time apps. |
-
----
-
-## Level 9: Browser APIs (Storage & State)
-
-| # | Term | Description |
-|---|------|-------------|
-| 81 | **`localStorage` & `sessionStorage`** | Essential concepts and mechanics. |
-| 82 | **Storage Serialization** | Why Web Storage only holds strings (JSON.stringify round-trip). |
-| 83 | **Cookies** | Essential concepts and mechanics. |
-| 84 | **Cookie Attributes (HttpOnly, Secure, SameSite)** | The flags that make cookies safe for auth. |
-| 85 | **IndexedDB** | Essential concepts and mechanics. |
-| 86 | **Cache API** | Essential concepts and mechanics. |
-| 87 | **Storage Limits & Eviction** | Quotas and when browsers purge cached/stored data. |
-| 88 | **Service Workers** | Essential concepts and mechanics. |
-| 89 | **Offline-First / PWA** | Designing apps that work without a network. |
+| # | Key | File |
+|---|-----|------|
+| 41 | `abortcontroller` | `terms/level_05/abortcontroller.md` |
+| 42 | `async_await` | `terms/level_05/async_await.md` |
+| 43 | `cors_errors` | `terms/level_05/cors_errors.md` |
+| 44 | `error_handling` | `terms/level_05/error_handling.md` |
+| 45 | `fetch` | `terms/level_05/fetch.md` |
+| 46 | `formdata` | `terms/level_05/formdata.md` |
+| 47 | `promise_all` | `terms/level_05/promise_all.md` |
+| 48 | `promises` | `terms/level_05/promises.md` |
+| 49 | `request_timeout` | `terms/level_05/request_timeout.md` |
+| 50 | `response_object` | `terms/level_05/response_object.md` |
+| 51 | `retry_backoff` | `terms/level_05/retry_backoff.md` |
+| 52 | `xmlhttprequest_ajax` | `terms/level_05/xmlhttprequest_ajax.md` |
 
 ---
 
-## Level 10: Designing & Tooling
+## Level 6
 
-| # | Term | Description |
-|---|------|-------------|
-| 90 | **Postman / Insomnia (API Clients)** | Essential concepts and mechanics. |
-| 91 | **DevTools Network Tab** | Inspecting real requests/responses in the browser. |
-| 92 | **Swagger / OpenAPI Specification** | Essential concepts and mechanics. |
-| 93 | **API Contract / Schema-First Design** | Agreeing the interface before writing code. |
-| 94 | **SDK / Client Library** | Language wrappers that hide raw HTTP from consumers. |
-| 95 | **API Versioning (v1, v2)** | Essential concepts and mechanics. |
-| 96 | **Deprecation & Sunsetting** | Retiring old API versions gracefully. |
-| 97 | **Mocking APIs** | Essential concepts and mechanics. |
-| 98 | **Microservices vs Monolith** | Why many small APIs vs one big one. |
-| 99 | **API Gateway** | The single entry point that routes/authenticates/rate-limits. |
-| 100 | **Load Balancing** | Spreading traffic across servers (and why statelessness enables it). |
-| 101 | **gRPC (Remote Procedure Call)** | Essential concepts and mechanics. |
-| 102 | **Protocol Buffers (protobuf)** | The binary schema format that powers gRPC. |
-| 103 | **SOAP & XML-RPC (legacy)** | The pre-REST protocols still alive in enterprise. |
+| # | Key | File |
+|---|-----|------|
+| 53 | `batch_requests` | `terms/level_06/batch_requests.md` |
+| 54 | `cache_invalidation` | `terms/level_06/cache_invalidation.md` |
+| 55 | `caching` | `terms/level_06/caching.md` |
+| 56 | `circuit_breaker` | `terms/level_06/circuit_breaker.md` |
+| 57 | `idempotency` | `terms/level_06/idempotency.md` |
+| 58 | `idempotency_keys` | `terms/level_06/idempotency_keys.md` |
+| 59 | `pagination` | `terms/level_06/pagination.md` |
+| 60 | `rate_limiting` | `terms/level_06/rate_limiting.md` |
+| 61 | `webhooks` | `terms/level_06/webhooks.md` |
 
 ---
 
-> **Total: 103 terms** covering Web APIs and networking protocols.
+## Level 7
+
+| # | Key | File |
+|---|-----|------|
+| 62 | `base64` | `terms/level_07/base64.md` |
+| 63 | `binary_vs_text_formats` | `terms/level_07/binary_vs_text_formats.md` |
+| 64 | `blob_arraybuffer` | `terms/level_07/blob_arraybuffer.md` |
+| 65 | `character_encoding` | `terms/level_07/character_encoding.md` |
+| 66 | `deserialization` | `terms/level_07/deserialization.md` |
+| 67 | `graphql` | `terms/level_07/graphql.md` |
+| 68 | `json_methods` | `terms/level_07/json_methods.md` |
+| 69 | `overfetching_underfetching` | `terms/level_07/overfetching_underfetching.md` |
+| 70 | `serialization` | `terms/level_07/serialization.md` |
+| 71 | `xml` | `terms/level_07/xml.md` |
+
+---
+
+## Level 8
+
+| # | Key | File |
+|---|-----|------|
+| 72 | `heartbeat_ping_pong` | `terms/level_08/heartbeat_ping_pong.md` |
+| 73 | `polling` | `terms/level_08/polling.md` |
+| 74 | `pub_sub_channels` | `terms/level_08/pub_sub_channels.md` |
+| 75 | `reconnection_backoff` | `terms/level_08/reconnection_backoff.md` |
+| 76 | `socket_io` | `terms/level_08/socket_io.md` |
+| 77 | `sse` | `terms/level_08/sse.md` |
+| 78 | `websocket_api` | `terms/level_08/websocket_api.md` |
+| 79 | `websocket_handshake` | `terms/level_08/websocket_handshake.md` |
+| 80 | `websockets` | `terms/level_08/websockets.md` |
+
+---
+
+## Level 9
+
+| # | Key | File |
+|---|-----|------|
+| 81 | `cache_api` | `terms/level_09/cache_api.md` |
+| 82 | `cookie_attributes` | `terms/level_09/cookie_attributes.md` |
+| 83 | `cookies` | `terms/level_09/cookies.md` |
+| 84 | `indexeddb` | `terms/level_09/indexeddb.md` |
+| 85 | `offline_first` | `terms/level_09/offline_first.md` |
+| 86 | `service_workers` | `terms/level_09/service_workers.md` |
+| 87 | `storage_limits` | `terms/level_09/storage_limits.md` |
+| 88 | `storage_serialization` | `terms/level_09/storage_serialization.md` |
+| 89 | `web_storage` | `terms/level_09/web_storage.md` |
+
+---
+
+## Level 10
+
+| # | Key | File |
+|---|-----|------|
+| 90 | `api_clients` | `terms/level_10/api_clients.md` |
+| 91 | `api_contract` | `terms/level_10/api_contract.md` |
+| 92 | `api_gateway` | `terms/level_10/api_gateway.md` |
+| 93 | `deprecation_sunsetting` | `terms/level_10/deprecation_sunsetting.md` |
+| 94 | `grpc` | `terms/level_10/grpc.md` |
+| 95 | `load_balancing` | `terms/level_10/load_balancing.md` |
+| 96 | `microservices_monolith` | `terms/level_10/microservices_monolith.md` |
+| 97 | `mocking` | `terms/level_10/mocking.md` |
+| 98 | `network_tab` | `terms/level_10/network_tab.md` |
+| 99 | `openapi` | `terms/level_10/openapi.md` |
+| 100 | `protocol_buffers` | `terms/level_10/protocol_buffers.md` |
+| 101 | `sdk` | `terms/level_10/sdk.md` |
+| 102 | `soap_xml_rpc` | `terms/level_10/soap_xml_rpc.md` |
+| 103 | `versioning` | `terms/level_10/versioning.md` |
+

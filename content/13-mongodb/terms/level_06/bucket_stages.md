@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [The Bucket Pattern](../../level_05/bucket_pattern.md) — The storage-level bucketing concept.
+- [The Bucket Pattern](../level_05/bucket_pattern.md) — The storage-level bucketing concept.
 
 ---
 
@@ -212,7 +212,7 @@ boundaries: [0, 100], default: "Other"
 
 ## 7. Related Terms
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [The Bucket Pattern](../../level_05/bucket_pattern.md) — The schema design equivalent.
+- [The Bucket Pattern](../level_05/bucket_pattern.md) — The schema design equivalent.
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [`$project` / `$addFields` Stages](project_addfields.md) — The parent reshaping stages.
-- [Update Operators (`$set`, `$unset`, etc.)](../../level_03/update_operators.md) — The write operators sharing names.
+- [Update Operators (`$set`, `$unset`, etc.)](../level_03/update_operators.md) — The write operators sharing names.
 
 ---
 
@@ -191,7 +191,7 @@ State which query alters data on disk.
 
 ## 7. Related Terms
 - [`$project` / `$addFields` Stages](project_addfields.md) — The parent reshaping stages.
-- [Update Operators (`$set`, `$unset`, etc.)](../../level_03/update_operators.md) — The write operators.
+- [Update Operators (`$set`, `$unset`, etc.)](../level_03/update_operators.md) — The write operators.
 
 ---
 

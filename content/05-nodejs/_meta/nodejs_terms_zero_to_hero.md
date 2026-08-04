@@ -1,120 +1,162 @@
-# 05-Node.js: Zero to Hero
+# Nodejs Terms: Zero to Hero
 
-A progressive glossary of essential Node.js architecture, modules, and performance concepts.
+> Auto-generated from `_meta/relationships.json`. **Do not edit manually** — run `sync_zero_hero.js --apply` to regenerate.
 
+Total terms: **86**
 
-## Level 1: Introduction & Architecture
+---
 
-1. **Node.js (Runtime Environment)** (nodejs.md)
-2. **V8 JavaScript Engine** (v8_engine.md)
-3. **Single-Threaded Architecture** (single_threaded.md)
-4. **The Call Stack** (call_stack.md)
-5. **Non-Blocking I/O** (non_blocking_io.md)
-6. **The Event Loop & Libuv** (event_loop.md)
-7. **The Thread Pool (libuv)** (thread_pool.md)
-8. **CPU-bound vs I/O-bound** (cpu_vs_io.md)
-9. **Blocking the Event Loop** (blocking_event_loop.md)
+## Level 1
 
-## Level 2: Core Modules & Globals
+| # | Key | File |
+|---|-----|------|
+| 1 | `blocking_event_loop` | `terms/level_01/blocking_event_loop.md` |
+| 2 | `call_stack` | `terms/level_01/call_stack.md` |
+| 3 | `cpu_vs_io` | `terms/level_01/cpu_vs_io.md` |
+| 4 | `event_loop` | `terms/level_01/event_loop.md` |
+| 5 | `nodejs` | `terms/level_01/nodejs.md` |
+| 6 | `non_blocking_io` | `terms/level_01/non_blocking_io.md` |
+| 7 | `single_threaded` | `terms/level_01/single_threaded.md` |
+| 8 | `thread_pool` | `terms/level_01/thread_pool.md` |
+| 9 | `v8_engine` | `terms/level_01/v8_engine.md` |
 
-10. **Global Objects (`global`, `__dirname`, `__filename`)** (global_objects.md)
-11. **The Node.js REPL** (repl.md)
-12. **The `process` Object** (process_object.md)
-13. **stdin / stdout / stderr (Standard Streams)** (standard_streams.md)
-14. **The `fs` Module (File System)** (fs_module.md)
-15. **The `path` Module** (path_module.md)
-16. **The `http` Module** (http_module.md)
-17. **The os & util Modules** (os_util_modules.md)
-18. **The events Module** (events_module.md)
-19. **The `crypto` Module** (crypto_module.md)
+---
 
-## Level 3: Module Systems
+## Level 2
 
-20. **CommonJS (`require`, `module.exports`)** (commonjs.md)
-21. **ES Modules (`import`, `export`)** (es_modules.md)
-22. **Module Resolution** (module_resolution.md)
-23. **Circular Dependencies** (circular_dependencies.md)
-24. **Built-in vs External Modules** (module_types.md)
+| # | Key | File |
+|---|-----|------|
+| 10 | `crypto_module` | `terms/level_02/crypto_module.md` |
+| 11 | `events_module` | `terms/level_02/events_module.md` |
+| 12 | `fs_module` | `terms/level_02/fs_module.md` |
+| 13 | `global_objects` | `terms/level_02/global_objects.md` |
+| 14 | `http_module` | `terms/level_02/http_module.md` |
+| 15 | `os_util_modules` | `terms/level_02/os_util_modules.md` |
+| 16 | `path_module` | `terms/level_02/path_module.md` |
+| 17 | `process_object` | `terms/level_02/process_object.md` |
+| 18 | `repl` | `terms/level_02/repl.md` |
+| 19 | `standard_streams` | `terms/level_02/standard_streams.md` |
 
-## Level 4: Package Management
+---
 
-25. **NPM (Node Package Manager)** (npm.md)
-26. **`package.json`** (package_json.md)
-27. **`node_modules`** (node_modules.md)
-28. **Semantic Versioning (SemVer)** (semantic_versioning.md)
-29. **`package-lock.json` & Deterministic Installs** (package_lock.md)
+## Level 3
 
-## Level 5: Asynchronous Patterns
+| # | Key | File |
+|---|-----|------|
+| 20 | `circular_dependencies` | `terms/level_03/circular_dependencies.md` |
+| 21 | `commonjs` | `terms/level_03/commonjs.md` |
+| 22 | `es_modules` | `terms/level_03/es_modules.md` |
+| 23 | `module_resolution` | `terms/level_03/module_resolution.md` |
+| 24 | `module_types` | `terms/level_03/module_types.md` |
 
-30. **Callbacks & Callback Hell** (callbacks.md)
-31. **Promisification (`util.promisify`)** (promisification.md)
-32. **async / await in Node** (async_await.md)
-33. **Async Error Handling (try/catch + .catch)** (async_error_handling.md)
-34. **Unhandled Promise Rejections** (unhandled_rejections.md)
-35. **Event Emitter** (event_emitter.md)
-36. **Microtasks vs Macrotasks** (microtasks_macrotasks.md)
-37. **process.nextTick() vs setImmediate()** (nexttick_setimmediate.md)
+---
 
-## Level 6: Data Handling
+## Level 4
 
-38. **Buffers** (buffers.md)
-39. **Character Encoding & Buffer ↔ String** (buffer_encoding.md)
-40. **Streams (General Concept)** (streams.md)
-41. **Readable & Writable Streams** (readable_writable.md)
-42. **Duplex & Transform Streams** (duplex_transform_streams.md)
-43. **Piping (`.pipe()`)** (piping.md)
-44. **Backpressure** (backpressure.md)
-45. **Data Chunks** (chunks.md)
+| # | Key | File |
+|---|-----|------|
+| 25 | `node_modules` | `terms/level_04/node_modules.md` |
+| 26 | `npm` | `terms/level_04/npm.md` |
+| 27 | `package_json` | `terms/level_04/package_json.md` |
+| 28 | `package_lock` | `terms/level_04/package_lock.md` |
+| 29 | `semantic_versioning` | `terms/level_04/semantic_versioning.md` |
 
-## Level 7: Web Servers & APIs
+---
 
-46. **The `http` Module Deep Dive** (http_deep_dive.md)
-47. **Express.js** (express_js.md)
-48. **Routing** (routing.md)
-49. **Route Parameters & Query Strings** (route_parameters.md)
-50. **Middleware** (middleware.md)
-51. **The Middleware Chain & next()** (middleware_chain.md)
-52. **Body Parsing (express.json())** (body_parsing.md)
-53. **Serving Static Files (express.static)** (static_files.md)
-54. **The `req` & `res` Objects** (req_res.md)
+## Level 5
 
-## Level 8: Database Integration
+| # | Key | File |
+|---|-----|------|
+| 30 | `async_await` | `terms/level_05/async_await.md` |
+| 31 | `async_error_handling` | `terms/level_05/async_error_handling.md` |
+| 32 | `callbacks` | `terms/level_05/callbacks.md` |
+| 33 | `event_emitter` | `terms/level_05/event_emitter.md` |
+| 34 | `microtasks_macrotasks` | `terms/level_05/microtasks_macrotasks.md` |
+| 35 | `nexttick_setimmediate` | `terms/level_05/nexttick_setimmediate.md` |
+| 36 | `promisification` | `terms/level_05/promisification.md` |
+| 37 | `unhandled_rejections` | `terms/level_05/unhandled_rejections.md` |
 
-55. **SQL vs NoSQL** (sql_vs_nosql.md)
-56. **ORMs & ODMs** (orms_odms.md)
-57. **Mongoose (MongoDB ODM)** (mongoose.md)
-58. **Prisma / Sequelize (SQL ORMs)** (prisma_sequelize.md)
-59. **Connection Pooling** (connection_pools.md)
-60. **Migrations** (migrations.md)
-61. **Database Transactions** (db_transactions.md)
-62. **SQL Injection** (sql_injection.md)
-63. **Parameterized Queries / Prepared Statements** (parameterized_queries.md)
+---
 
-## Level 9: REST APIs & Best Practices
+## Level 6
 
-64. **REST API Design** (rest_api.md)
-65. **API Versioning** (api_versioning.md)
-66. **HTTP Status Codes** (status_codes.md)
-67. **CORS** (cors.md)
-68. **Pagination** (pagination.md)
-69. **Rate Limiting** (rate_limiting.md)
-70. **MVC Pattern (Model–View–Controller)** (mvc_pattern.md)
-71. **Controllers & Services** (controllers_services.md)
-72. **Input Validation (joi / zod)** (input_validation.md)
-73. **Error Handling Middleware** (error_handling_middleware.md)
+| # | Key | File |
+|---|-----|------|
+| 38 | `backpressure` | `terms/level_06/backpressure.md` |
+| 39 | `buffer_encoding` | `terms/level_06/buffer_encoding.md` |
+| 40 | `buffers` | `terms/level_06/buffers.md` |
+| 41 | `chunks` | `terms/level_06/chunks.md` |
+| 42 | `duplex_transform_streams` | `terms/level_06/duplex_transform_streams.md` |
+| 43 | `piping` | `terms/level_06/piping.md` |
+| 44 | `readable_writable` | `terms/level_06/readable_writable.md` |
+| 45 | `streams` | `terms/level_06/streams.md` |
 
-## Level 10: Security & Production
+---
 
-74. **Bcrypt (Password Hashing)** (bcrypt.md)
-75. **JWT (JSON Web Tokens)** (jwt.md)
-76. **Environment Variables (`dotenv`)** (env_vars.md)
-77. **Child Processes (child_process)** (child_processes.md)
-78. **Worker Threads** (worker_threads.md)
-79. **The cluster Module** (cluster_module.md)
-80. **PM2 (Process Manager)** (pm2.md)
-81. **Load Balancing** (load_balancing.md)
-82. **Reverse Proxy (Nginx)** (reverse_proxy.md)
-83. **Docker** (docker.md)
-84. **Graceful Shutdown & Process Signals** (graceful_shutdown.md)
-85. **Logging & Monitoring** (logging_monitoring.md)
-86. **Memory Leaks & Garbage Collection** (memory_leaks.md)
+## Level 7
+
+| # | Key | File |
+|---|-----|------|
+| 46 | `body_parsing` | `terms/level_07/body_parsing.md` |
+| 47 | `express_js` | `terms/level_07/express_js.md` |
+| 48 | `http_deep_dive` | `terms/level_07/http_deep_dive.md` |
+| 49 | `middleware` | `terms/level_07/middleware.md` |
+| 50 | `middleware_chain` | `terms/level_07/middleware_chain.md` |
+| 51 | `req_res` | `terms/level_07/req_res.md` |
+| 52 | `route_parameters` | `terms/level_07/route_parameters.md` |
+| 53 | `routing` | `terms/level_07/routing.md` |
+| 54 | `static_files` | `terms/level_07/static_files.md` |
+
+---
+
+## Level 8
+
+| # | Key | File |
+|---|-----|------|
+| 55 | `connection_pools` | `terms/level_08/connection_pools.md` |
+| 56 | `db_transactions` | `terms/level_08/db_transactions.md` |
+| 57 | `migrations` | `terms/level_08/migrations.md` |
+| 58 | `mongoose` | `terms/level_08/mongoose.md` |
+| 59 | `orms_odms` | `terms/level_08/orms_odms.md` |
+| 60 | `parameterized_queries` | `terms/level_08/parameterized_queries.md` |
+| 61 | `prisma_sequelize` | `terms/level_08/prisma_sequelize.md` |
+| 62 | `sql_injection` | `terms/level_08/sql_injection.md` |
+| 63 | `sql_vs_nosql` | `terms/level_08/sql_vs_nosql.md` |
+
+---
+
+## Level 9
+
+| # | Key | File |
+|---|-----|------|
+| 64 | `api_versioning` | `terms/level_09/api_versioning.md` |
+| 65 | `controllers_services` | `terms/level_09/controllers_services.md` |
+| 66 | `cors` | `terms/level_09/cors.md` |
+| 67 | `error_handling_middleware` | `terms/level_09/error_handling_middleware.md` |
+| 68 | `input_validation` | `terms/level_09/input_validation.md` |
+| 69 | `mvc_pattern` | `terms/level_09/mvc_pattern.md` |
+| 70 | `pagination` | `terms/level_09/pagination.md` |
+| 71 | `rate_limiting` | `terms/level_09/rate_limiting.md` |
+| 72 | `rest_api` | `terms/level_09/rest_api.md` |
+| 73 | `status_codes` | `terms/level_09/status_codes.md` |
+
+---
+
+## Level 10
+
+| # | Key | File |
+|---|-----|------|
+| 74 | `bcrypt` | `terms/level_10/bcrypt.md` |
+| 75 | `child_processes` | `terms/level_10/child_processes.md` |
+| 76 | `cluster_module` | `terms/level_10/cluster_module.md` |
+| 77 | `docker` | `terms/level_10/docker.md` |
+| 78 | `env_vars` | `terms/level_10/env_vars.md` |
+| 79 | `graceful_shutdown` | `terms/level_10/graceful_shutdown.md` |
+| 80 | `jwt` | `terms/level_10/jwt.md` |
+| 81 | `load_balancing` | `terms/level_10/load_balancing.md` |
+| 82 | `logging_monitoring` | `terms/level_10/logging_monitoring.md` |
+| 83 | `memory_leaks` | `terms/level_10/memory_leaks.md` |
+| 84 | `pm2` | `terms/level_10/pm2.md` |
+| 85 | `reverse_proxy` | `terms/level_10/reverse_proxy.md` |
+| 86 | `worker_threads` | `terms/level_10/worker_threads.md` |
+

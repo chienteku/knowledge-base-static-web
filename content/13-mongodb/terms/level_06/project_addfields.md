@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Projection (Concept in CRUD)](../../level_03/projection.md) — The whitelisting rules.
+- [Projection (Concept in CRUD)](../level_03/projection.md) — The whitelisting rules.
 
 ---
 
@@ -206,7 +206,7 @@ db.users.aggregate([{ $project: { name: 1, _id: 0 } }]);
 
 ## 7. Related Terms
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Projection (Concept in CRUD)](../../level_03/projection.md) — The whitelisting rules.
+- [Projection (Concept in CRUD)](../level_03/projection.md) — The whitelisting rules.
 
 ---
 

@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Color & Background](../../level_03/color_vs_background.md) — Base color value properties.
+- [Color & Background](../level_03/color_vs_background.md) — Base color value properties.
 
 ---
 
@@ -272,7 +272,7 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 > **Explanation:** `accent-color` applies brand tinting to native interactive form controls.
 
 ## 7. Related Terms
-- [Advanced Pseudo-classes](pseudo_classes_advanced.md) — `:checked` and `:disabled` form selectors.
+- [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — `:checked` and `:disabled` form selectors.
 
 ---
 

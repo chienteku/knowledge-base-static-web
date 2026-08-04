@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Bucket Pattern](../../level_05/outlier_pattern.md) — The manual predecessor template.
+- [The Bucket Pattern](../level_05/outlier_pattern.md) — The manual predecessor template.
 
 ---
 
@@ -227,7 +227,7 @@ Design time-series collections for append-only data ingestion workflows
 
 ## 7. Related Terms
 - [Capped Collections](capped_collections.md) — Circular storage logs.
-- [The Bucket Pattern](../../level_05/outlier_pattern.md) — The manual predecessor template.
+- [The Bucket Pattern](../level_05/outlier_pattern.md) — The manual predecessor template.
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Ownership & Borrowing](../level_01/ownership.md) — Understanding borrow checker rules, aliasing XOR mutability, and lifetime guarantees.
+- [Ownership & Borrowing](../level_03/ownership.md) — Understanding borrow checker rules, aliasing XOR mutability, and lifetime guarantees.
 - [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Basic understanding of raw pointers that bypass borrow checking.
 - [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Understanding what constitutes memory safety violations in compiled Rust binaries.
 

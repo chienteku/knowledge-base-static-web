@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../../level_02/box_model.md) — Sizing boxes that the flow algorithm arranges.
+- [The Box Model](../level_02/box_model.md) — Sizing boxes that the flow algorithm arranges.
 
 ---
 

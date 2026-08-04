@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Inlining (`#[inline]`)](../level_15/inlining.md) — Cross-function and cross-crate code expansion.
-- [Crate (`crate`)](../level_07/crate.md) — Separate compilation units in Rust Cargo builds.
+- [Crate (`crate`)](../level_01/crate.md) — Separate compilation units in Rust Cargo builds.
 
 ---
 
@@ -658,7 +658,7 @@ codegen-units = 1 # Maximum optimization & smallest binary size
 - [Inlining (`#[inline]`)](../level_15/inlining.md) — Cross-crate function expansion mechanism enhanced by LTO.
 - [Release Profile](../level_15/release_profile.md) — Cargo build profile where LTO is configured.
 - [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Core performance philosophy realized via LTO passes.
-- [Crate (`crate`)](../level_07/crate.md) — Compilation units unified by LTO during linking.
+- [Crate (`crate`)](../level_01/crate.md) — Compilation units unified by LTO during linking.
 
 ---
 

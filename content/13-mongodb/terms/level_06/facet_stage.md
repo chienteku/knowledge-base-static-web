@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Document Size Limit (16 MB)](../../level_05/document_size_limit.md) — The output size constraint.
+- [Document Size Limit (16 MB)](../level_05/document_size_limit.md) — The output size constraint.
 
 ---
 
@@ -206,7 +206,7 @@ db.products.aggregate([{ $match: { status: "active" } }, { $facet: { ... } }]);
 
 ## 7. Related Terms
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Document Size Limit (16 MB)](../../level_05/document_size_limit.md) — The size constraint.
+- [Document Size Limit (16 MB)](../level_05/document_size_limit.md) — The size constraint.
 
 ---
 

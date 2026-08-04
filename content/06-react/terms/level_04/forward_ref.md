@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [`useRef` Hook](../level_04/use_ref.md) — The reference container mechanism.
-- [Components](../../level_01/components.md) — The visual boundaries crossed by refs.
+- [Components](../level_01/components.md) — The visual boundaries crossed by refs.
 
 ---
 
@@ -228,7 +228,7 @@ function App() {
 
 ## 7. Related Terms
 - [`useRef` Hook](../level_04/use_ref.md) — The reference object engine used to create refs.
-- [Portals](../../level_07/portals.md) — Porting component nodes outside parent DOM trees.
+- [Portals](../level_07/portals.md) — Porting component nodes outside parent DOM trees.
 
 ---
 

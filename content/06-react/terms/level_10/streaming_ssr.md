@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](../level_10/ssr.md) — The static rendering foundation that streaming improves.
-- [Lazy Loading & Suspense](../../level_08/suspense.md) — The boundary markers used to divide layout sections.
+- [Lazy Loading & Suspense](../level_08/suspense.md) — The boundary markers used to divide layout sections.
 
 ---
 
@@ -226,7 +226,7 @@ export default function LandingPage() {
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](../level_10/ssr.md) — The baseline server rendering pattern.
 - [Hydration](../level_10/hydration.md) — The process that links event handlers to static HTML.
-- [Concurrent Rendering](../../level_08/concurrent_rendering.md) — The prioritizing engine supporting Selective Hydration.
+- [Concurrent Rendering](../level_08/concurrent_rendering.md) — The prioritizing engine supporting Selective Hydration.
 
 ---
 

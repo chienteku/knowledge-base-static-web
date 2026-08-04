@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [`explain()` Method](explain.md) — Verifying execution plan stages.
-- [Projection (CRUD)](../../level_03/projection.md) — Limiting returned fields.
+- [Projection (CRUD)](../level_03/projection.md) — Limiting returned fields.
 
 ---
 

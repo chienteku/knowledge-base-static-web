@@ -2044,7 +2044,7 @@
         },
         {
           "term": "full_text_search",
-          "module": "14-surrealdb",
+          "module": "12-postgres",
           "description": "Query operators."
         }
       ]
@@ -4712,6 +4712,36 @@
           "term": "sdk_error_handling",
           "module": "14-surrealdb",
           "description": "Related concept: SDK Error Handling & Retry Patterns."
+        }
+      ]
+    },
+    "assert_clause": {
+      "file": "terms/level_04/assert_clause.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "14-surrealdb",
+          "term": "event_variables"
+        }
+      ]
+    },
+    "overwrite_keyword": {
+      "file": "terms/level_04/overwrite_keyword.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "14-surrealdb",
+          "term": "data_migrations"
+        }
+      ]
+    },
+    "array_record_links": {
+      "file": "terms/level_05/array_record_links.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "14-surrealdb",
+          "term": "indexing_record_links"
         }
       ]
     }

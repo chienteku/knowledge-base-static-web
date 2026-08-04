@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../../level_01/components.md) — The visual units being tested.
-- [Synthetic Events](../../level_05/synthetic_events.md) — The simulated interactions triggered during tests.
+- [Components](../level_01/components.md) — The visual units being tested.
+- [Synthetic Events](../level_05/synthetic_events.md) — The simulated interactions triggered during tests.
 
 ---
 
@@ -245,8 +245,8 @@ test('dismisses the warning message', () => {
 > **Explanation:** Querying by accessibility roles tests components as screen readers and real users perceive them.
 
 ## 7. Related Terms
-- [Components](../../level_01/components.md) — The visual units being tested.
-- [Synthetic Events](../../level_05/synthetic_events.md) — The event framework simulated in testing environments.
+- [Components](../level_01/components.md) — The visual units being tested.
+- [Synthetic Events](../level_05/synthetic_events.md) — The event framework simulated in testing environments.
 
 ---
 

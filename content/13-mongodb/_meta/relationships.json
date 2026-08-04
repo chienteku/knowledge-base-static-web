@@ -16,7 +16,7 @@
         },
         {
           "term": "managed_services",
-          "module": "13-mongodb",
+          "module": "12-postgres",
           "description": "Relational DB cloud hosting analogies."
         }
       ],
@@ -28,7 +28,7 @@
         },
         {
           "term": "managed_services",
-          "module": "13-mongodb",
+          "module": "12-postgres",
           "description": "Relational equivalents."
         },
         {

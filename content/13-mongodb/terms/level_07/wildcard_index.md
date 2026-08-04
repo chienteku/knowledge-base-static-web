@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation triggers.
-- [The Attribute Pattern](../../level_05/attribute_pattern.md) — The schema pattern alternative.
+- [The Attribute Pattern](../level_05/attribute_pattern.md) — The schema pattern alternative.
 
 ---
 
@@ -230,7 +230,7 @@ Write the MongoDB command to create a wildcard index on the `metrics` subdocumen
 
 ## 7. Related Terms
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
-- [The Attribute Pattern](../../level_05/attribute_pattern.md) — The schema design alternative.
+- [The Attribute Pattern](../level_05/attribute_pattern.md) — The schema design alternative.
 
 ---
 

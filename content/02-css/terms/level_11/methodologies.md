@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../../level_01/selectors.md) — Writing target classes.
-- [Specificity](../../level_01/specificity.md) — Understanding the danger of selector matching weight.
+- [CSS Selectors](../level_01/selectors.md) — Writing target classes.
+- [Specificity](../level_01/specificity.md) — Understanding the danger of selector matching weight.
 
 ---
 

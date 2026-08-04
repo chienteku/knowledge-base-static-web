@@ -325,7 +325,7 @@ A navigation bar that sticks to the top of the browser:
 ## 7. Related Terms
 - [`position: static` vs `relative`](../level_04/position_static_relative.md) — The parent relative settings.
 - [`position: absolute` vs `fixed`](../level_04/position_absolute_fixed.md) — Viewport locked layouts.
-- [`overflow` (hidden, scroll, auto, visible)](../../level_02/overflow.md) — The parent parameters that disable sticky positioning.
+- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent parameters that disable sticky positioning.
 
 ---
 

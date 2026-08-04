@@ -246,7 +246,7 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 
 ## 7. Related Terms
 - [`font-family`](../level_03/font_family.md) — The styling property that applies these fonts.
-- [`@import`](../../level_10/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
+- [`@import`](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Query Filter (Filter Document)](../../level_03/query_filter.md) — The identical syntax schema.
+- [Query Filter (Filter Document)](../level_03/query_filter.md) — The identical syntax schema.
 
 ---
 

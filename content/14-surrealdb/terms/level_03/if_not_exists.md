@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [`CREATE`](create.md) — The parent write statement.
-- [Table](table.md) — The schema container.
+- [Table](../level_01/table.md) — The schema container.
 
 ---
 
@@ -196,7 +196,7 @@ DEFINE INDEX post_title ON posts IF NOT EXISTS COLUMNS title;
 
 ## 7. Related Terms
 - [`CREATE`](create.md) — The parent write statement.
-- [Table](table.md) — The schema container.
+- [Table](../level_01/table.md) — The schema container.
 - [Define Table](../level_04/define_table.md) — Table creation in detail.
 
 ---

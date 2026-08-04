@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Tokens & Lexing](../level_01/tokens.md) — Basic understanding of source code lexical analysis (identifiers, literals, operators, punctuation).
-- [Iterators (`Iterator`)](../level_05/iterator.md) — `TokenStream` implements `IntoIterator`, producing `TokenTree` elements.
+- [Iterators (`Iterator`)](../level_02/iterator.md) — `TokenStream` implements `IntoIterator`, producing `TokenTree` elements.
 
 ---
 

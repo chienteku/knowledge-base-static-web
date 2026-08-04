@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Query Filter (CRUD)](../../level_03/query_filter.md) — The query syntax manipulated.
+- [Query Filter (CRUD)](../level_03/query_filter.md) — The query syntax manipulated.
 - [Authentication & Authorization (SCRAM, RBAC)](auth.md) — The login gate bypassed.
 
 ---
@@ -209,7 +209,7 @@ Use type validation schemas (Zod/Mongoose) to enforce scalar string inputs
 > **Explanation:** Stripping `$` prevents clients from injecting BSON query operators into query filters.
 
 ## 7. Related Terms
-- [Query Filter (CRUD)](../../level_03/query_filter.md) — The query syntax manipulated.
+- [Query Filter (CRUD)](../level_03/query_filter.md) — The query syntax manipulated.
 - [Authentication & Authorization (SCRAM, RBAC)](auth.md) — The database security model.
 
 ---

@@ -189,7 +189,7 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 
 ## 7. Related Terms
 - [Code Splitting & Lazy Loading](../level_08/code_splitting.md) — Dividing the main bundle into lazy-loaded files.
-- [Next.js](../../level_10/nextjs.md) — The meta-framework that automates bundling and route-based code splitting.
+- [Next.js](../level_10/nextjs.md) — The meta-framework that automates bundling and route-based code splitting.
 
 ---
 

@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Grid (Concept) & `display: grid`](../level_05/grid_concept.md) — `gap` only works if the parent container is a Grid or a Flexbox!
+- [CSS Grid (Concept) & `display: grid`](./grid_concept.md) — `gap` only works if the parent container is a Grid or a Flexbox!
 
 ---
 

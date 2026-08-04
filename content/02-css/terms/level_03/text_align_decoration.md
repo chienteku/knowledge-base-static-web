@@ -162,8 +162,8 @@ a {
 > **Explanation:** `text-decoration: none` removes default hyperlink underlines.
 
 ## 7. Related Terms
-- [`display: inline`](../../level_04/display.md) — The display type that `text-align` affects.
-- [Margin](../../level_02/margin.md) — The spacing property used to center boxes rather than inline text.
+- [`display: inline`](../level_04/display.md) — The display type that `text-align` affects.
+- [Margin](../level_02/margin.md) — The spacing property used to center boxes rather than inline text.
 
 ---
 

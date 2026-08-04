@@ -3886,6 +3886,10 @@
           "term": "expression_index",
           "module": "12-postgres",
           "description": "Indexing function calculations."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "search_index"
         }
       ]
     },

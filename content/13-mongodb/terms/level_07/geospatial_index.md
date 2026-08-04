@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Geospatial Queries (`$near`, `$geoWithin`)](../../level_06/geospatial_queries.md) — The parent query commands.
+- [Geospatial Queries (`$near`, `$geoWithin`)](../level_04/geospatial_queries.md) — The parent query commands.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation triggers.
 
 ---
@@ -237,7 +237,7 @@ coordinates: [-74.0060, 40.7128] // Correct [longitude, latitude]
 > **Explanation:** `2dsphere` calculates real-world geodesic Earth distances.
 
 ## 7. Related Terms
-- [Geospatial Queries (`$near`, `$geoWithin`)](../../level_06/geospatial_queries.md) — The query command.
+- [Geospatial Queries (`$near`, `$geoWithin`)](../level_04/geospatial_queries.md) — The query command.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The DDL triggers.
 
 ---

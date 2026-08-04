@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Width / Height](../../level_02/width_height.md) — The core dimensions of the Box Model.
+- [Width / Height](../level_02/width_height.md) — The core dimensions of the Box Model.
 - [Responsive Design (Concept)](responsive_design.md) — Sizing layout blocks relative to device size.
 
 ---
@@ -331,8 +331,8 @@ Fluid image scaling constraint:
 > **Explanation:** `max-width: 65ch` clamps line length for optimal reading ergonomics.
 
 ## 7. Related Terms
-- [Width / Height](../../level_02/width_height.md) — The baseline box sizes.
-- [`overflow`](../../level_02/overflow.md) — The property that handles clips if fixed sizing bounds are breached.
+- [Width / Height](../level_02/width_height.md) — The baseline box sizes.
+- [`overflow`](../level_02/overflow.md) — The property that handles clips if fixed sizing bounds are breached.
 
 ---
 

@@ -204,7 +204,7 @@ Write the SurrealQL queries to:
 
 ## 7. Related Terms
 - [DEFINE INDEX](define_index.md) — The parent index context.
-- [Full-Text Search](../level_09/full_text_search.md) — Query operators.
+- [Full-Text Search](../../../12-postgres/terms/level_10/full_text_search.md) — Query operators.
 
 ---
 

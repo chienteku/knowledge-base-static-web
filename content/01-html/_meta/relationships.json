@@ -654,7 +654,7 @@
         },
         {
           "term": "declaration_files",
-          "module": "01-html",
+          "module": "08-typescript",
           "description": "Like `&nbsp;`, used to bypass the browser's default spacing rules."
         },
         {
@@ -4329,6 +4329,16 @@
           "term": "geolocation",
           "module": "01-html",
           "description": "Related concept: Geolocation API."
+        }
+      ]
+    },
+    "output": {
+      "file": "terms/level_05/output.md",
+      "prerequisites": [],
+      "related": [
+        {
+          "module": "01-html",
+          "term": "progress_meter"
         }
       ]
     }

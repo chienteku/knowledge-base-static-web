@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Command-line interface for managing dependencies from `crates.io`.
-- [Crate (`crate`)](../level_07/crate.md) — Rust compilation unit packaged and published to `crates.io`.
+- [Crate (`crate`)](../level_01/crate.md) — Rust compilation unit packaged and published to `crates.io`.
 - [`docs.rs`](../level_16/docs_rs.md) — Auto-generated documentation platform for `crates.io`.
 
 ---

@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
-- [updateOne() / updateMany()](../../level_03/update.md) — executing updates.
+- [updateOne() / updateMany()](../level_03/update.md) — executing updates.
 
 ---
 
@@ -223,7 +223,7 @@ Write the MongoDB upsert query to log a reading.
 
 ## 7. Related Terms
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
-- [Upsert (`upsert: true`)](../../level_03/upsert.md) — The ingestion operator.
+- [Upsert (`upsert: true`)](../level_03/upsert.md) — The ingestion operator.
 
 ---
 

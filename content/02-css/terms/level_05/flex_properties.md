@@ -263,7 +263,7 @@ How many pixels wide will Box A be on the screen?
 
 ## 7. Related Terms
 - [`display: flex`](../level_05/flex_parent.md) — The parent container.
-- [Shorthand vs Longhand Properties](../../level_01/shorthand_longhand.md) — The combined syntax layout.
+- [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The combined syntax layout.
 
 ---
 

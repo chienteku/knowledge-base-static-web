@@ -252,8 +252,8 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 
 ## 7. Related Terms
 - [Width / Height](../level_02/width_height.md) — The size triggers.
-- [Text Overflow](../../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.
-- [Z-Index](../../level_04/z_index.md) — Layers which can be clipped by overflow settings.
+- [Text Overflow](../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.
+- [Z-Index](../level_04/z_index.md) — Layers which can be clipped by overflow settings.
 
 ---
 

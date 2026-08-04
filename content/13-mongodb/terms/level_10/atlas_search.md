@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Text Index](../../level_07/text_index.md) — The built-in, self-hosted text limits.
+- [Text Index](../level_07/text_index.md) — The built-in, self-hosted text limits.
 
 ---
 
@@ -209,8 +209,8 @@ Write the aggregation pipeline stage utilizing the `$search` operator to search 
 > **Explanation:** `{ $meta: "searchScore" }` projects Lucene relevance scores for ranking results.
 
 ## 7. Related Terms
-- [Text Index](../../level_07/text_index.md) — The built-in, self-hosted text limits.
-- [Aggregation Pipeline](../../level_06/aggregation_pipeline.md) — The aggregation context.
+- [Text Index](../level_07/text_index.md) — The built-in, self-hosted text limits.
+- [Aggregation Pipeline](../level_06/aggregation_pipeline.md) — The aggregation context.
 
 ---
 

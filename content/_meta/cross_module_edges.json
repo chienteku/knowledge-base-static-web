@@ -1,8 +1,16 @@
 {
   "version": 1,
   "updated_at": "2026-08-04",
-  "total_edges": 83,
+  "total_edges": 88,
   "edges": [
+    {
+      "source_term": "whitespace_collapse",
+      "source_module": "01-html",
+      "target_term": "declaration_files",
+      "target_module": "08-typescript",
+      "type": "related",
+      "description": "Like `&nbsp;`, used to bypass the browser's default spacing rules."
+    },
     {
       "source_term": "box_model",
       "source_module": "02-css",
@@ -492,6 +500,29 @@
       "description": "The underlying asynchronous callback runtime wrapper."
     },
     {
+      "source_term": "full_text_search",
+      "source_module": "12-postgres",
+      "target_term": "search_index",
+      "target_module": "14-surrealdb",
+      "type": "related"
+    },
+    {
+      "source_term": "atlas",
+      "source_module": "13-mongodb",
+      "target_term": "managed_services",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational DB cloud hosting analogies."
+    },
+    {
+      "source_term": "atlas",
+      "source_module": "13-mongodb",
+      "target_term": "managed_services",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Relational equivalents."
+    },
+    {
       "source_term": "auth",
       "source_module": "13-mongodb",
       "target_term": "roles_permissions",
@@ -650,6 +681,14 @@
       "target_module": "13-mongodb",
       "type": "prerequisite",
       "description": "Document database models."
+    },
+    {
+      "source_term": "search_index",
+      "source_module": "14-surrealdb",
+      "target_term": "full_text_search",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Query operators."
     },
     {
       "source_term": "surrealdb_vs_postgres_mongo",

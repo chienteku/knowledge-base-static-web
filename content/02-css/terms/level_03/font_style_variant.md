@@ -244,7 +244,7 @@ span { font-variant: small-caps; }
 
 ## 7. Related Terms
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The parent typography properties.
-- [`text-transform`](../../level_07/text_transform.md) — Uppercase/lowercase formatting overrides (different from small-caps).
+- [`text-transform`](../level_07/text_transform.md) — Uppercase/lowercase formatting overrides (different from small-caps).
 
 ---
 

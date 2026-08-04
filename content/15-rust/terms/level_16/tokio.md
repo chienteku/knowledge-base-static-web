@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 - [Async / Await](../level_09/async_await.md) — Rust's async language primitives.
-- [Future Trait](../level_09/future_trait.md) — The core asynchronous trait polled by `tokio`'s reactor.
+- [Future Trait](../level_10/future_trait.md) — The core asynchronous trait polled by `tokio`'s reactor.
 - [Channels (mpsc/oneshot)](../level_09/channels_mpsc_oneshot.md) — Asynchronous synchronization primitives.
 
 ---

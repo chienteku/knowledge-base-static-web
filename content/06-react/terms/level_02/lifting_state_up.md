@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [State](../level_02/state.md) — The dynamic data being shared.
-- [Props](../../level_01/props.md) — The vehicle used to pass state and setters down.
+- [Props](../level_01/props.md) — The vehicle used to pass state and setters down.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — The top-down data flow rules.
 
 ---
@@ -240,8 +240,8 @@ function SyncParent() {
 > **Explanation:** Colocating state minimizes un-necessary parent and sibling re-renders.
 
 ## 7. Related Terms
-- [Prop Drilling](../../level_06/prop_drilling.md) — The code maintainability cost of lifting state too high.
-- [The Context API](../../level_06/context_api.md) — The alternative state sharing mechanism for deeply nested trees.
+- [Prop Drilling](../level_06/prop_drilling.md) — The code maintainability cost of lifting state too high.
+- [The Context API](../level_06/context_api.md) — The alternative state sharing mechanism for deeply nested trees.
 
 ---
 

@@ -261,7 +261,7 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 
 ## 7. Related Terms
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — The parent properties using these colors.
-- [`opacity`](../../level_08/opacity.md) — The alternative way to manage element transparency.
+- [`opacity`](../level_09/opacity.md) — The alternative way to manage element transparency.
 
 ---
 

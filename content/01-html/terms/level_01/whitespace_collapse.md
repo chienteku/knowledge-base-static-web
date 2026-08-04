@@ -205,7 +205,7 @@ Whitespace collapse demonstration showing different source formatting yielding t
 
 ## 7. Related Terms
 - [Nesting](../level_01/nesting.md) — Proper tag structure which relies on source code indentation.
-- [HTML Entities](../../08-typescript/terms/level_11/declaration_files.md) — Like `&nbsp;`, used to bypass the browser's default spacing rules.
+- [HTML Entities](../../../08-typescript/terms/level_11/declaration_files.md) — Like `&nbsp;`, used to bypass the browser's default spacing rules.
 
 ---
 

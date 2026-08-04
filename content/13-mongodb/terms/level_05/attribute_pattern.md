@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling paradigm.
-- [Array Query Operators (`$elemMatch`, `$all`, `$size`)](../../level_04/array_query_operators.md) — Querying array elements.
+- [Array Query Operators (`$elemMatch`, `$all`, `$size`)](../level_04/array_query_operators.md) — Querying array elements.
 
 ---
 
@@ -223,7 +223,7 @@ Write the query to locate all documents where the attribute array `specs` contai
 
 ## 7. Related Terms
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
-- [Array Query Operators (`$elemMatch`, etc.)](../../level_04/array_query_operators.md) — Locking query parameters.
+- [Array Query Operators (`$elemMatch`, etc.)](../level_04/array_query_operators.md) — Locking query parameters.
 
 ---
 

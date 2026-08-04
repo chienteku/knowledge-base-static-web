@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../../level_01/selectors.md) — Target elements in the document.
+- [CSS Selectors](../level_01/selectors.md) — Target elements in the document.
 - [`var()` (CSS Custom Properties)](var.md) — The variables stored inside `:root`.
 
 ---

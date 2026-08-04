@@ -1,125 +1,178 @@
-# HTML Terms: Zero to Hero
+# Html Terms: Zero to Hero
 
-A complete, 95-term curriculum for mastering HTML from the ground up, designed for the modern web.
+> Auto-generated from `_meta/relationships.json`. **Do not edit manually** — run `sync_zero_hero.js --apply` to regenerate.
 
-## Level 1 — The Anatomy of a Webpage
-1. **HTML (HyperText Markup Language)** (html.md)
-2. **Element vs. Tag** (element_vs_tag.md)
-3. **Block-level vs Inline Elements** (block_inline.md)
-4. **Void Elements (Self-closing Tags)** (void_elements.md)
-5. **Attribute** (attribute.md)
-6. **`<!DOCTYPE html>`** (doctype_html.md)
-7. **`<html>`** (html_tag.md)
-8. **`<head>`** (head.md)
-9. **`<body>`** (body.md)
-10. **`<title>`** (title.md)
-11. **Nesting** (nesting.md)
-12. **Whitespace Collapse** (whitespace_collapse.md)
-13. **Comments (`<!-- -->`)** (comments.md)
-14. **URL (Uniform Resource Locator)** (url.md)
+Total terms: **102**
 
-## Level 2 — Text & Content
-15. **Headings (`<h1>` to `<h6>`)** (headings.md)
-16. **`<p>` (Paragraph)** (p.md)
-17. **Blockquote & Cite** (blockquote_cite.md)
-18. **Preformatted Text & Code** (pre_code.md)
-19. **`<a>` (Anchor / Link)** (a.md)
-20. **`href` Attribute** (href.md)
-21. **`<ul>`, `<ol>`, and `<li>` (Lists)** (lists.md)
-22. **`<div>` (Block container)** (div.md)
-23. **`<span>` (Inline container)** (span.md)
-24. **`<strong>` & `<em>`** (strong_em.md)
-25. **Presentational vs Semantic Formatting** (b_i_u_vs_strong_em.md)
-26. **Superscript & Subscript** (sup_sub.md)
-27. **`<br>` & `<hr>`** (br_hr.md)
+---
 
-## Level 3 — Media & Embedding
-28. **`src` Attribute** (src.md)
-29. **`<img>`** (img.md)
-30. **`alt` Attribute** (alt.md)
-31. **`<figure>` & `<figcaption>`** (figure_figcaption.md)
-32. **`<audio>`** (audio.md)
-33. **`<video>`** (video.md)
-34. **`<source>` Element** (source.md)
-35. **`<picture>` & Responsive Images** (picture_responsive.md)
-36. **`<iframe>`** (iframe.md)
+## Level 1
 
-## Level 4 — Tables
-37. **`<table>`** (table.md)
-38. **`<caption>`** (caption.md)
-39. **`<tr>` (Table Row)** (tr.md)
-40. **`<td>` (Table Data)** (td.md)
-41. **`<th>` (Table Header)** (th.md)
-42. **`scope` Attribute (in `<th>`)** (scope.md)
-43. **`colspan` & `rowspan`** (colspan_rowspan.md)
-44. **`<thead>`, `<tbody>`, `<tfoot>`** (thead_tbody_tfoot.md)
+| # | Key | File |
+|---|-----|------|
+| 1 | `attribute` | `terms/level_01/attribute.md` |
+| 2 | `block_inline` | `terms/level_01/block_inline.md` |
+| 3 | `body` | `terms/level_01/body.md` |
+| 4 | `comments` | `terms/level_01/comments.md` |
+| 5 | `doctype_html` | `terms/level_01/doctype_html.md` |
+| 6 | `element_vs_tag` | `terms/level_01/element_vs_tag.md` |
+| 7 | `head` | `terms/level_01/head.md` |
+| 8 | `html` | `terms/level_01/html.md` |
+| 9 | `html_tag` | `terms/level_01/html_tag.md` |
+| 10 | `nesting` | `terms/level_01/nesting.md` |
+| 11 | `url` | `terms/level_01/url.md` |
+| 12 | `void_elements` | `terms/level_01/void_elements.md` |
+| 13 | `whitespace_collapse` | `terms/level_01/whitespace_collapse.md` |
 
-## Level 5 — Forms & User Input
-45. **`<form>`** (form.md)
-46. **`action` & `method` Attributes** (action_method.md)
-47. **`<input>`** (input.md)
-48. **`placeholder` Attribute** (placeholder.md)
-49. **`value` Attribute (in Form Fields)** (value.md)
-50. **`name` Attribute (in Form Fields)** (name.md)
-51. **`<input type="radio">` & `<input type="checkbox">`** (radio_checkbox.md)
-52. **`<label>`** (label.md)
-53. **`<button>`** (button.md)
-54. **`<select>` & `<option>`** (select_option.md)
-55. **`<textarea>`** (textarea.md)
+---
 
-## Level 6 — Semantic HTML5
-56. **Semantic HTML** (semantic_html.md)
-57. **`<header>`** (header.md)
-58. **`<nav>`** (nav.md)
-59. **`<main>`** (main.md)
-60. **`<article>` & `<section>`** (article_section.md)
-61. **`<aside>`** (aside.md)
-62. **`<footer>`** (footer.md)
-63. **`<address>`** (address.md)
-64. **Heading Hierarchy & Document Outline** (heading_hierarchy.md)
-65. **`<details>` & `<summary>`** (details_summary.md)
-66. **`<time>` & `datetime` Attribute** (time_datetime.md)
-67. **`<mark>`** (mark.md)
+## Level 2
 
-## Level 7 — Global Attributes
-68. **`id` Attribute** (id.md)
-69. **`class` Attribute** (class.md)
-70. **`style` Attribute** (style.md)
-71. **`title` Attribute** (title.md)
-72. **`lang` Attribute** (lang.md)
-73. **`tabindex` Attribute** (tabindex.md)
-74. **`data-*` Attributes** (data_attributes.md)
+| # | Key | File |
+|---|-----|------|
+| 14 | `a` | `terms/level_02/a.md` |
+| 15 | `b_i_u_vs_strong_em` | `terms/level_02/b_i_u_vs_strong_em.md` |
+| 16 | `blockquote_cite` | `terms/level_02/blockquote_cite.md` |
+| 17 | `br_hr` | `terms/level_02/br_hr.md` |
+| 18 | `div` | `terms/level_02/div.md` |
+| 19 | `headings` | `terms/level_02/headings.md` |
+| 20 | `href` | `terms/level_02/href.md` |
+| 21 | `lists` | `terms/level_02/lists.md` |
+| 22 | `p` | `terms/level_02/p.md` |
+| 23 | `pre_code` | `terms/level_02/pre_code.md` |
+| 24 | `span` | `terms/level_02/span.md` |
+| 25 | `strong_em` | `terms/level_02/strong_em.md` |
+| 26 | `sup_sub` | `terms/level_02/sup_sub.md` |
 
-## Level 8 — Metadata, SEO & Head
-75. **`<meta>`** (meta.md)
-76. **Character Encoding (`charset`)** (character_encoding.md)
-77. **Open Graph Tags (`og:`)** (open_graph.md)
-78. **`<link>`** (link.md)
-79. **Favicon** (favicon.md)
-80. **`<base>` Element** (base.md)
-81. **`<style>` Element** (style_tag.md)
-82. **`<script>`** (script.md)
-83. **`defer` & `async` (Script Loading Strategies)** (defer_async.md)
-84. **`<noscript>`** (noscript.md)
+---
 
-## Level 9 — DOM & Rendering
-85. **DOM (Document Object Model)** (dom.md)
-86. **The Tree Structure** (tree_structure.md)
-87. **Critical Rendering Path** (critical_rendering_path.md)
-88. **Render-Blocking Resources** (render_blocking.md)
-89. **HTML Entities** (html_entities.md)
-90. **Accessibility (a11y) Fundamentals** (accessibility_fundamentals.md)
-91. **ARIA Attributes** (aria_attributes.md)
-92. **SEO Fundamentals for HTML** (seo_fundamentals.md)
+## Level 3
 
-## Level 10 — Advanced Features, APIS & Web Components
-93. **`<canvas>`** (canvas.md)
-94. **`<svg>` (Scalable Vector Graphics)** (svg.md)
-95. **Web Storage (Local/Session Storage)** (web_storage.md)
-96. **`<dialog>` Element** (dialog.md)
-97. **HTML Drag and Drop API** (drag_drop.md)
-98. **Geolocation API** (geolocation.md)
-99. **`<map>` & `<area>` Elements** (map_area.md)
-100. **`<progress>` & `<meter>` Elements** (progress_meter.md)
-101. **HTML Security Best Practices** (security.md)
-102. **Web Components (`<template>`, `<slot>`)** (web_components.md)
+| # | Key | File |
+|---|-----|------|
+| 27 | `alt` | `terms/level_03/alt.md` |
+| 28 | `audio` | `terms/level_03/audio.md` |
+| 29 | `figure_figcaption` | `terms/level_03/figure_figcaption.md` |
+| 30 | `iframe` | `terms/level_03/iframe.md` |
+| 31 | `img` | `terms/level_03/img.md` |
+| 32 | `picture_responsive` | `terms/level_03/picture_responsive.md` |
+| 33 | `source` | `terms/level_03/source.md` |
+| 34 | `src` | `terms/level_03/src.md` |
+| 35 | `video` | `terms/level_03/video.md` |
+
+---
+
+## Level 4
+
+| # | Key | File |
+|---|-----|------|
+| 36 | `caption` | `terms/level_04/caption.md` |
+| 37 | `colspan_rowspan` | `terms/level_04/colspan_rowspan.md` |
+| 38 | `scope` | `terms/level_04/scope.md` |
+| 39 | `table` | `terms/level_04/table.md` |
+| 40 | `td` | `terms/level_04/td.md` |
+| 41 | `th` | `terms/level_04/th.md` |
+| 42 | `thead_tbody_tfoot` | `terms/level_04/thead_tbody_tfoot.md` |
+| 43 | `tr` | `terms/level_04/tr.md` |
+
+---
+
+## Level 5
+
+| # | Key | File |
+|---|-----|------|
+| 44 | `action_method` | `terms/level_05/action_method.md` |
+| 45 | `button` | `terms/level_05/button.md` |
+| 46 | `form` | `terms/level_05/form.md` |
+| 47 | `input` | `terms/level_05/input.md` |
+| 48 | `label` | `terms/level_05/label.md` |
+| 49 | `name` | `terms/level_05/name.md` |
+| 50 | `output` | `terms/level_05/output.md` |
+| 51 | `placeholder` | `terms/level_05/placeholder.md` |
+| 52 | `radio_checkbox` | `terms/level_05/radio_checkbox.md` |
+| 53 | `select_option` | `terms/level_05/select_option.md` |
+| 54 | `textarea` | `terms/level_05/textarea.md` |
+| 55 | `value` | `terms/level_05/value.md` |
+
+---
+
+## Level 6
+
+| # | Key | File |
+|---|-----|------|
+| 56 | `address` | `terms/level_06/address.md` |
+| 57 | `article_section` | `terms/level_06/article_section.md` |
+| 58 | `aside` | `terms/level_06/aside.md` |
+| 59 | `details_summary` | `terms/level_06/details_summary.md` |
+| 60 | `footer` | `terms/level_06/footer.md` |
+| 61 | `header` | `terms/level_06/header.md` |
+| 62 | `heading_hierarchy` | `terms/level_06/heading_hierarchy.md` |
+| 63 | `main` | `terms/level_06/main.md` |
+| 64 | `mark` | `terms/level_06/mark.md` |
+| 65 | `nav` | `terms/level_06/nav.md` |
+| 66 | `semantic_html` | `terms/level_06/semantic_html.md` |
+| 67 | `time_datetime` | `terms/level_06/time_datetime.md` |
+
+---
+
+## Level 7
+
+| # | Key | File |
+|---|-----|------|
+| 68 | `class` | `terms/level_07/class.md` |
+| 69 | `data_attributes` | `terms/level_07/data_attributes.md` |
+| 70 | `id` | `terms/level_07/id.md` |
+| 71 | `lang` | `terms/level_07/lang.md` |
+| 72 | `style` | `terms/level_07/style.md` |
+| 73 | `tabindex` | `terms/level_07/tabindex.md` |
+| 74 | `title` | `terms/level_07/title.md` |
+
+---
+
+## Level 8
+
+| # | Key | File |
+|---|-----|------|
+| 75 | `base` | `terms/level_08/base.md` |
+| 76 | `character_encoding` | `terms/level_08/character_encoding.md` |
+| 77 | `defer_async` | `terms/level_08/defer_async.md` |
+| 78 | `favicon` | `terms/level_08/favicon.md` |
+| 79 | `link` | `terms/level_08/link.md` |
+| 80 | `meta` | `terms/level_08/meta.md` |
+| 81 | `noscript` | `terms/level_08/noscript.md` |
+| 82 | `open_graph` | `terms/level_08/open_graph.md` |
+| 83 | `script` | `terms/level_08/script.md` |
+| 84 | `style_tag` | `terms/level_08/style_tag.md` |
+
+---
+
+## Level 9
+
+| # | Key | File |
+|---|-----|------|
+| 85 | `accessibility_fundamentals` | `terms/level_09/accessibility_fundamentals.md` |
+| 86 | `aria_attributes` | `terms/level_09/aria_attributes.md` |
+| 87 | `critical_rendering_path` | `terms/level_09/critical_rendering_path.md` |
+| 88 | `dom` | `terms/level_09/dom.md` |
+| 89 | `html_entities` | `terms/level_09/html_entities.md` |
+| 90 | `render_blocking` | `terms/level_09/render_blocking.md` |
+| 91 | `seo_fundamentals` | `terms/level_09/seo_fundamentals.md` |
+| 92 | `tree_structure` | `terms/level_09/tree_structure.md` |
+
+---
+
+## Level 10
+
+| # | Key | File |
+|---|-----|------|
+| 93 | `canvas` | `terms/level_10/canvas.md` |
+| 94 | `dialog` | `terms/level_10/dialog.md` |
+| 95 | `drag_drop` | `terms/level_10/drag_drop.md` |
+| 96 | `geolocation` | `terms/level_10/geolocation.md` |
+| 97 | `map_area` | `terms/level_10/map_area.md` |
+| 98 | `progress_meter` | `terms/level_10/progress_meter.md` |
+| 99 | `security` | `terms/level_10/security.md` |
+| 100 | `svg` | `terms/level_10/svg.md` |
+| 101 | `web_components` | `terms/level_10/web_components.md` |
+| 102 | `web_storage` | `terms/level_10/web_storage.md` |
+

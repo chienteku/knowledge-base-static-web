@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Aggregation Pipeline](../../level_06/aggregation_pipeline.md) — The defining query format.
-- [View (PostgreSQL)](../../../12-postgres/terms/level_06/view.md) — Relational view abstractions.
+- [Aggregation Pipeline](../level_06/aggregation_pipeline.md) — The defining query format.
+- [View (PostgreSQL)](../../../12-postgres/terms/level_09/view.md) — Relational view abstractions.
 
 ---
 
@@ -216,8 +216,8 @@ Index underlying source collection fields or build Materialized Views via $merge
 > **Explanation:** On-demand views compute results dynamically; materialized views cache results on disk.
 
 ## 7. Related Terms
-- [Aggregation Pipeline](../../level_06/aggregation_pipeline.md) — The defining query format.
-- [View (PostgreSQL)](../../../12-postgres/terms/level_06/view.md) — Relational views.
+- [Aggregation Pipeline](../level_06/aggregation_pipeline.md) — The defining query format.
+- [View (PostgreSQL)](../../../12-postgres/terms/level_09/view.md) — Relational views.
 
 ---
 

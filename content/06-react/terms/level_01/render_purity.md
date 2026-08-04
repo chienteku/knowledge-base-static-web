@@ -277,9 +277,9 @@ function SortedList({ numbers }) {
 > **Explanation:** Double rendering in development exposes mutations and side-effects executed during render.
 
 ## 7. Related Terms
-- [Side Effects](../../level_03/side_effects.md) — The operations that must be isolated from render execution.
-- [Strict Mode](../../level_08/strict_mode.md) — A React utility that runs components twice in development to catch purity bugs.
-- [useEffect](../../level_03/use_effect.md) — The React hook used to execute side effects safely.
+- [Side Effects](../level_03/side_effects.md) — The operations that must be isolated from render execution.
+- [Strict Mode](../level_08/strict_mode.md) — A React utility that runs components twice in development to catch purity bugs.
+- [useEffect](../level_03/use_effect.md) — The React hook used to execute side effects safely.
 
 ---
 

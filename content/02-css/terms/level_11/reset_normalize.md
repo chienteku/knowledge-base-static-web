@@ -6,8 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Cascade](../../level_01/the_cascade.md) — Overwriting default rules.
-- [`box-sizing: border-box`](../../level_02/box_sizing.md) — The core layout adjustment.
+- [The Cascade](../level_01/the_cascade.md) — Overwriting default rules.
+- [`box-sizing: border-box`](../level_02/box_sizing.md) — The core layout adjustment.
 
 ---
 
@@ -233,7 +233,7 @@ HTML structure index file loading order:
 
 ## 7. Related Terms
 - [`@import`](import.md) — Loading modular sheets.
-- [`box-sizing: border-box`](../../level_02/box_sizing.md) — Sizing layouts easily.
+- [`box-sizing: border-box`](../level_02/box_sizing.md) — Sizing layouts easily.
 
 ---
 

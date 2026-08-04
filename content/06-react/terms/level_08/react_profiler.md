@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [React DevTools](../level_08/react_devtools.md) — The browser extension containing the Profiler tool interface.
-- [Re-rendering](../../level_02/re_rendering.md) — What the Profiler measures.
+- [Re-rendering](../level_02/re_rendering.md) — What the Profiler measures.
 
 ---
 

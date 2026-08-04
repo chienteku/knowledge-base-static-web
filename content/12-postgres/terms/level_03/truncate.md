@@ -188,7 +188,7 @@ It takes over 2 minutes to execute, slowing down your deployment pipeline. Refac
 
 ## 7. Related Terms
 - [`DELETE`](delete.md) — The DML row-filtering deletion command.
-- [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — Managing table lifecycles.
+- [`CREATE TABLE` / `DROP TABLE`](../level_01/create_drop_table.md) — Managing table lifecycles.
 
 ---
 

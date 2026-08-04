@@ -231,7 +231,7 @@ function SearchBar() {
 > **Explanation:** Single `useId()` calls support suffix formatting for related DOM accessibility attributes.
 
 ## 7. Related Terms
-- [Hydration](../../level_10/hydration.md) — The SSR startup process where server-client IDs must match.
+- [Hydration](../level_10/hydration.md) — The SSR startup process where server-client IDs must match.
 - [Rules of Hooks](../level_04/rules_of_hooks.md) — The structural laws governing hook calls.
 
 ---

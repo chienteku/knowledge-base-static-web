@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 - [MongoDB](mongodb.md) — The parent database engine hosted in the cloud.
-- [Managed PostgreSQL Services](../../12-postgres/terms/level_10/managed_services.md) — Relational DB cloud hosting analogies.
+- [Managed PostgreSQL Services](../../../12-postgres/terms/level_10/managed_services.md) — Relational DB cloud hosting analogies.
 
 ---
 
@@ -174,7 +174,7 @@ Upgrade to M10+ dedicated cluster tier for load testing and production
 
 ## 7. Related Terms
 - [`mongod` (MongoDB Server Daemon)](mongod.md) — The cloud hosted engine.
-- [Managed PostgreSQL Services](../../12-postgres/terms/level_10/managed_services.md) — Relational equivalents.
+- [Managed PostgreSQL Services](../../../12-postgres/terms/level_10/managed_services.md) — Relational equivalents.
 
 ---
 

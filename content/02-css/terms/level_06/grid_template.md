@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Grid (Concept) & `display: grid`](../level_05/grid_concept.md) — The parent container trigger that activates Grid math.
+- [CSS Grid (Concept) & `display: grid`](./grid_concept.md) — The parent container trigger that activates Grid math.
 
 ---
 
@@ -323,7 +323,7 @@ A standard 3-column card grid:
 > **Explanation:** `grid-template` shorthand combines `rows / columns`.
 
 ## 7. Related Terms
-- [CSS Grid (Concept) & `display: grid`](../level_05/grid_concept.md) — The parent trigger.
+- [CSS Grid (Concept) & `display: grid`](./grid_concept.md) — The parent trigger.
 - [`fr` Unit (Fractional Unit)](../level_06/fr_unit.md) — The flexible track sizing unit.
 - [`grid-column` / `grid-row` (Grid Item Placement)](../level_06/grid_item.md) — Positioning children on the grid lines.
 

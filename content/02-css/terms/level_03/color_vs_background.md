@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../../level_02/box_model.md) — It helps to understand that `background-color` fills the Padding and Content layers of the box.
+- [The Box Model](../level_02/box_model.md) — It helps to understand that `background-color` fills the Padding and Content layers of the box.
 - [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — The formats used to declare CSS colors.
 
 ---
@@ -170,7 +170,7 @@ div { background-color: #222; color: #fff; } /* High contrast ratio */
 ## 7. Related Terms
 - [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — Color notation formats.
 - [`background` Shorthand & `background-image`](../level_03/background_shorthand.md) — Advanced background styling.
-- [`opacity`](../../level_08/opacity.md) — Another way to adjust the transparency of colors.
+- [`opacity`](../level_09/opacity.md) — Another way to adjust the transparency of colors.
 
 ---
 

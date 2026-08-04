@@ -2987,6 +2987,21 @@
           "description": "The built-in React 18 hook that integrates stores with React state."
         }
       ]
+    },
+    "use_action_state": {
+      "file": "terms/level_10/use_action_state.md",
+      "prerequisites": [
+        {
+          "module": "06-react",
+          "term": "use_state"
+        }
+      ],
+      "related": [
+        {
+          "module": "06-react",
+          "term": "server_actions"
+        }
+      ]
     }
   }
 }

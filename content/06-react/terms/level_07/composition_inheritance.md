@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../../level_01/components.md) — The modular elements being combined.
+- [Components](../level_01/components.md) — The modular elements being combined.
 - [Children Prop](../level_07/children_prop.md) — The primary mechanism enabling element nesting.
 
 ---
