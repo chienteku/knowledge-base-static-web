@@ -1,0 +1,2755 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "08-typescript",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "static_dynamic_typing": {
+      "level": 1,
+      "file": "terms/level_01/static_dynamic_typing.md",
+      "display_name": "Static Typing vs Dynamic Typing",
+      "prerequisites": [
+        {
+          "term": "typescript",
+          "module": "08-typescript",
+          "description": "The language that brings Static Typing to the web."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "How TypeScript gives you Static Typing without forcing you to manually type everything."
+        },
+        {
+          "term": "typescript",
+          "module": "08-typescript",
+          "description": "The language implementation."
+        }
+      ]
+    },
+    "structural_typing": {
+      "level": 1,
+      "file": "terms/level_01/structural_typing.md",
+      "display_name": "Structural Typing / Duck Typing",
+      "prerequisites": [
+        {
+          "term": "typescript",
+          "module": "08-typescript",
+          "description": "The language introduction."
+        },
+        {
+          "term": "static_dynamic_typing",
+          "module": "08-typescript",
+          "description": "The difference between compile-time and runtime checks."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "Defining structured object shapes."
+        },
+        {
+          "term": "generic_constraints",
+          "module": "08-typescript",
+          "description": "Restricting generics based on structural shapes."
+        },
+        {
+          "term": "implements",
+          "module": "08-typescript",
+          "description": "Asserting that a class shape matches an interface."
+        },
+        {
+          "term": "branded_nominal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Branded / Nominal Types."
+        }
+      ]
+    },
+    "tsc": {
+      "level": 1,
+      "file": "terms/level_01/tsc.md",
+      "display_name": "The TypeScript Compiler (`tsc`)",
+      "prerequisites": [
+        {
+          "term": "typescript",
+          "module": "08-typescript",
+          "description": "The language that `tsc` compiles."
+        }
+      ],
+      "related": [
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "The configuration file that tells `tsc` exactly how to behave."
+        },
+        {
+          "term": "typescript",
+          "module": "08-typescript",
+          "description": "The language syntax `tsc` parses."
+        }
+      ]
+    },
+    "tsconfig": {
+      "level": 1,
+      "file": "terms/level_01/tsconfig.md",
+      "display_name": "`tsconfig.json`",
+      "prerequisites": [
+        {
+          "term": "tsc",
+          "module": "08-typescript",
+          "description": "The engine that reads this configuration file."
+        }
+      ],
+      "related": [
+        {
+          "term": "tsc",
+          "module": "08-typescript",
+          "description": "The tool that reads this file."
+        },
+        {
+          "term": "strict_mode",
+          "module": "08-typescript",
+          "description": "The specific flag that determines the quality of your entire project."
+        },
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "Related concept: Declaration Files (`.d.ts`)."
+        },
+        {
+          "term": "definitely_typed",
+          "module": "08-typescript",
+          "description": "Related concept: DefinitelyTyped."
+        },
+        {
+          "term": "module_resolution",
+          "module": "08-typescript",
+          "description": "Related concept: Module Resolution & Path Aliases."
+        }
+      ]
+    },
+    "type_inference": {
+      "level": 1,
+      "file": "terms/level_01/type_inference.md",
+      "display_name": "Type Inference",
+      "prerequisites": [
+        {
+          "term": "static_dynamic_typing",
+          "module": "08-typescript",
+          "description": "The system that Inference is optimizing."
+        },
+        {
+          "term": "tsc",
+          "module": "08-typescript",
+          "description": "The engine doing the guessing."
+        }
+      ],
+      "related": [
+        {
+          "term": "static_dynamic_typing",
+          "module": "08-typescript",
+          "description": "What is happening under the hood."
+        },
+        {
+          "term": "any",
+          "module": "08-typescript",
+          "description": "What happens when inference fails."
+        },
+        {
+          "term": "type_widening",
+          "module": "08-typescript",
+          "description": "Related concept: Type Widening."
+        },
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "Related concept: Primitive Types."
+        },
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "Related concept: Function Types."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Literal Types."
+        },
+        {
+          "term": "returntype",
+          "module": "08-typescript",
+          "description": "Related concept: `ReturnType<T>`."
+        }
+      ]
+    },
+    "type_widening": {
+      "level": 1,
+      "file": "terms/level_01/type_widening.md",
+      "display_name": "Type Widening",
+      "prerequisites": [
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "How the compiler determines types when they are not explicitly declared."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "Custom types representing exact primitive values."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "The mechanism that triggers widening."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The specific types that are widened."
+        },
+        {
+          "term": "const_assertions",
+          "module": "08-typescript",
+          "description": "The syntax used to opt-out of widening on objects and arrays."
+        },
+        {
+          "term": "satisfies_operator",
+          "module": "08-typescript",
+          "description": "Related concept: `satisfies` Operator."
+        }
+      ]
+    },
+    "typescript": {
+      "level": 1,
+      "file": "terms/level_01/typescript.md",
+      "display_name": "TypeScript",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "tsc",
+          "module": "08-typescript",
+          "description": "The engine that strips the types away."
+        },
+        {
+          "term": "static_dynamic_typing",
+          "module": "08-typescript",
+          "description": "The fundamental difference between TS and JS."
+        }
+      ]
+    },
+    "any": {
+      "level": 2,
+      "file": "terms/level_02/any.md",
+      "display_name": "`any`",
+      "prerequisites": [
+        {
+          "term": "static_dynamic_typing",
+          "module": "08-typescript",
+          "description": "`any` reverts the code back to Dynamic Typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "unknown",
+          "module": "08-typescript",
+          "description": "The type-safe, modern replacement for `any`."
+        },
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "When inference fails, TS defaults to `any` (if strict mode is off)."
+        },
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Related concept: Type Assertions (`as`)."
+        },
+        {
+          "term": "strict_mode",
+          "module": "08-typescript",
+          "description": "Related concept: Strict Mode."
+        }
+      ]
+    },
+    "arrays_tuples": {
+      "level": 2,
+      "file": "terms/level_02/arrays_tuples.md",
+      "display_name": "Arrays & Tuples",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "What is usually placed inside these lists."
+        }
+      ],
+      "related": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "The building blocks of arrays."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "Used to allow multiple different types inside a single array."
+        },
+        {
+          "term": "rest_parameters",
+          "module": "08-typescript",
+          "description": "Related concept: Rest Parameters (`...`)."
+        }
+      ]
+    },
+    "null_undefined_strict": {
+      "level": 2,
+      "file": "terms/level_02/null_undefined_strict.md",
+      "display_name": "`null`, `undefined` & `strictNullChecks`",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "The basic values of JavaScript."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "Representing no return or unreachable code."
+        }
+      ],
+      "related": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "Basic data types."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "The other non-value types."
+        },
+        {
+          "term": "strict_mode",
+          "module": "08-typescript",
+          "description": "The setting that turns on strict null checking."
+        },
+        {
+          "term": "non_null_assertion",
+          "module": "08-typescript",
+          "description": "Related concept: Non-null Assertion Operator (`!`)."
+        }
+      ]
+    },
+    "primitive_types": {
+      "level": 2,
+      "file": "terms/level_02/primitive_types.md",
+      "display_name": "Primitive Types",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "03-javascript",
+          "description": "The runtime types these annotations protect."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "Why you rarely need to write primitive type annotations."
+        },
+        {
+          "term": "arrays_tuples",
+          "module": "08-typescript",
+          "description": "How to group primitives together."
+        },
+        {
+          "term": "null_undefined_strict",
+          "module": "08-typescript",
+          "description": "Related concept: `null`, `undefined` & `strictNullChecks`."
+        }
+      ]
+    },
+    "unknown": {
+      "level": 2,
+      "file": "terms/level_02/unknown.md",
+      "display_name": "`unknown`",
+      "prerequisites": [
+        {
+          "term": "any",
+          "module": "08-typescript",
+          "description": "The dangerous type that `unknown` was designed to replace."
+        }
+      ],
+      "related": [
+        {
+          "term": "any",
+          "module": "08-typescript",
+          "description": "The chaotic equivalent of `unknown`."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The process of unlocking an `unknown` variable."
+        }
+      ]
+    },
+    "void_never": {
+      "level": 2,
+      "file": "terms/level_02/void_never.md",
+      "display_name": "`void` & `never`",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "Where `void` is heavily used."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "Exhaustive checks using `never` rely on this."
+        },
+        {
+          "term": "null_undefined_strict",
+          "module": "08-typescript",
+          "description": "Related concept: `null`, `undefined` & `strictNullChecks`."
+        },
+        {
+          "term": "discriminated_unions",
+          "module": "08-typescript",
+          "description": "Related concept: Discriminated Unions."
+        },
+        {
+          "term": "exhaustiveness_checking",
+          "module": "08-typescript",
+          "description": "Related concept: Exhaustiveness Checking (`never`)."
+        }
+      ]
+    },
+    "declaration_merging": {
+      "level": 3,
+      "file": "terms/level_03/declaration_merging.md",
+      "display_name": "Declaration Merging",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The fundamental contract for object shapes."
+        },
+        {
+          "term": "type_aliases",
+          "module": "08-typescript",
+          "description": "Creating names for custom union/intersection shapes."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The extensible objects contract."
+        },
+        {
+          "term": "type_aliases",
+          "module": "08-typescript",
+          "description": "Non-mergable type naming structures."
+        },
+        {
+          "term": "namespaces",
+          "module": "08-typescript",
+          "description": "Extensible namespace scopes."
+        }
+      ]
+    },
+    "excess_property_checks": {
+      "level": 3,
+      "file": "terms/level_03/excess_property_checks.md",
+      "display_name": "Excess Property Checks",
+      "prerequisites": [
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "Enforcing structural requirements."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "Extensible type contracts."
+        }
+      ],
+      "related": [
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "Base objects structures."
+        },
+        {
+          "term": "index_signatures",
+          "module": "08-typescript",
+          "description": "Defining interfaces with dynamic key contracts."
+        },
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Overriding compiler type decisions."
+        }
+      ]
+    },
+    "index_signatures": {
+      "level": 3,
+      "file": "terms/level_03/index_signatures.md",
+      "display_name": "Index Signatures",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The structure this syntax is used within."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "Where index signatures live."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The `Record` type is the generic equivalent of this."
+        },
+        {
+          "term": "excess_property_checks",
+          "module": "08-typescript",
+          "description": "Related concept: Excess Property Checks."
+        },
+        {
+          "term": "record",
+          "module": "08-typescript",
+          "description": "Related concept: `Record<Keys, Type>`."
+        }
+      ]
+    },
+    "interfaces": {
+      "level": 3,
+      "file": "terms/level_03/interfaces.md",
+      "display_name": "Interfaces",
+      "prerequisites": [
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "The concept that Interfaces abstract."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_aliases",
+          "module": "08-typescript",
+          "description": "The alternative way to name a type."
+        },
+        {
+          "term": "implements",
+          "module": "08-typescript",
+          "description": "How Classes use Interfaces to enforce their own shape."
+        },
+        {
+          "term": "structural_typing",
+          "module": "08-typescript",
+          "description": "Related concept: Structural Typing / Duck Typing."
+        },
+        {
+          "term": "declaration_merging",
+          "module": "08-typescript",
+          "description": "Related concept: Declaration Merging."
+        },
+        {
+          "term": "index_signatures",
+          "module": "08-typescript",
+          "description": "Related concept: Index Signatures."
+        },
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "Related concept: Object Types."
+        },
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "Related concept: Optional Properties (`?`)."
+        },
+        {
+          "term": "readonly",
+          "module": "08-typescript",
+          "description": "Related concept: Readonly Properties (`readonly`)."
+        },
+        {
+          "term": "this_typing",
+          "module": "08-typescript",
+          "description": "Related concept: `this` Typing in Functions."
+        },
+        {
+          "term": "intersection_types",
+          "module": "08-typescript",
+          "description": "Related concept: Intersection Types (`&`)."
+        },
+        {
+          "term": "abstract_classes",
+          "module": "08-typescript",
+          "description": "Related concept: Abstract Classes."
+        },
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "Related concept: Declaration Files (`.d.ts`)."
+        }
+      ]
+    },
+    "object_types": {
+      "level": 3,
+      "file": "terms/level_03/object_types.md",
+      "display_name": "Object Types",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "The types usually found inside the object properties."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The best way to abstract and reuse Object Types."
+        },
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "How to make object properties non-mandatory."
+        },
+        {
+          "term": "excess_property_checks",
+          "module": "08-typescript",
+          "description": "Related concept: Excess Property Checks."
+        }
+      ]
+    },
+    "optional_properties": {
+      "level": 3,
+      "file": "terms/level_03/optional_properties.md",
+      "display_name": "Optional Properties (`?`)",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "Where optional properties are usually defined."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The parent structure."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "How you safely interact with an optional property."
+        },
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "Related concept: Object Types."
+        },
+        {
+          "term": "optional_default_parameters",
+          "module": "08-typescript",
+          "description": "Related concept: Optional & Default Parameters."
+        },
+        {
+          "term": "partial_required",
+          "module": "08-typescript",
+          "description": "Related concept: `Partial<T>` & `Required<T>`."
+        }
+      ]
+    },
+    "readonly": {
+      "level": 3,
+      "file": "terms/level_03/readonly.md",
+      "display_name": "Readonly Properties (`readonly`)",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "Where `readonly` is usually applied."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The main place `readonly` is used."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "Where the `Readonly<T>` global helper lives."
+        }
+      ]
+    },
+    "function_overloads": {
+      "level": 4,
+      "file": "terms/level_04/function_overloads.md",
+      "display_name": "Function Overloads",
+      "prerequisites": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The standard way to type functions."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The underlying mechanic that handles the implementation."
+        }
+      ],
+      "related": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "What you are overloading."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "What you use inside the implementation body."
+        }
+      ]
+    },
+    "function_types": {
+      "level": 4,
+      "file": "terms/level_04/function_types.md",
+      "display_name": "Function Types",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "What is usually passed into functions."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "Specific return types for functions."
+        }
+      ],
+      "related": [
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "What you return when a function doesn't return data."
+        },
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "Why you don't always need to explicitly write the return type."
+        },
+        {
+          "term": "function_overloads",
+          "module": "08-typescript",
+          "description": "Related concept: Function Overloads."
+        },
+        {
+          "term": "optional_default_parameters",
+          "module": "08-typescript",
+          "description": "Related concept: Optional & Default Parameters."
+        },
+        {
+          "term": "rest_parameters",
+          "module": "08-typescript",
+          "description": "Related concept: Rest Parameters (`...`)."
+        },
+        {
+          "term": "this_typing",
+          "module": "08-typescript",
+          "description": "Related concept: `this` Typing in Functions."
+        },
+        {
+          "term": "returntype",
+          "module": "08-typescript",
+          "description": "Related concept: `ReturnType<T>`."
+        }
+      ]
+    },
+    "optional_default_parameters": {
+      "level": 4,
+      "file": "terms/level_04/optional_default_parameters.md",
+      "display_name": "Optional & Default Parameters",
+      "prerequisites": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The syntax these modify."
+        },
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "The exact same `?` syntax, but for interfaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The parent topic."
+        },
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "How `?` works inside objects."
+        },
+        {
+          "term": "default_generics",
+          "module": "08-typescript",
+          "description": "Related concept: Generic Default Types (`=`)."
+        }
+      ]
+    },
+    "rest_parameters": {
+      "level": 4,
+      "file": "terms/level_04/rest_parameters.md",
+      "display_name": "Rest Parameters (`...`)",
+      "prerequisites": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The context where rest parameters are used."
+        },
+        {
+          "term": "arrays_tuples",
+          "module": "08-typescript",
+          "description": "The type you must apply to a rest parameter."
+        }
+      ],
+      "related": [
+        {
+          "term": "arrays_tuples",
+          "module": "08-typescript",
+          "description": "The type required for Rest parameters."
+        },
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The parent topic."
+        }
+      ]
+    },
+    "this_typing": {
+      "level": 4,
+      "file": "terms/level_04/this_typing.md",
+      "display_name": "`this` Typing in Functions",
+      "prerequisites": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The parent topic."
+        },
+        {
+          "term": "this_keyword",
+          "module": "03-javascript",
+          "description": "The notoriously confusing JS feature being typed."
+        }
+      ],
+      "related": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "Standard function typing."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "What you usually bind `this` to."
+        }
+      ]
+    },
+    "intersection_types": {
+      "level": 5,
+      "file": "terms/level_05/intersection_types.md",
+      "display_name": "Intersection Types (`&`)",
+      "prerequisites": [
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The exact opposite concept."
+        },
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "What Intersection Types are almost exclusively used for."
+        }
+      ],
+      "related": [
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The OR operator."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The alternative way to combine object shapes (using `extends`)."
+        },
+        {
+          "term": "branded_nominal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Branded / Nominal Types."
+        }
+      ]
+    },
+    "literal_types": {
+      "level": 5,
+      "file": "terms/level_05/literal_types.md",
+      "display_name": "Literal Types",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "Literal types are ultra-specific versions of primitives."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "Literal types are almost always combined using Unions."
+        }
+      ],
+      "related": [
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The glue that makes Literal Types useful."
+        },
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "How TS decides between a string and a literal string."
+        },
+        {
+          "term": "type_widening",
+          "module": "08-typescript",
+          "description": "Related concept: Type Widening."
+        },
+        {
+          "term": "discriminated_unions",
+          "module": "08-typescript",
+          "description": "Related concept: Discriminated Unions."
+        },
+        {
+          "term": "template_literal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Template Literal Types."
+        },
+        {
+          "term": "enums",
+          "module": "08-typescript",
+          "description": "Related concept: Enums."
+        }
+      ]
+    },
+    "non_null_assertion": {
+      "level": 5,
+      "file": "terms/level_05/non_null_assertion.md",
+      "display_name": "Non-null Assertion Operator (`!`)",
+      "prerequisites": [
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Overriding default compile-time type resolution."
+        },
+        {
+          "term": "null_undefined_strict",
+          "module": "08-typescript",
+          "description": "Safety constraints on empty values."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Overriding default types."
+        },
+        {
+          "term": "null_undefined_strict",
+          "module": "08-typescript",
+          "description": "The safety setting that necessitates assertions."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The safe, conditional method to unpack values."
+        },
+        {
+          "term": "assertion_functions",
+          "module": "08-typescript",
+          "description": "Related concept: Assertion Functions (`asserts`)."
+        }
+      ]
+    },
+    "satisfies_operator": {
+      "level": 5,
+      "file": "terms/level_05/satisfies_operator.md",
+      "display_name": "`satisfies` Operator",
+      "prerequisites": [
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Overriding default types."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "Specific values as types."
+        },
+        {
+          "term": "type_widening",
+          "module": "08-typescript",
+          "description": "How types lose specific literal definitions."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Overriding default compile type checking."
+        },
+        {
+          "term": "const_assertions",
+          "module": "08-typescript",
+          "description": "Making object properties readonly literals."
+        },
+        {
+          "term": "type_widening",
+          "module": "08-typescript",
+          "description": "The process that `satisfies` avoids."
+        }
+      ]
+    },
+    "type_aliases": {
+      "level": 5,
+      "file": "terms/level_05/type_aliases.md",
+      "display_name": "Type Aliases (`type`)",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The other way to name types."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "A structure that `type` can handle, but `interface` cannot."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The alternative naming syntax for objects."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The primary reason you need `type` aliases."
+        },
+        {
+          "term": "declaration_merging",
+          "module": "08-typescript",
+          "description": "Related concept: Declaration Merging."
+        },
+        {
+          "term": "generic_interfaces_classes",
+          "module": "08-typescript",
+          "description": "Related concept: Generic Interfaces & Classes."
+        }
+      ]
+    },
+    "type_assertions": {
+      "level": 5,
+      "file": "terms/level_05/type_assertions.md",
+      "display_name": "Type Assertions (`as`)",
+      "prerequisites": [
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "The system you are forcefully overriding."
+        }
+      ],
+      "related": [
+        {
+          "term": "any",
+          "module": "08-typescript",
+          "description": "The type you should never assert to."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The safe, runtime-checked alternative to blindly asserting types."
+        },
+        {
+          "term": "excess_property_checks",
+          "module": "08-typescript",
+          "description": "Related concept: Excess Property Checks."
+        },
+        {
+          "term": "non_null_assertion",
+          "module": "08-typescript",
+          "description": "Related concept: Non-null Assertion Operator (`!`)."
+        },
+        {
+          "term": "satisfies_operator",
+          "module": "08-typescript",
+          "description": "Related concept: `satisfies` Operator."
+        },
+        {
+          "term": "branded_nominal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Branded / Nominal Types."
+        },
+        {
+          "term": "const_assertions",
+          "module": "08-typescript",
+          "description": "Related concept: Const Assertions (`as const`)."
+        }
+      ]
+    },
+    "union_types": {
+      "level": 5,
+      "file": "terms/level_05/union_types.md",
+      "display_name": "Union Types (`|`)",
+      "prerequisites": [
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "The building blocks often used inside Unions."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "How you safely interact with a Union Type."
+        }
+      ],
+      "related": [
+        {
+          "term": "intersection_types",
+          "module": "08-typescript",
+          "description": "The exact opposite (AND instead of OR)."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The mandatory step required to actually *use* Union types safely."
+        },
+        {
+          "term": "arrays_tuples",
+          "module": "08-typescript",
+          "description": "Related concept: Arrays & Tuples."
+        },
+        {
+          "term": "function_overloads",
+          "module": "08-typescript",
+          "description": "Related concept: Function Overloads."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Literal Types."
+        },
+        {
+          "term": "type_aliases",
+          "module": "08-typescript",
+          "description": "Related concept: Type Aliases (`type`)."
+        },
+        {
+          "term": "exclude_extract_nonnullable",
+          "module": "08-typescript",
+          "description": "Related concept: `Exclude` / `Extract` / `NonNullable`."
+        },
+        {
+          "term": "pick_omit",
+          "module": "08-typescript",
+          "description": "Related concept: `Pick<T>` & `Omit<T>`."
+        },
+        {
+          "term": "record",
+          "module": "08-typescript",
+          "description": "Related concept: `Record<Keys, Type>`."
+        }
+      ]
+    },
+    "assertion_functions": {
+      "level": 6,
+      "file": "terms/level_06/assertion_functions.md",
+      "display_name": "Assertion Functions (`asserts`)",
+      "prerequisites": [
+        {
+          "term": "custom_type_guards",
+          "module": "08-typescript",
+          "description": "Narrowing types via boolean checks (`is`)."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The process of refining union types inside code blocks."
+        }
+      ],
+      "related": [
+        {
+          "term": "custom_type_guards",
+          "module": "08-typescript",
+          "description": "The boolean version of type narrowing."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The core process of refining types."
+        },
+        {
+          "term": "non_null_assertion",
+          "module": "08-typescript",
+          "description": "Direct, line-level null type bypass."
+        }
+      ]
+    },
+    "custom_type_guards": {
+      "level": 6,
+      "file": "terms/level_06/custom_type_guards.md",
+      "display_name": "Custom Type Guards (`is`)",
+      "prerequisites": [
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "What this custom guard achieves."
+        },
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "Where the `is` keyword is placed."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "What this function achieves."
+        },
+        {
+          "term": "in_operator",
+          "module": "08-typescript",
+          "description": "Often used inside the body of a Custom Type Guard."
+        },
+        {
+          "term": "assertion_functions",
+          "module": "08-typescript",
+          "description": "Related concept: Assertion Functions (`asserts`)."
+        }
+      ]
+    },
+    "discriminated_unions": {
+      "level": 6,
+      "file": "terms/level_06/discriminated_unions.md",
+      "display_name": "Discriminated Unions",
+      "prerequisites": [
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The structure being narrowed."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The properties used as the discriminant."
+        }
+      ],
+      "related": [
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The building blocks of the discriminant."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "`never` is used in the `default` case of a Discriminated Union switch statement for exhaustive checking."
+        },
+        {
+          "term": "exhaustiveness_checking",
+          "module": "08-typescript",
+          "description": "Related concept: Exhaustiveness Checking (`never`)."
+        },
+        {
+          "term": "in_operator",
+          "module": "08-typescript",
+          "description": "Related concept: `in` Operator Narrowing."
+        }
+      ]
+    },
+    "exhaustiveness_checking": {
+      "level": 6,
+      "file": "terms/level_06/exhaustiveness_checking.md",
+      "display_name": "Exhaustiveness Checking (`never`)",
+      "prerequisites": [
+        {
+          "term": "discriminated_unions",
+          "module": "08-typescript",
+          "description": "Objects with a shared literal tag."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "The type representing unreachable states."
+        }
+      ],
+      "related": [
+        {
+          "term": "discriminated_unions",
+          "module": "08-typescript",
+          "description": "The type format that exhaustiveness checks protect."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "The structural types representing emptiness."
+        },
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The process of reducing union types."
+        }
+      ]
+    },
+    "in_operator": {
+      "level": 6,
+      "file": "terms/level_06/in_operator.md",
+      "display_name": "`in` Operator Narrowing",
+      "prerequisites": [
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The process this operator triggers."
+        },
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "The structures being narrowed."
+        }
+      ],
+      "related": [
+        {
+          "term": "typeof_instanceof",
+          "module": "08-typescript",
+          "description": "The alternative guards for primitives and classes."
+        },
+        {
+          "term": "discriminated_unions",
+          "module": "08-typescript",
+          "description": "A more powerful pattern that often replaces the `in` operator."
+        },
+        {
+          "term": "custom_type_guards",
+          "module": "08-typescript",
+          "description": "Related concept: Custom Type Guards (`is`)."
+        }
+      ]
+    },
+    "type_narrowing": {
+      "level": 6,
+      "file": "terms/level_06/type_narrowing.md",
+      "display_name": "Type Narrowing",
+      "prerequisites": [
+        {
+          "term": "unknown",
+          "module": "08-typescript",
+          "description": "Another broad type that strictly requires narrowing before use."
+        }
+      ],
+      "related": [
+        {
+          "term": "typeof_instanceof",
+          "module": "08-typescript",
+          "description": "The most common tools used to achieve narrowing."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The types that require narrowing."
+        },
+        {
+          "term": "unknown",
+          "module": "08-typescript",
+          "description": "Related concept: `unknown`."
+        },
+        {
+          "term": "void_never",
+          "module": "08-typescript",
+          "description": "Related concept: `void` & `never`."
+        },
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "Related concept: Optional Properties (`?`)."
+        },
+        {
+          "term": "non_null_assertion",
+          "module": "08-typescript",
+          "description": "Related concept: Non-null Assertion Operator (`!`)."
+        },
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "Related concept: Type Assertions (`as`)."
+        },
+        {
+          "term": "assertion_functions",
+          "module": "08-typescript",
+          "description": "Related concept: Assertion Functions (`asserts`)."
+        },
+        {
+          "term": "custom_type_guards",
+          "module": "08-typescript",
+          "description": "Related concept: Custom Type Guards (`is`)."
+        },
+        {
+          "term": "exhaustiveness_checking",
+          "module": "08-typescript",
+          "description": "Related concept: Exhaustiveness Checking (`never`)."
+        }
+      ]
+    },
+    "typeof_instanceof": {
+      "level": 6,
+      "file": "terms/level_06/typeof_instanceof.md",
+      "display_name": "`typeof` & `instanceof` Guards",
+      "prerequisites": [
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The process these operators trigger."
+        },
+        {
+          "term": "primitive_types",
+          "module": "08-typescript",
+          "description": "What `typeof` checks."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_narrowing",
+          "module": "08-typescript",
+          "description": "The goal of using these operators."
+        },
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The structures `instanceof` works with."
+        },
+        {
+          "term": "in_operator",
+          "module": "08-typescript",
+          "description": "Related concept: `in` Operator Narrowing."
+        }
+      ]
+    },
+    "default_generics": {
+      "level": 7,
+      "file": "terms/level_07/default_generics.md",
+      "display_name": "Generic Default Types (`=`)",
+      "prerequisites": [
+        {
+          "term": "generic_interfaces_classes",
+          "module": "08-typescript",
+          "description": "Where defaults are most commonly used."
+        },
+        {
+          "term": "optional_default_parameters",
+          "module": "08-typescript",
+          "description": "The exact same concept, but for data instead of Types."
+        }
+      ],
+      "related": [
+        {
+          "term": "optional_default_parameters",
+          "module": "08-typescript",
+          "description": "The runtime equivalent of this compile-time feature."
+        },
+        {
+          "term": "generic_constraints",
+          "module": "08-typescript",
+          "description": "The other modifier applied inside `<...>`."
+        }
+      ]
+    },
+    "generic_constraints": {
+      "level": 7,
+      "file": "terms/level_07/generic_constraints.md",
+      "display_name": "Generic Constraints (`extends`)",
+      "prerequisites": [
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "The base syntax being constrained."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "What is usually used to define the constraint shape."
+        }
+      ],
+      "related": [
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "The parent topic."
+        },
+        {
+          "term": "multiple_generics",
+          "module": "08-typescript",
+          "description": "You can constrain multiple generics simultaneously."
+        },
+        {
+          "term": "structural_typing",
+          "module": "08-typescript",
+          "description": "Related concept: Structural Typing / Duck Typing."
+        },
+        {
+          "term": "default_generics",
+          "module": "08-typescript",
+          "description": "Related concept: Generic Default Types (`=`)."
+        }
+      ]
+    },
+    "generic_interfaces_classes": {
+      "level": 7,
+      "file": "terms/level_07/generic_interfaces_classes.md",
+      "display_name": "Generic Interfaces & Classes",
+      "prerequisites": [
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "The core concept."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "One of the structures being made generic."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_aliases",
+          "module": "08-typescript",
+          "description": "Can also be Generic (`type MyType<T> = ...`)."
+        },
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The OOP structures being made generic."
+        }
+      ]
+    },
+    "generics": {
+      "level": 7,
+      "file": "terms/level_07/generics.md",
+      "display_name": "Generics Overview (`<T>`)",
+      "prerequisites": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "Generics are most often used to make functions dynamic."
+        },
+        {
+          "term": "type_aliases",
+          "module": "08-typescript",
+          "description": "The structures that often receive Generics."
+        }
+      ],
+      "related": [
+        {
+          "term": "generic_constraints",
+          "module": "08-typescript",
+          "description": "How to limit what `T` can be."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "All utility types are just Generic Type Aliases!"
+        },
+        {
+          "term": "conditional_types",
+          "module": "08-typescript",
+          "description": "Related concept: Conditional Types."
+        }
+      ]
+    },
+    "multiple_generics": {
+      "level": 7,
+      "file": "terms/level_07/multiple_generics.md",
+      "display_name": "Multiple Generics",
+      "prerequisites": [
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "The base syntax."
+        },
+        {
+          "term": "generic_constraints",
+          "module": "08-typescript",
+          "description": "Often used to link multiple generics together."
+        }
+      ],
+      "related": [
+        {
+          "term": "keyof",
+          "module": "08-typescript",
+          "description": "The operator used to link `K extends keyof T`."
+        },
+        {
+          "term": "generic_constraints",
+          "module": "08-typescript",
+          "description": "How you relate `U` to `T`."
+        }
+      ]
+    },
+    "exclude_extract_nonnullable": {
+      "level": 8,
+      "file": "terms/level_08/exclude_extract_nonnullable.md",
+      "display_name": "`Exclude` / `Extract` / `NonNullable`",
+      "prerequisites": [
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The baseline standard utility overview."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "Custom combined type options."
+        }
+      ],
+      "related": [
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The target data structures."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The collection of standard helper definitions."
+        },
+        {
+          "term": "conditional_types",
+          "module": "08-typescript",
+          "description": "The type checking logic that powers union filtering."
+        },
+        {
+          "term": "key_remapping_mapped_types",
+          "module": "08-typescript",
+          "description": "Related concept: Key Remapping in Mapped Types (`as`)."
+        }
+      ]
+    },
+    "parameters_awaited": {
+      "level": 8,
+      "file": "terms/level_08/parameters_awaited.md",
+      "display_name": "`Parameters` / `ConstructorParameters` / `Awaited`",
+      "prerequisites": [
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The baseline standard utility overview."
+        },
+        {
+          "term": "returntype",
+          "module": "08-typescript",
+          "description": "Extracting return types from functions."
+        }
+      ],
+      "related": [
+        {
+          "term": "returntype",
+          "module": "08-typescript",
+          "description": "Extracting outputs of functions."
+        },
+        {
+          "term": "infer",
+          "module": "08-typescript",
+          "description": "The mechanism enabling parameter capture."
+        },
+        {
+          "term": "conditional_types",
+          "module": "08-typescript",
+          "description": "The underlying type branching logic."
+        }
+      ]
+    },
+    "partial_required": {
+      "level": 8,
+      "file": "terms/level_08/partial_required.md",
+      "display_name": "`Partial<T>` & `Required<T>`",
+      "prerequisites": [
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The core concept."
+        },
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "The `?` syntax these utilities add or remove."
+        }
+      ],
+      "related": [
+        {
+          "term": "optional_properties",
+          "module": "08-typescript",
+          "description": "What `Partial` applies."
+        },
+        {
+          "term": "pick_omit",
+          "module": "08-typescript",
+          "description": "The other half of the object utility toolkit."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "Related concept: Utility Types Overview."
+        },
+        {
+          "term": "mapped_types",
+          "module": "08-typescript",
+          "description": "Related concept: Mapped Types."
+        }
+      ]
+    },
+    "pick_omit": {
+      "level": 8,
+      "file": "terms/level_08/pick_omit.md",
+      "display_name": "`Pick<T>` & `Omit<T>`",
+      "prerequisites": [
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The core concept."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "How you specify which keys to pick or omit."
+        }
+      ],
+      "related": [
+        {
+          "term": "partial_required",
+          "module": "08-typescript",
+          "description": "The utilities that modify the `?` flag instead of the properties themselves."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "What you use to pass multiple keys into Pick/Omit (e.g. `\"id\" | \"name\"`)."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "Related concept: Utility Types Overview."
+        }
+      ]
+    },
+    "record": {
+      "level": 8,
+      "file": "terms/level_08/record.md",
+      "display_name": "`Record<Keys, Type>`",
+      "prerequisites": [
+        {
+          "term": "index_signatures",
+          "module": "08-typescript",
+          "description": "The raw syntax that `Record` abstracts away."
+        },
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "Often used as the `Keys` in a Record."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_signatures",
+          "module": "08-typescript",
+          "description": "The raw syntax equivalent to `Record<string, Type>`."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "What you pass into `Record` to enforce specific keys."
+        },
+        {
+          "term": "mapped_types",
+          "module": "08-typescript",
+          "description": "Related concept: Mapped Types."
+        }
+      ]
+    },
+    "returntype": {
+      "level": 8,
+      "file": "terms/level_08/returntype.md",
+      "display_name": "`ReturnType<T>`",
+      "prerequisites": [
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The core concept."
+        },
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "The specific type of data this utility operates on."
+        },
+        {
+          "term": "typeof",
+          "module": "03-javascript",
+          "description": "Often used in conjunction with this utility."
+        }
+      ],
+      "related": [
+        {
+          "term": "function_types",
+          "module": "08-typescript",
+          "description": "What `ReturnType` analyzes."
+        },
+        {
+          "term": "type_inference",
+          "module": "08-typescript",
+          "description": "The engine powering this utility. `ReturnType` extracts whatever the engine inferred."
+        },
+        {
+          "term": "infer",
+          "module": "08-typescript",
+          "description": "The underlying syntax used to build `ReturnType`."
+        },
+        {
+          "term": "parameters_awaited",
+          "module": "08-typescript",
+          "description": "Sibling utilities that extract parameters and Promise contents."
+        }
+      ]
+    },
+    "utility_types": {
+      "level": 8,
+      "file": "terms/level_08/utility_types.md",
+      "display_name": "Utility Types Overview",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "What you are usually modifying."
+        },
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "The `<T>` syntax used to pass inputs into Utility Types."
+        }
+      ],
+      "related": [
+        {
+          "term": "partial_required",
+          "module": "08-typescript",
+          "description": "Modifying optional flags."
+        },
+        {
+          "term": "pick_omit",
+          "module": "08-typescript",
+          "description": "Slicing object shapes."
+        },
+        {
+          "term": "index_signatures",
+          "module": "08-typescript",
+          "description": "Related concept: Index Signatures."
+        },
+        {
+          "term": "readonly",
+          "module": "08-typescript",
+          "description": "Related concept: Readonly Properties (`readonly`)."
+        },
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "Related concept: Generics Overview (`<T>`)."
+        },
+        {
+          "term": "exclude_extract_nonnullable",
+          "module": "08-typescript",
+          "description": "Related concept: `Exclude` / `Extract` / `NonNullable`."
+        },
+        {
+          "term": "conditional_types",
+          "module": "08-typescript",
+          "description": "Related concept: Conditional Types."
+        }
+      ]
+    },
+    "branded_nominal_types": {
+      "level": 9,
+      "file": "terms/level_09/branded_nominal_types.md",
+      "display_name": "Branded / Nominal Types",
+      "prerequisites": [
+        {
+          "term": "structural_typing",
+          "module": "08-typescript",
+          "description": "The default shape-matching system."
+        },
+        {
+          "term": "intersection_types",
+          "module": "08-typescript",
+          "description": "Combining multiple type shapes together."
+        }
+      ],
+      "related": [
+        {
+          "term": "structural_typing",
+          "module": "08-typescript",
+          "description": "The default matching system that branding limits."
+        },
+        {
+          "term": "intersection_types",
+          "module": "08-typescript",
+          "description": "The operator used to combine the primitive and the brand."
+        },
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "The casting syntax used to brand values."
+        }
+      ]
+    },
+    "conditional_types": {
+      "level": 9,
+      "file": "terms/level_09/conditional_types.md",
+      "display_name": "Conditional Types",
+      "prerequisites": [
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "Conditional Types are almost exclusively used with Generics."
+        },
+        {
+          "term": "generic_constraints",
+          "module": "08-typescript",
+          "description": "The `extends` keyword is used as the evaluation condition."
+        }
+      ],
+      "related": [
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "Many advanced utilities (`Exclude`, `Extract`, `ReturnType`) are built entirely on Conditional Types."
+        },
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "The inputs to a Conditional Type."
+        },
+        {
+          "term": "infer",
+          "module": "08-typescript",
+          "description": "Capturing dynamic types inside conditional statements."
+        },
+        {
+          "term": "exclude_extract_nonnullable",
+          "module": "08-typescript",
+          "description": "Related concept: `Exclude` / `Extract` / `NonNullable`."
+        },
+        {
+          "term": "parameters_awaited",
+          "module": "08-typescript",
+          "description": "Related concept: `Parameters` / `ConstructorParameters` / `Awaited`."
+        }
+      ]
+    },
+    "indexed_access": {
+      "level": 9,
+      "file": "terms/level_09/indexed_access.md",
+      "display_name": "Indexed Access Types",
+      "prerequisites": [
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "The structures you are accessing properties from."
+        }
+      ],
+      "related": [
+        {
+          "term": "keyof",
+          "module": "08-typescript",
+          "description": "Often used inside the brackets of an Indexed Access Type to dynamically grab all property types (e.g., `User[keyof User]`)."
+        }
+      ]
+    },
+    "infer": {
+      "level": 9,
+      "file": "terms/level_09/infer.md",
+      "display_name": "The `infer` Keyword",
+      "prerequisites": [
+        {
+          "term": "conditional_types",
+          "module": "08-typescript",
+          "description": "The type-level `if/else` checks."
+        },
+        {
+          "term": "generics",
+          "module": "08-typescript",
+          "description": "Parametric type declarations."
+        }
+      ],
+      "related": [
+        {
+          "term": "conditional_types",
+          "module": "08-typescript",
+          "description": "The ternary structure that hosts `infer`."
+        },
+        {
+          "term": "returntype",
+          "module": "08-typescript",
+          "description": "The utility type powered by `infer`."
+        },
+        {
+          "term": "parameters_awaited",
+          "module": "08-typescript",
+          "description": "Standard library utilities built using `infer`."
+        }
+      ]
+    },
+    "key_remapping_mapped_types": {
+      "level": 9,
+      "file": "terms/level_09/key_remapping_mapped_types.md",
+      "display_name": "Key Remapping in Mapped Types (`as`)",
+      "prerequisites": [
+        {
+          "term": "mapped_types",
+          "module": "08-typescript",
+          "description": "Iterating over object keys to create new types."
+        },
+        {
+          "term": "template_literal_types",
+          "module": "08-typescript",
+          "description": "Rebuilding string patterns in type space."
+        }
+      ],
+      "related": [
+        {
+          "term": "mapped_types",
+          "module": "08-typescript",
+          "description": "The loop mechanism that `as` extends."
+        },
+        {
+          "term": "template_literal_types",
+          "module": "08-typescript",
+          "description": "Constructing the renamed key strings."
+        },
+        {
+          "term": "exclude_extract_nonnullable",
+          "module": "08-typescript",
+          "description": "The basic set operation logic."
+        }
+      ]
+    },
+    "keyof": {
+      "level": 9,
+      "file": "terms/level_09/keyof.md",
+      "display_name": "`keyof` Operator",
+      "prerequisites": [
+        {
+          "term": "object_types",
+          "module": "08-typescript",
+          "description": "What this operator reads from."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "The output format this operator generates."
+        }
+      ],
+      "related": [
+        {
+          "term": "typeof",
+          "module": "03-javascript",
+          "description": "Used alongside `keyof` to read JS objects."
+        },
+        {
+          "term": "mapped_types",
+          "module": "08-typescript",
+          "description": "The advanced feature that relies entirely on `keyof`."
+        },
+        {
+          "term": "multiple_generics",
+          "module": "08-typescript",
+          "description": "Related concept: Multiple Generics."
+        },
+        {
+          "term": "indexed_access",
+          "module": "08-typescript",
+          "description": "Related concept: Indexed Access Types."
+        },
+        {
+          "term": "template_literal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Template Literal Types."
+        },
+        {
+          "term": "typeof",
+          "module": "08-typescript",
+          "description": "Related concept: `typeof` Operator."
+        }
+      ]
+    },
+    "mapped_types": {
+      "level": 9,
+      "file": "terms/level_09/mapped_types.md",
+      "display_name": "Mapped Types",
+      "prerequisites": [
+        {
+          "term": "keyof",
+          "module": "08-typescript",
+          "description": "The iterator used to pull the keys."
+        },
+        {
+          "term": "index_signatures",
+          "module": "08-typescript",
+          "description": "The base syntax of a Mapped Type."
+        },
+        {
+          "term": "utility_types",
+          "module": "08-typescript",
+          "description": "The output of Mapped Types."
+        }
+      ],
+      "related": [
+        {
+          "term": "partial_required",
+          "module": "08-typescript",
+          "description": "Utility types powered entirely by Mapped Types."
+        },
+        {
+          "term": "record",
+          "module": "08-typescript",
+          "description": "A utility type built on a Mapped Type."
+        },
+        {
+          "term": "key_remapping_mapped_types",
+          "module": "08-typescript",
+          "description": "Related concept: Key Remapping in Mapped Types (`as`)."
+        },
+        {
+          "term": "keyof",
+          "module": "08-typescript",
+          "description": "Related concept: `keyof` Operator."
+        },
+        {
+          "term": "template_literal_types",
+          "module": "08-typescript",
+          "description": "Related concept: Template Literal Types."
+        }
+      ]
+    },
+    "template_literal_types": {
+      "level": 9,
+      "file": "terms/level_09/template_literal_types.md",
+      "display_name": "Template Literal Types",
+      "prerequisites": [
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "Base primitive values as types."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "Iterative collections of options."
+        }
+      ],
+      "related": [
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The primitive values that build templates."
+        },
+        {
+          "term": "mapped_types",
+          "module": "08-typescript",
+          "description": "Using literal keys to rebuild object definitions."
+        },
+        {
+          "term": "keyof",
+          "module": "08-typescript",
+          "description": "Extracting keys to feed into template transformations."
+        },
+        {
+          "term": "key_remapping_mapped_types",
+          "module": "08-typescript",
+          "description": "Related concept: Key Remapping in Mapped Types (`as`)."
+        }
+      ]
+    },
+    "typeof": {
+      "level": 9,
+      "file": "terms/level_09/typeof.md",
+      "display_name": "`typeof` Operator",
+      "prerequisites": [
+        {
+          "term": "typeof",
+          "module": "03-javascript",
+          "description": "The runtime version of this keyword."
+        }
+      ],
+      "related": [
+        {
+          "term": "keyof",
+          "module": "08-typescript",
+          "description": "Often combined with `typeof` to extract a union of all keys from a JavaScript object (`type Keys = keyof typeof myConfig`)."
+        }
+      ]
+    },
+    "abstract_classes": {
+      "level": 10,
+      "file": "terms/level_10/abstract_classes.md",
+      "display_name": "Abstract Classes",
+      "prerequisites": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The standard class structure."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "A similar concept used for blueprinting."
+        }
+      ],
+      "related": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The zero-cost alternative for pure shape blueprinting."
+        },
+        {
+          "term": "implements",
+          "module": "08-typescript",
+          "description": "How you apply an Interface to a class (similar to how you `extends` an abstract class)."
+        }
+      ]
+    },
+    "access_modifiers": {
+      "level": 10,
+      "file": "terms/level_10/access_modifiers.md",
+      "display_name": "Access Modifiers (`public`, `private`, `protected`)",
+      "prerequisites": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The structure these modifiers attach to."
+        },
+        {
+          "term": "class",
+          "module": "03-javascript",
+          "description": "The runtime equivalent of `private`."
+        }
+      ],
+      "related": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "Where these modifiers live."
+        },
+        {
+          "term": "parameter_properties",
+          "module": "08-typescript",
+          "description": "A shorthand trick using these exact keywords."
+        },
+        {
+          "term": "decorators",
+          "module": "08-typescript",
+          "description": "Related concept: Decorators."
+        },
+        {
+          "term": "static_members",
+          "module": "08-typescript",
+          "description": "Related concept: Static Members."
+        }
+      ]
+    },
+    "classes": {
+      "level": 10,
+      "file": "terms/level_10/classes.md",
+      "display_name": "Classes Overview",
+      "prerequisites": [
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The alternative to Classes for defining object shapes."
+        },
+        {
+          "term": "class",
+          "module": "03-javascript",
+          "description": "The runtime feature TypeScript is building upon."
+        }
+      ],
+      "related": [
+        {
+          "term": "access_modifiers",
+          "module": "08-typescript",
+          "description": "The `private`/`public` keywords added to TS classes."
+        },
+        {
+          "term": "implements",
+          "module": "08-typescript",
+          "description": "How to force a Class to obey an Interface."
+        },
+        {
+          "term": "typeof_instanceof",
+          "module": "08-typescript",
+          "description": "Related concept: `typeof` & `instanceof` Guards."
+        },
+        {
+          "term": "generic_interfaces_classes",
+          "module": "08-typescript",
+          "description": "Related concept: Generic Interfaces & Classes."
+        },
+        {
+          "term": "decorators",
+          "module": "08-typescript",
+          "description": "Related concept: Decorators."
+        },
+        {
+          "term": "parameter_properties",
+          "module": "08-typescript",
+          "description": "Related concept: Parameter Properties."
+        }
+      ]
+    },
+    "decorators": {
+      "level": 10,
+      "file": "terms/level_10/decorators.md",
+      "display_name": "Decorators",
+      "prerequisites": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The blueprints of object structures."
+        },
+        {
+          "term": "parameter_properties",
+          "module": "08-typescript",
+          "description": "Declaring fields inside constructor arguments."
+        }
+      ],
+      "related": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The structures decorated."
+        },
+        {
+          "term": "access_modifiers",
+          "module": "08-typescript",
+          "description": "Visibility bounds of fields."
+        },
+        {
+          "term": "static_members",
+          "module": "08-typescript",
+          "description": "Class-level properties."
+        }
+      ]
+    },
+    "implements": {
+      "level": 10,
+      "file": "terms/level_10/implements.md",
+      "display_name": "`implements` Keyword",
+      "prerequisites": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The structure making the promise."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The blueprint being promised."
+        }
+      ],
+      "related": [
+        {
+          "term": "abstract_classes",
+          "module": "08-typescript",
+          "description": "The alternative way to mandate class structure (using `extends` instead of `implements`)."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "What is being implemented."
+        },
+        {
+          "term": "structural_typing",
+          "module": "08-typescript",
+          "description": "The type assignment paradigm that permits this behavior."
+        },
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "Related concept: Classes Overview."
+        }
+      ]
+    },
+    "parameter_properties": {
+      "level": 10,
+      "file": "terms/level_10/parameter_properties.md",
+      "display_name": "Parameter Properties",
+      "prerequisites": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The standard, verbose way of initializing properties."
+        },
+        {
+          "term": "access_modifiers",
+          "module": "08-typescript",
+          "description": "The keywords required to trigger this shorthand."
+        }
+      ],
+      "related": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The parent topic."
+        },
+        {
+          "term": "access_modifiers",
+          "module": "08-typescript",
+          "description": "The trigger for this feature."
+        }
+      ]
+    },
+    "static_members": {
+      "level": 10,
+      "file": "terms/level_10/static_members.md",
+      "display_name": "Static Members",
+      "prerequisites": [
+        {
+          "term": "classes",
+          "module": "08-typescript",
+          "description": "The foundation of Object-Oriented Programming."
+        }
+      ],
+      "related": [
+        {
+          "term": "access_modifiers",
+          "module": "08-typescript",
+          "description": "Used alongside `static` to control who can view or modify the static data."
+        },
+        {
+          "term": "decorators",
+          "module": "08-typescript",
+          "description": "Related concept: Decorators."
+        }
+      ]
+    },
+    "const_assertions": {
+      "level": 11,
+      "file": "terms/level_11/const_assertions.md",
+      "display_name": "Const Assertions (`as const`)",
+      "prerequisites": [
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The specific, exact types that `as const` generates."
+        },
+        {
+          "term": "enums",
+          "module": "08-typescript",
+          "description": "The legacy feature that `as const` is rapidly replacing."
+        }
+      ],
+      "related": [
+        {
+          "term": "type_assertions",
+          "module": "08-typescript",
+          "description": "`as const` is a specialized form of the standard `as Type` syntax."
+        },
+        {
+          "term": "type_widening",
+          "module": "08-typescript",
+          "description": "Related concept: Type Widening."
+        },
+        {
+          "term": "satisfies_operator",
+          "module": "08-typescript",
+          "description": "Related concept: `satisfies` Operator."
+        },
+        {
+          "term": "enums",
+          "module": "08-typescript",
+          "description": "Related concept: Enums."
+        }
+      ]
+    },
+    "declaration_files": {
+      "level": 11,
+      "file": "terms/level_11/declaration_files.md",
+      "display_name": "Declaration Files (`.d.ts`)",
+      "prerequisites": [
+        {
+          "term": "tsc",
+          "module": "08-typescript",
+          "description": "The tool that generates or consumes these files."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The primary content of these files."
+        }
+      ],
+      "related": [
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "Where you configure TS to emit declaration files."
+        },
+        {
+          "term": "interfaces",
+          "module": "08-typescript",
+          "description": "The core content of `.d.ts` files."
+        },
+        {
+          "term": "namespaces",
+          "module": "08-typescript",
+          "description": "Related concept: Namespaces."
+        },
+        {
+          "term": "type_only_imports",
+          "module": "08-typescript",
+          "description": "Related concept: Type-Only Imports & Exports."
+        }
+      ]
+    },
+    "definitely_typed": {
+      "level": 11,
+      "file": "terms/level_11/definitely_typed.md",
+      "display_name": "DefinitelyTyped",
+      "prerequisites": [
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "The `.d.ts` files that DefinitelyTyped provides."
+        }
+      ],
+      "related": [
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "The `typeRoots` and `types` compiler options control how TypeScript searches for these `@types` packages."
+        },
+        {
+          "term": "module_resolution",
+          "module": "08-typescript",
+          "description": "Related concept: Module Resolution & Path Aliases."
+        }
+      ]
+    },
+    "enums": {
+      "level": 11,
+      "file": "terms/level_11/enums.md",
+      "display_name": "Enums",
+      "prerequisites": [
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The modern alternative to Enums."
+        },
+        {
+          "term": "union_types",
+          "module": "08-typescript",
+          "description": "Usually combined with Literal Types to replace Enums."
+        }
+      ],
+      "related": [
+        {
+          "term": "literal_types",
+          "module": "08-typescript",
+          "description": "The modern replacement for Enums."
+        },
+        {
+          "term": "const_assertions",
+          "module": "08-typescript",
+          "description": "Used with standard JS objects to replace Enums."
+        }
+      ]
+    },
+    "module_resolution": {
+      "level": 11,
+      "file": "terms/level_11/module_resolution.md",
+      "display_name": "Module Resolution & Path Aliases",
+      "prerequisites": [
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "The compiler configurations manager."
+        },
+        {
+          "term": "modules",
+          "module": "08-typescript",
+          "description": "The syntax for imports and exports."
+        }
+      ],
+      "related": [
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "The compiler options file."
+        },
+        {
+          "term": "modules",
+          "module": "08-typescript",
+          "description": "The modular loading specification."
+        },
+        {
+          "term": "definitely_typed",
+          "module": "08-typescript",
+          "description": "The third-party modules type registry."
+        }
+      ]
+    },
+    "modules": {
+      "level": 11,
+      "file": "terms/level_11/modules.md",
+      "display_name": "ES Modules in TypeScript",
+      "prerequisites": [
+        {
+          "term": "modules",
+          "module": "03-javascript",
+          "description": "The fundamental standard that TypeScript is built upon."
+        }
+      ],
+      "related": [
+        {
+          "term": "namespaces",
+          "module": "08-typescript",
+          "description": "TypeScript's outdated, legacy module system that was used before ES Modules became the standard."
+        },
+        {
+          "term": "module_resolution",
+          "module": "08-typescript",
+          "description": "Related concept: Module Resolution & Path Aliases."
+        },
+        {
+          "term": "type_only_imports",
+          "module": "08-typescript",
+          "description": "Related concept: Type-Only Imports & Exports."
+        }
+      ]
+    },
+    "namespaces": {
+      "level": 11,
+      "file": "terms/level_11/namespaces.md",
+      "display_name": "Namespaces",
+      "prerequisites": [
+        {
+          "term": "modules",
+          "module": "08-typescript",
+          "description": "The modern standard that has largely replaced Namespaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "The main place where you will still see the `namespace` keyword used heavily today."
+        },
+        {
+          "term": "declaration_merging",
+          "module": "08-typescript",
+          "description": "Related concept: Declaration Merging."
+        },
+        {
+          "term": "modules",
+          "module": "08-typescript",
+          "description": "Related concept: ES Modules in TypeScript."
+        }
+      ]
+    },
+    "strict_mode": {
+      "level": 11,
+      "file": "terms/level_11/strict_mode.md",
+      "display_name": "Strict Mode",
+      "prerequisites": [
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "The configuration file where this flag is enabled."
+        }
+      ],
+      "related": [
+        {
+          "term": "any",
+          "module": "08-typescript",
+          "description": "The dangerous \"escape hatch\" type that `strict` mode actively tries to prevent you from falling into accidentally."
+        },
+        {
+          "term": "tsconfig",
+          "module": "08-typescript",
+          "description": "Related concept: `tsconfig.json`."
+        },
+        {
+          "term": "null_undefined_strict",
+          "module": "08-typescript",
+          "description": "Related concept: `null`, `undefined` & `strictNullChecks`."
+        },
+        {
+          "term": "type_only_imports",
+          "module": "08-typescript",
+          "description": "Related concept: Type-Only Imports & Exports."
+        }
+      ]
+    },
+    "type_only_imports": {
+      "level": 11,
+      "file": "terms/level_11/type_only_imports.md",
+      "display_name": "Type-Only Imports & Exports",
+      "prerequisites": [
+        {
+          "term": "modules",
+          "module": "08-typescript",
+          "description": "How code files load each other."
+        },
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "The type signatures separation."
+        }
+      ],
+      "related": [
+        {
+          "term": "modules",
+          "module": "08-typescript",
+          "description": "The baseline module loading specification."
+        },
+        {
+          "term": "declaration_files",
+          "module": "08-typescript",
+          "description": "The type files that circular imports are often fetched from."
+        },
+        {
+          "term": "strict_mode",
+          "module": "08-typescript",
+          "description": "Configuring compiler constraints."
+        }
+      ]
+    }
+  }
+}

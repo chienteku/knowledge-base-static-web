@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "relationships.schema.json",
+  "title": "Term Relationships",
+  "description": "Single source of truth for term relationships within one technology module.",
+  "type": "object",
+  "required": ["module", "version", "updated_at", "terms"],
+  "additionalProperties": false,
+  "properties": {
+    "module": {
+      "type": "string",
+      "description": "Technology folder name, e.g. '03-javascript'",
+      "pattern": "^\\d{2}-[a-z0-9]+$"
+    },
+    "version": {
+      "type": "integer",
+      "description": "Schema version. Increment on breaking changes.",
+      "minimum": 1
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "ISO 8601 date of last update (YYYY-MM-DD).",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "terms": {
+      "type": "object",
+      "description": "Map of term_key (snake_case filename without .md) to relationship data.",
+      "additionalProperties": {
+        "$ref": "#/definitions/TermEntry"
+      }
+    }
+  },
+  "definitions": {
+    "TermEntry": {
+      "type": "object",
+      "required": ["level", "file", "display_name", "prerequisites", "related"],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "type": "integer",
+          "description": "Learning level this term belongs to.",
+          "minimum": 1
+        },
+        "file": {
+          "type": "string",
+          "description": "Relative path from the module root to the term file, e.g. 'terms/level_03/closure.md'.",
+          "pattern": "^terms/level_\\d+/[a-z0-9_]+\\.md$"
+        },
+        "display_name": {
+          "type": "string",
+          "description": "Human-readable term name used as markdown link text."
+        },
+        "prerequisites": {
+          "type": "array",
+          "description": "Ordered list of terms that must be understood before this one. Directed edge: this term → prerequisite.",
+          "items": {
+            "$ref": "#/definitions/RelationshipEdge"
+          }
+        },
+        "related": {
+          "type": "array",
+          "description": "List of conceptually related terms. Intended to be bidirectional.",
+          "items": {
+            "$ref": "#/definitions/RelationshipEdge"
+          }
+        }
+      }
+    },
+    "RelationshipEdge": {
+      "type": "object",
+      "required": ["term", "module", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "term": {
+          "type": "string",
+          "description": "Target term key (snake_case filename without .md).",
+          "pattern": "^[a-z0-9_`.()@#$%^&*+=,]+$"
+        },
+        "module": {
+          "type": "string",
+          "description": "Target term's module folder name, e.g. '03-javascript'.",
+          "pattern": "^\\d{2}-[a-z0-9]+$"
+        },
+        "description": {
+          "type": "string",
+          "description": "One-line description used after the em dash in markdown link syntax."
+        }
+      }
+    }
+  }
+}

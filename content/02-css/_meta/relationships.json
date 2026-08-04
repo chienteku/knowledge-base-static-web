@@ -1,0 +1,3425 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "02-css",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "comments": {
+      "level": 1,
+      "file": "terms/level_01/comments.md",
+      "display_name": "CSS Comments (`/* */`)",
+      "prerequisites": [
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "The language stylesheet where comments are written."
+        }
+      ],
+      "related": [
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "The parent language."
+        },
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "The container syntax holding comments."
+        }
+      ]
+    },
+    "css": {
+      "level": 1,
+      "file": "terms/level_01/css.md",
+      "display_name": "CSS (Cascading Style Sheets)",
+      "prerequisites": [
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "You must have an HTML structure before you can style it."
+        }
+      ],
+      "related": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "How CSS finds the specific HTML elements to style."
+        },
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "The declaration format mapping selectors."
+        },
+        {
+          "term": "comments",
+          "module": "02-css",
+          "description": "Notes ignored by the browser parser."
+        }
+      ]
+    },
+    "important": {
+      "level": 1,
+      "file": "terms/level_01/important.md",
+      "display_name": "`!important` Declaration",
+      "prerequisites": [
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "The point system that `!important` bypasses."
+        },
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "The conflict resolution engine that `!important` alters."
+        }
+      ],
+      "related": [
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "The point system overridden by the flag."
+        },
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "The conflict resolver."
+        },
+        {
+          "term": "inheritance",
+          "module": "02-css",
+          "description": "How properties fall back to parent element style selectors."
+        }
+      ]
+    },
+    "inheritance": {
+      "level": 1,
+      "file": "terms/level_01/inheritance.md",
+      "display_name": "Inheritance",
+      "prerequisites": [
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "The priority engine that resolves style values."
+        },
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "The patterns used to target nodes."
+        }
+      ],
+      "related": [
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "The parent priority engine."
+        },
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "Selector point weights."
+        },
+        {
+          "term": "important",
+          "module": "02-css",
+          "description": "Priority overrides."
+        },
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Related concept: Selectors (Element, Class, ID)."
+        }
+      ]
+    },
+    "ruleset": {
+      "level": 1,
+      "file": "terms/level_01/ruleset.md",
+      "display_name": "Ruleset (Declaration, Property, Value)",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "A ruleset always begins with a selector."
+        }
+      ],
+      "related": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "The first part of the ruleset."
+        },
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "How the browser decides which ruleset wins if two rulesets conflict."
+        },
+        {
+          "term": "shorthand_longhand",
+          "module": "02-css",
+          "description": "Formatting style parameters compactly."
+        },
+        {
+          "term": "comments",
+          "module": "02-css",
+          "description": "Related concept: CSS Comments (`/* */`)."
+        },
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "Related concept: CSS (Cascading Style Sheets)."
+        }
+      ]
+    },
+    "selectors": {
+      "level": 1,
+      "file": "terms/level_01/selectors.md",
+      "display_name": "Selectors (Element, Class, ID)",
+      "prerequisites": [
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "Selectors are the foundation of writing CSS."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The HTML attribute targeted by ID selectors."
+        },
+        {
+          "term": "class",
+          "module": "01-html",
+          "description": "The HTML attribute targeted by Class selectors."
+        }
+      ],
+      "related": [
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "What happens when an Element selector and a Class selector both try to style the exact same element?"
+        },
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "The curly braces and properties that come immediately *after* the selector."
+        },
+        {
+          "term": "inheritance",
+          "module": "02-css",
+          "description": "How properties fall back to parent element style selectors."
+        },
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "Related concept: CSS (Cascading Style Sheets)."
+        }
+      ]
+    },
+    "shorthand_longhand": {
+      "level": 1,
+      "file": "terms/level_01/shorthand_longhand.md",
+      "display_name": "Shorthand vs Longhand Properties",
+      "prerequisites": [
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "Understanding properties, values, and declarations."
+        },
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Custom styling targets."
+        }
+      ],
+      "related": [
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "The wrapper syntax."
+        },
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The outer spacing box utilizing shorthand properties."
+        },
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "The inner spacing box utilizing shorthand properties."
+        },
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "The frame border utilizing shorthand properties."
+        },
+        {
+          "term": "background_shorthand",
+          "module": "02-css",
+          "description": "Related concept: `background` Shorthand & `background-image`."
+        },
+        {
+          "term": "flex_properties",
+          "module": "02-css",
+          "description": "Related concept: `flex-grow` / `flex-shrink` / `flex-basis`."
+        }
+      ]
+    },
+    "specificity": {
+      "level": 1,
+      "file": "terms/level_01/specificity.md",
+      "display_name": "Specificity",
+      "prerequisites": [
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "Specificity is the most important part of the Cascade algorithm."
+        },
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Different selectors have different point values."
+        }
+      ],
+      "related": [
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "The system that uses Specificity to resolve conflicts."
+        },
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "The tools that generate the specificity score."
+        },
+        {
+          "term": "important",
+          "module": "02-css",
+          "description": "The specificity override flag."
+        },
+        {
+          "term": "inheritance",
+          "module": "02-css",
+          "description": "The fallback mechanism if no selectors target an element."
+        }
+      ]
+    },
+    "the_cascade": {
+      "level": 1,
+      "file": "terms/level_01/the_cascade.md",
+      "display_name": "The Cascade",
+      "prerequisites": [
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "It's right in the name: *Cascading* Style Sheets!"
+        },
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "The cascade resolves conflicts between multiple rulesets."
+        }
+      ],
+      "related": [
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "The only thing that can override the Rule of Source Order. If a rule is more \"specific\", it wins even if it comes first in the file!"
+        },
+        {
+          "term": "important",
+          "module": "02-css",
+          "description": "The global cascading priority flag."
+        },
+        {
+          "term": "inheritance",
+          "module": "02-css",
+          "description": "The cascade's baseline target resolution mechanism."
+        },
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "Related concept: Ruleset (Declaration, Property, Value)."
+        },
+        {
+          "term": "import",
+          "module": "02-css",
+          "description": "Related concept: `@import`."
+        }
+      ]
+    },
+    "border": {
+      "level": 2,
+      "file": "terms/level_02/border.md",
+      "display_name": "Border",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Border is the third layer of the Box Model."
+        }
+      ],
+      "related": [
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "The space directly inside the border."
+        },
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The space directly outside the border."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "Spilling content boundaries."
+        },
+        {
+          "term": "border_radius",
+          "module": "02-css",
+          "description": "A later Level 8 property used to curve the corners of the border."
+        },
+        {
+          "term": "shorthand_longhand",
+          "module": "02-css",
+          "description": "Related concept: Shorthand vs Longhand Properties."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Related concept: The Box Model (Concept)."
+        },
+        {
+          "term": "box_shadow",
+          "module": "02-css",
+          "description": "Related concept: `box-shadow` (Card Shadows)."
+        },
+        {
+          "term": "outline",
+          "module": "02-css",
+          "description": "Related concept: `outline`."
+        }
+      ]
+    },
+    "box_model": {
+      "level": 2,
+      "file": "terms/level_02/box_model.md",
+      "display_name": "The Box Model (Concept)",
+      "prerequisites": [
+        {
+          "term": "css",
+          "module": "02-css",
+          "description": "The Box Model is how CSS calculates the size of elements."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "It doesn't matter if the element is a tiny `<span>` or a massive `<div>`, they are all boxes."
+        }
+      ],
+      "related": [
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "The inner space."
+        },
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "The visible edge."
+        },
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The outer space."
+        },
+        {
+          "term": "margin_collapse",
+          "module": "02-css",
+          "description": "How adjacent margins merge visually."
+        },
+        {
+          "term": "box_sizing",
+          "module": "02-css",
+          "description": "Related concept: `box-sizing: border-box`."
+        },
+        {
+          "term": "background_shorthand",
+          "module": "02-css",
+          "description": "Related concept: `background` Shorthand & `background-image`."
+        }
+      ]
+    },
+    "box_sizing": {
+      "level": 2,
+      "file": "terms/level_02/box_sizing.md",
+      "display_name": "`box-sizing: border-box`",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "You must understand the default behavior before you understand how this fixes it."
+        },
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "This property changes how `width` and `height` calculate size."
+        }
+      ],
+      "related": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The fundamental math system this property modifies."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "How content behaves when forced into constrained borders."
+        },
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "Related concept: Padding."
+        },
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "Related concept: Width / Height."
+        },
+        {
+          "term": "reset_normalize",
+          "module": "02-css",
+          "description": "Related concept: CSS Reset vs. Normalize."
+        }
+      ]
+    },
+    "margin": {
+      "level": 2,
+      "file": "terms/level_02/margin.md",
+      "display_name": "Margin",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Margin is the fourth and final layer of the Box Model."
+        }
+      ],
+      "related": [
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "The inner spacing (inside the border)."
+        },
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "The wall separating margin from padding."
+        },
+        {
+          "term": "margin_collapse",
+          "module": "02-css",
+          "description": "The vertical merging behavior of adjacent margins."
+        },
+        {
+          "term": "shorthand_longhand",
+          "module": "02-css",
+          "description": "Related concept: Shorthand vs Longhand Properties."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Related concept: The Box Model (Concept)."
+        },
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "Related concept: Width / Height."
+        },
+        {
+          "term": "text_align_decoration",
+          "module": "02-css",
+          "description": "Related concept: `text-align` & `text-decoration`."
+        },
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "Related concept: `display: block` vs `inline` vs `inline-block`."
+        }
+      ]
+    },
+    "margin_collapse": {
+      "level": 2,
+      "file": "terms/level_02/margin_collapse.md",
+      "display_name": "Margin Collapse",
+      "prerequisites": [
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The outer spacing property that collapses."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The system regulating outer margins."
+        }
+      ],
+      "related": [
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The parent spacing property."
+        },
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "The inner spacing used to block margin leakage."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The parent model framework."
+        }
+      ]
+    },
+    "overflow": {
+      "level": 2,
+      "file": "terms/level_02/overflow.md",
+      "display_name": "`overflow` (hidden, scroll, auto, visible)",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The bounding box container."
+        },
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "The size constraints that trigger overflow conflicts."
+        }
+      ],
+      "related": [
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "The size triggers."
+        },
+        {
+          "term": "text_overflow",
+          "module": "02-css",
+          "description": "Adding ellipses (`...`) to clipped text."
+        },
+        {
+          "term": "z_index",
+          "module": "02-css",
+          "description": "Layers which can be clipped by overflow settings."
+        },
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "Related concept: Border."
+        },
+        {
+          "term": "box_sizing",
+          "module": "02-css",
+          "description": "Related concept: `box-sizing: border-box`."
+        },
+        {
+          "term": "padding",
+          "module": "02-css",
+          "description": "Related concept: Padding."
+        },
+        {
+          "term": "position_sticky",
+          "module": "02-css",
+          "description": "Related concept: `position: sticky`."
+        },
+        {
+          "term": "max_width",
+          "module": "02-css",
+          "description": "Related concept: `max-width` & `min-height` (Fluidity)."
+        },
+        {
+          "term": "scroll_snap",
+          "module": "02-css",
+          "description": "Related concept: `scroll-behavior` & `scroll-snap`."
+        }
+      ]
+    },
+    "padding": {
+      "level": 2,
+      "file": "terms/level_02/padding.md",
+      "display_name": "Padding",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Padding is the second layer of the Box Model, sitting between the content and the border."
+        }
+      ],
+      "related": [
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The outer spacing (outside the border)."
+        },
+        {
+          "term": "box_sizing",
+          "module": "02-css",
+          "description": "The layout sizing model."
+        },
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "The border box."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "Spilling content boundaries."
+        },
+        {
+          "term": "shorthand_longhand",
+          "module": "02-css",
+          "description": "Related concept: Shorthand vs Longhand Properties."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Related concept: The Box Model (Concept)."
+        },
+        {
+          "term": "margin_collapse",
+          "module": "02-css",
+          "description": "Related concept: Margin Collapse."
+        }
+      ]
+    },
+    "width_height": {
+      "level": 2,
+      "file": "terms/level_02/width_height.md",
+      "display_name": "Width / Height",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Width and Height control the very center layer: the Content."
+        }
+      ],
+      "related": [
+        {
+          "term": "box_sizing",
+          "module": "02-css",
+          "description": "Changes how Width and Height calculate padding and borders."
+        },
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "Surrounds the calculated width and height."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "Handling content that overflows the width and height box."
+        },
+        {
+          "term": "max_width",
+          "module": "02-css",
+          "description": "Related concept: `max-width` & `min-height` (Fluidity)."
+        }
+      ]
+    },
+    "background_shorthand": {
+      "level": 3,
+      "file": "terms/level_03/background_shorthand.md",
+      "display_name": "`background` Shorthand & `background-image`",
+      "prerequisites": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "Knowing how background colors interact with text."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Background shapes are defined by the elements' box layouts."
+        }
+      ],
+      "related": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "The color properties."
+        },
+        {
+          "term": "shorthand_longhand",
+          "module": "02-css",
+          "description": "The syntax concept."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The visual frame boundaries."
+        }
+      ]
+    },
+    "color_values": {
+      "level": 3,
+      "file": "terms/level_03/color_values.md",
+      "display_name": "Color Values (hex, rgb, rgba, hsl, named)",
+      "prerequisites": [
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "Properties accept color value targets."
+        }
+      ],
+      "related": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "The parent properties using these colors."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "The alternative way to manage element transparency."
+        }
+      ]
+    },
+    "color_vs_background": {
+      "level": 3,
+      "file": "terms/level_03/color_vs_background.md",
+      "display_name": "`color` vs `background-color`",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "It helps to understand that `background-color` fills the Padding and Content layers of the box."
+        },
+        {
+          "term": "color_values",
+          "module": "02-css",
+          "description": "The formats used to declare CSS colors."
+        }
+      ],
+      "related": [
+        {
+          "term": "color_values",
+          "module": "02-css",
+          "description": "Color notation formats."
+        },
+        {
+          "term": "background_shorthand",
+          "module": "02-css",
+          "description": "Advanced background styling."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "Another way to adjust the transparency of colors."
+        },
+        {
+          "term": "background_size",
+          "module": "02-css",
+          "description": "Related concept: `background-size` (cover / contain)."
+        },
+        {
+          "term": "gradients",
+          "module": "02-css",
+          "description": "Related concept: `linear-gradient` & `radial-gradient` (Gradients)."
+        }
+      ]
+    },
+    "font_family": {
+      "level": 3,
+      "file": "terms/level_03/font_family.md",
+      "display_name": "`font-family`",
+      "prerequisites": [
+        {
+          "term": "ruleset",
+          "module": "02-css",
+          "description": "Used inside a standard declaration block."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "Properties used to adjust the size and thickness of the chosen font family."
+        },
+        {
+          "term": "web_fonts",
+          "module": "02-css",
+          "description": "Loading custom external typefaces."
+        }
+      ]
+    },
+    "font_size_weight": {
+      "level": 3,
+      "file": "terms/level_03/font_size_weight.md",
+      "display_name": "`font-size` & `font-weight`",
+      "prerequisites": [
+        {
+          "term": "font_family",
+          "module": "02-css",
+          "description": "It helps to know how to select the font before you resize it."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_family",
+          "module": "02-css",
+          "description": "Defines the actual typeface."
+        },
+        {
+          "term": "font_style_variant",
+          "module": "02-css",
+          "description": "Styling and small-caps variations."
+        },
+        {
+          "term": "rem_em",
+          "module": "02-css",
+          "description": "Responsive typography units."
+        },
+        {
+          "term": "line_height",
+          "module": "02-css",
+          "description": "Related concept: `line-height`."
+        },
+        {
+          "term": "text_transform",
+          "module": "02-css",
+          "description": "Related concept: `text-transform`."
+        }
+      ]
+    },
+    "font_style_variant": {
+      "level": 3,
+      "file": "terms/level_03/font_style_variant.md",
+      "display_name": "`font-style` & `font-variant`",
+      "prerequisites": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "The baseline typography configuration tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "The parent typography properties."
+        },
+        {
+          "term": "text_transform",
+          "module": "02-css",
+          "description": "Uppercase/lowercase formatting overrides (different from small-caps)."
+        },
+        {
+          "term": "line_height",
+          "module": "02-css",
+          "description": "Related concept: `line-height`."
+        }
+      ]
+    },
+    "line_height": {
+      "level": 3,
+      "file": "terms/level_03/line_height.md",
+      "display_name": "`line-height`",
+      "prerequisites": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "`line-height` is calculated directly based on the font size."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "The property that `line-height` multiplies against."
+        },
+        {
+          "term": "font_style_variant",
+          "module": "02-css",
+          "description": "Text formatting variants."
+        }
+      ]
+    },
+    "text_align_decoration": {
+      "level": 3,
+      "file": "terms/level_03/text_align_decoration.md",
+      "display_name": "`text-align` & `text-decoration`",
+      "prerequisites": [
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "Text alignment only works if the container is actually wider than the text itself."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The HTML element that most commonly uses `text-decoration`."
+        }
+      ],
+      "related": [
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "The display type that `text-align` affects."
+        },
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "The spacing property used to center boxes rather than inline text."
+        }
+      ]
+    },
+    "web_fonts": {
+      "level": 3,
+      "file": "terms/level_03/web_fonts.md",
+      "display_name": "`@font-face` & Web Fonts (Google Fonts)",
+      "prerequisites": [
+        {
+          "term": "font_family",
+          "module": "02-css",
+          "description": "The styling property that utilizes these custom typefaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_family",
+          "module": "02-css",
+          "description": "The styling property that applies these fonts."
+        },
+        {
+          "term": "import",
+          "module": "02-css",
+          "description": "The CSS at-rule used to import stylesheets (including fonts) into CSS directly."
+        }
+      ]
+    },
+    "display": {
+      "level": 4,
+      "file": "terms/level_04/display.md",
+      "display_name": "`display: block` vs `inline` vs `inline-block`",
+      "prerequisites": [
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "The baseline page parsing sequence."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The `display` property determines how this box interacts with the boxes around it."
+        },
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "The `display` property completely changes how width and height behave!"
+        }
+      ],
+      "related": [
+        {
+          "term": "display_none_vs_visibility",
+          "module": "02-css",
+          "description": "Hiding elements."
+        },
+        {
+          "term": "display_flex",
+          "module": "02-css",
+          "description": "The modern Flexbox layout container."
+        },
+        {
+          "term": "margin",
+          "module": "02-css",
+          "description": "Visual box margins."
+        },
+        {
+          "term": "text_align_decoration",
+          "module": "02-css",
+          "description": "Related concept: `text-align` & `text-decoration`."
+        },
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "Related concept: Document Flow (Normal Flow)."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "Related concept: `opacity`."
+        },
+        {
+          "term": "pseudo_elements",
+          "module": "02-css",
+          "description": "Related concept: `::before` & `::after` (Pseudo-elements)."
+        }
+      ]
+    },
+    "display_none_vs_visibility": {
+      "level": 4,
+      "file": "terms/level_04/display_none_vs_visibility.md",
+      "display_name": "`display: none` vs `visibility: hidden`",
+      "prerequisites": [
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "The parent display rules."
+        },
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "The physical layout box that is hidden."
+        }
+      ],
+      "related": [
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "The parent display rules."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "The styling property that adjusts visibility percentage from 0 to 100."
+        }
+      ]
+    },
+    "document_flow": {
+      "level": 4,
+      "file": "terms/level_04/document_flow.md",
+      "display_name": "Document Flow (Normal Flow)",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Sizing boxes that the flow algorithm arranges."
+        }
+      ],
+      "related": [
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "The fundamental flow markers."
+        },
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "In-flow positioning options."
+        },
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "Out-of-flow positioning options."
+        },
+        {
+          "term": "float_clear",
+          "module": "02-css",
+          "description": "Related concept: `float` & `clear` (Legacy context)."
+        }
+      ]
+    },
+    "float_clear": {
+      "level": 4,
+      "file": "terms/level_04/float_clear.md",
+      "display_name": "`float` & `clear` (Legacy context)",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Floats drastically alter how boxes behave."
+        },
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "The normal document layout flow that floats disrupt."
+        }
+      ],
+      "related": [
+        {
+          "term": "display_flex",
+          "module": "02-css",
+          "description": "The modern Flexbox layout container."
+        },
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "The layout engine disrupted by floats."
+        }
+      ]
+    },
+    "position_absolute_fixed": {
+      "level": 4,
+      "file": "terms/level_04/position_absolute_fixed.md",
+      "display_name": "`position: absolute` vs `fixed`",
+      "prerequisites": [
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "Absolute positioning heavily relies on relative positioning to work correctly!"
+        },
+        {
+          "term": "top_bottom_left_right",
+          "module": "02-css",
+          "description": "Used to set the exact coordinates."
+        }
+      ],
+      "related": [
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "The required partner for `absolute`."
+        },
+        {
+          "term": "position_sticky",
+          "module": "02-css",
+          "description": "The hybrid offset scrolling behavior."
+        },
+        {
+          "term": "z_index",
+          "module": "02-css",
+          "description": "Overlapping z-axis stacking values."
+        },
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "Related concept: Document Flow (Normal Flow)."
+        },
+        {
+          "term": "top_bottom_left_right",
+          "module": "02-css",
+          "description": "Related concept: `top`, `bottom`, `left`, `right`."
+        }
+      ]
+    },
+    "position_static_relative": {
+      "level": 4,
+      "file": "terms/level_04/position_static_relative.md",
+      "display_name": "`position: static` vs `relative`",
+      "prerequisites": [
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "The baseline layout algorithm."
+        },
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "The normal layout flow that we are about to manipulate."
+        },
+        {
+          "term": "top_bottom_left_right",
+          "module": "02-css",
+          "description": "The properties used to move positioned elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "Absolute positioning dynamics."
+        },
+        {
+          "term": "position_sticky",
+          "module": "02-css",
+          "description": "Hybrid layout scrolling."
+        },
+        {
+          "term": "z_index",
+          "module": "02-css",
+          "description": "Overlapping stacking layer values."
+        },
+        {
+          "term": "document_flow",
+          "module": "02-css",
+          "description": "Related concept: Document Flow (Normal Flow)."
+        },
+        {
+          "term": "top_bottom_left_right",
+          "module": "02-css",
+          "description": "Related concept: `top`, `bottom`, `left`, `right`."
+        }
+      ]
+    },
+    "position_sticky": {
+      "level": 4,
+      "file": "terms/level_04/position_sticky.md",
+      "display_name": "`position: sticky`",
+      "prerequisites": [
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "Sticky starts as a relative offset."
+        },
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "Sticky mimics fixed positioning during scroll locks."
+        },
+        {
+          "term": "top_bottom_left_right",
+          "module": "02-css",
+          "description": "The required threshold coordinates."
+        }
+      ],
+      "related": [
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "The parent relative settings."
+        },
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "Viewport locked layouts."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "The parent parameters that disable sticky positioning."
+        },
+        {
+          "term": "top_bottom_left_right",
+          "module": "02-css",
+          "description": "Related concept: `top`, `bottom`, `left`, `right`."
+        }
+      ]
+    },
+    "stacking_context": {
+      "level": 4,
+      "file": "terms/level_04/stacking_context.md",
+      "display_name": "Stacking Context",
+      "prerequisites": [
+        {
+          "term": "z_index",
+          "module": "02-css",
+          "description": "The Z-axis priority system."
+        },
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "Properties that commonly trigger stacking context generation."
+        }
+      ],
+      "related": [
+        {
+          "term": "z_index",
+          "module": "02-css",
+          "description": "The numbering sequence sorted within the context."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "One of the visual triggers that creates a context."
+        },
+        {
+          "term": "transform",
+          "module": "02-css",
+          "description": "Another visual trigger that creates a context."
+        }
+      ]
+    },
+    "top_bottom_left_right": {
+      "level": 4,
+      "file": "terms/level_04/top_bottom_left_right.md",
+      "display_name": "`top`, `bottom`, `left`, `right`",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "The primary positioning properties."
+        },
+        {
+          "term": "position_sticky",
+          "module": "02-css",
+          "description": "The hybrid boundary scrolling property."
+        },
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "These four properties **do absolutely nothing** unless the element is positioned!"
+        }
+      ]
+    },
+    "z_index": {
+      "level": 4,
+      "file": "terms/level_04/z_index.md",
+      "display_name": "`z-index`",
+      "prerequisites": [
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "Just like `top` and `left`, `z-index` **only works on positioned elements**."
+        }
+      ],
+      "related": [
+        {
+          "term": "position_static_relative",
+          "module": "02-css",
+          "description": "Required positioning properties."
+        },
+        {
+          "term": "stacking_context",
+          "module": "02-css",
+          "description": "The parent layer grouping logic that shapes z-index behaviors."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "Related concept: `overflow` (hidden, scroll, auto, visible)."
+        },
+        {
+          "term": "position_absolute_fixed",
+          "module": "02-css",
+          "description": "Related concept: `position: absolute` vs `fixed`."
+        }
+      ]
+    },
+    "align_content": {
+      "level": 5,
+      "file": "terms/level_05/align_content.md",
+      "display_name": "`align-content`",
+      "prerequisites": [
+        {
+          "term": "flex_wrap",
+          "module": "02-css",
+          "description": "`align-content` has **no effect** unless items wrap into multiple lines!"
+        },
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "Understanding single-row alignment."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_wrap",
+          "module": "02-css",
+          "description": "The required prerequisite."
+        },
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "Single-line vertical alignment."
+        },
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "Horizontal main axis alignment."
+        }
+      ]
+    },
+    "align_items": {
+      "level": 5,
+      "file": "terms/level_05/align_items.md",
+      "display_name": "`align-items`",
+      "prerequisites": [
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "You must understand `justify-content` (Main Axis) to understand `align-items` (Cross Axis)."
+        }
+      ],
+      "related": [
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "The Main Axis sibling."
+        },
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Rotating the main layout axis."
+        },
+        {
+          "term": "align_self",
+          "module": "02-css",
+          "description": "Overrides align-items for a single child item."
+        },
+        {
+          "term": "align_content",
+          "module": "02-css",
+          "description": "Distributes multiple rows of flex items."
+        },
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Related concept: Flexbox (Concept) & `display: flex`."
+        }
+      ]
+    },
+    "align_self": {
+      "level": 5,
+      "file": "terms/level_05/align_self.md",
+      "display_name": "`align-self`",
+      "prerequisites": [
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "The parent property that `align-self` overrides."
+        }
+      ],
+      "related": [
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "The parent alignment controller."
+        },
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "The main axis spacing controller."
+        },
+        {
+          "term": "order",
+          "module": "02-css",
+          "description": "The visual child ordering property."
+        },
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Related concept: `flex-direction`."
+        }
+      ]
+    },
+    "flex_direction": {
+      "level": 5,
+      "file": "terms/level_05/flex_direction.md",
+      "display_name": "`flex-direction`",
+      "prerequisites": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "This property does absolutely nothing unless the element is a Flex Container!"
+        }
+      ],
+      "related": [
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "Aligns children along the axis defined by `flex-direction`."
+        },
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "Aligns children along the perpendicular (cross) axis."
+        },
+        {
+          "term": "align_self",
+          "module": "02-css",
+          "description": "Overrides align-items for a single child item."
+        },
+        {
+          "term": "order",
+          "module": "02-css",
+          "description": "Visual ordering of items."
+        },
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Related concept: Flexbox (Concept) & `display: flex`."
+        },
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Related concept: `@media` (Media Queries Basics)."
+        }
+      ]
+    },
+    "flex_parent": {
+      "level": 5,
+      "file": "terms/level_05/flex_parent.md",
+      "display_name": "Flexbox (Concept) & `display: flex`",
+      "prerequisites": [
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "Flexbox is just a special value applied to the `display` property."
+        },
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "Flexbox operates strictly on a Parent/Child relationship."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Rotating the main layout axis."
+        },
+        {
+          "term": "justify_content",
+          "module": "02-css",
+          "description": "Aligns children along the main axis."
+        },
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "Aligns children along the cross axis."
+        },
+        {
+          "term": "flex_properties",
+          "module": "02-css",
+          "description": "Sizing of child flex items."
+        },
+        {
+          "term": "grid_concept",
+          "module": "02-css",
+          "description": "The 2D layout engine."
+        },
+        {
+          "term": "order",
+          "module": "02-css",
+          "description": "Related concept: `order`."
+        },
+        {
+          "term": "gap",
+          "module": "02-css",
+          "description": "Related concept: `gap` (Grid Gap)."
+        }
+      ]
+    },
+    "flex_properties": {
+      "level": 5,
+      "file": "terms/level_05/flex_properties.md",
+      "display_name": "`flex-grow` / `flex-shrink` / `flex-basis`",
+      "prerequisites": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Must be applied to the parent container."
+        },
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Dictates which axis (width or height) the sizing math applies to."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "The parent container."
+        },
+        {
+          "term": "shorthand_longhand",
+          "module": "02-css",
+          "description": "The combined syntax layout."
+        }
+      ]
+    },
+    "flex_wrap": {
+      "level": 5,
+      "file": "terms/level_05/flex_wrap.md",
+      "display_name": "`flex-wrap`",
+      "prerequisites": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Must be applied to the parent container."
+        }
+      ],
+      "related": [
+        {
+          "term": "gap",
+          "module": "02-css",
+          "description": "When items wrap to a new line, you need a way to put space between the rows."
+        },
+        {
+          "term": "align_content",
+          "module": "02-css",
+          "description": "Distributes multiple rows of wrapped items."
+        }
+      ]
+    },
+    "justify_content": {
+      "level": 5,
+      "file": "terms/level_05/justify_content.md",
+      "display_name": "`justify-content`",
+      "prerequisites": [
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "`justify-content` always follows the direction of the Main Axis!"
+        }
+      ],
+      "related": [
+        {
+          "term": "align_items",
+          "module": "02-css",
+          "description": "The sister property that aligns things on the *opposite* (Cross) axis."
+        },
+        {
+          "term": "align_content",
+          "module": "02-css",
+          "description": "Distribution of rows in multi-line flex containers."
+        },
+        {
+          "term": "align_self",
+          "module": "02-css",
+          "description": "Child item alignment overrides."
+        },
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Related concept: `flex-direction`."
+        },
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Related concept: Flexbox (Concept) & `display: flex`."
+        }
+      ]
+    },
+    "order": {
+      "level": 5,
+      "file": "terms/level_05/order.md",
+      "display_name": "`order`",
+      "prerequisites": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Must be applied to the parent container."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "The parent layout engine."
+        },
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Dictates whether visual ordering flows vertically or horizontally."
+        },
+        {
+          "term": "align_self",
+          "module": "02-css",
+          "description": "Related concept: `align-self`."
+        }
+      ]
+    },
+    "fr_unit": {
+      "level": 6,
+      "file": "terms/level_06/fr_unit.md",
+      "display_name": "`fr` Unit (Fractional Unit)",
+      "prerequisites": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent blueprint properties where the `fr` unit is declared."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent blueprint."
+        },
+        {
+          "term": "grid_minmax",
+          "module": "02-css",
+          "description": "A function commonly used with `fr` units to set sizing caps."
+        },
+        {
+          "term": "grid_concept",
+          "module": "02-css",
+          "description": "Related concept: CSS Grid (Concept) & `display: grid`."
+        }
+      ]
+    },
+    "gap": {
+      "level": 6,
+      "file": "terms/level_06/gap.md",
+      "display_name": "`gap` (Grid Gap)",
+      "prerequisites": [
+        {
+          "term": "grid_concept",
+          "module": "02-css",
+          "description": "`gap` only works if the parent container is a Grid or a Flexbox!"
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_concept",
+          "module": "02-css",
+          "description": "The parent Grid layout container."
+        },
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "Defining track layout structures."
+        },
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "The parent Flex layout container."
+        },
+        {
+          "term": "flex_wrap",
+          "module": "02-css",
+          "description": "Related concept: `flex-wrap`."
+        },
+        {
+          "term": "calc",
+          "module": "02-css",
+          "description": "Related concept: `calc()`."
+        }
+      ]
+    },
+    "grid_auto_fill_fit": {
+      "level": 6,
+      "file": "terms/level_06/grid_auto_fill_fit.md",
+      "display_name": "`auto-fill` / `auto-fit`",
+      "prerequisites": [
+        {
+          "term": "grid_repeat",
+          "module": "02-css",
+          "description": "These keywords are used exclusively inside `repeat()`."
+        },
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The properties they configure."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_repeat",
+          "module": "02-css",
+          "description": "The loop container."
+        },
+        {
+          "term": "grid_minmax",
+          "module": "02-css",
+          "description": "The required track bounds function."
+        },
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The legacy responsive breakpoint method."
+        }
+      ]
+    },
+    "grid_concept": {
+      "level": 6,
+      "file": "terms/level_06/grid_concept.md",
+      "display_name": "CSS Grid (Concept) & `display: grid`",
+      "prerequisites": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "Grid uses similar concepts (like Parent/Child relationships and `gap`), but takes them to the next level."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_parent",
+          "module": "02-css",
+          "description": "The 1D alternative."
+        },
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "Track columns and rows template definitions."
+        },
+        {
+          "term": "gap",
+          "module": "02-css",
+          "description": "Spacing between cells."
+        },
+        {
+          "term": "fr_unit",
+          "module": "02-css",
+          "description": "The fractional grid track unit."
+        }
+      ]
+    },
+    "grid_item": {
+      "level": 6,
+      "file": "terms/level_06/grid_item.md",
+      "display_name": "`grid-column` / `grid-row` (Grid Item Placement)",
+      "prerequisites": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent properties that define the grid lines items place themselves against."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent coordinate blueprint."
+        },
+        {
+          "term": "grid_template_areas",
+          "module": "02-css",
+          "description": "The visual name placement alternative."
+        }
+      ]
+    },
+    "grid_minmax": {
+      "level": 6,
+      "file": "terms/level_06/grid_minmax.md",
+      "display_name": "`minmax()` Function",
+      "prerequisites": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent properties configured by `minmax()`."
+        },
+        {
+          "term": "fr_unit",
+          "module": "02-css",
+          "description": "The dynamic unit commonly used as the maximum size."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent blueprint."
+        },
+        {
+          "term": "grid_auto_fill_fit",
+          "module": "02-css",
+          "description": "The responsive counts keywords often paired with `minmax()`."
+        },
+        {
+          "term": "fr_unit",
+          "module": "02-css",
+          "description": "Related concept: `fr` Unit (Fractional Unit)."
+        }
+      ]
+    },
+    "grid_repeat": {
+      "level": 6,
+      "file": "terms/level_06/grid_repeat.md",
+      "display_name": "`repeat()` Function",
+      "prerequisites": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent blueprint properties where `repeat()` is declared."
+        },
+        {
+          "term": "fr_unit",
+          "module": "02-css",
+          "description": "The dynamic unit commonly repeated."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent coordinate blueprint."
+        },
+        {
+          "term": "grid_auto_fill_fit",
+          "module": "02-css",
+          "description": "Keywords used inside `repeat()` to automate responsive grid counts."
+        }
+      ]
+    },
+    "grid_template": {
+      "level": 6,
+      "file": "terms/level_06/grid_template.md",
+      "display_name": "`grid-template-columns` / `grid-template-rows`",
+      "prerequisites": [
+        {
+          "term": "grid_concept",
+          "module": "02-css",
+          "description": "The parent container trigger that activates Grid math."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_concept",
+          "module": "02-css",
+          "description": "The parent trigger."
+        },
+        {
+          "term": "fr_unit",
+          "module": "02-css",
+          "description": "The flexible track sizing unit."
+        },
+        {
+          "term": "grid_item",
+          "module": "02-css",
+          "description": "Positioning children on the grid lines."
+        },
+        {
+          "term": "gap",
+          "module": "02-css",
+          "description": "Related concept: `gap` (Grid Gap)."
+        },
+        {
+          "term": "grid_minmax",
+          "module": "02-css",
+          "description": "Related concept: `minmax()` Function."
+        },
+        {
+          "term": "grid_repeat",
+          "module": "02-css",
+          "description": "Related concept: `repeat()` Function."
+        },
+        {
+          "term": "grid_template_areas",
+          "module": "02-css",
+          "description": "Related concept: `grid-template-areas`."
+        }
+      ]
+    },
+    "grid_template_areas": {
+      "level": 6,
+      "file": "terms/level_06/grid_template_areas.md",
+      "display_name": "`grid-template-areas`",
+      "prerequisites": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "The parent track properties that establish the grid cell structure."
+        },
+        {
+          "term": "grid_item",
+          "module": "02-css",
+          "description": "Understanding the child-level placement system it overrides."
+        }
+      ],
+      "related": [
+        {
+          "term": "grid_template",
+          "module": "02-css",
+          "description": "Sizing the track grid."
+        },
+        {
+          "term": "grid_item",
+          "module": "02-css",
+          "description": "Placing items manually."
+        }
+      ]
+    },
+    "letter_word_spacing": {
+      "level": 7,
+      "file": "terms/level_07/letter_word_spacing.md",
+      "display_name": "`letter-spacing` & `word-spacing`",
+      "prerequisites": [
+        {
+          "term": "line_height",
+          "module": "02-css",
+          "description": "If `line-height` is vertical spacing for text, these are the horizontal equivalents."
+        }
+      ],
+      "related": [
+        {
+          "term": "text_transform",
+          "module": "02-css",
+          "description": "The property most commonly paired with `letter-spacing`."
+        }
+      ]
+    },
+    "list_style": {
+      "level": 7,
+      "file": "terms/level_07/list_style.md",
+      "display_name": "`list-style`",
+      "prerequisites": [
+        {
+          "term": "lists",
+          "module": "01-html",
+          "description": "The HTML elements that this CSS property targets."
+        }
+      ],
+      "related": [
+        {
+          "term": "lists",
+          "module": "01-html",
+          "description": "The HTML elements this applies to."
+        }
+      ]
+    },
+    "text_overflow": {
+      "level": 7,
+      "file": "terms/level_07/text_overflow.md",
+      "display_name": "`text-overflow` & `overflow-wrap`",
+      "prerequisites": [
+        {
+          "term": "white_space",
+          "module": "02-css",
+          "description": "`text-overflow` relies entirely on `white-space: nowrap` to work!"
+        }
+      ],
+      "related": [
+        {
+          "term": "white_space",
+          "module": "02-css",
+          "description": "The property that forces the single line required for `ellipsis` to work."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "Related concept: `overflow` (hidden, scroll, auto, visible)."
+        }
+      ]
+    },
+    "text_shadow": {
+      "level": 7,
+      "file": "terms/level_07/text_shadow.md",
+      "display_name": "`text-shadow`",
+      "prerequisites": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "The shadow needs a color value."
+        }
+      ],
+      "related": [
+        {
+          "term": "box_shadow",
+          "module": "02-css",
+          "description": "The exact same concept, but applied to the entire Box Model container instead of just the text inside it!"
+        }
+      ]
+    },
+    "text_transform": {
+      "level": 7,
+      "file": "terms/level_07/text_transform.md",
+      "display_name": "`text-transform`",
+      "prerequisites": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "Expanding on the basic text styling properties from Level 3."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "Often combined with `uppercase` to create strong, bold headings."
+        },
+        {
+          "term": "font_style_variant",
+          "module": "02-css",
+          "description": "Related concept: `font-style` & `font-variant`."
+        },
+        {
+          "term": "letter_word_spacing",
+          "module": "02-css",
+          "description": "Related concept: `letter-spacing` & `word-spacing`."
+        }
+      ]
+    },
+    "white_space": {
+      "level": 7,
+      "file": "terms/level_07/white_space.md",
+      "display_name": "`white-space`",
+      "prerequisites": [
+        {
+          "term": "whitespace_collapse",
+          "module": "01-html",
+          "description": "You must understand the browser's default behavior of crushing all spaces into a single space!"
+        }
+      ],
+      "related": [
+        {
+          "term": "text_overflow",
+          "module": "02-css",
+          "description": "When you use `nowrap` and the text blows out of the box, `text-overflow` allows you to cut it off with a \"...\" (ellipsis)."
+        }
+      ]
+    },
+    "breakpoints": {
+      "level": 8,
+      "file": "terms/level_08/breakpoints.md",
+      "display_name": "Breakpoints",
+      "prerequisites": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The conditional container code."
+        },
+        {
+          "term": "mobile_first",
+          "module": "02-css",
+          "description": "The progressive styling workflow."
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The code container."
+        },
+        {
+          "term": "mobile_first",
+          "module": "02-css",
+          "description": "The styling logic direction."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Related concept: Responsive Design (Concept)."
+        }
+      ]
+    },
+    "max_width": {
+      "level": 8,
+      "file": "terms/level_08/max_width.md",
+      "display_name": "`max-width` & `min-height` (Fluidity)",
+      "prerequisites": [
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "The core dimensions of the Box Model."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Sizing layout blocks relative to device size."
+        }
+      ],
+      "related": [
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "The baseline box sizes."
+        },
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "The property that handles clips if fixed sizing bounds are breached."
+        },
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "Related concept: `%` (Percentages)."
+        },
+        {
+          "term": "viewport_units",
+          "module": "02-css",
+          "description": "Related concept: `vw` / `vh` (Viewport Units)."
+        }
+      ]
+    },
+    "media_queries": {
+      "level": 8,
+      "file": "terms/level_08/media_queries.md",
+      "display_name": "`@media` (Media Queries Basics)",
+      "prerequisites": [
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "While fluid units handle small adjustments, Media Queries handle massive structural changes."
+        }
+      ],
+      "related": [
+        {
+          "term": "flex_direction",
+          "module": "02-css",
+          "description": "Commonly toggled inside media queries for responsive layouts."
+        },
+        {
+          "term": "mobile_first",
+          "module": "02-css",
+          "description": "Progressive enhancement coding methodology."
+        },
+        {
+          "term": "breakpoints",
+          "module": "02-css",
+          "description": "The screen size thresholds that trigger layout changes."
+        },
+        {
+          "term": "grid_auto_fill_fit",
+          "module": "02-css",
+          "description": "Related concept: `auto-fill` / `auto-fit`."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Related concept: Responsive Design (Concept)."
+        },
+        {
+          "term": "container_queries",
+          "module": "02-css",
+          "description": "Related concept: Container Queries (`@container`)."
+        },
+        {
+          "term": "dark_mode",
+          "module": "02-css",
+          "description": "Related concept: Dark Mode (`prefers-color-scheme`)."
+        },
+        {
+          "term": "supports",
+          "module": "02-css",
+          "description": "Related concept: `@supports` (Feature Queries)."
+        },
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "Related concept: `var()` (CSS Custom Properties)."
+        }
+      ]
+    },
+    "min_max_clamp": {
+      "level": 8,
+      "file": "terms/level_08/min_max_clamp.md",
+      "display_name": "`min()`, `max()`, `clamp()` (Responsive Functions)",
+      "prerequisites": [
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Adapting layout scales to viewports."
+        },
+        {
+          "term": "calc",
+          "module": "02-css",
+          "description": "Evaluating runtime mathematical equations."
+        }
+      ],
+      "related": [
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "The adaptation philosophy."
+        },
+        {
+          "term": "calc",
+          "module": "02-css",
+          "description": "Basic CSS math."
+        }
+      ]
+    },
+    "mobile_first": {
+      "level": 8,
+      "file": "terms/level_08/mobile_first.md",
+      "display_name": "Mobile-First Design",
+      "prerequisites": [
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "The adaptation philosophy."
+        },
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The conditional rules tool."
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The query container."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "The core philosophy."
+        },
+        {
+          "term": "breakpoints",
+          "module": "02-css",
+          "description": "The layout shift markers."
+        }
+      ]
+    },
+    "percentages": {
+      "level": 8,
+      "file": "terms/level_08/percentages.md",
+      "display_name": "`%` (Percentages)",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Understanding how elements take up space."
+        },
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "Percentages rely entirely on the Parent-Child relationship."
+        }
+      ],
+      "related": [
+        {
+          "term": "viewport_units",
+          "module": "02-css",
+          "description": "Sizing relative to the viewport instead of the parent container."
+        },
+        {
+          "term": "rem_em",
+          "module": "02-css",
+          "description": "Relative typography units."
+        },
+        {
+          "term": "max_width",
+          "module": "02-css",
+          "description": "Bounding limits for fluid elements."
+        }
+      ]
+    },
+    "rem_em": {
+      "level": 8,
+      "file": "terms/level_08/rem_em.md",
+      "display_name": "`rem` vs `em`",
+      "prerequisites": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "The property that these units multiply against."
+        }
+      ],
+      "related": [
+        {
+          "term": "font_size_weight",
+          "module": "02-css",
+          "description": "The property that controls the baseline font scale."
+        },
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "Sizing relative to parent containers."
+        },
+        {
+          "term": "viewport_units",
+          "module": "02-css",
+          "description": "Sizing relative to the viewport."
+        }
+      ]
+    },
+    "responsive_design": {
+      "level": 8,
+      "file": "terms/level_08/responsive_design.md",
+      "display_name": "Responsive Design (Concept)",
+      "prerequisites": [
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "Sizing boxes relative to parent dimensions."
+        },
+        {
+          "term": "viewport_units",
+          "module": "02-css",
+          "description": "Sizing relative to screen boundaries."
+        },
+        {
+          "term": "rem_em",
+          "module": "02-css",
+          "description": "Relative typography spacing."
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The conditional layout tool."
+        },
+        {
+          "term": "mobile_first",
+          "module": "02-css",
+          "description": "The styling workflow."
+        },
+        {
+          "term": "breakpoints",
+          "module": "02-css",
+          "description": "The layout shift coordinates."
+        },
+        {
+          "term": "min_max_clamp",
+          "module": "02-css",
+          "description": "Related concept: `min()`, `max()`, `clamp()` (Responsive Functions)."
+        }
+      ]
+    },
+    "viewport_units": {
+      "level": 8,
+      "file": "terms/level_08/viewport_units.md",
+      "display_name": "`vw` / `vh` (Viewport Units)",
+      "prerequisites": [
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "You must understand why `%` fails for heights to understand why Viewport units were invented."
+        }
+      ],
+      "related": [
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "The parent-relative sizing alternative."
+        },
+        {
+          "term": "rem_em",
+          "module": "02-css",
+          "description": "Sizing relative to fonts rather than the viewport."
+        },
+        {
+          "term": "max_width",
+          "module": "02-css",
+          "description": "Fluid constraints to pair with viewport heights."
+        }
+      ]
+    },
+    "backdrop_filter": {
+      "level": 9,
+      "file": "terms/level_09/backdrop_filter.md",
+      "display_name": "`backdrop-filter`",
+      "prerequisites": [
+        {
+          "term": "filter",
+          "module": "02-css",
+          "description": "The baseline visual filter functions."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "Fading elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "filter",
+          "module": "02-css",
+          "description": "Applying filters to the element itself."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "Sizing transparency values."
+        },
+        {
+          "term": "box_shadow",
+          "module": "02-css",
+          "description": "Card elevation."
+        }
+      ]
+    },
+    "background_size": {
+      "level": 9,
+      "file": "terms/level_09/background_size.md",
+      "display_name": "`background-size` (cover / contain)",
+      "prerequisites": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "Setting background image sources."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Sizing layout blocks relative to device size."
+        }
+      ],
+      "related": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "Base background settings."
+        },
+        {
+          "term": "object_fit",
+          "module": "02-css",
+          "description": "Sizing content media tags."
+        },
+        {
+          "term": "gradients",
+          "module": "02-css",
+          "description": "Related concept: `linear-gradient` & `radial-gradient` (Gradients)."
+        }
+      ]
+    },
+    "border_radius": {
+      "level": 9,
+      "file": "terms/level_09/border_radius.md",
+      "display_name": "`border-radius` (Rounded Corners)",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Every HTML element is inherently a sharp, rectangular box."
+        },
+        {
+          "term": "rem_em",
+          "module": "02-css",
+          "description": "Units used to measure the rounding."
+        }
+      ],
+      "related": [
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "The physical border boundaries."
+        },
+        {
+          "term": "box_shadow",
+          "module": "02-css",
+          "description": "Shadow rings which follow the border radius boundaries."
+        },
+        {
+          "term": "object_fit",
+          "module": "02-css",
+          "description": "Standard scaling property for images cropped by border radius."
+        }
+      ]
+    },
+    "box_shadow": {
+      "level": 9,
+      "file": "terms/level_09/box_shadow.md",
+      "display_name": "`box-shadow` (Card Shadows)",
+      "prerequisites": [
+        {
+          "term": "text_shadow",
+          "module": "02-css",
+          "description": "`box-shadow` uses the exact same syntax, but applies to the Box Model instead of the text inside it!"
+        }
+      ],
+      "related": [
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "Sizing layouts with structural boundaries."
+        },
+        {
+          "term": "border_radius",
+          "module": "02-css",
+          "description": "Card rounding properties which crop shadow layouts."
+        },
+        {
+          "term": "filter",
+          "module": "02-css",
+          "description": "Image processing filters that include `drop-shadow()`."
+        },
+        {
+          "term": "text_shadow",
+          "module": "02-css",
+          "description": "Related concept: `text-shadow`."
+        },
+        {
+          "term": "backdrop_filter",
+          "module": "02-css",
+          "description": "Related concept: `backdrop-filter`."
+        }
+      ]
+    },
+    "cursor": {
+      "level": 9,
+      "file": "terms/level_09/cursor.md",
+      "display_name": "`cursor`",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Changing the cursor is almost always paired with changing the styling properties on `:hover`."
+        },
+        {
+          "term": "outline",
+          "module": "02-css",
+          "description": "Visual ring for keyboard selection focuses."
+        }
+      ]
+    },
+    "filter": {
+      "level": 9,
+      "file": "terms/level_09/filter.md",
+      "display_name": "`filter`",
+      "prerequisites": [
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "Fading elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "box_shadow",
+          "module": "02-css",
+          "description": "The rectangular alternative."
+        },
+        {
+          "term": "backdrop_filter",
+          "module": "02-css",
+          "description": "Applying filters behind an element."
+        },
+        {
+          "term": "opacity",
+          "module": "02-css",
+          "description": "Fading elements."
+        }
+      ]
+    },
+    "gradients": {
+      "level": 9,
+      "file": "terms/level_09/gradients.md",
+      "display_name": "`linear-gradient` & `radial-gradient` (Gradients)",
+      "prerequisites": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "The parent container properties."
+        }
+      ],
+      "related": [
+        {
+          "term": "background_size",
+          "module": "02-css",
+          "description": "Scaling backgrounds."
+        },
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "Base background declarations."
+        }
+      ]
+    },
+    "hover_focus": {
+      "level": 9,
+      "file": "terms/level_09/hover_focus.md",
+      "display_name": "`:hover` & `:focus` (Pseudo-classes)",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "These are special attachments you add to normal selectors."
+        },
+        {
+          "term": "outline",
+          "module": "02-css",
+          "description": "The property most commonly tied to the `:focus` state."
+        }
+      ],
+      "related": [
+        {
+          "term": "transition",
+          "module": "02-css",
+          "description": "Making state adjustments smooth and animated."
+        },
+        {
+          "term": "cursor",
+          "module": "02-css",
+          "description": "Changing pointer graphics on hover states."
+        },
+        {
+          "term": "pseudo_elements",
+          "module": "02-css",
+          "description": "Double-colon structural selectors."
+        },
+        {
+          "term": "outline",
+          "module": "02-css",
+          "description": "Related concept: `outline`."
+        },
+        {
+          "term": "pseudo_classes_advanced",
+          "module": "02-css",
+          "description": "Related concept: Advanced Pseudo-classes."
+        }
+      ]
+    },
+    "object_fit": {
+      "level": 9,
+      "file": "terms/level_09/object_fit.md",
+      "display_name": "`object-fit` & `object-position`",
+      "prerequisites": [
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "Sizing the media element box."
+        },
+        {
+          "term": "background_size",
+          "module": "02-css",
+          "description": "The background equivalent."
+        }
+      ],
+      "related": [
+        {
+          "term": "background_size",
+          "module": "02-css",
+          "description": "The background equivalent."
+        },
+        {
+          "term": "border_radius",
+          "module": "02-css",
+          "description": "Cropping visual profiles."
+        },
+        {
+          "term": "aspect_ratio",
+          "module": "02-css",
+          "description": "Related concept: `aspect-ratio`."
+        }
+      ]
+    },
+    "opacity": {
+      "level": 9,
+      "file": "terms/level_09/opacity.md",
+      "display_name": "`opacity`",
+      "prerequisites": [
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "Because `opacity` aggressively affects the Parent and all of its Children!"
+        }
+      ],
+      "related": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "The much safer alternative if you only want to fade the background color, not the children."
+        },
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "Used when you want an element to be completely removed from the layout."
+        },
+        {
+          "term": "filter",
+          "module": "02-css",
+          "description": "Sizing visual filters."
+        },
+        {
+          "term": "backdrop_filter",
+          "module": "02-css",
+          "description": "Blurring backgrounds behind transparent containers."
+        },
+        {
+          "term": "color_values",
+          "module": "02-css",
+          "description": "Related concept: Color Values (hex, rgb, rgba, hsl, named)."
+        },
+        {
+          "term": "display_none_vs_visibility",
+          "module": "02-css",
+          "description": "Related concept: `display: none` vs `visibility: hidden`."
+        },
+        {
+          "term": "stacking_context",
+          "module": "02-css",
+          "description": "Related concept: Stacking Context."
+        }
+      ]
+    },
+    "outline": {
+      "level": 9,
+      "file": "terms/level_09/outline.md",
+      "display_name": "`outline`",
+      "prerequisites": [
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "You must understand Borders to understand how Outlines are different."
+        }
+      ],
+      "related": [
+        {
+          "term": "border",
+          "module": "02-css",
+          "description": "The physical layout equivalent."
+        },
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "The state where outlines are most commonly applied."
+        },
+        {
+          "term": "cursor",
+          "module": "02-css",
+          "description": "Sizing hover states."
+        }
+      ]
+    },
+    "pseudo_classes_advanced": {
+      "level": 9,
+      "file": "terms/level_09/pseudo_classes_advanced.md",
+      "display_name": "Advanced Pseudo-classes",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "The baseline element and class selectors."
+        },
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Understanding active selectors."
+        }
+      ],
+      "related": [
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Base active selector states."
+        },
+        {
+          "term": "pseudo_elements",
+          "module": "02-css",
+          "description": "Virtual node generators."
+        },
+        {
+          "term": "accent_color",
+          "module": "02-css",
+          "description": "Related concept: `accent-color`."
+        },
+        {
+          "term": "combinators",
+          "module": "02-css",
+          "description": "Related concept: Combinator Selectors."
+        }
+      ]
+    },
+    "pseudo_elements": {
+      "level": 9,
+      "file": "terms/level_09/pseudo_elements.md",
+      "display_name": "`::before` & `::after` (Pseudo-elements)",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Base class selectors."
+        },
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Understanding single-colon states."
+        }
+      ],
+      "related": [
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Interactive state selectors."
+        },
+        {
+          "term": "display",
+          "module": "02-css",
+          "description": "Overriding default inline display constraints."
+        },
+        {
+          "term": "pseudo_classes_advanced",
+          "module": "02-css",
+          "description": "Related concept: Advanced Pseudo-classes."
+        }
+      ]
+    },
+    "animation": {
+      "level": 10,
+      "file": "terms/level_10/animation.md",
+      "display_name": "`@keyframes` & `animation`",
+      "prerequisites": [
+        {
+          "term": "transition",
+          "module": "02-css",
+          "description": "The baseline two-state animation tool."
+        },
+        {
+          "term": "transform",
+          "module": "02-css",
+          "description": "The visual coordinates manipulated by animations."
+        }
+      ],
+      "related": [
+        {
+          "term": "transition",
+          "module": "02-css",
+          "description": "Two-state animated shifts."
+        },
+        {
+          "term": "transform",
+          "module": "02-css",
+          "description": "The positioning multipliers."
+        }
+      ]
+    },
+    "transform": {
+      "level": 10,
+      "file": "terms/level_10/transform.md",
+      "display_name": "`transform` (Scale, Translate, Rotate)",
+      "prerequisites": [
+        {
+          "term": "box_model",
+          "module": "02-css",
+          "description": "Normal properties like `margin` push other boxes around. `transform` ignores them!"
+        },
+        {
+          "term": "transition",
+          "module": "02-css",
+          "description": "Transforms are almost always animated on `:hover`."
+        }
+      ],
+      "related": [
+        {
+          "term": "transition",
+          "module": "02-css",
+          "description": "Without a transition, a transform just instantly snaps to its new shape/position."
+        },
+        {
+          "term": "animation",
+          "module": "02-css",
+          "description": "Complex animations that often chain multiple transforms together."
+        },
+        {
+          "term": "stacking_context",
+          "module": "02-css",
+          "description": "Related concept: Stacking Context."
+        }
+      ]
+    },
+    "transition": {
+      "level": 10,
+      "file": "terms/level_10/transition.md",
+      "display_name": "`transition`",
+      "prerequisites": [
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Transitions are almost exclusively used to animate the change between the default state and a hover/focus state."
+        }
+      ],
+      "related": [
+        {
+          "term": "transform",
+          "module": "02-css",
+          "description": "The most common property to animate (e.g., smoothly scaling a button up to be 10% larger on hover)."
+        },
+        {
+          "term": "animation",
+          "module": "02-css",
+          "description": "The multi-step alternative for complex, non-interactive animation loops."
+        },
+        {
+          "term": "hover_focus",
+          "module": "02-css",
+          "description": "Related concept: `:hover` & `:focus` (Pseudo-classes)."
+        }
+      ]
+    },
+    "accent_color": {
+      "level": 11,
+      "file": "terms/level_11/accent_color.md",
+      "display_name": "`accent-color`",
+      "prerequisites": [
+        {
+          "term": "color_vs_background",
+          "module": "02-css",
+          "description": "Base color value properties."
+        }
+      ],
+      "related": [
+        {
+          "term": "pseudo_classes_advanced",
+          "module": "02-css",
+          "description": "`:checked` and `:disabled` form selectors."
+        }
+      ]
+    },
+    "aspect_ratio": {
+      "level": 11,
+      "file": "terms/level_11/aspect_ratio.md",
+      "display_name": "`aspect-ratio`",
+      "prerequisites": [
+        {
+          "term": "width_height",
+          "module": "02-css",
+          "description": "Base HTML sizing properties."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Sizing layout blocks dynamically."
+        }
+      ],
+      "related": [
+        {
+          "term": "object_fit",
+          "module": "02-css",
+          "description": "Standard scaling for cropped media contents inside locked boxes."
+        }
+      ]
+    },
+    "attribute_selectors": {
+      "level": 11,
+      "file": "terms/level_11/attribute_selectors.md",
+      "display_name": "Attribute Selectors",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Base element and class matching."
+        },
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "How selectors accumulate matching priorities."
+        }
+      ],
+      "related": [
+        {
+          "term": "combinators",
+          "module": "02-css",
+          "description": "Target elements relative to parent-child tree layouts."
+        }
+      ]
+    },
+    "calc": {
+      "level": 11,
+      "file": "terms/level_11/calc.md",
+      "display_name": "`calc()`",
+      "prerequisites": [
+        {
+          "term": "percentages",
+          "module": "02-css",
+          "description": "`calc()` is most powerful when mixing these relative units with fixed units like `px`."
+        }
+      ],
+      "related": [
+        {
+          "term": "gap",
+          "module": "02-css",
+          "description": "Calculating space widths between grid tracks."
+        },
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "Evaluating custom variables inside math equations."
+        },
+        {
+          "term": "min_max_clamp",
+          "module": "02-css",
+          "description": "Advanced responsive scaling functions."
+        }
+      ]
+    },
+    "combinators": {
+      "level": 11,
+      "file": "terms/level_11/combinators.md",
+      "display_name": "Combinator Selectors",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Base element and class matching."
+        },
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "How selectors accumulate matching priorities."
+        }
+      ],
+      "related": [
+        {
+          "term": "attribute_selectors",
+          "module": "02-css",
+          "description": "Selective attribute matching."
+        },
+        {
+          "term": "pseudo_classes_advanced",
+          "module": "02-css",
+          "description": "Positional structural styling hooks."
+        }
+      ]
+    },
+    "container_queries": {
+      "level": 11,
+      "file": "terms/level_11/container_queries.md",
+      "display_name": "Container Queries (`@container`)",
+      "prerequisites": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Viewport conditional queries."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Sizing layout blocks dynamically."
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Viewport-based responsive queries."
+        },
+        {
+          "term": "supports",
+          "module": "02-css",
+          "description": "Browser feature detection at-rules."
+        }
+      ]
+    },
+    "dark_mode": {
+      "level": 11,
+      "file": "terms/level_11/dark_mode.md",
+      "display_name": "Dark Mode (`prefers-color-scheme`)",
+      "prerequisites": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Conditional CSS at-rules."
+        },
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "Theme custom variables."
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Baseline responsive queries."
+        },
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "Dynamic color variables."
+        },
+        {
+          "term": "root_pseudo_class",
+          "module": "02-css",
+          "description": "Variable scopes."
+        }
+      ]
+    },
+    "import": {
+      "level": 11,
+      "file": "terms/level_11/import.md",
+      "display_name": "`@import`",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "Because `@import` files are loaded first, any CSS you write *below* the imports in your master file will override the imported CSS (due to the cascade!)."
+        },
+        {
+          "term": "preprocessors",
+          "module": "02-css",
+          "description": "Modern preprocessors compile imports before browser loading loops."
+        },
+        {
+          "term": "reset_normalize",
+          "module": "02-css",
+          "description": "Resets are often loaded at the top of main files via `@import`."
+        },
+        {
+          "term": "web_fonts",
+          "module": "02-css",
+          "description": "Related concept: `@font-face` & Web Fonts (Google Fonts)."
+        }
+      ]
+    },
+    "methodologies": {
+      "level": 11,
+      "file": "terms/level_11/methodologies.md",
+      "display_name": "CSS Methodologies (BEM, OOCSS, SMACSS)",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Writing target classes."
+        },
+        {
+          "term": "specificity",
+          "module": "02-css",
+          "description": "Understanding the danger of selector matching weight."
+        }
+      ],
+      "related": [
+        {
+          "term": "preprocessors",
+          "module": "02-css",
+          "description": "Tools that help organize BEM naming modules."
+        },
+        {
+          "term": "reset_normalize",
+          "module": "02-css",
+          "description": "Base architecture configs."
+        }
+      ]
+    },
+    "preprocessors": {
+      "level": 11,
+      "file": "terms/level_11/preprocessors.md",
+      "display_name": "CSS Preprocessors (Sass & SCSS)",
+      "prerequisites": [
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "Dynamic browser variables."
+        },
+        {
+          "term": "import",
+          "module": "02-css",
+          "description": "Bundling modular styles."
+        }
+      ],
+      "related": [
+        {
+          "term": "import",
+          "module": "02-css",
+          "description": "Bundling modular styles."
+        },
+        {
+          "term": "methodologies",
+          "module": "02-css",
+          "description": "Component naming schemes."
+        }
+      ]
+    },
+    "reset_normalize": {
+      "level": 11,
+      "file": "terms/level_11/reset_normalize.md",
+      "display_name": "CSS Reset vs. Normalize",
+      "prerequisites": [
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "Overwriting default rules."
+        },
+        {
+          "term": "box_sizing",
+          "module": "02-css",
+          "description": "The core layout adjustment."
+        }
+      ],
+      "related": [
+        {
+          "term": "import",
+          "module": "02-css",
+          "description": "Loading modular sheets."
+        },
+        {
+          "term": "box_sizing",
+          "module": "02-css",
+          "description": "Sizing layouts easily."
+        },
+        {
+          "term": "methodologies",
+          "module": "02-css",
+          "description": "Related concept: CSS Methodologies (BEM, OOCSS, SMACSS)."
+        }
+      ]
+    },
+    "root_pseudo_class": {
+      "level": 11,
+      "file": "terms/level_11/root_pseudo_class.md",
+      "display_name": "`:root` Pseudo-class",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "Target elements in the document."
+        },
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "The variables stored inside `:root`."
+        }
+      ],
+      "related": [
+        {
+          "term": "var",
+          "module": "02-css",
+          "description": "The variables stored inside `:root`."
+        },
+        {
+          "term": "dark_mode",
+          "module": "02-css",
+          "description": "Overwriting `:root` values."
+        }
+      ]
+    },
+    "scroll_snap": {
+      "level": 11,
+      "file": "terms/level_11/scroll_snap.md",
+      "display_name": "`scroll-behavior` & `scroll-snap`",
+      "prerequisites": [
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "Creating scrollable parent containers."
+        }
+      ],
+      "related": [
+        {
+          "term": "overflow",
+          "module": "02-css",
+          "description": "The parent scrolling trigger."
+        }
+      ]
+    },
+    "supports": {
+      "level": 11,
+      "file": "terms/level_11/supports.md",
+      "display_name": "`@supports` (Feature Queries)",
+      "prerequisites": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "The foundation of conditional at-rule wrappers."
+        },
+        {
+          "term": "responsive_design",
+          "module": "02-css",
+          "description": "Designing layout adapters for various environments."
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Viewport sizing at-rules."
+        },
+        {
+          "term": "container_queries",
+          "module": "02-css",
+          "description": "Component container queries."
+        }
+      ]
+    },
+    "var": {
+      "level": 11,
+      "file": "terms/level_11/var.md",
+      "display_name": "`var()` (CSS Custom Properties)",
+      "prerequisites": [
+        {
+          "term": "selectors",
+          "module": "02-css",
+          "description": "You must understand how to target elements to understand the `:root` selector."
+        },
+        {
+          "term": "the_cascade",
+          "module": "02-css",
+          "description": "Variables respect the cascade, meaning they can be overwritten!"
+        }
+      ],
+      "related": [
+        {
+          "term": "media_queries",
+          "module": "02-css",
+          "description": "Overwriting variables inside media queries for responsive layouts."
+        },
+        {
+          "term": "root_pseudo_class",
+          "module": "02-css",
+          "description": "The global scope selector where custom properties are declared."
+        },
+        {
+          "term": "dark_mode",
+          "module": "02-css",
+          "description": "Custom property theme swaps."
+        },
+        {
+          "term": "calc",
+          "module": "02-css",
+          "description": "Related concept: `calc()`."
+        }
+      ]
+    }
+  }
+}

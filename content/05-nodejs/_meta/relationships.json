@@ -1,0 +1,2875 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "05-nodejs",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "blocking_event_loop": {
+      "level": 1,
+      "file": "terms/level_01/blocking_event_loop.md",
+      "display_name": "Blocking the Event Loop",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The loop mechanism that must be kept free."
+        },
+        {
+          "term": "cpu_vs_io",
+          "module": "05-nodejs",
+          "description": "The workloads that lead to thread blocking."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The loop system frozen by blocking code."
+        },
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "The execution structure vulnerable to blocking."
+        },
+        {
+          "term": "cpu_vs_io",
+          "module": "05-nodejs",
+          "description": "Related concept: CPU-bound vs I/O-bound."
+        },
+        {
+          "term": "memory_leaks",
+          "module": "05-nodejs",
+          "description": "Related concept: Memory Leaks & Garbage Collection."
+        }
+      ]
+    },
+    "call_stack": {
+      "level": 1,
+      "file": "terms/level_01/call_stack.md",
+      "display_name": "The Call Stack",
+      "prerequisites": [
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "JavaScript runs on exactly one call stack."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The coordinator that pushes callbacks onto the Call Stack once it is empty."
+        },
+        {
+          "term": "v8_engine",
+          "module": "05-nodejs",
+          "description": "The engine that allocates and runs the Call Stack."
+        }
+      ]
+    },
+    "cpu_vs_io": {
+      "level": 1,
+      "file": "terms/level_01/cpu_vs_io.md",
+      "display_name": "CPU-bound vs I/O-bound",
+      "prerequisites": [
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "The single-threaded context affected by processing bottlenecks."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The loop managing task scheduling."
+        }
+      ],
+      "related": [
+        {
+          "term": "blocking_event_loop",
+          "module": "05-nodejs",
+          "description": "The consequence of running CPU-bound code on the main thread."
+        },
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "The core design constraint behind Node's CPU limits."
+        }
+      ]
+    },
+    "event_loop": {
+      "level": 1,
+      "file": "terms/level_01/event_loop.md",
+      "display_name": "The Event Loop & Libuv",
+      "prerequisites": [
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "The Event Loop manages this single thread."
+        },
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "The Event Loop organizes the chaos created by Non-Blocking tasks."
+        }
+      ],
+      "related": [
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "The tasks that get sent to the background."
+        },
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "The actual functions that the Event Loop pushes onto the main thread."
+        },
+        {
+          "term": "blocking_event_loop",
+          "module": "05-nodejs",
+          "description": "Related concept: Blocking the Event Loop."
+        },
+        {
+          "term": "call_stack",
+          "module": "05-nodejs",
+          "description": "Related concept: The Call Stack."
+        },
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "Related concept: Single-Threaded Architecture."
+        },
+        {
+          "term": "thread_pool",
+          "module": "05-nodejs",
+          "description": "Related concept: The Thread Pool (libuv)."
+        },
+        {
+          "term": "v8_engine",
+          "module": "05-nodejs",
+          "description": "Related concept: V8 JavaScript Engine."
+        },
+        {
+          "term": "microtasks_macrotasks",
+          "module": "05-nodejs",
+          "description": "Related concept: Microtasks vs Macrotasks."
+        },
+        {
+          "term": "nexttick_setimmediate",
+          "module": "05-nodejs",
+          "description": "Related concept: process.nextTick() vs setImmediate()."
+        }
+      ]
+    },
+    "nodejs": {
+      "level": 1,
+      "file": "terms/level_01/nodejs.md",
+      "display_name": "Node.js (Runtime Environment)",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "v8_engine",
+          "module": "05-nodejs",
+          "description": "The actual engine beating inside the heart of Node.js."
+        },
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "The package manager that made the Node.js ecosystem the largest in the world."
+        },
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "Related concept: Docker."
+        }
+      ]
+    },
+    "non_blocking_io": {
+      "level": 1,
+      "file": "terms/level_01/non_blocking_io.md",
+      "display_name": "Non-Blocking I/O",
+      "prerequisites": [
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "Non-Blocking I/O is the *only* reason a Single-Threaded app doesn't instantly freeze."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The mechanism that acts as the \"buzzer\", telling the main thread that the background I/O task is finished."
+        },
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "The functions you provide to handle the data once the Non-Blocking I/O is done."
+        },
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "Related concept: Single-Threaded Architecture."
+        }
+      ]
+    },
+    "single_threaded": {
+      "level": 1,
+      "file": "terms/level_01/single_threaded.md",
+      "display_name": "Single-Threaded Architecture",
+      "prerequisites": [
+        {
+          "term": "v8_engine",
+          "module": "05-nodejs",
+          "description": "V8 is inherently single-threaded."
+        }
+      ],
+      "related": [
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "How the single thread manages to avoid waiting for the kitchen."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The mechanism that tells the single thread when the kitchen is done cooking."
+        },
+        {
+          "term": "blocking_event_loop",
+          "module": "05-nodejs",
+          "description": "Related concept: Blocking the Event Loop."
+        },
+        {
+          "term": "cpu_vs_io",
+          "module": "05-nodejs",
+          "description": "Related concept: CPU-bound vs I/O-bound."
+        },
+        {
+          "term": "thread_pool",
+          "module": "05-nodejs",
+          "description": "Related concept: The Thread Pool (libuv)."
+        }
+      ]
+    },
+    "thread_pool": {
+      "level": 1,
+      "file": "terms/level_01/thread_pool.md",
+      "display_name": "The Thread Pool (libuv)",
+      "prerequisites": [
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "The concept of offloading work."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The engine coordinating asynchronous callbacks."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The loop that collects tasks finished by the Thread Pool."
+        },
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "The architecture protected from blocking by the Thread Pool."
+        }
+      ]
+    },
+    "v8_engine": {
+      "level": 1,
+      "file": "terms/level_01/v8_engine.md",
+      "display_name": "V8 JavaScript Engine",
+      "prerequisites": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "Node is literally just a wrapper around V8."
+        }
+      ],
+      "related": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The runtime that hosts V8."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "While V8 executes the JS code, it relies on the Event Loop to handle asynchronous timing."
+        },
+        {
+          "term": "call_stack",
+          "module": "05-nodejs",
+          "description": "Related concept: The Call Stack."
+        }
+      ]
+    },
+    "crypto_module": {
+      "level": 2,
+      "file": "terms/level_02/crypto_module.md",
+      "display_name": "The crypto Module",
+      "prerequisites": [
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "Like `crypto`, this is built directly into Node.js."
+        }
+      ],
+      "related": [
+        {
+          "term": "bcrypt",
+          "module": "05-nodejs",
+          "description": "A specialized third-party library designed specifically for securely hashing passwords, often preferred over native `crypto` methods for that specific use case."
+        },
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "Many `crypto` functions return or expect data in the form of Buffers."
+        }
+      ]
+    },
+    "events_module": {
+      "level": 2,
+      "file": "terms/level_02/events_module.md",
+      "display_name": "The events Module",
+      "prerequisites": [
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "The global namespace containing built-in primitives."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_emitter",
+          "module": "05-nodejs",
+          "description": "The conceptual implementation of this architecture."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "Data-flow streams that inherit directly from `EventEmitter`."
+        }
+      ]
+    },
+    "fs_module": {
+      "level": 2,
+      "file": "terms/level_02/fs_module.md",
+      "display_name": "The fs Module (File System)",
+      "prerequisites": [
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "The `fs` module is the classic example of why Non-Blocking I/O is critical."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "This module is impossible in the browser for security reasons."
+        }
+      ],
+      "related": [
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "What the `fs` module returns if you forget to specify `utf8`."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "If a file is 10 Gigabytes, `fs.readFile` will crash your RAM. You must use `fs.createReadStream` instead."
+        },
+        {
+          "term": "path_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The path Module."
+        },
+        {
+          "term": "promisification",
+          "module": "05-nodejs",
+          "description": "Related concept: Promisification (util.promisify)."
+        }
+      ]
+    },
+    "global_objects": {
+      "level": 2,
+      "file": "terms/level_02/global_objects.md",
+      "display_name": "Global Objects (global, __dirname, __filename)",
+      "prerequisites": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "Node strips out browser APIs and replaces them with its own Globals."
+        }
+      ],
+      "related": [
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "The most powerful global object in Node.js."
+        },
+        {
+          "term": "path_module",
+          "module": "05-nodejs",
+          "description": "The module you use in conjunction with `__dirname` to build file paths safely."
+        },
+        {
+          "term": "repl",
+          "module": "05-nodejs",
+          "description": "Related concept: The Node.js REPL."
+        }
+      ]
+    },
+    "http_module": {
+      "level": 2,
+      "file": "terms/level_02/http_module.md",
+      "display_name": "The http Module",
+      "prerequisites": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The protocol this module implements."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "This module is the primary reason Node.js became famous."
+        }
+      ],
+      "related": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "The famous third-party framework that abstracts the native `http` module to make web development significantly easier."
+        },
+        {
+          "term": "event_emitter",
+          "module": "05-nodejs",
+          "description": "Related concept: Event Emitter."
+        },
+        {
+          "term": "static_files",
+          "module": "05-nodejs",
+          "description": "Related concept: Serving Static Files (express.static)."
+        }
+      ]
+    },
+    "os_util_modules": {
+      "level": 2,
+      "file": "terms/level_02/os_util_modules.md",
+      "display_name": "The os & util Modules",
+      "prerequisites": [
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "Built-in variables in the Node execution context."
+        }
+      ],
+      "related": [
+        {
+          "term": "promisification",
+          "module": "05-nodejs",
+          "description": "The concept behind async callback conversion."
+        },
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "Multiple processes that scale dynamically based on CPU core counts."
+        }
+      ]
+    },
+    "path_module": {
+      "level": 2,
+      "file": "terms/level_02/path_module.md",
+      "display_name": "The path Module",
+      "prerequisites": [
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "The `path` module is heavily used in conjunction with `__dirname`."
+        },
+        {
+          "term": "fs_module",
+          "module": "05-nodejs",
+          "description": "You use the `path` module to build the strings that you feed into `fs`."
+        }
+      ],
+      "related": [
+        {
+          "term": "fs_module",
+          "module": "05-nodejs",
+          "description": "The module that consumes the paths you build."
+        },
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "Related concept: Global Objects (global, __dirname, __filename)."
+        }
+      ]
+    },
+    "process_object": {
+      "level": 2,
+      "file": "terms/level_02/process_object.md",
+      "display_name": "The process Object",
+      "prerequisites": [
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "`process` is a global object, available in every file automatically."
+        }
+      ],
+      "related": [
+        {
+          "term": "env_vars",
+          "module": "05-nodejs",
+          "description": "The ecosystem tool used to manage `process.env` files easily on your laptop."
+        },
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "`process` is a member of this family."
+        },
+        {
+          "term": "repl",
+          "module": "05-nodejs",
+          "description": "Related concept: The Node.js REPL."
+        },
+        {
+          "term": "standard_streams",
+          "module": "05-nodejs",
+          "description": "Related concept: stdin / stdout / stderr (Standard Streams)."
+        },
+        {
+          "term": "unhandled_rejections",
+          "module": "05-nodejs",
+          "description": "Related concept: Unhandled Promise Rejections."
+        }
+      ]
+    },
+    "repl": {
+      "level": 2,
+      "file": "terms/level_02/repl.md",
+      "display_name": "The Node.js REPL",
+      "prerequisites": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The parent runtime executing the code."
+        },
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "The APIs available inside the REPL context."
+        }
+      ],
+      "related": [
+        {
+          "term": "global_objects",
+          "module": "05-nodejs",
+          "description": "The properties loaded in the REPL runtime scope."
+        },
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "The system environment configurations checked via the REPL."
+        }
+      ]
+    },
+    "standard_streams": {
+      "level": 2,
+      "file": "terms/level_02/standard_streams.md",
+      "display_name": "stdin / stdout / stderr (Standard Streams)",
+      "prerequisites": [
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "Standard streams are accessed as properties of `process`."
+        }
+      ],
+      "related": [
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "The core concepts behind readable and writable data channels."
+        },
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "The parent process object managing these streams."
+        }
+      ]
+    },
+    "circular_dependencies": {
+      "level": 3,
+      "file": "terms/level_03/circular_dependencies.md",
+      "display_name": "Circular Dependencies",
+      "prerequisites": [
+        {
+          "term": "commonjs",
+          "module": "05-nodejs",
+          "description": ""
+        }
+      ],
+      "related": [
+        {
+          "term": "module_resolution",
+          "module": "05-nodejs",
+          "description": "The process that gets trapped in the infinite loop."
+        }
+      ]
+    },
+    "commonjs": {
+      "level": 3,
+      "file": "terms/level_03/commonjs.md",
+      "display_name": "CommonJS (require, module.exports)",
+      "prerequisites": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "Node was created before JavaScript had an official module system, so Ryan Dahl had to invent one."
+        }
+      ],
+      "related": [
+        {
+          "term": "es_modules",
+          "module": "05-nodejs",
+          "description": "The modern replacement for CommonJS."
+        },
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "NPM packages are historically distributed as CommonJS modules."
+        }
+      ]
+    },
+    "es_modules": {
+      "level": 3,
+      "file": "terms/level_03/es_modules.md",
+      "display_name": "ES Modules (import, export)",
+      "prerequisites": [
+        {
+          "term": "commonjs",
+          "module": "05-nodejs",
+          "description": "You must understand the legacy system to understand why we upgraded to ES Modules."
+        }
+      ],
+      "related": [
+        {
+          "term": "commonjs",
+          "module": "05-nodejs",
+          "description": "The legacy system that ESM is slowly replacing."
+        },
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "Where you configure Node to use `\"type\": \"module\"`."
+        },
+        {
+          "term": "module_resolution",
+          "module": "05-nodejs",
+          "description": "Related concept: Module Resolution."
+        }
+      ]
+    },
+    "module_resolution": {
+      "level": 3,
+      "file": "terms/level_03/module_resolution.md",
+      "display_name": "Module Resolution",
+      "prerequisites": [
+        {
+          "term": "commonjs",
+          "module": "05-nodejs",
+          "description": "Uses the classic module resolution algorithm."
+        },
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "Resolution specifically looks for packages installed by NPM."
+        }
+      ],
+      "related": [
+        {
+          "term": "node_modules",
+          "module": "05-nodejs",
+          "description": "The folder the algorithm is desperately searching for."
+        },
+        {
+          "term": "es_modules",
+          "module": "05-nodejs",
+          "description": "ESM resolution is slightly stricter (e.g., forcing you to include the `.js` extension)."
+        },
+        {
+          "term": "circular_dependencies",
+          "module": "05-nodejs",
+          "description": "Related concept: Circular Dependencies."
+        },
+        {
+          "term": "module_types",
+          "module": "05-nodejs",
+          "description": "Related concept: Built-in vs External Modules."
+        }
+      ]
+    },
+    "module_types": {
+      "level": 3,
+      "file": "terms/level_03/module_types.md",
+      "display_name": "Built-in vs External Modules",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "The registry where you download all External Modules."
+        },
+        {
+          "term": "node_modules",
+          "module": "05-nodejs",
+          "description": "The folder where External Modules physically live on your hard drive once downloaded."
+        },
+        {
+          "term": "module_resolution",
+          "module": "05-nodejs",
+          "description": "How Node finds these modules."
+        }
+      ]
+    },
+    "node_modules": {
+      "level": 4,
+      "file": "terms/level_04/node_modules.md",
+      "display_name": "node_modules",
+      "prerequisites": [
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "The tool that creates this folder."
+        },
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "The blueprint that tells NPM what to put inside this folder."
+        }
+      ],
+      "related": [
+        {
+          "term": "module_resolution",
+          "module": "05-nodejs",
+          "description": "The exact algorithm Node uses to search inside the `node_modules` folder."
+        },
+        {
+          "term": "module_types",
+          "module": "05-nodejs",
+          "description": "Related concept: Built-in vs External Modules."
+        },
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "Related concept: NPM (Node Package Manager)."
+        },
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "Related concept: package.json."
+        }
+      ]
+    },
+    "npm": {
+      "level": 4,
+      "file": "terms/level_04/npm.md",
+      "display_name": "NPM (Node Package Manager)",
+      "prerequisites": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "NPM comes bundled automatically when you install Node.js."
+        },
+        {
+          "term": "module_types",
+          "module": "05-nodejs",
+          "description": "NPM is the tool used to download External Modules."
+        }
+      ],
+      "related": [
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "The configuration file that NPM reads and writes to."
+        },
+        {
+          "term": "node_modules",
+          "module": "05-nodejs",
+          "description": "Where NPM physically places the downloaded code."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "Related concept: Node.js (Runtime Environment)."
+        },
+        {
+          "term": "commonjs",
+          "module": "05-nodejs",
+          "description": "Related concept: CommonJS (require, module.exports)."
+        },
+        {
+          "term": "module_types",
+          "module": "05-nodejs",
+          "description": "Related concept: Built-in vs External Modules."
+        }
+      ]
+    },
+    "package_json": {
+      "level": 4,
+      "file": "terms/level_04/package_json.md",
+      "display_name": "package.json",
+      "prerequisites": [
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "The tool that automatically creates and edits this file."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The syntax format of this file."
+        }
+      ],
+      "related": [
+        {
+          "term": "package_lock",
+          "module": "05-nodejs",
+          "description": "The sister file to `package.json` that guarantees exact versions."
+        },
+        {
+          "term": "node_modules",
+          "module": "05-nodejs",
+          "description": "The physical folder where the downloaded code is placed."
+        },
+        {
+          "term": "es_modules",
+          "module": "05-nodejs",
+          "description": "Related concept: ES Modules (import, export)."
+        },
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "Related concept: NPM (Node Package Manager)."
+        },
+        {
+          "term": "semantic_versioning",
+          "module": "05-nodejs",
+          "description": "Related concept: Semantic Versioning (SemVer)."
+        }
+      ]
+    },
+    "package_lock": {
+      "level": 4,
+      "file": "terms/level_04/package_lock.md",
+      "display_name": "package-lock.json & Deterministic Installs",
+      "prerequisites": [
+        {
+          "term": "semantic_versioning",
+          "module": "05-nodejs",
+          "description": "The `^` symbol in `package.json` creates a massive vulnerability that the lock file fixes."
+        },
+        {
+          "term": "node_modules",
+          "module": "05-nodejs",
+          "description": "The lock file records exactly what goes into this folder."
+        }
+      ],
+      "related": [
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "The human-readable blueprint. (The lock file is the machine-readable exact receipt)."
+        }
+      ]
+    },
+    "semantic_versioning": {
+      "level": 4,
+      "file": "terms/level_04/semantic_versioning.md",
+      "display_name": "Semantic Versioning (SemVer)",
+      "prerequisites": [
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "The same concept, but applied to downloadable code packages."
+        },
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "Where these numbers are heavily used."
+        }
+      ],
+      "related": [
+        {
+          "term": "package_json",
+          "module": "05-nodejs",
+          "description": "Where the SemVer ranges (using `^` and `~`) are stored."
+        }
+      ]
+    },
+    "async_await": {
+      "level": 5,
+      "file": "terms/level_05/async_await.md",
+      "display_name": "async / await in Node",
+      "prerequisites": [
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "The original nesting problem."
+        },
+        {
+          "term": "promisification",
+          "module": "05-nodejs",
+          "description": "The bridge converting callbacks into Promise handles."
+        }
+      ],
+      "related": [
+        {
+          "term": "unhandled_rejections",
+          "module": "05-nodejs",
+          "description": "The errors triggered if you fail to handle async await exceptions."
+        },
+        {
+          "term": "async_error_handling",
+          "module": "05-nodejs",
+          "description": "The mechanisms used to capture errors during await."
+        }
+      ]
+    },
+    "async_error_handling": {
+      "level": 5,
+      "file": "terms/level_05/async_error_handling.md",
+      "display_name": "Async Error Handling (try/catch + .catch)",
+      "prerequisites": [
+        {
+          "term": "async_await",
+          "module": "05-nodejs",
+          "description": "The control flow syntax utilizing Promises."
+        },
+        {
+          "term": "unhandled_rejections",
+          "module": "05-nodejs",
+          "description": "The consequence of failing to handle async errors."
+        }
+      ],
+      "related": [
+        {
+          "term": "unhandled_rejections",
+          "module": "05-nodejs",
+          "description": "The process crashes caused by missing catch blocks."
+        },
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "The error-first callback style of handling errors."
+        },
+        {
+          "term": "async_await",
+          "module": "05-nodejs",
+          "description": "Related concept: async / await in Node."
+        },
+        {
+          "term": "error_handling_middleware",
+          "module": "05-nodejs",
+          "description": "Related concept: Error Handling Middleware."
+        }
+      ]
+    },
+    "callbacks": {
+      "level": 5,
+      "file": "terms/level_05/callbacks.md",
+      "display_name": "Callbacks & Callback Hell",
+      "prerequisites": [
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "Callbacks are the original mechanism Node.js used to handle Non-Blocking I/O."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The loop pushes callbacks back onto the main thread."
+        }
+      ],
+      "related": [
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The modern solution that completely eliminated Callback Hell."
+        },
+        {
+          "term": "promisification",
+          "module": "05-nodejs",
+          "description": "How you convert old callback code into modern Promise code."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "Related concept: The Event Loop & Libuv."
+        },
+        {
+          "term": "non_blocking_io",
+          "module": "05-nodejs",
+          "description": "Related concept: Non-Blocking I/O."
+        },
+        {
+          "term": "async_error_handling",
+          "module": "05-nodejs",
+          "description": "Related concept: Async Error Handling (try/catch + .catch)."
+        }
+      ]
+    },
+    "event_emitter": {
+      "level": 5,
+      "file": "terms/level_05/event_emitter.md",
+      "display_name": "Event Emitter",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "What manages the asynchronous nature of events."
+        },
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "What executes when an event is heard."
+        }
+      ],
+      "related": [
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "The most famous use-case of Event Emitters in Node.js."
+        },
+        {
+          "term": "http_module",
+          "module": "05-nodejs",
+          "description": "Servers are Event Emitters under the hood."
+        },
+        {
+          "term": "events_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The events Module."
+        }
+      ]
+    },
+    "microtasks_macrotasks": {
+      "level": 5,
+      "file": "terms/level_05/microtasks_macrotasks.md",
+      "display_name": "Microtasks vs Macrotasks",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "This is a deep dive into exactly how the Event Loop prioritizes work."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The manager of these two queues."
+        },
+        {
+          "term": "nexttick_setimmediate",
+          "module": "05-nodejs",
+          "description": "Related concept: process.nextTick() vs setImmediate()."
+        },
+        {
+          "term": "unhandled_rejections",
+          "module": "05-nodejs",
+          "description": "Related concept: Unhandled Promise Rejections."
+        }
+      ]
+    },
+    "nexttick_setimmediate": {
+      "level": 5,
+      "file": "terms/level_05/nexttick_setimmediate.md",
+      "display_name": "process.nextTick() vs setImmediate()",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The loop phases where callbacks are scheduled."
+        },
+        {
+          "term": "microtasks_macrotasks",
+          "module": "05-nodejs",
+          "description": "The standard JavaScript microtask queue priorities."
+        }
+      ],
+      "related": [
+        {
+          "term": "microtasks_macrotasks",
+          "module": "05-nodejs",
+          "description": "The standard V8 microtask scheduling queues."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The parent routing system managing execution phases."
+        }
+      ]
+    },
+    "promisification": {
+      "level": 5,
+      "file": "terms/level_05/promisification.md",
+      "display_name": "Promisification (util.promisify)",
+      "prerequisites": [
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "The legacy system you are trying to escape."
+        }
+      ],
+      "related": [
+        {
+          "term": "callbacks",
+          "module": "05-nodejs",
+          "description": "The problem this tool solves."
+        },
+        {
+          "term": "fs_module",
+          "module": "05-nodejs",
+          "description": "The most common module that was historically Promisified."
+        },
+        {
+          "term": "os_util_modules",
+          "module": "05-nodejs",
+          "description": "Related concept: The os & util Modules."
+        }
+      ]
+    },
+    "unhandled_rejections": {
+      "level": 5,
+      "file": "terms/level_05/unhandled_rejections.md",
+      "display_name": "Unhandled Promise Rejections",
+      "prerequisites": [
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The asynchronous objects that are failing."
+        },
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "How Node.js handles fatal crashes globally."
+        }
+      ],
+      "related": [
+        {
+          "term": "microtasks_macrotasks",
+          "module": "05-nodejs",
+          "description": "Promise rejections happen in the VIP Microtask queue."
+        },
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "The object that emits the `unhandledRejection` event."
+        },
+        {
+          "term": "async_await",
+          "module": "05-nodejs",
+          "description": "Related concept: async / await in Node."
+        },
+        {
+          "term": "async_error_handling",
+          "module": "05-nodejs",
+          "description": "Related concept: Async Error Handling (try/catch + .catch)."
+        },
+        {
+          "term": "status_codes",
+          "module": "05-nodejs",
+          "description": "Related concept: HTTP Status Codes."
+        }
+      ]
+    },
+    "backpressure": {
+      "level": 6,
+      "file": "terms/level_06/backpressure.md",
+      "display_name": "Backpressure",
+      "prerequisites": [
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "The source reader and target writer classes."
+        },
+        {
+          "term": "piping",
+          "module": "05-nodejs",
+          "description": "The stream linking method that manages backpressure."
+        }
+      ],
+      "related": [
+        {
+          "term": "piping",
+          "module": "05-nodejs",
+          "description": "The abstraction layer that automates backpressure handling."
+        },
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "The components that exchange flow-control signals."
+        }
+      ]
+    },
+    "buffer_encoding": {
+      "level": 6,
+      "file": "terms/level_06/buffer_encoding.md",
+      "display_name": "Character Encoding & Buffer ↔ String",
+      "prerequisites": [
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "The raw binary memory arrays undergoing translation."
+        }
+      ],
+      "related": [
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "The raw byte structure translated by encodings."
+        },
+        {
+          "term": "chunks",
+          "module": "05-nodejs",
+          "description": "The chunk payloads that risk character boundary corruption."
+        }
+      ]
+    },
+    "buffers": {
+      "level": 6,
+      "file": "terms/level_06/buffers.md",
+      "display_name": "Buffers",
+      "prerequisites": [
+        {
+          "term": "fs_module",
+          "module": "05-nodejs",
+          "description": "What returns a Buffer when you forget to specify `utf8`."
+        }
+      ],
+      "related": [
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "Streams are literally just continuous flows of Buffers!"
+        },
+        {
+          "term": "crypto_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The crypto Module."
+        },
+        {
+          "term": "fs_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The fs Module (File System)."
+        },
+        {
+          "term": "buffer_encoding",
+          "module": "05-nodejs",
+          "description": "Related concept: Character Encoding & Buffer ↔ String."
+        },
+        {
+          "term": "chunks",
+          "module": "05-nodejs",
+          "description": "Related concept: Data Chunks."
+        },
+        {
+          "term": "memory_leaks",
+          "module": "05-nodejs",
+          "description": "Related concept: Memory Leaks & Garbage Collection."
+        }
+      ]
+    },
+    "chunks": {
+      "level": 6,
+      "file": "terms/level_06/chunks.md",
+      "display_name": "Data Chunks",
+      "prerequisites": [
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "A chunk is literally just a Buffer object."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "Streams produce these chunks."
+        }
+      ],
+      "related": [
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "What a chunk actually is."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "The system that produces chunks."
+        },
+        {
+          "term": "buffer_encoding",
+          "module": "05-nodejs",
+          "description": "Related concept: Character Encoding & Buffer ↔ String."
+        }
+      ]
+    },
+    "duplex_transform_streams": {
+      "level": 6,
+      "file": "terms/level_06/duplex_transform_streams.md",
+      "display_name": "Duplex & Transform Streams",
+      "prerequisites": [
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "The fundamental unidirectional stream classes."
+        },
+        {
+          "term": "piping",
+          "module": "05-nodejs",
+          "description": "The pipeline chaining mechanisms."
+        }
+      ],
+      "related": [
+        {
+          "term": "piping",
+          "module": "05-nodejs",
+          "description": "The method used to link readable, transform, and writable streams together."
+        },
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "The base classes for unidirectional data streams."
+        }
+      ]
+    },
+    "piping": {
+      "level": 6,
+      "file": "terms/level_06/piping.md",
+      "display_name": "Piping (.pipe())",
+      "prerequisites": [
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "You are connecting these two exact things."
+        }
+      ],
+      "related": [
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "The two ends of the pipe."
+        },
+        {
+          "term": "backpressure",
+          "module": "05-nodejs",
+          "description": "Related concept: Backpressure."
+        },
+        {
+          "term": "duplex_transform_streams",
+          "module": "05-nodejs",
+          "description": "Related concept: Duplex & Transform Streams."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "Related concept: Streams (General Concept)."
+        }
+      ]
+    },
+    "readable_writable": {
+      "level": 6,
+      "file": "terms/level_06/readable_writable.md",
+      "display_name": "Readable & Writable Streams",
+      "prerequisites": [
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "You must understand what a stream is before using these specific classes."
+        },
+        {
+          "term": "event_emitter",
+          "module": "05-nodejs",
+          "description": "These streams inherit from `EventEmitter`."
+        }
+      ],
+      "related": [
+        {
+          "term": "piping",
+          "module": "05-nodejs",
+          "description": "The magical method used to connect a Readable Stream directly to a Writable Stream."
+        },
+        {
+          "term": "backpressure",
+          "module": "05-nodejs",
+          "description": "Related concept: Backpressure."
+        },
+        {
+          "term": "duplex_transform_streams",
+          "module": "05-nodejs",
+          "description": "Related concept: Duplex & Transform Streams."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "Related concept: Streams (General Concept)."
+        }
+      ]
+    },
+    "streams": {
+      "level": 6,
+      "file": "terms/level_06/streams.md",
+      "display_name": "Streams (General Concept)",
+      "prerequisites": [
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "Streams are composed of flowing Buffers."
+        },
+        {
+          "term": "event_emitter",
+          "module": "05-nodejs",
+          "description": "Streams use events to announce when a new chunk arrives."
+        }
+      ],
+      "related": [
+        {
+          "term": "readable_writable",
+          "module": "05-nodejs",
+          "description": "The specific implementations of Streams in Node.js."
+        },
+        {
+          "term": "piping",
+          "module": "05-nodejs",
+          "description": "How you connect two streams together."
+        },
+        {
+          "term": "events_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The events Module."
+        },
+        {
+          "term": "fs_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The fs Module (File System)."
+        },
+        {
+          "term": "standard_streams",
+          "module": "05-nodejs",
+          "description": "Related concept: stdin / stdout / stderr (Standard Streams)."
+        },
+        {
+          "term": "event_emitter",
+          "module": "05-nodejs",
+          "description": "Related concept: Event Emitter."
+        },
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "Related concept: Buffers."
+        },
+        {
+          "term": "chunks",
+          "module": "05-nodejs",
+          "description": "Related concept: Data Chunks."
+        },
+        {
+          "term": "body_parsing",
+          "module": "05-nodejs",
+          "description": "Related concept: Body Parsing (express.json())."
+        }
+      ]
+    },
+    "body_parsing": {
+      "level": 7,
+      "file": "terms/level_07/body_parsing.md",
+      "display_name": "Body Parsing (express.json())",
+      "prerequisites": [
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "The interception pipeline."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "The request structure populated by parsed inputs."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "Under the hood, the request is a Readable Stream."
+        }
+      ],
+      "related": [
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "The HTTP request and response structures."
+        },
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "The pipeline routing pattern."
+        },
+        {
+          "term": "streams",
+          "module": "05-nodejs",
+          "description": "The underlying network stream technology."
+        },
+        {
+          "term": "input_validation",
+          "module": "05-nodejs",
+          "description": "Related concept: Input Validation (joi / zod)."
+        }
+      ]
+    },
+    "express_js": {
+      "level": 7,
+      "file": "terms/level_07/express_js.md",
+      "display_name": "Express.js",
+      "prerequisites": [
+        {
+          "term": "npm",
+          "module": "05-nodejs",
+          "description": "Express is an external module, so you must download it."
+        },
+        {
+          "term": "http_deep_dive",
+          "module": "05-nodejs",
+          "description": "The core Node.js module that Express wraps and improves."
+        }
+      ],
+      "related": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "The feature Express uses `app.get` and `app.post` for."
+        },
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "The most powerful feature of the Express framework."
+        },
+        {
+          "term": "http_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The http Module."
+        },
+        {
+          "term": "http_deep_dive",
+          "module": "05-nodejs",
+          "description": "Related concept: The http Module Deep Dive."
+        }
+      ]
+    },
+    "http_deep_dive": {
+      "level": 7,
+      "file": "terms/level_07/http_deep_dive.md",
+      "display_name": "The http Module Deep Dive",
+      "prerequisites": [
+        {
+          "term": "http_module",
+          "module": "05-nodejs",
+          "description": "The basic introduction to this core module."
+        },
+        {
+          "term": "event_emitter",
+          "module": "05-nodejs",
+          "description": "The `http.Server` class is actually just an Event Emitter!"
+        }
+      ],
+      "related": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "The framework that hides the ugly parts of the `http` module."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "What the `http` module passes into your callback."
+        }
+      ]
+    },
+    "middleware": {
+      "level": 7,
+      "file": "terms/level_07/middleware.md",
+      "display_name": "Middleware",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "Middleware is the defining architectural feature of Express."
+        }
+      ],
+      "related": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "Where the request goes after it survives the Middleware."
+        },
+        {
+          "term": "body_parsing",
+          "module": "05-nodejs",
+          "description": "Related concept: Body Parsing (express.json())."
+        },
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "Related concept: Express.js."
+        },
+        {
+          "term": "middleware_chain",
+          "module": "05-nodejs",
+          "description": "Related concept: The Middleware Chain & next()."
+        },
+        {
+          "term": "cors",
+          "module": "05-nodejs",
+          "description": "Related concept: CORS."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "05-nodejs",
+          "description": "Related concept: Rate Limiting."
+        }
+      ]
+    },
+    "middleware_chain": {
+      "level": 7,
+      "file": "terms/level_07/middleware_chain.md",
+      "display_name": "The Middleware Chain & next()",
+      "prerequisites": [
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "The fundamental concept of intercepting requests."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "The core design pattern."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "The shared state containers passed down the chain."
+        },
+        {
+          "term": "error_handling_middleware",
+          "module": "05-nodejs",
+          "description": "Related concept: Error Handling Middleware."
+        }
+      ]
+    },
+    "req_res": {
+      "level": 7,
+      "file": "terms/level_07/req_res.md",
+      "display_name": "The req & res Objects",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "This article focuses specifically on the Express-enhanced versions of these objects."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "How you usually send data back using `res`."
+        }
+      ],
+      "related": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "The system that passes these objects to your function."
+        },
+        {
+          "term": "status_codes",
+          "module": "05-nodejs",
+          "description": "What you inject into `res.status()`."
+        },
+        {
+          "term": "body_parsing",
+          "module": "05-nodejs",
+          "description": "Related concept: Body Parsing (express.json())."
+        },
+        {
+          "term": "http_deep_dive",
+          "module": "05-nodejs",
+          "description": "Related concept: The http Module Deep Dive."
+        },
+        {
+          "term": "middleware_chain",
+          "module": "05-nodejs",
+          "description": "Related concept: The Middleware Chain & next()."
+        },
+        {
+          "term": "route_parameters",
+          "module": "05-nodejs",
+          "description": "Related concept: Route Parameters & Query Strings."
+        },
+        {
+          "term": "pagination",
+          "module": "05-nodejs",
+          "description": "Related concept: Pagination."
+        }
+      ]
+    },
+    "route_parameters": {
+      "level": 7,
+      "file": "terms/level_07/route_parameters.md",
+      "display_name": "Route Parameters & Query Strings",
+      "prerequisites": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "Defining the matching pathways."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "The incoming request wrappers housing parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "The routing system matching URL structures."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "The HTTP wrapper structures holding incoming parameters."
+        }
+      ]
+    },
+    "routing": {
+      "level": 7,
+      "file": "terms/level_07/routing.md",
+      "display_name": "Routing",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "The framework that makes Routing clean and manageable."
+        },
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "The design philosophy that dictates how routes should be named."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "Middleware executes right before the Router triggers your code."
+        },
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "The strict rules for naming your routes properly."
+        },
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "Related concept: Express.js."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "Related concept: The req & res Objects."
+        },
+        {
+          "term": "route_parameters",
+          "module": "05-nodejs",
+          "description": "Related concept: Route Parameters & Query Strings."
+        },
+        {
+          "term": "static_files",
+          "module": "05-nodejs",
+          "description": "Related concept: Serving Static Files (express.static)."
+        }
+      ]
+    },
+    "static_files": {
+      "level": 7,
+      "file": "terms/level_07/static_files.md",
+      "display_name": "Serving Static Files (express.static)",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "The parent framework hosting the middleware."
+        },
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "The request processing pipeline."
+        }
+      ],
+      "related": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "The system matching URL structures."
+        },
+        {
+          "term": "http_module",
+          "module": "05-nodejs",
+          "description": "The underlying HTTP server layer."
+        }
+      ]
+    },
+    "connection_pools": {
+      "level": 8,
+      "file": "terms/level_08/connection_pools.md",
+      "display_name": "Connection Pooling",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "Node handles thousands of requests, requiring an efficient database strategy."
+        },
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "Connection pools apply to almost all database types."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "ORMs manage the Connection Pool for you automatically."
+        },
+        {
+          "term": "db_transactions",
+          "module": "05-nodejs",
+          "description": "Related concept: Database Transactions."
+        }
+      ]
+    },
+    "db_transactions": {
+      "level": 8,
+      "file": "terms/level_08/db_transactions.md",
+      "display_name": "Database Transactions",
+      "prerequisites": [
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "The storage formats supporting transactions."
+        },
+        {
+          "term": "connection_pools",
+          "module": "05-nodejs",
+          "description": "The connection channels used to execute transaction queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_pools",
+          "module": "05-nodejs",
+          "description": "The network channels used to manage transaction streams."
+        },
+        {
+          "term": "migrations",
+          "module": "05-nodejs",
+          "description": "Schema updates executed within transactions to prevent partial updates."
+        }
+      ]
+    },
+    "migrations": {
+      "level": 8,
+      "file": "terms/level_08/migrations.md",
+      "display_name": "Migrations",
+      "prerequisites": [
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "Migrations are primarily used for Relational (SQL) databases because they have strict schemas."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "ORMs like Prisma automatically generate these migration files for you based on your JavaScript code!"
+        },
+        {
+          "term": "db_transactions",
+          "module": "05-nodejs",
+          "description": "Related concept: Database Transactions."
+        },
+        {
+          "term": "prisma_sequelize",
+          "module": "05-nodejs",
+          "description": "Related concept: Prisma / Sequelize (SQL ORMs)."
+        },
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "Related concept: SQL vs NoSQL."
+        }
+      ]
+    },
+    "mongoose": {
+      "level": 8,
+      "file": "terms/level_08/mongoose.md",
+      "display_name": "Mongoose (MongoDB ODM)",
+      "prerequisites": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The theoretical concept behind mapping data objects."
+        },
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "Understanding document-based MongoDB storage."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The general concept of bridging databases to object logic."
+        },
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "The database engines mapped by Mongoose."
+        }
+      ]
+    },
+    "orms_odms": {
+      "level": 8,
+      "file": "terms/level_08/orms_odms.md",
+      "display_name": "ORMs & ODMs",
+      "prerequisites": [
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "ORMs are for SQL, ODMs are for NoSQL."
+        },
+        {
+          "term": "connection_pools",
+          "module": "05-nodejs",
+          "description": "ORMs manage these automatically."
+        }
+      ],
+      "related": [
+        {
+          "term": "sql_injection",
+          "module": "05-nodejs",
+          "description": "ORMs automatically protect you against this devastating attack!"
+        },
+        {
+          "term": "migrations",
+          "module": "05-nodejs",
+          "description": "ORMs also manage the history of your database schema."
+        },
+        {
+          "term": "connection_pools",
+          "module": "05-nodejs",
+          "description": "Related concept: Connection Pooling."
+        },
+        {
+          "term": "mongoose",
+          "module": "05-nodejs",
+          "description": "Related concept: Mongoose (MongoDB ODM)."
+        },
+        {
+          "term": "parameterized_queries",
+          "module": "05-nodejs",
+          "description": "Related concept: Parameterized Queries / Prepared Statements."
+        },
+        {
+          "term": "prisma_sequelize",
+          "module": "05-nodejs",
+          "description": "Related concept: Prisma / Sequelize (SQL ORMs)."
+        },
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "Related concept: SQL vs NoSQL."
+        },
+        {
+          "term": "mvc_pattern",
+          "module": "05-nodejs",
+          "description": "Related concept: MVC Pattern (Model–View–Controller)."
+        },
+        {
+          "term": "pagination",
+          "module": "05-nodejs",
+          "description": "Related concept: Pagination."
+        }
+      ]
+    },
+    "parameterized_queries": {
+      "level": 8,
+      "file": "terms/level_08/parameterized_queries.md",
+      "display_name": "Parameterized Queries / Prepared Statements",
+      "prerequisites": [
+        {
+          "term": "sql_injection",
+          "module": "05-nodejs",
+          "description": "The vulnerability resolved by this design."
+        },
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The libraries that implement parameterization under the hood."
+        }
+      ],
+      "related": [
+        {
+          "term": "sql_injection",
+          "module": "05-nodejs",
+          "description": "The database vulnerability resolved by parameterization."
+        },
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "Object mappers that automatically implement query parameterization."
+        }
+      ]
+    },
+    "prisma_sequelize": {
+      "level": 8,
+      "file": "terms/level_08/prisma_sequelize.md",
+      "display_name": "Prisma / Sequelize (SQL ORMs)",
+      "prerequisites": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The core mapping patterns."
+        },
+        {
+          "term": "sql_vs_nosql",
+          "module": "05-nodejs",
+          "description": "Relational databases (PostgreSQL, MySQL) targeted by these libraries."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The design categories for SQL and NoSQL databases."
+        },
+        {
+          "term": "migrations",
+          "module": "05-nodejs",
+          "description": "Schema updates managed through SQL ORMs."
+        }
+      ]
+    },
+    "sql_injection": {
+      "level": 8,
+      "file": "terms/level_08/sql_injection.md",
+      "display_name": "SQL Injection",
+      "prerequisites": [
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "Where the malicious user input comes from (`req.body`)."
+        },
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The tools that automatically protect against this attack."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The best way to never worry about SQL Injection again."
+        },
+        {
+          "term": "parameterized_queries",
+          "module": "05-nodejs",
+          "description": "Related concept: Parameterized Queries / Prepared Statements."
+        },
+        {
+          "term": "input_validation",
+          "module": "05-nodejs",
+          "description": "Related concept: Input Validation (joi / zod)."
+        }
+      ]
+    },
+    "sql_vs_nosql": {
+      "level": 8,
+      "file": "terms/level_08/sql_vs_nosql.md",
+      "display_name": "SQL vs NoSQL",
+      "prerequisites": [
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The data structure that powers NoSQL databases."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The server that connects to these databases."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The tools Node.js uses to talk to these databases."
+        },
+        {
+          "term": "migrations",
+          "module": "05-nodejs",
+          "description": "A concept that exists in SQL, but rarely in NoSQL."
+        },
+        {
+          "term": "mongoose",
+          "module": "05-nodejs",
+          "description": "Related concept: Mongoose (MongoDB ODM)."
+        }
+      ]
+    },
+    "api_versioning": {
+      "level": 9,
+      "file": "terms/level_09/api_versioning.md",
+      "display_name": "API Versioning",
+      "prerequisites": [
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "The fundamental principles of API endpoint structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "The structuring rules governing endpoints."
+        }
+      ]
+    },
+    "controllers_services": {
+      "level": 9,
+      "file": "terms/level_09/controllers_services.md",
+      "display_name": "Controllers & Services",
+      "prerequisites": [
+        {
+          "term": "mvc_pattern",
+          "module": "05-nodejs",
+          "description": "The folder layout organizing data and logic."
+        },
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "Directing URL endpoints to code handlers."
+        }
+      ],
+      "related": [
+        {
+          "term": "mvc_pattern",
+          "module": "05-nodejs",
+          "description": "The parent application layout pattern."
+        },
+        {
+          "term": "error_handling_middleware",
+          "module": "05-nodejs",
+          "description": "Receives errors bubble-passed by controllers and services."
+        }
+      ]
+    },
+    "cors": {
+      "level": 9,
+      "file": "terms/level_09/cors.md",
+      "display_name": "CORS",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "You usually fix CORS issues using an Express middleware."
+        },
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "APIs are the target of CORS blocks."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "`cors()` is just a standard Express middleware."
+        },
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "What the browser is trying to protect."
+        }
+      ]
+    },
+    "error_handling_middleware": {
+      "level": 9,
+      "file": "terms/level_09/error_handling_middleware.md",
+      "display_name": "Error Handling Middleware",
+      "prerequisites": [
+        {
+          "term": "middleware_chain",
+          "module": "05-nodejs",
+          "description": "The routing conveyor belt."
+        },
+        {
+          "term": "async_error_handling",
+          "module": "05-nodejs",
+          "description": "Trapping async errors before forwarding them."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware_chain",
+          "module": "05-nodejs",
+          "description": "The middleware queue structure."
+        },
+        {
+          "term": "async_error_handling",
+          "module": "05-nodejs",
+          "description": "Catching async errors to pass them to `next(err)`."
+        },
+        {
+          "term": "controllers_services",
+          "module": "05-nodejs",
+          "description": "Related concept: Controllers & Services."
+        }
+      ]
+    },
+    "input_validation": {
+      "level": 9,
+      "file": "terms/level_09/input_validation.md",
+      "display_name": "Input Validation (joi / zod)",
+      "prerequisites": [
+        {
+          "term": "body_parsing",
+          "module": "05-nodejs",
+          "description": "Extracting payload data into JavaScript objects."
+        },
+        {
+          "term": "status_codes",
+          "module": "05-nodejs",
+          "description": "Utilizing standard client error responses (`400 Bad Request`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "body_parsing",
+          "module": "05-nodejs",
+          "description": "The parser feeding data to the validation schemas."
+        },
+        {
+          "term": "sql_injection",
+          "module": "05-nodejs",
+          "description": "Database query vulnerabilities prevented by parameterized inputs and edge validation."
+        }
+      ]
+    },
+    "mvc_pattern": {
+      "level": 9,
+      "file": "terms/level_09/mvc_pattern.md",
+      "display_name": "MVC Pattern (Model–View–Controller)",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "The routing web framework."
+        },
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The database schemas representing data models."
+        }
+      ],
+      "related": [
+        {
+          "term": "controllers_services",
+          "module": "05-nodejs",
+          "description": "A deeper separation refining the controller layer."
+        },
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The database mapping technologies representing Models."
+        }
+      ]
+    },
+    "pagination": {
+      "level": 9,
+      "file": "terms/level_09/pagination.md",
+      "display_name": "Pagination",
+      "prerequisites": [
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "This is a standard requirement for all production GET requests."
+        },
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "You use these tools to enforce the pagination on the database level."
+        }
+      ],
+      "related": [
+        {
+          "term": "orms_odms",
+          "module": "05-nodejs",
+          "description": "The tools that execute the `take` and `skip` commands."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "You extract the page numbers from `req.query`."
+        }
+      ]
+    },
+    "rate_limiting": {
+      "level": 9,
+      "file": "terms/level_09/rate_limiting.md",
+      "display_name": "Rate Limiting",
+      "prerequisites": [
+        {
+          "term": "express_js",
+          "module": "05-nodejs",
+          "description": "Rate limiting is usually implemented as an Express middleware."
+        },
+        {
+          "term": "status_codes",
+          "module": "05-nodejs",
+          "description": "When a user is rate-limited, they receive a special status code (429)."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "05-nodejs",
+          "description": "Rate limiters are just bouncer middlewares."
+        },
+        {
+          "term": "status_codes",
+          "module": "05-nodejs",
+          "description": "The `429` code is the hallmark of rate limiting."
+        }
+      ]
+    },
+    "rest_api": {
+      "level": 9,
+      "file": "terms/level_09/rest_api.md",
+      "display_name": "REST API Design",
+      "prerequisites": [
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The language REST APIs speak."
+        }
+      ],
+      "related": [
+        {
+          "term": "routing",
+          "module": "05-nodejs",
+          "description": "How you physically implement REST in Express."
+        },
+        {
+          "term": "status_codes",
+          "module": "05-nodejs",
+          "description": "REST APIs must return standard status codes to indicate success or failure."
+        },
+        {
+          "term": "api_versioning",
+          "module": "05-nodejs",
+          "description": "Related concept: API Versioning."
+        },
+        {
+          "term": "cors",
+          "module": "05-nodejs",
+          "description": "Related concept: CORS."
+        }
+      ]
+    },
+    "status_codes": {
+      "level": 9,
+      "file": "terms/level_09/status_codes.md",
+      "display_name": "HTTP Status Codes",
+      "prerequisites": [
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "REST dictates that you must use these codes correctly."
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "Where you set the code (`res.status(404)`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "rest_api",
+          "module": "05-nodejs",
+          "description": "The architecture that relies on these codes."
+        },
+        {
+          "term": "unhandled_rejections",
+          "module": "05-nodejs",
+          "description": "When this happens, the server usually fails to even send a 500 error!"
+        },
+        {
+          "term": "req_res",
+          "module": "05-nodejs",
+          "description": "Related concept: The req & res Objects."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "05-nodejs",
+          "description": "Related concept: Rate Limiting."
+        }
+      ]
+    },
+    "bcrypt": {
+      "level": 10,
+      "file": "terms/level_10/bcrypt.md",
+      "display_name": "Bcrypt (Password Hashing)",
+      "prerequisites": [
+        {
+          "term": "crypto_module",
+          "module": "05-nodejs",
+          "description": "While Node has built-in crypto, Bcrypt is a specialized, third-party tool specifically for passwords."
+        }
+      ],
+      "related": [
+        {
+          "term": "jwt",
+          "module": "05-nodejs",
+          "description": "You use Bcrypt to verify the password, and if it matches, you generate a JWT!"
+        },
+        {
+          "term": "crypto_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The crypto Module."
+        }
+      ]
+    },
+    "child_processes": {
+      "level": 10,
+      "file": "terms/level_10/child_processes.md",
+      "display_name": "Child Processes (child_process)",
+      "prerequisites": [
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "The parent process managing the OS lifecycle."
+        },
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The single-threaded context we want to avoid blocking."
+        }
+      ],
+      "related": [
+        {
+          "term": "worker_threads",
+          "module": "05-nodejs",
+          "description": "Multi-threading inside a single OS process."
+        },
+        {
+          "term": "cluster_module",
+          "module": "05-nodejs",
+          "description": "Forking duplicate server instances across CPU cores."
+        }
+      ]
+    },
+    "cluster_module": {
+      "level": 10,
+      "file": "terms/level_10/cluster_module.md",
+      "display_name": "The cluster Module",
+      "prerequisites": [
+        {
+          "term": "child_processes",
+          "module": "05-nodejs",
+          "description": "The process-spawning concepts used under the hood."
+        },
+        {
+          "term": "single_threaded",
+          "module": "05-nodejs",
+          "description": "The single-core limitation that clustering resolves."
+        }
+      ],
+      "related": [
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "Production tool automating cluster creation and management."
+        },
+        {
+          "term": "load_balancing",
+          "module": "05-nodejs",
+          "description": "The networking architecture distributing traffic across server instances."
+        },
+        {
+          "term": "child_processes",
+          "module": "05-nodejs",
+          "description": "Related concept: Child Processes (child_process)."
+        },
+        {
+          "term": "worker_threads",
+          "module": "05-nodejs",
+          "description": "Related concept: Worker Threads."
+        }
+      ]
+    },
+    "docker": {
+      "level": 10,
+      "file": "terms/level_10/docker.md",
+      "display_name": "Docker",
+      "prerequisites": [
+        {
+          "term": "env_vars",
+          "module": "05-nodejs",
+          "description": "Docker heavily relies on these to inject configuration into the container."
+        },
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "Docker is the modern, cloud-native alternative to running raw PM2 on a server."
+        }
+      ],
+      "related": [
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "While you can use PM2 inside Docker, Docker itself usually handles the \"restarting if crashed\" logic natively."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The language you are containerizing!"
+        },
+        {
+          "term": "env_vars",
+          "module": "05-nodejs",
+          "description": "Related concept: Environment Variables (dotenv)."
+        },
+        {
+          "term": "graceful_shutdown",
+          "module": "05-nodejs",
+          "description": "Related concept: Graceful Shutdown & Process Signals."
+        },
+        {
+          "term": "reverse_proxy",
+          "module": "05-nodejs",
+          "description": "Related concept: Reverse Proxy (Nginx)."
+        }
+      ]
+    },
+    "env_vars": {
+      "level": 10,
+      "file": "terms/level_10/env_vars.md",
+      "display_name": "Environment Variables (dotenv)",
+      "prerequisites": [
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "Where these variables actually live inside Node.js (`process.env`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "jwt",
+          "module": "05-nodejs",
+          "description": "The JWT signature secret MUST be stored in an Environment Variable."
+        },
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "Docker relies heavily on Environment Variables to configure containers dynamically."
+        },
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "Related concept: The process Object."
+        }
+      ]
+    },
+    "graceful_shutdown": {
+      "level": 10,
+      "file": "terms/level_10/graceful_shutdown.md",
+      "display_name": "Graceful Shutdown & Process Signals",
+      "prerequisites": [
+        {
+          "term": "process_object",
+          "module": "05-nodejs",
+          "description": "The process wrapper capturing OS signals."
+        },
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "The container container environments that emit shutdown signals during updates."
+        }
+      ],
+      "related": [
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "Automatically sends SIGINT and awaits graceful shutdowns during updates."
+        },
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "Relies on SIGTERM handling to shut down containers cleanly."
+        },
+        {
+          "term": "logging_monitoring",
+          "module": "05-nodejs",
+          "description": "Related concept: Logging & Monitoring."
+        }
+      ]
+    },
+    "jwt": {
+      "level": 10,
+      "file": "terms/level_10/jwt.md",
+      "display_name": "JWT (JSON Web Tokens)",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "JWTs are what allow REST APIs to remain \"Stateless\"."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The entire token is just encoded JSON data."
+        }
+      ],
+      "related": [
+        {
+          "term": "env_vars",
+          "module": "05-nodejs",
+          "description": "Where you store the Secret Password used to sign the JWTs."
+        },
+        {
+          "term": "bcrypt",
+          "module": "05-nodejs",
+          "description": "The tool used to check the user's password *before* giving them the JWT."
+        }
+      ]
+    },
+    "load_balancing": {
+      "level": 10,
+      "file": "terms/level_10/load_balancing.md",
+      "display_name": "Load Balancing",
+      "prerequisites": [
+        {
+          "term": "cluster_module",
+          "module": "05-nodejs",
+          "description": "The process clustering system matching this network architecture."
+        },
+        {
+          "term": "jwt",
+          "module": "05-nodejs",
+          "description": "The stateless token strategy enabling distributed routing."
+        }
+      ],
+      "related": [
+        {
+          "term": "reverse_proxy",
+          "module": "05-nodejs",
+          "description": "The gateway server that frequently performs load balancing."
+        },
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "Manages local process clusters under server-wide load balancers."
+        },
+        {
+          "term": "cluster_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The cluster Module."
+        }
+      ]
+    },
+    "logging_monitoring": {
+      "level": 10,
+      "file": "terms/level_10/logging_monitoring.md",
+      "display_name": "Logging & Monitoring",
+      "prerequisites": [
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "The process runner monitoring output logs."
+        },
+        {
+          "term": "env_vars",
+          "module": "05-nodejs",
+          "description": "Configurations adjusting logging levels dynamically."
+        }
+      ],
+      "related": [
+        {
+          "term": "pm2",
+          "module": "05-nodejs",
+          "description": "Captures stdout/stderr outputs and manages application logs."
+        },
+        {
+          "term": "graceful_shutdown",
+          "module": "05-nodejs",
+          "description": "Works with health probes to drain traffic before container termination."
+        }
+      ]
+    },
+    "memory_leaks": {
+      "level": 10,
+      "file": "terms/level_10/memory_leaks.md",
+      "display_name": "Memory Leaks & Garbage Collection",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "The execution context running code scopes."
+        },
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "The heavy binary chunks stored in memory."
+        }
+      ],
+      "related": [
+        {
+          "term": "blocking_event_loop",
+          "module": "05-nodejs",
+          "description": "Freezing the main execution thread."
+        },
+        {
+          "term": "buffers",
+          "module": "05-nodejs",
+          "description": "High-memory byte allocations that require garbage collection."
+        }
+      ]
+    },
+    "pm2": {
+      "level": 10,
+      "file": "terms/level_10/pm2.md",
+      "display_name": "PM2 (Process Manager)",
+      "prerequisites": [
+        {
+          "term": "event_loop",
+          "module": "05-nodejs",
+          "description": "Remember that Node.js runs on a Single Thread. PM2 fixes this limitation!"
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "How you usually run apps (`node server.js`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "The modern alternative/companion to PM2. Docker also manages keeping processes alive and isolated."
+        },
+        {
+          "term": "os_util_modules",
+          "module": "05-nodejs",
+          "description": "Related concept: The os & util Modules."
+        },
+        {
+          "term": "cluster_module",
+          "module": "05-nodejs",
+          "description": "Related concept: The cluster Module."
+        },
+        {
+          "term": "graceful_shutdown",
+          "module": "05-nodejs",
+          "description": "Related concept: Graceful Shutdown & Process Signals."
+        },
+        {
+          "term": "load_balancing",
+          "module": "05-nodejs",
+          "description": "Related concept: Load Balancing."
+        },
+        {
+          "term": "logging_monitoring",
+          "module": "05-nodejs",
+          "description": "Related concept: Logging & Monitoring."
+        }
+      ]
+    },
+    "reverse_proxy": {
+      "level": 10,
+      "file": "terms/level_10/reverse_proxy.md",
+      "display_name": "Reverse Proxy (Nginx)",
+      "prerequisites": [
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "The container environment where proxies are typically deployed."
+        },
+        {
+          "term": "http_module",
+          "module": "05-nodejs",
+          "description": "The underlying server module that the proxy shields."
+        }
+      ],
+      "related": [
+        {
+          "term": "load_balancing",
+          "module": "05-nodejs",
+          "description": "The routing system often combined with reverse proxies."
+        },
+        {
+          "term": "docker",
+          "module": "05-nodejs",
+          "description": "The container architecture used to isolate proxies from application servers."
+        }
+      ]
+    },
+    "worker_threads": {
+      "level": 10,
+      "file": "terms/level_10/worker_threads.md",
+      "display_name": "Worker Threads",
+      "prerequisites": [
+        {
+          "term": "cpu_vs_io",
+          "module": "05-nodejs",
+          "description": "The types of heavy computations that require parallel threads."
+        },
+        {
+          "term": "blocking_event_loop",
+          "module": "05-nodejs",
+          "description": "The performance bottleneck resolved by threading."
+        }
+      ],
+      "related": [
+        {
+          "term": "child_processes",
+          "module": "05-nodejs",
+          "description": "Multi-process concurrency with isolated memories."
+        },
+        {
+          "term": "cluster_module",
+          "module": "05-nodejs",
+          "description": "Spawning multiple instances of a Node server process."
+        }
+      ]
+    }
+  }
+}

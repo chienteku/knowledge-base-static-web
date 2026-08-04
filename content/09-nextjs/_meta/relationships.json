@@ -1,0 +1,2821 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "09-nextjs",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "app_router_vs_pages": {
+      "level": 1,
+      "file": "terms/level_01/app_router_vs_pages.md",
+      "display_name": "App Router vs Pages Router",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework itself."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The technology that necessitated the App Router."
+        }
+      ],
+      "related": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The technology that powers the App Router."
+        },
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The file that defines UI in the App Router."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Related concept: Client Components (`\"use client\"`)."
+        },
+        {
+          "term": "file_system_routing",
+          "module": "09-nextjs",
+          "description": "Related concept: File-System Routing."
+        },
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "Related concept: Next.js Overview."
+        }
+      ]
+    },
+    "client_components": {
+      "level": 1,
+      "file": "terms/level_01/client_components.md",
+      "display_name": "Client Components (`\"use client\"`)",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The default component type you are opting out of."
+        },
+        {
+          "term": "react_hooks",
+          "module": "09-nextjs",
+          "description": "Functions like `useState` and `useEffect` that are only available in Client Components."
+        }
+      ],
+      "related": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The default component type."
+        },
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The architecture where this distinction matters."
+        },
+        {
+          "term": "hydration",
+          "module": "09-nextjs",
+          "description": "Related concept: Hydration."
+        },
+        {
+          "term": "network_boundary",
+          "module": "09-nextjs",
+          "description": "Related concept: Network Boundary."
+        },
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "Related concept: React Components."
+        },
+        {
+          "term": "react_hooks",
+          "module": "09-nextjs",
+          "description": "Related concept: React Hooks."
+        },
+        {
+          "term": "environment_variables",
+          "module": "09-nextjs",
+          "description": "Related concept: Environment Variables (`.env.local`)."
+        }
+      ]
+    },
+    "csr_spa": {
+      "level": 1,
+      "file": "terms/level_01/csr_spa.md",
+      "display_name": "Client-Side Rendering (CSR) / SPA",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework designed to solve CSR performance limitations."
+        }
+      ],
+      "related": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The full-stack solution to CSR limitations."
+        },
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "A rendering strategy where HTML is pre-assembled on the server."
+        }
+      ]
+    },
+    "file_system_routing": {
+      "level": 1,
+      "file": "terms/level_01/file_system_routing.md",
+      "display_name": "File-System Routing",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework that uses this routing architecture."
+        }
+      ],
+      "related": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The shift from page-based routing to folder-based routing."
+        },
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The parent framework."
+        }
+      ]
+    },
+    "hydration": {
+      "level": 1,
+      "file": "terms/level_01/hydration.md",
+      "display_name": "Hydration",
+      "prerequisites": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The building blocks that are hydrated."
+        },
+        {
+          "term": "csr_spa",
+          "module": "09-nextjs",
+          "description": "The client-side execution framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The process that generates the static HTML to hydrate."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Components that undergo hydration."
+        }
+      ]
+    },
+    "network_boundary": {
+      "level": 1,
+      "file": "terms/level_01/network_boundary.md",
+      "display_name": "Network Boundary",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The server-only environment."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The client-side interactive environment."
+        }
+      ],
+      "related": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The server side of the boundary."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The client side of the boundary."
+        },
+        {
+          "term": "rsc_payload",
+          "module": "09-nextjs",
+          "description": "Related concept: React Server Component Payload (RSC Payload)."
+        }
+      ]
+    },
+    "nextjs": {
+      "level": 1,
+      "file": "terms/level_01/nextjs.md",
+      "display_name": "Next.js Overview",
+      "prerequisites": [
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The runtime environment that powers the backend of Next.js."
+        }
+      ],
+      "related": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The core performance feature of Next.js."
+        },
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The two different architectures of Next.js."
+        },
+        {
+          "term": "csr_spa",
+          "module": "09-nextjs",
+          "description": "Related concept: Client-Side Rendering (CSR) / SPA."
+        },
+        {
+          "term": "file_system_routing",
+          "module": "09-nextjs",
+          "description": "Related concept: File-System Routing."
+        },
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "Related concept: Node.js Runtime."
+        },
+        {
+          "term": "seo",
+          "module": "09-nextjs",
+          "description": "Related concept: SEO (Search Engine Optimization)."
+        },
+        {
+          "term": "next_config",
+          "module": "09-nextjs",
+          "description": "Related concept: `next.config.mjs`."
+        }
+      ]
+    },
+    "nodejs_runtime": {
+      "level": 1,
+      "file": "terms/level_01/nodejs_runtime.md",
+      "display_name": "Node.js Runtime",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework running on top of Node.js."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "Components executing inside this runtime."
+        },
+        {
+          "term": "path_module",
+          "module": "09-nextjs",
+          "description": "Related concept: Node.js `path` Module."
+        },
+        {
+          "term": "process_env",
+          "module": "09-nextjs",
+          "description": "Related concept: Node.js Environment Variables (`process.env`)."
+        },
+        {
+          "term": "turbopack",
+          "module": "09-nextjs",
+          "description": "Related concept: Turbopack."
+        },
+        {
+          "term": "v8_engine",
+          "module": "09-nextjs",
+          "description": "Related concept: V8 Engine."
+        }
+      ]
+    },
+    "react_components": {
+      "level": 1,
+      "file": "terms/level_01/react_components.md",
+      "display_name": "React Components",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework that uses React components as its primary building block."
+        }
+      ],
+      "related": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "Components executing exclusively on the server."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Interactive components executed on both server and client."
+        },
+        {
+          "term": "react_hooks",
+          "module": "09-nextjs",
+          "description": "Related concept: React Hooks."
+        },
+        {
+          "term": "children_prop",
+          "module": "09-nextjs",
+          "description": "Related concept: React Children Prop."
+        },
+        {
+          "term": "error_boundaries",
+          "module": "09-nextjs",
+          "description": "Related concept: React Error Boundaries."
+        }
+      ]
+    },
+    "react_hooks": {
+      "level": 1,
+      "file": "terms/level_01/react_hooks.md",
+      "display_name": "React Hooks",
+      "prerequisites": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The building blocks that hooks add features to."
+        }
+      ],
+      "related": [
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Next.js files marked with `'use client'` that enable hooks."
+        },
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The visual wrapper surrounding hooks."
+        },
+        {
+          "term": "use_effect",
+          "module": "09-nextjs",
+          "description": "Related concept: React `useEffect` Hook."
+        }
+      ]
+    },
+    "rsc": {
+      "level": 1,
+      "file": "terms/level_01/rsc.md",
+      "display_name": "React Server Components (RSC)",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework that implements RSCs."
+        },
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The standard UI building blocks."
+        }
+      ],
+      "related": [
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The interactive counterpart to RSCs."
+        },
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "A related, but distinct concept about generating initial HTML."
+        },
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "Related concept: App Router vs Pages Router."
+        },
+        {
+          "term": "network_boundary",
+          "module": "09-nextjs",
+          "description": "Related concept: Network Boundary."
+        },
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "Related concept: Node.js Runtime."
+        },
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "Related concept: React Components."
+        },
+        {
+          "term": "react_suspense",
+          "module": "09-nextjs",
+          "description": "Related concept: React Suspense."
+        },
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "Related concept: Server-side Fetching (Extended `fetch`)."
+        },
+        {
+          "term": "orm_prisma",
+          "module": "09-nextjs",
+          "description": "Related concept: ORM (Object-Relational Mapping) & Prisma."
+        }
+      ]
+    },
+    "seo": {
+      "level": 1,
+      "file": "terms/level_01/seo.md",
+      "display_name": "SEO (Search Engine Optimization)",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework designed to optimize SEO for React apps."
+        }
+      ],
+      "related": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The parent framework."
+        },
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The server-rendering strategy that makes SEO possible."
+        }
+      ]
+    },
+    "ssr": {
+      "level": 8,
+      "file": "terms/level_08/ssr.md",
+      "display_name": "Dynamic Rendering (SSR)",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The mechanism Next.js uses to perform SSR in the App Router."
+        },
+        {
+          "term": "csr_spa",
+          "module": "09-nextjs",
+          "description": "The opposite of SSR, where rendering happens entirely in the browser."
+        }
+      ],
+      "related": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The faster, build-time alternative to SSR."
+        },
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "The `no-store` cache option directly triggers SSR."
+        },
+        {
+          "term": "csr_spa",
+          "module": "09-nextjs",
+          "description": "Related concept: Client-Side Rendering (CSR) / SPA."
+        },
+        {
+          "term": "hydration",
+          "module": "09-nextjs",
+          "description": "Related concept: Hydration."
+        },
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "Related concept: Next.js Overview."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "Related concept: React Server Components (RSC)."
+        },
+        {
+          "term": "seo",
+          "module": "09-nextjs",
+          "description": "Related concept: SEO (Search Engine Optimization)."
+        },
+        {
+          "term": "cookies_headers",
+          "module": "09-nextjs",
+          "description": "Related concept: `cookies()` and `headers()` from `next/headers`."
+        }
+      ]
+    },
+    "children_prop": {
+      "level": 2,
+      "file": "terms/level_02/children_prop.md",
+      "display_name": "React Children Prop",
+      "prerequisites": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The building blocks that compose layout relationships."
+        }
+      ],
+      "related": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The parent units that wrap children."
+        },
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The primary Next.js file that wraps pages via the children prop."
+        }
+      ]
+    },
+    "error": {
+      "level": 2,
+      "file": "terms/level_02/error.md",
+      "display_name": "`error.tsx` & `global-error.tsx`",
+      "prerequisites": [
+        {
+          "term": "error_boundaries",
+          "module": "09-nextjs",
+          "description": "The underlying React feature that Next.js uses to catch errors in the UI."
+        },
+        {
+          "term": "loading",
+          "module": "09-nextjs",
+          "description": "The sister file that handles pending promises instead of rejected ones."
+        }
+      ],
+      "related": [
+        {
+          "term": "error_boundaries",
+          "module": "09-nextjs",
+          "description": "The native React feature that Next.js wraps to create this file."
+        },
+        {
+          "term": "not_found",
+          "module": "09-nextjs",
+          "description": "A specific type of error file for 404s."
+        },
+        {
+          "term": "loading",
+          "module": "09-nextjs",
+          "description": "Related concept: `loading.tsx`."
+        }
+      ]
+    },
+    "error_boundaries": {
+      "level": 2,
+      "file": "terms/level_02/error_boundaries.md",
+      "display_name": "React Error Boundaries",
+      "prerequisites": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The visual units wrapped inside the boundary."
+        }
+      ],
+      "related": [
+        {
+          "term": "error",
+          "module": "09-nextjs",
+          "description": "Next.js's wrapper that creates Error Boundaries automatically."
+        },
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The components wrapped by boundaries."
+        }
+      ]
+    },
+    "layout": {
+      "level": 2,
+      "file": "terms/level_02/layout.md",
+      "display_name": "`layout.tsx`",
+      "prerequisites": [
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The content that gets wrapped *inside* the layout."
+        },
+        {
+          "term": "children_prop",
+          "module": "09-nextjs",
+          "description": "How the nested segments are passed into the layout."
+        }
+      ],
+      "related": [
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The file injected into the layout's `children`."
+        },
+        {
+          "term": "template",
+          "module": "09-nextjs",
+          "description": "A layout that *does* remount on navigation."
+        },
+        {
+          "term": "children_prop",
+          "module": "09-nextjs",
+          "description": "Related concept: React Children Prop."
+        },
+        {
+          "term": "route_groups",
+          "module": "09-nextjs",
+          "description": "Related concept: Route Groups (`(group)`)."
+        },
+        {
+          "term": "parallel_routes",
+          "module": "09-nextjs",
+          "description": "Related concept: Parallel Routes (`@folder`)."
+        },
+        {
+          "term": "metadata_api",
+          "module": "09-nextjs",
+          "description": "Related concept: Metadata API (`metadata`)."
+        },
+        {
+          "term": "next_font",
+          "module": "09-nextjs",
+          "description": "Related concept: `next/font` Optimization."
+        }
+      ]
+    },
+    "loading": {
+      "level": 2,
+      "file": "terms/level_02/loading.md",
+      "display_name": "`loading.tsx`",
+      "prerequisites": [
+        {
+          "term": "react_suspense",
+          "module": "09-nextjs",
+          "description": "The core React feature that powers this file under the hood."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The components doing the `async` data fetching."
+        }
+      ],
+      "related": [
+        {
+          "term": "suspense",
+          "module": "06-react",
+          "description": "The underlying React technology."
+        },
+        {
+          "term": "error",
+          "module": "09-nextjs",
+          "description": "The sister file that handles when the `await` fails instead of succeeds."
+        },
+        {
+          "term": "react_suspense",
+          "module": "09-nextjs",
+          "description": "Related concept: React Suspense."
+        },
+        {
+          "term": "streaming",
+          "module": "09-nextjs",
+          "description": "Related concept: Streaming with `<Suspense>`."
+        }
+      ]
+    },
+    "next_config": {
+      "level": 2,
+      "file": "terms/level_02/next_config.md",
+      "display_name": "`next.config.mjs`",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The parent framework configured by this file."
+        }
+      ],
+      "related": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework itself."
+        }
+      ]
+    },
+    "page": {
+      "level": 2,
+      "file": "terms/level_02/page.md",
+      "display_name": "`page.tsx`",
+      "prerequisites": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The routing architecture."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "What a `page.tsx` is by default."
+        }
+      ],
+      "related": [
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The UI wrapper that wraps around `page.tsx`."
+        },
+        {
+          "term": "dynamic_routes",
+          "module": "09-nextjs",
+          "description": "How the `params` prop gets populated."
+        },
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "Related concept: App Router vs Pages Router."
+        },
+        {
+          "term": "template",
+          "module": "09-nextjs",
+          "description": "Related concept: `template.tsx`."
+        },
+        {
+          "term": "link",
+          "module": "09-nextjs",
+          "description": "Related concept: `<Link>` Component."
+        },
+        {
+          "term": "use_pathname",
+          "module": "09-nextjs",
+          "description": "Related concept: `usePathname` & `useSearchParams`."
+        }
+      ]
+    },
+    "react_suspense": {
+      "level": 2,
+      "file": "terms/level_02/react_suspense.md",
+      "display_name": "React Suspense",
+      "prerequisites": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The visual units wrapped inside the boundary."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The asynchronous server components caught by Suspense."
+        }
+      ],
+      "related": [
+        {
+          "term": "loading",
+          "module": "09-nextjs",
+          "description": "The special Next.js file that wraps routes in Suspense boundaries automatically."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The async components caught by Suspense."
+        },
+        {
+          "term": "streaming",
+          "module": "09-nextjs",
+          "description": "Related concept: Streaming with `<Suspense>`."
+        }
+      ]
+    },
+    "template": {
+      "level": 2,
+      "file": "terms/level_02/template.md",
+      "display_name": "`template.tsx`",
+      "prerequisites": [
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The standard wrapper file that Templates emulate."
+        },
+        {
+          "term": "use_effect",
+          "module": "09-nextjs",
+          "description": "Often used inside Templates to trigger animations on navigation."
+        }
+      ],
+      "related": [
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The state-preserving default wrapper."
+        },
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The child UI being wrapped."
+        },
+        {
+          "term": "use_effect",
+          "module": "09-nextjs",
+          "description": "Related concept: React `useEffect` Hook."
+        }
+      ]
+    },
+    "use_effect": {
+      "level": 2,
+      "file": "terms/level_02/use_effect.md",
+      "display_name": "React `useEffect` Hook",
+      "prerequisites": [
+        {
+          "term": "react_hooks",
+          "module": "09-nextjs",
+          "description": "The system governing hook executions."
+        }
+      ],
+      "related": [
+        {
+          "term": "react_hooks",
+          "module": "09-nextjs",
+          "description": "The parent hook mechanism."
+        },
+        {
+          "term": "template",
+          "module": "09-nextjs",
+          "description": "The Next.js UI file that intentionally re-triggers effects on page navigations."
+        }
+      ]
+    },
+    "catch_all_segments": {
+      "level": 3,
+      "file": "terms/level_03/catch_all_segments.md",
+      "display_name": "Catch-all Segments (`[...slug]`)",
+      "prerequisites": [
+        {
+          "term": "rest_parameters",
+          "module": "09-nextjs",
+          "description": "The JS syntax that inspired this folder naming convention."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_groups",
+          "module": "09-nextjs",
+          "description": "Another special folder naming convention that modifies routing behavior."
+        }
+      ]
+    },
+    "dynamic_routes": {
+      "level": 3,
+      "file": "terms/level_03/dynamic_routes.md",
+      "display_name": "Dynamic Routes (`[slug]`)",
+      "prerequisites": [
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The file that receives the dynamic parameter."
+        },
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "Understanding folder-based routing."
+        }
+      ],
+      "related": [
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The file that receives the `params`."
+        }
+      ]
+    },
+    "link": {
+      "level": 3,
+      "file": "terms/level_03/link.md",
+      "display_name": "`<Link>` Component",
+      "prerequisites": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "How routes are structured."
+        },
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The syntax of using a React component."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_router",
+          "module": "09-nextjs",
+          "description": "How to navigate programmatically without a clickable link."
+        },
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The file that the `<Link>` ultimately resolves to."
+        },
+        {
+          "term": "intercepting_routes",
+          "module": "09-nextjs",
+          "description": "Related concept: Intercepting Routes (`(..)folder`)."
+        }
+      ]
+    },
+    "rest_parameters": {
+      "level": 3,
+      "file": "terms/level_03/rest_parameters.md",
+      "display_name": "JavaScript Rest Parameters (`...`)",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The parent framework utilizing ES6 syntax."
+        }
+      ],
+      "related": []
+    },
+    "route_groups": {
+      "level": 3,
+      "file": "terms/level_03/route_groups.md",
+      "display_name": "Route Groups (`(group)`)",
+      "prerequisites": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "Understanding how folders equal routes."
+        },
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The primary reason Route Groups exist."
+        }
+      ],
+      "related": [
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The file that leverages Route Groups the most."
+        },
+        {
+          "term": "parallel_routes",
+          "module": "09-nextjs",
+          "description": "Another special folder convention that does not affect the URL string."
+        },
+        {
+          "term": "catch_all_segments",
+          "module": "09-nextjs",
+          "description": "Related concept: Catch-all Segments (`[...slug]`)."
+        }
+      ]
+    },
+    "use_router": {
+      "level": 3,
+      "file": "terms/level_03/use_router.md",
+      "display_name": "`useRouter` Hook",
+      "prerequisites": [
+        {
+          "term": "link",
+          "module": "09-nextjs",
+          "description": "The declarative alternative for navigation."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Required to use any React Hook."
+        }
+      ],
+      "related": [
+        {
+          "term": "link",
+          "module": "09-nextjs",
+          "description": "The preferred way to navigate when no programmatic logic is required."
+        },
+        {
+          "term": "redirect",
+          "module": "09-nextjs",
+          "description": "The Server Component equivalent of `useRouter`."
+        },
+        {
+          "term": "use_pathname",
+          "module": "09-nextjs",
+          "description": "Related concept: `usePathname` & `useSearchParams`."
+        }
+      ]
+    },
+    "intercepting_routes": {
+      "level": 4,
+      "file": "terms/level_04/intercepting_routes.md",
+      "display_name": "Intercepting Routes (`(..)folder`)",
+      "prerequisites": [
+        {
+          "term": "parallel_routes",
+          "module": "09-nextjs",
+          "description": "Intercepting Routes are almost always rendered inside a Parallel Route slot."
+        },
+        {
+          "term": "path_module",
+          "module": "09-nextjs",
+          "description": "Understanding relative navigation patterns."
+        }
+      ],
+      "related": [
+        {
+          "term": "parallel_routes",
+          "module": "09-nextjs",
+          "description": "The mechanism used to display the intercepted content without losing the background page."
+        },
+        {
+          "term": "link",
+          "module": "09-nextjs",
+          "description": "The trigger for the interception."
+        },
+        {
+          "term": "path_module",
+          "module": "09-nextjs",
+          "description": "Related concept: Node.js `path` Module."
+        }
+      ]
+    },
+    "not_found": {
+      "level": 4,
+      "file": "terms/level_04/not_found.md",
+      "display_name": "`not-found.tsx` & `notFound()`",
+      "prerequisites": [
+        {
+          "term": "error",
+          "module": "09-nextjs",
+          "description": "The general error boundary. `not-found` is a specific version of this."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The environment where the `notFound()` function is executed."
+        }
+      ],
+      "related": [
+        {
+          "term": "error",
+          "module": "09-nextjs",
+          "description": "Used for unexpected runtime crashes, not missing data."
+        },
+        {
+          "term": "redirect",
+          "module": "09-nextjs",
+          "description": "Another server-side function that stops execution and manipulates routing."
+        }
+      ]
+    },
+    "parallel_routes": {
+      "level": 4,
+      "file": "terms/level_04/parallel_routes.md",
+      "display_name": "Parallel Routes (`@folder`)",
+      "prerequisites": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The foundation of Next.js folder routing."
+        },
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The file that receives and renders the parallel routes."
+        }
+      ],
+      "related": [
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The file that orchestrates the slots."
+        },
+        {
+          "term": "intercepting_routes",
+          "module": "09-nextjs",
+          "description": "Often combined with Parallel Routes to build modal windows."
+        },
+        {
+          "term": "route_groups",
+          "module": "09-nextjs",
+          "description": "Related concept: Route Groups (`(group)`)."
+        }
+      ]
+    },
+    "path_module": {
+      "level": 4,
+      "file": "terms/level_04/path_module.md",
+      "display_name": "Node.js `path` Module",
+      "prerequisites": [
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The environment that hosts this module."
+        }
+      ],
+      "related": [
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The parent execution runtime."
+        },
+        {
+          "term": "intercepting_routes",
+          "module": "09-nextjs",
+          "description": "The routing feature utilizing path navigation operators."
+        }
+      ]
+    },
+    "redirect": {
+      "level": 4,
+      "file": "terms/level_04/redirect.md",
+      "display_name": "`redirect()` & `permanentRedirect()`",
+      "prerequisites": [
+        {
+          "term": "use_router",
+          "module": "09-nextjs",
+          "description": "The client-side equivalent for navigation."
+        },
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The most common place `redirect` is used."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_router",
+          "module": "09-nextjs",
+          "description": "Used for redirecting in Client Components."
+        },
+        {
+          "term": "not_found",
+          "module": "09-nextjs",
+          "description": "The sister function used for 404s instead of 307s."
+        },
+        {
+          "term": "on_demand_revalidation",
+          "module": "09-nextjs",
+          "description": "Related concept: On-Demand Revalidation (`revalidatePath`, `revalidateTag`)."
+        }
+      ]
+    },
+    "use_pathname": {
+      "level": 4,
+      "file": "terms/level_04/use_pathname.md",
+      "display_name": "`usePathname` & `useSearchParams`",
+      "prerequisites": [
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Required to use these hooks."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_router",
+          "module": "09-nextjs",
+          "description": "Used in conjunction with these hooks to update the URL."
+        },
+        {
+          "term": "page",
+          "module": "09-nextjs",
+          "description": "The server-side equivalent that receives `searchParams` as a prop."
+        }
+      ]
+    },
+    "client_fetching": {
+      "level": 5,
+      "file": "terms/level_05/client_fetching.md",
+      "display_name": "Client-side Fetching (SWR / React Query)",
+      "prerequisites": [
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The environment where this takes place."
+        },
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The default fetching method you are opting out of."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The default and preferred fetching method."
+        },
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The Next.js API endpoints that client-side `fetch` usually calls."
+        }
+      ]
+    },
+    "cookies_headers": {
+      "level": 5,
+      "file": "terms/level_05/cookies_headers.md",
+      "display_name": "`cookies()` and `headers()` from `next/headers`",
+      "prerequisites": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The dynamic rendering strategy triggered by these APIs."
+        },
+        {
+          "term": "js_fetch",
+          "module": "09-nextjs",
+          "description": "The request/response header context."
+        }
+      ],
+      "related": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The dynamic rendering strategy triggered by these APIs."
+        },
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The router proxy where cookies and headers can be written."
+        },
+        {
+          "term": "js_fetch",
+          "module": "09-nextjs",
+          "description": "Related concept: JavaScript Fetch API."
+        },
+        {
+          "term": "authentication_concepts",
+          "module": "09-nextjs",
+          "description": "Related concept: Authentication & Session Management."
+        }
+      ]
+    },
+    "data_caching": {
+      "level": 5,
+      "file": "terms/level_05/data_caching.md",
+      "display_name": "Data Caching (`force-cache`, `no-store`)",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The extended API we are configuring."
+        },
+        {
+          "term": "next_cache",
+          "module": "09-nextjs",
+          "description": "The underlying system where the data is stored."
+        }
+      ],
+      "related": [
+        {
+          "term": "revalidation",
+          "module": "09-nextjs",
+          "description": "A middle ground between `force-cache` and `no-store`."
+        },
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The page-level result of using `force-cache`."
+        },
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "Related concept: Dynamic Rendering (SSR)."
+        },
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "Related concept: Server-side Fetching (Extended `fetch`)."
+        },
+        {
+          "term": "on_demand_revalidation",
+          "module": "09-nextjs",
+          "description": "Related concept: On-Demand Revalidation (`revalidatePath`, `revalidateTag`)."
+        },
+        {
+          "term": "caching_route_handlers",
+          "module": "09-nextjs",
+          "description": "Related concept: Caching Route Handlers."
+        },
+        {
+          "term": "next_cache",
+          "module": "09-nextjs",
+          "description": "Related concept: The Next.js Cache (The Four Caches)."
+        }
+      ]
+    },
+    "fetch": {
+      "level": 5,
+      "file": "terms/level_05/fetch.md",
+      "display_name": "Server-side Fetching (Extended `fetch`)",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "Where you execute the fetch."
+        },
+        {
+          "term": "js_fetch",
+          "module": "09-nextjs",
+          "description": "The foundation of this extended API."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "How to control how long the `fetch` result is stored."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The components that allow top-level `async/await`."
+        },
+        {
+          "term": "client_fetching",
+          "module": "09-nextjs",
+          "description": "Related concept: Client-side Fetching (SWR / React Query)."
+        },
+        {
+          "term": "js_fetch",
+          "module": "09-nextjs",
+          "description": "Related concept: JavaScript Fetch API."
+        },
+        {
+          "term": "react_cache",
+          "module": "09-nextjs",
+          "description": "Related concept: `React.cache()` Function."
+        },
+        {
+          "term": "generate_metadata",
+          "module": "09-nextjs",
+          "description": "Related concept: Open Graph & Twitter Cards (`generateMetadata`)."
+        }
+      ]
+    },
+    "js_fetch": {
+      "level": 5,
+      "file": "terms/level_05/js_fetch.md",
+      "display_name": "JavaScript Fetch API",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The parent framework that extends this native API."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "How Next.js builds on this native API."
+        },
+        {
+          "term": "cookies_headers",
+          "module": "09-nextjs",
+          "description": "Accessing HTTP headers."
+        }
+      ]
+    },
+    "orm_prisma": {
+      "level": 5,
+      "file": "terms/level_05/orm_prisma.md",
+      "display_name": "ORM (Object-Relational Mapping) & Prisma",
+      "prerequisites": [
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The server runtime where database drivers execute."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The component type that can securely run database queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The secure server execution context."
+        },
+        {
+          "term": "react_cache",
+          "module": "09-nextjs",
+          "description": "How you deduplicate ORM requests."
+        }
+      ]
+    },
+    "react_cache": {
+      "level": 5,
+      "file": "terms/level_05/react_cache.md",
+      "display_name": "`React.cache()` Function",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The request memoization behavior this function mimics for non-HTTP calls."
+        },
+        {
+          "term": "orm_prisma",
+          "module": "09-nextjs",
+          "description": "The database clients that require memoization."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The automatic request deduplication model."
+        },
+        {
+          "term": "orm_prisma",
+          "module": "09-nextjs",
+          "description": "The queries commonly optimized by `React.cache()`."
+        }
+      ]
+    },
+    "revalidation": {
+      "level": 5,
+      "file": "terms/level_05/revalidation.md",
+      "display_name": "Time-based Revalidation (`next.revalidate`)",
+      "prerequisites": [
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "The two extreme ends of caching (`force-cache` vs `no-store`)."
+        },
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The API we are modifying."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "The alternative caching strategies."
+        },
+        {
+          "term": "on_demand_revalidation",
+          "module": "09-nextjs",
+          "description": "Updating the cache via a button click rather than a timer."
+        },
+        {
+          "term": "isr",
+          "module": "09-nextjs",
+          "description": "Related concept: Incremental Static Regeneration (ISR)."
+        }
+      ]
+    },
+    "streaming": {
+      "level": 5,
+      "file": "terms/level_05/streaming.md",
+      "display_name": "Streaming with `<Suspense>`",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The slow async operations that cause the need for streaming."
+        },
+        {
+          "term": "loading",
+          "module": "09-nextjs",
+          "description": "The file-system implementation of Suspense."
+        }
+      ],
+      "related": [
+        {
+          "term": "loading",
+          "module": "09-nextjs",
+          "description": "The automatic page-level implementation of Streaming."
+        },
+        {
+          "term": "react_suspense",
+          "module": "09-nextjs",
+          "description": "The React core primitive that powers this Next.js feature."
+        },
+        {
+          "term": "ppr",
+          "module": "09-nextjs",
+          "description": "Related concept: Partial Prerendering (PPR)."
+        }
+      ]
+    },
+    "form_actions": {
+      "level": 6,
+      "file": "terms/level_06/form_actions.md",
+      "display_name": "Form Actions",
+      "prerequisites": [
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The functions that form actions execute."
+        },
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The standard Web API this builds upon."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The target of the Form Action."
+        },
+        {
+          "term": "use_form_status",
+          "module": "09-nextjs",
+          "description": "How to show a loading spinner while the action is running."
+        }
+      ]
+    },
+    "on_demand_revalidation": {
+      "level": 6,
+      "file": "terms/level_06/on_demand_revalidation.md",
+      "display_name": "On-Demand Revalidation (`revalidatePath`, `revalidateTag`)",
+      "prerequisites": [
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The environment where you trigger the revalidation."
+        },
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "The cache you are purging."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "The system being manipulated."
+        },
+        {
+          "term": "redirect",
+          "module": "09-nextjs",
+          "description": "Often called immediately *after* `revalidatePath` in a Server Action."
+        },
+        {
+          "term": "revalidation",
+          "module": "09-nextjs",
+          "description": "Related concept: Time-based Revalidation (`next.revalidate`)."
+        },
+        {
+          "term": "isr",
+          "module": "09-nextjs",
+          "description": "Related concept: Incremental Static Regeneration (ISR)."
+        },
+        {
+          "term": "next_cache",
+          "module": "09-nextjs",
+          "description": "Related concept: The Next.js Cache (The Four Caches)."
+        }
+      ]
+    },
+    "server_actions": {
+      "level": 6,
+      "file": "terms/level_06/server_actions.md",
+      "display_name": "Server Actions Overview (`\"use server\"`)",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The environment that popularized Server Actions."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The counterpart directive to `\"use server\"`."
+        }
+      ],
+      "related": [
+        {
+          "term": "form_actions",
+          "module": "09-nextjs",
+          "description": "How Server Actions are actually invoked."
+        },
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The legacy way to handle mutations."
+        },
+        {
+          "term": "use_form_state",
+          "module": "09-nextjs",
+          "description": "Related concept: `useFormState` Hook."
+        },
+        {
+          "term": "zod_validation",
+          "module": "09-nextjs",
+          "description": "Related concept: Zod (Schema Validation)."
+        }
+      ]
+    },
+    "use_form_state": {
+      "level": 6,
+      "file": "terms/level_06/use_form_state.md",
+      "display_name": "`useFormState` Hook",
+      "prerequisites": [
+        {
+          "term": "form_actions",
+          "module": "09-nextjs",
+          "description": "The mechanism being enhanced."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Required to use this hook."
+        },
+        {
+          "term": "zod_validation",
+          "module": "09-nextjs",
+          "description": "How the error data structure is validated."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The function providing the state."
+        },
+        {
+          "term": "use_form_status",
+          "module": "09-nextjs",
+          "description": "The sister hook used for loading indicators."
+        },
+        {
+          "term": "zod_validation",
+          "module": "09-nextjs",
+          "description": "Related concept: Zod (Schema Validation)."
+        }
+      ]
+    },
+    "use_form_status": {
+      "level": 6,
+      "file": "terms/level_06/use_form_status.md",
+      "display_name": "`useFormStatus` Hook",
+      "prerequisites": [
+        {
+          "term": "form_actions",
+          "module": "09-nextjs",
+          "description": "The action whose status we are tracking."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "Required to use this hook."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_form_state",
+          "module": "09-nextjs",
+          "description": "The hook for tracking the *result* of the form, while this tracks the *status* of the form."
+        },
+        {
+          "term": "form_actions",
+          "module": "09-nextjs",
+          "description": "The trigger for the pending state."
+        }
+      ]
+    },
+    "zod_validation": {
+      "level": 6,
+      "file": "terms/level_06/zod_validation.md",
+      "display_name": "Zod (Schema Validation)",
+      "prerequisites": [
+        {
+          "term": "react_components",
+          "module": "09-nextjs",
+          "description": "The form components that gather user input."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The backend functions validated by Zod schemas."
+        },
+        {
+          "term": "use_form_state",
+          "module": "09-nextjs",
+          "description": "How validation errors are displayed."
+        }
+      ]
+    },
+    "caching_route_handlers": {
+      "level": 7,
+      "file": "terms/level_07/caching_route_handlers.md",
+      "display_name": "Caching Route Handlers",
+      "prerequisites": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The endpoints being cached."
+        },
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "Similar caching concepts, but applied to the entire API route rather than a single `fetch`."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "Caching individual fetches rather than whole routes."
+        },
+        {
+          "term": "dynamic_route_handlers",
+          "module": "09-nextjs",
+          "description": "Routes that are automatically dynamic by default."
+        }
+      ]
+    },
+    "dynamic_route_handlers": {
+      "level": 7,
+      "file": "terms/level_07/dynamic_route_handlers.md",
+      "display_name": "Dynamic Route Handlers",
+      "prerequisites": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The foundation of the API."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The file utilizing the parameters."
+        },
+        {
+          "term": "caching_route_handlers",
+          "module": "09-nextjs",
+          "description": "Related concept: Caching Route Handlers."
+        }
+      ]
+    },
+    "http_methods": {
+      "level": 7,
+      "file": "terms/level_07/http_methods.md",
+      "display_name": "HTTP Methods (GET, POST, PUT, DELETE)",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The parent framework that routes these actions."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The Next.js API endpoints that export these methods."
+        },
+        {
+          "term": "next_request_response",
+          "module": "09-nextjs",
+          "description": "The HTTP transaction objects."
+        }
+      ]
+    },
+    "middleware_vs_route_handlers": {
+      "level": 7,
+      "file": "terms/level_07/middleware_vs_route_handlers.md",
+      "display_name": "Middleware vs Route Handlers",
+      "prerequisites": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "Specific API endpoints."
+        },
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "Understanding the full-stack nature of Next.js."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "A deep dive into the syntax of `middleware.ts` (Level 10)."
+        },
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The specific endpoints."
+        }
+      ]
+    },
+    "next_request_response": {
+      "level": 7,
+      "file": "terms/level_07/next_request_response.md",
+      "display_name": "`NextRequest` & `NextResponse`",
+      "prerequisites": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The primary place these objects are used."
+        },
+        {
+          "term": "js_fetch",
+          "module": "09-nextjs",
+          "description": "The standard interface being extended."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "Where these objects are used."
+        },
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The other Next.js feature that heavily relies on `NextRequest` and `NextResponse`."
+        },
+        {
+          "term": "http_methods",
+          "module": "09-nextjs",
+          "description": "Related concept: HTTP Methods (GET, POST, PUT, DELETE)."
+        }
+      ]
+    },
+    "route_handlers": {
+      "level": 7,
+      "file": "terms/level_07/route_handlers.md",
+      "display_name": "Route Handlers (`route.ts`)",
+      "prerequisites": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The routing system."
+        },
+        {
+          "term": "http_methods",
+          "module": "09-nextjs",
+          "description": "GET, POST, PUT, DELETE."
+        }
+      ],
+      "related": [
+        {
+          "term": "next_request_response",
+          "module": "09-nextjs",
+          "description": "The Next.js specific extensions to the standard Web Request/Response objects."
+        },
+        {
+          "term": "server_actions",
+          "module": "09-nextjs",
+          "description": "The alternative to Route Handlers for internal app mutations."
+        },
+        {
+          "term": "client_fetching",
+          "module": "09-nextjs",
+          "description": "Related concept: Client-side Fetching (SWR / React Query)."
+        },
+        {
+          "term": "dynamic_route_handlers",
+          "module": "09-nextjs",
+          "description": "Related concept: Dynamic Route Handlers."
+        },
+        {
+          "term": "http_methods",
+          "module": "09-nextjs",
+          "description": "Related concept: HTTP Methods (GET, POST, PUT, DELETE)."
+        },
+        {
+          "term": "middleware_vs_route_handlers",
+          "module": "09-nextjs",
+          "description": "Related concept: Middleware vs Route Handlers."
+        },
+        {
+          "term": "draft_mode",
+          "module": "09-nextjs",
+          "description": "Related concept: Draft Mode."
+        },
+        {
+          "term": "edge_runtime",
+          "module": "09-nextjs",
+          "description": "Related concept: Edge Runtime vs Node.js Runtime."
+        }
+      ]
+    },
+    "generate_static_params": {
+      "level": 8,
+      "file": "terms/level_08/generate_static_params.md",
+      "display_name": "`generateStaticParams` Function",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The output target."
+        }
+      ]
+    },
+    "isr": {
+      "level": 8,
+      "file": "terms/level_08/isr.md",
+      "display_name": "Incremental Static Regeneration (ISR)",
+      "prerequisites": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The foundation of ISR."
+        },
+        {
+          "term": "revalidation",
+          "module": "09-nextjs",
+          "description": "The data-fetching concept that powers ISR."
+        }
+      ],
+      "related": [
+        {
+          "term": "revalidation",
+          "module": "09-nextjs",
+          "description": "The exact same concept, applied to data fetching. ISR is what happens when that concept is applied to the page rendering level."
+        },
+        {
+          "term": "on_demand_revalidation",
+          "module": "09-nextjs",
+          "description": "The alternative to time-based ISR for instant updates."
+        },
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "Related concept: Static Site Generation (SSG)."
+        },
+        {
+          "term": "cdn_edge",
+          "module": "09-nextjs",
+          "description": "Related concept: Content Delivery Network (CDN) & Edge Cache."
+        },
+        {
+          "term": "standalone_build",
+          "module": "09-nextjs",
+          "description": "Related concept: Docker & Standalone Build."
+        }
+      ]
+    },
+    "next_cache": {
+      "level": 8,
+      "file": "terms/level_08/next_cache.md",
+      "display_name": "The Next.js Cache (The Four Caches)",
+      "prerequisites": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "Another layer of this cache."
+        }
+      ],
+      "related": [
+        {
+          "term": "on_demand_revalidation",
+          "module": "09-nextjs",
+          "description": "The primary tool for clearing Layers 2, 3, and 4."
+        },
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "Essentially Layer 3."
+        },
+        {
+          "term": "rsc_payload",
+          "module": "09-nextjs",
+          "description": "Related concept: React Server Component Payload (RSC Payload)."
+        },
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "One layer of this cache."
+        }
+      ]
+    },
+    "ppr": {
+      "level": 8,
+      "file": "terms/level_08/ppr.md",
+      "display_name": "Partial Prerendering (PPR)",
+      "prerequisites": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The static shell."
+        },
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The dynamic holes."
+        },
+        {
+          "term": "streaming",
+          "module": "09-nextjs",
+          "description": "The mechanism that glues them together."
+        }
+      ],
+      "related": [
+        {
+          "term": "streaming",
+          "module": "09-nextjs",
+          "description": "The React primitive that enables PPR."
+        },
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The strategy used for the \"shell.\""
+        }
+      ]
+    },
+    "rsc_payload": {
+      "level": 8,
+      "file": "terms/level_08/rsc_payload.md",
+      "display_name": "React Server Component Payload (RSC Payload)",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The components that compile into this payload."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The placeholders defined inside this payload."
+        }
+      ],
+      "related": [
+        {
+          "term": "next_cache",
+          "module": "09-nextjs",
+          "description": "The system that caches the RSC Payload."
+        },
+        {
+          "term": "network_boundary",
+          "module": "09-nextjs",
+          "description": "The interface mapped by this format."
+        }
+      ]
+    },
+    "ssg": {
+      "level": 8,
+      "file": "terms/level_08/ssg.md",
+      "display_name": "Static Site Generation (SSG)",
+      "prerequisites": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The dynamic alternative to SSG."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The components being rendered statically."
+        },
+        {
+          "term": "generate_static_params",
+          "module": "09-nextjs",
+          "description": "How dynamic paths are pre-compiled statically."
+        }
+      ],
+      "related": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The dynamic alternative."
+        },
+        {
+          "term": "isr",
+          "module": "09-nextjs",
+          "description": "The solution to updating SSG pages without rebuilding the whole app."
+        },
+        {
+          "term": "data_caching",
+          "module": "09-nextjs",
+          "description": "Related concept: Data Caching (`force-cache`, `no-store`)."
+        },
+        {
+          "term": "generate_static_params",
+          "module": "09-nextjs",
+          "description": "Related concept: `generateStaticParams` Function."
+        },
+        {
+          "term": "next_cache",
+          "module": "09-nextjs",
+          "description": "Related concept: The Next.js Cache (The Four Caches)."
+        },
+        {
+          "term": "ppr",
+          "module": "09-nextjs",
+          "description": "Related concept: Partial Prerendering (PPR)."
+        },
+        {
+          "term": "draft_mode",
+          "module": "09-nextjs",
+          "description": "Related concept: Draft Mode."
+        }
+      ]
+    },
+    "generate_metadata": {
+      "level": 9,
+      "file": "terms/level_09/generate_metadata.md",
+      "display_name": "Open Graph & Twitter Cards (`generateMetadata`)",
+      "prerequisites": [
+        {
+          "term": "metadata_api",
+          "module": "09-nextjs",
+          "description": "The static version of this feature."
+        },
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "How we fetch the data for the metadata."
+        }
+      ],
+      "related": [
+        {
+          "term": "metadata_api",
+          "module": "09-nextjs",
+          "description": "The static equivalent."
+        },
+        {
+          "term": "fetch",
+          "module": "09-nextjs",
+          "description": "The mechanism used to deduplicate the API calls made in this function."
+        }
+      ]
+    },
+    "html_img": {
+      "level": 9,
+      "file": "terms/level_09/html_img.md",
+      "display_name": "HTML `<img>` Element",
+      "prerequisites": [
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "The performance metrics that image loading directly impacts."
+        }
+      ],
+      "related": [
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "The performance metrics that image loading directly impacts."
+        },
+        {
+          "term": "next_image",
+          "module": "09-nextjs",
+          "description": "Next.js's optimized wrapper."
+        }
+      ]
+    },
+    "html_script": {
+      "level": 9,
+      "file": "terms/level_09/html_script.md",
+      "display_name": "HTML `<script>` Element",
+      "prerequisites": [
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "The performance metrics impacted by script execution."
+        }
+      ],
+      "related": [
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "The performance metrics impacted by script execution."
+        },
+        {
+          "term": "next_script",
+          "module": "09-nextjs",
+          "description": "The Next.js wrapper."
+        }
+      ]
+    },
+    "metadata_api": {
+      "level": 9,
+      "file": "terms/level_09/metadata_api.md",
+      "display_name": "Metadata API (`metadata`)",
+      "prerequisites": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The tags being generated."
+        },
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "The environment required to export this Metadata."
+        }
+      ],
+      "related": [
+        {
+          "term": "generate_metadata",
+          "module": "09-nextjs",
+          "description": "The dynamic version of the Metadata API."
+        },
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The best place to establish your base metadata templates."
+        }
+      ]
+    },
+    "next_font": {
+      "level": 9,
+      "file": "terms/level_09/next_font.md",
+      "display_name": "`next/font` Optimization",
+      "prerequisites": [
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "Specifically Cumulative Layout Shift (CLS)."
+        }
+      ],
+      "related": [
+        {
+          "term": "next_image",
+          "module": "09-nextjs",
+          "description": "Another built-in performance optimization tool."
+        },
+        {
+          "term": "layout",
+          "module": "09-nextjs",
+          "description": "The best place to inject a global font."
+        },
+        {
+          "term": "next_script",
+          "module": "09-nextjs",
+          "description": "Related concept: `<Script>` Component."
+        },
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "Related concept: Web Core Vitals (FCP, LCP, CLS, TTFB)."
+        }
+      ]
+    },
+    "next_image": {
+      "level": 9,
+      "file": "terms/level_09/next_image.md",
+      "display_name": "`<Image>` Component",
+      "prerequisites": [
+        {
+          "term": "html_img",
+          "module": "09-nextjs",
+          "description": "The standard tag this component improves upon."
+        },
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "The performance metrics (LCP, CLS) this component is designed to solve."
+        }
+      ],
+      "related": [
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "Metrics improved by this component (CLS, LCP)."
+        },
+        {
+          "term": "next_font",
+          "module": "09-nextjs",
+          "description": "A similar built-in optimization tool."
+        },
+        {
+          "term": "html_img",
+          "module": "09-nextjs",
+          "description": "Related concept: HTML `<img>` Element."
+        },
+        {
+          "term": "next_script",
+          "module": "09-nextjs",
+          "description": "Related concept: `<Script>` Component."
+        }
+      ]
+    },
+    "next_script": {
+      "level": 9,
+      "file": "terms/level_09/next_script.md",
+      "display_name": "`<Script>` Component",
+      "prerequisites": [
+        {
+          "term": "html_script",
+          "module": "09-nextjs",
+          "description": "The standard element this improves."
+        },
+        {
+          "term": "web_core_vitals",
+          "module": "09-nextjs",
+          "description": "Specifically First Input Delay (FID) and Time to Interactive (TTI)."
+        }
+      ],
+      "related": [
+        {
+          "term": "next_image",
+          "module": "09-nextjs",
+          "description": "Optimization for visual assets."
+        },
+        {
+          "term": "next_font",
+          "module": "09-nextjs",
+          "description": "Optimization for typography."
+        },
+        {
+          "term": "html_script",
+          "module": "09-nextjs",
+          "description": "Related concept: HTML `<script>` Element."
+        }
+      ]
+    },
+    "web_core_vitals": {
+      "level": 9,
+      "file": "terms/level_09/web_core_vitals.md",
+      "display_name": "Web Core Vitals (FCP, LCP, CLS, TTFB)",
+      "prerequisites": [
+        {
+          "term": "seo",
+          "module": "09-nextjs",
+          "description": "The search engine indexing context that relies on these vitals."
+        }
+      ],
+      "related": [
+        {
+          "term": "next_image",
+          "module": "09-nextjs",
+          "description": "The optimization tool for LCP and CLS."
+        },
+        {
+          "term": "next_font",
+          "module": "09-nextjs",
+          "description": "The optimization tool for CLS."
+        },
+        {
+          "term": "html_img",
+          "module": "09-nextjs",
+          "description": "Related concept: HTML `<img>` Element."
+        },
+        {
+          "term": "html_script",
+          "module": "09-nextjs",
+          "description": "Related concept: HTML `<script>` Element."
+        }
+      ]
+    },
+    "authentication_concepts": {
+      "level": 10,
+      "file": "terms/level_10/authentication_concepts.md",
+      "display_name": "Authentication & Session Management",
+      "prerequisites": [
+        {
+          "term": "cookies_headers",
+          "module": "09-nextjs",
+          "description": "The mechanism used to read session identifiers."
+        }
+      ],
+      "related": [
+        {
+          "term": "cookies_headers",
+          "module": "09-nextjs",
+          "description": "The server-side cookies reader API."
+        },
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The global routing checkpoint."
+        }
+      ]
+    },
+    "cdn_edge": {
+      "level": 10,
+      "file": "terms/level_10/cdn_edge.md",
+      "display_name": "Content Delivery Network (CDN) & Edge Cache",
+      "prerequisites": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The rendering strategy designed to produce CDN-cacheable files."
+        },
+        {
+          "term": "edge_runtime",
+          "module": "09-nextjs",
+          "description": "The runtime that runs code at these edge locations."
+        }
+      ],
+      "related": [
+        {
+          "term": "isr",
+          "module": "09-nextjs",
+          "description": "The hybrid cache strategy managed by CDNs."
+        },
+        {
+          "term": "serverless_functions",
+          "module": "09-nextjs",
+          "description": "The centralized handlers that compile dynamic pages."
+        }
+      ]
+    },
+    "draft_mode": {
+      "level": 10,
+      "file": "terms/level_10/draft_mode.md",
+      "display_name": "Draft Mode",
+      "prerequisites": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The caching mechanism that Draft Mode bypasses."
+        },
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "How you securely enable Draft Mode via an API endpoint."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "The endpoints used to toggle Draft Mode."
+        },
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "The static caching layer being bypassed."
+        }
+      ]
+    },
+    "edge_runtime": {
+      "level": 10,
+      "file": "terms/level_10/edge_runtime.md",
+      "display_name": "Edge Runtime vs Node.js Runtime",
+      "prerequisites": [
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The feature that is forced to use the Edge Runtime."
+        },
+        {
+          "term": "v8_engine",
+          "module": "09-nextjs",
+          "description": "The core JavaScript execution engine the Edge is built upon."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The primary consumer of the Edge Runtime."
+        },
+        {
+          "term": "route_handlers",
+          "module": "09-nextjs",
+          "description": "Can optionally be opted into the Edge."
+        },
+        {
+          "term": "serverless_functions",
+          "module": "09-nextjs",
+          "description": "Related concept: Serverless Functions."
+        },
+        {
+          "term": "v8_engine",
+          "module": "09-nextjs",
+          "description": "Related concept: V8 Engine."
+        }
+      ]
+    },
+    "environment_variables": {
+      "level": 10,
+      "file": "terms/level_10/environment_variables.md",
+      "display_name": "Environment Variables (`.env.local`)",
+      "prerequisites": [
+        {
+          "term": "rsc",
+          "module": "09-nextjs",
+          "description": "Essential for understanding the security boundaries of environment variables."
+        },
+        {
+          "term": "process_env",
+          "module": "09-nextjs",
+          "description": "The foundational concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "vercel_deployment",
+          "module": "09-nextjs",
+          "description": "Where you configure production variables."
+        },
+        {
+          "term": "client_components",
+          "module": "09-nextjs",
+          "description": "The environment that requires the `NEXT_PUBLIC_` prefix."
+        },
+        {
+          "term": "process_env",
+          "module": "09-nextjs",
+          "description": "Related concept: Node.js Environment Variables (`process.env`)."
+        }
+      ]
+    },
+    "i18n": {
+      "level": 10,
+      "file": "terms/level_10/i18n.md",
+      "display_name": "Internationalization (i18n)",
+      "prerequisites": [
+        {
+          "term": "app_router_vs_pages",
+          "module": "09-nextjs",
+          "description": "The routing system comparison."
+        },
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The interceptor pattern for locale detection and redirects."
+        }
+      ],
+      "related": [
+        {
+          "term": "middleware",
+          "module": "09-nextjs",
+          "description": "The routing system used to capture request languages."
+        }
+      ]
+    },
+    "middleware": {
+      "level": 10,
+      "file": "terms/level_10/middleware.md",
+      "display_name": "Middleware (`middleware.ts`)",
+      "prerequisites": [
+        {
+          "term": "middleware_vs_route_handlers",
+          "module": "09-nextjs",
+          "description": "The conceptual difference between these two systems."
+        },
+        {
+          "term": "next_request_response",
+          "module": "09-nextjs",
+          "description": "The core API used within this file."
+        },
+        {
+          "term": "authentication_concepts",
+          "module": "09-nextjs",
+          "description": "The primary purpose of route checkpointing."
+        }
+      ],
+      "related": [
+        {
+          "term": "edge_runtime",
+          "module": "09-nextjs",
+          "description": "The restricted environment where Middleware runs."
+        },
+        {
+          "term": "next_request_response",
+          "module": "09-nextjs",
+          "description": "The object used to trigger the redirects and rewrites."
+        },
+        {
+          "term": "cookies_headers",
+          "module": "09-nextjs",
+          "description": "Related concept: `cookies()` and `headers()` from `next/headers`."
+        },
+        {
+          "term": "middleware_vs_route_handlers",
+          "module": "09-nextjs",
+          "description": "Related concept: Middleware vs Route Handlers."
+        },
+        {
+          "term": "authentication_concepts",
+          "module": "09-nextjs",
+          "description": "Related concept: Authentication & Session Management."
+        },
+        {
+          "term": "i18n",
+          "module": "09-nextjs",
+          "description": "Related concept: Internationalization (i18n)."
+        }
+      ]
+    },
+    "process_env": {
+      "level": 10,
+      "file": "terms/level_10/process_env.md",
+      "display_name": "Node.js Environment Variables (`process.env`)",
+      "prerequisites": [
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The environment that exposes the `process` global object."
+        }
+      ],
+      "related": [
+        {
+          "term": "environment_variables",
+          "module": "09-nextjs",
+          "description": "Next.js's implementation of this concept."
+        },
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The backend engine exposing the `process` global."
+        }
+      ]
+    },
+    "serverless_functions": {
+      "level": 10,
+      "file": "terms/level_10/serverless_functions.md",
+      "display_name": "Serverless Functions",
+      "prerequisites": [
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The dynamic rendering mechanism that serverless functions execute."
+        },
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The environment running inside a serverless container."
+        }
+      ],
+      "related": [
+        {
+          "term": "edge_runtime",
+          "module": "09-nextjs",
+          "description": "The edge-alternative to serverless computing."
+        },
+        {
+          "term": "vercel_deployment",
+          "module": "09-nextjs",
+          "description": "The platform that handles serverless deployments automatically."
+        },
+        {
+          "term": "cdn_edge",
+          "module": "09-nextjs",
+          "description": "Related concept: Content Delivery Network (CDN) & Edge Cache."
+        }
+      ]
+    },
+    "standalone_build": {
+      "level": 10,
+      "file": "terms/level_10/standalone_build.md",
+      "display_name": "Docker & Standalone Build",
+      "prerequisites": [
+        {
+          "term": "vercel_deployment",
+          "module": "09-nextjs",
+          "description": "The platform you are choosing *not* to use."
+        },
+        {
+          "term": "next_cache",
+          "module": "09-nextjs",
+          "description": "Important to understand when self-hosting."
+        }
+      ],
+      "related": [
+        {
+          "term": "vercel_deployment",
+          "module": "09-nextjs",
+          "description": "The zero-config alternative to self-hosting."
+        },
+        {
+          "term": "isr",
+          "module": "09-nextjs",
+          "description": "The feature that breaks if your Docker cache isn't configured correctly."
+        },
+        {
+          "term": "swc",
+          "module": "09-nextjs",
+          "description": "Related concept: The Next.js Compiler (SWC)."
+        }
+      ]
+    },
+    "swc": {
+      "level": 10,
+      "file": "terms/level_10/swc.md",
+      "display_name": "The Next.js Compiler (SWC)",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework powered by this compiler."
+        },
+        {
+          "term": "turbopack",
+          "module": "09-nextjs",
+          "description": "The development bundler that operates in tandem with SWC compilation."
+        }
+      ],
+      "related": [
+        {
+          "term": "turbopack",
+          "module": "09-nextjs",
+          "description": "The Rust-based development bundler."
+        },
+        {
+          "term": "standalone_build",
+          "module": "09-nextjs",
+          "description": "Where the compiled assets are packaged."
+        }
+      ]
+    },
+    "turbopack": {
+      "level": 10,
+      "file": "terms/level_10/turbopack.md",
+      "display_name": "Turbopack",
+      "prerequisites": [
+        {
+          "term": "nextjs",
+          "module": "09-nextjs",
+          "description": "The framework powered by this bundler."
+        }
+      ],
+      "related": [
+        {
+          "term": "swc",
+          "module": "09-nextjs",
+          "description": "The file compilation system."
+        },
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The execution host."
+        }
+      ]
+    },
+    "v8_engine": {
+      "level": 10,
+      "file": "terms/level_10/v8_engine.md",
+      "display_name": "V8 Engine",
+      "prerequisites": [
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The server runtime built on top of this engine."
+        }
+      ],
+      "related": [
+        {
+          "term": "edge_runtime",
+          "module": "09-nextjs",
+          "description": "The Next.js runtimes powered by V8."
+        },
+        {
+          "term": "nodejs_runtime",
+          "module": "09-nextjs",
+          "description": "The traditional server environment built on V8."
+        }
+      ]
+    },
+    "vercel_deployment": {
+      "level": 10,
+      "file": "terms/level_10/vercel_deployment.md",
+      "display_name": "Deployment (Vercel)",
+      "prerequisites": [
+        {
+          "term": "ssg",
+          "module": "09-nextjs",
+          "description": "One of the outputs Vercel hosts (CDN)."
+        },
+        {
+          "term": "ssr",
+          "module": "09-nextjs",
+          "description": "The other output Vercel hosts (Serverless Functions)."
+        },
+        {
+          "term": "cdn_edge",
+          "module": "09-nextjs",
+          "description": "The global edge distribution layer."
+        },
+        {
+          "term": "serverless_functions",
+          "module": "09-nextjs",
+          "description": "The dynamic compute containers."
+        }
+      ],
+      "related": [
+        {
+          "term": "standalone_build",
+          "module": "09-nextjs",
+          "description": "The alternative to Vercel for self-hosting."
+        },
+        {
+          "term": "environment_variables",
+          "module": "09-nextjs",
+          "description": "Must be configured in the Vercel Dashboard."
+        },
+        {
+          "term": "serverless_functions",
+          "module": "09-nextjs",
+          "description": "Related concept: Serverless Functions."
+        }
+      ]
+    }
+  }
+}

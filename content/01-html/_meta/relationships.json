@@ -1,0 +1,4336 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "01-html",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "attribute": {
+      "level": 1,
+      "file": "terms/level_01/attribute.md",
+      "display_name": "Attribute",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Attributes are always placed inside the opening tag."
+        }
+      ],
+      "related": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Attributes live inside the opening tag of an element."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Self-closing elements that are configured using attributes (like `<img>`)."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "An element that heavily relies on the `href` attribute."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "Related concept: `title` Attribute."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "Related concept: URL (Uniform Resource Locator)."
+        },
+        {
+          "term": "audio",
+          "module": "01-html",
+          "description": "Related concept: `<audio>`."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "Related concept: `src` Attribute."
+        },
+        {
+          "term": "time_datetime",
+          "module": "01-html",
+          "description": "Related concept: `<time>` & `datetime` Attribute."
+        }
+      ]
+    },
+    "block_inline": {
+      "level": 1,
+      "file": "terms/level_01/block_inline.md",
+      "display_name": "Block-level vs Inline Elements",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The fundamental unit of HTML."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The standard markup language."
+        }
+      ],
+      "related": [
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The most common block-level generic container."
+        },
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "The most common inline generic container."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Elements that have no closing tag, many of which are inline (like `<img>`)."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Related concept: Element vs. Tag."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "Related concept: HTML (HyperText Markup Language)."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Related concept: Nesting."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "Related concept: `<a>` (Anchor / Link)."
+        },
+        {
+          "term": "br_hr",
+          "module": "01-html",
+          "description": "Related concept: `<br>` & `<hr>`."
+        },
+        {
+          "term": "headings",
+          "module": "01-html",
+          "description": "Related concept: Headings (`<h1>` to `<h6>`)."
+        },
+        {
+          "term": "lists",
+          "module": "01-html",
+          "description": "Related concept: `<ul>`, `<ol>`, and `<li>` (Lists)."
+        },
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "Related concept: `<p>` (Paragraph)."
+        },
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "Related concept: `<strong>` & `<em>`."
+        },
+        {
+          "term": "td",
+          "module": "01-html",
+          "description": "Related concept: `<td>` (Table Data)."
+        },
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "Related concept: `<tr>` (Table Row)."
+        }
+      ]
+    },
+    "body": {
+      "level": 1,
+      "file": "terms/level_01/body.md",
+      "display_name": "`<body>`",
+      "prerequisites": [
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "The parent root container element."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Specifically, understanding how `<body>` nests inside the `<html>` root parent container."
+        }
+      ],
+      "related": [
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "The tag that contains the `<body>`."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The invisible metadata sibling to the `<body>`."
+        },
+        {
+          "term": "noscript",
+          "module": "01-html",
+          "description": "Related concept: `<noscript>`."
+        }
+      ]
+    },
+    "comments": {
+      "level": 1,
+      "file": "terms/level_01/comments.md",
+      "display_name": "Comments (<!-- -->)",
+      "prerequisites": [
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The standard markup language."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Understanding standard tag indicators."
+        }
+      ],
+      "related": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Standard nodes that comments can wrap."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Comments must be nested correctly and not overlap with other active tags."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "Related concept: HTML (HyperText Markup Language)."
+        }
+      ]
+    },
+    "doctype_html": {
+      "level": 1,
+      "file": "terms/level_01/doctype_html.md",
+      "display_name": "`<!DOCTYPE html>`",
+      "prerequisites": [
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "It declares the version of this language."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Understanding that declarations stand alone and do not close."
+        }
+      ],
+      "related": [
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "The tag that immediately follows the DOCTYPE declaration."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Like the DOCTYPE declaration, void elements stand as single declarations without closing pairs."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "Related concept: HTML (HyperText Markup Language)."
+        }
+      ]
+    },
+    "element_vs_tag": {
+      "level": 1,
+      "file": "terms/level_01/element_vs_tag.md",
+      "display_name": "Element vs. Tag",
+      "prerequisites": [
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The language that uses these structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "Extra information that is placed *inside* the opening tag."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behaviors of HTML elements."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Elements that do not have a separate closing tag."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The language built from these tags and elements."
+        },
+        {
+          "term": "comments",
+          "module": "01-html",
+          "description": "Related concept: Comments (<!-- -->)."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Related concept: Nesting."
+        },
+        {
+          "term": "html_entities",
+          "module": "01-html",
+          "description": "Related concept: HTML Entities."
+        }
+      ]
+    },
+    "head": {
+      "level": 1,
+      "file": "terms/level_01/head.md",
+      "display_name": "`<head>`",
+      "prerequisites": [
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "The parent root container element."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Specifically, understanding how `<head>` nests inside the `<html>` root parent container."
+        }
+      ],
+      "related": [
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "The sibling to `<head>` that handles all visible content."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "The most important tag that lives inside the `<head>`."
+        },
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "Related concept: `<html>`."
+        },
+        {
+          "term": "header",
+          "module": "01-html",
+          "description": "Related concept: `<header>`."
+        },
+        {
+          "term": "base",
+          "module": "01-html",
+          "description": "Related concept: `<base>` Element."
+        },
+        {
+          "term": "character_encoding",
+          "module": "01-html",
+          "description": "Related concept: Character Encoding (`charset`)."
+        },
+        {
+          "term": "favicon",
+          "module": "01-html",
+          "description": "Related concept: Favicon."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "Related concept: `<link>`."
+        },
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "Related concept: `<meta>`."
+        },
+        {
+          "term": "open_graph",
+          "module": "01-html",
+          "description": "Related concept: Open Graph Tags (`og:`)."
+        }
+      ]
+    },
+    "html": {
+      "level": 1,
+      "file": "terms/level_01/html.md",
+      "display_name": "HTML (HyperText Markup Language)",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The fundamental building blocks used to write HTML."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The two display behaviors of elements."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Tags that do not wrap content."
+        },
+        {
+          "term": "comments",
+          "module": "01-html",
+          "description": "Notes within the source code."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "The address system of the web."
+        },
+        {
+          "term": "doctype_html",
+          "module": "01-html",
+          "description": "The declaration that tells the browser it is reading modern HTML."
+        }
+      ]
+    },
+    "html_tag": {
+      "level": 1,
+      "file": "terms/level_01/html_tag.md",
+      "display_name": "`<html>`",
+      "prerequisites": [
+        {
+          "term": "doctype_html",
+          "module": "01-html",
+          "description": "The declaration that precedes the `<html>` tag."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since the root element acts as the top-level parent container wrapping all child nodes."
+        }
+      ],
+      "related": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The first child of the `<html>` element."
+        },
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "The second child of the `<html>` element."
+        },
+        {
+          "term": "doctype_html",
+          "module": "01-html",
+          "description": "Related concept: `<!DOCTYPE html>`."
+        },
+        {
+          "term": "lang",
+          "module": "01-html",
+          "description": "Related concept: `lang` Attribute."
+        }
+      ]
+    },
+    "nesting": {
+      "level": 1,
+      "file": "terms/level_01/nesting.md",
+      "display_name": "Nesting",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Understanding the start and end tag boundaries."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The standard markup language."
+        }
+      ],
+      "related": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The building blocks that are nested."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Nesting rules differ based on display properties (e.g., inline elements cannot contain block elements)."
+        },
+        {
+          "term": "comments",
+          "module": "01-html",
+          "description": "Related concept: Comments (<!-- -->)."
+        },
+        {
+          "term": "whitespace_collapse",
+          "module": "01-html",
+          "description": "Related concept: Whitespace Collapse."
+        },
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "Related concept: The Tree Structure."
+        }
+      ]
+    },
+    "title": {
+      "level": 7,
+      "file": "terms/level_07/title.md",
+      "display_name": "`title` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The syntax mechanism for writing values inside tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The general tag parameter concept."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "The required visual description attribute for images."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "The page title tag (located in the `<head>`)."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "Related concept: `<head>`."
+        },
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "Related concept: `<meta>`."
+        },
+        {
+          "term": "seo_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: SEO Fundamentals for HTML."
+        }
+      ]
+    },
+    "url": {
+      "level": 1,
+      "file": "terms/level_01/url.md",
+      "display_name": "URL (Uniform Resource Locator)",
+      "prerequisites": [
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The standard markup language."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "How URLs are assigned to elements (like `href` and `src`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The HTML tag parameters that receive URLs as values."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The standard HTML link element utilizing `href`."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "Related concept: HTML (HyperText Markup Language)."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "Related concept: `href` Attribute."
+        }
+      ]
+    },
+    "void_elements": {
+      "level": 1,
+      "file": "terms/level_01/void_elements.md",
+      "display_name": "Void Elements (Self-closing Tags)",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The difference between tag markers and complete elements."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The standard markup language."
+        }
+      ],
+      "related": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The fundamental components of markup."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "How display properties apply to void elements (e.g. `<img>` is inline, while `<hr>` behaves like a block)."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "Related concept: Attribute."
+        },
+        {
+          "term": "doctype_html",
+          "module": "01-html",
+          "description": "Related concept: `<!DOCTYPE html>`."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "Related concept: HTML (HyperText Markup Language)."
+        },
+        {
+          "term": "br_hr",
+          "module": "01-html",
+          "description": "Related concept: `<br>` & `<hr>`."
+        },
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "Related concept: `<img>`."
+        },
+        {
+          "term": "source",
+          "module": "01-html",
+          "description": "Related concept: `<source>` Element."
+        }
+      ]
+    },
+    "whitespace_collapse": {
+      "level": 1,
+      "file": "terms/level_01/whitespace_collapse.md",
+      "display_name": "Whitespace Collapse",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The HTML nodes wrapping the text content."
+        },
+        {
+          "term": "html",
+          "module": "01-html",
+          "description": "The standard markup language."
+        }
+      ],
+      "related": [
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Proper tag structure which relies on source code indentation."
+        },
+        {
+          "term": "declaration_files",
+          "module": "01-html",
+          "description": "Like `&nbsp;`, used to bypass the browser's default spacing rules."
+        },
+        {
+          "term": "pre_code",
+          "module": "01-html",
+          "description": "Related concept: `<pre>` & `<code>`."
+        },
+        {
+          "term": "html_entities",
+          "module": "01-html",
+          "description": "Related concept: HTML Entities."
+        }
+      ]
+    },
+    "a": {
+      "level": 2,
+      "file": "terms/level_02/a.md",
+      "display_name": "`<a>` (Anchor / Link)",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The anchor tag is useless without its primary attribute."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "Since hyperlinks point to absolute or relative resource addresses."
+        }
+      ],
+      "related": [
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "The required attribute that makes the anchor tag function."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "The web address standard links utilize."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "As `<a>` is an inline text element by default."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The concept of injecting configuration into a tag."
+        },
+        {
+          "term": "button",
+          "module": "01-html",
+          "description": "Related concept: `<button>`."
+        },
+        {
+          "term": "address",
+          "module": "01-html",
+          "description": "Related concept: `<address>`."
+        },
+        {
+          "term": "tabindex",
+          "module": "01-html",
+          "description": "Related concept: `tabindex` Attribute."
+        },
+        {
+          "term": "base",
+          "module": "01-html",
+          "description": "Related concept: `<base>` Element."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "Related concept: `<link>`."
+        }
+      ]
+    },
+    "b_i_u_vs_strong_em": {
+      "level": 2,
+      "file": "terms/level_02/b_i_u_vs_strong_em.md",
+      "display_name": "`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`",
+      "prerequisites": [
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "The standard semantic emphasis elements."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since all of these are inline phrasing elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "The baseline semantic text tags."
+        },
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "The non-semantic inline container used for visual formatting with CSS."
+        },
+        {
+          "term": "mark",
+          "module": "01-html",
+          "description": "Related concept: `<mark>`."
+        }
+      ]
+    },
+    "blockquote_cite": {
+      "level": 2,
+      "file": "terms/level_02/blockquote_cite.md",
+      "display_name": "`<blockquote>` & `<cite>`",
+      "prerequisites": [
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "The fundamental block of text."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Opening and closing tag boundaries."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "Providing configuration keys."
+        }
+      ],
+      "related": [
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "Standard text container, often nested inside `<blockquote>`."
+        },
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "Inline emphasis tags that sit alongside `<cite>`."
+        }
+      ]
+    },
+    "br_hr": {
+      "level": 2,
+      "file": "terms/level_02/br_hr.md",
+      "display_name": "`<br>` & `<hr>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The tag syntax rules."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Since `<br>` and `<hr>` are void elements with no closing tags."
+        },
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "Understand how paragraphs naturally break lines."
+        }
+      ],
+      "related": [
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "The tag that creates natural block spacing."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "The general concept that `<br>` and `<hr>` fall under."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since `<br>` acts as an inline break and `<hr>` behaves like a block-level break."
+        }
+      ]
+    },
+    "div": {
+      "level": 2,
+      "file": "terms/level_02/div.md",
+      "display_name": "`<div>` (Block container)",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The `<div>` is one of the most heavily used elements in web development."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "`<div>`s are almost always paired with `class` or `id` attributes."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since `<div>` is a block-level container."
+        }
+      ],
+      "related": [
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "The inline equivalent of the `<div>`."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing generic divisions."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The modern alternative to using `<div>` for everything."
+        },
+        {
+          "term": "figure_figcaption",
+          "module": "01-html",
+          "description": "Related concept: `<figure>` & `<figcaption>`."
+        },
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "Related concept: `<article>` and `<section>`."
+        },
+        {
+          "term": "aside",
+          "module": "01-html",
+          "description": "Related concept: `<aside>`."
+        },
+        {
+          "term": "details_summary",
+          "module": "01-html",
+          "description": "Related concept: `<details>` & `<summary>`."
+        }
+      ]
+    },
+    "headings": {
+      "level": 2,
+      "file": "terms/level_02/headings.md",
+      "display_name": "Headings (`<h1>` to `<h6>`)",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Headings are structural elements."
+        },
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "Headings must be placed inside the body."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since headings are block-level elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "The text that usually follows a heading."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing headings."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The overarching concept of using tags for their structural meaning."
+        },
+        {
+          "term": "heading_hierarchy",
+          "module": "01-html",
+          "description": "Related concept: Heading Hierarchy & Document Outline."
+        }
+      ]
+    },
+    "href": {
+      "level": 2,
+      "file": "terms/level_02/href.md",
+      "display_name": "`href` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "It is an attribute placed inside an opening tag."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "Since `href` values represent uniform resource locator web addresses."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The tag that almost exclusively relies on this attribute."
+        }
+      ],
+      "related": [
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The tag that utilizes the `href` attribute."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "The web address standard links utilize."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "A different HTML tag that ALSO uses the `href` attribute, but for stylesheets instead of navigation."
+        },
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "Related concept: `<img>`."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "Related concept: `src` Attribute."
+        },
+        {
+          "term": "base",
+          "module": "01-html",
+          "description": "Related concept: `<base>` Element."
+        },
+        {
+          "term": "map_area",
+          "module": "01-html",
+          "description": "Related concept: `<map>` & `<area>` (Image Maps)."
+        }
+      ]
+    },
+    "lists": {
+      "level": 2,
+      "file": "terms/level_02/lists.md",
+      "display_name": "`<ul>`, `<ol>`, and `<li>` (Lists)",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The tag syntax rules."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Understanding how `<li>` elements nest inside parent `<ul>` or `<ol>` elements."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since list containers and list items are block-level elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing lists."
+        },
+        {
+          "term": "nav",
+          "module": "01-html",
+          "description": "Unordered lists are very commonly used inside `<nav>` elements to build website navigation menus."
+        }
+      ]
+    },
+    "p": {
+      "level": 2,
+      "file": "terms/level_02/p.md",
+      "display_name": "`<p>` (Paragraph)",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The `<p>` tag creates a paragraph element."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since paragraphs are block-level elements."
+        },
+        {
+          "term": "whitespace_collapse",
+          "module": "01-html",
+          "description": "Since paragraphs collapse sequential spaces and newlines."
+        }
+      ],
+      "related": [
+        {
+          "term": "headings",
+          "module": "01-html",
+          "description": "The titles that usually precede a `<p>`."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing paragraphs."
+        },
+        {
+          "term": "br_hr",
+          "module": "01-html",
+          "description": "Ways to break lines without starting a completely new paragraph block."
+        },
+        {
+          "term": "blockquote_cite",
+          "module": "01-html",
+          "description": "Related concept: `<blockquote>` & `<cite>`."
+        }
+      ]
+    },
+    "pre_code": {
+      "level": 2,
+      "file": "terms/level_02/pre_code.md",
+      "display_name": "`<pre>` & `<code>`",
+      "prerequisites": [
+        {
+          "term": "whitespace_collapse",
+          "module": "01-html",
+          "description": "The browser behavior these tags modify or bypass."
+        },
+        {
+          "term": "p",
+          "module": "01-html",
+          "description": "Standard paragraph text blocks."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Combining block and inline nodes."
+        }
+      ],
+      "related": [
+        {
+          "term": "whitespace_collapse",
+          "module": "01-html",
+          "description": "The default browser behavior that `<pre>` overrides."
+        },
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "A generic inline container that does not enforce monospacing."
+        }
+      ]
+    },
+    "span": {
+      "level": 2,
+      "file": "terms/level_02/span.md",
+      "display_name": "`<span>` (Inline container)",
+      "prerequisites": [
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The block-level sibling to the `<span>`."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since `<span>` is an inline container."
+        }
+      ],
+      "related": [
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The block-level equivalent of `<span>`."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing generic inline tags."
+        },
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "Semantic inline tags that should be used instead of `<span>` when text needs structural emphasis."
+        },
+        {
+          "term": "b_i_u_vs_strong_em",
+          "module": "01-html",
+          "description": "Related concept: `<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`."
+        },
+        {
+          "term": "pre_code",
+          "module": "01-html",
+          "description": "Related concept: `<pre>` & `<code>`."
+        },
+        {
+          "term": "sup_sub",
+          "module": "01-html",
+          "description": "Related concept: `<sup>` & `<sub>`."
+        },
+        {
+          "term": "mark",
+          "module": "01-html",
+          "description": "Related concept: `<mark>`."
+        }
+      ]
+    },
+    "strong_em": {
+      "level": 2,
+      "file": "terms/level_02/strong_em.md",
+      "display_name": "`<strong>` & `<em>`",
+      "prerequisites": [
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "Unlike `<span>`, these tags have semantic meaning."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since `<strong>` and `<em>` are inline elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "The non-semantic alternative for purely visual styling."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing text wrappers."
+        },
+        {
+          "term": "b_i_u_vs_strong_em",
+          "module": "01-html",
+          "description": "The presentational vs semantic formatting comparison."
+        },
+        {
+          "term": "blockquote_cite",
+          "module": "01-html",
+          "description": "Related concept: `<blockquote>` & `<cite>`."
+        },
+        {
+          "term": "sup_sub",
+          "module": "01-html",
+          "description": "Related concept: `<sup>` & `<sub>`."
+        },
+        {
+          "term": "mark",
+          "module": "01-html",
+          "description": "Related concept: `<mark>`."
+        }
+      ]
+    },
+    "sup_sub": {
+      "level": 2,
+      "file": "terms/level_02/sup_sub.md",
+      "display_name": "`<sup>` & `<sub>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Opening and closing tag boundaries."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since these elements flow inline within paragraphs."
+        }
+      ],
+      "related": [
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "Standard inline formatting tags."
+        },
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "The non-semantic inline container."
+        }
+      ]
+    },
+    "alt": {
+      "level": 3,
+      "file": "terms/level_03/alt.md",
+      "display_name": "`alt` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The general concept of tag parameters."
+        },
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The image tag that utilizes this attribute."
+        }
+      ],
+      "related": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The element that requires the `alt` attribute."
+        },
+        {
+          "term": "figure_figcaption",
+          "module": "01-html",
+          "description": "The semantic containers used to package images and captions."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "Related concept: `title` Attribute."
+        },
+        {
+          "term": "picture_responsive",
+          "module": "01-html",
+          "description": "Related concept: `<picture>` & Responsive Images."
+        },
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: Accessibility (a11y) Fundamentals."
+        }
+      ]
+    },
+    "audio": {
+      "level": 3,
+      "file": "terms/level_03/audio.md",
+      "display_name": "`<audio>`",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The `<audio>` tag relies on several specific attributes like `controls`."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The source loader used to point to the audio file resource."
+        }
+      ],
+      "related": [
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The attribute defining the audio source."
+        },
+        {
+          "term": "source",
+          "module": "01-html",
+          "description": "The child element used for multi-format audio sources."
+        },
+        {
+          "term": "video",
+          "module": "01-html",
+          "description": "The visual equivalent of the audio tag."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The concept of tag configuration parameters."
+        }
+      ]
+    },
+    "figure_figcaption": {
+      "level": 3,
+      "file": "terms/level_03/figure_figcaption.md",
+      "display_name": "`<figure>` & `<figcaption>`",
+      "prerequisites": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The image tag wrapped by figures."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "Visually descriptive alternate text."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Nested tag structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The image element wrapped inside the figure."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "The visual description metadata."
+        },
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The non-semantic block container."
+        }
+      ]
+    },
+    "iframe": {
+      "level": 3,
+      "file": "terms/level_03/iframe.md",
+      "display_name": "`<iframe>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Understand basic HTML structures."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "Iframes rely heavily on attributes."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The media source loader attribute."
+        }
+      ],
+      "related": [
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The attribute defining the iframe source URL."
+        },
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "Another tag that embeds external content (images) by fetching a source URL."
+        }
+      ]
+    },
+    "img": {
+      "level": 3,
+      "file": "terms/level_03/img.md",
+      "display_name": "`<img>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The tag structure rules."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Understanding that the `<img>` is a void element (no closing tag)."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The `<img>` tag requires attributes to function."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The attribute that points to the image resource location."
+        }
+      ],
+      "related": [
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "The required accessibility attribute for images."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The attribute used to define the image source URL."
+        },
+        {
+          "term": "figure_figcaption",
+          "module": "01-html",
+          "description": "The semantic containers used to package images and captions."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "The category of tags `<img>` belongs to."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "The anchor equivalent of `src`."
+        },
+        {
+          "term": "iframe",
+          "module": "01-html",
+          "description": "Related concept: `<iframe>`."
+        },
+        {
+          "term": "picture_responsive",
+          "module": "01-html",
+          "description": "Related concept: `<picture>` & Responsive Images."
+        },
+        {
+          "term": "video",
+          "module": "01-html",
+          "description": "Related concept: `<video>`."
+        },
+        {
+          "term": "map_area",
+          "module": "01-html",
+          "description": "Related concept: `<map>` & `<area>` (Image Maps)."
+        }
+      ]
+    },
+    "picture_responsive": {
+      "level": 3,
+      "file": "terms/level_03/picture_responsive.md",
+      "display_name": "`<picture>` & Responsive Images",
+      "prerequisites": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The image container that actually displays the pixels."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "The accessibility description."
+        },
+        {
+          "term": "source",
+          "module": "01-html",
+          "description": "The tag used to list alternative media files."
+        }
+      ],
+      "related": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The rendering image element."
+        },
+        {
+          "term": "source",
+          "module": "01-html",
+          "description": "The sibling element specifying source lists."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "The required visual descriptor."
+        }
+      ]
+    },
+    "source": {
+      "level": 3,
+      "file": "terms/level_03/source.md",
+      "display_name": "`<source>` Element",
+      "prerequisites": [
+        {
+          "term": "audio",
+          "module": "01-html",
+          "description": "Sound media player containers."
+        },
+        {
+          "term": "video",
+          "module": "01-html",
+          "description": "Video media player containers."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Since `<source>` is a self-closing element."
+        }
+      ],
+      "related": [
+        {
+          "term": "audio",
+          "module": "01-html",
+          "description": "The audio container element."
+        },
+        {
+          "term": "video",
+          "module": "01-html",
+          "description": "The video container element."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "The general category of single-tag elements."
+        },
+        {
+          "term": "picture_responsive",
+          "module": "01-html",
+          "description": "Related concept: `<picture>` & Responsive Images."
+        }
+      ]
+    },
+    "src": {
+      "level": 3,
+      "file": "terms/level_03/src.md",
+      "display_name": "`src` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The concept of injecting configuration into opening tags."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "The address standard used to locate files."
+        }
+      ],
+      "related": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The concept of tag configuration keys."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "The coordinate system attribute for links."
+        },
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The most common media embedding tag using `src`."
+        },
+        {
+          "term": "audio",
+          "module": "01-html",
+          "description": "Related concept: `<audio>`."
+        },
+        {
+          "term": "iframe",
+          "module": "01-html",
+          "description": "Related concept: `<iframe>`."
+        },
+        {
+          "term": "video",
+          "module": "01-html",
+          "description": "Related concept: `<video>`."
+        }
+      ]
+    },
+    "video": {
+      "level": 3,
+      "file": "terms/level_03/video.md",
+      "display_name": "`<video>`",
+      "prerequisites": [
+        {
+          "term": "audio",
+          "module": "01-html",
+          "description": "The video tag works almost exactly like the audio tag."
+        },
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The source loader used to point to the video file resource."
+        }
+      ],
+      "related": [
+        {
+          "term": "src",
+          "module": "01-html",
+          "description": "The attribute defining the video source."
+        },
+        {
+          "term": "source",
+          "module": "01-html",
+          "description": "The child element used for multi-format video sources."
+        },
+        {
+          "term": "audio",
+          "module": "01-html",
+          "description": "The sound-only sibling to the video tag."
+        },
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The image tag related to the `poster` thumbnail."
+        }
+      ]
+    },
+    "caption": {
+      "level": 4,
+      "file": "terms/level_04/caption.md",
+      "display_name": "`<caption>`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "The parent element that holds the caption."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Understanding element hierarchies."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "The parent container that holds the caption."
+        },
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "The header cell tag inside rows."
+        },
+        {
+          "term": "scope",
+          "module": "01-html",
+          "description": "Related concept: `scope` Attribute (in `<th>`)."
+        }
+      ]
+    },
+    "colspan_rowspan": {
+      "level": 4,
+      "file": "terms/level_04/colspan_rowspan.md",
+      "display_name": "`colspan` & `rowspan` Attributes",
+      "prerequisites": [
+        {
+          "term": "td",
+          "module": "01-html",
+          "description": "The standard table cell."
+        },
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "The header cell."
+        },
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "The master table grid."
+        }
+      ],
+      "related": [
+        {
+          "term": "td",
+          "module": "01-html",
+          "description": "The tag that receives span attributes."
+        },
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "Header cells which frequently span across categories."
+        },
+        {
+          "term": "scope",
+          "module": "01-html",
+          "description": "Used alongside spans to clarify multi-cell header authority."
+        }
+      ]
+    },
+    "scope": {
+      "level": 4,
+      "file": "terms/level_04/scope.md",
+      "display_name": "`scope` Attribute (in `<th>`)",
+      "prerequisites": [
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "The tag that utilizes this attribute."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The general concept of injecting options into elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "The tag that hosts the `scope` attribute."
+        },
+        {
+          "term": "caption",
+          "module": "01-html",
+          "description": "The table title helper."
+        },
+        {
+          "term": "colspan_rowspan",
+          "module": "01-html",
+          "description": "Attributes used to merge table cells."
+        }
+      ]
+    },
+    "table": {
+      "level": 4,
+      "file": "terms/level_04/table.md",
+      "display_name": "`<table>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Tables are complex elements that require many nested child elements to function."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since a table requires nested row and cell structures."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "Since tables are block-level display components."
+        }
+      ],
+      "related": [
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "The tag that defines a horizontal row inside the table."
+        },
+        {
+          "term": "td",
+          "module": "01-html",
+          "description": "The tag that holds the actual data inside the row."
+        },
+        {
+          "term": "caption",
+          "module": "01-html",
+          "description": "The semantic title container for the table."
+        },
+        {
+          "term": "thead_tbody_tfoot",
+          "module": "01-html",
+          "description": "Related concept: `<thead>`, `<tbody>`, `<tfoot>`."
+        }
+      ]
+    },
+    "td": {
+      "level": 4,
+      "file": "terms/level_04/td.md",
+      "display_name": "`<td>` (Table Data)",
+      "prerequisites": [
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "The `<td>` element MUST be placed inside a `<tr>`."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since table data cells must nest directly inside a parent table row container."
+        }
+      ],
+      "related": [
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "The bold header equivalent of the data cell."
+        },
+        {
+          "term": "colspan_rowspan",
+          "module": "01-html",
+          "description": "Attributes used to merge table cells."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing table data."
+        },
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "Related concept: `<table>`."
+        },
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "Related concept: `<tr>` (Table Row)."
+        }
+      ]
+    },
+    "th": {
+      "level": 4,
+      "file": "terms/level_04/th.md",
+      "display_name": "`<th>` (Table Header)",
+      "prerequisites": [
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "The parent element that holds the `<th>`."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since table header cells must nest directly inside a parent table row container."
+        }
+      ],
+      "related": [
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "The row that contains the `<th>`."
+        },
+        {
+          "term": "td",
+          "module": "01-html",
+          "description": "The standard data cell that corresponds to the `<th>`."
+        },
+        {
+          "term": "scope",
+          "module": "01-html",
+          "description": "The attribute used to declare cell header associations."
+        },
+        {
+          "term": "colspan_rowspan",
+          "module": "01-html",
+          "description": "Attributes used to merge table cells."
+        },
+        {
+          "term": "caption",
+          "module": "01-html",
+          "description": "Related concept: `<caption>`."
+        }
+      ]
+    },
+    "thead_tbody_tfoot": {
+      "level": 4,
+      "file": "terms/level_04/thead_tbody_tfoot.md",
+      "display_name": "`<thead>`, `<tbody>`, `<tfoot>`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "These tags are placed directly inside the table element."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since these section wrappers must nest inside the parent `<table>` tag."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "The master container that holds these semantic groups."
+        },
+        {
+          "term": "tr",
+          "module": "01-html",
+          "description": "The horizontal row elements nested inside these group containers."
+        }
+      ]
+    },
+    "tr": {
+      "level": 4,
+      "file": "terms/level_04/tr.md",
+      "display_name": "`<tr>` (Table Row)",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "The parent container for all rows."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since table rows must nest directly inside a parent table container."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "01-html",
+          "description": "The parent that holds the `<tr>`."
+        },
+        {
+          "term": "td",
+          "module": "01-html",
+          "description": "The data cells that go *inside* the `<tr>`."
+        },
+        {
+          "term": "block_inline",
+          "module": "01-html",
+          "description": "The display behavior governing table rows."
+        },
+        {
+          "term": "th",
+          "module": "01-html",
+          "description": "Related concept: `<th>` (Table Header)."
+        },
+        {
+          "term": "thead_tbody_tfoot",
+          "module": "01-html",
+          "description": "Related concept: `<thead>`, `<tbody>`, `<tfoot>`."
+        }
+      ]
+    },
+    "action_method": {
+      "level": 5,
+      "file": "terms/level_05/action_method.md",
+      "display_name": "`action` & `method` Attributes",
+      "prerequisites": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The form tag containing these attributes."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "The address standard used to locate destination pages."
+        }
+      ],
+      "related": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The parent container wrapper."
+        },
+        {
+          "term": "button",
+          "module": "01-html",
+          "description": "The button element which acts as the submission trigger."
+        }
+      ]
+    },
+    "button": {
+      "level": 5,
+      "file": "terms/level_05/button.md",
+      "display_name": "`<button>`",
+      "prerequisites": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "Buttons are the primary way to submit a form."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Unlike `<input>`, the `<button>` is NOT a void element; it has opening and closing tags."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since buttons can contain nested tags like text, spans, or images."
+        }
+      ],
+      "related": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The element that the button usually submits."
+        },
+        {
+          "term": "action_method",
+          "module": "01-html",
+          "description": "The parameters that govern form submission when `type=\"submit\"` is pressed."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The navigation element that is often confused with a button."
+        },
+        {
+          "term": "tabindex",
+          "module": "01-html",
+          "description": "Related concept: `tabindex` Attribute."
+        }
+      ]
+    },
+    "form": {
+      "level": 5,
+      "file": "terms/level_05/form.md",
+      "display_name": "`<form>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The form is a master container that holds other input elements."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since other form controls must nest inside this boundary tag."
+        }
+      ],
+      "related": [
+        {
+          "term": "action_method",
+          "module": "01-html",
+          "description": "The destination and request details for form data."
+        },
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The text boxes and checkboxes that go *inside* the form."
+        },
+        {
+          "term": "button",
+          "module": "01-html",
+          "description": "The trigger that actually submits the form."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "Related concept: `name` Attribute (in Form Fields)."
+        }
+      ]
+    },
+    "input": {
+      "level": 5,
+      "file": "terms/level_05/input.md",
+      "display_name": "`<input>`",
+      "prerequisites": [
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "Inputs should generally be placed inside a form."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The behavior of an `<input>` changes entirely based on its attributes."
+        },
+        {
+          "term": "void_elements",
+          "module": "01-html",
+          "description": "Since `<input>` is a void element with no closing tag."
+        }
+      ],
+      "related": [
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "The tag that provides an accessible text description for the input."
+        },
+        {
+          "term": "placeholder",
+          "module": "01-html",
+          "description": "The inline visual text hint."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "The field content value representation."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "The key name used during form submission."
+        },
+        {
+          "term": "radio_checkbox",
+          "module": "01-html",
+          "description": "Toggle option fields."
+        },
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The container that packages the input's data."
+        },
+        {
+          "term": "select_option",
+          "module": "01-html",
+          "description": "Related concept: `<select>` and `<option>`."
+        },
+        {
+          "term": "textarea",
+          "module": "01-html",
+          "description": "Related concept: `<textarea>`."
+        }
+      ]
+    },
+    "label": {
+      "level": 5,
+      "file": "terms/level_05/label.md",
+      "display_name": "`<label>`",
+      "prerequisites": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The tag that the label describes."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The label relies on the `for` attribute to function."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since input controls can optionally nest inside label containers."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The element that requires a label."
+        },
+        {
+          "term": "radio_checkbox",
+          "module": "01-html",
+          "description": "Selection toggles that heavily depend on labels for target clicking."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The unique identifier required to link the label to the input."
+        },
+        {
+          "term": "placeholder",
+          "module": "01-html",
+          "description": "Related concept: `placeholder` Attribute."
+        },
+        {
+          "term": "select_option",
+          "module": "01-html",
+          "description": "Related concept: `<select>` and `<option>`."
+        },
+        {
+          "term": "textarea",
+          "module": "01-html",
+          "description": "Related concept: `<textarea>`."
+        },
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: Accessibility (a11y) Fundamentals."
+        }
+      ]
+    },
+    "name": {
+      "level": 5,
+      "file": "terms/level_05/name.md",
+      "display_name": "`name` Attribute (in Form Fields)",
+      "prerequisites": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The input controls containing the name parameter."
+        },
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The container compiling the key-value packages."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The input controls mapped by name tags."
+        },
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "The form collector."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "The value half of the key-value submission pair."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The unique client-side identifier."
+        },
+        {
+          "term": "radio_checkbox",
+          "module": "01-html",
+          "description": "Related concept: `<input type=\"radio\">` & `<input type=\"checkbox\">`."
+        },
+        {
+          "term": "select_option",
+          "module": "01-html",
+          "description": "Related concept: `<select>` and `<option>`."
+        },
+        {
+          "term": "textarea",
+          "module": "01-html",
+          "description": "Related concept: `<textarea>`."
+        }
+      ]
+    },
+    "placeholder": {
+      "level": 5,
+      "file": "terms/level_05/placeholder.md",
+      "display_name": "`placeholder` Attribute",
+      "prerequisites": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The input controls hosting the placeholder."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The parameter syntax injected into tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The tag hosting the placeholder."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "The mandatory companion tag for accessibility."
+        },
+        {
+          "term": "textarea",
+          "module": "01-html",
+          "description": "Multi-line text inputs that also support placeholders."
+        },
+        {
+          "term": "select_option",
+          "module": "01-html",
+          "description": "Related concept: `<select>` and `<option>`."
+        }
+      ]
+    },
+    "radio_checkbox": {
+      "level": 5,
+      "file": "terms/level_05/radio_checkbox.md",
+      "display_name": "`<input type=\"radio\">` & `<input type=\"checkbox\">`",
+      "prerequisites": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The input element that these types configure."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "Crucial for grouping selectors."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "Defining the submitted choice code data."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The parent element."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "The text label companion."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "Essential grouping parameter."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "Choice values."
+        }
+      ]
+    },
+    "select_option": {
+      "level": 5,
+      "file": "terms/level_05/select_option.md",
+      "display_name": "`<select>` and `<option>`",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "This is a parent/child relationship, much like lists (`<ul>` and `<li>`)."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since `<option>` tags must nest directly inside a parent `<select>` block."
+        },
+        {
+          "term": "form",
+          "module": "01-html",
+          "description": "Dropdowns are used to collect data for forms."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The alternative way to collect data (free-form typing)."
+        },
+        {
+          "term": "placeholder",
+          "module": "01-html",
+          "description": "The visual cue comparison."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "The option value parameters."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "The select key name used during form submission."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "The tag used to describe the `<select>` element."
+        }
+      ]
+    },
+    "textarea": {
+      "level": 5,
+      "file": "terms/level_05/textarea.md",
+      "display_name": "`<textarea>`",
+      "prerequisites": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The single-line sibling to the textarea."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Notice that `<textarea>` is NOT a void element!"
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since default text values are nested between the opening and closing tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The single-line equivalent for short data."
+        },
+        {
+          "term": "placeholder",
+          "module": "01-html",
+          "description": "The visual cue comparison."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "The value differences from textareas."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "The textarea key name parameter."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "The associated text label."
+        }
+      ]
+    },
+    "value": {
+      "level": 5,
+      "file": "terms/level_05/value.md",
+      "display_name": "`value` Attribute (in Form Fields)",
+      "prerequisites": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The primary interactive elements using value."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The standard syntax keys inside tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "input",
+          "module": "01-html",
+          "description": "The input elements hosting values."
+        },
+        {
+          "term": "select_option",
+          "module": "01-html",
+          "description": "Predefined value listings."
+        },
+        {
+          "term": "textarea",
+          "module": "01-html",
+          "description": "The tag that handles content differently (nested inner HTML)."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "Related concept: `name` Attribute (in Form Fields)."
+        },
+        {
+          "term": "radio_checkbox",
+          "module": "01-html",
+          "description": "Related concept: `<input type=\"radio\">` & `<input type=\"checkbox\">`."
+        },
+        {
+          "term": "progress_meter",
+          "module": "01-html",
+          "description": "Related concept: `<progress>` & `<meter>` Elements."
+        }
+      ]
+    },
+    "address": {
+      "level": 6,
+      "file": "terms/level_06/address.md",
+      "display_name": "`<address>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The parent layout philosophy."
+        },
+        {
+          "term": "footer",
+          "module": "01-html",
+          "description": "Since address blocks are commonly nested inside page footers."
+        }
+      ],
+      "related": [
+        {
+          "term": "footer",
+          "module": "01-html",
+          "description": "The parent container for site contact blocks."
+        },
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "Containers that house author-specific contact blocks."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "Used inside address blocks for mail/phone triggers."
+        }
+      ]
+    },
+    "article_section": {
+      "level": 6,
+      "file": "terms/level_06/article_section.md",
+      "display_name": "`<article>` and `<section>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Understanding that these replace generic `<div>` elements."
+        },
+        {
+          "term": "main",
+          "module": "01-html",
+          "description": "These tags are almost always placed inside the `<main>` container."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since sections and nested articles represent structural hierarchies."
+        }
+      ],
+      "related": [
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The non-semantic wrapper you should use if your block doesn't warrant an `<article>` or `<section>`."
+        },
+        {
+          "term": "main",
+          "module": "01-html",
+          "description": "The parent container for these elements."
+        },
+        {
+          "term": "aside",
+          "module": "01-html",
+          "description": "The tangential layout block placed next to articles."
+        },
+        {
+          "term": "address",
+          "module": "01-html",
+          "description": "Related concept: `<address>`."
+        },
+        {
+          "term": "footer",
+          "module": "01-html",
+          "description": "Related concept: `<footer>`."
+        },
+        {
+          "term": "heading_hierarchy",
+          "module": "01-html",
+          "description": "Related concept: Heading Hierarchy & Document Outline."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Related concept: Semantic HTML."
+        }
+      ]
+    },
+    "aside": {
+      "level": 6,
+      "file": "terms/level_06/aside.md",
+      "display_name": "`<aside>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The core layout philosophy."
+        },
+        {
+          "term": "main",
+          "module": "01-html",
+          "description": "Defining the primary content block."
+        }
+      ],
+      "related": [
+        {
+          "term": "main",
+          "module": "01-html",
+          "description": "The container for the primary document content."
+        },
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "The self-contained semantic blocks."
+        },
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The non-semantic block container."
+        },
+        {
+          "term": "nav",
+          "module": "01-html",
+          "description": "Related concept: `<nav>`."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Related concept: Semantic HTML."
+        }
+      ]
+    },
+    "details_summary": {
+      "level": 6,
+      "file": "terms/level_06/details_summary.md",
+      "display_name": "`<details>` & `<summary>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Semantic structures."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Basic nesting."
+        }
+      ],
+      "related": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The parent layout context."
+        },
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The non-interactive equivalent."
+        },
+        {
+          "term": "dialog",
+          "module": "01-html",
+          "description": "Related concept: `<dialog>` Element."
+        }
+      ]
+    },
+    "footer": {
+      "level": 6,
+      "file": "terms/level_06/footer.md",
+      "display_name": "`<footer>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The `<footer>` is the closing semantic landmark of a document."
+        },
+        {
+          "term": "header",
+          "module": "01-html",
+          "description": "The semantic opposite of the footer."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since concluding tags, links, and text are nested inside the footer wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "header",
+          "module": "01-html",
+          "description": "The introductory equivalent to the footer."
+        },
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "Often contains its own specific `<footer>`."
+        },
+        {
+          "term": "address",
+          "module": "01-html",
+          "description": "The semantic tag for contact info, typically hosted in page footers."
+        }
+      ]
+    },
+    "header": {
+      "level": 6,
+      "file": "terms/level_06/header.md",
+      "display_name": "`<header>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The `<header>` is a core part of the HTML5 semantic specification."
+        },
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "The `<header>` lives inside the body."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since other tags (headings, links) are nested within headers."
+        }
+      ],
+      "related": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The metadata container (do not confuse with `<header>`)."
+        },
+        {
+          "term": "footer",
+          "module": "01-html",
+          "description": "The semantic opposite of the `<header>`."
+        },
+        {
+          "term": "nav",
+          "module": "01-html",
+          "description": "The navigation block commonly nested inside main headers."
+        }
+      ]
+    },
+    "heading_hierarchy": {
+      "level": 6,
+      "file": "terms/level_06/heading_hierarchy.md",
+      "display_name": "Heading Hierarchy & Document Outline",
+      "prerequisites": [
+        {
+          "term": "headings",
+          "module": "01-html",
+          "description": "The visual header tags."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Document organization theory."
+        }
+      ],
+      "related": [
+        {
+          "term": "headings",
+          "module": "01-html",
+          "description": "The tags that define outline points."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The concept framework."
+        },
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "Containers that enclose outline sections."
+        },
+        {
+          "term": "seo_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: SEO Fundamentals for HTML."
+        }
+      ]
+    },
+    "main": {
+      "level": 6,
+      "file": "terms/level_06/main.md",
+      "display_name": "`<main>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The core philosophy behind the `<main>` tag."
+        },
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "The `<main>` tag is always a child of the `<body>`."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since primary text blocks, sections, and articles nest inside this main wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "The tags that usually live *inside* the `<main>` tag to break up the content."
+        },
+        {
+          "term": "aside",
+          "module": "01-html",
+          "description": "The tangential layout block placed outside main content boundaries."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Related concept: Semantic HTML."
+        }
+      ]
+    },
+    "mark": {
+      "level": 6,
+      "file": "terms/level_06/mark.md",
+      "display_name": "`<mark>`",
+      "prerequisites": [
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "The standard inline formatting tags."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The concept framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "strong_em",
+          "module": "01-html",
+          "description": "Standard inline text tags."
+        },
+        {
+          "term": "span",
+          "module": "01-html",
+          "description": "The non-semantic styling container."
+        },
+        {
+          "term": "b_i_u_vs_strong_em",
+          "module": "01-html",
+          "description": "Presentational vs semantic styling comparison."
+        }
+      ]
+    },
+    "nav": {
+      "level": 6,
+      "file": "terms/level_06/nav.md",
+      "display_name": "`<nav>`",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The `<nav>` is a core HTML5 semantic landmark."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The `<nav>` element is a container specifically for anchors."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "Since navigation lists must nest inside the parent `<nav>` container."
+        }
+      ],
+      "related": [
+        {
+          "term": "header",
+          "module": "01-html",
+          "description": "The parent container that usually holds the primary `<nav>`."
+        },
+        {
+          "term": "lists",
+          "module": "01-html",
+          "description": "The element almost always used *inside* a `<nav>` to structure the links."
+        },
+        {
+          "term": "aside",
+          "module": "01-html",
+          "description": "The tangential layout block."
+        }
+      ]
+    },
+    "semantic_html": {
+      "level": 6,
+      "file": "terms/level_06/semantic_html.md",
+      "display_name": "Semantic HTML",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Understanding the basic building blocks of HTML."
+        },
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "The tag that Semantic HTML was designed to replace."
+        }
+      ],
+      "related": [
+        {
+          "term": "main",
+          "module": "01-html",
+          "description": "The most important semantic tag, denoting the primary content."
+        },
+        {
+          "term": "article_section",
+          "module": "01-html",
+          "description": "Semantic tags used to break up large blocks of text."
+        },
+        {
+          "term": "aside",
+          "module": "01-html",
+          "description": "Non-essential sidebar or sidebar callout container."
+        },
+        {
+          "term": "details_summary",
+          "module": "01-html",
+          "description": "Interactive disclosure widgets without script logic."
+        },
+        {
+          "term": "div",
+          "module": "01-html",
+          "description": "Related concept: `<div>` (Block container)."
+        },
+        {
+          "term": "headings",
+          "module": "01-html",
+          "description": "Related concept: Headings (`<h1>` to `<h6>`)."
+        },
+        {
+          "term": "heading_hierarchy",
+          "module": "01-html",
+          "description": "Related concept: Heading Hierarchy & Document Outline."
+        },
+        {
+          "term": "time_datetime",
+          "module": "01-html",
+          "description": "Related concept: `<time>` & `datetime` Attribute."
+        },
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: Accessibility (a11y) Fundamentals."
+        },
+        {
+          "term": "aria_attributes",
+          "module": "01-html",
+          "description": "Related concept: ARIA Attributes."
+        },
+        {
+          "term": "seo_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: SEO Fundamentals for HTML."
+        }
+      ]
+    },
+    "time_datetime": {
+      "level": 6,
+      "file": "terms/level_06/time_datetime.md",
+      "display_name": "`<time>` & `datetime` Attribute",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Understanding the focus on machine-readable code."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The parameter syntax used to configure tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The parent layout context."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The parameter concept."
+        }
+      ]
+    },
+    "class": {
+      "level": 7,
+      "file": "terms/level_07/class.md",
+      "display_name": "`class` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The fundamental concept of providing extra information inside a starting tag."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The unique identifier that contrasts with `class`."
+        }
+      ],
+      "related": [
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The strictly unique identifier."
+        },
+        {
+          "term": "style",
+          "module": "01-html",
+          "description": "Another global attribute used to apply CSS directly to an element."
+        },
+        {
+          "term": "data_attributes",
+          "module": "01-html",
+          "description": "Custom metadata values often styled alongside classes."
+        },
+        {
+          "term": "style_tag",
+          "module": "01-html",
+          "description": "Related concept: `<style>` Element."
+        }
+      ]
+    },
+    "data_attributes": {
+      "level": 7,
+      "file": "terms/level_07/data_attributes.md",
+      "display_name": "`data-*` Attributes",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The fundamental concept of parameters in tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "class",
+          "module": "01-html",
+          "description": "The global attribute for styling categories."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The unique identifier."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "Used to execute the JavaScript that extracts dataset properties."
+        },
+        {
+          "term": "style",
+          "module": "01-html",
+          "description": "Related concept: `style` Attribute."
+        },
+        {
+          "term": "drag_drop",
+          "module": "01-html",
+          "description": "Related concept: Drag & Drop API."
+        }
+      ]
+    },
+    "id": {
+      "level": 7,
+      "file": "terms/level_07/id.md",
+      "display_name": "`id` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The fundamental concept of providing extra information inside a starting tag."
+        }
+      ],
+      "related": [
+        {
+          "term": "class",
+          "module": "01-html",
+          "description": "The attribute used for grouping *multiple* elements together (the opposite of `id`)."
+        },
+        {
+          "term": "style",
+          "module": "01-html",
+          "description": "The inline styling attribute."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "Relies entirely on `id`s to function."
+        },
+        {
+          "term": "data_attributes",
+          "module": "01-html",
+          "description": "Custom data values that can reside next to IDs for scripting."
+        },
+        {
+          "term": "name",
+          "module": "01-html",
+          "description": "Related concept: `name` Attribute (in Form Fields)."
+        },
+        {
+          "term": "tabindex",
+          "module": "01-html",
+          "description": "Related concept: `tabindex` Attribute."
+        }
+      ]
+    },
+    "lang": {
+      "level": 7,
+      "file": "terms/level_07/lang.md",
+      "display_name": "`lang` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "Tag configuration options."
+        },
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "The root tag where `lang` is primarily declared."
+        }
+      ],
+      "related": [
+        {
+          "term": "html_tag",
+          "module": "01-html",
+          "description": "The parent container where `lang` is declared."
+        },
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "Metadata tags used for other page settings."
+        }
+      ]
+    },
+    "style": {
+      "level": 7,
+      "file": "terms/level_07/style.md",
+      "display_name": "`style` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The fundamental concept of providing extra information inside a starting tag."
+        },
+        {
+          "term": "class",
+          "module": "01-html",
+          "description": "The preferred, external way to apply styles."
+        }
+      ],
+      "related": [
+        {
+          "term": "class",
+          "module": "01-html",
+          "description": "The correct, maintainable way to apply CSS to elements."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "The unique identifier attribute."
+        },
+        {
+          "term": "data_attributes",
+          "module": "01-html",
+          "description": "Custom metadata values often styled via CSS."
+        },
+        {
+          "term": "style_tag",
+          "module": "01-html",
+          "description": "Related concept: `<style>` Element."
+        },
+        {
+          "term": "progress_meter",
+          "module": "01-html",
+          "description": "Related concept: `<progress>` & `<meter>` Elements."
+        }
+      ]
+    },
+    "tabindex": {
+      "level": 7,
+      "file": "terms/level_07/tabindex.md",
+      "display_name": "`tabindex` Attribute",
+      "prerequisites": [
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The tag parameter syntax."
+        },
+        {
+          "term": "button",
+          "module": "01-html",
+          "description": "A naturally interactive element that handles focus by default."
+        }
+      ],
+      "related": [
+        {
+          "term": "button",
+          "module": "01-html",
+          "description": "The standard focusable trigger."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "Focusable navigation elements."
+        },
+        {
+          "term": "id",
+          "module": "01-html",
+          "description": "Unique identifiers."
+        },
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: Accessibility (a11y) Fundamentals."
+        },
+        {
+          "term": "aria_attributes",
+          "module": "01-html",
+          "description": "Related concept: ARIA Attributes."
+        }
+      ]
+    },
+    "base": {
+      "level": 8,
+      "file": "terms/level_08/base.md",
+      "display_name": "`<base>` Element",
+      "prerequisites": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent container where `<base>` is hosted."
+        },
+        {
+          "term": "url",
+          "module": "01-html",
+          "description": "Defining absolute vs. relative paths."
+        }
+      ],
+      "related": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent metadata container."
+        },
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "Elements impacted by base target modifications."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "The path target attribute."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "Related concept: `<link>`."
+        }
+      ]
+    },
+    "character_encoding": {
+      "level": 8,
+      "file": "terms/level_08/character_encoding.md",
+      "display_name": "Character Encoding (`charset`)",
+      "prerequisites": [
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "The tag used to declare encoding parameters."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent metadata container."
+        }
+      ],
+      "related": [
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "The parent tag containing the charset key."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The container housing the charset definition."
+        },
+        {
+          "term": "html_entities",
+          "module": "01-html",
+          "description": "A legacy way to display special characters when UTF-8 encoding is unavailable."
+        }
+      ]
+    },
+    "defer_async": {
+      "level": 8,
+      "file": "terms/level_08/defer_async.md",
+      "display_name": "`defer` & `async` (Script Loading Strategies)",
+      "prerequisites": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The parent tag hosting these attributes."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The location where script loading strategies are configured."
+        }
+      ],
+      "related": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The parent script container element."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "The element used to connect stylesheets (which are also render-blocking)."
+        },
+        {
+          "term": "render_blocking",
+          "module": "01-html",
+          "description": "Related concept: Render-Blocking Resources."
+        }
+      ]
+    },
+    "favicon": {
+      "level": 8,
+      "file": "terms/level_08/favicon.md",
+      "display_name": "Favicon",
+      "prerequisites": [
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "The tag used to connect external assets."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The metadata head container."
+        }
+      ],
+      "related": [
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "The resource connection element."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent container."
+        },
+        {
+          "term": "open_graph",
+          "module": "01-html",
+          "description": "Social media preview properties."
+        }
+      ]
+    },
+    "link": {
+      "level": 8,
+      "file": "terms/level_08/link.md",
+      "display_name": "`<link>`",
+      "prerequisites": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The `<link>` tag is almost exclusively placed inside the `<head>`."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The `<link>` tag is a void element (no closing tag)."
+        }
+      ],
+      "related": [
+        {
+          "term": "a",
+          "module": "01-html",
+          "description": "The clickable user navigation link (do not confuse with `<link>`)."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent container where the `<link>` tag lives."
+        },
+        {
+          "term": "favicon",
+          "module": "01-html",
+          "description": "The visual browser tab icon loaded using a link tag."
+        },
+        {
+          "term": "base",
+          "module": "01-html",
+          "description": "The target element controlling relative path resolution roots."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "Related concept: `href` Attribute."
+        },
+        {
+          "term": "defer_async",
+          "module": "01-html",
+          "description": "Related concept: `defer` & `async` (Script Loading Strategies)."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "Related concept: `<script>`."
+        },
+        {
+          "term": "style_tag",
+          "module": "01-html",
+          "description": "Related concept: `<style>` Element."
+        },
+        {
+          "term": "render_blocking",
+          "module": "01-html",
+          "description": "Related concept: Render-Blocking Resources."
+        }
+      ]
+    },
+    "meta": {
+      "level": 8,
+      "file": "terms/level_08/meta.md",
+      "display_name": "`<meta>`",
+      "prerequisites": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The `<meta>` tag MUST be placed inside the `<head>` of the document."
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The `<meta>` tag is a void element (no closing tag)."
+        }
+      ],
+      "related": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent container for all `<meta>` tags."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "Another form of metadata (the name of the browser tab)."
+        },
+        {
+          "term": "character_encoding",
+          "module": "01-html",
+          "description": "The tag encoding parameter used in meta definitions."
+        },
+        {
+          "term": "open_graph",
+          "module": "01-html",
+          "description": "Specialized meta properties for social indexing."
+        },
+        {
+          "term": "lang",
+          "module": "01-html",
+          "description": "Related concept: `lang` Attribute."
+        },
+        {
+          "term": "seo_fundamentals",
+          "module": "01-html",
+          "description": "Related concept: SEO Fundamentals for HTML."
+        }
+      ]
+    },
+    "noscript": {
+      "level": 8,
+      "file": "terms/level_08/noscript.md",
+      "display_name": "`<noscript>`",
+      "prerequisites": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The element whose absence this tag handles."
+        },
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "The parent visual container."
+        }
+      ],
+      "related": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The parent scripting element."
+        },
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": "The visual wrapper hosting the warning tags."
+        },
+        {
+          "term": "security",
+          "module": "01-html",
+          "description": "Related concept: Content Security Policy (CSP) & HTML Security."
+        }
+      ]
+    },
+    "open_graph": {
+      "level": 8,
+      "file": "terms/level_08/open_graph.md",
+      "display_name": "Open Graph Tags (`og:`)",
+      "prerequisites": [
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "The parent element used to structure meta keys."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The metadata head container."
+        }
+      ],
+      "related": [
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "The tag that packages these properties."
+        },
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The folder container holding the tags."
+        },
+        {
+          "term": "seo_fundamentals",
+          "module": "01-html",
+          "description": "Structural layouts that impact search indexers."
+        },
+        {
+          "term": "favicon",
+          "module": "01-html",
+          "description": "Related concept: Favicon."
+        }
+      ]
+    },
+    "script": {
+      "level": 8,
+      "file": "terms/level_08/script.md",
+      "display_name": "`<script>`",
+      "prerequisites": [
+        {
+          "term": "body",
+          "module": "01-html",
+          "description": ""
+        },
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The `<script>` tag is NOT a void element; it must have a closing tag, even if it is empty!"
+        }
+      ],
+      "related": [
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "Used to import CSS, whereas `<script>` is used to import JavaScript."
+        },
+        {
+          "term": "defer_async",
+          "module": "01-html",
+          "description": "Tag parameters optimized for asynchronous asset parsing."
+        },
+        {
+          "term": "noscript",
+          "module": "01-html",
+          "description": "A fallback frame shown if script execution is blocked or disabled."
+        },
+        {
+          "term": "data_attributes",
+          "module": "01-html",
+          "description": "Related concept: `data-*` Attributes."
+        },
+        {
+          "term": "render_blocking",
+          "module": "01-html",
+          "description": "Related concept: Render-Blocking Resources."
+        },
+        {
+          "term": "geolocation",
+          "module": "01-html",
+          "description": "Related concept: Geolocation API."
+        },
+        {
+          "term": "web_storage",
+          "module": "01-html",
+          "description": "Related concept: Web Storage (Local/Session Storage)."
+        }
+      ]
+    },
+    "style_tag": {
+      "level": 8,
+      "file": "terms/level_08/style_tag.md",
+      "display_name": "`<style>` Element",
+      "prerequisites": [
+        {
+          "term": "head",
+          "module": "01-html",
+          "description": "The parent container where `<style>` blocks are hosted."
+        },
+        {
+          "term": "style",
+          "module": "01-html",
+          "description": "The inline visual formatting attribute that contrasts with the style tag."
+        }
+      ],
+      "related": [
+        {
+          "term": "style",
+          "module": "01-html",
+          "description": "The inline styling attribute."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "The element used to connect external CSS."
+        },
+        {
+          "term": "class",
+          "module": "01-html",
+          "description": "The category naming selector."
+        }
+      ]
+    },
+    "accessibility_fundamentals": {
+      "level": 9,
+      "file": "terms/level_09/accessibility_fundamentals.md",
+      "display_name": "Accessibility (a11y) Fundamentals",
+      "prerequisites": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The foundation of visual layout meaning."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "The alternate text standard for media."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "Form field associations."
+        }
+      ],
+      "related": [
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The foundation of structured layouts."
+        },
+        {
+          "term": "alt",
+          "module": "01-html",
+          "description": "Media text descriptors."
+        },
+        {
+          "term": "label",
+          "module": "01-html",
+          "description": "Accessible form associations."
+        },
+        {
+          "term": "tabindex",
+          "module": "01-html",
+          "description": "Managing keyboard focus sequences."
+        },
+        {
+          "term": "aria_attributes",
+          "module": "01-html",
+          "description": "Advanced accessibility extensions."
+        }
+      ]
+    },
+    "aria_attributes": {
+      "level": 9,
+      "file": "terms/level_09/aria_attributes.md",
+      "display_name": "ARIA Attributes",
+      "prerequisites": [
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "The parent accessibility concepts."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Knowing which native tags are available."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "Tag configuration parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "The parent accessibility theory."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The native layout element list."
+        },
+        {
+          "term": "tabindex",
+          "module": "01-html",
+          "description": "Managing keyboard focus."
+        },
+        {
+          "term": "dialog",
+          "module": "01-html",
+          "description": "Related concept: `<dialog>` Element."
+        }
+      ]
+    },
+    "critical_rendering_path": {
+      "level": 9,
+      "file": "terms/level_09/critical_rendering_path.md",
+      "display_name": "Critical Rendering Path",
+      "prerequisites": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The interactive, in-memory representation."
+        },
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "The hierarchical parent-child format."
+        }
+      ],
+      "related": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The foundational node representation."
+        },
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "The parent-child layout hierarchy."
+        },
+        {
+          "term": "render_blocking",
+          "module": "01-html",
+          "description": "Files that pause this pipeline."
+        }
+      ]
+    },
+    "dom": {
+      "level": 9,
+      "file": "terms/level_09/dom.md",
+      "display_name": "DOM (Document Object Model)",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The HTML tags you type are converted into \"Objects\" in the DOM."
+        }
+      ],
+      "related": [
+        {
+          "term": "tree_structure",
+          "module": "01-html",
+          "description": "How the DOM organizes all of these objects in memory."
+        },
+        {
+          "term": "critical_rendering_path",
+          "module": "01-html",
+          "description": "The browser pipeline that compiles DOM into pixels."
+        },
+        {
+          "term": "dialog",
+          "module": "01-html",
+          "description": "Related concept: `<dialog>` Element."
+        },
+        {
+          "term": "drag_drop",
+          "module": "01-html",
+          "description": "Related concept: Drag & Drop API."
+        },
+        {
+          "term": "web_components",
+          "module": "01-html",
+          "description": "Related concept: Web Components."
+        }
+      ]
+    },
+    "html_entities": {
+      "level": 9,
+      "file": "terms/level_09/html_entities.md",
+      "display_name": "HTML Entities",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Understanding that browsers parse `<` and `>` as tags."
+        },
+        {
+          "term": "character_encoding",
+          "module": "01-html",
+          "description": "The system mapping character lookups."
+        }
+      ],
+      "related": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "The tags that require less-than/greater-than signs."
+        },
+        {
+          "term": "character_encoding",
+          "module": "01-html",
+          "description": "The underlying byte mapping."
+        },
+        {
+          "term": "whitespace_collapse",
+          "module": "01-html",
+          "description": "The default browser behavior that `&nbsp;` bypasses."
+        }
+      ]
+    },
+    "render_blocking": {
+      "level": 9,
+      "file": "terms/level_09/render_blocking.md",
+      "display_name": "Render-Blocking Resources",
+      "prerequisites": [
+        {
+          "term": "critical_rendering_path",
+          "module": "01-html",
+          "description": "The rendering stages impacted by blocking."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "The tag primarily used to import CSS."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The tag primarily used to import JS."
+        }
+      ],
+      "related": [
+        {
+          "term": "critical_rendering_path",
+          "module": "01-html",
+          "description": "The pipeline that gets blocked."
+        },
+        {
+          "term": "link",
+          "module": "01-html",
+          "description": "The stylesheet wrapper."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The script wrapper."
+        },
+        {
+          "term": "defer_async",
+          "module": "01-html",
+          "description": "The attributes used to make script loading non-blocking."
+        }
+      ]
+    },
+    "seo_fundamentals": {
+      "level": 9,
+      "file": "terms/level_09/seo_fundamentals.md",
+      "display_name": "SEO Fundamentals for HTML",
+      "prerequisites": [
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "The tag that holds search descriptions."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "The webpage tab title."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "The structural layout tags."
+        },
+        {
+          "term": "heading_hierarchy",
+          "module": "01-html",
+          "description": "The sequential outline rules."
+        }
+      ],
+      "related": [
+        {
+          "term": "meta",
+          "module": "01-html",
+          "description": "The container for search descriptions."
+        },
+        {
+          "term": "title",
+          "module": "01-html",
+          "description": "The primary SEO page title."
+        },
+        {
+          "term": "semantic_html",
+          "module": "01-html",
+          "description": "Structural layout tags crawled by spiders."
+        },
+        {
+          "term": "heading_hierarchy",
+          "module": "01-html",
+          "description": "Nesting rules for document indices."
+        },
+        {
+          "term": "open_graph",
+          "module": "01-html",
+          "description": "Metadata tags used for social media shared preview cards."
+        }
+      ]
+    },
+    "tree_structure": {
+      "level": 9,
+      "file": "terms/level_09/tree_structure.md",
+      "display_name": "The Tree Structure",
+      "prerequisites": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The tree structure is how the DOM organizes itself."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "The HTML concept of putting tags inside of other tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The system that uses this tree structure."
+        },
+        {
+          "term": "nesting",
+          "module": "01-html",
+          "description": "The act of writing the HTML code that generates this tree."
+        },
+        {
+          "term": "critical_rendering_path",
+          "module": "01-html",
+          "description": "The browser compilation pipeline converting layout trees into visuals."
+        }
+      ]
+    },
+    "canvas": {
+      "level": 10,
+      "file": "terms/level_10/canvas.md",
+      "display_name": "`<canvas>`",
+      "prerequisites": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The canvas element does absolutely nothing without JavaScript to control it."
+        },
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "JavaScript interacts with the Canvas object in the DOM to draw pixels."
+        }
+      ],
+      "related": [
+        {
+          "term": "svg",
+          "module": "01-html",
+          "description": "The alternative way to draw graphics on the web (Vector vs. Raster)."
+        },
+        {
+          "term": "progress_meter",
+          "module": "01-html",
+          "description": "Semantic gauges for loading states and scalars."
+        },
+        {
+          "term": "web_components",
+          "module": "01-html",
+          "description": "Related concept: Web Components."
+        }
+      ]
+    },
+    "dialog": {
+      "level": 10,
+      "file": "terms/level_10/dialog.md",
+      "display_name": "`<dialog>` Element",
+      "prerequisites": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The JavaScript API hook used to toggle window states."
+        },
+        {
+          "term": "button",
+          "module": "01-html",
+          "description": "The visual trigger targets."
+        },
+        {
+          "term": "accessibility_fundamentals",
+          "module": "01-html",
+          "description": "Focusing layouts."
+        }
+      ],
+      "related": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The parent interface hierarchy."
+        },
+        {
+          "term": "details_summary",
+          "module": "01-html",
+          "description": "The native toggle layout widget."
+        },
+        {
+          "term": "aria_attributes",
+          "module": "01-html",
+          "description": "Manual accessibility descriptions (not needed when using `<dialog>`)."
+        }
+      ]
+    },
+    "drag_drop": {
+      "level": 10,
+      "file": "terms/level_10/drag_drop.md",
+      "display_name": "Drag & Drop API",
+      "prerequisites": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "Drag events are captured and handled via JavaScript DOM listeners."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The programming blocks that run the drag-drop logic."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "The parameters used to toggle draggability."
+        }
+      ],
+      "related": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The parent interface hierarchy."
+        },
+        {
+          "term": "data_attributes",
+          "module": "01-html",
+          "description": "Used to store custom metadata identifiers on dragged items."
+        }
+      ]
+    },
+    "geolocation": {
+      "level": 10,
+      "file": "terms/level_10/geolocation.md",
+      "display_name": "Geolocation API",
+      "prerequisites": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The programming script block required to execute the API call."
+        },
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The window Navigator bindings hosting the API."
+        }
+      ],
+      "related": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The script environment executing API commands."
+        },
+        {
+          "term": "web_storage",
+          "module": "01-html",
+          "description": "Used to save coordinate preferences locally."
+        },
+        {
+          "term": "security",
+          "module": "01-html",
+          "description": "Defining secure context parameters."
+        }
+      ]
+    },
+    "map_area": {
+      "level": 10,
+      "file": "terms/level_10/map_area.md",
+      "display_name": "`<map>` & `<area>` (Image Maps)",
+      "prerequisites": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The target image containing the coordinate map."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "The destination hyperlink targets."
+        },
+        {
+          "term": "attribute",
+          "module": "01-html",
+          "description": "General tag parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "img",
+          "module": "01-html",
+          "description": "The host image element."
+        },
+        {
+          "term": "href",
+          "module": "01-html",
+          "description": "The destination hyperlink path."
+        },
+        {
+          "term": "svg",
+          "module": "01-html",
+          "description": "The modern vector-based responsive coordinate alternative."
+        }
+      ]
+    },
+    "progress_meter": {
+      "level": 10,
+      "file": "terms/level_10/progress_meter.md",
+      "display_name": "`<progress>` & `<meter>` Elements",
+      "prerequisites": [
+        {
+          "term": "element_vs_tag",
+          "module": "01-html",
+          "description": "Base tag syntax."
+        },
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "The attribute used to declare current values."
+        }
+      ],
+      "related": [
+        {
+          "term": "value",
+          "module": "01-html",
+          "description": "The data value tag."
+        },
+        {
+          "term": "output",
+          "module": "01-html",
+          "description": "The semantic tag displaying calculation results."
+        },
+        {
+          "term": "style",
+          "module": "01-html",
+          "description": "Used for overriding default progress styles."
+        },
+        {
+          "term": "canvas",
+          "module": "01-html",
+          "description": "Related concept: `<canvas>`."
+        }
+      ]
+    },
+    "security": {
+      "level": 10,
+      "file": "terms/level_10/security.md",
+      "display_name": "Content Security Policy (CSP) & HTML Security",
+      "prerequisites": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The script loading tag that carries security risks."
+        },
+        {
+          "term": "iframe",
+          "module": "01-html",
+          "description": "The frame element containing external websites."
+        },
+        {
+          "term": "html_entities",
+          "module": "01-html",
+          "description": "The escaping syntax used to neutralize input strings."
+        }
+      ],
+      "related": [
+        {
+          "term": "noscript",
+          "module": "01-html",
+          "description": "Fallbacks displayed when scripting is turned off."
+        },
+        {
+          "term": "web_storage",
+          "module": "01-html",
+          "description": "Storage blocks vulnerable to XSS data theft."
+        },
+        {
+          "term": "geolocation",
+          "module": "01-html",
+          "description": "Related concept: Geolocation API."
+        }
+      ]
+    },
+    "svg": {
+      "level": 10,
+      "file": "terms/level_10/svg.md",
+      "display_name": "`<svg>` (Scalable Vector Graphics)",
+      "prerequisites": [
+        {
+          "term": "canvas",
+          "module": "01-html",
+          "description": "The raster-based alternative to SVG."
+        },
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "Unlike `<canvas>`, `<svg>` elements become actual DOM nodes!"
+        }
+      ],
+      "related": [
+        {
+          "term": "canvas",
+          "module": "01-html",
+          "description": "The pixel-based alternative for graphics."
+        },
+        {
+          "term": "map_area",
+          "module": "01-html",
+          "description": "Traditional pixel coordinate click targets."
+        },
+        {
+          "term": "web_components",
+          "module": "01-html",
+          "description": "Related concept: Web Components."
+        }
+      ]
+    },
+    "web_components": {
+      "level": 10,
+      "file": "terms/level_10/web_components.md",
+      "display_name": "Web Components",
+      "prerequisites": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The parent structure manipulated by component lifecycle triggers."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "The programming block used to define component classes."
+        },
+        {
+          "term": "data_attributes",
+          "module": "01-html",
+          "description": "Used to pass configuration inputs to elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "The parent document object model."
+        },
+        {
+          "term": "canvas",
+          "module": "01-html",
+          "description": "Programmatic visual boards."
+        },
+        {
+          "term": "svg",
+          "module": "01-html",
+          "description": "XML-based scalable vector assets."
+        }
+      ]
+    },
+    "web_storage": {
+      "level": 10,
+      "file": "terms/level_10/web_storage.md",
+      "display_name": "Web Storage (Local/Session Storage)",
+      "prerequisites": [
+        {
+          "term": "dom",
+          "module": "01-html",
+          "description": "Web Storage is accessed via JavaScript through the global `window` object."
+        },
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "You must use JavaScript to read and write to Web Storage."
+        }
+      ],
+      "related": [
+        {
+          "term": "script",
+          "module": "01-html",
+          "description": "Web Storage is an API accessed entirely through JavaScript."
+        },
+        {
+          "term": "security",
+          "module": "01-html",
+          "description": "Securing local database structures against injection exploits."
+        },
+        {
+          "term": "geolocation",
+          "module": "01-html",
+          "description": "Related concept: Geolocation API."
+        }
+      ]
+    }
+  }
+}

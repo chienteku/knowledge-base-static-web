@@ -1,0 +1,4719 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "14-surrealdb",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "connection_credentials": {
+      "level": 1,
+      "file": "terms/level_01/connection_credentials.md",
+      "display_name": "Connection Credentials (`USE NS ... DB ...`)",
+      "prerequisites": [
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The logical containers targeted."
+        },
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "The executing client environment."
+        }
+      ],
+      "related": [
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The logical containers targeted."
+        },
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "The executing client environment."
+        },
+        {
+          "term": "sdk_connection",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)."
+        }
+      ]
+    },
+    "connection_uri": {
+      "level": 1,
+      "file": "terms/level_01/connection_uri.md",
+      "display_name": "Connection URI & Protocols (`ws://`, `wss://`, `http://`)",
+      "prerequisites": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "The server process listening."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "The server process listening."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "The real-time queries."
+        },
+        {
+          "term": "surrealist",
+          "module": "14-surrealdb",
+          "description": "Related concept: Surrealist (Web IDE)."
+        },
+        {
+          "term": "kill_live_query",
+          "module": "14-surrealdb",
+          "description": "Related concept: `KILL` (Stopping Live Queries)."
+        },
+        {
+          "term": "websocket_vs_http",
+          "module": "14-surrealdb",
+          "description": "Related concept: WebSocket vs HTTP Connection."
+        }
+      ]
+    },
+    "multi_model_database": {
+      "level": 1,
+      "file": "terms/level_01/multi_model_database.md",
+      "display_name": "Multi-Model Database",
+      "prerequisites": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Relational database models."
+        },
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "Document database models."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": "The Rust-based multi-model database."
+        },
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The unified query language."
+        },
+        {
+          "term": "surrealdb_vs_postgres_mongo",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealDB vs. PostgreSQL vs. MongoDB."
+        }
+      ]
+    },
+    "namespace_database": {
+      "level": 1,
+      "file": "terms/level_01/namespace_database.md",
+      "display_name": "Namespace & Database",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The collections grouped."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The collections grouped."
+        },
+        {
+          "term": "connection_credentials",
+          "module": "14-surrealdb",
+          "description": "Session authentication."
+        },
+        {
+          "term": "info_for",
+          "module": "14-surrealdb",
+          "description": "Related concept: `INFO FOR` (Introspection)."
+        }
+      ]
+    },
+    "record": {
+      "level": 1,
+      "file": "terms/level_01/record.md",
+      "display_name": "Record",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language used to fetch records."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The parent records collection."
+        },
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "The unique identifier."
+        },
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealQL."
+        }
+      ]
+    },
+    "record_id": {
+      "level": 1,
+      "file": "terms/level_01/record_id.md",
+      "display_name": "Record ID (`table:id`)",
+      "prerequisites": [
+        {
+          "term": "record",
+          "module": "14-surrealdb",
+          "description": "The fundamental unit identified."
+        },
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The collection namespace."
+        }
+      ],
+      "related": [
+        {
+          "term": "record",
+          "module": "14-surrealdb",
+          "description": "The fundamental unit identified."
+        },
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The collection namespace."
+        },
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "Related concept: Data Types (Overview)."
+        },
+        {
+          "term": "id_generation",
+          "module": "14-surrealdb",
+          "description": "Related concept: ID Generation Strategies (`ulid()`, `uuid()`, `rand::*`, String, Numeric)."
+        },
+        {
+          "term": "record_link_type",
+          "module": "14-surrealdb",
+          "description": "Related concept: `record` (Record Link Type)."
+        },
+        {
+          "term": "type_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Type Functions (`type::*`)."
+        }
+      ]
+    },
+    "schemafull_schemaless": {
+      "level": 1,
+      "file": "terms/level_01/schemafull_schemaless.md",
+      "display_name": "`SCHEMAFULL` vs `SCHEMALESS`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The parent records collection."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The parent records collection."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Setting field rules."
+        },
+        {
+          "term": "null_none",
+          "module": "14-surrealdb",
+          "description": "Related concept: `null` vs `NONE`."
+        },
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE TABLE`."
+        }
+      ]
+    },
+    "storage_backends": {
+      "level": 1,
+      "file": "terms/level_01/storage_backends.md",
+      "display_name": "Storage Backends (Memory, RocksDB, TiKV)",
+      "prerequisites": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "The startup command configuration."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "The startup command configuration."
+        },
+        {
+          "term": "tikv_backend",
+          "module": "14-surrealdb",
+          "description": "The distributed mode."
+        },
+        {
+          "term": "transaction_isolation",
+          "module": "14-surrealdb",
+          "description": "Related concept: Transaction Isolation & Atomicity Semantics."
+        },
+        {
+          "term": "docker_deployment",
+          "module": "14-surrealdb",
+          "description": "Related concept: Docker Deployment."
+        },
+        {
+          "term": "embedding",
+          "module": "14-surrealdb",
+          "description": "Related concept: Embedding SurrealDB (Rust / WASM)."
+        }
+      ]
+    },
+    "surreal_cli": {
+      "level": 1,
+      "file": "terms/level_01/surreal_cli.md",
+      "display_name": "SurrealDB CLI (`surreal sql`)",
+      "prerequisites": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "The target server process."
+        },
+        {
+          "term": "surrealist",
+          "module": "14-surrealdb",
+          "description": "The graphical counterpart."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "The server process target."
+        },
+        {
+          "term": "connection_credentials",
+          "module": "14-surrealdb",
+          "description": "Connection parameters."
+        },
+        {
+          "term": "surrealist",
+          "module": "14-surrealdb",
+          "description": "Related concept: Surrealist (Web IDE)."
+        },
+        {
+          "term": "error_handling",
+          "module": "14-surrealdb",
+          "description": "Related concept: Error Handling & Debugging."
+        },
+        {
+          "term": "export_import",
+          "module": "14-surrealdb",
+          "description": "Related concept: `surreal export` / `surreal import` (Backups)."
+        },
+        {
+          "term": "surreal_validate",
+          "module": "14-surrealdb",
+          "description": "Related concept: `surreal validate` (Query Validation)."
+        }
+      ]
+    },
+    "surreal_start": {
+      "level": 1,
+      "file": "terms/level_01/surreal_start.md",
+      "display_name": "SurrealDB Server (`surreal start`)",
+      "prerequisites": [
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The logical containers hosted."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Connect protocols."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Pluggable storage engines."
+        },
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealDB CLI (`surreal sql`)."
+        },
+        {
+          "term": "parallel_keyword",
+          "module": "14-surrealdb",
+          "description": "Related concept: `PARALLEL` Keyword."
+        },
+        {
+          "term": "docker_deployment",
+          "module": "14-surrealdb",
+          "description": "Related concept: Docker Deployment."
+        },
+        {
+          "term": "tikv_backend",
+          "module": "14-surrealdb",
+          "description": "Related concept: TiKV Backend (Distributed Mode)."
+        }
+      ]
+    },
+    "surrealdb": {
+      "level": 1,
+      "file": "terms/level_01/surrealdb.md",
+      "display_name": "SurrealDB",
+      "prerequisites": [
+        {
+          "term": "multi_model_database",
+          "module": "14-surrealdb",
+          "description": "The parent paradigm concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "multi_model_database",
+          "module": "14-surrealdb",
+          "description": "The parent paradigm concept."
+        },
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language."
+        },
+        {
+          "term": "surrealdb_vs_postgres_mongo",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealDB vs. PostgreSQL vs. MongoDB."
+        },
+        {
+          "term": "object_type",
+          "module": "14-surrealdb",
+          "description": "Related concept: `object`."
+        },
+        {
+          "term": "define_scope",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE SCOPE` (Auth Scopes Overview)."
+        }
+      ]
+    },
+    "surrealdb_vs_postgres_mongo": {
+      "level": 1,
+      "file": "terms/level_01/surrealdb_vs_postgres_mongo.md",
+      "display_name": "SurrealDB vs. PostgreSQL vs. MongoDB",
+      "prerequisites": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": "The Rust multi-model engine."
+        },
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Relational structures."
+        },
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "Document structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": "The parent database engine."
+        },
+        {
+          "term": "multi_model_database",
+          "module": "14-surrealdb",
+          "description": "The parent paradigm concept."
+        }
+      ]
+    },
+    "surrealist": {
+      "level": 1,
+      "file": "terms/level_01/surrealist.md",
+      "display_name": "Surrealist (Web IDE)",
+      "prerequisites": [
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Connect string setups."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Connect string setups."
+        },
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "Terminal commands."
+        },
+        {
+          "term": "surrealdb_cloud",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealDB Cloud."
+        }
+      ]
+    },
+    "surrealql": {
+      "level": 1,
+      "file": "terms/level_01/surrealql.md",
+      "display_name": "SurrealQL",
+      "prerequisites": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": "The parent database engine."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": "The parent database engine."
+        },
+        {
+          "term": "record",
+          "module": "14-surrealdb",
+          "description": "The fundamental data unit."
+        },
+        {
+          "term": "multi_model_database",
+          "module": "14-surrealdb",
+          "description": "Related concept: Multi-Model Database."
+        },
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Built-in Functions Overview."
+        },
+        {
+          "term": "if_else",
+          "module": "14-surrealdb",
+          "description": "Related concept: `IF` / `ELSE` Expressions."
+        },
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Related concept: Parameters (`$param`)."
+        }
+      ]
+    },
+    "table": {
+      "level": 1,
+      "file": "terms/level_01/table.md",
+      "display_name": "Table",
+      "prerequisites": [
+        {
+          "term": "record",
+          "module": "14-surrealdb",
+          "description": "The individual data units stored."
+        }
+      ],
+      "related": [
+        {
+          "term": "record",
+          "module": "14-surrealdb",
+          "description": "The individual data units stored."
+        },
+        {
+          "term": "schemafull_schemaless",
+          "module": "14-surrealdb",
+          "description": "The schema modes."
+        },
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "Related concept: Namespace & Database."
+        },
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "Related concept: Record ID (`table:id`)."
+        },
+        {
+          "term": "if_not_exists",
+          "module": "14-surrealdb",
+          "description": "Related concept: `IF NOT EXISTS` / `IF EXISTS`."
+        },
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE TABLE`."
+        }
+      ]
+    },
+    "array_type": {
+      "level": 2,
+      "file": "terms/level_02/array_type.md",
+      "display_name": "`array`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "set_type",
+          "module": "14-surrealdb",
+          "description": "Unique list container."
+        },
+        {
+          "term": "array_functions",
+          "module": "14-surrealdb",
+          "description": "Array manipulations."
+        },
+        {
+          "term": "for_expression",
+          "module": "14-surrealdb",
+          "description": "Related concept: `FOR` Expression."
+        }
+      ]
+    },
+    "bool": {
+      "level": 2,
+      "file": "terms/level_02/bool.md",
+      "display_name": "`bool`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "type_casting",
+          "module": "14-surrealdb",
+          "description": "Converting between types."
+        }
+      ]
+    },
+    "data_types": {
+      "level": 2,
+      "file": "terms/level_02/data_types.md",
+      "display_name": "Data Types (Overview)",
+      "prerequisites": [
+        {
+          "term": "record",
+          "module": "14-surrealdb",
+          "description": "The storage context."
+        }
+      ],
+      "related": [
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "The composite identifier."
+        },
+        {
+          "term": "type_casting",
+          "module": "14-surrealdb",
+          "description": "Converting between types."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "Related concept: `array`."
+        },
+        {
+          "term": "bool",
+          "module": "14-surrealdb",
+          "description": "Related concept: `bool`."
+        },
+        {
+          "term": "datetime_duration",
+          "module": "14-surrealdb",
+          "description": "Related concept: `datetime` / `duration`."
+        },
+        {
+          "term": "geometry_type",
+          "module": "14-surrealdb",
+          "description": "Related concept: `geometry` (GeoJSON)."
+        },
+        {
+          "term": "number_types",
+          "module": "14-surrealdb",
+          "description": "Related concept: `int` / `float` / `decimal`."
+        },
+        {
+          "term": "set_type",
+          "module": "14-surrealdb",
+          "description": "Related concept: `set`."
+        },
+        {
+          "term": "string",
+          "module": "14-surrealdb",
+          "description": "Related concept: `string`."
+        },
+        {
+          "term": "uuid_type",
+          "module": "14-surrealdb",
+          "description": "Related concept: `uuid`."
+        }
+      ]
+    },
+    "datetime_duration": {
+      "level": 2,
+      "file": "terms/level_02/datetime_duration.md",
+      "display_name": "`datetime` / `duration`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "time_functions",
+          "module": "14-surrealdb",
+          "description": "Chronological operations."
+        },
+        {
+          "term": "sleep",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SLEEP` Statement."
+        }
+      ]
+    },
+    "geometry_type": {
+      "level": 2,
+      "file": "terms/level_02/geometry_type.md",
+      "display_name": "`geometry` (GeoJSON)",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "geospatial_index",
+          "module": "14-surrealdb",
+          "description": "Indexing spatial data."
+        }
+      ]
+    },
+    "id_generation": {
+      "level": 2,
+      "file": "terms/level_02/id_generation.md",
+      "display_name": "ID Generation Strategies (`ulid()`, `uuid()`, `rand::*`, String, Numeric)",
+      "prerequisites": [
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "The composite identifier format."
+        },
+        {
+          "term": "uuid_type",
+          "module": "14-surrealdb",
+          "description": "The binary unique hash."
+        }
+      ],
+      "related": [
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "The composite identifier format."
+        },
+        {
+          "term": "uuid_type",
+          "module": "14-surrealdb",
+          "description": "The binary unique hash."
+        }
+      ]
+    },
+    "null_none": {
+      "level": 2,
+      "file": "terms/level_02/null_none.md",
+      "display_name": "`null` vs `NONE`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "schemafull_schemaless",
+          "module": "14-surrealdb",
+          "description": "The schema constraint context."
+        }
+      ],
+      "related": [
+        {
+          "term": "schemafull_schemaless",
+          "module": "14-surrealdb",
+          "description": "The schema constraint context."
+        },
+        {
+          "term": "option_type",
+          "module": "14-surrealdb",
+          "description": "Optional fields wrapper."
+        }
+      ]
+    },
+    "number_types": {
+      "level": 2,
+      "file": "terms/level_02/number_types.md",
+      "display_name": "`int` / `float` / `decimal`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "type_casting",
+          "module": "14-surrealdb",
+          "description": "Converting between types."
+        },
+        {
+          "term": "math_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Math Functions (`math::*`)."
+        }
+      ]
+    },
+    "object_type": {
+      "level": 2,
+      "file": "terms/level_02/object_type.md",
+      "display_name": "`object`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": ""
+        },
+        {
+          "term": "destructuring_select",
+          "module": "14-surrealdb",
+          "description": "Related concept: Destructuring & Object Notation in SELECT."
+        }
+      ]
+    },
+    "record_link_type": {
+      "level": 2,
+      "file": "terms/level_02/record_link_type.md",
+      "display_name": "`record` (Record Link Type)",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "The pointer formatting structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "The pointer formatting structure."
+        },
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "Traversing links."
+        },
+        {
+          "term": "select_fetch",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SELECT` with Record Link Fetching (`FETCH`)."
+        }
+      ]
+    },
+    "set_type": {
+      "level": 2,
+      "file": "terms/level_02/set_type.md",
+      "display_name": "`set`",
+      "prerequisites": [
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "The non-unique list context."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "The non-unique list context."
+        },
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "array_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Array Functions (`array::*`)."
+        }
+      ]
+    },
+    "string": {
+      "level": 2,
+      "file": "terms/level_02/string.md",
+      "display_name": "`string`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "type_casting",
+          "module": "14-surrealdb",
+          "description": "Converting between types."
+        },
+        {
+          "term": "string_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: String Functions (`string::*`)."
+        }
+      ]
+    },
+    "type_casting": {
+      "level": 2,
+      "file": "terms/level_02/type_casting.md",
+      "display_name": "Type Casting & Coercion",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "type_functions",
+          "module": "14-surrealdb",
+          "description": "Introspection library."
+        },
+        {
+          "term": "bool",
+          "module": "14-surrealdb",
+          "description": "Related concept: `bool`."
+        },
+        {
+          "term": "number_types",
+          "module": "14-surrealdb",
+          "description": "Related concept: `int` / `float` / `decimal`."
+        },
+        {
+          "term": "string",
+          "module": "14-surrealdb",
+          "description": "Related concept: `string`."
+        }
+      ]
+    },
+    "uuid_type": {
+      "level": 2,
+      "file": "terms/level_02/uuid_type.md",
+      "display_name": "`uuid`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The parent type system."
+        },
+        {
+          "term": "id_generation",
+          "module": "14-surrealdb",
+          "description": "Generating Record IDs."
+        }
+      ]
+    },
+    "aggregate_functions": {
+      "level": 3,
+      "file": "terms/level_03/aggregate_functions.md",
+      "display_name": "Aggregate Functions",
+      "prerequisites": [
+        {
+          "term": "group_by",
+          "module": "14-surrealdb",
+          "description": "The aggregation context."
+        }
+      ],
+      "related": [
+        {
+          "term": "group_by",
+          "module": "14-surrealdb",
+          "description": "The aggregation context."
+        },
+        {
+          "term": "math_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Math Functions (`math::*`)."
+        }
+      ]
+    },
+    "create": {
+      "level": 3,
+      "file": "terms/level_03/create.md",
+      "display_name": "`CREATE`",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_set_content",
+          "module": "14-surrealdb",
+          "description": "Create syntax variants."
+        },
+        {
+          "term": "insert",
+          "module": "14-surrealdb",
+          "description": "The SQL-compatible alternative."
+        },
+        {
+          "term": "if_not_exists",
+          "module": "14-surrealdb",
+          "description": "Related concept: `IF NOT EXISTS` / `IF EXISTS`."
+        },
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "Related concept: `UPDATE`."
+        }
+      ]
+    },
+    "create_set_content": {
+      "level": 3,
+      "file": "terms/level_03/create_set_content.md",
+      "display_name": "`CREATE` with Content (`SET` vs `CONTENT`)",
+      "prerequisites": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "update_strategies",
+          "module": "14-surrealdb",
+          "description": "Updating records content."
+        }
+      ]
+    },
+    "delete": {
+      "level": 3,
+      "file": "terms/level_03/delete.md",
+      "display_name": "`DELETE`",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        }
+      ],
+      "related": [
+        {
+          "term": "return_clause",
+          "module": "14-surrealdb",
+          "description": "Customizing delete outputs."
+        },
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "Modifying records."
+        },
+        {
+          "term": "remove_statement",
+          "module": "14-surrealdb",
+          "description": "Related concept: `REMOVE` Statement."
+        }
+      ]
+    },
+    "group_by": {
+      "level": 3,
+      "file": "terms/level_03/group_by.md",
+      "display_name": "`GROUP BY` / `GROUP ALL`",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        },
+        {
+          "term": "aggregate_functions",
+          "module": "14-surrealdb",
+          "description": "The calculation functions."
+        }
+      ]
+    },
+    "if_not_exists": {
+      "level": 3,
+      "file": "terms/level_03/if_not_exists.md",
+      "display_name": "`IF NOT EXISTS` / `IF EXISTS`",
+      "prerequisites": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The schema container."
+        }
+      ],
+      "related": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The schema container."
+        },
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Table creation in detail."
+        },
+        {
+          "term": "idempotent_migrations",
+          "module": "14-surrealdb",
+          "description": "Related concept: Idempotent Schema Migration Scripts."
+        }
+      ]
+    },
+    "info_for": {
+      "level": 3,
+      "file": "terms/level_03/info_for.md",
+      "display_name": "`INFO FOR` (Introspection)",
+      "prerequisites": [
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The database structure context."
+        },
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "The execution console context."
+        }
+      ],
+      "related": [
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The database structure context."
+        },
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Creating tables."
+        }
+      ]
+    },
+    "insert": {
+      "level": 3,
+      "file": "terms/level_03/insert.md",
+      "display_name": "`INSERT`",
+      "prerequisites": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The native write equivalent."
+        }
+      ],
+      "related": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The native write equivalent."
+        },
+        {
+          "term": "insert_on_duplicate",
+          "module": "14-surrealdb",
+          "description": "The SQL upsert modifier."
+        }
+      ]
+    },
+    "insert_on_duplicate": {
+      "level": 3,
+      "file": "terms/level_03/insert_on_duplicate.md",
+      "display_name": "`INSERT ... ON DUPLICATE KEY UPDATE`",
+      "prerequisites": [
+        {
+          "term": "insert",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "insert",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "upsert",
+          "module": "14-surrealdb",
+          "description": "The native standalone upsert statement."
+        }
+      ]
+    },
+    "operators": {
+      "level": 3,
+      "file": "terms/level_03/operators.md",
+      "display_name": "Operators in SurrealQL",
+      "prerequisites": [
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "The conditional context."
+        }
+      ],
+      "related": [
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "The conditional context."
+        },
+        {
+          "term": "array_functions",
+          "module": "14-surrealdb",
+          "description": "Manipulating lists."
+        },
+        {
+          "term": "update_strategies",
+          "module": "14-surrealdb",
+          "description": "Related concept: `UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)."
+        },
+        {
+          "term": "search_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: `search::*` Functions & `@@` Operator."
+        }
+      ]
+    },
+    "order_limit_start": {
+      "level": 3,
+      "file": "terms/level_03/order_limit_start.md",
+      "display_name": "`ORDER BY` / `LIMIT` / `START`",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        }
+      ]
+    },
+    "return_clause": {
+      "level": 3,
+      "file": "terms/level_03/return_clause.md",
+      "display_name": "`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "The write context."
+        },
+        {
+          "term": "delete",
+          "module": "14-surrealdb",
+          "description": "The delete context."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "The write context."
+        },
+        {
+          "term": "delete",
+          "module": "14-surrealdb",
+          "description": "The delete context."
+        },
+        {
+          "term": "return_statement",
+          "module": "14-surrealdb",
+          "description": "Related concept: `RETURN` Statement (in Functions / Blocks)."
+        }
+      ]
+    },
+    "select": {
+      "level": 3,
+      "file": "terms/level_03/select.md",
+      "display_name": "`SELECT`",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        }
+      ],
+      "related": [
+        {
+          "term": "select_value",
+          "module": "14-surrealdb",
+          "description": "Flattening query returns."
+        },
+        {
+          "term": "select_fetch",
+          "module": "14-surrealdb",
+          "description": "Resolving record links."
+        },
+        {
+          "term": "group_by",
+          "module": "14-surrealdb",
+          "description": "Related concept: `GROUP BY` / `GROUP ALL`."
+        },
+        {
+          "term": "order_limit_start",
+          "module": "14-surrealdb",
+          "description": "Related concept: `ORDER BY` / `LIMIT` / `START`."
+        },
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "Related concept: `WHERE` Clause."
+        },
+        {
+          "term": "destructuring_select",
+          "module": "14-surrealdb",
+          "description": "Related concept: Destructuring & Object Notation in SELECT."
+        },
+        {
+          "term": "only_keyword",
+          "module": "14-surrealdb",
+          "description": "Related concept: `ONLY` Keyword."
+        },
+        {
+          "term": "split_clause",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SPLIT` Clause."
+        },
+        {
+          "term": "subqueries",
+          "module": "14-surrealdb",
+          "description": "Related concept: Subqueries."
+        }
+      ]
+    },
+    "select_fetch": {
+      "level": 3,
+      "file": "terms/level_03/select_fetch.md",
+      "display_name": "`SELECT` with Record Link Fetching (`FETCH`)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        },
+        {
+          "term": "record_link_type",
+          "module": "14-surrealdb",
+          "description": "The pointer fields targeted."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        },
+        {
+          "term": "record_link_type",
+          "module": "14-surrealdb",
+          "description": "The pointer fields targeted."
+        }
+      ]
+    },
+    "select_value": {
+      "level": 3,
+      "file": "terms/level_03/select_value.md",
+      "display_name": "`SELECT VALUE` (Single Field Extraction)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        },
+        {
+          "term": "array_functions",
+          "module": "14-surrealdb",
+          "description": "Manipulating lists."
+        },
+        {
+          "term": "only_keyword",
+          "module": "14-surrealdb",
+          "description": "Related concept: `ONLY` Keyword."
+        },
+        {
+          "term": "subqueries",
+          "module": "14-surrealdb",
+          "description": "Related concept: Subqueries."
+        }
+      ]
+    },
+    "update": {
+      "level": 3,
+      "file": "terms/level_03/update.md",
+      "display_name": "`UPDATE`",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        }
+      ],
+      "related": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "update_strategies",
+          "module": "14-surrealdb",
+          "description": "Update payload options."
+        },
+        {
+          "term": "delete",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DELETE`."
+        },
+        {
+          "term": "return_clause",
+          "module": "14-surrealdb",
+          "description": "Related concept: `RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)."
+        },
+        {
+          "term": "upsert",
+          "module": "14-surrealdb",
+          "description": "Related concept: `UPSERT`."
+        },
+        {
+          "term": "parallel_keyword",
+          "module": "14-surrealdb",
+          "description": "Related concept: `PARALLEL` Keyword."
+        }
+      ]
+    },
+    "update_strategies": {
+      "level": 3,
+      "file": "terms/level_03/update_strategies.md",
+      "display_name": "`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "The parent modification statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "The parent modification statement."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "The assignment operators."
+        },
+        {
+          "term": "create_set_content",
+          "module": "14-surrealdb",
+          "description": "Related concept: `CREATE` with Content (`SET` vs `CONTENT`)."
+        },
+        {
+          "term": "data_migrations",
+          "module": "14-surrealdb",
+          "description": "Related concept: Data Migrations in SurrealDB."
+        },
+        {
+          "term": "sdk_crud",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)."
+        }
+      ]
+    },
+    "upsert": {
+      "level": 3,
+      "file": "terms/level_03/upsert.md",
+      "display_name": "`UPSERT`",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "The update write statement."
+        },
+        {
+          "term": "insert_on_duplicate",
+          "module": "14-surrealdb",
+          "description": "The insert-based upsert alternative."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "The update write statement."
+        },
+        {
+          "term": "insert_on_duplicate",
+          "module": "14-surrealdb",
+          "description": "The insert-based upsert alternative."
+        }
+      ]
+    },
+    "where": {
+      "level": 3,
+      "file": "terms/level_03/where.md",
+      "display_name": "`WHERE` Clause",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query context."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The parent query statement."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "The logical check symbols."
+        },
+        {
+          "term": "graph_filtering",
+          "module": "14-surrealdb",
+          "description": "Related concept: Graph Traversal Filtering (`WHERE` on edges)."
+        }
+      ]
+    },
+    "define_event": {
+      "level": 9,
+      "file": "terms/level_09/define_event.md",
+      "display_name": "`DEFINE EVENT`",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Table definition context."
+        },
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "Record mutation operations."
+        }
+      ],
+      "related": [
+        {
+          "term": "event_variables",
+          "module": "14-surrealdb",
+          "description": "Event context variables."
+        },
+        {
+          "term": "define_function",
+          "module": "14-surrealdb",
+          "description": "Reusable server-side functions."
+        },
+        {
+          "term": "changefeed",
+          "module": "14-surrealdb",
+          "description": "Table change logging."
+        }
+      ]
+    },
+    "define_field": {
+      "level": 4,
+      "file": "terms/level_04/define_field.md",
+      "display_name": "`DEFINE FIELD`",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "The parent schema context."
+        },
+        {
+          "term": "data_types",
+          "module": "14-surrealdb",
+          "description": "The type definitions."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "The parent schema context."
+        },
+        {
+          "term": "option_type",
+          "module": "14-surrealdb",
+          "description": "Optional fields wrapper."
+        },
+        {
+          "term": "field_assertions",
+          "module": "14-surrealdb",
+          "description": "Custom field validation."
+        },
+        {
+          "term": "schemafull_schemaless",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SCHEMAFULL` vs `SCHEMALESS`."
+        },
+        {
+          "term": "field_attributes",
+          "module": "14-surrealdb",
+          "description": "Related concept: `VALUE` / `DEFAULT` / `READONLY` Clause."
+        },
+        {
+          "term": "schemafull_validation",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SCHEMAFULL` Validation Assertion Patterns."
+        }
+      ]
+    },
+    "define_index": {
+      "level": 7,
+      "file": "terms/level_07/define_index.md",
+      "display_name": "`DEFINE INDEX` (Deep Dive)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query retrieval context."
+        },
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "Query filter operations."
+        }
+      ],
+      "related": [
+        {
+          "term": "unique_index",
+          "module": "14-surrealdb",
+          "description": "Unique constraints."
+        },
+        {
+          "term": "composite_index",
+          "module": "14-surrealdb",
+          "description": "Multi-column indexes."
+        },
+        {
+          "term": "indexing_record_links",
+          "module": "14-surrealdb",
+          "description": "Relationship index optimization."
+        },
+        {
+          "term": "search_index",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SEARCH` Index (Full-Text Search)."
+        },
+        {
+          "term": "vector_index",
+          "module": "14-surrealdb",
+          "description": "Related concept: Vector Index (Overview)."
+        },
+        {
+          "term": "geospatial_index",
+          "module": "14-surrealdb",
+          "description": "Related concept: Geospatial Index."
+        },
+        {
+          "term": "hnsw_index",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE INDEX ... HNSW` (Approximate Vector Search)."
+        },
+        {
+          "term": "query_explanation",
+          "module": "14-surrealdb",
+          "description": "Related concept: Query Explanation & Performance."
+        },
+        {
+          "term": "search_index_analyzer",
+          "module": "14-surrealdb",
+          "description": "Related concept: Search Index & `DEFINE ANALYZER`."
+        },
+        {
+          "term": "vector_search",
+          "module": "14-surrealdb",
+          "description": "Related concept: Vector Search Index (ML/AI)."
+        }
+      ]
+    },
+    "define_scope": {
+      "level": 4,
+      "file": "terms/level_04/define_scope.md",
+      "display_name": "`DEFINE SCOPE` (Auth Scopes Overview)",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "The user table context."
+        },
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The execution boundaries."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": ""
+        }
+      ]
+    },
+    "define_table": {
+      "level": 4,
+      "file": "terms/level_04/define_table.md",
+      "display_name": "`DEFINE TABLE`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The basic collection container."
+        },
+        {
+          "term": "schemafull_schemaless",
+          "module": "14-surrealdb",
+          "description": "The validation modes."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "14-surrealdb",
+          "description": "The basic collection container."
+        },
+        {
+          "term": "schemafull_schemaless",
+          "module": "14-surrealdb",
+          "description": "The validation modes."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Creating fields."
+        },
+        {
+          "term": "if_not_exists",
+          "module": "14-surrealdb",
+          "description": "Related concept: `IF NOT EXISTS` / `IF EXISTS`."
+        },
+        {
+          "term": "info_for",
+          "module": "14-surrealdb",
+          "description": "Related concept: `INFO FOR` (Introspection)."
+        },
+        {
+          "term": "remove_statement",
+          "module": "14-surrealdb",
+          "description": "Related concept: `REMOVE` Statement."
+        }
+      ]
+    },
+    "field_assertions": {
+      "level": 4,
+      "file": "terms/level_04/field_assertions.md",
+      "display_name": "Assertions (`ASSERT`)",
+      "prerequisites": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The parent schema context."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "The logical check symbols."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The parent schema context."
+        },
+        {
+          "term": "field_attributes",
+          "module": "14-surrealdb",
+          "description": "Value modification attributes."
+        }
+      ]
+    },
+    "field_attributes": {
+      "level": 4,
+      "file": "terms/level_04/field_attributes.md",
+      "display_name": "`VALUE` / `DEFAULT` / `READONLY` Clause",
+      "prerequisites": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The parent schema context."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The field declaration context."
+        },
+        {
+          "term": "field_assertions",
+          "module": "14-surrealdb",
+          "description": "Field-level validation rules."
+        }
+      ]
+    },
+    "idempotent_migrations": {
+      "level": 4,
+      "file": "terms/level_04/idempotent_migrations.md",
+      "display_name": "Idempotent Schema Migration Scripts",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "The schema generation context."
+        },
+        {
+          "term": "if_not_exists",
+          "module": "14-surrealdb",
+          "description": "The execution guards."
+        }
+      ],
+      "related": [
+        {
+          "term": "if_not_exists",
+          "module": "14-surrealdb",
+          "description": "The execution guards."
+        },
+        {
+          "term": "schemafull_validation",
+          "module": "14-surrealdb",
+          "description": "Designing schemas."
+        }
+      ]
+    },
+    "option_type": {
+      "level": 4,
+      "file": "terms/level_04/option_type.md",
+      "display_name": "`option<T>` (Optional Fields)",
+      "prerequisites": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The field declaration context."
+        },
+        {
+          "term": "null_none",
+          "module": "14-surrealdb",
+          "description": "The absent data states."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The field declaration context."
+        },
+        {
+          "term": "null_none",
+          "module": "14-surrealdb",
+          "description": "The absent data states."
+        },
+        {
+          "term": "schemafull_validation",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SCHEMAFULL` Validation Assertion Patterns."
+        }
+      ]
+    },
+    "remove_statement": {
+      "level": 4,
+      "file": "terms/level_04/remove_statement.md",
+      "display_name": "`REMOVE` Statement",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "The schema generation context."
+        },
+        {
+          "term": "if_not_exists",
+          "module": "14-surrealdb",
+          "description": "The execution guards."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "The table creation DDL."
+        },
+        {
+          "term": "delete",
+          "module": "14-surrealdb",
+          "description": "Data record deletion."
+        }
+      ]
+    },
+    "schemafull_validation": {
+      "level": 4,
+      "file": "terms/level_04/schemafull_validation.md",
+      "display_name": "`SCHEMAFULL` Validation Assertion Patterns",
+      "prerequisites": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The field declaration context."
+        },
+        {
+          "term": "field_assertions",
+          "module": "14-surrealdb",
+          "description": "Custom field validation."
+        },
+        {
+          "term": "option_type",
+          "module": "14-surrealdb",
+          "description": "Optional fields wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "The field declaration context."
+        },
+        {
+          "term": "option_type",
+          "module": "14-surrealdb",
+          "description": "Optional fields wrapper."
+        },
+        {
+          "term": "idempotent_migrations",
+          "module": "14-surrealdb",
+          "description": "Defining schemas safely."
+        }
+      ]
+    },
+    "search_index": {
+      "level": 4,
+      "file": "terms/level_04/search_index.md",
+      "display_name": "`SEARCH` Index (Full-Text Search)",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "full_text_search",
+          "module": "14-surrealdb",
+          "description": "Query operators."
+        }
+      ]
+    },
+    "show_changes": {
+      "level": 9,
+      "file": "terms/level_09/show_changes.md",
+      "display_name": "`SHOW CHANGES FOR TABLE ... SINCE ...`",
+      "prerequisites": [
+        {
+          "term": "changefeed",
+          "module": "14-surrealdb",
+          "description": "Enabling changefeed recording on tables."
+        },
+        {
+          "term": "datetime_duration",
+          "module": "14-surrealdb",
+          "description": "ISO datetime formats."
+        }
+      ],
+      "related": [
+        {
+          "term": "changefeed",
+          "module": "14-surrealdb",
+          "description": "Enabling change logging."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Real-time push streams."
+        },
+        {
+          "term": "time_functions",
+          "module": "14-surrealdb",
+          "description": "Date/time arithmetic."
+        }
+      ]
+    },
+    "unique_index": {
+      "level": 7,
+      "file": "terms/level_07/unique_index.md",
+      "display_name": "Unique Index",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "field_assertions",
+          "module": "14-surrealdb",
+          "description": "Field-level validation rules."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "composite_index",
+          "module": "14-surrealdb",
+          "description": "Multi-column indexes."
+        }
+      ]
+    },
+    "vector_index": {
+      "level": 4,
+      "file": "terms/level_04/vector_index.md",
+      "display_name": "Vector Index (Overview)",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "vector_search",
+          "module": "14-surrealdb",
+          "description": "Querying vectors."
+        }
+      ]
+    },
+    "bidirectional_queries": {
+      "level": 5,
+      "file": "terms/level_05/bidirectional_queries.md",
+      "display_name": "Bidirectional Relationship Queries",
+      "prerequisites": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        }
+      ],
+      "related": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        },
+        {
+          "term": "graph_vs_joins",
+          "module": "14-surrealdb",
+          "description": "Speed performance trade-offs."
+        }
+      ]
+    },
+    "deep_graph_traversal": {
+      "level": 5,
+      "file": "terms/level_05/deep_graph_traversal.md",
+      "display_name": "Deep Graph Traversal (Chained arrows)",
+      "prerequisites": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        },
+        {
+          "term": "graph_vs_joins",
+          "module": "14-surrealdb",
+          "description": "The performance mechanics."
+        }
+      ],
+      "related": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        },
+        {
+          "term": "graph_vs_joins",
+          "module": "14-surrealdb",
+          "description": "The performance mechanics."
+        },
+        {
+          "term": "parallel_edge_traversals",
+          "module": "14-surrealdb",
+          "description": "Related concept: Parallel Edge Traversals."
+        }
+      ]
+    },
+    "edge_properties": {
+      "level": 5,
+      "file": "terms/level_05/edge_properties.md",
+      "display_name": "Edge Properties",
+      "prerequisites": [
+        {
+          "term": "relate",
+          "module": "14-surrealdb",
+          "description": "The command creating the edges."
+        },
+        {
+          "term": "object_type",
+          "module": "14-surrealdb",
+          "description": "Nested metadata structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "relate",
+          "module": "14-surrealdb",
+          "description": "The command creating the edges."
+        },
+        {
+          "term": "graph_filtering",
+          "module": "14-surrealdb",
+          "description": "Filtering using edge properties."
+        }
+      ]
+    },
+    "graph_arrows": {
+      "level": 5,
+      "file": "terms/level_05/graph_arrows.md",
+      "display_name": "Graph Arrow Operators (`->`, `<-`)",
+      "prerequisites": [
+        {
+          "term": "relate",
+          "module": "14-surrealdb",
+          "description": "The command creating the edges."
+        }
+      ],
+      "related": [
+        {
+          "term": "relate",
+          "module": "14-surrealdb",
+          "description": "The command creating the edges."
+        },
+        {
+          "term": "bidirectional_queries",
+          "module": "14-surrealdb",
+          "description": "Cross-referencing tables."
+        },
+        {
+          "term": "deep_graph_traversal",
+          "module": "14-surrealdb",
+          "description": "Related concept: Deep Graph Traversal (Chained arrows)."
+        },
+        {
+          "term": "graph_vs_joins",
+          "module": "14-surrealdb",
+          "description": "Related concept: Graph Traversal vs. Relational JOINs."
+        },
+        {
+          "term": "parallel_edge_traversals",
+          "module": "14-surrealdb",
+          "description": "Related concept: Parallel Edge Traversals."
+        }
+      ]
+    },
+    "graph_filtering": {
+      "level": 5,
+      "file": "terms/level_05/graph_filtering.md",
+      "display_name": "Graph Traversal Filtering (`WHERE` on edges)",
+      "prerequisites": [
+        {
+          "term": "edge_properties",
+          "module": "14-surrealdb",
+          "description": "The metadata on edges."
+        },
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "The query filter context."
+        }
+      ],
+      "related": [
+        {
+          "term": "edge_properties",
+          "module": "14-surrealdb",
+          "description": "The metadata on edges."
+        },
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "The query filter context."
+        }
+      ]
+    },
+    "graph_overview": {
+      "level": 5,
+      "file": "terms/level_05/graph_overview.md",
+      "display_name": "Graph Connections (Overview: Nodes vs Edges)",
+      "prerequisites": [
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "The single reference link."
+        },
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Table structure configurations."
+        }
+      ],
+      "related": [
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "The single reference link."
+        },
+        {
+          "term": "relate",
+          "module": "14-surrealdb",
+          "description": "Creating graph edges."
+        }
+      ]
+    },
+    "graph_vs_joins": {
+      "level": 5,
+      "file": "terms/level_05/graph_vs_joins.md",
+      "display_name": "Graph Traversal vs. Relational JOINs",
+      "prerequisites": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        },
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Relational SQL JOIN engines."
+        }
+      ],
+      "related": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        },
+        {
+          "term": "deep_graph_traversal",
+          "module": "14-surrealdb",
+          "description": "Chaining arrow paths."
+        },
+        {
+          "term": "bidirectional_queries",
+          "module": "14-surrealdb",
+          "description": "Related concept: Bidirectional Relationship Queries."
+        }
+      ]
+    },
+    "parallel_edge_traversals": {
+      "level": 5,
+      "file": "terms/level_05/parallel_edge_traversals.md",
+      "display_name": "Parallel Edge Traversals",
+      "prerequisites": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        }
+      ],
+      "related": [
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "The query traversal operators."
+        },
+        {
+          "term": "deep_graph_traversal",
+          "module": "14-surrealdb",
+          "description": "Sequential path walks."
+        }
+      ]
+    },
+    "record_link_concept": {
+      "level": 5,
+      "file": "terms/level_05/record_link_concept.md",
+      "display_name": "Record Link (Concept)",
+      "prerequisites": [
+        {
+          "term": "record_link_type",
+          "module": "14-surrealdb",
+          "description": "The data type validation rules."
+        }
+      ],
+      "related": [
+        {
+          "term": "record_link_type",
+          "module": "14-surrealdb",
+          "description": "The data type validation rules."
+        },
+        {
+          "term": "graph_overview",
+          "module": "14-surrealdb",
+          "description": "Bidirectional mappings."
+        },
+        {
+          "term": "indexing_record_links",
+          "module": "14-surrealdb",
+          "description": "Related concept: Indexing Record Link Fields."
+        }
+      ]
+    },
+    "relate": {
+      "level": 5,
+      "file": "terms/level_05/relate.md",
+      "display_name": "`RELATE` Statement",
+      "prerequisites": [
+        {
+          "term": "graph_overview",
+          "module": "14-surrealdb",
+          "description": "The parent paradigm."
+        }
+      ],
+      "related": [
+        {
+          "term": "graph_overview",
+          "module": "14-surrealdb",
+          "description": "The parent paradigm."
+        },
+        {
+          "term": "graph_arrows",
+          "module": "14-surrealdb",
+          "description": "Querying relationships."
+        },
+        {
+          "term": "edge_properties",
+          "module": "14-surrealdb",
+          "description": "Related concept: Edge Properties."
+        }
+      ]
+    },
+    "array_functions": {
+      "level": 6,
+      "file": "terms/level_06/array_functions.md",
+      "display_name": "Array Functions (`array::*`)",
+      "prerequisites": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library context."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "The ordered list data type."
+        }
+      ],
+      "related": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "The ordered list container."
+        },
+        {
+          "term": "set_type",
+          "module": "14-surrealdb",
+          "description": "Unique set container."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "Related concept: Operators in SurrealQL."
+        },
+        {
+          "term": "select_value",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SELECT VALUE` (Single Field Extraction)."
+        },
+        {
+          "term": "split_clause",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SPLIT` Clause."
+        }
+      ]
+    },
+    "builtin_functions": {
+      "level": 6,
+      "file": "terms/level_06/builtin_functions.md",
+      "display_name": "Built-in Functions Overview",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "string_functions",
+          "module": "14-surrealdb",
+          "description": "Text module."
+        },
+        {
+          "term": "array_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Array Functions (`array::*`)."
+        },
+        {
+          "term": "math_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Math Functions (`math::*`)."
+        },
+        {
+          "term": "time_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Time Functions (`time::*`)."
+        },
+        {
+          "term": "type_functions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Type Functions (`type::*`)."
+        },
+        {
+          "term": "define_function",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE FUNCTION`."
+        }
+      ]
+    },
+    "destructuring_select": {
+      "level": 6,
+      "file": "terms/level_06/destructuring_select.md",
+      "display_name": "Destructuring & Object Notation in SELECT",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "object_type",
+          "module": "14-surrealdb",
+          "description": "Nested structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "object_type",
+          "module": "14-surrealdb",
+          "description": "Nested structures."
+        }
+      ]
+    },
+    "for_expression": {
+      "level": 6,
+      "file": "terms/level_06/for_expression.md",
+      "display_name": "`FOR` Expression",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "Target iteration arrays."
+        }
+      ],
+      "related": [
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Script variables."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "Iteration target lists."
+        },
+        {
+          "term": "split_clause",
+          "module": "14-surrealdb",
+          "description": "Unwinding arrays in SELECTs."
+        }
+      ]
+    },
+    "if_else": {
+      "level": 6,
+      "file": "terms/level_06/if_else.md",
+      "display_name": "`IF` / `ELSE` Expressions",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "Comparison operators."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "throw_expression",
+          "module": "14-surrealdb",
+          "description": "Raising errors in ELSE blocks."
+        },
+        {
+          "term": "return_statement",
+          "module": "14-surrealdb",
+          "description": "Related concept: `RETURN` Statement (in Functions / Blocks)."
+        },
+        {
+          "term": "transactions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Transactions (`BEGIN` / `COMMIT` / `CANCEL`)."
+        }
+      ]
+    },
+    "let_statement": {
+      "level": 6,
+      "file": "terms/level_06/let_statement.md",
+      "display_name": "`LET` Statement",
+      "prerequisites": [
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Variable syntax context."
+        }
+      ],
+      "related": [
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Parameter variable rules."
+        },
+        {
+          "term": "subqueries",
+          "module": "14-surrealdb",
+          "description": "Evaluated subquery inputs."
+        },
+        {
+          "term": "for_expression",
+          "module": "14-surrealdb",
+          "description": "Related concept: `FOR` Expression."
+        },
+        {
+          "term": "return_statement",
+          "module": "14-surrealdb",
+          "description": "Related concept: `RETURN` Statement (in Functions / Blocks)."
+        },
+        {
+          "term": "define_param",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE PARAM`."
+        }
+      ]
+    },
+    "math_functions": {
+      "level": 6,
+      "file": "terms/level_06/math_functions.md",
+      "display_name": "Math Functions (`math::*`)",
+      "prerequisites": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library context."
+        },
+        {
+          "term": "number_types",
+          "module": "14-surrealdb",
+          "description": "Numeric types."
+        }
+      ],
+      "related": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library."
+        },
+        {
+          "term": "number_types",
+          "module": "14-surrealdb",
+          "description": "Numeric types."
+        },
+        {
+          "term": "aggregate_functions",
+          "module": "14-surrealdb",
+          "description": "Grouping context."
+        }
+      ]
+    },
+    "only_keyword": {
+      "level": 6,
+      "file": "terms/level_06/only_keyword.md",
+      "display_name": "`ONLY` Keyword",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "Direct record lookups."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "select_value",
+          "module": "14-surrealdb",
+          "description": "Flat value extraction."
+        }
+      ]
+    },
+    "parallel_keyword": {
+      "level": 6,
+      "file": "terms/level_06/parallel_keyword.md",
+      "display_name": "`PARALLEL` Keyword",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "Bulk write statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "Bulk write statement."
+        },
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "Server multi-threading context."
+        },
+        {
+          "term": "query_explanation",
+          "module": "14-surrealdb",
+          "description": "Related concept: Query Explanation & Performance."
+        }
+      ]
+    },
+    "parameters": {
+      "level": 6,
+      "file": "terms/level_06/parameters.md",
+      "display_name": "Parameters (`$param`)",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "subqueries",
+          "module": "14-surrealdb",
+          "description": "Expression evaluation."
+        }
+      ],
+      "related": [
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Defining query-scoped variables."
+        },
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "subqueries",
+          "module": "14-surrealdb",
+          "description": "Related concept: Subqueries."
+        },
+        {
+          "term": "injection_prevention",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealQL Injection Prevention."
+        },
+        {
+          "term": "define_param",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE PARAM`."
+        },
+        {
+          "term": "sdk_query",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK `.query()` with Parameters."
+        }
+      ]
+    },
+    "return_statement": {
+      "level": 6,
+      "file": "terms/level_06/return_statement.md",
+      "display_name": "`RETURN` Statement (in Functions / Blocks)",
+      "prerequisites": [
+        {
+          "term": "return_clause",
+          "module": "14-surrealdb",
+          "description": "The CRUD projection clause (contrast)."
+        },
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Multi-step scripting."
+        }
+      ],
+      "related": [
+        {
+          "term": "return_clause",
+          "module": "14-surrealdb",
+          "description": "The CRUD projection clause."
+        },
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Script variables."
+        },
+        {
+          "term": "if_else",
+          "module": "14-surrealdb",
+          "description": "Conditional control flow."
+        },
+        {
+          "term": "throw_expression",
+          "module": "14-surrealdb",
+          "description": "Related concept: `THROW` Expression."
+        },
+        {
+          "term": "define_function",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE FUNCTION`."
+        }
+      ]
+    },
+    "split_clause": {
+      "level": 6,
+      "file": "terms/level_06/split_clause.md",
+      "display_name": "`SPLIT` Clause",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "array_type",
+          "module": "14-surrealdb",
+          "description": "The target container type."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "array_functions",
+          "module": "14-surrealdb",
+          "description": "Manipulating arrays."
+        },
+        {
+          "term": "for_expression",
+          "module": "14-surrealdb",
+          "description": "Related concept: `FOR` Expression."
+        }
+      ]
+    },
+    "string_functions": {
+      "level": 6,
+      "file": "terms/level_06/string_functions.md",
+      "display_name": "String Functions (`string::*`)",
+      "prerequisites": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library context."
+        },
+        {
+          "term": "string",
+          "module": "14-surrealdb",
+          "description": "The UTF-8 string data type."
+        }
+      ],
+      "related": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library."
+        },
+        {
+          "term": "string",
+          "module": "14-surrealdb",
+          "description": "The string data type."
+        }
+      ]
+    },
+    "subqueries": {
+      "level": 6,
+      "file": "terms/level_06/subqueries.md",
+      "display_name": "Subqueries",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The primary query statement."
+        },
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "Conditional filter contexts."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The query statement."
+        },
+        {
+          "term": "select_value",
+          "module": "14-surrealdb",
+          "description": "Extracting flat arrays."
+        },
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Session variables."
+        },
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Related concept: `LET` Statement."
+        }
+      ]
+    },
+    "throw_expression": {
+      "level": 6,
+      "file": "terms/level_06/throw_expression.md",
+      "display_name": "`THROW` Expression",
+      "prerequisites": [
+        {
+          "term": "surrealql",
+          "module": "14-surrealdb",
+          "description": "The query language context."
+        },
+        {
+          "term": "if_else",
+          "module": "14-surrealdb",
+          "description": "Conditional control flow."
+        }
+      ],
+      "related": [
+        {
+          "term": "if_else",
+          "module": "14-surrealdb",
+          "description": "Conditional control flow."
+        },
+        {
+          "term": "return_statement",
+          "module": "14-surrealdb",
+          "description": "Early returns."
+        },
+        {
+          "term": "transactions",
+          "module": "14-surrealdb",
+          "description": "Related concept: Transactions (`BEGIN` / `COMMIT` / `CANCEL`)."
+        }
+      ]
+    },
+    "time_functions": {
+      "level": 6,
+      "file": "terms/level_06/time_functions.md",
+      "display_name": "Time Functions (`time::*`)",
+      "prerequisites": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library context."
+        },
+        {
+          "term": "datetime_duration",
+          "module": "14-surrealdb",
+          "description": "Temporal types."
+        }
+      ],
+      "related": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library."
+        },
+        {
+          "term": "datetime_duration",
+          "module": "14-surrealdb",
+          "description": "Temporal types."
+        },
+        {
+          "term": "show_changes",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SHOW CHANGES FOR TABLE ... SINCE ...`."
+        }
+      ]
+    },
+    "type_functions": {
+      "level": 6,
+      "file": "terms/level_06/type_functions.md",
+      "display_name": "Type Functions (`type::*`)",
+      "prerequisites": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library context."
+        },
+        {
+          "term": "type_casting",
+          "module": "14-surrealdb",
+          "description": "Explicit casting."
+        }
+      ],
+      "related": [
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "The parent library."
+        },
+        {
+          "term": "type_casting",
+          "module": "14-surrealdb",
+          "description": "Explicit casting."
+        },
+        {
+          "term": "record_id",
+          "module": "14-surrealdb",
+          "description": "Record ID format."
+        }
+      ]
+    },
+    "composite_index": {
+      "level": 7,
+      "file": "terms/level_07/composite_index.md",
+      "display_name": "Composite Index",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "where",
+          "module": "14-surrealdb",
+          "description": "Multi-field filter queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "unique_index",
+          "module": "14-surrealdb",
+          "description": "Composite unique constraints."
+        },
+        {
+          "term": "query_explanation",
+          "module": "14-surrealdb",
+          "description": "Related concept: Query Explanation & Performance."
+        }
+      ]
+    },
+    "geospatial_index": {
+      "level": 7,
+      "file": "terms/level_07/geospatial_index.md",
+      "display_name": "Geospatial Index",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "geometry_type",
+          "module": "14-surrealdb",
+          "description": "Geospatial data types."
+        }
+      ],
+      "related": [
+        {
+          "term": "geometry_type",
+          "module": "14-surrealdb",
+          "description": "Geospatial data type."
+        },
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        }
+      ]
+    },
+    "hnsw_index": {
+      "level": 7,
+      "file": "terms/level_07/hnsw_index.md",
+      "display_name": "`DEFINE INDEX ... HNSW` (Approximate Vector Search)",
+      "prerequisites": [
+        {
+          "term": "vector_search",
+          "module": "14-surrealdb",
+          "description": "Vector search fundamentals."
+        },
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        }
+      ],
+      "related": [
+        {
+          "term": "vector_search",
+          "module": "14-surrealdb",
+          "description": "Vector search fundamentals."
+        },
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        }
+      ]
+    },
+    "indexing_record_links": {
+      "level": 7,
+      "file": "terms/level_07/indexing_record_links.md",
+      "display_name": "Indexing Record Link Fields",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "Pointer fields."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "record_link_concept",
+          "module": "14-surrealdb",
+          "description": "Pointer concept."
+        },
+        {
+          "term": "array_record_links",
+          "module": "14-surrealdb",
+          "description": "Multi-pointer fields."
+        }
+      ]
+    },
+    "query_explanation": {
+      "level": 7,
+      "file": "terms/level_07/query_explanation.md",
+      "display_name": "Query Explanation & Performance",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The index architecture."
+        },
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "Interactive CLI tools."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "composite_index",
+          "module": "14-surrealdb",
+          "description": "Multi-column optimization."
+        },
+        {
+          "term": "parallel_keyword",
+          "module": "14-surrealdb",
+          "description": "Multi-threaded execution."
+        }
+      ]
+    },
+    "search_functions": {
+      "level": 7,
+      "file": "terms/level_07/search_functions.md",
+      "display_name": "`search::*` Functions & `@@` Operator",
+      "prerequisites": [
+        {
+          "term": "search_index_analyzer",
+          "module": "14-surrealdb",
+          "description": "Full-text search architecture."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "Query operators."
+        }
+      ],
+      "related": [
+        {
+          "term": "search_index_analyzer",
+          "module": "14-surrealdb",
+          "description": "Search architecture."
+        },
+        {
+          "term": "operators",
+          "module": "14-surrealdb",
+          "description": "Query operators."
+        }
+      ]
+    },
+    "search_index_analyzer": {
+      "level": 7,
+      "file": "terms/level_07/search_index_analyzer.md",
+      "display_name": "Search Index & `DEFINE ANALYZER`",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "search_index",
+          "module": "14-surrealdb",
+          "description": "Schema configuration overview."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "search_functions",
+          "module": "14-surrealdb",
+          "description": "Querying full-text search."
+        }
+      ]
+    },
+    "vector_search": {
+      "level": 7,
+      "file": "terms/level_07/vector_search.md",
+      "display_name": "Vector Search Index (ML/AI)",
+      "prerequisites": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "vector_index",
+          "module": "14-surrealdb",
+          "description": "Schema configuration overview."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_index",
+          "module": "14-surrealdb",
+          "description": "The parent index context."
+        },
+        {
+          "term": "hnsw_index",
+          "module": "14-surrealdb",
+          "description": "HNSW algorithm."
+        },
+        {
+          "term": "vector_index",
+          "module": "14-surrealdb",
+          "description": "Related concept: Vector Index (Overview)."
+        }
+      ]
+    },
+    "auth_architecture": {
+      "level": 8,
+      "file": "terms/level_08/auth_architecture.md",
+      "display_name": "Authentication Architecture (Root, Namespace, Database, Record)",
+      "prerequisites": [
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "The logical container hierarchy."
+        },
+        {
+          "term": "connection_credentials",
+          "module": "14-surrealdb",
+          "description": "Authentication token basics."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_user",
+          "module": "14-surrealdb",
+          "description": "Creating Root, NS, and DB admins."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Authenticating end-users as table records."
+        },
+        {
+          "term": "browser_to_db",
+          "module": "14-surrealdb",
+          "description": "Architectural pattern for client-side connections."
+        }
+      ]
+    },
+    "auth_record_fields": {
+      "level": 8,
+      "file": "terms/level_08/auth_record_fields.md",
+      "display_name": "`$auth.id` vs `$auth.*` (Accessing Auth Record Fields)",
+      "prerequisites": [
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "The built-in authenticated user variable."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Row-level security rules."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "The parent authenticated user variable."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Table and field level permission rules."
+        },
+        {
+          "term": "session_token_variables",
+          "module": "14-surrealdb",
+          "description": "Token and session attributes."
+        }
+      ]
+    },
+    "auth_variable": {
+      "level": 8,
+      "file": "terms/level_08/auth_variable.md",
+      "display_name": "`$auth` Variable",
+      "prerequisites": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Record authentication."
+        }
+      ],
+      "related": [
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Table and field level security."
+        },
+        {
+          "term": "auth_record_fields",
+          "module": "14-surrealdb",
+          "description": "Accessing specific properties of `$auth`."
+        },
+        {
+          "term": "session_token_variables",
+          "module": "14-surrealdb",
+          "description": "Contextual session metadata."
+        },
+        {
+          "term": "signup_signin",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SIGNUP` / `SIGNIN` Clauses."
+        },
+        {
+          "term": "event_variables",
+          "module": "14-surrealdb",
+          "description": "Related concept: `$before` / `$after` / `$event` / `$value` Variables (in Events)."
+        }
+      ]
+    },
+    "browser_to_db": {
+      "level": 8,
+      "file": "terms/level_08/browser_to_db.md",
+      "display_name": "Direct Browser-to-Database Architecture",
+      "prerequisites": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "End-user record authentication."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Table and field level security."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Built-in end-user authentication."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Row-level authorization."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Related concept: `LIVE SELECT` (Live Queries)."
+        },
+        {
+          "term": "embedding",
+          "module": "14-surrealdb",
+          "description": "Related concept: Embedding SurrealDB (Rust / WASM)."
+        }
+      ]
+    },
+    "define_access_jwt": {
+      "level": 8,
+      "file": "terms/level_08/define_access_jwt.md",
+      "display_name": "`DEFINE ACCESS ... TYPE JWT` (External Auth Providers)",
+      "prerequisites": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Built-in record access vs external JWT validation."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Built-in database user registration."
+        },
+        {
+          "term": "jwt_auth",
+          "module": "14-surrealdb",
+          "description": "JWT structure and verification details."
+        },
+        {
+          "term": "session_token_variables",
+          "module": "14-surrealdb",
+          "description": "Accessing token payload claims in SurrealQL."
+        }
+      ]
+    },
+    "define_access_record": {
+      "level": 8,
+      "file": "terms/level_08/define_access_record.md",
+      "display_name": "Record Access (`DEFINE ACCESS ... TYPE RECORD`)",
+      "prerequisites": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier auth hierarchy."
+        },
+        {
+          "term": "define_user",
+          "module": "14-surrealdb",
+          "description": "Contrast between administrative system users and record users."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "System auth hierarchy overview."
+        },
+        {
+          "term": "signup_signin",
+          "module": "14-surrealdb",
+          "description": "Authentication handler expressions."
+        },
+        {
+          "term": "jwt_auth",
+          "module": "14-surrealdb",
+          "description": "How JWT tokens are evaluated."
+        },
+        {
+          "term": "browser_to_db",
+          "module": "14-surrealdb",
+          "description": "Related concept: Direct Browser-to-Database Architecture."
+        },
+        {
+          "term": "define_access_jwt",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE ACCESS ... TYPE JWT` (External Auth Providers)."
+        },
+        {
+          "term": "define_user",
+          "module": "14-surrealdb",
+          "description": "Related concept: System Users (`DEFINE USER`)."
+        }
+      ]
+    },
+    "define_user": {
+      "level": 8,
+      "file": "terms/level_08/define_user.md",
+      "display_name": "System Users (`DEFINE USER`)",
+      "prerequisites": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        },
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "Logical database boundary isolation."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The overall 4-tier security system."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Contrast with end-user table authentication."
+        },
+        {
+          "term": "injection_prevention",
+          "module": "14-surrealdb",
+          "description": "Security best practices."
+        }
+      ]
+    },
+    "injection_prevention": {
+      "level": 8,
+      "file": "terms/level_08/injection_prevention.md",
+      "display_name": "SurrealQL Injection Prevention",
+      "prerequisites": [
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Parameter syntax in SurrealQL."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "SDK query methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "SurrealQL query variables."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "SDK query methods."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Row-level authorization."
+        },
+        {
+          "term": "define_user",
+          "module": "14-surrealdb",
+          "description": "Related concept: System Users (`DEFINE USER`)."
+        },
+        {
+          "term": "sdk_query",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK `.query()` with Parameters."
+        }
+      ]
+    },
+    "jwt_auth": {
+      "level": 8,
+      "file": "terms/level_08/jwt_auth.md",
+      "display_name": "JWT Token-Based Auth",
+      "prerequisites": [
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Record authentication."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Built-in access definition."
+        },
+        {
+          "term": "session_token_variables",
+          "module": "14-surrealdb",
+          "description": "Accessing decoded JWT claims in SurrealQL."
+        },
+        {
+          "term": "define_access_jwt",
+          "module": "14-surrealdb",
+          "description": "Validating third-party provider JWTs."
+        },
+        {
+          "term": "signup_signin",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SIGNUP` / `SIGNIN` Clauses."
+        }
+      ]
+    },
+    "permissions_clause": {
+      "level": 8,
+      "file": "terms/level_08/permissions_clause.md",
+      "display_name": "`PERMISSIONS` Clause (Table & Field Level)",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Table definition context."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Field definition context."
+        },
+        {
+          "term": "auth_architecture",
+          "module": "14-surrealdb",
+          "description": "The 4-tier security hierarchy."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "The bound context user variable."
+        },
+        {
+          "term": "auth_record_fields",
+          "module": "14-surrealdb",
+          "description": "Using record properties in permissions."
+        },
+        {
+          "term": "browser_to_db",
+          "module": "14-surrealdb",
+          "description": "Client connectivity with row-level security."
+        },
+        {
+          "term": "injection_prevention",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealQL Injection Prevention."
+        },
+        {
+          "term": "error_handling",
+          "module": "14-surrealdb",
+          "description": "Related concept: Error Handling & Debugging."
+        }
+      ]
+    },
+    "session_token_variables": {
+      "level": 8,
+      "file": "terms/level_08/session_token_variables.md",
+      "display_name": "`$session` / `$token` Variables",
+      "prerequisites": [
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "The user record variable."
+        },
+        {
+          "term": "jwt_auth",
+          "module": "14-surrealdb",
+          "description": "JSON Web Token structure and claims."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "The authenticated record user object."
+        },
+        {
+          "term": "jwt_auth",
+          "module": "14-surrealdb",
+          "description": "JWT validation and claims parsing."
+        },
+        {
+          "term": "define_access_jwt",
+          "module": "14-surrealdb",
+          "description": "External auth provider setup."
+        },
+        {
+          "term": "auth_record_fields",
+          "module": "14-surrealdb",
+          "description": "Related concept: `$auth.id` vs `$auth.*` (Accessing Auth Record Fields)."
+        }
+      ]
+    },
+    "signup_signin": {
+      "level": 8,
+      "file": "terms/level_08/signup_signin.md",
+      "display_name": "`SIGNUP` / `SIGNIN` Clauses",
+      "prerequisites": [
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "The parent access definition."
+        },
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "Cryptographic functions (`crypto::*`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Parent access setup."
+        },
+        {
+          "term": "jwt_auth",
+          "module": "14-surrealdb",
+          "description": "Token generated after `SIGNUP` / `SIGNIN`."
+        },
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "The bound context variable after successful login."
+        }
+      ]
+    },
+    "changefeed": {
+      "level": 9,
+      "file": "terms/level_09/changefeed.md",
+      "display_name": "Changefeed (`DEFINE TABLE ... CHANGEFEED`)",
+      "prerequisites": [
+        {
+          "term": "define_table",
+          "module": "14-surrealdb",
+          "description": "Table definition context."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Real-time live subscriptions vs historical change feeds."
+        }
+      ],
+      "related": [
+        {
+          "term": "show_changes",
+          "module": "14-surrealdb",
+          "description": "Querying recorded changefeed logs."
+        },
+        {
+          "term": "define_event",
+          "module": "14-surrealdb",
+          "description": "Real-time server-side triggers."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Live push subscriptions vs changefeeds."
+        }
+      ]
+    },
+    "define_function": {
+      "level": 9,
+      "file": "terms/level_09/define_function.md",
+      "display_name": "`DEFINE FUNCTION`",
+      "prerequisites": [
+        {
+          "term": "return_statement",
+          "module": "14-surrealdb",
+          "description": "Returning values from functions."
+        },
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "Standard library functions."
+        }
+      ],
+      "related": [
+        {
+          "term": "return_statement",
+          "module": "14-surrealdb",
+          "description": "Flow-control return."
+        },
+        {
+          "term": "define_event",
+          "module": "14-surrealdb",
+          "description": "Event triggers calling custom functions."
+        },
+        {
+          "term": "builtin_functions",
+          "module": "14-surrealdb",
+          "description": "Native function library."
+        },
+        {
+          "term": "define_param",
+          "module": "14-surrealdb",
+          "description": "Related concept: `DEFINE PARAM`."
+        }
+      ]
+    },
+    "define_param": {
+      "level": 9,
+      "file": "terms/level_09/define_param.md",
+      "display_name": "`DEFINE PARAM`",
+      "prerequisites": [
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Query-level parameter syntax."
+        },
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Query-scoped session variables vs global database params."
+        }
+      ],
+      "related": [
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Query-level parameter syntax."
+        },
+        {
+          "term": "let_statement",
+          "module": "14-surrealdb",
+          "description": "Transient session variables."
+        },
+        {
+          "term": "define_function",
+          "module": "14-surrealdb",
+          "description": "Reusable server-side functions."
+        }
+      ]
+    },
+    "event_variables": {
+      "level": 9,
+      "file": "terms/level_09/event_variables.md",
+      "display_name": "`$before` / `$after` / `$event` / `$value` Variables (in Events)",
+      "prerequisites": [
+        {
+          "term": "define_event",
+          "module": "14-surrealdb",
+          "description": "Server-side event triggers."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Field definition clauses (`ASSERT`, `VALUE`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "define_event",
+          "module": "14-surrealdb",
+          "description": "Server-side triggers."
+        },
+        {
+          "term": "assert_clause",
+          "module": "14-surrealdb",
+          "description": "Field constraint assertions."
+        },
+        {
+          "term": "auth_variable",
+          "module": "14-surrealdb",
+          "description": "Authenticated user variable."
+        }
+      ]
+    },
+    "kill_live_query": {
+      "level": 9,
+      "file": "terms/level_09/kill_live_query.md",
+      "display_name": "`KILL` (Stopping Live Queries)",
+      "prerequisites": [
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Creating live query subscriptions."
+        },
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Passing query parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Starting live subscriptions."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "Client SDK lifecycle methods."
+        },
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "WebSocket session transport."
+        },
+        {
+          "term": "sdk_live_queries",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Live Query Subscriptions."
+        }
+      ]
+    },
+    "live_select": {
+      "level": 9,
+      "file": "terms/level_09/live_select.md",
+      "display_name": "`LIVE SELECT` (Live Queries)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "14-surrealdb",
+          "description": "The base query syntax."
+        },
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Persistent WebSocket connections (`ws://`, `wss://`)."
+        }
+      ],
+      "related": [
+        {
+          "term": "kill_live_query",
+          "module": "14-surrealdb",
+          "description": "Terminating active live query subscriptions."
+        },
+        {
+          "term": "changefeed",
+          "module": "14-surrealdb",
+          "description": "Table change history tracking."
+        },
+        {
+          "term": "browser_to_db",
+          "module": "14-surrealdb",
+          "description": "Real-time browser architecture."
+        },
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Related concept: Connection URI & Protocols (`ws://`, `wss://`, `http://`)."
+        },
+        {
+          "term": "show_changes",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SHOW CHANGES FOR TABLE ... SINCE ...`."
+        },
+        {
+          "term": "sdk_live_queries",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Live Query Subscriptions."
+        },
+        {
+          "term": "websocket_vs_http",
+          "module": "14-surrealdb",
+          "description": "Related concept: WebSocket vs HTTP Connection."
+        }
+      ]
+    },
+    "transaction_isolation": {
+      "level": 9,
+      "file": "terms/level_09/transaction_isolation.md",
+      "display_name": "Transaction Isolation & Atomicity Semantics",
+      "prerequisites": [
+        {
+          "term": "transactions",
+          "module": "14-surrealdb",
+          "description": "Basic transaction blocks."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Storage engine architectures."
+        }
+      ],
+      "related": [
+        {
+          "term": "transactions",
+          "module": "14-surrealdb",
+          "description": "Transaction commands."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Single-node and distributed storage backends."
+        },
+        {
+          "term": "sdk_error_handling",
+          "module": "14-surrealdb",
+          "description": "Handling write conflicts in SDKs."
+        }
+      ]
+    },
+    "transactions": {
+      "level": 9,
+      "file": "terms/level_09/transactions.md",
+      "display_name": "Transactions (`BEGIN` / `COMMIT` / `CANCEL`)",
+      "prerequisites": [
+        {
+          "term": "create",
+          "module": "14-surrealdb",
+          "description": "Record creation syntax."
+        },
+        {
+          "term": "update",
+          "module": "14-surrealdb",
+          "description": "Record modification syntax."
+        }
+      ],
+      "related": [
+        {
+          "term": "transaction_isolation",
+          "module": "14-surrealdb",
+          "description": "Snapshot isolation & concurrency."
+        },
+        {
+          "term": "throw_expression",
+          "module": "14-surrealdb",
+          "description": "Raising errors in transactions."
+        },
+        {
+          "term": "if_else",
+          "module": "14-surrealdb",
+          "description": "Conditional logic inside transactions."
+        },
+        {
+          "term": "sleep",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SLEEP` Statement."
+        }
+      ]
+    },
+    "data_migrations": {
+      "level": 10,
+      "file": "terms/level_10/data_migrations.md",
+      "display_name": "Data Migrations in SurrealDB",
+      "prerequisites": [
+        {
+          "term": "overwrite_keyword",
+          "module": "14-surrealdb",
+          "description": "Idempotent definition syntax."
+        },
+        {
+          "term": "define_field",
+          "module": "14-surrealdb",
+          "description": "Schema definitions and computed values."
+        }
+      ],
+      "related": [
+        {
+          "term": "overwrite_keyword",
+          "module": "14-surrealdb",
+          "description": "Idempotent syntax details."
+        },
+        {
+          "term": "surreal_validate",
+          "module": "14-surrealdb",
+          "description": "Pre-flight migration validation."
+        },
+        {
+          "term": "update_strategies",
+          "module": "14-surrealdb",
+          "description": "Batch data transformations."
+        },
+        {
+          "term": "export_import",
+          "module": "14-surrealdb",
+          "description": "Related concept: `surreal export` / `surreal import` (Backups)."
+        }
+      ]
+    },
+    "docker_deployment": {
+      "level": 10,
+      "file": "terms/level_10/docker_deployment.md",
+      "display_name": "Docker Deployment",
+      "prerequisites": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "Server startup flags."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Storage backends."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "Startup configuration flags."
+        },
+        {
+          "term": "surrealdb_cloud",
+          "module": "14-surrealdb",
+          "description": "Managed cloud alternative."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Storage engine choices."
+        }
+      ]
+    },
+    "embedding": {
+      "level": 10,
+      "file": "terms/level_10/embedding.md",
+      "display_name": "Embedding SurrealDB (Rust / WASM)",
+      "prerequisites": [
+        {
+          "term": "surrealdb",
+          "module": "14-surrealdb",
+          "description": "Multi-model database architecture."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "In-memory and file storage backends."
+        }
+      ],
+      "related": [
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "In-memory and local storage engines."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "Web client SDK."
+        },
+        {
+          "term": "browser_to_db",
+          "module": "14-surrealdb",
+          "description": "Browser connectivity."
+        }
+      ]
+    },
+    "error_handling": {
+      "level": 10,
+      "file": "terms/level_10/error_handling.md",
+      "display_name": "Error Handling & Debugging",
+      "prerequisites": [
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "Interactive CLI console."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Permission errors."
+        },
+        {
+          "term": "assert_clause",
+          "module": "14-surrealdb",
+          "description": "Field constraint assertions."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "Interactive CLI console."
+        },
+        {
+          "term": "surreal_validate",
+          "module": "14-surrealdb",
+          "description": "Pre-flight syntax validation."
+        },
+        {
+          "term": "permissions_clause",
+          "module": "14-surrealdb",
+          "description": "Table security permissions."
+        },
+        {
+          "term": "sleep",
+          "module": "14-surrealdb",
+          "description": "Related concept: `SLEEP` Statement."
+        }
+      ]
+    },
+    "export_import": {
+      "level": 10,
+      "file": "terms/level_10/export_import.md",
+      "display_name": "`surreal export` / `surreal import` (Backups)",
+      "prerequisites": [
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "CLI binary basics."
+        },
+        {
+          "term": "namespace_database",
+          "module": "14-surrealdb",
+          "description": "Database boundaries."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "Interactive CLI console."
+        },
+        {
+          "term": "surreal_validate",
+          "module": "14-surrealdb",
+          "description": "Pre-flight syntax validation."
+        },
+        {
+          "term": "data_migrations",
+          "module": "14-surrealdb",
+          "description": "Schema evolution strategies."
+        }
+      ]
+    },
+    "js_sdk": {
+      "level": 10,
+      "file": "terms/level_10/js_sdk.md",
+      "display_name": "JavaScript / TypeScript SDK",
+      "prerequisites": [
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Protocol formats (`ws://`, `wss://`, `http://`)."
+        },
+        {
+          "term": "define_access_record",
+          "module": "14-surrealdb",
+          "description": "Client authentication."
+        }
+      ],
+      "related": [
+        {
+          "term": "sdk_connection",
+          "module": "14-surrealdb",
+          "description": "Connection sequence details."
+        },
+        {
+          "term": "sdk_crud",
+          "module": "14-surrealdb",
+          "description": "Ergonomic methods."
+        },
+        {
+          "term": "websocket_vs_http",
+          "module": "14-surrealdb",
+          "description": "Choosing transport protocols."
+        },
+        {
+          "term": "injection_prevention",
+          "module": "14-surrealdb",
+          "description": "Related concept: SurrealQL Injection Prevention."
+        },
+        {
+          "term": "kill_live_query",
+          "module": "14-surrealdb",
+          "description": "Related concept: `KILL` (Stopping Live Queries)."
+        },
+        {
+          "term": "embedding",
+          "module": "14-surrealdb",
+          "description": "Related concept: Embedding SurrealDB (Rust / WASM)."
+        },
+        {
+          "term": "sdk_error_handling",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Error Handling & Retry Patterns."
+        },
+        {
+          "term": "sdk_live_queries",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Live Query Subscriptions."
+        }
+      ]
+    },
+    "sdk_connection": {
+      "level": 10,
+      "file": "terms/level_10/sdk_connection.md",
+      "display_name": "SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)",
+      "prerequisites": [
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "The `surrealdb` client package."
+        },
+        {
+          "term": "connection_credentials",
+          "module": "14-surrealdb",
+          "description": "Namespace and database scope concepts."
+        }
+      ],
+      "related": [
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "SurrealDB npm package overview."
+        },
+        {
+          "term": "connection_credentials",
+          "module": "14-surrealdb",
+          "description": "Scope selection."
+        },
+        {
+          "term": "websocket_vs_http",
+          "module": "14-surrealdb",
+          "description": "Transport choices."
+        }
+      ]
+    },
+    "sdk_crud": {
+      "level": 10,
+      "file": "terms/level_10/sdk_crud.md",
+      "display_name": "SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)",
+      "prerequisites": [
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "The `surrealdb` client package."
+        },
+        {
+          "term": "sdk_connection",
+          "module": "14-surrealdb",
+          "description": "Connection setup sequence."
+        }
+      ],
+      "related": [
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "SDK package overview."
+        },
+        {
+          "term": "sdk_query",
+          "module": "14-surrealdb",
+          "description": "Executing complex raw queries."
+        },
+        {
+          "term": "update_strategies",
+          "module": "14-surrealdb",
+          "description": "Update operations semantics."
+        }
+      ]
+    },
+    "sdk_error_handling": {
+      "level": 10,
+      "file": "terms/level_10/sdk_error_handling.md",
+      "display_name": "SDK Error Handling & Retry Patterns",
+      "prerequisites": [
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "Client SDK package."
+        },
+        {
+          "term": "transaction_isolation",
+          "module": "14-surrealdb",
+          "description": "Write conflicts in snapshot isolation."
+        }
+      ],
+      "related": [
+        {
+          "term": "transaction_isolation",
+          "module": "14-surrealdb",
+          "description": "Snapshot isolation semantics."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "Client package overview."
+        },
+        {
+          "term": "websocket_vs_http",
+          "module": "14-surrealdb",
+          "description": "Transport resilience."
+        }
+      ]
+    },
+    "sdk_live_queries": {
+      "level": 10,
+      "file": "terms/level_10/sdk_live_queries.md",
+      "display_name": "SDK Live Query Subscriptions",
+      "prerequisites": [
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Server-side live queries."
+        },
+        {
+          "term": "kill_live_query",
+          "module": "14-surrealdb",
+          "description": "Unsubscribing live queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Server-side live query statement."
+        },
+        {
+          "term": "kill_live_query",
+          "module": "14-surrealdb",
+          "description": "Terminating subscriptions."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "SDK package overview."
+        }
+      ]
+    },
+    "sdk_query": {
+      "level": 10,
+      "file": "terms/level_10/sdk_query.md",
+      "display_name": "SDK `.query()` with Parameters",
+      "prerequisites": [
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "The `surrealdb` client package."
+        },
+        {
+          "term": "injection_prevention",
+          "module": "14-surrealdb",
+          "description": "Parameterized query security."
+        },
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Parameter binding syntax."
+        }
+      ],
+      "related": [
+        {
+          "term": "injection_prevention",
+          "module": "14-surrealdb",
+          "description": "Security protections."
+        },
+        {
+          "term": "sdk_crud",
+          "module": "14-surrealdb",
+          "description": "High-level CRUD alternative."
+        },
+        {
+          "term": "parameters",
+          "module": "14-surrealdb",
+          "description": "Parameter syntax details."
+        }
+      ]
+    },
+    "sleep": {
+      "level": 10,
+      "file": "terms/level_10/sleep.md",
+      "display_name": "`SLEEP` Statement",
+      "prerequisites": [
+        {
+          "term": "datetime_duration",
+          "module": "14-surrealdb",
+          "description": "Duration data types (`500ms`, `2s`)."
+        },
+        {
+          "term": "transactions",
+          "module": "14-surrealdb",
+          "description": "Transaction execution blocks."
+        }
+      ],
+      "related": [
+        {
+          "term": "datetime_duration",
+          "module": "14-surrealdb",
+          "description": "Duration literals syntax."
+        },
+        {
+          "term": "transactions",
+          "module": "14-surrealdb",
+          "description": "Multi-statement execution blocks."
+        },
+        {
+          "term": "error_handling",
+          "module": "14-surrealdb",
+          "description": "Query debugging strategies."
+        }
+      ]
+    },
+    "surreal_validate": {
+      "level": 10,
+      "file": "terms/level_10/surreal_validate.md",
+      "display_name": "`surreal validate` (Query Validation)",
+      "prerequisites": [
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "CLI binary overview."
+        },
+        {
+          "term": "export_import",
+          "module": "14-surrealdb",
+          "description": "Working with `.surql` files."
+        }
+      ],
+      "related": [
+        {
+          "term": "surreal_cli",
+          "module": "14-surrealdb",
+          "description": "CLI binary tools."
+        },
+        {
+          "term": "export_import",
+          "module": "14-surrealdb",
+          "description": "Export and import utilities."
+        },
+        {
+          "term": "data_migrations",
+          "module": "14-surrealdb",
+          "description": "Schema migration strategies."
+        },
+        {
+          "term": "error_handling",
+          "module": "14-surrealdb",
+          "description": "Related concept: Error Handling & Debugging."
+        }
+      ]
+    },
+    "surrealdb_cloud": {
+      "level": 10,
+      "file": "terms/level_10/surrealdb_cloud.md",
+      "display_name": "SurrealDB Cloud",
+      "prerequisites": [
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "Server process basics."
+        },
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Distributed database engines."
+        }
+      ],
+      "related": [
+        {
+          "term": "surrealist",
+          "module": "14-surrealdb",
+          "description": "Visual cloud query editor."
+        },
+        {
+          "term": "docker_deployment",
+          "module": "14-surrealdb",
+          "description": "Self-hosted container deployment alternative."
+        },
+        {
+          "term": "tikv_backend",
+          "module": "14-surrealdb",
+          "description": "Distributed cloud storage engine."
+        }
+      ]
+    },
+    "tikv_backend": {
+      "level": 10,
+      "file": "terms/level_10/tikv_backend.md",
+      "display_name": "TiKV Backend (Distributed Mode)",
+      "prerequisites": [
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Pluggable storage architecture."
+        },
+        {
+          "term": "transaction_isolation",
+          "module": "14-surrealdb",
+          "description": "Snapshot isolation."
+        }
+      ],
+      "related": [
+        {
+          "term": "storage_backends",
+          "module": "14-surrealdb",
+          "description": "Storage backend overview."
+        },
+        {
+          "term": "surreal_start",
+          "module": "14-surrealdb",
+          "description": "Server startup flags."
+        },
+        {
+          "term": "surrealdb_cloud",
+          "module": "14-surrealdb",
+          "description": "Managed distributed cloud instances."
+        }
+      ]
+    },
+    "websocket_vs_http": {
+      "level": 10,
+      "file": "terms/level_10/websocket_vs_http.md",
+      "display_name": "WebSocket vs HTTP Connection",
+      "prerequisites": [
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "URI schemes."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Real-time subscription requirements."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_uri",
+          "module": "14-surrealdb",
+          "description": "Connection strings."
+        },
+        {
+          "term": "live_select",
+          "module": "14-surrealdb",
+          "description": "Live queries."
+        },
+        {
+          "term": "js_sdk",
+          "module": "14-surrealdb",
+          "description": "SDK client configuration."
+        },
+        {
+          "term": "sdk_connection",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)."
+        },
+        {
+          "term": "sdk_error_handling",
+          "module": "14-surrealdb",
+          "description": "Related concept: SDK Error Handling & Retry Patterns."
+        }
+      ]
+    }
+  }
+}

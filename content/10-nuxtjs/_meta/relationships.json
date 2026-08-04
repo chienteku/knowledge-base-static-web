@@ -1,0 +1,2158 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "10-nuxtjs",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "auto_imports": {
+      "level": 1,
+      "file": "terms/level_01/auto_imports.md",
+      "display_name": "Auto-imports",
+      "prerequisites": [
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The APIs that are heavily auto-imported."
+        },
+        {
+          "term": "modules",
+          "module": "03-javascript",
+          "description": "The manual ES module imports system being bypassed."
+        }
+      ],
+      "related": [
+        {
+          "term": "components_directory",
+          "module": "10-nuxtjs",
+          "description": "Where auto-imported components live."
+        },
+        {
+          "term": "composables_directory",
+          "module": "10-nuxtjs",
+          "description": "Where your custom auto-imported logic lives."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Vue 3 Composition API Context."
+        }
+      ]
+    },
+    "composition_api_context": {
+      "level": 1,
+      "file": "terms/level_01/composition_api_context.md",
+      "display_name": "Vue 3 Composition API Context",
+      "prerequisites": [
+        {
+          "term": "composition_api",
+          "module": "07-vue",
+          "description": "The core Vue paradigm."
+        },
+        {
+          "term": "ref",
+          "module": "07-vue",
+          "description": "The mechanism for primitive values."
+        },
+        {
+          "term": "reactive",
+          "module": "07-vue",
+          "description": "The mechanism for object structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "Why you don't need to explicitly import `ref` or `computed`."
+        },
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt 3 Overview."
+        }
+      ]
+    },
+    "hydration": {
+      "level": 1,
+      "file": "terms/level_01/hydration.md",
+      "display_name": "Hydration",
+      "prerequisites": [
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The paradigm defining the interactive components."
+        }
+      ],
+      "related": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that produces the HTML target."
+        },
+        {
+          "term": "client_only_component",
+          "module": "10-nuxtjs",
+          "description": "A component wrapper designed to completely skip hydration validation by rendering only on the client."
+        },
+        {
+          "term": "nuxt_payload",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt Payload (SSR State Transfer)."
+        }
+      ]
+    },
+    "nitro_engine": {
+      "level": 1,
+      "file": "terms/level_01/nitro_engine.md",
+      "display_name": "Nitro Engine",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that Nitro performs to generate HTML on the server."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The traditional execution host Nitro abstractly runs on or replaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "How you define endpoints in your project."
+        },
+        {
+          "term": "edge_deployment",
+          "module": "10-nuxtjs",
+          "description": "The environments where Nitro truly shines."
+        },
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt 3 Overview."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Universal Rendering (SSR)."
+        },
+        {
+          "term": "express_js",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Express.js (Legacy Node Server Context)."
+        },
+        {
+          "term": "esr",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Edge-Side Rendering (ESR)."
+        },
+        {
+          "term": "nuxt_devtools",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt DevTools."
+        }
+      ]
+    },
+    "nuxt_3_overview": {
+      "level": 1,
+      "file": "terms/level_01/nuxt_3_overview.md",
+      "display_name": "Nuxt 3 Overview",
+      "prerequisites": [
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The server runtime hosting the application."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The core UI framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process Nuxt uses to render Vue on the server."
+        },
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The backend engine powering Nuxt."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The core UI framework."
+        }
+      ]
+    },
+    "seo": {
+      "level": 1,
+      "file": "terms/level_01/seo.md",
+      "display_name": "Search Engine Optimization (SEO)",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that produces the structured HTML."
+        },
+        {
+          "term": "use_head",
+          "module": "10-nuxtjs",
+          "description": "The composable helper used to write head properties."
+        }
+      ]
+    },
+    "universal_rendering": {
+      "level": 1,
+      "file": "terms/level_01/universal_rendering.md",
+      "display_name": "Universal Rendering (SSR)",
+      "prerequisites": [
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "The orchestrator of this process."
+        },
+        {
+          "term": "component_lifecycle",
+          "module": "07-vue",
+          "description": "Understanding when component setups run."
+        },
+        {
+          "term": "seo",
+          "module": "10-nuxtjs",
+          "description": "The core driver for SSR."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The bridge mechanism between server HTML and client interactivity."
+        }
+      ],
+      "related": [
+        {
+          "term": "client_only_component",
+          "module": "10-nuxtjs",
+          "description": "A utility to force a component to completely skip server rendering."
+        },
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The server responsible for executing the SSR phase."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Hydration."
+        },
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt 3 Overview."
+        },
+        {
+          "term": "seo",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Search Engine Optimization (SEO)."
+        },
+        {
+          "term": "use_cookie",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useCookie` Hook."
+        },
+        {
+          "term": "nuxt_server_components",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt Server Components (Islands)."
+        },
+        {
+          "term": "output_directory",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `.output/` Directory."
+        }
+      ]
+    },
+    "app_vue": {
+      "level": 2,
+      "file": "terms/level_02/app_vue.md",
+      "display_name": "`app.vue`",
+      "prerequisites": [
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The syntax used inside this file."
+        },
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "The routing system initialized by this component."
+        }
+      ],
+      "related": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder whose contents are injected into `<NuxtPage />`."
+        },
+        {
+          "term": "layouts_directory",
+          "module": "10-nuxtjs",
+          "description": "The feature used to create switchable page wrappers."
+        },
+        {
+          "term": "nuxt_page_layout",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `<NuxtPage>` & `<NuxtLayout>` Components."
+        }
+      ]
+    },
+    "define_page_meta": {
+      "level": 2,
+      "file": "terms/level_02/define_page_meta.md",
+      "display_name": "`definePageMeta` Compiler Macro",
+      "prerequisites": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder where pages containing this macro reside."
+        },
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "The router config updated by this compiler macro."
+        }
+      ],
+      "related": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder where pages containing this macro reside."
+        },
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "The middleware handlers attached via this macro."
+        }
+      ]
+    },
+    "dynamic_routes": {
+      "level": 2,
+      "file": "terms/level_02/dynamic_routes.md",
+      "display_name": "Dynamic Routes",
+      "prerequisites": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "Where these dynamic files are created."
+        },
+        {
+          "term": "use_route_router",
+          "module": "10-nuxtjs",
+          "description": "The composables used to access parameter values."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The standard way to fetch data based on the dynamic route parameter."
+        },
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "Related concept: File-based Routing."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `pages/` Directory."
+        },
+        {
+          "term": "use_route_router",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useRoute` & `useRouter` Hooks."
+        }
+      ]
+    },
+    "file_based_routing": {
+      "level": 2,
+      "file": "terms/level_02/file_based_routing.md",
+      "display_name": "File-based Routing",
+      "prerequisites": [
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "The framework that implements this pattern."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The underlying UI component structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The physical directory where this feature lives."
+        },
+        {
+          "term": "dynamic_routes",
+          "module": "10-nuxtjs",
+          "description": "How to handle URLs with variables (like `/users/123`)."
+        }
+      ]
+    },
+    "layouts_directory": {
+      "level": 2,
+      "file": "terms/level_02/layouts_directory.md",
+      "display_name": "`layouts/` Directory",
+      "prerequisites": [
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "Where the global layouts feature is initialized."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The content that gets wrapped by the layout."
+        },
+        {
+          "term": "nuxt_page_layout",
+          "module": "10-nuxtjs",
+          "description": "The built-in components orchestrating layout loads."
+        },
+        {
+          "term": "define_page_meta",
+          "module": "10-nuxtjs",
+          "description": "The API used to override layout mappings."
+        },
+        {
+          "term": "slots",
+          "module": "07-vue",
+          "description": "The Vue mechanism used to inject page templates."
+        }
+      ],
+      "related": [
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "Where `<NuxtLayout>` is placed to activate the system."
+        },
+        {
+          "term": "nuxt_page_layout",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `<NuxtPage>` & `<NuxtLayout>` Components."
+        }
+      ]
+    },
+    "nuxt_page_layout": {
+      "level": 2,
+      "file": "terms/level_02/nuxt_page_layout.md",
+      "display_name": "`<NuxtPage>` & `<NuxtLayout>` Components",
+      "prerequisites": [
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "The root template where these viewport wrappers are initialized."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The directory providing the files to render."
+        }
+      ],
+      "related": [
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "The root node of the Vue app tree."
+        },
+        {
+          "term": "layouts_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder where layout templates are stored."
+        }
+      ]
+    },
+    "pages_directory": {
+      "level": 2,
+      "file": "terms/level_02/pages_directory.md",
+      "display_name": "`pages/` Directory",
+      "prerequisites": [
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "The concept that powers this directory."
+        },
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "The entry point that renders these pages."
+        }
+      ],
+      "related": [
+        {
+          "term": "components_directory",
+          "module": "10-nuxtjs",
+          "description": "Where non-routable Vue components belong."
+        },
+        {
+          "term": "dynamic_routes",
+          "module": "10-nuxtjs",
+          "description": "How to create pages that handle variable URLs like `/products/123`."
+        },
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `app.vue`."
+        },
+        {
+          "term": "define_page_meta",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `definePageMeta` Compiler Macro."
+        },
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "Related concept: File-based Routing."
+        },
+        {
+          "term": "nuxtlink_component",
+          "module": "10-nuxtjs",
+          "description": "Related concept: NuxtLink Component."
+        },
+        {
+          "term": "global_vs_named_middleware",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Global vs Named Middleware."
+        },
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Route Middleware."
+        }
+      ]
+    },
+    "use_route_router": {
+      "level": 2,
+      "file": "terms/level_02/use_route_router.md",
+      "display_name": "`useRoute` & `useRouter` Hooks",
+      "prerequisites": [
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "The routing system these composables inspect."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The execution scope where these hooks are called."
+        }
+      ],
+      "related": [
+        {
+          "term": "dynamic_routes",
+          "module": "10-nuxtjs",
+          "description": "The route types that produce parameters."
+        },
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "The routing interceptors where redirects occur."
+        }
+      ]
+    },
+    "assets_vs_public": {
+      "level": 3,
+      "file": "terms/level_03/assets_vs_public.md",
+      "display_name": "`assets/` vs `public/`",
+      "prerequisites": [
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "Specifically the Vite bundler that powers the build process."
+        }
+      ],
+      "related": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "Where you can configure global SCSS stylesheets from the `assets/` directory."
+        }
+      ]
+    },
+    "client_only_component": {
+      "level": 3,
+      "file": "terms/level_03/client_only_component.md",
+      "display_name": "ClientOnly Component",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The default rendering flow that `<ClientOnly>` purposely interrupts."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The client-side lifecycle hook that mounts client-only structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process this component skips."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Hydration."
+        }
+      ]
+    },
+    "components_directory": {
+      "level": 3,
+      "file": "terms/level_03/components_directory.md",
+      "display_name": "`components/` Directory",
+      "prerequisites": [
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "The mechanism that powers this directory."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "Where you actually use these components."
+        }
+      ],
+      "related": [
+        {
+          "term": "lazy_components",
+          "module": "10-nuxtjs",
+          "description": "How to asynchronously load components from this directory."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The files that consume these components."
+        },
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Auto-imports."
+        },
+        {
+          "term": "composables_directory",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `composables/` Directory."
+        }
+      ]
+    },
+    "lazy_components": {
+      "level": 3,
+      "file": "terms/level_03/lazy_components.md",
+      "display_name": "Lazy Components",
+      "prerequisites": [
+        {
+          "term": "components_directory",
+          "module": "10-nuxtjs",
+          "description": "Where your components are stored."
+        },
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "How Lazy Components are automatically triggered."
+        }
+      ],
+      "related": [
+        {
+          "term": "components_directory",
+          "module": "10-nuxtjs",
+          "description": "The directory that auto-generates these Lazy versions."
+        },
+        {
+          "term": "nuxt_server_components",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt Server Components (Islands)."
+        }
+      ]
+    },
+    "nuxtlink_component": {
+      "level": 3,
+      "file": "terms/level_03/nuxtlink_component.md",
+      "display_name": "NuxtLink Component",
+      "prerequisites": [
+        {
+          "term": "file_based_routing",
+          "module": "10-nuxtjs",
+          "description": "The URL destinations that NuxtLink navigates to."
+        },
+        {
+          "term": "directives",
+          "module": "07-vue",
+          "description": "How basic template bindings are applied."
+        }
+      ],
+      "related": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The destination of internal NuxtLinks."
+        }
+      ]
+    },
+    "composables_directory": {
+      "level": 4,
+      "file": "terms/level_04/composables_directory.md",
+      "display_name": "`composables/` Directory",
+      "prerequisites": [
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The syntax used to write composables."
+        },
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "The mechanism that powers this directory."
+        },
+        {
+          "term": "composables",
+          "module": "07-vue",
+          "description": "The core Vue concept of composable state logic wrappers."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "A Nuxt-specific composable often used *inside* your custom composables to create global state."
+        },
+        {
+          "term": "components_directory",
+          "module": "10-nuxtjs",
+          "description": "The visual equivalent to `composables/`."
+        },
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Auto-imports."
+        },
+        {
+          "term": "pinia",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Pinia State Management."
+        }
+      ]
+    },
+    "nuxt_payload": {
+      "level": 4,
+      "file": "terms/level_04/nuxt_payload.md",
+      "display_name": "Nuxt Payload (SSR State Transfer)",
+      "prerequisites": [
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The process that consumes this payload package to achieve page interactivity."
+        },
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "The global state container whose data is transferred via this payload."
+        }
+      ],
+      "related": [
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The process that uses this payload to align client components."
+        },
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "The state mechanism serialized inside the payload."
+        }
+      ]
+    },
+    "pinia": {
+      "level": 4,
+      "file": "terms/level_04/pinia.md",
+      "display_name": "Pinia State Management",
+      "prerequisites": [
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "The lightweight Nuxt alternative that Pinia improves upon for large-scale applications."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The syntax used to write modern Pinia stores."
+        }
+      ],
+      "related": [
+        {
+          "term": "composables_directory",
+          "module": "10-nuxtjs",
+          "description": "Pinia stores are essentially super-powered composables."
+        },
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useState` Hook."
+        },
+        {
+          "term": "nuxt_modules",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt Modules System."
+        }
+      ]
+    },
+    "use_cookie": {
+      "level": 4,
+      "file": "terms/level_04/use_cookie.md",
+      "display_name": "`useCookie` Hook",
+      "prerequisites": [
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "Similar hook patterns."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The rendering strategy where cookies enable server-accessible state configuration."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_state",
+          "module": "10-nuxtjs",
+          "description": "The non-persistent alternative to `useCookie`."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "Why reading cookies on the server is so important."
+        }
+      ]
+    },
+    "use_nuxt_app": {
+      "level": 4,
+      "file": "terms/level_04/use_nuxt_app.md",
+      "display_name": "`useNuxtApp` Context",
+      "prerequisites": [
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "How this composable is accessed."
+        }
+      ],
+      "related": [
+        {
+          "term": "plugins_directory",
+          "module": "10-nuxtjs",
+          "description": "Where these `$variables` are actually created and injected into the Nuxt app."
+        },
+        {
+          "term": "vue_vs_nuxt_plugins",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Vue Plugins vs Nuxt Plugins."
+        }
+      ]
+    },
+    "use_state": {
+      "level": 4,
+      "file": "terms/level_04/use_state.md",
+      "display_name": "`useState` Hook",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The environment that makes `useState` necessary."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "Specifically, understanding how Vue's standard `ref()` works."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The synchronization process that relies on serialized state parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "pinia",
+          "module": "10-nuxtjs",
+          "description": "The heavy-duty alternative to `useState` for complex global state."
+        },
+        {
+          "term": "use_cookie",
+          "module": "10-nuxtjs",
+          "description": "Similar to `useState`, but persists the data in the browser cookies."
+        },
+        {
+          "term": "composables_directory",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `composables/` Directory."
+        },
+        {
+          "term": "nuxt_payload",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt Payload (SSR State Transfer)."
+        }
+      ]
+    },
+    "caching_data": {
+      "level": 5,
+      "file": "terms/level_05/caching_data.md",
+      "display_name": "Caching Data",
+      "prerequisites": [
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "The string key used here is the foundation of the cache."
+        },
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The URL acts as the cache key here automatically."
+        },
+        {
+          "term": "nuxt_payload",
+          "module": "10-nuxtjs",
+          "description": "The payload data cache containing server responses."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetching_errors",
+          "module": "10-nuxtjs",
+          "description": "How to manually delete items from this cache."
+        },
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useAsyncData`."
+        },
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useFetch`."
+        }
+      ]
+    },
+    "dollar_fetch": {
+      "level": 5,
+      "file": "terms/level_05/dollar_fetch.md",
+      "display_name": "`$fetch` (ofetch)",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "`$fetch` operates seamlessly across both environments."
+        },
+        {
+          "term": "async_await",
+          "module": "03-javascript",
+          "description": "For asynchronous control flow."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The SSR-safe wrapper around `$fetch`."
+        },
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "The underlying composable that handles SSR serialization."
+        }
+      ]
+    },
+    "fetching_errors": {
+      "level": 5,
+      "file": "terms/level_05/fetching_errors.md",
+      "display_name": "Fetching Errors & `clearNuxtData`",
+      "prerequisites": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The composable that generates these errors."
+        },
+        {
+          "term": "caching_data",
+          "module": "10-nuxtjs",
+          "description": "The cache that `clearNuxtData` interacts with."
+        }
+      ],
+      "related": [
+        {
+          "term": "error_vue",
+          "module": "10-nuxtjs",
+          "description": "How to trigger a full-page error instead of an inline component error."
+        },
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "Works exactly the same way with `error` and `clearNuxtData`."
+        },
+        {
+          "term": "caching_data",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Caching Data."
+        }
+      ]
+    },
+    "use_async_data": {
+      "level": 5,
+      "file": "terms/level_05/use_async_data.md",
+      "display_name": "`useAsyncData`",
+      "prerequisites": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The syntactic sugar built directly on top of `useAsyncData`."
+        },
+        {
+          "term": "promise",
+          "module": "03-javascript",
+          "description": "The underlying asynchronous callback runtime wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "caching_data",
+          "module": "10-nuxtjs",
+          "description": "How the unique string key is used to cache data across navigations."
+        },
+        {
+          "term": "dollar_fetch",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `$fetch` (ofetch)."
+        },
+        {
+          "term": "fetching_errors",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Fetching Errors & `clearNuxtData`."
+        },
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useFetch`."
+        },
+        {
+          "term": "use_lazy_fetch",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks."
+        }
+      ]
+    },
+    "use_fetch": {
+      "level": 5,
+      "file": "terms/level_05/use_fetch.md",
+      "display_name": "`useFetch`",
+      "prerequisites": [
+        {
+          "term": "dollar_fetch",
+          "module": "10-nuxtjs",
+          "description": "The underlying HTTP client that `useFetch` uses."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that `useFetch` optimizes."
+        },
+        {
+          "term": "nuxt_payload",
+          "module": "10-nuxtjs",
+          "description": "The mechanism conveying server responses to client hydration cache pools."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "The lower-level composable that powers `useFetch`."
+        },
+        {
+          "term": "caching_data",
+          "module": "10-nuxtjs",
+          "description": "How `useFetch` avoids refetching when navigating back and forth between pages."
+        },
+        {
+          "term": "dynamic_routes",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Dynamic Routes."
+        },
+        {
+          "term": "dollar_fetch",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `$fetch` (ofetch)."
+        },
+        {
+          "term": "use_lazy_fetch",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks."
+        },
+        {
+          "term": "vue_suspense",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Vue Suspense Integration."
+        }
+      ]
+    },
+    "use_lazy_fetch": {
+      "level": 5,
+      "file": "terms/level_05/use_lazy_fetch.md",
+      "display_name": "`useLazyFetch` & `useLazyAsyncData` Hooks",
+      "prerequisites": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The standard, blocking data-fetching hook."
+        },
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "The lower-level custom promise-fetching composable."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The blocking sibling composable."
+        },
+        {
+          "term": "use_async_data",
+          "module": "10-nuxtjs",
+          "description": "The core promise wrapping composable."
+        }
+      ]
+    },
+    "app_config": {
+      "level": 6,
+      "file": "terms/level_06/app_config.md",
+      "display_name": "`app.config.ts`",
+      "prerequisites": [
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "How the app config is exposed to components."
+        }
+      ],
+      "related": [
+        {
+          "term": "runtime_config",
+          "module": "10-nuxtjs",
+          "description": "The secure alternative used for private API keys and `.env` variables."
+        },
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "The build-time framework configuration file."
+        }
+      ]
+    },
+    "nuxt_config": {
+      "level": 6,
+      "file": "terms/level_06/nuxt_config.md",
+      "display_name": "`nuxt.config.ts`",
+      "prerequisites": [
+        {
+          "term": "nuxt_3_overview",
+          "module": "10-nuxtjs",
+          "description": "Nuxt is \"zero-config\" by default, but this is where you override those defaults."
+        },
+        {
+          "term": "modules",
+          "module": "03-javascript",
+          "description": "Understanding the export format of the configuration object."
+        }
+      ],
+      "related": [
+        {
+          "term": "app_config",
+          "module": "10-nuxtjs",
+          "description": "The configuration file meant for reactive, client-side UI state."
+        },
+        {
+          "term": "runtime_config",
+          "module": "10-nuxtjs",
+          "description": "How you pass `.env` variables through `nuxt.config.ts`."
+        },
+        {
+          "term": "assets_vs_public",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `assets/` vs `public/`."
+        },
+        {
+          "term": "nuxt_modules",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt Modules System."
+        },
+        {
+          "term": "nuxt_devtools",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nuxt DevTools."
+        }
+      ]
+    },
+    "runtime_config": {
+      "level": 6,
+      "file": "terms/level_06/runtime_config.md",
+      "display_name": "Runtime Config (`useRuntimeConfig`)",
+      "prerequisites": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "Where the Runtime Config schema is defined."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The server environment hosting standard process configs."
+        }
+      ],
+      "related": [
+        {
+          "term": "app_config",
+          "module": "10-nuxtjs",
+          "description": "The alternative config meant for non-secret, UI-related theme variables."
+        },
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `nuxt.config.ts`."
+        },
+        {
+          "term": "env_variables",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Environment Variables (`.env`)."
+        }
+      ]
+    },
+    "use_head": {
+      "level": 6,
+      "file": "terms/level_06/use_head.md",
+      "display_name": "`useHead`",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that ensures these `<head>` tags are actually visible to search engines on initial load."
+        },
+        {
+          "term": "seo",
+          "module": "10-nuxtjs",
+          "description": "The core design requirement for dynamic indexing tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_seo_meta",
+          "module": "10-nuxtjs",
+          "description": "A specialized version of `useHead` strictly for Open Graph and Twitter meta tags."
+        },
+        {
+          "term": "seo",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Search Engine Optimization (SEO)."
+        }
+      ]
+    },
+    "use_seo_meta": {
+      "level": 6,
+      "file": "terms/level_06/use_seo_meta.md",
+      "display_name": "`useSeoMeta`",
+      "prerequisites": [
+        {
+          "term": "use_head",
+          "module": "10-nuxtjs",
+          "description": "The underlying tool that `useSeoMeta` simplifies."
+        },
+        {
+          "term": "seo",
+          "module": "10-nuxtjs",
+          "description": "The core design requirement for dynamic indexing tags."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_head",
+          "module": "10-nuxtjs",
+          "description": "The tool used for scripts and stylesheets."
+        }
+      ]
+    },
+    "express_js": {
+      "level": 7,
+      "file": "terms/level_07/express_js.md",
+      "display_name": "Express.js (Legacy Node Server Context)",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The modern Nuxt server engine that replaces traditional Express setups."
+        },
+        {
+          "term": "nodejs",
+          "module": "05-nodejs",
+          "description": "The execution host for standard Express servers."
+        }
+      ],
+      "related": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The modern server compiler powering Nuxt."
+        },
+        {
+          "term": "h3_handlers",
+          "module": "10-nuxtjs",
+          "description": "The modern event-driven API engine replacing Express routes in Nuxt."
+        }
+      ]
+    },
+    "h3_handlers": {
+      "level": 7,
+      "file": "terms/level_07/h3_handlers.md",
+      "display_name": "H3 Request Handlers (`defineEventHandler`)",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "Nitro is built entirely on top of H3."
+        },
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "Where H3 handlers are primarily used."
+        },
+        {
+          "term": "express_js",
+          "module": "10-nuxtjs",
+          "description": "The request/response routing pattern H3 abstracts and replaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_middleware",
+          "module": "10-nuxtjs",
+          "description": "Middleware files use the exact same H3 `defineEventHandler` syntax."
+        },
+        {
+          "term": "express_js",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Express.js (Legacy Node Server Context)."
+        },
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `server/api/` Routes."
+        },
+        {
+          "term": "server_routes",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `server/routes/`."
+        }
+      ]
+    },
+    "server_api_routes": {
+      "level": 7,
+      "file": "terms/level_07/server_api_routes.md",
+      "display_name": "`server/api/` Routes",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The server engine that hosts these files."
+        },
+        {
+          "term": "dollar_fetch",
+          "module": "10-nuxtjs",
+          "description": "The primary way to consume these API endpoints from the frontend."
+        },
+        {
+          "term": "express_js",
+          "module": "10-nuxtjs",
+          "description": "The server pattern Nitro/H3 API routes replace."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_routes",
+          "module": "10-nuxtjs",
+          "description": "Similar to `api/`, but does not prefix the URL with `/api`."
+        },
+        {
+          "term": "h3_handlers",
+          "module": "10-nuxtjs",
+          "description": "The utility (`defineEventHandler`) used inside these files."
+        },
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nitro Engine."
+        },
+        {
+          "term": "storage_layer",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nitro Storage Layer (unstorage)."
+        }
+      ]
+    },
+    "server_middleware": {
+      "level": 7,
+      "file": "terms/level_07/server_middleware.md",
+      "display_name": "Server Middleware",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The server engine that intercepts these requests."
+        },
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "The endpoints that middleware often protects."
+        },
+        {
+          "term": "express_js",
+          "module": "10-nuxtjs",
+          "description": "The legacy request-intercepting middleware pattern Nitro replaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "The frontend equivalent that runs during Vue router navigation (do not confuse the two!)."
+        },
+        {
+          "term": "h3_handlers",
+          "module": "10-nuxtjs",
+          "description": "The utility `defineEventHandler` used to write the middleware."
+        }
+      ]
+    },
+    "server_routes": {
+      "level": 7,
+      "file": "terms/level_07/server_routes.md",
+      "display_name": "`server/routes/`",
+      "prerequisites": [
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "The standard directory for JSON APIs."
+        },
+        {
+          "term": "express_js",
+          "module": "10-nuxtjs",
+          "description": "The server routing structure that Nitro/H3 replaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "The standard directory for JSON APIs."
+        },
+        {
+          "term": "h3_handlers",
+          "module": "10-nuxtjs",
+          "description": "The utilities used to parse incoming webhooks in these routes."
+        }
+      ]
+    },
+    "storage_layer": {
+      "level": 7,
+      "file": "terms/level_07/storage_layer.md",
+      "display_name": "Nitro Storage Layer (unstorage)",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The engine that manages this storage layer."
+        },
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "Where you configure the storage drivers."
+        }
+      ],
+      "related": [
+        {
+          "term": "server_api_routes",
+          "module": "10-nuxtjs",
+          "description": "Where `useStorage` is typically executed."
+        }
+      ]
+    },
+    "abort_navigation": {
+      "level": 8,
+      "file": "terms/level_08/abort_navigation.md",
+      "display_name": "`abortNavigation` Utility",
+      "prerequisites": [
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "The routing context where this utility is exclusively invoked."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The routing layouts guarded by this check."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "The routing context where this utility is used."
+        },
+        {
+          "term": "error_vue",
+          "module": "10-nuxtjs",
+          "description": "The global page layout that renders aborted error objects."
+        }
+      ]
+    },
+    "global_vs_named_middleware": {
+      "level": 8,
+      "file": "terms/level_08/global_vs_named_middleware.md",
+      "display_name": "Global vs Named Middleware",
+      "prerequisites": [
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "The overarching concept of intercepting Vue routing."
+        },
+        {
+          "term": "dynamic_routes",
+          "module": "10-nuxtjs",
+          "description": "Understanding route paths and structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The macro used to attach Named Middleware to a specific page."
+        },
+        {
+          "term": "route_middleware",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Route Middleware."
+        }
+      ]
+    },
+    "plugins_directory": {
+      "level": 8,
+      "file": "terms/level_08/plugins_directory.md",
+      "display_name": "`plugins/` Directory",
+      "prerequisites": [
+        {
+          "term": "use_nuxt_app",
+          "module": "10-nuxtjs",
+          "description": "The composable used to access the helpers injected by these plugins."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The Vue context hosting plugin initialization blocks."
+        }
+      ],
+      "related": [
+        {
+          "term": "vue_vs_nuxt_plugins",
+          "module": "10-nuxtjs",
+          "description": "Understanding how to specifically attach standard Vue plugins."
+        },
+        {
+          "term": "use_nuxt_app",
+          "module": "10-nuxtjs",
+          "description": "How you retrieve the provided `$helpers`."
+        }
+      ]
+    },
+    "route_middleware": {
+      "level": 8,
+      "file": "terms/level_08/route_middleware.md",
+      "display_name": "Route Middleware",
+      "prerequisites": [
+        {
+          "term": "server_middleware",
+          "module": "10-nuxtjs",
+          "description": "It is critical to understand that Route Middleware is fundamentally different from Server Middleware."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "The destinations that Route Middleware protects."
+        }
+      ],
+      "related": [
+        {
+          "term": "global_vs_named_middleware",
+          "module": "10-nuxtjs",
+          "description": "The two ways to apply these functions."
+        },
+        {
+          "term": "pages_directory",
+          "module": "10-nuxtjs",
+          "description": "Where middleware is applied via `definePageMeta`."
+        },
+        {
+          "term": "define_page_meta",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `definePageMeta` Compiler Macro."
+        },
+        {
+          "term": "use_route_router",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `useRoute` & `useRouter` Hooks."
+        },
+        {
+          "term": "server_middleware",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Server Middleware."
+        },
+        {
+          "term": "abort_navigation",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `abortNavigation` Utility."
+        }
+      ]
+    },
+    "route_rules": {
+      "level": 8,
+      "file": "terms/level_08/route_rules.md",
+      "display_name": "Route Rules Configuration",
+      "prerequisites": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "Where route rules are defined."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The default rendering mode that Route Rules can override."
+        }
+      ],
+      "related": [
+        {
+          "term": "hybrid_rendering",
+          "module": "10-nuxtjs",
+          "description": "The architectural pattern that Route Rules enables."
+        },
+        {
+          "term": "ssg",
+          "module": "10-nuxtjs",
+          "description": "The `prerender: true` rule."
+        },
+        {
+          "term": "spa",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Single Page Application (SPA) Mode."
+        }
+      ]
+    },
+    "vue_vs_nuxt_plugins": {
+      "level": 8,
+      "file": "terms/level_08/vue_vs_nuxt_plugins.md",
+      "display_name": "Vue Plugins vs Nuxt Plugins",
+      "prerequisites": [
+        {
+          "term": "plugins_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder where both types of plugins are initialized."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "The standard Vue application environment."
+        }
+      ],
+      "related": [
+        {
+          "term": "plugins_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder where these files must be placed."
+        },
+        {
+          "term": "use_nuxt_app",
+          "module": "10-nuxtjs",
+          "description": "The parent object that holds `.vueApp`."
+        }
+      ]
+    },
+    "esr": {
+      "level": 9,
+      "file": "terms/level_09/esr.md",
+      "display_name": "Edge-Side Rendering (ESR)",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The compiler engine that enables deployment to Edge runtimes."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The server-side rendering logic executed at the edge nodes."
+        }
+      ],
+      "related": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The engine that compiles the edge-compatible output."
+        },
+        {
+          "term": "hybrid_rendering",
+          "module": "10-nuxtjs",
+          "description": "The routing system that coordinates edge caching."
+        },
+        {
+          "term": "edge_deployment",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Edge Deployment."
+        }
+      ]
+    },
+    "hybrid_rendering": {
+      "level": 9,
+      "file": "terms/level_09/hybrid_rendering.md",
+      "display_name": "Hybrid Rendering",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The default rendering strategy."
+        },
+        {
+          "term": "spa",
+          "module": "10-nuxtjs",
+          "description": "The strategy that skips the server."
+        },
+        {
+          "term": "ssg",
+          "module": "10-nuxtjs",
+          "description": "The strategy that pre-builds HTML."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_rules",
+          "module": "10-nuxtjs",
+          "description": "The syntax used to configure Hybrid Rendering."
+        },
+        {
+          "term": "esr",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Edge-Side Rendering (ESR)."
+        }
+      ]
+    },
+    "nuxt_modules": {
+      "level": 9,
+      "file": "terms/level_09/nuxt_modules.md",
+      "display_name": "Nuxt Modules System",
+      "prerequisites": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "The file where modules are registered."
+        },
+        {
+          "term": "vue_vs_nuxt_plugins",
+          "module": "10-nuxtjs",
+          "description": "The difference between simple plugins and Nuxt Modules."
+        }
+      ],
+      "related": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "Where modules are registered."
+        },
+        {
+          "term": "pinia",
+          "module": "10-nuxtjs",
+          "description": "An example of a tool that is installed via a Nuxt Module."
+        }
+      ]
+    },
+    "nuxt_server_components": {
+      "level": 9,
+      "file": "terms/level_09/nuxt_server_components.md",
+      "display_name": "Nuxt Server Components (Islands)",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The server-rendering execution pipeline used to build these static nodes."
+        },
+        {
+          "term": "lazy_components",
+          "module": "10-nuxtjs",
+          "description": "Understanding dynamic import patterns for bundles."
+        }
+      ],
+      "related": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that compiles server components."
+        },
+        {
+          "term": "lazy_components",
+          "module": "10-nuxtjs",
+          "description": "Dynamic code-splitting for interactive components."
+        }
+      ]
+    },
+    "spa": {
+      "level": 9,
+      "file": "terms/level_09/spa.md",
+      "display_name": "Single Page Application (SPA) Mode",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The default rendering mode in Nuxt, which is the exact opposite of an SPA."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The client-side bootstrapping process."
+        }
+      ],
+      "related": [
+        {
+          "term": "route_rules",
+          "module": "10-nuxtjs",
+          "description": "How to enable SPA mode for only *specific* URLs instead of the whole app."
+        },
+        {
+          "term": "ssg",
+          "module": "10-nuxtjs",
+          "description": "Another non-Node.js deployment strategy, but with perfect SEO."
+        }
+      ]
+    },
+    "ssg": {
+      "level": 9,
+      "file": "terms/level_09/ssg.md",
+      "display_name": "Static Site Generation (SSG)",
+      "prerequisites": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "SSR renders HTML on-demand. SSG renders HTML ahead of time."
+        },
+        {
+          "term": "hydration",
+          "module": "10-nuxtjs",
+          "description": "The client-side bootstrapping process that still runs after loading static HTML."
+        }
+      ],
+      "related": [
+        {
+          "term": "spa",
+          "module": "10-nuxtjs",
+          "description": "The other rendering mode that doesn't require a Node server, but sacrifices SEO."
+        },
+        {
+          "term": "route_rules",
+          "module": "10-nuxtjs",
+          "description": "How to apply `prerender: true` to specific routes instead of the whole app."
+        },
+        {
+          "term": "output_directory",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `.output/` Directory."
+        }
+      ]
+    },
+    "vue_suspense": {
+      "level": 9,
+      "file": "terms/level_09/vue_suspense.md",
+      "display_name": "Vue Suspense Integration",
+      "prerequisites": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The asynchronous composables that Suspense listens to."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "Specifically, the use of top-level `await` inside `<script setup>`."
+        }
+      ],
+      "related": [
+        {
+          "term": "use_fetch",
+          "module": "10-nuxtjs",
+          "description": "The tool used to interact with the Suspense boundary."
+        }
+      ]
+    },
+    "create_error": {
+      "level": 10,
+      "file": "terms/level_10/create_error.md",
+      "display_name": "`createError`, `showError` & `clearError`",
+      "prerequisites": [
+        {
+          "term": "h3_handlers",
+          "module": "10-nuxtjs",
+          "description": "The underlying server engine that formats these errors."
+        }
+      ],
+      "related": [
+        {
+          "term": "error_vue",
+          "module": "10-nuxtjs",
+          "description": "What the user sees when these functions are executed."
+        }
+      ]
+    },
+    "edge_deployment": {
+      "level": 10,
+      "file": "terms/level_10/edge_deployment.md",
+      "display_name": "Edge Deployment",
+      "prerequisites": [
+        {
+          "term": "esr",
+          "module": "10-nuxtjs",
+          "description": "The rendering logic that Edge Deployment runs."
+        },
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The build engine that compiles edge targets."
+        }
+      ],
+      "related": [
+        {
+          "term": "esr",
+          "module": "10-nuxtjs",
+          "description": "The architecture used to execute edge code."
+        },
+        {
+          "term": "standalone_build",
+          "module": "10-nuxtjs",
+          "description": "The centralized alternative to edge deployments."
+        },
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Nitro Engine."
+        }
+      ]
+    },
+    "env_variables": {
+      "level": 10,
+      "file": "terms/level_10/env_variables.md",
+      "display_name": "Environment Variables (`.env`)",
+      "prerequisites": [
+        {
+          "term": "runtime_config",
+          "module": "10-nuxtjs",
+          "description": "The only secure way to access the variables defined in this `.env` file."
+        },
+        {
+          "term": "standalone_build",
+          "module": "10-nuxtjs",
+          "description": "Understanding how environment variables inject configurations at runtime."
+        }
+      ],
+      "related": [
+        {
+          "term": "runtime_config",
+          "module": "10-nuxtjs",
+          "description": "The feature that consumes the `.env` file."
+        },
+        {
+          "term": "standalone_build",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Standalone Build (Node server)."
+        }
+      ]
+    },
+    "error_vue": {
+      "level": 10,
+      "file": "terms/level_10/error_vue.md",
+      "display_name": "`error.vue` & `useError`",
+      "prerequisites": [
+        {
+          "term": "app_vue",
+          "module": "10-nuxtjs",
+          "description": "The root application instance `error.vue` completely replaces."
+        },
+        {
+          "term": "create_error",
+          "module": "10-nuxtjs",
+          "description": "The utility functions that trigger this page."
+        }
+      ],
+      "related": [
+        {
+          "term": "nuxt_error_boundary",
+          "module": "10-nuxtjs",
+          "description": "How to handle non-fatal errors without destroying the whole page layout."
+        },
+        {
+          "term": "fetching_errors",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Fetching Errors & `clearNuxtData`."
+        },
+        {
+          "term": "abort_navigation",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `abortNavigation` Utility."
+        },
+        {
+          "term": "create_error",
+          "module": "10-nuxtjs",
+          "description": "Related concept: `createError`, `showError` & `clearError`."
+        }
+      ]
+    },
+    "nuxt_devtools": {
+      "level": 10,
+      "file": "terms/level_10/nuxt_devtools.md",
+      "display_name": "Nuxt DevTools",
+      "prerequisites": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "The configuration file where DevTools is enabled or disabled."
+        },
+        {
+          "term": "auto_imports",
+          "module": "10-nuxtjs",
+          "description": "DevTools maps out all active imports to assist code inspection."
+        }
+      ],
+      "related": [
+        {
+          "term": "nuxt_config",
+          "module": "10-nuxtjs",
+          "description": "The central configuration hub."
+        },
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The server engine that DevTools monitors."
+        }
+      ]
+    },
+    "nuxt_error_boundary": {
+      "level": 10,
+      "file": "terms/level_10/nuxt_error_boundary.md",
+      "display_name": "`<NuxtErrorBoundary>` Component",
+      "prerequisites": [
+        {
+          "term": "error_vue",
+          "module": "10-nuxtjs",
+          "description": "The global fatal error handler that `<NuxtErrorBoundary>` explicitly tries to avoid."
+        },
+        {
+          "term": "composition_api_context",
+          "module": "10-nuxtjs",
+          "description": "Understanding slots and rendering boundaries."
+        }
+      ],
+      "related": [
+        {
+          "term": "error_vue",
+          "module": "10-nuxtjs",
+          "description": "The global equivalent that handles fatal, unrecoverable errors."
+        }
+      ]
+    },
+    "output_directory": {
+      "level": 10,
+      "file": "terms/level_10/output_directory.md",
+      "display_name": "`.output/` Directory",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The engine responsible for building the server component of this directory."
+        },
+        {
+          "term": "ssg",
+          "module": "10-nuxtjs",
+          "description": "The rendering strategy that outputs static files to a subfolder here."
+        }
+      ],
+      "related": [
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The process that requires `.output/server/index.mjs` to run."
+        },
+        {
+          "term": "ssg",
+          "module": "10-nuxtjs",
+          "description": "The process that only requires `.output/public/`."
+        },
+        {
+          "term": "standalone_build",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Standalone Build (Node server)."
+        }
+      ]
+    },
+    "standalone_build": {
+      "level": 10,
+      "file": "terms/level_10/standalone_build.md",
+      "display_name": "Standalone Build (Node server)",
+      "prerequisites": [
+        {
+          "term": "nitro_engine",
+          "module": "10-nuxtjs",
+          "description": "The engine that compiles the standalone server bundle."
+        },
+        {
+          "term": "universal_rendering",
+          "module": "10-nuxtjs",
+          "description": "The rendering mode that requires a running server to operate."
+        }
+      ],
+      "related": [
+        {
+          "term": "output_directory",
+          "module": "10-nuxtjs",
+          "description": "The folder where the standalone build is stored."
+        },
+        {
+          "term": "env_variables",
+          "module": "10-nuxtjs",
+          "description": "Configuring production values for the standalone server."
+        },
+        {
+          "term": "edge_deployment",
+          "module": "10-nuxtjs",
+          "description": "Related concept: Edge Deployment."
+        }
+      ]
+    }
+  }
+}

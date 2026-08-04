@@ -1,0 +1,671 @@
+{
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "total_edges": 83,
+  "edges": [
+    {
+      "source_term": "box_model",
+      "source_module": "02-css",
+      "target_term": "element_vs_tag",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "It doesn't matter if the element is a tiny `<span>` or a massive `<div>`, they are all boxes."
+    },
+    {
+      "source_term": "css",
+      "source_module": "02-css",
+      "target_term": "html",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "You must have an HTML structure before you can style it."
+    },
+    {
+      "source_term": "flex_parent",
+      "source_module": "02-css",
+      "target_term": "tree_structure",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "Flexbox operates strictly on a Parent/Child relationship."
+    },
+    {
+      "source_term": "list_style",
+      "source_module": "02-css",
+      "target_term": "lists",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The HTML elements that this CSS property targets."
+    },
+    {
+      "source_term": "list_style",
+      "source_module": "02-css",
+      "target_term": "lists",
+      "target_module": "01-html",
+      "type": "related",
+      "description": "The HTML elements this applies to."
+    },
+    {
+      "source_term": "opacity",
+      "source_module": "02-css",
+      "target_term": "tree_structure",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "Because `opacity` aggressively affects the Parent and all of its Children!"
+    },
+    {
+      "source_term": "percentages",
+      "source_module": "02-css",
+      "target_term": "tree_structure",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "Percentages rely entirely on the Parent-Child relationship."
+    },
+    {
+      "source_term": "selectors",
+      "source_module": "02-css",
+      "target_term": "class",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The HTML attribute targeted by Class selectors."
+    },
+    {
+      "source_term": "selectors",
+      "source_module": "02-css",
+      "target_term": "id",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The HTML attribute targeted by ID selectors."
+    },
+    {
+      "source_term": "text_align_decoration",
+      "source_module": "02-css",
+      "target_term": "a",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The HTML element that most commonly uses `text-decoration`."
+    },
+    {
+      "source_term": "white_space",
+      "source_module": "02-css",
+      "target_term": "whitespace_collapse",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "You must understand the browser's default behavior of crushing all spaces into a single space!"
+    },
+    {
+      "source_term": "dynamic_weak_typing",
+      "source_module": "03-javascript",
+      "target_term": "typescript",
+      "target_module": "08-typescript",
+      "type": "related",
+      "description": "Statically typed superset of JavaScript."
+    },
+    {
+      "source_term": "node_js",
+      "source_module": "03-javascript",
+      "target_term": "api",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "Node.js provides APIs for file systems and networking instead of DOM manipulation."
+    },
+    {
+      "source_term": "callbacks",
+      "source_module": "05-nodejs",
+      "target_term": "promises",
+      "target_module": "04-apis",
+      "type": "related",
+      "description": "The modern solution that completely eliminated Callback Hell."
+    },
+    {
+      "source_term": "http_module",
+      "source_module": "05-nodejs",
+      "target_term": "http_https",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The protocol this module implements."
+    },
+    {
+      "source_term": "jwt",
+      "source_module": "05-nodejs",
+      "target_term": "json",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The entire token is just encoded JSON data."
+    },
+    {
+      "source_term": "jwt",
+      "source_module": "05-nodejs",
+      "target_term": "rest",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "JWTs are what allow REST APIs to remain \"Stateless\"."
+    },
+    {
+      "source_term": "package_json",
+      "source_module": "05-nodejs",
+      "target_term": "json",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The syntax format of this file."
+    },
+    {
+      "source_term": "req_res",
+      "source_module": "05-nodejs",
+      "target_term": "json",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "How you usually send data back using `res`."
+    },
+    {
+      "source_term": "rest_api",
+      "source_module": "05-nodejs",
+      "target_term": "json",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The language REST APIs speak."
+    },
+    {
+      "source_term": "semantic_versioning",
+      "source_module": "05-nodejs",
+      "target_term": "versioning",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The same concept, but applied to downloadable code packages."
+    },
+    {
+      "source_term": "sql_vs_nosql",
+      "source_module": "05-nodejs",
+      "target_term": "json",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The data structure that powers NoSQL databases."
+    },
+    {
+      "source_term": "unhandled_rejections",
+      "source_module": "05-nodejs",
+      "target_term": "promises",
+      "target_module": "04-apis",
+      "type": "prerequisite",
+      "description": "The asynchronous objects that are failing."
+    },
+    {
+      "source_term": "client_side_routing",
+      "source_module": "06-react",
+      "target_term": "dom",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "What routing is actually doing under the hood."
+    },
+    {
+      "source_term": "client_side_routing",
+      "source_module": "06-react",
+      "target_term": "spa",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The architecture that requires Client-Side routing."
+    },
+    {
+      "source_term": "client_side_routing",
+      "source_module": "06-react",
+      "target_term": "spa",
+      "target_module": "03-javascript",
+      "type": "related",
+      "description": "The parent architecture."
+    },
+    {
+      "source_term": "error_boundaries",
+      "source_module": "06-react",
+      "target_term": "error",
+      "target_module": "09-nextjs",
+      "type": "related",
+      "description": "The Next.js framework has built-in Error Boundaries disguised as simple files."
+    },
+    {
+      "source_term": "hoc",
+      "source_module": "06-react",
+      "target_term": "higher_order_function",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The JavaScript concept this pattern is named after."
+    },
+    {
+      "source_term": "ssr",
+      "source_module": "06-react",
+      "target_term": "spa",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The opposite of SSR (Client-Side Rendering)."
+    },
+    {
+      "source_term": "suspense",
+      "source_module": "06-react",
+      "target_term": "rsc",
+      "target_module": "09-nextjs",
+      "type": "related",
+      "description": "The modern React architecture that relies heavily on Suspense for data fetching."
+    },
+    {
+      "source_term": "declarative_rendering",
+      "source_module": "07-vue",
+      "target_term": "dom",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The imperative approach that declarative rendering replaces."
+    },
+    {
+      "source_term": "teleport",
+      "source_module": "07-vue",
+      "target_term": "dom",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The physical HTML structure we are breaking out of."
+    },
+    {
+      "source_term": "template_syntax",
+      "source_module": "07-vue",
+      "target_term": "html",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "Vue templates are just extended HTML."
+    },
+    {
+      "source_term": "virtual_dom",
+      "source_module": "07-vue",
+      "target_term": "dom",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The slow, expensive API the Virtual DOM is trying to avoid."
+    },
+    {
+      "source_term": "vue_instance",
+      "source_module": "07-vue",
+      "target_term": "dom",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "What the Vue Instance is ultimately controlling."
+    },
+    {
+      "source_term": "access_modifiers",
+      "source_module": "08-typescript",
+      "target_term": "class",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The runtime equivalent of `private`."
+    },
+    {
+      "source_term": "classes",
+      "source_module": "08-typescript",
+      "target_term": "class",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The runtime feature TypeScript is building upon."
+    },
+    {
+      "source_term": "keyof",
+      "source_module": "08-typescript",
+      "target_term": "typeof",
+      "target_module": "03-javascript",
+      "type": "related",
+      "description": "Used alongside `keyof` to read JS objects."
+    },
+    {
+      "source_term": "modules",
+      "source_module": "08-typescript",
+      "target_term": "modules",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The fundamental standard that TypeScript is built upon."
+    },
+    {
+      "source_term": "primitive_types",
+      "source_module": "08-typescript",
+      "target_term": "primitive_types",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The runtime types these annotations protect."
+    },
+    {
+      "source_term": "returntype",
+      "source_module": "08-typescript",
+      "target_term": "typeof",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "Often used in conjunction with this utility."
+    },
+    {
+      "source_term": "this_typing",
+      "source_module": "08-typescript",
+      "target_term": "this_keyword",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The notoriously confusing JS feature being typed."
+    },
+    {
+      "source_term": "typeof",
+      "source_module": "08-typescript",
+      "target_term": "typeof",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The runtime version of this keyword."
+    },
+    {
+      "source_term": "form_actions",
+      "source_module": "09-nextjs",
+      "target_term": "form",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The standard Web API this builds upon."
+    },
+    {
+      "source_term": "loading",
+      "source_module": "09-nextjs",
+      "target_term": "suspense",
+      "target_module": "06-react",
+      "type": "related",
+      "description": "The underlying React technology."
+    },
+    {
+      "source_term": "metadata_api",
+      "source_module": "09-nextjs",
+      "target_term": "head",
+      "target_module": "01-html",
+      "type": "prerequisite",
+      "description": "The tags being generated."
+    },
+    {
+      "source_term": "auto_imports",
+      "source_module": "10-nuxtjs",
+      "target_term": "modules",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The manual ES module imports system being bypassed."
+    },
+    {
+      "source_term": "composables_directory",
+      "source_module": "10-nuxtjs",
+      "target_term": "composables",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "The core Vue concept of composable state logic wrappers."
+    },
+    {
+      "source_term": "composition_api_context",
+      "source_module": "10-nuxtjs",
+      "target_term": "composition_api",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "The core Vue paradigm."
+    },
+    {
+      "source_term": "composition_api_context",
+      "source_module": "10-nuxtjs",
+      "target_term": "reactive",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "The mechanism for object structures."
+    },
+    {
+      "source_term": "composition_api_context",
+      "source_module": "10-nuxtjs",
+      "target_term": "ref",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "The mechanism for primitive values."
+    },
+    {
+      "source_term": "dollar_fetch",
+      "source_module": "10-nuxtjs",
+      "target_term": "async_await",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "For asynchronous control flow."
+    },
+    {
+      "source_term": "express_js",
+      "source_module": "10-nuxtjs",
+      "target_term": "nodejs",
+      "target_module": "05-nodejs",
+      "type": "prerequisite",
+      "description": "The execution host for standard Express servers."
+    },
+    {
+      "source_term": "layouts_directory",
+      "source_module": "10-nuxtjs",
+      "target_term": "slots",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "The Vue mechanism used to inject page templates."
+    },
+    {
+      "source_term": "nitro_engine",
+      "source_module": "10-nuxtjs",
+      "target_term": "nodejs",
+      "target_module": "05-nodejs",
+      "type": "prerequisite",
+      "description": "The traditional execution host Nitro abstractly runs on or replaces."
+    },
+    {
+      "source_term": "nuxt_3_overview",
+      "source_module": "10-nuxtjs",
+      "target_term": "nodejs",
+      "target_module": "05-nodejs",
+      "type": "prerequisite",
+      "description": "The server runtime hosting the application."
+    },
+    {
+      "source_term": "nuxt_config",
+      "source_module": "10-nuxtjs",
+      "target_term": "modules",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "Understanding the export format of the configuration object."
+    },
+    {
+      "source_term": "nuxtlink_component",
+      "source_module": "10-nuxtjs",
+      "target_term": "directives",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "How basic template bindings are applied."
+    },
+    {
+      "source_term": "runtime_config",
+      "source_module": "10-nuxtjs",
+      "target_term": "nodejs",
+      "target_module": "05-nodejs",
+      "type": "prerequisite",
+      "description": "The server environment hosting standard process configs."
+    },
+    {
+      "source_term": "universal_rendering",
+      "source_module": "10-nuxtjs",
+      "target_term": "component_lifecycle",
+      "target_module": "07-vue",
+      "type": "prerequisite",
+      "description": "Understanding when component setups run."
+    },
+    {
+      "source_term": "use_async_data",
+      "source_module": "10-nuxtjs",
+      "target_term": "promise",
+      "target_module": "03-javascript",
+      "type": "prerequisite",
+      "description": "The underlying asynchronous callback runtime wrapper."
+    },
+    {
+      "source_term": "auth",
+      "source_module": "13-mongodb",
+      "target_term": "roles_permissions",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational security models."
+    },
+    {
+      "source_term": "binary_data",
+      "source_module": "13-mongodb",
+      "target_term": "uuid_type",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational binary identifier equivalents."
+    },
+    {
+      "source_term": "binary_data",
+      "source_module": "13-mongodb",
+      "target_term": "uuid_type",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Relational equivalents."
+    },
+    {
+      "source_term": "graph_lookup",
+      "source_module": "13-mongodb",
+      "target_term": "recursive_cte",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational recursive joins."
+    },
+    {
+      "source_term": "graph_lookup",
+      "source_module": "13-mongodb",
+      "target_term": "recursive_cte",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Relational recursive joins."
+    },
+    {
+      "source_term": "index_builds",
+      "source_module": "13-mongodb",
+      "target_term": "replication",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "The replica set architecture."
+    },
+    {
+      "source_term": "index_builds",
+      "source_module": "13-mongodb",
+      "target_term": "replication",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Cluster architecture."
+    },
+    {
+      "source_term": "index_concept",
+      "source_module": "13-mongodb",
+      "target_term": "index_concept",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational index conceptual foundations."
+    },
+    {
+      "source_term": "mongodb_vs_postgresql",
+      "source_module": "13-mongodb",
+      "target_term": "database",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational paradigm."
+    },
+    {
+      "source_term": "mongodb_vs_postgresql",
+      "source_module": "13-mongodb",
+      "target_term": "database",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Relational paradigm."
+    },
+    {
+      "source_term": "sharding",
+      "source_module": "13-mongodb",
+      "target_term": "database",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational database structures."
+    },
+    {
+      "source_term": "snapshot_isolation",
+      "source_module": "13-mongodb",
+      "target_term": "isolation_levels",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational isolation levels."
+    },
+    {
+      "source_term": "snapshot_isolation",
+      "source_module": "13-mongodb",
+      "target_term": "isolation_levels",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Relational isolation levels."
+    },
+    {
+      "source_term": "timestamp_vs_date",
+      "source_module": "13-mongodb",
+      "target_term": "replication",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "The sync architecture context."
+    },
+    {
+      "source_term": "timestamp_vs_date",
+      "source_module": "13-mongodb",
+      "target_term": "replication",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "The replication pipeline."
+    },
+    {
+      "source_term": "views",
+      "source_module": "13-mongodb",
+      "target_term": "view",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational view abstractions."
+    },
+    {
+      "source_term": "views",
+      "source_module": "13-mongodb",
+      "target_term": "view",
+      "target_module": "12-postgres",
+      "type": "related",
+      "description": "Relational views."
+    },
+    {
+      "source_term": "graph_vs_joins",
+      "source_module": "14-surrealdb",
+      "target_term": "database",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational SQL JOIN engines."
+    },
+    {
+      "source_term": "multi_model_database",
+      "source_module": "14-surrealdb",
+      "target_term": "database",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational database models."
+    },
+    {
+      "source_term": "multi_model_database",
+      "source_module": "14-surrealdb",
+      "target_term": "database_context",
+      "target_module": "13-mongodb",
+      "type": "prerequisite",
+      "description": "Document database models."
+    },
+    {
+      "source_term": "surrealdb_vs_postgres_mongo",
+      "source_module": "14-surrealdb",
+      "target_term": "database",
+      "target_module": "12-postgres",
+      "type": "prerequisite",
+      "description": "Relational structures."
+    },
+    {
+      "source_term": "surrealdb_vs_postgres_mongo",
+      "source_module": "14-surrealdb",
+      "target_term": "database_context",
+      "target_module": "13-mongodb",
+      "type": "prerequisite",
+      "description": "Document structures."
+    }
+  ]
+}

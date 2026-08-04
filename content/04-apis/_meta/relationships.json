@@ -1,0 +1,3604 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "04-apis",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "client_server_model": {
+      "level": 1,
+      "file": "terms/level_01/client_server_model.md",
+      "display_name": "Client-Server Model",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The specific language the Client and Server use to talk to each other."
+        },
+        {
+          "term": "api",
+          "module": "04-apis",
+          "description": "The waiter in the restaurant metaphor."
+        }
+      ]
+    },
+    "dns": {
+      "level": 1,
+      "file": "terms/level_01/dns.md",
+      "display_name": "DNS (Domain Name System)",
+      "prerequisites": [
+        {
+          "term": "ip_address_port",
+          "module": "04-apis",
+          "description": "The network numbering addressing system."
+        }
+      ],
+      "related": [
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "The string structure containing the host domain resolved by DNS."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The web protocols initiated immediately after DNS resolves the destination IP address."
+        },
+        {
+          "term": "ip_address_port",
+          "module": "04-apis",
+          "description": "Related concept: IP Address & Port."
+        }
+      ]
+    },
+    "http_https": {
+      "level": 1,
+      "file": "terms/level_01/http_https.md",
+      "display_name": "HTTP / HTTPS",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "HTTP is the language these two entities use to talk."
+        }
+      ],
+      "related": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "How HTTP is used in practice."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "An architectural style built entirely on top of HTTP."
+        },
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "Related concept: Client-Server Model."
+        },
+        {
+          "term": "dns",
+          "module": "04-apis",
+          "description": "Related concept: DNS (Domain Name System)."
+        },
+        {
+          "term": "ip_address_port",
+          "module": "04-apis",
+          "description": "Related concept: IP Address & Port."
+        },
+        {
+          "term": "ssl_tls_handshake",
+          "module": "04-apis",
+          "description": "Related concept: SSL/TLS & the Handshake."
+        },
+        {
+          "term": "tcp_ip",
+          "module": "04-apis",
+          "description": "Related concept: TCP/IP (high-level)."
+        }
+      ]
+    },
+    "ip_address_port": {
+      "level": 1,
+      "file": "terms/level_01/ip_address_port.md",
+      "display_name": "IP Address & Port",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "The core network communication concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "dns",
+          "module": "04-apis",
+          "description": "The phonebook system mapping user domains to IP addresses."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The application layer protocols routing through ports `80` and `443`."
+        }
+      ]
+    },
+    "json": {
+      "level": 1,
+      "file": "terms/level_01/json.md",
+      "display_name": "JSON (JavaScript Object Notation)",
+      "prerequisites": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "HTTP is the envelope; JSON is the letter inside the envelope."
+        }
+      ],
+      "related": [
+        {
+          "term": "request_body",
+          "module": "04-apis",
+          "description": "JSON is the most common format placed inside the Body of an HTTP request."
+        },
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "How we extract JSON out of a network response using `.json()`."
+        },
+        {
+          "term": "api",
+          "module": "04-apis",
+          "description": "Related concept: API (Application Programming Interface)."
+        },
+        {
+          "term": "xml",
+          "module": "04-apis",
+          "description": "Related concept: XML."
+        }
+      ]
+    },
+    "latency_bandwidth": {
+      "level": 1,
+      "file": "terms/level_01/latency_bandwidth.md",
+      "display_name": "Latency & Bandwidth",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "The request-response foundation."
+        }
+      ],
+      "related": [
+        {
+          "term": "caching",
+          "module": "04-apis",
+          "description": "Storing data locally to bypass network latency entirely."
+        },
+        {
+          "term": "pagination",
+          "module": "04-apis",
+          "description": "Limiting API response payload sizes to reduce bandwidth usage."
+        },
+        {
+          "term": "promise_all",
+          "module": "04-apis",
+          "description": "Related concept: Promise.all / Parallel Requests."
+        }
+      ]
+    },
+    "request_response": {
+      "level": 1,
+      "file": "terms/level_01/request_response.md",
+      "display_name": "Request & Response Lifecycle",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "The two actors in this lifecycle."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The language they are speaking."
+        }
+      ],
+      "related": [
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "How the Server communicates the result of the processing step back to the Client."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The JavaScript function used to trigger this lifecycle manually."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "Related concept: HTTP / HTTPS."
+        }
+      ]
+    },
+    "ssl_tls_handshake": {
+      "level": 1,
+      "file": "terms/level_01/ssl_tls_handshake.md",
+      "display_name": "SSL/TLS & the Handshake",
+      "prerequisites": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The web protocols requiring encryption."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The application protocols secured by SSL/TLS."
+        },
+        {
+          "term": "api_keys",
+          "module": "04-apis",
+          "description": "Authentication tokens that must be sent over HTTPS to prevent interception."
+        }
+      ]
+    },
+    "tcp_ip": {
+      "level": 1,
+      "file": "terms/level_01/tcp_ip.md",
+      "display_name": "TCP/IP (high-level)",
+      "prerequisites": [
+        {
+          "term": "ip_address_port",
+          "module": "04-apis",
+          "description": "The routing coordinates that identify network devices."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "The application protocols that utilize TCP connections to load web pages."
+        },
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The real-time connection protocol that rides directly on top of persistent TCP connections."
+        },
+        {
+          "term": "websocket_handshake",
+          "module": "04-apis",
+          "description": "Related concept: WebSocket Handshake (Upgrade)."
+        }
+      ]
+    },
+    "url_uri": {
+      "level": 1,
+      "file": "terms/level_01/url_uri.md",
+      "display_name": "URL / URI (Uniform Resource Identifier)",
+      "prerequisites": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "URLs almost always start with this protocol."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "How we pass dynamic data directly inside the URL."
+        },
+        {
+          "term": "dns",
+          "module": "04-apis",
+          "description": "Related concept: DNS (Domain Name System)."
+        }
+      ]
+    },
+    "content_negotiation": {
+      "level": 2,
+      "file": "terms/level_02/content_negotiation.md",
+      "display_name": "Content Negotiation (Accept)",
+      "prerequisites": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "The metadata wrapper sent with requests."
+        },
+        {
+          "term": "content_type",
+          "module": "04-apis",
+          "description": "The standard media type format representations."
+        }
+      ],
+      "related": [
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "The resulting data container described by content negotiation."
+        },
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "Sometimes implemented via custom MIME types inside the `Accept` header (e.g. `Accept: application/vnd.myapi.v2+json`)."
+        }
+      ]
+    },
+    "content_type": {
+      "level": 2,
+      "file": "terms/level_02/content_type.md",
+      "display_name": "Content-Type & MIME Types",
+      "prerequisites": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "Metadata wrappers sent with HTTP payloads."
+        }
+      ],
+      "related": [
+        {
+          "term": "request_body",
+          "module": "04-apis",
+          "description": "The raw message payload described by Content-Type."
+        },
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The process of transforming objects into raw MIME formats."
+        },
+        {
+          "term": "formdata",
+          "module": "04-apis",
+          "description": "Related concept: FormData & Multipart Uploads."
+        }
+      ]
+    },
+    "http_headers": {
+      "level": 2,
+      "file": "terms/level_02/http_headers.md",
+      "display_name": "HTTP Headers",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Headers are attached to both halves of this cycle."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The server uses Headers to announce that the data is JSON."
+        }
+      ],
+      "related": [
+        {
+          "term": "request_body",
+          "module": "04-apis",
+          "description": "The data that the Headers are describing."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "Tokens are placed inside the `Authorization` header."
+        },
+        {
+          "term": "cors",
+          "module": "04-apis",
+          "description": "Related concept: CORS (Cross-Origin Resource Sharing)."
+        },
+        {
+          "term": "preflight_request",
+          "module": "04-apis",
+          "description": "Related concept: Preflight Request (OPTIONS)."
+        },
+        {
+          "term": "caching",
+          "module": "04-apis",
+          "description": "Related concept: Caching (ETag, Cache-Control)."
+        },
+        {
+          "term": "sse",
+          "module": "04-apis",
+          "description": "Related concept: Server-Sent Events (SSE)."
+        }
+      ]
+    },
+    "http_methods": {
+      "level": 2,
+      "file": "terms/level_02/http_methods.md",
+      "display_name": "HTTP Methods (Verbs)",
+      "prerequisites": [
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "Methods are the very first word in every HTTP request."
+        },
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "You use a Method to tell the server *what* to do with the URL."
+        }
+      ],
+      "related": [
+        {
+          "term": "crud",
+          "module": "04-apis",
+          "description": "The programming concept that HTTP Methods map to."
+        },
+        {
+          "term": "idempotency",
+          "module": "04-apis",
+          "description": "The mathematical concept explaining why `PUT` and `POST` are treated differently in network retry logic."
+        },
+        {
+          "term": "cors",
+          "module": "04-apis",
+          "description": "Related concept: CORS (Cross-Origin Resource Sharing)."
+        }
+      ]
+    },
+    "idempotent_vs_safe_methods": {
+      "level": 2,
+      "file": "terms/level_02/idempotent_vs_safe_methods.md",
+      "display_name": "Idempotent vs Safe Methods",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "The standard verbs defining request actions."
+        }
+      ],
+      "related": [
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "The architectural constraint requiring requests to carry their own state."
+        },
+        {
+          "term": "crud",
+          "module": "04-apis",
+          "description": "The persistent database actions mapped to HTTP verbs."
+        },
+        {
+          "term": "idempotency_keys",
+          "module": "04-apis",
+          "description": "Related concept: Idempotency Keys."
+        }
+      ]
+    },
+    "query_params": {
+      "level": 2,
+      "file": "terms/level_02/query_params.md",
+      "display_name": "Query Parameters & Path Variables",
+      "prerequisites": [
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "This is an extension of how URLs are structured."
+        },
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "This is primarily used for `GET` requests, which cannot have bodies."
+        }
+      ],
+      "related": [
+        {
+          "term": "request_body",
+          "module": "04-apis",
+          "description": "The alternative way to send data (used for `POST`/`PUT`)."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architectural style that dictates when to use Path vs Query params."
+        },
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "Related concept: URL / URI (Uniform Resource Identifier)."
+        },
+        {
+          "term": "url_encoding",
+          "module": "04-apis",
+          "description": "Related concept: URL Encoding (Percent-Encoding)."
+        },
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "Related concept: Endpoints & Resources."
+        },
+        {
+          "term": "pagination",
+          "module": "04-apis",
+          "description": "Related concept: Pagination (Offset vs. Cursor)."
+        }
+      ]
+    },
+    "request_body": {
+      "level": 2,
+      "file": "terms/level_02/request_body.md",
+      "display_name": "Request Body & Payloads",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "Not all methods are allowed to have a body!"
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The most common format for a payload."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "How you tell the server what format the body is in (e.g., `Content-Type`)."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The format you must convert your payload into."
+        },
+        {
+          "term": "content_type",
+          "module": "04-apis",
+          "description": "Related concept: Content-Type & MIME Types."
+        },
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "Related concept: Query Parameters & Path Variables."
+        },
+        {
+          "term": "url_encoding",
+          "module": "04-apis",
+          "description": "Related concept: URL Encoding (Percent-Encoding)."
+        }
+      ]
+    },
+    "status_codes": {
+      "level": 2,
+      "file": "terms/level_02/status_codes.md",
+      "display_name": "HTTP Status Codes",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Status codes are the core feature of the Response phase."
+        }
+      ],
+      "related": [
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "How we check the status code in JavaScript using `response.status` and `response.ok`."
+        },
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Related concept: Request & Response Lifecycle."
+        },
+        {
+          "term": "caching",
+          "module": "04-apis",
+          "description": "Related concept: Caching (ETag, Cache-Control)."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "Related concept: Rate Limiting (429 Too Many Requests)."
+        }
+      ]
+    },
+    "url_encoding": {
+      "level": 2,
+      "file": "terms/level_02/url_encoding.md",
+      "display_name": "URL Encoding (Percent-Encoding)",
+      "prerequisites": [
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "The string structure describing resource locations."
+        },
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "The parameters appended to URL query strings."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "The URL data inputs escaped by percent-encoding."
+        },
+        {
+          "term": "request_body",
+          "module": "04-apis",
+          "description": "Un-encoded data payloads that do not require URL character escaping."
+        }
+      ]
+    },
+    "api": {
+      "level": 3,
+      "file": "terms/level_03/api.md",
+      "display_name": "API (Application Programming Interface)",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "The API is the bridge between these two entities."
+        }
+      ],
+      "related": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The most popular architectural style for building Web APIs."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The food the waiter carries back from the kitchen."
+        },
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "Related concept: Client-Server Model."
+        }
+      ]
+    },
+    "crud": {
+      "level": 3,
+      "file": "terms/level_03/crud.md",
+      "display_name": "CRUD Operations",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "CRUD operations map directly to HTTP verbs."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "Building a REST API essentially means building a CRUD interface for your database."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "The tools we use to execute CRUD over the network."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architecture that enforces this mapping."
+        },
+        {
+          "term": "idempotent_vs_safe_methods",
+          "module": "04-apis",
+          "description": "Related concept: Idempotent vs Safe Methods."
+        },
+        {
+          "term": "resource_naming",
+          "module": "04-apis",
+          "description": "Related concept: Resource Naming & URI Design."
+        },
+        {
+          "term": "richardson_maturity_model",
+          "module": "04-apis",
+          "description": "Related concept: Richardson Maturity Model."
+        }
+      ]
+    },
+    "endpoints_resources": {
+      "level": 3,
+      "file": "terms/level_03/endpoints_resources.md",
+      "display_name": "Endpoints & Resources",
+      "prerequisites": [
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "Endpoints are just specific URLs on a server."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "REST relies heavily on defining resources as nouns."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "The dynamic IDs injected into endpoints to target specific resources."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architecture that dictates endpoints must be nouns."
+        },
+        {
+          "term": "hateoas",
+          "module": "04-apis",
+          "description": "Related concept: HATEOAS."
+        },
+        {
+          "term": "richardson_maturity_model",
+          "module": "04-apis",
+          "description": "Related concept: Richardson Maturity Model."
+        },
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "Related concept: API Versioning (v1, v2)."
+        }
+      ]
+    },
+    "hateoas": {
+      "level": 3,
+      "file": "terms/level_03/hateoas.md",
+      "display_name": "HATEOAS",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The fundamental web service architecture style."
+        },
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "The rule requiring requests to hold complete context."
+        }
+      ],
+      "related": [
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "The target nodes navigated via hypermedia links."
+        },
+        {
+          "term": "richardson_maturity_model",
+          "module": "04-apis",
+          "description": "The grading scale where HATEOAS represents the highest level of REST design."
+        }
+      ]
+    },
+    "resource_naming": {
+      "level": 3,
+      "file": "terms/level_03/resource_naming.md",
+      "display_name": "Resource Naming & URI Design",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architectural style for web services."
+        },
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "The entry points representing data."
+        }
+      ],
+      "related": [
+        {
+          "term": "crud",
+          "module": "04-apis",
+          "description": "The database actions that align with RESTful resource endpoints."
+        },
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "The strategy of prefixing paths with versions (e.g. `/v1/users`)."
+        },
+        {
+          "term": "overfetching_underfetching",
+          "module": "04-apis",
+          "description": "Related concept: Over-fetching vs Under-fetching."
+        }
+      ]
+    },
+    "rest": {
+      "level": 3,
+      "file": "terms/level_03/rest.md",
+      "display_name": "REST (Representational State Transfer)",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "REST is entirely built around mapping operations to GET, POST, PUT, and DELETE."
+        },
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "REST dictates exactly how URLs should be formatted."
+        }
+      ],
+      "related": [
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "The nouns that REST APIs are built around."
+        },
+        {
+          "term": "graphql",
+          "module": "04-apis",
+          "description": "The modern alternative to REST, which abandons HTTP methods entirely in favor of a single `/graphql` endpoint."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "Related concept: HTTP / HTTPS."
+        },
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "Related concept: Query Parameters & Path Variables."
+        },
+        {
+          "term": "api",
+          "module": "04-apis",
+          "description": "Related concept: API (Application Programming Interface)."
+        },
+        {
+          "term": "crud",
+          "module": "04-apis",
+          "description": "Related concept: CRUD Operations."
+        },
+        {
+          "term": "pagination",
+          "module": "04-apis",
+          "description": "Related concept: Pagination (Offset vs. Cursor)."
+        },
+        {
+          "term": "xml",
+          "module": "04-apis",
+          "description": "Related concept: XML."
+        },
+        {
+          "term": "grpc",
+          "module": "04-apis",
+          "description": "Related concept: gRPC (Remote Procedure Call)."
+        },
+        {
+          "term": "openapi",
+          "module": "04-apis",
+          "description": "Related concept: Swagger / OpenAPI Specification."
+        }
+      ]
+    },
+    "richardson_maturity_model": {
+      "level": 3,
+      "file": "terms/level_03/richardson_maturity_model.md",
+      "display_name": "Richardson Maturity Model",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The base web service API standard."
+        },
+        {
+          "term": "hateoas",
+          "module": "04-apis",
+          "description": "Hypermedia-guided API navigation."
+        }
+      ],
+      "related": [
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "The resource URIs introduced in Level 1."
+        },
+        {
+          "term": "crud",
+          "module": "04-apis",
+          "description": "The HTTP-to-database actions standardized in Level 2."
+        },
+        {
+          "term": "hateoas",
+          "module": "04-apis",
+          "description": "Related concept: HATEOAS."
+        }
+      ]
+    },
+    "statelessness": {
+      "level": 3,
+      "file": "terms/level_03/statelessness.md",
+      "display_name": "Statelessness",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "This dictates how the two sides interact."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "Statelessness is the \"ST\" in Representational State Transfer."
+        }
+      ],
+      "related": [
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The \"movie ticket\" used to make Stateless APIs possible."
+        },
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The mechanism commonly used to store session tokens in the browser."
+        },
+        {
+          "term": "idempotent_vs_safe_methods",
+          "module": "04-apis",
+          "description": "Related concept: Idempotent vs Safe Methods."
+        },
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "Related concept: Basic & Bearer Authentication."
+        }
+      ]
+    },
+    "access_refresh_tokens": {
+      "level": 4,
+      "file": "terms/level_04/access_refresh_tokens.md",
+      "display_name": "Access Token vs Refresh Token",
+      "prerequisites": [
+        {
+          "term": "session_vs_token_auth",
+          "module": "04-apis",
+          "description": "The core stateful/stateless auth structures."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The signed token data format."
+        }
+      ],
+      "related": [
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "The HTTP headers formatting access tokens."
+        },
+        {
+          "term": "oauth",
+          "module": "04-apis",
+          "description": "The authorization framework standardizing access and refresh flows."
+        }
+      ]
+    },
+    "api_keys": {
+      "level": 4,
+      "file": "terms/level_04/api_keys.md",
+      "display_name": "API Keys",
+      "prerequisites": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "The most common place to securely attach an API Key."
+        },
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "Because APIs are stateless, the API Key must be sent on every single request."
+        }
+      ],
+      "related": [
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "Other methods of sending secrets in HTTP Headers."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "While API Keys authenticate *Applications*, JWTs usually authenticate individual *Users*."
+        },
+        {
+          "term": "ssl_tls_handshake",
+          "module": "04-apis",
+          "description": "Related concept: SSL/TLS & the Handshake."
+        },
+        {
+          "term": "oauth_scopes",
+          "module": "04-apis",
+          "description": "Related concept: OAuth Scopes."
+        }
+      ]
+    },
+    "basic_bearer_auth": {
+      "level": 4,
+      "file": "terms/level_04/basic_bearer_auth.md",
+      "display_name": "Basic & Bearer Authentication",
+      "prerequisites": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "These authentication schemes dictate exactly how to format the `Authorization` header."
+        }
+      ],
+      "related": [
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The most common type of token placed inside a Bearer header."
+        },
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "The reason we have to send the Bearer token on every single request."
+        },
+        {
+          "term": "access_refresh_tokens",
+          "module": "04-apis",
+          "description": "Related concept: Access Token vs Refresh Token."
+        },
+        {
+          "term": "api_keys",
+          "module": "04-apis",
+          "description": "Related concept: API Keys."
+        },
+        {
+          "term": "oauth",
+          "module": "04-apis",
+          "description": "Related concept: OAuth 2.0."
+        },
+        {
+          "term": "secrets_env",
+          "module": "04-apis",
+          "description": "Related concept: Secrets & Environment Variables."
+        },
+        {
+          "term": "base64",
+          "module": "04-apis",
+          "description": "Related concept: Base64 Encoding."
+        }
+      ]
+    },
+    "cors": {
+      "level": 4,
+      "file": "terms/level_04/cors.md",
+      "display_name": "CORS (Cross-Origin Resource Sharing)",
+      "prerequisites": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "CORS relies entirely on specific HTTP headers to work."
+        },
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "A \"Origin\" is just the Domain/Port part of a URL."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "The Preflight request uses the obscure `OPTIONS` method."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "CORS is entirely driven by `Access-Control` headers."
+        },
+        {
+          "term": "same_origin_policy",
+          "module": "04-apis",
+          "description": "Related concept: Same-Origin Policy."
+        }
+      ]
+    },
+    "csrf": {
+      "level": 4,
+      "file": "terms/level_04/csrf.md",
+      "display_name": "CSRF (Cross-Site Request Forgery)",
+      "prerequisites": [
+        {
+          "term": "session_vs_token_auth",
+          "module": "04-apis",
+          "description": "The auth architectures utilizing cookies or tokens."
+        },
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The browser storage mechanism that attaches credentials automatically."
+        }
+      ],
+      "related": [
+        {
+          "term": "xss",
+          "module": "04-apis",
+          "description": "The script injection attack that can steal credentials directly."
+        },
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The browser storage mechanism targeted by CSRF."
+        },
+        {
+          "term": "same_origin_policy",
+          "module": "04-apis",
+          "description": "Related concept: Same-Origin Policy."
+        },
+        {
+          "term": "cookie_attributes",
+          "module": "04-apis",
+          "description": "Related concept: Cookie Attributes (HttpOnly, Secure, SameSite)."
+        }
+      ]
+    },
+    "jwt": {
+      "level": 4,
+      "file": "terms/level_04/jwt.md",
+      "display_name": "JWT (JSON Web Tokens)",
+      "prerequisites": [
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "The entire reason JWTs exist is because servers cannot remember who is logged in."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The format the token is built upon."
+        }
+      ],
+      "related": [
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "JWTs are sent in the `Authorization: Bearer <token>` header."
+        },
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The common (though sometimes risky) place to store JWTs on the client."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "Related concept: HTTP Headers."
+        },
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "Related concept: Statelessness."
+        },
+        {
+          "term": "api_keys",
+          "module": "04-apis",
+          "description": "Related concept: API Keys."
+        },
+        {
+          "term": "oauth",
+          "module": "04-apis",
+          "description": "Related concept: OAuth 2.0."
+        },
+        {
+          "term": "oauth_scopes",
+          "module": "04-apis",
+          "description": "Related concept: OAuth Scopes."
+        },
+        {
+          "term": "session_vs_token_auth",
+          "module": "04-apis",
+          "description": "Related concept: Session vs Token Authentication."
+        },
+        {
+          "term": "base64",
+          "module": "04-apis",
+          "description": "Related concept: Base64 Encoding."
+        },
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "Related concept: Cookies."
+        }
+      ]
+    },
+    "oauth": {
+      "level": 4,
+      "file": "terms/level_04/oauth.md",
+      "display_name": "OAuth 2.0",
+      "prerequisites": [
+        {
+          "term": "api",
+          "module": "04-apis",
+          "description": "OAuth is the lock on the API door."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The \"Access Tokens\" issued by OAuth are almost always JWTs."
+        }
+      ],
+      "related": [
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The actual string format of the Access Token generated by the OAuth flow."
+        },
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "How the app sends the OAuth token to the API (using `Bearer`)."
+        },
+        {
+          "term": "access_refresh_tokens",
+          "module": "04-apis",
+          "description": "Related concept: Access Token vs Refresh Token."
+        }
+      ]
+    },
+    "oauth_scopes": {
+      "level": 4,
+      "file": "terms/level_04/oauth_scopes.md",
+      "display_name": "OAuth Scopes",
+      "prerequisites": [
+        {
+          "term": "oauth",
+          "module": "04-apis",
+          "description": "The authorization framework defining client access."
+        }
+      ],
+      "related": [
+        {
+          "term": "api_keys",
+          "module": "04-apis",
+          "description": "Simple tokens that usually grant full access without fine-grained scope limitations."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The token format where OAuth scopes are typically stored in the payload (often under the `scp` or `scope` claims)."
+        }
+      ]
+    },
+    "preflight_request": {
+      "level": 4,
+      "file": "terms/level_04/preflight_request.md",
+      "display_name": "Preflight Request (OPTIONS)",
+      "prerequisites": [
+        {
+          "term": "same_origin_policy",
+          "module": "04-apis",
+          "description": "The browser sandbox isolating domains."
+        },
+        {
+          "term": "cors",
+          "module": "04-apis",
+          "description": "The mechanism relaxing same-origin restrictions."
+        },
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "The verbs defining request actions."
+        }
+      ],
+      "related": [
+        {
+          "term": "same_origin_policy",
+          "module": "04-apis",
+          "description": "The browser security wall that necessitates CORS and preflight probes."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "The metadata lines negotiating CORS parameters."
+        },
+        {
+          "term": "cors_errors",
+          "module": "04-apis",
+          "description": "Related concept: CORS Errors in the Browser."
+        }
+      ]
+    },
+    "same_origin_policy": {
+      "level": 4,
+      "file": "terms/level_04/same_origin_policy.md",
+      "display_name": "Same-Origin Policy",
+      "prerequisites": [
+        {
+          "term": "url_uri",
+          "module": "04-apis",
+          "description": "The address containing protocol, host, and port parts."
+        },
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "The network request-response architecture."
+        }
+      ],
+      "related": [
+        {
+          "term": "cors",
+          "module": "04-apis",
+          "description": "The protocol relaxations enabling safe cross-origin API queries."
+        },
+        {
+          "term": "csrf",
+          "module": "04-apis",
+          "description": "The session-riding exploit that bypasses SOP write-blindness."
+        },
+        {
+          "term": "preflight_request",
+          "module": "04-apis",
+          "description": "Related concept: Preflight Request (OPTIONS)."
+        },
+        {
+          "term": "cors_errors",
+          "module": "04-apis",
+          "description": "Related concept: CORS Errors in the Browser."
+        }
+      ]
+    },
+    "secrets_env": {
+      "level": 4,
+      "file": "terms/level_04/secrets_env.md",
+      "display_name": "Secrets & Environment Variables",
+      "prerequisites": [
+        {
+          "term": "api_keys",
+          "module": "04-apis",
+          "description": "The credential strings requiring protection."
+        }
+      ],
+      "related": [
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "The credentials transport protocols initialized using environment secrets."
+        },
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "Browser Web Storage spaces where API secrets should **never** be placed (since client-side JavaScript can be read by XSS attacks)."
+        },
+        {
+          "term": "sdk",
+          "module": "04-apis",
+          "description": "Related concept: SDK / Client Library."
+        }
+      ]
+    },
+    "session_vs_token_auth": {
+      "level": 4,
+      "file": "terms/level_04/session_vs_token_auth.md",
+      "display_name": "Session vs Token Authentication",
+      "prerequisites": [
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "The REST constraint relating to request context."
+        }
+      ],
+      "related": [
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The standard format for stateless tokens."
+        },
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The browser storage mechanism typically used to store session IDs."
+        },
+        {
+          "term": "load_balancing",
+          "module": "04-apis",
+          "description": "Related concept: Load Balancing."
+        }
+      ]
+    },
+    "xss": {
+      "level": 4,
+      "file": "terms/level_04/xss.md",
+      "display_name": "XSS (Cross-Site Scripting)",
+      "prerequisites": [
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The token format commonly stored on clients."
+        },
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The browser storage mechanism that can be secured using HttpOnly."
+        }
+      ],
+      "related": [
+        {
+          "term": "csrf",
+          "module": "04-apis",
+          "description": "The complementary session-riding exploit."
+        },
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The client-side Web Storage APIs vulnerable to XSS theft."
+        },
+        {
+          "term": "cookie_attributes",
+          "module": "04-apis",
+          "description": "Related concept: Cookie Attributes (HttpOnly, Secure, SameSite)."
+        }
+      ]
+    },
+    "abortcontroller": {
+      "level": 5,
+      "file": "terms/level_05/abortcontroller.md",
+      "display_name": "AbortController / Cancellation",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The network request handler."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The asynchronous response objects."
+        }
+      ],
+      "related": [
+        {
+          "term": "request_timeout",
+          "module": "04-apis",
+          "description": "The timing pattern built on top of AbortController triggers."
+        },
+        {
+          "term": "xmlhttprequest_ajax",
+          "module": "04-apis",
+          "description": "The legacy request API which supported request cancellation via `xhr.abort()`."
+        }
+      ]
+    },
+    "async_await": {
+      "level": 5,
+      "file": "terms/level_05/async_await.md",
+      "display_name": "async / await",
+      "prerequisites": [
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "`async/await` is just a prettier way of writing `.then()`."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The primary reason we need `async/await`."
+        }
+      ],
+      "related": [
+        {
+          "term": "error_handling",
+          "module": "04-apis",
+          "description": "Because we no longer use `.catch()`, we need a new way to handle errors with `async/await`."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "Related concept: Promises (in the context of networks)."
+        }
+      ]
+    },
+    "cors_errors": {
+      "level": 5,
+      "file": "terms/level_05/cors_errors.md",
+      "display_name": "CORS Errors in the Browser",
+      "prerequisites": [
+        {
+          "term": "cors",
+          "module": "04-apis",
+          "description": "The header policy relaxing domain restrictions."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The browser API used to trigger network queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "same_origin_policy",
+          "module": "04-apis",
+          "description": "The security wall that triggers CORS blocks."
+        },
+        {
+          "term": "preflight_request",
+          "module": "04-apis",
+          "description": "The pre-request probe that often triggers CORS errors if it fails."
+        },
+        {
+          "term": "network_tab",
+          "module": "04-apis",
+          "description": "Related concept: DevTools Network Tab."
+        }
+      ]
+    },
+    "error_handling": {
+      "level": 5,
+      "file": "terms/level_05/error_handling.md",
+      "display_name": "Error Handling (try / catch)",
+      "prerequisites": [
+        {
+          "term": "async_await",
+          "module": "04-apis",
+          "description": "`try/catch` is the standard way to handle errors in async functions."
+        },
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "The primary source of errors we are trying to catch."
+        }
+      ],
+      "related": [
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "How we check for 400 and 500 status codes inside the `try` block."
+        },
+        {
+          "term": "async_await",
+          "module": "04-apis",
+          "description": "Related concept: async / await."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "Related concept: Promises (in the context of networks)."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "Related concept: Rate Limiting (429 Too Many Requests)."
+        }
+      ]
+    },
+    "fetch": {
+      "level": 5,
+      "file": "terms/level_05/fetch.md",
+      "display_name": "The fetch() API",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "`fetch()` is how you manually trigger this lifecycle in code."
+        },
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "`fetch()` defaults to GET, but can be configured for POST, PUT, DELETE."
+        }
+      ],
+      "related": [
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "What `fetch` actually returns."
+        },
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "The first thing `fetch` hands back to you when the network trip finishes."
+        },
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Related concept: Request & Response Lifecycle."
+        },
+        {
+          "term": "promise_all",
+          "module": "04-apis",
+          "description": "Related concept: Promise.all / Parallel Requests."
+        },
+        {
+          "term": "xmlhttprequest_ajax",
+          "module": "04-apis",
+          "description": "Related concept: XMLHttpRequest / AJAX."
+        },
+        {
+          "term": "websocket_api",
+          "module": "04-apis",
+          "description": "Related concept: The WebSocket API (Client-side)."
+        },
+        {
+          "term": "api_clients",
+          "module": "04-apis",
+          "description": "Related concept: Postman / Insomnia (API Clients)."
+        }
+      ]
+    },
+    "formdata": {
+      "level": 5,
+      "file": "terms/level_05/formdata.md",
+      "display_name": "FormData & Multipart Uploads",
+      "prerequisites": [
+        {
+          "term": "request_body",
+          "module": "04-apis",
+          "description": "The request message container formats."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The network query tool."
+        }
+      ],
+      "related": [
+        {
+          "term": "content_type",
+          "module": "04-apis",
+          "description": "The media type descriptors."
+        },
+        {
+          "term": "base64",
+          "module": "04-apis",
+          "description": "The alternative text-based binary transport encoding method."
+        },
+        {
+          "term": "blob_arraybuffer",
+          "module": "04-apis",
+          "description": "Related concept: Blob & ArrayBuffer."
+        }
+      ]
+    },
+    "promise_all": {
+      "level": 5,
+      "file": "terms/level_05/promise_all.md",
+      "display_name": "Promise.all / Parallel Requests",
+      "prerequisites": [
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The async data wrapper objects."
+        },
+        {
+          "term": "async_await",
+          "module": "04-apis",
+          "description": "The syntax used to orchestrate Promise resolutions."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The network request builder."
+        },
+        {
+          "term": "latency_bandwidth",
+          "module": "04-apis",
+          "description": "The physical network constraints optimized by parallel connections."
+        }
+      ]
+    },
+    "promises": {
+      "level": 5,
+      "file": "terms/level_05/promises.md",
+      "display_name": "Promises (in the context of networks)",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "`fetch` is the most common function that generates a Promise."
+        },
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Promises exist to handle the \"waiting\" phase of this lifecycle."
+        }
+      ],
+      "related": [
+        {
+          "term": "async_await",
+          "module": "04-apis",
+          "description": "The modern, much cleaner syntax for handling Promises without using `.then()`."
+        },
+        {
+          "term": "error_handling",
+          "module": "04-apis",
+          "description": "How we handle \"Rejected\" promises."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "Related concept: The fetch() API."
+        },
+        {
+          "term": "xmlhttprequest_ajax",
+          "module": "04-apis",
+          "description": "Related concept: XMLHttpRequest / AJAX."
+        }
+      ]
+    },
+    "request_timeout": {
+      "level": 5,
+      "file": "terms/level_05/request_timeout.md",
+      "display_name": "Request Timeout",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The network request API."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The async data wrapper objects."
+        }
+      ],
+      "related": [
+        {
+          "term": "abortcontroller",
+          "module": "04-apis",
+          "description": "The browser API used to terminate active requests."
+        },
+        {
+          "term": "retry_backoff",
+          "module": "04-apis",
+          "description": "The recovery patterns triggered after a request timeout occurs."
+        }
+      ]
+    },
+    "response_object": {
+      "level": 5,
+      "file": "terms/level_05/response_object.md",
+      "display_name": "The Response Object (res.json(), res.ok)",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "This is what generates the Response object."
+        },
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "The Response object allows us to check these codes."
+        }
+      ],
+      "related": [
+        {
+          "term": "error_handling",
+          "module": "04-apis",
+          "description": "The `try` block is where we check `response.ok`."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The format `response.json()` expects the body to be in."
+        },
+        {
+          "term": "content_negotiation",
+          "module": "04-apis",
+          "description": "Related concept: Content Negotiation (Accept)."
+        },
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "Related concept: HTTP Status Codes."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "Related concept: The fetch() API."
+        }
+      ]
+    },
+    "retry_backoff": {
+      "level": 5,
+      "file": "terms/level_05/retry_backoff.md",
+      "display_name": "Retry & Exponential Backoff",
+      "prerequisites": [
+        {
+          "term": "error_handling",
+          "module": "04-apis",
+          "description": "The core structure for trapping query failures."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "The server-side restriction policy."
+        }
+      ],
+      "related": [
+        {
+          "term": "idempotency",
+          "module": "04-apis",
+          "description": "The server property that makes repeating requests safe."
+        },
+        {
+          "term": "request_timeout",
+          "module": "04-apis",
+          "description": "The client-side cancel condition that often triggers a retry loop."
+        }
+      ]
+    },
+    "xmlhttprequest_ajax": {
+      "level": 5,
+      "file": "terms/level_05/xmlhttprequest_ajax.md",
+      "display_name": "XMLHttpRequest / AJAX",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "The network request round-trip fundamentals."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The modern Promise-based request standard."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "The asynchronous data container object returned by fetch."
+        },
+        {
+          "term": "abortcontroller",
+          "module": "04-apis",
+          "description": "Related concept: AbortController / Cancellation."
+        }
+      ]
+    },
+    "batch_requests": {
+      "level": 6,
+      "file": "terms/level_06/batch_requests.md",
+      "display_name": "Bulk / Batch Requests",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "The verbs describing request operations."
+        },
+        {
+          "term": "pagination",
+          "module": "04-apis",
+          "description": "The concepts for navigating collection sets."
+        }
+      ],
+      "related": [
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "The protection policies that batch requests help avoid triggering."
+        },
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "The utility methods used to construct and parse batch payloads."
+        }
+      ]
+    },
+    "cache_invalidation": {
+      "level": 6,
+      "file": "terms/level_06/cache_invalidation.md",
+      "display_name": "Cache Invalidation",
+      "prerequisites": [
+        {
+          "term": "caching",
+          "module": "04-apis",
+          "description": "The fundamental mechanisms for storing response states."
+        }
+      ],
+      "related": [
+        {
+          "term": "caching",
+          "module": "04-apis",
+          "description": "The HTTP protocols utilizing cache validations."
+        },
+        {
+          "term": "webhooks",
+          "module": "04-apis",
+          "description": "The event push notifications that can trigger remote cache evictions."
+        }
+      ]
+    },
+    "caching": {
+      "level": 6,
+      "file": "terms/level_06/caching.md",
+      "display_name": "Caching (ETag, Cache-Control)",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Caching intercepts this lifecycle to skip the server processing step."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "Caching is entirely controlled by specific HTTP headers."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "Where `Cache-Control` and `ETag` live."
+        },
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "`304 Not Modified` is the king of bandwidth-saving codes."
+        },
+        {
+          "term": "latency_bandwidth",
+          "module": "04-apis",
+          "description": "Related concept: Latency & Bandwidth."
+        },
+        {
+          "term": "cache_invalidation",
+          "module": "04-apis",
+          "description": "Related concept: Cache Invalidation."
+        }
+      ]
+    },
+    "circuit_breaker": {
+      "level": 6,
+      "file": "terms/level_06/circuit_breaker.md",
+      "display_name": "Circuit Breaker",
+      "prerequisites": [
+        {
+          "term": "error_handling",
+          "module": "04-apis",
+          "description": "The structure used to catch request errors."
+        },
+        {
+          "term": "retry_backoff",
+          "module": "04-apis",
+          "description": "The client-side request recovery loop."
+        }
+      ],
+      "related": [
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "The server defense policy that client circuit breakers help mitigate."
+        },
+        {
+          "term": "webhooks",
+          "module": "04-apis",
+          "description": "Asynchronous push notifications that bypass synchronous HTTP waiting loops."
+        }
+      ]
+    },
+    "idempotency": {
+      "level": 6,
+      "file": "terms/level_06/idempotency.md",
+      "display_name": "Idempotency",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "HTTP verbs are strictly categorized by whether they are idempotent or not."
+        },
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Network failures are the reason idempotency is so important."
+        }
+      ],
+      "related": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "Where the rules of Idempotency are heavily enforced."
+        },
+        {
+          "term": "retry_backoff",
+          "module": "04-apis",
+          "description": "Related concept: Retry & Exponential Backoff."
+        }
+      ]
+    },
+    "idempotency_keys": {
+      "level": 6,
+      "file": "terms/level_06/idempotency_keys.md",
+      "display_name": "Idempotency Keys",
+      "prerequisites": [
+        {
+          "term": "idempotency",
+          "module": "04-apis",
+          "description": "The concept of safe request repetition."
+        },
+        {
+          "term": "retry_backoff",
+          "module": "04-apis",
+          "description": "The client-side request recovery loop."
+        }
+      ],
+      "related": [
+        {
+          "term": "idempotent_vs_safe_methods",
+          "module": "04-apis",
+          "description": "The HTTP safety definitions."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "The server protections that clients retry against."
+        }
+      ]
+    },
+    "pagination": {
+      "level": 6,
+      "file": "terms/level_06/pagination.md",
+      "display_name": "Pagination (Offset vs. Cursor)",
+      "prerequisites": [
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "Pagination is almost exclusively handled via query parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_params",
+          "module": "04-apis",
+          "description": "Where the `limit` and `offset` variables are placed."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "Designing standard URLs."
+        },
+        {
+          "term": "latency_bandwidth",
+          "module": "04-apis",
+          "description": "Related concept: Latency & Bandwidth."
+        },
+        {
+          "term": "overfetching_underfetching",
+          "module": "04-apis",
+          "description": "Related concept: Over-fetching vs Under-fetching."
+        }
+      ]
+    },
+    "rate_limiting": {
+      "level": 6,
+      "file": "terms/level_06/rate_limiting.md",
+      "display_name": "Rate Limiting (429 Too Many Requests)",
+      "prerequisites": [
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "Rate limiting uses a very specific 4xx status code."
+        },
+        {
+          "term": "api_keys",
+          "module": "04-apis",
+          "description": "How the server knows exactly *who* is making the requests."
+        }
+      ],
+      "related": [
+        {
+          "term": "status_codes",
+          "module": "04-apis",
+          "description": "`429` is the official code for Rate Limiting."
+        },
+        {
+          "term": "error_handling",
+          "module": "04-apis",
+          "description": "Where you write the logic to pause your requests."
+        },
+        {
+          "term": "batch_requests",
+          "module": "04-apis",
+          "description": "Related concept: Bulk / Batch Requests."
+        },
+        {
+          "term": "circuit_breaker",
+          "module": "04-apis",
+          "description": "Related concept: Circuit Breaker."
+        },
+        {
+          "term": "idempotency_keys",
+          "module": "04-apis",
+          "description": "Related concept: Idempotency Keys."
+        },
+        {
+          "term": "webhooks",
+          "module": "04-apis",
+          "description": "Related concept: Webhooks."
+        }
+      ]
+    },
+    "webhooks": {
+      "level": 6,
+      "file": "terms/level_06/webhooks.md",
+      "display_name": "Webhooks",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Webhooks completely flip who initiates this lifecycle."
+        },
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "Webhooks are almost always `POST` requests."
+        }
+      ],
+      "related": [
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "Webhooks are the primary solution to avoid hitting Rate Limits caused by aggressive polling."
+        },
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "A different real-time technology usually used for Client-to-Server, whereas Webhooks are Server-to-Server."
+        },
+        {
+          "term": "cache_invalidation",
+          "module": "04-apis",
+          "description": "Related concept: Cache Invalidation."
+        },
+        {
+          "term": "circuit_breaker",
+          "module": "04-apis",
+          "description": "Related concept: Circuit Breaker."
+        },
+        {
+          "term": "polling",
+          "module": "04-apis",
+          "description": "Related concept: Polling vs Long Polling."
+        },
+        {
+          "term": "pub_sub_channels",
+          "module": "04-apis",
+          "description": "Related concept: Pub/Sub & Channels."
+        }
+      ]
+    },
+    "base64": {
+      "level": 7,
+      "file": "terms/level_07/base64.md",
+      "display_name": "Base64 Encoding",
+      "prerequisites": [
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "Base64 is essentially a form of serialization specifically for binary files."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "JSON can only hold text, so if you want to put an image in JSON, you must Base64 encode it."
+        }
+      ],
+      "related": [
+        {
+          "term": "basic_bearer_auth",
+          "module": "04-apis",
+          "description": "Basic Auth literally uses Base64 to combine the username and password into the header."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "The Header and Payload of a JSON Web Token are Base64 encoded (which is why anyone can read them!)."
+        },
+        {
+          "term": "formdata",
+          "module": "04-apis",
+          "description": "Related concept: FormData & Multipart Uploads."
+        },
+        {
+          "term": "character_encoding",
+          "module": "04-apis",
+          "description": "Related concept: Character Encoding (UTF-8)."
+        },
+        {
+          "term": "protocol_buffers",
+          "module": "04-apis",
+          "description": "Related concept: Protocol Buffers (protobuf)."
+        }
+      ]
+    },
+    "binary_vs_text_formats": {
+      "level": 7,
+      "file": "terms/level_07/binary_vs_text_formats.md",
+      "display_name": "Binary vs Text Formats",
+      "prerequisites": [
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The processes of preparing data for network transit."
+        },
+        {
+          "term": "base64",
+          "module": "04-apis",
+          "description": "The mechanism that wraps binary data inside text strings."
+        }
+      ],
+      "related": [
+        {
+          "term": "grpc",
+          "module": "04-apis",
+          "description": "The network protocol designed on top of Protocol Buffers."
+        },
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "The standard functions used to manage text-based JSON configurations."
+        },
+        {
+          "term": "blob_arraybuffer",
+          "module": "04-apis",
+          "description": "Related concept: Blob & ArrayBuffer."
+        },
+        {
+          "term": "character_encoding",
+          "module": "04-apis",
+          "description": "Related concept: Character Encoding (UTF-8)."
+        },
+        {
+          "term": "protocol_buffers",
+          "module": "04-apis",
+          "description": "Related concept: Protocol Buffers (protobuf)."
+        }
+      ]
+    },
+    "blob_arraybuffer": {
+      "level": 7,
+      "file": "terms/level_07/blob_arraybuffer.md",
+      "display_name": "Blob & ArrayBuffer",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The network request builder."
+        },
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "The response container wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "formdata",
+          "module": "04-apis",
+          "description": "The payload format used to send files back to the server."
+        },
+        {
+          "term": "binary_vs_text_formats",
+          "module": "04-apis",
+          "description": "The network data serialization paradigms."
+        }
+      ]
+    },
+    "character_encoding": {
+      "level": 7,
+      "file": "terms/level_07/character_encoding.md",
+      "display_name": "Character Encoding (UTF-8)",
+      "prerequisites": [
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The concepts of formatting objects for transmission."
+        }
+      ],
+      "related": [
+        {
+          "term": "base64",
+          "module": "04-apis",
+          "description": "The binary-to-text format that translates raw bytes back into printable ASCII characters."
+        },
+        {
+          "term": "binary_vs_text_formats",
+          "module": "04-apis",
+          "description": "The architectural trade-off between sending byte-streams vs character-encoded text."
+        }
+      ]
+    },
+    "deserialization": {
+      "level": 7,
+      "file": "terms/level_07/deserialization.md",
+      "display_name": "Deserialization / Parsing",
+      "prerequisites": [
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The core high-level data transport concepts."
+        },
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "The standard JSON transformation methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "The functions executing standard serialization and deserialization in JavaScript."
+        },
+        {
+          "term": "xml",
+          "module": "04-apis",
+          "description": "The alternative markup data format requiring parsing libraries."
+        }
+      ]
+    },
+    "graphql": {
+      "level": 7,
+      "file": "terms/level_07/graphql.md",
+      "display_name": "GraphQL (The REST Alternative)",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "GraphQL was invented specifically to solve the inefficiencies of REST."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The format GraphQL uses to return data."
+        }
+      ],
+      "related": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architecture GraphQL is slowly replacing in highly complex applications."
+        },
+        {
+          "term": "openapi",
+          "module": "04-apis",
+          "description": "Related concept: Swagger / OpenAPI Specification."
+        },
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "Related concept: API Versioning (v1, v2)."
+        }
+      ]
+    },
+    "json_methods": {
+      "level": 7,
+      "file": "terms/level_07/json_methods.md",
+      "display_name": "JSON Methods (parse / stringify)",
+      "prerequisites": [
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The theoretical concepts these methods execute."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The text format these methods work with."
+        }
+      ],
+      "related": [
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "A browser API that can ONLY store strings, making `JSON.stringify` mandatory when saving objects."
+        },
+        {
+          "term": "batch_requests",
+          "module": "04-apis",
+          "description": "Related concept: Bulk / Batch Requests."
+        },
+        {
+          "term": "binary_vs_text_formats",
+          "module": "04-apis",
+          "description": "Related concept: Binary vs Text Formats."
+        },
+        {
+          "term": "deserialization",
+          "module": "04-apis",
+          "description": "Related concept: Deserialization / Parsing."
+        },
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "Related concept: Serialization & Deserialization."
+        },
+        {
+          "term": "storage_serialization",
+          "module": "04-apis",
+          "description": "Related concept: Storage Serialization."
+        }
+      ]
+    },
+    "overfetching_underfetching": {
+      "level": 7,
+      "file": "terms/level_07/overfetching_underfetching.md",
+      "display_name": "Over-fetching vs Under-fetching",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The resource-based endpoint architectural design."
+        },
+        {
+          "term": "graphql",
+          "module": "04-apis",
+          "description": "The query language designed to address REST constraints."
+        }
+      ],
+      "related": [
+        {
+          "term": "resource_naming",
+          "module": "04-apis",
+          "description": "The design pattern governing REST routes."
+        },
+        {
+          "term": "pagination",
+          "module": "04-apis",
+          "description": "The methods of splitting large resource collections to prevent over-fetching."
+        }
+      ]
+    },
+    "serialization": {
+      "level": 7,
+      "file": "terms/level_07/serialization.md",
+      "display_name": "Serialization & Deserialization",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "04-apis",
+          "description": "The fundamental reason data must travel."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The most common text format used for Serialization."
+        }
+      ],
+      "related": [
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "The actual JavaScript functions used to execute this concept."
+        },
+        {
+          "term": "content_type",
+          "module": "04-apis",
+          "description": "Related concept: Content-Type & MIME Types."
+        }
+      ]
+    },
+    "xml": {
+      "level": 7,
+      "file": "terms/level_07/xml.md",
+      "display_name": "XML",
+      "prerequisites": [
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The modern format that replaced XML."
+        },
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "XML is just another format used to serialize data."
+        }
+      ],
+      "related": [
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The lightweight successor to XML."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "REST APIs typically use JSON, while SOAP APIs typically use XML."
+        },
+        {
+          "term": "deserialization",
+          "module": "04-apis",
+          "description": "Related concept: Deserialization / Parsing."
+        },
+        {
+          "term": "soap_xml_rpc",
+          "module": "04-apis",
+          "description": "Related concept: SOAP & XML-RPC (legacy)."
+        }
+      ]
+    },
+    "heartbeat_ping_pong": {
+      "level": 8,
+      "file": "terms/level_08/heartbeat_ping_pong.md",
+      "display_name": "Heartbeat / Ping-Pong",
+      "prerequisites": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The real-time protocol."
+        }
+      ],
+      "related": [
+        {
+          "term": "reconnection_backoff",
+          "module": "04-apis",
+          "description": "The client-side logic triggered after a heartbeat check failure closes a socket."
+        },
+        {
+          "term": "websocket_api",
+          "module": "04-apis",
+          "description": "The browser interface which handles incoming pings and returns pongs."
+        }
+      ]
+    },
+    "polling": {
+      "level": 8,
+      "file": "terms/level_08/polling.md",
+      "display_name": "Polling vs Long Polling",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Polling exploits this lifecycle to simulate real-time behavior."
+        },
+        {
+          "term": "sse",
+          "module": "04-apis",
+          "description": "The modern replacement for these hacks."
+        }
+      ],
+      "related": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The technology that made Polling obsolete."
+        },
+        {
+          "term": "webhooks",
+          "module": "04-apis",
+          "description": "The Server-to-Server equivalent to eliminate polling."
+        },
+        {
+          "term": "socket_io",
+          "module": "04-apis",
+          "description": "Related concept: Socket.io (Ecosystem tool)."
+        }
+      ]
+    },
+    "pub_sub_channels": {
+      "level": 8,
+      "file": "terms/level_08/pub_sub_channels.md",
+      "display_name": "Pub/Sub & Channels",
+      "prerequisites": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The real-time network transport."
+        },
+        {
+          "term": "socket_io",
+          "module": "04-apis",
+          "description": "The abstraction library utilizing room patterns."
+        }
+      ],
+      "related": [
+        {
+          "term": "socket_io",
+          "module": "04-apis",
+          "description": "The Node.js real-time framework."
+        },
+        {
+          "term": "webhooks",
+          "module": "04-apis",
+          "description": "The HTTP callback request alternative for server-to-server notifications."
+        }
+      ]
+    },
+    "reconnection_backoff": {
+      "level": 8,
+      "file": "terms/level_08/reconnection_backoff.md",
+      "display_name": "Reconnection & Backoff",
+      "prerequisites": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The real-time connection protocol."
+        },
+        {
+          "term": "retry_backoff",
+          "module": "04-apis",
+          "description": "The mathematical delay concepts for network retries."
+        }
+      ],
+      "related": [
+        {
+          "term": "heartbeat_ping_pong",
+          "module": "04-apis",
+          "description": "The diagnostic frame checks that alert the client of a silent disconnect."
+        },
+        {
+          "term": "websocket_api",
+          "module": "04-apis",
+          "description": "The browser object interface."
+        }
+      ]
+    },
+    "socket_io": {
+      "level": 8,
+      "file": "terms/level_08/socket_io.md",
+      "display_name": "Socket.io (Ecosystem tool)",
+      "prerequisites": [
+        {
+          "term": "websocket_api",
+          "module": "04-apis",
+          "description": "Socket.io is essentially a massive upgrade to this native API."
+        },
+        {
+          "term": "polling",
+          "module": "04-apis",
+          "description": "Socket.io uses this as a secret backup plan!"
+        }
+      ],
+      "related": [
+        {
+          "term": "websocket_api",
+          "module": "04-apis",
+          "description": "The native, low-level browser API that Socket.io abstracts."
+        },
+        {
+          "term": "polling",
+          "module": "04-apis",
+          "description": "The HTTP fallback that Socket.io uses if WebSockets are blocked."
+        },
+        {
+          "term": "pub_sub_channels",
+          "module": "04-apis",
+          "description": "Related concept: Pub/Sub & Channels."
+        },
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "Related concept: WebSockets."
+        }
+      ]
+    },
+    "sse": {
+      "level": 8,
+      "file": "terms/level_08/sse.md",
+      "display_name": "Server-Sent Events (SSE)",
+      "prerequisites": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "SSE solves a very specific problem that WebSockets are overkill for."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "Unlike WebSockets, SSE strictly remains HTTP."
+        }
+      ],
+      "related": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The two-way alternative."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "SSE relies on `Content-Type: text/event-stream`."
+        }
+      ]
+    },
+    "websocket_api": {
+      "level": 8,
+      "file": "terms/level_08/websocket_api.md",
+      "display_name": "The WebSocket API (Client-side)",
+      "prerequisites": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The theoretical protocol that this API implements."
+        },
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "Because WebSockets only send text, you must use these methods heavily."
+        }
+      ],
+      "related": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The HTTP alternative to `WebSocket`."
+        },
+        {
+          "term": "socket_io",
+          "module": "04-apis",
+          "description": "A massive third-party library that wraps the native WebSocket API to make it easier to use."
+        },
+        {
+          "term": "heartbeat_ping_pong",
+          "module": "04-apis",
+          "description": "Related concept: Heartbeat / Ping-Pong."
+        },
+        {
+          "term": "reconnection_backoff",
+          "module": "04-apis",
+          "description": "Related concept: Reconnection & Backoff."
+        },
+        {
+          "term": "websocket_handshake",
+          "module": "04-apis",
+          "description": "Related concept: WebSocket Handshake (Upgrade)."
+        }
+      ]
+    },
+    "websocket_handshake": {
+      "level": 8,
+      "file": "terms/level_08/websocket_handshake.md",
+      "display_name": "WebSocket Handshake (Upgrade)",
+      "prerequisites": [
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "The real-time, bi-directional protocol concept."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "The metadata packets used to negotiate requests."
+        }
+      ],
+      "related": [
+        {
+          "term": "tcp_ip",
+          "module": "04-apis",
+          "description": "The protocol layer that keeps the network connection open."
+        },
+        {
+          "term": "websocket_api",
+          "module": "04-apis",
+          "description": "The browser interface that initiates the handshake."
+        }
+      ]
+    },
+    "websockets": {
+      "level": 8,
+      "file": "terms/level_08/websockets.md",
+      "display_name": "WebSockets",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "WebSockets bypass this traditional lifecycle entirely."
+        },
+        {
+          "term": "http_https",
+          "module": "04-apis",
+          "description": "WebSockets start as HTTP, but then \"upgrade\" to a completely different protocol."
+        }
+      ],
+      "related": [
+        {
+          "term": "webhooks",
+          "module": "04-apis",
+          "description": "Webhooks are Server-to-Server. WebSockets are usually Browser-to-Server."
+        },
+        {
+          "term": "socket_io",
+          "module": "04-apis",
+          "description": "The most popular library for working with WebSockets in Node.js."
+        },
+        {
+          "term": "tcp_ip",
+          "module": "04-apis",
+          "description": "Related concept: TCP/IP (high-level)."
+        },
+        {
+          "term": "polling",
+          "module": "04-apis",
+          "description": "Related concept: Polling vs Long Polling."
+        },
+        {
+          "term": "sse",
+          "module": "04-apis",
+          "description": "Related concept: Server-Sent Events (SSE)."
+        },
+        {
+          "term": "grpc",
+          "module": "04-apis",
+          "description": "Related concept: gRPC (Remote Procedure Call)."
+        }
+      ]
+    },
+    "cache_api": {
+      "level": 9,
+      "file": "terms/level_09/cache_api.md",
+      "display_name": "Cache API",
+      "prerequisites": [
+        {
+          "term": "response_object",
+          "module": "04-apis",
+          "description": "The exact object this API is designed to store."
+        },
+        {
+          "term": "service_workers",
+          "module": "04-apis",
+          "description": "The primary technology that controls the Cache API."
+        }
+      ],
+      "related": [
+        {
+          "term": "service_workers",
+          "module": "04-apis",
+          "description": "The scripts that actively use the Cache API to intercept network requests."
+        },
+        {
+          "term": "indexeddb",
+          "module": "04-apis",
+          "description": "The complementary database used for JSON, while the Cache API handles Files."
+        },
+        {
+          "term": "storage_limits",
+          "module": "04-apis",
+          "description": "Related concept: Storage Limits & Eviction."
+        }
+      ]
+    },
+    "cookie_attributes": {
+      "level": 9,
+      "file": "terms/level_09/cookie_attributes.md",
+      "display_name": "Cookie Attributes (HttpOnly, Secure, SameSite)",
+      "prerequisites": [
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The header-based browser storage state."
+        },
+        {
+          "term": "session_vs_token_auth",
+          "module": "04-apis",
+          "description": "The authentication paradigms utilizing cookies."
+        }
+      ],
+      "related": [
+        {
+          "term": "csrf",
+          "module": "04-apis",
+          "description": "The cross-origin vulnerability mitigated by SameSite attributes."
+        },
+        {
+          "term": "xss",
+          "module": "04-apis",
+          "description": "The injection vulnerability mitigated by HttpOnly."
+        }
+      ]
+    },
+    "cookies": {
+      "level": 9,
+      "file": "terms/level_09/cookies.md",
+      "display_name": "Cookies",
+      "prerequisites": [
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "Cookies are transmitted entirely via headers."
+        },
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "Cookies were the original invention to solve HTTP's amnesia."
+        }
+      ],
+      "related": [
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The frontend alternative to cookies."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "Modern tokens are often placed inside Cookies for secure, automatic transmission."
+        },
+        {
+          "term": "csrf",
+          "module": "04-apis",
+          "description": "Related concept: CSRF (Cross-Site Request Forgery)."
+        },
+        {
+          "term": "session_vs_token_auth",
+          "module": "04-apis",
+          "description": "Related concept: Session vs Token Authentication."
+        },
+        {
+          "term": "storage_serialization",
+          "module": "04-apis",
+          "description": "Related concept: Storage Serialization."
+        }
+      ]
+    },
+    "indexeddb": {
+      "level": 9,
+      "file": "terms/level_09/indexeddb.md",
+      "display_name": "IndexedDB",
+      "prerequisites": [
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "IndexedDB is the big brother to localStorage."
+        },
+        {
+          "term": "promises",
+          "module": "04-apis",
+          "description": "Because IndexedDB reads from the hard drive, it is entirely asynchronous."
+        }
+      ],
+      "related": [
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The lightweight, synchronous alternative."
+        },
+        {
+          "term": "service_workers",
+          "module": "04-apis",
+          "description": "The technology that uses IndexedDB to build Progressive Web Apps (PWAs) that work entirely offline."
+        },
+        {
+          "term": "cache_api",
+          "module": "04-apis",
+          "description": "Related concept: Cache API."
+        },
+        {
+          "term": "offline_first",
+          "module": "04-apis",
+          "description": "Related concept: Offline-First / PWA."
+        },
+        {
+          "term": "storage_limits",
+          "module": "04-apis",
+          "description": "Related concept: Storage Limits & Eviction."
+        }
+      ]
+    },
+    "offline_first": {
+      "level": 9,
+      "file": "terms/level_09/offline_first.md",
+      "display_name": "Offline-First / PWA",
+      "prerequisites": [
+        {
+          "term": "service_workers",
+          "module": "04-apis",
+          "description": "The network interceptor threads."
+        },
+        {
+          "term": "cache_api",
+          "module": "04-apis",
+          "description": "The storage for asset request states."
+        }
+      ],
+      "related": [
+        {
+          "term": "service_workers",
+          "module": "04-apis",
+          "description": "The background scripts that orchestrate PWA caching."
+        },
+        {
+          "term": "indexeddb",
+          "module": "04-apis",
+          "description": "The browser-native database used for offline data storage."
+        }
+      ]
+    },
+    "service_workers": {
+      "level": 9,
+      "file": "terms/level_09/service_workers.md",
+      "display_name": "Service Workers",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "Service workers literally hijack this lifecycle before it hits the internet."
+        }
+      ],
+      "related": [
+        {
+          "term": "cache_api",
+          "module": "04-apis",
+          "description": "The database the Service Worker uses to store the offline files."
+        },
+        {
+          "term": "indexeddb",
+          "module": "04-apis",
+          "description": "The database the Service Worker uses to store the offline JSON data."
+        },
+        {
+          "term": "offline_first",
+          "module": "04-apis",
+          "description": "Related concept: Offline-First / PWA."
+        }
+      ]
+    },
+    "storage_limits": {
+      "level": 9,
+      "file": "terms/level_09/storage_limits.md",
+      "display_name": "Storage Limits & Eviction",
+      "prerequisites": [
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The lightweight key-value browser stores."
+        },
+        {
+          "term": "cache_api",
+          "module": "04-apis",
+          "description": "The response caching mechanism."
+        }
+      ],
+      "related": [
+        {
+          "term": "indexeddb",
+          "module": "04-apis",
+          "description": "The browser-native transactional database."
+        },
+        {
+          "term": "cache_api",
+          "module": "04-apis",
+          "description": "The network response storage API."
+        }
+      ]
+    },
+    "storage_serialization": {
+      "level": 9,
+      "file": "terms/level_09/storage_serialization.md",
+      "display_name": "Storage Serialization",
+      "prerequisites": [
+        {
+          "term": "web_storage",
+          "module": "04-apis",
+          "description": "The browser storage engines."
+        },
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The data-flattening concepts."
+        }
+      ],
+      "related": [
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "The core utilities executing JavaScript storage serialization."
+        },
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The header-based storage strings that also require custom parsing mechanisms."
+        }
+      ]
+    },
+    "web_storage": {
+      "level": 9,
+      "file": "terms/level_09/web_storage.md",
+      "display_name": "localStorage & sessionStorage",
+      "prerequisites": [
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "Web Storage only stores strings, so you must use these methods to save Objects."
+        }
+      ],
+      "related": [
+        {
+          "term": "cookies",
+          "module": "04-apis",
+          "description": "The older, server-facing alternative to localStorage."
+        },
+        {
+          "term": "indexeddb",
+          "module": "04-apis",
+          "description": "A massive, complex alternative for storing Gigabytes of data, instead of localStorage's tiny 5MB limit."
+        },
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "Related concept: Statelessness."
+        },
+        {
+          "term": "jwt",
+          "module": "04-apis",
+          "description": "Related concept: JWT (JSON Web Tokens)."
+        },
+        {
+          "term": "secrets_env",
+          "module": "04-apis",
+          "description": "Related concept: Secrets & Environment Variables."
+        },
+        {
+          "term": "xss",
+          "module": "04-apis",
+          "description": "Related concept: XSS (Cross-Site Scripting)."
+        },
+        {
+          "term": "json_methods",
+          "module": "04-apis",
+          "description": "Related concept: JSON Methods (parse / stringify)."
+        }
+      ]
+    },
+    "api_clients": {
+      "level": 10,
+      "file": "terms/level_10/api_clients.md",
+      "display_name": "Postman / Insomnia (API Clients)",
+      "prerequisites": [
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "These tools are essentially graphical interfaces for building complex HTTP requests."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The primary format used to test payloads in these tools."
+        }
+      ],
+      "related": [
+        {
+          "term": "openapi",
+          "module": "04-apis",
+          "description": "While Postman is for *testing* APIs, Swagger is for *documenting* them."
+        },
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "What Postman is essentially replacing during the testing phase."
+        },
+        {
+          "term": "mocking",
+          "module": "04-apis",
+          "description": "Related concept: Mocking APIs."
+        },
+        {
+          "term": "network_tab",
+          "module": "04-apis",
+          "description": "Related concept: DevTools Network Tab."
+        },
+        {
+          "term": "sdk",
+          "module": "04-apis",
+          "description": "Related concept: SDK / Client Library."
+        }
+      ]
+    },
+    "api_contract": {
+      "level": 10,
+      "file": "terms/level_10/api_contract.md",
+      "display_name": "API Contract / Schema-First Design",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The resource-based architectural paradigm."
+        },
+        {
+          "term": "openapi",
+          "module": "04-apis",
+          "description": "The language used to write machine-readable contracts."
+        }
+      ],
+      "related": [
+        {
+          "term": "mocking",
+          "module": "04-apis",
+          "description": "The process of serving mock data derived directly from the API contract."
+        },
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "The process of releasing updates to a contract without breaking legacy systems."
+        },
+        {
+          "term": "deprecation_sunsetting",
+          "module": "04-apis",
+          "description": "Related concept: Deprecation & Sunsetting."
+        }
+      ]
+    },
+    "api_gateway": {
+      "level": 10,
+      "file": "terms/level_10/api_gateway.md",
+      "display_name": "API Gateway",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The resource-based communication style."
+        },
+        {
+          "term": "rate_limiting",
+          "module": "04-apis",
+          "description": "The policies limiting client queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "microservices_monolith",
+          "module": "04-apis",
+          "description": "The backend architectures managed by gateways."
+        },
+        {
+          "term": "load_balancing",
+          "module": "04-apis",
+          "description": "The process of distributing routed traffic to scaled service instances."
+        }
+      ]
+    },
+    "deprecation_sunsetting": {
+      "level": 10,
+      "file": "terms/level_10/deprecation_sunsetting.md",
+      "display_name": "Deprecation & Sunsetting",
+      "prerequisites": [
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "The methods of releasing new endpoint versions."
+        }
+      ],
+      "related": [
+        {
+          "term": "versioning",
+          "module": "04-apis",
+          "description": "The process of releasing new API versions."
+        },
+        {
+          "term": "api_contract",
+          "module": "04-apis",
+          "description": "The interface definitions that outline version upgrades."
+        }
+      ]
+    },
+    "grpc": {
+      "level": 10,
+      "file": "terms/level_10/grpc.md",
+      "display_name": "gRPC (Remote Procedure Call)",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "gRPC completely abandons the REST philosophy."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "gRPC famously hates JSON and replaces it with Protocol Buffers."
+        }
+      ],
+      "related": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architecture gRPC replaces in backend microservices."
+        },
+        {
+          "term": "websockets",
+          "module": "04-apis",
+          "description": "gRPC also natively supports bi-directional streaming!"
+        },
+        {
+          "term": "binary_vs_text_formats",
+          "module": "04-apis",
+          "description": "Related concept: Binary vs Text Formats."
+        },
+        {
+          "term": "soap_xml_rpc",
+          "module": "04-apis",
+          "description": "Related concept: SOAP & XML-RPC (legacy)."
+        }
+      ]
+    },
+    "load_balancing": {
+      "level": 10,
+      "file": "terms/level_10/load_balancing.md",
+      "display_name": "Load Balancing",
+      "prerequisites": [
+        {
+          "term": "statelessness",
+          "module": "04-apis",
+          "description": "The architectural constraint making horizontal scaling simple."
+        }
+      ],
+      "related": [
+        {
+          "term": "api_gateway",
+          "module": "04-apis",
+          "description": "The edge proxy that often integrates load balancing features."
+        },
+        {
+          "term": "session_vs_token_auth",
+          "module": "04-apis",
+          "description": "The authentication models that determine whether server state is required."
+        },
+        {
+          "term": "microservices_monolith",
+          "module": "04-apis",
+          "description": "Related concept: Microservices vs Monolith."
+        }
+      ]
+    },
+    "microservices_monolith": {
+      "level": 10,
+      "file": "terms/level_10/microservices_monolith.md",
+      "display_name": "Microservices vs Monolith",
+      "prerequisites": [
+        {
+          "term": "api",
+          "module": "04-apis",
+          "description": "The core interface connection concepts."
+        },
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The resource-focused communication style."
+        }
+      ],
+      "related": [
+        {
+          "term": "api_gateway",
+          "module": "04-apis",
+          "description": "The routing entry point used to coordinate microservices traffic."
+        },
+        {
+          "term": "load_balancing",
+          "module": "04-apis",
+          "description": "The process of distributing incoming requests to scaled service instances."
+        }
+      ]
+    },
+    "mocking": {
+      "level": 10,
+      "file": "terms/level_10/mocking.md",
+      "display_name": "Mocking APIs",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The frontend code that calls the mock."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The hardcoded data returned by the mock."
+        }
+      ],
+      "related": [
+        {
+          "term": "openapi",
+          "module": "04-apis",
+          "description": "You can actually feed an OpenAPI file into a mocking tool, and it will automatically generate the fake API for you!"
+        },
+        {
+          "term": "api_clients",
+          "module": "04-apis",
+          "description": "Postman has built-in Mock Server capabilities."
+        },
+        {
+          "term": "api_contract",
+          "module": "04-apis",
+          "description": "Related concept: API Contract / Schema-First Design."
+        }
+      ]
+    },
+    "network_tab": {
+      "level": 10,
+      "file": "terms/level_10/network_tab.md",
+      "display_name": "DevTools Network Tab",
+      "prerequisites": [
+        {
+          "term": "request_response",
+          "module": "04-apis",
+          "description": "The network request round-trip fundamentals."
+        },
+        {
+          "term": "http_headers",
+          "module": "04-apis",
+          "description": "The metadata packets attached to requests."
+        }
+      ],
+      "related": [
+        {
+          "term": "api_clients",
+          "module": "04-apis",
+          "description": "External tools used to test endpoints in isolation."
+        },
+        {
+          "term": "cors_errors",
+          "module": "04-apis",
+          "description": "The console blocks diagnosed using the Network tab."
+        }
+      ]
+    },
+    "openapi": {
+      "level": 10,
+      "file": "terms/level_10/openapi.md",
+      "display_name": "Swagger / OpenAPI Specification",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "OpenAPI is specifically designed to document REST APIs."
+        },
+        {
+          "term": "json",
+          "module": "04-apis",
+          "description": "The OpenAPI blueprint is written in JSON (or YAML)."
+        }
+      ],
+      "related": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architecture this specification documents."
+        },
+        {
+          "term": "graphql",
+          "module": "04-apis",
+          "description": "GraphQL doesn't need Swagger, because GraphQL has \"Introspection\" (it inherently documents itself!)."
+        },
+        {
+          "term": "api_clients",
+          "module": "04-apis",
+          "description": "Related concept: Postman / Insomnia (API Clients)."
+        },
+        {
+          "term": "mocking",
+          "module": "04-apis",
+          "description": "Related concept: Mocking APIs."
+        }
+      ]
+    },
+    "protocol_buffers": {
+      "level": 10,
+      "file": "terms/level_10/protocol_buffers.md",
+      "display_name": "Protocol Buffers (protobuf)",
+      "prerequisites": [
+        {
+          "term": "serialization",
+          "module": "04-apis",
+          "description": "The concepts of formatting objects for transmission."
+        },
+        {
+          "term": "grpc",
+          "module": "04-apis",
+          "description": "The network protocol designed on top of Protocol Buffers."
+        }
+      ],
+      "related": [
+        {
+          "term": "binary_vs_text_formats",
+          "module": "04-apis",
+          "description": "The serialization format comparisons."
+        },
+        {
+          "term": "base64",
+          "module": "04-apis",
+          "description": "The text translation method used if binary bytes must travel over text channels."
+        }
+      ]
+    },
+    "sdk": {
+      "level": 10,
+      "file": "terms/level_10/sdk.md",
+      "display_name": "SDK / Client Library",
+      "prerequisites": [
+        {
+          "term": "fetch",
+          "module": "04-apis",
+          "description": "The core networking protocol engine."
+        },
+        {
+          "term": "openapi",
+          "module": "04-apis",
+          "description": "The schema descriptions used to generate client code."
+        }
+      ],
+      "related": [
+        {
+          "term": "secrets_env",
+          "module": "04-apis",
+          "description": "The system configurations used to secure keys injected into SDK constructors."
+        },
+        {
+          "term": "api_clients",
+          "module": "04-apis",
+          "description": "External clients used to test API behaviors before installing SDK packages."
+        }
+      ]
+    },
+    "soap_xml_rpc": {
+      "level": 10,
+      "file": "terms/level_10/soap_xml_rpc.md",
+      "display_name": "SOAP & XML-RPC (legacy)",
+      "prerequisites": [
+        {
+          "term": "xml",
+          "module": "04-apis",
+          "description": "The tag-based markup language used for legacy payloads."
+        },
+        {
+          "term": "http_methods",
+          "module": "04-apis",
+          "description": "The network action keywords."
+        }
+      ],
+      "related": [
+        {
+          "term": "grpc",
+          "module": "04-apis",
+          "description": "The modern binary remote procedure call alternative."
+        },
+        {
+          "term": "xml",
+          "module": "04-apis",
+          "description": "The data format that structures SOAP messages."
+        }
+      ]
+    },
+    "versioning": {
+      "level": 10,
+      "file": "terms/level_10/versioning.md",
+      "display_name": "API Versioning (v1, v2)",
+      "prerequisites": [
+        {
+          "term": "rest",
+          "module": "04-apis",
+          "description": "The architecture where versioning is most heavily debated."
+        },
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "The URLs that get versioned."
+        }
+      ],
+      "related": [
+        {
+          "term": "endpoints_resources",
+          "module": "04-apis",
+          "description": "Where the `/v1/` is injected."
+        },
+        {
+          "term": "graphql",
+          "module": "04-apis",
+          "description": "GraphQL famously avoids versioning because clients specifically ask for the exact fields they want. If a field is deprecated, GraphQL just throws a warning."
+        },
+        {
+          "term": "content_negotiation",
+          "module": "04-apis",
+          "description": "Related concept: Content Negotiation (Accept)."
+        },
+        {
+          "term": "resource_naming",
+          "module": "04-apis",
+          "description": "Related concept: Resource Naming & URI Design."
+        },
+        {
+          "term": "api_contract",
+          "module": "04-apis",
+          "description": "Related concept: API Contract / Schema-First Design."
+        },
+        {
+          "term": "deprecation_sunsetting",
+          "module": "04-apis",
+          "description": "Related concept: Deprecation & Sunsetting."
+        }
+      ]
+    }
+  }
+}

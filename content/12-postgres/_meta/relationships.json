@@ -1,0 +1,4303 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "12-postgres",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "client_server_model": {
+      "level": 1,
+      "file": "terms/level_01/client_server_model.md",
+      "display_name": "Client-Server Model (in Databases)",
+      "prerequisites": [
+        {
+          "term": "postgresql",
+          "module": "12-postgres",
+          "description": "The database server process."
+        }
+      ],
+      "related": [
+        {
+          "term": "postgresql",
+          "module": "12-postgres",
+          "description": "The server engine."
+        },
+        {
+          "term": "connection_string",
+          "module": "12-postgres",
+          "description": "The client connection guide."
+        },
+        {
+          "term": "psql",
+          "module": "12-postgres",
+          "description": "Related concept: `psql` (Interactive Terminal)."
+        }
+      ]
+    },
+    "column": {
+      "level": 1,
+      "file": "terms/level_01/column.md",
+      "display_name": "Column (Field / Attribute)",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The parent container grid where columns are defined."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The parent container."
+        },
+        {
+          "term": "row",
+          "module": "12-postgres",
+          "description": "The horizontal record unit."
+        },
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "Related concept: Relational Database."
+        }
+      ]
+    },
+    "connection_string": {
+      "level": 1,
+      "file": "terms/level_01/connection_string.md",
+      "display_name": "Connection String / DSN",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "12-postgres",
+          "description": "Understanding that client libraries require parameters to find database servers."
+        }
+      ],
+      "related": [
+        {
+          "term": "client_server_model",
+          "module": "12-postgres",
+          "description": "The network structure."
+        },
+        {
+          "term": "psql",
+          "module": "12-postgres",
+          "description": "Connects using connection strings."
+        },
+        {
+          "term": "pgadmin",
+          "module": "12-postgres",
+          "description": "Related concept: pgAdmin & GUI Tools."
+        }
+      ]
+    },
+    "create_drop_database": {
+      "level": 1,
+      "file": "terms/level_01/create_drop_database.md",
+      "display_name": "`CREATE DATABASE` / `DROP DATABASE`",
+      "prerequisites": [
+        {
+          "term": "postgresql",
+          "module": "12-postgres",
+          "description": "The host server where databases are created."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The language schema query syntax."
+        }
+      ],
+      "related": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "The target logical container."
+        },
+        {
+          "term": "create_drop_table",
+          "module": "12-postgres",
+          "description": "Managing structures inside the database."
+        }
+      ]
+    },
+    "create_drop_table": {
+      "level": 1,
+      "file": "terms/level_01/create_drop_table.md",
+      "display_name": "`CREATE TABLE` / `DROP TABLE`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The logical data grid being managed."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The declarative syntax standard."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The resulting storage structure."
+        },
+        {
+          "term": "create_drop_database",
+          "module": "12-postgres",
+          "description": "Managing the parent database containers."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "Related concept: SQL (Structured Query Language)."
+        },
+        {
+          "term": "truncate",
+          "module": "12-postgres",
+          "description": "Related concept: `TRUNCATE`."
+        },
+        {
+          "term": "alter_table",
+          "module": "12-postgres",
+          "description": "Related concept: `ALTER TABLE`."
+        }
+      ]
+    },
+    "database": {
+      "level": 1,
+      "file": "terms/level_01/database.md",
+      "display_name": "Database",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "postgresql",
+          "module": "12-postgres",
+          "description": "A specific type of database management system."
+        },
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The relational structural philosophy."
+        },
+        {
+          "term": "create_drop_database",
+          "module": "12-postgres",
+          "description": "Related concept: `CREATE DATABASE` / `DROP DATABASE`."
+        },
+        {
+          "term": "schema",
+          "module": "12-postgres",
+          "description": "Related concept: Schema."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "Related concept: SQL (Structured Query Language)."
+        }
+      ]
+    },
+    "pgadmin": {
+      "level": 1,
+      "file": "terms/level_01/pgadmin.md",
+      "display_name": "pgAdmin & GUI Tools",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "12-postgres",
+          "description": "Understanding that visual tools are clients connecting to a background server."
+        }
+      ],
+      "related": [
+        {
+          "term": "psql",
+          "module": "12-postgres",
+          "description": "The command-line alternative."
+        },
+        {
+          "term": "connection_string",
+          "module": "12-postgres",
+          "description": "The parameters used by GUIs to connect."
+        }
+      ]
+    },
+    "postgresql": {
+      "level": 1,
+      "file": "terms/level_01/postgresql.md",
+      "display_name": "PostgreSQL (Postgres)",
+      "prerequisites": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Understanding why we need database storage."
+        }
+      ],
+      "related": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "The parent technology class."
+        },
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The relational data structure model."
+        },
+        {
+          "term": "client_server_model",
+          "module": "12-postgres",
+          "description": "Related concept: Client-Server Model (in Databases)."
+        }
+      ]
+    },
+    "psql": {
+      "level": 1,
+      "file": "terms/level_01/psql.md",
+      "display_name": "`psql` (Interactive Terminal)",
+      "prerequisites": [
+        {
+          "term": "client_server_model",
+          "module": "12-postgres",
+          "description": "Understanding that `psql` is a client connecting to a server process."
+        }
+      ],
+      "related": [
+        {
+          "term": "client_server_model",
+          "module": "12-postgres",
+          "description": "The underlying network architecture."
+        },
+        {
+          "term": "pgadmin",
+          "module": "12-postgres",
+          "description": "The graphical client alternative."
+        },
+        {
+          "term": "connection_string",
+          "module": "12-postgres",
+          "description": "Related concept: Connection String / DSN."
+        }
+      ]
+    },
+    "relational_database": {
+      "level": 1,
+      "file": "terms/level_01/relational_database.md",
+      "display_name": "Relational Database",
+      "prerequisites": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Why databases exist in software architecture."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The core storage grid."
+        },
+        {
+          "term": "row",
+          "module": "12-postgres",
+          "description": "The horizontal database entry."
+        },
+        {
+          "term": "column",
+          "module": "12-postgres",
+          "description": "The vertical data category."
+        },
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Related concept: Database."
+        },
+        {
+          "term": "postgresql",
+          "module": "12-postgres",
+          "description": "Related concept: PostgreSQL (Postgres)."
+        }
+      ]
+    },
+    "row": {
+      "level": 1,
+      "file": "terms/level_01/row.md",
+      "display_name": "Row (Record / Tuple)",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The parent container grid where rows live."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The parent container."
+        },
+        {
+          "term": "column",
+          "module": "12-postgres",
+          "description": "The vertical data parameters."
+        },
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "Related concept: Relational Database."
+        }
+      ]
+    },
+    "schema": {
+      "level": 1,
+      "file": "terms/level_01/schema.md",
+      "display_name": "Schema",
+      "prerequisites": [
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The parent system housing tables."
+        },
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The database objects grouped by schemas."
+        }
+      ],
+      "related": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "The parent container."
+        },
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The child object."
+        }
+      ]
+    },
+    "sql": {
+      "level": 1,
+      "file": "terms/level_01/sql.md",
+      "display_name": "SQL (Structured Query Language)",
+      "prerequisites": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Understanding the need for structured data storage."
+        }
+      ],
+      "related": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "The query target."
+        },
+        {
+          "term": "create_drop_table",
+          "module": "12-postgres",
+          "description": "Core SQL DDL statements."
+        }
+      ]
+    },
+    "table": {
+      "level": 1,
+      "file": "terms/level_01/table.md",
+      "display_name": "Table (Relation)",
+      "prerequisites": [
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The parent database model."
+        }
+      ],
+      "related": [
+        {
+          "term": "row",
+          "module": "12-postgres",
+          "description": "The horizontal table entries."
+        },
+        {
+          "term": "column",
+          "module": "12-postgres",
+          "description": "The vertical table columns."
+        },
+        {
+          "term": "create_drop_table",
+          "module": "12-postgres",
+          "description": "The table lifecycle SQL commands."
+        },
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "Related concept: Relational Database."
+        },
+        {
+          "term": "schema",
+          "module": "12-postgres",
+          "description": "Related concept: Schema."
+        },
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "Related concept: `INSERT INTO`."
+        },
+        {
+          "term": "foreign_data_wrappers",
+          "module": "12-postgres",
+          "description": "Related concept: Foreign Data Wrappers (`postgres_fdw`)."
+        }
+      ]
+    },
+    "boolean": {
+      "level": 2,
+      "file": "terms/level_02/boolean.md",
+      "display_name": "`BOOLEAN`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding database column typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing framework."
+        },
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The unset boolean state."
+        }
+      ]
+    },
+    "check_constraint": {
+      "level": 2,
+      "file": "terms/level_02/check_constraint.md",
+      "display_name": "`CHECK` Constraint",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding table columns setup."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The typing foundation."
+        },
+        {
+          "term": "not_null",
+          "module": "12-postgres",
+          "description": "Often paired with check rules."
+        }
+      ]
+    },
+    "data_types": {
+      "level": 2,
+      "file": "terms/level_02/data_types.md",
+      "display_name": "Data Types (Overview)",
+      "prerequisites": [
+        {
+          "term": "column",
+          "module": "12-postgres",
+          "description": "Understanding table structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "integer_types",
+          "module": "12-postgres",
+          "description": "Numeric integer types."
+        },
+        {
+          "term": "text_types",
+          "module": "12-postgres",
+          "description": "Character text types."
+        },
+        {
+          "term": "boolean",
+          "module": "12-postgres",
+          "description": "Related concept: `BOOLEAN`."
+        },
+        {
+          "term": "check_constraint",
+          "module": "12-postgres",
+          "description": "Related concept: `CHECK` Constraint."
+        },
+        {
+          "term": "date_time_types",
+          "module": "12-postgres",
+          "description": "Related concept: `DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`."
+        },
+        {
+          "term": "default_value",
+          "module": "12-postgres",
+          "description": "Related concept: `DEFAULT` Value."
+        },
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "Related concept: `NULL`."
+        },
+        {
+          "term": "numeric_types",
+          "module": "12-postgres",
+          "description": "Related concept: `NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`."
+        },
+        {
+          "term": "type_casting",
+          "module": "12-postgres",
+          "description": "Related concept: Type Casting (`CAST` / `::`)."
+        },
+        {
+          "term": "enum_type",
+          "module": "12-postgres",
+          "description": "Related concept: `ENUM` Type."
+        },
+        {
+          "term": "json_jsonb",
+          "module": "12-postgres",
+          "description": "Related concept: `JSON` / `JSONB` Type."
+        },
+        {
+          "term": "uuid_type",
+          "module": "12-postgres",
+          "description": "Related concept: `UUID` Type."
+        }
+      ]
+    },
+    "date_time_types": {
+      "level": 2,
+      "file": "terms/level_02/date_time_types.md",
+      "display_name": "`DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding database column typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing framework."
+        },
+        {
+          "term": "date_time_functions",
+          "module": "12-postgres",
+          "description": "Related concept: Date/Time Functions (`NOW()`, `CURRENT_DATE`, `AGE()`, `EXTRACT`, `DATE_TRUNC`, `INTERVAL`)."
+        }
+      ]
+    },
+    "default_value": {
+      "level": 2,
+      "file": "terms/level_02/default_value.md",
+      "display_name": "`DEFAULT` Value",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding database column typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The typing foundation."
+        },
+        {
+          "term": "not_null",
+          "module": "12-postgres",
+          "description": "Often paired with defaults."
+        }
+      ]
+    },
+    "integer_types": {
+      "level": 2,
+      "file": "terms/level_02/integer_types.md",
+      "display_name": "`INTEGER` / `BIGINT` / `SMALLINT`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding database column typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing framework."
+        },
+        {
+          "term": "serial_identity",
+          "module": "12-postgres",
+          "description": "Auto-incrementing integers."
+        },
+        {
+          "term": "text_types",
+          "module": "12-postgres",
+          "description": "Related concept: `TEXT` / `VARCHAR` / `CHAR`."
+        }
+      ]
+    },
+    "not_null": {
+      "level": 2,
+      "file": "terms/level_02/not_null.md",
+      "display_name": "`NOT NULL` Constraint",
+      "prerequisites": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "Understanding the missing state we are trying to block."
+        }
+      ],
+      "related": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The unset state."
+        },
+        {
+          "term": "default_value",
+          "module": "12-postgres",
+          "description": "Providing fallbacks for required columns."
+        },
+        {
+          "term": "check_constraint",
+          "module": "12-postgres",
+          "description": "Related concept: `CHECK` Constraint."
+        }
+      ]
+    },
+    "null": {
+      "level": 2,
+      "file": "terms/level_02/null.md",
+      "display_name": "`NULL`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding table columns setup."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The typing foundation."
+        },
+        {
+          "term": "not_null",
+          "module": "12-postgres",
+          "description": "Blocking NULL values."
+        },
+        {
+          "term": "boolean",
+          "module": "12-postgres",
+          "description": "Related concept: `BOOLEAN`."
+        },
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "Related concept: `UNIQUE` Constraint."
+        },
+        {
+          "term": "is_null",
+          "module": "12-postgres",
+          "description": "Related concept: `IS NULL` / `IS NOT NULL`."
+        },
+        {
+          "term": "coalesce_nullif",
+          "module": "12-postgres",
+          "description": "Related concept: `COALESCE` / `NULLIF`."
+        },
+        {
+          "term": "null_in_aggregates",
+          "module": "12-postgres",
+          "description": "Related concept: `NULL` Behavior in Expressions & Aggregates."
+        }
+      ]
+    },
+    "numeric_precision_scale": {
+      "level": 2,
+      "file": "terms/level_02/numeric_precision_scale.md",
+      "display_name": "`NUMERIC` Precision & Scale",
+      "prerequisites": [
+        {
+          "term": "numeric_types",
+          "module": "12-postgres",
+          "description": "The parent exact numeric type."
+        }
+      ],
+      "related": [
+        {
+          "term": "numeric_types",
+          "module": "12-postgres",
+          "description": "The parent exact numeric type."
+        }
+      ]
+    },
+    "numeric_types": {
+      "level": 2,
+      "file": "terms/level_02/numeric_types.md",
+      "display_name": "`NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding database column typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing framework."
+        },
+        {
+          "term": "numeric_precision_scale",
+          "module": "12-postgres",
+          "description": "Configuring exact decimal limits."
+        }
+      ]
+    },
+    "primary_key": {
+      "level": 2,
+      "file": "terms/level_02/primary_key.md",
+      "display_name": "`PRIMARY KEY`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Columns typing."
+        },
+        {
+          "term": "not_null",
+          "module": "12-postgres",
+          "description": "The requirement of non-empty fields."
+        }
+      ],
+      "related": [
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "Ensuring distinct values without primary key anchors."
+        },
+        {
+          "term": "serial_identity",
+          "module": "12-postgres",
+          "description": "How primary key numbers are usually generated."
+        },
+        {
+          "term": "natural_vs_surrogate_key",
+          "module": "12-postgres",
+          "description": "Related concept: Natural Key vs. Surrogate Key."
+        },
+        {
+          "term": "composite_key",
+          "module": "12-postgres",
+          "description": "Related concept: Composite Key."
+        }
+      ]
+    },
+    "serial_identity": {
+      "level": 2,
+      "file": "terms/level_02/serial_identity.md",
+      "display_name": "`SERIAL` / `GENERATED ALWAYS AS IDENTITY`",
+      "prerequisites": [
+        {
+          "term": "integer_types",
+          "module": "12-postgres",
+          "description": "The numeric types assigned to identity columns."
+        }
+      ],
+      "related": [
+        {
+          "term": "integer_types",
+          "module": "12-postgres",
+          "description": "The underlying types."
+        },
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "The constraint typically bound to identity columns."
+        }
+      ]
+    },
+    "text_types": {
+      "level": 2,
+      "file": "terms/level_02/text_types.md",
+      "display_name": "`TEXT` / `VARCHAR` / `CHAR`",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding database column typing."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing framework."
+        },
+        {
+          "term": "integer_types",
+          "module": "12-postgres",
+          "description": "Numeric integer types."
+        }
+      ]
+    },
+    "unique_constraint": {
+      "level": 2,
+      "file": "terms/level_02/unique_constraint.md",
+      "display_name": "`UNIQUE` Constraint",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Columns typing."
+        },
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "Understanding the missing state representation."
+        }
+      ],
+      "related": [
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "The main unique and required column anchor."
+        },
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The values that escape uniqueness checks."
+        },
+        {
+          "term": "upsert",
+          "module": "12-postgres",
+          "description": "Related concept: `UPSERT` (`ON CONFLICT`)."
+        },
+        {
+          "term": "one_to_one",
+          "module": "12-postgres",
+          "description": "Related concept: One-to-One Relationship."
+        },
+        {
+          "term": "unique_index",
+          "module": "12-postgres",
+          "description": "Related concept: Unique Index."
+        }
+      ]
+    },
+    "delete": {
+      "level": 3,
+      "file": "terms/level_03/delete.md",
+      "display_name": "`DELETE`",
+      "prerequisites": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The query filter used to target specific records."
+        }
+      ],
+      "related": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The query target filter."
+        },
+        {
+          "term": "truncate",
+          "module": "12-postgres",
+          "description": "The high-speed table emptying alternative."
+        },
+        {
+          "term": "returning",
+          "module": "12-postgres",
+          "description": "Related concept: `RETURNING` Clause."
+        }
+      ]
+    },
+    "insert_into": {
+      "level": 3,
+      "file": "terms/level_03/insert_into.md",
+      "display_name": "`INSERT INTO`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The target container grid where data is stored."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "Declarative query syntax standards."
+        }
+      ],
+      "related": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The target data storage container."
+        },
+        {
+          "term": "multi_row_insert",
+          "module": "12-postgres",
+          "description": "Bulk insert optimizations."
+        },
+        {
+          "term": "returning",
+          "module": "12-postgres",
+          "description": "Returning data immediately after inserts."
+        },
+        {
+          "term": "upsert",
+          "module": "12-postgres",
+          "description": "Related concept: `UPSERT` (`ON CONFLICT`)."
+        }
+      ]
+    },
+    "is_null": {
+      "level": 3,
+      "file": "terms/level_03/is_null.md",
+      "display_name": "`IS NULL` / `IS NOT NULL`",
+      "prerequisites": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "Understanding the absent state."
+        },
+        {
+          "term": "operators",
+          "module": "12-postgres",
+          "description": "How basic SQL comparisons work."
+        }
+      ],
+      "related": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The parent absent state."
+        },
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The query filter wrapper."
+        },
+        {
+          "term": "operators",
+          "module": "12-postgres",
+          "description": "Related concept: Comparison & Logical Operators."
+        }
+      ]
+    },
+    "limit_offset": {
+      "level": 3,
+      "file": "terms/level_03/limit_offset.md",
+      "display_name": "`LIMIT` / `OFFSET`",
+      "prerequisites": [
+        {
+          "term": "order_by",
+          "module": "12-postgres",
+          "description": "The sorting clause required for stable pagination."
+        }
+      ],
+      "related": [
+        {
+          "term": "order_by",
+          "module": "12-postgres",
+          "description": "The sorting anchor for pagination stability."
+        }
+      ]
+    },
+    "multi_row_insert": {
+      "level": 3,
+      "file": "terms/level_03/multi_row_insert.md",
+      "display_name": "Multi-row `INSERT` / `INSERT ... SELECT`",
+      "prerequisites": [
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "The baseline insert statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The query statement sourcing copy operations."
+        }
+      ]
+    },
+    "operators": {
+      "level": 3,
+      "file": "terms/level_03/operators.md",
+      "display_name": "Comparison & Logical Operators",
+      "prerequisites": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The parent filter context."
+        }
+      ],
+      "related": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The parent filter context."
+        },
+        {
+          "term": "is_null",
+          "module": "12-postgres",
+          "description": "The only way to compare missing values."
+        },
+        {
+          "term": "like_ilike",
+          "module": "12-postgres",
+          "description": "Related concept: `LIKE` / `ILIKE` Pattern Matching."
+        }
+      ]
+    },
+    "order_by": {
+      "level": 3,
+      "file": "terms/level_03/order_by.md",
+      "display_name": "`ORDER BY`",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline query command."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The query starter."
+        },
+        {
+          "term": "limit_offset",
+          "module": "12-postgres",
+          "description": "Restricting sorted output counts."
+        }
+      ]
+    },
+    "returning": {
+      "level": 3,
+      "file": "terms/level_03/returning.md",
+      "display_name": "`RETURNING` Clause",
+      "prerequisites": [
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "Sourcing new rows."
+        },
+        {
+          "term": "update",
+          "module": "12-postgres",
+          "description": "Modifying rows."
+        },
+        {
+          "term": "delete",
+          "module": "12-postgres",
+          "description": "Removing rows."
+        }
+      ],
+      "related": [
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "update",
+          "module": "12-postgres",
+          "description": "The parent edit statement."
+        },
+        {
+          "term": "delete",
+          "module": "12-postgres",
+          "description": "The parent delete statement."
+        }
+      ]
+    },
+    "select": {
+      "level": 3,
+      "file": "terms/level_03/select.md",
+      "display_name": "`SELECT`",
+      "prerequisites": [
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The storage philosophy."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "Declarative query syntax standards."
+        }
+      ],
+      "related": [
+        {
+          "term": "select_star_vs_columns",
+          "module": "12-postgres",
+          "description": "Sizing selection scopes."
+        },
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "Filtering query results."
+        },
+        {
+          "term": "multi_row_insert",
+          "module": "12-postgres",
+          "description": "Related concept: Multi-row `INSERT` / `INSERT ... SELECT`."
+        },
+        {
+          "term": "order_by",
+          "module": "12-postgres",
+          "description": "Related concept: `ORDER BY`."
+        },
+        {
+          "term": "aggregate_functions",
+          "module": "12-postgres",
+          "description": "Related concept: Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)."
+        },
+        {
+          "term": "aliases",
+          "module": "12-postgres",
+          "description": "Related concept: Aliases (`AS`)."
+        },
+        {
+          "term": "case_expression",
+          "module": "12-postgres",
+          "description": "Related concept: `CASE` Expression."
+        },
+        {
+          "term": "distinct",
+          "module": "12-postgres",
+          "description": "Related concept: `DISTINCT`."
+        },
+        {
+          "term": "subquery",
+          "module": "12-postgres",
+          "description": "Related concept: Subquery (Nested Query)."
+        },
+        {
+          "term": "set_operations",
+          "module": "12-postgres",
+          "description": "Related concept: `UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`."
+        }
+      ]
+    },
+    "select_star_vs_columns": {
+      "level": 3,
+      "file": "terms/level_03/select_star_vs_columns.md",
+      "display_name": "`SELECT *` vs. Column List",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline data retrieval statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The parent query command."
+        }
+      ]
+    },
+    "truncate": {
+      "level": 3,
+      "file": "terms/level_03/truncate.md",
+      "display_name": "`TRUNCATE`",
+      "prerequisites": [
+        {
+          "term": "delete",
+          "module": "12-postgres",
+          "description": "The standard row deletion command."
+        }
+      ],
+      "related": [
+        {
+          "term": "delete",
+          "module": "12-postgres",
+          "description": "The DML row-filtering deletion command."
+        },
+        {
+          "term": "create_drop_table",
+          "module": "12-postgres",
+          "description": "Managing table lifecycles."
+        }
+      ]
+    },
+    "update": {
+      "level": 3,
+      "file": "terms/level_03/update.md",
+      "display_name": "`UPDATE`",
+      "prerequisites": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The query filter used to target specific records."
+        }
+      ],
+      "related": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The update filter anchor."
+        },
+        {
+          "term": "returning",
+          "module": "12-postgres",
+          "description": "Returning updated values instantly."
+        }
+      ]
+    },
+    "upsert": {
+      "level": 3,
+      "file": "terms/level_03/upsert.md",
+      "display_name": "`UPSERT` (`ON CONFLICT`)",
+      "prerequisites": [
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "The baseline write command."
+        },
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "The database rule that triggers conflict intercepts."
+        }
+      ],
+      "related": [
+        {
+          "term": "insert_into",
+          "module": "12-postgres",
+          "description": "The parent write statement."
+        },
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "The trigger rule for conflicts."
+        }
+      ]
+    },
+    "where": {
+      "level": 3,
+      "file": "terms/level_03/where.md",
+      "display_name": "`WHERE` Clause",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline query command."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "Sourcing data."
+        },
+        {
+          "term": "operators",
+          "module": "12-postgres",
+          "description": "The parameters used to write conditions."
+        },
+        {
+          "term": "is_null",
+          "module": "12-postgres",
+          "description": "Handling missing data filters."
+        },
+        {
+          "term": "delete",
+          "module": "12-postgres",
+          "description": "Related concept: `DELETE`."
+        },
+        {
+          "term": "update",
+          "module": "12-postgres",
+          "description": "Related concept: `UPDATE`."
+        },
+        {
+          "term": "exists",
+          "module": "12-postgres",
+          "description": "Related concept: `EXISTS` / `NOT EXISTS`."
+        },
+        {
+          "term": "having",
+          "module": "12-postgres",
+          "description": "Related concept: `HAVING`."
+        }
+      ]
+    },
+    "aggregate_functions": {
+      "level": 4,
+      "file": "terms/level_04/aggregate_functions.md",
+      "display_name": "Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline data retrieval statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The parent query command."
+        },
+        {
+          "term": "null_in_aggregates",
+          "module": "12-postgres",
+          "description": "How missing values affect summaries."
+        },
+        {
+          "term": "group_by",
+          "module": "12-postgres",
+          "description": "Slicing aggregates into categories."
+        }
+      ]
+    },
+    "aliases": {
+      "level": 4,
+      "file": "terms/level_04/aliases.md",
+      "display_name": "Aliases (`AS`)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline data retrieval statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The parent query command."
+        },
+        {
+          "term": "self_join",
+          "module": "12-postgres",
+          "description": "Related concept: Self-Join."
+        }
+      ]
+    },
+    "case_expression": {
+      "level": 4,
+      "file": "terms/level_04/case_expression.md",
+      "display_name": "`CASE` Expression",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline query projection statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The parent query command."
+        },
+        {
+          "term": "type_casting",
+          "module": "12-postgres",
+          "description": "Converting data types in branches."
+        }
+      ]
+    },
+    "coalesce_nullif": {
+      "level": 4,
+      "file": "terms/level_04/coalesce_nullif.md",
+      "display_name": "`COALESCE` / `NULLIF`",
+      "prerequisites": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The absent state we are validating."
+        }
+      ],
+      "related": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The parent absent state."
+        },
+        {
+          "term": "type_casting",
+          "module": "12-postgres",
+          "description": "Converting data types inside functions."
+        },
+        {
+          "term": "null_in_aggregates",
+          "module": "12-postgres",
+          "description": "Related concept: `NULL` Behavior in Expressions & Aggregates."
+        }
+      ]
+    },
+    "date_time_functions": {
+      "level": 4,
+      "file": "terms/level_04/date_time_functions.md",
+      "display_name": "Date/Time Functions (`NOW()`, `CURRENT_DATE`, `AGE()`, `EXTRACT`, `DATE_TRUNC`, `INTERVAL`)",
+      "prerequisites": [
+        {
+          "term": "date_time_types",
+          "module": "12-postgres",
+          "description": "The temporal data types."
+        }
+      ],
+      "related": [
+        {
+          "term": "date_time_types",
+          "module": "12-postgres",
+          "description": "The parent temporal types."
+        }
+      ]
+    },
+    "distinct": {
+      "level": 4,
+      "file": "terms/level_04/distinct.md",
+      "display_name": "`DISTINCT`",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline data retrieval statement."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The parent query command."
+        },
+        {
+          "term": "group_by",
+          "module": "12-postgres",
+          "description": "Another way to collapse duplicate rows."
+        }
+      ]
+    },
+    "exists": {
+      "level": 4,
+      "file": "terms/level_04/exists.md",
+      "display_name": "`EXISTS` / `NOT EXISTS`",
+      "prerequisites": [
+        {
+          "term": "subquery",
+          "module": "12-postgres",
+          "description": "The query format evaluated by the operator."
+        }
+      ],
+      "related": [
+        {
+          "term": "subquery",
+          "module": "12-postgres",
+          "description": "The query container."
+        },
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The parent filter wrapper."
+        }
+      ]
+    },
+    "group_by": {
+      "level": 4,
+      "file": "terms/level_04/group_by.md",
+      "display_name": "`GROUP BY`",
+      "prerequisites": [
+        {
+          "term": "aggregate_functions",
+          "module": "12-postgres",
+          "description": "The summaries calculated per group."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregate_functions",
+          "module": "12-postgres",
+          "description": "The math engines inside groups."
+        },
+        {
+          "term": "having",
+          "module": "12-postgres",
+          "description": "Filtering grouped outputs."
+        },
+        {
+          "term": "distinct",
+          "module": "12-postgres",
+          "description": "Related concept: `DISTINCT`."
+        }
+      ]
+    },
+    "having": {
+      "level": 4,
+      "file": "terms/level_04/having.md",
+      "display_name": "`HAVING`",
+      "prerequisites": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The individual row filtering clause."
+        },
+        {
+          "term": "group_by",
+          "module": "12-postgres",
+          "description": "The clause that builds categories."
+        }
+      ],
+      "related": [
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The pre-grouping filter."
+        },
+        {
+          "term": "group_by",
+          "module": "12-postgres",
+          "description": "The grouping engine."
+        }
+      ]
+    },
+    "like_ilike": {
+      "level": 4,
+      "file": "terms/level_04/like_ilike.md",
+      "display_name": "`LIKE` / `ILIKE` Pattern Matching",
+      "prerequisites": [
+        {
+          "term": "operators",
+          "module": "12-postgres",
+          "description": "The baseline query comparison symbols."
+        }
+      ],
+      "related": [
+        {
+          "term": "operators",
+          "module": "12-postgres",
+          "description": "The parent comparison standard."
+        },
+        {
+          "term": "string_functions",
+          "module": "12-postgres",
+          "description": "Text manipulation utilities."
+        }
+      ]
+    },
+    "null_in_aggregates": {
+      "level": 4,
+      "file": "terms/level_04/null_in_aggregates.md",
+      "display_name": "`NULL` Behavior in Expressions & Aggregates",
+      "prerequisites": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "Understanding the absent state."
+        },
+        {
+          "term": "aggregate_functions",
+          "module": "12-postgres",
+          "description": "Standard summary calculations."
+        }
+      ],
+      "related": [
+        {
+          "term": "null",
+          "module": "12-postgres",
+          "description": "The parent absent state."
+        },
+        {
+          "term": "aggregate_functions",
+          "module": "12-postgres",
+          "description": "Standard calculations."
+        },
+        {
+          "term": "coalesce_nullif",
+          "module": "12-postgres",
+          "description": "Swapping NULLs for safe defaults."
+        }
+      ]
+    },
+    "string_functions": {
+      "level": 4,
+      "file": "terms/level_04/string_functions.md",
+      "display_name": "String Functions (`CONCAT`, `LENGTH`, `UPPER`, `LOWER`, `TRIM`, `SUBSTRING`, `REPLACE`)",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "Understanding text columns."
+        }
+      ],
+      "related": [
+        {
+          "term": "like_ilike",
+          "module": "12-postgres",
+          "description": "Wildcard text searches."
+        }
+      ]
+    },
+    "subquery": {
+      "level": 4,
+      "file": "terms/level_04/subquery.md",
+      "display_name": "Subquery (Nested Query)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline query command."
+        },
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The parent filter context where subqueries are commonly nested."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The query starter."
+        },
+        {
+          "term": "exists",
+          "module": "12-postgres",
+          "description": "Testing subquery row matching."
+        }
+      ]
+    },
+    "type_casting": {
+      "level": 4,
+      "file": "terms/level_04/type_casting.md",
+      "display_name": "Type Casting (`CAST` / `::`)",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The database typing system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing framework."
+        },
+        {
+          "term": "case_expression",
+          "module": "12-postgres",
+          "description": "Related concept: `CASE` Expression."
+        },
+        {
+          "term": "coalesce_nullif",
+          "module": "12-postgres",
+          "description": "Related concept: `COALESCE` / `NULLIF`."
+        }
+      ]
+    },
+    "cross_join": {
+      "level": 5,
+      "file": "terms/level_05/cross_join.md",
+      "display_name": "`CROSS JOIN`",
+      "prerequisites": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "The parent table combination mechanics."
+        }
+      ],
+      "related": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "The parent operation."
+        },
+        {
+          "term": "self_join",
+          "module": "12-postgres",
+          "description": "Joining a table to itself."
+        }
+      ]
+    },
+    "foreign_key": {
+      "level": 5,
+      "file": "terms/level_05/foreign_key.md",
+      "display_name": "`FOREIGN KEY`",
+      "prerequisites": [
+        {
+          "term": "referential_integrity",
+          "module": "12-postgres",
+          "description": "The logical consistency standard."
+        },
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "The parent unique identifier targeted by references."
+        }
+      ],
+      "related": [
+        {
+          "term": "referential_integrity",
+          "module": "12-postgres",
+          "description": "The core database safety standard."
+        },
+        {
+          "term": "on_delete_update",
+          "module": "12-postgres",
+          "description": "Custom parent delete behaviors."
+        },
+        {
+          "term": "natural_vs_surrogate_key",
+          "module": "12-postgres",
+          "description": "Related concept: Natural Key vs. Surrogate Key."
+        },
+        {
+          "term": "one_to_many",
+          "module": "12-postgres",
+          "description": "Related concept: One-to-Many Relationship."
+        },
+        {
+          "term": "one_to_one",
+          "module": "12-postgres",
+          "description": "Related concept: One-to-One Relationship."
+        }
+      ]
+    },
+    "inner_join": {
+      "level": 5,
+      "file": "terms/level_05/inner_join.md",
+      "display_name": "`INNER JOIN`",
+      "prerequisites": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "The parent table combination mechanics."
+        }
+      ],
+      "related": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "The parent operation."
+        },
+        {
+          "term": "left_join",
+          "module": "12-postgres",
+          "description": "Sourcing unmatched left-side elements."
+        },
+        {
+          "term": "right_full_join",
+          "module": "12-postgres",
+          "description": "Related concept: `RIGHT JOIN` / `FULL OUTER JOIN`."
+        }
+      ]
+    },
+    "join_concept": {
+      "level": 5,
+      "file": "terms/level_05/join_concept.md",
+      "display_name": "`JOIN` (Concept)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The baseline query command."
+        },
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The column relationships enabling joins."
+        }
+      ],
+      "related": [
+        {
+          "term": "inner_join",
+          "module": "12-postgres",
+          "description": "The default matching join."
+        },
+        {
+          "term": "left_join",
+          "module": "12-postgres",
+          "description": "Sourcing unmatched left-side rows."
+        },
+        {
+          "term": "cross_join",
+          "module": "12-postgres",
+          "description": "Related concept: `CROSS JOIN`."
+        },
+        {
+          "term": "self_join",
+          "module": "12-postgres",
+          "description": "Related concept: Self-Join."
+        },
+        {
+          "term": "lateral_join",
+          "module": "12-postgres",
+          "description": "Related concept: `LATERAL` Join."
+        }
+      ]
+    },
+    "junction_table": {
+      "level": 5,
+      "file": "terms/level_05/junction_table.md",
+      "display_name": "Junction Table (Bridge / Pivot Table)",
+      "prerequisites": [
+        {
+          "term": "many_to_many",
+          "module": "12-postgres",
+          "description": "The logical relationship model."
+        },
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "Standard unique row identifiers."
+        }
+      ],
+      "related": [
+        {
+          "term": "many_to_many",
+          "module": "12-postgres",
+          "description": "The parent logical relationship."
+        },
+        {
+          "term": "composite_key",
+          "module": "12-postgres",
+          "description": "Forward reference: keys composed of multiple columns."
+        },
+        {
+          "term": "erd",
+          "module": "12-postgres",
+          "description": "Related concept: Entity-Relationship Diagram (ERD)."
+        }
+      ]
+    },
+    "left_join": {
+      "level": 5,
+      "file": "terms/level_05/left_join.md",
+      "display_name": "`LEFT JOIN` (`LEFT OUTER JOIN`)",
+      "prerequisites": [
+        {
+          "term": "inner_join",
+          "module": "12-postgres",
+          "description": "The default matching join behavior."
+        }
+      ],
+      "related": [
+        {
+          "term": "inner_join",
+          "module": "12-postgres",
+          "description": "The matching-only join."
+        },
+        {
+          "term": "right_full_join",
+          "module": "12-postgres",
+          "description": "Reversing sides or joining everything."
+        },
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "Related concept: `JOIN` (Concept)."
+        }
+      ]
+    },
+    "many_to_many": {
+      "level": 5,
+      "file": "terms/level_05/many_to_many.md",
+      "display_name": "Many-to-Many Relationship",
+      "prerequisites": [
+        {
+          "term": "one_to_many",
+          "module": "12-postgres",
+          "description": "The single-direction parent-child default pattern."
+        }
+      ],
+      "related": [
+        {
+          "term": "one_to_many",
+          "module": "12-postgres",
+          "description": "The single-direction default pattern."
+        },
+        {
+          "term": "junction_table",
+          "module": "12-postgres",
+          "description": "The physical implementation table."
+        }
+      ]
+    },
+    "natural_vs_surrogate_key": {
+      "level": 5,
+      "file": "terms/level_05/natural_vs_surrogate_key.md",
+      "display_name": "Natural Key vs. Surrogate Key",
+      "prerequisites": [
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "The unique row identifier targeted by relationships."
+        }
+      ],
+      "related": [
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "The parent unique identifier."
+        },
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The constraint referencing the keys."
+        },
+        {
+          "term": "uuid_type",
+          "module": "12-postgres",
+          "description": "Related concept: `UUID` Type."
+        }
+      ]
+    },
+    "on_delete_update": {
+      "level": 5,
+      "file": "terms/level_05/on_delete_update.md",
+      "display_name": "`ON DELETE` / `ON UPDATE` Actions (`CASCADE`, `SET NULL`, `RESTRICT`)",
+      "prerequisites": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The reference pointer constraint."
+        },
+        {
+          "term": "referential_integrity",
+          "module": "12-postgres",
+          "description": "The database safety standards."
+        }
+      ],
+      "related": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The parent constraint."
+        },
+        {
+          "term": "referential_integrity",
+          "module": "12-postgres",
+          "description": "The parent safety concept."
+        }
+      ]
+    },
+    "one_to_many": {
+      "level": 5,
+      "file": "terms/level_05/one_to_many.md",
+      "display_name": "One-to-Many Relationship",
+      "prerequisites": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The constraint used to implement the relationship."
+        }
+      ],
+      "related": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The linking constraint."
+        },
+        {
+          "term": "one_to_one",
+          "module": "12-postgres",
+          "description": "Linking exactly two rows."
+        },
+        {
+          "term": "many_to_many",
+          "module": "12-postgres",
+          "description": "Linking multiple rows on both sides."
+        }
+      ]
+    },
+    "one_to_one": {
+      "level": 5,
+      "file": "terms/level_05/one_to_one.md",
+      "display_name": "One-to-One Relationship",
+      "prerequisites": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The reference pointer constraint."
+        },
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "The rule preventing duplicate key assignments."
+        }
+      ],
+      "related": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The parent reference logic."
+        },
+        {
+          "term": "one_to_many",
+          "module": "12-postgres",
+          "description": "The hierarchical default link."
+        },
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "The one-to-one validator."
+        }
+      ]
+    },
+    "referential_integrity": {
+      "level": 5,
+      "file": "terms/level_05/referential_integrity.md",
+      "display_name": "Referential Integrity",
+      "prerequisites": [
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The relational structural philosophy."
+        },
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The data grid containers."
+        }
+      ],
+      "related": [
+        {
+          "term": "foreign_key",
+          "module": "12-postgres",
+          "description": "The physical constraint that enforces integrity."
+        },
+        {
+          "term": "on_delete_update",
+          "module": "12-postgres",
+          "description": "Automating cascades to preserve integrity."
+        }
+      ]
+    },
+    "right_full_join": {
+      "level": 5,
+      "file": "terms/level_05/right_full_join.md",
+      "display_name": "`RIGHT JOIN` / `FULL OUTER JOIN`",
+      "prerequisites": [
+        {
+          "term": "left_join",
+          "module": "12-postgres",
+          "description": "The left-side preservation default."
+        }
+      ],
+      "related": [
+        {
+          "term": "left_join",
+          "module": "12-postgres",
+          "description": "The left-side master default."
+        },
+        {
+          "term": "inner_join",
+          "module": "12-postgres",
+          "description": "The intersection-only match."
+        }
+      ]
+    },
+    "self_join": {
+      "level": 5,
+      "file": "terms/level_05/self_join.md",
+      "display_name": "Self-Join",
+      "prerequisites": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "The parent table combination mechanics."
+        },
+        {
+          "term": "aliases",
+          "module": "12-postgres",
+          "description": "The renaming system required to differentiate self-references."
+        }
+      ],
+      "related": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "The parent operation."
+        },
+        {
+          "term": "aliases",
+          "module": "12-postgres",
+          "description": "The alias renaming syntax."
+        },
+        {
+          "term": "cross_join",
+          "module": "12-postgres",
+          "description": "Related concept: `CROSS JOIN`."
+        }
+      ]
+    },
+    "alter_table": {
+      "level": 6,
+      "file": "terms/level_06/alter_table.md",
+      "display_name": "`ALTER TABLE`",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The target structural grid we are modifying."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_table",
+          "module": "12-postgres",
+          "description": "Managing table lifecycles."
+        },
+        {
+          "term": "enum_type",
+          "module": "12-postgres",
+          "description": "Related concept: `ENUM` Type."
+        },
+        {
+          "term": "database_migrations",
+          "module": "12-postgres",
+          "description": "Related concept: Database Migrations."
+        },
+        {
+          "term": "table_partitioning",
+          "module": "12-postgres",
+          "description": "Related concept: Table Partitioning."
+        }
+      ]
+    },
+    "array_type": {
+      "level": 6,
+      "file": "terms/level_06/array_type.md",
+      "display_name": "`ARRAY` Type",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent database typing standard."
+        },
+        {
+          "term": "first_normal_form",
+          "module": "12-postgres",
+          "description": "The database design rules that arrays technically violate."
+        }
+      ],
+      "related": [
+        {
+          "term": "first_normal_form",
+          "module": "12-postgres",
+          "description": "The relational atomicity standard."
+        },
+        {
+          "term": "json_jsonb",
+          "module": "12-postgres",
+          "description": "Storing unstructured documents."
+        },
+        {
+          "term": "gin_index",
+          "module": "12-postgres",
+          "description": "Related concept: GIN Index."
+        }
+      ]
+    },
+    "composite_key": {
+      "level": 6,
+      "file": "terms/level_06/composite_key.md",
+      "display_name": "Composite Key",
+      "prerequisites": [
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "Standard single-column identifiers."
+        },
+        {
+          "term": "junction_table",
+          "module": "12-postgres",
+          "description": "The bridge tables where composite keys are most commonly used."
+        }
+      ],
+      "related": [
+        {
+          "term": "primary_key",
+          "module": "12-postgres",
+          "description": "The parent single-column key standard."
+        },
+        {
+          "term": "junction_table",
+          "module": "12-postgres",
+          "description": "The primary target for composite keys."
+        },
+        {
+          "term": "second_normal_form",
+          "module": "12-postgres",
+          "description": "Slicing composite key dependencies."
+        },
+        {
+          "term": "composite_index",
+          "module": "12-postgres",
+          "description": "Related concept: Composite Index (Multi-column)."
+        }
+      ]
+    },
+    "denormalization": {
+      "level": 6,
+      "file": "terms/level_06/denormalization.md",
+      "display_name": "Denormalization",
+      "prerequisites": [
+        {
+          "term": "third_normal_form",
+          "module": "12-postgres",
+          "description": "The clean relational design standard."
+        }
+      ],
+      "related": [
+        {
+          "term": "third_normal_form",
+          "module": "12-postgres",
+          "description": "The parent clean design target."
+        },
+        {
+          "term": "materialized_view",
+          "module": "12-postgres",
+          "description": "Related concept: Materialized View."
+        }
+      ]
+    },
+    "enum_type": {
+      "level": 6,
+      "file": "terms/level_06/enum_type.md",
+      "display_name": "`ENUM` Type",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent database typing standard."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing system."
+        },
+        {
+          "term": "alter_table",
+          "module": "12-postgres",
+          "description": "Editing schemas."
+        }
+      ]
+    },
+    "erd": {
+      "level": 6,
+      "file": "terms/level_06/erd.md",
+      "display_name": "Entity-Relationship Diagram (ERD)",
+      "prerequisites": [
+        {
+          "term": "relational_database",
+          "module": "12-postgres",
+          "description": "The relational structural philosophy."
+        },
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The physical data containers."
+        }
+      ],
+      "related": [
+        {
+          "term": "normalization",
+          "module": "12-postgres",
+          "description": "The mathematical rules of schema structuring."
+        },
+        {
+          "term": "junction_table",
+          "module": "12-postgres",
+          "description": "The physical resolution of M:N relationships in ERDs."
+        }
+      ]
+    },
+    "first_normal_form": {
+      "level": 6,
+      "file": "terms/level_06/first_normal_form.md",
+      "display_name": "First Normal Form (1NF)",
+      "prerequisites": [
+        {
+          "term": "normalization",
+          "module": "12-postgres",
+          "description": "The parent organizing process."
+        },
+        {
+          "term": "functional_dependency",
+          "module": "12-postgres",
+          "description": "Column determination mathematics."
+        }
+      ],
+      "related": [
+        {
+          "term": "normalization",
+          "module": "12-postgres",
+          "description": "The parent process."
+        },
+        {
+          "term": "second_normal_form",
+          "module": "12-postgres",
+          "description": "Eliminating partial key dependencies."
+        },
+        {
+          "term": "array_type",
+          "module": "12-postgres",
+          "description": "Related concept: `ARRAY` Type."
+        },
+        {
+          "term": "functional_dependency",
+          "module": "12-postgres",
+          "description": "Related concept: Functional Dependency."
+        }
+      ]
+    },
+    "functional_dependency": {
+      "level": 6,
+      "file": "terms/level_06/functional_dependency.md",
+      "display_name": "Functional Dependency",
+      "prerequisites": [
+        {
+          "term": "normalization",
+          "module": "12-postgres",
+          "description": "The schema cleanup process that uses dependencies to split tables."
+        }
+      ],
+      "related": [
+        {
+          "term": "normalization",
+          "module": "12-postgres",
+          "description": "The parent organization process."
+        },
+        {
+          "term": "first_normal_form",
+          "module": "12-postgres",
+          "description": "The atomic standard."
+        }
+      ]
+    },
+    "json_jsonb": {
+      "level": 6,
+      "file": "terms/level_06/json_jsonb.md",
+      "display_name": "`JSON` / `JSONB` Type",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent database typing system."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing system."
+        },
+        {
+          "term": "array_type",
+          "module": "12-postgres",
+          "description": "Storing flat text arrays."
+        },
+        {
+          "term": "expression_index",
+          "module": "12-postgres",
+          "description": "Related concept: Expression Index (Functional Index)."
+        },
+        {
+          "term": "gin_index",
+          "module": "12-postgres",
+          "description": "Related concept: GIN Index."
+        }
+      ]
+    },
+    "normalization": {
+      "level": 6,
+      "file": "terms/level_06/normalization.md",
+      "display_name": "Normalization",
+      "prerequisites": [
+        {
+          "term": "erd",
+          "module": "12-postgres",
+          "description": "Visual schema blueprints."
+        }
+      ],
+      "related": [
+        {
+          "term": "functional_dependency",
+          "module": "12-postgres",
+          "description": "The prerequisite math concept behind normal forms."
+        },
+        {
+          "term": "first_normal_form",
+          "module": "12-postgres",
+          "description": "The atomic data standard."
+        },
+        {
+          "term": "erd",
+          "module": "12-postgres",
+          "description": "Related concept: Entity-Relationship Diagram (ERD)."
+        }
+      ]
+    },
+    "second_normal_form": {
+      "level": 6,
+      "file": "terms/level_06/second_normal_form.md",
+      "display_name": "Second Normal Form (2NF)",
+      "prerequisites": [
+        {
+          "term": "first_normal_form",
+          "module": "12-postgres",
+          "description": "The atomic row standard."
+        },
+        {
+          "term": "composite_key",
+          "module": "12-postgres",
+          "description": "Forward reference: keys containing multiple columns."
+        }
+      ],
+      "related": [
+        {
+          "term": "first_normal_form",
+          "module": "12-postgres",
+          "description": "The prerequisite atomic standard."
+        },
+        {
+          "term": "third_normal_form",
+          "module": "12-postgres",
+          "description": "Eliminating indirect (transitive) dependencies."
+        },
+        {
+          "term": "composite_key",
+          "module": "12-postgres",
+          "description": "Forward reference: multi-column keys."
+        }
+      ]
+    },
+    "third_normal_form": {
+      "level": 6,
+      "file": "terms/level_06/third_normal_form.md",
+      "display_name": "Third Normal Form (3NF)",
+      "prerequisites": [
+        {
+          "term": "second_normal_form",
+          "module": "12-postgres",
+          "description": "The prerequisite partial dependency check."
+        }
+      ],
+      "related": [
+        {
+          "term": "second_normal_form",
+          "module": "12-postgres",
+          "description": "The prerequisite standard."
+        },
+        {
+          "term": "denormalization",
+          "module": "12-postgres",
+          "description": "Intentionally breaking 3NF for speed."
+        }
+      ]
+    },
+    "uuid_type": {
+      "level": 6,
+      "file": "terms/level_06/uuid_type.md",
+      "display_name": "`UUID` Type",
+      "prerequisites": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent database typing system."
+        },
+        {
+          "term": "natural_vs_surrogate_key",
+          "module": "12-postgres",
+          "description": "Primary key design choices."
+        }
+      ],
+      "related": [
+        {
+          "term": "data_types",
+          "module": "12-postgres",
+          "description": "The parent typing standard."
+        },
+        {
+          "term": "natural_vs_surrogate_key",
+          "module": "12-postgres",
+          "description": "Key design patterns."
+        },
+        {
+          "term": "extensions",
+          "module": "12-postgres",
+          "description": "Related concept: Extensions (`CREATE EXTENSION`)."
+        }
+      ]
+    },
+    "btree_index": {
+      "level": 7,
+      "file": "terms/level_07/btree_index.md",
+      "display_name": "B-tree Index",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "The parent performance concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "The parent performance concept."
+        },
+        {
+          "term": "create_drop_index",
+          "module": "12-postgres",
+          "description": "SQL commands."
+        },
+        {
+          "term": "gin_index",
+          "module": "12-postgres",
+          "description": "The index type for non-scalar types."
+        },
+        {
+          "term": "composite_index",
+          "module": "12-postgres",
+          "description": "Related concept: Composite Index (Multi-column)."
+        },
+        {
+          "term": "expression_index",
+          "module": "12-postgres",
+          "description": "Related concept: Expression Index (Functional Index)."
+        },
+        {
+          "term": "partial_index",
+          "module": "12-postgres",
+          "description": "Related concept: Partial Index."
+        }
+      ]
+    },
+    "composite_index": {
+      "level": 7,
+      "file": "terms/level_07/composite_index.md",
+      "display_name": "Composite Index (Multi-column)",
+      "prerequisites": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The parent sorted tree structure."
+        },
+        {
+          "term": "composite_key",
+          "module": "12-postgres",
+          "description": "Managing multi-column constraints."
+        }
+      ],
+      "related": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The parent sorted tree structure."
+        },
+        {
+          "term": "composite_key",
+          "module": "12-postgres",
+          "description": "Slicing multi-column constraints."
+        }
+      ]
+    },
+    "create_drop_index": {
+      "level": 7,
+      "file": "terms/level_07/create_drop_index.md",
+      "display_name": "`CREATE INDEX` / `DROP INDEX`",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "The auxiliary search data structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "The parent performance concept."
+        },
+        {
+          "term": "reindex",
+          "module": "12-postgres",
+          "description": "Rebuilding corrupted index files."
+        },
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "Related concept: B-tree Index."
+        }
+      ]
+    },
+    "explain_analyze": {
+      "level": 7,
+      "file": "terms/level_07/explain_analyze.md",
+      "display_name": "`EXPLAIN` / `EXPLAIN ANALYZE`",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "The performance structures being diagnosed."
+        },
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The parent language."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_planner",
+          "module": "12-postgres",
+          "description": "The engine generating the plans."
+        },
+        {
+          "term": "seq_scan_vs_index_scan",
+          "module": "12-postgres",
+          "description": "The two scan behaviors."
+        }
+      ]
+    },
+    "expression_index": {
+      "level": 7,
+      "file": "terms/level_07/expression_index.md",
+      "display_name": "Expression Index (Functional Index)",
+      "prerequisites": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The parent sorted tree structure."
+        },
+        {
+          "term": "string_functions",
+          "module": "12-postgres",
+          "description": "The functions commonly indexed."
+        }
+      ],
+      "related": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The parent sorted tree structure."
+        },
+        {
+          "term": "json_jsonb",
+          "module": "12-postgres",
+          "description": "Storing nested documents."
+        },
+        {
+          "term": "full_text_search",
+          "module": "12-postgres",
+          "description": "Related concept: Full-Text Search (`tsvector`, `tsquery`)."
+        }
+      ]
+    },
+    "gin_index": {
+      "level": 7,
+      "file": "terms/level_07/gin_index.md",
+      "display_name": "GIN Index",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "The parent performance concept."
+        },
+        {
+          "term": "array_type",
+          "module": "12-postgres",
+          "description": "The multi-value array column standard."
+        },
+        {
+          "term": "json_jsonb",
+          "module": "12-postgres",
+          "description": "Nested document storage structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The default scalar index type."
+        },
+        {
+          "term": "array_type",
+          "module": "12-postgres",
+          "description": "The flat array typing standard."
+        },
+        {
+          "term": "json_jsonb",
+          "module": "12-postgres",
+          "description": "Storing nested documents."
+        },
+        {
+          "term": "full_text_search",
+          "module": "12-postgres",
+          "description": "Related concept: Full-Text Search (`tsvector`, `tsquery`)."
+        }
+      ]
+    },
+    "index_concept": {
+      "level": 7,
+      "file": "terms/level_07/index_concept.md",
+      "display_name": "Index (Concept)",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The data grid where rows are stored."
+        },
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The read statements optimized by indexes."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "12-postgres",
+          "description": "The SQL commands."
+        },
+        {
+          "term": "seq_scan_vs_index_scan",
+          "module": "12-postgres",
+          "description": "Scenting read routes."
+        },
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "Related concept: B-tree Index."
+        },
+        {
+          "term": "table_partitioning",
+          "module": "12-postgres",
+          "description": "Related concept: Table Partitioning."
+        }
+      ]
+    },
+    "index_only_scan": {
+      "level": 7,
+      "file": "terms/level_07/index_only_scan.md",
+      "display_name": "Index-Only Scan (Covering Index)",
+      "prerequisites": [
+        {
+          "term": "seq_scan_vs_index_scan",
+          "module": "12-postgres",
+          "description": "Scenting read routes."
+        }
+      ],
+      "related": [
+        {
+          "term": "seq_scan_vs_index_scan",
+          "module": "12-postgres",
+          "description": "The baseline scan options."
+        },
+        {
+          "term": "vacuum_analyze",
+          "module": "12-postgres",
+          "description": "The maintenance tasks that clean visibility maps."
+        }
+      ]
+    },
+    "partial_index": {
+      "level": 7,
+      "file": "terms/level_07/partial_index.md",
+      "display_name": "Partial Index",
+      "prerequisites": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The default search tree structure."
+        },
+        {
+          "term": "where",
+          "module": "12-postgres",
+          "description": "The filter clause used to define index subsets."
+        }
+      ],
+      "related": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The parent sorted tree structure."
+        },
+        {
+          "term": "unique_index",
+          "module": "12-postgres",
+          "description": "Customizing partial unique indexes."
+        }
+      ]
+    },
+    "query_planner": {
+      "level": 7,
+      "file": "terms/level_07/query_planner.md",
+      "display_name": "Query Planner / Optimizer",
+      "prerequisites": [
+        {
+          "term": "explain_analyze",
+          "module": "12-postgres",
+          "description": "The commands used to read the planner's decisions."
+        }
+      ],
+      "related": [
+        {
+          "term": "explain_analyze",
+          "module": "12-postgres",
+          "description": "Inspecting planner outputs."
+        },
+        {
+          "term": "vacuum_analyze",
+          "module": "12-postgres",
+          "description": "- Updating catalog statistics."
+        }
+      ]
+    },
+    "reindex": {
+      "level": 7,
+      "file": "terms/level_07/reindex.md",
+      "display_name": "`REINDEX`",
+      "prerequisites": [
+        {
+          "term": "create_drop_index",
+          "module": "12-postgres",
+          "description": "The lifecycle index DDL."
+        },
+        {
+          "term": "vacuum_analyze",
+          "module": "12-postgres",
+          "description": "The parent table cleaning concepts."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "12-postgres",
+          "description": "Sourcing indexes."
+        },
+        {
+          "term": "vacuum_analyze",
+          "module": "12-postgres",
+          "description": "Table slot cleanup."
+        }
+      ]
+    },
+    "seq_scan_vs_index_scan": {
+      "level": 7,
+      "file": "terms/level_07/seq_scan_vs_index_scan.md",
+      "display_name": "Sequential Scan vs. Index Scan",
+      "prerequisites": [
+        {
+          "term": "explain_analyze",
+          "module": "12-postgres",
+          "description": "The commands used to inspect table scan choices."
+        }
+      ],
+      "related": [
+        {
+          "term": "explain_analyze",
+          "module": "12-postgres",
+          "description": "Measuring scan plans."
+        },
+        {
+          "term": "index_only_scan",
+          "module": "12-postgres",
+          "description": "The fastest possible read path."
+        },
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "Related concept: Index (Concept)."
+        }
+      ]
+    },
+    "unique_index": {
+      "level": 7,
+      "file": "terms/level_07/unique_index.md",
+      "display_name": "Unique Index",
+      "prerequisites": [
+        {
+          "term": "btree_index",
+          "module": "12-postgres",
+          "description": "The default balancing structure type."
+        },
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "The logical uniqueness constraint."
+        }
+      ],
+      "related": [
+        {
+          "term": "unique_constraint",
+          "module": "12-postgres",
+          "description": "The logical database rule."
+        },
+        {
+          "term": "partial_index",
+          "module": "12-postgres",
+          "description": "Indexes filtering subsets of rows."
+        }
+      ]
+    },
+    "vacuum_analyze": {
+      "level": 7,
+      "file": "terms/level_07/vacuum_analyze.md",
+      "display_name": "`VACUUM` / `ANALYZE`",
+      "prerequisites": [
+        {
+          "term": "query_planner",
+          "module": "12-postgres",
+          "description": "The cost-calculation engine."
+        },
+        {
+          "term": "index_only_scan",
+          "module": "12-postgres",
+          "description": "The scans that rely on Visibility Maps cleaned by vacuum."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_planner",
+          "module": "12-postgres",
+          "description": "The stats consumer."
+        },
+        {
+          "term": "index_only_scan",
+          "module": "12-postgres",
+          "description": "The scans that require clean visibility maps."
+        },
+        {
+          "term": "reindex",
+          "module": "12-postgres",
+          "description": "Related concept: `REINDEX`."
+        },
+        {
+          "term": "mvcc",
+          "module": "12-postgres",
+          "description": "Related concept: MVCC (Multi-Version Concurrency Control)."
+        }
+      ]
+    },
+    "acid": {
+      "level": 8,
+      "file": "terms/level_08/acid.md",
+      "display_name": "ACID Properties",
+      "prerequisites": [
+        {
+          "term": "transaction",
+          "module": "12-postgres",
+          "description": "The unit of work context where ACID properties are applied."
+        }
+      ],
+      "related": [
+        {
+          "term": "transaction",
+          "module": "12-postgres",
+          "description": "- The parent unit of work."
+        },
+        {
+          "term": "mvcc",
+          "module": "12-postgres",
+          "description": "The mechanism enforcing Isolation in Postgres."
+        },
+        {
+          "term": "wal",
+          "module": "12-postgres",
+          "description": "Related concept: WAL (Write-Ahead Log)."
+        }
+      ]
+    },
+    "advisory_locks": {
+      "level": 8,
+      "file": "terms/level_08/advisory_locks.md",
+      "display_name": "Advisory Locks",
+      "prerequisites": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The parent lock concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The parent lock concept."
+        },
+        {
+          "term": "select_for_update",
+          "module": "12-postgres",
+          "description": "Row-level read locks."
+        }
+      ]
+    },
+    "begin_commit_rollback": {
+      "level": 8,
+      "file": "terms/level_08/begin_commit_rollback.md",
+      "display_name": "`BEGIN` / `COMMIT` / `ROLLBACK`",
+      "prerequisites": [
+        {
+          "term": "transaction",
+          "module": "12-postgres",
+          "description": "The logical unit of work wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "transaction",
+          "module": "12-postgres",
+          "description": "- The parent unit of work."
+        },
+        {
+          "term": "savepoint",
+          "module": "12-postgres",
+          "description": "Partial rollbacks."
+        }
+      ]
+    },
+    "concurrency_anomalies": {
+      "level": 8,
+      "file": "terms/level_08/concurrency_anomalies.md",
+      "display_name": "Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads)",
+      "prerequisites": [
+        {
+          "term": "mvcc",
+          "module": "12-postgres",
+          "description": "The versioning snapshot manager."
+        }
+      ],
+      "related": [
+        {
+          "term": "mvcc",
+          "module": "12-postgres",
+          "description": "The version snapshot driver."
+        },
+        {
+          "term": "isolation_levels",
+          "module": "12-postgres",
+          "description": "The settings used to block anomalies."
+        }
+      ]
+    },
+    "deadlock": {
+      "level": 8,
+      "file": "terms/level_08/deadlock.md",
+      "display_name": "Deadlock",
+      "prerequisites": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The blocking locks that cause deadlocks."
+        }
+      ],
+      "related": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The locking basics."
+        },
+        {
+          "term": "select_for_update",
+          "module": "12-postgres",
+          "description": "Query locks."
+        }
+      ]
+    },
+    "isolation_levels": {
+      "level": 8,
+      "file": "terms/level_08/isolation_levels.md",
+      "display_name": "Transaction Isolation Levels",
+      "prerequisites": [
+        {
+          "term": "concurrency_anomalies",
+          "module": "12-postgres",
+          "description": "The read errors blocked by isolation levels."
+        }
+      ],
+      "related": [
+        {
+          "term": "concurrency_anomalies",
+          "module": "12-postgres",
+          "description": "The target consistency errors."
+        },
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The physical blocking mechanisms."
+        },
+        {
+          "term": "mvcc",
+          "module": "12-postgres",
+          "description": "Related concept: MVCC (Multi-Version Concurrency Control)."
+        }
+      ]
+    },
+    "locking": {
+      "level": 8,
+      "file": "terms/level_08/locking.md",
+      "display_name": "Locking (Row-level, Table-level)",
+      "prerequisites": [
+        {
+          "term": "isolation_levels",
+          "module": "12-postgres",
+          "description": "The settings controlling read visibility."
+        }
+      ],
+      "related": [
+        {
+          "term": "isolation_levels",
+          "module": "12-postgres",
+          "description": "The settings controlling read visibility."
+        },
+        {
+          "term": "deadlock",
+          "module": "12-postgres",
+          "description": "Gridlocks caused by lock loops."
+        },
+        {
+          "term": "select_for_update",
+          "module": "12-postgres",
+          "description": "Manually locking rows during reads."
+        },
+        {
+          "term": "advisory_locks",
+          "module": "12-postgres",
+          "description": "Related concept: Advisory Locks."
+        },
+        {
+          "term": "optimistic_pessimistic",
+          "module": "12-postgres",
+          "description": "Related concept: Optimistic vs. Pessimistic Locking."
+        }
+      ]
+    },
+    "mvcc": {
+      "level": 8,
+      "file": "terms/level_08/mvcc.md",
+      "display_name": "MVCC (Multi-Version Concurrency Control)",
+      "prerequisites": [
+        {
+          "term": "transaction",
+          "module": "12-postgres",
+          "description": "The transaction boundaries managing the snapshots."
+        },
+        {
+          "term": "vacuum_analyze",
+          "module": "12-postgres",
+          "description": "The maintenance tasks that purge obsolete MVCC row versions."
+        }
+      ],
+      "related": [
+        {
+          "term": "transaction",
+          "module": "12-postgres",
+          "description": "The snapshot boundaries."
+        },
+        {
+          "term": "vacuum_analyze",
+          "module": "12-postgres",
+          "description": "Garbage collecting old row versions."
+        },
+        {
+          "term": "isolation_levels",
+          "module": "12-postgres",
+          "description": "Fine-tuning snapshot rules."
+        },
+        {
+          "term": "acid",
+          "module": "12-postgres",
+          "description": "Related concept: ACID Properties."
+        },
+        {
+          "term": "concurrency_anomalies",
+          "module": "12-postgres",
+          "description": "Related concept: Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads)."
+        }
+      ]
+    },
+    "optimistic_pessimistic": {
+      "level": 8,
+      "file": "terms/level_08/optimistic_pessimistic.md",
+      "display_name": "Optimistic vs. Pessimistic Locking",
+      "prerequisites": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The locking basics."
+        },
+        {
+          "term": "select_for_update",
+          "module": "12-postgres",
+          "description": "The SQL tool for pessimistic locking."
+        }
+      ],
+      "related": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The locking basics."
+        },
+        {
+          "term": "select_for_update",
+          "module": "12-postgres",
+          "description": "- Pessimistic implementation."
+        }
+      ]
+    },
+    "savepoint": {
+      "level": 8,
+      "file": "terms/level_08/savepoint.md",
+      "display_name": "`SAVEPOINT` / `ROLLBACK TO`",
+      "prerequisites": [
+        {
+          "term": "begin_commit_rollback",
+          "module": "12-postgres",
+          "description": "The parent transaction control commands."
+        }
+      ],
+      "related": [
+        {
+          "term": "begin_commit_rollback",
+          "module": "12-postgres",
+          "description": "The parent transaction controls."
+        }
+      ]
+    },
+    "select_for_update": {
+      "level": 8,
+      "file": "terms/level_08/select_for_update.md",
+      "display_name": "`SELECT ... FOR UPDATE`",
+      "prerequisites": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The lock types utilized."
+        }
+      ],
+      "related": [
+        {
+          "term": "locking",
+          "module": "12-postgres",
+          "description": "The locking basics."
+        },
+        {
+          "term": "deadlock",
+          "module": "12-postgres",
+          "description": "Gridlocks caused by locking conflicts."
+        },
+        {
+          "term": "advisory_locks",
+          "module": "12-postgres",
+          "description": "Related concept: Advisory Locks."
+        },
+        {
+          "term": "optimistic_pessimistic",
+          "module": "12-postgres",
+          "description": "Related concept: Optimistic vs. Pessimistic Locking."
+        }
+      ]
+    },
+    "transaction": {
+      "level": 8,
+      "file": "terms/level_08/transaction.md",
+      "display_name": "Transaction",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The language statements grouped in transactions."
+        }
+      ],
+      "related": [
+        {
+          "term": "begin_commit_rollback",
+          "module": "12-postgres",
+          "description": "The control statements."
+        },
+        {
+          "term": "acid",
+          "module": "12-postgres",
+          "description": "- The transactional guarantees."
+        },
+        {
+          "term": "mvcc",
+          "module": "12-postgres",
+          "description": "Related concept: MVCC (Multi-Version Concurrency Control)."
+        }
+      ]
+    },
+    "cte": {
+      "level": 9,
+      "file": "terms/level_09/cte.md",
+      "display_name": "Common Table Expression (CTE / `WITH`)",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The query syntax encapsulated."
+        }
+      ],
+      "related": [
+        {
+          "term": "recursive_cte",
+          "module": "12-postgres",
+          "description": "Self-referencing loops."
+        },
+        {
+          "term": "view",
+          "module": "12-postgres",
+          "description": "Persistent saved database queries."
+        },
+        {
+          "term": "lateral_join",
+          "module": "12-postgres",
+          "description": "Related concept: `LATERAL` Join."
+        }
+      ]
+    },
+    "do_block": {
+      "level": 9,
+      "file": "terms/level_09/do_block.md",
+      "display_name": "`DO` Block (Anonymous Code Block)",
+      "prerequisites": [
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The procedural language code compiled inside the block."
+        }
+      ],
+      "related": [
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The parent procedural language."
+        }
+      ]
+    },
+    "lag_lead": {
+      "level": 9,
+      "file": "terms/level_09/lag_lead.md",
+      "display_name": "`LAG()` / `LEAD()`",
+      "prerequisites": [
+        {
+          "term": "window_function",
+          "module": "12-postgres",
+          "description": "The parent calculation engine."
+        }
+      ],
+      "related": [
+        {
+          "term": "window_function",
+          "module": "12-postgres",
+          "description": "The parent calculation engine."
+        },
+        {
+          "term": "row_number_rank",
+          "module": "12-postgres",
+          "description": "Positional window functions."
+        }
+      ]
+    },
+    "lateral_join": {
+      "level": 9,
+      "file": "terms/level_09/lateral_join.md",
+      "display_name": "`LATERAL` Join",
+      "prerequisites": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "Standard non-correlated joins."
+        },
+        {
+          "term": "cte",
+          "module": "12-postgres",
+          "description": "Subquery structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "join_concept",
+          "module": "12-postgres",
+          "description": "Standard non-correlated joins."
+        },
+        {
+          "term": "cte",
+          "module": "12-postgres",
+          "description": "Subquery structures."
+        }
+      ]
+    },
+    "materialized_view": {
+      "level": 9,
+      "file": "terms/level_09/materialized_view.md",
+      "display_name": "Materialized View",
+      "prerequisites": [
+        {
+          "term": "view",
+          "module": "12-postgres",
+          "description": "The parent virtual table concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "view",
+          "module": "12-postgres",
+          "description": "The parent virtual view concept."
+        },
+        {
+          "term": "denormalization",
+          "module": "12-postgres",
+          "description": "The caching design theory."
+        }
+      ]
+    },
+    "plpgsql": {
+      "level": 9,
+      "file": "terms/level_09/plpgsql.md",
+      "display_name": "PL/pgSQL",
+      "prerequisites": [
+        {
+          "term": "stored_function",
+          "module": "12-postgres",
+          "description": "The wrapper objects compiling PL/pgSQL."
+        }
+      ],
+      "related": [
+        {
+          "term": "stored_function",
+          "module": "12-postgres",
+          "description": "The compiling wrapper."
+        },
+        {
+          "term": "do_block",
+          "module": "12-postgres",
+          "description": "Running script loops on-the-fly."
+        },
+        {
+          "term": "stored_procedure",
+          "module": "12-postgres",
+          "description": "Related concept: Stored Procedure (`CREATE PROCEDURE` / `CALL`)."
+        },
+        {
+          "term": "trigger",
+          "module": "12-postgres",
+          "description": "Related concept: Trigger."
+        }
+      ]
+    },
+    "recursive_cte": {
+      "level": 9,
+      "file": "terms/level_09/recursive_cte.md",
+      "display_name": "Recursive CTE",
+      "prerequisites": [
+        {
+          "term": "cte",
+          "module": "12-postgres",
+          "description": "The parent query abstraction syntax."
+        }
+      ],
+      "related": [
+        {
+          "term": "cte",
+          "module": "12-postgres",
+          "description": "The parent query abstraction syntax."
+        }
+      ]
+    },
+    "row_number_rank": {
+      "level": 9,
+      "file": "terms/level_09/row_number_rank.md",
+      "display_name": "`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`",
+      "prerequisites": [
+        {
+          "term": "window_function",
+          "module": "12-postgres",
+          "description": "The calculation engine running ranking window clauses."
+        }
+      ],
+      "related": [
+        {
+          "term": "window_function",
+          "module": "12-postgres",
+          "description": "The parent calculation engine."
+        },
+        {
+          "term": "lag_lead",
+          "module": "12-postgres",
+          "description": "Offset window functions."
+        },
+        {
+          "term": "window_clause",
+          "module": "12-postgres",
+          "description": "Related concept: `OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)."
+        }
+      ]
+    },
+    "set_operations": {
+      "level": 9,
+      "file": "terms/level_09/set_operations.md",
+      "display_name": "`UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The parent query syntax whose outputs are combined."
+        }
+      ],
+      "related": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The query basics."
+        }
+      ]
+    },
+    "stored_function": {
+      "level": 9,
+      "file": "terms/level_09/stored_function.md",
+      "display_name": "Stored Function (`CREATE FUNCTION`)",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The query language inside the function."
+        }
+      ],
+      "related": [
+        {
+          "term": "stored_procedure",
+          "module": "12-postgres",
+          "description": "The transaction-managing alternative."
+        },
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The procedural language layout."
+        },
+        {
+          "term": "trigger",
+          "module": "12-postgres",
+          "description": "Related concept: Trigger."
+        }
+      ]
+    },
+    "stored_procedure": {
+      "level": 9,
+      "file": "terms/level_09/stored_procedure.md",
+      "display_name": "Stored Procedure (`CREATE PROCEDURE` / `CALL`)",
+      "prerequisites": [
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The language used to write trigger handlers."
+        }
+      ],
+      "related": [
+        {
+          "term": "stored_function",
+          "module": "12-postgres",
+          "description": "The transaction-locked inline alternative."
+        },
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The programming language block wrapper."
+        }
+      ]
+    },
+    "trigger": {
+      "level": 9,
+      "file": "terms/level_09/trigger.md",
+      "display_name": "Trigger",
+      "prerequisites": [
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The language used to write trigger handlers."
+        },
+        {
+          "term": "stored_function",
+          "module": "12-postgres",
+          "description": "The wrapper compiling the trigger logic."
+        }
+      ],
+      "related": [
+        {
+          "term": "plpgsql",
+          "module": "12-postgres",
+          "description": "The parent procedural language."
+        },
+        {
+          "term": "stored_function",
+          "module": "12-postgres",
+          "description": "The compiling wrapper."
+        },
+        {
+          "term": "listen_notify",
+          "module": "12-postgres",
+          "description": "Related concept: `LISTEN` / `NOTIFY`."
+        }
+      ]
+    },
+    "view": {
+      "level": 9,
+      "file": "terms/level_09/view.md",
+      "display_name": "View",
+      "prerequisites": [
+        {
+          "term": "select",
+          "module": "12-postgres",
+          "description": "The query statement saved inside the view."
+        },
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The underlying base tables."
+        }
+      ],
+      "related": [
+        {
+          "term": "materialized_view",
+          "module": "12-postgres",
+          "description": "The cached database view."
+        },
+        {
+          "term": "cte",
+          "module": "12-postgres",
+          "description": "Temporary query abstractions."
+        },
+        {
+          "term": "row_level_security",
+          "module": "12-postgres",
+          "description": "Related concept: Row-Level Security (RLS)."
+        }
+      ]
+    },
+    "window_clause": {
+      "level": 9,
+      "file": "terms/level_09/window_clause.md",
+      "display_name": "`OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)",
+      "prerequisites": [
+        {
+          "term": "order_by",
+          "module": "12-postgres",
+          "description": "Sorting sequence inside windows."
+        },
+        {
+          "term": "group_by",
+          "module": "12-postgres",
+          "description": "Understanding grouping boundaries."
+        }
+      ],
+      "related": [
+        {
+          "term": "window_function",
+          "module": "12-postgres",
+          "description": "The calculations applied."
+        },
+        {
+          "term": "row_number_rank",
+          "module": "12-postgres",
+          "description": "Window position calculations."
+        }
+      ]
+    },
+    "window_function": {
+      "level": 9,
+      "file": "terms/level_09/window_function.md",
+      "display_name": "Window Function",
+      "prerequisites": [
+        {
+          "term": "window_clause",
+          "module": "12-postgres",
+          "description": "The prerequisite window definition syntax."
+        }
+      ],
+      "related": [
+        {
+          "term": "window_clause",
+          "module": "12-postgres",
+          "description": "The parent window definition syntax."
+        },
+        {
+          "term": "row_number_rank",
+          "module": "12-postgres",
+          "description": "Positional window functions."
+        },
+        {
+          "term": "lag_lead",
+          "module": "12-postgres",
+          "description": "Related concept: `LAG()` / `LEAD()`."
+        }
+      ]
+    },
+    "connection_pooling": {
+      "level": 10,
+      "file": "terms/level_10/connection_pooling.md",
+      "display_name": "Connection Pooling",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The query execution context."
+        }
+      ],
+      "related": [
+        {
+          "term": "postgresql_conf",
+          "module": "12-postgres",
+          "description": "Setting connection thresholds."
+        }
+      ]
+    },
+    "database_migrations": {
+      "level": 10,
+      "file": "terms/level_10/database_migrations.md",
+      "display_name": "Database Migrations",
+      "prerequisites": [
+        {
+          "term": "alter_table",
+          "module": "12-postgres",
+          "description": "The DDL queries executed during migrations."
+        }
+      ],
+      "related": [
+        {
+          "term": "alter_table",
+          "module": "12-postgres",
+          "description": "The DDL queries."
+        },
+        {
+          "term": "managed_services",
+          "module": "12-postgres",
+          "description": "Related concept: Managed PostgreSQL Services (Supabase, Neon, AWS RDS)."
+        }
+      ]
+    },
+    "extensions": {
+      "level": 10,
+      "file": "terms/level_10/extensions.md",
+      "display_name": "Extensions (`CREATE EXTENSION`)",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The query context."
+        },
+        {
+          "term": "uuid_type",
+          "module": "12-postgres",
+          "description": "Custom types historically enabled by extensions."
+        }
+      ],
+      "related": [
+        {
+          "term": "monitoring",
+          "module": "12-postgres",
+          "description": "The monitoring metrics extension."
+        },
+        {
+          "term": "uuid_type",
+          "module": "12-postgres",
+          "description": "Custom types historically enabled by extensions."
+        },
+        {
+          "term": "foreign_data_wrappers",
+          "module": "12-postgres",
+          "description": "Related concept: Foreign Data Wrappers (`postgres_fdw`)."
+        }
+      ]
+    },
+    "foreign_data_wrappers": {
+      "level": 10,
+      "file": "terms/level_10/foreign_data_wrappers.md",
+      "display_name": "Foreign Data Wrappers (`postgres_fdw`)",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The data grids mapped from external servers."
+        },
+        {
+          "term": "extensions",
+          "module": "12-postgres",
+          "description": "The packaging system used to install the FDW module."
+        }
+      ],
+      "related": [
+        {
+          "term": "extensions",
+          "module": "12-postgres",
+          "description": "The packaging system."
+        },
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The base data grid."
+        }
+      ]
+    },
+    "full_text_search": {
+      "level": 10,
+      "file": "terms/level_10/full_text_search.md",
+      "display_name": "Full-Text Search (`tsvector`, `tsquery`)",
+      "prerequisites": [
+        {
+          "term": "gin_index",
+          "module": "12-postgres",
+          "description": "The parent multi-value index type used to speed up text search."
+        }
+      ],
+      "related": [
+        {
+          "term": "gin_index",
+          "module": "12-postgres",
+          "description": "The parent performance index."
+        },
+        {
+          "term": "expression_index",
+          "module": "12-postgres",
+          "description": "Indexing function calculations."
+        }
+      ]
+    },
+    "listen_notify": {
+      "level": 10,
+      "file": "terms/level_10/listen_notify.md",
+      "display_name": "`LISTEN` / `NOTIFY`",
+      "prerequisites": [
+        {
+          "term": "trigger",
+          "module": "12-postgres",
+          "description": "Automating notify events on table writes."
+        }
+      ],
+      "related": [
+        {
+          "term": "trigger",
+          "module": "12-postgres",
+          "description": "Automating notifications."
+        }
+      ]
+    },
+    "managed_services": {
+      "level": 10,
+      "file": "terms/level_10/managed_services.md",
+      "display_name": "Managed PostgreSQL Services (Supabase, Neon, AWS RDS)",
+      "prerequisites": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "The core database service hosted."
+        }
+      ],
+      "related": [
+        {
+          "term": "postgresql_conf",
+          "module": "12-postgres",
+          "description": "Hardware tuning configurations."
+        },
+        {
+          "term": "database_migrations",
+          "module": "12-postgres",
+          "description": "Coordinating schema code updates."
+        }
+      ]
+    },
+    "monitoring": {
+      "level": 10,
+      "file": "terms/level_10/monitoring.md",
+      "display_name": "`pg_stat_statements` / Monitoring",
+      "prerequisites": [
+        {
+          "term": "extensions",
+          "module": "12-postgres",
+          "description": "The packaging system used to enable `pg_stat_statements`."
+        },
+        {
+          "term": "explain_analyze",
+          "module": "12-postgres",
+          "description": "Analyzing the individual slow queries identified by monitoring."
+        }
+      ],
+      "related": [
+        {
+          "term": "extensions",
+          "module": "12-postgres",
+          "description": "The packaging system."
+        },
+        {
+          "term": "postgresql_conf",
+          "module": "12-postgres",
+          "description": "Setting preloads."
+        }
+      ]
+    },
+    "orm_vs_raw": {
+      "level": 10,
+      "file": "terms/level_10/orm_vs_raw.md",
+      "display_name": "ORM vs. Query Builder vs. Raw SQL",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The query language encapsulated by these interfaces."
+        }
+      ],
+      "related": [
+        {
+          "term": "sql_injection",
+          "module": "12-postgres",
+          "description": "The vulnerability risk."
+        },
+        {
+          "term": "parameterized_queries",
+          "module": "12-postgres",
+          "description": "Secure raw query patterns."
+        }
+      ]
+    },
+    "parameterized_queries": {
+      "level": 10,
+      "file": "terms/level_10/parameterized_queries.md",
+      "display_name": "Parameterized Queries / Prepared Statements",
+      "prerequisites": [
+        {
+          "term": "sql_injection",
+          "module": "12-postgres",
+          "description": "The critical security vulnerability blocked."
+        }
+      ],
+      "related": [
+        {
+          "term": "sql_injection",
+          "module": "12-postgres",
+          "description": "The vulnerability blocked."
+        },
+        {
+          "term": "orm_vs_raw",
+          "module": "12-postgres",
+          "description": "Related concept: ORM vs. Query Builder vs. Raw SQL."
+        }
+      ]
+    },
+    "pg_dump_restore": {
+      "level": 10,
+      "file": "terms/level_10/pg_dump_restore.md",
+      "display_name": "`pg_dump` / `pg_restore` (Backups)",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The DDL/DML written inside dump files."
+        }
+      ],
+      "related": [
+        {
+          "term": "wal",
+          "module": "12-postgres",
+          "description": "The physical log alternative."
+        },
+        {
+          "term": "pitr",
+          "module": "12-postgres",
+          "description": "Advanced transaction-level recovery."
+        }
+      ]
+    },
+    "pg_hba_conf": {
+      "level": 10,
+      "file": "terms/level_10/pg_hba_conf.md",
+      "display_name": "`pg_hba.conf` (Host-Based Authentication)",
+      "prerequisites": [
+        {
+          "term": "roles_permissions",
+          "module": "12-postgres",
+          "description": "The login roles validated by pg_hba.conf."
+        }
+      ],
+      "related": [
+        {
+          "term": "roles_permissions",
+          "module": "12-postgres",
+          "description": "The login roles checked."
+        },
+        {
+          "term": "postgresql_conf",
+          "module": "12-postgres",
+          "description": "General connection settings."
+        }
+      ]
+    },
+    "pitr": {
+      "level": 10,
+      "file": "terms/level_10/pitr.md",
+      "display_name": "Point-in-Time Recovery (PITR)",
+      "prerequisites": [
+        {
+          "term": "wal",
+          "module": "12-postgres",
+          "description": "The transaction logs replayed during recovery."
+        },
+        {
+          "term": "pg_dump_restore",
+          "module": "12-postgres",
+          "description": "The baseline logical backup tools."
+        }
+      ],
+      "related": [
+        {
+          "term": "wal",
+          "module": "12-postgres",
+          "description": "The physical log files."
+        },
+        {
+          "term": "pg_dump_restore",
+          "module": "12-postgres",
+          "description": "Logical alternatives."
+        },
+        {
+          "term": "replication",
+          "module": "12-postgres",
+          "description": "Related concept: Replication (Streaming / Logical)."
+        }
+      ]
+    },
+    "postgresql_conf": {
+      "level": 10,
+      "file": "terms/level_10/postgresql_conf.md",
+      "display_name": "`postgresql.conf` (Server Configuration)",
+      "prerequisites": [
+        {
+          "term": "connection_pooling",
+          "module": "12-postgres",
+          "description": "Managing connection caps tuned in postgresql.conf."
+        }
+      ],
+      "related": [
+        {
+          "term": "pg_hba_conf",
+          "module": "12-postgres",
+          "description": "Network permissions file."
+        },
+        {
+          "term": "connection_pooling",
+          "module": "12-postgres",
+          "description": "Managing connection caps."
+        },
+        {
+          "term": "managed_services",
+          "module": "12-postgres",
+          "description": "Related concept: Managed PostgreSQL Services (Supabase, Neon, AWS RDS)."
+        },
+        {
+          "term": "monitoring",
+          "module": "12-postgres",
+          "description": "Related concept: `pg_stat_statements` / Monitoring."
+        }
+      ]
+    },
+    "replication": {
+      "level": 10,
+      "file": "terms/level_10/replication.md",
+      "display_name": "Replication (Streaming / Logical)",
+      "prerequisites": [
+        {
+          "term": "wal",
+          "module": "12-postgres",
+          "description": "The transaction logs used to synchronize replicas."
+        }
+      ],
+      "related": [
+        {
+          "term": "wal",
+          "module": "12-postgres",
+          "description": "The sync fuel."
+        },
+        {
+          "term": "pitr",
+          "module": "12-postgres",
+          "description": "- Offline WAL replaying."
+        }
+      ]
+    },
+    "roles_permissions": {
+      "level": 10,
+      "file": "terms/level_10/roles_permissions.md",
+      "display_name": "Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The query language context."
+        }
+      ],
+      "related": [
+        {
+          "term": "pg_hba_conf",
+          "module": "12-postgres",
+          "description": "Remote connection security configurations."
+        },
+        {
+          "term": "row_level_security",
+          "module": "12-postgres",
+          "description": "Finer security filters."
+        },
+        {
+          "term": "sql_injection",
+          "module": "12-postgres",
+          "description": "Related concept: SQL Injection."
+        }
+      ]
+    },
+    "row_level_security": {
+      "level": 10,
+      "file": "terms/level_10/row_level_security.md",
+      "display_name": "Row-Level Security (RLS)",
+      "prerequisites": [
+        {
+          "term": "roles_permissions",
+          "module": "12-postgres",
+          "description": "The roles bound by security policies."
+        }
+      ],
+      "related": [
+        {
+          "term": "roles_permissions",
+          "module": "12-postgres",
+          "description": "The roles bound."
+        },
+        {
+          "term": "view",
+          "module": "12-postgres",
+          "description": "Creating simple logical column masks."
+        }
+      ]
+    },
+    "sql_injection": {
+      "level": 10,
+      "file": "terms/level_10/sql_injection.md",
+      "display_name": "SQL Injection",
+      "prerequisites": [
+        {
+          "term": "sql",
+          "module": "12-postgres",
+          "description": "The query language structure manipulated."
+        }
+      ],
+      "related": [
+        {
+          "term": "parameterized_queries",
+          "module": "12-postgres",
+          "description": "The defense standard."
+        },
+        {
+          "term": "roles_permissions",
+          "module": "12-postgres",
+          "description": "- Securing role limits."
+        },
+        {
+          "term": "orm_vs_raw",
+          "module": "12-postgres",
+          "description": "Related concept: ORM vs. Query Builder vs. Raw SQL."
+        }
+      ]
+    },
+    "table_partitioning": {
+      "level": 10,
+      "file": "terms/level_10/table_partitioning.md",
+      "display_name": "Table Partitioning",
+      "prerequisites": [
+        {
+          "term": "table",
+          "module": "12-postgres",
+          "description": "The data grids partitioned."
+        },
+        {
+          "term": "alter_table",
+          "module": "12-postgres",
+          "description": "Attaching or detaching partitions."
+        }
+      ],
+      "related": [
+        {
+          "term": "alter_table",
+          "module": "12-postgres",
+          "description": "Managing table states."
+        },
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "Balancing indexing scales."
+        }
+      ]
+    },
+    "wal": {
+      "level": 10,
+      "file": "terms/level_10/wal.md",
+      "display_name": "WAL (Write-Ahead Log)",
+      "prerequisites": [
+        {
+          "term": "acid",
+          "module": "12-postgres",
+          "description": "The Durability guarantee powered by WAL."
+        },
+        {
+          "term": "pg_dump_restore",
+          "module": "12-postgres",
+          "description": "Understanding the differences between logical and write-ahead backups."
+        }
+      ],
+      "related": [
+        {
+          "term": "acid",
+          "module": "12-postgres",
+          "description": "The Durability guarantee powered by WAL."
+        },
+        {
+          "term": "pitr",
+          "module": "12-postgres",
+          "description": "- Restoring database state using WAL archives."
+        },
+        {
+          "term": "replication",
+          "module": "12-postgres",
+          "description": "Using WAL to sync replica databases."
+        },
+        {
+          "term": "pg_dump_restore",
+          "module": "12-postgres",
+          "description": "Related concept: `pg_dump` / `pg_restore` (Backups)."
+        }
+      ]
+    }
+  }
+}

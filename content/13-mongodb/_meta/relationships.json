@@ -1,0 +1,4721 @@
+{
+  "$schema": "../../_meta/relationships.schema.json",
+  "module": "13-mongodb",
+  "version": 1,
+  "updated_at": "2026-08-04",
+  "terms": {
+    "atlas": {
+      "level": 1,
+      "file": "terms/level_01/atlas.md",
+      "display_name": "MongoDB Atlas",
+      "prerequisites": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "The parent database engine hosted in the cloud."
+        },
+        {
+          "term": "managed_services",
+          "module": "13-mongodb",
+          "description": "Relational DB cloud hosting analogies."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongod",
+          "module": "13-mongodb",
+          "description": "The cloud hosted engine."
+        },
+        {
+          "term": "managed_services",
+          "module": "13-mongodb",
+          "description": "Relational equivalents."
+        },
+        {
+          "term": "compass",
+          "module": "13-mongodb",
+          "description": "Related concept: MongoDB Compass."
+        }
+      ]
+    },
+    "bson": {
+      "level": 1,
+      "file": "terms/level_01/bson.md",
+      "display_name": "BSON (Binary JSON)",
+      "prerequisites": [
+        {
+          "term": "objectid",
+          "module": "13-mongodb",
+          "description": "The binary ObjectId type introduced by BSON."
+        }
+      ],
+      "related": [
+        {
+          "term": "objectid",
+          "module": "13-mongodb",
+          "description": "BSON primary keys."
+        },
+        {
+          "term": "json_vs_bson",
+          "module": "13-mongodb",
+          "description": "The differences in use cases."
+        },
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "Related concept: MongoDB."
+        },
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "Related concept: BSON Data Types (Overview)."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "Related concept: Document Size Limit (16 MB)."
+        }
+      ]
+    },
+    "collection": {
+      "level": 1,
+      "file": "terms/level_01/collection.md",
+      "display_name": "Collection",
+      "prerequisites": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The fundamental data units grouped inside collections."
+        }
+      ],
+      "related": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The core data record."
+        },
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The parent namespace."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The schema design."
+        },
+        {
+          "term": "document_vs_relational",
+          "module": "13-mongodb",
+          "description": "Related concept: Document vs. Relational Model."
+        },
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "Related concept: MongoDB."
+        },
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "Related concept: `insertOne()` / `insertMany()`."
+        }
+      ]
+    },
+    "compass": {
+      "level": 1,
+      "file": "terms/level_01/compass.md",
+      "display_name": "MongoDB Compass",
+      "prerequisites": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "The parent database engine system."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongosh",
+          "module": "13-mongodb",
+          "description": "The command-line client."
+        },
+        {
+          "term": "atlas",
+          "module": "13-mongodb",
+          "description": "Cloud dashboard interfaces."
+        }
+      ]
+    },
+    "database_context": {
+      "level": 1,
+      "file": "terms/level_01/database_context.md",
+      "display_name": "Database (MongoDB Context)",
+      "prerequisites": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The data tables grouped inside the database."
+        }
+      ],
+      "related": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The child collections."
+        },
+        {
+          "term": "mongosh",
+          "module": "13-mongodb",
+          "description": "The command line interface."
+        },
+        {
+          "term": "mongodb_vs_postgresql",
+          "module": "13-mongodb",
+          "description": "Related concept: MongoDB vs. PostgreSQL — When to Choose Which."
+        },
+        {
+          "term": "mongodump_restore",
+          "module": "13-mongodb",
+          "description": "Related concept: `mongodump` / `mongorestore` (Backups)."
+        },
+        {
+          "term": "server_diagnostics",
+          "module": "13-mongodb",
+          "description": "Related concept: `serverStatus` / `currentOp` / `db.stats()`."
+        }
+      ]
+    },
+    "document": {
+      "level": 1,
+      "file": "terms/level_01/document.md",
+      "display_name": "Document",
+      "prerequisites": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "The parent database engine."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": ""
+        },
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "Related concept: Collection."
+        },
+        {
+          "term": "document_vs_relational",
+          "module": "13-mongodb",
+          "description": "Related concept: Document vs. Relational Model."
+        },
+        {
+          "term": "field",
+          "module": "13-mongodb",
+          "description": "Related concept: Field."
+        }
+      ]
+    },
+    "document_vs_relational": {
+      "level": 1,
+      "file": "terms/level_01/document_vs_relational.md",
+      "display_name": "Document vs. Relational Model",
+      "prerequisites": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The fundamental unit of the document model."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The schema design contrast."
+        }
+      ],
+      "related": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The basic unit of data."
+        },
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The logical container."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The schema design contrast."
+        },
+        {
+          "term": "nosql_databases",
+          "module": "13-mongodb",
+          "description": "Related concept: NoSQL Databases (Overview)."
+        }
+      ]
+    },
+    "field": {
+      "level": 1,
+      "file": "terms/level_01/field.md",
+      "display_name": "Field",
+      "prerequisites": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The parent records containing fields."
+        }
+      ],
+      "related": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The parent container."
+        },
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The types of values fields can store."
+        },
+        {
+          "term": "objectid",
+          "module": "13-mongodb",
+          "description": "Related concept: `_id` Field & ObjectId."
+        }
+      ]
+    },
+    "flexible_schema": {
+      "level": 1,
+      "file": "terms/level_01/flexible_schema.md",
+      "display_name": "Flexible Schema (Schema-on-Read)",
+      "prerequisites": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The schema-free data container."
+        }
+      ],
+      "related": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The schema-free container."
+        },
+        {
+          "term": "document_vs_relational",
+          "module": "13-mongodb",
+          "description": "Paradigm comparisons."
+        },
+        {
+          "term": "null_type",
+          "module": "13-mongodb",
+          "description": "Related concept: `null`."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Element Query Operators (`$exists`, `$type`)."
+        },
+        {
+          "term": "polymorphic_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Polymorphic Pattern."
+        },
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "Related concept: Schema Design (Document Modeling)."
+        }
+      ]
+    },
+    "json_vs_bson": {
+      "level": 1,
+      "file": "terms/level_01/json_vs_bson.md",
+      "display_name": "JSON vs. BSON",
+      "prerequisites": [
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The binary-encoded database format."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The parent binary structure."
+        }
+      ]
+    },
+    "mongod": {
+      "level": 1,
+      "file": "terms/level_01/mongod.md",
+      "display_name": "`mongod` (MongoDB Server Daemon)",
+      "prerequisites": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "The parent database engine system."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongosh",
+          "module": "13-mongodb",
+          "description": "The terminal query client."
+        },
+        {
+          "term": "atlas",
+          "module": "13-mongodb",
+          "description": "The cloud hosted alternative to local daemons."
+        }
+      ]
+    },
+    "mongodb": {
+      "level": 1,
+      "file": "terms/level_01/mongodb.md",
+      "display_name": "MongoDB",
+      "prerequisites": [
+        {
+          "term": "nosql_databases",
+          "module": "13-mongodb",
+          "description": "The parent non-relational database family."
+        }
+      ],
+      "related": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The core database unit."
+        },
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "Groupings of documents."
+        },
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The internal storage format."
+        },
+        {
+          "term": "nosql_databases",
+          "module": "13-mongodb",
+          "description": "Related concept: NoSQL Databases (Overview)."
+        },
+        {
+          "term": "outlier_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Outlier Pattern."
+        }
+      ]
+    },
+    "mongosh": {
+      "level": 1,
+      "file": "terms/level_01/mongosh.md",
+      "display_name": "mongosh (MongoDB Shell)",
+      "prerequisites": [
+        {
+          "term": "mongod",
+          "module": "13-mongodb",
+          "description": "The background server database engine connected to."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongod",
+          "module": "13-mongodb",
+          "description": "The target server."
+        },
+        {
+          "term": "compass",
+          "module": "13-mongodb",
+          "description": "The graphical GUI alternative."
+        },
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "Related concept: Database (MongoDB Context)."
+        }
+      ]
+    },
+    "nosql_databases": {
+      "level": 1,
+      "file": "terms/level_01/nosql_databases.md",
+      "display_name": "NoSQL Databases (Overview)",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": "The document database implementation."
+        },
+        {
+          "term": "document_vs_relational",
+          "module": "13-mongodb",
+          "description": "Comparing SQL and NoSQL paradigms."
+        }
+      ]
+    },
+    "objectid": {
+      "level": 1,
+      "file": "terms/level_01/objectid.md",
+      "display_name": "`_id` Field & ObjectId",
+      "prerequisites": [
+        {
+          "term": "field",
+          "module": "13-mongodb",
+          "description": "The key-value structure of document attributes."
+        }
+      ],
+      "related": [
+        {
+          "term": "field",
+          "module": "13-mongodb",
+          "description": "The parent attribute structure."
+        },
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The serialization format."
+        },
+        {
+          "term": "objectid_reference",
+          "module": "13-mongodb",
+          "description": "Related concept: `ObjectId` as a Manual Reference."
+        }
+      ]
+    },
+    "array_type": {
+      "level": 2,
+      "file": "terms/level_02/array_type.md",
+      "display_name": "Array",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type lists."
+        },
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "Arrays frequently hold nested subdocuments."
+        }
+      ],
+      "related": [
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "Nested document lists."
+        },
+        {
+          "term": "objectid_reference",
+          "module": "13-mongodb",
+          "description": "Referencing alternatives."
+        },
+        {
+          "term": "array_update_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)."
+        },
+        {
+          "term": "array_query_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Array Query Operators (`$elemMatch`, `$all`, `$size`)."
+        },
+        {
+          "term": "querying_arrays",
+          "module": "13-mongodb",
+          "description": "Related concept: Querying Arrays."
+        },
+        {
+          "term": "unwind_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$unwind` Stage."
+        },
+        {
+          "term": "multikey_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Multikey Index."
+        }
+      ]
+    },
+    "binary_data": {
+      "level": 2,
+      "file": "terms/level_02/binary_data.md",
+      "display_name": "`Binary` Data",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type lists."
+        },
+        {
+          "term": "uuid_type",
+          "module": "12-postgres",
+          "description": "Relational binary identifier equivalents."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent types."
+        },
+        {
+          "term": "uuid_type",
+          "module": "12-postgres",
+          "description": "Relational equivalents."
+        }
+      ]
+    },
+    "boolean_type": {
+      "level": 2,
+      "file": "terms/level_02/boolean_type.md",
+      "display_name": "Boolean",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent types."
+        }
+      ]
+    },
+    "bson_data_types": {
+      "level": 2,
+      "file": "terms/level_02/bson_data_types.md",
+      "display_name": "BSON Data Types (Overview)",
+      "prerequisites": [
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The parent binary serialization format."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The binary serialization."
+        },
+        {
+          "term": "string",
+          "module": "13-mongodb",
+          "description": "The text type."
+        },
+        {
+          "term": "number_types",
+          "module": "13-mongodb",
+          "description": "The numeric types."
+        },
+        {
+          "term": "field",
+          "module": "13-mongodb",
+          "description": "Related concept: Field."
+        },
+        {
+          "term": "binary_data",
+          "module": "13-mongodb",
+          "description": "Related concept: `Binary` Data."
+        },
+        {
+          "term": "boolean_type",
+          "module": "13-mongodb",
+          "description": "Related concept: Boolean."
+        },
+        {
+          "term": "date_type",
+          "module": "13-mongodb",
+          "description": "Related concept: Date."
+        },
+        {
+          "term": "null_type",
+          "module": "13-mongodb",
+          "description": "Related concept: `null`."
+        },
+        {
+          "term": "schema_validation",
+          "module": "13-mongodb",
+          "description": "Related concept: Schema Validation (`$jsonSchema`)."
+        }
+      ]
+    },
+    "date_type": {
+      "level": 2,
+      "file": "terms/level_02/date_type.md",
+      "display_name": "Date",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type catalog."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent types."
+        },
+        {
+          "term": "timestamp_vs_date",
+          "module": "13-mongodb",
+          "description": "Internal logging difference."
+        },
+        {
+          "term": "data_lifecycle",
+          "module": "13-mongodb",
+          "description": "Related concept: Data Lifecycle & TTL Strategies."
+        }
+      ]
+    },
+    "decimal128": {
+      "level": 2,
+      "file": "terms/level_02/decimal128.md",
+      "display_name": "`Decimal128`",
+      "prerequisites": [
+        {
+          "term": "number_types",
+          "module": "13-mongodb",
+          "description": "The parent numeric type family."
+        }
+      ],
+      "related": [
+        {
+          "term": "number_types",
+          "module": "13-mongodb",
+          "description": "The parent types."
+        }
+      ]
+    },
+    "embedded_document": {
+      "level": 2,
+      "file": "terms/level_02/embedded_document.md",
+      "display_name": "Embedded Document (Subdocument)",
+      "prerequisites": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The parent container."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The structure of variable documents."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "Ordered lists of embedded documents."
+        },
+        {
+          "term": "objectid_reference",
+          "module": "13-mongodb",
+          "description": "The reference alternative."
+        },
+        {
+          "term": "dot_notation",
+          "module": "13-mongodb",
+          "description": "Related concept: Dot Notation."
+        },
+        {
+          "term": "querying_embedded",
+          "module": "13-mongodb",
+          "description": "Related concept: Querying Embedded Documents."
+        },
+        {
+          "term": "one_to_one",
+          "module": "13-mongodb",
+          "description": "Related concept: One-to-One Relationship (Embedding)."
+        }
+      ]
+    },
+    "null_type": {
+      "level": 2,
+      "file": "terms/level_02/null_type.md",
+      "display_name": "`null`",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type system."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The context of omitted fields."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON types."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The concept of dynamic layouts."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Element Query Operators (`$exists`, `$type`)."
+        },
+        {
+          "term": "querying_null_missing",
+          "module": "13-mongodb",
+          "description": "Related concept: Querying `null` and Missing Fields."
+        }
+      ]
+    },
+    "number_types": {
+      "level": 2,
+      "file": "terms/level_02/number_types.md",
+      "display_name": "Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type catalog."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent types."
+        },
+        {
+          "term": "decimal128",
+          "module": "13-mongodb",
+          "description": "Finer details on financial math."
+        },
+        {
+          "term": "string",
+          "module": "13-mongodb",
+          "description": "Related concept: String."
+        }
+      ]
+    },
+    "objectid_reference": {
+      "level": 2,
+      "file": "terms/level_02/objectid_reference.md",
+      "display_name": "`ObjectId` as a Manual Reference",
+      "prerequisites": [
+        {
+          "term": "objectid",
+          "module": "13-mongodb",
+          "description": "The unique identifier data type."
+        },
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The nested alternative."
+        }
+      ],
+      "related": [
+        {
+          "term": "objectid",
+          "module": "13-mongodb",
+          "description": "The reference key type."
+        },
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The nested alternative."
+        },
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "Related concept: Array."
+        }
+      ]
+    },
+    "string": {
+      "level": 2,
+      "file": "terms/level_02/string.md",
+      "display_name": "String",
+      "prerequisites": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent BSON type system."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The parent types."
+        },
+        {
+          "term": "number_types",
+          "module": "13-mongodb",
+          "description": "Non-text alternatives."
+        }
+      ]
+    },
+    "timestamp_vs_date": {
+      "level": 2,
+      "file": "terms/level_02/timestamp_vs_date.md",
+      "display_name": "`Timestamp` vs. `Date`",
+      "prerequisites": [
+        {
+          "term": "date_type",
+          "module": "13-mongodb",
+          "description": "The standard calendar time data type."
+        },
+        {
+          "term": "replication",
+          "module": "12-postgres",
+          "description": "The sync architecture context."
+        }
+      ],
+      "related": [
+        {
+          "term": "date_type",
+          "module": "13-mongodb",
+          "description": "The developer date type."
+        },
+        {
+          "term": "replication",
+          "module": "12-postgres",
+          "description": "The replication pipeline."
+        }
+      ]
+    },
+    "array_update_operators": {
+      "level": 3,
+      "file": "terms/level_03/array_update_operators.md",
+      "display_name": "Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)",
+      "prerequisites": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The target list fields modified."
+        },
+        {
+          "term": "update_operators",
+          "module": "13-mongodb",
+          "description": "The parent update operator context."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        },
+        {
+          "term": "update_operators",
+          "module": "13-mongodb",
+          "description": "The parent update operators."
+        },
+        {
+          "term": "positional_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Positional Operators (`$`, `$[]`, `$[<identifier>]`)."
+        }
+      ]
+    },
+    "bulk_write": {
+      "level": 3,
+      "file": "terms/level_03/bulk_write.md",
+      "display_name": "`bulkWrite()`",
+      "prerequisites": [
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "The insert operation."
+        },
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The update operation."
+        },
+        {
+          "term": "delete",
+          "module": "13-mongodb",
+          "description": "The delete operation."
+        }
+      ],
+      "related": [
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "Standard inserts."
+        },
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "Standard updates."
+        },
+        {
+          "term": "delete",
+          "module": "13-mongodb",
+          "description": "Standard deletes."
+        }
+      ]
+    },
+    "comparison_operators": {
+      "level": 3,
+      "file": "terms/level_03/comparison_operators.md",
+      "display_name": "Comparison Query Operators (`$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$nin`)",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent filter parameter structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent filter layout."
+        },
+        {
+          "term": "logical_operators",
+          "module": "13-mongodb",
+          "description": "- Combining filters."
+        }
+      ]
+    },
+    "count_documents": {
+      "level": 3,
+      "file": "terms/level_03/count_documents.md",
+      "display_name": "`countDocuments()` / `estimatedDocumentCount()`",
+      "prerequisites": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The read query context."
+        }
+      ],
+      "related": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The query basics."
+        }
+      ]
+    },
+    "cursor": {
+      "level": 3,
+      "file": "terms/level_03/cursor.md",
+      "display_name": "Cursor",
+      "prerequisites": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The query methods that return cursors."
+        }
+      ],
+      "related": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The query methods."
+        },
+        {
+          "term": "sort_limit_skip",
+          "module": "13-mongodb",
+          "description": "Cursor pagination methods."
+        }
+      ]
+    },
+    "delete": {
+      "level": 3,
+      "file": "terms/level_03/delete.md",
+      "display_name": "`deleteOne()` / `deleteMany()`",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "Defining which records are deleted."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The target filters."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "The outputs containing deleted counts."
+        },
+        {
+          "term": "bulk_write",
+          "module": "13-mongodb",
+          "description": "Related concept: `bulkWrite()`."
+        }
+      ]
+    },
+    "element_operators": {
+      "level": 3,
+      "file": "terms/level_03/element_operators.md",
+      "display_name": "Element Query Operators (`$exists`, `$type`)",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent filter parameter structure."
+        },
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The dynamic context requiring structure queries."
+        }
+      ],
+      "related": [
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The paradigm."
+        },
+        {
+          "term": "null_type",
+          "module": "13-mongodb",
+          "description": "The null indicator difference."
+        },
+        {
+          "term": "querying_null_missing",
+          "module": "13-mongodb",
+          "description": "Related concept: Querying `null` and Missing Fields."
+        },
+        {
+          "term": "polymorphic_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Polymorphic Pattern."
+        }
+      ]
+    },
+    "find": {
+      "level": 3,
+      "file": "terms/level_03/find.md",
+      "display_name": "`find()` / `findOne()`",
+      "prerequisites": [
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "The write operations."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The filter parameter."
+        },
+        {
+          "term": "cursor",
+          "module": "13-mongodb",
+          "description": "The pointer returned by `find()`."
+        },
+        {
+          "term": "projection",
+          "module": "13-mongodb",
+          "description": "Selecting specific fields to return."
+        },
+        {
+          "term": "count_documents",
+          "module": "13-mongodb",
+          "description": "Related concept: `countDocuments()` / `estimatedDocumentCount()`."
+        },
+        {
+          "term": "geospatial_queries",
+          "module": "13-mongodb",
+          "description": "Related concept: Geospatial Queries (`$near`, `$geoWithin`, `2dsphere`)."
+        }
+      ]
+    },
+    "find_and_modify": {
+      "level": 3,
+      "file": "terms/level_03/find_and_modify.md",
+      "display_name": "`findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The standard non-atomic updates."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "Differentiating results metrics from returned documents."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "Standard non-atomic modifications."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "Standard write outputs."
+        }
+      ]
+    },
+    "implicit_eq_combining": {
+      "level": 3,
+      "file": "terms/level_03/implicit_eq_combining.md",
+      "display_name": "Implicit `$eq` & Combining Conditions",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The query syntax structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent filter layout."
+        },
+        {
+          "term": "logical_operators",
+          "module": "13-mongodb",
+          "description": "- Explicit combining arrays."
+        }
+      ]
+    },
+    "insert": {
+      "level": 3,
+      "file": "terms/level_03/insert.md",
+      "display_name": "`insertOne()` / `insertMany()`",
+      "prerequisites": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The target container where documents are written."
+        }
+      ],
+      "related": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The parent data container."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "Understanding the insert outputs."
+        },
+        {
+          "term": "bulk_write",
+          "module": "13-mongodb",
+          "description": "Related concept: `bulkWrite()`."
+        }
+      ]
+    },
+    "logical_operators": {
+      "level": 3,
+      "file": "terms/level_03/logical_operators.md",
+      "display_name": "Logical Query Operators (`$and`, `$or`, `$not`, `$nor`)",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent filter parameter structure."
+        },
+        {
+          "term": "implicit_eq_combining",
+          "module": "13-mongodb",
+          "description": "Differentiating implicit ANDs from explicit ones."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent filter layout."
+        },
+        {
+          "term": "implicit_eq_combining",
+          "module": "13-mongodb",
+          "description": "Shorthand logic."
+        },
+        {
+          "term": "comparison_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Comparison Query Operators (`$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$nin`)."
+        }
+      ]
+    },
+    "projection": {
+      "level": 3,
+      "file": "terms/level_03/projection.md",
+      "display_name": "Projection",
+      "prerequisites": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The query methods that execute projections."
+        }
+      ],
+      "related": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The executing methods."
+        },
+        {
+          "term": "sort_limit_skip",
+          "module": "13-mongodb",
+          "description": "Related concept: `sort()` / `limit()` / `skip()`."
+        },
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "Related concept: `$project` / `$addFields` Stages."
+        }
+      ]
+    },
+    "query_filter": {
+      "level": 3,
+      "file": "terms/level_03/query_filter.md",
+      "display_name": "Query Filter (Filter Document)",
+      "prerequisites": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The methods that accept query filters."
+        }
+      ],
+      "related": [
+        {
+          "term": "implicit_eq_combining",
+          "module": "13-mongodb",
+          "description": "How fields are combined."
+        },
+        {
+          "term": "comparison_operators",
+          "module": "13-mongodb",
+          "description": "The value comparison codes."
+        },
+        {
+          "term": "delete",
+          "module": "13-mongodb",
+          "description": "Related concept: `deleteOne()` / `deleteMany()`."
+        },
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "Related concept: `find()` / `findOne()`."
+        },
+        {
+          "term": "logical_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Logical Query Operators (`$and`, `$or`, `$not`, `$nor`)."
+        },
+        {
+          "term": "nosql_injection",
+          "module": "13-mongodb",
+          "description": "Related concept: NoSQL Injection."
+        }
+      ]
+    },
+    "replace_one": {
+      "level": 3,
+      "file": "terms/level_03/replace_one.md",
+      "display_name": "`replaceOne()`",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The partial update alternatives."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "Partial update methods."
+        },
+        {
+          "term": "set_vs_replace",
+          "module": "13-mongodb",
+          "description": "Comparative rules."
+        }
+      ]
+    },
+    "set_vs_replace": {
+      "level": 3,
+      "file": "terms/level_03/set_vs_replace.md",
+      "display_name": "`$set` vs. Whole-Document Replacement",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The partial update methods."
+        },
+        {
+          "term": "replace_one",
+          "module": "13-mongodb",
+          "description": "The whole-document replacement method."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "Partial update methods."
+        },
+        {
+          "term": "replace_one",
+          "module": "13-mongodb",
+          "description": "Whole-document replacement."
+        }
+      ]
+    },
+    "sort_limit_skip": {
+      "level": 3,
+      "file": "terms/level_03/sort_limit_skip.md",
+      "display_name": "`sort()` / `limit()` / `skip()`",
+      "prerequisites": [
+        {
+          "term": "cursor",
+          "module": "13-mongodb",
+          "description": "The query result pointer modified by these methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "cursor",
+          "module": "13-mongodb",
+          "description": "The parent pointer modified."
+        },
+        {
+          "term": "projection",
+          "module": "13-mongodb",
+          "description": "The column filtering argument."
+        },
+        {
+          "term": "sort_limit_skip_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$sort` / `$limit` / `$skip` Stages."
+        }
+      ]
+    },
+    "update": {
+      "level": 3,
+      "file": "terms/level_03/update.md",
+      "display_name": "`updateOne()` / `updateMany()`",
+      "prerequisites": [
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "Creating the documents edited."
+        },
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "Specifying which records to target."
+        }
+      ],
+      "related": [
+        {
+          "term": "update_operators",
+          "module": "13-mongodb",
+          "description": "The modification commands."
+        },
+        {
+          "term": "upsert",
+          "module": "13-mongodb",
+          "description": "- Dynamic insert on updates."
+        },
+        {
+          "term": "bulk_write",
+          "module": "13-mongodb",
+          "description": "Related concept: `bulkWrite()`."
+        },
+        {
+          "term": "find_and_modify",
+          "module": "13-mongodb",
+          "description": "Related concept: `findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`."
+        },
+        {
+          "term": "replace_one",
+          "module": "13-mongodb",
+          "description": "Related concept: `replaceOne()`."
+        },
+        {
+          "term": "set_vs_replace",
+          "module": "13-mongodb",
+          "description": "Related concept: `$set` vs. Whole-Document Replacement."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "Related concept: Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)."
+        }
+      ]
+    },
+    "update_operators": {
+      "level": 3,
+      "file": "terms/level_03/update_operators.md",
+      "display_name": "Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The parent modification methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The parent update methods."
+        },
+        {
+          "term": "array_update_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)."
+        },
+        {
+          "term": "set_unset_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$set` / `$unset` Pipeline Stages."
+        }
+      ]
+    },
+    "upsert": {
+      "level": 3,
+      "file": "terms/level_03/upsert.md",
+      "display_name": "Upsert (`upsert: true`)",
+      "prerequisites": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The parent update methods."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "Verifying upsertedId outputs."
+        }
+      ],
+      "related": [
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The parent update methods."
+        },
+        {
+          "term": "write_results",
+          "module": "13-mongodb",
+          "description": "The query output indicators."
+        },
+        {
+          "term": "bucket_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Bucket Pattern."
+        },
+        {
+          "term": "out_merge_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$out` / `$merge` Stages."
+        }
+      ]
+    },
+    "write_results": {
+      "level": 3,
+      "file": "terms/level_03/write_results.md",
+      "display_name": "Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)",
+      "prerequisites": [
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "Insert methods returning write results."
+        },
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "Update methods returning write results."
+        },
+        {
+          "term": "delete",
+          "module": "13-mongodb",
+          "description": "Delete methods returning write results."
+        }
+      ],
+      "related": [
+        {
+          "term": "insert",
+          "module": "13-mongodb",
+          "description": "The insert operations."
+        },
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "The modify operations."
+        },
+        {
+          "term": "delete",
+          "module": "13-mongodb",
+          "description": "The delete operations."
+        },
+        {
+          "term": "find_and_modify",
+          "module": "13-mongodb",
+          "description": "Related concept: `findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`."
+        },
+        {
+          "term": "upsert",
+          "module": "13-mongodb",
+          "description": "Related concept: Upsert (`upsert: true`)."
+        }
+      ]
+    },
+    "array_filters": {
+      "level": 4,
+      "file": "terms/level_04/array_filters.md",
+      "display_name": "`arrayFilters` Option",
+      "prerequisites": [],
+      "related": [
+        {
+          "term": "positional_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Positional Operators (`$`, `$[]`, `$[<identifier>]`)."
+        }
+      ]
+    },
+    "array_query_operators": {
+      "level": 4,
+      "file": "terms/level_04/array_query_operators.md",
+      "display_name": "Array Query Operators (`$elemMatch`, `$all`, `$size`)",
+      "prerequisites": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The parent list structures."
+        },
+        {
+          "term": "querying_arrays",
+          "module": "13-mongodb",
+          "description": "Standard array matching behaviors."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        },
+        {
+          "term": "querying_arrays",
+          "module": "13-mongodb",
+          "description": "The parent array querying."
+        },
+        {
+          "term": "attribute_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Attribute Pattern."
+        }
+      ]
+    },
+    "dot_notation": {
+      "level": 4,
+      "file": "terms/level_04/dot_notation.md",
+      "display_name": "Dot Notation",
+      "prerequisites": [
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The nested data traversed."
+        },
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The ordered lists navigated."
+        }
+      ],
+      "related": [
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The nested data."
+        },
+        {
+          "term": "querying_embedded",
+          "module": "13-mongodb",
+          "description": "Dynamic nested filtering."
+        }
+      ]
+    },
+    "evaluation_operators": {
+      "level": 4,
+      "file": "terms/level_04/evaluation_operators.md",
+      "display_name": "Evaluation Query Operators (`$regex`, `$expr`, `$mod`)",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent query filters context."
+        }
+      ],
+      "related": [
+        {
+          "term": "regex",
+          "module": "13-mongodb",
+          "description": "String matching."
+        }
+      ]
+    },
+    "geospatial_queries": {
+      "level": 4,
+      "file": "terms/level_04/geospatial_queries.md",
+      "display_name": "Geospatial Queries (`$near`, `$geoWithin`, `2dsphere`)",
+      "prerequisites": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The query execution methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "find",
+          "module": "13-mongodb",
+          "description": "The query framework."
+        },
+        {
+          "term": "geospatial_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Geospatial Index (`2dsphere` / `2d`)."
+        }
+      ]
+    },
+    "positional_operators": {
+      "level": 4,
+      "file": "terms/level_04/positional_operators.md",
+      "display_name": "Positional Operators (`$`, `$[]`, `$[<identifier>]`)",
+      "prerequisites": [
+        {
+          "term": "array_update_operators",
+          "module": "13-mongodb",
+          "description": "The parent array update operations."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_update_operators",
+          "module": "13-mongodb",
+          "description": "The parent update operators."
+        },
+        {
+          "term": "array_filters",
+          "module": "13-mongodb",
+          "description": "Custom filtered updates."
+        }
+      ]
+    },
+    "querying_arrays": {
+      "level": 4,
+      "file": "terms/level_04/querying_arrays.md",
+      "display_name": "Querying Arrays",
+      "prerequisites": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The parent list data type."
+        },
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The parent query filters context."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        },
+        {
+          "term": "array_query_operators",
+          "module": "13-mongodb",
+          "description": "Complex array filters."
+        }
+      ]
+    },
+    "querying_embedded": {
+      "level": 4,
+      "file": "terms/level_04/querying_embedded.md",
+      "display_name": "Querying Embedded Documents",
+      "prerequisites": [
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The nested structures queried."
+        },
+        {
+          "term": "dot_notation",
+          "module": "13-mongodb",
+          "description": "The path syntax used to target nested fields."
+        }
+      ],
+      "related": [
+        {
+          "term": "dot_notation",
+          "module": "13-mongodb",
+          "description": "The path syntax."
+        },
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        }
+      ]
+    },
+    "querying_null_missing": {
+      "level": 4,
+      "file": "terms/level_04/querying_null_missing.md",
+      "display_name": "Querying `null` and Missing Fields",
+      "prerequisites": [
+        {
+          "term": "null_type",
+          "module": "13-mongodb",
+          "description": "The representation of null."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "The metadata operators used."
+        }
+      ],
+      "related": [
+        {
+          "term": "null_type",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "The checks operators."
+        }
+      ]
+    },
+    "regex": {
+      "level": 4,
+      "file": "terms/level_04/regex.md",
+      "display_name": "`$regex` (Regular Expressions)",
+      "prerequisites": [
+        {
+          "term": "evaluation_operators",
+          "module": "13-mongodb",
+          "description": "The evaluation context."
+        }
+      ],
+      "related": [
+        {
+          "term": "evaluation_operators",
+          "module": "13-mongodb",
+          "description": "The parent context."
+        },
+        {
+          "term": "text_search",
+          "module": "13-mongodb",
+          "description": "Large text indexing alternatives."
+        }
+      ]
+    },
+    "text_search": {
+      "level": 4,
+      "file": "terms/level_04/text_search.md",
+      "display_name": "Text Search (`$text` / `$search`)",
+      "prerequisites": [
+        {
+          "term": "regex",
+          "module": "13-mongodb",
+          "description": "The string search alternative."
+        }
+      ],
+      "related": [
+        {
+          "term": "regex",
+          "module": "13-mongodb",
+          "description": "Pattern searches."
+        },
+        {
+          "term": "text_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Text Index."
+        }
+      ]
+    },
+    "anti_patterns": {
+      "level": 5,
+      "file": "terms/level_05/anti_patterns.md",
+      "display_name": "Anti-Patterns in Schema Design",
+      "prerequisites": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The core design choices."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The physical boundary constraint."
+        }
+      ],
+      "related": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The design choice."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The size constraint."
+        }
+      ]
+    },
+    "attribute_pattern": {
+      "level": 5,
+      "file": "terms/level_05/attribute_pattern.md",
+      "display_name": "The Attribute Pattern",
+      "prerequisites": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling paradigm."
+        },
+        {
+          "term": "array_query_operators",
+          "module": "13-mongodb",
+          "description": "Querying array elements."
+        }
+      ],
+      "related": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "array_query_operators",
+          "module": "13-mongodb",
+          "description": "Locking query parameters."
+        },
+        {
+          "term": "wildcard_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Wildcard Index."
+        }
+      ]
+    },
+    "bucket_pattern": {
+      "level": 5,
+      "file": "terms/level_05/bucket_pattern.md",
+      "display_name": "The Bucket Pattern",
+      "prerequisites": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "update",
+          "module": "13-mongodb",
+          "description": "executing updates."
+        }
+      ],
+      "related": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "upsert",
+          "module": "13-mongodb",
+          "description": "The ingestion operator."
+        },
+        {
+          "term": "bucket_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$bucket` / `$bucketAuto` Stages."
+        }
+      ]
+    },
+    "data_lifecycle": {
+      "level": 5,
+      "file": "terms/level_05/data_lifecycle.md",
+      "display_name": "Data Lifecycle & TTL Strategies",
+      "prerequisites": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "date_type",
+          "module": "13-mongodb",
+          "description": "The required time parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "date_type",
+          "module": "13-mongodb",
+          "description": "The data type."
+        },
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "Modeling rules."
+        },
+        {
+          "term": "ttl_index",
+          "module": "13-mongodb",
+          "description": "Related concept: TTL (Time-To-Live) Index."
+        }
+      ]
+    },
+    "document_size_limit": {
+      "level": 5,
+      "file": "terms/level_05/document_size_limit.md",
+      "display_name": "Document Size Limit (16 MB)",
+      "prerequisites": [
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The binary format that is sized."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The design decision driven."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson",
+          "module": "13-mongodb",
+          "description": "The binary format."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "anti_patterns",
+          "module": "13-mongodb",
+          "description": "Related concept: Anti-Patterns in Schema Design."
+        },
+        {
+          "term": "one_to_many",
+          "module": "13-mongodb",
+          "description": "Related concept: One-to-Many Relationship (Embedding vs. Referencing)."
+        },
+        {
+          "term": "subset_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Subset Pattern."
+        },
+        {
+          "term": "facet_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$facet` Stage."
+        },
+        {
+          "term": "gridfs",
+          "module": "13-mongodb",
+          "description": "Related concept: GridFS."
+        }
+      ]
+    },
+    "embedding_vs_referencing": {
+      "level": 5,
+      "file": "terms/level_05/embedding_vs_referencing.md",
+      "display_name": "Embedding vs. Referencing",
+      "prerequisites": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling paradigm."
+        },
+        {
+          "term": "objectid_reference",
+          "module": "13-mongodb",
+          "description": "The referencing implementation."
+        }
+      ],
+      "related": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The size constraint."
+        },
+        {
+          "term": "anti_patterns",
+          "module": "13-mongodb",
+          "description": "Related concept: Anti-Patterns in Schema Design."
+        },
+        {
+          "term": "extended_reference_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Extended Reference Pattern."
+        },
+        {
+          "term": "many_to_many",
+          "module": "13-mongodb",
+          "description": "Related concept: Many-to-Many Relationship."
+        },
+        {
+          "term": "one_to_many",
+          "module": "13-mongodb",
+          "description": "Related concept: One-to-Many Relationship (Embedding vs. Referencing)."
+        },
+        {
+          "term": "one_to_one",
+          "module": "13-mongodb",
+          "description": "Related concept: One-to-One Relationship (Embedding)."
+        },
+        {
+          "term": "subset_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Subset Pattern."
+        }
+      ]
+    },
+    "extended_reference_pattern": {
+      "level": 5,
+      "file": "terms/level_05/extended_reference_pattern.md",
+      "display_name": "The Extended Reference Pattern",
+      "prerequisites": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling choice."
+        },
+        {
+          "term": "one_to_many",
+          "module": "13-mongodb",
+          "description": "The parent relationship context."
+        }
+      ],
+      "related": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling choices."
+        },
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "Access pattern optimization."
+        }
+      ]
+    },
+    "many_to_many": {
+      "level": 5,
+      "file": "terms/level_05/many_to_many.md",
+      "display_name": "Many-to-Many Relationship",
+      "prerequisites": [
+        {
+          "term": "one_to_many",
+          "module": "13-mongodb",
+          "description": "The parent cardinality models."
+        },
+        {
+          "term": "array_query_operators",
+          "module": "13-mongodb",
+          "description": "Querying reference lists."
+        }
+      ],
+      "related": [
+        {
+          "term": "one_to_many",
+          "module": "13-mongodb",
+          "description": "The cardinality context."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        }
+      ]
+    },
+    "one_to_many": {
+      "level": 5,
+      "file": "terms/level_05/one_to_many.md",
+      "display_name": "One-to-Many Relationship (Embedding vs. Referencing)",
+      "prerequisites": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling framework."
+        },
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "Nested collection arrays."
+        }
+      ],
+      "related": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "Core pattern framework."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The critical size ceiling."
+        },
+        {
+          "term": "many_to_many",
+          "module": "13-mongodb",
+          "description": "Related concept: Many-to-Many Relationship."
+        }
+      ]
+    },
+    "one_to_one": {
+      "level": 5,
+      "file": "terms/level_05/one_to_one.md",
+      "display_name": "One-to-One Relationship (Embedding)",
+      "prerequisites": [
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The syntax for nesting objects."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The comparative design framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "The nested structure."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The general pattern comparison."
+        }
+      ]
+    },
+    "outlier_pattern": {
+      "level": 5,
+      "file": "terms/level_05/outlier_pattern.md",
+      "display_name": "The Outlier Pattern",
+      "prerequisites": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling choice."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The physical boundary ceiling."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongodb",
+          "module": "13-mongodb",
+          "description": ""
+        },
+        {
+          "term": "time_series",
+          "module": "13-mongodb",
+          "description": "Related concept: Time-Series Collections."
+        }
+      ]
+    },
+    "polymorphic_pattern": {
+      "level": 5,
+      "file": "terms/level_05/polymorphic_pattern.md",
+      "display_name": "The Polymorphic Pattern",
+      "prerequisites": [
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The parent paradigm."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "Querying structure differences."
+        }
+      ],
+      "related": [
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The parent structure paradigm."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "Evaluating structures."
+        }
+      ]
+    },
+    "schema_design": {
+      "level": 5,
+      "file": "terms/level_05/schema_design.md",
+      "display_name": "Schema Design (Document Modeling)",
+      "prerequisites": [
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "The dynamic structure context."
+        },
+        {
+          "term": "embedded_document",
+          "module": "13-mongodb",
+          "description": "Nested document modeling."
+        }
+      ],
+      "related": [
+        {
+          "term": "flexible_schema",
+          "module": "13-mongodb",
+          "description": "Dynamic structures."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The core design choice."
+        },
+        {
+          "term": "anti_patterns",
+          "module": "13-mongodb",
+          "description": "Related concept: Anti-Patterns in Schema Design."
+        },
+        {
+          "term": "attribute_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Attribute Pattern."
+        },
+        {
+          "term": "bucket_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Bucket Pattern."
+        },
+        {
+          "term": "data_lifecycle",
+          "module": "13-mongodb",
+          "description": "Related concept: Data Lifecycle & TTL Strategies."
+        },
+        {
+          "term": "extended_reference_pattern",
+          "module": "13-mongodb",
+          "description": "Related concept: The Extended Reference Pattern."
+        },
+        {
+          "term": "schema_validation",
+          "module": "13-mongodb",
+          "description": "Related concept: Schema Validation (`$jsonSchema`)."
+        }
+      ]
+    },
+    "schema_validation": {
+      "level": 5,
+      "file": "terms/level_05/schema_validation.md",
+      "display_name": "Schema Validation (`$jsonSchema`)",
+      "prerequisites": [
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The target types validated."
+        }
+      ],
+      "related": [
+        {
+          "term": "bson_data_types",
+          "module": "13-mongodb",
+          "description": "The target types."
+        },
+        {
+          "term": "schema_design",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "database_migrations",
+          "module": "13-mongodb",
+          "description": "Related concept: Database Migrations (MongoDB)."
+        }
+      ]
+    },
+    "subset_pattern": {
+      "level": 5,
+      "file": "terms/level_05/subset_pattern.md",
+      "display_name": "The Subset Pattern",
+      "prerequisites": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The size constraint solved."
+        }
+      ],
+      "related": [
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The physical boundary constraint."
+        }
+      ]
+    },
+    "accumulator_operators": {
+      "level": 6,
+      "file": "terms/level_06/accumulator_operators.md",
+      "display_name": "Accumulator Operators (`$sum`, `$avg`, `$min`, `$max`, `$count`, `$push`, `$addToSet`)",
+      "prerequisites": [
+        {
+          "term": "group_stage",
+          "module": "13-mongodb",
+          "description": "The pipeline stage where accumulators execute."
+        }
+      ],
+      "related": [
+        {
+          "term": "group_stage",
+          "module": "13-mongodb",
+          "description": "The parent pipeline stage."
+        }
+      ]
+    },
+    "aggregation_pipeline": {
+      "level": 6,
+      "file": "terms/level_06/aggregation_pipeline.md",
+      "display_name": "Aggregation Pipeline (Concept)",
+      "prerequisites": [
+        {
+          "term": "cursor",
+          "module": "13-mongodb",
+          "description": "The query results cursor wrapper."
+        }
+      ],
+      "related": [
+        {
+          "term": "match_stage",
+          "module": "13-mongodb",
+          "description": "The filtering stage."
+        },
+        {
+          "term": "group_stage",
+          "module": "13-mongodb",
+          "description": "The grouping stage."
+        },
+        {
+          "term": "aggregation_variables",
+          "module": "13-mongodb",
+          "description": "Related concept: Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`)."
+        },
+        {
+          "term": "bucket_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$bucket` / `$bucketAuto` Stages."
+        },
+        {
+          "term": "expression_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`)."
+        },
+        {
+          "term": "facet_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$facet` Stage."
+        },
+        {
+          "term": "lookup_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$lookup` Stage."
+        },
+        {
+          "term": "out_merge_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$out` / `$merge` Stages."
+        },
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "Related concept: `$project` / `$addFields` Stages."
+        },
+        {
+          "term": "replace_root",
+          "module": "13-mongodb",
+          "description": "Related concept: `$replaceRoot` / `$replaceWith` Stages."
+        },
+        {
+          "term": "sort_limit_skip_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$sort` / `$limit` / `$skip` Stages."
+        },
+        {
+          "term": "unwind_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$unwind` Stage."
+        },
+        {
+          "term": "atlas_search",
+          "module": "13-mongodb",
+          "description": "Related concept: Atlas Search."
+        },
+        {
+          "term": "views",
+          "module": "13-mongodb",
+          "description": "Related concept: Views."
+        }
+      ]
+    },
+    "aggregation_variables": {
+      "level": 6,
+      "file": "terms/level_06/aggregation_variables.md",
+      "display_name": "Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`)",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "lookup_stage",
+          "module": "13-mongodb",
+          "description": "The join stage using `let`."
+        }
+      ]
+    },
+    "bucket_stages": {
+      "level": 6,
+      "file": "terms/level_06/bucket_stages.md",
+      "display_name": "`$bucket` / `$bucketAuto` Stages",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "bucket_pattern",
+          "module": "13-mongodb",
+          "description": "The storage-level bucketing concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "bucket_pattern",
+          "module": "13-mongodb",
+          "description": "The schema design equivalent."
+        }
+      ]
+    },
+    "expression_operators": {
+      "level": 6,
+      "file": "terms/level_06/expression_operators.md",
+      "display_name": "Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`)",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "The stages where expressions execute."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "The executing stages."
+        }
+      ]
+    },
+    "facet_stage": {
+      "level": 6,
+      "file": "terms/level_06/facet_stage.md",
+      "display_name": "`$facet` Stage",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The output size constraint."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The size constraint."
+        }
+      ]
+    },
+    "graph_lookup": {
+      "level": 6,
+      "file": "terms/level_06/graph_lookup.md",
+      "display_name": "`$graphLookup` Stage",
+      "prerequisites": [
+        {
+          "term": "lookup_stage",
+          "module": "13-mongodb",
+          "description": "The parent non-recursive join stage."
+        },
+        {
+          "term": "recursive_cte",
+          "module": "12-postgres",
+          "description": "Relational recursive joins."
+        }
+      ],
+      "related": [
+        {
+          "term": "lookup_stage",
+          "module": "13-mongodb",
+          "description": "The parent non-recursive join."
+        },
+        {
+          "term": "recursive_cte",
+          "module": "12-postgres",
+          "description": "Relational recursive joins."
+        }
+      ]
+    },
+    "group_stage": {
+      "level": 6,
+      "file": "terms/level_06/group_stage.md",
+      "display_name": "`$group` Stage",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "accumulator_operators",
+          "module": "13-mongodb",
+          "description": "The calculation operators."
+        },
+        {
+          "term": "match_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$match` Stage."
+        }
+      ]
+    },
+    "lookup_stage": {
+      "level": 6,
+      "file": "terms/level_06/lookup_stage.md",
+      "display_name": "`$lookup` Stage",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "embedding_vs_referencing",
+          "module": "13-mongodb",
+          "description": "The relational data modeling context."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "unwind_stage",
+          "module": "13-mongodb",
+          "description": "The array flattening tool."
+        },
+        {
+          "term": "aggregation_variables",
+          "module": "13-mongodb",
+          "description": "Related concept: Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`)."
+        },
+        {
+          "term": "graph_lookup",
+          "module": "13-mongodb",
+          "description": "Related concept: `$graphLookup` Stage."
+        }
+      ]
+    },
+    "match_stage": {
+      "level": 6,
+      "file": "terms/level_06/match_stage.md",
+      "display_name": "`$match` Stage",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The identical syntax schema."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "group_stage",
+          "module": "13-mongodb",
+          "description": "The grouping stage."
+        }
+      ]
+    },
+    "out_merge_stages": {
+      "level": 6,
+      "file": "terms/level_06/out_merge_stages.md",
+      "display_name": "`$out` / `$merge` Stages",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "upsert",
+          "module": "13-mongodb",
+          "description": "The update-or-insert write concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "upsert",
+          "module": "13-mongodb",
+          "description": "The write concept."
+        }
+      ]
+    },
+    "project_addfields": {
+      "level": 6,
+      "file": "terms/level_06/project_addfields.md",
+      "display_name": "`$project` / `$addFields` Stages",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "projection",
+          "module": "13-mongodb",
+          "description": "The whitelisting rules."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "projection",
+          "module": "13-mongodb",
+          "description": "The whitelisting rules."
+        },
+        {
+          "term": "expression_operators",
+          "module": "13-mongodb",
+          "description": "Related concept: Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`)."
+        },
+        {
+          "term": "replace_root",
+          "module": "13-mongodb",
+          "description": "Related concept: `$replaceRoot` / `$replaceWith` Stages."
+        },
+        {
+          "term": "set_unset_stages",
+          "module": "13-mongodb",
+          "description": "Related concept: `$set` / `$unset` Pipeline Stages."
+        }
+      ]
+    },
+    "replace_root": {
+      "level": 6,
+      "file": "terms/level_06/replace_root.md",
+      "display_name": "`$replaceRoot` / `$replaceWith` Stages",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "aggregation_variables",
+          "module": "13-mongodb",
+          "description": "Utilizing document pointers."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "Reshaping alternatives."
+        }
+      ]
+    },
+    "set_unset_stages": {
+      "level": 6,
+      "file": "terms/level_06/set_unset_stages.md",
+      "display_name": "`$set` / `$unset` Pipeline Stages",
+      "prerequisites": [
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "The parent reshaping stages."
+        },
+        {
+          "term": "update_operators",
+          "module": "13-mongodb",
+          "description": "The write operators sharing names."
+        }
+      ],
+      "related": [
+        {
+          "term": "project_addfields",
+          "module": "13-mongodb",
+          "description": "The parent reshaping stages."
+        },
+        {
+          "term": "update_operators",
+          "module": "13-mongodb",
+          "description": "The write operators."
+        }
+      ]
+    },
+    "sort_limit_skip_stages": {
+      "level": 6,
+      "file": "terms/level_06/sort_limit_skip_stages.md",
+      "display_name": "`$sort` / `$limit` / `$skip` Stages",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "sort_limit_skip",
+          "module": "13-mongodb",
+          "description": "The cursor pagination methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "sort_limit_skip",
+          "module": "13-mongodb",
+          "description": "The cursor pagination."
+        }
+      ]
+    },
+    "unwind_stage": {
+      "level": 6,
+      "file": "terms/level_06/unwind_stage.md",
+      "display_name": "`$unwind` Stage",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The array structure flattened."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The parent pipeline framework."
+        },
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        },
+        {
+          "term": "lookup_stage",
+          "module": "13-mongodb",
+          "description": "Related concept: `$lookup` Stage."
+        }
+      ]
+    },
+    "collection_scan_vs_index": {
+      "level": 7,
+      "file": "terms/level_07/collection_scan_vs_index.md",
+      "display_name": "Collection Scan vs Index Scan",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree index theory."
+        },
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "The query plan analyzer."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree index theory."
+        },
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "The query planner analyzer."
+        },
+        {
+          "term": "index_selectivity",
+          "module": "13-mongodb",
+          "description": "Related concept: Index Selectivity & Cardinality."
+        }
+      ]
+    },
+    "compound_index": {
+      "level": 7,
+      "file": "terms/level_07/compound_index.md",
+      "display_name": "Compound Index",
+      "prerequisites": [
+        {
+          "term": "single_field_index",
+          "module": "13-mongodb",
+          "description": "The parent index type."
+        },
+        {
+          "term": "index_selectivity",
+          "module": "13-mongodb",
+          "description": "Determining index suitability."
+        }
+      ],
+      "related": [
+        {
+          "term": "single_field_index",
+          "module": "13-mongodb",
+          "description": "The parent index type."
+        },
+        {
+          "term": "esr_rule",
+          "module": "13-mongodb",
+          "description": "Ordering compound keys."
+        },
+        {
+          "term": "covered_query",
+          "module": "13-mongodb",
+          "description": "Related concept: Covered Query."
+        },
+        {
+          "term": "index_intersection",
+          "module": "13-mongodb",
+          "description": "Related concept: Index Intersection."
+        },
+        {
+          "term": "multikey_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Multikey Index."
+        }
+      ]
+    },
+    "covered_query": {
+      "level": 7,
+      "file": "terms/level_07/covered_query.md",
+      "display_name": "Covered Query",
+      "prerequisites": [
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "Verifying execution plan stages."
+        },
+        {
+          "term": "projection",
+          "module": "13-mongodb",
+          "description": "Limiting returned fields."
+        }
+      ],
+      "related": [
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "The plan analyzer."
+        },
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "The target multi-key index."
+        }
+      ]
+    },
+    "create_drop_index": {
+      "level": 7,
+      "file": "terms/level_07/create_drop_index.md",
+      "display_name": "`createIndex()` / `dropIndex()`",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree index theory."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree index theory."
+        },
+        {
+          "term": "index_builds",
+          "module": "13-mongodb",
+          "description": "Index construction locks."
+        },
+        {
+          "term": "geospatial_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Geospatial Index (`2dsphere` / `2d`)."
+        },
+        {
+          "term": "text_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Text Index."
+        },
+        {
+          "term": "ttl_index",
+          "module": "13-mongodb",
+          "description": "Related concept: TTL (Time-To-Live) Index."
+        },
+        {
+          "term": "unique_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Unique Index."
+        },
+        {
+          "term": "wildcard_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Wildcard Index."
+        }
+      ]
+    },
+    "esr_rule": {
+      "level": 7,
+      "file": "terms/level_07/esr_rule.md",
+      "display_name": "The ESR Rule (Equality, Sort, Range)",
+      "prerequisites": [
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "The target multi-key index."
+        },
+        {
+          "term": "index_selectivity",
+          "module": "13-mongodb",
+          "description": "Analyzing query selectivity."
+        }
+      ],
+      "related": [
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "The parent index type."
+        },
+        {
+          "term": "index_selectivity",
+          "module": "13-mongodb",
+          "description": "Index optimization rules."
+        }
+      ]
+    },
+    "explain": {
+      "level": 7,
+      "file": "terms/level_07/explain.md",
+      "display_name": "`explain()` Method",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The B-Tree structures analyzed."
+        }
+      ],
+      "related": [
+        {
+          "term": "collection_scan_vs_index",
+          "module": "13-mongodb",
+          "description": "The scan types."
+        },
+        {
+          "term": "covered_query",
+          "module": "13-mongodb",
+          "description": "The optimal index scan."
+        },
+        {
+          "term": "index_intersection",
+          "module": "13-mongodb",
+          "description": "Related concept: Index Intersection."
+        },
+        {
+          "term": "profiler",
+          "module": "13-mongodb",
+          "description": "Related concept: MongoDB Profiler (`db.setProfilingLevel()`)."
+        }
+      ]
+    },
+    "geospatial_index": {
+      "level": 7,
+      "file": "terms/level_07/geospatial_index.md",
+      "display_name": "Geospatial Index (`2dsphere` / `2d`)",
+      "prerequisites": [
+        {
+          "term": "geospatial_queries",
+          "module": "13-mongodb",
+          "description": "The parent query commands."
+        },
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation triggers."
+        }
+      ],
+      "related": [
+        {
+          "term": "geospatial_queries",
+          "module": "13-mongodb",
+          "description": "The query command."
+        },
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The DDL triggers."
+        }
+      ]
+    },
+    "index_builds": {
+      "level": 7,
+      "file": "terms/level_07/index_builds.md",
+      "display_name": "Background / Rolling Index Builds",
+      "prerequisites": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation triggers."
+        },
+        {
+          "term": "replication",
+          "module": "12-postgres",
+          "description": "The replica set architecture."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "Index management."
+        },
+        {
+          "term": "replication",
+          "module": "12-postgres",
+          "description": "Cluster architecture."
+        }
+      ]
+    },
+    "index_concept": {
+      "level": 7,
+      "file": "terms/level_07/index_concept.md",
+      "display_name": "Index (Concept in MongoDB)",
+      "prerequisites": [
+        {
+          "term": "collection",
+          "module": "13-mongodb",
+          "description": "The collection where indexes are built."
+        },
+        {
+          "term": "index_concept",
+          "module": "12-postgres",
+          "description": "Relational index conceptual foundations."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "Index management."
+        },
+        {
+          "term": "collection_scan_vs_index",
+          "module": "13-mongodb",
+          "description": "The search methods."
+        },
+        {
+          "term": "index_selectivity",
+          "module": "13-mongodb",
+          "description": "Related concept: Index Selectivity & Cardinality."
+        },
+        {
+          "term": "single_field_index",
+          "module": "13-mongodb",
+          "description": "Related concept: Single-Field Index."
+        }
+      ]
+    },
+    "index_intersection": {
+      "level": 7,
+      "file": "terms/level_07/index_intersection.md",
+      "display_name": "Index Intersection",
+      "prerequisites": [
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "The optimal multi-field index."
+        },
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "Verifying execution plan stages."
+        }
+      ],
+      "related": [
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "The optimal multi-field index."
+        },
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "The plan analyzer."
+        }
+      ]
+    },
+    "index_selectivity": {
+      "level": 7,
+      "file": "terms/level_07/index_selectivity.md",
+      "display_name": "Index Selectivity & Cardinality",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The B-Tree structure."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree structure."
+        },
+        {
+          "term": "collection_scan_vs_index",
+          "module": "13-mongodb",
+          "description": "The query planner choices."
+        },
+        {
+          "term": "esr_rule",
+          "module": "13-mongodb",
+          "description": "Related concept: The ESR Rule (Equality, Sort, Range)."
+        }
+      ]
+    },
+    "multikey_index": {
+      "level": 7,
+      "file": "terms/level_07/multikey_index.md",
+      "display_name": "Multikey Index",
+      "prerequisites": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The array structures indexed."
+        },
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "Multi-field index parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "array_type",
+          "module": "13-mongodb",
+          "description": "The data structure."
+        },
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "Multi-field index parameters."
+        }
+      ]
+    },
+    "partial_index": {
+      "level": 7,
+      "file": "terms/level_07/partial_index.md",
+      "display_name": "Partial Index",
+      "prerequisites": [
+        {
+          "term": "sparse_index",
+          "module": "13-mongodb",
+          "description": "The limited predecessor."
+        },
+        {
+          "term": "unique_index",
+          "module": "13-mongodb",
+          "description": "The uniqueness constraint."
+        }
+      ],
+      "related": [
+        {
+          "term": "sparse_index",
+          "module": "13-mongodb",
+          "description": "The parent existence index."
+        },
+        {
+          "term": "unique_index",
+          "module": "13-mongodb",
+          "description": "The constraint model."
+        }
+      ]
+    },
+    "single_field_index": {
+      "level": 7,
+      "file": "terms/level_07/single_field_index.md",
+      "display_name": "Single-Field Index",
+      "prerequisites": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree index theory."
+        },
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation methods."
+        }
+      ],
+      "related": [
+        {
+          "term": "index_concept",
+          "module": "13-mongodb",
+          "description": "The parent B-Tree index theory."
+        },
+        {
+          "term": "compound_index",
+          "module": "13-mongodb",
+          "description": "Multi-field index structures."
+        }
+      ]
+    },
+    "sparse_index": {
+      "level": 7,
+      "file": "terms/level_07/sparse_index.md",
+      "display_name": "Sparse Index",
+      "prerequisites": [
+        {
+          "term": "unique_index",
+          "module": "13-mongodb",
+          "description": "The parent constraint."
+        },
+        {
+          "term": "element_operators",
+          "module": "13-mongodb",
+          "description": "Checking field presence."
+        }
+      ],
+      "related": [
+        {
+          "term": "unique_index",
+          "module": "13-mongodb",
+          "description": "The parent constraint."
+        },
+        {
+          "term": "partial_index",
+          "module": "13-mongodb",
+          "description": "The modern alternative."
+        }
+      ]
+    },
+    "text_index": {
+      "level": 7,
+      "file": "terms/level_07/text_index.md",
+      "display_name": "Text Index",
+      "prerequisites": [
+        {
+          "term": "text_search",
+          "module": "13-mongodb",
+          "description": "The parent query operation."
+        },
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation triggers."
+        }
+      ],
+      "related": [
+        {
+          "term": "text_search",
+          "module": "13-mongodb",
+          "description": "The query command."
+        },
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The DDL triggers."
+        },
+        {
+          "term": "atlas_search",
+          "module": "13-mongodb",
+          "description": "Related concept: Atlas Search."
+        }
+      ]
+    },
+    "ttl_index": {
+      "level": 7,
+      "file": "terms/level_07/ttl_index.md",
+      "display_name": "TTL (Time-To-Live) Index",
+      "prerequisites": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation triggers."
+        },
+        {
+          "term": "data_lifecycle",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "Index management."
+        },
+        {
+          "term": "data_lifecycle",
+          "module": "13-mongodb",
+          "description": "The parent modeling rules."
+        }
+      ]
+    },
+    "unique_index": {
+      "level": 7,
+      "file": "terms/level_07/unique_index.md",
+      "display_name": "Unique Index",
+      "prerequisites": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation triggers."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "Index management."
+        },
+        {
+          "term": "sparse_index",
+          "module": "13-mongodb",
+          "description": "The duplicate null fix."
+        },
+        {
+          "term": "partial_index",
+          "module": "13-mongodb",
+          "description": "The modern alternative."
+        }
+      ]
+    },
+    "wildcard_index": {
+      "level": 7,
+      "file": "terms/level_07/wildcard_index.md",
+      "display_name": "Wildcard Index",
+      "prerequisites": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "The index creation triggers."
+        },
+        {
+          "term": "attribute_pattern",
+          "module": "13-mongodb",
+          "description": "The schema pattern alternative."
+        }
+      ],
+      "related": [
+        {
+          "term": "create_drop_index",
+          "module": "13-mongodb",
+          "description": "Index management."
+        },
+        {
+          "term": "attribute_pattern",
+          "module": "13-mongodb",
+          "description": "The schema design alternative."
+        }
+      ]
+    },
+    "acid_vs_base": {
+      "level": 8,
+      "file": "terms/level_08/acid_vs_base.md",
+      "display_name": "ACID vs BASE",
+      "prerequisites": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "MongoDB's ACID feature."
+        }
+      ],
+      "related": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "MongoDB's ACID engine."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The distributed nodes."
+        },
+        {
+          "term": "atomicity",
+          "module": "13-mongodb",
+          "description": "Related concept: Atomicity in MongoDB."
+        }
+      ]
+    },
+    "atomicity": {
+      "level": 8,
+      "file": "terms/level_08/atomicity.md",
+      "display_name": "Atomicity in MongoDB",
+      "prerequisites": [
+        {
+          "term": "document",
+          "module": "13-mongodb",
+          "description": "The basic unit of storage."
+        }
+      ],
+      "related": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "Multi-collection ACID blocks."
+        },
+        {
+          "term": "acid_vs_base",
+          "module": "13-mongodb",
+          "description": "The consistency models."
+        }
+      ]
+    },
+    "causal_consistency": {
+      "level": 8,
+      "file": "terms/level_08/causal_consistency.md",
+      "display_name": "Causal Consistency",
+      "prerequisites": [
+        {
+          "term": "read_concern",
+          "module": "13-mongodb",
+          "description": "The read durability context."
+        },
+        {
+          "term": "read_preference",
+          "module": "13-mongodb",
+          "description": "The routing of queries."
+        },
+        {
+          "term": "session_transaction",
+          "module": "13-mongodb",
+          "description": "The sessions container."
+        }
+      ],
+      "related": [
+        {
+          "term": "session_transaction",
+          "module": "13-mongodb",
+          "description": "The session containers."
+        },
+        {
+          "term": "read_preference",
+          "module": "13-mongodb",
+          "description": "The routing of queries."
+        }
+      ]
+    },
+    "multi_document_transaction": {
+      "level": 8,
+      "file": "terms/level_08/multi_document_transaction.md",
+      "display_name": "Multi-Document Transaction",
+      "prerequisites": [
+        {
+          "term": "atomicity",
+          "module": "13-mongodb",
+          "description": "The parent write guarantee."
+        }
+      ],
+      "related": [
+        {
+          "term": "atomicity",
+          "module": "13-mongodb",
+          "description": "The parent write guarantee."
+        },
+        {
+          "term": "session_transaction",
+          "module": "13-mongodb",
+          "description": "The driver implementation."
+        },
+        {
+          "term": "acid_vs_base",
+          "module": "13-mongodb",
+          "description": "Related concept: ACID vs BASE."
+        },
+        {
+          "term": "snapshot_isolation",
+          "module": "13-mongodb",
+          "description": "Related concept: Snapshot Isolation."
+        }
+      ]
+    },
+    "read_concern": {
+      "level": 8,
+      "file": "terms/level_08/read_concern.md",
+      "display_name": "Read Concern",
+      "prerequisites": [
+        {
+          "term": "write_concern",
+          "module": "13-mongodb",
+          "description": "The writing durability equivalent."
+        }
+      ],
+      "related": [
+        {
+          "term": "write_concern",
+          "module": "13-mongodb",
+          "description": "The writing durability equivalent."
+        },
+        {
+          "term": "read_preference",
+          "module": "13-mongodb",
+          "description": "Query routing targets."
+        }
+      ]
+    },
+    "read_preference": {
+      "level": 8,
+      "file": "terms/level_08/read_preference.md",
+      "display_name": "Read Preference",
+      "prerequisites": [
+        {
+          "term": "read_concern",
+          "module": "13-mongodb",
+          "description": "The read isolation context."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The target cluster nodes."
+        }
+      ],
+      "related": [
+        {
+          "term": "read_concern",
+          "module": "13-mongodb",
+          "description": "The read isolation configuration."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The target cluster."
+        },
+        {
+          "term": "causal_consistency",
+          "module": "13-mongodb",
+          "description": "Related concept: Causal Consistency."
+        },
+        {
+          "term": "replication_lag",
+          "module": "13-mongodb",
+          "description": "Related concept: Replication Lag."
+        }
+      ]
+    },
+    "retryable_operations": {
+      "level": 8,
+      "file": "terms/level_08/retryable_operations.md",
+      "display_name": "Retryable Writes / Retryable Reads",
+      "prerequisites": [
+        {
+          "term": "write_errors",
+          "module": "13-mongodb",
+          "description": "The write failure context."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The distributed cluster."
+        }
+      ],
+      "related": [
+        {
+          "term": "write_errors",
+          "module": "13-mongodb",
+          "description": "The error formats."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The distributed cluster."
+        }
+      ]
+    },
+    "session_transaction": {
+      "level": 8,
+      "file": "terms/level_08/session_transaction.md",
+      "display_name": "`startSession()` / `session.withTransaction()`",
+      "prerequisites": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "The parent transaction concept."
+        },
+        {
+          "term": "snapshot_isolation",
+          "module": "13-mongodb",
+          "description": "The concurrency conflict context."
+        }
+      ],
+      "related": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "The parent transaction concept."
+        },
+        {
+          "term": "causal_consistency",
+          "module": "13-mongodb",
+          "description": "Session-level read guarantees."
+        }
+      ]
+    },
+    "snapshot_isolation": {
+      "level": 8,
+      "file": "terms/level_08/snapshot_isolation.md",
+      "display_name": "Snapshot Isolation",
+      "prerequisites": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "The transaction context."
+        },
+        {
+          "term": "isolation_levels",
+          "module": "12-postgres",
+          "description": "Relational isolation levels."
+        }
+      ],
+      "related": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "The transaction context."
+        },
+        {
+          "term": "isolation_levels",
+          "module": "12-postgres",
+          "description": "Relational isolation levels."
+        }
+      ]
+    },
+    "write_concern": {
+      "level": 8,
+      "file": "terms/level_08/write_concern.md",
+      "display_name": "Write Concern",
+      "prerequisites": [
+        {
+          "term": "multi_document_transaction",
+          "module": "13-mongodb",
+          "description": "The transaction context."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The distributed cluster context."
+        }
+      ],
+      "related": [
+        {
+          "term": "read_concern",
+          "module": "13-mongodb",
+          "description": "Read durability parameters."
+        },
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The cluster context."
+        },
+        {
+          "term": "write_errors",
+          "module": "13-mongodb",
+          "description": "Related concept: `WriteConcernError` / `WriteError`."
+        }
+      ]
+    },
+    "write_errors": {
+      "level": 8,
+      "file": "terms/level_08/write_errors.md",
+      "display_name": "`WriteConcernError` / `WriteError`",
+      "prerequisites": [
+        {
+          "term": "write_concern",
+          "module": "13-mongodb",
+          "description": "The write acknowledgment parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "write_concern",
+          "module": "13-mongodb",
+          "description": "The write acknowledgment parameters."
+        },
+        {
+          "term": "retryable_operations",
+          "module": "13-mongodb",
+          "description": "Network recovery."
+        }
+      ]
+    },
+    "chunks_balancing": {
+      "level": 9,
+      "file": "terms/level_09/chunks_balancing.md",
+      "display_name": "Chunks & Balancing",
+      "prerequisites": [
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The partitioning keys."
+        }
+      ],
+      "related": [
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The partitioning index key."
+        },
+        {
+          "term": "config_servers_mongos",
+          "module": "13-mongodb",
+          "description": "Cluster infrastructure."
+        }
+      ]
+    },
+    "config_servers_mongos": {
+      "level": 9,
+      "file": "terms/level_09/config_servers_mongos.md",
+      "display_name": "Config Servers & `mongos` Router",
+      "prerequisites": [
+        {
+          "term": "sharding",
+          "module": "13-mongodb",
+          "description": "The parent cluster architecture."
+        }
+      ],
+      "related": [
+        {
+          "term": "sharding",
+          "module": "13-mongodb",
+          "description": "The parent partitioning concept."
+        },
+        {
+          "term": "chunks_balancing",
+          "module": "13-mongodb",
+          "description": "The balancing logic."
+        }
+      ]
+    },
+    "failover_elections": {
+      "level": 9,
+      "file": "terms/level_09/failover_elections.md",
+      "display_name": "Automatic Failover & Elections",
+      "prerequisites": [
+        {
+          "term": "primary_secondary_arbiter",
+          "module": "13-mongodb",
+          "description": "The cluster roles."
+        }
+      ],
+      "related": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The parent cluster architecture."
+        },
+        {
+          "term": "primary_secondary_arbiter",
+          "module": "13-mongodb",
+          "description": "Node roles."
+        }
+      ]
+    },
+    "hashed_vs_ranged": {
+      "level": 9,
+      "file": "terms/level_09/hashed_vs_ranged.md",
+      "display_name": "Hashed vs. Ranged Sharding",
+      "prerequisites": [
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The partitioning index key."
+        },
+        {
+          "term": "targeted_vs_scatter",
+          "module": "13-mongodb",
+          "description": "The routing execution patterns."
+        }
+      ],
+      "related": [
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The partitioning index key."
+        },
+        {
+          "term": "targeted_vs_scatter",
+          "module": "13-mongodb",
+          "description": "Query routing modes."
+        }
+      ]
+    },
+    "oplog": {
+      "level": 9,
+      "file": "terms/level_09/oplog.md",
+      "display_name": "Oplog (Operations Log)",
+      "prerequisites": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The parent cluster context."
+        }
+      ],
+      "related": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The parent cluster context."
+        },
+        {
+          "term": "replication_lag",
+          "module": "13-mongodb",
+          "description": "The sync delay."
+        },
+        {
+          "term": "capped_collections",
+          "module": "13-mongodb",
+          "description": "Related concept: Capped Collections."
+        },
+        {
+          "term": "change_streams",
+          "module": "13-mongodb",
+          "description": "Related concept: Change Streams."
+        }
+      ]
+    },
+    "primary_secondary_arbiter": {
+      "level": 9,
+      "file": "terms/level_09/primary_secondary_arbiter.md",
+      "display_name": "Primary / Secondary / Arbiter",
+      "prerequisites": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The parent cluster architecture."
+        }
+      ],
+      "related": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The parent cluster architecture."
+        },
+        {
+          "term": "failover_elections",
+          "module": "13-mongodb",
+          "description": "The election process."
+        }
+      ]
+    },
+    "replica_set": {
+      "level": 9,
+      "file": "terms/level_09/replica_set.md",
+      "display_name": "Replica Set",
+      "prerequisites": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The single `mongod` process."
+        }
+      ],
+      "related": [
+        {
+          "term": "primary_secondary_arbiter",
+          "module": "13-mongodb",
+          "description": "Node roles."
+        },
+        {
+          "term": "failover_elections",
+          "module": "13-mongodb",
+          "description": "The election process."
+        },
+        {
+          "term": "acid_vs_base",
+          "module": "13-mongodb",
+          "description": "Related concept: ACID vs BASE."
+        },
+        {
+          "term": "read_preference",
+          "module": "13-mongodb",
+          "description": "Related concept: Read Preference."
+        },
+        {
+          "term": "retryable_operations",
+          "module": "13-mongodb",
+          "description": "Related concept: Retryable Writes / Retryable Reads."
+        },
+        {
+          "term": "write_concern",
+          "module": "13-mongodb",
+          "description": "Related concept: Write Concern."
+        },
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "Related concept: Oplog (Operations Log)."
+        },
+        {
+          "term": "sharding",
+          "module": "13-mongodb",
+          "description": "Related concept: Sharding (Horizontal Scaling)."
+        },
+        {
+          "term": "change_streams",
+          "module": "13-mongodb",
+          "description": "Related concept: Change Streams."
+        }
+      ]
+    },
+    "replication_lag": {
+      "level": 9,
+      "file": "terms/level_09/replication_lag.md",
+      "display_name": "Replication Lag",
+      "prerequisites": [
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "The log replicated."
+        },
+        {
+          "term": "read_preference",
+          "module": "13-mongodb",
+          "description": "The query routing hazard."
+        }
+      ],
+      "related": [
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "The log replicated."
+        },
+        {
+          "term": "read_preference",
+          "module": "13-mongodb",
+          "description": "The query routing hazard."
+        }
+      ]
+    },
+    "shard_key": {
+      "level": 9,
+      "file": "terms/level_09/shard_key.md",
+      "display_name": "Shard Key",
+      "prerequisites": [
+        {
+          "term": "sharding",
+          "module": "13-mongodb",
+          "description": "The parent partitioning concept."
+        }
+      ],
+      "related": [
+        {
+          "term": "sharding",
+          "module": "13-mongodb",
+          "description": "The parent partitioning concept."
+        },
+        {
+          "term": "targeted_vs_scatter",
+          "module": "13-mongodb",
+          "description": "Query routing modes."
+        },
+        {
+          "term": "hashed_vs_ranged",
+          "module": "13-mongodb",
+          "description": "Distribution strategies."
+        },
+        {
+          "term": "chunks_balancing",
+          "module": "13-mongodb",
+          "description": "Related concept: Chunks & Balancing."
+        }
+      ]
+    },
+    "sharding": {
+      "level": 9,
+      "file": "terms/level_09/sharding.md",
+      "display_name": "Sharding (Horizontal Scaling)",
+      "prerequisites": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The high-availability replica node building blocks."
+        },
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Relational database structures."
+        }
+      ],
+      "related": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The replica node building blocks."
+        },
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The partitioning index key."
+        },
+        {
+          "term": "config_servers_mongos",
+          "module": "13-mongodb",
+          "description": "Related concept: Config Servers & `mongos` Router."
+        }
+      ]
+    },
+    "targeted_vs_scatter": {
+      "level": 9,
+      "file": "terms/level_09/targeted_vs_scatter.md",
+      "display_name": "Targeted vs. Scatter-Gather Queries",
+      "prerequisites": [
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The routing index key."
+        },
+        {
+          "term": "config_servers_mongos",
+          "module": "13-mongodb",
+          "description": "The query routing layer."
+        }
+      ],
+      "related": [
+        {
+          "term": "shard_key",
+          "module": "13-mongodb",
+          "description": "The partitioning index key."
+        },
+        {
+          "term": "hashed_vs_ranged",
+          "module": "13-mongodb",
+          "description": "Distribution strategies."
+        }
+      ]
+    },
+    "atlas_search": {
+      "level": 10,
+      "file": "terms/level_10/atlas_search.md",
+      "display_name": "Atlas Search",
+      "prerequisites": [
+        {
+          "term": "text_index",
+          "module": "13-mongodb",
+          "description": "The built-in, self-hosted text limits."
+        }
+      ],
+      "related": [
+        {
+          "term": "text_index",
+          "module": "13-mongodb",
+          "description": "The built-in, self-hosted text limits."
+        },
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The aggregation context."
+        }
+      ]
+    },
+    "auth": {
+      "level": 10,
+      "file": "terms/level_10/auth.md",
+      "display_name": "Authentication & Authorization (SCRAM, RBAC)",
+      "prerequisites": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The `mongod` process."
+        },
+        {
+          "term": "roles_permissions",
+          "module": "12-postgres",
+          "description": "Relational security models."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_string",
+          "module": "13-mongodb",
+          "description": "Authentication connection strings."
+        },
+        {
+          "term": "nosql_injection",
+          "module": "13-mongodb",
+          "description": "Input validation security."
+        }
+      ]
+    },
+    "capped_collections": {
+      "level": 10,
+      "file": "terms/level_10/capped_collections.md",
+      "display_name": "Capped Collections",
+      "prerequisites": [
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "The most famous capped collection."
+        }
+      ],
+      "related": [
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "The most famous capped collection."
+        },
+        {
+          "term": "time_series",
+          "module": "13-mongodb",
+          "description": "Chronological metrics."
+        }
+      ]
+    },
+    "change_streams": {
+      "level": 10,
+      "file": "terms/level_10/change_streams.md",
+      "display_name": "Change Streams",
+      "prerequisites": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The cluster context."
+        },
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "The event source."
+        }
+      ],
+      "related": [
+        {
+          "term": "replica_set",
+          "module": "13-mongodb",
+          "description": "The cluster context."
+        },
+        {
+          "term": "oplog",
+          "module": "13-mongodb",
+          "description": "The event source."
+        }
+      ]
+    },
+    "connection_pooling": {
+      "level": 10,
+      "file": "terms/level_10/connection_pooling.md",
+      "display_name": "Connection Pooling",
+      "prerequisites": [
+        {
+          "term": "connection_string",
+          "module": "13-mongodb",
+          "description": "Configuring pool parameters."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_string",
+          "module": "13-mongodb",
+          "description": "Configuring pool parameters."
+        },
+        {
+          "term": "node_driver",
+          "module": "13-mongodb",
+          "description": "The driver interface."
+        }
+      ]
+    },
+    "connection_string": {
+      "level": 10,
+      "file": "terms/level_10/connection_string.md",
+      "display_name": "Connection String URI",
+      "prerequisites": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The target `mongod` port."
+        },
+        {
+          "term": "auth",
+          "module": "13-mongodb",
+          "description": "Credentials validation."
+        }
+      ],
+      "related": [
+        {
+          "term": "auth",
+          "module": "13-mongodb",
+          "description": "Credentials validation."
+        },
+        {
+          "term": "node_driver",
+          "module": "13-mongodb",
+          "description": "The executing driver."
+        },
+        {
+          "term": "connection_pooling",
+          "module": "13-mongodb",
+          "description": "Related concept: Connection Pooling."
+        }
+      ]
+    },
+    "database_migrations": {
+      "level": 10,
+      "file": "terms/level_10/database_migrations.md",
+      "display_name": "Database Migrations (MongoDB)",
+      "prerequisites": [
+        {
+          "term": "schema_validation",
+          "module": "13-mongodb",
+          "description": "Enforcing consistency limits."
+        }
+      ],
+      "related": [
+        {
+          "term": "schema_validation",
+          "module": "13-mongodb",
+          "description": "Enforcing consistency limits."
+        }
+      ]
+    },
+    "gridfs": {
+      "level": 10,
+      "file": "terms/level_10/gridfs.md",
+      "display_name": "GridFS",
+      "prerequisites": [
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The 16MB ceiling constraint."
+        }
+      ],
+      "related": [
+        {
+          "term": "document_size_limit",
+          "module": "13-mongodb",
+          "description": "The 16MB ceiling constraint."
+        }
+      ]
+    },
+    "mongodb_vs_postgresql": {
+      "level": 10,
+      "file": "terms/level_10/mongodb_vs_postgresql.md",
+      "display_name": "MongoDB vs. PostgreSQL — When to Choose Which",
+      "prerequisites": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Relational paradigm."
+        },
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "Document paradigm."
+        }
+      ],
+      "related": [
+        {
+          "term": "database",
+          "module": "12-postgres",
+          "description": "Relational paradigm."
+        },
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "Document paradigm."
+        }
+      ]
+    },
+    "mongodump_restore": {
+      "level": 10,
+      "file": "terms/level_10/mongodump_restore.md",
+      "display_name": "`mongodump` / `mongorestore` (Backups)",
+      "prerequisites": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The target database process connection."
+        }
+      ],
+      "related": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The single `mongod` process."
+        }
+      ]
+    },
+    "mongoose": {
+      "level": 10,
+      "file": "terms/level_10/mongoose.md",
+      "display_name": "Mongoose (ODM)",
+      "prerequisites": [
+        {
+          "term": "node_driver",
+          "module": "13-mongodb",
+          "description": "The low-level driver wrapped."
+        }
+      ],
+      "related": [
+        {
+          "term": "node_driver",
+          "module": "13-mongodb",
+          "description": "The low-level driver wrapped."
+        },
+        {
+          "term": "mongoose_schema_model",
+          "module": "13-mongodb",
+          "description": "The core concepts."
+        }
+      ]
+    },
+    "mongoose_middleware": {
+      "level": 10,
+      "file": "terms/level_10/mongoose_middleware.md",
+      "display_name": "Mongoose Middleware (Hooks)",
+      "prerequisites": [
+        {
+          "term": "mongoose_schema_model",
+          "module": "13-mongodb",
+          "description": "The parent modeling blueprint."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongoose_schema_model",
+          "module": "13-mongodb",
+          "description": "The parent modeling blueprint."
+        }
+      ]
+    },
+    "mongoose_schema_model": {
+      "level": 10,
+      "file": "terms/level_10/mongoose_schema_model.md",
+      "display_name": "Mongoose Schema & Model",
+      "prerequisites": [
+        {
+          "term": "mongoose",
+          "module": "13-mongodb",
+          "description": "The parent ODM framework."
+        }
+      ],
+      "related": [
+        {
+          "term": "mongoose",
+          "module": "13-mongodb",
+          "description": "The parent ODM framework."
+        },
+        {
+          "term": "mongoose_middleware",
+          "module": "13-mongodb",
+          "description": "Lifecycle hooks."
+        }
+      ]
+    },
+    "node_driver": {
+      "level": 10,
+      "file": "terms/level_10/node_driver.md",
+      "display_name": "MongoDB Node.js Driver",
+      "prerequisites": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The target `mongod` port."
+        }
+      ],
+      "related": [
+        {
+          "term": "connection_string",
+          "module": "13-mongodb",
+          "description": "The connection configurations."
+        },
+        {
+          "term": "mongoose",
+          "module": "13-mongodb",
+          "description": "The schema wrapper library."
+        },
+        {
+          "term": "connection_pooling",
+          "module": "13-mongodb",
+          "description": "Related concept: Connection Pooling."
+        }
+      ]
+    },
+    "nosql_injection": {
+      "level": 10,
+      "file": "terms/level_10/nosql_injection.md",
+      "display_name": "NoSQL Injection",
+      "prerequisites": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The query syntax manipulated."
+        },
+        {
+          "term": "auth",
+          "module": "13-mongodb",
+          "description": "The login gate bypassed."
+        }
+      ],
+      "related": [
+        {
+          "term": "query_filter",
+          "module": "13-mongodb",
+          "description": "The query syntax manipulated."
+        },
+        {
+          "term": "auth",
+          "module": "13-mongodb",
+          "description": "The database security model."
+        }
+      ]
+    },
+    "profiler": {
+      "level": 10,
+      "file": "terms/level_10/profiler.md",
+      "display_name": "MongoDB Profiler (`db.setProfilingLevel()`)",
+      "prerequisites": [
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "The single query analyzer."
+        },
+        {
+          "term": "server_diagnostics",
+          "module": "13-mongodb",
+          "description": "The parent monitoring tools."
+        }
+      ],
+      "related": [
+        {
+          "term": "explain",
+          "module": "13-mongodb",
+          "description": "The single query analyzer."
+        },
+        {
+          "term": "server_diagnostics",
+          "module": "13-mongodb",
+          "description": "The parent monitoring tools."
+        }
+      ]
+    },
+    "server_diagnostics": {
+      "level": 10,
+      "file": "terms/level_10/server_diagnostics.md",
+      "display_name": "`serverStatus` / `currentOp` / `db.stats()`",
+      "prerequisites": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The `mongod` server connection."
+        }
+      ],
+      "related": [
+        {
+          "term": "database_context",
+          "module": "13-mongodb",
+          "description": "The target server."
+        },
+        {
+          "term": "profiler",
+          "module": "13-mongodb",
+          "description": "Slow query logging."
+        }
+      ]
+    },
+    "time_series": {
+      "level": 10,
+      "file": "terms/level_10/time_series.md",
+      "display_name": "Time-Series Collections",
+      "prerequisites": [
+        {
+          "term": "outlier_pattern",
+          "module": "13-mongodb",
+          "description": "The manual predecessor template."
+        }
+      ],
+      "related": [
+        {
+          "term": "capped_collections",
+          "module": "13-mongodb",
+          "description": "Circular storage logs."
+        },
+        {
+          "term": "outlier_pattern",
+          "module": "13-mongodb",
+          "description": "The manual predecessor template."
+        }
+      ]
+    },
+    "views": {
+      "level": 10,
+      "file": "terms/level_10/views.md",
+      "display_name": "Views",
+      "prerequisites": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The defining query format."
+        },
+        {
+          "term": "view",
+          "module": "12-postgres",
+          "description": "Relational view abstractions."
+        }
+      ],
+      "related": [
+        {
+          "term": "aggregation_pipeline",
+          "module": "13-mongodb",
+          "description": "The defining query format."
+        },
+        {
+          "term": "view",
+          "module": "12-postgres",
+          "description": "Relational views."
+        }
+      ]
+    }
+  }
+}
