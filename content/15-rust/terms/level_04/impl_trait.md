@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Trait Bound](../level_04/trait_bound.md) — The fundamental concept that `impl Trait` provides a shortcut for.
-- [Trait](../level_04/trait.md) — The contract being promised.
+
+- [Trait Bound](trait_bound.md) — The fundamental concept that `impl Trait` provides a shortcut for.
+- [Trait](trait.md) — The contract being promised.
 
 ---
 
@@ -478,8 +479,12 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Trait Bound](../level_04/trait_bound.md) — What `impl Trait` is replacing in the argument position.
+
+- [Trait Bound](trait_bound.md) — What `impl Trait` is replacing in the argument position.
 - [Iterator](../level_02/iterator.md) — The main reason `-> impl Trait` exists (so you can return massive, unnamable iterator chains without tearing your hair out).
+- [Trait](trait.md) — Related concept: Trait.
+- [`where` Clause](where_clause.md) — Related concept: `where` Clause.
+- [Tait Type Alias Impl Trait](../level_19/tait_type_alias_impl_trait.md) — Related concept: Tait Type Alias Impl Trait.
 
 ---
 

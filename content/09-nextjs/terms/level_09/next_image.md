@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTML `<img>` Element](../level_09/html_img.md) — The standard tag this component improves upon.
-- [Web Core Vitals (FCP, LCP, CLS, TTFB)](../level_09/web_core_vitals.md) — The performance metrics (LCP, CLS) this component is designed to solve.
-
+- [HTML `<img>` Element](html_img.md) — The standard tag this component improves upon.
+- [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics (LCP, CLS) this component is designed to solve.
 ---
 
 ## 2. Term Category
@@ -196,9 +195,10 @@ export default {
 ---
 
 ## 7. Related Terms
-- [Web Core Vitals (FCP, LCP, CLS, TTFB)](../level_09/web_core_vitals.md) — Metrics improved by this component (CLS, LCP).
-- [Font Optimization (`next/font`)](../level_09/next_font.md) — A similar built-in optimization tool.
-
+- [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Metrics improved by this component (CLS, LCP).
+- [`next/font` Optimization](next_font.md) — A similar built-in optimization tool.
+- [HTML `<img>` Element](html_img.md) — Related concept: HTML `<img>` Element.
+- [`<Script>` Component](next_script.md) — Related concept: `<Script>` Component.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [DOM](../level_05/dom.md) — The tree structure representing the HTML document.
-- CSS Basics — Understanding of selectors like `.class`, `#id`, and tag names.
-
+- [DOM (Document Object Model)](dom.md) — The tree structure representing the HTML document.
 ---
 
 ## 2. Term Category
@@ -199,9 +197,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [DOM](../level_05/dom.md) — The structure you are querying.
-- Element (Node) — The object that `querySelector` returns.
-
+- [DOM (Document Object Model)](dom.md) — The structure you are querying.
+- [document object](document_object.md) — Related concept: document object.
+- [getElementById / getElementsByClassName](getelementbyid_legacy.md) — Related concept: getElementById / getElementsByClassName.
+- [Node](node.md) — Related concept: Node.
 ---
 
 ## 8. Key Takeaways

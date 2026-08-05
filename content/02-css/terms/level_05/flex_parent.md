@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`display`](../level_04/display.md) — Flexbox is just a special value applied to the `display` property.
-- [HTML Parent/Child Trees](../../../01-html/terms/level_09/tree_structure.md) — Flexbox operates strictly on a Parent/Child relationship.
-
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Flexbox is just a special value applied to the `display` property.
+- tree_structure — Flexbox operates strictly on a Parent/Child relationship.
 ---
 
 ## 2. Term Category
@@ -170,12 +169,13 @@ Applying `display: flex;` turns that cardboard box into a high-tech robotic orga
 > **Explanation:** `display: inline-flex` combines inline outer layout flow with inner flex formatting.
 
 ## 7. Related Terms
-- [`flex-direction`](../level_05/flex_direction.md) — Rotating the main layout axis.
-- [`justify-content`](../level_05/justify_content.md) — Aligns children along the main axis.
-- [`align-items`](../level_05/align_items.md) — Aligns children along the cross axis.
-- [`flex-grow` / `flex-shrink` / `flex-basis`](../level_05/flex_properties.md) — Sizing of child flex items.
-- [CSS Grid (Concept)](../level_06/grid_concept.md) — The 2D layout engine.
-
+- [`flex-direction`](flex_direction.md) — Rotating the main layout axis.
+- [`justify-content`](justify_content.md) — Aligns children along the main axis.
+- [`align-items`](align_items.md) — Aligns children along the cross axis.
+- [`flex-grow` / `flex-shrink` / `flex-basis`](flex_properties.md) — Sizing of child flex items.
+- [CSS Grid (Concept) & `display: grid`](../level_06/grid_concept.md) — The 2D layout engine.
+- [`order`](order.md) — Related concept: `order`.
+- [`gap` (Grid Gap)](../level_06/gap.md) — Related concept: `gap` (Grid Gap).
 ---
 
 ## 8. Key Takeaways

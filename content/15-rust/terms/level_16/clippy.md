@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Invokes `clippy` via `cargo clippy`.
+
+- [Cargo CLI](../level_07/cargo_cli.md) — Invokes `clippy` via `cargo clippy`.
 
 ---
 
@@ -515,6 +516,15 @@ fn main() {
 > 1. **`clippy::redundant_closure_for_method_calls`**: Passing `SignalSample::is_valid` directly into `.filter()` avoids generating an extra closure instantiation and clarifies functional iterator pipelines.
 > 2. **`clippy::single_match`**: Replacing single-branch `match` constructs with `if let Some(...) = ...` simplifies control flow syntax while preserving pattern-matching capabilities.
 > 3. **`clippy::unnecessary_unwrap`**: Combining option checking and value extraction into a single atomic pattern match (`if let Some(&val) = item`) prevents unsafe runtime unwraps and eliminates redundant state checks.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`)](../level_07/lint_control_attributes.md) — Related concept: Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`).
+- [Rustup](rustup.md) — Related concept: Rustup.
 
 ---
 

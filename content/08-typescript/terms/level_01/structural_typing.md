@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [TypeScript](../level_01/typescript.md) — The language introduction.
-- [Static Typing vs Dynamic Typing](../level_01/static_dynamic_typing.md) — The difference between compile-time and runtime checks.
-
+- [TypeScript](typescript.md) — The language introduction.
+- [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — The difference between compile-time and runtime checks.
 ---
 
 ## 2. Term Category
@@ -243,9 +242,12 @@ const myDog: Dog = new Cat();
 
 ## 7. Related Terms
 - [Interfaces](../level_03/interfaces.md) — Defining structured object shapes.
-- [Generic Constraints](../level_07/generic_constraints.md) — Restricting generics based on structural shapes.
-- [implements](../level_10/implements.md) — Asserting that a class shape matches an interface.
-
+- [Generic Constraints (`extends`)](../level_07/generic_constraints.md) — Restricting generics based on structural shapes.
+- [`implements` Keyword](../level_10/implements.md) — Asserting that a class shape matches an interface.
+- [Branded / Nominal Types](../level_09/branded_nominal_types.md) — Related concept: Branded / Nominal Types.
+- [Type Aliases (`type`)](../level_05/type_aliases.md) — Type aliases.
+- [Excess Property Checks](../level_03/excess_property_checks.md) — Excess property checks.
+- [TypeScript](typescript.md) — Related concept: TypeScript.
 ---
 
 ## 8. Key Takeaways

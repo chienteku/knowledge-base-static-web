@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Trait](../level_04/trait.md) — The contract being implemented.
-- [Derive Macro](../level_04/derive_macro.md) — How you get this trait for free 99% of the time.
+
+- [Trait](trait.md) — The contract being implemented.
+- [Derive Macro](derive_macro.md) — How you get this trait for free 99% of the time.
 - [`println!` / `format!`](../level_01/println_format.md) — The macros that consume this trait.
 
 ---
@@ -611,8 +612,12 @@ An extensible microservices backend processes telemetry events through dynamical
 
 ## 6. Related Terms
 
-- [`Display` Trait](../level_04/display_trait.md) — The user-facing counterpart to `Debug`.
-- [Derive Macro](../level_04/derive_macro.md) — The mechanism used to generate `Debug` automatically.
+
+- [`Display` Trait](display_trait.md) — The user-facing counterpart to `Debug`.
+- [Derive Macro](derive_macro.md) — The mechanism used to generate `Debug` automatically.
+- [`dbg!` Macro](../level_01/dbg_macro.md) — Related concept: `dbg!` Macro.
+- [`std::error::Error` Trait & `Box<dyn Error>`](error_trait_box_dyn_error.md) — Related concept: `std::error::Error` Trait & `Box<dyn Error>`.
+- [`assert!` Macros](../level_08/assert_macros.md) — Related concept: `assert!` / `assert_eq!` / `assert_ne!`.
 
 ---
 

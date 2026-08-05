@@ -7,15 +7,16 @@
 
 ## 1. Prerequisites
 
+
 - [Iterator](../level_02/iterator.md) — The core trait that makes these chains possible.
-- [Closure](../level_06/closure.md) — The tiny anonymous functions that are passed into the chain links.
+- [Closure](closure.md) — The tiny anonymous functions that are passed into the chain links.
 - [Iterator Adapters](../level_02/iterator_adapters.md) — Methods like `.map()` and `.filter()` that are linked together to form the chain.
 
 ---
 
 ## 2. Term Category
 
-**Rust Idiom (the functional pipeline)**: Rust allows you to write standard imperative `for` loops, but experienced Rust developers rarely use them for complex data transformations. Instead, they string together multiple "Iterator Adapters" (methods that take Closures) into a single, elegant pipeline called an **Iterator Chain**.
+**Rust Idiom (declarative processing pipelines)**: An **Iterator Chain** is a functional composition pattern in Rust where multiple lazy iterator adapters (`.map()`, `.filter()`, `.flat_map()`, `.zip()`) are chained together into a single zero-cost pipeline driven by a terminal consumer (`.collect()`, `.fold()`, `.sum()`).
 
 ---
 
@@ -23,77 +24,65 @@
 
 ### (1) Design Motivation — "Why did we design this?"
 
-Imagine you have a list of strings representing numbers: `vec!["1", "5", "12", "bad", "20"]`. 
+Traditional imperative loops processing complex data require manual state mutation, index management, nested `if/else` checks, and temporary vector allocations.
 
-You want to:
-1. Parse them into actual integers.
-2. Ignore any bad data that fails to parse.
-3. Filter out any numbers less than 10.
-4. Square the remaining numbers.
-5. Collect the final results into a new Vector.
-
-If you wrote this with a traditional `for` loop, you would need mutable variables, nested `if let` statements, `continue` keywords, and it would take up 15 lines of dense code. The core "business logic" gets buried in boilerplate.
-
-**Iterator chains** solve this by allowing you to define a declarative pipeline. You just write: 
-`.filter_map(...).filter(...).map(...).collect()`. 
-
-It compresses the logic into a highly readable, functional format. Best of all, because of Rust's compiler optimizations (Zero-Cost Abstractions), the chain compiles down to the exact same blazing-fast machine code as a hand-written `for` loop!
+Iterator chains provide a declarative syntax where transformations are expressed as pure functions:
+1. **Zero-Cost Abstractions**: The LLVM compiler monomorphizes and inline-expands iterator chain closures, eliminating intermediate heap allocations and unrolling loops to run as fast as hand-optimized C assembly.
+2. **Bounds Check Elimination**: Because iterator chains operate on internal pointer bounds rather than indexed subscript access (`vec[i]`), LLVM can completely eliminate runtime array bounds checks.
+3. **Lazy Fusion**: Adapter steps (`.map(f1).map(f2).filter(f3)`) are fused together in a single item-by-item pass rather than creating temporary array buffers for each step.
 
 ### (2) Reality Metaphor
 
-Imagine an Assembly Line in a factory. 
-
-You don't have one worker grab a raw piece of metal, carry it to the cutting station, carry it to the welding station, and finally carry it to the paint station (a `for` loop). 
-
-Instead, you build a conveyor belt. The raw metal moves through the Cutter (`filter`), directly into the Welder (`map`), and finally drops into a shipping box at the very end of the belt (`collect`). The items flow seamlessly through a chain of specialized stations.
+- **Imperative `for` loop**: A factory where a worker picks up a raw part, walks it to machine 1, waits, walks it to machine 2, waits, and puts it in a crate manually.
+- **Iterator Chain**: A fully automated conveyor belt assembly line. Parts move smoothly through machine 1 (`.filter()`) directly into machine 2 (`.map()`) and drop into the shipping container (`.collect()`) in a continuous stream.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (Imperative vs Declarative)
-Notice how much cleaner the Iterator Chain is compared to the `for` loop!
-
+#### Imperative Loop vs Declarative Iterator Chain
 ```rust
 fn main() {
-    let numbers = vec![1, 2, 3, 4, 5];
+    let numbers = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    // THE OLD WAY (Imperative `for` loop)
-    let mut evens_doubled = Vec::new();
-    for n in &numbers {
+    // Imperative approach (verbose state mutation)
+    let mut imperative_res = Vec::new();
+    for &n in &numbers {
         if n % 2 == 0 {
-            evens_doubled.push(n * 2);
+            imperative_res.push(n * n);
         }
     }
 
-    // THE RUST WAY (Declarative Iterator Chain)
-    let evens_doubled_chain: Vec<i32> = numbers
+    // Declarative Iterator Chain (zero extra allocation)
+    let chain_res: Vec<i32> = numbers
         .iter()
-        .filter(|n| *n % 2 == 0)  // Keep only even numbers
-        .map(|n| n * 2)           // Double them
-        .collect();               // Put them in a new Vec
+        .filter(|&&n| n % 2 == 0)
+        .map(|&n| n * n)
+        .collect();
+
+    assert_eq!(imperative_res, chain_res);
 }
 ```
 
-#### Fuller Example (The Power Pipeline)
-Iterator chains can do incredibly complex work in very little code. This example calculates the total sum of the squares of all valid numbers greater than 10.
-
+#### Complex Multi-Stage Pipeline (`filter_map` + `flat_map` + `fold`)
 ```rust
 fn main() {
-    let raw_data = vec!["5", "20", "error", "12", "999"];
+    let raw_logs = vec![
+        "2026-08-01 INFO status=200 path=/index.html",
+        "2026-08-01 ERROR status=500 path=/checkout",
+        "invalid log line",
+        "2026-08-01 ERROR status=503 path=/payment",
+    ];
 
-    let total_sum: i32 = raw_data
+    let error_paths: Vec<&str> = raw_logs
         .into_iter()
-        // `filter_map` tries to parse the string. 
-        // If it succeeds (Ok), it keeps the number. If it fails (Err), it drops it!
-        .filter_map(|s| s.parse::<i32>().ok())
-        // Keep only numbers less than 100
-        .filter(|&n| n < 100)
-        // Square the number
-        .map(|n| n * n)
-        // Consume the chain by adding them all together!
-        .sum();
+        .filter(|line| line.contains("ERROR"))
+        .filter_map(|line| {
+            line.split_whitespace()
+                .find(|part| part.starts_with("path="))
+                .map(|p| &p[5..])
+        })
+        .collect();
 
-    // 20^2 + 12^2 = 400 + 144 = 544
-    println!("Total: {}", total_sum);
+    assert_eq!(error_paths, vec!["/checkout", "/payment"]);
 }
 ```
 
@@ -101,170 +90,194 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Iterator Chains Scoping and Lifecycle Rules
+### Mistake 1: Collecting Intermediate Allocations Between Chain Steps
 
-**The mistake:** Assuming Iterator Chains instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Calling `.collect::<Vec<_>>()` after every single intermediate adapter step in a processing pipeline.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Allocates multiple redundant heap vectors. Keep adapters linked continuously in a single lazy pipeline and call `.collect()` only once at the end.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("iterator_chains_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+let step1: Vec<i32> = nums.into_iter().filter(|x| x % 2 == 0).collect(); // Extra heap allocation!
+let step2: Vec<i32> = step1.into_iter().map(|x| x * 2).collect();
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("iterator_chains_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+let step2: Vec<i32> = nums.into_iter().filter(|x| x % 2 == 0).map(|x| x * 2).collect(); // Single pass!
 ```
 
-### Mistake 2: Mutating Iterator Chains State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Using `.map()` for Side-Effects Without Terminal Consumption
 
-**The mistake:** Attempting to mutate data associated with Iterator Chains through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Writing `items.iter().map(|x| println!("{x}"));` to print items.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
-
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+**Why it is wrong:** `.map()` is a lazy adapter. Without a terminal consumer, the closure **never runs**, triggering compiler warning `unused Map that must be used`.
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+items.iter().for_each(|x| println!("{x}")); // Use for_each consumer!
 ```
 
-### Mistake 3: Concurrent Access to Iterator Chains Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Over-Complicating Chains where Simple Loops or `filter_map` Excel
 
-**The mistake:** Sharing non-thread-safe Iterator Chains instances across OS threads via `std::thread::spawn`.
+**The mistake:** Nesting multiple `.map().flatten()` operations instead of using `.flat_map()` or `.filter_map()`.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
-### Exercise 1: Build the Conveyor Belt
+### Exercise 1: Multi-Stage Telemetry Sensor Data Processing Pipeline
 
-**Problem:** Convert the messy `for` loop below into a clean, chained iterator pipeline.
+**Scenario:** Build a telemetry data cleanser `cleanse_telemetry(readings: &[&str]) -> Vec<f64>` using an iterator chain that:
+1. Parses string inputs into `f64`.
+2. Ignores invalid parse entries (`Err`).
+3. Filters out extreme noise values outside the range `[0.0, 100.0]`.
+4. Converts Celsius values to Fahrenheit (`c * 1.8 + 32.0`).
+5. Collects into `Vec<f64>`.
 
-```rust
-fn main() {
-    let words = vec!["apple", "banana", "kiwi", "strawberry"];
-    
-    // BAD: Imperative loop
-    let mut long_words_uppercase = Vec::new();
-    for word in words {
-        if word.len() > 5 {
-            long_words_uppercase.push(word.to_uppercase());
-        }
-    }
-    
-    // TODO: Write this using an Iterator Chain instead!
-    // let chain_result: Vec<String> = ...
-}
-```
+**Requirements:**
+1. Implement `cleanse_telemetry`.
+2. Write unit tests.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let words = vec!["apple", "banana", "kiwi", "strawberry"];
+> pub fn cleanse_telemetry(readings: &[&str]) -> Vec<f64> {
+>     readings
+>         .iter()
+>         .filter_map(|s| s.parse::<f64>().ok())
+>         .filter(|&temp| (0.0..=100.0).contains(&temp))
+>         .map(|temp| temp * 1.8 + 32.0)
+>         .collect()
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_telemetry_pipeline() {
+>         let raw = vec!["25.0", "invalid", "-10.0", "150.0", "0.0"];
+>         let result = cleanse_telemetry(&raw);
+>         
+>         // 25.0 C -> 77.0 F, 0.0 C -> 32.0 F
+>         assert_eq!(result, vec![77.0, 32.0]);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `filter_map(|s| s.parse().ok())` drops invalid float strings without panicking.
+> 2. `filter` removes values outside `[0.0, 100.0]` range.
+> 3. `map` converts Celsius to Fahrenheit in a single unrolled pass.
+
+---
+
+### Exercise 2: E-Commerce Order Tax & Discount Calculator (`zip` + `fold`)
+
+**Scenario:** Implement an order invoicing engine `calculate_total(prices: &[f64], quantities: &[u32], tax_rate: f64) -> f64` that zips item price and quantity arrays, calculates subtotal, applies tax, and returns total amount.
+
+**Requirements:**
+1. Use `prices.iter().zip(quantities)`.
+2. Compute `price * quantity` sum via `.fold()` or `.map().sum()`.
+3. Apply `tax_rate`.
+4. Write unit tests.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> pub fn calculate_total(prices: &[f64], quantities: &[u32], tax_rate: f64) -> f64 {
+>     let subtotal: f64 = prices
+>         .iter()
+>         .zip(quantities)
+>         .map(|(&price, &qty)| price * qty as f64)
+>         .sum();
 >     
->     let chain_result: Vec<String> = words
->         .into_iter()
->         .filter(|w| w.len() > 5)
->         .map(|w| w.to_uppercase())
->         .collect();
+>     subtotal * (1.0 + tax_rate)
 > }
-> ```
-
----
-
-### Exercise 2: Chaining `enumerate()`, `filter()`, and `map()`
-
-**Problem:** Take strings `vec!["a", "b", "c", "d"]`, enumerate them, filter even indices, and map to uppercase.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> ["A", "C"]
-> ```
-> ```rust
-> fn main() {
->     let items = vec!["a", "b", "c", "d"];
->     let result: Vec<String> = items
->         .into_iter()
->         .enumerate()
->         .filter(|(idx, _)| idx % 2 == 0)
->         .map(|(_, val)| val.to_uppercase())
->         .collect();
->     println!("{:?}", result);
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_order_calculator() {
+>         let prices = vec![10.0, 20.0, 5.0];
+>         let quantities = vec![2, 1, 4]; // (20 + 20 + 20) = 60.0
+>         let total = calculate_total(&prices, &quantities, 0.10); // 60 * 1.10 = 66.0
+>         
+>         assert!((total - 66.0).abs() < 1e-6);
+>     }
 > }
 > ```
 >
-> **Explanation:** Combining iterator adapters builds efficient, single-pass processing pipelines.
+> #### Technical Explanation
+>
+> 1. `.zip()` combines parallel price and quantity slices into item tuples.
+> 2. `.map(...).sum()` aggregates totals in a single SIMD-vectorizable loop.
 
 ---
 
-### Exercise 3: Zipping Two Parallel Iterators
+### Exercise 3: Log File Tokenizer using `flat_map`
 
-**Problem:** Combine `vec!["one", "two"]` and `vec![1, 2]` into tuples using `.zip()`.
+**Scenario:** Build a log document word frequency tokenizer `extract_keywords(documents: &[&str]) -> Vec<String>` that splits lines into lowercase words, filters out words shorter than 4 characters, and collects unique results.
 
-**Expected output:**
+**Requirements:**
+1. Use `.flat_map(|doc| doc.split_whitespace())`.
+2. Clean word strings and filter by length $\ge 4$.
+3. Write unit tests.
+
 > [!check]- Answer
-> ```
-> [("one", 1), ("two", 2)]
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let keys = vec!["one", "two"];
->     let vals = vec![1, 2];
->     let zipped: Vec<(&str, i32)> = keys.into_iter().zip(vals).collect();
->     println!("{:?}", zipped);
+> pub fn extract_keywords(documents: &[&str]) -> Vec<String> {
+>     documents
+>         .iter()
+>         .flat_map(|doc| doc.split_whitespace())
+>         .map(|w| w.to_lowercase())
+>         .filter(|w| w.len() >= 4)
+>         .collect()
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_extract_keywords() {
+>         let docs = vec!["Rust async programming", "High performance async web"];
+>         let keywords = extract_keywords(&docs);
+>         
+>         assert_eq!(keywords, vec!["rust", "async", "programming", "high", "performance", "async"];
+>     }
 > }
 > ```
 >
-> **Explanation:** `.zip()` pairs elements from two iterators into single combined tuple sequences.
+> #### Technical Explanation
+>
+> 1. `flat_map` flattens sub-iterators returned by `split_whitespace()` into a single contiguous stream.
+> 2. Avoids intermediate vector creation per document line.
 
 ---
 
 ## 6. Related Terms
 
-- [Lazy Evaluation](../level_06/lazy_evaluation.md) — The fundamental concept explaining why Iterator Chains do absolutely nothing until a Consumer like `.collect()` is called.
-- [Closure](../level_06/closure.md) — The tiny anonymous functions you are passing into `map()` and `filter()`.
+
+- [Lazy Evaluation](lazy_evaluation.md) — The fundamental concept explaining why Iterator Chains do absolutely nothing until a Consumer like `.collect()` is called.
+- [Closure](closure.md) — The tiny anonymous functions you are passing into `map()` and `filter()`.
 
 ---
 
 ## 7. Key Takeaways
 
-- Iterator Chains let you build expressive, declarative data pipelines instead of imperative `for` loops.
-- Common chain links (Adapters) include `.map()`, `.filter()`, and `.filter_map()`.
-- The chain **must** always end with a "Consumer" like `.collect()`, `.sum()`, or `.count()` to actually trigger the work.
-- Thanks to Zero-Cost Abstractions, Iterator Chains are just as fast (and sometimes even faster) than manual `for` loops.
+- Iterator chains compose lazy adapters (`map`, `filter`, `flat_map`) into single-pass processing pipelines.
+- Compiled iterator chains achieve zero-cost abstractions with bounds-check elimination.
+- Pipelines do not execute until driven by terminal consumers (`collect`, `sum`, `fold`, `for_each`).
+- Prefer `.flat_map()` over nested `.map().flatten()` and `.filter_map()` for combined parse and filter operations.

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Cargo](../level_01/cargo.md) — The Rust package manager and build system
-- [Crate](../level_01/crate.md) — A compilation unit in Rust (either a library or a binary)
+
+- [Cargo](cargo.md) — The Rust package manager and build system
+- [Crate](crate.md) — A compilation unit in Rust (either a library or a binary)
 
 ---
 
@@ -914,9 +915,13 @@ You are tasked with implementing a `FeatureGraph` engine that registers feature 
 
 ## 6. Related Terms
 
-- [Cargo](../level_01/cargo.md) — The tool that manages packages
-- [Crate](../level_01/crate.md) — The building blocks contained within a package
-- [Module](../level_01/module.md) — How you organize code *inside* a single crate
+
+- [Cargo](cargo.md) — The tool that manages packages
+- [Crate](crate.md) — The building blocks contained within a package
+- [Module](module.md) — How you organize code *inside* a single crate
+- [Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)](../level_07/cargo_target_kinds.md) — Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`).
+- [`Cargo.toml`](../level_07/cargo_toml.md) — Cargo package manifest.
+- [Workspace](../level_07/workspace.md) — Multi-package workspace.
 
 ---
 

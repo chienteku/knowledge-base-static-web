@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The core rules (One Owner, Drop out of scope).
-- [Borrowing (`&`)](../level_03/borrowing.md) — The rule allowing multiple read-only references.
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The rule allowing exactly *one* exclusive write reference.
+
+- [Ownership](ownership.md) — The core rules (One Owner, Drop out of scope).
+- [Borrowing (`&`)](borrowing.md) — The rule allowing multiple read-only references.
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The rule allowing exactly *one* exclusive write reference.
 
 ---
 
@@ -661,8 +662,15 @@ Design an arena-based graph architecture `ArenaGraph<T>` that replaces pointer r
 
 ## 6. Related Terms
 
-- [Dangling Reference](../level_03/dangling_reference.md) — One of the catastrophic memory bugs the Borrow Checker actively prevents.
-- [Lifetimes](../level_05/lifetime.md) — How the Borrow Checker tracks how long a reference is valid under the hood.
+
+- [Dangling Reference](dangling_reference.md) — One of the catastrophic memory bugs the Borrow Checker actively prevents.
+- [Lifetime (`'a`)](../level_05/lifetime.md) — How the Borrow Checker tracks how long a reference is valid under the hood.
+- [Borrowing (`&`)](borrowing.md) — Related concept: Borrowing (`&`).
+- [`Drop Check` (dropck)](drop_check.md) — Related concept: `Drop Check` (dropck).
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — Related concept: Mutable Borrowing (`&mut`).
+- [Slice (`&[T]`, `&str`)](slice.md) — Related concept: Slice (`&[T]`, `&str`).
+- [Non-Lexical Lifetimes (NLL)](../level_05/non_lexical_lifetimes.md) — Related concept: Non-Lexical Lifetimes (NLL).
+- [Polonius](../level_19/polonius.md) — Related concept: Polonius.
 
 ---
 

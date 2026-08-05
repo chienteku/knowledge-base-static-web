@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Function](../level_03/function.md) — A reusable block of code.
-- [Arguments](../level_03/arguments.md) — Values passed to a function.
-
+- [Function](function.md) — A reusable block of code.
+- [Arguments](arguments.md) — Values passed to a function.
 ---
 
 ## 2. Term Category
@@ -219,9 +218,12 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Callback Function](../level_03/callback_function.md) — The function that gets passed *into* the Higher-Order Function.
-- [Closure](../level_03/closure.md) — Often used when a HOF returns a new function.
-
+- [Callback Function](callback_function.md) — The function that gets passed *into* the Higher-Order Function.
+- [Closure](closure.md) — Often used when a HOF returns a new function.
+- [First-Class Function](first_class_function.md) — Related concept: First-Class Function.
+- [Recursion](recursion.md) — Related concept: Recursion.
+- [Event Listener](../level_05/event_listener.md) — Related concept: Event Listener.
+- [Memoization](../level_09/memoization.md) — Related concept: Memoization.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [V8 Engine](../level_01/v8_engine.md) — V8 is inherently single-threaded.
-
+- [V8 JavaScript Engine](v8_engine.md) — V8 is inherently single-threaded.
 ---
 
 ## 2. Term Category
@@ -144,9 +143,11 @@ Which product should use Node.js, and which should use a multi-threaded language
 > **Explanation:** PM2 monitors Node.js processes and instantly restarts them if uncaught errors occur.
 
 ## 7. Related Terms
-- [Non-Blocking I/O](../level_01/non_blocking_io.md) — How the single thread manages to avoid waiting for the kitchen.
-- [The Event Loop](../level_01/event_loop.md) — The mechanism that tells the single thread when the kitchen is done cooking.
-
+- [Non-Blocking I/O](non_blocking_io.md) — How the single thread manages to avoid waiting for the kitchen.
+- [The Event Loop & Libuv](event_loop.md) — The mechanism that tells the single thread when the kitchen is done cooking.
+- [Blocking the Event Loop](blocking_event_loop.md) — Related concept: Blocking the Event Loop.
+- [CPU-bound vs I/O-bound](cpu_vs_io.md) — Related concept: CPU-bound vs I/O-bound.
+- [The Thread Pool (libuv)](thread_pool.md) — Related concept: The Thread Pool (libuv).
 ---
 
 ## 8. Key Takeaways

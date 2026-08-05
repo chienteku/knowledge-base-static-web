@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 - [Middleware vs Route Handlers](../level_07/middleware_vs_route_handlers.md) — The conceptual difference between these two systems.
 - [`NextRequest` & `NextResponse`](../level_07/next_request_response.md) — The core API used within this file.
-- [Authentication & Session Management](../level_10/authentication_concepts.md) — The primary purpose of route checkpointing.
-
+- [Authentication & Session Management](authentication_concepts.md) — The primary purpose of route checkpointing.
 ---
 
 ## 2. Term Category
@@ -186,9 +185,13 @@ export const config = {
 ---
 
 ## 7. Related Terms
-- [Edge Runtime](../level_10/edge_runtime.md) — The restricted environment where Middleware runs.
-- [`NextResponse`](../level_07/next_request_response.md) — The object used to trigger the redirects and rewrites.
-
+- [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The restricted environment where Middleware runs.
+- [`NextRequest` & `NextResponse`](../level_07/next_request_response.md) — The object used to trigger the redirects and rewrites.
+- [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — Related concept: `cookies()` and `headers()` from `next/headers`.
+- [Middleware vs Route Handlers](../level_07/middleware_vs_route_handlers.md) — Related concept: Middleware vs Route Handlers.
+- [Authentication & Session Management](authentication_concepts.md) — Related concept: Authentication & Session Management.
+- [Internationalization (i18n)](i18n.md) — Related concept: Internationalization (i18n).
+- [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — Route Handlers.
 ---
 
 ## 8. Key Takeaways

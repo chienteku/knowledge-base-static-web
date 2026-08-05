@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The syntax used inside this file.
-- [File-based Routing](../level_02/file_based_routing.md) — The routing system initialized by this component.
-
+- [File-based Routing](file_based_routing.md) — The routing system initialized by this component.
 ---
 
 ## 2. Term Category
@@ -197,9 +196,9 @@ While you *can* put global headers and footers in `app.vue`, doing so means they
 ---
 
 ## 7. Related Terms
-- [`pages/` Directory](../level_02/pages_directory.md) — The folder whose contents are injected into `<NuxtPage />`.
-- [`layouts/` Directory](../level_02/layouts_directory.md) — The feature used to create switchable page wrappers.
-
+- [`pages/` Directory](pages_directory.md) — The folder whose contents are injected into `<NuxtPage />`.
+- [`layouts/` Directory](layouts_directory.md) — The feature used to create switchable page wrappers.
+- [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — Related concept: `<NuxtPage>` & `<NuxtLayout>` Components.
 ---
 
 ## 8. Key Takeaways

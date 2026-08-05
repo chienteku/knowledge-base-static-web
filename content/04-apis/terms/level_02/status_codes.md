@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Status codes are the core feature of the Response phase.
-
 ---
 
 ## 2. Term Category
@@ -180,8 +179,12 @@ Should you spend the next hour debugging your React code, or call the backend en
 ---
 
 ## 7. Related Terms
-- [The `Response` Object](../level_05/response_object.md) — How we check the status code in JavaScript using `response.status` and `response.ok`.
-
+- [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — How we check the status code in JavaScript using `response.status` and `response.ok`.
+- [Request & Response Lifecycle](../level_01/request_response.md) — Related concept: Request & Response Lifecycle.
+- [Caching (ETag, Cache-Control)](../level_06/caching.md) — Related concept: Caching (ETag, Cache-Control).
+- [Rate Limiting (429 Too Many Requests)](../level_06/rate_limiting.md) — Related concept: Rate Limiting (429 Too Many Requests).
+- [HTTP Methods (Verbs)](http_methods.md) — Status codes per HTTP method.
+- [Error Handling (try / catch)](../level_05/error_handling.md) — API error status codes.
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [JavaScript Engine](../level_05/javascript_engine.md) — What Node.js is built on top of (specifically V8).
-- [API](../../../04-apis/terms/level_03/api.md) — Node.js provides APIs for file systems and networking instead of DOM manipulation.
-
+- api — Node.js provides APIs for file systems and networking instead of DOM manipulation.
 ---
 
 ## 2. Term Category
@@ -210,8 +209,9 @@ async function processData() {
 
 ## 7. Related Terms
 - [JavaScript Engine](../level_05/javascript_engine.md) — Node uses the V8 engine to actually execute the code.
-- [npm](./npm.md) — The package manager installed automatically alongside Node.js.
-
+- [npm](npm.md) — The package manager installed automatically alongside Node.js.
+- [globalThis](../level_08/globalthis.md) — Related concept: globalThis.
+- [package.json](package_json.md) — Related concept: package.json.
 ---
 
 ## 8. Key Takeaways

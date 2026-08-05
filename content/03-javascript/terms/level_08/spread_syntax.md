@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — Often spread into a new array.
 - [Object](../level_02/object.md) — Often spread into a new object.
-
 ---
 
 ## 2. Term Category
@@ -199,9 +198,14 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Rest Parameter](./rest_parameter.md) — Uses the exact same `...` symbol, but does the exact opposite thing!
-- [Destructuring](./destructuring.md) — Often combined with Spread and Rest.
-
+- [Rest Parameter (...)](rest_parameter.md) — Uses the exact same `...` symbol, but does the exact opposite thing!
+- [Destructuring](destructuring.md) — Often combined with Spread and Rest.
+- [Array.from / Array.of / Array.isArray](../level_04/array_from_of_isarray.md) — Related concept: Array.from / Array.of / Array.isArray.
+- [concat / join / split](../level_04/concat_join_split.md) — Related concept: concat / join / split.
+- [Mutating vs Non-mutating Methods](../level_04/mutating_vs_non_mutating.md) — Related concept: Mutating vs Non-mutating Methods.
+- [slice / splice](../level_04/slice_splice.md) — Related concept: slice / splice.
+- [Object.assign](../level_07/object_assign.md) — Related concept: Object.assign.
+- [Shallow Copy vs Deep Copy](../level_07/shallow_vs_deep_copy.md) — Related concept: Shallow Copy vs Deep Copy.
 ---
 
 ## 8. Key Takeaways

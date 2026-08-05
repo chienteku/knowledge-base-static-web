@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Nuxt 3 Overview](../level_01/nuxt_3_overview.md) — The framework that implements this pattern.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The underlying UI component structure.
-
 ---
 
 ## 2. Term Category
@@ -155,9 +154,8 @@ If you want to create a layout specifically for a sub-section of your site (like
 ---
 
 ## 7. Related Terms
-- [`pages/` Directory](../level_02/pages_directory.md) — The physical directory where this feature lives.
-- [Dynamic Routes](../level_02/dynamic_routes.md) — How to handle URLs with variables (like `/users/123`).
-
+- [`pages/` Directory](pages_directory.md) — The physical directory where this feature lives.
+- [Dynamic Routes](dynamic_routes.md) — How to handle URLs with variables (like `/users/123`).
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — Named bindings to store data.
-- [Scalar Types](../level_01/scalar_types.md) — The primitive data types (integers, floats, etc.) that the compiler needs to deduce.
+
+- [Variable](variable.md) — Named bindings to store data.
+- [Scalar Types](scalar_types.md) — The primitive data types (integers, floats, etc.) that the compiler needs to deduce.
 
 ---
 
@@ -491,9 +492,11 @@ Demonstrate how initializing an empty local evaluation stack (`let mut stack = V
 
 ## 6. Related Terms
 
-- [Type Annotation](../level_01/type_annotation.md) — The exact opposite of type inference. It's when you manually tell the compiler the specific type (`let x: i32 = 5;`).
-- [Variable](../level_01/variable.md) — The named bindings that are having their types inferred.
-- [Scalar Types](../level_01/scalar_types.md) — The primitive types that Rust falls back to (e.g., defaulting to `i32` for whole numbers and `f64` for decimals).
+
+- [Type Annotation](type_annotation.md) — The exact opposite of type inference. It's when you manually tell the compiler the specific type (`let x: i32 = 5;`).
+- [Variable](variable.md) — The named bindings that are having their types inferred.
+- [Scalar Types](scalar_types.md) — The primitive types that Rust falls back to (e.g., defaulting to `i32` for whole numbers and `f64` for decimals).
+- [Turbofish (`::<>`)](../level_06/turbofish.md) — Related concept: Turbofish (`::<>`).
 
 ---
 

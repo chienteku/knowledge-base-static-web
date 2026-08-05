@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — The modular elements being combined.
-- [Children Prop](../level_07/children_prop.md) — The primary mechanism enabling element nesting.
-
+- [Children Prop](children_prop.md) — The primary mechanism enabling element nesting.
 ---
 
 ## 2. Term Category
@@ -240,9 +239,8 @@ function ProductCard({ product }) {
 > **Explanation:** Composition provides flexible, decoupled code reuse across component UIs.
 
 ## 7. Related Terms
-- [Children Prop](../level_07/children_prop.md) — The property that enables nesting components.
-- [Higher-Order Components (HOC)](../level_07/hoc.md) — An alternative pattern for component wrapper logic.
-
+- [Children Prop](children_prop.md) — The property that enables nesting components.
+- [Higher-Order Components (HOC)](hoc.md) — An alternative pattern for component wrapper logic.
 ---
 
 ## 8. Key Takeaways

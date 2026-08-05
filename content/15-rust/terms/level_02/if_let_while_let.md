@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`match`](../level_02/match.md) — The exhaustive pattern matching tool that `if let` is designed to simplify.
+
+- [`match`](match.md) — The exhaustive pattern matching tool that `if let` is designed to simplify.
 
 ---
 
@@ -445,8 +446,11 @@ Implement an iterative AST symbol harvester `collect_declared_variables(root: As
 
 ## 6. Related Terms
 
-- [`match`](../level_02/match.md) — The verbose, exhaustive parent of `if let`.
-- [Pattern Matching](../level_02/pattern_matching.md) — The underlying mechanic used by `if let` to extract values.
+
+- [`match`](match.md) — The verbose, exhaustive parent of `if let`.
+- [Pattern Matching](pattern_matching.md) — The underlying mechanic used by `if let` to extract values.
+- [`let else` Statement](let_else_statement.md) — Related concept: `let else` Statement.
+- [`Option<T>`](option_t.md) — (Future reference) `if let` is most commonly used to extract values from `Option` (`Some` / `None`).
 
 ---
 

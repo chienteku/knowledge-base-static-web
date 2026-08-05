@@ -7,10 +7,9 @@
 
 ## 1. Prerequisites
 - [Static Site Generation (SSG)](../level_08/ssg.md) — One of the outputs Vercel hosts (CDN).
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The other output Vercel hosts (Serverless Functions).
-- [Content Delivery Network (CDN) & Edge Cache](../level_10/cdn_edge.md) — The global edge distribution layer.
-- [Serverless Functions](../level_10/serverless_functions.md) — The dynamic compute containers.
-
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — The other output Vercel hosts (Serverless Functions).
+- [Content Delivery Network (CDN) & Edge Cache](cdn_edge.md) — The global edge distribution layer.
+- [Serverless Functions](serverless_functions.md) — The dynamic compute containers.
 ---
 
 ## 2. Term Category
@@ -142,9 +141,9 @@ One of Vercel's most powerful features. Whenever you open a Pull Request on GitH
 ---
 
 ## 7. Related Terms
-- [Docker & Standalone Build](../level_10/standalone_build.md) — The alternative to Vercel for self-hosting.
-- [Environment Variables](../level_10/environment_variables.md) — Must be configured in the Vercel Dashboard.
-
+- [Docker & Standalone Build](standalone_build.md) — The alternative to Vercel for self-hosting.
+- [Environment Variables (`.env.local`)](environment_variables.md) — Must be configured in the Vercel Dashboard.
+- [Serverless Functions](serverless_functions.md) — Related concept: Serverless Functions.
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`CREATE`](create.md) — The parent write statement.
 - [Table](../level_01/table.md) — The schema container.
 
@@ -195,9 +196,11 @@ DEFINE INDEX post_title ON posts IF NOT EXISTS COLUMNS title;
 > **Explanation:** `DEFINE INDEX IF NOT EXISTS` prevents index re-creation errors.
 
 ## 7. Related Terms
+
 - [`CREATE`](create.md) — The parent write statement.
 - [Table](../level_01/table.md) — The schema container.
-- [Define Table](../level_04/define_table.md) — Table creation in detail.
+- [`DEFINE TABLE`](../level_04/define_table.md) — Table creation in detail.
+- [Idempotent Schema Migration Scripts](../level_04/idempotent_migrations.md) — Related concept: Idempotent Schema Migration Scripts.
 
 ---
 

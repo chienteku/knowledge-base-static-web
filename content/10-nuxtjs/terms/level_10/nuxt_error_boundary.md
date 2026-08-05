@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`error.vue` Layout](../level_10/error_vue.md) — The global fatal error handler that `<NuxtErrorBoundary>` explicitly tries to avoid.
+- [`error.vue` & `useError`](error_vue.md) — The global fatal error handler that `<NuxtErrorBoundary>` explicitly tries to avoid.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — Understanding slots and rendering boundaries.
-
 ---
 
 ## 2. Term Category
@@ -207,8 +206,7 @@ async function handleClick() {
 ---
 
 ## 7. Related Terms
-- [`error.vue`](../level_10/error_vue.md) — The global equivalent that handles fatal, unrecoverable errors.
-
+- [`error.vue` & `useError`](error_vue.md) — The global equivalent that handles fatal, unrecoverable errors.
 ---
 
 ## 8. Key Takeaways

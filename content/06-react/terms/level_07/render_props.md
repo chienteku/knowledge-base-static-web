@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Props](../level_01/props.md) — The mechanism being used.
-- [Higher-Order Components (HOC)](../level_07/hoc.md) — The alternative pattern that Render Props competed against before Hooks.
-
+- [Props (Properties)](../level_01/props.md) — The mechanism being used.
+- [Higher-Order Components (HOC)](hoc.md) — The alternative pattern that Render Props competed against before Hooks.
 ---
 
 ## 2. Term Category

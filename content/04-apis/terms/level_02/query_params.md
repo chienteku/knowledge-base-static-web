@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [URL / URI](../level_01/url_uri.md) — This is an extension of how URLs are structured.
-- [HTTP Methods](../level_02/http_methods.md) — This is primarily used for `GET` requests, which cannot have bodies.
-
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — This is an extension of how URLs are structured.
+- [HTTP Methods (Verbs)](http_methods.md) — This is primarily used for `GET` requests, which cannot have bodies.
 ---
 
 ## 2. Term Category
@@ -169,9 +168,12 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 ---
 
 ## 7. Related Terms
-- [Request Body & Payloads](../level_02/request_body.md) — The alternative way to send data (used for `POST`/`PUT`).
-- [REST](../level_03/rest.md) — The architectural style that dictates when to use Path vs Query params.
-
+- [Request Body & Payloads](request_body.md) — The alternative way to send data (used for `POST`/`PUT`).
+- [REST (Representational State Transfer)](../level_03/rest.md) — The architectural style that dictates when to use Path vs Query params.
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — Related concept: URL / URI (Uniform Resource Identifier).
+- [URL Encoding (Percent-Encoding)](url_encoding.md) — Related concept: URL Encoding (Percent-Encoding).
+- [Endpoints & Resources](../level_03/endpoints_resources.md) — Related concept: Endpoints & Resources.
+- [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — Related concept: Pagination (Offset vs. Cursor).
 ---
 
 ## 8. Key Takeaways

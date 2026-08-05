@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Expression](../level_01/expression.md) — Any valid unit of code that resolves to a single value.
-- [`if` / `else`](../level_02/if_else.md) — Conditional branching statement.
-
+- [Expression](expression.md) — Any valid unit of code that resolves to a single value.
+- [if / else](../level_02/if_else.md) — Conditional branching statement.
 ---
 
 ## 2. Term Category
@@ -234,8 +233,7 @@ console.log("Button label:", buttonLabel);
 ## 7. Related Terms
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — Concept of truthy and falsy values.
 - [Logical Operators](../level_02/logical_operators.md) — Logic combinators (`&&`, `||`, `!`).
-- [`if` / `else`](../level_02/if_else.md) — General purpose control flow statements.
-
+- [if / else](../level_02/if_else.md) — General purpose control flow statements.
 ---
 
 ## 8. Key Takeaways

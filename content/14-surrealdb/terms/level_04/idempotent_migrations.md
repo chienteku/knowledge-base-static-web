@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](define_table.md) — The schema generation context.
 - [`IF NOT EXISTS` / `IF EXISTS`](../level_03/if_not_exists.md) — The execution guards.
 
@@ -206,8 +207,10 @@ COMMIT TRANSACTION;
 > **Explanation:** `UPSERT` seeds record data safely without failing if records already exist.
 
 ## 7. Related Terms
+
 - [`IF NOT EXISTS` / `IF EXISTS`](../level_03/if_not_exists.md) — The execution guards.
-- [Schemafull Validation Assertion Patterns](schemafull_validation.md) — Designing schemas.
+- [`SCHEMAFULL` Validation Assertion Patterns](schemafull_validation.md) — Designing schemas.
+- [`OVERWRITE` Keyword](overwrite_keyword.md) — Related concept: `OVERWRITE` Keyword.
 
 ---
 

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — The building blocks involved.
 - [Props](../level_04/props.md) — The standard way to pass simple data. Slots are for passing HTML structure.
-
 ---
 
 ## 2. Term Category
@@ -183,9 +182,9 @@ The parent targets them using the `<template v-slot:header>` syntax (or the shor
 ---
 
 ## 7. Related Terms
-- [Scoped Slots](../level_05/scoped_slots.md) — Advanced slots that send data *back up* to the parent.
+- [Scoped Slots](scoped_slots.md) — Advanced slots that send data *back up* to the parent.
 - [Props](../level_04/props.md) — For passing JavaScript data instead of HTML structure.
-
+- [Components](../level_04/components.md) — Component template insertion.
 ---
 
 ## 8. Key Takeaways

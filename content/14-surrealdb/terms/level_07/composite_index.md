@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
-- [WHERE Clause](../level_03/where.md) — Multi-field filter queries.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
+- [`WHERE` Clause](../level_03/where.md) — Multi-field filter queries.
 
 ---
 
@@ -193,8 +194,10 @@ Write the SurrealQL statement to create the optimal composite index named `idx_a
 > **Explanation:** Composite unique indexes enforce uniqueness across multi-field combinations.
 
 ## 7. Related Terms
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Unique Index](unique_index.md) — Composite unique constraints.
+- [Query Explanation & Performance](query_explanation.md) — Related concept: Query Explanation & Performance.
 
 ---
 

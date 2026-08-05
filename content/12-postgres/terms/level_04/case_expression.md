@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The baseline query projection statement.
-
 ---
 
 ## 2. Term Category
@@ -238,7 +237,6 @@ CASE WHEN status = 'active' THEN 1 ELSE 0 END -- Fallback 0
 ## 7. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [Type Casting (`CAST` / `::`)](type_casting.md) — Converting data types in branches.
-
 ---
 
 ## 8. Key Takeaways

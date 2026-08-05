@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Null](../level_01/null.md) / [Undefined](../level_01/undefined.md) — The specific "Nullish" values this operator looks for.
+- [null](../level_01/null.md)
 - [Logical Operators](../level_02/logical_operators.md) — The older `||` operator this often replaces.
-
 ---
 
 ## 2. Term Category
@@ -206,9 +205,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Optional Chaining (`?.`)](./optional_chaining.md) — Usually chained directly into `??`.
+- [Optional Chaining (?.)](optional_chaining.md) — Usually chained directly into `??`.
 - [Logical Operators](../level_02/logical_operators.md) — The `||` operator that `??` improves upon.
-
+- [Logical Assignment (??=, ||=, &&=)](logical_assignment.md) — Related concept: Logical Assignment (??=, ||=, &&=).
 ---
 
 ## 8. Key Takeaways

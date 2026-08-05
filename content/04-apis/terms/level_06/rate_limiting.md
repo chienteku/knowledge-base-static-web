@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [HTTP Status Codes](../level_02/status_codes.md) — Rate limiting uses a very specific 4xx status code.
 - [API Keys](../level_04/api_keys.md) — How the server knows exactly *who* is making the requests.
-
 ---
 
 ## 2. Term Category
@@ -147,8 +146,13 @@ X-RateLimit-Reset: 1700000060
 
 ## 7. Related Terms
 - [HTTP Status Codes](../level_02/status_codes.md) — `429` is the official code for Rate Limiting.
-- [Error Handling (`try/catch`)](../level_05/error_handling.md) — Where you write the logic to pause your requests.
-
+- [Error Handling (try / catch)](../level_05/error_handling.md) — Where you write the logic to pause your requests.
+- [Bulk / Batch Requests](batch_requests.md) — Related concept: Bulk / Batch Requests.
+- [Circuit Breaker](circuit_breaker.md) — Related concept: Circuit Breaker.
+- [Idempotency Keys](idempotency_keys.md) — Related concept: Idempotency Keys.
+- [Webhooks](webhooks.md) — Related concept: Webhooks.
+- [Caching (ETag, Cache-Control)](caching.md) — Related concept: Caching (ETag, Cache-Control).
+- [API Gateway](../level_10/api_gateway.md) — Related concept: API Gateway.
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library context.
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Temporal types.
 
@@ -200,8 +201,10 @@ Write the SurrealQL query to:
 > **Explanation:** Subtracting two `datetime` primitives returns a `duration` value.
 
 ## 7. Related Terms
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Temporal types.
+- [`SHOW CHANGES FOR TABLE ... SINCE ...`](../level_09/show_changes.md) — Related concept: `SHOW CHANGES FOR TABLE ... SINCE ...`.
 
 ---
 

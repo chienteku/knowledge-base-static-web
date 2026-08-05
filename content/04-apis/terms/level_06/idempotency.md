@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Methods](../level_02/http_methods.md) — HTTP verbs are strictly categorized by whether they are idempotent or not.
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — HTTP verbs are strictly categorized by whether they are idempotent or not.
 - [Request & Response Lifecycle](../level_01/request_response.md) — Network failures are the reason idempotency is so important.
-
 ---
 
 ## 2. Term Category
@@ -154,8 +153,8 @@ DELETE /api/notifications/45 HTTP/1.1 ; Idempotent target deletion
 ---
 
 ## 7. Related Terms
-- [HTTP Methods](../level_02/http_methods.md) — Where the rules of Idempotency are heavily enforced.
-
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — Where the rules of Idempotency are heavily enforced.
+- [Retry & Exponential Backoff](../level_05/retry_backoff.md) — Related concept: Retry & Exponential Backoff.
 ---
 
 ## 8. Key Takeaways

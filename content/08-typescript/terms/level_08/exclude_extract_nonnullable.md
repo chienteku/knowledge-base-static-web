@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Generic Utility Types](../level_08/utility_types.md) — The baseline standard utility overview.
-- [Union Types](../level_05/union_types.md) — Custom combined type options.
-
+- [Utility Types Overview](utility_types.md) — The baseline standard utility overview.
+- [Union Types (`|`)](../level_05/union_types.md) — Custom combined type options.
 ---
 
 ## 2. Term Category
@@ -209,10 +208,10 @@ const getHandler = (method: SafeMethod) => { ... };
 > **Explanation:** `Extract` retains union members assignable to pattern match types.
 
 ## 7. Related Terms
-- [Union Types](../level_05/union_types.md) — The target data structures.
-- [Generic Utility Types](../level_08/utility_types.md) — The collection of standard helper definitions.
+- [Union Types (`|`)](../level_05/union_types.md) — The target data structures.
+- [Utility Types Overview](utility_types.md) — The collection of standard helper definitions.
 - [Conditional Types](../level_09/conditional_types.md) — The type checking logic that powers union filtering.
-
+- [Key Remapping in Mapped Types (`as`)](../level_09/key_remapping_mapped_types.md) — Related concept: Key Remapping in Mapped Types (`as`).
 ---
 
 ## 8. Key Takeaways

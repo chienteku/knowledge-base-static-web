@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Directives](../level_03/directives.md) — The category `v-on` belongs to.
+- [Directives](directives.md) — The category `v-on` belongs to.
 - [Reactive State](../level_02/reactive_state.md) — What events typically mutate.
-
 ---
 
 ## 2. Term Category
@@ -163,10 +162,10 @@ Vue provides **Modifiers** to handle this in the template, keeping your JavaScri
 ---
 
 ## 7. Related Terms
-- [`v-bind`](../level_03/v_bind.md) — The other half of the coin (Binding attributes vs listening to events).
-- [Emitting Events](../level_04/emit.md) — How you use `@` to listen to custom events emitted by child components.
-- [Event, Key & Form Modifiers](../level_03/modifiers.md) — The full modifier system for events.
-
+- [`v-bind`](v_bind.md) — The other half of the coin (Binding attributes vs listening to events).
+- [Emitting Events (`defineEmits`)](../level_04/emit.md) — How you use `@` to listen to custom events emitted by child components.
+- [Event, Key & Form Modifiers](modifiers.md) — The full modifier system for events.
+- [`v-model`](v_model.md) — Related concept: `v-model`.
 ---
 
 ## 8. Key Takeaways

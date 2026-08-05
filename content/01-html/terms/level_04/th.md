@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<tr>` (Table Row)](../level_04/tr.md) — The parent element that holds the `<th>`.
+- [`<tr>` (Table Row)](tr.md) — The parent element that holds the `<th>`.
 - [Nesting](../level_01/nesting.md) — Since table header cells must nest directly inside a parent table row container.
-
 ---
 
 ## 2. Term Category
@@ -173,11 +172,12 @@ Usually, you type your column names there and make the text bold so it stands ou
 > **Explanation:** Browsers render header cells bold and centered by default.
 
 ## 7. Related Terms
-- [`<tr>` (Table Row)](../level_04/tr.md) — The row that contains the `<th>`.
-- [`<td>` (Table Data)](../level_04/td.md) — The standard data cell that corresponds to the `<th>`.
-- [`scope` Attribute (in `<th>`)](../level_04/scope.md) — The attribute used to declare cell header associations.
-- [`colspan` & `rowspan`](../level_04/colspan_rowspan.md) — Attributes used to merge table cells.
-
+- [`<tr>` (Table Row)](tr.md) — The row that contains the `<th>`.
+- [`<td>` (Table Data)](td.md) — The standard data cell that corresponds to the `<th>`.
+- [`scope` Attribute (in `<th>`)](scope.md) — The attribute used to declare cell header associations.
+- [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.
+- [`<caption>`](caption.md) — Related concept: `<caption>`.
+- [`<table>`](table.md) — Related concept: `<table>`.
 ---
 
 ## 8. Key Takeaways

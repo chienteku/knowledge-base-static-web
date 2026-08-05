@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`Clone` Trait](../level_03/clone_trait.md) — The narrower trait this one generalizes.
-- [`Cow<'a, T>`](../level_11/cow_t.md) — The type whose entire design depends on this trait.
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The canonical example of borrowed/owned types that differ.
+- [`Cow<'a, T>`](cow_t.md) — The type whose entire design depends on this trait.
+- [String vs &str](../level_01/string_vs_&str.md) — The canonical example of borrowed/owned types that differ.
 
 ---
 
@@ -473,16 +474,14 @@ thread::spawn(move || {
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`Clone` Trait](../level_03/clone_trait.md) — The same-type duplication trait `ToOwned` generalizes; every `Clone` type gets `ToOwned` for free.
-> - [`Cow<'a, T>`](../level_11/cow_t.md) — The primary consumer of this trait; `Cow::Owned` variant's type is exactly `<T as ToOwned>::Owned`.
-> - [`Borrow` / `BorrowMut`](../level_14/borrow_trait.md) — A conceptually related trait for the reverse direction (owned-to-borrowed lookups), often mentioned alongside `ToOwned`.
-> - [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — The reason `str`/`[T]` need `ToOwned` instead of `Clone` in the first place.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [String vs &str](../level_01/string_vs_&str.md) — Related concept: String vs &str.
+- [Cow For Flexibility](../level_18/cow_for_flexibility.md) — Related concept: Cow For Flexibility.
+
+---
+
+## 7. Key Takeaways
 > 
 > - `ToOwned::to_owned(&self) -> Self::Owned` generalizes `Clone` by allowing the owned result to be a **different type** than the borrowed source.
 > - Every `Clone` type automatically implements `ToOwned` too (via a blanket impl with `Owned = Self`) — `ToOwned` is a strict superset of capability.

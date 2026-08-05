@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Vue Router](../level_06/vue_router.md) — The system that parses the URLs.
-
+- [Vue Router](vue_router.md) — The system that parses the URLs.
 ---
 
 ## 2. Term Category
@@ -183,9 +182,9 @@ const routes = [
 ---
 
 ## 7. Related Terms
-- [Vue Router](../level_06/vue_router.md) — The parent library.
+- [Vue Router](vue_router.md) — The parent library.
 - [Watchers](../level_02/watchers.md) — The tool needed to detect when dynamic parameters change.
-
+- [Route Params, Query & Meta](route_params_query_meta.md) — Related concept: Route Params, Query & Meta.
 ---
 
 ## 8. Key Takeaways

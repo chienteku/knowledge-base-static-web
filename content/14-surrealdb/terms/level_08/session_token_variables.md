@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`$auth` Variable](auth_variable.md) — The user record variable.
 - [JWT Token-Based Auth](jwt_auth.md) — JSON Web Token structure and claims.
 
@@ -214,9 +215,11 @@ Write a `PERMISSIONS` clause for a `system_settings` table allowing `update` onl
 > **Explanation:** `$auth` provides database record state; `$token` provides JWT claim metadata.
 
 ## 7. Related Terms
+
 - [`$auth` Variable](auth_variable.md) — The authenticated record user object.
 - [JWT Token-Based Auth](jwt_auth.md) — JWT validation and claims parsing.
-- [`DEFINE ACCESS ... TYPE JWT`](define_access_jwt.md) — External auth provider setup.
+- [`DEFINE ACCESS ... TYPE JWT` (External Auth Providers)](define_access_jwt.md) — External auth provider setup.
+- [`$auth.id` vs `$auth.*` (Accessing Auth Record Fields)](auth_record_fields.md) — Related concept: `$auth.id` vs `$auth.*` (Accessing Auth Record Fields).
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Context API](../level_06/context_api.md) — State managers are the heavy-duty alternative to the built-in Context API.
+- [The Context API](context_api.md) — State managers are the heavy-duty alternative to the built-in Context API.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — State managers use tricks to bypass this safely.
-
 ---
 
 ## 2. Term Category
@@ -156,9 +155,13 @@ Which global tool should you use for each?
 > **Explanation:** Right-sizing state management tools prevents architectural bloat.
 
 ## 7. Related Terms
-- [`useReducer` Hook](../level_06/use_reducer.md) — React's built-in hook that mimics the Action/Reducer pattern of Redux on a local component level.
-- [The Context API](../level_06/context_api.md) — The built-in alternative.
-
+- [`useReducer` Hook](use_reducer.md) — React's built-in hook that mimics the Action/Reducer pattern of Redux on a local component level.
+- [The Context API](context_api.md) — The built-in alternative.
+- [Prop Drilling](prop_drilling.md) — Related concept: Prop Drilling.
+- [React Query (TanStack Query) / SWR](../level_11/react_query.md) — Related concept: React Query (TanStack Query) / SWR.
+- [`useSyncExternalStore` Hook](../level_11/use_sync_external_store.md) — Related concept: `useSyncExternalStore` Hook.
+- [Zustand](../level_11/zustand.md) — Related concept: Zustand.
+- [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
 ---
 
 ## 8. Key Takeaways

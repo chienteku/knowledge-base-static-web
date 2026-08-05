@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Record Link (Concept)](../level_05/record_link_concept.md) — Pointer fields.
 
 ---
@@ -186,9 +187,10 @@ Write the SurrealQL statement to define an index named `idx_order_customer` to o
 > **Explanation:** Composite record link indexes optimize multi-tenant query range scans.
 
 ## 7. Related Terms
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Record Link (Concept)](../level_05/record_link_concept.md) — Pointer concept.
-- [Array of Record Links](../level_05/array_record_links.md) — Multi-pointer fields.
+- [Array of Record Links (`array<record<table>>`)](../level_05/array_record_links.md) — Multi-pointer fields.
 
 ---
 

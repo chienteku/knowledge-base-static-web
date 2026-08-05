@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library context.
-- [Array Type](../level_02/array_type.md) — The ordered list data type.
+- [`array`](../level_02/array_type.md) — The ordered list data type.
 
 ---
 
@@ -198,9 +199,13 @@ Write the SurrealQL expression using `array::*` to check if `$user_roles` shares
 > **Explanation:** `array::map(arr, closure)` transforms array elements into new values.
 
 ## 7. Related Terms
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
-- [Array Type](../level_02/array_type.md) — The ordered list container.
-- [Set Type](../level_02/set_type.md) — Unique set container.
+- [`array`](../level_02/array_type.md) — The ordered list container.
+- [`set`](../level_02/set_type.md) — Unique set container.
+- [Operators in SurrealQL](../level_03/operators.md) — Related concept: Operators in SurrealQL.
+- [`SELECT VALUE` (Single Field Extraction)](../level_03/select_value.md) — Related concept: `SELECT VALUE` (Single Field Extraction).
+- [`SPLIT` Clause](split_clause.md) — Related concept: `SPLIT` Clause.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Global Objects](../level_02/global_objects.md) — `process` is a global object, available in every file automatically.
-
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — `process` is a global object, available in every file automatically.
 ---
 
 ## 2. Term Category
@@ -154,9 +153,11 @@ process.on('unhandledRejection', (reason, promise) => {
 > **Explanation:** Listening for `SIGTERM` allows servers to close active socket connections cleanly before exiting.
 
 ## 7. Related Terms
-- [Environment Variables (`dotenv`)](../level_10/env_vars.md) — The ecosystem tool used to manage `process.env` files easily on your laptop.
-- [Global Objects](../level_02/global_objects.md) — `process` is a member of this family.
-
+- [Environment Variables (dotenv)](../level_10/env_vars.md) — The ecosystem tool used to manage `process.env` files easily on your laptop.
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — `process` is a member of this family.
+- [The Node.js REPL](repl.md) — Related concept: The Node.js REPL.
+- [stdin / stdout / stderr (Standard Streams)](standard_streams.md) — Related concept: stdin / stdout / stderr (Standard Streams).
+- [Unhandled Promise Rejections](../level_05/unhandled_rejections.md) — Related concept: Unhandled Promise Rejections.
 ---
 
 ## 8. Key Takeaways

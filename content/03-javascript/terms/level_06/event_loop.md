@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Synchronous](./synchronous.md) / [Asynchronous](./asynchronous.md) — Blocking vs non-blocking code.
-- [Call Stack](./call_stack.md) — The queue of synchronous tasks.
-
+- [Synchronous](synchronous.md)
+- [Call Stack](call_stack.md) — The queue of synchronous tasks.
 ---
 
 ## 2. Term Category
@@ -198,9 +197,13 @@ console.log("C");
 ---
 
 ## 7. Related Terms
-- [Call Stack](./call_stack.md) — Where code is actually executed.
-- [Microtask Queue](./microtask_queue.md) — The VIP waiting room for Promises.
-
+- [Call Stack](call_stack.md) — Where code is actually executed.
+- [Microtask Queue](microtask_queue.md) — The VIP waiting room for Promises.
+- [Timers (setTimeout / setInterval / clearTimeout)](../level_05/timers.md) — Related concept: Timers (setTimeout / setInterval / clearTimeout).
+- [Asynchronous](asynchronous.md) — Related concept: Asynchronous.
+- [Macrotask Queue](macrotask_queue.md) — Related concept: Macrotask Queue.
+- [Web Workers](web_workers.md) — Related concept: Web Workers.
+- [Promise](promise.md) — Related concept: Promise.
 ---
 
 ## 8. Key Takeaways

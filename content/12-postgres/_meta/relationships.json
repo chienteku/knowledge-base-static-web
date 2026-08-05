@@ -30,6 +30,11 @@
           "term": "psql",
           "module": "12-postgres",
           "description": "Related concept: `psql` (Interactive Terminal)."
+        },
+        {
+          "module": "12-postgres",
+          "term": "connection_pooling",
+          "description": "Related concept: Connection Pooling."
         }
       ]
     },
@@ -247,6 +252,11 @@
           "term": "client_server_model",
           "module": "12-postgres",
           "description": "Related concept: Client-Server Model (in Databases)."
+        },
+        {
+          "module": "12-postgres",
+          "term": "psql",
+          "description": "Interactive terminal CLI."
         }
       ]
     },
@@ -276,6 +286,11 @@
           "term": "connection_string",
           "module": "12-postgres",
           "description": "Related concept: Connection String / DSN."
+        },
+        {
+          "module": "12-postgres",
+          "term": "postgresql",
+          "description": "Related concept: PostgreSQL (Postgres)."
         }
       ]
     },
@@ -315,6 +330,11 @@
           "term": "postgresql",
           "module": "12-postgres",
           "description": "Related concept: PostgreSQL (Postgres)."
+        },
+        {
+          "module": "12-postgres",
+          "term": "sql",
+          "description": "SQL query language."
         }
       ]
     },
@@ -397,6 +417,11 @@
           "term": "create_drop_table",
           "module": "12-postgres",
           "description": "Core SQL DDL statements."
+        },
+        {
+          "module": "12-postgres",
+          "term": "relational_database",
+          "description": "Related concept: Relational Database."
         }
       ]
     },
@@ -805,6 +830,11 @@
           "term": "composite_key",
           "module": "12-postgres",
           "description": "Related concept: Composite Key."
+        },
+        {
+          "module": "12-postgres",
+          "term": "foreign_key",
+          "description": "Foreign key references."
         }
       ]
     },
@@ -1782,6 +1812,21 @@
           "term": "one_to_one",
           "module": "12-postgres",
           "description": "Related concept: One-to-One Relationship."
+        },
+        {
+          "module": "12-postgres",
+          "term": "junction_table",
+          "description": "Junction tables."
+        },
+        {
+          "module": "12-postgres",
+          "term": "primary_key",
+          "description": "Related concept: `PRIMARY KEY`."
+        },
+        {
+          "module": "12-postgres",
+          "term": "inner_join",
+          "description": "Related concept: `INNER JOIN`."
         }
       ]
     },
@@ -1811,6 +1856,11 @@
           "term": "right_full_join",
           "module": "12-postgres",
           "description": "Related concept: `RIGHT JOIN` / `FULL OUTER JOIN`."
+        },
+        {
+          "module": "12-postgres",
+          "term": "foreign_key",
+          "description": "Joining on foreign key columns."
         }
       ]
     },
@@ -1889,6 +1939,11 @@
           "term": "erd",
           "module": "12-postgres",
           "description": "Related concept: Entity-Relationship Diagram (ERD)."
+        },
+        {
+          "module": "12-postgres",
+          "term": "foreign_key",
+          "description": "Related concept: `FOREIGN KEY`."
         }
       ]
     },
@@ -2281,6 +2336,11 @@
           "term": "materialized_view",
           "module": "12-postgres",
           "description": "Related concept: Materialized View."
+        },
+        {
+          "module": "12-postgres",
+          "term": "normalization",
+          "description": "Related concept: Normalization."
         }
       ]
     },
@@ -2460,6 +2520,21 @@
           "term": "erd",
           "module": "12-postgres",
           "description": "Related concept: Entity-Relationship Diagram (ERD)."
+        },
+        {
+          "module": "12-postgres",
+          "term": "second_normal_form",
+          "description": "2NF."
+        },
+        {
+          "module": "12-postgres",
+          "term": "third_normal_form",
+          "description": "3NF."
+        },
+        {
+          "module": "12-postgres",
+          "term": "denormalization",
+          "description": "Strategic denormalization."
         }
       ]
     },
@@ -2494,6 +2569,11 @@
           "term": "composite_key",
           "module": "12-postgres",
           "description": "Forward reference: multi-column keys."
+        },
+        {
+          "module": "12-postgres",
+          "term": "normalization",
+          "description": "Related concept: Normalization."
         }
       ]
     },
@@ -2518,6 +2598,11 @@
           "term": "denormalization",
           "module": "12-postgres",
           "description": "Intentionally breaking 3NF for speed."
+        },
+        {
+          "module": "12-postgres",
+          "term": "normalization",
+          "description": "Related concept: Normalization."
         }
       ]
     },
@@ -2596,6 +2681,11 @@
           "term": "partial_index",
           "module": "12-postgres",
           "description": "Related concept: Partial Index."
+        },
+        {
+          "module": "12-postgres",
+          "term": "unique_index",
+          "description": "Unique index."
         }
       ]
     },
@@ -2625,6 +2715,11 @@
           "term": "composite_key",
           "module": "12-postgres",
           "description": "Slicing multi-column constraints."
+        },
+        {
+          "module": "12-postgres",
+          "term": "index_concept",
+          "description": "Related concept: Index (Concept)."
         }
       ]
     },
@@ -2683,6 +2778,11 @@
           "term": "seq_scan_vs_index_scan",
           "module": "12-postgres",
           "description": "The two scan behaviors."
+        },
+        {
+          "module": "12-postgres",
+          "term": "index_concept",
+          "description": "Related concept: Index (Concept)."
         }
       ]
     },
@@ -2800,6 +2900,16 @@
           "term": "table_partitioning",
           "module": "12-postgres",
           "description": "Related concept: Table Partitioning."
+        },
+        {
+          "module": "12-postgres",
+          "term": "composite_index",
+          "description": "Multi-column indexes."
+        },
+        {
+          "module": "12-postgres",
+          "term": "explain_analyze",
+          "description": "Query execution plan analysis."
         }
       ]
     },
@@ -2964,6 +3074,11 @@
           "term": "partial_index",
           "module": "12-postgres",
           "description": "Indexes filtering subsets of rows."
+        },
+        {
+          "module": "12-postgres",
+          "term": "btree_index",
+          "description": "Related concept: B-tree Index."
         }
       ]
     },
@@ -3775,6 +3890,11 @@
           "term": "postgresql_conf",
           "module": "12-postgres",
           "description": "Setting connection thresholds."
+        },
+        {
+          "module": "12-postgres",
+          "term": "client_server_model",
+          "description": "Client connections."
         }
       ]
     },

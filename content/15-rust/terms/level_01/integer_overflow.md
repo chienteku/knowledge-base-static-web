@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Scalar Types](../level_01/scalar_types.md) — The fixed-width integer types (`u8`, `i32`, ...) that can overflow.
+
+- [Scalar Types](scalar_types.md) — The fixed-width integer types (`u8`, `i32`, ...) that can overflow.
 - [Release Profile](../level_15/release_profile.md) — The build mode whose optimization settings change overflow behavior.
 
 ---
@@ -572,8 +573,9 @@ Design a production-grade embedded rate limiter and telemetry tracking pipeline 
 
 ## 6. Related Terms
 
-- [`as` Casting](../level_01/as_casting.md) — Another silent-truncation footgun; `as` and unchecked `+` share the same "no warning" failure mode.
-- [`panic!`](../level_04/panic.md) — What debug-mode overflow triggers.
+
+- [`as` Casting (Primitive Numeric Coercion)](as_casting.md) — Another silent-truncation footgun; `as` and unchecked `+` share the same "no warning" failure mode.
+- [`panic!` Macro](../level_04/panic.md) — What debug-mode overflow triggers.
 - [`Option<T>`](../level_02/option_t.md) — The return type of every `checked_*` method.
 - [Release Profile](../level_15/release_profile.md) — The build setting (`overflow-checks`) that determines whether unchecked `+` panics or wraps.
 

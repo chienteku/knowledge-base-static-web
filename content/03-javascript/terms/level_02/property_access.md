@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Object](../level_02/object.md) — A collection of key-value pairs representing properties and methods.
-- [Property](../level_02/property.md) — An association between a name (key) and a value within an object.
-
+- [Object](object.md) — A collection of key-value pairs representing properties and methods.
+- [Property](property.md) — An association between a name (key) and a value within an object.
 ---
 
 ## 2. Term Category
@@ -232,9 +231,9 @@ console.log(currentValue);
 ---
 
 ## 7. Related Terms
-- [Method](../level_02/method.md) — Functions stored inside objects.
+- [Method](method.md) — Functions stored inside objects.
 - [Computed Property Names](../level_07/computed_property_names.md) — Declaring dynamic keys inside object literals.
-
+- [Object](object.md) — Related concept: Object.
 ---
 
 ## 8. Key Takeaways

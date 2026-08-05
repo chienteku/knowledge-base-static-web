@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Date](date_type.md) — The standard calendar time data type.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — The sync architecture context.
 
@@ -198,6 +199,7 @@ new Date(1700000000 * 1000); // Correct millisecond conversion
 > **Explanation:** `.getTime()` returns 64-bit UTC epoch millisecond numbers.
 
 ## 7. Related Terms
+
 - [Date](date_type.md) — The developer date type.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — The replication pipeline.
 

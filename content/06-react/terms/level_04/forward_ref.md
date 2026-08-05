@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useRef` Hook](../level_04/use_ref.md) — The reference container mechanism.
+- [`useRef` Hook](use_ref.md) — The reference container mechanism.
 - [Components](../level_01/components.md) — The visual boundaries crossed by refs.
-
 ---
 
 ## 2. Term Category
@@ -227,9 +226,8 @@ function App() {
 > **Explanation:** React 19 unifies `ref` as a standard component prop.
 
 ## 7. Related Terms
-- [`useRef` Hook](../level_04/use_ref.md) — The reference object engine used to create refs.
+- [`useRef` Hook](use_ref.md) — The reference object engine used to create refs.
 - [Portals](../level_07/portals.md) — Porting component nodes outside parent DOM trees.
-
 ---
 
 ## 8. Key Takeaways

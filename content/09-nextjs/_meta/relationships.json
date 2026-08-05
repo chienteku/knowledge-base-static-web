@@ -259,6 +259,11 @@
           "term": "next_config",
           "module": "09-nextjs",
           "description": "Related concept: `next.config.mjs`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "rsc",
+          "description": "React Server Components architecture."
         }
       ]
     },
@@ -429,6 +434,21 @@
           "term": "orm_prisma",
           "module": "09-nextjs",
           "description": "Related concept: ORM (Object-Relational Mapping) & Prisma."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "rsc_payload",
+          "description": "RSC Payload."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "nextjs",
+          "description": "Related concept: Next.js Overview."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "ppr",
+          "description": "Related concept: Partial Prerendering (PPR)."
         }
       ]
     },
@@ -453,6 +473,11 @@
           "term": "ssr",
           "module": "09-nextjs",
           "description": "The server-rendering strategy that makes SEO possible."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "metadata_api",
+          "description": "Related concept: Metadata API (`metadata`)."
         }
       ]
     },
@@ -570,6 +595,11 @@
           "term": "loading",
           "module": "09-nextjs",
           "description": "Related concept: `loading.tsx`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "page",
+          "description": "Page component."
         }
       ]
     },
@@ -687,6 +717,11 @@
           "term": "streaming",
           "module": "09-nextjs",
           "description": "Related concept: Streaming with `<Suspense>`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "page",
+          "description": "Page component."
         }
       ]
     },
@@ -706,6 +741,11 @@
           "term": "nextjs",
           "module": "09-nextjs",
           "description": "The framework itself."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "turbopack",
+          "description": "Related concept: Turbopack."
         }
       ]
     },
@@ -755,6 +795,16 @@
           "term": "use_pathname",
           "module": "09-nextjs",
           "description": "Related concept: `usePathname` & `useSearchParams`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "loading",
+          "description": "Loading UI."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "error",
+          "description": "Related concept: `error.tsx` & `global-error.tsx`."
         }
       ]
     },
@@ -789,6 +839,11 @@
           "term": "streaming",
           "module": "09-nextjs",
           "description": "Related concept: Streaming with `<Suspense>`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "ppr",
+          "description": "Related concept: Partial Prerendering (PPR)."
         }
       ]
     },
@@ -866,6 +921,16 @@
           "term": "route_groups",
           "module": "09-nextjs",
           "description": "Another special folder naming convention that modifies routing behavior."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "rest_parameters",
+          "description": "Related concept: JavaScript Rest Parameters (`...`)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "dynamic_routes",
+          "description": "Related concept: Dynamic Routes (`[slug]`)."
         }
       ]
     },
@@ -890,6 +955,26 @@
           "term": "page",
           "module": "09-nextjs",
           "description": "The file that receives the `params`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "catch_all_segments",
+          "description": "Catch-all route segments."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "generate_static_params",
+          "description": "generateStaticParams for SSG."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "rest_parameters",
+          "description": "Related concept: JavaScript Rest Parameters (`...`)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "intercepting_routes",
+          "description": "Related concept: Intercepting Routes (`(..)folder`)."
         }
       ]
     },
@@ -938,7 +1023,18 @@
           "description": "The parent framework utilizing ES6 syntax."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "09-nextjs",
+          "term": "catch_all_segments",
+          "description": "Catch-all route segments."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "dynamic_routes",
+          "description": "Dynamic route parameters."
+        }
+      ]
     },
     "route_groups": {
       "level": 3,
@@ -1039,6 +1135,11 @@
           "term": "path_module",
           "module": "09-nextjs",
           "description": "Related concept: Node.js `path` Module."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "dynamic_routes",
+          "description": "Dynamic routing."
         }
       ]
     },
@@ -1306,6 +1407,11 @@
           "term": "next_cache",
           "module": "09-nextjs",
           "description": "Related concept: The Next.js Cache (The Four Caches)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "react_cache",
+          "description": "React cache memoization."
         }
       ]
     },
@@ -1437,6 +1543,11 @@
           "term": "orm_prisma",
           "module": "09-nextjs",
           "description": "The queries commonly optimized by `React.cache()`."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "data_caching",
+          "description": "Related concept: Data Caching (`force-cache`, `no-store`)."
         }
       ]
     },
@@ -1534,6 +1645,11 @@
           "term": "use_form_status",
           "module": "09-nextjs",
           "description": "How to show a loading spinner while the action is running."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "zod_validation",
+          "description": "Zod schema validation."
         }
       ]
     },
@@ -1617,6 +1733,11 @@
           "term": "zod_validation",
           "module": "09-nextjs",
           "description": "Related concept: Zod (Schema Validation)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "use_form_status",
+          "description": "useFormStatus hook."
         }
       ]
     },
@@ -1685,6 +1806,11 @@
           "term": "form_actions",
           "module": "09-nextjs",
           "description": "The trigger for the pending state."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "server_actions",
+          "description": "Related concept: Server Actions Overview (`\"use server\"`)."
         }
       ]
     },
@@ -1709,6 +1835,11 @@
           "term": "use_form_state",
           "module": "09-nextjs",
           "description": "How validation errors are displayed."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "form_actions",
+          "description": "Related concept: Form Actions."
         }
       ]
     },
@@ -1738,6 +1869,11 @@
           "term": "dynamic_route_handlers",
           "module": "09-nextjs",
           "description": "Routes that are automatically dynamic by default."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "route_handlers",
+          "description": "Related concept: Route Handlers (`route.ts`)."
         }
       ]
     },
@@ -1908,6 +2044,16 @@
           "term": "edge_runtime",
           "module": "09-nextjs",
           "description": "Related concept: Edge Runtime vs Node.js Runtime."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "caching_route_handlers",
+          "description": "Caching Route Handlers."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "middleware",
+          "description": "Related concept: Middleware (`middleware.ts`)."
         }
       ]
     },
@@ -1921,6 +2067,16 @@
           "term": "ssg",
           "module": "09-nextjs",
           "description": "The output target."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "dynamic_routes",
+          "description": "Related concept: Dynamic Routes (`[slug]`)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "isr",
+          "description": "Related concept: Incremental Static Regeneration (ISR)."
         }
       ]
     },
@@ -1965,6 +2121,11 @@
           "term": "standalone_build",
           "module": "09-nextjs",
           "description": "Related concept: Docker & Standalone Build."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "generate_static_params",
+          "description": "generateStaticParams."
         }
       ]
     },
@@ -2033,6 +2194,16 @@
           "term": "ssg",
           "module": "09-nextjs",
           "description": "The strategy used for the \"shell.\""
+        },
+        {
+          "module": "09-nextjs",
+          "term": "rsc",
+          "description": "React Server Components."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "react_suspense",
+          "description": "Partial Prerendering suspense boundaries."
         }
       ]
     },
@@ -2062,6 +2233,11 @@
           "term": "network_boundary",
           "module": "09-nextjs",
           "description": "The interface mapped by this format."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "rsc",
+          "description": "Related concept: React Server Components (RSC)."
         }
       ]
     },
@@ -2227,6 +2403,11 @@
           "term": "layout",
           "module": "09-nextjs",
           "description": "The best place to establish your base metadata templates."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "seo",
+          "description": "SEO optimizations."
         }
       ]
     },
@@ -2601,6 +2782,11 @@
           "term": "i18n",
           "module": "09-nextjs",
           "description": "Related concept: Internationalization (i18n)."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "route_handlers",
+          "description": "Route Handlers."
         }
       ]
     },
@@ -2746,6 +2932,11 @@
           "term": "nodejs_runtime",
           "module": "09-nextjs",
           "description": "The execution host."
+        },
+        {
+          "module": "09-nextjs",
+          "term": "next_config",
+          "description": "next.config.js."
         }
       ]
     },

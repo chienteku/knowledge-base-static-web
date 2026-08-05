@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Scope](../level_03/scope.md) — The current context of execution.
-- [`let`](../level_01/let.md) and [`const`](../level_01/const.md) — Block-scoped variable declarations.
-
+- [Scope](scope.md) — The current context of execution.
+- [let](../level_01/let.md)
 ---
 
 ## 2. Term Category
@@ -219,9 +218,10 @@ console.log(b);
 ---
 
 ## 7. Related Terms
-- [`var`](../level_01/var.md) — The legacy variable declaration that ignores Block Scope.
-- [Local / Function Scope](../level_03/local_scope.md) — Scope restricted to a full function.
-
+- [var](../level_01/var.md) — The legacy variable declaration that ignores Block Scope.
+- [Local / Function Scope](local_scope.md) — Scope restricted to a full function.
+- [Scope](scope.md) — Related concept: Scope.
+- [let](../level_01/let.md) — Related concept: let.
 ---
 
 ## 8. Key Takeaways

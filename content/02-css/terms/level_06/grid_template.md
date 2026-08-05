@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Grid (Concept) & `display: grid`](./grid_concept.md) — The parent container trigger that activates Grid math.
-
+- [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent container trigger that activates Grid math.
 ---
 
 ## 2. Term Category
@@ -323,10 +322,13 @@ A standard 3-column card grid:
 > **Explanation:** `grid-template` shorthand combines `rows / columns`.
 
 ## 7. Related Terms
-- [CSS Grid (Concept) & `display: grid`](./grid_concept.md) — The parent trigger.
-- [`fr` Unit (Fractional Unit)](../level_06/fr_unit.md) — The flexible track sizing unit.
-- [`grid-column` / `grid-row` (Grid Item Placement)](../level_06/grid_item.md) — Positioning children on the grid lines.
-
+- [CSS Grid (Concept) & `display: grid`](grid_concept.md) — The parent trigger.
+- [`fr` Unit (Fractional Unit)](fr_unit.md) — The flexible track sizing unit.
+- [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Positioning children on the grid lines.
+- [`gap` (Grid Gap)](gap.md) — Related concept: `gap` (Grid Gap).
+- [`minmax()` Function](grid_minmax.md) — Related concept: `minmax()` Function.
+- [`repeat()` Function](grid_repeat.md) — Related concept: `repeat()` Function.
+- [`grid-template-areas`](grid_template_areas.md) — Related concept: `grid-template-areas`.
 ---
 
 ## 8. Key Takeaways

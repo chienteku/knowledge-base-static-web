@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Trait](../level_04/trait.md) — The contract being implemented.
-- [Structs](../level_02/struct.md) — The primary target for default configurations.
-- [Derive Macro](../level_04/derive_macro.md) — How you get a "zeroed-out" default for free.
+
+- [Trait](trait.md) — The contract being implemented.
+- [Struct](../level_02/struct.md) — The primary target for default configurations.
+- [Derive Macro](derive_macro.md) — How you get a "zeroed-out" default for free.
 
 ---
 
@@ -668,8 +669,12 @@ Microservice API gateways inspect incoming HTTP headers to extract distributed t
 
 ## 6. Related Terms
 
-- [Derive Macro](../level_04/derive_macro.md) — How you get `Default` for free (which recursively zeroes out all fields).
+
+- [Derive Macro](derive_macro.md) — How you get `Default` for free (which recursively zeroes out all fields).
 - [`Option<T>`](../level_02/option_t.md) — Another way to handle missing data. Interestingly, `Option::None` is actually the `Default` value for an `Option`!
+- [Entry API (`.entry(k).or_insert(...)`)](../level_02/entry_api.md) — Related concept: Entry API (`.entry(k).or_insert(...)`).
+- [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](../level_03/std_mem_utilities.md) — Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`).
+- [Builder Pattern](../level_18/builder_pattern.md) — Related concept: Builder Pattern.
 
 ---
 

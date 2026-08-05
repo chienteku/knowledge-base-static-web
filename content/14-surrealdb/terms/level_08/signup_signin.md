@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — The parent access definition.
 - [Built-in Functions Overview](../level_06/builtin_functions.md) — Cryptographic functions (`crypto::*`).
 
@@ -202,6 +203,7 @@ Write a `SIGNIN` clause that authenticates users by `username` instead of `email
 > **Explanation:** `db.signup()` invokes the RECORD access `SIGNUP` query block.
 
 ## 7. Related Terms
+
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Parent access setup.
 - [JWT Token-Based Auth](jwt_auth.md) — Token generated after `SIGNUP` / `SIGNIN`.
 - [`$auth` Variable](auth_variable.md) — The bound context variable after successful login.

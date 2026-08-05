@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Element vs. Tag](../level_01/element_vs_tag.md) — Attributes are always placed inside the opening tag.
-
+- [Element vs. Tag](element_vs_tag.md) — Attributes are always placed inside the opening tag.
 ---
 
 ## 2. Term Category
@@ -171,10 +170,14 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 > **Explanation:** Boolean attributes are true when present, so key-only syntax (`disabled`) is sufficient.
 
 ## 7. Related Terms
-- [Element vs. Tag](../level_01/element_vs_tag.md) — Attributes live inside the opening tag of an element.
-- [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Self-closing elements that are configured using attributes (like `<img>`).
+- [Element vs. Tag](element_vs_tag.md) — Attributes live inside the opening tag of an element.
+- [Void Elements (Self-closing Tags)](void_elements.md) — Self-closing elements that are configured using attributes (like `<img>`).
 - [`<a>` (Anchor / Link)](../level_02/a.md) — An element that heavily relies on the `href` attribute.
-
+- [`title` Attribute](../level_07/title.md) — Related concept: `title` Attribute.
+- [URL (Uniform Resource Locator)](url.md) — Related concept: URL (Uniform Resource Locator).
+- [`<audio>`](../level_03/audio.md) — Related concept: `<audio>`.
+- [`src` Attribute](../level_03/src.md) — Related concept: `src` Attribute.
+- [`<time>` & `datetime` Attribute](../level_06/time_datetime.md) — Related concept: `<time>` & `datetime` Attribute.
 ---
 
 ## 8. Key Takeaways

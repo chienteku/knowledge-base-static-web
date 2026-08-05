@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](../level_03/rest.md) — The resource-based communication style.
 - [Rate Limiting (429 Too Many Requests)](../level_06/rate_limiting.md) — The policies limiting client queries.
-
 ---
 
 ## 2. Term Category
@@ -161,9 +160,10 @@ Imagine entering a large corporate headquarters building.
 ---
 
 ## 7. Related Terms
-- [Microservices vs Monolith](./microservices_monolith.md) — The backend architectures managed by gateways.
-- [Load Balancing](./load_balancing.md) — The process of distributing routed traffic to scaled service instances.
-
+- [Microservices vs Monolith](microservices_monolith.md) — The backend architectures managed by gateways.
+- [Load Balancing](load_balancing.md) — The process of distributing routed traffic to scaled service instances.
+- [Rate Limiting (429 Too Many Requests)](../level_06/rate_limiting.md) — Gateway rate limiting.
+- [API Versioning (v1, v2)](versioning.md) — API versioning at gateway.
 ---
 
 ## 8. Key Takeaways

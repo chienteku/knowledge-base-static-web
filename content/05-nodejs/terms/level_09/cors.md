@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Express.js](../level_07/express_js.md) — You usually fix CORS issues using an Express middleware.
-- [REST APIs](../level_09/rest_api.md) — APIs are the target of CORS blocks.
-
+- [REST API Design](rest_api.md) — APIs are the target of CORS blocks.
 ---
 
 ## 2. Term Category
@@ -219,8 +218,8 @@ Your friend gets a CORS error. You do not. Why?
 
 ## 7. Related Terms
 - [Middleware](../level_07/middleware.md) — `cors()` is just a standard Express middleware.
-- [REST APIs](../level_09/rest_api.md) — What the browser is trying to protect.
-
+- [REST API Design](rest_api.md) — What the browser is trying to protect.
+- [Express.js](../level_07/express_js.md) — Express CORS setup.
 ---
 
 ## 8. Key Takeaways

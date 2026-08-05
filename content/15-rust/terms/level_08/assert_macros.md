@@ -7,9 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`#[test]`](../level_08/test_attribute.md) — The attribute that sets up the environment where these macros are most commonly used.
+
 - [Macros](../level_01/macros.md) — The code-generating system (denoted by `!`) that powers these assertions.
-- [`panic!`](../level_04/panic.md) — The action these macros take when an assertion fails.
+- [`panic!` Macro](../level_04/panic.md) — The action these macros take when an assertion fails.
 
 ---
 
@@ -582,8 +582,11 @@ You are developing a high-throughput telemetry ingestion service. Packet frames 
 
 ## 6. Related Terms
 
-- [`PartialEq` Trait](../level_04/partialeq_eq.md) — The mathematical trait required to compare two items in `assert_eq!`.
+
+- [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — The mathematical trait required to compare two items in `assert_eq!`.
 - [`Debug` Trait](../level_04/debug_trait.md) — The formatting trait required to print the failure messages to the terminal.
+- [`#[should_panic]` Attribute](should_panic.md) — Related concept: `#[should_panic]`.
+- [`#[test]` Attribute](test_attribute.md) — Related concept: `#[test]`.
 
 ---
 

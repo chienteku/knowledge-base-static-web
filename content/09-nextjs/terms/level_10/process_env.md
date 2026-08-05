@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The environment that exposes the `process` global object.
-
 ---
 
 ## 2. Term Category
@@ -185,9 +184,8 @@ export function getStripeKey(): string {
 ---
 
 ## 7. Related Terms
-- [Environment Variables (`.env.local`)](../level_10/environment_variables.md) — Next.js's implementation of this concept.
+- [Environment Variables (`.env.local`)](environment_variables.md) — Next.js's implementation of this concept.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The backend engine exposing the `process` global.
-
 ---
 
 ## 8. Key Takeaways

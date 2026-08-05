@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Table](table.md) — The parent records collection.
 
 ---
@@ -221,8 +222,11 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 > **Explanation:** Tables in SurrealDB default to `SCHEMALESS` document flexibility.
 
 ## 7. Related Terms
+
 - [Table](table.md) — The parent records collection.
 - [`DEFINE FIELD`](../level_04/define_field.md) — Setting field rules.
+- [`null` vs `NONE`](../level_02/null_none.md) — Related concept: `null` vs `NONE`.
+- [`DEFINE TABLE`](../level_04/define_table.md) — Related concept: `DEFINE TABLE`.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Rules of Hooks](../level_04/rules_of_hooks.md) — The usage guidelines governing hook invocations.
-
+- [Rules of Hooks](rules_of_hooks.md) — The usage guidelines governing hook invocations.
 ---
 
 ## 2. Term Category
@@ -232,8 +231,7 @@ function SearchBar() {
 
 ## 7. Related Terms
 - [Hydration](../level_10/hydration.md) — The SSR startup process where server-client IDs must match.
-- [Rules of Hooks](../level_04/rules_of_hooks.md) — The structural laws governing hook calls.
-
+- [Rules of Hooks](rules_of_hooks.md) — The structural laws governing hook calls.
 ---
 
 ## 8. Key Takeaways

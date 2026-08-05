@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`Vec<T>`](../level_02/vec_t.md) — The default collection for lists of items, indexed by numbers.
-- [`Option<T>`](../level_02/option_t.md) — Used heavily when trying to safely read data out of a HashMap.
+
+- [`Vec<T>`](vec_t.md) — The default collection for lists of items, indexed by numbers.
+- [`Option<T>`](option_t.md) — Used heavily when trying to safely read data out of a HashMap.
 
 ---
 
@@ -547,8 +548,13 @@ use std::collections::HashMap;
 
 ## 6. Related Terms
 
-- [`Vec<T>`](../level_02/vec_t.md) — The standard collection for ordered lists, where items are looked up by a numerical index rather than a Key.
-- [`Option<T>`](../level_02/option_t.md) — The type returned by `HashMap::get()`, ensuring you safely handle the scenario where the Key doesn't exist.
+
+- [`Vec<T>`](vec_t.md) — The standard collection for ordered lists, where items are looked up by a numerical index rather than a Key.
+- [`Option<T>`](option_t.md) — The type returned by `HashMap::get()`, ensuring you safely handle the scenario where the Key doesn't exist.
+- [`BTreeMap<K, V>`](btreemap_k_v.md) — Related concept: `BTreeMap<K, V>`.
+- [Entry API (`.entry(k).or_insert(...)`)](entry_api.md) — Related concept: Entry API (`.entry(k).or_insert(...)`).
+- [`Hash` Trait](hash_trait.md) — Related concept: `Hash` Trait.
+- [`HashSet<T>` / `BTreeSet<T>`](hashset_btreeset.md) — Related concept: `HashSet<T>` / `BTreeSet<T>`.
 
 ---
 

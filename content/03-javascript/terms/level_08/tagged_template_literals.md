@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Template Literals](./template_literals.md) — String interpolation utilizing backticks and `${}` placeholders.
+- [Template Literals](template_literals.md) — String interpolation utilizing backticks and `${}` placeholders.
 - [Function](../level_03/function.md) — Reusable blocks of execution logic.
-
 ---
 
 ## 2. Term Category
@@ -240,7 +239,7 @@ console.log(output);
 
 ## 7. Related Terms
 - [String Methods](../level_02/string_methods.md) — Text manipulation helpers often applied inside tag functions.
-
+- [Regular Expressions (RegExp)](../level_09/regexp.md) — Related concept: Regular Expressions (RegExp).
 ---
 
 ## 8. Key Takeaways

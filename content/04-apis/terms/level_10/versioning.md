@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [REST](../level_03/rest.md) — The architecture where versioning is most heavily debated.
+- [REST (Representational State Transfer)](../level_03/rest.md) — The architecture where versioning is most heavily debated.
 - [Endpoints & Resources](../level_03/endpoints_resources.md) — The URLs that get versioned.
-
 ---
 
 ## 2. Term Category
@@ -152,8 +151,12 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 
 ## 7. Related Terms
 - [Endpoints & Resources](../level_03/endpoints_resources.md) — Where the `/v1/` is injected.
-- [GraphQL](../level_07/graphql.md) — GraphQL famously avoids versioning because clients specifically ask for the exact fields they want. If a field is deprecated, GraphQL just throws a warning.
-
+- [GraphQL (The REST Alternative)](../level_07/graphql.md) — GraphQL famously avoids versioning because clients specifically ask for the exact fields they want. If a field is deprecated, GraphQL just throws a warning.
+- [Content Negotiation (Accept)](../level_02/content_negotiation.md) — Related concept: Content Negotiation (Accept).
+- [Resource Naming & URI Design](../level_03/resource_naming.md) — Related concept: Resource Naming & URI Design.
+- [API Contract / Schema-First Design](api_contract.md) — Related concept: API Contract / Schema-First Design.
+- [Deprecation & Sunsetting](deprecation_sunsetting.md) — Related concept: Deprecation & Sunsetting.
+- [API Gateway](api_gateway.md) — Related concept: API Gateway.
 ---
 
 ## 8. Key Takeaways

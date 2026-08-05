@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- None (This is the introductory concept of the NoSQL curriculum).
+
+**None.**
 
 ---
 
@@ -170,6 +171,7 @@ Use relational SQL databases when complex 3NF normalization is required
 > **Explanation:** BASE describes high-availability eventual consistency models in distributed databases.
 
 ## 7. Related Terms
+
 - [MongoDB](mongodb.md) — The document database implementation.
 - [Document vs. Relational Model](document_vs_relational.md) — Comparing SQL and NoSQL paradigms.
 

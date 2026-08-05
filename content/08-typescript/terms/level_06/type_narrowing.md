@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`unknown`](../level_02/unknown.md) — Another broad type that strictly requires narrowing before use.
-
 ---
 
 ## 2. Term Category
@@ -178,9 +177,17 @@ function printNum(n: number | null) {
 > **Explanation:** Type predicate functions inside `.filter()` narrow array element union types.
 
 ## 7. Related Terms
-- [`typeof` & `instanceof` Guards](../level_06/typeof_instanceof.md) — The most common tools used to achieve narrowing.
-- [Union Types](../level_05/union_types.md) — The types that require narrowing.
-
+- [`typeof` & `instanceof` Guards](typeof_instanceof.md) — The most common tools used to achieve narrowing.
+- [Union Types (`|`)](../level_05/union_types.md) — The types that require narrowing.
+- [`unknown`](../level_02/unknown.md) — Related concept: `unknown`.
+- [`void` & `never`](../level_02/void_never.md) — Related concept: `void` & `never`.
+- [Optional Properties (`?`)](../level_03/optional_properties.md) — Related concept: Optional Properties (`?`).
+- [Non-null Assertion Operator (`!`)](../level_05/non_null_assertion.md) — Related concept: Non-null Assertion Operator (`!`).
+- [Type Assertions (`as`)](../level_05/type_assertions.md) — Related concept: Type Assertions (`as`).
+- [Assertion Functions (`asserts`)](assertion_functions.md) — Related concept: Assertion Functions (`asserts`).
+- [Custom Type Guards (`is`)](custom_type_guards.md) — Related concept: Custom Type Guards (`is`).
+- [Exhaustiveness Checking (`never`)](exhaustiveness_checking.md) — Related concept: Exhaustiveness Checking (`never`).
+- [Discriminated Unions](discriminated_unions.md) — Discriminated union narrowing.
 ---
 
 ## 8. Key Takeaways

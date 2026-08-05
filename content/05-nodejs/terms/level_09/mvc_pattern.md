@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Express.js](../level_07/express_js.md) — The routing web framework.
 - [ORMs & ODMs](../level_08/orms_odms.md) — The database schemas representing data models.
-
 ---
 
 ## 2. Term Category
@@ -327,9 +326,9 @@ module.exports = router;
 > **Explanation:** `res.render` compiles template files with data objects and returns HTML to client.
 
 ## 7. Related Terms
-- [Controllers & Services](./controllers_services.md) — A deeper separation refining the controller layer.
+- [Controllers & Services](controllers_services.md) — A deeper separation refining the controller layer.
 - [ORMs & ODMs](../level_08/orms_odms.md) — The database mapping technologies representing Models.
-
+- [REST API Design](rest_api.md) — Related concept: REST API Design.
 ---
 
 ## 8. Key Takeaways

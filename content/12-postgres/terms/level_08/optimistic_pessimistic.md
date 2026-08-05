@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — The SQL tool for pessimistic locking.
-
 ---
 
 ## 2. Term Category
@@ -199,8 +198,7 @@ UPDATE products SET price = 100, version = version + 1 WHERE id = 1 AND version 
 
 ## 7. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
-- [`SELECT ... FOR UPDATE`](select_for_update.md) -- Pessimistic implementation.
-
+- [`SELECT ... FOR UPDATE`](select_for_update.md) — - Pessimistic implementation.
 ---
 
 ## 8. Key Takeaways

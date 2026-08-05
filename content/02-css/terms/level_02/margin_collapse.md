@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Margin](../level_02/margin.md) — The outer spacing property that collapses.
-- [The Box Model](../level_02/box_model.md) — The system regulating outer margins.
-
+- [Margin](margin.md) — The outer spacing property that collapses.
+- [The Box Model (Concept)](box_model.md) — The system regulating outer margins.
 ---
 
 ## 2. Term Category
@@ -241,10 +240,9 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 > **Explanation:** Creating a Block Formatting Context (BFC) prevents internal margins from collapsing outside parent.
 
 ## 7. Related Terms
-- [Margin](../level_02/margin.md) — The parent spacing property.
-- [Padding](../level_02/padding.md) — The inner spacing used to block margin leakage.
-- [The Box Model](../level_02/box_model.md) — The parent model framework.
-
+- [Margin](margin.md) — The parent spacing property.
+- [Padding](padding.md) — The inner spacing used to block margin leakage.
+- [The Box Model (Concept)](box_model.md) — The parent model framework.
 ---
 
 ## 8. Key Takeaways

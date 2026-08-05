@@ -6,11 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [Nuxt 3 Overview](../level_01/nuxt_3_overview.md) — The orchestrator of this process.
-- [Vue Component Lifecycle](../../../07-vue/terms/level_04/component_lifecycle.md) — Understanding when component setups run.
-- [Hydration](../level_01/hydration.md) — The bridge mechanism between server HTML and client interactivity.
-- [Search Engine Optimization (SEO)](../level_01/seo.md) — The core driver for SSR.
-
+- [Nuxt 3 Overview](nuxt_3_overview.md) — The orchestrator of this process.
+- component_lifecycle — Understanding when component setups run.
+- [Search Engine Optimization (SEO)](seo.md) — The core driver for SSR.
+- [Hydration](hydration.md) — The bridge mechanism between server HTML and client interactivity.
 ---
 
 ## 2. Term Category
@@ -191,8 +190,14 @@ routeRules: { '/admin/**': { ssr: false } }
 
 ## 7. Related Terms
 - [ClientOnly Component](../level_03/client_only_component.md) — A utility to force a component to completely skip server rendering.
-- [Nitro Engine](../level_01/nitro_engine.md) — The server responsible for executing the SSR phase.
-
+- [Nitro Engine](nitro_engine.md) — The server responsible for executing the SSR phase.
+- [Hydration](hydration.md) — Related concept: Hydration.
+- [Nuxt 3 Overview](nuxt_3_overview.md) — Related concept: Nuxt 3 Overview.
+- [Search Engine Optimization (SEO)](seo.md) — Related concept: Search Engine Optimization (SEO).
+- [`useCookie` Hook](../level_04/use_cookie.md) — Related concept: `useCookie` Hook.
+- [Nuxt Server Components (Islands)](../level_09/nuxt_server_components.md) — Related concept: Nuxt Server Components (Islands).
+- [`.output/` Directory](../level_10/output_directory.md) — Related concept: `.output/` Directory.
+- [Hybrid Rendering](../level_09/hybrid_rendering.md) — Hybrid rendering modes.
 ---
 
 ## 8. Key Takeaways

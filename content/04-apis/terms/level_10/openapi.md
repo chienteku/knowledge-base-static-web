@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [REST](../level_03/rest.md) — OpenAPI is specifically designed to document REST APIs.
-- [JSON](../level_01/json.md) — The OpenAPI blueprint is written in JSON (or YAML).
-
+- [REST (Representational State Transfer)](../level_03/rest.md) — OpenAPI is specifically designed to document REST APIs.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The OpenAPI blueprint is written in JSON (or YAML).
 ---
 
 ## 2. Term Category
@@ -164,9 +163,12 @@ nullable: true
 ---
 
 ## 7. Related Terms
-- [REST](../level_03/rest.md) — The architecture this specification documents.
-- [GraphQL](../level_07/graphql.md) — GraphQL doesn't need Swagger, because GraphQL has "Introspection" (it inherently documents itself!).
-
+- [REST (Representational State Transfer)](../level_03/rest.md) — The architecture this specification documents.
+- [GraphQL (The REST Alternative)](../level_07/graphql.md) — GraphQL doesn't need Swagger, because GraphQL has "Introspection" (it inherently documents itself!).
+- [Postman / Insomnia (API Clients)](api_clients.md) — Related concept: Postman / Insomnia (API Clients).
+- [Mocking APIs](mocking.md) — Related concept: Mocking APIs.
+- [API Contract / Schema-First Design](api_contract.md) — API Contract specification.
+- [SDK / Client Library](sdk.md) — Generating client SDKs.
 ---
 
 ## 8. Key Takeaways

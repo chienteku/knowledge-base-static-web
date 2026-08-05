@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`display: flex`](../level_05/flex_parent.md) — Must be applied to the parent container.
-
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — Must be applied to the parent container.
 ---
 
 ## 2. Term Category
@@ -250,9 +249,9 @@ In what visual order (from left to right) will they render on the screen?
 > **Explanation:** All flex items default to `order: 0` and display in HTML source order.
 
 ## 7. Related Terms
-- [`display: flex`](../level_05/flex_parent.md) — The parent layout engine.
-- [`flex-direction`](../level_05/flex_direction.md) — Dictates whether visual ordering flows vertically or horizontally.
-
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent layout engine.
+- [`flex-direction`](flex_direction.md) — Dictates whether visual ordering flows vertically or horizontally.
+- [`align-self`](align_self.md) — Related concept: `align-self`.
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -180,7 +180,11 @@ function area(s: Shape) {
 ## 7. Related Terms
 - [Function Types](../level_04/function_types.md) — Where `void` is heavily used.
 - [Type Narrowing](../level_06/type_narrowing.md) — Exhaustive checks using `never` rely on this.
-
+- [`null`, `undefined` & `strictNullChecks`](null_undefined_strict.md) — Related concept: `null`, `undefined` & `strictNullChecks`.
+- [Discriminated Unions](../level_06/discriminated_unions.md) — Related concept: Discriminated Unions.
+- [Exhaustiveness Checking (`never`)](../level_06/exhaustiveness_checking.md) — Related concept: Exhaustiveness Checking (`never`).
+- [`unknown`](unknown.md) — unknown type.
+- [`any`](any.md) — any type.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [DOM](../level_05/dom.md) — The tree structure representing the HTML document.
-
+- [DOM (Document Object Model)](dom.md) — The tree structure representing the HTML document.
 ---
 
 ## 2. Term Category
@@ -187,9 +186,8 @@ If you create a `<p>` tag using `document.createElement('p')`, what is its `node
 ---
 
 ## 7. Related Terms
-- [DOM](../level_05/dom.md) — The entire tree made out of these Nodes.
-- [`document.querySelector()`](../level_05/document_queryselector.md) — The primary method used to find Element Nodes in the tree.
-
+- [DOM (Document Object Model)](dom.md) — The entire tree made out of these Nodes.
+- [document.querySelector()](document_queryselector.md) — The primary method used to find Element Nodes in the tree.
 ---
 
 ## 8. Key Takeaways

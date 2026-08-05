@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Document](../level_01/document.md) — The parent container.
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The structure of variable documents.
 
@@ -199,8 +200,12 @@ Write the MongoDB query to find all companies where the nested contact email is 
 > **Explanation:** Dot-notation traverses arbitrary sub-document nesting levels.
 
 ## 7. Related Terms
+
 - [Array](array_type.md) — Ordered lists of embedded documents.
 - [`ObjectId` as a Manual Reference](objectid_reference.md) — The reference alternative.
+- [Dot Notation](../level_04/dot_notation.md) — Related concept: Dot Notation.
+- [Querying Embedded Documents](../level_04/querying_embedded.md) — Related concept: Querying Embedded Documents.
+- [One-to-One Relationship (Embedding)](../level_05/one_to_one.md) — Related concept: One-to-One Relationship (Embedding).
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<Link>` Component](../level_03/link.md) — The declarative alternative for navigation.
+- [`<Link>` Component](link.md) — The declarative alternative for navigation.
 - [Client Components (`"use client"`)](../level_01/client_components.md) — Required to use any React Hook.
-
 ---
 
 ## 2. Term Category
@@ -189,9 +188,9 @@ export default async function Page() {
 ---
 
 ## 7. Related Terms
-- [`<Link>` Component](../level_03/link.md) — The preferred way to navigate when no programmatic logic is required.
-- [`redirect()`](../level_04/redirect.md) — The Server Component equivalent of `useRouter`.
-
+- [`<Link>` Component](link.md) — The preferred way to navigate when no programmatic logic is required.
+- [`redirect()` & `permanentRedirect()`](../level_04/redirect.md) — The Server Component equivalent of `useRouter`.
+- [`usePathname` & `useSearchParams`](../level_04/use_pathname.md) — Related concept: `usePathname` & `useSearchParams`.
 ---
 
 ## 8. Key Takeaways

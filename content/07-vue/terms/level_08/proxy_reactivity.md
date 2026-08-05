@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Reactive State](../level_02/reactive_state.md) — The concept powered by Proxies.
-
 ---
 
 ## 2. Term Category
@@ -161,9 +160,8 @@ state.count++; // Mutate Proxy wrapper to trigger reactive reactivity traps
 
 ## 7. Related Terms
 - [`reactive`](../level_02/reactive.md) — The Vue API that directly returns a Proxy.
-- [Virtual DOM](../level_08/virtual_dom.md) — What gets triggered when the Proxy's `set` trap fires.
+- [Virtual DOM (Vue)](virtual_dom.md) — What gets triggered when the Proxy's `set` trap fires.
 - [`toRefs` / `toRef`](../level_02/to_refs.md) — The solution to preserve reactivity when destructuring proxies.
-
 ---
 
 ## 8. Key Takeaways

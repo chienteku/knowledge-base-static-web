@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Element vs. Tag](../level_01/element_vs_tag.md) — The difference between tag markers and complete elements.
-- [HTML](../level_01/html.md) — The standard markup language.
-
+- [Element vs. Tag](element_vs_tag.md) — The difference between tag markers and complete elements.
+- [HTML (HyperText Markup Language)](html.md) — The standard markup language.
 ---
 
 ## 2. Term Category
@@ -225,9 +224,14 @@ Void elements in action alongside standard container elements:
 > **Explanation:** Modern HTML5 parsers ignore optional trailing `/` slashes on void tags.
 
 ## 7. Related Terms
-- [Element vs. Tag](../level_01/element_vs_tag.md) — The fundamental components of markup.
-- [Block-level vs Inline Elements](../level_01/block_inline.md) — How display properties apply to void elements (e.g. `<img>` is inline, while `<hr>` behaves like a block).
-
+- [Element vs. Tag](element_vs_tag.md) — The fundamental components of markup.
+- [Block-level vs Inline Elements](block_inline.md) — How display properties apply to void elements (e.g. `<img>` is inline, while `<hr>` behaves like a block).
+- [Attribute](attribute.md) — Related concept: Attribute.
+- [`<!DOCTYPE html>`](doctype_html.md) — Related concept: `<!DOCTYPE html>`.
+- [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
+- [`<br>` & `<hr>`](../level_02/br_hr.md) — Related concept: `<br>` & `<hr>`.
+- [`<img>`](../level_03/img.md) — Related concept: `<img>`.
+- [`<source>` Element](../level_03/source.md) — Related concept: `<source>` Element.
 ---
 
 ## 8. Key Takeaways

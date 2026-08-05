@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [ECMAScript](../level_01/ecmascript.md) — The rulebook the engine is programmed to follow.
-- [Execution Context](../level_05/execution_context.md) — What the engine creates to run your code.
-
+- [Execution Context](execution_context.md) — What the engine creates to run your code.
 ---
 
 ## 2. Term Category

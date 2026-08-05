@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../level_01/selectors.md) — The baseline element and class selectors.
-- [Pseudo-classes (`:hover` & `:focus`)](hover_focus.md) — Understanding active selectors.
-
+- [Selectors (Element, Class, ID)](../level_01/selectors.md) — The baseline element and class selectors.
+- [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Understanding active selectors.
 ---
 
 ## 2. Term Category
@@ -279,9 +278,10 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 > **Explanation:** `:where()` simplifies CSS resets by applying 0 specificity.
 
 ## 7. Related Terms
-- [Pseudo-classes (`:hover` & `:focus`)](hover_focus.md) — Base active selector states.
-- [Pseudo-elements (`::before` & `::after`)](pseudo_elements.md) — Virtual node generators.
-
+- [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Base active selector states.
+- [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Virtual node generators.
+- [`accent-color`](../level_11/accent_color.md) — Related concept: `accent-color`.
+- [Combinator Selectors](../level_11/combinators.md) — Related concept: Combinator Selectors.
 ---
 
 ## 8. Key Takeaways

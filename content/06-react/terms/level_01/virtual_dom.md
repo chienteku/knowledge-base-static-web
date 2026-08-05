@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [JSX](../level_01/jsx.md) — The syntax that creates the Virtual DOM nodes.
-
+- [JSX (JavaScript XML)](jsx.md) — The syntax that creates the Virtual DOM nodes.
 ---
 
 ## 2. Term Category
@@ -170,11 +169,16 @@ If React compares these two trees, how many changes will it make to the real Bro
 > **Explanation:** Diffing Virtual DOM trees minimizes expensive real browser DOM write operations.
 
 ## 7. Related Terms
-- [Reconciliation](./reconciliation.md) — The diffing process comparing Virtual DOM states.
-- [The Fiber Architecture](./fiber_architecture.md) — The engine driving the rendering cycles.
+- [Reconciliation](reconciliation.md) — The diffing process comparing Virtual DOM states.
+- [The Fiber Architecture](fiber_architecture.md) — The engine driving the rendering cycles.
 - [Re-rendering](../level_02/re_rendering.md) — The process of creating the new Virtual DOM tree.
-- [JSX](../level_01/jsx.md) — The syntax used to write the blueprints.
-
+- [JSX (JavaScript XML)](jsx.md) — The syntax used to write the blueprints.
+- [Declarative Programming](declarative_programming.md) — Related concept: Declarative Programming.
+- [Conditional Rendering](../level_05/conditional_rendering.md) — Related concept: Conditional Rendering.
+- [Lists & Keys](../level_05/lists_and_keys.md) — Related concept: Lists & Keys.
+- [React DevTools](../level_08/react_devtools.md) — Related concept: React DevTools.
+- [Hydration](../level_10/hydration.md) — Related concept: Hydration.
+- [React Native](../level_11/react_native.md) — Related concept: React Native.
 ---
 
 ## 8. Key Takeaways

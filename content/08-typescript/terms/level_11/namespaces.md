@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [ES Modules in TypeScript](../level_11/modules.md) — The modern standard that has largely replaced Namespaces.
-
+- [ES Modules in TypeScript](modules.md) — The modern standard that has largely replaced Namespaces.
 ---
 
 ## 2. Term Category

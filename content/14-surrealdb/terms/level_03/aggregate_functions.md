@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`GROUP BY` / `GROUP ALL`](group_by.md) — The aggregation context.
 
 ---
@@ -194,7 +195,9 @@ Write the equivalent query in SurrealQL.
 > **Explanation:** `GROUP ALL` calculates aggregates across the entire table.
 
 ## 7. Related Terms
+
 - [`GROUP BY` / `GROUP ALL`](group_by.md) — The aggregation context.
+- [Math Functions (`math::*`)](../level_06/math_functions.md) — Related concept: Math Functions (`math::*`).
 
 ---
 

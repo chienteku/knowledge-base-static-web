@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The system that `Copy` types bypass.
-- [Move Semantics](../level_03/move_semantics.md) — The default behavior of assignment that invalidates old variables.
+
+- [Ownership](ownership.md) — The system that `Copy` types bypass.
+- [Move Semantics](move_semantics.md) — The default behavior of assignment that invalidates old variables.
 - [Scalar Types](../level_01/scalar_types.md) — The simple, stack-only data types that automatically implement `Copy`.
 
 ---
@@ -647,9 +648,12 @@ Implement a quadraphonic fixed-point audio frame system:
 
 ## 6. Related Terms
 
-- [`Clone` Trait](../level_03/clone_trait.md) — The explicit, deep-copy equivalent for Heap data. You must type `.clone()` to use it.
-- [Move Semantics](../level_03/move_semantics.md) — What happens to a variable if it *doesn't* have the `Copy` trait.
-- [Traits](../level_04/trait.md) — (Future reference) The overarching system used to define shared interfaces and behaviors like `Copy` and `Clone`.
+
+- [`Clone` Trait](clone_trait.md) — The explicit, deep-copy equivalent for Heap data. You must type `.clone()` to use it.
+- [Move Semantics](move_semantics.md) — What happens to a variable if it *doesn't* have the `Copy` trait.
+- [Trait](../level_04/trait.md) — (Future reference) The overarching system used to define shared interfaces and behaviors like `Copy` and `Clone`.
+- [`Drop` Trait](drop_trait.md) — Related concept: `Drop` Trait.
+- [Ownership](ownership.md) — Related concept: Ownership.
 
 ---
 

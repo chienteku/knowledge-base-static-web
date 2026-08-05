@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [CSS](../level_01/css.md) — Selectors are the foundation of writing CSS.
-- [id Attribute](../../../01-html/terms/level_07/id.md) — The HTML attribute targeted by ID selectors.
-- [class Attribute](../../../01-html/terms/level_07/class.md) — The HTML attribute targeted by Class selectors.
-
+- [CSS (Cascading Style Sheets)](css.md) — Selectors are the foundation of writing CSS.
+- id — The HTML attribute targeted by ID selectors.
+- class — The HTML attribute targeted by Class selectors.
 ---
 
 ## 2. Term Category
@@ -205,10 +204,12 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 > **Explanation:** Chaining class selectors without spaces (`.btn.primary`) targets elements possessing all listed classes.
 
 ## 7. Related Terms
-- [Specificity](../level_01/specificity.md) — What happens when an Element selector and a Class selector both try to style the exact same element?
-- [Ruleset](../level_01/ruleset.md) — The curly braces and properties that come immediately *after* the selector.
-- [Inheritance](../level_01/inheritance.md) — How properties fall back to parent element style selectors.
-
+- [Specificity](specificity.md) — What happens when an Element selector and a Class selector both try to style the exact same element?
+- [Ruleset (Declaration, Property, Value)](ruleset.md) — The curly braces and properties that come immediately *after* the selector.
+- [Inheritance](inheritance.md) — How properties fall back to parent element style selectors.
+- [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
+- [Combinator Selectors](../level_11/combinators.md) — Selector combinators.
+- [Attribute Selectors](../level_11/attribute_selectors.md) — Attribute selectors.
 ---
 
 ## 8. Key Takeaways

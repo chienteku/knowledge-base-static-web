@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Client-Server Model](../level_01/client_server_model.md) — The API is the bridge between these two entities.
-
 ---
 
 ## 2. Term Category
@@ -308,9 +307,11 @@ res.json({ user_name: user.name }); // ❌ Breaks clients expecting { name: '...
 ---
 
 ## 7. Related Terms
-- [REST](../level_03/rest.md) — The most popular architectural style for building Web APIs.
-- [JSON](../level_01/json.md) — The food the waiter carries back from the kitchen.
-
+- [REST (Representational State Transfer)](rest.md) — The most popular architectural style for building Web APIs.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The food the waiter carries back from the kitchen.
+- [Client-Server Model](../level_01/client_server_model.md) — Related concept: Client-Server Model.
+- [GraphQL (The REST Alternative)](../level_07/graphql.md) — GraphQL APIs.
+- [gRPC (Remote Procedure Call)](../level_10/grpc.md) — gRPC APIs.
 ---
 
 ## 8. Key Takeaways

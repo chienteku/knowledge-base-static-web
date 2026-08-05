@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Sharding (Horizontal Scaling)](sharding.md) — The parent partitioning concept.
+
+- [Sharding (Horizontal Scaling)](sharding.md) — Sharding architecture.
 
 ---
 
@@ -195,9 +196,11 @@ Evaluate these three candidate fields, and state which is the **Best** choice, a
 > **Explanation:** Compound shard keys support multi-tenant query targeting and high cardinality.
 
 ## 7. Related Terms
+
 - [Sharding (Horizontal Scaling)](sharding.md) — The parent partitioning concept.
 - [Targeted vs. Scatter-Gather Queries](targeted_vs_scatter.md) — Query routing modes.
 - [Hashed vs. Ranged Sharding](hashed_vs_ranged.md) — Distribution strategies.
+- [Chunks & Balancing](chunks_balancing.md) — Related concept: Chunks & Balancing.
 
 ---
 

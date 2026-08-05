@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 2. Term Category
@@ -193,9 +192,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`let`](../level_01/let.md) — The modern, block-scoped way to declare variables.
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [let](let.md) — The modern, block-scoped way to declare variables.
+- [Variable](variable.md) — A named container for storing data values.
+- [Block Scope](../level_03/block_scope.md) — Related concept: Block Scope.
+- [Hoisting](../level_03/hoisting.md) — Related concept: Hoisting.
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Trait](../level_04/trait.md) — The contract where these types are declared.
-- [Generics (`<T>`)](../level_04/generics.md) — The feature that Associated Types are an alternative to.
-- [Iterator Trait](../level_02/iterator.md) — The most famous trait in Rust that relies on this feature.
+
+- [Trait](trait.md) — The contract where these types are declared.
+- [Generics (`<T>`)](generics.md) — The feature that Associated Types are an alternative to.
+- [Iterator](../level_02/iterator.md) — The most famous trait in Rust that relies on this feature.
 
 ---
 
@@ -730,8 +731,12 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Generics (`<T>`)](../level_04/generics.md) — The feature that Associated Types are designed to replace in specific scenarios.
-- [Iterator Trait](../level_02/iterator.md) — The most famous trait in Rust that relies heavily on Associated Types.
+
+- [Generics (`<T>`)](generics.md) — The feature that Associated Types are designed to replace in specific scenarios.
+- [Iterator](../level_02/iterator.md) — The most famous trait in Rust that relies heavily on Associated Types.
+- [Associated Constants](associated_constants.md) — Related concept: Associated Constants.
+- [GATs (Generic Associated Types)](../level_14/gats.md) — Related concept: GATs (Generic Associated Types).
+- [Operator Overloading](../level_14/operator_overloading.md) — Related concept: Operator Overloading.
 
 ---
 

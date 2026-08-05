@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Static Site Generation (SSG)](../level_08/ssg.md) — Another layer of this cache.
-
+- [Static Site Generation (SSG)](ssg.md) — Another layer of this cache.
 ---
 
 ## 2. Term Category
@@ -246,9 +245,10 @@ export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for ent
 ---
 
 ## 7. Related Terms
-- [On-Demand Revalidation](../level_06/on_demand_revalidation.md) — The primary tool for clearing Layers 2, 3, and 4.
-- [Static Site Generation (SSG)](../level_08/ssg.md) — Essentially Layer 3.
-
+- [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — The primary tool for clearing Layers 2, 3, and 4.
+- [Static Site Generation (SSG)](ssg.md) — Essentially Layer 3.
+- [React Server Component Payload (RSC Payload)](rsc_payload.md) — Related concept: React Server Component Payload (RSC Payload).
+- [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — One layer of this cache.
 ---
 
 ## 8. Key Takeaways

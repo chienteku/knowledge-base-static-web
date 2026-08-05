@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`while`](../level_02/while.md) — The conditional loop, which the `for` loop is designed to replace in 90% of use cases.
+
+- [`while`](while.md) — The conditional loop, which the `for` loop is designed to replace in 90% of use cases.
 - [Variable](../level_01/variable.md) — The `for` loop automatically binds the current item to a variable for you.
 
 ---
@@ -535,8 +536,11 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Iterator](../level_02/iterator.md) — The underlying mechanic that powers the `in` part of a `for` loop (how it knows how to get the "next" item).
-- [`while`](../level_02/while.md) — The conditional loop, which is much more prone to off-by-one errors than `for`.
+
+- [Iterator](iterator.md) — The underlying mechanic that powers the `in` part of a `for` loop (how it knows how to get the "next" item).
+- [`while`](while.md) — The conditional loop, which is much more prone to off-by-one errors than `for`.
+- [`loop`](loop.md) — Related concept: `loop`.
+- [`IntoIterator`](../level_06/intoiterator.md) — Related concept: `IntoIterator`.
 
 ---
 

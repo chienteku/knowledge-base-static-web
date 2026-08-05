@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP / HTTPS](../level_01/http_https.md) — Methods are the very first word in every HTTP request.
-- [URL / URI](../level_01/url_uri.md) — You use a Method to tell the server *what* to do with the URL.
-
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — You use a Method to tell the server *what* to do with the URL.
 ---
 
 ## 2. Term Category
@@ -179,7 +178,9 @@ PATCH /users/5 HTTP/1.1
 ## 7. Related Terms
 - [CRUD Operations](../level_03/crud.md) — The programming concept that HTTP Methods map to.
 - [Idempotency](../level_06/idempotency.md) — The mathematical concept explaining why `PUT` and `POST` are treated differently in network retry logic.
-
+- [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
+- [Idempotent vs Safe Methods](idempotent_vs_safe_methods.md) — Safe and idempotent HTTP methods.
+- [HTTP Status Codes](status_codes.md) — HTTP status codes.
 ---
 
 ## 8. Key Takeaways

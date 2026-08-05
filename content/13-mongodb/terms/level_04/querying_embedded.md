@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The nested structures queried.
 - [Dot Notation](dot_notation.md) — The path syntax used to target nested fields.
 
@@ -196,6 +197,7 @@ Refactor this query using dot notation to make it robust.
 > **Explanation:** Dot-notation updates specific sub-document fields preserving other properties.
 
 ## 7. Related Terms
+
 - [Dot Notation](dot_notation.md) — The path syntax.
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The data structure.
 

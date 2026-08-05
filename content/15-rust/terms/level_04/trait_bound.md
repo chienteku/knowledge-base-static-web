@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Generics (`<T>`)](../level_04/generics.md) — The placeholder types we want to constrain.
-- [Trait](../level_04/trait.md) — The certificates of ability we use as the constraints.
+
+- [Generics (`<T>`)](generics.md) — The placeholder types we want to constrain.
+- [Trait](trait.md) — The certificates of ability we use as the constraints.
 
 ---
 
@@ -569,8 +570,14 @@ You are implementing an enterprise payload validation and transformation engine.
 
 ## 6. Related Terms
 
-- [`where` Clause](../level_04/where_clause.md) — A cleaner syntax for writing Trait Bounds when you have multiple generics and the `<T: Display + Clone>` line gets too long and messy to read.
-- [`impl Trait`](../level_04/impl_trait.md) — Syntactic sugar (`fn foo(item: impl Display)`) that does the exact same thing as a Trait Bound under the hood, but is sometimes easier to read.
+
+- [`where` Clause](where_clause.md) — A cleaner syntax for writing Trait Bounds when you have multiple generics and the `<T: Display + Clone>` line gets too long and messy to read.
+- [`impl Trait`](impl_trait.md) — Syntactic sugar (`fn foo(item: impl Display)`) that does the exact same thing as a Trait Bound under the hood, but is sometimes easier to read.
+- [Generics (`<T>`)](generics.md) — Related concept: Generics (`<T>`).
+- [Trait](trait.md) — Related concept: Trait.
+- [Higher-Ranked Trait Bounds (HRTB)](../level_05/higher_ranked_trait_bounds.md) — Related concept: Higher-Ranked Trait Bounds (HRTB).
+- [`Fn` / `FnMut` / `FnOnce`](../level_06/fn_traits.md) — Related concept: `Fn` / `FnMut` / `FnOnce`.
+- [Dependency Injection](../level_18/dependency_injection.md) — Related concept: Dependency Injection.
 
 ---
 

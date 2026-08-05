@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Column (Field / Attribute)](../level_01/column.md) — Understanding table structures.
-
 ---
 
 ## 2. Term Category
@@ -181,7 +180,16 @@ balance NUMERIC(12, 2) -- Exact fixed-point decimal precision
 ## 7. Related Terms
 - [`INTEGER` / `BIGINT` / `SMALLINT`](integer_types.md) — Numeric integer types.
 - [`TEXT` / `VARCHAR` / `CHAR`](text_types.md) — Character text types.
-
+- [`BOOLEAN`](boolean.md) — Related concept: `BOOLEAN`.
+- [`CHECK` Constraint](check_constraint.md) — Related concept: `CHECK` Constraint.
+- [`DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`](date_time_types.md) — Related concept: `DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`.
+- [`DEFAULT` Value](default_value.md) — Related concept: `DEFAULT` Value.
+- [`NULL`](null.md) — Related concept: `NULL`.
+- [`NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`](numeric_types.md) — Related concept: `NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`.
+- [Type Casting (`CAST` / `::`)](../level_04/type_casting.md) — Related concept: Type Casting (`CAST` / `::`).
+- [`ENUM` Type](../level_06/enum_type.md) — Related concept: `ENUM` Type.
+- [`JSON` / `JSONB` Type](../level_06/json_jsonb.md) — Related concept: `JSON` / `JSONB` Type.
+- [`UUID` Type](../level_06/uuid_type.md) — Related concept: `UUID` Type.
 ---
 
 ## 8. Key Takeaways

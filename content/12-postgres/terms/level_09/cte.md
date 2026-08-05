@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The query syntax encapsulated.
-
 ---
 
 ## 2. Term Category
@@ -222,7 +221,7 @@ Rewrite this query using a clean `WITH` CTE block named `product_averages`.
 ## 7. Related Terms
 - [Recursive CTE](recursive_cte.md) — Self-referencing loops.
 - [View](view.md) — Persistent saved database queries.
-
+- [`LATERAL` Join](lateral_join.md) — Related concept: `LATERAL` Join.
 ---
 
 ## 8. Key Takeaways

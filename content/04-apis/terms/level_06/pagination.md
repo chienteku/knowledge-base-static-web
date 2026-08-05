@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Query Parameters](../level_02/query_params.md) — Pagination is almost exclusively handled via query parameters.
-
+- [Query Parameters & Path Variables](../level_02/query_params.md) — Pagination is almost exclusively handled via query parameters.
 ---
 
 ## 2. Term Category
@@ -163,9 +162,10 @@ SELECT * FROM posts WHERE id < 100000 ORDER BY id DESC LIMIT 20; -- Uses index l
 ---
 
 ## 7. Related Terms
-- [Query Parameters](../level_02/query_params.md) — Where the `limit` and `offset` variables are placed.
-- [REST](../level_03/rest.md) — Designing standard URLs.
-
+- [Query Parameters & Path Variables](../level_02/query_params.md) — Where the `limit` and `offset` variables are placed.
+- [REST (Representational State Transfer)](../level_03/rest.md) — Designing standard URLs.
+- [Latency & Bandwidth](../level_01/latency_bandwidth.md) — Related concept: Latency & Bandwidth.
+- [Over-fetching vs Under-fetching](../level_07/overfetching_underfetching.md) — Related concept: Over-fetching vs Under-fetching.
 ---
 
 ## 8. Key Takeaways

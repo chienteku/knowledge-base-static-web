@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [SELECT](../level_03/select.md) — The query statement.
-- [Array Type](../level_02/array_type.md) — The target container type.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
+- [`array`](../level_02/array_type.md) — The target container type.
 
 ---
 
@@ -180,8 +181,10 @@ Write the SurrealQL query to:
 > **Explanation:** Combining `SPLIT` and `GROUP BY` aggregates tag frequencies across records.
 
 ## 7. Related Terms
-- [SELECT](../level_03/select.md) — The query statement.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
 - [Array Functions (`array::*`)](array_functions.md) — Manipulating arrays.
+- [`FOR` Expression](for_expression.md) — Related concept: `FOR` Expression.
 
 ---
 

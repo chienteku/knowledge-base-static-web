@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Multi-Document Transaction](multi_document_transaction.md) — The parent transaction concept.
 - [Snapshot Isolation](snapshot_isolation.md) — The concurrency conflict context.
 
@@ -235,6 +236,7 @@ State how to fix the code.
 > **Explanation:** Operations MUST pass `{ session }` to be bound within transaction boundaries.
 
 ## 7. Related Terms
+
 - [Multi-Document Transaction](multi_document_transaction.md) — The parent transaction concept.
 - [Causal Consistency](causal_consistency.md) — Session-level read guarantees.
 

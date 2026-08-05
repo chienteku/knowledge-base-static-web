@@ -9,7 +9,6 @@
 - [`INSERT INTO`](insert_into.md) — Sourcing new rows.
 - [`UPDATE`](update.md) — Modifying rows.
 - [`DELETE`](delete.md) — Removing rows.
-
 ---
 
 ## 2. Term Category
@@ -208,7 +207,6 @@ const res = await client.query('UPDATE users SET active = true RETURNING *'); co
 - [`INSERT INTO`](insert_into.md) — The parent write statement.
 - [`UPDATE`](update.md) — The parent edit statement.
 - [`DELETE`](delete.md) — The parent delete statement.
-
 ---
 
 ## 8. Key Takeaways

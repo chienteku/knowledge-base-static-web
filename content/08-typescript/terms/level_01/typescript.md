@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- JavaScript — The foundation that TypeScript is built upon.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -141,9 +140,9 @@ function greet(name) {
 > **Explanation:** TypeScript is a syntactic superset of JavaScript.
 
 ## 7. Related Terms
-- [The TypeScript Compiler (tsc)](../level_01/tsc.md) — The engine that strips the types away.
-- [Static Typing vs Dynamic Typing](../level_01/static_dynamic_typing.md) — The fundamental difference between TS and JS.
-
+- [The TypeScript Compiler (`tsc`)](tsc.md) — The engine that strips the types away.
+- [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — The fundamental difference between TS and JS.
+- [Structural Typing / Duck Typing](structural_typing.md) — Structural type system.
 ---
 
 ## 8. Key Takeaways

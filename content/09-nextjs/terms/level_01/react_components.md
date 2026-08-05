@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Next.js Overview](../level_01/nextjs.md) — The framework that uses React components as its primary building block.
-
+- [Next.js Overview](nextjs.md) — The framework that uses React components as its primary building block.
 ---
 
 ## 2. Term Category
@@ -220,9 +219,11 @@ export default function Button({ label }: ButtonProps) {
 ---
 
 ## 7. Related Terms
-- [React Server Components (RSC)](../level_01/rsc.md) — Components executing exclusively on the server.
-- [Client Components](../level_01/client_components.md) — Interactive components executed on both server and client.
-
+- [React Server Components (RSC)](rsc.md) — Components executing exclusively on the server.
+- [Client Components (`"use client"`)](client_components.md) — Interactive components executed on both server and client.
+- [React Hooks](react_hooks.md) — Related concept: React Hooks.
+- [React Children Prop](../level_02/children_prop.md) — Related concept: React Children Prop.
+- [React Error Boundaries](../level_02/error_boundaries.md) — Related concept: React Error Boundaries.
 ---
 
 ## 8. Key Takeaways

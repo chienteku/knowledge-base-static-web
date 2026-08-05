@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Collection](../level_01/collection.md) — The collection where indexes are built.
-- [Index (Concept - PostgreSQL)](../../../12-postgres/terms/level_07/index_concept.md) — Relational index conceptual foundations.
+- [Index (Concept)](../../../12-postgres/terms/level_07/index_concept.md) — Relational index conceptual foundations.
 
 ---
 
@@ -217,8 +218,13 @@ Index high-cardinality unique fields or compound ESR fields
 > **Explanation:** Active index working sets are kept in RAM for fast key lookups.
 
 ## 7. Related Terms
+
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The search methods.
+- [Index Selectivity & Cardinality](index_selectivity.md) — Related concept: Index Selectivity & Cardinality.
+- [Single-Field Index](single_field_index.md) — Related concept: Single-Field Index.
+- [Compound Index](compound_index.md) — Compound indexes.
+- [`explain()` Method](explain.md) — Explain execution plan.
 
 ---
 

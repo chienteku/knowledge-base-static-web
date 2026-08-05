@@ -7,15 +7,16 @@
 
 ## 1. Prerequisites
 
+
 - [Borrow Checker](../level_03/borrow_checker.md) — The system NLL is the current operating model of.
-- [Lifetime (`'a`)](../level_05/lifetime.md) — What NLL changed the precise meaning of.
+- [Lifetime (`'a`)](lifetime.md) — What NLL changed the precise meaning of.
 - [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The rule NLL's flexibility is most noticeable around.
 
 ---
 
 ## 2. Term Category
 
-**Borrow-Checker Model (the "ends when you're done" rule)**: Before NLL, a borrow was considered alive for its **entire enclosing block**, textually, even after its last use. NLL changed this: a borrow is now considered to end at the last point in the control-flow graph where it's actually used, which lets the borrow checker accept far more obviously-correct code without requiring artificial restructuring.
+**Borrow-Checker Analysis Model**: Non-Lexical Lifetimes (NLL) is the borrow checking analysis engine introduced in Rust 2018 (and stabilized for all editions in 2021). Instead of tying a borrow's validity duration to textual block scopes (`{ ... }`), NLL analyzes the program's **Control Flow Graph (CFG)** on Mid-level Intermediate Representation (MIR) nodes. A borrow's effective lifetime ends at the exact location of its **last actual point of use**.
 
 ---
 
@@ -23,49 +24,65 @@
 
 ### (1) Design Motivation — "Why did we design this?"
 
-Early Rust (pre-2018 edition, roughly) tied a borrow's lifetime to **lexical scope** — the borrow lasted until the closing `}` of the block it was created in, regardless of whether the code actually used it again after some earlier point. This produced maddening false-positive errors: `let r = &mut vec; use(r); let r2 = &mut vec;` would fail to compile even though `r` was never touched again after `use(r)`, purely because `r`'s lexical scope technically extended to the end of the block. NLL fixed this by making the borrow checker analyze the actual **control-flow graph** instead of textual scope: a borrow's *effective* lifetime now ends at its last real use, computed from how the code actually flows, not from where the curly braces happen to sit. This single change eliminated a huge fraction of the "the borrow checker is fighting me over code that's obviously fine" complaints from early Rust.
+In early Rust (pre-2018 edition), the borrow checker evaluated lifetimes using **lexical scoping**. A borrow was considered active from its declaration point until the closing brace `}` of its enclosing block, regardless of whether the borrowed reference was used after an early statement.
 
-### (2) Reality Metaphor
+This produced frustrating false-positive compiler errors for clean, valid code:
 
-Imagine a library that tracks whether a book is "checked out" based on when you're actually reading it, versus a stricter library that considers a book checked out for your entire visit no matter how briefly you glanced at it.
-
-- **Lexical lifetimes (the old model)**: The library considers any book you touched checked out for your *entire visit*, even if you set it back down and never opened it again — so if a friend wants to borrow that exact book five minutes later, while you're still browsing the same room, they're incorrectly told it's unavailable.
-- **NLL (the current model)**: The library's smart tracking system notices the exact moment you're truly done with a book (**your last actual use**) and marks it available again immediately — your friend can borrow it the moment you're finished, without needing to wait for you to leave the room entirely.
-
-### (3) Rust Code Examples
-
-#### Short Snippet (Code That Only Compiles Thanks to NLL)
 ```rust
+// PRE-2018 RUST (Lexical Borrow Checker False Positive)
 fn main() {
     let mut data = vec![1, 2, 3];
+    let r = &data[0]; // Immutable borrow begins
+    println!("{r}");  // LAST USE of `r`
+    
+    data.push(4);     // ❌ Pre-2018 Error: `data` borrowed as immutable until end of main!
+} // `r`'s lexical scope ends here
+```
 
-    let r = &data;          // Immutable borrow starts.
-    println!("{r:?}");      // Last use of `r` — its borrow ends HERE, not at the closing brace.
+In the snippet above, `r` is never accessed after `println!`. Under lexical rules, the borrow persisted until `main` exited, blocking `data.push(4)`. Developers had to introduce artificial inner blocks `{ let r = ...; }` to force early drop.
 
-    data.push(4);           // A mutable borrow — legal under NLL, since `r`'s borrow already ended.
-    println!("{data:?}");   // [1, 2, 3, 4]
+NLL eliminated this friction by tracking borrows across MIR control flow points. The borrow for `r` automatically ends immediately after `println!("{r}")`, allowing `data.push(4)` to compile without artificial scoping hacks.
+
+### (2) Deep Dive — How NLL Operates on MIR
+
+The compiler converts high-level Rust code into Mid-level Intermediate Representation (MIR), a Control Flow Graph consisting of basic blocks and statements:
+
+1. **Point-Based Lifetimes**: Lifetimes are represented as sets of MIR statement locations rather than block spans.
+2. **Liveness Analysis**: At every MIR location, the borrow checker calculates whether a variable or reference will be read or written in any execution path reachable from that point.
+3. **Early Expiration**: Once a borrow is no longer reachable by future reads, the borrow checker releases the loan, permitting new shared (`&T`) or exclusive (`&mut T`) borrows of the underlying data.
+
+### (3) Reality Metaphor
+
+- **Lexical Lifetimes (Old Model)**: A valet parking service that locks your car keys until the hotel checkout time at 11:00 AM tomorrow, even if you paid for 1 hour of parking and left the hotel at 2:00 PM today.
+- **Non-Lexical Lifetimes (NLL)**: A smart parking meter equipped with motion sensors. The moment your car pulls out of the parking spot (**last actual use**), the meter instantly releases the spot for the next driver.
+
+### (4) Rust Code Examples
+
+#### Short Snippet (NLL Early Borrow Termination)
+```rust
+fn main() {
+    let mut scores = vec![10, 20, 30];
+    
+    let first = scores.first();
+    println!("First score: {:?}", first); // Borrow ends HERE!
+    
+    scores.push(40); // Legal under NLL!
+    assert_eq!(scores.len(), 4);
 }
 ```
 
-#### Fuller Example (The Classic Pre-NLL Rejection)
+#### HashMap Match & Insert Pattern (Classic Pre-NLL Fix)
 ```rust
 use std::collections::HashMap;
 
-fn get_or_insert(map: &mut HashMap<&str, i32>, key: &'static str) -> i32 {
-    // Pre-NLL, this pattern often required restructuring to satisfy the borrow checker,
-    // because `map.get(key)`'s borrow was considered to extend to the end of the block.
-    if let Some(&value) = map.get(key) {
-        return value; // Immutable borrow's LAST use is right here.
+fn get_or_insert_default<'a>(map: &'a mut HashMap<String, String>, key: &str) -> &'a str {
+    // Under NLL, `map.get(key)`'s borrow ends at the `if let` condition check if None!
+    if let Some(val) = map.get(key) {
+        return val;
     }
-    // NLL correctly recognizes the immutable borrow above already ended,
-    // so this mutable borrow is accepted without any restructuring needed.
-    map.insert(key, 0);
-    0
-}
-
-fn main() {
-    let mut scores = HashMap::new();
-    println!("{}", get_or_insert(&mut scores, "alice")); // 0
+    
+    map.insert(key.to_string(), "default_val".to_string());
+    map.get(key).unwrap()
 }
 ```
 
@@ -73,157 +90,229 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Non Lexical Lifetimes Scoping and Lifecycle Rules
+### Mistake 1: Assuming NLL Allows Overlapping Active Mutability within the Same Evaluation Statement
 
-**The mistake:** Assuming Non Lexical Lifetimes instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Assuming NLL allows mutating a collection while simultaneously accessing a reference derived from it in the same statement.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** NLL terminates borrows *after* their last point of use. If a reference is passed into a function call or expression alongside a call that mutates the collection, both borrows overlap in the statement evaluation span, causing `E0502`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("non_lexical_lifetimes_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+let mut vec = vec![1, 2, 3];
+// vec.push(vec[0]); // ❌ Error E0502: cannot borrow `vec` as mutable because it is also borrowed as immutable
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("non_lexical_lifetimes_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+let mut vec = vec![1, 2, 3];
+let val = vec[0]; // Copy or store value first!
+vec.push(val);    // First borrow ended; push succeeds.
 ```
 
-### Mistake 2: Mutating Non Lexical Lifetimes State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Expecting NLL to Infer Lifetime Bounds Across Function Signature Boundaries
 
-**The mistake:** Attempting to mutate data associated with Non Lexical Lifetimes through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Expecting NLL analysis to automatically fix invalid function signature lifetime annotations.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** NLL functions purely within local function bodies. Interface signatures across function boundaries are enforced statically based on explicit or elided lifetime parameters.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
+fn get_dangling<'a>() -> &'a str {
+    let s = String::from("local");
+    &s // ❌ Error E0515: NLL cannot extend local stack frame lifetime!
 }
 ```
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+### Mistake 3: Retaining Borrowed References Across Async Yield Points (`.await`)
 
-### Mistake 3: Concurrent Access to Non Lexical Lifetimes Across Threads Without `Send` / `Sync` Guards
+**The mistake:** Expecting NLL to drop a borrow before an `.await` call when the reference is referenced after `.await`.
 
-**The mistake:** Sharing non-thread-safe Non Lexical Lifetimes instances across OS threads via `std::thread::spawn`.
+**Why it is wrong:** If a reference is held across an `.await` yield point, the state machine constructed by the async runtime must store the reference in the Future generator state, requiring it to remain valid across thread yield boundaries.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
-### Exercise 1: Explain Why This Compiles Under NLL
+### Exercise 1: High-Throughput Cache Lookup & Insertion (`get_or_insert_with`)
 
-**Problem:** Explain, using NLL's "ends at last use" rule, why this function compiles:
-```rust
-fn first_word(s: &mut String) -> &str {
-    let bytes = s.as_bytes();
-    for (i, &b) in bytes.iter().enumerate() {
-        if b == b' ' {
-            return &s[0..i]; // A NEW immutable borrow of `s`, after `bytes`'s last use.
-        }
-    }
-    s.push_str("!"); // A mutable borrow — would conflict with `bytes` under lexical scoping!
-    s
-}
-```
+**Scenario:** You are building an in-memory session cache `SessionCache`. Implement `get_or_create(&mut self, token: &str)` that performs a map lookup, returns a reference if present, or inserts a new session if missing, leveraging NLL to avoid double-lookup overhead.
+
+**Requirements:**
+1. Check `map.get_mut(token)`.
+2. Return mutable reference if present.
+3. If missing, insert new session and return reference.
+4. Write unit tests.
 
 > [!check]- Answer
-> `bytes` (an immutable borrow of `s`) is last used inside the `for` loop's condition check (`bytes.iter()`). Under NLL, that borrow's effective lifetime ends there — it doesn't extend all the way to the function's closing brace just because it was declared near the top. By the time `s.push_str("!")` (a mutable borrow) executes, `bytes`'s borrow has already conceptually ended in the control-flow graph, so there's no conflict. Under the old, purely lexical-scope model, `bytes`'s borrow would have been considered alive for the entire function body, and this exact function would have failed to compile.
-
----
-
-### Exercise 2: Early Borrow Termination via NLL
-
-**Problem:** Create an immutable borrow `r = &mut val`, modify `*r`, print it, and then mutate `val` directly on the next line.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Modified val: 100
-> ```
-> ```rust
-> fn main() {
->     let mut val = 42;
->     let r = &mut val;
->     *r = 100;
->     println!("Read via r: {}", r); // Last use of r
->     val = 200; // Allowed by NLL because r is never used after line above
->     println!("Modified val: {}", val);
-> }
-> ```
 >
-> **Explanation:** NLL ends reference lifetimes immediately after their final point of use rather than at scope end.
-
----
-
-### Exercise 3: NLL in HashMap Entry Iteration
-
-**Problem:** Demonstrate looking up a key in `HashMap`, using the reference, and modifying the map on subsequent lines without scope block nesting.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Updated map successfully
-> ```
+> #### Implementation
+>
 > ```rust
 > use std::collections::HashMap;
-> fn main() {
->     let mut map = HashMap::new();
->     map.insert("key", 1);
->     if let Some(val) = map.get("key") {
->         println!("Val: {}", val);
+> 
+> #[derive(Debug, PartialEq)]
+> pub struct UserSession {
+>     pub user_id: u64,
+>     pub active: bool,
+> }
+> 
+> pub struct SessionCache {
+>     sessions: HashMap<String, UserSession>,
+> }
+> 
+> impl SessionCache {
+>     pub fn new() -> Self {
+>         Self { sessions: HashMap::new() }
 >     }
->     map.insert("key", 2);
->     println!("Updated map successfully");
+> 
+>     pub fn get_or_create(&mut self, token: &str, user_id: u64) -> &mut UserSession {
+>         // NLL permits this: if `map.get_mut` returns None, the borrow ends!
+>         if self.sessions.contains_key(token) {
+>             return self.sessions.get_mut(token).unwrap();
+>         }
+>         
+>         self.sessions.insert(token.to_string(), UserSession { user_id, active: true });
+>         self.sessions.get_mut(token).unwrap()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_cache_nll() {
+>         let mut cache = SessionCache::new();
+>         let s1 = cache.get_or_create("token_abc", 42);
+>         assert_eq!(s1.user_id, 42);
+>         
+>         s1.active = false;
+>         let s2 = cache.get_or_create("token_abc", 42);
+>         assert_eq!(s2.active, false);
+>     }
 > }
 > ```
 >
-> **Explanation:** NLL permits map mutation immediately after `if let` pattern lookup references finish execution.
+> #### Technical Explanation
+>
+> 1. In `get_or_create`, checking `contains_key` or `get_mut` creates a temporary borrow.
+> 2. Under NLL, when `if` condition evaluation finishes or returns, the initial borrow ends immediately.
+> 3. Subsequent `insert` operations proceed safely without borrow checker conflict.
+
+---
+
+### Exercise 2: Zero-Copy String Buffer Replacer & In-Place Sanitizer
+
+**Scenario:** Implement an in-place string sanitizer `sanitize_token(buffer: &mut String)` that inspects the buffer using a slice borrow, and if invalid characters are detected, clears and repopulates the buffer without allocating a secondary buffer.
+
+**Requirements:**
+1. Inspect `buffer.as_str()` for non-alphanumeric characters.
+2. If clean, return early.
+3. If dirty, clear `buffer` and retain only alphanumeric characters.
+4. Write unit tests.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> pub fn sanitize_token(buffer: &mut String) {
+>     let needs_clean = buffer.chars().any(|c| !c.is_alphanumeric());
+>     
+>     // `buffer.chars()` borrow ends right HERE after `any(...)` completes!
+>     if needs_clean {
+>         let cleaned: String = buffer.chars().filter(|c| c.is_alphanumeric()).collect();
+>         buffer.clear();
+>         buffer.push_str(&cleaned);
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_sanitize_token() {
+>         let mut token = String::from("usr_123#sec!");
+>         sanitize_token(&mut token);
+>         assert_eq!(token, "usr123sec");
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `buffer.chars()` creates an immutable borrow of `buffer`.
+> 2. Under NLL, the borrow ends immediately after `.any(...)` returns its boolean result.
+> 3. `buffer.clear()` and `buffer.push_str()` acquire exclusive mutable access to `buffer` without compiler error.
+
+---
+
+### Exercise 3: Zero-Copy Token Stream Scanner with Fallback Mutation
+
+**Scenario:** Build a stream token scanner `scan_next<'a>(input: &mut &'a str) -> Option<&'a str>` that pops the next space-delimited token from a string slice reference, updating `input` to point to the remainder.
+
+**Requirements:**
+1. Strip leading spaces.
+2. Extract token slice up to whitespace.
+3. Update `*input` to remaining slice.
+4. Return extracted token.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> pub fn scan_next<'a>(input: &mut &'a str) -> Option<&'a str> {
+>     *input = input.trim_start();
+>     if input.is_empty() {
+>         return None;
+>     }
+>     
+>     let end = input.find(char::is_whitespace).unwrap_or(input.len());
+>     let token = &input[..end];
+>     *input = &input[end..];
+>     Some(token)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_scan_next_tokens() {
+>         let mut stream = "   alpha   beta  gamma  ";
+>         let t1 = scan_next(&mut stream);
+>         let t2 = scan_next(&mut stream);
+>         
+>         assert_eq!(t1, Some("alpha"));
+>         assert_eq!(t2, Some("beta"));
+>         assert_eq!(stream.trim(), "gamma");
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `input.find(...)` borrows from `input`.
+> 2. NLL ends the inspection borrow before `*input = &input[end..]` executes.
+> 3. Tightly updates slice cursor while returning borrowed tokens tied to `'a`.
 
 ---
 
 ## 6. Related Terms
 
+
 - [Borrow Checker](../level_03/borrow_checker.md) — The system NLL is the modern operating model for.
-- [Lifetime (`'a`)](../level_05/lifetime.md) — What NLL redefines the practical *ending point* of.
+- [Lifetime (`'a`)](lifetime.md) — What NLL redefines the practical *ending point* of.
 - [Reborrowing & Two-Phase Borrows](../level_03/reborrowing.md) — A closely related refinement that also loosened overly strict early borrow-checker behavior.
+- [Polonius](../level_19/polonius.md) — Related concept: Polonius.
 
 ---
 
 ## 7. Key Takeaways
 
-- NLL (stabilized in the 2018 edition) redefined a borrow's effective lifetime to end at its **last actual use** in the control-flow graph, not at the end of its lexical (`{ }`) scope.
-- This eliminated a large class of "obviously correct" code that the older, purely-scope-based borrow checker used to reject.
-- NLL does **not** relax the core aliasing rules — it only changes *when* a borrow is considered to have ended.
+- NLL redefined borrow lifetimes to end at their **last actual point of use** in the Control Flow Graph.
+- Eliminates artificial block scoping hacks (`{ ... }`) needed in pre-2018 Rust.
+- NLL operates locally inside function bodies on MIR statements.
+- Core borrow rules (aliasing XOR mutability) remain fully enforced; only borrow duration estimation is refined.

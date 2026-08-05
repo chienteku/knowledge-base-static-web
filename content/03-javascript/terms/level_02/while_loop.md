@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Boolean](../level_01/boolean.md) — A logical entity having two values: `true` or `false`.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
-
 ---
 
 ## 2. Term Category
@@ -217,9 +216,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`for` Loop](../level_02/for_loop.md) — A loop that repeats until a specified condition evaluates to false (better for known iterations).
-- [`do...while`](../level_02/do_while.md) — A variation that executes the block at least once.
-
+- [for Loop](for_loop.md) — A loop that repeats until a specified condition evaluates to false (better for known iterations).
+- [do...while](do_while.md) — A variation that executes the block at least once.
+- [break / continue](break_continue.md) — Related concept: break / continue.
 ---
 
 ## 8. Key Takeaways

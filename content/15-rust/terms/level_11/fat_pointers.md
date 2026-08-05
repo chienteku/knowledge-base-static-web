@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — What fat pointers exist to point at.
-- [Slice (`&[T]`, `&str`)](../level_03/slice.md) — The most common concrete example of a fat pointer.
+
+- [Dynamically Sized Types (DSTs)](dynamically_sized_types.md) — What fat pointers exist to point at.
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The other major fat-pointer use case.
 
 ---
@@ -530,16 +530,14 @@ Your task is to demonstrate the internal mechanics of `dyn Trait` fat pointers:
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — What fat pointers exist specifically to make usable.
-> - [Slice (`&[T]`, `&str`)](../level_03/slice.md) — The length-metadata flavor of fat pointer.
-> - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The vtable-metadata flavor of fat pointer.
-> - [Object Safety](../level_04/object_safety.md) — The rule set that keeps a trait's vtable (and thus its fat pointers) well-formed.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`Object Safety` (dyn-Compatibility)](../level_04/object_safety.md) — Related concept: `Object Safety` (dyn-Compatibility).
+- [`Function Pointers` (`fn()`)](../level_06/function_pointers.md) — Related concept: `Function Pointers` (`fn()`).
+
+---
+
+## 7. Key Takeaways
 > 
 > - A fat pointer is twice the size of a normal reference: an address, plus one word of metadata.
 > - For slices and `str`, the metadata is a **length**. For trait objects, it's a **vtable pointer** — two structurally different kinds of "extra word."

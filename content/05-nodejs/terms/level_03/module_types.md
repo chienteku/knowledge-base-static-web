@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -168,9 +168,9 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 > **Explanation:** Conditional exports direct CJS `require()` and ESM `import` statements to appropriate build formats.
 
 ## 7. Related Terms
-- [NPM](../level_04/npm.md) — The registry where you download all External Modules.
-- [`node_modules`](../level_04/node_modules.md) — The folder where External Modules physically live on your hard drive once downloaded.
-
+- [NPM (Node Package Manager)](../level_04/npm.md) — The registry where you download all External Modules.
+- [node_modules](../level_04/node_modules.md) — The folder where External Modules physically live on your hard drive once downloaded.
+- [Module Resolution](module_resolution.md) — How Node finds these modules.
 ---
 
 ## 8. Key Takeaways

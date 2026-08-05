@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [NoSQL Databases (Overview)](nosql_databases.md) — The parent non-relational database family.
+
+- [NoSQL Databases (Overview)](nosql_databases.md) — NoSQL database paradigm.
 
 ---
 
@@ -160,9 +161,13 @@ Explain how this object is saved in MongoDB compared to a relational database.
 > **Explanation:** MongoDB enforces a hard 16MB document size limit for BSON storage safety.
 
 ## 7. Related Terms
+
 - [Document](document.md) — The core database unit.
 - [Collection](collection.md) — Groupings of documents.
 - [BSON (Binary JSON)](bson.md) — The internal storage format.
+- [NoSQL Databases (Overview)](nosql_databases.md) — Related concept: NoSQL Databases (Overview).
+- [The Outlier Pattern](../level_05/outlier_pattern.md) — Related concept: The Outlier Pattern.
+- [`mongod` (MongoDB Server Daemon)](mongod.md) — MongoDB server daemon.
 
 ---
 

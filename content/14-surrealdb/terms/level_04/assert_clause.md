@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-_(none)_
+
+- [`DEFINE FIELD`](define_field.md) — DEFINE FIELD statement.
 
 ---
 
@@ -29,7 +30,10 @@ _(none)_
 ---
 
 ## 5. Related Terms
-_(none)_
+
+- [`$before` / `$after` / `$event` / `$value` Variables (in Events)](../level_09/event_variables.md)
+- [Assertions (`ASSERT`)](field_assertions.md) — Field assertion constraints.
+- [`SCHEMAFULL` Validation Assertion Patterns](schemafull_validation.md) — Schemafull validation rules.
 
 ---
 

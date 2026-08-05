@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — The data you are trying to print or format.
-- [String vs &str](../level_01/string_vs_&str.md) — `format!` specifically creates and returns a heap-allocated `String`.
+
+- [Variable](variable.md) — The data you are trying to print or format.
+- [String vs &str](string_vs_&str.md) — `format!` specifically creates and returns a heap-allocated `String`.
 
 ---
 
@@ -576,8 +577,11 @@ pub fn render_order_book(snapshot: &OrderBookSnapshot) -> String {
 
 ## 6. Related Terms
 
-- [String vs &str](../level_01/string_vs_&str.md) — The `format!` macro specifically returns a `String` (heap-allocated), not a `&str`.
-- **[Declarative Macros (`macro_rules!`)](../level_12/declarative_macros.md)** — (Level 12 concept) The underlying pattern-matching feature that powers macros like `println!` and `format!`.
+
+- [String vs &str](string_vs_&str.md) — The `format!` macro specifically returns a `String` (heap-allocated), not a `&str`.
+- [`dbg!` Macro](dbg_macro.md) — Related concept: `dbg!` Macro.
+- [Macros](macros.md) — Related concept: Macros.
+- [`Display` Trait](../level_04/display_trait.md) — Display formatting trait.
 
 ---
 

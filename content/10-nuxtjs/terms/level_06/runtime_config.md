@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where the Runtime Config schema is defined.
-- [Node.js Runtime](../../../05-nodejs/terms/level_01/nodejs.md) — The server environment hosting standard process configs.
-
+- [`nuxt.config.ts`](nuxt_config.md) — Where the Runtime Config schema is defined.
+- nodejs — The server environment hosting standard process configs.
 ---
 
 ## 2. Term Category
@@ -217,8 +216,9 @@ console.log(config.public.apiBase); // Access public runtimeConfig properties on
 ---
 
 ## 7. Related Terms
-- [`app.config.ts`](../level_06/app_config.md) — The alternative config meant for non-secret, UI-related theme variables.
-
+- [`app.config.ts`](app_config.md) — The alternative config meant for non-secret, UI-related theme variables.
+- [`nuxt.config.ts`](nuxt_config.md) — Related concept: `nuxt.config.ts`.
+- [Environment Variables (`.env`)](../level_10/env_variables.md) — Related concept: Environment Variables (`.env`).
 ---
 
 ## 8. Key Takeaways

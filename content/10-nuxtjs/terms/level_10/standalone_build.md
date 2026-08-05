@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Nitro Engine](../level_01/nitro_engine.md) — The engine that compiles the standalone server bundle.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The rendering mode that requires a running server to operate.
-
 ---
 
 ## 2. Term Category
@@ -185,9 +184,10 @@ PORT=8080 NODE_ENV=production node .output/server/index.mjs
 ---
 
 ## 7. Related Terms
-- [`.output/` Directory](../level_10/output_directory.md) — The folder where the standalone build is stored.
-- [Environment Variables (`.env`)](../level_10/env_variables.md) — Configuring production values for the standalone server.
-
+- [`.output/` Directory](output_directory.md) — The folder where the standalone build is stored.
+- [Environment Variables (`.env`)](env_variables.md) — Configuring production values for the standalone server.
+- [Edge Deployment](edge_deployment.md) — Related concept: Edge Deployment.
+- [Nitro Engine](../level_01/nitro_engine.md) — Nitro standalone server.
 ---
 
 ## 8. Key Takeaways

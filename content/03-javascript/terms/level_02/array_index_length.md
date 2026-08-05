@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Array](../level_02/array.md) — A high-level, list-like object for storing an ordered collection of multiple values.
-
+- [Array](array.md) — A high-level, list-like object for storing an ordered collection of multiple values.
 ---
 
 ## 2. Term Category
@@ -217,10 +216,10 @@ console.log("Updated fruits:", fruits);
 ---
 
 ## 7. Related Terms
-- [Array](../level_02/array.md) — The ordered collection datatype.
-- [`for` Loop](../level_02/for_loop.md) — Standard structure used to iterate through array indices.
+- [Array](array.md) — The ordered collection datatype.
+- [for Loop](for_loop.md) — Standard structure used to iterate through array indices.
 - [Mutating vs Non-mutating Methods](../level_04/mutating_vs_non_mutating.md) — Array methods that update or read items.
-
+- [String Methods](string_methods.md) — Related concept: String Methods.
 ---
 
 ## 8. Key Takeaways

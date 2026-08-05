@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`localStorage`](../level_09/web_storage.md) — IndexedDB is the big brother to localStorage.
-- [Promises](../level_05/promises.md) — Because IndexedDB reads from the hard drive, it is entirely asynchronous.
-
+- [localStorage & sessionStorage](web_storage.md) — IndexedDB is the big brother to localStorage.
+- [Promises (in the context of networks)](../level_05/promises.md) — Because IndexedDB reads from the hard drive, it is entirely asynchronous.
 ---
 
 ## 2. Term Category
@@ -154,9 +153,11 @@ await db.put('users', { id: 1, name: 'Alice' }); // Clean async/await
 ---
 
 ## 7. Related Terms
-- [`localStorage`](../level_09/web_storage.md) — The lightweight, synchronous alternative.
-- [Service Workers](../level_09/service_workers.md) — The technology that uses IndexedDB to build Progressive Web Apps (PWAs) that work entirely offline.
-
+- [localStorage & sessionStorage](web_storage.md) — The lightweight, synchronous alternative.
+- [Service Workers](service_workers.md) — The technology that uses IndexedDB to build Progressive Web Apps (PWAs) that work entirely offline.
+- [Cache API](cache_api.md) — Related concept: Cache API.
+- [Offline-First / PWA](offline_first.md) — Related concept: Offline-First / PWA.
+- [Storage Limits & Eviction](storage_limits.md) — Related concept: Storage Limits & Eviction.
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Understanding that browsers parse `<` and `>` as tags.
 - [Character Encoding (`charset`)](../level_08/character_encoding.md) — The system mapping character lookups.
-
 ---
 
 ## 2. Term Category
@@ -230,7 +229,6 @@ Displaying code examples safely:
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tags that require less-than/greater-than signs.
 - [Character Encoding (`charset`)](../level_08/character_encoding.md) — The underlying byte mapping.
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The default browser behavior that `&nbsp;` bypasses.
-
 ---
 
 ## 8. Key Takeaways

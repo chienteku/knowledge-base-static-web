@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`mod` Declaration](../level_07/mod_declaration.md) — The boundaries that `pub` actually allows you to cross.
-- [Functions (`fn`)](../level_01/fn.md) — The most common items you will make public.
-- [Structs (`struct`)](../level_02/struct.md) — The data structures with tricky field-level privacy rules.
+
+- [`mod` Declaration](mod_declaration.md) — The boundaries that `pub` actually allows you to cross.
+- [`fn` (Functions)](../level_01/fn.md) — The most common items you will make public.
+- [Struct](../level_02/struct.md) — The data structures with tricky field-level privacy rules.
 
 ---
 
@@ -99,73 +100,53 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Pub Visibility Scoping and Lifecycle Rules
+### Mistake 1: Assuming Struct Fields Become Public Automatically when Declaring `pub struct`
 
-**The mistake:** Assuming Pub Visibility instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Marking a struct public via `pub struct User { name: String }` and expecting callers outside the module to access `user.name`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** In Rust, declaring `pub struct User` makes the type name public, but all struct fields remain **private by default**. Callers outside the module cannot access or initialize `name` unless the field is explicitly marked `pub name: String`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("pub_visibility_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
+pub struct User {
+    name: String, // ❌ Field is private! Cannot be accessed outside this module!
 }
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("pub_visibility_data");
-    s // Ownership of the String is transferred directly to the caller
+pub struct User {
+    pub name: String, // Explicitly marked public!
 }
 ```
 
-### Mistake 2: Mutating Pub Visibility State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Assuming Enum Variants Require Individual `pub` Annotations
 
-**The mistake:** Attempting to mutate data associated with Pub Visibility through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Trying to write `pub enum Status { pub Active, pub Inactive }`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Unlike struct fields, making an `enum` public automatically makes **all** of its variants and variant fields public. Writing `pub` on individual enum variants is invalid syntax.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
+pub enum Status {
+    pub Active, // ❌ Syntax error! Enum variants inherit public visibility automatically
 }
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
+pub enum Status {
+    Active, // Correct!
 }
 ```
 
-### Mistake 3: Concurrent Access to Pub Visibility Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Forgetting Public Parent Module Declarations for Public Child Items
 
-**The mistake:** Sharing non-thread-safe Pub Visibility instances across OS threads via `std::thread::spawn`.
+**The mistake:** Declaring `pub fn helper()` inside `mod foo`, but declaring `mod foo;` (without `pub`) in `lib.rs`.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Even if an item is `pub`, it cannot be accessed from outside the parent module if the parent module itself is private. The module must be `pub mod foo;` to be reachable by external callers.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -255,8 +236,12 @@ fn main() {
 
 ## 6. Related Terms
 
-- [`mod` Declaration](../level_07/mod_declaration.md) — The boundaries that `pub` actually allows you to cross.
-- [`pub(crate)` / `pub(super)`](../level_07/pub_crate_super.md) — Advanced, fine-grained versions of `pub` that allow you to restrict visibility to specific areas instead of making things completely public.
+
+- [`mod` Declaration](mod_declaration.md) — The boundaries that `pub` actually allows you to cross.
+- [`pub(crate)` / `pub(super)`](pub_crate_super.md) — Advanced, fine-grained versions of `pub` that allow you to restrict visibility to specific areas instead of making things completely public.
+- [Crate](../level_01/crate.md) — Related concept: Crate.
+- [Re-exporting (`pub use`)](re_exporting.md) — Related concept: Re-exporting (`pub use`).
+- [`cargo doc`](../level_08/cargo_doc.md) — Related concept: `cargo doc`.
 
 ---
 

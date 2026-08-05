@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [CommonJS](../level_03/commonjs.md) & [ES Modules](../level_03/es_modules.md) — The systems where these bugs occur.
-
+- [CommonJS (require, module.exports)](commonjs.md)
 ---
 
 ## 2. Term Category
@@ -155,8 +154,7 @@ If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dep
 > **Explanation:** CommonJS exposes partial export objects; ESM enforces strict static TDZ live bindings.
 
 ## 7. Related Terms
-- [Module Resolution](../level_03/module_resolution.md) — The process that gets trapped in the infinite loop.
-
+- [Module Resolution](module_resolution.md) — The process that gets trapped in the infinite loop.
 ---
 
 ## 8. Key Takeaways

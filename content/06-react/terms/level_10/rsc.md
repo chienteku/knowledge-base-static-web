@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR)](../level_10/ssr.md) — SSR is about rendering initial HTML. RSC is about *staying* on the server permanently.
-- [Hydration](../level_10/hydration.md) — RSCs completely skip the Hydration process!
-
+- [Server-Side Rendering (SSR)](ssr.md) — SSR is about rendering initial HTML. RSC is about *staying* on the server permanently.
+- [Hydration](hydration.md) — RSCs completely skip the Hydration process!
 ---
 
 ## 2. Term Category
@@ -159,9 +158,12 @@ import 'server-only'; // Enforces server-only execution guard at build time
 > **Explanation:** RSC architecture keeps heavy dependencies on the server, minimizing client bundle sizes.
 
 ## 7. Related Terms
-- [Hydration](../level_10/hydration.md) — What Client Components do, and what Server Components intentionally skip.
-- [Next.js](../level_10/nextjs.md) — The first framework to fully implement the RSC architecture.
-
+- [Hydration](hydration.md) — What Client Components do, and what Server Components intentionally skip.
+- [Next.js](nextjs.md) — The first framework to fully implement the RSC architecture.
+- [Client vs Server Components & `"use client"`](client_server_components.md) — Related concept: Client vs Server Components & `"use client"`.
+- [Server Actions & `"use server"`](server_actions.md) — Server Actions.
+- [`useActionState` Hook](use_action_state.md) — useActionState hook.
+- [Suspense for Data Fetching & the `use()` Hook](use_hook.md) — Related concept: Suspense for Data Fetching & the `use()` Hook.
 ---
 
 ## 8. Key Takeaways

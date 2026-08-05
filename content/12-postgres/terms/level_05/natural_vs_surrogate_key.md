@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Primary Key](../level_02/primary_key.md) — The unique row identifier targeted by relationships.
-
+- [`PRIMARY KEY`](../level_02/primary_key.md) — The unique row identifier targeted by relationships.
 ---
 
 ## 2. Term Category
@@ -237,9 +236,9 @@ id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, UNIQUE (org_id, dept_id, yea
 > **Explanation:** Combining surrogate primary keys with natural unique constraints balances integrity and flexibility.
 
 ## 7. Related Terms
-- [Primary Key](../level_02/primary_key.md) — The parent unique identifier.
+- [`PRIMARY KEY`](../level_02/primary_key.md) — The parent unique identifier.
 - [`FOREIGN KEY`](foreign_key.md) — The constraint referencing the keys.
-
+- [`UUID` Type](../level_06/uuid_type.md) — Related concept: `UUID` Type.
 ---
 
 ## 8. Key Takeaways

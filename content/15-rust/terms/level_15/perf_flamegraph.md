@@ -7,9 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Release Profile](../level_15/release_profile.md) — Configuring `[profile.release]` with `debug = true` for profiling symbol resolution.
-- [Inlining (`#[inline]`)](../level_15/inlining.md) — Understanding how inlining affects stack trace function visibility.
-- [`#[cold]` / `#[hot]`](../level_15/cold_hot_attributes.md) — Identifying hot vs cold code paths during profiling.
+
+- [Release Profile](release_profile.md) — Configuring `[profile.release]` with `debug = true` for profiling symbol resolution.
 
 ---
 
@@ -496,10 +495,11 @@ Implement an optimized iterative dynamic programming version `fibonacci_iterativ
 
 ## 7. Related Terms
 
-- [Release Profile](../level_15/release_profile.md) — Cargo build profile configured with `debug = true` for profiling.
-- [Inlining (`#[inline]`)](../level_15/inlining.md) — Optimization that merges stack frames visible in Flamegraph stacks.
-- [`#[cold]` / `#[hot]`](../level_15/cold_hot_attributes.md) — Attributes used to relocate cold paths identified during profiling.
-- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Core performance philosophy verified via profiling tools.
+
+- [Release Profile](release_profile.md) — Cargo build profile configured with `debug = true` for profiling.
+- [Zero-Cost Abstractions](zero_cost_abstractions.md) — Core performance philosophy verified via profiling tools.
+- [`#[cold]` / `#[hot]`](cold_hot_attributes.md) — Related concept: `#[cold]` / `#[hot]`.
+- [SIMD (`std::simd`)](simd.md) — Related concept: SIMD (`std::simd`).
 
 ---
 

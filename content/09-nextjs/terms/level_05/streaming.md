@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-side Fetching (Extended `fetch`)](../level_05/fetch.md) — The slow async operations that cause the need for streaming.
+- [Server-side Fetching (Extended `fetch`)](fetch.md) — The slow async operations that cause the need for streaming.
 - [`loading.tsx`](../level_02/loading.md) — The file-system implementation of Suspense.
-
 ---
 
 ## 2. Term Category
@@ -185,7 +184,7 @@ export default function Page() {
 ## 7. Related Terms
 - [`loading.tsx`](../level_02/loading.md) — The automatic page-level implementation of Streaming.
 - [React Suspense](../level_02/react_suspense.md) — The React core primitive that powers this Next.js feature.
-
+- [Partial Prerendering (PPR)](../level_08/ppr.md) — Related concept: Partial Prerendering (PPR).
 ---
 
 ## 8. Key Takeaways

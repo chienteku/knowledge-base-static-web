@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Compound Types](../level_01/compound_types.md) — Specifically Arrays (`[T; N]`), which are the fixed-size cousin of Vectors.
-- [`Option<T>`](../level_02/option_t.md) — Used heavily when safely reading data out of a Vector.
+- [`Option<T>`](option_t.md) — Used heavily when safely reading data out of a Vector.
 
 ---
 
@@ -556,9 +557,14 @@ Requirements:
 
 ## 6. Related Terms
 
+
 - [Compound Types](../level_01/compound_types.md) — The rigid, fixed-size cousin of `Vec`.
-- [`Option<T>`](../level_02/option_t.md) — The type returned by the safe `Vec::get()` method.
-- [Iterator](../level_02/iterator.md) — The idiomatic way to loop through every item inside a Vector.
+- [`Option<T>`](option_t.md) — The type returned by the safe `Vec::get()` method.
+- [Iterator](iterator.md) — The idiomatic way to loop through every item inside a Vector.
+- [`HashMap<K, V>`](hashmap_k_v.md) — Related concept: `HashMap<K, V>`.
+- [`VecDeque<T>`](vecdeque_t.md) — Related concept: `VecDeque<T>`.
+- [`Box<T>`](../level_03/box_t.md) — Related concept: `Box<T>`.
+- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Related concept: Arrays and Slices (`[T; N]`, `&[T]`).
 
 ---
 

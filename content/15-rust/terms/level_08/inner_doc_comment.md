@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Comments](../level_01/comments.md) — The standard `//` and `///` syntax used to write text.
-- [`cargo doc`](../level_08/cargo_doc.md) — The tool that actually turns these comments into HTML websites.
+- [`cargo doc`](cargo_doc.md) — The tool that actually turns these comments into HTML websites.
 
 ---
 
@@ -523,7 +524,8 @@ Requirements:
 
 ## 6. Related Terms
 
-- [`cargo doc`](../level_08/cargo_doc.md) — The tool that turns these comments into HTML.
+
+- [`cargo doc`](cargo_doc.md) — The tool that turns these comments into HTML.
 - [Comments](../level_01/comments.md) — The standard `//` and `///` syntax.
 
 ---

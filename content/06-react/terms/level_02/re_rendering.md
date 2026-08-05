@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Virtual DOM](../level_01/virtual_dom.md) — Re-rendering is the process of generating a new Virtual DOM.
-- [State](../level_02/state.md) — Changing state is the primary trigger for a re-render.
-
+- [State](state.md) — Changing state is the primary trigger for a re-render.
 ---
 
 ## 2. Term Category
@@ -158,7 +157,12 @@ const options = useMemo(() => ({ theme: 'dark' }), []);
 ## 7. Related Terms
 - [React.memo](../level_08/react_memo.md) — How you stop the waterfall effect and prevent unnecessary re-renders.
 - [Virtual DOM](../level_01/virtual_dom.md) — What React actually generates during a re-render.
-
+- [Reconciliation](../level_01/reconciliation.md) — Related concept: Reconciliation.
+- [Automatic Batching](automatic_batching.md) — Related concept: Automatic Batching.
+- [Immutability](immutability.md) — Related concept: Immutability.
+- [State](state.md) — Related concept: State.
+- [React DevTools](../level_08/react_devtools.md) — Related concept: React DevTools.
+- [`useState` Hook](use_state.md) — Related concept: `useState` Hook.
 ---
 
 ## 8. Key Takeaways

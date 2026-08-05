@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`SELECT`](select.md) — The parent query statement.
 
 ---
@@ -202,6 +203,7 @@ Write the math formulas to calculate the values for the SurrealQL query paramete
 > **Explanation:** `ORDER BY col1 ASC, col2 DESC` sorts results across multiple field criteria.
 
 ## 7. Related Terms
+
 - [`SELECT`](select.md) — The parent query statement.
 
 ---

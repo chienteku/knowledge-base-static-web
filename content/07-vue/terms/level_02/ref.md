@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Reactive State](../level_02/reactive_state.md) — What `ref` creates.
+- [Reactive State](reactive_state.md) — What `ref` creates.
 - [Composition API](../level_01/composition_api.md) — The syntax where `ref` is primarily used.
-
 ---
 
 ## 2. Term Category
@@ -171,10 +170,14 @@ user = "Alice";
 ---
 
 ## 7. Related Terms
-- [`reactive`](../level_02/reactive.md) — The alternative way to declare state specifically for Objects.
-- [Reactive State](../level_02/reactive_state.md) — The overarching concept.
-- [`shallowRef` / `markRaw`](../level_02/shallow_ref_mark_raw.md) — Reactivity escape hatches for performance.
-
+- [`reactive`](reactive.md) — The alternative way to declare state specifically for Objects.
+- [Reactive State](reactive_state.md) — The overarching concept.
+- [`shallowRef` / `markRaw`](shallow_ref_mark_raw.md) — Reactivity escape hatches for performance.
+- [Composition API](../level_01/composition_api.md) — Related concept: Composition API.
+- [Computed Properties](computed_properties.md) — Related concept: Computed Properties.
+- [`toRefs` / `toRef`](to_refs.md) — Related concept: `toRefs` / `toRef`.
+- [Watchers](watchers.md) — Related concept: Watchers.
+- [VueUse](../level_10/vueuse.md) — Related concept: VueUse.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of providing extra information inside a starting tag.
-
 ---
 
 ## 2. Term Category
@@ -174,11 +173,12 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 > **Explanation:** ID selectors have higher CSS specificity rank than class selectors.
 
 ## 7. Related Terms
-- [`class` Attribute](../level_07/class.md) — The attribute used for grouping *multiple* elements together (the opposite of `id`).
-- [`style` Attribute](../level_07/style.md) — The inline styling attribute.
+- [`class` Attribute](class.md) — The attribute used for grouping *multiple* elements together (the opposite of `id`).
+- [`style` Attribute](style.md) — The inline styling attribute.
 - [`<label>`](../level_05/label.md) — Relies entirely on `id`s to function.
-- [`data-*` Attributes](../level_07/data_attributes.md) — Custom data values that can reside next to IDs for scripting.
-
+- [`data-*` Attributes](data_attributes.md) — Custom data values that can reside next to IDs for scripting.
+- [`name` Attribute (in Form Fields)](../level_05/name.md) — Related concept: `name` Attribute (in Form Fields).
+- [`tabindex` Attribute](tabindex.md) — Related concept: `tabindex` Attribute.
 ---
 
 ## 8. Key Takeaways

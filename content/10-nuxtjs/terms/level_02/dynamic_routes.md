@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`pages/` Directory](../level_02/pages_directory.md) — Where these dynamic files are created.
-- [`useRoute` & `useRouter` Hooks](../level_02/use_route_router.md) — The composables used to access parameter values.
-
+- [`pages/` Directory](pages_directory.md) — Where these dynamic files are created.
+- [`useRoute` & `useRouter` Hooks](use_route_router.md) — The composables used to access parameter values.
 ---
 
 ## 2. Term Category
@@ -194,7 +193,9 @@ const userId = computed(() => route.params.id); // Reactive computed property up
 
 ## 7. Related Terms
 - [`useFetch`](../level_05/use_fetch.md) — The standard way to fetch data based on the dynamic route parameter.
-
+- [File-based Routing](file_based_routing.md) — Related concept: File-based Routing.
+- [`pages/` Directory](pages_directory.md) — Related concept: `pages/` Directory.
+- [`useRoute` & `useRouter` Hooks](use_route_router.md) — Related concept: `useRoute` & `useRouter` Hooks.
 ---
 
 ## 8. Key Takeaways

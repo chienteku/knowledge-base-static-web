@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Relational vs NoSQL](../level_08/sql_vs_nosql.md) — ORMs are for SQL, ODMs are for NoSQL.
-- [Connection Pools](../level_08/connection_pools.md) — ORMs manage these automatically.
-
+- [SQL vs NoSQL](sql_vs_nosql.md) — ORMs are for SQL, ODMs are for NoSQL.
+- [Connection Pooling](connection_pools.md) — ORMs manage these automatically.
 ---
 
 ## 2. Term Category
@@ -164,9 +163,15 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 > **Explanation:** `include` performs eager relation loading in a single optimized query.
 
 ## 7. Related Terms
-- [SQL Injection Prevention](../level_08/sql_injection.md) — ORMs automatically protect you against this devastating attack!
-- [Migrations](../level_08/migrations.md) — ORMs also manage the history of your database schema.
-
+- [SQL Injection](sql_injection.md) — ORMs automatically protect you against this devastating attack!
+- [Migrations](migrations.md) — ORMs also manage the history of your database schema.
+- [Connection Pooling](connection_pools.md) — Related concept: Connection Pooling.
+- [Mongoose (MongoDB ODM)](mongoose.md) — Related concept: Mongoose (MongoDB ODM).
+- [Parameterized Queries / Prepared Statements](parameterized_queries.md) — Related concept: Parameterized Queries / Prepared Statements.
+- [Prisma / Sequelize (SQL ORMs)](prisma_sequelize.md) — Related concept: Prisma / Sequelize (SQL ORMs).
+- [SQL vs NoSQL](sql_vs_nosql.md) — Related concept: SQL vs NoSQL.
+- [MVC Pattern (Model–View–Controller)](../level_09/mvc_pattern.md) — Related concept: MVC Pattern (Model–View–Controller).
+- [Pagination](../level_09/pagination.md) — Related concept: Pagination.
 ---
 
 ## 8. Key Takeaways

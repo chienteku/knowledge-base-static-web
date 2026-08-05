@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [File-based Routing](../level_02/file_based_routing.md) — The routing system these composables inspect.
+- [File-based Routing](file_based_routing.md) — The routing system these composables inspect.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The execution scope where these hooks are called.
-
 ---
 
 ## 2. Term Category
@@ -217,9 +216,8 @@ const searchQuery = route.query.q;
 ---
 
 ## 7. Related Terms
-- [Dynamic Routes](../level_02/dynamic_routes.md) — The route types that produce parameters.
+- [Dynamic Routes](dynamic_routes.md) — The route types that produce parameters.
 - [Route Middleware](../level_08/route_middleware.md) — The routing interceptors where redirects occur.
-
 ---
 
 ## 8. Key Takeaways

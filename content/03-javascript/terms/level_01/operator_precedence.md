@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Operator](../level_01/operator.md) — Symbol that performs an operation on operands.
-- [Expression](../level_01/expression.md) — Any valid unit of code that resolves to a single value.
-
+- [Operator](operator.md) — Symbol that performs an operation on operands.
+- [Expression](expression.md) — Any valid unit of code that resolves to a single value.
 ---
 
 ## 2. Term Category
@@ -233,10 +232,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Arithmetic Operators](../level_01/arithmetic_operators.md) — Mathematical calculation symbols.
+- [Arithmetic Operators](arithmetic_operators.md) — Mathematical calculation symbols.
 - [Logical Operators](../level_02/logical_operators.md) — Boolean logic symbols.
-- [Expression](../level_01/expression.md) — Any piece of code that yields a value.
-
+- [Expression](expression.md) — Any piece of code that yields a value.
 ---
 
 ## 8. Key Takeaways

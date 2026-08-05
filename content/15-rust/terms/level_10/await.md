@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — Declaring the lazy functions that we `.await`.
-- [`Future` Trait](../level_10/future_trait.md) — The trait whose `Output` type is returned by `.await`.
-- [`Tokio`](../level_10/tokio.md) — The runtime that drives execution while we wait.
+
+- [`async fn`](async_fn.md) — Declaring the lazy functions that we `.await`.
+- [`Future` Trait](future_trait.md) — The trait whose `Output` type is returned by `.await`.
+- [`tokio`](../level_16/tokio.md) — The runtime that drives execution while we wait.
 
 ---
 
@@ -447,15 +448,13 @@ Construct a resilient retry function using `.await` and deadline timeouts.
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`async fn`](../level_10/async_fn.md) — The function declaration that creates the Future we `.await`.
-> - [`Future` Trait](../level_10/future_trait.md) — The underlying trait driving `.await`.
-> - [`join!`](../level_10/join_macro.md) — How to `.await` multiple futures concurrently instead of sequentially.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`async` / `.await`](../level_09/async_await.md) — Related concept: `async` / `.await`.
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`.await`** pauses the current async function until the `Future` yields its final result.
 > - It is **non-blocking** — the host OS thread is released to work on other tasks while waiting!

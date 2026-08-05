@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The anchor tag is useless without its primary attribute.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — Since hyperlinks point to absolute or relative resource addresses.
-
 ---
 
 ## 2. Term Category
@@ -241,11 +240,15 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 > **Explanation:** Hash link `#id` targets matching element ID on the current page.
 
 ## 7. Related Terms
-- [`href` Attribute](../level_02/href.md) — The required attribute that makes the anchor tag function.
+- [`href` Attribute](href.md) — The required attribute that makes the anchor tag function.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — As `<a>` is an inline text element by default.
 - [Attribute](../level_01/attribute.md) — The concept of injecting configuration into a tag.
-
+- [`<button>`](../level_05/button.md) — Related concept: `<button>`.
+- [`<address>`](../level_06/address.md) — Related concept: `<address>`.
+- [`tabindex` Attribute](../level_07/tabindex.md) — Related concept: `tabindex` Attribute.
+- [`<base>` Element](../level_08/base.md) — Related concept: `<base>` Element.
+- [`<link>`](../level_08/link.md) — Related concept: `<link>`.
 ---
 
 ## 8. Key Takeaways

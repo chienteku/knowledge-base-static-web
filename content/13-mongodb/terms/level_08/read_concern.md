@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Write Concern](write_concern.md) — The writing durability equivalent.
 
 ---
@@ -194,6 +195,7 @@ Select the optimal Read Concern level (**"local"**, **"majority"**, or **"linear
 > **Explanation:** `snapshot` read concern guarantees point-in-time isolation across transaction statements.
 
 ## 7. Related Terms
+
 - [Write Concern](write_concern.md) — The writing durability equivalent.
 - [Read Preference](read_preference.md) — Query routing targets.
 

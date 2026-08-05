@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_02/primitive_types.md) — The building blocks often used inside Unions.
 - [Type Narrowing](../level_06/type_narrowing.md) — How you safely interact with a Union Type.
-
 ---
 
 ## 2. Term Category
@@ -169,9 +168,16 @@ let val: string | number; // Represents a value that can be either string or num
 > **Explanation:** Parentheses establish binding operator precedence in array union definitions.
 
 ## 7. Related Terms
-- [Intersection Types](../level_05/intersection_types.md) — The exact opposite (AND instead of OR).
+- [Intersection Types (`&`)](intersection_types.md) — The exact opposite (AND instead of OR).
 - [Type Narrowing](../level_06/type_narrowing.md) — The mandatory step required to actually *use* Union types safely.
-
+- [Arrays & Tuples](../level_02/arrays_tuples.md) — Related concept: Arrays & Tuples.
+- [Function Overloads](../level_04/function_overloads.md) — Related concept: Function Overloads.
+- [Literal Types](literal_types.md) — Related concept: Literal Types.
+- [Type Aliases (`type`)](type_aliases.md) — Related concept: Type Aliases (`type`).
+- [`Exclude` / `Extract` / `NonNullable`](../level_08/exclude_extract_nonnullable.md) — Related concept: `Exclude` / `Extract` / `NonNullable`.
+- [`Pick<T>` & `Omit<T>`](../level_08/pick_omit.md) — Related concept: `Pick<T>` & `Omit<T>`.
+- [`Record<Keys, Type>`](../level_08/record.md) — Related concept: `Record<Keys, Type>`.
+- [Discriminated Unions](../level_06/discriminated_unions.md) — Discriminated unions.
 ---
 
 ## 8. Key Takeaways

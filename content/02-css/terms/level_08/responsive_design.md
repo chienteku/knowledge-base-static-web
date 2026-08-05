@@ -9,7 +9,6 @@
 - [`%` (Percentages)](percentages.md) — Sizing boxes relative to parent dimensions.
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to screen boundaries.
 - [`rem` vs `em`](rem_em.md) — Relative typography spacing.
-
 ---
 
 ## 2. Term Category
@@ -317,7 +316,9 @@ How do you modify it to make the images responsive?
 - [`@media` (Media Queries Basics)](media_queries.md) — The conditional layout tool.
 - [Mobile-First Design](mobile_first.md) — The styling workflow.
 - [Breakpoints](breakpoints.md) — The layout shift coordinates.
-
+- [`min()`, `max()`, `clamp()` (Responsive Functions)](min_max_clamp.md) — Related concept: `min()`, `max()`, `clamp()` (Responsive Functions).
+- [`rem` vs `em`](rem_em.md) — Relative font units.
+- [`vw` / `vh` (Viewport Units)](viewport_units.md) — Viewport units (vw, vh).
 ---
 
 ## 8. Key Takeaways

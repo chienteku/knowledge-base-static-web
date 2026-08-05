@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — A named binding in memory; immutable by default in Rust.
+
+- [Variable](variable.md) — A named binding in memory; immutable by default in Rust.
 
 ---
 
@@ -646,9 +647,12 @@ Implement `TelemetryRingBuffer` managing telemetry sample streams:
 
 ## 6. Related Terms
 
-- [Variable](../level_01/variable.md) — The standard immutable binding that `mut` alters.
-- [Shadowing](../level_01/shadowing.md) — An alternative to mutability where you declare a completely new variable with the same name.
-- [Constants (`const`)](../level_01/constants_const.md) — Values that can *never* be made mutable and are evaluated at compile time.
+
+- [Variable](variable.md) — The standard immutable binding that `mut` alters.
+- [Shadowing](shadowing.md) — An alternative to mutability where you declare a completely new variable with the same name.
+- [Constants (`const`)](constants_const.md) — Values that can *never* be made mutable and are evaluated at compile time.
+- [References and Borrowing (`&`, `&mut`)](references_and_borrowing.md) — Exclusive mutable references (&mut).
+- [`Cell<T>`](../level_03/cell_t.md) — Interior mutability.
 
 ---
 

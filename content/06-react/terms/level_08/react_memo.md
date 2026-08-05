@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Re-rendering](../level_02/re_rendering.md) — The default behavior that `React.memo` stops.
-- [`useMemo` & `useCallback`](../level_04/use_memo.md) — The hooks required to make `React.memo` actually work properly.
-
+- [`useMemo` Hook](../level_04/use_memo.md) — The hooks required to make `React.memo` actually work properly.
 ---
 
 ## 2. Term Category
@@ -158,7 +157,10 @@ React.memo(Comp, (prev, next) => prev.id === next.id); // Return true when equal
 ## 7. Related Terms
 - [`useCallback` Hook](../level_04/use_callback.md) — Used by the Parent to pass stable functions to a `memo` child.
 - [`useMemo` Hook](../level_04/use_memo.md) — Used by the Parent to pass stable objects/arrays to a `memo` child.
-
+- [Re-rendering](../level_02/re_rendering.md) — Related concept: Re-rendering.
+- [Memoization (the concept)](../level_04/memoization.md) — Related concept: Memoization (the concept).
+- [Referential Equality](../level_04/referential_equality.md) — Related concept: Referential Equality.
+- [The React Profiler](react_profiler.md) — Related concept: The React Profiler.
 ---
 
 ## 8. Key Takeaways

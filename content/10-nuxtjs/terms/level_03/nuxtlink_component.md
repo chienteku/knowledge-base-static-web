@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [File-based Routing](../level_02/file_based_routing.md) — The URL destinations that NuxtLink navigates to.
-- [Vue Template Directives](../../../07-vue/terms/level_03/directives.md) — How basic template bindings are applied.
-
+- directives — How basic template bindings are applied.
 ---
 
 ## 2. Term Category
@@ -157,7 +156,7 @@ When the user finally clicks the link, the page transition is truly instant, bec
 
 ## 7. Related Terms
 - [`pages/` Directory](../level_02/pages_directory.md) — The destination of internal NuxtLinks.
-
+- [Lazy Components](lazy_components.md) — Related concept: Lazy Components.
 ---
 
 ## 8. Key Takeaways

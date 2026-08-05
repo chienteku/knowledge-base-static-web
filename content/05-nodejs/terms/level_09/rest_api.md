@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [JSON](../../../04-apis/terms/level_01/json.md) — The language REST APIs speak.
-
+- json — The language REST APIs speak.
 ---
 
 ## 2. Term Category
@@ -234,8 +233,11 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 
 ## 7. Related Terms
 - [Routing](../level_07/routing.md) — How you physically implement REST in Express.
-- [HTTP Status Codes](../level_09/status_codes.md) — REST APIs must return standard status codes to indicate success or failure.
-
+- [HTTP Status Codes](status_codes.md) — REST APIs must return standard status codes to indicate success or failure.
+- [API Versioning](api_versioning.md) — Related concept: API Versioning.
+- [CORS](cors.md) — Related concept: CORS.
+- [Controllers & Services](controllers_services.md) — Controllers and Services architecture.
+- [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — MVC pattern.
 ---
 
 ## 8. Key Takeaways

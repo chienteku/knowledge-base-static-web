@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Template Syntax](../level_01/template_syntax.md) — The HTML structure where directives are used.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The core philosophy directives implement.
-
 ---
 
 ## 2. Term Category
@@ -165,11 +164,13 @@ const attributeName = ref('href'); // Dynamic attribute name
 ---
 
 ## 7. Related Terms
-- [`v-bind`](../level_03/v_bind.md) — The most common directive.
+- [`v-bind`](v_bind.md) — The most common directive.
 - [Template Syntax](../level_01/template_syntax.md) — Where directives live.
-- [`v-for` (List Rendering) & `:key`](../level_03/v_for_key.md) — List rendering directive.
-- [Custom Directives (`v-*`)](../level_03/custom_directives.md) — Creating your own directive lifecycle handlers.
-
+- [`v-for` (List Rendering) & `:key`](v_for_key.md) — List rendering directive.
+- [Custom Directives (`v-*`)](custom_directives.md) — Creating your own directive lifecycle handlers.
+- [Event, Key & Form Modifiers](modifiers.md) — Related concept: Event, Key & Form Modifiers.
+- [`v-if` / `v-show`](v_if_show.md) — Related concept: `v-if` / `v-show`.
+- [`v-model`](v_model.md) — Related concept: `v-model`.
 ---
 
 ## 8. Key Takeaways

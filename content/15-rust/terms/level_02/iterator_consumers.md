@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Iterator](../level_02/iterator.md) — The lazy sequence these methods consume.
+
+- [Iterator](iterator.md) — The lazy sequence these methods consume.
 - [Lazy Evaluation](../level_06/lazy_evaluation.md) — What every consumer method finally triggers.
-- [Collecting (`.collect()`)](../level_02/collecting.md) — The most famous consumer; this term covers all the *other* ones.
+- [Collecting](collecting.md) — The most famous consumer; this term covers all the *other* ones.
 
 ---
 
@@ -639,10 +640,11 @@ Implement a stream analyzer that:
 
 ## 6. Related Terms
 
-- [Iterator](../level_02/iterator.md) / [Iterator Adapters](../level_02/iterator_adapters.md) — The lazy machinery these consumers finally drive to completion.
+
+- [Iterator](iterator.md)
 - [Lazy Evaluation](../level_06/lazy_evaluation.md) — The principle that no work happens until a consumer like these is called.
-- [Collecting (`.collect()`)](../level_02/collecting.md) — The most general consumer (builds a whole new collection), contrasted with these more specific, often more efficient single-value consumers.
-- [`FromIterator` / `Extend` Traits](../level_02/fromiterator_extend_traits.md) — What powers `.collect()` specifically, as opposed to the direct-computation consumers covered here.
+- [Collecting](collecting.md) — The most general consumer (builds a whole new collection), contrasted with these more specific, often more efficient single-value consumers.
+- [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — What powers `.collect()` specifically, as opposed to the direct-computation consumers covered here.
 
 ---
 

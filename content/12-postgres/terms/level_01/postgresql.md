@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Database](database.md) — Understanding why we need database storage.
-
 ---
 
 ## 2. Term Category
@@ -161,7 +160,8 @@ Check server engine version via SELECT version();
 ## 7. Related Terms
 - [Database](database.md) — The parent technology class.
 - [Relational Database](relational_database.md) — The relational data structure model.
-
+- [Client-Server Model (in Databases)](client_server_model.md) — Related concept: Client-Server Model (in Databases).
+- [`psql` (Interactive Terminal)](psql.md) — Interactive terminal CLI.
 ---
 
 ## 8. Key Takeaways

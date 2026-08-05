@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [use_state](../level_02/use_state.md) — (see term file)
-
+- [`useState` Hook](../level_02/use_state.md)
 ---
 
 ## 2. Term Category
@@ -29,8 +28,8 @@
 ---
 
 ## 5. Related Terms
-- [server_actions](./server_actions.md) — (see term file)
-
+- [Server Actions & `"use server"`](server_actions.md)
+- [React Server Components (RSC)](rsc.md) — Related concept: React Server Components (RSC).
 ---
 
 ## 6. Key Takeaways

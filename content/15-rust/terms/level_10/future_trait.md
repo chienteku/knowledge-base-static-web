@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — The syntax that generates types implementing `Future`.
-- [`Trait`](../level_04/trait.md) — The general concept of defining shared behavior in Rust.
-- [`pin!`, `Pin<T>`, and `Unpin`](../level_10/pin_t.md) — The memory guarantee that keeps futures from moving.
+
+- [`async fn`](async_fn.md) — The syntax that generates types implementing `Future`.
+- [Trait](../level_04/trait.md) — The general concept of defining shared behavior in Rust.
+- [`Pin<T>`](pin_t.md) — The memory guarantee that keeps futures from moving.
 
 ---
 
@@ -459,15 +460,15 @@ Construct a manual `Select2` combinator with pinned projection.
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`async fn`](../level_10/async_fn.md) — Generates types that implement `Future`.
-> - [`await`](../level_10/await.md) — The keyword that drives a `Future` to completion.
-> - [`Executor / Runtime`](../level_10/executor_runtime.md) — The engine that calls `.poll()` on Futures.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`Pin<T>`](pin_t.md) — Related concept: `pin!`, `Pin<T>`, and `Unpin`.
+- [Generators Coroutines](../level_19/generators_coroutines.md) — Related concept: Generators Coroutines.
+- [`Waker` and `Context`](waker_context.md) — Related concept: `Waker` and `Context`.
+
+---
+
+## 7. Key Takeaways
 > 
 > - Every `async` computation in Rust is a struct implementing **`std::future::Future`**.
 > - A `Future` is a zero-cost **State Machine** — it contains no background threads or hidden runtime cost!

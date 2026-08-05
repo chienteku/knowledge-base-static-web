@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Function](../level_03/function.md) — The basic block of code we are treating as a value.
+- [Function](function.md) — The basic block of code we are treating as a value.
 - [Variable](../level_01/variable.md) — The container we assign the function to.
-
 ---
 
 ## 2. Term Category

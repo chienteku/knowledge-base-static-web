@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation triggers.
 
 ---
@@ -230,6 +231,7 @@ db.users.createIndex({ passportNumber: 1 }, { unique: true, sparse: true }); // 
 > **Explanation:** Error code 11000 flags unique index primary key constraint violations.
 
 ## 7. Related Terms
+
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Sparse Index](sparse_index.md) — The duplicate null fix.
 - [Partial Index](partial_index.md) — The modern alternative.

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [React Components](../level_01/react_components.md) — The building blocks that hooks add features to.
-
+- [React Components](react_components.md) — The building blocks that hooks add features to.
 ---
 
 ## 2. Term Category
@@ -224,9 +223,9 @@ export default function UserStatus({ id }: { id: string | null }) {
 ---
 
 ## 7. Related Terms
-- [Client Components](../level_01/client_components.md) — Next.js files marked with `'use client'` that enable hooks.
-- [React Components](../level_01/react_components.md) — The visual wrapper surrounding hooks.
-
+- [Client Components (`"use client"`)](client_components.md) — Next.js files marked with `'use client'` that enable hooks.
+- [React Components](react_components.md) — The visual wrapper surrounding hooks.
+- [React `useEffect` Hook](../level_02/use_effect.md) — Related concept: React `useEffect` Hook.
 ---
 
 ## 8. Key Takeaways

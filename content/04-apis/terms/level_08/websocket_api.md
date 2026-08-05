@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [WebSockets](../level_08/websockets.md) — The theoretical protocol that this API implements.
-- [JSON.stringify() & JSON.parse()](../level_07/json_methods.md) — Because WebSockets only send text, you must use these methods heavily.
-
+- [WebSockets](websockets.md) — The theoretical protocol that this API implements.
+- [JSON Methods (parse / stringify)](../level_07/json_methods.md) — Because WebSockets only send text, you must use these methods heavily.
 ---
 
 ## 2. Term Category
@@ -341,9 +340,11 @@ ws.onopen = () => {
 ---
 
 ## 7. Related Terms
-- [The `fetch()` API](../level_05/fetch.md) — The HTTP alternative to `WebSocket`.
-- [Socket.io](../level_08/socket_io.md) — A massive third-party library that wraps the native WebSocket API to make it easier to use.
-
+- [The fetch() API](../level_05/fetch.md) — The HTTP alternative to `WebSocket`.
+- [Socket.io (Ecosystem tool)](socket_io.md) — A massive third-party library that wraps the native WebSocket API to make it easier to use.
+- [Heartbeat / Ping-Pong](heartbeat_ping_pong.md) — Related concept: Heartbeat / Ping-Pong.
+- [Reconnection & Backoff](reconnection_backoff.md) — Related concept: Reconnection & Backoff.
+- [WebSocket Handshake (Upgrade)](websocket_handshake.md) — Related concept: WebSocket Handshake (Upgrade).
 ---
 
 ## 8. Key Takeaways

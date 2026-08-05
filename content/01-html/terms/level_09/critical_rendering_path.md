@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DOM (Document Object Model)](../level_09/dom.md) — The interactive, in-memory representation.
-- [The Tree Structure](../level_09/tree_structure.md) — The hierarchical parent-child format.
-
+- [DOM (Document Object Model)](dom.md) — The interactive, in-memory representation.
+- [The Tree Structure](tree_structure.md) — The hierarchical parent-child format.
 ---
 
 ## 2. Term Category
@@ -223,10 +222,9 @@ Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 > **Explanation:** Geometry changes trigger Reflow + Repaint; visual-only changes trigger Repaint.
 
 ## 7. Related Terms
-- [DOM (Document Object Model)](../level_09/dom.md) — The foundational node representation.
-- [The Tree Structure](../level_09/tree_structure.md) — The parent-child layout hierarchy.
-- [Render-Blocking Resources](../level_09/render_blocking.md) — Files that pause this pipeline.
-
+- [DOM (Document Object Model)](dom.md) — The foundational node representation.
+- [The Tree Structure](tree_structure.md) — The parent-child layout hierarchy.
+- [Render-Blocking Resources](render_blocking.md) — Files that pause this pipeline.
 ---
 
 ## 8. Key Takeaways

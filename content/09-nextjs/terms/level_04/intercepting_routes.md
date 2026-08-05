@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Parallel Routes (`@folder`)](../level_04/parallel_routes.md) — Intercepting Routes are almost always rendered inside a Parallel Route slot.
-- [Node.js `path` Module](../level_04/path_module.md) — Understanding relative navigation patterns.
-
+- [Parallel Routes (`@folder`)](parallel_routes.md) — Intercepting Routes are almost always rendered inside a Parallel Route slot.
+- [Node.js `path` Module](path_module.md) — Understanding relative navigation patterns.
 ---
 
 ## 2. Term Category
@@ -170,9 +169,10 @@ app/
 ---
 
 ## 7. Related Terms
-- [Parallel Routes (`@folder`)](../level_04/parallel_routes.md) — The mechanism used to display the intercepted content without losing the background page.
+- [Parallel Routes (`@folder`)](parallel_routes.md) — The mechanism used to display the intercepted content without losing the background page.
 - [`<Link>` Component](../level_03/link.md) — The trigger for the interception.
-
+- [Node.js `path` Module](path_module.md) — Related concept: Node.js `path` Module.
+- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — Dynamic routing.
 ---
 
 ## 8. Key Takeaways

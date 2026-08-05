@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Classes Overview](../level_10/classes.md) — The structure making the promise.
+- [Classes Overview](classes.md) — The structure making the promise.
 - [Interfaces](../level_03/interfaces.md) — The blueprint being promised.
-
 ---
 
 ## 2. Term Category
@@ -263,10 +262,10 @@ Can you still pass `new MyLogger()` into a function `function run(logger: Logger
 > **Explanation:** `implements` is a compile-time check erased during JavaScript output generation.
 
 ## 7. Related Terms
-- [Abstract Classes](../level_10/abstract_classes.md) — The alternative way to mandate class structure (using `extends` instead of `implements`).
+- [Abstract Classes](abstract_classes.md) — The alternative way to mandate class structure (using `extends` instead of `implements`).
 - [Interfaces](../level_03/interfaces.md) — What is being implemented.
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — The type assignment paradigm that permits this behavior.
-
+- [Classes Overview](classes.md) — Related concept: Classes Overview.
 ---
 
 ## 8. Key Takeaways

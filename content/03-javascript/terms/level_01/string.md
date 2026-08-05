@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [Primitive Types](primitive_types.md) — Basic immutable data types.
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 2. Term Category
@@ -199,8 +198,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-
+- [Primitive Types](primitive_types.md) — Basic immutable data types.
+- [Number](number.md) — Related concept: Number.
+- [Type Coercion](type_coercion.md) — Related concept: Type Coercion.
+- [Template Literals](../level_08/template_literals.md) — Related concept: Template Literals.
 ---
 
 ## 8. Key Takeaways

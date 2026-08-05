@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Standard trait definitions and `impl Trait for Type` syntax.
-- [Blanket Implementation](../level_14/blanket_implementation.md) — Generic trait implementations across type bounds.
+
+- [Trait](../level_04/trait.md) — Standard trait definitions and `impl Trait for Type` syntax.
+- [Blanket Implementation](blanket_implementation.md) — Generic trait implementations across type bounds.
 - [`Display` Trait](../level_04/display_trait.md) — Standard library formatting trait often used as a supertrait bound.
 
 ---
@@ -610,10 +611,11 @@ Write unit tests with assertions (`assert!`, `assert_eq!`) testing manual trait 
 
 ## 7. Related Terms
 
-- [Traits](../level_04/trait.md) — Fundamental trait abstraction concept.
-- [Blanket Implementation](../level_14/blanket_implementation.md) — Implementing traits generically across bounds.
-- [Sealed Trait Pattern](../level_14/sealed_trait_pattern.md) — Design pattern relying on private supertraits to restrict external implementations.
-- [Marker Traits](../level_14/marker_traits.md) — Empty marker traits often used as supertraits (`Send`, `Sync`).
+
+- [Trait](../level_04/trait.md) — Fundamental trait abstraction concept.
+- [Blanket Implementation](blanket_implementation.md) — Implementing traits generically across bounds.
+- [Sealed Trait Pattern](sealed_trait_pattern.md) — Design pattern relying on private supertraits to restrict external implementations.
+- [Marker Traits](marker_traits.md) — Empty marker traits often used as supertraits (`Send`, `Sync`).
 
 ---
 

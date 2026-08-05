@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [updateOne() / updateMany()](update.md) — The parent modification methods.
+
+- [`updateOne()` / `updateMany()`](update.md) — The parent modification methods.
 
 ---
 
@@ -238,8 +239,11 @@ db.users.updateOne({ _id: id }, { $currentDate: { updatedAt: true } }); // Serve
 > **Explanation:** `$max` updates fields ONLY if the new value is greater than existing field values.
 
 ## 7. Related Terms
-- [updateOne() / updateMany()](update.md) — The parent update methods.
-- `$set` vs. Whole-Document Replacement](set_vs_replace.md) — The replacement rules.
+
+- [`updateOne()` / `updateMany()`](update.md) — The parent update methods.
+- [Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)](array_update_operators.md) — Related concept: Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`).
+- [`$set` / `$unset` Pipeline Stages](../level_06/set_unset_stages.md) — Related concept: `$set` / `$unset` Pipeline Stages.
+- [`arrayFilters` Option](../level_04/array_filters.md) — Related concept: `arrayFilters` Option.
 
 ---
 

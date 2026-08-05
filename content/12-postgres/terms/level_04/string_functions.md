@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](../level_02/data_types.md) — Understanding text columns.
-
 ---
 
 ## 2. Term Category
@@ -197,7 +196,6 @@ Write the SQL query.
 
 ## 7. Related Terms
 - [`LIKE` / `ILIKE` Pattern Matching](like_ilike.md) — Wildcard text searches.
-
 ---
 
 ## 8. Key Takeaways

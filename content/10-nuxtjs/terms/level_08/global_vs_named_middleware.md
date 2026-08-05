@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Route Middleware](../level_08/route_middleware.md) — The overarching concept of intercepting Vue routing.
-- [Dynamic Routing (Pages)](../level_02/dynamic_routes.md) — Understanding route paths and structure.
-
+- [Route Middleware](route_middleware.md) — The overarching concept of intercepting Vue routing.
+- [Dynamic Routes](../level_02/dynamic_routes.md) — Understanding route paths and structure.
 ---
 
 ## 2. Term Category
@@ -184,8 +183,8 @@ export default defineNuxtRouteMiddleware((to) => {
 ---
 
 ## 7. Related Terms
-- [`definePageMeta`](../level_02/pages_directory.md) — The macro used to attach Named Middleware to a specific page.
-
+- [`pages/` Directory](../level_02/pages_directory.md) — The macro used to attach Named Middleware to a specific page.
+- [Route Middleware](route_middleware.md) — Related concept: Route Middleware.
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Database Context (Running processes)](../level_01/database_context.md) — The single `mongod` process.
+
+- [`mongod` (MongoDB Server Daemon)](../level_01/mongod.md) — MongoDB server daemon.
+- [Database (MongoDB Context)](../level_01/database_context.md) — The single `mongod` process.
 
 ---
 
@@ -189,8 +191,16 @@ Explain:
 > **Explanation:** `rs.printSecondaryReplicationInfo()` displays seconds of replication lag per secondary node.
 
 ## 7. Related Terms
+
 - [Primary / Secondary / Arbiter](primary_secondary_arbiter.md) — Node roles.
 - [Automatic Failover & Elections](failover_elections.md) — The election process.
+- [ACID vs BASE](../level_08/acid_vs_base.md) — Related concept: ACID vs BASE.
+- [Read Preference](../level_08/read_preference.md) — Related concept: Read Preference.
+- [Retryable Writes / Retryable Reads](../level_08/retryable_operations.md) — Related concept: Retryable Writes / Retryable Reads.
+- [Write Concern](../level_08/write_concern.md) — Related concept: Write Concern.
+- [Oplog (Operations Log)](oplog.md) — Related concept: Oplog (Operations Log).
+- [Sharding (Horizontal Scaling)](sharding.md) — Related concept: Sharding (Horizontal Scaling).
+- [Change Streams](../level_10/change_streams.md) — Related concept: Change Streams.
 
 ---
 

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The schema constraint context.
 
@@ -211,8 +212,9 @@ Evaluate the result (returns **product:01**, **product:02**, **both**, or **neit
 > **Explanation:** Setting a field to `NONE` deletes the field key from the record.
 
 ## 7. Related Terms
+
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The schema constraint context.
-- [`option<T>`](../level_04/option_type.md) — Optional fields wrapper.
+- [`option<T>` (Optional Fields)](../level_04/option_type.md) — Optional fields wrapper.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Statement](../level_01/statement.md) — An instruction that performs an action.
-
+- [Statement](statement.md) — An instruction that performs an action.
 ---
 
 ## 2. Term Category
@@ -222,9 +221,8 @@ let y = x
 ---
 
 ## 7. Related Terms
-- [Statement](../level_01/statement.md) — The individual actions separated by delimiters.
-- [Comments](../level_01/comments.md) — Text ignored by the engine, which does not affect ASI.
-
+- [Statement](statement.md) — The individual actions separated by delimiters.
+- [Comments](comments.md) — Text ignored by the engine, which does not affect ASI.
 ---
 
 ## 8. Key Takeaways

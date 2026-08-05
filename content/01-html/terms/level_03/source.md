@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<audio>`](../level_03/audio.md) — Sound media player containers.
-- [`<video>`](../level_03/video.md) — Video media player containers.
+- [`<audio>`](audio.md) — Sound media player containers.
+- [`<video>`](video.md) — Video media player containers.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Since `<source>` is a self-closing element.
-
 ---
 
 ## 2. Term Category
@@ -210,10 +209,10 @@ Nesting alternative sources inside a video container:
 > **Explanation:** `2x` handles high-DPI retina screens; `800w` specifies source image pixel width.
 
 ## 7. Related Terms
-- [`<audio>`](../level_03/audio.md) — The audio container element.
-- [`<video>`](../level_03/video.md) — The video container element.
+- [`<audio>`](audio.md) — The audio container element.
+- [`<video>`](video.md) — The video container element.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The general category of single-tag elements.
-
+- [`<picture>` & Responsive Images](picture_responsive.md) — Related concept: `<picture>` & Responsive Images.
 ---
 
 ## 8. Key Takeaways

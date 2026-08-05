@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Type Assertions](../level_05/type_assertions.md) — Overriding default compile-time type resolution.
+- [Type Assertions (`as`)](type_assertions.md) — Overriding default compile-time type resolution.
 - [`null`, `undefined` & `strictNullChecks`](../level_02/null_undefined_strict.md) — Safety constraints on empty values.
-
 ---
 
 ## 2. Term Category
@@ -210,10 +209,10 @@ function focusInput() {
 > **Explanation:** Definite assignment assertions inform TS that fields are assigned via dependency injection or framework lifecycle methods.
 
 ## 7. Related Terms
-- [Type Assertions](../level_05/type_assertions.md) — Overriding default types.
+- [Type Assertions (`as`)](type_assertions.md) — Overriding default types.
 - [`null`, `undefined` & `strictNullChecks`](../level_02/null_undefined_strict.md) — The safety setting that necessitates assertions.
 - [Type Narrowing](../level_06/type_narrowing.md) — The safe, conditional method to unpack values.
-
+- [Assertion Functions (`asserts`)](../level_06/assertion_functions.md) — Related concept: Assertion Functions (`asserts`).
 ---
 
 ## 8. Key Takeaways

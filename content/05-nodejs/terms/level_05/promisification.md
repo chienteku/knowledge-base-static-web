@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Callbacks & Callback Hell](../level_05/callbacks.md) — The legacy system you are trying to escape.
-
+- [Callbacks & Callback Hell](callbacks.md) — The legacy system you are trying to escape.
 ---
 
 ## 2. Term Category
@@ -176,9 +175,10 @@ function get() {
 > **Explanation:** Modern Node.js core modules (`fs/promises`, `dns/promises`, `timers/promises`) provide native promises out-of-the-box.
 
 ## 7. Related Terms
-- [Callbacks & Callback Hell](../level_05/callbacks.md) — The problem this tool solves.
-- [The `fs` Module](../level_02/fs_module.md) — The most common module that was historically Promisified.
-
+- [Callbacks & Callback Hell](callbacks.md) — The problem this tool solves.
+- [The fs Module (File System)](../level_02/fs_module.md) — The most common module that was historically Promisified.
+- [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.
+- [async / await in Node](async_await.md) — Related concept: async / await in Node.
 ---
 
 ## 8. Key Takeaways

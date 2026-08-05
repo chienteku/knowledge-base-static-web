@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Referential Integrity](referential_integrity.md) — The logical consistency standard.
-- [Primary Key](../level_02/primary_key.md) — The parent unique identifier targeted by references.
-
+- [`PRIMARY KEY`](../level_02/primary_key.md) — The parent unique identifier targeted by references.
 ---
 
 ## 2. Term Category
@@ -244,8 +243,13 @@ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 
 ## 7. Related Terms
 - [Referential Integrity](referential_integrity.md) — The core database safety standard.
-- [`ON DELETE` / `ON UPDATE` Actions](on_delete_update.md) — Custom parent delete behaviors.
-
+- [`ON DELETE` / `ON UPDATE` Actions (`CASCADE`, `SET NULL`, `RESTRICT`)](on_delete_update.md) — Custom parent delete behaviors.
+- [Natural Key vs. Surrogate Key](natural_vs_surrogate_key.md) — Related concept: Natural Key vs. Surrogate Key.
+- [One-to-Many Relationship](one_to_many.md) — Related concept: One-to-Many Relationship.
+- [One-to-One Relationship](one_to_one.md) — Related concept: One-to-One Relationship.
+- [Junction Table (Bridge / Pivot Table)](junction_table.md) — Junction tables.
+- [`PRIMARY KEY`](../level_02/primary_key.md) — Related concept: `PRIMARY KEY`.
+- [`INNER JOIN`](inner_join.md) — Related concept: `INNER JOIN`.
 ---
 
 ## 8. Key Takeaways

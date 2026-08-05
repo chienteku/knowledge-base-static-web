@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [PL/pgSQL](plpgsql.md) — The language used to write trigger handlers.
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The wrapper compiling the trigger logic.
-
 ---
 
 ## 2. Term Category
@@ -227,7 +226,7 @@ Write the SQL queries to:
 ## 7. Related Terms
 - [PL/pgSQL](plpgsql.md) — The parent procedural language.
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The compiling wrapper.
-
+- [`LISTEN` / `NOTIFY`](../level_10/listen_notify.md) — Related concept: `LISTEN` / `NOTIFY`.
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Express.js](../level_07/express_js.md) — Rate limiting is usually implemented as an Express middleware.
-- [HTTP Status Codes](../level_09/status_codes.md) — When a user is rate-limited, they receive a special status code (429).
-
+- [HTTP Status Codes](status_codes.md) — When a user is rate-limited, they receive a special status code (429).
 ---
 
 ## 2. Term Category
@@ -224,8 +223,7 @@ app.set('trust proxy', 1); // Trust first reverse proxy hop for true client IP
 
 ## 7. Related Terms
 - [Middleware](../level_07/middleware.md) — Rate limiters are just bouncer middlewares.
-- [HTTP Status Codes](../level_09/status_codes.md) — The `429` code is the hallmark of rate limiting.
-
+- [HTTP Status Codes](status_codes.md) — The `429` code is the hallmark of rate limiting.
 ---
 
 ## 8. Key Takeaways

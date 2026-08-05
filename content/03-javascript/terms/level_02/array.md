@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-
 ---
 
 ## 2. Term Category
@@ -191,9 +190,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Object](../level_02/object.md) — A collection of key-value pairs (Arrays are technically a type of Object).
-- [`for` Loop](../level_02/for_loop.md) — The most common way to iterate through an Array.
-
+- [Object](object.md) — A collection of key-value pairs (Arrays are technically a type of Object).
+- [for Loop](for_loop.md) — The most common way to iterate through an Array.
+- [Array Index & .length](array_index_length.md) — Related concept: Array Index & .length.
+- [Set](../level_08/set.md) — Related concept: Set.
+- [push / pop / shift / unshift](../level_04/push_pop_shift_unshift.md) — Mutating methods.
 ---
 
 ## 8. Key Takeaways

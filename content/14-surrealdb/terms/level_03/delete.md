@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 
 ---
@@ -188,8 +189,10 @@ Write the SurrealQL query to:
 > **Explanation:** `RETURN BEFORE` returns record contents prior to deletion.
 
 ## 7. Related Terms
-- [`RETURN` Clause](return_clause.md) — Customizing delete outputs.
+
+- [`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)](return_clause.md) — Customizing delete outputs.
 - [`UPDATE`](update.md) — Modifying records.
+- [`REMOVE` Statement](../level_04/remove_statement.md) — Related concept: `REMOVE` Statement.
 
 ---
 

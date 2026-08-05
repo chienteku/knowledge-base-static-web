@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Static Site Generation (SSG)](../level_08/ssg.md) — The static shell.
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The dynamic holes.
+- [Static Site Generation (SSG)](ssg.md) — The static shell.
+- [Dynamic Rendering (SSR)](ssr.md) — The dynamic holes.
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — The mechanism that glues them together.
-
 ---
 
 ## 2. Term Category
@@ -250,8 +249,9 @@ module.exports = {
 
 ## 7. Related Terms
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — The React primitive that enables PPR.
-- [Static Site Generation (SSG)](../level_08/ssg.md) — The strategy used for the "shell."
-
+- [Static Site Generation (SSG)](ssg.md) — The strategy used for the "shell."
+- [React Server Components (RSC)](../level_01/rsc.md) — React Server Components.
+- [React Suspense](../level_02/react_suspense.md) — Partial Prerendering suspense boundaries.
 ---
 
 ## 8. Key Takeaways

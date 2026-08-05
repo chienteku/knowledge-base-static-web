@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Rustup](../level_16/rustup.md) — Toolchain manager used to install `rust-analyzer`.
+
+- [Rustup](rustup.md) — Toolchain manager used to install `rust-analyzer`.
 - [Procedural Macros](../level_12/procedural_macros.md) — Macros expanded live in the editor by `rust-analyzer`.
 
 ---
@@ -334,6 +335,14 @@ In early Rust tooling (like legacy `rls`), IDE completion was slow, crashed on c
 >    - **Fill match arms**: Automatically generates all enum patterns when matching on decoded bytes or enums.
 > 2. **Slice Pattern Matching**: Demonstrates `let [cmd_byte, rest @ ..] = ... else { ... }` pattern matching on slice references in zero-allocation contexts.
 > 3. **Unit Tests**: Asserts happy-path decoding and error detection via `assert_eq!`.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

@@ -6,11 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [`map()`](../level_04/map.md) — Transforms each element in an array.
-- [`filter()`](../level_04/filter.md) — Filters elements based on a condition callback.
-- [`reduce()`](../level_04/reduce.md) — Accumulates array values into a single output.
-- [Pure Function](../level_03/pure_function.md) — A function that returns a new value without modifying its inputs.
-
+- [Map](../level_08/map.md) — Transforms each element in an array.
+- [filter()](filter.md) — Filters elements based on a condition callback.
+- [reduce()](reduce.md) — Accumulates array values into a single output.
+- [Pure Function & Side Effects](../level_03/pure_function.md) — A function that returns a new value without modifying its inputs.
 ---
 
 ## 2. Term Category
@@ -241,9 +240,8 @@ console.log(formattedPrices);
 ---
 
 ## 7. Related Terms
-- [Pure Function](../level_03/pure_function.md) — The building blocks of functional pipeline flows.
+- [Pure Function & Side Effects](../level_03/pure_function.md) — The building blocks of functional pipeline flows.
 - [Anonymous Function](../level_03/anonymous_function.md) — Frequently written inside chains for compactness.
-
 ---
 
 ## 8. Key Takeaways

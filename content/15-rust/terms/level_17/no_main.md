@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`#![no_std]`](../level_17/no_std.md) — Bare-metal crate attribute often paired with `#![no_main]`.
-- [Linker Script](../level_17/linker_script.md) — Controls hardware memory layout and entry point addresses.
+
+- [Linker Script](linker_script.md) — Controls hardware memory layout and entry point addresses.
 
 ---
 
@@ -508,6 +508,14 @@ Implement a C-ABI compliant `BootInformation` header structure with magic header
 > 2. **`#[repr(C)]` Memory Layout**: The `BootInformation` struct uses `#[repr(C)]` so that field offsets match memory packed by external assembly or C bootloaders without Rust struct layout reordering.
 > 3. **Defensive Firmware Validation**: Bare-metal kernels must validate boot parameters passed via raw pointers prior to initializing subsystems. Magic headers (`BOOT_MAGIC`) and XOR checksums prevent corrupted bootloader data from causing silent memory corruption.
 > 4. **Unit Verification**: The unit tests verify that valid boot parameter payloads pass header verification, modified magic codes return `InvalidMagic`, flipped checksum bits trigger `ChecksumMismatch`, and under-sized RAM parameters report `InsufficientMemory`.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

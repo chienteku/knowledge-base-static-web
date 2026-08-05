@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`loop`](../level_02/loop.md) — The unconditional loop that runs forever.
-- [`if` / `else`](../level_02/if_else.md) — The branching logic that evaluates a true/false condition (which `while` also does).
+
+- [`loop`](loop.md) — The unconditional loop that runs forever.
+- [`if` / `else`](if_else.md) — The branching logic that evaluates a true/false condition (which `while` also does).
 
 ---
 
@@ -685,8 +686,9 @@ Write unit tests verifying:
 
 ## 6. Related Terms
 
-- [`loop`](../level_02/loop.md) — The unconditional loop. If you find yourself writing `while true`, replace it with `loop`.
-- [`for` / Range](../level_02/for_range.md) — The preferred loop for going through arrays or counting through a range of numbers.
+
+- [`loop`](loop.md) — The unconditional loop. If you find yourself writing `while true`, replace it with `loop`.
+- [`for` / Range](for_range.md) — The preferred loop for going through arrays or counting through a range of numbers.
 
 ---
 

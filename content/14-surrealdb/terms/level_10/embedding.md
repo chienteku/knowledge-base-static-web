@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB](../level_01/surrealdb.md) — Multi-model database architecture.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — In-memory and file storage backends.
 
@@ -221,6 +222,7 @@ Name the 2 primary embedded runtimes supported by SurrealDB:
 > **Explanation:** `RocksDb` provides embedded local disk storage in Rust.
 
 ## 7. Related Terms
+
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — In-memory and local storage engines.
 - [JavaScript / TypeScript SDK](js_sdk.md) — Web client SDK.
 - [Direct Browser-to-Database Architecture](../level_08/browser_to_db.md) — Browser connectivity.

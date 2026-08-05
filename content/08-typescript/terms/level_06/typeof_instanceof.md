@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Type Narrowing](../level_06/type_narrowing.md) — The process these operators trigger.
+- [Type Narrowing](type_narrowing.md) — The process these operators trigger.
 - [Primitive Types](../level_02/primitive_types.md) — What `typeof` checks.
-
 ---
 
 ## 2. Term Category
@@ -171,9 +170,9 @@ if (val === null) { /* Correct null check */ }
 > **Explanation:** `typeof` returns standard primitive type name strings.
 
 ## 7. Related Terms
-- [Type Narrowing](../level_06/type_narrowing.md) — The goal of using these operators.
-- [Classes](../level_10/classes.md) — The structures `instanceof` works with.
-
+- [Type Narrowing](type_narrowing.md) — The goal of using these operators.
+- [Classes Overview](../level_10/classes.md) — The structures `instanceof` works with.
+- [`in` Operator Narrowing](in_operator.md) — Related concept: `in` Operator Narrowing.
 ---
 
 ## 8. Key Takeaways

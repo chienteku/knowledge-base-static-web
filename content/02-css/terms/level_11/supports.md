@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — The foundation of conditional at-rule wrappers.
 - [Responsive Design (Concept)](../level_08/responsive_design.md) — Designing layout adapters for various environments.
-
 ---
 
 ## 2. Term Category
@@ -266,7 +265,6 @@ Checking modern display properties:
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport sizing at-rules.
 - [Container Queries (`@container`)](container_queries.md) — Component container queries.
-
 ---
 
 ## 8. Key Takeaways

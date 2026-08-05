@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Creating live query subscriptions.
 - [Parameters (`$param`)](../level_06/parameters.md) — Passing query parameters.
 
@@ -233,9 +234,11 @@ Write the SurrealQL command to kill a live subscription with UUID `u"a1b2c3d4-e5
 > **Explanation:** `db.kill(queryId)` closes real-time WebSocket subscription listeners.
 
 ## 7. Related Terms
+
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Starting live subscriptions.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — Client SDK lifecycle methods.
-- [Connection URI & Protocols](../level_01/connection_uri.md) — WebSocket session transport.
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — WebSocket session transport.
+- [SDK Live Query Subscriptions](../level_10/sdk_live_queries.md) — Related concept: SDK Live Query Subscriptions.
 
 ---
 

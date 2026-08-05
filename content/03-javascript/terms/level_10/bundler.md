@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Modules](../level_08/modules.md) — The individual files that a Bundler combines.
-- [npm](./npm.md) — How you install and run Bundlers.
-
+- [Modules (import/export)](../level_08/modules.md) — The individual files that a Bundler combines.
+- [npm](npm.md) — How you install and run Bundlers.
 ---
 
 ## 2. Term Category
@@ -194,9 +193,12 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Modules](../level_08/modules.md) — The modern file system that makes Bundlers necessary.
-- [npm](./npm.md) — The ecosystem where you download Bundlers.
-
+- [Modules (import/export)](../level_08/modules.md) — The modern file system that makes Bundlers necessary.
+- [npm](npm.md) — The ecosystem where you download Bundlers.
+- [Dynamic import()](../level_08/dynamic_import.md) — Related concept: Dynamic import().
+- [CommonJS vs ES Modules (require vs import)](commonjs_vs_esm.md) — Related concept: CommonJS vs ES Modules (require vs import).
+- [Framework vs Library (React / Vue / Angular)](framework_vs_library.md) — Related concept: Framework vs Library (React / Vue / Angular).
+- [Specific Bundlers (Webpack / Vite / Rollup / esbuild)](specific_bundlers.md) — Related concept: Specific Bundlers (Webpack / Vite / Rollup / esbuild).
 ---
 
 ## 8. Key Takeaways

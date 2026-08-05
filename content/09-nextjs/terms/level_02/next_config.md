@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The parent framework configured by this file.
-
 ---
 
 ## 2. Term Category
@@ -209,7 +208,7 @@ export default nextConfig;
 
 ## 7. Related Terms
 - [Next.js Overview](../level_01/nextjs.md) — The framework itself.
-
+- [Turbopack](../level_10/turbopack.md) — Related concept: Turbopack.
 ---
 
 ## 8. Key Takeaways

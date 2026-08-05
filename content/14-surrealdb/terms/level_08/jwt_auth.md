@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Record authentication.
 
 ---
@@ -212,9 +213,12 @@ Identify the 4 core system claims included in every SurrealDB Record Access JWT 
 > **Explanation:** `db.authenticate(token)` establishes SDK session state using a raw JWT string.
 
 ## 7. Related Terms
+
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in access definition.
 - [`$session` / `$token` Variables](session_token_variables.md) — Accessing decoded JWT claims in SurrealQL.
-- [`DEFINE ACCESS ... TYPE JWT`](define_access_jwt.md) — Validating third-party provider JWTs.
+- [`DEFINE ACCESS ... TYPE JWT` (External Auth Providers)](define_access_jwt.md) — Validating third-party provider JWTs.
+- [`SIGNUP` / `SIGNIN` Clauses](signup_signin.md) — Related concept: `SIGNUP` / `SIGNIN` Clauses.
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — Related concept: Authentication Architecture (Root, Namespace, Database, Record).
 
 ---
 

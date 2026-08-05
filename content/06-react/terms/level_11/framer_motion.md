@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Declarative Programming](../level_01/declarative_programming.md) — Framer Motion is the ultimate expression of declarative animation.
 - [Component Lifecycle](../level_03/component_lifecycle.md) — Framer Motion specializes in animating components as they Mount and Unmount.
-
 ---
 
 ## 2. Term Category
@@ -183,7 +182,6 @@ function App({ isVisible }) {
 ## 7. Related Terms
 - [Conditional Rendering](../level_05/conditional_rendering.md) — What `<AnimatePresence>` supercharges.
 - [Declarative Programming](../level_01/declarative_programming.md) — You declare *what* the animation should look like, Framer Motion figures out *how* to do the math.
-
 ---
 
 ## 8. Key Takeaways

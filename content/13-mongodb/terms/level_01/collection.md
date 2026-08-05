@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Document](document.md) — The fundamental data units grouped inside collections.
 
 ---
@@ -215,9 +216,13 @@ await db.users.insertOne({ name: "Alice" }); // Collection implicitly created on
 > **Explanation:** `db.collection.drop()` deletes the collection and all its associated indexes.
 
 ## 7. Related Terms
+
 - [Document](document.md) — The core data record.
 - [Database (MongoDB Context)](database_context.md) — The parent namespace.
 - [Flexible Schema (Schema-on-Read)](flexible_schema.md) — The schema design.
+- [Document vs. Relational Model](document_vs_relational.md) — Related concept: Document vs. Relational Model.
+- [MongoDB](mongodb.md) — Related concept: MongoDB.
+- [`insertOne()` / `insertMany()`](../level_03/insert.md) — Related concept: `insertOne()` / `insertMany()`.
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`tokio`](../level_16/tokio.md) — Asynchronous runtime powering `sqlx`.
-- [`serde`](../level_16/serde.md) — Used for JSON column mappings and struct conversions.
-- [Async / Await](../level_09/async_await.md) — Asynchronous database query execution.
+
+- [`tokio`](tokio.md) — Asynchronous runtime powering `sqlx`.
+- [`serde`](serde.md) — Used for JSON column mappings and struct conversions.
+- [`async` / `.await`](../level_09/async_await.md) — Asynchronous database query execution.
 
 ---
 
@@ -609,6 +610,14 @@ Implement an async user search service using `sqlx::QueryBuilder` in Rust for SQ
 > 1. **Safe Dynamic SQL (`QueryBuilder`):** Allows appending dynamic SQL clauses while preserving binding parameter placeholders (`push_bind`). This ensures that user inputs are safely escaped and separated from the SQL execution plan, preventing SQL injection vulnerabilities.
 > 2. **Type-Safe Dynamic Mapping (`build_query_as::<User>()`):** Automatically maps dynamically generated SQL result columns into the target `User` struct using `sqlx::FromRow`.
 > 3. **Dynamic Pagination & Filtering:** Demonstrates how production APIs handle optional URL parameters seamlessly without requiring complex ORM query DSLs.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

@@ -7,15 +7,16 @@
 
 ## 1. Prerequisites
 
-- [Closure](../level_06/closure.md) — The closely related, but fundamentally different, callable type this contrasts with.
-- [`Fn` / `FnMut` / `FnOnce`](../level_06/fn_traits.md) — The trait family closures implement, which function pointers *also* implement.
-- [`fn`](../level_01/fn.md) — The keyword that both declares functions and names this type.
+
+- [Closure](closure.md) — The closely related, but fundamentally different, callable type this contrasts with.
+- [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The trait family closures implement, which function pointers *also* implement.
+- [`fn` (Functions)](../level_01/fn.md) — The keyword that both declares functions and names this type.
 
 ---
 
 ## 2. Term Category
 
-**Primitive Type (the environment-free callable)**: `fn(Args) -> Ret` is an actual, concrete, `Copy`-able Rust type — the type of a plain function itself (or a non-capturing closure), not a trait or a generic bound. It's the simplest possible "callable value," precisely because it's guaranteed to carry **no captured data** at all — just a bare address to jump to.
+**Primitive Type (environment-free callables)**: `fn(Args) -> Ret` is a concrete, primitive, scalar `Copy` type in Rust that stores the raw memory address of an executable function. Unlike closure types, function pointers carry **zero captured environment state**, making them thin pointers (a single machine word) fully compatible with C FFI.
 
 ---
 
@@ -23,48 +24,66 @@
 
 ### (1) Design Motivation — "Why did we design this?"
 
-A closure that captures its environment (`let x = 5; let f = move || x + 1;`) needs to carry that captured data around with it, so it's necessarily a unique, compiler-generated struct type — different closures, even with identical bodies, are always different types. A **plain function** (`fn add_one(x: i32) -> i32 { x + 1 }`), on the other hand, has no environment to capture at all — every call to it behaves identically regardless of context. This means a function (or a closure that happens to capture nothing) can be represented by something dramatically simpler: just the memory address of its compiled code. Rust exposes this as the `fn` type — a genuine, nameable, `Copy`, thread-safe (`Send + Sync`), single-machine-word type, distinct from the anonymous, capture-carrying types closures produce. This matters for FFI (C has no concept of closures, only plain function pointers) and for any scenario where you want to store "a callback" without paying for a capture-carrying struct.
+Capturing closures require generating unique compiler structs to hold captured references or owned variables. Consequently, two closures with identical bodies have distinct, unnameable struct types.
 
-### (2) Reality Metaphor
+Plain functions (`fn add(a: i32, b: i32) -> i32`), however, carry no environment. They execute stateless code located at a fixed memory address in the executable binary.
 
-Imagine the difference between a vending machine's built-in dispensing mechanism and a custom Rube Goldberg contraption someone rigs up beside it.
+Rust exposes this capability through **Function Pointers (`fn`)**:
+1. **Concrete, Nameable Type**: Unlike closures, `fn(i32) -> i32` is an explicit type nameable in structs, arrays, and FFI interfaces.
+2. **`Copy` & `Send` & `Sync`**: Because a function pointer is just a code memory address, it implements `Copy`, `Clone`, `Send`, and `Sync` automatically.
+3. **Coercion from Non-Capturing Closures**: Any closure that captures *no variables* from its environment automatically coerces to a raw function pointer `fn`.
 
-- **A function pointer (`fn`)** is the vending machine's standard mechanism: a fixed, built-in procedure with **no memory of context** — press button B4, and it does the exact same mechanical motion every single time, regardless of who's standing there or what happened five minutes ago.
-- **A capturing closure** is the custom contraption: it might remember "how many times has this specific person pressed a button today" or "what was the last item they bought" (**captured environment**) — genuinely unique machinery that can't be reduced to a single simple address, because it's carrying extra state along with it.
+### (2) Deep Dive — Function Pointers vs Closure Traits
 
-### (3) Rust Code Examples
+Function pointers implement all three closure traits (`Fn`, `FnMut`, `FnOnce`), but the reverse is **not** true:
 
-#### Short Snippet (A Function as a Value)
+$$\text{Bare Functions / Non-Capturing Closures} \xrightarrow{\text{Coerce}} \text{fn(A) -> B} \implies \text{Implements Fn, FnMut, FnOnce}$$
+
+$$\text{Capturing Closures} \implies \text{Anonymous Struct} \centernot\implies \text{fn(A) -> B}$$
+
+### (3) Reality Metaphor
+
+- **Function Pointer (`fn`)**: A GPS coordinate pinned to a public library branch. Anyone can follow the coordinate to reach the exact same building, and sending the coordinate over a text message (`Copy`) costs nothing.
+- **Capturing Closure**: A mobile food truck with ingredients and kitchen gear inside. You cannot represent the food truck using just a GPS coordinate, because moving the truck requires towing its entire physical vehicle and inventory (**captured state**).
+
+### (4) Rust Code Examples
+
+#### Top-Level Function & Non-Capturing Closure Coercion
 ```rust
 fn add_one(x: i32) -> i32 { x + 1 }
-fn double(x: i32) -> i32 { x * 2 }
-
-fn apply(f: fn(i32) -> i32, value: i32) -> i32 {
-    f(value)
-}
 
 fn main() {
-    println!("{}", apply(add_one, 5)); // 6
-    println!("{}", apply(double, 5));  // 10
+    // Top-level function assigns to function pointer type
+    let fp: fn(i32) -> i32 = add_one;
+    assert_eq!(fp(5), 6);
 
-    // fn is Copy: storing it in a variable and using it twice is trivial.
-    let op: fn(i32) -> i32 = add_one;
-    println!("{} {}", op(1), op(2)); // 2 3
+    // Non-capturing closure coerces to function pointer!
+    let non_capturing_closure = |x: i32| x * 2;
+    let fp2: fn(i32) -> i32 = non_capturing_closure;
+    assert_eq!(fp2(5), 10);
 }
 ```
 
-#### Fuller Example (Non-Capturing Closures Coerce to `fn`; Capturing Ones Don't)
+#### Function Pointer Lookup Table
 ```rust
+type MathOp = fn(i32, i32) -> i32;
+
+fn add(a: i32, b: i32) -> i32 { a + b }
+fn sub(a: i32, b: i32) -> i32 { a - b }
+fn mul(a: i32, b: i32) -> i32 { a * b }
+
+fn get_operator(symbol: char) -> Option<MathOp> {
+    match symbol {
+        '+' => Some(add),
+        '-' => Some(sub),
+        '*' => Some(mul),
+        _ => None,
+    }
+}
+
 fn main() {
-    let non_capturing = |x: i32| x + 1; // Captures NOTHING from its environment.
-    let fp: fn(i32) -> i32 = non_capturing; // Coerces to a plain fn pointer — legal!
-    println!("{}", fp(10)); // 11
-
-    let captured = 100;
-    let capturing = |x: i32| x + captured; // Captures `captured` — has real environment data.
-    // let fp2: fn(i32) -> i32 = capturing; // COMPILE ERROR: closure captures data, no fn coercion possible!
-
-    println!("{}", capturing(1)); // 101 — still perfectly usable, just NOT as a bare `fn`.
+    let op = get_operator('+').unwrap();
+    assert_eq!(op(10, 20), 30);
 }
 ```
 
@@ -72,143 +91,234 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Function Pointers Scoping and Lifecycle Rules
+### Mistake 1: Attempting to Assign a Capturing Closure to a `fn` Pointer
 
-**The mistake:** Assuming Function Pointers instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Trying to store a closure that captures environment variables into a `fn` function pointer type.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Capturing closures carry environment struct fields. `fn` pointers only store code addresses with zero payload. The compiler rejects this with `E0308`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("function_pointers_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+let offset = 10;
+let f: fn(i32) -> i32 = |x| x + offset; // ❌ Error E0308: expected fn pointer, found closure with captured environment
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("function_pointers_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+let offset = 10;
+let f = |x: i32| x + offset; // Use closure type or generic bound F: Fn(i32) -> i32!
 ```
 
-### Mistake 2: Mutating Function Pointers State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Specifying `fn` Pointer Parameter in APIs Intended for General Closures
 
-**The mistake:** Attempting to mutate data associated with Function Pointers through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Defining a public library function `fn process(f: fn(i32))` instead of using generic `fn process<F: Fn(i32)>(f: F)`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Hardcoding `fn(i32)` forces API callers to pass non-capturing functions or closures, preventing them from passing capturing closures.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+fn for_each_num(nums: &[i32], callback: fn(i32)) { ... } // Rejects capturing closures!
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+fn for_each_num<F: Fn(i32)>(nums: &[i32], callback: F) { ... } // Accepts functions AND closures!
 ```
 
-### Mistake 3: Concurrent Access to Function Pointers Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Omitting `extern "C"` when Passing Function Pointers to C FFI
 
-**The mistake:** Sharing non-thread-safe Function Pointers instances across OS threads via `std::thread::spawn`.
+**The mistake:** Passing a standard Rust `fn()` pointer to C code without specifying ABI calling conventions.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Rust's default ABI (`extern "Rust"`) is unstable and does not match C calling conventions (`extern "C"`), leading to stack corruption in FFI calls.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
-### Exercise 1: Predict the Compile Result
+### Exercise 1: FFI C-Compatible Callback Bridge
 
-**Problem:** Will this compile? Why or why not?
-```rust
-fn make_adder(n: i32) -> fn(i32) -> i32 {
-    |x| x + n
-}
-```
+**Scenario:** Design a C FFI callback dispatch system `CLogger` accepting stateless function pointers `extern "C" fn(level: i32, msg: *const std::ffi::c_char)`.
+
+**Requirements:**
+1. Define type alias `type LogCallback = extern "C" fn(i32, *const std::ffi::c_char)`.
+2. Implement `struct CLogger` holding `callback: LogCallback`.
+3. Implement `log_message(&self, level: i32, msg: &str)`.
+4. Write unit tests with an `extern "C"` static handler function.
 
 > [!check]- Answer
-> **No, this fails to compile.** The closure `|x| x + n` captures `n` from `make_adder`'s parameters — it has real environment data, so it cannot coerce into a bare `fn(i32) -> i32`, which by definition carries none. The fix is to change the return type to `impl Fn(i32) -> i32` (an opaque type representing "some closure implementing `Fn`"), which *can* represent a capturing closure, unlike the concrete `fn` pointer type.
-
----
-
-### Exercise 2: Passing Top-Level Functions as Function Pointers
-
-**Problem:** Pass top-level function `add_one(x: i32) -> i32` to a higher-order function taking `fn(i32) -> i32`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Result: 11
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn add_one(x: i32) -> i32 { x + 1 }
-> fn apply(val: i32, f: fn(i32) -> i32) -> i32 { f(val) }
-> fn main() {
->     println!("Result: {}", apply(10, add_one));
+> use std::ffi::CString;
+> use std::os::raw::c_char;
+> 
+> pub type LogCallback = extern "C" fn(i32, *const c_char);
+> 
+> pub struct CLogger {
+>     callback: LogCallback,
+> }
+> 
+> impl CLogger {
+>     pub fn new(callback: LogCallback) -> Self {
+>         Self { callback }
+>     }
+> 
+>     pub fn log(&self, level: i32, message: &str) {
+>         let c_str = CString::new(message).unwrap();
+>         (self.callback)(level, c_str.as_ptr());
+>     }
+> }
+> 
+> extern "C" fn default_c_log(level: i32, msg: *const c_char) {
+>     unsafe {
+>         let c_str = std::ffi::CStr::from_ptr(msg);
+>         println!("[C-Log L{}] {}", level, c_str.to_str().unwrap());
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_c_logger() {
+>         let logger = CLogger::new(default_c_log);
+>         logger.log(1, "System initialized");
+>     }
 > }
 > ```
 >
-> **Explanation:** Function pointers `fn(T) -> R` represent stateless function addresses taking zero environment captures.
+> #### Technical Explanation
+>
+> 1. `extern "C" fn(...)` defines the C ABI calling convention for thin function pointers.
+> 2. `LogCallback` stores a bare code memory address with zero environment overhead.
 
 ---
 
-### Exercise 3: Coercing Non-Capturing Closures into `fn` Pointers
+### Exercise 2: High-Performance Command Dispatch Table
 
-**Problem:** Pass a non-capturing closure `|x| x * 2` directly to `apply(5, ...)`.
+**Scenario:** Build a command execution registry `CommandRegistry` storing command string names mapped to stateless function pointers `fn(&str) -> Result<String, String>`.
 
-**Expected output:**
+**Requirements:**
+1. Define `struct CommandRegistry` wrapping `std::collections::HashMap<&'static str, fn(&str) -> Result<String, String>>`.
+2. Implement `register` and `execute` methods.
+3. Write unit tests.
+
 > [!check]- Answer
-> ```
-> Result: 10
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn apply(val: i32, f: fn(i32) -> i32) -> i32 { f(val) }
-> fn main() {
->     println!("Result: {}", apply(5, |x| x * 2));
+> use std::collections::HashMap;
+> 
+> pub type CommandFn = fn(&str) -> Result<String, String>;
+> 
+> pub struct CommandRegistry {
+>     handlers: HashMap<&'static str, CommandFn>,
+> }
+> 
+> impl CommandRegistry {
+>     pub fn new() -> Self {
+>         Self { handlers: HashMap::new() }
+>     }
+> 
+>     pub fn register(&mut self, cmd: &'static str, handler: CommandFn) {
+>         self.handlers.insert(cmd, handler);
+>     }
+> 
+>     pub fn execute(&self, cmd: &str, arg: &str) -> Result<String, String> {
+>         let handler = self.handlers.get(cmd).ok_or("Command not found")?;
+>         handler(arg)
+>     }
+> }
+> 
+> fn echo_cmd(arg: &str) -> Result<String, String> {
+>     Ok(format!("Echo: {arg}"))
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_command_registry() {
+>         let mut reg = CommandRegistry::new();
+>         reg.register("echo", echo_cmd);
+>         
+>         let res = reg.execute("echo", "hello world");
+>         assert_eq!(res, Ok("Echo: hello world".to_string()));
+>     }
 > }
 > ```
 >
-> **Explanation:** Non-capturing closures automatically coerce into raw function pointers `fn`.
+> #### Technical Explanation
+>
+> 1. `fn(&str) -> Result<String, String>` is a concrete `Copy` type stored directly in the `HashMap`.
+> 2. Avoids dynamic trait object allocations (`Box<dyn Fn(...)>`).
+
+---
+
+### Exercise 3: Pluggable Sorting Comparator Engine
+
+**Scenario:** Implement a slice sorting utility `custom_sort<T>(slice: &mut [T], comparator: fn(&T, &T) -> std::cmp::Ordering)` that uses stateless function pointers for element comparison.
+
+**Requirements:**
+1. Implement `custom_sort` using function pointer comparators.
+2. Write unit tests passing non-capturing closures and top-level comparator functions.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::cmp::Ordering;
+> 
+> pub fn custom_sort<T>(slice: &mut [T], comparator: fn(&T, &T) -> Ordering) {
+>     slice.sort_by(|a, b| comparator(a, b));
+> }
+> 
+> fn reverse_cmp(a: &i32, b: &i32) -> Ordering {
+>     b.cmp(a)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_function_pointer_sorting() {
+>         let mut data = vec![5, 2, 8, 1, 9];
+>         custom_sort(&mut data, reverse_cmp);
+>         assert_eq!(data, vec![9, 8, 5, 2, 1]);
+>         
+>         // Non-capturing closure coerces to fn pointer!
+>         custom_sort(&mut data, |a, b| a.cmp(b));
+>         assert_eq!(data, vec![1, 2, 5, 8, 9]);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `comparator: fn(&T, &T) -> Ordering` accepts both top-level functions (`reverse_cmp`) and non-capturing closures.
+> 2. Function pointers carry zero environment overhead.
 
 ---
 
 ## 6. Related Terms
 
-- [Closure](../level_06/closure.md) — The capturing, generally more flexible sibling that `fn` pointers contrast with.
-- [`Fn` / `FnMut` / `FnOnce`](../level_06/fn_traits.md) — The trait family that `fn` pointers *also* implement (specifically `Fn`, since they never mutate captured state — they have none).
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) / [`extern "C"`](../level_13/extern_c.md) — Where `fn` pointers are essential, since C has no concept of a capturing closure at all.
-- [Fat Pointers](../level_11/fat_pointers.md) — A useful contrast: `fn` pointers are always **thin** (a single address), unlike `dyn Trait` references.
+
+- [Closure](closure.md) — The capturing, generally more flexible sibling that `fn` pointers contrast with.
+- [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The trait family that `fn` pointers *also* implement (specifically `Fn`, since they never mutate captured state — they have none).
+- [FFI (Foreign Function Interface)](../level_13/ffi.md)
+- [`Fat Pointers` (Wide Pointers)](../level_11/fat_pointers.md) — A useful contrast: `fn` pointers are always **thin** (a single address), unlike `dyn Trait` references.
 
 ---
 
 ## 7. Key Takeaways
 
-- `fn(Args) -> Ret` is a real, concrete, `Copy`, `Send + Sync` scalar type — the type of a plain function or a non-capturing closure.
-- It's fundamentally different from a closure type: it carries **zero** captured environment, just a bare code address.
-- A non-capturing closure can coerce into a matching `fn` type; a capturing closure cannot, since there's nowhere for the captured data to go.
-- Prefer generic `impl Fn`/`FnMut`/`FnOnce` bounds when you want to accept *any* callable, including capturing closures — reserve bare `fn` pointers for cases (like FFI) that specifically require environment-free callables.
+- `fn(Args) -> Ret` is a concrete, `Copy`, `Send + Sync` primitive type representing bare code memory addresses.
+- Function pointers carry **zero** captured environment state.
+- Non-capturing closures automatically coerce to function pointers (`fn`); capturing closures do not.
+- Prefer generic `F: Fn(...)` trait bounds for general APIs, and use bare `fn` pointers when environment-free callables or FFI ABI compatibility is required.

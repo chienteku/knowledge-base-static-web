@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<canvas>`](../level_10/canvas.md) — The raster-based alternative to SVG.
+- [`<canvas>`](canvas.md) — The raster-based alternative to SVG.
 - [DOM (Document Object Model)](../level_09/dom.md) — Unlike `<canvas>`, `<svg>` elements become actual DOM nodes!
-
 ---
 
 ## 2. Term Category
@@ -228,9 +227,9 @@ An `<svg>` is like a geometry textbook. It doesn't contain tiles; it contains in
 > **Explanation:** `<use>` clones pre-defined SVG symbol definitions for efficient vector reusability.
 
 ## 7. Related Terms
-- [`<canvas>`](../level_10/canvas.md) — The pixel-based alternative for graphics.
-- [`<map>` & `<area>` (Image Maps)](../level_10/map_area.md) — Traditional pixel coordinate click targets.
-
+- [`<canvas>`](canvas.md) — The pixel-based alternative for graphics.
+- [`<map>` & `<area>` (Image Maps)](map_area.md) — Traditional pixel coordinate click targets.
+- [Web Components](web_components.md) — Related concept: Web Components.
 ---
 
 ## 8. Key Takeaways

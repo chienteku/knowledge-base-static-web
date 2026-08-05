@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Functions (`fn`)](../level_01/fn.md) — The standard, named functions that closures provide a lightweight alternative to.
+
+- [`fn` (Functions)](../level_01/fn.md) — The standard, named functions that closures provide a lightweight alternative to.
 - [Borrowing (`&`)](../level_03/borrowing.md) — The mechanism closures use behind the scenes to read variables from their environment.
 - [Ownership](../level_03/ownership.md) — The rules that closures must still strictly obey.
 
@@ -223,8 +224,16 @@ fn main() {
 
 ## 6. Related Terms
 
-- [`Fn` / `FnMut` / `FnOnce`](../level_06/fn_traits.md) — The behind-the-scenes traits that actually define exactly *how* a closure captures its environment (by immutable reference, by mutable reference, or by consuming ownership).
-- [`move` Closure](../level_06/move_closure.md) — A keyword you add to force a closure to take full Ownership of the environment variables instead of just borrowing them.
+
+- [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The behind-the-scenes traits that actually define exactly *how* a closure captures its environment (by immutable reference, by mutable reference, or by consuming ownership).
+- [`move` Closure](move_closure.md) — A keyword you add to force a closure to take full Ownership of the environment variables instead of just borrowing them.
+- [Collecting](../level_02/collecting.md) — Related concept: Collecting.
+- [Entry API (`.entry(k).or_insert(...)`)](../level_02/entry_api.md) — Related concept: Entry API (`.entry(k).or_insert(...)`).
+- [Iterator](../level_02/iterator.md) — Related concept: Iterator.
+- [Higher-Ranked Trait Bounds (HRTB)](../level_05/higher_ranked_trait_bounds.md) — Related concept: Higher-Ranked Trait Bounds (HRTB).
+- [`Function Pointers` (`fn()`)](function_pointers.md) — Related concept: `Function Pointers` (`fn()`).
+- [Iterator Chains](iterator_chains.md) — Related concept: Iterator Chains.
+- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](../level_09/oncelock_lazylock.md) — Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`.
 
 ---
 

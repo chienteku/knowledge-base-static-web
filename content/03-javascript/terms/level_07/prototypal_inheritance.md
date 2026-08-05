@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — A collection of properties and methods.
-- [Prototype](./prototype.md) — A shared master object.
-
+- [Prototype](prototype.md) — A shared master object.
 ---
 
 ## 2. Term Category
@@ -211,9 +210,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Prototype](./prototype.md) — The master object being inherited from.
-- [Prototype Chain](./prototype_chain.md) — The visual linkage of this inheritance.
-
+- [Prototype](prototype.md) — The master object being inherited from.
+- [Prototype Chain](prototype_chain.md) — The visual linkage of this inheritance.
+- [hasOwnProperty / Object.getPrototypeOf](hasownproperty_getprototypeof.md) — Related concept: hasOwnProperty / Object.getPrototypeOf.
+- [Object.create](object_create.md) — Related concept: Object.create.
 ---
 
 ## 8. Key Takeaways

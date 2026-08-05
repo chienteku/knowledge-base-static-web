@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`ORDER BY`](../level_03/order_by.md) — Sorting sequence inside windows.
 - [`GROUP BY`](../level_04/group_by.md) — Understanding grouping boundaries.
-
 ---
 
 ## 2. Term Category
@@ -232,7 +231,6 @@ Rewrite this query using the `WINDOW` alias keyword to keep the SQL DRY.
 ## 7. Related Terms
 - [Window Function](window_function.md) — The calculations applied.
 - [`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`](row_number_rank.md) — Window position calculations.
-
 ---
 
 ## 8. Key Takeaways

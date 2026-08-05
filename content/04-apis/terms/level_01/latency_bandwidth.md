@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Client-Server Model](./client_server_model.md) — The request-response foundation.
-
+- [Client-Server Model](client_server_model.md) — The request-response foundation.
 ---
 
 ## 2. Term Category
@@ -185,9 +184,9 @@ const usersWithDetails = await getUsersWithBatchDetails();
 ---
 
 ## 7. Related Terms
-- [Caching](../level_06/caching.md) — Storing data locally to bypass network latency entirely.
-- [Pagination](../level_06/pagination.md) — Limiting API response payload sizes to reduce bandwidth usage.
-
+- [Caching (ETag, Cache-Control)](../level_06/caching.md) — Storing data locally to bypass network latency entirely.
+- [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — Limiting API response payload sizes to reduce bandwidth usage.
+- [Promise.all / Parallel Requests](../level_05/promise_all.md) — Related concept: Promise.all / Parallel Requests.
 ---
 
 ## 8. Key Takeaways

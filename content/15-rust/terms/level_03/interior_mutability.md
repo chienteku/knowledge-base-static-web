@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Borrow Checker](../level_03/borrow_checker.md) — The strict compile-time cop that this pattern is designed to bypass.
-- [`RefCell<T>`](../level_03/refcell_t.md) — The standard tool used to implement this pattern for Heap data.
-- [`Cell<T>`](../level_03/cell_t.md) — The lightweight tool used to implement this pattern for simple Stack data.
+
+- [Borrow Checker](borrow_checker.md) — The strict compile-time cop that this pattern is designed to bypass.
+- [`RefCell<T>`](refcell_t.md) — The standard tool used to implement this pattern for Heap data.
+- [`Cell<T>`](cell_t.md) — The lightweight tool used to implement this pattern for simple Stack data.
 
 ---
 
@@ -620,9 +621,13 @@ Build a doubly-linked tree node hierarchy utilizing interior mutability:
 
 ## 6. Related Terms
 
-- [`RefCell<T>`](../level_03/refcell_t.md) — The primary tool used to achieve Interior Mutability in single-threaded code.
-- [`Cell<T>`](../level_03/cell_t.md) — The lightweight tool used to achieve Interior Mutability for simple `Copy` data.
+
+- [`RefCell<T>`](refcell_t.md) — The primary tool used to achieve Interior Mutability in single-threaded code.
+- [`Cell<T>`](cell_t.md) — The lightweight tool used to achieve Interior Mutability for simple `Copy` data.
 - [`Mutex<T>`](../level_09/mutex_t.md) — The thread-safe tool used to achieve Interior Mutability across background threads.
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — Related concept: Mutable Borrowing (`&mut`).
+- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](../level_09/oncelock_lazylock.md) — Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`.
+- [`thread_local!` Macro](../level_09/thread_local_macro.md) — Related concept: `thread_local!` Macro.
 
 ---
 

@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Interfaces](../level_03/interfaces.md) — The alternative to Classes for defining object shapes.
-- [JavaScript Classes](../../../03-javascript/terms/level_07/class.md) — The runtime feature TypeScript is building upon.
-
+- class — The runtime feature TypeScript is building upon.
 ---
 
 ## 2. Term Category
@@ -297,9 +296,13 @@ class User {
 > **Explanation:** Accessor getters and setters control property read and write operations.
 
 ## 7. Related Terms
-- [Access Modifiers](../level_10/access_modifiers.md) — The `private`/`public` keywords added to TS classes.
-- [`implements` Keyword](../level_10/implements.md) — How to force a Class to obey an Interface.
-
+- [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — The `private`/`public` keywords added to TS classes.
+- [`implements` Keyword](implements.md) — How to force a Class to obey an Interface.
+- [`typeof` & `instanceof` Guards](../level_06/typeof_instanceof.md) — Related concept: `typeof` & `instanceof` Guards.
+- [Generic Interfaces & Classes](../level_07/generic_interfaces_classes.md) — Related concept: Generic Interfaces & Classes.
+- [Decorators](decorators.md) — Related concept: Decorators.
+- [Parameter Properties](parameter_properties.md) — Related concept: Parameter Properties.
+- [Abstract Classes](abstract_classes.md) — Abstract classes.
 ---
 
 ## 8. Key Takeaways

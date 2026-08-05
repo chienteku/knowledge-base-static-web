@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [B-tree Index](btree_index.md) — The default search tree structure.
 - [`WHERE` Clause](../level_03/where.md) — The filter clause used to define index subsets.
-
 ---
 
 ## 2. Term Category
@@ -203,7 +202,6 @@ CREATE INDEX idx_active_orders ON orders (user_id) WHERE deleted_at IS NULL;
 ## 7. Related Terms
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [Unique Index](unique_index.md) — Customizing partial unique indexes.
-
 ---
 
 ## 8. Key Takeaways

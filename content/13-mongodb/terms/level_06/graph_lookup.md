@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`$lookup` Stage](lookup_stage.md) — The parent non-recursive join stage.
-- [Recursive CTE (PostgreSQL)](../../../12-postgres/terms/level_09/recursive_cte.md) — Relational recursive joins.
+- [Recursive CTE](../../../12-postgres/terms/level_09/recursive_cte.md) — Relational recursive joins.
 
 ---
 
@@ -249,8 +250,9 @@ Write the `$graphLookup` stage (as a JSON block) to recursively find all ancesto
 > **Explanation:** `depthField` attaches recursion iteration depth numbers to joined graph elements.
 
 ## 7. Related Terms
+
 - [`$lookup` Stage](lookup_stage.md) — The parent non-recursive join.
-- [Recursive CTE (PostgreSQL)](../../../12-postgres/terms/level_09/recursive_cte.md) — Relational recursive joins.
+- [Recursive CTE](../../../12-postgres/terms/level_09/recursive_cte.md) — Relational recursive joins.
 
 ---
 

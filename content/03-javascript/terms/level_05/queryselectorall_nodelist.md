@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`document.querySelector()`](./document_queryselector.md) — Returns the first Element matching a specified CSS selector.
-
+- [document.querySelector()](document_queryselector.md) — Returns the first Element matching a specified CSS selector.
 ---
 
 ## 2. Term Category
@@ -216,9 +215,8 @@ if (typeof document !== "undefined") {
 ---
 
 ## 7. Related Terms
-- [`for...of`](../level_04/for_of.md) — A loop statement that can directly iterate over a NodeList.
-- [`forEach()`](../level_04/for_each.md) — The loop method supported by NodeLists.
-
+- [for...of](../level_04/for_of.md) — A loop statement that can directly iterate over a NodeList.
+- [forEach()](../level_04/for_each.md) — The loop method supported by NodeLists.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — Padding is the second layer of the Box Model, sitting between the content and the border.
-
+- [The Box Model (Concept)](box_model.md) — Padding is the second layer of the Box Model, sitting between the content and the border.
 ---
 
 ## 2. Term Category
@@ -168,11 +167,13 @@ span {
 > **Explanation:** Padding expands inner content space; margin pushes outside boundaries.
 
 ## 7. Related Terms
-- [Margin](../level_02/margin.md) — The outer spacing (outside the border).
-- [`box-sizing: border-box`](../level_02/box_sizing.md) — The layout sizing model.
-- [Border](../level_02/border.md) — The border box.
-- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Spilling content boundaries.
-
+- [Margin](margin.md) — The outer spacing (outside the border).
+- [`box-sizing: border-box`](box_sizing.md) — The layout sizing model.
+- [Border](border.md) — The border box.
+- [`overflow` (hidden, scroll, auto, visible)](overflow.md) — Spilling content boundaries.
+- [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — Related concept: Shorthand vs Longhand Properties.
+- [The Box Model (Concept)](box_model.md) — Related concept: The Box Model (Concept).
+- [Margin Collapse](margin_collapse.md) — Related concept: Margin Collapse.
 ---
 
 ## 8. Key Takeaways

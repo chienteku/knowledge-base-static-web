@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that Nitro performs to generate HTML on the server.
-- [Node.js Runtime](../../../05-nodejs/terms/level_01/nodejs.md) — The traditional execution host Nitro abstractly runs on or replaces.
-
+- [Universal Rendering (SSR)](universal_rendering.md) — The process that Nitro performs to generate HTML on the server.
+- nodejs — The traditional execution host Nitro abstractly runs on or replaces.
 ---
 
 ## 2. Term Category
@@ -168,7 +167,14 @@ export default defineEventHandler((event) => { return { status: 'ok' }; });
 ## 7. Related Terms
 - [`server/api/` Routes](../level_07/server_api_routes.md) — How you define endpoints in your project.
 - [Edge Deployment](../level_10/edge_deployment.md) — The environments where Nitro truly shines.
-
+- [Nuxt 3 Overview](nuxt_3_overview.md) — Related concept: Nuxt 3 Overview.
+- [Universal Rendering (SSR)](universal_rendering.md) — Related concept: Universal Rendering (SSR).
+- [Express.js (Legacy Node Server Context)](../level_07/express_js.md) — Related concept: Express.js (Legacy Node Server Context).
+- [Edge-Side Rendering (ESR)](../level_09/esr.md) — Related concept: Edge-Side Rendering (ESR).
+- [Nuxt DevTools](../level_10/nuxt_devtools.md) — Related concept: Nuxt DevTools.
+- [`server/routes/`](../level_07/server_routes.md) — Nitro server routes.
+- [H3 Request Handlers (`defineEventHandler`)](../level_07/h3_handlers.md) — H3 event handlers.
+- [Standalone Build (Node server)](../level_10/standalone_build.md) — Related concept: Standalone Build (Node server).
 ---
 
 ## 8. Key Takeaways

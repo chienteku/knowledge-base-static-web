@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [SELECT](../level_03/select.md) — The query retrieval context.
-- [WHERE Clause](../level_03/where.md) — Query filter operations.
+
+- [`SELECT`](../level_03/select.md) — The query retrieval context.
+- [`WHERE` Clause](../level_03/where.md) — Query filter operations.
 
 ---
 
@@ -174,9 +175,17 @@ Write the SurrealQL statement to create a B-Tree index named `idx_status` on the
 > **Explanation:** `REMOVE INDEX` drops specified index structures.
 
 ## 7. Related Terms
+
 - [Unique Index](unique_index.md) — Unique constraints.
 - [Composite Index](composite_index.md) — Multi-column indexes.
 - [Indexing Record Link Fields](indexing_record_links.md) — Relationship index optimization.
+- [`SEARCH` Index (Full-Text Search)](../level_04/search_index.md) — Related concept: `SEARCH` Index (Full-Text Search).
+- [Vector Index (Overview)](../level_04/vector_index.md) — Related concept: Vector Index (Overview).
+- [Geospatial Index](geospatial_index.md) — Related concept: Geospatial Index.
+- [`DEFINE INDEX ... HNSW` (Approximate Vector Search)](hnsw_index.md) — Related concept: `DEFINE INDEX ... HNSW` (Approximate Vector Search).
+- [Query Explanation & Performance](query_explanation.md) — Related concept: Query Explanation & Performance.
+- [Search Index & `DEFINE ANALYZER`](search_index_analyzer.md) — Related concept: Search Index & `DEFINE ANALYZER`.
+- [Vector Search Index (ML/AI)](vector_search.md) — Related concept: Vector Search Index (ML/AI).
 
 ---
 

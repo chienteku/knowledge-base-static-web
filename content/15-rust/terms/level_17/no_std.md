@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`core` Library](../level_17/core_library.md) — The fundamental dependency-free library available in `#![no_std]`.
-- [`alloc` Library](../level_17/alloc_library.md) — Optional heap allocation library for `#![no_std]`.
-- [Panic Handling](../level_04/panic_handling.md) — Custom panic handlers required in `#![no_std]`.
+
+- [`core` Library](core_library.md) — The fundamental dependency-free library available in `#![no_std]`.
+- [`alloc` Library](alloc_library.md) — Optional heap allocation library for `#![no_std]`.
+- [Panic Handling (`panic!`)](../level_04/panic_handling.md) — Custom panic handlers required in `#![no_std]`.
 
 ---
 
@@ -591,6 +592,14 @@ pub extern "C" fn _start() -> ! {
 > > 2. **Atomic Re-Entrancy Guards**: Using `AtomicBool::swap` with `Ordering::SeqCst` detects if a panic occurs inside the panic handler itself, safely halting recursive panic loops.
 > > 3. **Non-Allocating Fault Capture**: Storing diagnostic strings in stack byte arrays (`[u8; 48]`) ensures fault logging functions without standard heap infrastructure (`alloc`).
 > > 4. **Hardware Spin Loops (`core::hint::spin_loop`)**: Halting the CPU with `core::hint::spin_loop()` issues architecture-specific hints (like `PAUSE`/`NOP`) to minimize CPU power consumption during catastrophic system failures.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [The Rust Standard Library (`std`)](std_library.md) — Related concept: The Rust Standard Library (`std`).
 
 ---
 

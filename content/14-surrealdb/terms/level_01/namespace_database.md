@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Table](table.md) — The collections grouped.
 
 ---
@@ -206,8 +207,10 @@ Write the SurrealQL commands to:
 > **Explanation:** Namespaces group databases per tenant, preventing cross-tenant data leaks.
 
 ## 7. Related Terms
+
 - [Table](table.md) — The collections grouped.
 - [Connection Credentials (`USE NS ... DB ...`)](connection_credentials.md) — Session authentication.
+- [`INFO FOR` (Introspection)](../level_03/info_for.md) — Related concept: `INFO FOR` (Introspection).
 
 ---
 

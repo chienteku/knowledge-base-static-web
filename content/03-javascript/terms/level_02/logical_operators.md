@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Boolean](../level_01/boolean.md) — The fundamental `true` or `false` values these operators work with.
-- [Truthy / Falsy](../level_02/truthy_falsy.md) — How JavaScript interprets non-boolean values in logical operations.
-
+- [Truthy / Falsy](truthy_falsy.md) — How JavaScript interprets non-boolean values in logical operations.
 ---
 
 ## 2. Term Category

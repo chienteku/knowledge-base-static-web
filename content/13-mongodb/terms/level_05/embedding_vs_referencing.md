@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Schema Design (Document Modeling)](schema_design.md) — The parent modeling paradigm.
-- [ObjectId Manual Reference](../level_02/objectid_reference.md) — The referencing implementation.
+
+- [Schema Design (Document Modeling)](schema_design.md) — Schema design fundamentals.
+- [`ObjectId` as a Manual Reference](../level_02/objectid_reference.md) — The referencing implementation.
 
 ---
 
@@ -207,8 +208,16 @@ Embed address sub-document directly inside user profile document
 > **Explanation:** Active shopping cart items are bounded and queried together as a single unit.
 
 ## 7. Related Terms
+
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The size constraint.
+- [Anti-Patterns in Schema Design](anti_patterns.md) — Related concept: Anti-Patterns in Schema Design.
+- [The Extended Reference Pattern](extended_reference_pattern.md) — Related concept: The Extended Reference Pattern.
+- [Many-to-Many Relationship](many_to_many.md) — Related concept: Many-to-Many Relationship.
+- [One-to-Many Relationship (Embedding vs. Referencing)](one_to_many.md) — Related concept: One-to-Many Relationship (Embedding vs. Referencing).
+- [One-to-One Relationship (Embedding)](one_to_one.md) — Related concept: One-to-One Relationship (Embedding).
+- [The Subset Pattern](subset_pattern.md) — Related concept: The Subset Pattern.
+- [`$lookup` Stage](../level_06/lookup_stage.md) — Related concept: `$lookup` Stage.
 
 ---
 

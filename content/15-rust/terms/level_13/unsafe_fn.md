@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`unsafe` Block](../level_13/unsafe_block.md) — Understanding `unsafe { ... }` blocks and the five unlocked superpowers.
-- [Functions](../level_01/function.md) — Function signatures, parameters, and return types.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Understanding memory corruption risks when function safety contracts are violated.
+
+- [`unsafe` Block](unsafe_block.md) — Understanding `unsafe { ... }` blocks and the five unlocked superpowers.
+- [Functions (`fn`)](../level_01/function.md) — Function signatures, parameters, and return types.
+- [Undefined Behavior (UB)](undefined_behavior.md) — Understanding memory corruption risks when function safety contracts are violated.
 
 ---
 
@@ -436,10 +437,12 @@ Implement:
 
 ## 7. Related Terms
 
-- [`unsafe` Block](../level_13/unsafe_block.md) — The block construct used by callers to execute an `unsafe fn`.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — The memory safety violations prevented by enforcing `unsafe fn` safety preconditions.
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Common argument types accepted by `unsafe fn` functions.
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Foreign functions exported from C libraries are automatically typed as `unsafe fn`.
+
+- [`unsafe` Block](unsafe_block.md) — The block construct used by callers to execute an `unsafe fn`.
+- [Undefined Behavior (UB)](undefined_behavior.md) — The memory safety violations prevented by enforcing `unsafe fn` safety preconditions.
+- [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Common argument types accepted by `unsafe fn` functions.
+- [FFI (Foreign Function Interface)](ffi.md) — Foreign functions exported from C libraries are automatically typed as `unsafe fn`.
+
 ---
 
 ## 8. Key Takeaways

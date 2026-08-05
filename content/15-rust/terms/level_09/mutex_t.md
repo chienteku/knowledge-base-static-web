@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [Interior Mutability](../level_03/interior_mutability.md) — The ability to mutate data even when you only have an immutable reference to it.
 - [`RefCell<T>`](../level_03/refcell_t.md) — The single-threaded version of this concept.
-- [`Sync` Trait](../level_09/sync_trait.md) — The trait that proves a type is safe to share across threads.
+- [`Sync` Trait](sync_trait.md) — The trait that proves a type is safe to share across threads.
 
 ---
 
@@ -616,9 +617,16 @@ Implement a deadlock-free bank transaction ledger:
 
 ## 6. Related Terms
 
+
 - [`Arc<T>`](../level_03/arc_t.md) — The `Arc` shares the Mutex; the Mutex mutates the data. They are best friends (`Arc<Mutex<T>>`).
-- [`RwLock<T>`](../level_09/rwlock_t.md) — The faster cousin of `Mutex` that allows multiple readers to read the data simultaneously, but still restricts writing to one thread at a time.
+- [`RwLock<T>`](rwlock_t.md) — The faster cousin of `Mutex` that allows multiple readers to read the data simultaneously, but still restricts writing to one thread at a time.
 - [`RefCell<T>`](../level_03/refcell_t.md) — The single-threaded version of `Mutex`.
+- [Interior Mutability](../level_03/interior_mutability.md) — Related concept: Interior Mutability.
+- [`Atomic` Types](atomic_types.md) — Related concept: `Atomic` Types.
+- [`Condvar` & `Barrier`](condvar_barrier.md) — Related concept: `Condvar` & `Barrier`.
+- [Data Race](data_race.md) — Related concept: Data Race.
+- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](oncelock_lazylock.md) — Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`.
+- [RAII (Resource Acquisition Is Initialization)](../level_18/raii.md) — Related concept: RAII (Resource Acquisition Is Initialization).
 
 ---
 

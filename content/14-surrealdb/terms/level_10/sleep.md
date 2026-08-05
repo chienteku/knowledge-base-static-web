@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Duration data types (`500ms`, `2s`).
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](../level_09/transactions.md) — Transaction execution blocks.
 
@@ -193,6 +194,7 @@ d. All of the above.
 > **Explanation:** `sleep()` inserts controlled delays between batch iteration steps.
 
 ## 7. Related Terms
+
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — Duration literals syntax.
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](../level_09/transactions.md) — Multi-statement execution blocks.
 - [Error Handling & Debugging](error_handling.md) — Query debugging strategies.

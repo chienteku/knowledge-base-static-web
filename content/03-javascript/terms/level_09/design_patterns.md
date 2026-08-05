@@ -7,9 +7,8 @@
 
 ## 1. Prerequisites
 - [Closure](../level_03/closure.md) — The function scope scope pattern.
-- [IIFE](./iife.md) — Immediately Invoked Function Expressions used for module isolation.
+- [IIFE](iife.md) — Immediately Invoked Function Expressions used for module isolation.
 - [Object](../level_02/object.md) — The base key-value dictionary structure.
-
 ---
 
 ## 2. Term Category
@@ -289,7 +288,6 @@ console.log(toy2.speak()); // "Hello!"
 
 ## 7. Related Terms
 - [Class](../level_07/class.md) — The object-oriented blueprint wrapper.
-
 ---
 
 ## 8. Key Takeaways

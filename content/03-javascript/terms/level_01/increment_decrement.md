@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Number](../level_01/number.md) — Represents both integer and floating-point numbers.
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [Number](number.md) — Represents both integer and floating-point numbers.
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 2. Term Category
@@ -218,10 +217,9 @@ const result = a++ + --b;
 ---
 
 ## 7. Related Terms
-- [Arithmetic Operators](../level_01/arithmetic_operators.md) — General mathematical operators.
-- [Assignment Operators](../level_01/assignment_operators.md) — Shorthand operators to update variable values.
-- [`for` Loop](../level_02/for_loop.md) — Repetitive execution blocks that typically rely on increment counters.
-
+- [Arithmetic Operators](arithmetic_operators.md) — General mathematical operators.
+- [Assignment Operators](assignment_operators.md) — Shorthand operators to update variable values.
+- [for Loop](../level_02/for_loop.md) — Repetitive execution blocks that typically rely on increment counters.
 ---
 
 ## 8. Key Takeaways

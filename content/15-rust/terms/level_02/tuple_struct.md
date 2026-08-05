@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Struct](../level_02/struct.md) — The parent concept; standard structs have named fields.
+
+- [Struct](struct.md) — The parent concept; standard structs have named fields.
 - [Compound Types](../level_01/compound_types.md) — Tuples are the underlying structure of a Tuple Struct.
 
 ---
@@ -484,9 +485,11 @@ Design an in-memory entity lookup system using strong tuple struct key wrappers 
 
 ## 6. Related Terms
 
-- [Struct](../level_02/struct.md) — The standard version that requires you to name every field.
-- [Unit Struct](../level_02/unit_struct.md) — A struct with no fields at all (e.g. `struct Marker;`).
-- [Pattern Matching](../level_02/pattern_matching.md) — A great way to extract values from a Tuple Struct: `let Color(r, g, b) = my_color;`
+
+- [Struct](struct.md) — The standard version that requires you to name every field.
+- [Unit Struct](unit_struct.md) — A struct with no fields at all (e.g. `struct Marker;`).
+- [Pattern Matching](pattern_matching.md) — A great way to extract values from a Tuple Struct: `let Color(r, g, b) = my_color;`
+- [Newtype Pattern](../level_11/newtype_pattern.md) — Related concept: Newtype Pattern.
 
 ---
 

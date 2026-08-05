@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Promise](./promise.md) — The object that `fetch()` returns.
-- [`async` / `await`](./async_await.md) — The best way to interact with `fetch()`.
-
+- [Promise](promise.md) — The object that `fetch()` returns.
+- [async / await](async_await.md) — The best way to interact with `fetch()`.
 ---
 
 ## 2. Term Category
@@ -215,9 +214,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Promise](./promise.md) — What `fetch()` returns.
-- [`async` / `await`](./async_await.md) — The preferred way to consume `fetch()`.
-
+- [Promise](promise.md) — What `fetch()` returns.
+- [async / await](async_await.md) — The preferred way to consume `fetch()`.
+- [Promise.all / allSettled / race / any](promise_combinators.md) — Related concept: Promise.all / allSettled / race / any.
+- [try/catch with async/await](try_catch_async_await.md) — Related concept: try/catch with async/await.
+- [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — Related concept: JSON / JSON.stringify / JSON.parse.
 ---
 
 ## 8. Key Takeaways

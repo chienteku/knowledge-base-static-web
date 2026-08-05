@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [MongoDB](mongodb.md) — The parent database engine system.
 
 ---
@@ -188,8 +189,10 @@ Bind to private IP subnets and enforce TLS + firewall rules
 > **Explanation:** `mongod` listens on TCP port 27017 by default.
 
 ## 7. Related Terms
+
 - [mongosh (MongoDB Shell)](mongosh.md) — The terminal query client.
 - [MongoDB Atlas](atlas.md) — The cloud hosted alternative to local daemons.
+- [MongoDB](mongodb.md) — Related concept: MongoDB.
 
 ---
 

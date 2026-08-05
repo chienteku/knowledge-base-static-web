@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Database Context (Running processes)](../level_01/database_context.md) — The `mongod` server connection.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The `mongod` server connection.
 
 ---
 
@@ -200,7 +201,8 @@ Write the sequential mongosh commands to:
 > **Explanation:** `db.serverStatus()` outputs memory, connection pool, locks, and WiredTiger metrics.
 
 ## 7. Related Terms
-- [Database Context (Running processes)](../level_01/database_context.md) — The target server.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The target server.
 - [MongoDB Profiler (`db.setProfilingLevel()`)](profiler.md) — Slow query logging.
 
 ---

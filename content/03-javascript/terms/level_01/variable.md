@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-*(None — this is a foundational concept)*
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -196,10 +195,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`let`](../level_01/let.md) — The modern way to declare a reassignable variable.
-- [`const`](../level_01/const.md) — The way to declare a variable that cannot be reassigned.
-- [`var`](../level_01/var.md) — The legacy way to declare variables.
-
+- [let](let.md) — The modern way to declare a reassignable variable.
+- [const](const.md) — The way to declare a variable that cannot be reassigned.
+- [var](var.md) — The legacy way to declare variables.
+- [console.log()](console_log.md) — Related concept: console.log().
+- [ECMAScript](ecmascript.md) — Related concept: ECMAScript.
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The server runtime where database drivers execute.
 - [React Server Components (RSC)](../level_01/rsc.md) — The component type that can securely run database queries.
-
 ---
 
 ## 2. Term Category
@@ -214,8 +213,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 ## 7. Related Terms
 - [React Server Components (RSC)](../level_01/rsc.md) — The secure server execution context.
-- [`React.cache()` Function](../level_05/react_cache.md) — How you deduplicate ORM requests.
-
+- [`React.cache()` Function](react_cache.md) — How you deduplicate ORM requests.
 ---
 
 ## 8. Key Takeaways

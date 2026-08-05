@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Cargo](../level_01/cargo.md) — Rust's build system and package manager that creates, builds, and manages crates
+
+- [Cargo](cargo.md) — Rust's build system and package manager that creates, builds, and manages crates
 
 ---
 
@@ -858,11 +859,15 @@ Architect a clean separation between the library crate facade and binary task di
 
 ## 6. Related Terms
 
-- [Cargo](../level_01/cargo.md) — the tool that builds, tests, and manages crates
-- [Package](../level_01/package.md) — a Cargo concept wrapping one or more crates with a `Cargo.toml`
-- [Module](../level_01/module.md) — the organizational unit *within* a crate; crates contain modules
+
+- [Cargo](cargo.md) — the tool that builds, tests, and manages crates
+- [Package](package.md) — a Cargo concept wrapping one or more crates with a `Cargo.toml`
+- [Module](module.md) — the organizational unit *within* a crate; crates contain modules
 - [`pub` Visibility](../level_07/pub_visibility.md) — controls what items are exposed beyond the crate boundary
 - [`Cargo.toml`](../level_07/cargo_toml.md) — the manifest file that defines how a crate is built and its dependencies
+- [Workspace](../level_07/workspace.md) — Related concept: Workspace.
+- [Integration Tests](../level_08/integration_tests.md) — Related concept: Integration Tests.
+- [Link-Time Optimization (LTO)](../level_15/link_time_optimization.md) — Related concept: Link-Time Optimization (LTO).
 
 ---
 

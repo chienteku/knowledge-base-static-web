@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — This is a parent/child relationship, much like lists (`<ul>` and `<li>`).
 - [Nesting](../level_01/nesting.md) — Since `<option>` tags must nest directly inside a parent `<select>` block.
-- [`<form>`](../level_05/form.md) — Dropdowns are used to collect data for forms.
-
+- [`<form>`](form.md) — Dropdowns are used to collect data for forms.
 ---
 
 ## 2. Term Category
@@ -189,12 +188,11 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 > **Explanation:** `<optgroup>` organizes select dropdown choices into categorized sections.
 
 ## 7. Related Terms
-- [`<input>`](../level_05/input.md) — The alternative way to collect data (free-form typing).
-- [`placeholder` Attribute](../level_05/placeholder.md) — The visual cue comparison.
-- [`value` Attribute (in Form Fields)](../level_05/value.md) — The option value parameters.
-- [`name` Attribute (in Form Fields)](../level_05/name.md) — The select key name used during form submission.
-- [`<label>`](../level_05/label.md) — The tag used to describe the `<select>` element.
-
+- [`<input>`](input.md) — The alternative way to collect data (free-form typing).
+- [`placeholder` Attribute](placeholder.md) — The visual cue comparison.
+- [`value` Attribute (in Form Fields)](value.md) — The option value parameters.
+- [`name` Attribute (in Form Fields)](name.md) — The select key name used during form submission.
+- [`<label>`](label.md) — The tag used to describe the `<select>` element.
 ---
 
 ## 8. Key Takeaways

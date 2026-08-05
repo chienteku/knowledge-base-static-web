@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`if` / `else`](../level_02/if_else.md) — The basic branching logic that `match` often replaces when things get complex.
+
+- [`if` / `else`](if_else.md) — The basic branching logic that `match` often replaces when things get complex.
 - [Expressions](../level_01/expressions.md) — Because `match` is an expression, it can return a value directly to a variable.
 
 ---
@@ -883,8 +884,14 @@ Requirements:
 
 ## 6. Related Terms
 
-- [`if let`](../level_02/if_let_while_let.md) — Syntactic sugar for when a `match` only cares about one specific pattern and ignores all others.
-- [Enum](../level_02/enum.md) — The custom data structure that `match` was practically built to work hand-in-hand with.
+
+- [`if let` / `while let`](if_let_while_let.md) — Syntactic sugar for when a `match` only cares about one specific pattern and ignores all others.
+- [Enum](enum.md) — The custom data structure that `match` was practically built to work hand-in-hand with.
+- [`if` / `else`](if_else.md) — Related concept: `if` / `else`.
+- [`matches!` Macro](matches_macro.md) — Related concept: `matches!` Macro.
+- [`todo!` / `unimplemented!` / `unreachable!`](../level_04/todo_unimplemented_unreachable.md) — Related concept: `todo!` / `unimplemented!` / `unreachable!`.
+- [`#[non_exhaustive]`](../level_07/non_exhaustive_attribute.md) — Related concept: `#[non_exhaustive]`.
+- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Related concept: Declarative Macros (`macro_rules!`).
 
 ---
 

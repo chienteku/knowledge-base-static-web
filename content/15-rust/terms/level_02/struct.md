@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [Variable](../level_01/variable.md) — You bind an instance of a struct to a variable using `let`.
 - [Compound Types](../level_01/compound_types.md) — Structs are essentially Tuples where every piece of data has a strict name.
 
@@ -601,8 +602,13 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Tuple Struct](../level_02/tuple_struct.md) — A specialized struct that has a name, but its fields do not (they are accessed via `.0`, `.1`).
-- [`impl` Block](../level_02/impl_block.md) — The mechanism you use to attach functions and methods directly to a struct.
+
+- [Tuple Struct](tuple_struct.md) — A specialized struct that has a name, but its fields do not (they are accessed via `.0`, `.1`).
+- [`impl` Block](impl_block.md) — The mechanism you use to attach functions and methods directly to a struct.
+- [Compound Types](../level_01/compound_types.md) — Related concept: Compound Types.
+- [Pattern Matching](pattern_matching.md) — Related concept: Pattern Matching.
+- [Unit Struct](unit_struct.md) — Related concept: Unit Struct.
+- [Struct Lifetimes](../level_05/struct_lifetimes.md) — Related concept: Struct Lifetimes.
 
 ---
 

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Targeted vs. Scatter-Gather Queries](targeted_vs_scatter.md) — The routing execution patterns.
 
@@ -200,6 +201,7 @@ Select the optimal sharding strategy (**Ranged** or **Hashed**) for each scenari
 > **Explanation:** Sharding strategy balances insertion distribution against range query targeting.
 
 ## 7. Related Terms
+
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Targeted vs. Scatter-Gather Queries](targeted_vs_scatter.md) — Query routing modes.
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Code Splitting & Lazy Loading](../level_08/code_splitting.md) — The process of splitting bundle outputs.
-
+- [Code Splitting & Lazy Loading](code_splitting.md) — The process of splitting bundle outputs.
 ---
 
 ## 2. Term Category
@@ -188,9 +187,8 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right';
 > **Explanation:** Static `import`/`export` syntax enables compile-time dead code analysis.
 
 ## 7. Related Terms
-- [Code Splitting & Lazy Loading](../level_08/code_splitting.md) — Dividing the main bundle into lazy-loaded files.
+- [Code Splitting & Lazy Loading](code_splitting.md) — Dividing the main bundle into lazy-loaded files.
 - [Next.js](../level_10/nextjs.md) — The meta-framework that automates bundling and route-based code splitting.
-
 ---
 
 ## 8. Key Takeaways

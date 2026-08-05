@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation methods.
 
@@ -222,6 +223,7 @@ Write the query to create a single-field index on the `created_at` field (use as
 > **Explanation:** B-Tree pointers allow reverse traversal for single-field index queries.
 
 ## 7. Related Terms
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [Compound Index](compound_index.md) — Multi-field index structures.
 

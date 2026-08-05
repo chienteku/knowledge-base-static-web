@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) / [Function](../level_03/function.md) — The things you export and import.
+- [Variable](../level_01/variable.md)
 - [Scope](../level_03/scope.md) — Modules create their own file-level scope.
-
 ---
 
 ## 2. Term Category
@@ -204,7 +203,10 @@ async function processData() {
 ## 7. Related Terms
 - [Scope](../level_03/scope.md) — Modules solve the Global Scope pollution problem.
 - [IIFE](../level_09/iife.md) — The old, messy way developers simulated modules before ES6.
-
+- [Strict Mode ("use strict")](../level_09/strict_mode.md) — Related concept: Strict Mode ("use strict").
+- [Bundler](../level_10/bundler.md) — Related concept: Bundler.
+- [Named vs Default Exports](named_vs_default_exports.md) — Exports syntax.
+- [Dynamic import()](dynamic_import.md) — Dynamic import()
 ---
 
 ## 8. Key Takeaways

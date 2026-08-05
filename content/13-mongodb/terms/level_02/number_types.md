@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type catalog.
 
 ---
@@ -187,8 +188,10 @@ const { Long } = require('mongodb'); const id = Long.fromString("900719925474099
 > **Explanation:** MongoDB provides double, 32-bit int, 64-bit long, and 128-bit decimal numeric primitives.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
-- [Decimal128](decimal128.md) — Finer details on financial math.
+- [`Decimal128`](decimal128.md) — Finer details on financial math.
+- [String](string.md) — Related concept: String.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Next.js Overview](../level_01/nextjs.md) — The framework designed to solve CSR performance limitations.
-
+- [Next.js Overview](nextjs.md) — The framework designed to solve CSR performance limitations.
 ---
 
 ## 2. Term Category
@@ -166,9 +165,8 @@ export default async function Page() {
 ---
 
 ## 7. Related Terms
-- [Next.js Overview](../level_01/nextjs.md) — The full-stack solution to CSR limitations.
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — A rendering strategy where HTML is pre-assembled on the server.
-
+- [Next.js Overview](nextjs.md) — The full-stack solution to CSR limitations.
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — A rendering strategy where HTML is pre-assembled on the server.
 ---
 
 ## 8. Key Takeaways

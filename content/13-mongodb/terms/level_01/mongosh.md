@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`mongod` (MongoDB Server Daemon)](mongod.md) — The background server database engine connected to.
 
 ---
@@ -198,8 +199,10 @@ db.users.find().limit(10); // Controlled limit
 > **Explanation:** `mongosh` is a full Node.js REPL supporting JavaScript loop logic.
 
 ## 7. Related Terms
+
 - [`mongod` (MongoDB Server Daemon)](mongod.md) — The target server.
 - [MongoDB Compass](compass.md) — The graphical GUI alternative.
+- [Database (MongoDB Context)](database_context.md) — Related concept: Database (MongoDB Context).
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The dynamic rendering strategy triggered by these APIs.
-- [JavaScript Fetch API](../level_05/js_fetch.md) — The request/response header context.
-
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — The dynamic rendering strategy triggered by these APIs.
+- [JavaScript Fetch API](js_fetch.md) — The request/response header context.
 ---
 
 ## 2. Term Category
@@ -217,9 +216,10 @@ export default function SettingsPage() {
 ---
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The dynamic rendering strategy triggered by these APIs.
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — The dynamic rendering strategy triggered by these APIs.
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — The router proxy where cookies and headers can be written.
-
+- [JavaScript Fetch API](js_fetch.md) — Related concept: JavaScript Fetch API.
+- [Authentication & Session Management](../level_10/authentication_concepts.md) — Related concept: Authentication & Session Management.
 ---
 
 ## 8. Key Takeaways

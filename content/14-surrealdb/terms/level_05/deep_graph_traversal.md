@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
-- [Graph Traversal vs Relational JOINs](graph_vs_joins.md) — The performance mechanics.
+- [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — The performance mechanics.
 
 ---
 
@@ -238,8 +239,10 @@ Write the SurrealQL query starting from `user:john` to retrieve all genre names 
 > **Explanation:** SurrealDB executes multi-hop graph traversals in constant pointer time.
 
 ## 7. Related Terms
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
-- [Graph Traversal vs Relational JOINs](graph_vs_joins.md) — The performance mechanics.
+- [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — The performance mechanics.
+- [Parallel Edge Traversals](parallel_edge_traversals.md) — Related concept: Parallel Edge Traversals.
 
 ---
 

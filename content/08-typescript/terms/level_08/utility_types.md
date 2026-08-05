@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Interfaces](../level_03/interfaces.md) — What you are usually modifying.
-- [Generics](../level_07/generics.md) — The `<T>` syntax used to pass inputs into Utility Types.
-
+- [Generics Overview (`<T>`)](../level_07/generics.md) — The `<T>` syntax used to pass inputs into Utility Types.
 ---
 
 ## 2. Term Category
@@ -156,9 +155,14 @@ type Good = Required<Pick<User, "id">>; // id is explicitly required
 > **Explanation:** Built-in utilities transform object shapes, unions, and function signatures.
 
 ## 7. Related Terms
-- [`Partial<T>` & `Required<T>`](../level_08/partial_required.md) — Modifying optional flags.
-- [`Pick<T>` & `Omit<T>`](../level_08/pick_omit.md) — Slicing object shapes.
-
+- [`Partial<T>` & `Required<T>`](partial_required.md) — Modifying optional flags.
+- [`Pick<T>` & `Omit<T>`](pick_omit.md) — Slicing object shapes.
+- [Index Signatures](../level_03/index_signatures.md) — Related concept: Index Signatures.
+- [Readonly Properties (`readonly`)](../level_03/readonly.md) — Related concept: Readonly Properties (`readonly`).
+- [Generics Overview (`<T>`)](../level_07/generics.md) — Related concept: Generics Overview (`<T>`).
+- [`Exclude` / `Extract` / `NonNullable`](exclude_extract_nonnullable.md) — Related concept: `Exclude` / `Extract` / `NonNullable`.
+- [Conditional Types](../level_09/conditional_types.md) — Related concept: Conditional Types.
+- [`Record<Keys, Type>`](record.md) — Record utility type.
 ---
 
 ## 8. Key Takeaways

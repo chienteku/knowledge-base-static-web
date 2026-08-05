@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`%` (Percentages)](percentages.md) — You must understand why `%` fails for heights to understand why Viewport units were invented.
-
 ---
 
 ## 2. Term Category
@@ -236,9 +235,9 @@ p { font-size: clamp(1rem, 2vw, 1.5rem); } /* Clamped viewport typography */
 
 ## 7. Related Terms
 - [`%` (Percentages)](percentages.md) — The parent-relative sizing alternative.
-- [`rem` and `em` units](rem_em.md) — Sizing relative to fonts rather than the viewport.
-- [`max-width` & `min-height`](max_width.md) — Fluid constraints to pair with viewport heights.
-
+- [`rem` vs `em`](rem_em.md) — Sizing relative to fonts rather than the viewport.
+- [`max-width` & `min-height` (Fluidity)](max_width.md) — Fluid constraints to pair with viewport heights.
+- [Responsive Design (Concept)](responsive_design.md) — Related concept: Responsive Design (Concept).
 ---
 
 ## 8. Key Takeaways

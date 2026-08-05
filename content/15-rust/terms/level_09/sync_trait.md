@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`Send` Trait](../level_09/send_trait.md) — The sister trait to `Sync`. You must understand `Send` first!
-- [Shared Borrowing (`&T`)](../level_03/borrowing.md) — The concept of multiple read-only pointers pointing to the same data.
+
+- [`Send` Trait](send_trait.md) — The sister trait to `Sync`. You must understand `Send` first!
+- [Borrowing (`&`)](../level_03/borrowing.md) — The concept of multiple read-only pointers pointing to the same data.
 - [`RefCell<T>`](../level_03/refcell_t.md) — The most famous type that lacks this trait.
 
 ---
@@ -491,15 +492,13 @@ Implement a fixed-capacity sequence buffer `AtomicSeqBuffer<T, const N: usize>` 
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`Send` Trait](../level_09/send_trait.md) — The sister trait for *moving* data.
-> - [`Arc<T>`](../level_03/arc_t.md) — Requires its inner type `T` to be both `Send` and `Sync` to safely share data across threads.
-> - [`Mutex<T>`](../level_09/mutex_t.md) — The thread-safe alternative to `RefCell` that *is* `Sync`.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`Send` Trait](send_trait.md) — Related concept: `Send` Trait.
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`Sync`** proves a type can be safely referenced (`&T`) by multiple threads simultaneously.
 > - A type `T` is `Sync` if and only if `&T` is `Send`.

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Variable](../level_01/variable.md) — Variables are the "owners" of data.
-- [Expressions / Blocks](../level_01/expressions.md) — Curly braces `{}` define scopes, which are critical for determining when an owner dies.
+- [Expressions](../level_01/expressions.md) — Curly braces `{}` define scopes, which are critical for determining when an owner dies.
 - [String vs &str](../level_01/string_vs_&str.md) — `String` data lives on the Heap, making it the primary subject of Ownership rules.
 
 ---
@@ -706,9 +707,17 @@ Write a complete compilable module with unit tests in `#[cfg(test)] mod tests` v
 
 ## 6. Related Terms
 
-- [Move Semantics](../level_03/move_semantics.md) — The technical term for transferring ownership from one variable to another (e.g., `let s2 = s1;`).
-- [`Copy` Trait](../level_03/copy_trait.md) — The exception to Ownership rules for simple stack data.
-- [Borrowing (`&`)](../level_03/borrowing.md) — How to let a function look at data *without* taking ownership of it.
+
+- [Move Semantics](move_semantics.md) — The technical term for transferring ownership from one variable to another (e.g., `let s2 = s1;`).
+- [`Copy` Trait](copy_trait.md) — The exception to Ownership rules for simple stack data.
+- [Borrowing (`&`)](borrowing.md) — How to let a function look at data *without* taking ownership of it.
+- [String vs &str](../level_01/string_vs_&str.md) — Related concept: String vs &str.
+- [Entry API (`.entry(k).or_insert(...)`)](../level_02/entry_api.md) — Related concept: Entry API (`.entry(k).or_insert(...)`).
+- [`Drop` Trait](drop_trait.md) — Related concept: `Drop` Trait.
+- [`Rc<T>`](rc_t.md) — Related concept: `Rc<T>`.
+- [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](std_mem_utilities.md) — Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`).
+- [Memory Leaks & Reference Cycles](../level_11/memory_leaks.md) — Related concept: Memory Leaks & Reference Cycles.
+- [Stack vs Heap](../level_15/stack_vs_heap.md) — Related concept: Stack vs Heap.
 
 ---
 

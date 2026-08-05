@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Element vs. Tag](../level_01/element_vs_tag.md) — The fundamental unit of HTML.
-- [HTML](../level_01/html.md) — The standard markup language.
-
+- [Element vs. Tag](element_vs_tag.md) — The fundamental unit of HTML.
+- [HTML (HyperText Markup Language)](html.md) — The standard markup language.
 ---
 
 ## 2. Term Category
@@ -214,10 +213,21 @@ div > span -- Block container wrapping inline child
 > **Explanation:** `display: inline-block` combines inline flow with block-level box-model dimensions.
 
 ## 7. Related Terms
-- [`<div>` (Block Container)](../level_02/div.md) — The most common block-level generic container.
-- [`<span>` (Inline Container)](../level_02/span.md) — The most common inline generic container.
-- [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Elements that have no closing tag, many of which are inline (like `<img>`).
-
+- [`<div>` (Block container)](../level_02/div.md) — The most common block-level generic container.
+- [`<span>` (Inline container)](../level_02/span.md) — The most common inline generic container.
+- [Void Elements (Self-closing Tags)](void_elements.md) — Elements that have no closing tag, many of which are inline (like `<img>`).
+- [Element vs. Tag](element_vs_tag.md) — Related concept: Element vs. Tag.
+- [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
+- [Nesting](nesting.md) — Related concept: Nesting.
+- [`<a>` (Anchor / Link)](../level_02/a.md) — Related concept: `<a>` (Anchor / Link).
+- [`<br>` & `<hr>`](../level_02/br_hr.md) — Related concept: `<br>` & `<hr>`.
+- [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — Related concept: Headings (`<h1>` to `<h6>`).
+- [`<ul>`, `<ol>`, and `<li>` (Lists)](../level_02/lists.md) — Related concept: `<ul>`, `<ol>`, and `<li>` (Lists).
+- [`<p>` (Paragraph)](../level_02/p.md) — Related concept: `<p>` (Paragraph).
+- [`<strong>` & `<em>`](../level_02/strong_em.md) — Related concept: `<strong>` & `<em>`.
+- [`<td>` (Table Data)](../level_04/td.md) — Related concept: `<td>` (Table Data).
+- [`<tr>` (Table Row)](../level_04/tr.md) — Related concept: `<tr>` (Table Row).
+- [`<body>`](body.md) — Related concept: `<body>`.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [URL / URI](../level_01/url_uri.md) — The address containing protocol, host, and port parts.
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — The address containing protocol, host, and port parts.
 - [Client-Server Model](../level_01/client_server_model.md) — The network request-response architecture.
-
 ---
 
 ## 2. Term Category
@@ -178,9 +177,10 @@ Imagine a high-security hotel.
 ---
 
 ## 7. Related Terms
-- [CORS (Cross-Origin Resource Sharing)](./cors.md) — The protocol relaxations enabling safe cross-origin API queries.
-- [CSRF (Cross-Site Request Forgery)](./csrf.md) — The session-riding exploit that bypasses SOP write-blindness.
-
+- [CORS (Cross-Origin Resource Sharing)](cors.md) — The protocol relaxations enabling safe cross-origin API queries.
+- [CSRF (Cross-Site Request Forgery)](csrf.md) — The session-riding exploit that bypasses SOP write-blindness.
+- [Preflight Request (OPTIONS)](preflight_request.md) — Related concept: Preflight Request (OPTIONS).
+- [CORS Errors in the Browser](../level_05/cors_errors.md) — Related concept: CORS Errors in the Browser.
 ---
 
 ## 8. Key Takeaways

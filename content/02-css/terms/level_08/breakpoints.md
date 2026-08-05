@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`@media` (Media Queries Basics)](media_queries.md) — The conditional container code.
 - [Mobile-First Design](mobile_first.md) — The progressive styling workflow.
-
 ---
 
 ## 2. Term Category
@@ -315,7 +314,7 @@ body { background-color: white; }
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](media_queries.md) — The code container.
 - [Mobile-First Design](mobile_first.md) — The styling logic direction.
-
+- [Responsive Design (Concept)](responsive_design.md) — Related concept: Responsive Design (Concept).
 ---
 
 ## 8. Key Takeaways

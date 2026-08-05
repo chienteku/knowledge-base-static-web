@@ -6,6 +6,8 @@
 ---
 
 ## 1. Prerequisites
+
+- [MongoDB](../level_01/mongodb.md) — MongoDB architecture.
 - [Multi-Document Transaction](multi_document_transaction.md) — MongoDB's ACID feature.
 
 ---
@@ -194,8 +196,10 @@ await db.users.updateOne(...); // Single-document updates are natively atomic
 > **Explanation:** All field and array modifications within a single BSON document execute atomically.
 
 ## 7. Related Terms
+
 - [Multi-Document Transaction](multi_document_transaction.md) — MongoDB's ACID engine.
 - [Replica Set](../level_09/replica_set.md) — The distributed nodes.
+- [Atomicity in MongoDB](atomicity.md) — Related concept: Atomicity in MongoDB.
 
 ---
 

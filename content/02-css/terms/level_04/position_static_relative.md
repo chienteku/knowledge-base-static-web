@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Document Flow (Normal Flow)](../level_04/document_flow.md) — The baseline layout algorithm.
-- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The normal layout flow that we are about to manipulate.
-- [`top`, `bottom`, `left`, `right`](../level_04/top_bottom_left_right.md) — The properties used to move positioned elements.
-
+- [Document Flow (Normal Flow)](document_flow.md) — The baseline layout algorithm.
+- [`display: block` vs `inline` vs `inline-block`](display.md) — The normal layout flow that we are about to manipulate.
+- [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — The properties used to move positioned elements.
 ---
 
 ## 2. Term Category
@@ -228,10 +227,11 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 > **Explanation:** `position: static` is default un-positioned normal document flow.
 
 ## 7. Related Terms
-- [`position: absolute` vs `fixed`](../level_04/position_absolute_fixed.md) — Absolute positioning dynamics.
-- [`position: sticky`](../level_04/position_sticky.md) — Hybrid layout scrolling.
-- [`z-index`](../level_04/z_index.md) — Overlapping stacking layer values.
-
+- [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Absolute positioning dynamics.
+- [`position: sticky`](position_sticky.md) — Hybrid layout scrolling.
+- [`z-index`](z_index.md) — Overlapping stacking layer values.
+- [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
+- [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Related concept: `top`, `bottom`, `left`, `right`.
 ---
 
 ## 8. Key Takeaways

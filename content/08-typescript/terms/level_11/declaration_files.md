@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [The TypeScript Compiler (`tsc`)](../level_01/tsc.md) — The tool that generates or consumes these files.
 - [Interfaces](../level_03/interfaces.md) — The primary content of these files.
-
 ---
 
 ## 2. Term Category
@@ -153,7 +152,9 @@ declare global {
 ## 7. Related Terms
 - [`tsconfig.json`](../level_01/tsconfig.md) — Where you configure TS to emit declaration files.
 - [Interfaces](../level_03/interfaces.md) — The core content of `.d.ts` files.
-
+- [Namespaces](namespaces.md) — Related concept: Namespaces.
+- [Type-Only Imports & Exports](type_only_imports.md) — Related concept: Type-Only Imports & Exports.
+- [DefinitelyTyped](definitely_typed.md) — DefinitelyTyped / @types.
 ---
 
 ## 8. Key Takeaways

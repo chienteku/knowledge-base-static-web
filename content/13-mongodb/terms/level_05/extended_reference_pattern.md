@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling choice.
-- [One-to-Many Relationship (Embedding vs Referencing)](one_to_many.md) — The parent relationship context.
+- [One-to-Many Relationship (Embedding vs. Referencing)](one_to_many.md) — The parent relationship context.
 
 ---
 
@@ -200,7 +201,8 @@ Embed point-in-time address snapshot directly inside order document
 > **Explanation:** Point-in-time snapshots protect historic transaction data against catalog price mutations.
 
 ## 7. Related Terms
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The parent modeling choices.
+
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling choices.
 - [Schema Design (Document Modeling)](schema_design.md) — Access pattern optimization.
 
 ---

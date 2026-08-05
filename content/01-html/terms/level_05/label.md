@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<input>`](../level_05/input.md) — The tag that the label describes.
+- [`<input>`](input.md) — The tag that the label describes.
 - [Attribute](../level_01/attribute.md) — The label relies on the `for` attribute to function.
 - [Nesting](../level_01/nesting.md) — Since input controls can optionally nest inside label containers.
-
 ---
 
 ## 2. Term Category
@@ -188,10 +187,14 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 > **Explanation:** Bound labels enlarge small touch target areas for mobile users.
 
 ## 7. Related Terms
-- [`<input>`](../level_05/input.md) — The element that requires a label.
-- [`<input type="radio">` & `<input type="checkbox">`](../level_05/radio_checkbox.md) — Selection toggles that heavily depend on labels for target clicking.
+- [`<input>`](input.md) — The element that requires a label.
+- [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Selection toggles that heavily depend on labels for target clicking.
 - [`id` Attribute](../level_07/id.md) — The unique identifier required to link the label to the input.
-
+- [`placeholder` Attribute](placeholder.md) — Related concept: `placeholder` Attribute.
+- [`<select>` and `<option>`](select_option.md) — Related concept: `<select>` and `<option>`.
+- [`<textarea>`](textarea.md) — Related concept: `<textarea>`.
+- [Accessibility (a11y) Fundamentals](../level_09/accessibility_fundamentals.md) — Related concept: Accessibility (a11y) Fundamentals.
+- [`<form>`](form.md) — Related concept: `<form>`.
 ---
 
 ## 8. Key Takeaways

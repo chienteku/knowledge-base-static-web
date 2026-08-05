@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`mod` Declaration](../level_07/mod_declaration.md) — The keyword that actually builds the module tree that `use` navigates.
-- [`pub` Visibility](../level_07/pub_visibility.md) — The keyword that allows `use` to reach into other modules.
+
+- [`mod` Declaration](mod_declaration.md) — The keyword that actually builds the module tree that `use` navigates.
+- [`pub` Visibility](pub_visibility.md) — The keyword that allows `use` to reach into other modules.
 
 ---
 
@@ -83,73 +84,36 @@ use std::f32::consts::*;
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Use Statement Scoping and Lifecycle Rules
+### Mistake 1: Expecting `use` Statements to Load/Compile Unlinked `.rs` Files
 
-**The mistake:** Assuming Use Statement instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Writing `use foo::bar;` expecting Rust to discover and compile `foo.rs` without declaring `mod foo;`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `use` creates a local path shortcut to an item already present in the crate module tree. It does not register files for compilation. You must declare `mod foo;` once in the parent module to build the node in the tree first.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("use_statement_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+use foo::bar; // ❌ Error E0432: unresolved import `foo` (missing `mod foo;`!)
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("use_statement_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+mod foo; // Declares the module node first!
+use foo::bar; // Now brings bar into scope!
 ```
 
-### Mistake 2: Mutating Use Statement State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Overusing Glob Wildcard Imports (`use std::io::*`)
 
-**The mistake:** Attempting to mutate data associated with Use Statement through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Writing `use std::collections::*;` across multiple files in a project.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Glob imports pollute the local module scope, create symbol naming collisions, and obscure where types/functions originate. Prefer explicit or grouped imports (`use std::collections::{HashMap, HashSet};`).
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Unhandled Ambiguity with Identically Named Imports
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Importing `use std::fmt::Result;` and `use std::io::Result;` in the same file.
 
-### Mistake 3: Concurrent Access to Use Statement Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Triggers compiler error `E0252: the name `Result` is defined multiple times`. Use alias renaming: `use std::fmt::Result as FmtResult;`.
 
-**The mistake:** Sharing non-thread-safe Use Statement instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -226,8 +190,10 @@ fn main() {
 
 ## 6. Related Terms
 
-- [`mod` Declaration](../level_07/mod_declaration.md) — The keyword that actually builds the module tree that `use` navigates.
-- [Re-exporting (`pub use`)](../level_07/re_exporting.md) — A specialized version of `use` that takes your shortcut and exposes it to the public API.
+
+- [`mod` Declaration](mod_declaration.md) — The keyword that actually builds the module tree that `use` navigates.
+- [Re-exporting (`pub use`)](re_exporting.md) — A specialized version of `use` that takes your shortcut and exposes it to the public API.
+- [Prelude](prelude.md) — Related concept: Prelude.
 
 ---
 

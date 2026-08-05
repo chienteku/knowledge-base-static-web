@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — Regular bindings that are evaluated at runtime.
-- [Type Annotation](../level_01/type_annotation.md) — The syntax required to define the type, which is mandatory for constants.
+
+- [Variable](variable.md) — Regular bindings that are evaluated at runtime.
+- [Type Annotation](type_annotation.md) — The syntax required to define the type, which is mandatory for constants.
 
 ---
 
@@ -654,9 +655,12 @@ In bare-metal microcontrollers, peripherals interact with CPU core clock domains
 
 ## 6. Related Terms
 
-- [Variable](../level_01/variable.md) — A binding evaluated at runtime (which can be mutable or shadowed, unlike a constant).
-- [Static (`static`)](../level_01/static_static.md) — Another way to define a global value, but it represents a specific, single location in memory rather than being "pasted" everywhere like `const`.
-- [Type Annotation](../level_01/type_annotation.md) — The manual typing syntax that `const` strictly requires.
+
+- [Variable](variable.md) — A binding evaluated at runtime (which can be mutable or shadowed, unlike a constant).
+- [Static (`static`)](static_static.md) — Another way to define a global value, but it represents a specific, single location in memory rather than being "pasted" everywhere like `const`.
+- [Type Annotation](type_annotation.md) — The manual typing syntax that `const` strictly requires.
+- [Mutability (`mut`)](mutability_mut.md) — Related concept: Mutability (`mut`).
+- [Associated Constants](../level_04/associated_constants.md) — Related concept: Associated Constants.
 
 ---
 

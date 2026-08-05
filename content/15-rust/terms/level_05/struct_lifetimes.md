@@ -7,15 +7,16 @@
 
 ## 1. Prerequisites
 
+
 - [Struct](../level_02/struct.md) — Custom composite data types.
-- [Lifetime (`'a`)](../level_05/lifetime.md) — Reference validity annotations.
-- [Lifetime Elision](../level_05/lifetime_elision.md) — Understanding why struct definitions *cannot* elide lifetimes.
+- [Lifetime (`'a`)](lifetime.md) — Reference validity annotations.
+- [Lifetime Elision](lifetime_elision.md) — Understanding why struct definitions *cannot* elide lifetimes.
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (borrowed struct fields)**: Most structs in Rust store owned data (like `String`, `i32`, or `Vec<T>`). However, when a struct needs to store a *reference* (`&str` or `&T`), Rust forces you to declare a generic lifetime parameter on the struct definition itself. This ensures that an instance of the struct can never outlive the data it references.
+**Rust-specific (borrowed struct fields)**: While most production structs store owned data (`String`, `i32`, `Vec<T>`), performance-critical data structures often store *references* (`&'a str` or `&'a [u8]`) to avoid heap allocations. When a struct or enum contains borrowed fields, Rust requires declaring generic lifetime parameters (`struct MyStruct<'a>`). This ensures struct instances cannot outlive the underlying memory referenced by their fields.
 
 ---
 
@@ -23,76 +24,96 @@
 
 ### (1) Design Motivation — "Why did we design this?"
 
-If a struct holds a reference:
+If Rust allowed struct definitions to store references without explicit lifetime annotations:
 
 ```rust
-// INVALID RUST (Will not compile)
-struct User {
-    username: &str, 
+// INVALID RUST (Will not compile!)
+struct UserSession {
+    token: &str, // ❌ Error E0106: missing lifetime specifier
 }
 ```
 
-The compiler asks: *"How long is the string slice `username` valid for?"* 
+The compiler would have no way to verify how long `token` remains valid. If `token` pointed to a String on the heap that gets freed while `UserSession` is still held by a caller, reading `session.token` would cause a dangerous dangling pointer access!
 
-If `User` could exist after the original string was deallocated, accessing `user.username` would be a dangerous dangling pointer access.
-
-To solve this, Rust requires you to declare a lifetime parameter on the struct:
+To enforce compile-time safety, Rust demands explicit generic lifetime parameters on struct definitions:
 
 ```rust
-struct User<'a> {
-    username: &'a str,
+struct UserSession<'a> {
+    token: &'a str,
 }
 ```
 
-This enforces a ironclad rule: **An instance of `User<'a>` cannot outlive the reference stored in its `username` field.**
+This enforces an ironclad guarantee: **An instance of `UserSession<'a>` cannot outlive the string slice stored in its `token` field.**
 
-### (2) Reality Metaphor
+### (2) Deep Dive — Implementing Methods and Multiple Field Lifetimes
 
-Imagine a paper photo frame (`struct User<'a>`) holding a printed photograph (`&'a str`).
+#### Implementing Methods (`impl<'a> Struct<'a>`)
+When writing implementation blocks for a struct with lifetimes, declare generic lifetime parameters after `impl` and attach them to the struct name:
 
-The photo frame cannot exist in a valid state without the photograph inside it. If you throw the photograph into a paper shredder (the data's lifetime `'a` ends), you cannot look at the frame and expect to see the picture. 
+```rust
+struct Header<'a> {
+    name: &'a str,
+}
 
-The struct's lifetime parameter `'a` stamps the frame with an expiration date tied directly to the photo inside.
+impl<'a> Header<'a> {
+    fn get_name(&self) -> &'a str {
+        self.name
+    }
+}
+```
 
-### (3) Rust Code Examples
+#### Multiple Field Lifetimes (`struct Dual<'a, 'b>`)
+If a struct contains multiple reference fields that originate from different scopes, assign distinct lifetime parameters (`'a` and `'b`) to avoid unnecessarily over-constraining field lifetimes:
+
+```rust
+struct RequestContext<'a, 'b> {
+    headers: &'a str,
+    body: &'b str,
+}
+```
+
+### (3) Reality Metaphor
+
+A picture frame (`struct UserSession<'a>`) holding a printed physical photograph (`&'a str`):
+- The picture frame cannot present a valid image without the photograph placed inside it.
+- If you throw the photo into a paper shredder (the original data's lifetime `'a` ends), you cannot hold up the empty frame and expect to see the picture.
+- The struct's lifetime parameter `'a` acts as a safety tether physically binding the frame's validity duration to the photograph.
+
+### (4) Rust Code Examples
 
 #### Short Snippet (Defining and Instantiating)
-```rust
-struct ImportantExcerpt<'a> {
-    part: &'a str,
-}
-
-fn main() {
-    let novel = String::from("Call me Ishmael. Some years ago...");
-    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
-    
-    // i is tied to the lifetime of `novel`
-    let i = ImportantExcerpt {
-        part: first_sentence,
-    };
-    
-    println!("Excerpt: {}", i.part);
-}
-```
-
-#### Implementing Methods on a Struct with Lifetimes
-When writing an `impl` block for a struct with a lifetime, the lifetime parameter must be declared after `impl` and used after the struct name:
-
 ```rust
 struct Highlight<'a> {
     text: &'a str,
 }
 
-impl<'a> Highlight<'a> {
-    // Method returning a reference with the same lifetime
-    fn get_text(&self) -> &str {
-        self.text
+fn main() {
+    let article = String::from("Rust memory safety without garbage collection.");
+    let snippet = &article[0..4]; // Borrowed slice
+    
+    let highlight = Highlight { text: snippet };
+    println!("Highlight: {}", highlight.text);
+}
+```
+
+#### Struct Method Propagation
+```rust
+struct ConfigParser<'a> {
+    raw_config: &'a str,
+}
+
+impl<'a> ConfigParser<'a> {
+    fn new(raw_config: &'a str) -> Self {
+        Self { raw_config }
     }
 
-    // Method taking another reference
-    fn announce_and_return_part(&self, announcement: &str) -> &str {
-        println!("Attention: {announcement}");
-        self.text
+    fn extract_section(&self, name: &str) -> Option<&'a str> {
+        for line in self.raw_config.lines() {
+            if line.starts_with(name) {
+                return Some(line);
+            }
+        }
+        None
     }
 }
 ```
@@ -101,149 +122,247 @@ impl<'a> Highlight<'a> {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Struct Lifetimes Scoping and Lifecycle Rules
+### Mistake 1: Attempting to Build Self-Referential Structs
 
-**The mistake:** Assuming Struct Lifetimes instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Defining a struct that holds an owned value alongside a reference pointing to that same owned value.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Moving a struct in memory updates its stack location, which invalidates internal references pointing to itself. Rust strictly forbids self-referential structs without special wrappers like `Pin` or `Ouroboros`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("struct_lifetimes_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
+struct SelfRef<'a> {
+    data: String,
+    slice: &'a str, // ❌ Attempting to point `slice` into `data` inside the same struct!
 }
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("struct_lifetimes_data");
-    s // Ownership of the String is transferred directly to the caller
+// Keep owned data and references separate, or store integer offsets (usize) instead of references!
+struct ParsedData {
+    data: String,
+    start: usize,
+    end: usize,
 }
 ```
 
-### Mistake 2: Mutating Struct Lifetimes State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Omitting Lifetime Parameters on `impl` Headers
 
-**The mistake:** Attempting to mutate data associated with Struct Lifetimes through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Writing `impl MyStruct` instead of `impl<'a> MyStruct<'a>`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `MyStruct<'a>` is a generic type parameterized over `'a`. The `impl` block must declare `'a` to bring it into scope for the methods.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
+struct Token<'a>(&'a str);
+
+// impl Token { ... } // ❌ Error E0726: implicit elided lifetime not allowed in impl header
+```
+
+*Fix:*
+```rust
+impl<'a> Token<'a> { ... } // Correct!
+```
+
+### Mistake 3: Over-Constraining Independent Fields to a Single Lifetime Parameter
+
+**The mistake:** Assigning the same lifetime `'a` to multiple reference fields that are borrowed from completely independent data sources with different lifespans.
+
+**Why it is wrong:** Using a single lifetime `'a` forces both fields to shrink their effective lifetime to the *shortest* borrowed input scope, unnecessarily restricting how long the struct can be held.
+
+*Incorrect:*
+```rust
+struct Pair<'a> {
+    first: &'a str,  // Forced to match second's lifetime!
+    second: &'a str,
 }
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
+struct Pair<'a, 'b> { // Independent lifetimes allow flexible borrowing!
+    first: &'a str,
+    second: &'b str,
 }
 ```
 
-### Mistake 3: Concurrent Access to Struct Lifetimes Across Threads Without `Send` / `Sync` Guards
-
-**The mistake:** Sharing non-thread-safe Struct Lifetimes instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
-### Exercise 1: Create a Borrowing Struct
+### Exercise 1: Zero-Copy Network Frame Dissector
 
-**Problem:** Define a struct named `BookReview` that has two fields: `title` (which is an owned `String`) and `quote` (which is a borrowed `&str`). Include all necessary lifetime parameters.
+**Scenario:** Build a high-performance network packet parser `struct PacketFrame<'a>` that holds slice references to Ethernet, IPv4, and Payload headers without allocating dynamic memory.
+
+**Requirements:**
+1. Define struct `PacketFrame<'a>` with fields `eth_header: &'a [u8]`, `payload: &'a [u8]`.
+2. Implement constructor `fn parse(raw: &'a [u8]) -> Option<PacketFrame<'a>>`.
+3. Write unit tests dissecting raw byte buffers.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
-> struct BookReview<'a> {
->     title: String,
->     quote: &'a str,
+> #[derive(Debug, PartialEq)]
+> pub struct PacketFrame<'a> {
+>     pub eth_header: &'a [u8],
+>     pub payload: &'a [u8],
 > }
-> ```
-
----
-
-### Exercise 2: Struct Holding String Slices
-
-**Problem:** Define `struct Highlight<'a> { text: &'a str }`. Instantiate it with a string slice and print `text`.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Highlight: Important
-> ```
-> ```rust
-> struct Highlight<'a> {
->     text: &'a str,
+> 
+> impl<'a> PacketFrame<'a> {
+>     pub fn parse(raw: &'a [u8]) -> Option<Self> {
+>         if raw.len() < 14 {
+>             return None;
+>         }
+>         Some(Self {
+>             eth_header: &raw[0..14],
+>             payload: &raw[14..],
+>         })
+>     }
 > }
-> fn main() {
->     let quote = String::from("Important news");
->     let h = Highlight { text: &quote[..9] };
->     println!("Highlight: {}", h.text);
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_packet_dissector() {
+>         let raw_bytes = vec![0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0x08, 0x00, 0xDE, 0xAD, 0xBE, 0xEF];
+>         let frame = PacketFrame::parse(&raw_bytes).unwrap();
+>         
+>         assert_eq!(frame.eth_header.len(), 14);
+>         assert_eq!(frame.payload, &[0xDE, 0xAD, 0xBE, 0xEF]);
+>     }
 > }
 > ```
 >
-> **Explanation:** Struct lifetime annotations guarantee struct instances cannot outlive referenced target data.
+> #### Technical Explanation
+>
+> 1. `PacketFrame<'a>` stores slices borrowed from `raw_bytes` with zero copy overhead.
+> 2. Lifetime `'a` guarantees `PacketFrame` cannot outlive the underlying `raw_bytes` vector.
 
 ---
 
-### Exercise 3: Method Implementation on Lifetime Structs
+### Exercise 2: Document Search Match Engine with Dual Lifetimes
 
-**Problem:** Implement an `impl<'a> Highlight<'a>` block with a method `fn announce(&self) -> &str`.
+**Scenario:** Implement a search result struct `SearchMatch<'doc, 'query>` holding references to both a target document string (`'doc`) and the matched search term (`'query`). Use two distinct lifetimes to ensure flexible borrowing.
 
-**Expected output:**
+**Requirements:**
+1. Define struct `SearchMatch<'doc, 'query>` with fields `document: &'doc str`, `query: &'query str`, and `line_number: usize`.
+2. Implement method `fn render(&self) -> String`.
+3. Write unit tests demonstrating search matches across different variable lifespans.
+
 > [!check]- Answer
-> ```
-> Announce: Important
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> struct Highlight<'a> { text: &'a str }
-> impl<'a> Highlight<'a> {
->     fn announce(&self) -> &str { self.text }
+> pub struct SearchMatch<'doc, 'query> {
+>     pub document: &'doc str,
+>     pub query: &'query str,
+>     pub line_number: usize,
 > }
-> fn main() {
->     let h = Highlight { text: "Important" };
->     println!("Announce: {}", h.announce());
+> 
+> impl<'doc, 'query> SearchMatch<'doc, 'query> {
+>     pub fn render(&self) -> String {
+>         format!("Line {}: found '{}' in document", self.line_number, self.query)
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_dual_lifetime_match() {
+>         let doc_text = String::from("Rust guarantees concurrency\nZero cost abstractions");
+>         let search_term = String::from("concurrency");
+>         
+>         let match_result = SearchMatch {
+>             document: &doc_text,
+>             query: &search_term,
+>             line_number: 1,
+>         };
+>         
+>         assert_eq!(match_result.render(), "Line 1: found 'concurrency' in document");
+>     }
 > }
 > ```
 >
-> **Explanation:** Method `impl` blocks for lifetime-constrained structs require declaring lifetime parameters e.g. `impl<'a> Struct<'a>`.
+> #### Technical Explanation
+>
+> 1. Using two distinct lifetimes (`'doc` and `'query`) prevents forcing `doc_text` and `search_term` to share an identical lifetime scope.
+> 2. `SearchMatch` can be retained safely as long as both borrowed targets remain alive.
+
+---
+
+### Exercise 3: Zero-Copy Streaming Log Reader with Method Implementation
+
+**Scenario:** Build a streaming log line reader struct `LogReader<'a>` that parses log lines one by one and provides a method `read_error_lines(&mut self) -> Vec<&'a str>` returning borrowed error line slices.
+
+**Requirements:**
+1. Define struct `LogReader<'a> { raw_logs: &'a str }`.
+2. Implement method `fn read_errors(&mut self) -> Vec<&'a str>`.
+3. Write unit tests.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> pub struct LogReader<'a> {
+>     pub raw_logs: &'a str,
+> }
+> 
+> impl<'a> LogReader<'a> {
+>     pub fn new(raw_logs: &'a str) -> Self {
+>         Self { raw_logs }
+>     }
+> 
+>     pub fn read_errors(&mut self) -> Vec<&'a str> {
+>         self.raw_logs
+>             .lines()
+>             .filter(|line| line.contains("[ERROR]"))
+>             .collect()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_log_reader_methods() {
+>         let log_data = String::from("[INFO] Server starting\n[ERROR] Connection reset\n[INFO] Retrying\n[ERROR] Timeout");
+>         let mut reader = LogReader::new(&log_data);
+>         let errors = reader.read_errors();
+>         
+>         assert_eq!(errors, vec!["[ERROR] Connection reset", "[ERROR] Timeout"]);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `impl<'a> LogReader<'a>` declares lifetime `'a` for all method implementations.
+> 2. `read_errors(&mut self) -> Vec<&'a str>` explicitly returns slices tied to `'a` (the log data), allowing caller to hold returned error slices after `reader` drops.
 
 ---
 
 ## 6. Related Terms
 
-- [Lifetime (`'a`)](../level_05/lifetime.md) — The annotation used on struct fields.
-- [Lifetime Bounds](../level_05/lifetime_bounds.md) — `struct Container<'a, T: 'a>` bounds.
+
+- [Lifetime (`'a`)](lifetime.md) — The annotation used on struct fields.
+- [Lifetime Bounds](lifetime_bounds.md) — `struct Container<'a, T: 'a>` bounds.
 - [Struct](../level_02/struct.md) — Composite data structures.
+- [Lifetime Elision](lifetime_elision.md) — Related concept: Lifetime Elision.
 
 ---
 
 ## 7. Key Takeaways
 
-- Any struct that holds references must declare generic lifetime parameters: `struct MyStruct<'a> { field: &'a str }`.
-- An instance of a borrowing struct cannot outlive any of the data referenced by its fields.
-- `impl<'a> MyStruct<'a>` is the syntax for implementing methods on a borrowing struct.
+- Any struct or enum holding references must declare generic lifetime parameters: `struct MyStruct<'a> { field: &'a str }`.
+- An instance of a borrowing struct cannot outlive any of the memory referenced by its fields.
+- `impl<'a> MyStruct<'a>` is the required syntax for implementing methods on borrowing structs.
 - Lifetime elision does **not** apply to struct field definitions.

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Authentication Architecture](auth_architecture.md) — The 4-tier auth hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier auth hierarchy.
 - [System Users (`DEFINE USER`)](define_user.md) — Contrast between administrative system users and record users.
 
 ---
@@ -201,9 +202,13 @@ Write a `DEFINE ACCESS` statement named `mobile_app` on the current database tha
 > **Explanation:** `DURATION FOR SESSION` configures JWT token validity periods.
 
 ## 7. Related Terms
-- [Authentication Architecture](auth_architecture.md) — System auth hierarchy overview.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — System auth hierarchy overview.
 - [`SIGNUP` / `SIGNIN` Clauses](signup_signin.md) — Authentication handler expressions.
 - [JWT Token-Based Auth](jwt_auth.md) — How JWT tokens are evaluated.
+- [Direct Browser-to-Database Architecture](browser_to_db.md) — Related concept: Direct Browser-to-Database Architecture.
+- [`DEFINE ACCESS ... TYPE JWT` (External Auth Providers)](define_access_jwt.md) — Related concept: `DEFINE ACCESS ... TYPE JWT` (External Auth Providers).
+- [System Users (`DEFINE USER`)](define_user.md) — Related concept: System Users (`DEFINE USER`).
 
 ---
 

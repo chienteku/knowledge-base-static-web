@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Middleware (`middleware.ts`)](../level_10/middleware.md) — The feature that is forced to use the Edge Runtime.
-- [V8 Engine](../level_10/v8_engine.md) — The core JavaScript execution engine the Edge is built upon.
-
+- [Middleware (`middleware.ts`)](middleware.md) — The feature that is forced to use the Edge Runtime.
+- [V8 Engine](v8_engine.md) — The core JavaScript execution engine the Edge is built upon.
 ---
 
 ## 2. Term Category
@@ -165,9 +164,10 @@ import fs from 'fs'; // ❌ Build Error: Node.js module 'fs' not supported in Ed
 ---
 
 ## 7. Related Terms
-- [Middleware (`middleware.ts`)](../level_10/middleware.md) — The primary consumer of the Edge Runtime.
-- [Route Handlers](../level_07/route_handlers.md) — Can optionally be opted into the Edge.
-
+- [Middleware (`middleware.ts`)](middleware.md) — The primary consumer of the Edge Runtime.
+- [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — Can optionally be opted into the Edge.
+- [Serverless Functions](serverless_functions.md) — Related concept: Serverless Functions.
+- [V8 Engine](v8_engine.md) — Related concept: V8 Engine.
 ---
 
 ## 8. Key Takeaways

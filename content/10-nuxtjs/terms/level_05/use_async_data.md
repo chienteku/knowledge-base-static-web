@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useFetch`](../level_05/use_fetch.md) — The syntactic sugar built directly on top of `useAsyncData`.
-- [JavaScript Promises & `async`/`await`](../../../03-javascript/terms/level_06/promise.md) — The underlying asynchronous callback runtime wrapper.
-
+- [`useFetch`](use_fetch.md) — The syntactic sugar built directly on top of `useAsyncData`.
+- promise — The underlying asynchronous callback runtime wrapper.
 ---
 
 ## 2. Term Category
@@ -179,8 +178,11 @@ const { data } = await useAsyncData('key', async () => 'plain string');
 ---
 
 ## 7. Related Terms
-- [Caching Data](../level_05/caching_data.md) — How the unique string key is used to cache data across navigations.
-
+- [Caching Data](caching_data.md) — How the unique string key is used to cache data across navigations.
+- [`$fetch` (ofetch)](dollar_fetch.md) — Related concept: `$fetch` (ofetch).
+- [Fetching Errors & `clearNuxtData`](fetching_errors.md) — Related concept: Fetching Errors & `clearNuxtData`.
+- [`useFetch`](use_fetch.md) — Related concept: `useFetch`.
+- [`useLazyFetch` & `useLazyAsyncData` Hooks](use_lazy_fetch.md) — Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks.
 ---
 
 ## 8. Key Takeaways

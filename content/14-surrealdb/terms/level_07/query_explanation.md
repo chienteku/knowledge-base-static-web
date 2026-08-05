@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The index architecture.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The index architecture.
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI tools.
 
 ---
@@ -186,7 +187,8 @@ Write the SurrealQL command to create the single most effective composite index 
 > **Explanation:** `EXPLAIN` plan steps display whether `INDEX` range scans or full table scans are used.
 
 ## 7. Related Terms
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Composite Index](composite_index.md) — Multi-column optimization.
 - [`PARALLEL` Keyword](../level_06/parallel_keyword.md) — Multi-threaded execution.
 

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [MongoDB](mongodb.md) — The parent database engine hosted in the cloud.
-- [Managed PostgreSQL Services](../../../12-postgres/terms/level_10/managed_services.md) — Relational DB cloud hosting analogies.
+- [Managed PostgreSQL Services (Supabase, Neon, AWS RDS)](../../../12-postgres/terms/level_10/managed_services.md) — Relational DB cloud hosting analogies.
 
 ---
 
@@ -173,8 +174,10 @@ Upgrade to M10+ dedicated cluster tier for load testing and production
 > **Explanation:** Atlas Vector Search indexes vector embeddings for semantic AI search.
 
 ## 7. Related Terms
+
 - [`mongod` (MongoDB Server Daemon)](mongod.md) — The cloud hosted engine.
-- [Managed PostgreSQL Services](../../../12-postgres/terms/level_10/managed_services.md) — Relational equivalents.
+- [Managed PostgreSQL Services (Supabase, Neon, AWS RDS)](../../../12-postgres/terms/level_10/managed_services.md) — Relational equivalents.
+- [MongoDB Compass](compass.md) — Related concept: MongoDB Compass.
 
 ---
 

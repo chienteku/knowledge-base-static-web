@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object Types](../level_03/object_types.md) — What this operator reads from.
-- [Union Types](../level_05/union_types.md) — The output format this operator generates.
-
+- [Union Types (`|`)](../level_05/union_types.md) — The output format this operator generates.
 ---
 
 ## 2. Term Category
@@ -169,9 +168,13 @@ type StringKeysOnly<T> = Extract<keyof T, string>;
 > **Explanation:** `keyof T` constrains parameter keys to valid property names of object `T`.
 
 ## 7. Related Terms
-- [`typeof` Operator (Type Context)](../../../03-javascript/terms/level_01/typeof.md) — Used alongside `keyof` to read JS objects.
-- [Mapped Types](../level_09/mapped_types.md) — The advanced feature that relies entirely on `keyof`.
-
+- `typeof` Operator — Used alongside `keyof` to read JS objects.
+- [Mapped Types](mapped_types.md) — The advanced feature that relies entirely on `keyof`.
+- [Multiple Generics](../level_07/multiple_generics.md) — Related concept: Multiple Generics.
+- [Indexed Access Types](indexed_access.md) — Related concept: Indexed Access Types.
+- [Template Literal Types](template_literal_types.md) — Related concept: Template Literal Types.
+- [`typeof` Operator](typeof.md) — Related concept: `typeof` Operator.
+- [Generic Constraints (`extends`)](../level_07/generic_constraints.md) — Related concept: Generic Constraints (`extends`).
 ---
 
 ## 8. Key Takeaways

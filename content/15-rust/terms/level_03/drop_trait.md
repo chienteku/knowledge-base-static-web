@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The system that determines exactly *when* the Drop trait is triggered.
-- [Traits](../level_04/trait.md) — (Future reference) The overarching system used to define shared interfaces and behaviors like `Drop`.
+
+- [Ownership](ownership.md) — The system that determines exactly *when* the Drop trait is triggered.
+- [Trait](../level_04/trait.md) — (Future reference) The overarching system used to define shared interfaces and behaviors like `Drop`.
 
 ---
 
@@ -748,8 +749,14 @@ Design an `ArenaSlotPool<T>` and a reference-counted handle guard `SlotLease<T>`
 
 ## 6. Related Terms
 
-- [Ownership](../level_03/ownership.md) — The system that decides *when* the scope ends and `Drop` is called.
-- [`Copy` Trait](../level_03/copy_trait.md) — As a rule, types that implement `Copy` are not allowed to implement `Drop` (you can't trivially duplicate something that requires complex cleanup!).
+
+- [Ownership](ownership.md) — The system that decides *when* the scope ends and `Drop` is called.
+- [`Copy` Trait](copy_trait.md) — As a rule, types that implement `Copy` are not allowed to implement `Drop` (you can't trivially duplicate something that requires complex cleanup!).
+- [`Drop Check` (dropck)](drop_check.md) — Related concept: `Drop Check` (dropck).
+- [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](std_mem_utilities.md) — Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`).
+- [`panic!` Macro](../level_04/panic.md) — Related concept: `panic!`.
+- [Memory Leaks & Reference Cycles](../level_11/memory_leaks.md) — Related concept: Memory Leaks & Reference Cycles.
+- [RAII (Resource Acquisition Is Initialization)](../level_18/raii.md) — Related concept: RAII (Resource Acquisition Is Initialization).
 
 ---
 

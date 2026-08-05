@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`WHERE` Clause](where.md) — The parent filter context.
-
 ---
 
 ## 2. Term Category
@@ -197,7 +196,7 @@ SELECT * FROM t WHERE val = ANY(COALESCE(array_col, ARRAY[]::INT[]));
 ## 7. Related Terms
 - [`WHERE` Clause](where.md) — The parent filter context.
 - [`IS NULL` / `IS NOT NULL`](is_null.md) — The only way to compare missing values.
-
+- [`LIKE` / `ILIKE` Pattern Matching](../level_04/like_ilike.md) — Related concept: `LIKE` / `ILIKE` Pattern Matching.
 ---
 
 ## 8. Key Takeaways

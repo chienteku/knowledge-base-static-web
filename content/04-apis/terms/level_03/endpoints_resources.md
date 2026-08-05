@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [URL / URI](../level_01/url_uri.md) — Endpoints are just specific URLs on a server.
-- [REST](../level_03/rest.md) — REST relies heavily on defining resources as nouns.
-
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — Endpoints are just specific URLs on a server.
+- [REST (Representational State Transfer)](rest.md) — REST relies heavily on defining resources as nouns.
 ---
 
 ## 2. Term Category
@@ -306,9 +305,11 @@ GET /api/orders ; Standardized plural resource nouns
 ---
 
 ## 7. Related Terms
-- [Path Variables](../level_02/query_params.md) — The dynamic IDs injected into endpoints to target specific resources.
-- [REST](../level_03/rest.md) — The architecture that dictates endpoints must be nouns.
-
+- [Query Parameters & Path Variables](../level_02/query_params.md) — The dynamic IDs injected into endpoints to target specific resources.
+- [REST (Representational State Transfer)](rest.md) — The architecture that dictates endpoints must be nouns.
+- [HATEOAS](hateoas.md) — Related concept: HATEOAS.
+- [Richardson Maturity Model](richardson_maturity_model.md) — Related concept: Richardson Maturity Model.
+- [API Versioning (v1, v2)](../level_10/versioning.md) — Related concept: API Versioning (v1, v2).
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`cfg` Attribute](../level_07/cfg_attribute.md) — A sibling attribute mechanism, for conditional compilation rather than lint severity.
+
+- [`cfg` Attribute](cfg_attribute.md) — A sibling attribute mechanism, for conditional compilation rather than lint severity.
 - [Clippy](../level_16/clippy.md) — The linter whose suggestions these attributes most commonly tune.
-- [`#[must_use]`](../level_07/must_use_attribute.md) — An example of a specific warning these attributes can silence or escalate.
 
 ---
 
@@ -74,73 +74,38 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Lint Control Attributes Scoping and Lifecycle Rules
+### Mistake 1: Attempting to Override `forbid` Attributes with `allow` Attributes
 
-**The mistake:** Assuming Lint Control Attributes instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Placing `#[allow(unused_variables)]` inside a module when the crate root has declared `#![forbid(unused_variables)]`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `#![forbid(...)]` locks lint levels permanently for the entire sub-tree. Attempting to override a `forbid` lint with `allow` causes a compile-time error (`error: allow(unused_variables) overrides forbid(unused_variables)`).
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("lint_control_attributes_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+#![forbid(dead_code)]
+
+#[allow(dead_code)] // ❌ Fails to compile! forbid cannot be overridden by allow
+fn helper() {}
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("lint_control_attributes_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+// Use `#![deny(dead_code)]` at crate root if you need local item-level `#[allow(dead_code)]` overrides!
 ```
 
-### Mistake 2: Mutating Lint Control Attributes State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Hardcoding `#![deny(warnings)]` Directly in Source Files for Published Crates
 
-**The mistake:** Attempting to mutate data associated with Lint Control Attributes through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Placing `#![deny(warnings)]` inside published `crates.io` source code.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Future Rust compiler versions introduce new lints. Published crates with hardcoded `#![deny(warnings)]` will fail to compile on future Rust toolchains. Enforce `-D warnings` in CI via `RUSTFLAGS="-D warnings"` instead.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Blanket Lint Suppression via Scope-Wide `#[allow(warnings)]`
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Annotating entire modules or functions with `#[allow(warnings)]`.
 
-### Mistake 3: Concurrent Access to Lint Control Attributes Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Silences memory leaks, safety warnings, and bug detectors indiscriminately. Scope lints to specific lint names (`#[allow(unused_variables)]`).
 
-**The mistake:** Sharing non-thread-safe Lint Control Attributes instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -238,10 +203,10 @@ Then answer: **why do many projects prefer `RUSTFLAGS="-D warnings"` (or `RUSTDO
 
 ## 6. Related Terms
 
-- [`cfg` Attribute](../level_07/cfg_attribute.md) — A sibling attribute mechanism for a different purpose (conditional compilation, not lint severity).
+
+- [`cfg` Attribute](cfg_attribute.md) — A sibling attribute mechanism for a different purpose (conditional compilation, not lint severity).
 - [Clippy](../level_16/clippy.md) — The linter whose suggestions (`clippy::lint_name`) are most commonly tuned with these attributes.
-- [`#[must_use]`](../level_07/must_use_attribute.md) — An example of a specific lint (`unused_must_use`) these attributes can silence, warn on, or deny.
-- [Edition](../level_07/edition.md) — Lint defaults and available lints can shift between editions, another reason explicit control sometimes matters.
+- [Edition](edition.md) — Lint defaults and available lints can shift between editions, another reason explicit control sometimes matters.
 
 ---
 

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Nitro Engine](../level_01/nitro_engine.md) — The compiler engine that enables deployment to Edge runtimes.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The server-side rendering logic executed at the edge nodes.
-
 ---
 
 ## 2. Term Category
@@ -245,8 +244,8 @@ import fs from 'fs'; // ❌ Build Error: Node module 'fs' not supported in Edge 
 
 ## 7. Related Terms
 - [Nitro Engine](../level_01/nitro_engine.md) — The engine that compiles the edge-compatible output.
-- [Hybrid Rendering](../level_09/hybrid_rendering.md) — The routing system that coordinates edge caching.
-
+- [Hybrid Rendering](hybrid_rendering.md) — The routing system that coordinates edge caching.
+- [Edge Deployment](../level_10/edge_deployment.md) — Related concept: Edge Deployment.
 ---
 
 ## 8. Key Takeaways

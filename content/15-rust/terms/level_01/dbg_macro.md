@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`println!` / `format!`](../level_01/println_format.md) — The output-formatting macro `dbg!` builds on.
-- [Expressions](../level_01/expressions.md) — `dbg!` wraps an expression and evaluates to it.
-- [Macros](../level_01/macros.md) — The general mechanism.
+
+- [`println!` / `format!`](println_format.md) — The output-formatting macro `dbg!` builds on.
+- [Expressions](expressions.md) — `dbg!` wraps an expression and evaluates to it.
+- [Macros](macros.md) — The general mechanism.
 
 ---
 
@@ -534,9 +535,11 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`println!` / `format!`](../level_01/println_format.md) — The formatting macro family `dbg!` is a debug-focused sibling of.
+
+- [`println!` / `format!`](println_format.md) — The formatting macro family `dbg!` is a debug-focused sibling of.
 - [`Debug` Trait](../level_04/debug_trait.md) — Required on any value passed to `dbg!`, since it prints using `{:#?}`-style formatting.
-- [Expressions](../level_01/expressions.md) — Why `dbg!` can be embedded anywhere a value is expected.
+- [Expressions](expressions.md) — Why `dbg!` can be embedded anywhere a value is expected.
+- [`todo!` / `unimplemented!` / `unreachable!`](../level_04/todo_unimplemented_unreachable.md) — Related concept: `todo!` / `unimplemented!` / `unreachable!`.
 
 ---
 

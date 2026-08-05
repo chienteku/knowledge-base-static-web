@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](define_table.md) — The user table context.
 - [Namespace & Database](../level_01/namespace_database.md) — The execution boundaries.
 
@@ -200,6 +201,7 @@ DEFINE ACCESS user ... SIGNIN (SELECT * FROM user WHERE email = $email AND crypt
 > **Explanation:** `DURATION FOR SESSION` specifies JWT token expiration times.
 
 ## 7. Related Terms
+
 
 - [SurrealDB](../level_01/surrealdb.md)
 

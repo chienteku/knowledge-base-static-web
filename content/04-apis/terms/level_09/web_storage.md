@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [JSON.stringify() & JSON.parse()](../level_07/json_methods.md) — Web Storage only stores strings, so you must use these methods to save Objects.
-
+- [JSON Methods (parse / stringify)](../level_07/json_methods.md) — Web Storage only stores strings, so you must use these methods to save Objects.
 ---
 
 ## 2. Term Category
@@ -172,9 +171,14 @@ function render() { useTheme(theme); requestAnimationFrame(render); }
 ---
 
 ## 7. Related Terms
-- [Cookies](../level_09/cookies.md) — The older, server-facing alternative to localStorage.
-- [IndexedDB](../level_09/indexeddb.md) — A massive, complex alternative for storing Gigabytes of data, instead of localStorage's tiny 5MB limit.
-
+- [Cookies](cookies.md) — The older, server-facing alternative to localStorage.
+- [IndexedDB](indexeddb.md) — A massive, complex alternative for storing Gigabytes of data, instead of localStorage's tiny 5MB limit.
+- [Statelessness](../level_03/statelessness.md) — Related concept: Statelessness.
+- [JWT (JSON Web Tokens)](../level_04/jwt.md) — Related concept: JWT (JSON Web Tokens).
+- [Secrets & Environment Variables](../level_04/secrets_env.md) — Related concept: Secrets & Environment Variables.
+- [XSS (Cross-Site Scripting)](../level_04/xss.md) — Related concept: XSS (Cross-Site Scripting).
+- [JSON Methods (parse / stringify)](../level_07/json_methods.md) — Related concept: JSON Methods (parse / stringify).
+- [Service Workers](service_workers.md) — Related concept: Service Workers.
 ---
 
 ## 8. Key Takeaways

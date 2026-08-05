@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`find()` / `findOne()`](../level_03/find.md) — The query execution methods.
 
 ---
@@ -231,7 +232,9 @@ Write the query to find all documents in the `stores` collection located within 
 > **Explanation:** `$geoWithin` finds points enclosed within target polygon boundaries.
 
 ## 7. Related Terms
+
 - [`find()` / `findOne()`](../level_03/find.md) — The query framework.
+- [Geospatial Index (`2dsphere` / `2d`)](../level_07/geospatial_index.md) — Related concept: Geospatial Index (`2dsphere` / `2d`).
 
 ---
 

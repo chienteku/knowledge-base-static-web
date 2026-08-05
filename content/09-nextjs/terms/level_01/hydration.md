@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Components](../level_01/react_components.md) — The building blocks that are hydrated.
-- [Client-Side Rendering (CSR) / SPA](../level_01/csr_spa.md) — The client-side execution framework.
-
+- [React Components](react_components.md) — The building blocks that are hydrated.
+- [Client-Side Rendering (CSR) / SPA](csr_spa.md) — The client-side execution framework.
 ---
 
 ## 2. Term Category
@@ -199,9 +198,8 @@ export default function SafeTimestamp() {
 ---
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The process that generates the static HTML to hydrate.
-- [Client Components](../level_01/client_components.md) — Components that undergo hydration.
-
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — The process that generates the static HTML to hydrate.
+- [Client Components (`"use client"`)](client_components.md) — Components that undergo hydration.
 ---
 
 ## 8. Key Takeaways

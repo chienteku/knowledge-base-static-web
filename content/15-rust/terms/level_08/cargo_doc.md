@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [Cargo](../level_01/cargo.md) — The build system that executes this command.
 - [Comments](../level_01/comments.md) — The `///` syntax that provides the raw text for this tool.
-- [Doc Tests](../level_08/doc_tests.md) — The code examples that this tool formats into the final page.
+- [Doc Tests](doc_tests.md) — The code examples that this tool formats into the final page.
 
 ---
 
@@ -650,8 +651,10 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Doc Tests](../level_08/doc_tests.md) — The code examples that `cargo doc` formats beautifully into the HTML page (which are also run as tests!).
+
+- [Doc Tests](doc_tests.md) — The code examples that `cargo doc` formats beautifully into the HTML page (which are also run as tests!).
 - [`pub` Visibility](../level_07/pub_visibility.md) — The access modifier that determines whether `cargo doc` includes an item by default.
+- [`//!` (Inner Doc Comment)](inner_doc_comment.md) — Related concept: `//!` (Inner Doc Comment).
 
 ---
 

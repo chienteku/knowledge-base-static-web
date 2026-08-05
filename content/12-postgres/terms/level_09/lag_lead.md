@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Window Function](window_function.md) — The parent calculation engine.
-
 ---
 
 ## 2. Term Category
@@ -204,7 +203,6 @@ SELECT price, LAG(price) OVER (ORDER BY date ASC) FROM prices; -- Accesses PREVI
 ## 7. Related Terms
 - [Window Function](window_function.md) — The parent calculation engine.
 - [`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`](row_number_rank.md) — Positional window functions.
-
 ---
 
 ## 8. Key Takeaways

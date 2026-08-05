@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`font-size`](../level_03/font_size_weight.md) — The property that these units multiply against.
-
+- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that these units multiply against.
 ---
 
 ## 2. Term Category
@@ -240,10 +239,10 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 > **Explanation:** `rem` maintains consistent global scaling; `em` enables component-relative scaling.
 
 ## 7. Related Terms
-- [`font-size`](../level_03/font_size_weight.md) — The property that controls the baseline font scale.
+- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that controls the baseline font scale.
 - [`%` (Percentages)](percentages.md) — Sizing relative to parent containers.
-- [`vw` / `vh`](viewport_units.md) — Sizing relative to the viewport.
-
+- [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport.
+- [Responsive Design (Concept)](responsive_design.md) — Related concept: Responsive Design (Concept).
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Ownership & Borrowing](../level_03/ownership.md) — Understanding borrow checker rules, aliasing XOR mutability, and lifetime guarantees.
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Basic understanding of raw pointers that bypass borrow checking.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Understanding what constitutes memory safety violations in compiled Rust binaries.
+
+- [Ownership](../level_03/ownership.md) — Understanding borrow checker rules, aliasing XOR mutability, and lifetime guarantees.
+- [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Basic understanding of raw pointers that bypass borrow checking.
+- [Undefined Behavior (UB)](undefined_behavior.md) — Understanding what constitutes memory safety violations in compiled Rust binaries.
 
 ---
 
@@ -708,10 +709,18 @@ Requirements:
 
 ## 7. Related Terms
 
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Unsafe pointer types that bypass borrow checking.
-- [`unsafe fn`](../level_13/unsafe_fn.md) — Functions with caller-enforced safety contracts.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Invalid operations that break compiler execution guarantees.
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Interoperability bindings between Rust and foreign languages like C.
+
+- [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Unsafe pointer types that bypass borrow checking.
+- [`unsafe fn`](unsafe_fn.md) — Functions with caller-enforced safety contracts.
+- [Undefined Behavior (UB)](undefined_behavior.md) — Invalid operations that break compiler execution guarantees.
+- [FFI (Foreign Function Interface)](ffi.md) — Interoperability bindings between Rust and foreign languages like C.
+- [`MaybeUninit<T>`](../level_11/maybeuninit_t.md) — Related concept: `MaybeUninit<T>`.
+- [`PhantomData<T>`](../level_11/phantomdata_t.md) — Related concept: `PhantomData<T>`.
+- [`extern "C"`](extern_c.md) — Related concept: `extern "C"`.
+- [`union`](union.md) — Related concept: `union`.
+- [`unsafe trait` / `unsafe impl`](unsafe_trait.md) — Related concept: `unsafe trait` / `unsafe impl`.
+- [Allocator API](../level_15/allocator_api.md) — Related concept: Allocator API.
+- [Inline Assembly (`asm!`)](inline_assembly.md) — Related concept: Inline Assembly (`asm!`).
 
 ---
 

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`RELATE` Statement](relate.md) — The command creating the edges.
-- [Object Type](../level_02/object_type.md) — Nested metadata structures.
+- [`object`](../level_02/object_type.md) — Nested metadata structures.
 
 ---
 
@@ -247,6 +248,7 @@ Write the SurrealQL query to:
 > **Explanation:** Graph edge tables (like `reviewed`) can be queried directly like standard tables.
 
 ## 7. Related Terms
+
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 - [Graph Traversal Filtering (`WHERE` on edges)](graph_filtering.md) — Filtering using edge properties.
 

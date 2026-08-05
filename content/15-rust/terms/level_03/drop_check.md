@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`Drop` Trait](../level_03/drop_trait.md) — The destructor mechanism this analysis specifically governs.
-- [Borrow Checker](../level_03/borrow_checker.md) — The broader system dropck is a specialized part of.
+
+- [`Drop` Trait](drop_trait.md) — The destructor mechanism this analysis specifically governs.
+- [Borrow Checker](borrow_checker.md) — The broader system dropck is a specialized part of.
 - [Lifetime (`'a`)](../level_05/lifetime.md) — What dropck ultimately reasons about.
 
 ---
@@ -545,8 +546,9 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`Drop` Trait](../level_03/drop_trait.md) — The destructor mechanism dropck specifically protects.
-- [Borrow Checker](../level_03/borrow_checker.md) — The broader compiler system dropck is a specialized extension of.
+
+- [`Drop` Trait](drop_trait.md) — The destructor mechanism dropck specifically protects.
+- [Borrow Checker](borrow_checker.md) — The broader compiler system dropck is a specialized extension of.
 - [Lifetime Variance](../level_05/lifetime_variance.md) — Closely intertwined with dropck's reasoning about generic lifetime parameters.
 - [`PhantomData<T>`](../level_11/phantomdata_t.md) — Sometimes used specifically to communicate drop-related ownership semantics to dropck for types using raw pointers.
 

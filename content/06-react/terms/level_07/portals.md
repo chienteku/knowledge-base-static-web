@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Virtual DOM](../level_01/virtual_dom.md) — Portals allow you to escape the root node of the React tree.
-
 ---
 
 ## 2. Term Category

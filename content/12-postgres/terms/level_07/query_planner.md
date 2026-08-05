@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — The commands used to read the planner's decisions.
-
 ---
 
 ## 2. Term Category
@@ -191,8 +190,7 @@ ANALYZE table_name; -- Updates query planner catalog statistics
 
 ## 7. Related Terms
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — Inspecting planner outputs.
-- [`VACUUM` / `ANALYZE`](vacuum_analyze.md) -- Updating catalog statistics.
-
+- [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — - Updating catalog statistics.
 ---
 
 ## 8. Key Takeaways

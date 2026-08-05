@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — The parent runtime executing the code.
-- [Global Objects (global, __dirname, __filename)](./global_objects.md) — The APIs available inside the REPL context.
-
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — The APIs available inside the REPL context.
 ---
 
 ## 2. Term Category
@@ -192,9 +191,8 @@ undefined
 > **Explanation:** `.save` writes the current REPL interactive command history to disk.
 
 ## 7. Related Terms
-- [Global Objects (global, __dirname, __filename)](./global_objects.md) — The properties loaded in the REPL runtime scope.
-- [The process Object](./process_object.md) — The system environment configurations checked via the REPL.
-
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — The properties loaded in the REPL runtime scope.
+- [The process Object](process_object.md) — The system environment configurations checked via the REPL.
 ---
 
 ## 8. Key Takeaways

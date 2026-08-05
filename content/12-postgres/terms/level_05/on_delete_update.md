@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`FOREIGN KEY`](foreign_key.md) — The reference pointer constraint.
 - [Referential Integrity](referential_integrity.md) — The database safety standards.
-
 ---
 
 ## 2. Term Category
@@ -241,7 +240,6 @@ user_id INT REFERENCES users(id) ON DELETE SET NULL -- Allow NULLs
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The parent constraint.
 - [Referential Integrity](referential_integrity.md) — The parent safety concept.
-
 ---
 
 ## 8. Key Takeaways

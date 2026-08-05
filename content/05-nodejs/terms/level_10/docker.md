@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Environment Variables](../level_10/env_vars.md) — Docker heavily relies on these to inject configuration into the container.
-- [PM2](../level_10/pm2.md) — Docker is the modern, cloud-native alternative to running raw PM2 on a server.
-
+- [Environment Variables (dotenv)](env_vars.md) — Docker heavily relies on these to inject configuration into the container.
+- [PM2 (Process Manager)](pm2.md) — Docker is the modern, cloud-native alternative to running raw PM2 on a server.
 ---
 
 ## 2. Term Category
@@ -153,9 +152,11 @@ node_modules
 > **Explanation:** Node.js as PID 1 does not handle default kernel signals properly without an init wrapper.
 
 ## 7. Related Terms
-- [PM2](../level_10/pm2.md) — While you can use PM2 inside Docker, Docker itself usually handles the "restarting if crashed" logic natively.
-- [Node.js](../level_01/nodejs.md) — The language you are containerizing!
-
+- [PM2 (Process Manager)](pm2.md) — While you can use PM2 inside Docker, Docker itself usually handles the "restarting if crashed" logic natively.
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — The language you are containerizing!
+- [Environment Variables (dotenv)](env_vars.md) — Related concept: Environment Variables (dotenv).
+- [Graceful Shutdown & Process Signals](graceful_shutdown.md) — Related concept: Graceful Shutdown & Process Signals.
+- [Reverse Proxy (Nginx)](reverse_proxy.md) — Related concept: Reverse Proxy (Nginx).
 ---
 
 ## 8. Key Takeaways

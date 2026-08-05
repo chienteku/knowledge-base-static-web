@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Single-Threaded Architecture](../level_01/single_threaded.md) — Non-Blocking I/O is the *only* reason a Single-Threaded app doesn't instantly freeze.
-
+- [Single-Threaded Architecture](single_threaded.md) — Non-Blocking I/O is the *only* reason a Single-Threaded app doesn't instantly freeze.
 ---
 
 ## 2. Term Category
@@ -160,9 +159,12 @@ console.log("3. Done.");
 > **Explanation:** Non-blocking I/O fires all 100 socket queries concurrently without waiting sequentially for each query to finish.
 
 ## 7. Related Terms
-- [The Event Loop](../level_01/event_loop.md) — The mechanism that acts as the "buzzer", telling the main thread that the background I/O task is finished.
-- [Callbacks](../level_05/callbacks.md) — The functions you provide to handle the data once the Non-Blocking I/O is done.
-
+- [The Event Loop & Libuv](event_loop.md) — The mechanism that acts as the "buzzer", telling the main thread that the background I/O task is finished.
+- [Callbacks & Callback Hell](../level_05/callbacks.md) — The functions you provide to handle the data once the Non-Blocking I/O is done.
+- [Single-Threaded Architecture](single_threaded.md) — Related concept: Single-Threaded Architecture.
+- [Blocking the Event Loop](blocking_event_loop.md) — Blocking vs non-blocking code.
+- [CPU-bound vs I/O-bound](cpu_vs_io.md) — CPU vs I/O intensive tasks.
+- [Node.js (Runtime Environment)](nodejs.md) — Related concept: Node.js (Runtime Environment).
 ---
 
 ## 8. Key Takeaways

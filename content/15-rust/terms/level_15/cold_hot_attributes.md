@@ -7,9 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Inlining (`#[inline]`)](../level_15/inlining.md) — Function inlining heuristics affected by function temperature attributes.
-- [Release Profile](../level_15/release_profile.md) — Cargo release profile driving LLVM optimization passes.
-- [`perf` / `flamegraph`](../level_15/perf_flamegraph.md) — Profiling tools used to identify hot and cold code paths.
+
+- [Release Profile](release_profile.md) — Cargo release profile driving LLVM optimization passes.
+- [`perf` / `flamegraph`](perf_flamegraph.md) — Profiling tools used to identify hot and cold code paths.
 
 ---
 
@@ -613,9 +613,9 @@ Implement a `BumpAllocator` featuring:
 
 ## 7. Related Terms
 
-- [Inlining (`#[inline]`)](../level_15/inlining.md) — Function inlining heuristics affected by `#[cold]`.
-- [`perf` / `flamegraph`](../level_15/perf_flamegraph.md) — Profiling tools used to identify hot and cold code execution paths.
-- [Release Profile](../level_15/release_profile.md) — Cargo build profile where LLVM branch optimizations take effect.
+
+- [`perf` / `flamegraph`](perf_flamegraph.md) — Profiling tools used to identify hot and cold code execution paths.
+- [Release Profile](release_profile.md) — Cargo build profile where LLVM branch optimizations take effect.
 
 ---
 

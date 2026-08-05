@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`static` (`static`)](../level_01/static_static.md) — The global-scope mechanism this macro provides a per-thread alternative to.
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — What creates the separate threads, each of which gets its own instance.
-- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](../level_09/oncelock_lazylock.md) — A related global-state tool, but *shared* across threads rather than per-thread.
+
+- [Static (`static`)](../level_01/static_static.md) — The global-scope mechanism this macro provides a per-thread alternative to.
+- [`std::thread::spawn`](std_thread_spawn.md) — What creates the separate threads, each of which gets its own instance.
+- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](oncelock_lazylock.md) — A related global-state tool, but *shared* across threads rather than per-thread.
 
 ---
 
@@ -514,10 +515,11 @@ Implement a thread-isolated Fast Xorshift PRNG and thread-exit cleanup guard:
 
 ## 6. Related Terms
 
-- [`static` (`static`)](../level_01/static_static.md) — The program-wide, shared alternative this macro specifically avoids.
+
+- [Static (`static`)](../level_01/static_static.md) — The program-wide, shared alternative this macro specifically avoids.
 - [Interior Mutability](../level_03/interior_mutability.md) — `thread_local!` values are almost always paired with `Cell`/`RefCell`, since the storage itself is accessed through a shared `&` reference via `.with()`.
-- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](../level_09/oncelock_lazylock.md) — The shared-across-threads sibling tool for lazy global state.
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — What creates the separate threads, each lazily getting its own independent `thread_local!` instance on first access.
+- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](oncelock_lazylock.md) — The shared-across-threads sibling tool for lazy global state.
+- [`std::thread::spawn`](std_thread_spawn.md) — What creates the separate threads, each lazily getting its own independent `thread_local!` instance on first access.
 
 ---
 

@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — What the DevTools display.
-- [State](../level_02/state.md) & [Props](../level_01/props.md) — The data you can inspect and modify.
-
+- [State](../level_02/state.md)
 ---
 
 ## 2. Term Category
@@ -142,7 +141,7 @@ Assign Component.displayName = 'AuthWrapper(Profile)'
 ## 7. Related Terms
 - [Re-rendering](../level_02/re_rendering.md) — What the Profiler tab is measuring.
 - [Virtual DOM](../level_01/virtual_dom.md) — What the Components tab is displaying.
-
+- [The React Profiler](react_profiler.md) — Related concept: The React Profiler.
 ---
 
 ## 8. Key Takeaways

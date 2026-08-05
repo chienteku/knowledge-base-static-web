@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [`FOREIGN KEY`](foreign_key.md) — The reference pointer constraint.
-- [Unique Constraint](../level_02/unique_constraint.md) — The rule preventing duplicate key assignments.
-
+- [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The rule preventing duplicate key assignments.
 ---
 
 ## 2. Term Category
@@ -234,8 +233,7 @@ Keep name and email in single users table
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The parent reference logic.
 - [One-to-Many Relationship](one_to_many.md) — The hierarchical default link.
-- [Unique Constraint](../level_02/unique_constraint.md) — The one-to-one validator.
-
+- [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The one-to-one validator.
 ---
 
 ## 8. Key Takeaways

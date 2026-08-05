@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<form>`](../level_05/form.md) — Inputs should generally be placed inside a form.
+- [`<form>`](form.md) — Inputs should generally be placed inside a form.
 - [Attribute](../level_01/attribute.md) — The behavior of an `<input>` changes entirely based on its attributes.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Since `<input>` is a void element with no closing tag.
-
 ---
 
 ## 2. Term Category
@@ -180,13 +179,14 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 > **Explanation:** `pattern` accepts regular expressions for native input validation.
 
 ## 7. Related Terms
-- [`<label>`](../level_05/label.md) — The tag that provides an accessible text description for the input.
-- [`placeholder` Attribute](../level_05/placeholder.md) — The inline visual text hint.
-- [`value` Attribute (in Form Fields)](../level_05/value.md) — The field content value representation.
-- [`name` Attribute (in Form Fields)](../level_05/name.md) — The key name used during form submission.
-- [`<input type="radio">` & `<input type="checkbox">`](../level_05/radio_checkbox.md) — Toggle option fields.
-- [`<form>`](../level_05/form.md) — The container that packages the input's data.
-
+- [`<label>`](label.md) — The tag that provides an accessible text description for the input.
+- [`placeholder` Attribute](placeholder.md) — The inline visual text hint.
+- [`value` Attribute (in Form Fields)](value.md) — The field content value representation.
+- [`name` Attribute (in Form Fields)](name.md) — The key name used during form submission.
+- [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Toggle option fields.
+- [`<form>`](form.md) — The container that packages the input's data.
+- [`<select>` and `<option>`](select_option.md) — Related concept: `<select>` and `<option>`.
+- [`<textarea>`](textarea.md) — Related concept: `<textarea>`.
 ---
 
 ## 8. Key Takeaways

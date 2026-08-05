@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Nuxt 3 Overview](../level_01/nuxt_3_overview.md) — Nuxt is "zero-config" by default, but this is where you override those defaults.
-- [JavaScript Modules (`import`/`export`)](../../../03-javascript/terms/level_08/modules.md) — Understanding the export format of the configuration object.
-
+- modules — Understanding the export format of the configuration object.
 ---
 
 ## 2. Term Category
@@ -192,9 +191,12 @@ export default defineNuxtConfig({
 ---
 
 ## 7. Related Terms
-- [`app.config.ts`](../level_06/app_config.md) — The configuration file meant for reactive, client-side UI state.
-- [Runtime Config (`useRuntimeConfig`)](../level_06/runtime_config.md) — How you pass `.env` variables through `nuxt.config.ts`.
-
+- [`app.config.ts`](app_config.md) — The configuration file meant for reactive, client-side UI state.
+- [Runtime Config (`useRuntimeConfig`)](runtime_config.md) — How you pass `.env` variables through `nuxt.config.ts`.
+- [`assets/` vs `public/`](../level_03/assets_vs_public.md) — Related concept: `assets/` vs `public/`.
+- [Nuxt Modules System](../level_09/nuxt_modules.md) — Related concept: Nuxt Modules System.
+- [Nuxt DevTools](../level_10/nuxt_devtools.md) — Related concept: Nuxt DevTools.
+- [Route Rules Configuration](../level_08/route_rules.md) — Route rules.
 ---
 
 ## 8. Key Takeaways

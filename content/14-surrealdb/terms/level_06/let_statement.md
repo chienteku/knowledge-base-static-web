@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Parameters (`$param`)](parameters.md) — Variable syntax context.
 
 ---
@@ -192,8 +193,12 @@ SELECT * FROM user WHERE role = $unassigned_var;
 > **Explanation:** Parameters `$u` and `$p` parameterize record targets in graph queries.
 
 ## 7. Related Terms
+
 - [Parameters (`$param`)](parameters.md) — Parameter variable rules.
 - [Subqueries](subqueries.md) — Evaluated subquery inputs.
+- [`FOR` Expression](for_expression.md) — Related concept: `FOR` Expression.
+- [`RETURN` Statement (in Functions / Blocks)](return_statement.md) — Related concept: `RETURN` Statement (in Functions / Blocks).
+- [`DEFINE PARAM`](../level_09/define_param.md) — Related concept: `DEFINE PARAM`.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Node.js](../level_01/nodejs.md) — Node is literally just a wrapper around V8.
-
+- [Node.js (Runtime Environment)](nodejs.md) — Node is literally just a wrapper around V8.
 ---
 
 ## 2. Term Category
@@ -143,9 +142,9 @@ node --max-old-space-size=8192 app.js // Increase heap limit to 8GB or use Strea
 > **Explanation:** Ignition interprets bytecode initially; TurboFan compiles hot code functions into optimized machine code.
 
 ## 7. Related Terms
-- [Node.js](../level_01/nodejs.md) — The runtime that hosts V8.
-- [The Event Loop](../level_01/event_loop.md) — While V8 executes the JS code, it relies on the Event Loop to handle asynchronous timing.
-
+- [Node.js (Runtime Environment)](nodejs.md) — The runtime that hosts V8.
+- [The Event Loop & Libuv](event_loop.md) — While V8 executes the JS code, it relies on the Event Loop to handle asynchronous timing.
+- [The Call Stack](call_stack.md) — Related concept: The Call Stack.
 ---
 
 ## 8. Key Takeaways

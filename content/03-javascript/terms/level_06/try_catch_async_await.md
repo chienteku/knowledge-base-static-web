@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`async` / `await`](./async_await.md) — Syntactic sugar built on top of Promises.
-- [Error Handling (`try`/`catch`/`finally`)](./error_handling.md) — Structured exception handling flow.
-
+- [async / await](async_await.md) — Syntactic sugar built on top of Promises.
+- [Error Handling (try/catch/finally)](error_handling.md) — Structured exception handling flow.
 ---
 
 ## 2. Term Category
@@ -284,9 +283,9 @@ getUserProfile(false).then(p => console.log("Profile 2:", p));
 ---
 
 ## 7. Related Terms
-- [`.then()` / `.catch()`](./then_catch.md) — The Promise instance methods replaced by try/catch.
-- [Fetch API](./fetch_api.md) — The network interface frequently wrapped in try/catch pipelines.
-
+- [.then() / .catch()](then_catch.md) — The Promise instance methods replaced by try/catch.
+- [Fetch API](fetch_api.md) — The network interface frequently wrapped in try/catch pipelines.
+- [Error Handling (try/catch/finally)](error_handling.md) — Related concept: Error Handling (try/catch/finally).
 ---
 
 ## 8. Key Takeaways

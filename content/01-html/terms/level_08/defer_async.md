@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<script>`](../level_08/script.md) — The parent tag hosting these attributes.
+- [`<script>`](script.md) — The parent tag hosting these attributes.
 - [`<head>`](../level_01/head.md) — The location where script loading strategies are configured.
-
 ---
 
 ## 2. Term Category
@@ -237,9 +236,9 @@ Comparing script tags in `<head>`:
 > **Explanation:** `async` is ideal for standalone analytics scripts with zero dependencies.
 
 ## 7. Related Terms
-- [`<script>`](../level_08/script.md) — The parent script container element.
-- [`<link>`](../level_08/link.md) — The element used to connect stylesheets (which are also render-blocking).
-
+- [`<script>`](script.md) — The parent script container element.
+- [`<link>`](link.md) — The element used to connect stylesheets (which are also render-blocking).
+- [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
 ---
 
 ## 8. Key Takeaways

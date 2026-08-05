@@ -6,9 +6,10 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB](surrealdb.md) — The Rust multi-model engine.
-- [Database (Concept - PostgreSQL)](../../../12-postgres/terms/level_01/database.md) — Relational structures.
-- [Database Context (MongoDB)](../../../13-mongodb/terms/level_01/database_context.md) — Document structures.
+- [Database](../../../12-postgres/terms/level_01/database.md) — Relational structures.
+- [Database (MongoDB Context)](../../../13-mongodb/terms/level_01/database_context.md) — Document structures.
 
 ---
 
@@ -186,6 +187,7 @@ SELECT * FROM post FETCH author;
 > **Explanation:** `LIVE SELECT` provides query-level real-time subscription push events.
 
 ## 7. Related Terms
+
 - [SurrealDB](surrealdb.md) — The parent database engine.
 - [Multi-Model Database](multi_model_database.md) — The parent paradigm concept.
 

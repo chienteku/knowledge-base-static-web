@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 
 ---
@@ -198,8 +199,14 @@ RETURN string::slice("hello", 0, 2); // Correct argument signature
 > **Explanation:** `rand::string(length)` generates cryptographically random strings.
 
 ## 7. Related Terms
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 - [String Functions (`string::*`)](string_functions.md) — Text module.
+- [Array Functions (`array::*`)](array_functions.md) — Related concept: Array Functions (`array::*`).
+- [Math Functions (`math::*`)](math_functions.md) — Related concept: Math Functions (`math::*`).
+- [Time Functions (`time::*`)](time_functions.md) — Related concept: Time Functions (`time::*`).
+- [Type Functions (`type::*`)](type_functions.md) — Related concept: Type Functions (`type::*`).
+- [`DEFINE FUNCTION`](../level_09/define_function.md) — Related concept: `DEFINE FUNCTION`.
 
 ---
 

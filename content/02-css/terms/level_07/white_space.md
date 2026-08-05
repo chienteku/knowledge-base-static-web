@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTML Whitespace Collapse](../../../01-html/terms/level_01/whitespace_collapse.md) — You must understand the browser's default behavior of crushing all spaces into a single space!
-
+- whitespace_collapse — You must understand the browser's default behavior of crushing all spaces into a single space!
 ---
 
 ## 2. Term Category
@@ -169,8 +168,7 @@ The W3C created the **`white-space`** property to allow developers to override t
 > **Explanation:** `white-space` dictates whitespace collapsing and line wrapping rules.
 
 ## 7. Related Terms
-- [`text-overflow`](text_overflow.md) — When you use `nowrap` and the text blows out of the box, `text-overflow` allows you to cut it off with a "..." (ellipsis).
-
+- [`text-overflow` & `overflow-wrap`](text_overflow.md) — When you use `nowrap` and the text blows out of the box, `text-overflow` allows you to cut it off with a "..." (ellipsis).
 ---
 
 ## 8. Key Takeaways

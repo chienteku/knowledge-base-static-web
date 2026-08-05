@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Reference vs Value (copy semantics)](./reference_vs_value.md) — The nature of memory storage pointers.
+- [Reference vs Value (copy semantics)](reference_vs_value.md) — The nature of memory storage pointers.
 - [Object](../level_02/object.md) — The base data structure.
-
 ---
 
 ## 2. Term Category
@@ -225,10 +224,11 @@ console.log("Copy Port:", configCopy.settings.port);
 ---
 
 ## 7. Related Terms
-- [`Object.assign`](./object_assign.md) — The legacy shallow copy method.
-- [`JSON` / `JSON.stringify` / `JSON.parse`](./json.md) — The classic serialization deep copy fallback.
-- [Spread Syntax](../level_08/spread_syntax.md) — The modern array/object shallow copy operator.
-
+- [Object.assign](object_assign.md) — The legacy shallow copy method.
+- [JSON / JSON.stringify / JSON.parse](json.md) — The classic serialization deep copy fallback.
+- [Spread Syntax (...)](../level_08/spread_syntax.md) — The modern array/object shallow copy operator.
+- [Reference vs Value (copy semantics)](reference_vs_value.md) — Related concept: Reference vs Value (copy semantics).
+- [Immutability](../level_09/immutability.md) — Related concept: Immutability.
 ---
 
 ## 8. Key Takeaways

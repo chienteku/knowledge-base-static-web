@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- None! This is the absolute starting point for understanding how the internet works.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -151,9 +150,10 @@ fetch('https://api.example.com/users/45/data');
 ---
 
 ## 7. Related Terms
-- [HTTP / HTTPS](../level_01/http_https.md) — The specific language the Client and Server use to talk to each other.
-- [API](../level_03/api.md) — The waiter in the restaurant metaphor.
-
+- [HTTP / HTTPS](http_https.md) — The specific language the Client and Server use to talk to each other.
+- [API (Application Programming Interface)](../level_03/api.md) — The waiter in the restaurant metaphor.
+- [Request & Response Lifecycle](request_response.md) — Request/Response model.
+- [DNS (Domain Name System)](dns.md) — DNS resolution.
 ---
 
 ## 8. Key Takeaways

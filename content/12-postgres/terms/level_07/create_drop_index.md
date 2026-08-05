@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Index (Concept)](index_concept.md) — The auxiliary search data structure.
-
 ---
 
 ## 2. Term Category
@@ -199,7 +198,7 @@ CREATE INDEX CONCURRENTLY idx ON t (a); -- Run outside transaction blocks
 ## 7. Related Terms
 - [Index (Concept)](index_concept.md) — The parent performance concept.
 - [`REINDEX`](reindex.md) — Rebuilding corrupted index files.
-
+- [B-tree Index](btree_index.md) — Related concept: B-tree Index.
 ---
 
 ## 8. Key Takeaways

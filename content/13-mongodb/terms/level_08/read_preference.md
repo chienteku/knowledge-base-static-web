@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Read Concern](read_concern.md) — The read isolation context.
 - [Replica Set](../level_09/replica_set.md) — The target cluster nodes.
 
@@ -208,8 +209,11 @@ Select the optimal Read Preference mode for these application tasks:
 > **Explanation:** Read preferences dictate which replica set nodes execute read queries.
 
 ## 7. Related Terms
+
 - [Read Concern](read_concern.md) — The read isolation configuration.
 - [Replica Set](../level_09/replica_set.md) — The target cluster.
+- [Causal Consistency](causal_consistency.md) — Related concept: Causal Consistency.
+- [Replication Lag](../level_09/replication_lag.md) — Related concept: Replication Lag.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Responsive Units](percentages.md) — While fluid units handle small adjustments, Media Queries handle massive structural changes.
-
+- [`%` (Percentages)](percentages.md) — While fluid units handle small adjustments, Media Queries handle massive structural changes.
 ---
 
 ## 2. Term Category
@@ -242,7 +241,12 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 - [`flex-direction`](../level_05/flex_direction.md) — Commonly toggled inside media queries for responsive layouts.
 - [Mobile-First Design](mobile_first.md) — Progressive enhancement coding methodology.
 - [Breakpoints](breakpoints.md) — The screen size thresholds that trigger layout changes.
-
+- [`auto-fill` / `auto-fit`](../level_06/grid_auto_fill_fit.md) — Related concept: `auto-fill` / `auto-fit`.
+- [Responsive Design (Concept)](responsive_design.md) — Related concept: Responsive Design (Concept).
+- [Container Queries (`@container`)](../level_11/container_queries.md) — Related concept: Container Queries (`@container`).
+- [Dark Mode (`prefers-color-scheme`)](../level_11/dark_mode.md) — Related concept: Dark Mode (`prefers-color-scheme`).
+- [`@supports` (Feature Queries)](../level_11/supports.md) — Related concept: `@supports` (Feature Queries).
+- [`var()` (CSS Custom Properties)](../level_11/var.md) — Related concept: `var()` (CSS Custom Properties).
 ---
 
 ## 8. Key Takeaways

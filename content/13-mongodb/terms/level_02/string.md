@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type system.
 
 ---
@@ -183,6 +184,7 @@ Write the MongoDB query using a regular expression to find all products where th
 > **Explanation:** `$regex` performs pattern matching on string fields.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — Non-text alternatives.
 

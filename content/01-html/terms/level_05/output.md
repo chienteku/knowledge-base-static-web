@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-_(none)_
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -29,8 +28,7 @@ _(none)_
 ---
 
 ## 5. Related Terms
-_(none)_
-
+- [`<progress>` & `<meter>` Elements](../level_10/progress_meter.md)
 ---
 
 ## 6. Key Takeaways

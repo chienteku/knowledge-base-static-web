@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Semantic HTML](../level_06/semantic_html.md) — The `<nav>` is a core HTML5 semantic landmark.
+- [Semantic HTML](semantic_html.md) — The `<nav>` is a core HTML5 semantic landmark.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The `<nav>` element is a container specifically for anchors.
 - [Nesting](../level_01/nesting.md) — Since navigation lists must nest inside the parent `<nav>` container.
-
 ---
 
 ## 2. Term Category
@@ -184,10 +183,10 @@ The `<nav>` element is the giant directory sign sitting near the entrance or the
 > **Explanation:** `<nav>` acts as the `navigation` accessibility landmark.
 
 ## 7. Related Terms
-- [`<header>`](../level_06/header.md) — The parent container that usually holds the primary `<nav>`.
-- [`<ul>` (Lists)](../level_02/lists.md) — The element almost always used *inside* a `<nav>` to structure the links.
-- [`<aside>`](../level_06/aside.md) — The tangential layout block.
-
+- [`<header>`](header.md) — The parent container that usually holds the primary `<nav>`.
+- [`<ul>`, `<ol>`, and `<li>` (Lists)](../level_02/lists.md) — The element almost always used *inside* a `<nav>` to structure the links.
+- [`<aside>`](aside.md) — The tangential layout block.
+- [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
 ---
 
 ## 8. Key Takeaways

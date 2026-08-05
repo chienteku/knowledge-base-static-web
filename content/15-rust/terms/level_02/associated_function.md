@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`impl` Block](../level_02/impl_block.md) — The location where Associated Functions are defined.
-- [Method](../level_02/method.md) — The sister concept; Methods *do* take `self`, whereas Associated Functions *do not*.
+
+- [`impl` Block](impl_block.md) — The location where Associated Functions are defined.
+- [Method](method.md) — The sister concept; Methods *do* take `self`, whereas Associated Functions *do not*.
 
 ---
 
@@ -731,8 +732,10 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Method](../level_02/method.md) — The sister function that *does* take `self`.
-- [`impl` Block](../level_02/impl_block.md) — The boundary where Associated Functions are defined.
+
+- [Method](method.md) — The sister function that *does* take `self`.
+- [`impl` Block](impl_block.md) — The boundary where Associated Functions are defined.
+- [Associated Constants](../level_04/associated_constants.md) — Related concept: Associated Constants.
 
 ---
 

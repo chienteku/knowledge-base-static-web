@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -201,8 +202,10 @@ Calculate the resulting UTC datetime value returned by the database.
 > **Explanation:** `time::format()` formats `datetime` values into custom string layouts.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
-- [Time Functions](../level_06/time_functions.md) — Chronological operations.
+- [Time Functions (`time::*`)](../level_06/time_functions.md) — Chronological operations.
+- [`SLEEP` Statement](../level_10/sleep.md) — Related concept: `SLEEP` Statement.
 
 ---
 

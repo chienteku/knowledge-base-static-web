@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [SELECT](../level_03/select.md) — The base query syntax.
-- [Connection URI & Protocols](../level_01/connection_uri.md) — Persistent WebSocket connections (`ws://`, `wss://`).
+
+- [`SELECT`](../level_03/select.md) — The base query syntax.
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — Persistent WebSocket connections (`ws://`, `wss://`).
 
 ---
 
@@ -218,9 +219,15 @@ Write a `LIVE SELECT` statement that subscribes only to `order` table updates wh
 > **Explanation:** `db.live(table, callback)` registers real-time event handlers over WebSockets.
 
 ## 7. Related Terms
+
 - [`KILL` (Stopping Live Queries)](kill_live_query.md) — Terminating active live query subscriptions.
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Table change history tracking.
 - [Direct Browser-to-Database Architecture](../level_08/browser_to_db.md) — Real-time browser architecture.
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — Related concept: Connection URI & Protocols (`ws://`, `wss://`, `http://`).
+- [`SHOW CHANGES FOR TABLE ... SINCE ...`](show_changes.md) — Related concept: `SHOW CHANGES FOR TABLE ... SINCE ...`.
+- [SDK Live Query Subscriptions](../level_10/sdk_live_queries.md) — Related concept: SDK Live Query Subscriptions.
+- [WebSocket vs HTTP Connection](../level_10/websocket_vs_http.md) — Related concept: WebSocket vs HTTP Connection.
+- [`DEFINE EVENT`](define_event.md) — DEFINE EVENT triggers.
 
 ---
 

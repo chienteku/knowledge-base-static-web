@@ -6,8 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [Connection URI & Protocols](../level_01/connection_uri.md) — Protocol formats (`ws://`, `wss://`, `http://`).
+
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — Protocol formats (`ws://`, `wss://`, `http://`).
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](../level_08/define_access_record.md) — Client authentication.
+- [SurrealDB](../level_01/surrealdb.md) — SurrealDB core server.
 
 ---
 
@@ -236,9 +238,15 @@ What NPM command is used to install the official SurrealDB JavaScript/TypeScript
 > **Explanation:** `npm install surrealdb` installs the official JavaScript/TypeScript SDK.
 
 ## 7. Related Terms
+
 - [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](sdk_connection.md) — Connection sequence details.
 - [SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)](sdk_crud.md) — Ergonomic methods.
 - [WebSocket vs HTTP Connection](websocket_vs_http.md) — Choosing transport protocols.
+- [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Related concept: SurrealQL Injection Prevention.
+- [`KILL` (Stopping Live Queries)](../level_09/kill_live_query.md) — Related concept: `KILL` (Stopping Live Queries).
+- [Embedding SurrealDB (Rust / WASM)](embedding.md) — Related concept: Embedding SurrealDB (Rust / WASM).
+- [SDK Error Handling & Retry Patterns](sdk_error_handling.md) — Related concept: SDK Error Handling & Retry Patterns.
+- [SDK Live Query Subscriptions](sdk_live_queries.md) — Related concept: SDK Live Query Subscriptions.
 
 ---
 

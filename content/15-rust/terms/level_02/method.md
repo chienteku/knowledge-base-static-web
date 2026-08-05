@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`impl` Block](../level_02/impl_block.md) — The location where all methods must be defined.
-- [Struct](../level_02/struct.md) / [Enum](../level_02/enum.md) — The data types that methods are attached to.
-- [`fn`](../level_01/fn.md) — A method is just a function with a special first parameter.
+
+- [`impl` Block](impl_block.md) — The location where all methods must be defined.
+- [Struct](struct.md)
+- [`fn` (Functions)](../level_01/fn.md) — A method is just a function with a special first parameter.
 
 ---
 
@@ -744,8 +745,10 @@ Write unit tests verifying variable environment setup using mutable reference ch
 
 ## 6. Related Terms
 
-- [Associated Function](../level_02/associated_function.md) — A function inside an `impl` block that does *not* take `self` (like a static constructor, e.g., `String::new()`).
-- [`impl` Block](../level_02/impl_block.md) — The boundary where all methods live.
+
+- [Associated Function](associated_function.md) — A function inside an `impl` block that does *not* take `self` (like a static constructor, e.g., `String::new()`).
+- [`impl` Block](impl_block.md) — The boundary where all methods live.
+- [Reborrowing & Two-Phase Borrows](../level_03/reborrowing.md) — Related concept: Reborrowing & Two-Phase Borrows.
 
 ---
 

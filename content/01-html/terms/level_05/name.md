@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<input>`](../level_05/input.md) — The input controls containing the name parameter.
-- [`<form>`](../level_05/form.md) — The container compiling the key-value packages.
-
+- [`<input>`](input.md) — The input controls containing the name parameter.
+- [`<form>`](form.md) — The container compiling the key-value packages.
 ---
 
 ## 2. Term Category
@@ -229,11 +228,13 @@ Form payload fields declaring names:
 > **Explanation:** Trailing brackets `name[]` signal backend server body parsers to aggregate values into an array.
 
 ## 7. Related Terms
-- [`<input>`](../level_05/input.md) — The input controls mapped by name tags.
-- [`<form>`](../level_05/form.md) — The form collector.
-- [`value` Attribute (in Form Fields)](../level_05/value.md) — The value half of the key-value submission pair.
+- [`<input>`](input.md) — The input controls mapped by name tags.
+- [`<form>`](form.md) — The form collector.
+- [`value` Attribute (in Form Fields)](value.md) — The value half of the key-value submission pair.
 - [`id` Attribute](../level_07/id.md) — The unique client-side identifier.
-
+- [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Related concept: `<input type="radio">` & `<input type="checkbox">`.
+- [`<select>` and `<option>`](select_option.md) — Related concept: `<select>` and `<option>`.
+- [`<textarea>`](textarea.md) — Related concept: `<textarea>`.
 ---
 
 ## 8. Key Takeaways

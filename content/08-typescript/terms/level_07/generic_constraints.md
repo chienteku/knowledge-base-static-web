@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Generics Overview](../level_07/generics.md) — The base syntax being constrained.
+- [Generics Overview (`<T>`)](generics.md) — The base syntax being constrained.
 - [Interfaces](../level_03/interfaces.md) — What is usually used to define the constraint shape.
-
 ---
 
 ## 2. Term Category
@@ -161,9 +160,11 @@ function getProp<T, K extends keyof T>(obj: T, key: K) { return obj[key]; }
 > **Explanation:** `K extends keyof T` guarantees that `key` exists on target object `T`.
 
 ## 7. Related Terms
-- [Generics Overview](../level_07/generics.md) — The parent topic.
-- [Multiple Generics](../level_07/multiple_generics.md) — You can constrain multiple generics simultaneously.
-
+- [Generics Overview (`<T>`)](generics.md) — The parent topic.
+- [Multiple Generics](multiple_generics.md) — You can constrain multiple generics simultaneously.
+- [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Related concept: Structural Typing / Duck Typing.
+- [Generic Default Types (`=`)](default_generics.md) — Related concept: Generic Default Types (`=`).
+- [`keyof` Operator](../level_09/keyof.md) — keyof constraints.
 ---
 
 ## 8. Key Takeaways

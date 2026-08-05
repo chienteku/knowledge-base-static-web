@@ -7,8 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — Named bindings to store data.
-- [Mutability (`mut`)](../level_01/mutability_mut.md) — The ability to change a value (crucial for `String`).
+
+- [Variable](variable.md) — Named bindings to store data.
+- [Mutability (`mut`)](mutability_mut.md) — The ability to change a value (crucial for `String`).
+- [Scalar Types](scalar_types.md) — Primitive types.
 
 ---
 
@@ -461,8 +463,16 @@ A financial compliance audit engine generates SQL query strings dynamically from
 
 ## 6. Related Terms
 
+
 - [Ownership](../level_03/ownership.md) — A `String` *owns* its text data, while a `&str` merely *borrows* it.
 - [Borrowing (`&`)](../level_03/borrowing.md) — The ampersand `&` in `&str` indicates it is a borrowed reference to text that lives elsewhere.
+- [`OsString` / `OsStr`](os_string_str.md) — Related concept: `OsString` / `OsStr`.
+- [`Path` / `PathBuf`](path_pathbuf.md) — Related concept: `Path` / `PathBuf`.
+- [`println!` / `format!`](println_format.md) — Related concept: `println!` / `format!`.
+- [`Display` Trait](../level_04/display_trait.md) — Related concept: `Display` Trait.
+- [`Cow<'a, T>`](../level_11/cow_t.md) — Related concept: `Cow<'a, T>`.
+- [Slice (`&[T]`, `&str`)](../level_03/slice.md) — Contiguous sequence slice views.
+- [`ToOwned` Trait](../level_11/toowned_trait.md) — ToOwned conversion from &str to String.
 
 ---
 

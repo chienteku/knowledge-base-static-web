@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [ORMs & ODMs](./orms_odms.md) — The core mapping patterns.
-- [SQL vs NoSQL](./sql_vs_nosql.md) — Relational databases (PostgreSQL, MySQL) targeted by these libraries.
-
+- [ORMs & ODMs](orms_odms.md) — The core mapping patterns.
+- [SQL vs NoSQL](sql_vs_nosql.md) — Relational databases (PostgreSQL, MySQL) targeted by these libraries.
 ---
 
 ## 2. Term Category
@@ -218,9 +217,8 @@ const productsWithReviews = await Product.findAll({
 > **Explanation:** Prisma generates client code from `.prisma` schemas; Sequelize uses object models.
 
 ## 7. Related Terms
-- [ORMs & ODMs](./orms_odms.md) — The design categories for SQL and NoSQL databases.
-- [Migrations](./migrations.md) — Schema updates managed through SQL ORMs.
-
+- [ORMs & ODMs](orms_odms.md) — The design categories for SQL and NoSQL databases.
+- [Migrations](migrations.md) — Schema updates managed through SQL ORMs.
 ---
 
 ## 8. Key Takeaways

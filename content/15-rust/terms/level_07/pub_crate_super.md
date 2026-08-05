@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`pub` Visibility](../level_07/pub_visibility.md) — The default "make it public to everyone" keyword.
-- [`mod` Declaration](../level_07/mod_declaration.md) — The module boundaries that these keywords restrict.
+
+- [`pub` Visibility](pub_visibility.md) — The default "make it public to everyone" keyword.
+- [`mod` Declaration](mod_declaration.md) — The module boundaries that these keywords restrict.
 - [Cargo](../level_01/cargo.md) — The build system that compiles your project into the "Crate" that `pub(crate)` refers to.
 
 ---
@@ -117,73 +118,48 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Pub Crate Super Scoping and Lifecycle Rules
+### Mistake 1: Confusing `pub(crate)` with Plain Unannotated Private Visibility
 
-**The mistake:** Assuming Pub Crate Super instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Assuming unannotated items (`fn helper()`) are visible across all files in the current crate.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** By default in Rust, unannotated items are **private** to their immediate enclosing module and its child modules. To make an item visible to *all* modules inside the current crate, you must explicitly write `pub(crate)`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("pub_crate_super_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+// in mod_a.rs:
+fn internal_util() {} // Private to mod_a! Cannot be called by mod_b.rs!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("pub_crate_super_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+// in mod_a.rs:
+pub(crate) fn internal_util() {} // Visible to all modules in the crate!
 ```
 
-### Mistake 2: Mutating Pub Crate Super State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Leaking Private or `pub(crate)` Types in Fully `pub` Function Signatures
 
-**The mistake:** Attempting to mutate data associated with Pub Crate Super through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Declaring a `pub fn get_secret() -> SecretStruct` where `SecretStruct` is declared `pub(crate) struct SecretStruct`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `rustc` enforces private type reachability rules. A public function signature cannot return a type that external callers cannot access, triggering compiler error `E0446: private type in public interface`.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+pub(crate) struct InternalData;
+pub fn get_data() -> InternalData { InternalData } // ❌ Error E0446!
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+pub(crate) fn get_data() -> InternalData { InternalData } // Match visibility scope!
 ```
 
-### Mistake 3: Concurrent Access to Pub Crate Super Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Overusing `pub(super)` in Deeply Nested Module Hierarchies
 
-**The mistake:** Sharing non-thread-safe Pub Crate Super instances across OS threads via `std::thread::spawn`.
+**The mistake:** Scattering `pub(super)` across 5-level nested module trees.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** `pub(super)` only exposes the item to the immediate parent module. Refactoring module nesting breaks item visibility. Prefer `pub(crate)` or `pub(in crate::path)` for stable internal visibility.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -248,8 +224,9 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`pub` Visibility](../level_07/pub_visibility.md) — The sledgehammer version of these keywords that makes items visible to the entire universe.
-- [`mod` Declaration](../level_07/mod_declaration.md) — The module hierarchy that these keywords navigate.
+
+- [`pub` Visibility](pub_visibility.md) — The sledgehammer version of these keywords that makes items visible to the entire universe.
+- [`mod` Declaration](mod_declaration.md) — The module hierarchy that these keywords navigate.
 
 ---
 

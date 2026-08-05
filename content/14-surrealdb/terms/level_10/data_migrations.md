@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`OVERWRITE` Keyword (Idempotent Definitions)](../level_04/overwrite_keyword.md) — Idempotent definition syntax.
+
+- [`OVERWRITE` Keyword](../level_04/overwrite_keyword.md) — Idempotent definition syntax.
 - [`DEFINE FIELD`](../level_04/define_field.md) — Schema definitions and computed values.
 
 ---
@@ -200,9 +201,11 @@ Which keyword must be appended to `DEFINE FIELD` and `DEFINE TABLE` statements t
 > **Explanation:** `surreal export` creates text backups of database schemas and data records.
 
 ## 7. Related Terms
-- [`OVERWRITE` Keyword (Idempotent Definitions)](../level_04/overwrite_keyword.md) — Idempotent syntax details.
+
+- [`OVERWRITE` Keyword](../level_04/overwrite_keyword.md) — Idempotent syntax details.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight migration validation.
 - [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](../level_03/update_strategies.md) — Batch data transformations.
+- [`surreal export` / `surreal import` (Backups)](export_import.md) — Related concept: `surreal export` / `surreal import` (Backups).
 
 ---
 

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Array](../level_02/array_type.md) — The parent list structures.
 - [Querying Arrays](querying_arrays.md) — Standard array matching behaviors.
 
@@ -207,8 +208,10 @@ Write the MongoDB query to select all companies that employ **at least one emplo
 > **Explanation:** `$all` matches documents whose array contains all specified list items.
 
 ## 7. Related Terms
+
 - [Array](../level_02/array_type.md) — The data structure.
 - [Querying Arrays](querying_arrays.md) — The parent array querying.
+- [The Attribute Pattern](../level_05/attribute_pattern.md) — Related concept: The Attribute Pattern.
 
 ---
 

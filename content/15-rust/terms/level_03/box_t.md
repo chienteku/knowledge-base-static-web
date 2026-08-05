@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The fundamental "One Owner" rule that `Box` strictly enforces.
+
+- [Ownership](ownership.md) — The fundamental "One Owner" rule that `Box` strictly enforces.
 - [Scalar Types](../level_01/scalar_types.md) — Types like `i32` that default to living on the fast Stack memory.
 - [Enum](../level_02/enum.md) — Often used in combination with `Box` to build recursive data structures.
 
@@ -649,8 +650,11 @@ Implement a dynamic middleware execution pipeline and analyze the memory layout 
 
 ## 6. Related Terms
 
-- [`Rc<T>`](../level_03/rc_t.md) — The smart pointer you use when you need Heap allocation *and* multiple owners. (`Box` strictly enforces One Owner).
+
+- [`Rc<T>`](rc_t.md) — The smart pointer you use when you need Heap allocation *and* multiple owners. (`Box` strictly enforces One Owner).
 - [`Vec<T>`](../level_02/vec_t.md) — Under the hood, `Vec` actually uses a `Box` to store its growable list of items on the Heap!
+- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — Related concept: Trait Objects (`dyn Trait`).
+- [Smart Pointers (`Box`, `Rc`, `Arc`)](../level_10/smart_pointers.md) — Related concept: Smart Pointers (`Box`, `Rc`, `Arc`).
 
 ---
 

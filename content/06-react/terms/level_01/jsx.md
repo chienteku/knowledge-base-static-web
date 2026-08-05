@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Declarative Programming](../level_01/declarative_programming.md) — 
-
+- [Declarative Programming](declarative_programming.md)
 ---
 
 ## 2. Term Category
@@ -209,10 +208,11 @@ function Header() {
 > **Explanation:** JSX inline styles accept camelCase JavaScript objects wrapped in double curly braces.
 
 ## 7. Related Terms
-- [Fragments](./fragments.md) — Wrapping adjacent JSX elements without extra DOM wrapper nodes.
-- [Components](../level_01/components.md) — What you build using JSX.
-- [Virtual DOM](../level_01/virtual_dom.md) — What those `React.createElement` calls actually produce.
-
+- [Fragments](fragments.md) — Wrapping adjacent JSX elements without extra DOM wrapper nodes.
+- [Components](components.md) — What you build using JSX.
+- [Virtual DOM](virtual_dom.md) — What those `React.createElement` calls actually produce.
+- [Conditional Rendering](../level_05/conditional_rendering.md) — Related concept: Conditional Rendering.
+- [Synthetic Events](../level_05/synthetic_events.md) — Related concept: Synthetic Events.
 ---
 
 ## 8. Key Takeaways

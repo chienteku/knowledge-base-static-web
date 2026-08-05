@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — The collection that requires this trait on its keys.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — The collection that requires this trait on its keys.
 - [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — `Hash` must stay logically consistent with `Eq`.
 - [Derive Macro](../level_04/derive_macro.md) — How `Hash` is almost always implemented in practice.
 
@@ -482,10 +483,12 @@ Implement `SymbolKey` with custom `PartialEq`, `Eq`, and `Hash` to perform case-
 
 ## 6. Related Terms
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — The primary consumer of this trait.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — The primary consumer of this trait.
 - [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — Must stay logically consistent with `Hash` on every type.
-- [`Borrow` / `BorrowMut`](../level_14/borrow_trait.md) — Governs how `HashMap::get(&Q)` can look up a key by a borrowed type (e.g. looking up a `HashMap<String, _>` with a `&str`).
+- [`Borrow<T>` Trait](../level_14/borrow_trait.md) — Governs how `HashMap::get(&Q)` can look up a key by a borrowed type (e.g. looking up a `HashMap<String, _>` with a `&str`).
 - [Derive Macro](../level_04/derive_macro.md) — The mechanism (`#[derive(Hash)]`) that implements this trait correctly in nearly all real code.
+- [`HashSet<T>` / `BTreeSet<T>`](hashset_btreeset.md) — Related concept: `HashSet<T>` / `BTreeSet<T>`.
 
 ---
 

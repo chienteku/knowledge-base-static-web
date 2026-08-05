@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Functions (`fn`)](../level_01/fn.md) — The blocks of code you are trying to organize.
-- [Structs (`struct`)](../level_02/struct.md) — The data structures you want to separate into different files.
+
+- [`fn` (Functions)](../level_01/fn.md) — The blocks of code you are trying to organize.
+- [Struct](../level_02/struct.md) — The data structures you want to separate into different files.
 
 ---
 
@@ -86,73 +87,36 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Mod Declaration Scoping and Lifecycle Rules
+### Mistake 1: Confusing `mod` Declarations with `use` Import Statements
 
-**The mistake:** Assuming Mod Declaration instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Writing `mod foo;` everywhere you want to call items inside `foo.rs`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `mod foo;` registers a new module file into your crate tree once. It must be declared **only once** in the parent file. Accessing items from other files should be done with `use foo::item;`. Declaring `mod foo;` multiple times causes compiler errors (`error: duplicate definition of module 'foo'`).
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("mod_declaration_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+// In file_a.rs:
+mod foo; // ❌ Duplicate module declaration!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("mod_declaration_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+// Declare `mod foo;` once in lib.rs or main.rs, then write `use crate::foo;` in other files!
 ```
 
-### Mistake 2: Mutating Mod Declaration State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Assuming Creating a `.rs` File Automatically Registers it in Compilation
 
-**The mistake:** Attempting to mutate data associated with Mod Declaration through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Creating `src/network.rs` and expecting `cargo build` to compile it without adding `mod network;` to `src/main.rs`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Rust only compiles files attached to the crate root tree. `src/network.rs` is ignored until declared via `mod network;`.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Mixing Legacy `mod.rs` Directories with Modern Edition Module File Naming
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Creating both `src/foo.rs` and `src/foo/mod.rs` in the same project directory.
 
-### Mistake 3: Concurrent Access to Mod Declaration Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** In 2018+ editions, `src/foo.rs` acts as the module file for submodules located inside `src/foo/`. Coexisting `src/foo.rs` and `src/foo/mod.rs` causes ambiguous module resolution compiler errors.
 
-**The mistake:** Sharing non-thread-safe Mod Declaration instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -211,8 +175,11 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`use` Statement](../level_07/use_statement.md) — The keyword you use to actually *import* things from the modules you declare with `mod`.
-- [`pub` Visibility](../level_07/pub_visibility.md) — How you make the functions inside your modules visible to the rest of the project.
+
+- [`use` Statement](use_statement.md) — The keyword you use to actually *import* things from the modules you declare with `mod`.
+- [`pub` Visibility](pub_visibility.md) — How you make the functions inside your modules visible to the rest of the project.
+- [`pub(crate)` / `pub(super)`](pub_crate_super.md) — Related concept: `pub(crate)` / `pub(super)`.
+- [Module](../level_01/module.md) — Related concept: Module.
 
 ---
 

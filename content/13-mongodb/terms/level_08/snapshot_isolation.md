@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Multi-Document Transaction](multi_document_transaction.md) — The transaction context.
-- [Transaction Isolation Levels (PostgreSQL)](../../../12-postgres/terms/level_08/isolation_levels.md) — Relational isolation levels.
+- [Transaction Isolation Levels](../../../12-postgres/terms/level_08/isolation_levels.md) — Relational isolation levels.
 
 ---
 
@@ -180,8 +181,9 @@ At `10:00:10`, Transaction A reads that user's address.
 > **Explanation:** `withTransaction()` includes built-in retry handlers for OCC write conflicts.
 
 ## 7. Related Terms
+
 - [Multi-Document Transaction](multi_document_transaction.md) — The transaction context.
-- [Transaction Isolation Levels (PostgreSQL)](../../../12-postgres/terms/level_08/isolation_levels.md) — Relational isolation levels.
+- [Transaction Isolation Levels](../../../12-postgres/terms/level_08/isolation_levels.md) — Relational isolation levels.
 
 ---
 

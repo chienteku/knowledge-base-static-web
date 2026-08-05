@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — What object safety governs the formation of.
-- [Generics (`<T>`)](../level_04/generics.md) — Contrasted against; generic methods are precisely what break object safety.
+
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — What object safety governs the formation of.
+- [Generics (`<T>`)](generics.md) — Contrasted against; generic methods are precisely what break object safety.
 - [`Sized` Trait](../level_11/sized_trait.md) — The implicit bound every generic type parameter carries, which is part of why `Self`-returning methods are the problem.
 
 ---
@@ -670,9 +671,10 @@ In an asynchronous microservice framework, tasks execute across isolated subsyst
 
 ## 6. Related Terms
 
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — What object safety is a precondition for.
-- [Associated Constants](../level_04/associated_constants.md) — Another feature that, if present on a trait, breaks object safety.
-- [Fat Pointers](../level_11/fat_pointers.md) — The underlying `dyn Trait` representation (data pointer + vtable pointer) that object safety exists to keep well-formed.
+
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — What object safety is a precondition for.
+- [Associated Constants](associated_constants.md) — Another feature that, if present on a trait, breaks object safety.
+- [`Fat Pointers` (Wide Pointers)](../level_11/fat_pointers.md) — The underlying `dyn Trait` representation (data pointer + vtable pointer) that object safety exists to keep well-formed.
 - [`Sized` Trait](../level_11/sized_trait.md) — `where Self: Sized` is the standard escape hatch to exclude a specific method from the vtable requirement.
 
 ---

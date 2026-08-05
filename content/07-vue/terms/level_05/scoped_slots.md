@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Slots](../level_05/slots.md) — The baseline mechanism.
+- [Slots](slots.md) — The baseline mechanism.
 - [Props](../level_04/props.md) — How data usually flows (Top-Down). Scoped slots briefly invert this.
-
 ---
 
 ## 2. Term Category
@@ -175,9 +174,8 @@ In the parent, you use `v-slot` (or `#`) to receive the exposed data object. You
 ---
 
 ## 7. Related Terms
-- [Slots](../level_05/slots.md) — The fundamental mechanism.
-- [Composables](../level_05/composables.md) — The modern replacement for the "Renderless Component" scoped slot pattern.
-
+- [Slots](slots.md) — The fundamental mechanism.
+- [Composables](composables.md) — The modern replacement for the "Renderless Component" scoped slot pattern.
 ---
 
 ## 8. Key Takeaways

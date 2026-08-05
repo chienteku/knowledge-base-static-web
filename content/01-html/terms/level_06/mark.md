@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [`<strong>` & `<em>`](../level_02/strong_em.md) — The standard inline formatting tags.
-- [Semantic HTML](../level_06/semantic_html.md) — The concept framework.
-
+- [Semantic HTML](semantic_html.md) — The concept framework.
 ---
 
 ## 2. Term Category
@@ -198,8 +197,7 @@ Basic inline highlight:
 ## 7. Related Terms
 - [`<strong>` & `<em>`](../level_02/strong_em.md) — Standard inline text tags.
 - [`<span>` (Inline container)](../level_02/span.md) — The non-semantic styling container.
-- [`b_i_u_vs_strong_em.md`](../level_02/b_i_u_vs_strong_em.md) — Presentational vs semantic styling comparison.
-
+- [`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`](../level_02/b_i_u_vs_strong_em.md) — Presentational vs semantic styling comparison.
 ---
 
 ## 8. Key Takeaways

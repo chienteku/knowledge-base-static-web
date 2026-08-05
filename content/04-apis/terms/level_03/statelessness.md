@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Client-Server Model](../level_01/client_server_model.md) — This dictates how the two sides interact.
-- [REST](../level_03/rest.md) — Statelessness is the "ST" in Representational State Transfer.
-
+- [REST (Representational State Transfer)](rest.md) — Statelessness is the "ST" in Representational State Transfer.
 ---
 
 ## 2. Term Category
@@ -293,8 +292,10 @@ POST /api/checkout/step2 HTTP/1.1
 
 ## 7. Related Terms
 - [JWT (JSON Web Tokens)](../level_04/jwt.md) — The "movie ticket" used to make Stateless APIs possible.
-- [Web Storage (localStorage)](../level_09/web_storage.md) — The mechanism commonly used to store session tokens in the browser.
-
+- [localStorage & sessionStorage](../level_09/web_storage.md) — The mechanism commonly used to store session tokens in the browser.
+- [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — Related concept: Idempotent vs Safe Methods.
+- [Basic & Bearer Authentication](../level_04/basic_bearer_auth.md) — Related concept: Basic & Bearer Authentication.
+- [REST (Representational State Transfer)](rest.md) — Related concept: REST (Representational State Transfer).
 ---
 
 ## 8. Key Takeaways

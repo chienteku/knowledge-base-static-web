@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Reactive State](../level_02/reactive_state.md) — The data you are watching.
-- [Computed Properties](../level_02/computed_properties.md) — The tool you use for deriving data (which Watchers should NOT be used for).
-
+- [Reactive State](reactive_state.md) — The data you are watching.
+- [Computed Properties](computed_properties.md) — The tool you use for deriving data (which Watchers should NOT be used for).
 ---
 
 ## 2. Term Category
@@ -184,11 +183,12 @@ watch(() => state.count, (newVal, oldVal) => {
 ---
 
 ## 7. Related Terms
-- [Computed Properties](../level_02/computed_properties.md) — The declarative alternative for deriving data.
-- [`ref`](../level_02/ref.md) — The variables you are most commonly watching.
-- [`watchEffect`](../level_02/watch_effect.md) — Auto-tracking reactivity watcher.
+- [Computed Properties](computed_properties.md) — The declarative alternative for deriving data.
+- [`ref`](ref.md) — The variables you are most commonly watching.
+- [`watchEffect`](watch_effect.md) — Auto-tracking reactivity watcher.
 - [`nextTick`](../level_04/next_tick.md) — Awaiting the next DOM update flush.
-
+- [Component Lifecycle](../level_04/component_lifecycle.md) — Related concept: Component Lifecycle.
+- [Dynamic Routing](../level_06/dynamic_routing.md) — Related concept: Dynamic Routing.
 ---
 
 ## 8. Key Takeaways

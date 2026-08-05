@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The OS-level equivalent we learned in Level 9.
-- [`Tokio`](../level_10/tokio.md) — The async runtime providing the task executor.
-- [`async fn`](../level_10/async_fn.md) — The functions that are passed to `spawn`.
+- [`tokio`](../level_16/tokio.md) — The async runtime providing the task executor.
+- [`async fn`](async_fn.md) — The functions that are passed to `spawn`.
 
 ---
 
@@ -453,15 +454,13 @@ Construct a task spawning pool that limits active concurrent tasks and supports 
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The OS-level thread equivalent.
-> - [`Tokio`](../level_10/tokio.md) — The runtime that manages these tasks.
-> - [`join!`](../level_10/join_macro.md) — How you run multiple futures concurrently on the *same* task.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+**None.**
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`tokio::spawn`** creates a lightweight, independent background task.
 > - It does **NOT** spawn an OS thread; it places a task on Tokio's internal thread-pool queue.

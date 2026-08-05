@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Transaction Isolation Levels](isolation_levels.md) — The settings controlling read visibility.
-
 ---
 
 ## 2. Term Category
@@ -190,7 +189,8 @@ CREATE INDEX idx_users_category ON users (category);
 - [Transaction Isolation Levels](isolation_levels.md) — The settings controlling read visibility.
 - [Deadlock](deadlock.md) — Gridlocks caused by lock loops.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — Manually locking rows during reads.
-
+- [Advisory Locks](advisory_locks.md) — Related concept: Advisory Locks.
+- [Optimistic vs. Pessimistic Locking](optimistic_pessimistic.md) — Related concept: Optimistic vs. Pessimistic Locking.
 ---
 
 ## 8. Key Takeaways

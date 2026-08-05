@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Trait Bound](../level_04/trait_bound.md) — The mathematical constraints that the `where` clause is organizing.
-- [Generics (`<T>`)](../level_04/generics.md) — The placeholder types being constrained.
+
+- [Trait Bound](trait_bound.md) — The mathematical constraints that the `where` clause is organizing.
+- [Generics (`<T>`)](generics.md) — The placeholder types being constrained.
 
 ---
 
@@ -736,8 +737,10 @@ Implementing generic methods for tiered caches involves multiple intersecting tr
 
 ## 6. Related Terms
 
-- [Trait Bound](../level_04/trait_bound.md) — What the `where` clause is literally just moving around visually.
-- [`impl Trait`](../level_04/impl_trait.md) — Another form of syntactic sugar for trait bounds. `impl Trait` is used to make simple, single-bound cases cleaner. `where` clauses are used to make massive, multi-bound cases cleaner.
+
+- [Trait Bound](trait_bound.md) — What the `where` clause is literally just moving around visually.
+- [`impl Trait`](impl_trait.md) — Another form of syntactic sugar for trait bounds. `impl Trait` is used to make simple, single-bound cases cleaner. `where` clauses are used to make massive, multi-bound cases cleaner.
+- [Lifetime Bounds](../level_05/lifetime_bounds.md) — Related concept: Lifetime Bounds.
 
 ---
 

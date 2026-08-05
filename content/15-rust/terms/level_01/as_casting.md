@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Scalar Types](../level_01/scalar_types.md) — The integer, float, `bool`, and `char` types you'll be converting between.
-- [Type Annotation](../level_01/type_annotation.md) — `as` always names its target type explicitly, e.g. `x as u8`.
+
+- [Scalar Types](scalar_types.md) — The integer, float, `bool`, and `char` types you'll be converting between.
+- [Type Annotation](type_annotation.md) — `as` always names its target type explicitly, e.g. `x as u8`.
 
 ---
 
@@ -536,9 +537,11 @@ x.set(100);
 
 ## 6. Related Terms
 
-- [`TryFrom` / `TryInto`](../level_14/tryfrom_tryinto.md) — The fallible, `Result`-returning alternative that never silently loses data.
-- [Integer Overflow Semantics](../level_01/integer_overflow.md) — The `checked_`/`wrapping_`/`saturating_` method families that make truncation an explicit choice instead of an `as`-cast accident.
+
+- [`TryFrom` and `TryInto` Traits](../level_14/tryfrom_tryinto.md) — The fallible, `Result`-returning alternative that never silently loses data.
+- [Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`)](integer_overflow.md) — The `checked_`/`wrapping_`/`saturating_` method families that make truncation an explicit choice instead of an `as`-cast accident.
 - [`From` / `Into` Traits](../level_04/from_into_traits.md) — The *lossless*, guaranteed-safe conversion traits; prefer these over `as` whenever the target type can represent every source value.
+- [`TryFrom` / `TryInto`](../level_14/try_from_try_into.md) — Fallible type conversions.
 
 ---
 

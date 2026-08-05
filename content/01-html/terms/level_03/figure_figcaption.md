@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<img>`](../level_03/img.md) — The image tag wrapped by figures.
-- [`alt` Attribute](../level_03/alt.md) — Visually descriptive alternate text.
+- [`<img>`](img.md) — The image tag wrapped by figures.
+- [`alt` Attribute](alt.md) — Visually descriptive alternate text.
 - [Nesting](../level_01/nesting.md) — Nested tag structures.
-
 ---
 
 ## 2. Term Category
@@ -216,10 +215,9 @@ A basic image wrapped in a figure with a caption:
 > **Explanation:** `<figcaption>` must be placed at the top or bottom boundary of `<figure>`.
 
 ## 7. Related Terms
-- [`<img>`](../level_03/img.md) — The image element wrapped inside the figure.
-- [`alt` Attribute](../level_03/alt.md) — The visual description metadata.
+- [`<img>`](img.md) — The image element wrapped inside the figure.
+- [`alt` Attribute](alt.md) — The visual description metadata.
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic block container.
-
 ---
 
 ## 8. Key Takeaways

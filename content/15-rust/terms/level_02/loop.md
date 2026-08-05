@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`if` / `else`](../level_02/if_else.md) — You almost always need an `if` statement to decide when to stop the loop.
+
+- [`if` / `else`](if_else.md) — You almost always need an `if` statement to decide when to stop the loop.
 - [Expressions](../level_01/expressions.md) — Understanding how blocks of code can evaluate to a value.
 
 ---
@@ -680,8 +681,9 @@ Implement `LockFreeRingBuffer` slot reservation using `AtomicUsize` and CAS retr
 
 ## 6. Related Terms
 
-- [`while`](../level_02/while.md) — A loop that runs as long as a specific condition evaluates to true.
-- [`for` / Range](../level_02/for_range.md) — An iterator loop (the most common and idiomatic loop in Rust).
+
+- [`while`](while.md) — A loop that runs as long as a specific condition evaluates to true.
+- [`for` / Range](for_range.md) — An iterator loop (the most common and idiomatic loop in Rust).
 - [Expressions](../level_01/expressions.md) — The concept that allows `loop` to return a value.
 
 ---

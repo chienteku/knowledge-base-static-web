@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — You can't see if one thing is greater than another if you don't even know how to check if they are equal!
-- [Derive Macro](../level_04/derive_macro.md) — How you get these traits for free 99% of the time.
-- [Expressions (`<`, `>`)](../level_01/expressions.md) — The operators that these traits unlock.
+
+- [`PartialEq` / `Eq`](partialeq_eq.md) — You can't see if one thing is greater than another if you don't even know how to check if they are equal!
+- [Derive Macro](derive_macro.md) — How you get these traits for free 99% of the time.
+- [Expressions](../level_01/expressions.md) — The operators that these traits unlock.
 
 ---
 
@@ -721,8 +722,11 @@ Design a wrapper type `OrderedMetric` around `f64` that provides strict `Ord` an
 
 ## 6. Related Terms
 
-- [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — The prerequisite traits that these ordering traits are built on top of.
-- [Derive Macro](../level_04/derive_macro.md) — How you get `PartialOrd` and `Ord` for free 99% of the time.
+
+- [`PartialEq` / `Eq`](partialeq_eq.md) — The prerequisite traits that these ordering traits are built on top of.
+- [Derive Macro](derive_macro.md) — How you get `PartialOrd` and `Ord` for free 99% of the time.
+- [`BTreeMap<K, V>`](../level_02/btreemap_k_v.md) — Related concept: `BTreeMap<K, V>`.
+- [`HashSet<T>` / `BTreeSet<T>`](../level_02/hashset_btreeset.md) — Related concept: `HashSet<T>` / `BTreeSet<T>`.
 
 ---
 

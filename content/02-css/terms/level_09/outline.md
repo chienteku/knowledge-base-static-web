@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model / `border`](../level_02/border.md) — You must understand Borders to understand how Outlines are different.
-
+- [Border](../level_02/border.md) — You must understand Borders to understand how Outlines are different.
 ---
 
 ## 2. Term Category
@@ -154,10 +153,9 @@ You remove the border, and add a `10px solid black` Outline instead. How wide is
 > **Explanation:** Outlines are non-layout-shifting visual overlays.
 
 ## 7. Related Terms
-- [`border`](../level_02/border.md) — The physical layout equivalent.
-- [`:focus`](hover_focus.md) — The state where outlines are most commonly applied.
+- [Border](../level_02/border.md) — The physical layout equivalent.
+- [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — The state where outlines are most commonly applied.
 - [`cursor`](cursor.md) — Sizing hover states.
-
 ---
 
 ## 8. Key Takeaways

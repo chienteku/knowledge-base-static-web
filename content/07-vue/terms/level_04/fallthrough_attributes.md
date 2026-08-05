@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_04/components.md) — Reusable HTML layouts.
-- [Props](../level_04/props.md) — Explicit component inputs.
-- [Emitting Events](../level_04/emit.md) — Communicating triggers up to parent scopes.
-
+- [Components](components.md) — Reusable HTML layouts.
+- [Props](props.md) — Explicit component inputs.
+- [Emitting Events (`defineEmits`)](emit.md) — Communicating triggers up to parent scopes.
 ---
 
 ## 2. Term Category
@@ -274,10 +273,9 @@ defineOptions({
 ---
 
 ## 7. Related Terms
-- [Props](../level_04/props.md) — The explicit input channel for components.
-- [Emitting Events](../level_04/emit.md) — The channel to notify parent scopes.
-- [Components](../level_04/components.md) — Modular templates.
-
+- [Props](props.md) — The explicit input channel for components.
+- [Emitting Events (`defineEmits`)](emit.md) — The channel to notify parent scopes.
+- [Components](components.md) — Modular templates.
 ---
 
 ## 8. Key Takeaways

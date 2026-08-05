@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type lists.
-- [UUID Type (PostgreSQL)](../../../12-postgres/terms/level_06/uuid_type.md) — Relational binary identifier equivalents.
+- [`UUID` Type](../../../12-postgres/terms/level_06/uuid_type.md) — Relational binary identifier equivalents.
 
 ---
 
@@ -184,8 +185,9 @@ new Binary(uuidBuffer, Binary.SUBTYPE_UUID); // Explicit UUID Subtype 4
 > **Explanation:** GridFS chunks large files into 255KB pieces for storage across collections.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
-- [UUID Type (PostgreSQL)](../../../12-postgres/terms/level_06/uuid_type.md) — Relational equivalents.
+- [`UUID` Type](../../../12-postgres/terms/level_06/uuid_type.md) — Relational equivalents.
 
 ---
 

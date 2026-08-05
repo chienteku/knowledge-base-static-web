@@ -144,6 +144,11 @@
           "term": "tr",
           "module": "01-html",
           "description": "Related concept: `<tr>` (Table Row)."
+        },
+        {
+          "module": "01-html",
+          "term": "body",
+          "description": "Related concept: `<body>`."
         }
       ]
     },
@@ -178,6 +183,16 @@
           "term": "noscript",
           "module": "01-html",
           "description": "Related concept: `<noscript>`."
+        },
+        {
+          "module": "01-html",
+          "term": "block_inline",
+          "description": "Block vs inline elements."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Semantic HTML layout."
         }
       ]
     },
@@ -402,6 +417,11 @@
           "term": "doctype_html",
           "module": "01-html",
           "description": "The declaration that tells the browser it is reading modern HTML."
+        },
+        {
+          "module": "01-html",
+          "term": "html_tag",
+          "description": "Root <html> element."
         }
       ]
     },
@@ -441,6 +461,11 @@
           "term": "lang",
           "module": "01-html",
           "description": "Related concept: `lang` Attribute."
+        },
+        {
+          "module": "01-html",
+          "term": "html",
+          "description": "Related concept: HTML (HyperText Markup Language)."
         }
       ]
     },
@@ -509,11 +534,6 @@
           "term": "alt",
           "module": "01-html",
           "description": "The required visual description attribute for images."
-        },
-        {
-          "term": "title",
-          "module": "01-html",
-          "description": "The page title tag (located in the `<head>`)."
         },
         {
           "term": "head",
@@ -1795,6 +1815,11 @@
           "term": "thead_tbody_tfoot",
           "module": "01-html",
           "description": "Related concept: `<thead>`, `<tbody>`, `<tfoot>`."
+        },
+        {
+          "module": "01-html",
+          "term": "th",
+          "description": "Table header cells."
         }
       ]
     },
@@ -1883,6 +1908,11 @@
           "term": "caption",
           "module": "01-html",
           "description": "Related concept: `<caption>`."
+        },
+        {
+          "module": "01-html",
+          "term": "table",
+          "description": "Related concept: `<table>`."
         }
       ]
     },
@@ -2068,6 +2098,11 @@
           "term": "name",
           "module": "01-html",
           "description": "Related concept: `name` Attribute (in Form Fields)."
+        },
+        {
+          "module": "01-html",
+          "term": "label",
+          "description": "Input label element."
         }
       ]
     },
@@ -2191,6 +2226,11 @@
           "term": "accessibility_fundamentals",
           "module": "01-html",
           "description": "Related concept: Accessibility (a11y) Fundamentals."
+        },
+        {
+          "module": "01-html",
+          "term": "form",
+          "description": "Related concept: `<form>`."
         }
       ]
     },
@@ -2685,6 +2725,11 @@
           "term": "address",
           "module": "01-html",
           "description": "The semantic tag for contact info, typically hosted in page footers."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Related concept: Semantic HTML."
         }
       ]
     },
@@ -2724,6 +2769,11 @@
           "term": "nav",
           "module": "01-html",
           "description": "The navigation block commonly nested inside main headers."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Related concept: Semantic HTML."
         }
       ]
     },
@@ -2875,6 +2925,11 @@
           "term": "aside",
           "module": "01-html",
           "description": "The tangential layout block."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Related concept: Semantic HTML."
         }
       ]
     },
@@ -2949,6 +3004,26 @@
           "term": "seo_fundamentals",
           "module": "01-html",
           "description": "Related concept: SEO Fundamentals for HTML."
+        },
+        {
+          "module": "01-html",
+          "term": "nav",
+          "description": "Navigation container."
+        },
+        {
+          "module": "01-html",
+          "term": "header",
+          "description": "Header element."
+        },
+        {
+          "module": "01-html",
+          "term": "footer",
+          "description": "Footer element."
+        },
+        {
+          "module": "01-html",
+          "term": "body",
+          "description": "Related concept: `<body>`."
         }
       ]
     },
@@ -4340,7 +4415,9 @@
           "module": "01-html",
           "term": "progress_meter"
         }
-      ]
+      ],
+      "display_name": "`<output>` Element",
+      "level": 5
     }
   }
 }

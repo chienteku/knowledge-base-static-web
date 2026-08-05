@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [SQL vs NoSQL](./sql_vs_nosql.md) — The storage formats supporting transactions.
-- [Connection Pooling](./connection_pools.md) — The connection channels used to execute transaction queries.
-
+- [SQL vs NoSQL](sql_vs_nosql.md) — The storage formats supporting transactions.
+- [Connection Pooling](connection_pools.md) — The connection channels used to execute transaction queries.
 ---
 
 ## 2. Term Category
@@ -260,9 +259,8 @@ async function placeOrder(userId, productId, price) {
 > **Explanation:** ACID properties guarantee reliable execution of database transactions.
 
 ## 7. Related Terms
-- [Connection Pooling](./connection_pools.md) — The network channels used to manage transaction streams.
-- [Migrations](./migrations.md) — Schema updates executed within transactions to prevent partial updates.
-
+- [Connection Pooling](connection_pools.md) — The network channels used to manage transaction streams.
+- [Migrations](migrations.md) — Schema updates executed within transactions to prevent partial updates.
 ---
 
 ## 8. Key Takeaways

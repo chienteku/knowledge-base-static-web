@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
-
 ---
 
 ## 2. Term Category
@@ -202,10 +201,13 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Parameters](../level_03/parameters.md) — The variables listed in the function definition.
-- [`return` Statement](../level_03/return_statement.md) — Ends execution and outputs a value.
-- [Arrow Function](../level_03/arrow_function.md) — A shorter syntax for writing functions.
-
+- [Parameters](parameters.md) — The variables listed in the function definition.
+- [return Statement](return_statement.md) — Ends execution and outputs a value.
+- [Arrow Function](arrow_function.md) — A shorter syntax for writing functions.
+- [Arguments](arguments.md) — Related concept: Arguments.
+- [Generator (function*)](../level_09/generator.md) — Related concept: Generator (function*).
+- [Function Declaration](function_declaration.md) — Function declaration.
+- [Function Expression](function_expression.md) — Function expression.
 ---
 
 ## 8. Key Takeaways

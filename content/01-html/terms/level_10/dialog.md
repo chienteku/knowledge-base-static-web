@@ -9,7 +9,6 @@
 - [DOM (Document Object Model)](../level_09/dom.md) — The JavaScript API hook used to toggle window states.
 - [`<button>`](../level_05/button.md) — The visual trigger targets.
 - [Accessibility (a11y) Fundamentals](../level_09/accessibility_fundamentals.md) — Focusing layouts.
-
 ---
 
 ## 2. Term Category
@@ -349,7 +348,6 @@ dialogElement.showModal(); // Opens true modal with backdrop and focus trap
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`<details>` & `<summary>`](../level_06/details_summary.md) — The native toggle layout widget.
 - [ARIA Attributes](../level_09/aria_attributes.md) — Manual accessibility descriptions (not needed when using `<dialog>`).
-
 ---
 
 ## 8. Key Takeaways

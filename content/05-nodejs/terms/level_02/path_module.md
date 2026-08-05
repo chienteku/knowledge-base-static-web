@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Global Objects (`__dirname`)](../level_02/global_objects.md) — The `path` module is heavily used in conjunction with `__dirname`.
-- [The `fs` Module](../level_02/fs_module.md) — You use the `path` module to build the strings that you feed into `fs`.
-
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — The `path` module is heavily used in conjunction with `__dirname`.
+- [The fs Module (File System)](fs_module.md) — You use the `path` module to build the strings that you feed into `fs`.
 ---
 
 ## 2. Term Category
@@ -153,8 +152,8 @@ path.resolve('/a', '/b'); // Returns '/b' -- resolve treats /b as absolute root!
 > **Explanation:** `path.join` normalizes slashes automatically for Windows and Unix operating systems.
 
 ## 7. Related Terms
-- [The `fs` Module](../level_02/fs_module.md) — The module that consumes the paths you build.
-
+- [The fs Module (File System)](fs_module.md) — The module that consumes the paths you build.
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — Related concept: Global Objects (global, __dirname, __filename).
 ---
 
 ## 8. Key Takeaways

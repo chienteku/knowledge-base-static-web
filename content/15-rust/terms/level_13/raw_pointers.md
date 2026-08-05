@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [References & Borrowing](../level_01/references_and_borrowing.md) — Understanding standard safe references (`&T`, `&mut T`), borrow lifetimes, and aliasing rules.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — De-referencing null, dangling, or unaligned raw pointers causes Undefined Behavior.
+
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Understanding standard safe references (`&T`, `&mut T`), borrow lifetimes, and aliasing rules.
+- [Undefined Behavior (UB)](undefined_behavior.md) — De-referencing null, dangling, or unaligned raw pointers causes Undefined Behavior.
 
 ---
 
@@ -558,10 +559,15 @@ Write unit tests verifying pointer linkage, payload swapping, and structural int
 
 ## 7. Related Terms
 
-- [`unsafe` Block](../level_13/unsafe_block.md) — Required block scope to dereference raw pointers.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — The memory safety risks when misusing raw pointers.
-- [References & Borrowing](../level_01/references_and_borrowing.md) — Standard safe pointer abstractions in Rust.
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Interoperability layer where raw pointers pass to/from C libraries.
+
+- [`unsafe` Block](unsafe_block.md) — Required block scope to dereference raw pointers.
+- [Undefined Behavior (UB)](undefined_behavior.md) — The memory safety risks when misusing raw pointers.
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Standard safe pointer abstractions in Rust.
+- [FFI (Foreign Function Interface)](ffi.md) — Interoperability layer where raw pointers pass to/from C libraries.
+- [`extern "C"`](extern_c.md) — Related concept: `extern "C"`.
+- [`unsafe fn`](unsafe_fn.md) — Related concept: `unsafe fn`.
+- [Allocator API](../level_15/allocator_api.md) — Related concept: Allocator API.
+- [`#[repr(packed)]` / `#[repr(align)]`](../level_15/repr_packed_align.md) — Related concept: `#[repr(packed)]` / `#[repr(align)]`.
 
 ---
 

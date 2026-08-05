@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
 - [Callback Function](../level_03/callback_function.md) — A function passed into another function.
-
 ---
 
 ## 2. Term Category
@@ -205,9 +204,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`filter()`](../level_04/filter.md) — Finds *all* elements that match a condition and returns them in an Array.
-- [`some()`](../level_04/some.md) — Checks if an element exists, but returns `true`/`false` instead of the element itself.
-
+- [filter()](filter.md) — Finds *all* elements that match a condition and returns them in an Array.
+- [some()](some.md) — Checks if an element exists, but returns `true`/`false` instead of the element itself.
+- [indexOf / includes / findIndex](indexof_includes_findindex.md) — Related concept: indexOf / includes / findIndex.
 ---
 
 ## 8. Key Takeaways

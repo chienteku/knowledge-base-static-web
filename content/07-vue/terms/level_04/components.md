@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Vue Instance](../level_01/vue_instance.md) — The root that holds all components.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The logic components use internally.
-
 ---
 
 ## 2. Term Category
@@ -159,9 +158,17 @@ import Child from './Child.vue'; // Automatically registered and ready to use in
 ---
 
 ## 7. Related Terms
-- [Single-File Components (SFCs)](../level_04/sfc.md) — The physical file format used to write components.
-- [Props](../level_04/props.md) — How you pass data into a component.
-
+- [Single-File Components (SFCs)](sfc.md) — The physical file format used to write components.
+- [Props](props.md) — How you pass data into a component.
+- [Vue Instance](../level_01/vue_instance.md) — Related concept: Vue Instance.
+- [Dynamic Components (`<component :is>`)](dynamic_components.md) — Related concept: Dynamic Components (`<component :is>`).
+- [Fallthrough Attributes (`$attrs`)](fallthrough_attributes.md) — Related concept: Fallthrough Attributes (`$attrs`).
+- [Teleport](../level_05/teleport.md) — Related concept: Teleport.
+- [Transitions & Animations](../level_10/transition.md) — Related concept: Transitions & Animations.
+- [Vue DevTools](../level_10/vue_devtools.md) — Related concept: Vue DevTools.
+- [Vue Test Utils](../level_10/vue_test_utils.md) — Related concept: Vue Test Utils.
+- [Slots](../level_05/slots.md) — Related concept: Slots.
+- [Provide / Inject](../level_05/provide_inject.md) — Related concept: Provide / Inject.
 ---
 
 ## 8. Key Takeaways

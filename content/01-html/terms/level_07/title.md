@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The syntax mechanism for writing values inside tags.
-
 ---
 
 ## 2. Term Category
@@ -207,8 +206,9 @@ Hover tooltips on different elements:
 ## 7. Related Terms
 - [Attribute](../level_01/attribute.md) — The general tag parameter concept.
 - [`alt` Attribute](../level_03/alt.md) — The required visual description attribute for images.
-- [`<title>` Tag](../level_01/title.md) — The page title tag (located in the `<head>`).
-
+- [`<head>`](../level_01/head.md) — Related concept: `<head>`.
+- [`<meta>`](../level_08/meta.md) — Related concept: `<meta>`.
+- [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Related concept: SEO Fundamentals for HTML.
 ---
 
 ## 8. Key Takeaways

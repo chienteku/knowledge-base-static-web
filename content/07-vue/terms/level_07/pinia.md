@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [State Management](../level_07/state_management.md) — The concept that Pinia implements.
+- [State Management](state_management.md) — The concept that Pinia implements.
 - [Composition API](../level_01/composition_api.md) — The syntax pattern Pinia natively mimics.
-
 ---
 
 ## 2. Term Category
@@ -175,9 +174,11 @@ router.beforeEach(() => {
 ---
 
 ## 7. Related Terms
-- [Store](../level_07/store.md) — The actual files you create inside Pinia.
+- [Store (Pinia)](store.md) — The actual files you create inside Pinia.
 - [Composables](../level_05/composables.md) — The local-logic equivalent of a Pinia store.
-
+- [Provide / Inject](../level_05/provide_inject.md) — Related concept: Provide / Inject.
+- [State Management](state_management.md) — Related concept: State Management.
+- [Vue DevTools](../level_10/vue_devtools.md) — Related concept: Vue DevTools.
 ---
 
 ## 8. Key Takeaways

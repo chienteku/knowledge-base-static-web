@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Component Lifecycle](../level_03/component_lifecycle.md) — Error Boundaries rely on specific, class-based lifecycle methods.
-
 ---
 
 ## 2. Term Category

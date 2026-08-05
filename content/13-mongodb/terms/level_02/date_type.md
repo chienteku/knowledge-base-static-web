@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type catalog.
 
 ---
@@ -196,8 +197,10 @@ Store timezone string in separate field: { date: new Date(), tz: "Asia/Taipei" }
 > **Explanation:** `new Date()` captures current UTC timestamp as a BSON Date primitive.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
-- [Timestamp vs. Date](timestamp_vs_date.md) — Internal logging difference.
+- [`Timestamp` vs. `Date`](timestamp_vs_date.md) — Internal logging difference.
+- [Data Lifecycle & TTL Strategies](../level_05/data_lifecycle.md) — Related concept: Data Lifecycle & TTL Strategies.
 
 ---
 

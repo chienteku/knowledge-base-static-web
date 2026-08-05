@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The `fs` Module](../level_02/fs_module.md) — What returns a Buffer when you forget to specify `utf8`.
-
+- [The fs Module (File System)](../level_02/fs_module.md) — What returns a Buffer when you forget to specify `utf8`.
 ---
 
 ## 2. Term Category
@@ -148,8 +147,12 @@ res.send(buf);
 > **Explanation:** `Buffer.concat()` combines multiple buffer segments into a single contiguous buffer.
 
 ## 7. Related Terms
-- [Streams](../level_06/streams.md) — Streams are literally just continuous flows of Buffers!
-
+- [Streams (General Concept)](streams.md) — Streams are literally just continuous flows of Buffers!
+- [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.
+- [The fs Module (File System)](../level_02/fs_module.md) — Related concept: The fs Module (File System).
+- [Character Encoding & Buffer ↔ String](buffer_encoding.md) — Related concept: Character Encoding & Buffer ↔ String.
+- [Data Chunks](chunks.md) — Related concept: Data Chunks.
+- [Memory Leaks & Garbage Collection](../level_10/memory_leaks.md) — Related concept: Memory Leaks & Garbage Collection.
 ---
 
 ## 8. Key Takeaways

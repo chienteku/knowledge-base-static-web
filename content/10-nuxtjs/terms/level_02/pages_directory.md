@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [File-based Routing](../level_02/file_based_routing.md) — The concept that powers this directory.
-- [`app.vue`](../level_02/app_vue.md) — The entry point that renders these pages.
-
+- [File-based Routing](file_based_routing.md) — The concept that powers this directory.
+- [`app.vue`](app_vue.md) — The entry point that renders these pages.
 ---
 
 ## 2. Term Category
@@ -167,8 +166,15 @@ definePageMeta({
 
 ## 7. Related Terms
 - [`components/` Directory](../level_03/components_directory.md) — Where non-routable Vue components belong.
-- [Dynamic Routes](../level_02/dynamic_routes.md) — How to create pages that handle variable URLs like `/products/123`.
-
+- [Dynamic Routes](dynamic_routes.md) — How to create pages that handle variable URLs like `/products/123`.
+- [`app.vue`](app_vue.md) — Related concept: `app.vue`.
+- [`definePageMeta` Compiler Macro](define_page_meta.md) — Related concept: `definePageMeta` Compiler Macro.
+- [File-based Routing](file_based_routing.md) — Related concept: File-based Routing.
+- [NuxtLink Component](../level_03/nuxtlink_component.md) — Related concept: NuxtLink Component.
+- [Global vs Named Middleware](../level_08/global_vs_named_middleware.md) — Related concept: Global vs Named Middleware.
+- [Route Middleware](../level_08/route_middleware.md) — Related concept: Route Middleware.
+- [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — NuxtPage component.
+- [`layouts/` Directory](layouts_directory.md) — layouts/ directory.
 ---
 
 ## 8. Key Takeaways

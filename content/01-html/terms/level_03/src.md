@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The concept of injecting configuration into opening tags.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The address standard used to locate files.
-
 ---
 
 ## 2. Term Category
@@ -210,8 +209,10 @@ Different elements using `src` to load resources:
 ## 7. Related Terms
 - [Attribute](../level_01/attribute.md) — The concept of tag configuration keys.
 - [`href` Attribute](../level_02/href.md) — The coordinate system attribute for links.
-- [`<img>`](../level_03/img.md) — The most common media embedding tag using `src`.
-
+- [`<img>`](img.md) — The most common media embedding tag using `src`.
+- [`<audio>`](audio.md) — Related concept: `<audio>`.
+- [`<iframe>`](iframe.md) — Related concept: `<iframe>`.
+- [`<video>`](video.md) — Related concept: `<video>`.
 ---
 
 ## 8. Key Takeaways

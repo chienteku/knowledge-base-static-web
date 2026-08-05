@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTML Lists (`<ul>`, `<ol>`, `<li>`)](../../../01-html/terms/level_02/lists.md) — The HTML elements that this CSS property targets.
-
+- lists — The HTML elements that this CSS property targets.
 ---
 
 ## 2. Term Category
@@ -165,8 +164,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 > **Explanation:** `::marker` pseudo-element styles list bullet points directly.
 
 ## 7. Related Terms
-- [`<ul>`, `<ol>`, `<li>`](../../../01-html/terms/level_02/lists.md) — The HTML elements this applies to.
-
+- lists — The HTML elements this applies to.
 ---
 
 ## 8. Key Takeaways

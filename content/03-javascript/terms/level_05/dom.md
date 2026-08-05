@@ -7,8 +7,6 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — A collection of key-value pairs.
-- HTML Basics — Understanding of tags (like `<div>`, `<p>`).
-
 ---
 
 ## 2. Term Category
@@ -192,9 +190,15 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Node](../level_05/node.md) — The individual pieces (like elements or text) that make up the DOM tree.
-- [Event](../level_05/event.md) — Actions (like clicks) that happen to DOM elements.
-
+- [Node](node.md) — The individual pieces (like elements or text) that make up the DOM tree.
+- [Event](event.md) — Actions (like clicks) that happen to DOM elements.
+- [document object](document_object.md) — Related concept: document object.
+- [document.querySelector()](document_queryselector.md) — Related concept: document.querySelector().
+- [window object / BOM](window_bom.md) — Related concept: window object / BOM.
+- [SPA](../level_10/spa.md) — Related concept: SPA.
+- [Web APIs vs the Language](../level_10/web_apis_vs_language.md) — Related concept: Web APIs vs the Language.
+- [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — DOM manipulation.
+- [Event Listener](event_listener.md) — Event listeners.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Asynchronous](./asynchronous.md) — Operations that take time to complete.
-- [Callback Hell](./callback_hell.md) — The problem Promises were invented to solve.
-
+- [Asynchronous](asynchronous.md) — Operations that take time to complete.
+- [Callback Hell](callback_hell.md) — The problem Promises were invented to solve.
 ---
 
 ## 2. Term Category
@@ -206,9 +205,13 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`async` / `await`](./async_await.md) — The modern syntax used to unwrap the data inside a Promise.
-- [`.then()` / `.catch()`](./then_catch.md) — The traditional methods used to handle resolved or rejected Promises.
-
+- [async / await](async_await.md) — The modern syntax used to unwrap the data inside a Promise.
+- [.then() / .catch()](then_catch.md) — The traditional methods used to handle resolved or rejected Promises.
+- [AbortController](abortcontroller.md) — Related concept: AbortController.
+- [Asynchronous](asynchronous.md) — Related concept: Asynchronous.
+- [Callback Hell](callback_hell.md) — Related concept: Callback Hell.
+- [Fetch API](fetch_api.md) — Related concept: Fetch API.
+- [Event Loop](event_loop.md) — Microtask queue.
 ---
 
 ## 8. Key Takeaways

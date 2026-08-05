@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Interfaces](../level_03/interfaces.md) — Where `readonly` is usually applied.
-
+- [Interfaces](interfaces.md) — Where `readonly` is usually applied.
 ---
 
 ## 2. Term Category
@@ -156,9 +155,9 @@ const arr: number[] = [...ro]; // Create a mutable shallow copy
 > **Explanation:** `readonly` prefix creates immutable tuple structures.
 
 ## 7. Related Terms
-- [Interfaces](../level_03/interfaces.md) — The main place `readonly` is used.
-- [Utility Types](../level_08/utility_types.md) — Where the `Readonly<T>` global helper lives.
-
+- [Interfaces](interfaces.md) — The main place `readonly` is used.
+- [Utility Types Overview](../level_08/utility_types.md) — Where the `Readonly<T>` global helper lives.
+- [Arrays & Tuples](../level_02/arrays_tuples.md) — Related concept: Arrays & Tuples.
 ---
 
 ## 8. Key Takeaways

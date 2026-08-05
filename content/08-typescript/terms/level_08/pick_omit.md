@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Utility Types Overview](../level_08/utility_types.md) — The core concept.
+- [Utility Types Overview](utility_types.md) — The core concept.
 - [Literal Types](../level_05/literal_types.md) — How you specify which keys to pick or omit.
-
 ---
 
 ## 2. Term Category
@@ -174,9 +173,9 @@ type Good = Exclude<Union, "a">; // Result: "b" | "c"
 > **Explanation:** `Omit<T, K>` creates object types excluding specified keys.
 
 ## 7. Related Terms
-- [`Partial<T>` & `Required<T>`](../level_08/partial_required.md) — The utilities that modify the `?` flag instead of the properties themselves.
-- [Union Types](../level_05/union_types.md) — What you use to pass multiple keys into Pick/Omit (e.g. `"id" | "name"`).
-
+- [`Partial<T>` & `Required<T>`](partial_required.md) — The utilities that modify the `?` flag instead of the properties themselves.
+- [Union Types (`|`)](../level_05/union_types.md) — What you use to pass multiple keys into Pick/Omit (e.g. `"id" | "name"`).
+- [Utility Types Overview](utility_types.md) — Related concept: Utility Types Overview.
 ---
 
 ## 8. Key Takeaways

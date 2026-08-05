@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [JSON](../level_01/json.md) — The modern format that replaced XML.
-- [Serialization](../level_07/serialization.md) — XML is just another format used to serialize data.
-
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The modern format that replaced XML.
+- [Serialization & Deserialization](serialization.md) — XML is just another format used to serialize data.
 ---
 
 ## 2. Term Category
@@ -169,9 +168,10 @@ parser.setFeature("http://xml.org/sax/features/external-general-entities", false
 ---
 
 ## 7. Related Terms
-- [JSON](../level_01/json.md) — The lightweight successor to XML.
-- [REST](../level_03/rest.md) — REST APIs typically use JSON, while SOAP APIs typically use XML.
-
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The lightweight successor to XML.
+- [REST (Representational State Transfer)](../level_03/rest.md) — REST APIs typically use JSON, while SOAP APIs typically use XML.
+- [Deserialization / Parsing](deserialization.md) — Related concept: Deserialization / Parsing.
+- [SOAP & XML-RPC (legacy)](../level_10/soap_xml_rpc.md) — Related concept: SOAP & XML-RPC (legacy).
 ---
 
 ## 8. Key Takeaways

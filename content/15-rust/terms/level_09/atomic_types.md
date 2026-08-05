@@ -7,18 +7,15 @@
 
 ## 1. Prerequisites
 
-- [`Arc<T>`](../level_03/arc_t.md) — The tool used to share Atomic types across threads. 
-- [`Mutex<T>`](../level_09/mutex_t.md) — The software lock that Atomics are designed to replace for simple data!
+
+- [`Arc<T>`](../level_03/arc_t.md) — The tool used to share Atomic types across threads.
+- [`Mutex<T>`](mutex_t.md) — The software lock that Atomics are designed to replace for simple data!
 
 ---
 
 ## 2. Term Category
 
-**Rust-nonspecific (the hardware lock)**: A `Mutex` is incredibly safe, but it is a "software lock". When a thread is waiting for a `Mutex`, the Operating System literally pauses the thread, switches context, and wakes it up later. This OS-level context switching is relatively slow. 
-
-For simple operations (like adding `1` to a counter, or flipping a `bool` flag to `true`), pausing an entire thread with a massive `Mutex` is overkill. 
-
-**`Atomic` types** (like `AtomicUsize`, `AtomicBool`) are hardware-level primitives that perform math operations in a single, uninterruptible CPU cycle—no OS locks required!
+**Hardware Synchronization Primitives (Lock-Free Thread Safety)**: Atomic types (`AtomicBool`, `AtomicUsize`, `AtomicI32`, etc.) leverage CPU hardware-level atomic instructions (`fetch_add`, `compare_exchange`) to perform uninterruptible read-modify-write memory operations across OS threads without software mutex locks.
 
 ---
 
@@ -26,59 +23,37 @@ For simple operations (like adding `1` to a counter, or flipping a `bool` flag t
 
 ### (1) Design Motivation — "Why did we design this?"
 
-Consider the simple math equation: `x = x + 1`. 
+A standard operation like `x = x + 1` requires 3 distinct CPU instruction steps:
+1. Load `x` from memory into a register.
+2. Increment the register value.
+3. Store the register value back to memory.
 
-In hardware, this actually requires 3 distinct steps: 
-1. Read the value of `x` from memory.
-2. Add `1` to it inside the CPU. 
-3. Write the new value back to memory. 
+If two threads execute this concurrently, both might read `5` and store `6`, causing a lost update data race.
 
-If Thread A and Thread B do this at the exact same microsecond, they might both read `5`, both add `1`, and both write `6` back to memory. The number should be `7`! You lost data!
-
-A `Mutex` prevents this by forcing the threads to wait in line. But CPU manufacturers realized this math was so common that they built a special hardware instruction into the microchip: *"Read, Add, and Write this specific memory location in one single, uninterruptible, Atomic step."* 
-
-Rust exposes these hardware instructions via the `std::sync::atomic` module.
+While a `Mutex` prevents this by forcing OS threads to sleep and wait in line (involving expensive OS context switches), atomic types invoke hardware atomic instructions supported directly by CPU microchips. These instructions execute the entire read-modify-write cycle in a single uninterruptible hardware cycle, enabling high-performance lock-free concurrent counters, flags, and state trackers.
 
 ### (2) Reality Metaphor
 
-Imagine two people (threads) trying to deposit a check at a bank.
-
-- **Mutex:** You stand in a 5-minute line, talk to the teller, hand them the check, wait for them to type it in, and get a receipt. It is very safe, but very slow.
-- **Atomic Type:** You walk directly past the line and drop the check into a highly secure, robotic ATM deposit slot that instantly vacuums it up and updates your balance in a millisecond. It is lightning fast! *(However, the robot ATM only supports very basic operations. You can't ask the ATM robot for a complex mortgage loan!)*
+A turnstile counter at a stadium:
+- **`Mutex`**: A security guard who halts each fan, checks their ticket, writes their name in a logbook, and signals the next fan to enter. Safe, but slow for large crowds.
+- **`AtomicUsize`**: A mechanical turnstile counter. Every fan walking through physically rotates the wheel by 1 tooth in a single mechanical motion. It cannot split or interleave mid-turn, counting every single fan instantly.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Methods)
-Atomic types have special methods like `fetch_add` (add), `fetch_sub` (subtract), and `store` (replace). 
-
-```rust
-use std::sync::atomic::{AtomicUsize, Ordering};
-
-let counter = AtomicUsize::new(0);
-
-// Atomically add 1 to the counter!
-counter.fetch_add(1, Ordering::SeqCst);
-```
-
-#### Fuller Example (The Speed Boost)
-In a previous term, we used `Arc<Mutex<usize>>` to share a counter across 10 threads. Look how much cleaner (and faster!) it is to replace the `Mutex` with an `AtomicUsize`.
-
+#### High-Performance Concurrent Counter with `AtomicUsize`
 ```rust
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 use std::thread;
 
 fn main() {
-    // 1. Notice there is no Mutex! Just Arc + Atomic!
     let counter = Arc::new(AtomicUsize::new(0));
     let mut handles = vec![];
 
     for _ in 0..10 {
         let counter_clone = Arc::clone(&counter);
-        
         let handle = thread::spawn(move || {
-            // 2. We don't have to call .lock().unwrap()!
-            // We just ask the CPU to atomically add 1.
+            // Hardware atomic increment: no mutex locking required!
             counter_clone.fetch_add(1, Ordering::SeqCst);
         });
         handles.push(handle);
@@ -88,8 +63,8 @@ fn main() {
         handle.join().unwrap();
     }
 
-    // 3. We read the final value using `.load()`
-    println!("Final count: {}", counter.load(Ordering::SeqCst));
+    assert_eq!(counter.load(Ordering::SeqCst), 10);
+    println!("Final atomic counter: {}", counter.load(Ordering::SeqCst));
 }
 ```
 
@@ -97,73 +72,54 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Atomic Types Scoping and Lifecycle Rules
+### Mistake 1: Assuming Multiple Separate Atomic Calls form a Single Atomic Operation
 
-**The mistake:** Assuming Atomic Types instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Executing `if counter.load(Ordering::SeqCst) < max { counter.fetch_add(1, Ordering::SeqCst); }`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Even though each individual operation (`load` and `fetch_add`) is atomic, another thread can intervene between the two calls, causing race conditions. You must use a single Compare-And-Swap operation like `compare_exchange` or `compare_exchange_weak`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("atomic_types_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
+if counter.load(Ordering::SeqCst) < 10 {
+    // ❌ Another thread can increment counter here! Over-capacity race condition!
+    counter.fetch_add(1, Ordering::SeqCst);
 }
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("atomic_types_data");
-    s // Ownership of the String is transferred directly to the caller
+// Use compare_exchange in a CAS loop!
+let mut current = counter.load(Ordering::SeqCst);
+loop {
+    if current >= 10 { break; }
+    match counter.compare_exchange_weak(current, current + 1, Ordering::SeqCst, Ordering::SeqCst) {
+        Ok(_) => break,
+        Err(actual) => current = actual,
+    }
 }
 ```
 
-### Mistake 2: Mutating Atomic Types State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Misusing `Ordering::Relaxed` for Thread Synchronization Flags
 
-**The mistake:** Attempting to mutate data associated with Atomic Types through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Using `Ordering::Relaxed` when using an `AtomicBool` as a flag to notify another thread that shared data is ready.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `Ordering::Relaxed` allows the CPU and compiler to reorder memory operations. Thread B might see the flag set to `true` *before* it sees the memory writes that occurred prior to setting the flag.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+ready_flag.store(true, Ordering::Relaxed); // ❌ Memory writes can be reordered after this store!
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+ready_flag.store(true, Ordering::Release); // Guarantees prior writes are published!
 ```
 
-### Mistake 3: Concurrent Access to Atomic Types Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Expecting Atomic Types to Work on Arbitrary Complex Structs
 
-**The mistake:** Sharing non-thread-safe Atomic Types instances across OS threads via `std::thread::spawn`.
+**The mistake:** Trying to create an `Atomic<MyStruct>` without a mutex.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+**Why it is wrong:** Atomics rely on hardware support for native primitive types (`usize`, `u64`, `bool`, pointers). Custom structs exceeding machine word size cannot be modified atomically by CPU hardware instructions; use `Mutex<MyStruct>` or `RwLock<MyStruct>`.
 
 ---
 
@@ -171,16 +127,18 @@ thread::spawn(move || {
 
 ### Exercise 1: Lock-Free Concurrency Guard and Rate Limiter
 
-**Problem:** Build a lock-free rate limiter and active connection manager for an API gateway using `AtomicUsize`. The rate limiter must enforce a maximum limit of active concurrent connections (`max_conns`) without using software locks (`Mutex`). 
+**Scenario:** Build a lock-free rate limiter and active connection manager for an API gateway using `AtomicUsize`. The rate limiter must enforce a maximum limit of active concurrent connections (`max_conns`) without using software locks (`Mutex`).
 
-Implement `LockFreeRateLimiter` with:
-1. `try_acquire(&self) -> Result<AcquiredGuard, RateLimiterError>`: Uses a Compare-And-Swap (CAS) loop with `compare_exchange_weak` to atomically check if `active_conns < max_conns`. If true, it increments `active_conns` and returns an `AcquiredGuard`. If full, it atomically increments `rejected_requests` and returns `Err(RateLimiterError::CapacityExceeded)`.
-2. An `AcquiredGuard` struct implementing `Drop` that atomically decrements `active_conns` via `fetch_sub(1, Ordering::SeqCst)` when it leaves scope.
-3. Thread-safe tracking of total successful requests (`total_requests`) and rejected requests (`rejected_requests`).
-
-Include unit tests in `#[cfg(test)] mod tests` verifying capacity limits, drop cleanup, and multithreaded burst safety using `assert_eq!`, `assert!`, and `assert_ne!`.
+**Requirements:**
+1. Implement `LockFreeRateLimiter` with `try_acquire`, `active_connections`, `total_requests`, and `rejected_requests`.
+2. Use `compare_exchange_weak` inside a CAS retry loop for atomic slot reservation.
+3. Implement `AcquiredGuard` with `Drop` to automatically decrement active connection counts on exit.
+4. Write unit tests validating capacity enforcement under multi-threaded connection bursts.
 
 > [!check]- Answer
+> 
+> #### Implementation
+> 
 > ```rust
 > use std::sync::atomic::{AtomicUsize, Ordering};
 > use std::sync::Arc;
@@ -256,35 +214,6 @@ Include unit tests in `#[cfg(test)] mod tests` verifying capacity limits, drop c
 >     }
 > }
 > 
-> fn main() {
->     let limiter = Arc::new(LockFreeRateLimiter::new(3));
->     let mut handles = vec![];
-> 
->     for i in 0..10 {
->         let limiter_clone = Arc::clone(&limiter);
->         let h = thread::spawn(move || {
->             match limiter_clone.try_acquire() {
->                 Ok(_guard) => {
->                     thread::sleep(Duration::from_millis(50));
->                     println!("Thread {} acquired slot successfully", i);
->                 }
->                 Err(_) => {
->                     println!("Thread {} rate limited", i);
->                 }
->             }
->         });
->         handles.push(h);
->     }
-> 
->     for h in handles {
->         h.join().unwrap();
->     }
-> 
->     println!("Total requests: {}", limiter.total_requests());
->     println!("Rejected requests: {}", limiter.rejected_requests());
->     println!("Active connections: {}", limiter.active_connections());
-> }
-> 
 > #[cfg(test)]
 > mod tests {
 >     use super::*;
@@ -335,24 +264,28 @@ Include unit tests in `#[cfg(test)] mod tests` verifying capacity limits, drop c
 > }
 > ```
 >
-> **Step-by-Step Explanation:**
-> 1. **Atomic CAS Loop (`compare_exchange_weak`)**: Instead of blocking OS threads with a `Mutex`, `try_acquire` reads the current value into `current`, validates `current < max_conns`, and attempts an atomic swap. If another thread mutated `active_conns` concurrently, `compare_exchange_weak` returns `Err(actual)`, updating `current` to retry immediately.
-> 2. **RAII Guard Cleanup (`Drop`)**: `AcquiredGuard` implements `Drop` to ensure `active_conns.fetch_sub(1, Ordering::SeqCst)` is executed whenever the guard leaves scope, even if worker logic panics.
-> 3. **Lock-Free Request Metrics**: Both `total_requests` and `rejected_requests` are modified using atomic `fetch_add` operations, guaranteeing strict thread safety and lock-free hardware speed.
+> #### Technical Explanation
+>
+> 1. `compare_exchange_weak` performs lock-free atomic Compare-And-Swap (CAS) state updates without OS context switches.
+> 2. `AcquiredGuard` implements RAII drop semantics to decrement active counts automatically upon completion.
+> 3. Counters (`total_requests`, `rejected_requests`) use atomic `fetch_add` for thread-safe lock-free metric collection.
 
 ---
 
-### Exercise 2: Lock-Free State Machine and Optimistic Peak Memory Aggregator
+### Exercise 2: Lock-Free State Machine and Peak Memory Aggregator
 
-**Problem:** Build an execution task state machine and concurrent memory metric aggregator using `AtomicU8` and `AtomicUsize`.
+**Scenario:** Build an execution task state machine and concurrent memory metric aggregator using `AtomicU8` and `AtomicUsize`.
 
-Implement `TaskStateTracker` with:
-1. State management using `AtomicU8` representing discrete execution states (`STATE_IDLE = 0`, `STATE_RUNNING = 1`, `STATE_PAUSED = 2`, `STATE_STOPPED = 3`).
-2. `try_transition(&self, current: u8, next: u8) -> Result<u8, u8>` using `compare_exchange` to ensure state transitions occur atomically without race conditions.
-3. `update_peak_memory(&self, val: usize)`: Optimistically tracks the maximum memory observed across all threads by executing a CAS retry loop (`compare_exchange_weak`) until `peak_memory_mb` is at least `val`.
-4. Unit tests in `#[cfg(test)] mod tests` verifying transition validity, invalid transition rejections, and lock-free maximum value calculation under concurrent updates.
+**Requirements:**
+1. Implement `TaskStateTracker` with `try_transition` and `update_peak_memory`.
+2. Use `compare_exchange` for state transitions.
+3. Use a CAS loop to update `peak_memory_mb` optimistically.
+4. Write unit tests.
 
 > [!check]- Answer
+> 
+> #### Implementation
+> 
 > ```rust
 > use std::sync::atomic::{AtomicU8, AtomicUsize, Ordering};
 > use std::sync::Arc;
@@ -421,27 +354,10 @@ Implement `TaskStateTracker` with:
 >     }
 > }
 > 
-> fn main() {
->     let tracker = Arc::new(TaskStateTracker::new());
->     
->     assert!(tracker.try_transition(STATE_IDLE, STATE_RUNNING).is_ok());
->     
->     let mut handles = vec![];
->     for i in 1..=5 {
->         let tr = Arc::clone(&tracker);
->         handles.push(thread::spawn(move || {
->             let memory_used = i * 128;
->             tr.update_peak_memory(memory_used);
->         }));
+> impl Default for TaskStateTracker {
+>     fn default() -> Self {
+>         Self::new()
 >     }
-> 
->     for h in handles {
->         h.join().unwrap();
->     }
-> 
->     println!("Current State: {}", tracker.current_state());
->     println!("Peak Memory: {} MB", tracker.peak_memory());
->     println!("Transitions: {}", tracker.transition_count());
 > }
 > 
 > #[cfg(test)]
@@ -460,10 +376,6 @@ Implement `TaskStateTracker` with:
 >         let invalid_res = tracker.try_transition(STATE_IDLE, STATE_PAUSED);
 >         assert_eq!(invalid_res, Err(STATE_RUNNING));
 >         assert_eq!(tracker.current_state(), STATE_RUNNING);
-> 
->         let pause_res = tracker.try_transition(STATE_RUNNING, STATE_PAUSED);
->         assert!(pause_res.is_ok());
->         assert_eq!(tracker.transition_count(), 2);
 >     }
 > 
 >     #[test]
@@ -487,31 +399,31 @@ Implement `TaskStateTracker` with:
 >     }
 > }
 > ```
->
-> **Step-by-Step Explanation:**
-> 1. **Atomic State Machine (`compare_exchange`)**: State transitions check if the current state strictly matches the expected predecessor (`current`). If two threads attempt conflicting transitions, only one succeeds; the other receives `Err(actual)` with the real state.
-> 2. **Optimistic Max Update Loop**: `update_peak_memory` reads the existing peak into `current`. If `val <= current`, no update is needed. If `val > current`, it executes `compare_exchange_weak`. If a concurrent thread sets a higher or equal value, `compare_exchange_weak` fails, updating `current` so the loop re-evaluates whether `val > current`.
-> 3. **Lock-Free Metrics**: Metric updates complete in nanoseconds directly on CPU registers without OS thread unscheduling.
+> 
+> #### Technical Explanation
+> 
+> 1. `AtomicU8::compare_exchange` validates state transition correctness atomically across threads.
+> 2. `update_peak_memory` uses an optimistic CAS loop (`compare_exchange_weak`) to track maximum memory without software locks.
+> 3. State machine metrics execute in nanoseconds directly on CPU registers.
 
 ---
 
 ### Exercise 3: Multithreaded Worker Pool Shutdown Coordinator
 
-**Problem:** Implement a thread pool lifecycle and metric coordinator using `AtomicBool` and `AtomicUsize`.
+**Scenario:** Implement a thread pool lifecycle and metric coordinator using `AtomicBool` and `AtomicUsize`.
 
-Implement `ThreadPoolCoordinator` with:
-1. `shutdown_requested`: An `AtomicBool` flag indicating whether workers should finish their work loops and exit.
-2. `tasks_processed`: An `AtomicUsize` tracking total completed workload units across all threads.
-3. `active_workers`: An `AtomicUsize` tracking currently live worker threads.
-4. `request_shutdown(&self)`: Atomically sets `shutdown_requested` to `true` via `store(true, Ordering::SeqCst)`.
-5. Unit tests in `#[cfg(test)] mod tests` verifying worker creation, task processing count aggregation, and clean shutdown propagation using `assert_eq!` and `assert!`.
+**Requirements:**
+1. Implement `ThreadPoolCoordinator` with `request_shutdown`, `is_shutdown`, `record_task_completed`, and `active_workers`.
+2. Write unit tests.
 
 > [!check]- Answer
+> 
+> #### Implementation
+> 
 > ```rust
 > use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 > use std::sync::Arc;
 > use std::thread;
-> use std::time::Duration;
 > 
 > pub struct ThreadPoolCoordinator {
 >     shutdown_requested: AtomicBool,
@@ -549,37 +461,10 @@ Implement `ThreadPoolCoordinator` with:
 >     }
 > }
 > 
-> fn main() {
->     let coordinator = Arc::new(ThreadPoolCoordinator::new());
->     let worker_count = 4;
->     let mut handles = vec![];
-> 
->     for worker_id in 0..worker_count {
->         let coord = Arc::clone(&coordinator);
->         coord.active_workers.fetch_add(1, Ordering::SeqCst);
-> 
->         let h = thread::spawn(move || {
->             while !coord.is_shutdown() {
->                 // Simulate processing a task
->                 coord.record_task_completed();
->                 thread::sleep(Duration::from_millis(10));
->             }
->             coord.active_workers.fetch_sub(1, Ordering::SeqCst);
->             println!("Worker {} shut down cleanly.", worker_id);
->         });
->         handles.push(h);
+> impl Default for ThreadPoolCoordinator {
+>     fn default() -> Self {
+>         Self::new()
 >     }
-> 
->     // Let workers execute for a brief period
->     thread::sleep(Duration::from_millis(50));
->     coordinator.request_shutdown();
-> 
->     for h in handles {
->         h.join().unwrap();
->     }
-> 
->     println!("Total tasks processed: {}", coordinator.tasks_processed());
->     println!("Remaining active workers: {}", coordinator.active_workers());
 > }
 > 
 > #[cfg(test)]
@@ -623,18 +508,22 @@ Implement `ThreadPoolCoordinator` with:
 >     }
 > }
 > ```
->
-> **Step-by-Step Explanation:**
-> 1. **Atomic Control Signaling (`AtomicBool`)**: Workers check `coord.is_shutdown()` on every iteration. Setting `shutdown_requested` to `true` via `store(true, Ordering::SeqCst)` provides immediate cross-thread visibility across CPU cache coherency lines.
-> 2. **Concurrent Workers Lifecycle Accounting**: Each worker atomically increments `active_workers` on launch via `fetch_add(1, Ordering::SeqCst)` and atomically decrements `active_workers` on exit via `fetch_sub(1, Ordering::SeqCst)`.
-> 3. **Lock-Free Aggregate Task Counters**: `tasks_processed` aggregates completed work metrics safely across all concurrently executing threads without mutex locks.
+> 
+> #### Technical Explanation
+> 
+> 1. `AtomicBool` provides zero-latency cross-thread shutdown signal propagation.
+> 2. `active_workers` tracks worker lifetime boundaries via atomic increment and decrement operations.
+> 3. Task metrics aggregate concurrently across threads without lock contention.
 
 ---
 
 ## 6. Related Terms
 
+
 - [`Arc<T>`](../level_03/arc_t.md) — The "A" in `Arc` literally stands for Atomic! It uses an `AtomicUsize` internally to track the reference count across threads!
-- [`Mutex<T>`](../level_09/mutex_t.md) — The slower, software-lock alternative required for complex types.
+- [`Mutex<T>`](mutex_t.md) — The slower, software-lock alternative required for complex types.
+- [Data Race](data_race.md) — Related concept: Data Race.
+- [Memory Ordering (`Ordering`)](memory_ordering.md) — Related concept: Memory Ordering (`Ordering`).
 
 ---
 

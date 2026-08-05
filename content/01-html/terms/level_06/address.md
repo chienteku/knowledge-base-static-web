@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Semantic HTML](../level_06/semantic_html.md) — The parent layout philosophy.
-- [`<footer>`](../level_06/footer.md) — Since address blocks are commonly nested inside page footers.
-
+- [Semantic HTML](semantic_html.md) — The parent layout philosophy.
+- [`<footer>`](footer.md) — Since address blocks are commonly nested inside page footers.
 ---
 
 ## 2. Term Category
@@ -220,10 +219,9 @@ Basic contact block in a footer:
 > **Explanation:** User-agent stylesheets render `<address>` text in italics.
 
 ## 7. Related Terms
-- [`<footer>`](../level_06/footer.md) — The parent container for site contact blocks.
-- [`<article>`](../level_06/article_section.md) — Containers that house author-specific contact blocks.
+- [`<footer>`](footer.md) — The parent container for site contact blocks.
+- [`<article>` and `<section>`](article_section.md) — Containers that house author-specific contact blocks.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Used inside address blocks for mail/phone triggers.
-
 ---
 
 ## 8. Key Takeaways

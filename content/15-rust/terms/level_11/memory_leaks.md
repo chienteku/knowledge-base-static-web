@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [`Rc<T>`](../level_03/rc_t.md) — The reference-counted smart pointer whose cycles cause leaks.
-- [`Weak<T>`](../level_11/weak_t.md) — The tool specifically designed to break these cycles.
+- [`Weak<T>`](weak_t.md) — The tool specifically designed to break these cycles.
 - [`Drop` Trait](../level_03/drop_trait.md) — What *fails to run* when a cycle leaks.
 
 ---
@@ -525,10 +526,12 @@ Implement `ConfigManager`:
 
 ## 6. Related Terms
 
-- [`Weak<T>`](../level_11/weak_t.md) — The non-owning pointer specifically designed to break reference cycles.
-- [`Rc<T>`](../level_03/rc_t.md) / [`Arc<T>`](../level_03/arc_t.md) — The reference-counted pointers whose cycles cause leaks.
+
+- [`Weak<T>`](weak_t.md) — The non-owning pointer specifically designed to break reference cycles.
+- [`Rc<T>`](../level_03/rc_t.md)
 - [`Drop` Trait](../level_03/drop_trait.md) — The destructor that never runs on leaked data.
-- [`std::mem` Utilities](../level_03/ownership.md) — `mem::forget` is the "intentional leak" primitive; see also `Box::leak`.
+- [Ownership](../level_03/ownership.md) — `mem::forget` is the "intentional leak" primitive; see also `Box::leak`.
+- [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](../level_03/std_mem_utilities.md) — Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`).
 
 ---
 

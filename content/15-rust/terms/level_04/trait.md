@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Structs](../level_02/struct.md) — The data types that will implement the traits.
+
+- [Struct](../level_02/struct.md) — The data types that will implement the traits.
 - [`impl` Block](../level_02/impl_block.md) — The syntax used to attach methods to a type.
 
 ---
@@ -677,9 +678,22 @@ To enforce this structural constraint at compile time, design a supertrait relat
 
 ## 6. Related Terms
 
-- [Trait Bound](../level_04/trait_bound.md) — How we actually force a generic `<T>` to implement a specific Trait (e.g., `<T: Summary>`).
-- [Generics (`<T>`)](../level_04/generics.md) — What we use Traits to constrain.
-- [`impl Trait`](../level_04/impl_trait.md) — Syntactic sugar for accepting/returning types that implement a specific trait.
+
+- [Trait Bound](trait_bound.md) — How we actually force a generic `<T>` to implement a specific Trait (e.g., `<T: Summary>`).
+- [Generics (`<T>`)](generics.md) — What we use Traits to constrain.
+- [`impl Trait`](impl_trait.md) — Syntactic sugar for accepting/returning types that implement a specific trait.
+- [`impl` Block](../level_02/impl_block.md) — Related concept: `impl` Block.
+- [`Copy` Trait](../level_03/copy_trait.md) — Related concept: `Copy` Trait.
+- [Derive Macros](../level_12/derive_macros.md) — Related concept: Derive Macros.
+- [`unsafe trait` / `unsafe impl`](../level_13/unsafe_trait.md) — Related concept: `unsafe trait` / `unsafe impl`.
+- [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md) — Related concept: `AsRef` / `AsMut`.
+- [Blanket Implementation](../level_14/blanket_implementation.md) — Related concept: Blanket Implementation.
+- [`Borrow` / `BorrowMut`](../level_14/borrow_borrow_mut.md) — Related concept: `Borrow` / `BorrowMut`.
+- [Coherence](../level_14/coherence.md) — Related concept: Coherence.
+- [Operator Overloading](../level_14/operator_overloading.md) — Related concept: Operator Overloading.
+- [Orphan Rule](../level_14/orphan_rule.md) — Related concept: Orphan Rule.
+- [Sealed Trait Pattern](../level_14/sealed_trait_pattern.md) — Related concept: Sealed Trait Pattern.
+- [Supertraits](../level_14/supertraits.md) — Related concept: Supertraits.
 
 ---
 

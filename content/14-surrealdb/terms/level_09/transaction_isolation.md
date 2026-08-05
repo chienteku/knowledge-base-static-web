@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](transactions.md) — Basic transaction blocks.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Storage engine architectures.
 
@@ -220,6 +221,7 @@ What isolation level does SurrealDB provide by default for transaction execution
 > **Explanation:** Short transactions reduce write conflict probability in concurrent storage engines.
 
 ## 7. Related Terms
+
 - [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](transactions.md) — Transaction commands.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Single-node and distributed storage backends.
 - [SDK Error Handling & Retry Patterns](../level_10/sdk_error_handling.md) — Handling write conflicts in SDKs.

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`Tokio`](../level_10/tokio.md) — The async runtime that provides this macro.
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that `join!` runs.
-- [`select!`](../level_10/select_macro.md) — The opposite of `join!` (waits for only one to finish).
+
+- [`tokio`](../level_16/tokio.md) — The async runtime that provides this macro.
+- [`Future` Trait](future_trait.md) — The state machines that `join!` runs.
+- [`select!` Macro](select_macro.md) — The opposite of `join!` (waits for only one to finish).
 
 ---
 
@@ -547,14 +548,13 @@ Write a function `coordinate_reservation` using `tokio::try_join!` that coordina
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`tokio::select!`](../level_10/select_macro.md) — The ruthless race where only the first one to finish survives.
-> - [`tokio::spawn`](../level_10/tokio_spawn.md) — How you actually push tasks onto the background Executor thread pool instead of just polling them on the current thread.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`select!` Macro](select_macro.md) — Related concept: `select!`.
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`tokio::join!`** runs multiple Futures concurrently on the current thread.
 > - It waits until **all** Futures have finished, returning a Tuple of their results.

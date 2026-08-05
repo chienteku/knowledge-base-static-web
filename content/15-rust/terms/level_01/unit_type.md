@@ -7,9 +7,11 @@
 
 ## 1. Prerequisites
 
-- [`fn`](../level_01/fn.md) — Functions that don't specify a return type implicitly return `()`.
-- [Statements](../level_01/statements.md) — Statements in Rust evaluate to the Unit Type `()`.
-- [Expressions](../level_01/expressions.md) — If you add a semicolon to an expression, it turns into a statement and returns `()` instead of its actual value.
+
+- [`fn` (Functions)](fn.md) — Functions that don't specify a return type implicitly return `()`.
+- [Statements](statements.md) — Statements in Rust evaluate to the Unit Type `()`.
+- [Expressions](expressions.md) — If you add a semicolon to an expression, it turns into a statement and returns `()` instead of its actual value.
+- [Scalar Types](scalar_types.md) — Primitive types.
 
 ---
 
@@ -638,8 +640,11 @@ In database engines (such as PostgreSQL or SQLite WAL modules), disk flushing op
 
 ## 6. Related Terms
 
+
 - [Unit Struct](../level_02/unit_struct.md) — A custom struct you define that behaves exactly like the built-in Unit Type (taking up 0 bytes).
-- [Statements](../level_01/statements.md) — The fundamental building blocks that always evaluate to `()`.
+- [Statements](statements.md) — The fundamental building blocks that always evaluate to `()`.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Related concept: `ZSTs` (Zero-Sized Types).
+- [Never Type (`!`)](../level_11/never_type.md) — The ! never type.
 
 ---
 

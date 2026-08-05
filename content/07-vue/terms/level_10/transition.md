@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — Base template layouts.
 - [`v-if` / `v-show`](../level_03/v_if_show.md) — Conditional rendering triggers.
-- [Dynamic Components](../level_04/dynamic_components.md) — Dynamic swapping layouts.
-
+- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Dynamic swapping layouts.
 ---
 
 ## 2. Term Category
@@ -308,10 +307,9 @@ function remove(id) {
 ---
 
 ## 7. Related Terms
-- [Dynamic Components](../level_04/dynamic_components.md) — Swapping active nodes.
+- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Swapping active nodes.
 - [`v-if` / `v-show`](../level_03/v_if_show.md) — The visibility attributes that trigger transitions.
 - [Components](../level_04/components.md) — Custom templates.
-
 ---
 
 ## 8. Key Takeaways

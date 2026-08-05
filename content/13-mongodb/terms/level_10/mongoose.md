@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [MongoDB Node.js Driver](node_driver.md) — The low-level driver wrapped.
+
+- [MongoDB Node.js Driver](node_driver.md) — Official Node.js driver.
 
 ---
 
@@ -195,8 +196,10 @@ Use pre('updateMany') query middleware or update document instances
 > **Explanation:** `.lean()` skips Mongoose document hydration, speeding up read performance by 3-5x.
 
 ## 7. Related Terms
+
 - [MongoDB Node.js Driver](node_driver.md) — The low-level driver wrapped.
 - [Mongoose Schema & Model](mongoose_schema_model.md) — The core concepts.
+- [Mongoose Middleware (Hooks)](mongoose_middleware.md) — Mongoose pre/post middleware.
 
 ---
 

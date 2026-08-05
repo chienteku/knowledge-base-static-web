@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [HTTP Headers](../level_02/http_headers.md) — The most common place to securely attach an API Key.
 - [Statelessness](../level_03/statelessness.md) — Because APIs are stateless, the API Key must be sent on every single request.
-
 ---
 
 ## 2. Term Category
@@ -140,9 +139,10 @@ const STRIPE_SECRET_KEY = 'sk_live_51Nx...'; // ❌ Leaked in public browser bun
 ---
 
 ## 7. Related Terms
-- [Basic & Bearer Authentication](../level_04/basic_bearer_auth.md) — Other methods of sending secrets in HTTP Headers.
-- [JWT](../level_04/jwt.md) — While API Keys authenticate *Applications*, JWTs usually authenticate individual *Users*.
-
+- [Basic & Bearer Authentication](basic_bearer_auth.md) — Other methods of sending secrets in HTTP Headers.
+- [JWT (JSON Web Tokens)](jwt.md) — While API Keys authenticate *Applications*, JWTs usually authenticate individual *Users*.
+- [SSL/TLS & the Handshake](../level_01/ssl_tls_handshake.md) — Related concept: SSL/TLS & the Handshake.
+- [OAuth Scopes](oauth_scopes.md) — Related concept: OAuth Scopes.
 ---
 
 ## 8. Key Takeaways

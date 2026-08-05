@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The nested data traversed.
 - [Array](../level_02/array_type.md) — The ordered lists navigated.
 
@@ -193,6 +194,7 @@ Write the query path string (wrapped in quotes) using dot notation to target:
 > **Explanation:** `"array.index.field"` indexes specific positional array elements.
 
 ## 7. Related Terms
+
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The nested data.
 - [Querying Embedded Documents](querying_embedded.md) — Dynamic nested filtering.
 

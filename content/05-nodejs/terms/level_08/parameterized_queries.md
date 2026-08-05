@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [SQL Injection](./sql_injection.md) — The vulnerability resolved by this design.
-- [ORMs & ODMs](./orms_odms.md) — The libraries that implement parameterization under the hood.
-
+- [SQL Injection](sql_injection.md) — The vulnerability resolved by this design.
+- [ORMs & ODMs](orms_odms.md) — The libraries that implement parameterization under the hood.
 ---
 
 ## 2. Term Category
@@ -183,9 +182,8 @@ db.query(query, [username, password], callback); // PostgreSQL syntax
 > **Explanation:** Parameterized inputs cannot alter compiled SQL query structure.
 
 ## 7. Related Terms
-- [SQL Injection](./sql_injection.md) — The database vulnerability resolved by parameterization.
-- [ORMs & ODMs](./orms_odms.md) — Object mappers that automatically implement query parameterization.
-
+- [SQL Injection](sql_injection.md) — The database vulnerability resolved by parameterization.
+- [ORMs & ODMs](orms_odms.md) — Object mappers that automatically implement query parameterization.
 ---
 
 ## 8. Key Takeaways

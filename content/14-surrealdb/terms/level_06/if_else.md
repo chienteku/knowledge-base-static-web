@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 - [Operators in SurrealQL](../level_03/operators.md) — Comparison operators.
 
@@ -217,8 +218,11 @@ Write a SurrealQL query to retrieve the product `name` and a calculated `availab
 > **Explanation:** `IF / ELSE IF / ELSE` blocks branch statement logic across multiple conditions.
 
 ## 7. Related Terms
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
-- [THROW Expression](throw_expression.md) — Raising errors in ELSE blocks.
+- [`THROW` Expression](throw_expression.md) — Raising errors in ELSE blocks.
+- [`RETURN` Statement (in Functions / Blocks)](return_statement.md) — Related concept: `RETURN` Statement (in Functions / Blocks).
+- [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](../level_09/transactions.md) — Related concept: Transactions (`BEGIN` / `COMMIT` / `CANCEL`).
 
 ---
 

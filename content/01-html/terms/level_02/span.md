@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<div>` (Block container)](../level_02/div.md) — The block-level sibling to the `<span>`.
+- [`<div>` (Block container)](div.md) — The block-level sibling to the `<span>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<span>` is an inline container.
-
 ---
 
 ## 2. Term Category
@@ -238,10 +237,13 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 > **Explanation:** `<span>` allows targeting specific inline text substrings for CSS styling.
 
 ## 7. Related Terms
-- [`<div>` (Block container)](../level_02/div.md) — The block-level equivalent of `<span>`.
+- [`<div>` (Block container)](div.md) — The block-level equivalent of `<span>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic inline tags.
-- [`<strong>` & `<em>`](../level_02/strong_em.md) — Semantic inline tags that should be used instead of `<span>` when text needs structural emphasis.
-
+- [`<strong>` & `<em>`](strong_em.md) — Semantic inline tags that should be used instead of `<span>` when text needs structural emphasis.
+- [`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`](b_i_u_vs_strong_em.md) — Related concept: `<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`.
+- [`<pre>` & `<code>`](pre_code.md) — Related concept: `<pre>` & `<code>`.
+- [`<sup>` & `<sub>`](sup_sub.md) — Related concept: `<sup>` & `<sub>`.
+- [`<mark>`](../level_06/mark.md) — Related concept: `<mark>`.
 ---
 
 ## 8. Key Takeaways

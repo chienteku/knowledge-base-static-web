@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — How compiler optimizations eliminate high-level function call overhead.
-- [Functions](../level_01/function.md) — Function calls, stack frames, and parameter passing mechanics.
-- [Link-Time Optimization (LTO)](../level_15/link_time_optimization.md) — Cross-crate optimization pipeline paired with inlining.
+
+- [Zero-Cost Abstractions](zero_cost_abstractions.md) — How compiler optimizations eliminate high-level function call overhead.
+- [Functions (`fn`)](../level_01/function.md) — Function calls, stack frames, and parameter passing mechanics.
+- [Link-Time Optimization (LTO)](link_time_optimization.md) — Cross-crate optimization pipeline paired with inlining.
 
 ---
 
@@ -434,10 +435,10 @@ Design a packet parsing driver that:
 
 ## 7. Related Terms
 
-- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Inlining is a core mechanism enabling zero-cost abstractions.
-- [Link-Time Optimization (LTO)](../level_15/link_time_optimization.md) — Cross-crate optimization allowing inlining without `#[inline]`.
-- [`#[cold]` / `#[hot]`](../level_15/cold_hot_attributes.md) — Compiler attributes for branch prediction and call frequency.
-- [Release Profile](../level_15/release_profile.md) — Cargo build profile where inlining optimizations are enabled.
+
+- [Zero-Cost Abstractions](zero_cost_abstractions.md) — Inlining is a core mechanism enabling zero-cost abstractions.
+- [Link-Time Optimization (LTO)](link_time_optimization.md) — Cross-crate optimization allowing inlining without `#[inline]`.
+- [Release Profile](release_profile.md) — Cargo build profile where inlining optimizations are enabled.
 
 ---
 

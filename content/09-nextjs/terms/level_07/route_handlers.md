@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The routing system.
-- [HTTP Methods](../level_07/http_methods.md) — GET, POST, PUT, DELETE.
-
+- [HTTP Methods (GET, POST, PUT, DELETE)](http_methods.md) — GET, POST, PUT, DELETE.
 ---
 
 ## 2. Term Category
@@ -175,9 +174,16 @@ export async function POST(req: Request) {
 ---
 
 ## 7. Related Terms
-- [`NextRequest` & `NextResponse`](../level_07/next_request_response.md) — The Next.js specific extensions to the standard Web Request/Response objects.
-- [Server Actions](../level_06/server_actions.md) — The alternative to Route Handlers for internal app mutations.
-
+- [`NextRequest` & `NextResponse`](next_request_response.md) — The Next.js specific extensions to the standard Web Request/Response objects.
+- [Server Actions Overview (`"use server"`)](../level_06/server_actions.md) — The alternative to Route Handlers for internal app mutations.
+- [Client-side Fetching (SWR / React Query)](../level_05/client_fetching.md) — Related concept: Client-side Fetching (SWR / React Query).
+- [Dynamic Route Handlers](dynamic_route_handlers.md) — Related concept: Dynamic Route Handlers.
+- [HTTP Methods (GET, POST, PUT, DELETE)](http_methods.md) — Related concept: HTTP Methods (GET, POST, PUT, DELETE).
+- [Middleware vs Route Handlers](middleware_vs_route_handlers.md) — Related concept: Middleware vs Route Handlers.
+- [Draft Mode](../level_10/draft_mode.md) — Related concept: Draft Mode.
+- [Edge Runtime vs Node.js Runtime](../level_10/edge_runtime.md) — Related concept: Edge Runtime vs Node.js Runtime.
+- [Caching Route Handlers](caching_route_handlers.md) — Caching Route Handlers.
+- [Middleware (`middleware.ts`)](../level_10/middleware.md) — Related concept: Middleware (`middleware.ts`).
 ---
 
 ## 8. Key Takeaways

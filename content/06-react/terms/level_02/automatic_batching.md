@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [State](../level_02/state.md) — The variables being modified.
-- [Re-rendering](../level_02/re_rendering.md) — The UI update cycle triggered by state changes.
-- [`useState` Hook](../level_02/use_state.md) — The hook used to trigger state updates.
-
+- [State](state.md) — The variables being modified.
+- [Re-rendering](re_rendering.md) — The UI update cycle triggered by state changes.
+- [`useState` Hook](use_state.md) — The hook used to trigger state updates.
 ---
 
 ## 2. Term Category
@@ -238,9 +237,8 @@ function RenderCounter() {
 > **Explanation:** Automatic batching groups all state updates within a microtask into a single re-render.
 
 ## 7. Related Terms
-- [Re-rendering](../level_02/re_rendering.md) — The UI update cycle triggered by state changes.
-- [`useState` Hook](../level_02/use_state.md) — The hook used to define and trigger state updates.
-
+- [Re-rendering](re_rendering.md) — The UI update cycle triggered by state changes.
+- [`useState` Hook](use_state.md) — The hook used to define and trigger state updates.
 ---
 
 ## 8. Key Takeaways

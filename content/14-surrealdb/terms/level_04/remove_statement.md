@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](define_table.md) — The schema generation context.
 - [`IF NOT EXISTS` / `IF EXISTS`](../level_03/if_not_exists.md) — The execution guards.
 
@@ -197,6 +198,7 @@ Write the SurrealQL commands to:
 > **Explanation:** `REMOVE DATABASE` drops database schemas and all associated records.
 
 ## 7. Related Terms
+
 - [`DEFINE TABLE`](define_table.md) — The table creation DDL.
 - [`DELETE`](../level_03/delete.md) — Data record deletion.
 

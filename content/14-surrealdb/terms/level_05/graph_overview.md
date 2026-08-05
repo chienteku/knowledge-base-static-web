@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Record Link (Concept)](record_link_concept.md) — The single reference link.
 - [`DEFINE TABLE`](../level_04/define_table.md) — Table structure configurations.
 
@@ -230,8 +231,10 @@ Classify the following tables as either **Nodes** (entity tables) or **Edges** (
 > **Explanation:** `RELATE node->edge:id->node` creates graph edges with explicit custom Record IDs.
 
 ## 7. Related Terms
+
 - [Record Link (Concept)](record_link_concept.md) — The single reference link.
 - [`RELATE` Statement](relate.md) — Creating graph edges.
+- [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — Graph traversal vs SQL JOINs.
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<link>`](../level_08/link.md) — The tag used to connect external assets.
+- [`<link>`](link.md) — The tag used to connect external assets.
 - [`<head>`](../level_01/head.md) — The metadata head container.
-
 ---
 
 ## 2. Term Category
@@ -205,10 +204,9 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 > **Explanation:** `rel="apple-touch-icon"` specifies home screen bookmark icon for iOS Safari.
 
 ## 7. Related Terms
-- [`<link>`](../level_08/link.md) — The resource connection element.
+- [`<link>`](link.md) — The resource connection element.
 - [`<head>`](../level_01/head.md) — The parent container.
-- [Open Graph Tags (`og:`)](../level_08/open_graph.md) — Social media preview properties.
-
+- [Open Graph Tags (`og:`)](open_graph.md) — Social media preview properties.
 ---
 
 ## 8. Key Takeaways

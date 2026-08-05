@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — What the Router is swapping in and out.
 - [Vue Instance](../level_01/vue_instance.md) — Where the Router is registered as a plugin.
-
 ---
 
 ## 2. Term Category
@@ -185,10 +184,15 @@ const router = createRouter({
 ---
 
 ## 7. Related Terms
-- [Router View / Router Link](../level_06/router_view_link.md) — The HTML tags used to interact with the Router.
-- [Dynamic Routing](../level_06/dynamic_routing.md) — Passing variables in the URL.
-- [Programmatic Navigation (`useRouter` / `useRoute`)](../level_06/programmatic_navigation.md) — Navigating inside component scripts.
-
+- [Router View / Router Link](router_view_link.md) — The HTML tags used to interact with the Router.
+- [Dynamic Routing](dynamic_routing.md) — Passing variables in the URL.
+- [Programmatic Navigation (`useRouter` / `useRoute`)](programmatic_navigation.md) — Navigating inside component scripts.
+- [Navigation Guards](navigation_guards.md) — Related concept: Navigation Guards.
+- [Nested Routes](nested_routes.md) — Related concept: Nested Routes.
+- [Route Params, Query & Meta](route_params_query_meta.md) — Related concept: Route Params, Query & Meta.
+- [Async Components](../level_08/async_components.md) — Related concept: Async Components.
+- [Client-Side Rendering (CSR)](../level_09/csr.md) — Related concept: Client-Side Rendering (CSR).
+- [Nuxt.js](../level_09/nuxt.md) — Related concept: Nuxt.js.
 ---
 
 ## 8. Key Takeaways

@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Understanding cross-language binary interoperability.
-- [`extern "C"`](../level_13/extern_c.md) — Exporting Rust functions using C ABI conventions.
-- [`#[repr(C)]`](../level_13/repr_c.md) — Creating C-compatible struct and enum layouts.
-- [`bindgen`](../level_13/bindgen.md) — The counterpart tool (generating Rust bindings from C headers).
+
+- [FFI (Foreign Function Interface)](ffi.md) — Understanding cross-language binary interoperability.
+- [`extern "C"`](extern_c.md) — Exporting Rust functions using C ABI conventions.
+- [`bindgen`](bindgen.md) — The counterpart tool (generating Rust bindings from C headers).
 
 ---
 
@@ -739,10 +739,10 @@ Write the complete Rust code that:
 
 ## 7. Related Terms
 
-- [`bindgen`](../level_13/bindgen.md) — The counterpart tool (parsing C headers to generate Rust code).
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — The cross-language interface mechanism.
-- [`extern "C"`](../level_13/extern_c.md) — C calling convention keyword driving `cbindgen` export scanning.
-- [`#[repr(C)]`](../level_13/repr_c.md) — Memory representation attribute required for `cbindgen` struct exports.
+
+- [`bindgen`](bindgen.md) — The counterpart tool (parsing C headers to generate Rust code).
+- [FFI (Foreign Function Interface)](ffi.md) — The cross-language interface mechanism.
+- [`extern "C"`](extern_c.md) — C calling convention keyword driving `cbindgen` export scanning.
 
 ---
 

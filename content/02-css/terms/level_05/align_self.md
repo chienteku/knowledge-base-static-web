@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`align-items`](../level_05/align_items.md) — The parent property that `align-self` overrides.
-
+- [`align-items`](align_items.md) — The parent property that `align-self` overrides.
 ---
 
 ## 2. Term Category
@@ -241,10 +240,10 @@ If you want to push a single child item to the far-right, use the margin trick: 
 > **Explanation:** `auto` inherits the parent container's `align-items` rule.
 
 ## 7. Related Terms
-- [`align-items`](../level_05/align_items.md) — The parent alignment controller.
-- [`justify-content`](../level_05/justify_content.md) — The main axis spacing controller.
-- [`order`](../level_05/order.md) — The visual child ordering property.
-
+- [`align-items`](align_items.md) — The parent alignment controller.
+- [`justify-content`](justify_content.md) — The main axis spacing controller.
+- [`order`](order.md) — The visual child ordering property.
+- [`flex-direction`](flex_direction.md) — Related concept: `flex-direction`.
 ---
 
 ## 8. Key Takeaways

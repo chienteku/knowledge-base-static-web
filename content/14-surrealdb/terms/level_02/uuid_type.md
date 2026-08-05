@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -187,8 +188,9 @@ Assume `tracking_id` is defined as `TYPE uuid` on the table.
 > **Explanation:** `TYPE uuid` enforces binary 16-byte UUID field validation.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
-- [ID Generation Strategies](id_generation.md) — Generating Record IDs.
+- [ID Generation Strategies (`ulid()`, `uuid()`, `rand::*`, String, Numeric)](id_generation.md) — Generating Record IDs.
 
 ---
 

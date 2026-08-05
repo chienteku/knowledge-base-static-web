@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`WHERE` Clause](where.md) — The conditional context.
 
 ---
@@ -206,8 +207,11 @@ SELECT * FROM article WHERE title ~ "rust"; // Fuzzy string/regex match operator
 > **Explanation:** `<inside>` tests geospatial point containment inside polygon boundaries.
 
 ## 7. Related Terms
+
 - [`WHERE` Clause](where.md) — The conditional context.
-- [Array Functions](../level_06/array_functions.md) — Manipulating lists.
+- [Array Functions (`array::*`)](../level_06/array_functions.md) — Manipulating lists.
+- [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](update_strategies.md) — Related concept: `UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`).
+- [`search::*` Functions & `@@` Operator](../level_07/search_functions.md) — Related concept: `search::*` Functions & `@@` Operator.
 
 ---
 

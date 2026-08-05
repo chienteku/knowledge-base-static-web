@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$project` / `$addFields` Stages](project_addfields.md) — The stages where expressions execute.
 
@@ -242,6 +243,7 @@ It cannot process expression transformations like `$concat` natively.
 > **Explanation:** `$map` transforms each item in an array using specified expression logic.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$project` / `$addFields` Stages](project_addfields.md) — The executing stages.
 

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [React Components](../level_01/react_components.md) — The building blocks that compose layout relationships.
-
 ---
 
 ## 2. Term Category
@@ -247,8 +246,7 @@ export default function SidebarLayout({ children }: SidebarLayoutProps) {
 
 ## 7. Related Terms
 - [React Components](../level_01/react_components.md) — The parent units that wrap children.
-- [layout.tsx](../level_02/layout.md) — The primary Next.js file that wraps pages via the children prop.
-
+- [`layout.tsx`](layout.md) — The primary Next.js file that wraps pages via the children prop.
 ---
 
 ## 8. Key Takeaways

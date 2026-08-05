@@ -9,7 +9,6 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<div>` is one of the most heavily used elements in web development.
 - [Attribute](../level_01/attribute.md) — `<div>`s are almost always paired with `class` or `id` attributes.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<div>` is a block-level container.
-
 ---
 
 ## 2. Term Category
@@ -250,10 +249,13 @@ The `<div>` is that plain cardboard box. It doesn't do anything on its own; it j
 > **Explanation:** `<div>` is the designated element for non-semantic CSS layout grouping.
 
 ## 7. Related Terms
-- [`<span>`](../level_02/span.md) — The inline equivalent of the `<div>`.
+- [`<span>` (Inline container)](span.md) — The inline equivalent of the `<div>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing generic divisions.
 - [Semantic HTML](../level_06/semantic_html.md) — The modern alternative to using `<div>` for everything.
-
+- [`<figure>` & `<figcaption>`](../level_03/figure_figcaption.md) — Related concept: `<figure>` & `<figcaption>`.
+- [`<article>` and `<section>`](../level_06/article_section.md) — Related concept: `<article>` and `<section>`.
+- [`<aside>`](../level_06/aside.md) — Related concept: `<aside>`.
+- [`<details>` & `<summary>`](../level_06/details_summary.md) — Related concept: `<details>` & `<summary>`.
 ---
 
 ## 8. Key Takeaways

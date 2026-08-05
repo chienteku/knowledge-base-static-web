@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [One-to-Many Relationship (Embedding vs Referencing)](one_to_many.md) — The parent cardinality models.
+
+- [One-to-Many Relationship (Embedding vs. Referencing)](one_to_many.md) — The parent cardinality models.
 - [Array Query Operators (`$elemMatch`, `$all`, `$size`)](../level_04/array_query_operators.md) — Querying reference lists.
 
 ---
@@ -209,8 +210,9 @@ Store array references on the side with smaller cardinality (e.g. user.groupIds)
 > **Explanation:** Passing a scalar ObjectId queries if the ID exists inside the `courseIds` array.
 
 ## 7. Related Terms
-- [One-to-Many Relationship (Embedding vs Referencing)](one_to_many.md) — The cardinality context.
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The parent modeling rules.
+
+- [One-to-Many Relationship (Embedding vs. Referencing)](one_to_many.md) — The cardinality context.
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling rules.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Interfaces](../level_03/interfaces.md) — The structure this syntax is used within.
-
+- [Interfaces](interfaces.md) — The structure this syntax is used within.
 ---
 
 ## 2. Term Category
@@ -171,9 +170,10 @@ interface Good {
 > **Explanation:** JS coerces numeric index keys to strings during property lookups.
 
 ## 7. Related Terms
-- [Interfaces](../level_03/interfaces.md) — Where index signatures live.
-- [Utility Types](../level_08/utility_types.md) — The `Record` type is the generic equivalent of this.
-
+- [Interfaces](interfaces.md) — Where index signatures live.
+- [Utility Types Overview](../level_08/utility_types.md) — The `Record` type is the generic equivalent of this.
+- [Excess Property Checks](excess_property_checks.md) — Related concept: Excess Property Checks.
+- [`Record<Keys, Type>`](../level_08/record.md) — Related concept: `Record<Keys, Type>`.
 ---
 
 ## 8. Key Takeaways

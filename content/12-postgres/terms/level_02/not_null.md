@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [NULL](null.md) — Understanding the missing state we are trying to block.
-
+- [`NULL`](null.md) — Understanding the missing state we are trying to block.
 ---
 
 ## 2. Term Category
@@ -198,9 +197,9 @@ email TEXT NOT NULL -- Guarantees presence of value
 > **Explanation:** `DROP NOT NULL` allows target columns to store NULL values.
 
 ## 7. Related Terms
-- [NULL](null.md) — The unset state.
+- [`NULL`](null.md) — The unset state.
 - [`DEFAULT` Value](default_value.md) — Providing fallbacks for required columns.
-
+- [`CHECK` Constraint](check_constraint.md) — Related concept: `CHECK` Constraint.
 ---
 
 ## 8. Key Takeaways

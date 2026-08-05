@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Boolean](../level_01/boolean.md) — A logical entity having two values: `true` or `false`.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
-
 ---
 
 ## 2. Term Category
@@ -210,9 +209,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`switch`](../level_02/switch.md) — Evaluates an expression against multiple cases.
-- [Truthy / Falsy](../level_02/truthy_falsy.md) — Values that evaluate to `true` or `false`.
-
+- [switch](switch.md) — Evaluates an expression against multiple cases.
+- [Truthy / Falsy](truthy_falsy.md) — Values that evaluate to `true` or `false`.
+- [Comparison Operators](../level_01/comparison_operators.md) — Related concept: Comparison Operators.
+- [Ternary / Conditional Operator (? :)](../level_01/ternary_operator.md) — Related concept: Ternary / Conditional Operator (? :).
+- [Logical Operators](logical_operators.md) — Related concept: Logical Operators.
 ---
 
 ## 8. Key Takeaways

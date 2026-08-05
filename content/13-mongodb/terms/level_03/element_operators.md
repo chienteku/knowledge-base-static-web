@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter parameter structure.
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The dynamic context requiring structure queries.
 
@@ -222,8 +223,11 @@ Write the query to locate all products where the `price` field is stored as the 
 > **Explanation:** `$type: "array"` checks if a field contains BSON array data.
 
 ## 7. Related Terms
+
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The paradigm.
 - [`null`](../level_02/null_type.md) — The null indicator difference.
+- [Querying `null` and Missing Fields](../level_04/querying_null_missing.md) — Related concept: Querying `null` and Missing Fields.
+- [The Polymorphic Pattern](../level_05/polymorphic_pattern.md) — Related concept: The Polymorphic Pattern.
 
 ---
 

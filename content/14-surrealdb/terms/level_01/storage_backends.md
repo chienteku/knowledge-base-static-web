@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The startup command configuration.
 
 ---
@@ -203,8 +204,12 @@ Select the optimal storage backend (**memory**, **file**, or **tikv**) for each 
 > **Explanation:** SurrealKV is SurrealDB's native, zero-dependency embedded Rust storage backend.
 
 ## 7. Related Terms
+
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The startup command configuration.
-- [TiKV Backend](../level_10/tikv_backend.md) — The distributed mode.
+- [TiKV Backend (Distributed Mode)](../level_10/tikv_backend.md) — The distributed mode.
+- [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Related concept: Transaction Isolation & Atomicity Semantics.
+- [Docker Deployment](../level_10/docker_deployment.md) — Related concept: Docker Deployment.
+- [Embedding SurrealDB (Rust / WASM)](../level_10/embedding.md) — Related concept: Embedding SurrealDB (Rust / WASM).
 
 ---
 

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Array Update Operators (`$push`, `$pull`, etc.)](../level_03/array_update_operators.md) — The parent array update operations.
+
+- [Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)](../level_03/array_update_operators.md) — The parent array update operations.
 
 ---
 
@@ -199,7 +200,8 @@ Write the update query to find the company with `_id: 10` and replace its `"IT"`
 > **Explanation:** `"array.$[].field"` applies updates to all array elements in target documents.
 
 ## 7. Related Terms
-- [Array Update Operators (`$push`, `$pull`, etc.)](../level_03/array_update_operators.md) — The parent update operators.
+
+- [Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)](../level_03/array_update_operators.md) — The parent update operators.
 - [`arrayFilters` Option](array_filters.md) — Custom filtered updates.
 
 ---

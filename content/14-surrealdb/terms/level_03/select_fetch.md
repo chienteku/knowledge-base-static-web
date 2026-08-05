@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`SELECT`](select.md) — The parent query statement.
-- [Record Link Type](../level_02/record_link_type.md) — The pointer fields targeted.
+- [`record` (Record Link Type)](../level_02/record_link_type.md) — The pointer fields targeted.
 
 ---
 
@@ -215,8 +216,9 @@ Write the SurrealQL query to retrieve all orders, replacing the customer and bil
 > **Explanation:** `FETCH` expands single record links and arrays of record links seamlessly.
 
 ## 7. Related Terms
+
 - [`SELECT`](select.md) — The parent query statement.
-- [Record Link Type](../level_02/record_link_type.md) — The pointer fields targeted.
+- [`record` (Record Link Type)](../level_02/record_link_type.md) — The pointer fields targeted.
 
 ---
 

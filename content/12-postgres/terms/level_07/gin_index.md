@@ -9,7 +9,6 @@
 - [Index (Concept)](index_concept.md) — The parent performance concept.
 - [`ARRAY` Type](../level_06/array_type.md) — The multi-value array column standard.
 - [`JSON` / `JSONB` Type](../level_06/json_jsonb.md) — Nested document storage structures.
-
 ---
 
 ## 2. Term Category
@@ -205,7 +204,7 @@ Tune GIN fastupdate buffers or limit GIN indexes to read-heavy search tables
 - [B-tree Index](btree_index.md) — The default scalar index type.
 - [`ARRAY` Type](../level_06/array_type.md) — The flat array typing standard.
 - [`JSON` / `JSONB` Type](../level_06/json_jsonb.md) — Storing nested documents.
-
+- [Full-Text Search (`tsvector`, `tsquery`)](../level_10/full_text_search.md) — Related concept: Full-Text Search (`tsvector`, `tsquery`).
 ---
 
 ## 8. Key Takeaways

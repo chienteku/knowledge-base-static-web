@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server process basics.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Distributed database engines.
 
@@ -189,6 +190,7 @@ c. PostgreSQL
 > **Explanation:** SurrealDB Cloud handles database clustering, backups, and security patching.
 
 ## 7. Related Terms
+
 - [Surrealist (Web IDE)](../level_01/surrealist.md) — Visual cloud query editor.
 - [Docker Deployment](docker_deployment.md) — Self-hosted container deployment alternative.
 - [TiKV Backend (Distributed Mode)](tikv_backend.md) — Distributed cloud storage engine.

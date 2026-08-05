@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -187,9 +188,11 @@ RETURN array::add($arr, 3); // Correct array element addition
 > **Explanation:** `array::distinct()` removes duplicate values from SurrealQL arrays.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
-- [Set Type](set_type.md) — Unique list container.
-- [Array Functions](../level_06/array_functions.md) — Array manipulations.
+- [`set`](set_type.md) — Unique list container.
+- [Array Functions (`array::*`)](../level_06/array_functions.md) — Array manipulations.
+- [`FOR` Expression](../level_06/for_expression.md) — Related concept: `FOR` Expression.
 
 ---
 

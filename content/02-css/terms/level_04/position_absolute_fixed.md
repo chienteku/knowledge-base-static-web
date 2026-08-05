@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`position: static` vs `relative`](../level_04/position_static_relative.md) — Absolute positioning heavily relies on relative positioning to work correctly!
-- [`top`, `bottom`, `left`, `right`](../level_04/top_bottom_left_right.md) — Used to set the exact coordinates.
-
+- [`position: static` vs `relative`](position_static_relative.md) — Absolute positioning heavily relies on relative positioning to work correctly!
+- [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Used to set the exact coordinates.
 ---
 
 ## 2. Term Category
@@ -288,10 +287,12 @@ To place an absolute element exactly where you want it inside a container, you M
 > **Explanation:** Fixed elements remain pinned to the screen viewport during page scrolling.
 
 ## 7. Related Terms
-- [`position: static` vs `relative`](../level_04/position_static_relative.md) — The required partner for `absolute`.
-- [`position: sticky`](../level_04/position_sticky.md) — The hybrid offset scrolling behavior.
-- [`z-index`](../level_04/z_index.md) — Overlapping z-axis stacking values.
-
+- [`position: static` vs `relative`](position_static_relative.md) — The required partner for `absolute`.
+- [`position: sticky`](position_sticky.md) — The hybrid offset scrolling behavior.
+- [`z-index`](z_index.md) — Overlapping z-axis stacking values.
+- [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
+- [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Related concept: `top`, `bottom`, `left`, `right`.
+- [Stacking Context](stacking_context.md) — Stacking context.
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`match`](../level_02/match.md) — The full construct this macro is sugar over.
-- [Pattern Matching](../level_02/pattern_matching.md) — The pattern grammar accepted on the right-hand side.
+
+- [`match`](match.md) — The full construct this macro is sugar over.
+- [Pattern Matching](pattern_matching.md) — The pattern grammar accepted on the right-hand side.
 - [Macros](../level_01/macros.md) — The general mechanism `matches!` is built with.
 
 ---
@@ -546,10 +547,11 @@ Include a complete unit test module `#[cfg(test)] mod tests` using `assert!`, `a
 
 ## 6. Related Terms
 
-- [`match`](../level_02/match.md) — The full construct `matches!` expands into internally.
-- [Pattern Matching](../level_02/pattern_matching.md) — Supplies the or-patterns (`|`) and guards (`if`) `matches!` accepts.
+
+- [`match`](match.md) — The full construct `matches!` expands into internally.
+- [Pattern Matching](pattern_matching.md) — Supplies the or-patterns (`|`) and guards (`if`) `matches!` accepts.
 - [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — What `==` requires, and what `matches!` deliberately does **not** require.
-- [`let else` Statement](../level_02/let_else_statement.md) — A sibling pattern-matching-flattening macro/statement, for a different use case (extraction rather than boolean testing).
+- [`let else` Statement](let_else_statement.md) — A sibling pattern-matching-flattening macro/statement, for a different use case (extraction rather than boolean testing).
 
 ---
 

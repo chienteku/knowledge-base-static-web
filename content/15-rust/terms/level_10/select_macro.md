@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`Tokio`](../level_10/tokio.md) — The async runtime providing the `select!` macro.
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that `select!` races against each other.
+
+- [`tokio`](../level_16/tokio.md) — The async runtime providing the `select!` macro.
+- [`Future` Trait](future_trait.md) — The state machines that `select!` races against each other.
 
 ---
 
@@ -402,15 +403,13 @@ Build a hedged RPC dispatcher using `futures::future::select_all` combined with 
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`join!`](../level_10/join_macro.md) — Waits for *all* futures to complete instead of just the first one.
-> - [`tokio::spawn`](../level_10/tokio_spawn.md) — How to run tasks in the background independently.
-> - [`Future` Trait](../level_10/future_trait.md) — The state machine interface used by `select!`.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`join!` Macro](join_macro.md) — The opposite of `select!` (waits for *all* futures to finish).
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`tokio::select!`** races multiple Futures and executes the branch for whichever one finishes **first**.
 > - It **instantly cancels and drops** all the losing Futures.

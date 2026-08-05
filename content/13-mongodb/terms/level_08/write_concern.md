@@ -6,6 +6,8 @@
 ---
 
 ## 1. Prerequisites
+
+- [`insertOne()` / `insertMany()`](../level_03/insert.md) — Write operations.
 - [Multi-Document Transaction](multi_document_transaction.md) — The transaction context.
 - [Replica Set](../level_09/replica_set.md) — The distributed cluster context.
 
@@ -201,8 +203,10 @@ State the optimal Write Concern parameters (`w` and `j` settings) to handle this
 > **Explanation:** `wtimeoutMS` aborts write concern waiting if replication fails to fulfill requirements in time.
 
 ## 7. Related Terms
+
 - [Read Concern](read_concern.md) — Read durability parameters.
 - [Replica Set](../level_09/replica_set.md) — The cluster context.
+- [`WriteConcernError` / `WriteError`](write_errors.md) — Related concept: `WriteConcernError` / `WriteError`.
 
 ---
 

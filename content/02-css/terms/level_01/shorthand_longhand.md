@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Ruleset (Declaration, Property, Value)](../level_01/ruleset.md) — Understanding properties, values, and declarations.
-- [Selectors](../level_01/selectors.md) — Custom styling targets.
-
+- [Ruleset (Declaration, Property, Value)](ruleset.md) — Understanding properties, values, and declarations.
+- [Selectors (Element, Class, ID)](selectors.md) — Custom styling targets.
 ---
 
 ## 2. Term Category
@@ -265,11 +264,12 @@ padding: 10px 20px 30px 40px;
 > **Explanation:** `border` shorthand combines width, style, and color.
 
 ## 7. Related Terms
-- [Ruleset (Declaration, Property, Value)](../level_01/ruleset.md) — The wrapper syntax.
+- [Ruleset (Declaration, Property, Value)](ruleset.md) — The wrapper syntax.
 - [Margin](../level_02/margin.md) — The outer spacing box utilizing shorthand properties.
 - [Padding](../level_02/padding.md) — The inner spacing box utilizing shorthand properties.
 - [Border](../level_02/border.md) — The frame border utilizing shorthand properties.
-
+- [`background` Shorthand & `background-image`](../level_03/background_shorthand.md) — Related concept: `background` Shorthand & `background-image`.
+- [`flex-grow` / `flex-shrink` / `flex-basis`](../level_05/flex_properties.md) — Related concept: `flex-grow` / `flex-shrink` / `flex-basis`.
 ---
 
 ## 8. Key Takeaways

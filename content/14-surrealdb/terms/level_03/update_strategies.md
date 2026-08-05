@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`UPDATE`](update.md) — The parent modification statement.
 
 ---
@@ -214,8 +215,12 @@ UPDATE user:alice PATCH [{ op: "replace", path: "/age", value: 30 }];
 > **Explanation:** `-=` operator removes specified items from array or set fields.
 
 ## 7. Related Terms
+
 - [`UPDATE`](update.md) — The parent modification statement.
 - [Operators in SurrealQL](operators.md) — The assignment operators.
+- [`CREATE` with Content (`SET` vs `CONTENT`)](create_set_content.md) — Related concept: `CREATE` with Content (`SET` vs `CONTENT`).
+- [Data Migrations in SurrealDB](../level_10/data_migrations.md) — Related concept: Data Migrations in SurrealDB.
+- [SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)](../level_10/sdk_crud.md) — Related concept: SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`).
 
 ---
 

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — The left-side preservation default.
-
 ---
 
 ## 2. Term Category
@@ -242,7 +241,6 @@ SELECT * FROM table_a INNER JOIN table_b ON ...;
 ## 7. Related Terms
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — The left-side master default.
 - [`INNER JOIN`](inner_join.md) — The intersection-only match.
-
 ---
 
 ## 8. Key Takeaways

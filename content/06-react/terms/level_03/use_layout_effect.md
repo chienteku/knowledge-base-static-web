@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useEffect` Hook](../level_03/use_effect.md) — The asynchronous counterpart to this hook.
-- [Component Lifecycle](../level_03/component_lifecycle.md) — The rendering stages where effects are scheduled.
-
+- [`useEffect` Hook](use_effect.md) — The asynchronous counterpart to this hook.
+- [Component Lifecycle](component_lifecycle.md) — The rendering stages where effects are scheduled.
 ---
 
 ## 2. Term Category
@@ -221,9 +220,8 @@ Use useEffect for SSR components or fallback to useEffect on server
 > **Explanation:** Use `useLayoutEffect` only when reading/mutating DOM layout measurements to prevent UI flickering.
 
 ## 7. Related Terms
-- [`useEffect` Hook](../level_03/use_effect.md) — The standard asynchronous hook for side effects.
+- [`useEffect` Hook](use_effect.md) — The standard asynchronous hook for side effects.
 - [`useRef` Hook](../level_04/use_ref.md) — The hook used to reference DOM nodes for layout measurement.
-
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Closure (`|...|`)](../level_06/closure.md) — The anonymous function syntax used to give the new thread its instructions.
-- [`move` Keyword](../level_06/move_closure.md) — The keyword required to safely transfer variables into the new thread.
+
+- [Closure](../level_06/closure.md) — The anonymous function syntax used to give the new thread its instructions.
+- [`move` Closure](../level_06/move_closure.md) — The keyword required to safely transfer variables into the new thread.
 
 ---
 
@@ -529,8 +530,16 @@ Implement a resilient task dispatch manager `execute_task_batch` that accepts a 
 
 ## 6. Related Terms
 
-- [`move` Keyword](../level_06/move_closure.md) — The keyword required to safely transfer external variables into the thread closure.
-- [`Send` Trait](../level_09/send_trait.md) — The upcoming trait that determines if a variable is actually *allowed* to be moved into a thread!
+
+- [`move` Closure](../level_06/move_closure.md) — The keyword required to safely transfer external variables into the thread closure.
+- [`Send` Trait](send_trait.md) — The upcoming trait that determines if a variable is actually *allowed* to be moved into a thread!
+- [Channel (`mpsc`)](channel_mpsc.md) — Related concept: Channel (`mpsc`).
+- [`Condvar` & `Barrier`](condvar_barrier.md) — Related concept: `Condvar` & `Barrier`.
+- [Rayon](rayon.md) — Related concept: Rayon.
+- [Scoped Threads (`std::thread::scope`)](scoped_threads.md) — Related concept: Scoped Threads (`std::thread::scope`).
+- [`thread_local!` Macro](thread_local_macro.md) — Related concept: `thread_local!` Macro.
+- [`Duration` and `Instant`](../level_01/duration_instant.md) — Related concept: `Duration` and `Instant`.
+- [`thread::spawn`](thread_spawn.md) — Related concept: `thread::spawn`.
 
 ---
 

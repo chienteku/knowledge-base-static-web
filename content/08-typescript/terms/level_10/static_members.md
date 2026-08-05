@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Classes](../level_10/classes.md) — The foundation of Object-Oriented Programming.
-
+- [Classes Overview](classes.md) — The foundation of Object-Oriented Programming.
 ---
 
 ## 2. Term Category

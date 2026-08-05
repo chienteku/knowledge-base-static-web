@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- None! This is the foundation of the language.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category

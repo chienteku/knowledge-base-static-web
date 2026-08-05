@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The loop phases where callbacks are scheduled.
-- [Microtasks vs Macrotasks](./microtasks_macrotasks.md) — The standard JavaScript microtask queue priorities.
-
+- [Microtasks vs Macrotasks](microtasks_macrotasks.md) — The standard JavaScript microtask queue priorities.
 ---
 
 ## 2. Term Category
@@ -199,9 +198,8 @@ app.get('/health', (res) => res.send('OK'));
 > **Explanation:** `process.nextTick` defers emission until after current call stack finishes listener attachments.
 
 ## 7. Related Terms
-- [Microtasks vs Macrotasks](./microtasks_macrotasks.md) — The standard V8 microtask scheduling queues.
+- [Microtasks vs Macrotasks](microtasks_macrotasks.md) — The standard V8 microtask scheduling queues.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The parent routing system managing execution phases.
-
 ---
 
 ## 8. Key Takeaways

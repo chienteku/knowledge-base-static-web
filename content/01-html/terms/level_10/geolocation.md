@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`<script>`](../level_08/script.md) — The programming script block required to execute the API call.
 - [DOM (Document Object Model)](../level_09/dom.md) — The window Navigator bindings hosting the API.
-
 ---
 
 ## 2. Term Category
@@ -312,9 +311,8 @@ navigator.geolocation.getCurrentPosition(
 
 ## 7. Related Terms
 - [`<script>`](../level_08/script.md) — The script environment executing API commands.
-- [Web Storage (Local/Session Storage)](../level_10/web_storage.md) — Used to save coordinate preferences locally.
-- [Content Security Policy (CSP) & HTML Security](../level_10/security.md) — Defining secure context parameters.
-
+- [Web Storage (Local/Session Storage)](web_storage.md) — Used to save coordinate preferences locally.
+- [Content Security Policy (CSP) & HTML Security](security.md) — Defining secure context parameters.
 ---
 
 ## 8. Key Takeaways

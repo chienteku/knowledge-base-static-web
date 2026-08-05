@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Edge Properties](edge_properties.md) — The metadata on edges.
 - [`WHERE` Clause](../level_03/where.md) — The query filter context.
 
@@ -238,6 +239,7 @@ Write the SurrealQL query to:
 > **Explanation:** `->(node WHERE condition)` filters graph traversals by target node properties.
 
 ## 7. Related Terms
+
 - [Edge Properties](edge_properties.md) — The metadata on edges.
 - [`WHERE` Clause](../level_03/where.md) — The query filter context.
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`fn` (Functions)](../level_01/fn.md) — The primary place you will write generic code.
-- [Structs](../level_02/struct.md) / [Enums](../level_02/enum.md) — The data structures you will make generic.
-- [Traits](../level_04/trait.md) — The mechanism used to restrict what a generic type is allowed to do.
+- [Struct](../level_02/struct.md)
+- [Trait](trait.md) — The mechanism used to restrict what a generic type is allowed to do.
 
 ---
 
@@ -614,8 +615,13 @@ Implement a zero-cost generic stream processing framework using generic traits, 
 
 ## 6. Related Terms
 
-- [Trait Bounds](../level_04/trait_bound.md) — The way we restrict what `<T>` is allowed to be (e.g., "T must be something that can be added together").
-- [Monomorphization](../level_04/monomorphization.md) — The terrifying-sounding but incredibly awesome way the compiler physically implements Generics under the hood without losing performance.
+
+- [Trait Bound](trait_bound.md) — The way we restrict what `<T>` is allowed to be (e.g., "T must be something that can be added together").
+- [Monomorphization](monomorphization.md) — The terrifying-sounding but incredibly awesome way the compiler physically implements Generics under the hood without losing performance.
+- [Associated Types](associated_types.md) — Related concept: Associated Types.
+- [Trait](trait.md) — Related concept: Trait.
+- [`Sized` Trait](../level_11/sized_trait.md) — Related concept: `Sized` Trait.
+- [Type-State Pattern](../level_14/type_state_pattern.md) — Related concept: Type-State Pattern.
 
 ---
 

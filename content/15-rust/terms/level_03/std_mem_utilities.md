@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — What these functions directly manipulate.
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The context in which "I need to move this out from behind a reference" arises.
+
+- [Ownership](ownership.md) — What these functions directly manipulate.
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The context in which "I need to move this out from behind a reference" arises.
 - [`Default` Trait](../level_04/default_trait.md) — What `mem::take` leaves behind.
 
 ---
@@ -550,10 +551,12 @@ Implement a module containing:
 
 ## 6. Related Terms
 
-- [Ownership](../level_03/ownership.md) / [Move Semantics](../level_03/move_semantics.md) — The rules these functions work within, not around.
-- [`Drop` Trait](../level_03/drop_trait.md) — What `mem::drop` triggers early, and what the "old" value's destructor still runs on after a `replace`/`take`.
+
+- [Ownership](ownership.md)
+- [`Drop` Trait](drop_trait.md) — What `mem::drop` triggers early, and what the "old" value's destructor still runs on after a `replace`/`take`.
 - [`Default` Trait](../level_04/default_trait.md) — Required by `mem::take`'s placeholder value.
 - [Memory Leaks & Reference Cycles](../level_11/memory_leaks.md) — `mem::forget` (a `std::mem` sibling) is the deliberate-leak primitive.
+- [Partial Moves & Partial Borrows](partial_moves.md) — Related concept: Partial Moves & Partial Borrows.
 
 ---
 

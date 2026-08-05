@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [insertOne() / insertMany()](insert.md) — The write operations.
+
+- [`insertOne()` / `insertMany()`](insert.md) — The write operations.
 
 ---
 
@@ -227,9 +228,12 @@ db.users.findOne({ _id: id }, { projection: { name: 1 } });
 > **Explanation:** `findOne()` returns the first matching document object directly.
 
 ## 7. Related Terms
+
 - [Query Filter (Filter Document)](query_filter.md) — The filter parameter.
 - [Cursor](cursor.md) — The pointer returned by `find()`.
 - [Projection](projection.md) — Selecting specific fields to return.
+- [`countDocuments()` / `estimatedDocumentCount()`](count_documents.md) — Related concept: `countDocuments()` / `estimatedDocumentCount()`.
+- [Geospatial Queries (`$near`, `$geoWithin`, `2dsphere`)](../level_04/geospatial_queries.md) — Related concept: Geospatial Queries (`$near`, `$geoWithin`, `2dsphere`).
 
 ---
 

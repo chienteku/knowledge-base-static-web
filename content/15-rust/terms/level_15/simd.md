@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — How LLVM auto-vectorizes loops into SIMD instructions in release mode.
-- [Release Profile](../level_15/release_profile.md) — Optimization levels driving hardware instruction generation.
-- [Arrays & Slices](../level_01/array_and_slice.md) — Contiguous memory buffers suitable for SIMD vector loading.
+
+- [Zero-Cost Abstractions](zero_cost_abstractions.md) — How LLVM auto-vectorizes loops into SIMD instructions in release mode.
+- [Release Profile](release_profile.md) — Optimization levels driving hardware instruction generation.
+- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Contiguous memory buffers suitable for SIMD vector loading.
 
 ---
 
@@ -515,10 +516,12 @@ for x in slice.iter_mut() {
 
 ## 7. Related Terms
 
-- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — How auto-vectorization transforms high-level iterators into SIMD.
-- [Release Profile](../level_15/release_profile.md) — Optimization profile driving SIMD code generation.
-- [`perf` / `flamegraph`](../level_15/perf_flamegraph.md) — Profiling tools used to detect un-vectorized loop bottlenecks.
-- [Arrays & Slices](../level_01/array_and_slice.md) — Contiguous memory buffers required for SIMD vector loading.
+
+- [Zero-Cost Abstractions](zero_cost_abstractions.md) — How auto-vectorization transforms high-level iterators into SIMD.
+- [Release Profile](release_profile.md) — Optimization profile driving SIMD code generation.
+- [`perf` / `flamegraph`](perf_flamegraph.md) — Profiling tools used to detect un-vectorized loop bottlenecks.
+- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Contiguous memory buffers required for SIMD vector loading.
+- [`#[repr(packed)]` / `#[repr(align)]`](repr_packed_align.md) — Related concept: `#[repr(packed)]` / `#[repr(align)]`.
 
 ---
 

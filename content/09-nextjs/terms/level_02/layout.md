@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`page.tsx`](../level_02/page.md) — The content that gets wrapped *inside* the layout.
-- [React Children Prop](../level_02/children_prop.md) — How the nested segments are passed into the layout.
-
+- [`page.tsx`](page.md) — The content that gets wrapped *inside* the layout.
+- [React Children Prop](children_prop.md) — How the nested segments are passed into the layout.
 ---
 
 ## 2. Term Category
@@ -186,9 +185,13 @@ const [search, setSearch] = useState(''); // ❌ State persists across all sub-r
 ---
 
 ## 7. Related Terms
-- [`page.tsx`](../level_02/page.md) — The file injected into the layout's `children`.
-- [`template.tsx`](../level_02/template.md) — A layout that *does* remount on navigation.
-
+- [`page.tsx`](page.md) — The file injected into the layout's `children`.
+- [`template.tsx`](template.md) — A layout that *does* remount on navigation.
+- [React Children Prop](children_prop.md) — Related concept: React Children Prop.
+- [Route Groups (`(group)`)](../level_03/route_groups.md) — Related concept: Route Groups (`(group)`).
+- [Parallel Routes (`@folder`)](../level_04/parallel_routes.md) — Related concept: Parallel Routes (`@folder`).
+- [Metadata API (`metadata`)](../level_09/metadata_api.md) — Related concept: Metadata API (`metadata`).
+- [`next/font` Optimization](../level_09/next_font.md) — Related concept: `next/font` Optimization.
 ---
 
 ## 8. Key Takeaways

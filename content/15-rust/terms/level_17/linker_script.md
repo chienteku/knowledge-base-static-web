@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`#![no_main]`](../level_17/no_main.md) — Bare-metal entry point mapped via linker script.
-- [Cross-Compilation](../level_17/cross_compilation.md) — Target compilation using custom linker scripts.
+
+- [Cross-Compilation](cross_compilation.md) — Target compilation using custom linker scripts.
 
 ---
 
@@ -396,6 +396,14 @@ Using linker script symbols `_stack_start` (top of stack) and `_stack_end` (bott
 > 1. **Stack Growth Direction**: On ARM Cortex-M and x86 architectures, stack memory grows downward from high addresses (`_stack_start`) to lower addresses (`_stack_end`).
 > 2. **Headroom Calculation**: Remaining headroom is `current_sp - _stack_end`. If `current_sp < _stack_end`, the stack pointer has overflowed past the allowed region.
 > 3. **Decoupled Testing Architecture**: By isolating pointer bounds into `StackGuard::new(start_addr, end_addr)` alongside `StackGuard::from_linker()`, unit tests can run cleanly on host architectures while maintaining exact bare-metal compatibility.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

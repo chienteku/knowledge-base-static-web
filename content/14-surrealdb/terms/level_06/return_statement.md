@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [RETURN Clause](../level_03/return_clause.md) — The CRUD projection clause (contrast).
+
+- [`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)](../level_03/return_clause.md) — The CRUD projection clause (contrast).
 - [`LET` Statement](let_statement.md) — Multi-step scripting.
 
 ---
@@ -210,9 +211,12 @@ Use predicate filters or `array::find()` for early value extraction
 > **Explanation:** `RETURN expression` returns formatted JSON objects or primitive values.
 
 ## 7. Related Terms
-- [RETURN Clause](../level_03/return_clause.md) — The CRUD projection clause.
+
+- [`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)](../level_03/return_clause.md) — The CRUD projection clause.
 - [`LET` Statement](let_statement.md) — Script variables.
 - [`IF` / `ELSE` Expressions](if_else.md) — Conditional control flow.
+- [`THROW` Expression](throw_expression.md) — Related concept: `THROW` Expression.
+- [`DEFINE FUNCTION`](../level_09/define_function.md) — Related concept: `DEFINE FUNCTION`.
 
 ---
 

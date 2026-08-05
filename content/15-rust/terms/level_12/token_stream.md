@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Tokens & Lexing](../level_01/tokens.md) — Basic understanding of source code lexical analysis (identifiers, literals, operators, punctuation).
-- [Iterators (`Iterator`)](../level_02/iterator.md) — `TokenStream` implements `IntoIterator`, producing `TokenTree` elements.
+
+- [Tokens](../level_01/tokens.md) — Basic understanding of source code lexical analysis (identifiers, literals, operators, punctuation).
+- [Iterator](../level_02/iterator.md) — `TokenStream` implements `IntoIterator`, producing `TokenTree` elements.
 
 ---
 
@@ -480,10 +481,15 @@ Write unit tests verifying both success cases (correct operator count) and failu
 
 ## 7. Related Terms
 
-- [Procedural Macros](../level_12/procedural_macros.md) — The metaprogramming function features that consume and produce token streams.
-- [`syn` Crate](../level_12/syn_crate.md) — Crate used to parse raw `TokenStream` instances into high-level AST structs.
-- [`quote` Crate](../level_12/quote_crate.md) — Crate used to turn Rust code templates into `TokenStream` instances.
-- [Hygiene](../level_12/hygiene.md) — The macro safety property preserved by Span metadata inside TokenStreams.
+
+- [Procedural Macros](procedural_macros.md) — The metaprogramming function features that consume and produce token streams.
+- [`syn` Crate](syn_crate.md) — Crate used to parse raw `TokenStream` instances into high-level AST structs.
+- [`quote` Crate](quote_crate.md) — Crate used to turn Rust code templates into `TokenStream` instances.
+- [Hygiene](hygiene.md) — The macro safety property preserved by Span metadata inside TokenStreams.
+- [Attribute Macros](attribute_macros.md) — Related concept: Attribute Macros.
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Related concept: Declarative Macros (`macro_rules!`).
+- [Function-like Macros](function_like_macros.md) — Related concept: Function-like Macros.
+- [Tokens](../level_01/tokens.md) — Related concept: Tokens.
 
 ---
 

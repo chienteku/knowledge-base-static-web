@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [JavaScript / TypeScript SDK](js_sdk.md) — Client SDK package.
 - [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Write conflicts in snapshot isolation.
 
@@ -236,6 +237,7 @@ If initial delay is `100ms` and multiplier is `2`, calculate the delay duration 
 > **Explanation:** Unauthorized query executions throw access permission error exceptions.
 
 ## 7. Related Terms
+
 - [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Snapshot isolation semantics.
 - [JavaScript / TypeScript SDK](js_sdk.md) — Client package overview.
 - [WebSocket vs HTTP Connection](websocket_vs_http.md) — Transport resilience.

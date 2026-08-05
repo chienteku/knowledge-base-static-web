@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Side Effects](../level_03/side_effects.md) — The actions you execute inside this hook.
-- [Component Lifecycle](../level_03/component_lifecycle.md) — When this hook actually runs.
-
+- [Side Effects](side_effects.md) — The actions you execute inside this hook.
+- [Component Lifecycle](component_lifecycle.md) — When this hook actually runs.
 ---
 
 ## 2. Term Category
@@ -170,9 +169,14 @@ function App() {
 > **Explanation:** Calculate data during render and handle user actions in event handlers.
 
 ## 7. Related Terms
-- [Dependency Array](../level_03/dependency_array.md) — The second argument of `useEffect` that controls its timing.
-- [Cleanup Functions](../level_03/cleanup_functions.md) — What you return from `useEffect` to handle the Unmounting phase.
-
+- [Dependency Array](dependency_array.md) — The second argument of `useEffect` that controls its timing.
+- [Cleanup Functions](cleanup_functions.md) — What you return from `useEffect` to handle the Unmounting phase.
+- [Render Purity](../level_01/render_purity.md) — Related concept: Render Purity.
+- [Component Lifecycle](component_lifecycle.md) — Related concept: Component Lifecycle.
+- [Side Effects](side_effects.md) — Related concept: Side Effects.
+- [`useLayoutEffect` Hook](use_layout_effect.md) — Related concept: `useLayoutEffect` Hook.
+- [Dynamic Segments (URL Parameters)](../level_09/dynamic_segments.md) — Related concept: Dynamic Segments (URL Parameters).
+- [React Query (TanStack Query) / SWR](../level_11/react_query.md) — Related concept: React Query (TanStack Query) / SWR.
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [BSON](../level_01/bson.md) — The binary format that is sized.
+
+- [BSON (Binary JSON)](../level_01/bson.md) — The binary format that is sized.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The design decision driven.
 
 ---
@@ -185,8 +186,15 @@ Explain why this design will eventually crash the database, and state how to fix
 > **Explanation:** GridFS chunks binary files exceeding the 16MB document size limit.
 
 ## 7. Related Terms
-- [BSON](../level_01/bson.md) — The binary format.
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The parent modeling rules.
+
+- [BSON (Binary JSON)](../level_01/bson.md) — The binary format.
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling rules.
+- [Anti-Patterns in Schema Design](anti_patterns.md) — Related concept: Anti-Patterns in Schema Design.
+- [One-to-Many Relationship (Embedding vs. Referencing)](one_to_many.md) — Related concept: One-to-Many Relationship (Embedding vs. Referencing).
+- [The Subset Pattern](subset_pattern.md) — Related concept: The Subset Pattern.
+- [`$facet` Stage](../level_06/facet_stage.md) — Related concept: `$facet` Stage.
+- [GridFS](../level_10/gridfs.md) — Related concept: GridFS.
+- [The Outlier Pattern](outlier_pattern.md) — Outlier pattern for size limits.
 
 ---
 

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`white-space`](white_space.md) — `text-overflow` relies entirely on `white-space: nowrap` to work!
-
 ---
 
 ## 2. Term Category
@@ -174,7 +173,7 @@ This requires an exact combo of 3 specific properties to work!
 
 ## 7. Related Terms
 - [`white-space`](white_space.md) — The property that forces the single line required for `ellipsis` to work.
-
+- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Related concept: `overflow` (hidden, scroll, auto, visible).
 ---
 
 ## 8. Key Takeaways

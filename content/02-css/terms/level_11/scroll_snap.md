@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Creating scrollable parent containers.
-
 ---
 
 ## 2. Term Category
@@ -286,8 +285,7 @@ Vertical snap layout:
 > **Explanation:** `mandatory` enforces strict snap points; `proximity` allows free scrolling until near points.
 
 ## 7. Related Terms
-- [`overflow`](../level_02/overflow.md) — The parent scrolling trigger.
-
+- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent scrolling trigger.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`ref`](../level_02/ref.md) — The standard way to create state, which `reactive` acts as an alternative to.
+- [`ref`](ref.md) — The standard way to create state, which `reactive` acts as an alternative to.
 - [Proxy Reactivity](../level_08/proxy_reactivity.md) — The underlying JavaScript feature that powers `reactive`.
-
 ---
 
 ## 2. Term Category
@@ -181,11 +180,11 @@ const count = ref(0); // Use ref() for primitive values
 ---
 
 ## 7. Related Terms
-- [`ref`](../level_02/ref.md) — The recommended alternative for declaring state.
+- [`ref`](ref.md) — The recommended alternative for declaring state.
 - [Proxy Reactivity](../level_08/proxy_reactivity.md) — The ES6 feature that powers `reactive`.
-- [`toRefs` / `toRef`](../level_02/to_refs.md) — The utility to safely destructure reactive objects.
-- [`shallowRef` / `markRaw`](../level_02/shallow_ref_mark_raw.md) — Reactivity escape hatches for performance.
-
+- [`toRefs` / `toRef`](to_refs.md) — The utility to safely destructure reactive objects.
+- [`shallowRef` / `markRaw`](shallow_ref_mark_raw.md) — Reactivity escape hatches for performance.
+- [Reactive State](reactive_state.md) — Related concept: Reactive State.
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`find()` / `findOne()`](find.md) — The query methods that return cursors.
 
 ---
@@ -240,6 +241,7 @@ Explain what database actions occur on the server at the moment this line is run
 > **Explanation:** `batchSize(N)` controls how many documents are fetched per network RPC roundtrip.
 
 ## 7. Related Terms
+
 - [`find()` / `findOne()`](find.md) — The query methods.
 - [`sort()` / `limit()` / `skip()`](sort_limit_skip.md) — Cursor pagination methods.
 

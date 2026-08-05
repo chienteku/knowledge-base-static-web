@@ -7,9 +7,11 @@
 
 ## 1. Prerequisites
 
-- [`svd2rust`](../level_17/svd2rust.md) — Tool that generates PAC crates from vendor SVD files.
-- [HAL (Hardware Abstraction Layer)](../level_17/hal.md) — Higher-level driver crate built on top of a PAC.
-- [`volatile` Read/Write](../level_13/raw_pointers.md) — Register accesses perform volatile memory reads and writes.
+
+- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Register accesses perform volatile memory reads and writes.
+- [HAL (Hardware Abstraction Layer)](hal.md) — Higher-level driver crate built on top of a PAC.
+- [`svd2rust`](svd2rust.md) — Tool that generates PAC crates from vendor SVD files.
+- [`#![no_std]`](no_std.md) — #![no_std] bare-metal environment.
 
 ---
 
@@ -349,6 +351,16 @@ Implement a thread-safe `Peripherals` singleton using `AtomicBool` to manage own
 > 1. **Single-Ownership Guarantee**: Physical hardware registers are unique resources. By exposing `Peripherals::take() -> Option<Self>`, PAC crates guarantee single ownership at runtime.
 > 2. **Atomic Swap Synchronization**: Using `AtomicBool::swap(true, Ordering::SeqCst)` guarantees lock-free, atomic check-and-set operations even in multi-threaded host tests or interrupt-driven embedded environments.
 > 3. **HAL Consumption**: A high-level Hardware Abstraction Layer (HAL) crate calls `Peripherals::take()` during system startup to split raw peripherals into individual driver instances (e.g., `dp.GPIOA.split()`), moving ownership tracking to compile-time types.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [HAL (Hardware Abstraction Layer)](hal.md) — Higher-level driver crate built on top of a PAC.
+- [`svd2rust`](svd2rust.md) — Related concept: `svd2rust`.
+- [`embedded-hal`](embedded_hal.md) — Embedded HAL traits.
 
 ---
 

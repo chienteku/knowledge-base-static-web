@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`tokio`](../level_16/tokio.md) — Asynchronous runtime instrumented by `tracing`.
-- [Async / Await](../level_09/async_await.md) — Asynchronous control flow tracked via `tracing::instrument`.
+
+- [`tokio`](tokio.md) — Asynchronous runtime instrumented by `tracing`.
+- [`async` / `.await`](../level_09/async_await.md) — Asynchronous control flow tracked via `tracing::instrument`.
 
 ---
 
@@ -408,6 +409,14 @@ Implement a structured diagnostic sweep function `perform_hardware_sweep(sweep_i
 > 2. **RAII Scope Management (`enter()`)**: `span.enter()` returns a guard (`Entered`). As long as `_root_guard` or `_child_guard` remains in scope, that span is active on the current thread. Dropping the guard exits the span.
 > 3. **Structured Field Formatting (`format_args!`)**: Key-value metadata on spans support dynamic formatting like `format_args!("0x{:02X}", address)` without needing allocation.
 > 4. **Deterministic Diagnostics Testing**: Combining structured telemetry with return types (`SweepSummary`) allows both runtime diagnostic capturing and unit test assertion via `assert_eq!`.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

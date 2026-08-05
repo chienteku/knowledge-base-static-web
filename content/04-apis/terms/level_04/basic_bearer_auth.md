@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [HTTP Headers](../level_02/http_headers.md) — These authentication schemes dictate exactly how to format the `Authorization` header.
-
 ---
 
 ## 2. Term Category
@@ -146,9 +145,13 @@ Authorization: Bearer eyJhbGciOi... ; Standard OAuth2 Bearer token header
 ---
 
 ## 7. Related Terms
-- [JWT](../level_04/jwt.md) — The most common type of token placed inside a Bearer header.
+- [JWT (JSON Web Tokens)](jwt.md) — The most common type of token placed inside a Bearer header.
 - [Statelessness](../level_03/statelessness.md) — The reason we have to send the Bearer token on every single request.
-
+- [Access Token vs Refresh Token](access_refresh_tokens.md) — Related concept: Access Token vs Refresh Token.
+- [API Keys](api_keys.md) — Related concept: API Keys.
+- [OAuth 2.0](oauth.md) — Related concept: OAuth 2.0.
+- [Secrets & Environment Variables](secrets_env.md) — Related concept: Secrets & Environment Variables.
+- [Base64 Encoding](../level_07/base64.md) — Related concept: Base64 Encoding.
 ---
 
 ## 8. Key Takeaways

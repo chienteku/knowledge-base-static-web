@@ -9,7 +9,6 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<p>` tag creates a paragraph element.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since paragraphs are block-level elements.
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — Since paragraphs collapse sequential spaces and newlines.
-
 ---
 
 ## 2. Term Category
@@ -286,10 +285,10 @@ How many spaces will actually appear between Word1 and Word2 when viewed in the 
 > **Explanation:** User-agent stylesheets apply `1em` top and bottom block margins to paragraphs.
 
 ## 7. Related Terms
-- [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — The titles that usually precede a `<p>`.
+- [Headings (`<h1>` to `<h6>`)](headings.md) — The titles that usually precede a `<p>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing paragraphs.
-- [`<br>` & `<hr>`](../level_02/br_hr.md) — Ways to break lines without starting a completely new paragraph block.
-
+- [`<br>` & `<hr>`](br_hr.md) — Ways to break lines without starting a completely new paragraph block.
+- [`<blockquote>` & `<cite>`](blockquote_cite.md) — Related concept: `<blockquote>` & `<cite>`.
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](../level_07/define_index.md) — The parent index context.
 
 ---
 
@@ -203,8 +204,11 @@ Write the SurrealQL queries to:
 > **Explanation:** `search::score(index_id)` extracts relevance scores for ordering search results.
 
 ## 7. Related Terms
-- [DEFINE INDEX](define_index.md) — The parent index context.
-- [Full-Text Search](../../../12-postgres/terms/level_10/full_text_search.md) — Query operators.
+
+- [`DEFINE INDEX` (Deep Dive)](../level_07/define_index.md) — The parent index context.
+- [Full-Text Search (`tsvector`, `tsquery`)](../../../12-postgres/terms/level_10/full_text_search.md) — Query operators.
+- [Search Index & `DEFINE ANALYZER`](../level_07/search_index_analyzer.md) — Search analyzers and tokenizers.
+- [`search::*` Functions & `@@` Operator](../level_07/search_functions.md) — search::score() search functions.
 
 ---
 

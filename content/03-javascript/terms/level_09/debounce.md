@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 - [Higher-Order Function](../level_03/higher_order_function.md) — The wrapper function.
 - [Closure](../level_03/closure.md) — Used to remember the timer.
-- [`setTimeout`](../level_06/asynchronous.md) — The timer mechanism.
-
+- [Asynchronous](../level_06/asynchronous.md) — The timer mechanism.
 ---
 
 ## 2. Term Category
@@ -218,9 +217,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Throttle](./throttle.md) — The sister technique to Debounce.
+- [Throttle](throttle.md) — The sister technique to Debounce.
 - [Closure](../level_03/closure.md) — The mechanic keeping the timer ID alive.
-
 ---
 
 ## 8. Key Takeaways

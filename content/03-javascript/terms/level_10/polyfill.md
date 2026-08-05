@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [ECMAScript](../level_01/ecmascript.md) — The standards that dictate what new features browsers should have.
-- [Babel](./babel.md) — Often confused with Polyfills. Babel translates syntax; Polyfills add features.
-
+- [Babel](babel.md) — Often confused with Polyfills. Babel translates syntax; Polyfills add features.
 ---
 
 ## 2. Term Category
@@ -202,9 +201,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Babel](./babel.md) — The transpiler that works alongside Polyfills.
+- [Babel](babel.md) — The transpiler that works alongside Polyfills.
 - [ECMAScript](../level_01/ecmascript.md) — The spec that dictates what needs to be polyfilled in older environments.
-
+- [Transpiler vs Compiler](transpiler_vs_compiler.md) — Related concept: Transpiler vs Compiler.
 ---
 
 ## 8. Key Takeaways

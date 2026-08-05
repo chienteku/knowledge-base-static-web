@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`CREATE`](create.md) — The native write equivalent.
 
 ---
@@ -193,6 +194,7 @@ UPDATE user:alice SET name = "Alice Smith"; // Correct update statement
 > **Explanation:** `INSERT (fields) VALUES (vals)` provides SQL-style bulk insertion syntax.
 
 ## 7. Related Terms
+
 - [`CREATE`](create.md) — The native write equivalent.
 - [`INSERT ... ON DUPLICATE KEY UPDATE`](insert_on_duplicate.md) — The SQL upsert modifier.
 

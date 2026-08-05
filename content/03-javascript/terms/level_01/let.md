@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 2. Term Category
@@ -197,9 +196,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-- [`const`](../level_01/const.md) — A block-scoped variable that cannot be reassigned.
-
+- [Variable](variable.md) — A named container for storing data values.
+- [const](const.md) — A block-scoped variable that cannot be reassigned.
+- [Assignment Operators](assignment_operators.md) — Related concept: Assignment Operators.
+- [var](var.md) — Related concept: var.
+- [Block Scope](../level_03/block_scope.md) — Block scoping.
 ---
 
 ## 8. Key Takeaways

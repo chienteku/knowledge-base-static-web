@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Write Concern](write_concern.md) — The write acknowledgment parameters.
 
 ---
@@ -206,6 +207,7 @@ const res = await db.coll.bulkWrite(ops, { ordered: false }); if (res.hasWriteEr
 > **Explanation:** Error code 121 signals that inserted documents failed `$jsonSchema` validator rules.
 
 ## 7. Related Terms
+
 - [Write Concern](write_concern.md) — The write acknowledgment parameters.
 - [Retryable Writes / Retryable Reads](retryable_operations.md) — Network recovery.
 

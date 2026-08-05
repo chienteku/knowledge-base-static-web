@@ -6,9 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- CSS Typography — Understanding how web fonts work in standard CSS.
-- [Web Core Vitals (FCP, LCP, CLS, TTFB)](../level_09/web_core_vitals.md) — Specifically Cumulative Layout Shift (CLS).
-
+- [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Specifically Cumulative Layout Shift (CLS).
 ---
 
 ## 2. Term Category
@@ -198,9 +196,10 @@ export default function Page() { return <div className={inter.className}>Text</d
 ---
 
 ## 7. Related Terms
-- [Image Optimization (`next/image`)](../level_09/next_image.md) — Another built-in performance optimization tool.
+- [`<Image>` Component](next_image.md) — Another built-in performance optimization tool.
 - [`layout.tsx`](../level_02/layout.md) — The best place to inject a global font.
-
+- [`<Script>` Component](next_script.md) — Related concept: `<Script>` Component.
+- [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Related concept: Web Core Vitals (FCP, LCP, CLS, TTFB).
 ---
 
 ## 8. Key Takeaways

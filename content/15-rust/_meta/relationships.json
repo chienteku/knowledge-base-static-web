@@ -35,6 +35,11 @@
           "term": "from_into_traits",
           "module": "15-rust",
           "description": "The *lossless*, guaranteed-safe conversion traits; prefer these over `as` whenever the target type can represent every source value."
+        },
+        {
+          "module": "15-rust",
+          "term": "try_from_try_into",
+          "description": "Fallible type conversions."
         }
       ]
     },
@@ -96,6 +101,11 @@
           "term": "inner_doc_comment",
           "module": "15-rust",
           "description": "Related concept: `//!` (Inner Doc Comment)."
+        },
+        {
+          "module": "15-rust",
+          "term": "documentation_comments",
+          "description": "Doc comments for rustdoc."
         }
       ]
     },
@@ -130,6 +140,11 @@
           "term": "vec_t",
           "module": "15-rust",
           "description": "The heap-allocated, dynamic version of an array that *can* grow and shrink."
+        },
+        {
+          "module": "15-rust",
+          "term": "array_and_slice",
+          "description": "Fixed-size arrays."
         }
       ]
     },
@@ -311,13 +326,23 @@
           "term": "loop",
           "module": "15-rust",
           "description": "Related concept: `loop`."
+        },
+        {
+          "module": "15-rust",
+          "term": "expression_vs_statement",
+          "description": "Related concept: Expressions vs. Statements."
+        },
+        {
+          "module": "15-rust",
+          "term": "function",
+          "description": "Related concept: Functions (`fn`)."
         }
       ]
     },
     "fn": {
       "level": 1,
       "file": "terms/level_01/fn.md",
-      "display_name": "fn",
+      "display_name": "`fn` (Functions)",
       "prerequisites": [],
       "related": [
         {
@@ -339,6 +364,11 @@
           "term": "comments",
           "module": "15-rust",
           "description": "Related concept: Comments."
+        },
+        {
+          "module": "15-rust",
+          "term": "function",
+          "description": "Functions declared with fn."
         }
       ]
     },
@@ -392,9 +422,9 @@
           "description": "The standard way to write reusable code in Rust."
         },
         {
-          "term": "println_format",
           "module": "15-rust",
-          "description": "The most common macros you will use every day."
+          "term": "println_format",
+          "description": "Common macros like println!."
         }
       ],
       "related": [
@@ -407,6 +437,11 @@
           "term": "panic",
           "module": "15-rust",
           "description": "The macro used to crash the program on an unrecoverable error."
+        },
+        {
+          "module": "15-rust",
+          "term": "declarative_macros_macro_rules",
+          "description": "macro_rules! macros."
         }
       ]
     },
@@ -446,6 +481,16 @@
           "term": "prelude",
           "module": "15-rust",
           "description": "Related concept: Prelude."
+        },
+        {
+          "module": "15-rust",
+          "term": "visibility_and_modules",
+          "description": "Visibility rules across modules."
+        },
+        {
+          "module": "15-rust",
+          "term": "mod_declaration",
+          "description": "mod statement syntax."
         }
       ]
     },
@@ -475,6 +520,16 @@
           "term": "constants_const",
           "module": "15-rust",
           "description": "Values that can *never* be made mutable and are evaluated at compile time."
+        },
+        {
+          "module": "15-rust",
+          "term": "references_and_borrowing",
+          "description": "Exclusive mutable references (&mut)."
+        },
+        {
+          "module": "15-rust",
+          "term": "cell_t",
+          "description": "Interior mutability."
         }
       ]
     },
@@ -548,6 +603,16 @@
           "term": "cargo_target_kinds",
           "module": "15-rust",
           "description": "Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "cargo_toml",
+          "description": "Cargo package manifest."
+        },
+        {
+          "module": "15-rust",
+          "term": "workspace",
+          "description": "Multi-package workspace."
         }
       ]
     },
@@ -587,6 +652,11 @@
           "term": "std_library",
           "module": "15-rust",
           "description": "`Path`/`PathBuf` are part of the OS-integration layer."
+        },
+        {
+          "module": "15-rust",
+          "term": "file_bufreadwriter",
+          "description": "File IO operations."
         }
       ]
     },
@@ -621,6 +691,11 @@
           "term": "macros",
           "module": "15-rust",
           "description": "Related concept: Macros."
+        },
+        {
+          "module": "15-rust",
+          "term": "display_trait",
+          "description": "Display formatting trait."
         }
       ]
     },
@@ -679,6 +754,11 @@
           "term": "variable",
           "module": "15-rust",
           "description": "The basic named binding that shadowing replaces."
+        },
+        {
+          "module": "15-rust",
+          "term": "scope_and_shadowing",
+          "description": "Block scoping rules."
         }
       ]
     },
@@ -708,6 +788,11 @@
           "term": "unit_type",
           "module": "15-rust",
           "description": "Related concept: Unit Type (`()`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "expression_vs_statement",
+          "description": "Related concept: Expressions vs. Statements."
         }
       ]
     },
@@ -764,6 +849,11 @@
           "term": "mutability_mut",
           "module": "15-rust",
           "description": "The ability to change a value (crucial for `String`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "scalar_types",
+          "description": "Primitive types."
         }
       ],
       "related": [
@@ -801,6 +891,16 @@
           "term": "cow_t",
           "module": "15-rust",
           "description": "Related concept: `Cow<'a, T>`."
+        },
+        {
+          "module": "15-rust",
+          "term": "slice",
+          "description": "Contiguous sequence slice views."
+        },
+        {
+          "module": "15-rust",
+          "term": "toowned_trait",
+          "description": "ToOwned conversion from &str to String."
         }
       ]
     },
@@ -840,6 +940,11 @@
           "term": "constants_const",
           "module": "15-rust",
           "description": "Related concept: Constants (`const`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "variable",
+          "description": "Related concept: Variable."
         }
       ]
     },
@@ -901,6 +1006,11 @@
           "term": "expressions",
           "module": "15-rust",
           "description": "If you add a semicolon to an expression, it turns into a statement and returns `()` instead of its actual value."
+        },
+        {
+          "module": "15-rust",
+          "term": "scalar_types",
+          "description": "Primitive types."
         }
       ],
       "related": [
@@ -918,6 +1028,11 @@
           "term": "zsts",
           "module": "15-rust",
           "description": "Related concept: `ZSTs` (Zero-Sized Types)."
+        },
+        {
+          "module": "15-rust",
+          "term": "never_type",
+          "description": "The ! never type."
         }
       ]
     },
@@ -961,6 +1076,11 @@
           "term": "static_static",
           "module": "15-rust",
           "description": "Related concept: Static (`static`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "type_annotation",
+          "description": "Specifying variable types."
         }
       ]
     },
@@ -2293,6 +2413,11 @@
           "term": "box_t",
           "module": "15-rust",
           "description": "Related concept: `Box<T>`."
+        },
+        {
+          "module": "15-rust",
+          "term": "array_and_slice",
+          "description": "Related concept: Arrays and Slices (`[T; N]`, `&[T]`)."
         }
       ]
     },
@@ -2415,6 +2540,11 @@
           "term": "send_trait",
           "module": "15-rust",
           "description": "Related concept: `Send` Trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "smart_pointers",
+          "description": "Related concept: Smart Pointers (`Box`, `Rc`, `Arc`)."
         }
       ]
     },
@@ -2474,6 +2604,11 @@
           "term": "non_lexical_lifetimes",
           "module": "15-rust",
           "description": "Related concept: Non-Lexical Lifetimes (NLL)."
+        },
+        {
+          "module": "15-rust",
+          "term": "polonius",
+          "description": "Related concept: Polonius."
         }
       ]
     },
@@ -2533,6 +2668,11 @@
           "term": "slice",
           "module": "15-rust",
           "description": "Related concept: Slice (`&[T]`, `&str`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "references_and_borrowing",
+          "description": "Related concept: References and Borrowing (`&`, `&mut`)."
         }
       ]
     },
@@ -2572,6 +2712,11 @@
           "term": "trait_objects",
           "module": "15-rust",
           "description": "Related concept: Trait Objects (`dyn Trait`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "smart_pointers",
+          "description": "Related concept: Smart Pointers (`Box`, `Rc`, `Arc`)."
         }
       ]
     },
@@ -2601,6 +2746,11 @@
           "term": "interior_mutability",
           "module": "15-rust",
           "description": "The official name for the design pattern that both `Cell` and `RefCell` enable."
+        },
+        {
+          "module": "15-rust",
+          "term": "mutability_mut",
+          "description": "Related concept: Mutability (`mut`)."
         }
       ]
     },
@@ -2821,6 +2971,11 @@
           "term": "memory_leaks",
           "module": "15-rust",
           "description": "Related concept: Memory Leaks & Reference Cycles."
+        },
+        {
+          "module": "15-rust",
+          "term": "raii",
+          "description": "Related concept: RAII (Resource Acquisition Is Initialization)."
         }
       ]
     },
@@ -2973,6 +3128,11 @@
           "term": "lifetime_variance",
           "module": "15-rust",
           "description": "Related concept: Lifetime Variance."
+        },
+        {
+          "module": "15-rust",
+          "term": "references_and_borrowing",
+          "description": "Related concept: References and Borrowing (`&`, `&mut`)."
         }
       ]
     },
@@ -3140,6 +3300,11 @@
           "term": "weak_t",
           "module": "15-rust",
           "description": "Related concept: `Weak<T>`."
+        },
+        {
+          "module": "15-rust",
+          "term": "smart_pointers",
+          "description": "Related concept: Smart Pointers (`Box`, `Rc`, `Arc`)."
         }
       ]
     },
@@ -3277,6 +3442,16 @@
           "term": "borrow_checker",
           "module": "15-rust",
           "description": "The compiler cop that ensures you don't mutate the original collection while a slice is actively looking at it."
+        },
+        {
+          "module": "15-rust",
+          "term": "array_and_slice",
+          "description": "Related concept: Arrays and Slices (`[T; N]`, `&[T]`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "string_vs_&str",
+          "description": "Related concept: String vs &str."
         }
       ]
     },
@@ -3404,6 +3579,11 @@
           "term": "error_trait_box_dyn_error",
           "module": "15-rust",
           "description": "Related concept: `std::error::Error` Trait & `Box<dyn Error>`."
+        },
+        {
+          "module": "15-rust",
+          "term": "error_handling_stack",
+          "description": "Related concept: Error Handling Stack."
         }
       ]
     },
@@ -3536,6 +3716,11 @@
           "term": "error_trait_box_dyn_error",
           "module": "15-rust",
           "description": "Related concept: `std::error::Error` Trait & `Box<dyn Error>`."
+        },
+        {
+          "module": "15-rust",
+          "term": "error_handling_stack",
+          "description": "Related concept: Error Handling Stack."
         }
       ]
     },
@@ -3629,6 +3814,11 @@
           "term": "std_mem_utilities",
           "module": "15-rust",
           "description": "Related concept: `std::mem` Utilities (`replace`, `take`, `swap`, `drop`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "builder_pattern",
+          "description": "Related concept: Builder Pattern."
         }
       ]
     },
@@ -3722,6 +3912,11 @@
           "term": "string_vs_&str",
           "module": "15-rust",
           "description": "The type you magically get for free (via the `.to_string()` method) the moment you implement the `Display` trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "println_format",
+          "description": "Related concept: `println!` / `format!`."
         }
       ]
     },
@@ -3820,6 +4015,11 @@
           "term": "try_from_try_into",
           "module": "15-rust",
           "description": "Related concept: `TryFrom` / `TryInto`."
+        },
+        {
+          "module": "15-rust",
+          "term": "from_for_constructor_overloading",
+          "description": "Related concept: From For Constructor Overloading."
         }
       ]
     },
@@ -3957,6 +4157,11 @@
           "term": "where_clause",
           "module": "15-rust",
           "description": "Related concept: `where` Clause."
+        },
+        {
+          "module": "15-rust",
+          "term": "tait_type_alias_impl_trait",
+          "description": "Related concept: Tait Type Alias Impl Trait."
         }
       ]
     },
@@ -4046,7 +4251,7 @@
     "panic": {
       "level": 4,
       "file": "terms/level_04/panic.md",
-      "display_name": "`panic!`",
+      "display_name": "`panic!` Macro",
       "prerequisites": [
         {
           "term": "result_t_e",
@@ -4487,6 +4692,11 @@
           "term": "fn_traits",
           "module": "15-rust",
           "description": "Related concept: `Fn` / `FnMut` / `FnOnce`."
+        },
+        {
+          "module": "15-rust",
+          "term": "dependency_injection",
+          "description": "Related concept: Dependency Injection."
         }
       ]
     },
@@ -4546,6 +4756,16 @@
           "term": "dynamically_sized_types",
           "module": "15-rust",
           "description": "Related concept: Dynamically Sized Types (DSTs)."
+        },
+        {
+          "module": "15-rust",
+          "term": "visitor_pattern",
+          "description": "Related concept: Visitor Pattern."
+        },
+        {
+          "module": "15-rust",
+          "term": "enum_dispatch",
+          "description": "Related concept: Enum Dispatch."
         }
       ]
     },
@@ -4908,6 +5128,11 @@
           "term": "reborrowing",
           "module": "15-rust",
           "description": "A closely related refinement that also loosened overly strict early borrow-checker behavior."
+        },
+        {
+          "module": "15-rust",
+          "term": "polonius",
+          "description": "Related concept: Polonius."
         }
       ]
     },
@@ -5519,6 +5744,11 @@
           "term": "feature_flags",
           "module": "15-rust",
           "description": "Related concept: Feature Flags."
+        },
+        {
+          "module": "15-rust",
+          "term": "package",
+          "description": "Related concept: Package."
         }
       ]
     },
@@ -5728,6 +5958,11 @@
           "term": "pub_crate_super",
           "module": "15-rust",
           "description": "Related concept: `pub(crate)` / `pub(super)`."
+        },
+        {
+          "module": "15-rust",
+          "term": "module",
+          "description": "Related concept: Module."
         }
       ]
     },
@@ -6045,13 +6280,18 @@
           "term": "edition",
           "module": "15-rust",
           "description": "Related concept: Edition."
+        },
+        {
+          "module": "15-rust",
+          "term": "package",
+          "description": "Related concept: Package."
         }
       ]
     },
     "assert_macros": {
       "level": 8,
       "file": "terms/level_08/assert_macros.md",
-      "display_name": "`assert!` / `assert_eq!` / `assert_ne!`",
+      "display_name": "`assert!` Macros",
       "prerequisites": [
         {
           "term": "macros",
@@ -6172,7 +6412,7 @@
     "ignore": {
       "level": 8,
       "file": "terms/level_08/ignore.md",
-      "display_name": "`#[ignore]`",
+      "display_name": "`#[ignore]` Attribute",
       "prerequisites": [],
       "related": []
     },
@@ -6242,7 +6482,7 @@
     "should_panic": {
       "level": 8,
       "file": "terms/level_08/should_panic.md",
-      "display_name": "`#[should_panic]`",
+      "display_name": "`#[should_panic]` Attribute",
       "prerequisites": [
         {
           "term": "panic",
@@ -6266,7 +6506,7 @@
     "test_attribute": {
       "level": 8,
       "file": "terms/level_08/test_attribute.md",
-      "display_name": "`#[test]`",
+      "display_name": "`#[test]` Attribute",
       "prerequisites": [
         {
           "term": "derive_macro",
@@ -6352,6 +6592,11 @@
           "term": "data_race",
           "module": "15-rust",
           "description": "Related concept: Data Race."
+        },
+        {
+          "module": "15-rust",
+          "term": "memory_ordering",
+          "description": "Related concept: Memory Ordering (`Ordering`)."
         }
       ]
     },
@@ -6440,6 +6685,11 @@
           "term": "condvar_barrier",
           "module": "15-rust",
           "description": "Related concept: `Condvar` & `Barrier`."
+        },
+        {
+          "module": "15-rust",
+          "term": "channels_mpsc_oneshot",
+          "description": "Related concept: Channels (`mpsc`, `oneshot`)."
         }
       ]
     },
@@ -6582,6 +6832,11 @@
           "term": "oncelock_lazylock",
           "module": "15-rust",
           "description": "Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`."
+        },
+        {
+          "module": "15-rust",
+          "term": "raii",
+          "description": "Related concept: RAII (Resource Acquisition Is Initialization)."
         }
       ]
     },
@@ -6851,6 +7106,16 @@
           "term": "thread_local_macro",
           "module": "15-rust",
           "description": "Related concept: `thread_local!` Macro."
+        },
+        {
+          "module": "15-rust",
+          "term": "duration_instant",
+          "description": "Related concept: `Duration` and `Instant`."
+        },
+        {
+          "module": "15-rust",
+          "term": "thread_spawn",
+          "description": "Related concept: `thread::spawn`."
         }
       ]
     },
@@ -6971,7 +7236,18 @@
           "description": "The core interface that powers async Rust under the hood."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Related concept: `async` / `.await`."
+        },
+        {
+          "module": "15-rust",
+          "term": "generators_coroutines",
+          "description": "Related concept: Generators Coroutines."
+        }
+      ]
     },
     "await": {
       "level": 10,
@@ -6994,7 +7270,13 @@
           "description": "The runtime that drives execution while we wait."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Related concept: `async` / `.await`."
+        }
+      ]
     },
     "executor_runtime": {
       "level": 10,
@@ -7017,7 +7299,13 @@
           "description": "The most popular implementation of an executor runtime."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "waker_context",
+          "description": "Related concept: `Waker` and `Context`."
+        }
+      ]
     },
     "future_trait": {
       "level": 10,
@@ -7045,13 +7333,23 @@
           "term": "pin_t",
           "module": "15-rust",
           "description": "Related concept: `pin!`, `Pin<T>`, and `Unpin`."
+        },
+        {
+          "module": "15-rust",
+          "term": "generators_coroutines",
+          "description": "Related concept: Generators Coroutines."
+        },
+        {
+          "module": "15-rust",
+          "term": "waker_context",
+          "description": "Related concept: `Waker` and `Context`."
         }
       ]
     },
     "join_macro": {
       "level": 10,
       "file": "terms/level_10/join_macro.md",
-      "display_name": "`join!`",
+      "display_name": "`join!` Macro",
       "prerequisites": [
         {
           "term": "tokio",
@@ -7080,7 +7378,7 @@
     "pin_t": {
       "level": 10,
       "file": "terms/level_10/pin_t.md",
-      "display_name": "`pin!`, `Pin<T>`, and `Unpin`",
+      "display_name": "`Pin<T>`",
       "prerequisites": [
         {
           "term": "async_fn",
@@ -7104,7 +7402,7 @@
     "select_macro": {
       "level": 10,
       "file": "terms/level_10/select_macro.md",
-      "display_name": "`select!`",
+      "display_name": "`select!` Macro",
       "prerequisites": [
         {
           "term": "tokio",
@@ -7128,7 +7426,7 @@
     "stream_trait": {
       "level": 10,
       "file": "terms/level_10/stream_trait.md",
-      "display_name": "`stream_trait.md` (Stream Trait)",
+      "display_name": "`Stream` Trait",
       "prerequisites": [
         {
           "term": "iterator_trait",
@@ -7203,7 +7501,7 @@
     "unpin_trait": {
       "level": 10,
       "file": "terms/level_10/unpin_trait.md",
-      "display_name": "`unpin_trait.md` (Unpin Trait)",
+      "display_name": "`Unpin` Trait",
       "prerequisites": [
         {
           "term": "pin_t",
@@ -7265,6 +7563,11 @@
           "term": "os_string_str",
           "module": "15-rust",
           "description": "Related concept: `OsString` / `OsStr`."
+        },
+        {
+          "module": "15-rust",
+          "term": "cow_for_flexibility",
+          "description": "Related concept: Cow For Flexibility."
         }
       ]
     },
@@ -7455,6 +7758,11 @@
           "term": "todo_unimplemented_unreachable",
           "module": "15-rust",
           "description": "Related concept: `todo!` / `unimplemented!` / `unreachable!`."
+        },
+        {
+          "module": "15-rust",
+          "term": "unit_type",
+          "description": "Related concept: Unit Type (`()`)."
         }
       ]
     },
@@ -7611,7 +7919,18 @@
           "description": "The canonical example of borrowed/owned types that differ."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "string_vs_&str",
+          "description": "Related concept: String vs &str."
+        },
+        {
+          "module": "15-rust",
+          "term": "cow_for_flexibility",
+          "description": "Related concept: Cow For Flexibility."
+        }
+      ]
     },
     "type_alias": {
       "level": 11,
@@ -7825,6 +8144,16 @@
           "term": "function_like_macros",
           "module": "15-rust",
           "description": "Related concept: Function-like Macros."
+        },
+        {
+          "module": "15-rust",
+          "term": "declarative_macros",
+          "description": "Related concept: Declarative Macros (`macro_rules!`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "macros",
+          "description": "Related concept: Macros."
         }
       ]
     },
@@ -8178,6 +8507,11 @@
           "term": "function_like_macros",
           "module": "15-rust",
           "description": "Related concept: Function-like Macros."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokens",
+          "description": "Related concept: Tokens."
         }
       ]
     },
@@ -8315,6 +8649,11 @@
           "term": "union",
           "module": "15-rust",
           "description": "Related concept: `union`."
+        },
+        {
+          "module": "15-rust",
+          "term": "cstring_cstr",
+          "description": "Related concept: `CString` / `CStr`."
         }
       ]
     },
@@ -8394,6 +8733,11 @@
           "term": "unsafe_fn",
           "module": "15-rust",
           "description": "Related concept: `unsafe fn`."
+        },
+        {
+          "module": "15-rust",
+          "term": "cstring_cstr",
+          "description": "Related concept: `CString` / `CStr`."
         }
       ]
     },
@@ -8551,6 +8895,11 @@
           "term": "repr_packed_align",
           "module": "15-rust",
           "description": "Related concept: `#[repr(packed)]` / `#[repr(align)]`."
+        },
+        {
+          "module": "15-rust",
+          "term": "miri_ub_detector",
+          "description": "Related concept: Miri (UB Detector)."
         }
       ]
     },
@@ -8669,6 +9018,11 @@
           "term": "allocator_api",
           "module": "15-rust",
           "description": "Related concept: Allocator API."
+        },
+        {
+          "module": "15-rust",
+          "term": "inline_assembly",
+          "description": "Related concept: Inline Assembly (`asm!`)."
         }
       ]
     },
@@ -8806,6 +9160,11 @@
           "term": "operator_overloading",
           "module": "15-rust",
           "description": "Related concept: Operator Overloading."
+        },
+        {
+          "module": "15-rust",
+          "term": "as_ref",
+          "description": "Related concept: `AsRef<T>` Trait."
         }
       ]
     },
@@ -8855,6 +9214,16 @@
           "term": "try_from_try_into",
           "module": "15-rust",
           "description": "Related concept: `TryFrom` / `TryInto`."
+        },
+        {
+          "module": "15-rust",
+          "term": "extension_trait",
+          "description": "Related concept: Extension Trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "specialization",
+          "description": "Related concept: Specialization."
         }
       ]
     },
@@ -8899,6 +9268,11 @@
           "term": "trait",
           "module": "15-rust",
           "description": "Trait abstraction mechanism."
+        },
+        {
+          "module": "15-rust",
+          "term": "borrow_trait",
+          "description": "Related concept: `Borrow<T>` Trait."
         }
       ]
     },
@@ -8987,6 +9361,16 @@
           "term": "borrow_borrow_mut",
           "module": "15-rust",
           "description": "Consistency-guaranteed reference conversion traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "deref_trait",
+          "description": "Related concept: `Deref` and `DerefMut` Traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "deref_coercion",
+          "description": "Related concept: Deref Coercion."
         }
       ]
     },
@@ -9139,6 +9523,11 @@
           "term": "as_ref_as_mut",
           "module": "15-rust",
           "description": "Reference conversion traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "index_indexmut_traits",
+          "description": "Related concept: `Index` and `IndexMut` Traits."
         }
       ]
     },
@@ -9310,6 +9699,16 @@
           "term": "blanket_implementation",
           "module": "15-rust",
           "description": "Automatic implementation of `TryInto` for all types implementing `TryFrom`."
+        },
+        {
+          "module": "15-rust",
+          "term": "as_casting",
+          "description": "Related concept: `as` Casting (Primitive Numeric Coercion)."
+        },
+        {
+          "module": "15-rust",
+          "term": "tryfrom_tryinto",
+          "description": "Related concept: `TryFrom` and `TryInto` Traits."
         }
       ]
     },
@@ -9364,6 +9763,11 @@
           "term": "zero_cost_abstractions",
           "module": "15-rust",
           "description": "Related concept: Zero-Cost Abstractions."
+        },
+        {
+          "module": "15-rust",
+          "term": "builder_pattern",
+          "description": "Related concept: Builder Pattern."
         }
       ]
     },
@@ -9510,6 +9914,11 @@
           "term": "inlining",
           "module": "15-rust",
           "description": "Related concept: Inlining (`#[inline]`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "llvm_codegen_backend",
+          "description": "Related concept: Llvm Codegen Backend."
         }
       ]
     },
@@ -10109,6 +10518,11 @@
           "term": "core_library",
           "module": "15-rust",
           "description": "Related concept: `core` Library."
+        },
+        {
+          "module": "15-rust",
+          "term": "std_library",
+          "description": "Related concept: The Rust Standard Library (`std`)."
         }
       ]
     },
@@ -10128,6 +10542,11 @@
           "term": "alloc_library",
           "module": "15-rust",
           "description": "The heap-allocating extension built on top of `core`."
+        },
+        {
+          "module": "15-rust",
+          "term": "std_library",
+          "description": "Related concept: The Rust Standard Library (`std`)."
         }
       ]
     },
@@ -10170,6 +10589,16 @@
           "term": "hal",
           "module": "15-rust",
           "description": "Related concept: HAL (Hardware Abstraction Layer)."
+        },
+        {
+          "module": "15-rust",
+          "term": "svd2rust",
+          "description": "Related concept: `svd2rust`."
+        },
+        {
+          "module": "15-rust",
+          "term": "pac",
+          "description": "Related concept: PAC (Peripheral Access Crate)."
         }
       ]
     },
@@ -10262,18 +10691,19 @@
           "description": "Custom panic handlers required in `#![no_std]`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "std_library",
+          "description": "Related concept: The Rust Standard Library (`std`)."
+        }
+      ]
     },
     "pac": {
       "level": 17,
       "file": "terms/level_17/pac.md",
       "display_name": "PAC (Peripheral Access Crate)",
       "prerequisites": [
-        {
-          "term": "svd2rust",
-          "module": "15-rust",
-          "description": "Tool that generates PAC crates from vendor SVD files."
-        },
         {
           "term": "raw_pointers",
           "module": "15-rust",
@@ -10283,6 +10713,16 @@
           "term": "hal",
           "module": "15-rust",
           "description": "Higher-level driver crate built on top of a PAC."
+        },
+        {
+          "module": "15-rust",
+          "term": "svd2rust",
+          "description": "Tool that generates PAC crates from vendor SVD files."
+        },
+        {
+          "module": "15-rust",
+          "term": "no_std",
+          "description": "#![no_std] bare-metal environment."
         }
       ],
       "related": [
@@ -10290,32 +10730,119 @@
           "term": "hal",
           "module": "15-rust",
           "description": "Higher-level driver crate built on top of a PAC."
+        },
+        {
+          "module": "15-rust",
+          "term": "svd2rust",
+          "description": "Related concept: `svd2rust`."
+        },
+        {
+          "module": "15-rust",
+          "term": "embedded_hal",
+          "description": "Embedded HAL traits."
         }
       ]
     },
     "array_and_slice": {
       "file": "terms/level_01/array_and_slice.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "compound_types",
+          "description": "Fixed-length sequences built on primitive scalar types."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "simd"
+        },
+        {
+          "module": "15-rust",
+          "term": "slice",
+          "description": "Borrowed slice views (&[T])."
+        },
+        {
+          "module": "15-rust",
+          "term": "vec_t",
+          "description": "The heap-allocated dynamic array version."
+        },
+        {
+          "module": "15-rust",
+          "term": "compound_types",
+          "description": "Related concept: Compound Types."
+        },
+        {
+          "module": "15-rust",
+          "term": "index_indexmut_traits",
+          "description": "Related concept: `Index` and `IndexMut` Traits."
         }
-      ]
+      ],
+      "display_name": "Arrays and Slices (`[T; N]`, `&[T]`)",
+      "level": 1
     },
     "expression_vs_statement": {
       "file": "terms/level_01/expression_vs_statement.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "statements",
+          "description": "Statements doing actions."
+        },
+        {
+          "module": "15-rust",
+          "term": "expressions",
+          "description": "Expressions returning values."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "statements",
+          "description": "Action statements."
+        },
+        {
+          "module": "15-rust",
+          "term": "expressions",
+          "description": "Value-producing expressions."
+        }
+      ],
+      "display_name": "Expressions vs. Statements",
+      "level": 1
     },
     "function": {
       "file": "terms/level_01/function.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "fn",
+          "description": "fn keyword syntax."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "fn",
+          "description": "fn keyword."
+        },
+        {
+          "module": "15-rust",
+          "term": "expressions",
+          "description": "Function body tail expressions."
+        }
+      ],
+      "display_name": "Functions (`fn`)",
+      "level": 1
     },
     "references_and_borrowing": {
       "file": "terms/level_01/references_and_borrowing.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "variable",
+          "description": "Variable bindings."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10324,33 +10851,75 @@
         {
           "module": "15-rust",
           "term": "as_ref_as_mut"
+        },
+        {
+          "module": "15-rust",
+          "term": "borrowing",
+          "description": "Immutable borrowing (&T)."
+        },
+        {
+          "module": "15-rust",
+          "term": "mutable_borrowing",
+          "description": "Mutable borrowing (&mut T)."
+        },
+        {
+          "module": "15-rust",
+          "term": "mutability_mut",
+          "description": "Related concept: Mutability (`mut`)."
         }
-      ]
+      ],
+      "display_name": "References and Borrowing (`&`, `&mut`)",
+      "level": 1
     },
     "scope_and_shadowing": {
       "file": "terms/level_01/scope_and_shadowing.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "variable",
+          "description": "Variable bindings."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "hygiene"
+        },
+        {
+          "module": "15-rust",
+          "term": "shadowing",
+          "description": "Re-declaring variables in scope."
         }
-      ]
+      ],
+      "display_name": "Scope and Shadowing",
+      "level": 1
     },
     "tokens": {
       "file": "terms/level_01/tokens.md",
       "prerequisites": [],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "token_stream",
+          "description": "Stream of compiler tokens."
+        }
+      ],
+      "display_name": "Tokens",
+      "level": 1
     },
     "panic_handling": {
       "file": "terms/level_04/panic_handling.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "Panic Handling (`panic!`)",
+      "level": 4
     },
     "closures": {
       "file": "terms/level_05/closures.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "Closures (`|args| body`)",
+      "level": 5
     },
     "hashmap_and_hashset": {
       "file": "terms/level_05/hashmap_and_hashset.md",
@@ -10360,12 +10929,16 @@
           "module": "15-rust",
           "term": "borrow_borrow_mut"
         }
-      ]
+      ],
+      "display_name": "`HashMap` and `HashSet` testimony",
+      "level": 5
     },
     "iterator_trait": {
       "file": "terms/level_05/iterator_trait.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "The `Iterator` Trait",
+      "level": 5
     },
     "attributes": {
       "file": "terms/level_07/attributes.md",
@@ -10375,7 +10948,9 @@
           "module": "15-rust",
           "term": "attribute_macros"
         }
-      ]
+      ],
+      "display_name": "Attributes (`#[...]`)",
+      "level": 7
     },
     "build_rs": {
       "file": "terms/level_07/build_rs.md",
@@ -10385,7 +10960,9 @@
           "module": "15-rust",
           "term": "bindgen"
         }
-      ]
+      ],
+      "display_name": "`build.rs` (Build Scripts)",
+      "level": 7
     },
     "cargo_cli": {
       "file": "terms/level_07/cargo_cli.md",
@@ -10398,13 +10975,28 @@
         {
           "module": "15-rust",
           "term": "rustup"
+        },
+        {
+          "module": "15-rust",
+          "term": "miri_ub_detector",
+          "description": "Related concept: Miri (UB Detector)."
         }
-      ]
+      ],
+      "display_name": "Cargo CLI",
+      "level": 7
     },
     "documentation_comments": {
       "file": "terms/level_07/documentation_comments.md",
       "prerequisites": [],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "comments",
+          "description": "Related concept: Comments."
+        }
+      ],
+      "display_name": "Documentation Comments (`///`, `//!`)",
+      "level": 7
     },
     "visibility_and_modules": {
       "file": "terms/level_07/visibility_and_modules.md",
@@ -10413,32 +11005,91 @@
         {
           "module": "15-rust",
           "term": "sealed_trait_pattern"
+        },
+        {
+          "module": "15-rust",
+          "term": "module",
+          "description": "Related concept: Module."
         }
-      ]
+      ],
+      "display_name": "Visibility and Modules (`pub`, `mod`)",
+      "level": 7
     },
     "async_await": {
       "file": "terms/level_09/async_await.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "async_fn",
+          "description": "Async functions."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_fn",
+          "description": "Async fn declarations."
+        },
+        {
+          "module": "15-rust",
+          "term": "await",
+          "description": "Await syntax."
+        }
+      ],
+      "display_name": "`async` / `.await`",
+      "level": 9
     },
     "channels_mpsc_oneshot": {
       "file": "terms/level_09/channels_mpsc_oneshot.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "channel_mpsc",
+          "description": "MPSC channels."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "channel_mpsc",
+          "description": "Standard MPSC channel."
+        }
+      ],
+      "display_name": "Channels (`mpsc`, `oneshot`)",
+      "level": 9
     },
     "thread_spawn": {
       "file": "terms/level_09/thread_spawn.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "std_thread_spawn",
+          "description": "Standard thread spawning."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "static_lifetime"
+        },
+        {
+          "module": "15-rust",
+          "term": "std_thread_spawn",
+          "description": "std::thread::spawn reference."
         }
-      ]
+      ],
+      "display_name": "`thread::spawn`",
+      "level": 9
     },
     "smart_pointers": {
       "file": "terms/level_10/smart_pointers.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "box_t",
+          "description": "Box heap allocation."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10447,47 +11098,123 @@
         {
           "module": "15-rust",
           "term": "stack_vs_heap"
+        },
+        {
+          "module": "15-rust",
+          "term": "box_t",
+          "description": "Box pointer."
+        },
+        {
+          "module": "15-rust",
+          "term": "rc_t",
+          "description": "Reference counted pointer."
+        },
+        {
+          "module": "15-rust",
+          "term": "arc_t",
+          "description": "Atomic reference counted pointer."
         }
-      ]
+      ],
+      "display_name": "Smart Pointers (`Box`, `Rc`, `Arc`)",
+      "level": 10
     },
     "declarative_macros": {
       "file": "terms/level_12/declarative_macros.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "declarative_macros_macro_rules",
+          "description": "macro_rules! syntax."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "declarative_macros_macro_rules",
+          "description": "macro_rules! macro rules."
+        }
+      ],
+      "display_name": "Declarative Macros (`macro_rules!`)",
+      "level": 12
     },
     "as_ref": {
       "file": "terms/level_14/as_ref.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "as_ref_as_mut",
+          "description": "AsRef / AsMut traits."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "path_pathbuf"
+        },
+        {
+          "module": "15-rust",
+          "term": "as_ref_as_mut",
+          "description": "AsRef/AsMut pair."
         }
-      ]
+      ],
+      "display_name": "`AsRef<T>` Trait",
+      "level": 14
     },
     "borrow_trait": {
       "file": "terms/level_14/borrow_trait.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "borrow_borrow_mut",
+          "description": "Borrow / BorrowMut traits."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "hash_trait"
+        },
+        {
+          "module": "15-rust",
+          "term": "borrow_borrow_mut",
+          "description": "Borrow trait family."
         }
-      ]
+      ],
+      "display_name": "`Borrow<T>` Trait",
+      "level": 14
     },
     "deref_trait": {
       "file": "terms/level_14/deref_trait.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "deref_deref_mut_traits",
+          "description": "Deref traits."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "newtype_pattern"
+        },
+        {
+          "module": "15-rust",
+          "term": "deref_deref_mut_traits",
+          "description": "Deref/DerefMut traits."
         }
-      ]
+      ],
+      "display_name": "`Deref` and `DerefMut` Traits",
+      "level": 14
     },
     "tryfrom_tryinto": {
       "file": "terms/level_14/tryfrom_tryinto.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "try_from_try_into",
+          "description": "TryFrom / TryInto traits."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10504,12 +11231,30 @@
         {
           "module": "15-rust",
           "term": "fromstr_parse"
+        },
+        {
+          "module": "15-rust",
+          "term": "try_from_try_into",
+          "description": "TryFrom/TryInto family."
         }
-      ]
+      ],
+      "display_name": "`TryFrom` and `TryInto` Traits",
+      "level": 14
     },
     "std_library": {
       "file": "terms/level_17/std_library.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "core_library",
+          "description": "Core library foundation."
+        },
+        {
+          "module": "15-rust",
+          "term": "alloc_library",
+          "description": "Allocation primitives."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10522,183 +11267,821 @@
         {
           "module": "15-rust",
           "term": "prelude"
+        },
+        {
+          "module": "15-rust",
+          "term": "core_library",
+          "description": "Core dependency."
+        },
+        {
+          "module": "15-rust",
+          "term": "alloc_library",
+          "description": "Alloc dependency."
+        },
+        {
+          "module": "15-rust",
+          "term": "no_std",
+          "description": "#![no_std] environment."
         }
-      ]
+      ],
+      "display_name": "The Rust Standard Library (`std`)",
+      "level": 17
     },
     "svd2rust": {
       "file": "terms/level_17/svd2rust.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "cargo_cli",
+          "description": "Cargo command line interface."
+        },
+        {
+          "module": "15-rust",
+          "term": "no_std",
+          "description": "Bare-metal Rust environment."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "pac",
+          "description": "PAC generation."
+        },
+        {
+          "module": "15-rust",
+          "term": "embedded_hal",
+          "description": "Embedded HAL traits."
+        }
+      ],
+      "display_name": "`svd2rust`",
+      "level": 17
     },
     "raii": {
       "file": "terms/level_18/raii.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "drop_trait",
+          "description": "Drop destructor trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "ownership",
+          "description": "Ownership rules."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "scoped_threads"
+        },
+        {
+          "module": "15-rust",
+          "term": "drop_trait",
+          "description": "Drop trait destructors."
+        },
+        {
+          "module": "15-rust",
+          "term": "mutex_t",
+          "description": "RAII mutex guard locking."
         }
-      ]
+      ],
+      "display_name": "RAII (Resource Acquisition Is Initialization)",
+      "level": 18
     },
     "builder_pattern": {
       "file": "terms/level_18/builder_pattern.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "struct",
+          "description": "Struct data structures."
+        },
+        {
+          "module": "15-rust",
+          "term": "impl_block",
+          "description": "Impl blocks."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "type_state_pattern",
+          "description": "Type-state builder pattern variant."
+        },
+        {
+          "module": "15-rust",
+          "term": "default_trait",
+          "description": "Default values."
+        }
+      ],
+      "display_name": "Builder Pattern",
+      "level": 18
     },
     "visitor_pattern": {
       "file": "terms/level_18/visitor_pattern.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "trait",
+          "description": "Trait polymorphism."
+        },
+        {
+          "module": "15-rust",
+          "term": "enum",
+          "description": "Enum variants."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "enum_dispatch",
+          "description": "Enum dispatch alternative."
+        },
+        {
+          "module": "15-rust",
+          "term": "trait_objects",
+          "description": "Dynamic trait objects."
+        }
+      ],
+      "display_name": "Visitor Pattern",
+      "level": 18
     },
     "extension_trait": {
       "file": "terms/level_18/extension_trait.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "trait",
+          "description": "Traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "orphan_rule",
+          "description": "Orphan rule restrictions."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "blanket_implementation",
+          "description": "Blanket trait implementations."
+        }
+      ],
+      "display_name": "Extension Trait",
+      "level": 18
     },
     "enum_dispatch": {
       "file": "terms/level_18/enum_dispatch.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "enum",
+          "description": "Enums."
+        },
+        {
+          "module": "15-rust",
+          "term": "trait",
+          "description": "Traits."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "visitor_pattern",
+          "description": "Visitor pattern alternative."
+        },
+        {
+          "module": "15-rust",
+          "term": "trait_objects",
+          "description": "Trait objects vs static enum dispatch."
+        }
+      ],
+      "display_name": "Enum Dispatch",
+      "level": 18
     },
     "error_handling_stack": {
       "file": "terms/level_18/error_handling_stack.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "anyhow_thiserror",
+          "description": "Anyhow and thiserror crates."
+        },
+        {
+          "module": "15-rust",
+          "term": "question_mark_operator",
+          "description": "? error propagation."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "anyhow_thiserror",
+          "description": "Error libraries."
+        },
+        {
+          "module": "15-rust",
+          "term": "custom_error_types",
+          "description": "Custom error types."
+        }
+      ],
+      "display_name": "Error Handling Stack",
+      "level": 18
     },
     "dependency_injection": {
       "file": "terms/level_18/dependency_injection.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "generics",
+          "description": "Generic parameters."
+        },
+        {
+          "module": "15-rust",
+          "term": "trait_bound",
+          "description": "Trait bounds."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "trait_bound",
+          "description": "Trait bound constraints."
+        }
+      ],
+      "display_name": "Dependency Injection",
+      "level": 18
     },
     "from_for_constructor_overloading": {
       "file": "terms/level_18/from_for_constructor_overloading.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "from_into_traits",
+          "description": "From/Into traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "associated_function",
+          "description": "Associated functions."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "from_into_traits",
+          "description": "From trait conversions."
+        }
+      ],
+      "display_name": "From For Constructor Overloading",
+      "level": 18
     },
     "cow_for_flexibility": {
       "file": "terms/level_18/cow_for_flexibility.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "cow_t",
+          "description": "Cow smart pointer."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "cow_t",
+          "description": "Clone-on-write pointer."
+        },
+        {
+          "module": "15-rust",
+          "term": "toowned_trait",
+          "description": "ToOwned trait."
+        }
+      ],
+      "display_name": "Cow For Flexibility",
+      "level": 18
     },
     "mir_mid_level_ir": {
       "file": "terms/level_19/mir_mid_level_ir.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "hir_high_level_ir",
+          "description": "HIR representation."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "hir_high_level_ir",
+          "description": "High-level IR."
+        },
+        {
+          "module": "15-rust",
+          "term": "llvm_codegen_backend",
+          "description": "LLVM backend."
+        },
+        {
+          "module": "15-rust",
+          "term": "miri_ub_detector",
+          "description": "Miri execution engine."
+        }
+      ],
+      "display_name": "Mir Mid Level Ir",
+      "level": 19
     },
     "hir_high_level_ir": {
       "file": "terms/level_19/hir_high_level_ir.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "tokens",
+          "description": "Lexical tokens."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "mir_mid_level_ir",
+          "description": "Mid-level IR."
+        }
+      ],
+      "display_name": "Hir High Level Ir",
+      "level": 19
     },
     "nightly_compiler": {
       "file": "terms/level_19/nightly_compiler.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "rustup",
+          "description": "Rustup toolchain installer."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "specialization",
+          "description": "Unstable specialization."
+        },
+        {
+          "module": "15-rust",
+          "term": "generators_coroutines",
+          "description": "Unstable coroutines."
+        }
+      ],
+      "display_name": "Nightly Compiler",
+      "level": 19
     },
     "const_generics": {
       "file": "terms/level_19/const_generics.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "generics",
+          "description": "Generics."
+        },
+        {
+          "module": "15-rust",
+          "term": "constants_const",
+          "description": "Compile-time constants."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "const_fn",
+          "description": "Const functions."
+        },
+        {
+          "module": "15-rust",
+          "term": "const_evaluation_ctfe",
+          "description": "Compile-time evaluation."
+        }
+      ],
+      "display_name": "`const` Generics",
+      "level": 19
     },
     "const_fn": {
       "file": "terms/level_19/const_fn.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "constants_const",
+          "description": "Constants."
+        },
+        {
+          "module": "15-rust",
+          "term": "fn",
+          "description": "Functions."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "const_generics",
+          "description": "Const generics."
+        },
+        {
+          "module": "15-rust",
+          "term": "const_evaluation_ctfe",
+          "description": "Compile-time evaluation."
+        }
+      ],
+      "display_name": "`const fn`",
+      "level": 19
     },
     "const_evaluation_ctfe": {
       "file": "terms/level_19/const_evaluation_ctfe.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "const_fn",
+          "description": "Const functions."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "const_fn",
+          "description": "Const functions."
+        },
+        {
+          "module": "15-rust",
+          "term": "const_generics",
+          "description": "Const generics."
+        }
+      ],
+      "display_name": "Const Evaluation Ctfe",
+      "level": 19
     },
     "specialization": {
       "file": "terms/level_19/specialization.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "nightly_compiler",
+          "description": "Nightly feature gate."
+        },
+        {
+          "module": "15-rust",
+          "term": "trait",
+          "description": "Traits."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "blanket_implementation",
+          "description": "Overriding blanket implementations."
+        },
+        {
+          "module": "15-rust",
+          "term": "nightly_compiler",
+          "description": "Related concept: Nightly Compiler."
+        }
+      ],
+      "display_name": "Specialization",
+      "level": 19
     },
     "generators_coroutines": {
       "file": "terms/level_19/generators_coroutines.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "nightly_compiler",
+          "description": "Nightly features."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_fn",
+          "description": "Async fn."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_fn",
+          "description": "Async/await runtime foundation."
+        },
+        {
+          "module": "15-rust",
+          "term": "future_trait",
+          "description": "Future trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "nightly_compiler",
+          "description": "Related concept: Nightly Compiler."
+        }
+      ],
+      "display_name": "Generators Coroutines",
+      "level": 19
     },
     "tait_type_alias_impl_trait": {
       "file": "terms/level_19/tait_type_alias_impl_trait.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "impl_trait",
+          "description": "impl Trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "type_alias",
+          "description": "Type aliases."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "impl_trait",
+          "description": "Opaque return types."
+        }
+      ],
+      "display_name": "Tait Type Alias Impl Trait",
+      "level": 19
     },
     "polonius": {
       "file": "terms/level_19/polonius.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "borrow_checker",
+          "description": "Borrow checker rules."
+        },
+        {
+          "module": "15-rust",
+          "term": "mir_mid_level_ir",
+          "description": "MIR IR."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "borrow_checker",
+          "description": "Borrow checker."
+        },
+        {
+          "module": "15-rust",
+          "term": "non_lexical_lifetimes",
+          "description": "NLL lifetime model."
+        }
+      ],
+      "display_name": "Polonius",
+      "level": 19
     },
     "cstring_cstr": {
       "file": "terms/level_13/cstring_cstr.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "ffi",
+          "description": "FFI interoperability."
+        },
+        {
+          "module": "15-rust",
+          "term": "string_vs_&str",
+          "description": "Rust string types."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "ffi",
+          "description": "C FFI boundary."
+        },
+        {
+          "module": "15-rust",
+          "term": "extern_c",
+          "description": "C calling convention."
+        }
+      ],
+      "display_name": "`CString` / `CStr`",
+      "level": 13
     },
     "miri_ub_detector": {
       "file": "terms/level_13/miri_ub_detector.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "undefined_behavior",
+          "description": "Undefined behavior rules."
+        },
+        {
+          "module": "15-rust",
+          "term": "unsafe_block",
+          "description": "Unsafe code blocks."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "undefined_behavior",
+          "description": "UB detection."
+        },
+        {
+          "module": "15-rust",
+          "term": "cargo_cli",
+          "description": "Cargo integration."
+        },
+        {
+          "module": "15-rust",
+          "term": "mir_mid_level_ir",
+          "description": "Related concept: Mir Mid Level Ir."
+        }
+      ],
+      "display_name": "Miri (UB Detector)",
+      "level": 13
     },
     "llvm_codegen_backend": {
       "file": "terms/level_19/llvm_codegen_backend.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "mir_mid_level_ir",
+          "description": "MIR lowering."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "mir_mid_level_ir",
+          "description": "MIR intermediate representation."
+        },
+        {
+          "module": "15-rust",
+          "term": "link_time_optimization",
+          "description": "Link time optimization."
+        }
+      ],
+      "display_name": "Llvm Codegen Backend",
+      "level": 19
     },
     "deref_coercion": {
       "file": "terms/level_14/deref_coercion.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "deref_deref_mut_traits",
+          "description": "Deref traits."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "deref_deref_mut_traits",
+          "description": "Deref traits."
+        }
+      ],
+      "display_name": "Deref Coercion",
+      "level": 14
     },
     "index_indexmut_traits": {
       "file": "terms/level_14/index_indexmut_traits.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "operator_overloading",
+          "description": "Operator overloading."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "operator_overloading",
+          "description": "Operator overloading."
+        },
+        {
+          "module": "15-rust",
+          "term": "array_and_slice",
+          "description": "Slice indexing."
+        }
+      ],
+      "display_name": "`Index` and `IndexMut` Traits",
+      "level": 14
     },
     "labeled_loops": {
       "file": "terms/level_02/labeled_loops.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "Labeled Loops",
+      "level": 2
     },
     "pattern_features": {
       "file": "terms/level_02/pattern_features.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "Pattern Features",
+      "level": 2
     },
     "file_bufreadwriter": {
       "file": "terms/level_04/file_bufreadwriter.md",
       "prerequisites": [],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "path_pathbuf",
+          "description": "Related concept: `Path` / `PathBuf`."
+        }
+      ],
+      "display_name": "`File`, `BufReader`, `BufWriter`",
+      "level": 4
     },
     "duration_instant": {
       "file": "terms/level_01/duration_instant.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "scalar_types",
+          "description": "Primitive integer types."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "std_thread_spawn",
+          "description": "Thread sleep and timing operations."
+        }
+      ],
+      "display_name": "`Duration` and `Instant`",
+      "level": 1
     },
     "formatting_traits": {
       "file": "terms/level_04/formatting_traits.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "Formatting Traits (`std::fmt`)",
+      "level": 4
     },
     "result_option_combinators": {
       "file": "terms/level_04/result_option_combinators.md",
       "prerequisites": [],
-      "related": []
+      "related": [],
+      "display_name": "`Result` and `Option` Combinators",
+      "level": 4
     },
     "waker_context": {
       "file": "terms/level_10/waker_context.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "future_trait",
+          "description": "The Future trait."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "future_trait",
+          "description": "Polling futures via Waker."
+        },
+        {
+          "module": "15-rust",
+          "term": "executor_runtime",
+          "description": "Task executors."
+        }
+      ],
+      "display_name": "`Waker` and `Context`",
+      "level": 10
     },
     "memory_ordering": {
       "file": "terms/level_09/memory_ordering.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "atomic_types",
+          "description": "Atomic memory operations."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "atomic_types",
+          "description": "Lock-free atomic types."
+        }
+      ],
+      "display_name": "Memory Ordering (`Ordering`)",
+      "level": 9
     },
     "inline_assembly": {
       "file": "terms/level_13/inline_assembly.md",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "unsafe_block",
+          "description": "Unsafe execution context."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "unsafe_block",
+          "description": "Unsafe blocks."
+        }
+      ],
+      "display_name": "Inline Assembly (`asm!`)",
+      "level": 13
     }
   }
 }

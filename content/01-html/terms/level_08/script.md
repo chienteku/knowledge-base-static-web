@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<body>`](../level_01/body.md) and [`<head>`](../level_01/head.md) — The `<script>` tag can be placed in either location, depending on the strategy.
+- [`<body>`](../level_01/body.md)
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<script>` tag is NOT a void element; it must have a closing tag, even if it is empty!
-
 ---
 
 ## 2. Term Category
@@ -198,10 +197,13 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 > **Explanation:** `type="text/javascript"` is redundant in modern HTML5.
 
 ## 7. Related Terms
-- [`<link>`](../level_08/link.md) — Used to import CSS, whereas `<script>` is used to import JavaScript.
-- [`defer` & `async` (Script Loading Strategies)](../level_08/defer_async.md) — Tag parameters optimized for asynchronous asset parsing.
-- [`<noscript>`](../level_08/noscript.md) — A fallback frame shown if script execution is blocked or disabled.
-
+- [`<link>`](link.md) — Used to import CSS, whereas `<script>` is used to import JavaScript.
+- [`defer` & `async` (Script Loading Strategies)](defer_async.md) — Tag parameters optimized for asynchronous asset parsing.
+- [`<noscript>`](noscript.md) — A fallback frame shown if script execution is blocked or disabled.
+- [`data-*` Attributes](../level_07/data_attributes.md) — Related concept: `data-*` Attributes.
+- [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
+- [Geolocation API](../level_10/geolocation.md) — Related concept: Geolocation API.
+- [Web Storage (Local/Session Storage)](../level_10/web_storage.md) — Related concept: Web Storage (Local/Session Storage).
 ---
 
 ## 8. Key Takeaways

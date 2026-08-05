@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Data Types](../level_01/primitive_types.md) — The core concept TypeScript is enforcing.
-- [Babel](./babel.md) / [Bundler](./bundler.md) — How TypeScript is ultimately converted back to JS.
-
+- [Primitive Types](../level_01/primitive_types.md) — The core concept TypeScript is enforcing.
+- [Babel](babel.md)
 ---
 
 ## 2. Term Category
@@ -200,9 +199,12 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Babel](./babel.md) — Often used alongside TypeScript to compile the code for the browser.
-- [Primitive Data Types](../level_01/primitive_types.md) — The building blocks of TypeScript's rules.
-
+- [Babel](babel.md) — Often used alongside TypeScript to compile the code for the browser.
+- [Primitive Types](../level_01/primitive_types.md) — The building blocks of TypeScript's rules.
+- [Alternative Runtimes (Deno / Bun)](alternative_runtimes.md) — Related concept: Alternative Runtimes (Deno / Bun).
+- [Linter (ESLint) & Formatter (Prettier)](linter_formatter.md) — Related concept: Linter (ESLint) & Formatter (Prettier).
+- [Runtime vs Compile Time](runtime_vs_compile_time.md) — Related concept: Runtime vs Compile Time.
+- [ECMAScript](../level_01/ecmascript.md) — ECMAScript static typing.
 ---
 
 ## 8. Key Takeaways

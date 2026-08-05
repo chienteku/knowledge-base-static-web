@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Concurrent Rendering](../level_08/concurrent_rendering.md) — The core engine scheduling deferred rendering.
+- [Concurrent Rendering](concurrent_rendering.md) — The core engine scheduling deferred rendering.
 - [Re-rendering](../level_02/re_rendering.md) — The process React optimizes by delaying updates.
-
 ---
 
 ## 2. Term Category
@@ -218,9 +217,9 @@ const HeavyList = React.memo(function HeavyList({ query }) { ... });
 > **Explanation:** `useDeferredValue` adapts dynamically to user device processing capabilities.
 
 ## 7. Related Terms
-- [`useTransition` Hook](../level_08/use_transition.md) — Deferring updates when you control the state setter.
-- [Concurrent Rendering](../level_08/concurrent_rendering.md) — The engine architecture that enables deferred rendering.
-
+- [`useTransition` Hook](use_transition.md) — Deferring updates when you control the state setter.
+- [Concurrent Rendering](concurrent_rendering.md) — The engine architecture that enables deferred rendering.
+- [Suspense](suspense.md) — Related concept: Suspense.
 ---
 
 ## 8. Key Takeaways

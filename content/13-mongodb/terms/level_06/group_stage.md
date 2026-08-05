@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 
 ---
@@ -205,8 +206,10 @@ db.sales.aggregate([{ $group: { _id: "$category", firstName: { $first: "$name" }
 > **Explanation:** Compound object `_id: { year, month }` groups documents across multiple dimension keys.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Accumulator Operators (`$sum`, `$avg`, etc.)](accumulator_operators.md) — The calculation operators.
+- [Accumulator Operators (`$sum`, `$avg`, `$min`, `$max`, `$count`, `$push`, `$addToSet`)](accumulator_operators.md) — The calculation operators.
+- [`$match` Stage](match_stage.md) — Related concept: `$match` Stage.
 
 ---
 

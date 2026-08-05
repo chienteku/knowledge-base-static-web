@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Express.js](../level_07/express_js.md) — This article focuses specifically on the Express-enhanced versions of these objects.
-- [JSON](../../../04-apis/terms/level_01/json.md) — How you usually send data back using `res`.
-
+- [Express.js](express_js.md) — This article focuses specifically on the Express-enhanced versions of these objects.
+- json — How you usually send data back using `res`.
 ---
 
 ## 2. Term Category
@@ -237,9 +236,15 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 > **Explanation:** `req.ip` returns client IP; `req.get(headerName)` gets request header values.
 
 ## 7. Related Terms
-- [Routing](../level_07/routing.md) — The system that passes these objects to your function.
+- [Routing](routing.md) — The system that passes these objects to your function.
 - [HTTP Status Codes](../level_09/status_codes.md) — What you inject into `res.status()`.
-
+- [Body Parsing (express.json())](body_parsing.md) — Related concept: Body Parsing (express.json()).
+- [The http Module Deep Dive](http_deep_dive.md) — Related concept: The http Module Deep Dive.
+- [The Middleware Chain & next()](middleware_chain.md) — Related concept: The Middleware Chain & next().
+- [Route Parameters & Query Strings](route_parameters.md) — Related concept: Route Parameters & Query Strings.
+- [Pagination](../level_09/pagination.md) — Related concept: Pagination.
+- [The http Module](../level_02/http_module.md) — Related concept: The http Module.
+- [Express.js](express_js.md) — Related concept: Express.js.
 ---
 
 ## 8. Key Takeaways

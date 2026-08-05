@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Vue 3 Composition API Overview](../../../07-vue/terms/level_01/composition_api.md) — The core Vue paradigm.
-- [Reactivity API (`ref`)](../../../07-vue/terms/level_02/ref.md) — The mechanism for primitive values.
-- [Reactivity API (`reactive`)](../../../07-vue/terms/level_02/reactive.md) — The mechanism for object structures.
-
+- composition_api — The core Vue paradigm.
+- ref — The mechanism for primitive values.
+- reactive — The mechanism for object structures.
 ---
 
 ## 2. Term Category
@@ -210,8 +209,8 @@ console.log(route.path);
 ---
 
 ## 7. Related Terms
-- [Auto-imports](../level_01/auto_imports.md) — Why you don't need to explicitly import `ref` or `computed`.
-
+- [Auto-imports](auto_imports.md) — Why you don't need to explicitly import `ref` or `computed`.
+- [Nuxt 3 Overview](nuxt_3_overview.md) — Related concept: Nuxt 3 Overview.
 ---
 
 ## 8. Key Takeaways

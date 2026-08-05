@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter parameter structure.
 - [Implicit `$eq` & Combining Conditions](implicit_eq_combining.md) — Differentiating implicit ANDs from explicit ones.
 
@@ -252,8 +253,10 @@ db.users.find({ $nor: [{ status: "active" }] });
 > **Explanation:** `$nor: [ ... ]` matches documents failing all specified clause conditions.
 
 ## 7. Related Terms
+
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
 - [Implicit `$eq` & Combining Conditions](implicit_eq_combining.md) — Shorthand logic.
+- [Comparison Query Operators (`$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$nin`)](comparison_operators.md) — Related concept: Comparison Query Operators (`$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$nin`).
 
 ---
 

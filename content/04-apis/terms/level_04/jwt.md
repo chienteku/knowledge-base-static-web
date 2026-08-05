@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Statelessness](../level_03/statelessness.md) — The entire reason JWTs exist is because servers cannot remember who is logged in.
-- [JSON](../level_01/json.md) — The format the token is built upon.
-
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The format the token is built upon.
 ---
 
 ## 2. Term Category
@@ -160,9 +159,16 @@ jwt.verify(token, key, { algorithms: ['HS256'] });
 ---
 
 ## 7. Related Terms
-- [Basic & Bearer Authentication](../level_04/basic_bearer_auth.md) — JWTs are sent in the `Authorization: Bearer <token>` header.
-- [Web Storage (localStorage)](../level_09/web_storage.md) — The common (though sometimes risky) place to store JWTs on the client.
-
+- [Basic & Bearer Authentication](basic_bearer_auth.md) — JWTs are sent in the `Authorization: Bearer <token>` header.
+- [localStorage & sessionStorage](../level_09/web_storage.md) — The common (though sometimes risky) place to store JWTs on the client.
+- [HTTP Headers](../level_02/http_headers.md) — Related concept: HTTP Headers.
+- [Statelessness](../level_03/statelessness.md) — Related concept: Statelessness.
+- [API Keys](api_keys.md) — Related concept: API Keys.
+- [OAuth 2.0](oauth.md) — Related concept: OAuth 2.0.
+- [OAuth Scopes](oauth_scopes.md) — Related concept: OAuth Scopes.
+- [Session vs Token Authentication](session_vs_token_auth.md) — Related concept: Session vs Token Authentication.
+- [Base64 Encoding](../level_07/base64.md) — Related concept: Base64 Encoding.
+- [Cookies](../level_09/cookies.md) — Related concept: Cookies.
 ---
 
 ## 8. Key Takeaways

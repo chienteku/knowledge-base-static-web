@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`line-height`](../level_03/line_height.md) — If `line-height` is vertical spacing for text, these are the horizontal equivalents.
-
 ---
 
 ## 2. Term Category
@@ -155,7 +154,6 @@ h1 { font-size: 4rem; letter-spacing: 0.05em; } /* Relative scaling tracking */
 
 ## 7. Related Terms
 - [`text-transform`](text_transform.md) — The property most commonly paired with `letter-spacing`.
-
 ---
 
 ## 8. Key Takeaways

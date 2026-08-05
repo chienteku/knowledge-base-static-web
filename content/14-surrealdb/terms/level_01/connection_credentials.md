@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Namespace & Database](namespace_database.md) — The logical containers targeted.
 - [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — The executing client environment.
 
@@ -220,8 +221,10 @@ Write the SurrealQL code block to:
 > **Explanation:** SurrealDB enforces multi-tenant authentication at root, namespace, and database/scope levels.
 
 ## 7. Related Terms
+
 - [Namespace & Database](namespace_database.md) — The logical containers targeted.
 - [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — The executing client environment.
+- [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](../level_10/sdk_connection.md) — Related concept: SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`).
 
 ---
 

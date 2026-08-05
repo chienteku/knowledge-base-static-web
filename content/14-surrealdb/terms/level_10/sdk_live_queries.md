@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Server-side live queries.
 - [`KILL` (Stopping Live Queries)](../level_09/kill_live_query.md) — Unsubscribing live queries.
 
@@ -240,6 +241,7 @@ What are the 3 possible string values for the `action` parameter passed to the `
 > **Explanation:** Live query callbacks receive action strings indicating record mutation type.
 
 ## 7. Related Terms
+
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Server-side live query statement.
 - [`KILL` (Stopping Live Queries)](../level_09/kill_live_query.md) — Terminating subscriptions.
 - [JavaScript / TypeScript SDK](js_sdk.md) — SDK package overview.

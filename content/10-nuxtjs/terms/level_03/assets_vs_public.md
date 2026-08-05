@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Nuxt 3 Overview](../level_01/nuxt_3_overview.md) — Specifically the Vite bundler that powers the build process.
-
 ---
 
 ## 2. Term Category
@@ -191,7 +190,6 @@ const currentImage = 'hero.jpg';
 
 ## 7. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where you can configure global SCSS stylesheets from the `assets/` directory.
-
 ---
 
 ## 8. Key Takeaways

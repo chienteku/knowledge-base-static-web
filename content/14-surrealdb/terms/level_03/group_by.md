@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`SELECT`](select.md) — The parent query statement.
 
 ---
@@ -213,6 +214,7 @@ SELECT role, count() FROM user GROUP BY role HAVING count() > 5;
 > **Explanation:** `GROUP ALL` aggregates the entire table dataset into a single summary result.
 
 ## 7. Related Terms
+
 - [`SELECT`](select.md) — The parent query statement.
 - [Aggregate Functions](aggregate_functions.md) — The calculation functions.
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-side Fetching (Extended `fetch`)](../level_05/fetch.md) — The request memoization behavior this function mimics for non-HTTP calls.
-- [ORM (Object-Relational Mapping) & Prisma](../level_05/orm_prisma.md) — The database clients that require memoization.
-
+- [Server-side Fetching (Extended `fetch`)](fetch.md) — The request memoization behavior this function mimics for non-HTTP calls.
+- [ORM (Object-Relational Mapping) & Prisma](orm_prisma.md) — The database clients that require memoization.
 ---
 
 ## 2. Term Category
@@ -209,9 +208,9 @@ export const getCachedArticles = cache(async (category: string) => {
 ---
 
 ## 7. Related Terms
-- [Server-side Fetching (Extended `fetch`)](../level_05/fetch.md) — The automatic request deduplication model.
-- [ORM (Object-Relational Mapping) & Prisma](../level_05/orm_prisma.md) — The queries commonly optimized by `React.cache()`.
-
+- [Server-side Fetching (Extended `fetch`)](fetch.md) — The automatic request deduplication model.
+- [ORM (Object-Relational Mapping) & Prisma](orm_prisma.md) — The queries commonly optimized by `React.cache()`.
+- [Data Caching (`force-cache`, `no-store`)](data_caching.md) — Related concept: Data Caching (`force-cache`, `no-store`).
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE FIELD`](define_field.md) — The parent schema context.
 
 ---
@@ -204,6 +205,7 @@ Predict the values stored in `points` and `tier` for these write actions:
 > **Explanation:** `VALUE <future>` computes dynamic expressions on demand when records are queried.
 
 ## 7. Related Terms
+
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [Assertions (`ASSERT`)](field_assertions.md) — Field-level validation rules.
 

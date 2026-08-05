@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [MongoDB](mongodb.md) — The parent database engine.
 
 ---
@@ -193,7 +194,11 @@ Flatten object hierarchies into top-level or shallow 2-3 level fields
 
 ## 7. Related Terms
 
+
 - [MongoDB](mongodb.md)
+- [Collection](collection.md) — Related concept: Collection.
+- [Document vs. Relational Model](document_vs_relational.md) — Related concept: Document vs. Relational Model.
+- [Field](field.md) — Related concept: Field.
 
 ---
 

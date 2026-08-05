@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [JavaScript / TypeScript SDK](js_sdk.md) — The `surrealdb` client package.
 - [Connection Credentials (`USE NS ... DB ...`)](../level_01/connection_credentials.md) — Namespace and database scope concepts.
 
@@ -259,6 +260,7 @@ d. `use()`
 > **Explanation:** Official SDKs include built-in automatic WebSocket reconnection handlers.
 
 ## 7. Related Terms
+
 - [JavaScript / TypeScript SDK](js_sdk.md) — SurrealDB npm package overview.
 - [Connection Credentials (`USE NS ... DB ...`)](../level_01/connection_credentials.md) — Scope selection.
 - [WebSocket vs HTTP Connection](websocket_vs_http.md) — Transport choices.

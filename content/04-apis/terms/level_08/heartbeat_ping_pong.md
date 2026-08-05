@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [WebSockets](./websockets.md) — The real-time protocol.
-
+- [WebSockets](websockets.md) — The real-time protocol.
 ---
 
 ## 2. Term Category
@@ -349,9 +348,8 @@ At what time will the server detect the drop and terminate the socket resource?
 ---
 
 ## 7. Related Terms
-- [Reconnection & Backoff](./reconnection_backoff.md) — The client-side logic triggered after a heartbeat check failure closes a socket.
-- [The WebSocket API (Client-side)](./websocket_api.md) — The browser interface which handles incoming pings and returns pongs.
-
+- [Reconnection & Backoff](reconnection_backoff.md) — The client-side logic triggered after a heartbeat check failure closes a socket.
+- [The WebSocket API (Client-side)](websocket_api.md) — The browser interface which handles incoming pings and returns pongs.
 ---
 
 ## 8. Key Takeaways

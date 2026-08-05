@@ -7,9 +7,8 @@
 
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — A block of code.
-- [`this` Keyword](./this_keyword.md) — Used heavily inside constructors.
-- [Prototypal Inheritance](./prototypal_inheritance.md) — How constructors share methods.
-
+- [this Keyword](this_keyword.md) — Used heavily inside constructors.
+- [Prototypal Inheritance](prototypal_inheritance.md) — How constructors share methods.
 ---
 
 ## 2. Term Category
@@ -213,9 +212,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`new` Keyword](./new_keyword.md) — The magic word that makes Constructors work.
-- [Class](./class.md) — The modern ES6 syntax that completely replaces Constructor Functions.
-
+- [new Keyword](new_keyword.md) — The magic word that makes Constructors work.
+- [Class](class.md) — The modern ES6 syntax that completely replaces Constructor Functions.
+- [Default this Binding Rules](default_this_binding.md) — Related concept: Default this Binding Rules.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Generics Overview](../level_07/generics.md) — The core concept.
+- [Generics Overview (`<T>`)](generics.md) — The core concept.
 - [Interfaces](../level_03/interfaces.md) — One of the structures being made generic.
-
 ---
 
 ## 2. Term Category
@@ -182,9 +181,9 @@ class UserRepo implements Repository<string> { find() { return "user"; } }
 > **Explanation:** Generic interfaces parametrize key and value data contracts.
 
 ## 7. Related Terms
-- [Type Aliases](../level_05/type_aliases.md) — Can also be Generic (`type MyType<T> = ...`).
-- [Classes](../level_10/classes.md) — The OOP structures being made generic.
-
+- [Type Aliases (`type`)](../level_05/type_aliases.md) — Can also be Generic (`type MyType<T> = ...`).
+- [Classes Overview](../level_10/classes.md) — The OOP structures being made generic.
+- [Generics Overview (`<T>`)](generics.md) — Related concept: Generics Overview (`<T>`).
 ---
 
 ## 8. Key Takeaways

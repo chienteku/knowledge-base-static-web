@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Props](../level_01/props.md) — The mechanism `children` uses.
+- [Props (Properties)](../level_01/props.md) — The mechanism `children` uses.
 - [Components](../level_01/components.md) — Where this prop is passed.
-
 ---
 
 ## 2. Term Category

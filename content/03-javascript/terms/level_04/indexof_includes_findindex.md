@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
-- [Strict vs Loose Equality (`===` vs `==`)](../level_01/strict_vs_loose_equality.md) — Identity comparison without coercion.
-
+- [Strict vs Loose Equality (=== vs ==)](../level_01/strict_vs_loose_equality.md) — Identity comparison without coercion.
 ---
 
 ## 2. Term Category
@@ -227,9 +226,8 @@ const cart = ["Apple", "Bread", "Soda", "Cheese"];
 ---
 
 ## 7. Related Terms
-- [`find()`](../level_04/find.md) — Returns the actual matched element itself (rather than its index).
-- [`some()`](../level_04/some.md) — Checks if at least one element satisfies a callback condition.
-
+- [find()](find.md) — Returns the actual matched element itself (rather than its index).
+- [some()](some.md) — Checks if at least one element satisfies a callback condition.
 ---
 
 ## 8. Key Takeaways

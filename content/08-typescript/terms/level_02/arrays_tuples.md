@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Primitive Types](../level_02/primitive_types.md) — What is usually placed inside these lists.
-
+- [Primitive Types](primitive_types.md) — What is usually placed inside these lists.
 ---
 
 ## 2. Term Category
@@ -151,9 +150,10 @@ const point: [number, number] = [10, 20]; // Positional fixed tuple
 > **Explanation:** `readonly` tuple types disable array mutator methods like `push` or `pop`.
 
 ## 7. Related Terms
-- [Primitive Types](../level_02/primitive_types.md) — The building blocks of arrays.
-- [Union Types](../level_05/union_types.md) — Used to allow multiple different types inside a single array.
-
+- [Primitive Types](primitive_types.md) — The building blocks of arrays.
+- [Union Types (`|`)](../level_05/union_types.md) — Used to allow multiple different types inside a single array.
+- [Rest Parameters (`...`)](../level_04/rest_parameters.md) — Related concept: Rest Parameters (`...`).
+- [Readonly Properties (`readonly`)](../level_03/readonly.md) — Readonly tuples and arrays.
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Standard trait definitions and implementation blocks (`impl Trait for Type`).
-- [Generics](../level_04/generics.md) — Generic parameters (`T`) and trait bounds (`where T: Trait`).
+
+- [Trait](../level_04/trait.md) — Standard trait definitions and implementation blocks (`impl Trait for Type`).
+- [Generics (`<T>`)](../level_04/generics.md) — Generic parameters (`T`) and trait bounds (`where T: Trait`).
 - [`Display` Trait](../level_04/display_trait.md) — Common standard library trait often used as a bound for blanket implementations (`ToString`).
 
 ---
@@ -557,10 +558,14 @@ A logging system requires a custom trait `AuditDump` with `fn dump_audit(&self) 
 
 ## 7. Related Terms
 
-- [Traits](../level_04/trait.md) — The fundamental abstraction mechanism.
-- [Orphan Rule](../level_14/orphan_rule.md) — The coherence rule restricting where blanket implementations can be declared.
-- [Coherence](../level_14/coherence.md) — The property ensuring no conflicting duplicate trait implementations exist.
-- [Supertraits](../level_14/supertraits.md) — Trait inheritance relationships (`trait A: B`).
+
+- [Trait](../level_04/trait.md) — The fundamental abstraction mechanism.
+- [Orphan Rule](orphan_rule.md) — The coherence rule restricting where blanket implementations can be declared.
+- [Coherence](coherence.md) — The property ensuring no conflicting duplicate trait implementations exist.
+- [Supertraits](supertraits.md) — Trait inheritance relationships (`trait A: B`).
+- [`TryFrom` / `TryInto`](try_from_try_into.md) — Related concept: `TryFrom` / `TryInto`.
+- [Extension Trait](../level_18/extension_trait.md) — Related concept: Extension Trait.
+- [Specialization](../level_19/specialization.md) — Related concept: Specialization.
 
 ---
 

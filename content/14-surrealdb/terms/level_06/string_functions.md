@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library context.
-- [`string` Type](../level_02/string.md) — The UTF-8 string data type.
+- [`string`](../level_02/string.md) — The UTF-8 string data type.
 
 ---
 
@@ -193,8 +194,9 @@ LET $str = "hi"; RETURN string::slice($str, 0, string::len($str));
 > **Explanation:** `string::replace(str, target, replacement)` substitutes matching substrings.
 
 ## 7. Related Terms
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
-- [`string` Type](../level_02/string.md) — The string data type.
+- [`string`](../level_02/string.md) — The string data type.
 
 ---
 

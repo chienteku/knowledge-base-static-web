@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — The dynamic parameters we are defining.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -294,9 +293,9 @@ export async function generateStaticParams() {
 ---
 
 ## 7. Related Terms
-- [Static Rendering (SSG)](../level_08/ssg.md) — The output target.
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — The syntax being structured.
-
+- [Static Site Generation (SSG)](ssg.md) — The output target.
+- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — Related concept: Dynamic Routes (`[slug]`).
+- [Incremental Static Regeneration (ISR)](isr.md) — Related concept: Incremental Static Regeneration (ISR).
 ---
 
 ## 8. Key Takeaways

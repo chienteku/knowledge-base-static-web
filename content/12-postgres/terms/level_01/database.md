@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- None. This is the starting point of the entire database curriculum.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -165,7 +164,9 @@ CREATE SCHEMA tenant_123; -- Isolated schemas inside shared database
 ## 7. Related Terms
 - [PostgreSQL (Postgres)](postgresql.md) — A specific type of database management system.
 - [Relational Database](relational_database.md) — The relational structural philosophy.
-
+- [`CREATE DATABASE` / `DROP DATABASE`](create_drop_database.md) — Related concept: `CREATE DATABASE` / `DROP DATABASE`.
+- [Schema](schema.md) — Related concept: Schema.
+- [SQL (Structured Query Language)](sql.md) — Related concept: SQL (Structured Query Language).
 ---
 
 ## 8. Key Takeaways

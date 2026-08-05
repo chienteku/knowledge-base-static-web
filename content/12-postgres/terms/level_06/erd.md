@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Relational Database](../level_01/relational_database.md) — The relational structural philosophy.
 - [Table (Relation)](../level_01/table.md) — The physical data containers.
-
 ---
 
 ## 2. Term Category
@@ -199,7 +198,6 @@ Model core domain entities (User, Account, Subscription)
 ## 7. Related Terms
 - [Normalization](normalization.md) — The mathematical rules of schema structuring.
 - [Junction Table (Bridge / Pivot Table)](../level_05/junction_table.md) — The physical resolution of M:N relationships in ERDs.
-
 ---
 
 ## 8. Key Takeaways

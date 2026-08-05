@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Standard trait definitions and implementations.
-- [`Send`](../level_09/send_trait.md) & [`Sync`](../level_09/sync_trait.md) Traits — The flagship standard library marker traits for thread safety.
-- [Zero-Sized Types (ZSTs)](../level_11/zsts.md) — Type-level markers that cost zero memory at runtime.
+
+- [Trait](../level_04/trait.md) — Standard trait definitions and implementations.
+- [`Send` Trait](../level_09/send_trait.md)
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Type-level markers that cost zero memory at runtime.
 - [`Sized` Trait](../level_11/sized_trait.md) — Built-in marker trait indicating known compile-time size.
 
 ---
@@ -675,10 +676,14 @@ Using Rust's type system, design compile-time capability authorization using mar
 
 ## 7. Related Terms
 
-- [`Send`](../level_09/send_trait.md) & [`Sync`](../level_09/sync_trait.md) Traits — Thread-safety marker traits.
+
+- [`Send` Trait](../level_09/send_trait.md)
 - [`Sized` Trait](../level_11/sized_trait.md) — Compile-time size marker trait.
-- [Zero-Sized Types (ZSTs)](../level_11/zsts.md) — Types that occupy 0 bytes of memory.
-- [Sealed Trait Pattern](../level_14/sealed_trait_pattern.md) — Design pattern using private supertraits to lock trait implementations.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Types that occupy 0 bytes of memory.
+- [Sealed Trait Pattern](sealed_trait_pattern.md) — Design pattern using private supertraits to lock trait implementations.
+- [Auto Traits](../level_09/auto_traits.md) — Related concept: Auto Traits.
+- [Supertraits](supertraits.md) — Related concept: Supertraits.
+- [Type-State Pattern](type_state_pattern.md) — Related concept: Type-State Pattern.
 
 ---
 

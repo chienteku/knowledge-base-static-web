@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [`Rc<T>`](../level_03/rc_t.md) — The Reference Counted smart pointer used for shared ownership.
 - [`Arc<T>`](../level_03/arc_t.md) — The thread-safe version of `Rc`.
 
@@ -537,8 +538,10 @@ Implement a leak-free tree structure `TreeNode`:
 
 ## 6. Related Terms
 
+
 - [`Rc<T>`](../level_03/rc_t.md) — The strong pointer that actually keeps data alive.
 - [`RefCell<T>`](../level_03/refcell_t.md) — Usually used inside the `Rc` to allow the parent and child to mutate each other!
+- [Memory Leaks & Reference Cycles](memory_leaks.md) — Related concept: Memory Leaks & Reference Cycles.
 
 ---
 

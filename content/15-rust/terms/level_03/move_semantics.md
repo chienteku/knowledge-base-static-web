@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — Move semantics are the direct consequence of the rule: "There can only be one owner at a time."
+
+- [Ownership](ownership.md) — Move semantics are the direct consequence of the rule: "There can only be one owner at a time."
 - [String vs &str](../level_01/string_vs_&str.md) — `String` data lives on the Heap, making it the perfect example of a type that gets "moved".
 
 ---
@@ -541,9 +542,12 @@ Write unit tests verifying pointer preservation (`as_ptr()`), partial moves with
 
 ## 6. Related Terms
 
-- [`Clone` Trait](../level_03/clone_trait.md) — The explicit way to bypass a Move and perform a deep copy of the data.
-- [`Copy` Trait](../level_03/copy_trait.md) — The reason why simple types like `i32` or `bool` do not get moved (they are copied automatically).
-- [Borrowing (`&`)](../level_03/borrowing.md) — The idiomatic way to let a function read your data without moving ownership.
+
+- [`Clone` Trait](clone_trait.md) — The explicit way to bypass a Move and perform a deep copy of the data.
+- [`Copy` Trait](copy_trait.md) — The reason why simple types like `i32` or `bool` do not get moved (they are copied automatically).
+- [Borrowing (`&`)](borrowing.md) — The idiomatic way to let a function read your data without moving ownership.
+- [Ownership](ownership.md) — Related concept: Ownership.
+- [Partial Moves & Partial Borrows](partial_moves.md) — Related concept: Partial Moves & Partial Borrows.
 
 ---
 

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 
 ---
@@ -244,6 +245,7 @@ Write the SurrealQL query starting from `student:alice` to retrieve the student'
 > **Explanation:** `array::distinct()` deduplicates record IDs retrieved across multiple edge paths.
 
 ## 7. Related Terms
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 - [Deep Graph Traversal (Chained arrows)](deep_graph_traversal.md) — Sequential path walks.
 

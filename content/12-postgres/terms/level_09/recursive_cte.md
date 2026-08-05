@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Common Table Expression (CTE / `WITH`)](cte.md) — The parent query abstraction syntax.
-
 ---
 
 ## 2. Term Category
@@ -243,7 +242,6 @@ Write a recursive CTE named `category_tree` that starts at the root category `'E
 
 ## 7. Related Terms
 - [Common Table Expression (CTE / `WITH`)](cte.md) — The parent query abstraction syntax.
-
 ---
 
 ## 8. Key Takeaways

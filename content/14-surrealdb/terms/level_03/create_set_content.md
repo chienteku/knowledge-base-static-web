@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`CREATE`](create.md) — The parent write statement.
 
 ---
@@ -203,8 +204,9 @@ Write the equivalent query using the `CONTENT` syntax style.
 > **Explanation:** `PATCH` executes standard RFC 6902 JSON Patch operations.
 
 ## 7. Related Terms
+
 - [`CREATE`](create.md) — The parent write statement.
-- [`UPDATE` Strategies](update_strategies.md) — Updating records content.
+- [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](update_strategies.md) — Updating records content.
 
 ---
 

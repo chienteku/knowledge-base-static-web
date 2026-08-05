@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Type Inference](../level_01/type_inference.md) — How the compiler determines types when they are not explicitly declared.
+- [Type Inference](type_inference.md) — How the compiler determines types when they are not explicitly declared.
 - [Literal Types](../level_05/literal_types.md) — Custom types representing exact primitive values.
-
 ---
 
 ## 2. Term Category
@@ -212,10 +211,10 @@ const z = { greeting: 'Hello' };
 > **Explanation:** `const` primitive bindings preserve literal types; `let` widens to base primitive types.
 
 ## 7. Related Terms
-- [Type Inference](../level_01/type_inference.md) — The mechanism that triggers widening.
+- [Type Inference](type_inference.md) — The mechanism that triggers widening.
 - [Literal Types](../level_05/literal_types.md) — The specific types that are widened.
-- [Const Assertions](../level_11/const_assertions.md) — The syntax used to opt-out of widening on objects and arrays.
-
+- [Const Assertions (`as const`)](../level_11/const_assertions.md) — The syntax used to opt-out of widening on objects and arrays.
+- [`satisfies` Operator](../level_05/satisfies_operator.md) — Related concept: `satisfies` Operator.
 ---
 
 ## 8. Key Takeaways

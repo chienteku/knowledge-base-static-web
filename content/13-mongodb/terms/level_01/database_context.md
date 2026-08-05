@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Collection](collection.md) — The data tables grouped inside the database.
 
 ---
@@ -179,8 +180,12 @@ Write the shell commands to execute this.
 > **Explanation:** `show dbs` prints active non-empty databases and file sizes.
 
 ## 7. Related Terms
+
 - [Collection](collection.md) — The child collections.
 - [mongosh (MongoDB Shell)](mongosh.md) — The command line interface.
+- [MongoDB vs. PostgreSQL — When to Choose Which](../level_10/mongodb_vs_postgresql.md) — Related concept: MongoDB vs. PostgreSQL — When to Choose Which.
+- [`mongodump` / `mongorestore` (Backups)](../level_10/mongodump_restore.md) — Related concept: `mongodump` / `mongorestore` (Backups).
+- [`serverStatus` / `currentOp` / `db.stats()`](../level_10/server_diagnostics.md) — Related concept: `serverStatus` / `currentOp` / `db.stats()`.
 
 ---
 

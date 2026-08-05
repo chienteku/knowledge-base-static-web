@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`app.vue`](../level_02/app_vue.md) — The root template where these viewport wrappers are initialized.
-- [`pages/` Directory](../level_02/pages_directory.md) — The directory providing the files to render.
-
+- [`app.vue`](app_vue.md) — The root template where these viewport wrappers are initialized.
+- [`pages/` Directory](pages_directory.md) — The directory providing the files to render.
 ---
 
 ## 2. Term Category
@@ -232,9 +231,9 @@ definePageMeta({
 ---
 
 ## 7. Related Terms
-- [`app.vue`](../level_02/app_vue.md) — The root node of the Vue app tree.
-- [`layouts/` Directory](../level_02/layouts_directory.md) — The folder where layout templates are stored.
-
+- [`app.vue`](app_vue.md) — The root node of the Vue app tree.
+- [`layouts/` Directory](layouts_directory.md) — The folder where layout templates are stored.
+- [`pages/` Directory](pages_directory.md) — Related concept: `pages/` Directory.
 ---
 
 ## 8. Key Takeaways

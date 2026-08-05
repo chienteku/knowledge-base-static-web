@@ -6,9 +6,10 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](../level_04/define_table.md) — Table definition context.
 - [`DEFINE FIELD`](../level_04/define_field.md) — Field definition context.
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 
 ---
 
@@ -203,9 +204,12 @@ Write a `PERMISSIONS` clause for a `profile` table allowing any authenticated us
 > **Explanation:** `PERMISSIONS NONE` on a field prevents it from being exposed in projection outputs.
 
 ## 7. Related Terms
+
 - [`$auth` Variable](auth_variable.md) — The bound context user variable.
-- [`$auth.id` vs `$auth.*`](auth_record_fields.md) — Using record properties in permissions.
+- [`$auth.id` vs `$auth.*` (Accessing Auth Record Fields)](auth_record_fields.md) — Using record properties in permissions.
 - [Direct Browser-to-Database Architecture](browser_to_db.md) — Client connectivity with row-level security.
+- [SurrealQL Injection Prevention](injection_prevention.md) — Related concept: SurrealQL Injection Prevention.
+- [Error Handling & Debugging](../level_10/error_handling.md) — Related concept: Error Handling & Debugging.
 
 ---
 

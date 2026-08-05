@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_04/components.md) — What is going through the lifecycle.
+- [Components](components.md) — What is going through the lifecycle.
 - [`v-if` / `v-show`](../level_03/v_if_show.md) — `v-if` physically triggers the Mount/Unmount lifecycles!
-
 ---
 
 ## 2. Term Category
@@ -190,10 +189,13 @@ onUnmounted(() => {
 ---
 
 ## 7. Related Terms
-- [`v-if`](../level_03/v_if_show.md) — When `v-if` becomes false, it triggers the `onUnmounted` hook.
+- [`v-if` / `v-show`](../level_03/v_if_show.md) — When `v-if` becomes false, it triggers the `onUnmounted` hook.
 - [Watchers](../level_02/watchers.md) — A better alternative to `onUpdated`.
-- [`nextTick`](../level_04/next_tick.md) — Awaiting the next DOM update flush.
-
+- [`nextTick`](next_tick.md) — Awaiting the next DOM update flush.
+- [Custom Directives (`v-*`)](../level_03/custom_directives.md) — Related concept: Custom Directives (`v-*`).
+- [Navigation Guards](../level_06/navigation_guards.md) — Related concept: Navigation Guards.
+- [KeepAlive](../level_08/keepalive.md) — Related concept: KeepAlive.
+- [Universal Code (Isomorphic)](../level_09/universal_code.md) — Related concept: Universal Code (Isomorphic).
 ---
 
 ## 8. Key Takeaways

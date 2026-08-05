@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md) — Reference conversion traits (contrasted with `Borrow`'s hashing/equality equivalence guarantees).
-- [HashMap & HashSet](../level_05/hashmap_and_hashset.md) — Standard collections that rely on `Borrow` for key lookups.
-- [Traits](../level_04/trait.md) — Trait implementation mechanics (`impl Trait for Type`).
+
+- [`AsRef` / `AsMut`](as_ref_as_mut.md) — Reference conversion traits (contrasted with `Borrow`'s hashing/equality equivalence guarantees).
+- [`HashMap` and `HashSet` testimony](../level_05/hashmap_and_hashset.md) — Standard collections that rely on `Borrow` for key lookups.
+- [Trait](../level_04/trait.md) — Trait implementation mechanics (`impl Trait for Type`).
 
 ---
 
@@ -545,10 +546,12 @@ Implement `Borrow<[u8]>` and `BorrowMut<[u8]>` for `TelemetryRecord`. Implement 
 
 ## 7. Related Terms
 
-- [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md) — Reference conversion traits without `Hash`/`Eq` equivalence requirements.
-- [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md) — Implicit smart pointer dereferencing traits.
-- [HashMap & HashSet](../level_05/hashmap_and_hashset.md) — Collections that rely on `Borrow` for key lookups.
-- [Traits](../level_04/trait.md) — Trait abstraction mechanism.
+
+- [`AsRef` / `AsMut`](as_ref_as_mut.md) — Reference conversion traits without `Hash`/`Eq` equivalence requirements.
+- [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Implicit smart pointer dereferencing traits.
+- [`HashMap` and `HashSet` testimony](../level_05/hashmap_and_hashset.md) — Collections that rely on `Borrow` for key lookups.
+- [Trait](../level_04/trait.md) — Trait abstraction mechanism.
+- [`Borrow<T>` Trait](borrow_trait.md) — Related concept: `Borrow<T>` Trait.
 
 ---
 

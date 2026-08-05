@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Client-Server Model (in Databases)](client_server_model.md) — Understanding that client libraries require parameters to find database servers.
-
 ---
 
 ## 2. Term Category
@@ -200,8 +199,8 @@ Construct the correct, URL-safe connection string to connect your application. R
 
 ## 7. Related Terms
 - [Client-Server Model (in Databases)](client_server_model.md) — The network structure.
-- [psql (Interactive Terminal)](psql.md) — Connects using connection strings.
-
+- [`psql` (Interactive Terminal)](psql.md) — Connects using connection strings.
+- [pgAdmin & GUI Tools](pgadmin.md) — Related concept: pgAdmin & GUI Tools.
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Iterator](../level_02/iterator.md) — The lazy sequence of items that adapters attach to.
-- [Closures](../level_06/closure.md) — The inline anonymous functions (like `|x| x + 1`) that tell the adapters exactly what to do.
+
+- [Iterator](iterator.md) — The lazy sequence of items that adapters attach to.
+- [Closure](../level_06/closure.md) — The inline anonymous functions (like `|x| x + 1`) that tell the adapters exactly what to do.
 
 ---
 
@@ -582,8 +583,10 @@ Write a function `process_network_frames` that takes an iterator of `RawFrame` s
 
 ## 6. Related Terms
 
-- [Collecting](../level_02/collecting.md) — The terminal operation that forces the lazy adapters to finally execute and save their work.
-- [Iterator](../level_02/iterator.md) — The prerequisite lazy sequence that adapters attach to.
+
+- [Collecting](collecting.md) — The terminal operation that forces the lazy adapters to finally execute and save their work.
+- [Iterator](iterator.md) — The prerequisite lazy sequence that adapters attach to.
+- [Rayon](../level_09/rayon.md) — Related concept: Rayon.
 
 ---
 

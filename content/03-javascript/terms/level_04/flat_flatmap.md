@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
-- [`map()`](../level_04/map.md) — Iterates through an array and returns a new array with transformed elements.
-
+- [Map](../level_08/map.md) — Iterates through an array and returns a new array with transformed elements.
 ---
 
 ## 2. Term Category
@@ -225,9 +224,8 @@ console.log(usernames);
 ---
 
 ## 7. Related Terms
-- [`map()`](../level_04/map.md) — The transformation iteration helper.
-- [`reduce()`](../level_04/reduce.md) — General purpose accumulator method which can also be used to flatten lists.
-
+- [Map](../level_08/map.md) — The transformation iteration helper.
+- [reduce()](reduce.md) — General purpose accumulator method which can also be used to flatten lists.
 ---
 
 ## 8. Key Takeaways

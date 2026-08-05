@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_04/components.md) — What an SFC represents physically.
+- [Components](components.md) — What an SFC represents physically.
 - [Composition API](../level_01/composition_api.md) — The JavaScript syntax usually written inside the SFC.
-
 ---
 
 ## 2. Term Category
@@ -183,9 +182,12 @@ SFCs are a "Developer Experience" (DX) feature. They require a build tool (like 
 ---
 
 ## 7. Related Terms
-- [Components](../level_04/components.md) — The architectural concept that SFCs physically represent.
+- [Components](components.md) — The architectural concept that SFCs physically represent.
 - [Vite](../level_10/vite.md) — The build tool that compiles `.vue` files.
-
+- [Teleport](../level_05/teleport.md) — Related concept: Teleport.
+- [Build Step (Compilation)](../level_10/build_step.md) — Related concept: Build Step (Compilation).
+- [`<script setup>` & Compiler Macros](script_setup.md) — <script setup> compiler macro.
+- [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
 ---
 
 ## 8. Key Takeaways

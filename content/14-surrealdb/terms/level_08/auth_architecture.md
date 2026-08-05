@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Namespace & Database](../level_01/namespace_database.md) — The logical container hierarchy.
-- [Connection Credentials](../level_01/connection_credentials.md) — Authentication token basics.
+- [Connection Credentials (`USE NS ... DB ...`)](../level_01/connection_credentials.md) — Authentication token basics.
 
 ---
 
@@ -216,9 +217,11 @@ Categorize the following credentials into Root, Namespace, Database, or Record l
 > **Explanation:** SCOPE/ACCESS tokens inject `$auth` identity context into table `PERMISSIONS` rules.
 
 ## 7. Related Terms
+
 - [System Users (`DEFINE USER`)](define_user.md) — Creating Root, NS, and DB admins.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Authenticating end-users as table records.
 - [Direct Browser-to-Database Architecture](browser_to_db.md) — Architectural pattern for client-side connections.
+- [JWT Token-Based Auth](jwt_auth.md) — JWT authentication.
 
 ---
 

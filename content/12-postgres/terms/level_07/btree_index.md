@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Index (Concept)](index_concept.md) — The parent performance concept.
-
 ---
 
 ## 2. Term Category
@@ -195,7 +194,10 @@ Drop duplicate indexes using DROP INDEX
 - [Index (Concept)](index_concept.md) — The parent performance concept.
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — SQL commands.
 - [GIN Index](gin_index.md) — The index type for non-scalar types.
-
+- [Composite Index (Multi-column)](composite_index.md) — Related concept: Composite Index (Multi-column).
+- [Expression Index (Functional Index)](expression_index.md) — Related concept: Expression Index (Functional Index).
+- [Partial Index](partial_index.md) — Related concept: Partial Index.
+- [Unique Index](unique_index.md) — Unique index.
 ---
 
 ## 8. Key Takeaways

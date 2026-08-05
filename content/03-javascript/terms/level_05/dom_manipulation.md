@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [DOM (Document Object Model)](./dom.md) — The structured tree API of HTML nodes.
-- [Node](./node.md) — A single point in the DOM tree.
-- [`document` object](./document_object.md) — The entry point gateway to the DOM tree.
-
+- [DOM (Document Object Model)](dom.md) — The structured tree API of HTML nodes.
+- [Node](node.md) — A single point in the DOM tree.
+- [document object](document_object.md) — The entry point gateway to the DOM tree.
 ---
 
 ## 2. Term Category
@@ -226,9 +225,9 @@ if (typeof document !== "undefined") {
 ---
 
 ## 7. Related Terms
-- [`innerHTML` / `textContent` / `innerText`](./innerhtml_textcontent.md) — Properties used to read or update text/HTML inside nodes.
-- [`classList` & `setAttribute`/`getAttribute`](./classlist_attributes.md) — Modifying node styling classes and attributes.
-
+- [innerHTML / textContent / innerText](innerhtml_textcontent.md) — Properties used to read or update text/HTML inside nodes.
+- [classList & setAttribute/getAttribute](classlist_attributes.md) — Modifying node styling classes and attributes.
+- [DOM (Document Object Model)](dom.md) — Related concept: DOM (Document Object Model).
 ---
 
 ## 8. Key Takeaways

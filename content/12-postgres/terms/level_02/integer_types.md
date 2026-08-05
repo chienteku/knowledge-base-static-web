@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding database column typing.
-
 ---
 
 ## 2. Term Category
@@ -177,7 +176,7 @@ id INT PRIMARY KEY or BIGINT PRIMARY KEY
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`SERIAL` / `GENERATED ALWAYS AS IDENTITY`](serial_identity.md) — Auto-incrementing integers.
-
+- [`TEXT` / `VARCHAR` / `CHAR`](text_types.md) — Related concept: `TEXT` / `VARCHAR` / `CHAR`.
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Tuple Structs](../level_02/tuple_struct.md) — The fundamental syntax used to create a Newtype.
-- [Traits](../level_04/trait.md) — The interfaces that the Newtype pattern is often used to implement.
+
+- [Tuple Struct](../level_02/tuple_struct.md) — The fundamental syntax used to create a Newtype.
+- [Trait](../level_04/trait.md) — The interfaces that the Newtype pattern is often used to implement.
 
 ---
 
@@ -535,8 +536,13 @@ Solve this problem using the Newtype pattern combined with smart pointer derefer
 
 ## 6. Related Terms
 
-- [Tuple Structs](../level_02/tuple_struct.md) — The syntax used to build a Newtype.
-- [`Deref` Trait](../level_14/deref_trait.md) — The trait used to automatically forward method calls (like `.len()`) through the Newtype to the inner data!
+
+- [Tuple Struct](../level_02/tuple_struct.md) — The syntax used to build a Newtype.
+- [`Deref` and `DerefMut` Traits](../level_14/deref_trait.md) — The trait used to automatically forward method calls (like `.len()`) through the Newtype to the inner data!
+- [Type Alias](type_alias.md) — Related concept: Type Alias.
+- [Coherence](../level_14/coherence.md) — Related concept: Coherence.
+- [Orphan Rule](../level_14/orphan_rule.md) — Related concept: Orphan Rule.
+- [Type-State Pattern](../level_14/type_state_pattern.md) — Related concept: Type-State Pattern.
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Streams (General Concept)](../level_06/streams.md) — You must understand what a stream is before using these specific classes.
+- [Streams (General Concept)](streams.md) — You must understand what a stream is before using these specific classes.
 - [Event Emitter](../level_05/event_emitter.md) — These streams inherit from `EventEmitter`.
-
 ---
 
 ## 2. Term Category
@@ -176,8 +175,10 @@ writable.on('finish', () => console.log('Write complete'));
 > **Explanation:** `.write()` pushes data to the writable buffer; `.end()` flushes and closes the stream.
 
 ## 7. Related Terms
-- [Piping (`.pipe()`)](../level_06/piping.md) — The magical method used to connect a Readable Stream directly to a Writable Stream.
-
+- [Piping (.pipe())](piping.md) — The magical method used to connect a Readable Stream directly to a Writable Stream.
+- [Backpressure](backpressure.md) — Related concept: Backpressure.
+- [Duplex & Transform Streams](duplex_transform_streams.md) — Related concept: Duplex & Transform Streams.
+- [Streams (General Concept)](streams.md) — Related concept: Streams (General Concept).
 ---
 
 ## 8. Key Takeaways

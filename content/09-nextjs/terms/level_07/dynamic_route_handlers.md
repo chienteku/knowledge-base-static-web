@@ -6,9 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The foundation of the API.
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — The folder syntax being applied here.
-
+- [Route Handlers (`route.ts`)](route_handlers.md) — The foundation of the API.
 ---
 
 ## 2. Term Category
@@ -185,9 +183,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 ---
 
 ## 7. Related Terms
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — The exact same concept, applied to `page.tsx`.
-- [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The file utilizing the parameters.
-
+- [Route Handlers (`route.ts`)](route_handlers.md) — The file utilizing the parameters.
+- [Caching Route Handlers](caching_route_handlers.md) — Related concept: Caching Route Handlers.
 ---
 
 ## 8. Key Takeaways

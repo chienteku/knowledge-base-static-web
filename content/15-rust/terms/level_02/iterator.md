@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`Vec<T>`](../level_02/vec_t.md) — The most common collection that we iterate over.
-- [`Option<T>`](../level_02/option_t.md) — The data type returned by an iterator to signify if there is data left or if the sequence is finished.
-- [`for` / `in` (Range)](../level_02/for_range.md) — The loop syntax that secretly uses iterators behind the scenes.
+
+- [`Vec<T>`](vec_t.md) — The most common collection that we iterate over.
+- [`Option<T>`](option_t.md) — The data type returned by an iterator to signify if there is data left or if the sequence is finished.
+- [`for` / Range](for_range.md) — The loop syntax that secretly uses iterators behind the scenes.
 
 ---
 
@@ -533,9 +534,19 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Collecting](../level_02/collecting.md) — The process of forcing a lazy Iterator to do its work and save the results back into a concrete collection (like a new `Vec`).
-- [`for` / `in` (Range)](../level_02/for_range.md) — The loop syntax that consumes iterators.
-- [Closures](../level_06/closure.md) — Anonymous functions heavily used alongside iterator methods like `.map()` and `.filter()`.
+
+- [Collecting](collecting.md) — The process of forcing a lazy Iterator to do its work and save the results back into a concrete collection (like a new `Vec`).
+- [`for` / Range](for_range.md) — The loop syntax that consumes iterators.
+- [Closure](../level_06/closure.md) — Anonymous functions heavily used alongside iterator methods like `.map()` and `.filter()`.
+- [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — Related concept: `FromIterator` / `Extend` Traits.
+- [Iterator Adapters](iterator_adapters.md) — Related concept: Iterator Adapters.
+- [`Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`)](iterator_consumers.md) — Related concept: `Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`).
+- [`Vec<T>`](vec_t.md) — Related concept: `Vec<T>`.
+- [Associated Types](../level_04/associated_types.md) — Related concept: Associated Types.
+- [`impl Trait`](../level_04/impl_trait.md) — Related concept: `impl Trait`.
+- [`IntoIterator`](../level_06/intoiterator.md) — Related concept: `IntoIterator`.
+- [GATs (Generic Associated Types)](../level_14/gats.md) — Related concept: GATs (Generic Associated Types).
+- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Related concept: Zero-Cost Abstractions.
 
 ---
 

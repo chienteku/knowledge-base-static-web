@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Nitro Engine](../level_01/nitro_engine.md) — The engine that manages this storage layer.
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where you configure the storage drivers.
-
 ---
 
 ## 2. Term Category
@@ -199,8 +198,7 @@ await useStorage().setItem('cache:key', value); // Await storage operation
 ---
 
 ## 7. Related Terms
-- [`server/api/` Routes](../level_07/server_api_routes.md) — Where `useStorage` is typically executed.
-
+- [`server/api/` Routes](server_api_routes.md) — Where `useStorage` is typically executed.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Nullish Coalescing (`??`)](./nullish_coalescing.md) — The logical operator checking for nullish states.
+- [Nullish Coalescing (??)](nullish_coalescing.md) — The logical operator checking for nullish states.
 - [Logical Operators](../level_02/logical_operators.md) — Core operators (`&&`, `||`, `!`).
-
 ---
 
 ## 2. Term Category
@@ -235,8 +234,7 @@ console.log("scale:", settings.scale); // should remain 0
 ---
 
 ## 7. Related Terms
-- [Nullish Coalescing (`??`)](./nullish_coalescing.md) — The logical operator checking for nullish states.
-
+- [Nullish Coalescing (??)](nullish_coalescing.md) — The logical operator checking for nullish states.
 ---
 
 ## 8. Key Takeaways

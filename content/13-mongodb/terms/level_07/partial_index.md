@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Sparse Index](sparse_index.md) — The limited predecessor.
 - [Unique Index](unique_index.md) — The uniqueness constraint.
 
@@ -243,6 +244,7 @@ Write the `createIndex` command.
 > **Explanation:** Partial indexes minimize RAM working sets by indexing active subset records.
 
 ## 7. Related Terms
+
 - [Sparse Index](sparse_index.md) — The parent existence index.
 - [Unique Index](unique_index.md) — The constraint model.
 

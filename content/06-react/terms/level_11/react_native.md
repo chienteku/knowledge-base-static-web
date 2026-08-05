@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React](../level_01/declarative_programming.md) — React Native uses the exact same React Hooks, State, and architecture.
+- [Declarative Programming](../level_01/declarative_programming.md) — React Native uses the exact same React Hooks, State, and architecture.
 - [Virtual DOM](../level_01/virtual_dom.md) — The engine that powers React Native.
-
 ---
 
 ## 2. Term Category
@@ -186,9 +185,8 @@ function Button() {
 > **Explanation:** React Native defaults Flexbox layout direction to vertical columns.
 
 ## 7. Related Terms
-- [React](../level_01/declarative_programming.md) — The parent library.
+- [Declarative Programming](../level_01/declarative_programming.md) — The parent library.
 - [Virtual DOM](../level_01/virtual_dom.md) — The abstract layer that makes React Native possible.
-
 ---
 
 ## 8. Key Takeaways

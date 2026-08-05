@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Bundler](./bundler.md) — The conceptual utility grouping asset dependencies.
-- [Modules (`import`/`export`)](../level_08/modules.md) — Standard modular code layout.
-
+- [Bundler](bundler.md) — The conceptual utility grouping asset dependencies.
+- [Modules (import/export)](../level_08/modules.md) — Standard modular code layout.
 ---
 
 ## 2. Term Category
@@ -226,9 +225,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Bundler](./bundler.md) — The core dependency-resolving utility.
-- [Tree Shaking & Code Splitting](./tree_shaking_code_splitting.md) — The optimizations performed by modern bundler tools.
-
+- [Bundler](bundler.md) — The core dependency-resolving utility.
+- [Tree Shaking & Code Splitting](tree_shaking_code_splitting.md) — The optimizations performed by modern bundler tools.
 ---
 
 ## 8. Key Takeaways

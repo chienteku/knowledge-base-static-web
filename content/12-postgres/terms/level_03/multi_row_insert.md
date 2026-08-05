@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`INSERT INTO`](insert_into.md) — The baseline insert statement.
-
 ---
 
 ## 2. Term Category
@@ -224,7 +223,6 @@ INSERT INTO t (a) VALUES (1), (2);
 ## 7. Related Terms
 - [`INSERT INTO`](insert_into.md) — The parent write statement.
 - [`SELECT`](select.md) — The query statement sourcing copy operations.
-
 ---
 
 ## 8. Key Takeaways

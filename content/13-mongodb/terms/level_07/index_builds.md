@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — The index creation triggers.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — The replica set architecture.
 
@@ -219,6 +220,7 @@ List the correct sequential steps to execute a rolling index build.
 > **Explanation:** `dropIndex()` cleanly aborts active index builds on modern MongoDB clusters.
 
 ## 7. Related Terms
+
 - [`createIndex()` / `dropIndex()`](create_drop_index.md) — Index management.
 - [Replication (Streaming / Logical)](../../../12-postgres/terms/level_10/replication.md) — Cluster architecture.
 

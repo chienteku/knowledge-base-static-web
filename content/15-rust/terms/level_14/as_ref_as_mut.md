@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Standard trait implementation mechanics (`impl Trait for Type`).
-- [References & Borrowing](../level_01/references_and_borrowing.md) — Understanding `&T` and `&mut T` reference semantics.
-- [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md) — Implicit dereference coercion traits (contrasted with explicit `AsRef`).
+
+- [Trait](../level_04/trait.md) — Standard trait implementation mechanics (`impl Trait for Type`).
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Understanding `&T` and `&mut T` reference semantics.
+- [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Implicit dereference coercion traits (contrasted with explicit `AsRef`).
 
 ---
 
@@ -466,10 +467,13 @@ Design a struct `LogTarget<P, M>` with generic bounds `P: AsRef<Path>` and `M: A
 
 ## 7. Related Terms
 
-- [`Deref` / `DerefMut` Traits](../level_14/deref_deref_mut_traits.md) — Implicit reference coercion traits (contrasted with explicit `AsRef`).
-- [`Borrow` / `BorrowMut`](../level_14/borrow_borrow_mut.md) — Conversion traits requiring hash and equality consistency.
-- [Traits](../level_04/trait.md) — Trait abstraction mechanism.
-- [References & Borrowing](../level_01/references_and_borrowing.md) — Reference borrowing mechanics.
+
+- [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Implicit reference coercion traits (contrasted with explicit `AsRef`).
+- [`Borrow` / `BorrowMut`](borrow_borrow_mut.md) — Conversion traits requiring hash and equality consistency.
+- [Trait](../level_04/trait.md) — Trait abstraction mechanism.
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Reference borrowing mechanics.
+- [Operator Overloading](operator_overloading.md) — Related concept: Operator Overloading.
+- [`AsRef<T>` Trait](as_ref.md) — Related concept: `AsRef<T>` Trait.
 
 ---
 

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Locking (Row-level, Table-level)](locking.md) — The parent lock concept.
-
 ---
 
 ## 2. Term Category
@@ -189,7 +188,6 @@ SELECT pg_advisory_xact_lock(hashtext('billing_job_123'));
 ## 7. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The parent lock concept.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — Row-level read locks.
-
 ---
 
 ## 8. Key Takeaways

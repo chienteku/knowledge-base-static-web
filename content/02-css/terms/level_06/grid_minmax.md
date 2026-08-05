@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent properties configured by `minmax()`.
-- [`fr` Unit (Fractional Unit)](../level_06/fr_unit.md) — The dynamic unit commonly used as the maximum size.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent properties configured by `minmax()`.
+- [`fr` Unit (Fractional Unit)](fr_unit.md) — The dynamic unit commonly used as the maximum size.
 ---
 
 ## 2. Term Category
@@ -300,9 +299,10 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 > **Explanation:** `min-content` clamps column width to minimum content requirements.
 
 ## 7. Related Terms
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent blueprint.
-- [`auto-fill` / `auto-fit`](../level_06/grid_auto_fill_fit.md) — The responsive counts keywords often paired with `minmax()`.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
+- [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — The responsive counts keywords often paired with `minmax()`.
+- [`fr` Unit (Fractional Unit)](fr_unit.md) — Related concept: `fr` Unit (Fractional Unit).
+- [`repeat()` Function](grid_repeat.md) — repeat() function.
 ---
 
 ## 8. Key Takeaways

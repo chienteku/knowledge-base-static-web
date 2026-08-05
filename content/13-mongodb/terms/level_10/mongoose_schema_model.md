@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Mongoose (ODM)](mongoose.md) — The parent ODM framework.
 
 ---
@@ -225,6 +226,7 @@ const schema = new Schema({ ... }, { toJSON: { virtuals: true } });
 > **Explanation:** Instance methods operate on `this` document; statics operate on the collection Model.
 
 ## 7. Related Terms
+
 - [Mongoose (ODM)](mongoose.md) — The parent ODM framework.
 - [Mongoose Middleware (Hooks)](mongoose_middleware.md) — Lifecycle hooks.
 

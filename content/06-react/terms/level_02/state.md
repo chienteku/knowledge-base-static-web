@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — State lives inside components.
-- [Props](../level_01/props.md) — The read-only counterpart to State.
-
+- [Props (Properties)](../level_01/props.md) — The read-only counterpart to State.
 ---
 
 ## 2. Term Category
@@ -149,9 +148,12 @@ Use React Query (useQuery) for server cache state management
 > **Explanation:** State values act as snapshots within event handlers; use updater functions `setCount(c => c + 1)` for sequential updates.
 
 ## 7. Related Terms
-- [useState Hook](../level_02/use_state.md) — How you actually create State in modern React.
-- [Re-rendering](../level_02/re_rendering.md) — What happens immediately after State changes.
-
+- [`useState` Hook](use_state.md) — How you actually create State in modern React.
+- [Re-rendering](re_rendering.md) — What happens immediately after State changes.
+- [Declarative Programming](../level_01/declarative_programming.md) — Related concept: Declarative Programming.
+- [Props (Properties)](../level_01/props.md) — Related concept: Props (Properties).
+- [Derived State](derived_state.md) — Derived state.
+- [Unidirectional Data Flow](unidirectional_flow.md) — Unidirectional data flow.
 ---
 
 ## 8. Key Takeaways

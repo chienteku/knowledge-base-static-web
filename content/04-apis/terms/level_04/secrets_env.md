@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [API Keys](./api_keys.md) — The credential strings requiring protection.
-
+- [API Keys](api_keys.md) — The credential strings requiring protection.
 ---
 
 ## 2. Term Category
@@ -180,9 +179,9 @@ DB_PASSWORD=secret123 # Omit framework public prefix for server-only secrets
 ---
 
 ## 7. Related Terms
-- [Basic & Bearer Authentication](./basic_bearer_auth.md) — The credentials transport protocols initialized using environment secrets.
+- [Basic & Bearer Authentication](basic_bearer_auth.md) — The credentials transport protocols initialized using environment secrets.
 - [localStorage & sessionStorage](../level_09/web_storage.md) — Browser Web Storage spaces where API secrets should **never** be placed (since client-side JavaScript can be read by XSS attacks).
-
+- [SDK / Client Library](../level_10/sdk.md) — Related concept: SDK / Client Library.
 ---
 
 ## 8. Key Takeaways

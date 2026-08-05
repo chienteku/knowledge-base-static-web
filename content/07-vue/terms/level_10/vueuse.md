@@ -9,7 +9,6 @@
 - [Composables](../level_05/composables.md) — The reuse pattern for stateful logic.
 - [`ref`](../level_02/ref.md) — The basic reactive state wrapper.
 - [`watchEffect`](../level_02/watch_effect.md) — Reactive dependency tracking.
-
 ---
 
 ## 2. Term Category
@@ -274,7 +273,6 @@ const toggleDark = useToggle(isDark)
 - [Composables](../level_05/composables.md) — The state encapsulation pattern.
 - [`ref`](../level_02/ref.md) — The reactivity wrapper.
 - [`watchEffect`](../level_02/watch_effect.md) — Automatic side-effect tracking.
-
 ---
 
 ## 8. Key Takeaways

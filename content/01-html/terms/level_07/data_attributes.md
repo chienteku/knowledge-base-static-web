@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of parameters in tags.
-
 ---
 
 ## 2. Term Category
@@ -240,10 +239,11 @@ What are the corresponding JavaScript keys to read these values from the element
 > **Explanation:** CSS attribute selectors target custom `data-*` state attributes.
 
 ## 7. Related Terms
-- [`class` Attribute](../level_07/class.md) — The global attribute for styling categories.
-- [`id` Attribute](../level_07/id.md) — The unique identifier.
+- [`class` Attribute](class.md) — The global attribute for styling categories.
+- [`id` Attribute](id.md) — The unique identifier.
 - [`<script>`](../level_08/script.md) — Used to execute the JavaScript that extracts dataset properties.
-
+- [`style` Attribute](style.md) — Related concept: `style` Attribute.
+- [Drag & Drop API](../level_10/drag_drop.md) — Related concept: Drag & Drop API.
 ---
 
 ## 8. Key Takeaways

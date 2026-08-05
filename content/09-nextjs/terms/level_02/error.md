@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Error Boundaries](../level_02/error_boundaries.md) — The underlying React feature that Next.js uses to catch errors in the UI.
-- [`loading.tsx`](../level_02/loading.md) — The sister file that handles pending promises instead of rejected ones.
-
+- [React Error Boundaries](error_boundaries.md) — The underlying React feature that Next.js uses to catch errors in the UI.
+- [`loading.tsx`](loading.md) — The sister file that handles pending promises instead of rejected ones.
 ---
 
 ## 2. Term Category
@@ -186,9 +185,10 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
 ---
 
 ## 7. Related Terms
-- [React Error Boundaries](../level_02/error_boundaries.md) — The native React feature that Next.js wraps to create this file.
-- [`not-found.tsx`](../level_04/not_found.md) — A specific type of error file for 404s.
-
+- [React Error Boundaries](error_boundaries.md) — The native React feature that Next.js wraps to create this file.
+- [`not-found.tsx` & `notFound()`](../level_04/not_found.md) — A specific type of error file for 404s.
+- [`loading.tsx`](loading.md) — Related concept: `loading.tsx`.
+- [`page.tsx`](page.md) — Page component.
 ---
 
 ## 8. Key Takeaways

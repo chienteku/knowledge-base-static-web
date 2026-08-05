@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Functions](../level_01/function.md) — Understanding function calls and signatures vs macro expansion.
-- [Pattern Matching (`match`)](../level_02/match.md) — declarative macros use structural pattern matching very similar to `match` arms.
-- [Expressions vs Statements](../level_01/expression_vs_statement.md) — Macro matchers care deeply about syntactic categories like `expr`, `stmt`, and `ty`.
+
+- [Functions (`fn`)](../level_01/function.md) — Understanding function calls and signatures vs macro expansion.
+- [`match`](../level_02/match.md) — declarative macros use structural pattern matching very similar to `match` arms.
+- [Expressions vs. Statements](../level_01/expression_vs_statement.md) — Macro matchers care deeply about syntactic categories like `expr`, `stmt`, and `ty`.
 
 ---
 
@@ -638,10 +639,14 @@ Write comprehensive unit tests with `#[test]` and `assert_eq!` verifying success
 
 ## 7. Related Terms
 
-- [Procedural Macros](../level_12/procedural_macros.md) — Function-like, derive, and attribute macros operating on raw `TokenStream`s via Rust code.
-- [Hygiene](../level_12/hygiene.md) — The rule system ensuring macros don't accidentally leak or collide with identifiers in caller scopes.
-- [Pattern Matching (`match`)](../level_02/match.md) — Value-level pattern matching, which inspired macro token matching.
-- [Token Stream](../level_12/token_stream.md) — The underlying stream of compiler tokens that macros analyze and generate.
+
+- [Procedural Macros](procedural_macros.md) — Function-like, derive, and attribute macros operating on raw `TokenStream`s via Rust code.
+- [Hygiene](hygiene.md) — The rule system ensuring macros don't accidentally leak or collide with identifiers in caller scopes.
+- [`match`](../level_02/match.md) — Value-level pattern matching, which inspired macro token matching.
+- [Token Stream](token_stream.md) — The underlying stream of compiler tokens that macros analyze and generate.
+- [Function-like Macros](function_like_macros.md) — Related concept: Function-like Macros.
+- [Declarative Macros (`macro_rules!`)](declarative_macros.md) — Related concept: Declarative Macros (`macro_rules!`).
+- [Macros](../level_01/macros.md) — Related concept: Macros.
 
 ---
 

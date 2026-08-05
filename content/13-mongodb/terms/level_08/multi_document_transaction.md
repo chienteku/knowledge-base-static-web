@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Atomicity in MongoDB](atomicity.md) — The parent write guarantee.
 
 ---
@@ -230,8 +231,11 @@ Write the corresponding MongoDB transaction pseudocode using the `session` objec
 > **Explanation:** Transactions exceeding 60 seconds are automatically aborted by the server.
 
 ## 7. Related Terms
+
 - [Atomicity in MongoDB](atomicity.md) — The parent write guarantee.
 - [`startSession()` / `session.withTransaction()`](session_transaction.md) — The driver implementation.
+- [ACID vs BASE](acid_vs_base.md) — Related concept: ACID vs BASE.
+- [Snapshot Isolation](snapshot_isolation.md) — Related concept: Snapshot Isolation.
 
 ---
 

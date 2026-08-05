@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI console.
-- [PERMISSIONS Clause](../level_08/permissions_clause.md) — Permission errors.
+- [`PERMISSIONS` Clause (Table & Field Level)](../level_08/permissions_clause.md) — Permission errors.
 - [`ASSERT` Clause](../level_04/assert_clause.md) — Field constraint assertions.
 
 ---
@@ -224,9 +225,11 @@ c. `surreal export`
 > **Explanation:** SDK error objects expose JSON-RPC error codes and detailed diagnostic strings.
 
 ## 7. Related Terms
+
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI console.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight syntax validation.
-- [PERMISSIONS Clause](../level_08/permissions_clause.md) — Table security permissions.
+- [`PERMISSIONS` Clause (Table & Field Level)](../level_08/permissions_clause.md) — Table security permissions.
+- [`SLEEP` Statement](sleep.md) — Related concept: `SLEEP` Statement.
 
 ---
 

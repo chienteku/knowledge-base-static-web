@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Array](../level_02/array_type.md) — The target list fields modified.
-- [Update Operators (`$set`, `$unset`, etc.)](update_operators.md) — The parent update operator context.
+- [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](update_operators.md) — The parent update operator context.
 
 ---
 
@@ -248,8 +249,10 @@ Write the MongoDB query to update a single user where the `username` is `"design
 > **Explanation:** `$pull` removes all instances of specified elements from array fields.
 
 ## 7. Related Terms
+
 - [Array](../level_02/array_type.md) — The data structure.
-- [Update Operators (`$set`, `$unset`, etc.)](update_operators.md) — The parent update operators.
+- [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](update_operators.md) — The parent update operators.
+- [Positional Operators (`$`, `$[]`, `$[<identifier>]`)](../level_04/positional_operators.md) — Related concept: Positional Operators (`$`, `$[]`, `$[<identifier>]`).
 
 ---
 

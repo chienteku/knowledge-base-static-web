@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Function Expression](../level_03/function_expression.md) — A function assigned to a variable.
-
+- [Function Expression](function_expression.md) — A function assigned to a variable.
 ---
 
 ## 2. Term Category
@@ -209,9 +208,15 @@ A valid ES6 arrow function.
 ---
 
 ## 7. Related Terms
-- [Function Expression](../level_03/function_expression.md) — The traditional syntax for creating a function as a variable.
+- [Function Expression](function_expression.md) — The traditional syntax for creating a function as a variable.
 - [Method](../level_02/method.md) — An object property that holds a function.
-
+- [Anonymous Function](anonymous_function.md) — Related concept: Anonymous Function.
+- [Callback Function](callback_function.md) — Related concept: Callback Function.
+- [Function](function.md) — Related concept: Function.
+- [Lexical (Static) Scope / Environment](lexical_scope.md) — Related concept: Lexical (Static) Scope / Environment.
+- [return Statement](return_statement.md) — Related concept: return Statement.
+- [this Keyword](../level_07/this_keyword.md) — Related concept: this Keyword.
+- [Currying](../level_09/currying.md) — Related concept: Currying.
 ---
 
 ## 8. Key Takeaways

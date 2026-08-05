@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`if let` / `while let`](../level_02/if_let_while_let.md) — The pattern-matching sugar `let else` complements.
-- [Pattern Matching](../level_02/pattern_matching.md) — The underlying mechanism.
+
+- [`if let` / `while let`](if_let_while_let.md) — The pattern-matching sugar `let else` complements.
+- [Pattern Matching](pattern_matching.md) — The underlying mechanism.
 - [Never Type (`!`)](../level_11/never_type.md) — The type of the diverging `else` block.
 
 ---
@@ -582,10 +583,12 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`if let` / `while let`](../level_02/if_let_while_let.md) — The syntax `let else` is designed to flatten away in the "extract or bail" case.
-- [Pattern Matching](../level_02/pattern_matching.md) — The general matching machinery `let else` uses on its left-hand side.
+
+- [`if let` / `while let`](if_let_while_let.md) — The syntax `let else` is designed to flatten away in the "extract or bail" case.
+- [Pattern Matching](pattern_matching.md) — The general matching machinery `let else` uses on its left-hand side.
 - [Never Type (`!`)](../level_11/never_type.md) — The type-theoretic reason the `else` block is required to diverge.
 - [`?` Operator](../level_04/question_mark_operator.md) — A related but narrower flattening tool, specific to `Option`/`Result` propagation; `let else` is more general, since its pattern isn't limited to `Some`/`Ok`.
+- [`matches!` Macro](matches_macro.md) — Related concept: `matches!` Macro.
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Struct](../level_02/struct.md) — The custom data types that `impl` blocks are most commonly attached to.
-- [Enum](../level_02/enum.md) — You can also attach `impl` blocks to enums!
-- [`fn`](../level_01/fn.md) — The functions that actually live inside the `impl` block.
+
+- [Struct](struct.md) — The custom data types that `impl` blocks are most commonly attached to.
+- [Enum](enum.md) — You can also attach `impl` blocks to enums!
+- [`fn` (Functions)](../level_01/fn.md) — The functions that actually live inside the `impl` block.
 
 ---
 
@@ -652,9 +653,11 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Method](../level_02/method.md) — A function inside an `impl` block that *does* take `self` (operates on an instance).
-- [Associated Function](../level_02/associated_function.md) — A function inside an `impl` block that *does not* take `self` (like a static constructor).
-- [Traits](../level_04/trait.md) — (Future reference) You use `impl Trait for Type` to attach standardized interfaces to your structs.
+
+- [Method](method.md) — A function inside an `impl` block that *does* take `self` (operates on an instance).
+- [Associated Function](associated_function.md) — A function inside an `impl` block that *does not* take `self` (like a static constructor).
+- [Trait](../level_04/trait.md) — (Future reference) You use `impl Trait for Type` to attach standardized interfaces to your structs.
+- [Struct](struct.md) — Related concept: Struct.
 
 ---
 

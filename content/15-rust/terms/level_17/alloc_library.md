@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [`#![no_std]`](../level_17/no_std.md) — The crate attribute where `alloc` is explicitly imported.
+
 - [Allocator API](../level_15/allocator_api.md) — Custom global allocators (`#[global_allocator]`) required by `alloc`.
 
 ---
@@ -360,6 +360,15 @@ Implement a bare-metal peripheral device manager `struct DeviceRegistry` that ro
 > 1. **No-OS Key-Value Map (`BTreeMap`)**: While `HashMap` requires OS entropy for hash seeds, `BTreeMap` relies only on key comparison (`Ord`), making it the standard dynamic dictionary structure in `alloc` for `#![no_std]` targets.
 > 2. **Deterministic Ordering**: `BTreeMap` automatically sorts keys in memory ($O(\log N)$ operations). Iterating over `BTreeMap` yields keys in natural ascending order, guaranteeing deterministic serial output for embedded hardware inspection.
 > 3. **Heap Storage Management**: Dynamically resizes internally as devices are added or removed, utilizing allocator pages without fixed array size limits.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [`core` Library](core_library.md) — Related concept: `core` Library.
+- [The Rust Standard Library (`std`)](std_library.md) — Related concept: The Rust Standard Library (`std`).
 
 ---
 

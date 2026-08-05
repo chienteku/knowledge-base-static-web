@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [`Result<T, E>`](../level_02/result_t_e.md) — The success/failure enum that `?` unpacks.
 - [`Option<T>`](../level_02/option_t.md) — The some/none enum that `?` can also unpack.
 - [Pattern Matching](../level_02/pattern_matching.md) — The verbose `match` syntax that `?` successfully replaces.
@@ -740,8 +741,15 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`unwrap()` / `expect()`](../level_04/unwrap_expect.md) — The dangerous alternative to `?` that crashes the program entirely instead of safely returning the error.
-- [`From` / `Into` Traits](../level_04/from_into_traits.md) — The hidden magic that allows `?` to automatically convert different types of errors into a single unified error type before returning.
+
+- [`unwrap()` / `expect()`](unwrap_expect.md) — The dangerous alternative to `?` that crashes the program entirely instead of safely returning the error.
+- [`From` / `Into` Traits](from_into_traits.md) — The hidden magic that allows `?` to automatically convert different types of errors into a single unified error type before returning.
+- [`let else` Statement](../level_02/let_else_statement.md) — Related concept: `let else` Statement.
+- [`Result<T, E>`](../level_02/result_t_e.md) — Related concept: `Result<T, E>`.
+- [`std::error::Error` Trait & `Box<dyn Error>`](error_trait_box_dyn_error.md) — Related concept: `std::error::Error` Trait & `Box<dyn Error>`.
+- [`FromStr` Trait & `.parse()`](fromstr_parse.md) — Related concept: `FromStr` Trait & `.parse()`.
+- [`Read` / `Write` / `BufRead` Traits](read_write_bufread.md) — Related concept: `Read` / `Write` / `BufRead` Traits.
+- [`#[must_use]`](../level_07/must_use_attribute.md) — Related concept: `#[must_use]`.
 
 ---
 

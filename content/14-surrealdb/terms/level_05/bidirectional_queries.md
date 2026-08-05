@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
 
 ---
@@ -244,8 +245,9 @@ Write the SurrealQL queries to:
 > **Explanation:** `<->` traverses graph relations in both directions simultaneously.
 
 ## 7. Related Terms
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
-- [Graph Traversal vs Relational JOINs](graph_vs_joins.md) — Speed performance trade-offs.
+- [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — Speed performance trade-offs.
 
 ---
 

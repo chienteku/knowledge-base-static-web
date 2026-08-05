@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [Derive Macro](../level_04/derive_macro.md) — The feature that introduces the `#[...]` attribute syntax.
 - [`cfg` Attribute](../level_07/cfg_attribute.md) — The tool used to hide tests from production builds.
 
@@ -665,7 +666,8 @@ Requirements:
 
 ## 6. Related Terms
 
-- [`assert!`](../level_08/assert_macros.md) — The macros you use *inside* the `#[test]` function to actually verify that the code behaves correctly.
+
+- [`assert!` Macros](assert_macros.md) — The macros you use *inside* the `#[test]` function to actually verify that the code behaves correctly.
 - [`cfg` Attribute](../level_07/cfg_attribute.md) — Used in conjunction with tests to hide the test module from the compiler.
 
 ---

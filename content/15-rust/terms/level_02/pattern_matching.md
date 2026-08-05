@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`match`](../level_02/match.md) — The most common and powerful place pattern matching is used.
-- [`if let` / `while let`](../level_02/if_let_while_let.md) — Uses pattern matching to check for a single specific shape of data.
+
+- [`match`](match.md) — The most common and powerful place pattern matching is used.
+- [`if let` / `while let`](if_let_while_let.md) — Uses pattern matching to check for a single specific shape of data.
 - [Compound Types](../level_01/compound_types.md) — Tuples and arrays, which are frequently pulled apart using patterns.
 
 ---
@@ -741,8 +742,13 @@ Implement a telemetry processing pipeline using Rust pattern matching:
 
 ## 6. Related Terms
 
-- [`if let`](../level_02/if_let_while_let.md) — Syntactic sugar that relies entirely on refutable pattern matching.
-- [Struct](../level_02/struct.md) — You can also use pattern matching to destructure Structs to get their inner fields!
+
+- [`if let` / `while let`](if_let_while_let.md) — Syntactic sugar that relies entirely on refutable pattern matching.
+- [Struct](struct.md) — You can also use pattern matching to destructure Structs to get their inner fields!
+- [`let else` Statement](let_else_statement.md) — Related concept: `let else` Statement.
+- [`matches!` Macro](matches_macro.md) — Related concept: `matches!` Macro.
+- [Tuple Struct](tuple_struct.md) — Related concept: Tuple Struct.
+- [Partial Moves & Partial Borrows](../level_03/partial_moves.md) — Related concept: Partial Moves & Partial Borrows.
 
 ---
 

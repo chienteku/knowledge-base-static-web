@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Unsafe Rust](../level_13/unsafe_block.md) — The unsafe superpowers required to extract data from this wrapper.
-- [Memory Allocation](../level_15/stack_vs_heap.md) — Understanding how RAM works under the hood.
+
+- [`unsafe` Block](../level_13/unsafe_block.md) — The unsafe superpowers required to extract data from this wrapper.
+- [Stack vs Heap](../level_15/stack_vs_heap.md) — Understanding how RAM works under the hood.
 
 ---
 
@@ -494,7 +495,8 @@ pub struct HardwareStats {
 
 ## 6. Related Terms
 
-- [Unsafe Rust](../level_13/unsafe_block.md) — The only place you will use `MaybeUninit`.
+
+- [`unsafe` Block](../level_13/unsafe_block.md) — The only place you will use `MaybeUninit`.
 - [FFI (Foreign Function Interface)](../level_13/ffi.md) — The most common reason to use it (passing empty, uninitialized buffers to C code).
 
 ---

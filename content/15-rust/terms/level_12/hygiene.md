@@ -7,10 +7,11 @@
 
 ## 1. Prerequisites
 
-- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Understanding declarative macro expansion syntax.
-- [Procedural Macros](../level_12/procedural_macros.md) — Compile-time procedural code generation functions.
-- [Token Stream](../level_12/token_stream.md) — How `proc_macro::Span` metadata tracks token hygiene boundaries.
-- [Scope & Shadowing](../level_01/scope_and_shadowing.md) — Variable scope rules and shadowing behavior in Rust.
+
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Understanding declarative macro expansion syntax.
+- [Procedural Macros](procedural_macros.md) — Compile-time procedural code generation functions.
+- [Token Stream](token_stream.md) — How `proc_macro::Span` metadata tracks token hygiene boundaries.
+- [Scope and Shadowing](../level_01/scope_and_shadowing.md) — Variable scope rules and shadowing behavior in Rust.
 
 ---
 
@@ -429,10 +430,11 @@ Write a macro `execute_transaction!` that:
 
 ## 7. Related Terms
 
-- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — The pattern-matching macro system built with automatic local hygiene.
-- [Token Stream](../level_12/token_stream.md) — `Span` metadata inside token streams tracks hygiene syntax contexts.
-- [`quote` Crate](../level_12/quote_crate.md) — Proc macro generation tool exposing `Span::call_site()` and `Span::mixed_site()`.
-- [Scope & Shadowing](../level_01/scope_and_shadowing.md) — Lexical scope and binding mechanics in Rust.
+
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — The pattern-matching macro system built with automatic local hygiene.
+- [Token Stream](token_stream.md) — `Span` metadata inside token streams tracks hygiene syntax contexts.
+- [`quote` Crate](quote_crate.md) — Proc macro generation tool exposing `Span::call_site()` and `Span::mixed_site()`.
+- [Scope and Shadowing](../level_01/scope_and_shadowing.md) — Lexical scope and binding mechanics in Rust.
 
 ---
 

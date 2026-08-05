@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<input>`](../level_05/input.md) — The primary interactive elements using value.
+- [`<input>`](input.md) — The primary interactive elements using value.
 - [Attribute](../level_01/attribute.md) — The standard syntax keys inside tags.
-
 ---
 
 ## 2. Term Category
@@ -231,10 +230,12 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 > **Explanation:** `.value` property retrieves live user input text.
 
 ## 7. Related Terms
-- [`<input>`](../level_05/input.md) — The input elements hosting values.
-- [`<select>` & `<option>`](../level_05/select_option.md) — Predefined value listings.
-- [`<textarea>`](../level_05/textarea.md) — The tag that handles content differently (nested inner HTML).
-
+- [`<input>`](input.md) — The input elements hosting values.
+- [`<select>` and `<option>`](select_option.md) — Predefined value listings.
+- [`<textarea>`](textarea.md) — The tag that handles content differently (nested inner HTML).
+- [`name` Attribute (in Form Fields)](name.md) — Related concept: `name` Attribute (in Form Fields).
+- [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Related concept: `<input type="radio">` & `<input type="checkbox">`.
+- [`<progress>` & `<meter>` Elements](../level_10/progress_meter.md) — Related concept: `<progress>` & `<meter>` Elements.
 ---
 
 ## 8. Key Takeaways

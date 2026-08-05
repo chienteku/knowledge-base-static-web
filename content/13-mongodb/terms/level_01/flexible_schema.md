@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Collection](collection.md) — The schema-free data container.
 
 ---
@@ -201,8 +202,13 @@ Handle multi-schema versions using Polymorphic Schema Patterns in code
 > **Explanation:** `$exists` filters documents containing specified field keys.
 
 ## 7. Related Terms
+
 - [Collection](collection.md) — The schema-free container.
 - [Document vs. Relational Model](document_vs_relational.md) — Paradigm comparisons.
+- [`null`](../level_02/null_type.md) — Related concept: `null`.
+- [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — Related concept: Element Query Operators (`$exists`, `$type`).
+- [The Polymorphic Pattern](../level_05/polymorphic_pattern.md) — Related concept: The Polymorphic Pattern.
+- [Schema Design (Document Modeling)](../level_05/schema_design.md) — Related concept: Schema Design (Document Modeling).
 
 ---
 

@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The dynamic structure context.
+
+- [Document](../level_01/document.md) — BSON document structure.
+- [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — Flexible schema-on-read paradigm.
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — Nested document modeling.
 
 ---
@@ -205,8 +207,15 @@ Apply established MongoDB Schema Design Patterns (Subset, Extended Reference, Bu
 > **Explanation:** High read ratios justify embedding and denormalizing data to minimize read latency.
 
 ## 7. Related Terms
+
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — Dynamic structures.
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The core design choice.
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The core design choice.
+- [Anti-Patterns in Schema Design](anti_patterns.md) — Related concept: Anti-Patterns in Schema Design.
+- [The Attribute Pattern](attribute_pattern.md) — Related concept: The Attribute Pattern.
+- [The Bucket Pattern](bucket_pattern.md) — Related concept: The Bucket Pattern.
+- [Data Lifecycle & TTL Strategies](data_lifecycle.md) — Related concept: Data Lifecycle & TTL Strategies.
+- [The Extended Reference Pattern](extended_reference_pattern.md) — Related concept: The Extended Reference Pattern.
+- [Schema Validation (`$jsonSchema`)](schema_validation.md) — Related concept: Schema Validation (`$jsonSchema`).
 
 ---
 

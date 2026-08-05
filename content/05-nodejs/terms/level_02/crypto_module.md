@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The `process` Object](../level_02/process_object.md) — Like `crypto`, this is built directly into Node.js.
-
+- [The process Object](process_object.md) — Like `crypto`, this is built directly into Node.js.
 ---
 
 ## 2. Term Category

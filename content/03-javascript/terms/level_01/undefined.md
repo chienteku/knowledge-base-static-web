@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-- [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-
+- [Variable](variable.md) — A named container for storing data values.
+- [Primitive Types](primitive_types.md) — Basic immutable data types.
 ---
 
 ## 2. Term Category
@@ -187,9 +186,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`null`](../level_01/null.md) — An intentional assignment value representing the absence of any object value.
-- [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-
+- [null](null.md) — An intentional assignment value representing the absence of any object value.
+- [Primitive Types](primitive_types.md) — Basic immutable data types.
+- [typeof](typeof.md) — Related concept: typeof.
+- [Default Parameters](../level_08/default_parameters.md) — Related concept: Default Parameters.
+- [Optional Chaining (?.)](../level_08/optional_chaining.md) — Related concept: Optional Chaining (?.).
 ---
 
 ## 8. Key Takeaways

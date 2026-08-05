@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Borrowing (`&`)](../level_03/borrowing.md) — Slices are fundamentally just a special type of Borrow.
+
+- [Borrowing (`&`)](borrowing.md) — Slices are fundamentally just a special type of Borrow.
 - [`Vec<T>`](../level_02/vec_t.md) — The most common collection that we slice into.
 - [String vs &str](../level_01/string_vs_&str.md) — We previously learned that `&str` is a string reference. We can now reveal its true name: a **String Slice**.
 
@@ -611,8 +612,11 @@ Implement `LogEntryScanner::parse<'a>(line: &'a str) -> Result<LogRecord<'a>, Lo
 
 ## 6. Related Terms
 
-- [Borrowing (`&`)](../level_03/borrowing.md) — The fundamental mechanism that makes Slices memory-safe.
-- [Borrow Checker](../level_03/borrow_checker.md) — The compiler cop that ensures you don't mutate the original collection while a slice is actively looking at it.
+
+- [Borrowing (`&`)](borrowing.md) — The fundamental mechanism that makes Slices memory-safe.
+- [Borrow Checker](borrow_checker.md) — The compiler cop that ensures you don't mutate the original collection while a slice is actively looking at it.
+- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Related concept: Arrays and Slices (`[T; N]`, `&[T]`).
+- [String vs &str](../level_01/string_vs_&str.md) — Related concept: String vs &str.
 
 ---
 

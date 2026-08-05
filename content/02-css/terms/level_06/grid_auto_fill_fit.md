@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`repeat()` Function](../level_06/grid_repeat.md) — These keywords are used exclusively inside `repeat()`.
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The properties they configure.
-
+- [`repeat()` Function](grid_repeat.md) — These keywords are used exclusively inside `repeat()`.
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The properties they configure.
 ---
 
 ## 2. Term Category
@@ -324,10 +323,9 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 > **Explanation:** `auto-fit` stretches items across full width; `auto-fill` preserves empty track slots.
 
 ## 7. Related Terms
-- [`repeat()`](../level_06/grid_repeat.md) — The loop container.
-- [`minmax()`](../level_06/grid_minmax.md) — The required track bounds function.
-- [Media Queries](../level_08/media_queries.md) — The legacy responsive breakpoint method.
-
+- [`repeat()` Function](grid_repeat.md) — The loop container.
+- [`minmax()` Function](grid_minmax.md) — The required track bounds function.
+- [`@media` (Media Queries Basics)](../level_08/media_queries.md) — The legacy responsive breakpoint method.
 ---
 
 ## 8. Key Takeaways

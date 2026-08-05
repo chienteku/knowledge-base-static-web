@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](../level_04/define_table.md) — Table definition context.
-- [UPDATE](../level_03/update.md) — Record mutation operations.
+- [`UPDATE`](../level_03/update.md) — Record mutation operations.
 
 ---
 
@@ -209,9 +210,11 @@ Write a `DEFINE EVENT` named `audit_order_cancel` on table `order` that triggers
 > **Explanation:** `WHEN $event = ...` filters event execution by mutation type.
 
 ## 7. Related Terms
-- [`$before` / `$after` / `$event` / `$value` Variables](event_variables.md) — Event context variables.
+
+- [`$before` / `$after` / `$event` / `$value` Variables (in Events)](event_variables.md) — Event context variables.
 - [`DEFINE FUNCTION`](define_function.md) — Reusable server-side functions.
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Table change logging.
+- [`LIVE SELECT` (Live Queries)](live_select.md) — LIVE SELECT subscriptions.
 
 ---
 

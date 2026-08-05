@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding database column typing.
-
 ---
 
 ## 2. Term Category
@@ -186,7 +185,6 @@ bio TEXT -- Unconstrained text storage
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`INTEGER` / `BIGINT` / `SMALLINT`](integer_types.md) — Numeric integer types.
-
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The function that creates threads and strictly requires this trait.
+
+- [`std::thread::spawn`](std_thread_spawn.md) — The function that creates threads and strictly requires this trait.
 - [`Rc<T>`](../level_03/rc_t.md) — The most famous type that lacks this trait.
 
 ---
@@ -497,9 +498,13 @@ Construct a generic state wrapper and worker dispatcher that:
 
 ## 6. Related Terms
 
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The function that strictly requires the `Send` trait.
-- [`Sync` Trait](../level_09/sync_trait.md) — The sister trait to `Send`, dealing with shared references (`&T`) instead of moved ownership (`T`).
+
+- [`std::thread::spawn`](std_thread_spawn.md) — The function that strictly requires the `Send` trait.
+- [`Sync` Trait](sync_trait.md) — The sister trait to `Send`, dealing with shared references (`&T`) instead of moved ownership (`T`).
 - [`Arc<T>`](../level_03/arc_t.md) — The thread-safe alternative to `Rc<T>` that *does* implement `Send`.
+- [Auto Traits](auto_traits.md) — Related concept: Auto Traits.
+- [`unsafe trait` / `unsafe impl`](../level_13/unsafe_trait.md) — Related concept: `unsafe trait` / `unsafe impl`.
+- [Marker Traits](../level_14/marker_traits.md) — Related concept: Marker Traits.
 
 ---
 

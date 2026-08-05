@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — The types that do *not* implement `Sized`.
-- [Generics](../level_04/generics.md) — The syntax where `Sized` becomes incredibly important.
+
+- [Dynamically Sized Types (DSTs)](dynamically_sized_types.md) — The types that do *not* implement `Sized`.
+- [Generics (`<T>`)](../level_04/generics.md) — The syntax where `Sized` becomes incredibly important.
 
 ---
 
@@ -530,8 +531,11 @@ When implementing generic data structures like key-value caches or index tables 
 
 ## 6. Related Terms
 
-- [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — The types (like `str`) that do *not* implement `Sized`.
-- [Generics](../level_04/generics.md) — The syntax where `Sized` and `?Sized` are almost exclusively used.
+
+- [Dynamically Sized Types (DSTs)](dynamically_sized_types.md) — The types (like `str`) that do *not* implement `Sized`.
+- [Generics (`<T>`)](../level_04/generics.md) — The syntax where `Sized` and `?Sized` are almost exclusively used.
+- [`Object Safety` (dyn-Compatibility)](../level_04/object_safety.md) — Related concept: `Object Safety` (dyn-Compatibility).
+- [Marker Traits](../level_14/marker_traits.md) — Related concept: Marker Traits.
 
 ---
 

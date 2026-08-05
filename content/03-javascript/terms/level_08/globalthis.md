@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Global Scope](../level_03/global_scope.md) — The outermost execution context where globally accessible variables reside.
-- [`window` object / BOM](../level_05/window_bom.md) — The browser environment's global object.
-
+- [window object / BOM](../level_05/window_bom.md) — The browser environment's global object.
 ---
 
 ## 2. Term Category
@@ -216,7 +215,7 @@ console.log("Console available?", hasConsole());
 
 ## 7. Related Terms
 - [Node.js](../level_10/node_js.md) — The server-side JavaScript environment which uses `global` as its native global object.
-
+- [Alternative Runtimes (Deno / Bun)](../level_10/alternative_runtimes.md) — Related concept: Alternative Runtimes (Deno / Bun).
 ---
 
 ## 8. Key Takeaways

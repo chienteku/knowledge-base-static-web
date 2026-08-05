@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON (Binary JSON)](bson.md) — The binary-encoded database format.
 
 ---
@@ -182,6 +183,7 @@ WiredTiger stores documents as optimized binary BSON structures
 > **Explanation:** Length prefixes allow database engines to jump directly to target fields.
 
 ## 7. Related Terms
+
 - [BSON (Binary JSON)](bson.md) — The parent binary structure.
 
 ---

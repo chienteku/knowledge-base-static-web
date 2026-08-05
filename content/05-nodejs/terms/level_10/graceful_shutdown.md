@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [The process Object](../level_02/process_object.md) — The process wrapper capturing OS signals.
-- [Docker](./docker.md) — The container container environments that emit shutdown signals during updates.
-
+- [Docker](docker.md) — The container container environments that emit shutdown signals during updates.
 ---
 
 ## 2. Term Category
@@ -221,9 +220,9 @@ process.on('SIGINT', async () => {
 > **Explanation:** Kubernetes sends `SIGTERM` to initiate graceful shutdown, giving processes time to finish active requests.
 
 ## 7. Related Terms
-- [PM2 (Process Manager)](./pm2.md) — Automatically sends SIGINT and awaits graceful shutdowns during updates.
-- [Docker](./docker.md) — Relies on SIGTERM handling to shut down containers cleanly.
-
+- [PM2 (Process Manager)](pm2.md) — Automatically sends SIGINT and awaits graceful shutdowns during updates.
+- [Docker](docker.md) — Relies on SIGTERM handling to shut down containers cleanly.
+- [Logging & Monitoring](logging_monitoring.md) — Related concept: Logging & Monitoring.
 ---
 
 ## 8. Key Takeaways

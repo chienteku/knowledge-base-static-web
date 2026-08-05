@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
-
 ---
 
 ## 2. Term Category
@@ -210,9 +209,13 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`while` Loop](../level_02/while_loop.md) — A simpler loop based purely on a condition.
-- [Array](../level_02/array.md) — A list-like object often iterated over using loops.
-
+- [while Loop](while_loop.md) — A simpler loop based purely on a condition.
+- [Array](array.md) — A list-like object often iterated over using loops.
+- [Increment / Decrement (++ / --)](../level_01/increment_decrement.md) — Related concept: Increment / Decrement (++ / --).
+- [Array Index & .length](array_index_length.md) — Related concept: Array Index & .length.
+- [break / continue](break_continue.md) — Related concept: break / continue.
+- [do...while](do_while.md) — Related concept: do...while.
+- [forEach()](../level_04/for_each.md) — Related concept: forEach().
 ---
 
 ## 8. Key Takeaways

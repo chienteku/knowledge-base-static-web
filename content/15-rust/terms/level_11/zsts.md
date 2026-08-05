@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Unit Type (`()`)](../level_01/unit_type.md) — The most basic ZST, and the one every Rust programmer meets first.
-- [`PhantomData<T>`](../level_11/phantomdata_t.md) — The flagship "deliberately zero-sized" type used to carry compile-time-only information.
+- [`PhantomData<T>`](phantomdata_t.md) — The flagship "deliberately zero-sized" type used to carry compile-time-only information.
 - [Monomorphization](../level_04/monomorphization.md) — Part of why ZSTs cost nothing at runtime.
 
 ---
@@ -462,10 +463,13 @@ Implement a generic struct `Transaction<State>` using Zero-Sized unit structs (`
 
 ## 6. Related Terms
 
-- [Unit Type (`()`)](../level_01/unit_type.md) / [Unit Struct](../level_02/unit_struct.md) — The two most common, everyday ZSTs.
-- [`PhantomData<T>`](../level_11/phantomdata_t.md) — The purpose-built ZST for carrying type/lifetime information with zero runtime cost.
+
+- [Unit Type (`()`)](../level_01/unit_type.md)
+- [`PhantomData<T>`](phantomdata_t.md) — The purpose-built ZST for carrying type/lifetime information with zero runtime cost.
 - [Type-State Pattern](../level_14/type_state_pattern.md) — A design pattern that leans heavily on ZSTs to encode state transitions the compiler can verify for free.
-- [Monomorphization](../level_04/monomorphization.md) / [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — The broader optimization philosophy ZSTs are one concrete expression of.
+- [Monomorphization](../level_04/monomorphization.md)
+- [Marker Traits](../level_14/marker_traits.md) — Related concept: Marker Traits.
+- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Related concept: Zero-Cost Abstractions.
 
 ---
 

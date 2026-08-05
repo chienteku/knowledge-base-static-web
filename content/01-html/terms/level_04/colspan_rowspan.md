@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<td>` (Table Data)](../level_04/td.md) — The standard table cell.
-- [`<th>` (Table Header)](../level_04/th.md) — The header cell.
-- [`<table>`](../level_04/table.md) — The master table grid.
-
+- [`<td>` (Table Data)](td.md) — The standard table cell.
+- [`<th>` (Table Header)](th.md) — The header cell.
+- [`<table>`](table.md) — The master table grid.
 ---
 
 ## 2. Term Category
@@ -241,10 +240,9 @@ A calendar schedule using both column and row spans:
 > **Explanation:** `rowspan` and `colspan` can be combined on a single cell to create multi-cell grid blocks.
 
 ## 7. Related Terms
-- [`<td>` (Table Data)](../level_04/td.md) — The tag that receives span attributes.
-- [`<th>` (Table Header)](../level_04/th.md) — Header cells which frequently span across categories.
-- [`scope` Attribute (in `<th>`)](../level_04/scope.md) — Used alongside spans to clarify multi-cell header authority.
-
+- [`<td>` (Table Data)](td.md) — The tag that receives span attributes.
+- [`<th>` (Table Header)](th.md) — Header cells which frequently span across categories.
+- [`scope` Attribute (in `<th>`)](scope.md) — Used alongside spans to clarify multi-cell header authority.
 ---
 
 ## 8. Key Takeaways

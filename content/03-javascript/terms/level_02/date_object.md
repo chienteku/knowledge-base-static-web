@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Object](../level_02/object.md) — A collection of key-value pairs representing properties and methods.
-
+- [Object](object.md) — A collection of key-value pairs representing properties and methods.
 ---
 
 ## 2. Term Category
@@ -216,9 +215,8 @@ console.log(getFormattedDate(testDate));
 ---
 
 ## 7. Related Terms
-- [Timers](../level_05/timers.md) — Functions used to execute code after delays or periodically.
-- [JSON](../level_07/json.md) — Text data representation (Note: JSON has no date type, so Date objects are serialized to strings).
-
+- [Timers (setTimeout / setInterval / clearTimeout)](../level_05/timers.md) — Functions used to execute code after delays or periodically.
+- [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — Text data representation (Note: JSON has no date type, so Date objects are serialized to strings).
 ---
 
 ## 8. Key Takeaways

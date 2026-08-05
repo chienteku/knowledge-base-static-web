@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Cascade](../level_01/the_cascade.md) — Specificity is the most important part of the Cascade algorithm.
-- [Selectors](../level_01/selectors.md) — Different selectors have different point values.
-
+- [The Cascade](the_cascade.md) — Specificity is the most important part of the Cascade algorithm.
+- [Selectors (Element, Class, ID)](selectors.md) — Different selectors have different point values.
 ---
 
 ## 2. Term Category
@@ -198,11 +197,10 @@ p { color: black; }
 > **Explanation:** `:where()` provides zero-specificity utility style grouping.
 
 ## 7. Related Terms
-- [The Cascade](../level_01/the_cascade.md) — The system that uses Specificity to resolve conflicts.
-- [Selectors](../level_01/selectors.md) — The tools that generate the specificity score.
-- [`!important` Declaration](../level_01/important.md) — The specificity override flag.
-- [Inheritance](../level_01/inheritance.md) — The fallback mechanism if no selectors target an element.
-
+- [The Cascade](the_cascade.md) — The system that uses Specificity to resolve conflicts.
+- [Selectors (Element, Class, ID)](selectors.md) — The tools that generate the specificity score.
+- [`!important` Declaration](important.md) — The specificity override flag.
+- [Inheritance](inheritance.md) — The fallback mechanism if no selectors target an element.
 ---
 
 ## 8. Key Takeaways

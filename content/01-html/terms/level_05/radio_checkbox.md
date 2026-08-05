@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<input>`](../level_05/input.md) — The input element that these types configure.
-- [`name` Attribute (in Form Fields)](../level_05/name.md) — Crucial for grouping selectors.
-- [`value` Attribute (in Form Fields)](../level_05/value.md) — Defining the submitted choice code data.
-
+- [`<input>`](input.md) — The input element that these types configure.
+- [`name` Attribute (in Form Fields)](name.md) — Crucial for grouping selectors.
+- [`value` Attribute (in Form Fields)](value.md) — Defining the submitted choice code data.
 ---
 
 ## 2. Term Category
@@ -250,11 +249,10 @@ Basic selector templates:
 > **Explanation:** Checkboxes use boolean `.checked` property, not string `.value`.
 
 ## 7. Related Terms
-- [`<input>`](../level_05/input.md) — The parent element.
-- [`<label>`](../level_05/label.md) — The text label companion.
-- [`name` Attribute (in Form Fields)](../level_05/name.md) — Essential grouping parameter.
-- [`value` Attribute (in Form Fields)](../level_05/value.md) — Choice values.
-
+- [`<input>`](input.md) — The parent element.
+- [`<label>`](label.md) — The text label companion.
+- [`name` Attribute (in Form Fields)](name.md) — Essential grouping parameter.
+- [`value` Attribute (in Form Fields)](value.md) — Choice values.
 ---
 
 ## 8. Key Takeaways

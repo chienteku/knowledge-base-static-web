@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Understanding macro evaluation and AST-level code generation versus simple function execution.
-- [Token Stream](../level_12/token_stream.md) — The fundamental compiler input/output type (`proc_macro::TokenStream`) manipulated by procedural macros.
-- [Crate (`crate`)](../level_01/crate.md) — Procedural macros MUST be defined in a dedicated separate crate with `proc-macro = true` in `Cargo.toml`.
+
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Understanding macro evaluation and AST-level code generation versus simple function execution.
+- [Token Stream](token_stream.md) — The fundamental compiler input/output type (`proc_macro::TokenStream`) manipulated by procedural macros.
+- [Crate](../level_01/crate.md) — Procedural macros MUST be defined in a dedicated separate crate with `proc-macro = true` in `Cargo.toml`.
 
 ---
 
@@ -621,11 +622,14 @@ syn = { version = "2.0", features = ["derive"] }
 
 ## 7. Related Terms
 
-- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Pattern-matching declarative macro system in Rust.
-- [Token Stream](../level_12/token_stream.md) — The fundamental token sequence type processed by proc macros.
-- [`syn` Crate](../level_12/syn_crate.md) — Popular crate for parsing Rust tokens into an Abstract Syntax Tree (AST).
-- [`quote` Crate](../level_12/quote_crate.md) — Popular crate for turning Rust AST/code fragments back into token streams.
-- [Derive Macros](../level_12/derive_macros.md) — Specific subset of procedural macros for auto-implementing traits.
+
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Pattern-matching declarative macro system in Rust.
+- [Token Stream](token_stream.md) — The fundamental token sequence type processed by proc macros.
+- [`syn` Crate](syn_crate.md) — Popular crate for parsing Rust tokens into an Abstract Syntax Tree (AST).
+- [`quote` Crate](quote_crate.md) — Popular crate for turning Rust AST/code fragments back into token streams.
+- [Derive Macros](derive_macros.md) — Specific subset of procedural macros for auto-implementing traits.
+- [Attribute Macros](attribute_macros.md) — Related concept: Attribute Macros.
+- [Function-like Macros](function_like_macros.md) — Related concept: Function-like Macros.
 
 ---
 

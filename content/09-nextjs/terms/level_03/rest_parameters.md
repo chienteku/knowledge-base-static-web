@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The parent framework utilizing ES6 syntax.
-
 ---
 
 ## 2. Term Category
@@ -203,9 +202,8 @@ export function filterScores(threshold: number, ...scores: number[]): number[] {
 ---
 
 ## 7. Related Terms
-- [Catch-all Segments (`[...slug]`)](../level_03/catch_all_segments.md) — The routing feature powered by this syntax.
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — Single segment parameter mapping.
-
+- [Catch-all Segments (`[...slug]`)](catch_all_segments.md) — Catch-all route segments.
+- [Dynamic Routes (`[slug]`)](dynamic_routes.md) — Dynamic route parameters.
 ---
 
 ## 8. Key Takeaways

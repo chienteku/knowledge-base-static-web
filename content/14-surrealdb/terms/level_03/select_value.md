@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`SELECT`](select.md) — The parent query statement.
 
 ---
@@ -206,8 +207,11 @@ Predict the exact JSON output returned by this query:
 > **Explanation:** `ONLY VALUE` returns a raw scalar primitive value without array or object wrappers.
 
 ## 7. Related Terms
+
 - [`SELECT`](select.md) — The parent query statement.
-- [Array Functions](../level_06/array_functions.md) — Manipulating lists.
+- [Array Functions (`array::*`)](../level_06/array_functions.md) — Manipulating lists.
+- [`ONLY` Keyword](../level_06/only_keyword.md) — Related concept: `ONLY` Keyword.
+- [Subqueries](../level_06/subqueries.md) — Related concept: Subqueries.
 
 ---
 

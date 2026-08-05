@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [Assertions (`ASSERT`)](field_assertions.md) — Custom field validation.
 - [`option<T>` (Optional Fields)](option_type.md) — Optional fields wrapper.
@@ -231,9 +232,11 @@ DEFINE FIELD metadata ON TABLE log TYPE object FLEXIBLE; // Permits nested keys
 > **Explanation:** `SCHEMAFULL` validation rejects invalid data type mutations.
 
 ## 7. Related Terms
+
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [`option<T>` (Optional Fields)](option_type.md) — Optional fields wrapper.
-- [Idempotent Migration Scripts](idempotent_migrations.md) — Defining schemas safely.
+- [Idempotent Schema Migration Scripts](idempotent_migrations.md) — Defining schemas safely.
+- [`ASSERT` Clause](assert_clause.md) — Related concept: `ASSERT` Clause.
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Zero-Sized Types](../level_02/unit_struct.md) — Types that take up 0 bytes of memory (like `()`).
-- [Generics](../level_04/generics.md) — The `<T>` syntax that `PhantomData` interacts with.
-- [Lifetimes](../level_05/lifetime.md) — The `'a` annotations that `PhantomData` can also simulate.
+
+- [Unit Struct](../level_02/unit_struct.md) — Types that take up 0 bytes of memory (like `()`).
+- [Generics (`<T>`)](../level_04/generics.md) — The `<T>` syntax that `PhantomData` interacts with.
+- [Lifetime (`'a`)](../level_05/lifetime.md) — The `'a` annotations that `PhantomData` can also simulate.
 
 ---
 
@@ -557,8 +558,11 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Zero-Sized Types](../level_02/unit_struct.md) — The fundamental concept behind `PhantomData`.
-- [Unsafe Rust](../level_13/unsafe_block.md) — One of the main domains where `PhantomData` is required to communicate ownership rules to the compiler.
+
+- [Unit Struct](../level_02/unit_struct.md) — The fundamental concept behind `PhantomData`.
+- [`unsafe` Block](../level_13/unsafe_block.md) — One of the main domains where `PhantomData` is required to communicate ownership rules to the compiler.
+- [`Drop Check` (dropck)](../level_03/drop_check.md) — Related concept: `Drop Check` (dropck).
+- [`ZSTs` (Zero-Sized Types)](zsts.md) — Related concept: `ZSTs` (Zero-Sized Types).
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Methods (Verbs)](./http_methods.md) — The standard verbs defining request actions.
-
+- [HTTP Methods (Verbs)](http_methods.md) — The standard verbs defining request actions.
 ---
 
 ## 2. Term Category
@@ -203,7 +202,8 @@ DELETE /api/queue/items/item-123 HTTP/1.1 ; Targeted item deletion is idempotent
 ## 7. Related Terms
 - [Statelessness](../level_03/statelessness.md) — The architectural constraint requiring requests to carry their own state.
 - [CRUD Operations](../level_03/crud.md) — The persistent database actions mapped to HTTP verbs.
-
+- [Idempotency Keys](../level_06/idempotency_keys.md) — Related concept: Idempotency Keys.
+- [HTTP Methods (Verbs)](http_methods.md) — Related concept: HTTP Methods (Verbs).
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Null Type](../level_02/null_type.md) — The representation of null.
+
+- [`null`](../level_02/null_type.md) — The representation of null.
 - [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — The metadata operators used.
 
 ---
@@ -194,7 +195,8 @@ Write the query to find all products where the `discount_code` field is **physic
 > **Explanation:** `{ $type: "null" }` matches explicit null field values while ignoring missing fields.
 
 ## 7. Related Terms
-- [Null Type](../level_02/null_type.md) — The data structure.
+
+- [`null`](../level_02/null_type.md) — The data structure.
 - [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — The checks operators.
 
 ---

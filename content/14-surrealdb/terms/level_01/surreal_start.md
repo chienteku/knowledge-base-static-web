@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Namespace & Database](namespace_database.md) — The logical containers hosted.
 
 ---
@@ -185,8 +186,13 @@ Write the terminal command to:
 > **Explanation:** `--log debug` outputs detailed internal RPC, storage, and query execution logs.
 
 ## 7. Related Terms
-- [Connection URI & Protocols](connection_uri.md) — Connect protocols.
-- [Storage Backends](storage_backends.md) — Pluggable storage engines.
+
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](connection_uri.md) — Connect protocols.
+- [Storage Backends (Memory, RocksDB, TiKV)](storage_backends.md) — Pluggable storage engines.
+- [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — Related concept: SurrealDB CLI (`surreal sql`).
+- [`PARALLEL` Keyword](../level_06/parallel_keyword.md) — Related concept: `PARALLEL` Keyword.
+- [Docker Deployment](../level_10/docker_deployment.md) — Related concept: Docker Deployment.
+- [TiKV Backend (Distributed Mode)](../level_10/tikv_backend.md) — Related concept: TiKV Backend (Distributed Mode).
 
 ---
 

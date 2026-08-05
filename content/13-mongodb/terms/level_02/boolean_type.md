@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type system.
 
 ---
@@ -179,6 +180,7 @@ Write the MongoDB query.
 > **Explanation:** Combining boolean matching with `$exists` handles un-initialized fields.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent types.
 
 ---

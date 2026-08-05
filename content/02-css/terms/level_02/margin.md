@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — Margin is the fourth and final layer of the Box Model.
-
+- [The Box Model (Concept)](box_model.md) — Margin is the fourth and final layer of the Box Model.
 ---
 
 ## 2. Term Category
@@ -185,10 +184,14 @@ span { display: block; margin: 0 auto; width: 200px; }
 > **Explanation:** `margin: auto` inside Flexbox absorbs available free space along main/cross axes.
 
 ## 7. Related Terms
-- [Padding](../level_02/padding.md) — The inner spacing (inside the border).
-- [Border](../level_02/border.md) — The wall separating margin from padding.
-- [Margin Collapse](../level_02/margin_collapse.md) — The vertical merging behavior of adjacent margins.
-
+- [Padding](padding.md) — The inner spacing (inside the border).
+- [Border](border.md) — The wall separating margin from padding.
+- [Margin Collapse](margin_collapse.md) — The vertical merging behavior of adjacent margins.
+- [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — Related concept: Shorthand vs Longhand Properties.
+- [The Box Model (Concept)](box_model.md) — Related concept: The Box Model (Concept).
+- [Width / Height](width_height.md) — Related concept: Width / Height.
+- [`text-align` & `text-decoration`](../level_03/text_align_decoration.md) — Related concept: `text-align` & `text-decoration`.
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Related concept: `display: block` vs `inline` vs `inline-block`.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The configuration file where this section lives.
+
+- [`Cargo.toml`](cargo_toml.md) — The configuration file where this section lives.
 - [Cargo](../level_01/cargo.md) — The program that reads this section and does all the hard work.
 - [Crate](../level_01/crate.md) — The external libraries you are actually importing.
 
@@ -82,73 +83,37 @@ my_shared_types = { path = "../my_shared_types" }
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Dependencies Section Scoping and Lifecycle Rules
+### Mistake 1: Omitting Quotes Around Version Strings in `Cargo.toml`
 
-**The mistake:** Assuming Dependencies Section instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Writing `rand = 0.8` instead of `rand = "0.8"`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `Cargo.toml` uses TOML format rules. Unquoted `0.8` is parsed as a floating-point number, causing a manifest syntax error.
 
 *Incorrect:*
-```rust
-fn get_ref() -> &str {
-    let s = String::from("dependencies_section_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+```toml
+[dependencies]
+rand = 0.8 # ❌ TOML syntax error!
 ```
 
 *Fix:*
-```rust
-fn get_string() -> String {
-    let s = String::from("dependencies_section_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+```toml
+[dependencies]
+rand = "0.8" # Correct!
 ```
 
-### Mistake 2: Mutating Dependencies Section State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Relying on Unpinned `branch = "master"` Git Dependencies in Production
 
-**The mistake:** Attempting to mutate data associated with Dependencies Section through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Setting `rand = { git = "https://github.com/rust-random/rand", branch = "master" }`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Unpinned git branches cause non-deterministic builds across developer machines whenever upstream pushes commits. Pin to a specific commit SHA via `rev = "..."`.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Forgetting `optional = true` When Declaring Opt-In Feature Dependencies
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Adding `serde = { version = "1.0" }` and listing `json = ["serde"]` in `[features]` without `optional = true`.
 
-### Mistake 3: Concurrent Access to Dependencies Section Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Without `optional = true`, Cargo forces compilation of `serde` for all users even when `json` feature is disabled.
 
-**The mistake:** Sharing non-thread-safe Dependencies Section instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -266,8 +231,9 @@ You need to use a bug-fix commit in `rand` that was merged to `master` but hasn'
 
 ## 6. Related Terms
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The file that this section lives inside.
-- [Workspace](../level_07/workspace.md) — The feature that heavily uses local `{ path = "..." }` dependencies.
+
+- [`Cargo.toml`](cargo_toml.md) — The file that this section lives inside.
+- [Workspace](workspace.md) — The feature that heavily uses local `{ path = "..." }` dependencies.
 - [Cargo](../level_01/cargo.md) — The program that actually reads this section and downloads the crates.
 
 ---

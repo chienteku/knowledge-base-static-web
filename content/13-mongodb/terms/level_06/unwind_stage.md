@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Array](../level_02/array_type.md) — The array structure flattened.
 
@@ -232,8 +233,10 @@ db.posts.aggregate([{ $unwind: "$tags" }]); // Correct $tags path
 > **Explanation:** `includeArrayIndex` attaches original array element position numbers to unwound documents.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Array](../level_02/array_type.md) — The data structure.
+- [`$lookup` Stage](lookup_stage.md) — Related concept: `$lookup` Stage.
 
 ---
 

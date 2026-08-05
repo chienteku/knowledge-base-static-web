@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`display: flex`](../level_05/flex_parent.md) — This property does absolutely nothing unless the element is a Flex Container!
-
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — This property does absolutely nothing unless the element is a Flex Container!
 ---
 
 ## 2. Term Category
@@ -159,11 +158,13 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 > **Explanation:** `flex-direction` dictates main axis orientation and direction.
 
 ## 7. Related Terms
-- [`justify-content`](../level_05/justify_content.md) — Aligns children along the axis defined by `flex-direction`.
-- [`align-items`](../level_05/align_items.md) — Aligns children along the perpendicular (cross) axis.
-- [`align-self`](../level_05/align_self.md) — Overrides align-items for a single child item.
-- [`order`](../level_05/order.md) — Visual ordering of items.
-
+- [`justify-content`](justify_content.md) — Aligns children along the axis defined by `flex-direction`.
+- [`align-items`](align_items.md) — Aligns children along the perpendicular (cross) axis.
+- [`align-self`](align_self.md) — Overrides align-items for a single child item.
+- [`order`](order.md) — Visual ordering of items.
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
+- [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Related concept: `@media` (Media Queries Basics).
+- [`display: flex`](display_flex.md) — Related concept: `display: flex`.
 ---
 
 ## 8. Key Takeaways

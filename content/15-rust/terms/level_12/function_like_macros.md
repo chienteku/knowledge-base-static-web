@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Procedural Macros](../level_12/procedural_macros.md) — Understanding procedural macro definitions, compile-time host execution, and dedicated `proc-macro = true` crate setup.
-- [Token Stream](../level_12/token_stream.md) — The fundamental compiler input/output type (`proc_macro::TokenStream`) manipulated by function-like procedural macros.
-- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Understanding invocation syntax similarities (`my_macro!(...)`) versus procedural AST logic capabilities.
+
+- [Procedural Macros](procedural_macros.md) — Understanding procedural macro definitions, compile-time host execution, and dedicated `proc-macro = true` crate setup.
+- [Token Stream](token_stream.md) — The fundamental compiler input/output type (`proc_macro::TokenStream`) manipulated by function-like procedural macros.
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Understanding invocation syntax similarities (`my_macro!(...)`) versus procedural AST logic capabilities.
 
 ---
 
@@ -812,10 +813,11 @@ Implement a complete, `#![no_std]` Rust binary telemetry packet framing generato
 
 ## 7. Related Terms
 
-- [Procedural Macros](../level_12/procedural_macros.md) — The parent procedural macro system.
-- [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Pattern-matching macros with identical invocation syntax (`my_macro!(...)`).
-- [Token Stream](../level_12/token_stream.md) — The compiler input/output type passed into function-like proc macros.
-- [Attribute Macros](../level_12/attribute_macros.md) — Procedural macros invoked as outer attributes `#[my_attr]`.
+
+- [Procedural Macros](procedural_macros.md) — The parent procedural macro system.
+- [Declarative Macros (`macro_rules!`)](declarative_macros_macro_rules.md) — Pattern-matching macros with identical invocation syntax (`my_macro!(...)`).
+- [Token Stream](token_stream.md) — The compiler input/output type passed into function-like proc macros.
+- [Attribute Macros](attribute_macros.md) — Procedural macros invoked as outer attributes `#[my_attr]`.
 
 ---
 

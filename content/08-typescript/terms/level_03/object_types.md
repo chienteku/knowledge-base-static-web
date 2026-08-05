@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Primitive Types](../level_02/primitive_types.md) — The types usually found inside the object properties.
-
 ---
 
 ## 2. Term Category
@@ -153,9 +152,9 @@ const user: { readonly name: string } = { name: "Alice" };
 > **Explanation:** Type `object` represents non-primitive values (objects, arrays, functions).
 
 ## 7. Related Terms
-- [Interfaces](../level_03/interfaces.md) — The best way to abstract and reuse Object Types.
-- [Optional Properties](../level_03/optional_properties.md) — How to make object properties non-mandatory.
-
+- [Interfaces](interfaces.md) — The best way to abstract and reuse Object Types.
+- [Optional Properties (`?`)](optional_properties.md) — How to make object properties non-mandatory.
+- [Excess Property Checks](excess_property_checks.md) — Related concept: Excess Property Checks.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- None. This is a purely visual UI/UX enhancement.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -174,9 +173,8 @@ button:disabled {
 > **Explanation:** Custom cursor images require fallback generic keywords (e.g. `auto`).
 
 ## 7. Related Terms
-- [`:hover` Pseudo-class](hover_focus.md) — Changing the cursor is almost always paired with changing the styling properties on `:hover`.
+- [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Changing the cursor is almost always paired with changing the styling properties on `:hover`.
 - [`outline`](outline.md) — Visual ring for keyboard selection focuses.
-
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Collection](../level_01/collection.md) — The target container where documents are written.
 
 ---
@@ -238,8 +239,10 @@ await db.users.insertMany([{ name: "Alice" }]); // Correct array input
 > **Explanation:** `insertMany([ docs ])` performs bulk document insertions.
 
 ## 7. Related Terms
+
 - [Collection](../level_01/collection.md) — The parent data container.
-- [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — Understanding the insert outputs.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Understanding the insert outputs.
+- [`bulkWrite()`](bulk_write.md) — Related concept: `bulkWrite()`.
 
 ---
 

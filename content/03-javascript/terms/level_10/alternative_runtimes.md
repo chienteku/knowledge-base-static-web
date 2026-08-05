@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Node.js](./node_js.md) — The original server-side JavaScript runtime environment.
-
+- [Node.js](node_js.md) — The original server-side JavaScript runtime environment.
 ---
 
 ## 2. Term Category
@@ -213,9 +212,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [TypeScript](./typescript.md) — The typed language natively executed by Deno and Bun.
-- [`globalThis`](../level_08/globalthis.md) — The universal global scope wrapper shared across all three runtimes.
-
+- [TypeScript](typescript.md) — The typed language natively executed by Deno and Bun.
+- [globalThis](../level_08/globalthis.md) — The universal global scope wrapper shared across all three runtimes.
 ---
 
 ## 8. Key Takeaways

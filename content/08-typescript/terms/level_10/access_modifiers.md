@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Classes Overview](../level_10/classes.md) — The structure these modifiers attach to.
-- [JavaScript Private Fields](../../../03-javascript/terms/level_07/class.md) — The runtime equivalent of `private`.
-
+- [Classes Overview](classes.md) — The structure these modifiers attach to.
+- class — The runtime equivalent of `private`.
 ---
 
 ## 2. Term Category
@@ -238,9 +237,10 @@ class Child extends Base { getId() { return this.id; } } // Accessible inside su
 > **Explanation:** ES `#field` private members use native JavaScript language-level private slots.
 
 ## 7. Related Terms
-- [Classes Overview](../level_10/classes.md) — Where these modifiers live.
-- [Parameter Properties](../level_10/parameter_properties.md) — A shorthand trick using these exact keywords.
-
+- [Classes Overview](classes.md) — Where these modifiers live.
+- [Parameter Properties](parameter_properties.md) — A shorthand trick using these exact keywords.
+- [Decorators](decorators.md) — Related concept: Decorators.
+- [Static Members](static_members.md) — Related concept: Static Members.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Upsert](../level_03/upsert.md) — The update-or-insert write concept.
+- [Upsert (`upsert: true`)](../level_03/upsert.md) — The update-or-insert write concept.
 
 ---
 
@@ -213,8 +214,9 @@ db.orders.aggregate([..., { $merge: { into: "sharded_analytics", on: "_id" } }])
 > **Explanation:** `$out` writes pipeline outputs to a target collection, creating or replacing it.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Upsert](../level_03/upsert.md) — The write concept.
+- [Upsert (`upsert: true`)](../level_03/upsert.md) — The write concept.
 
 ---
 

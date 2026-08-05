@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../level_01/selectors.md) — You must understand how to target elements to understand the `:root` selector.
+- [Selectors (Element, Class, ID)](../level_01/selectors.md) — You must understand how to target elements to understand the `:root` selector.
 - [The Cascade](../level_01/the_cascade.md) — Variables respect the cascade, meaning they can be overwritten!
-
 ---
 
 ## 2. Term Category
@@ -161,10 +160,10 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 > **Explanation:** `setProperty()` modifies live DOM CSS custom variables dynamically in runtime.
 
 ## 7. Related Terms
-- [`@media`](../level_08/media_queries.md) — Overwriting variables inside media queries for responsive layouts.
-- [`:root`](root_pseudo_class.md) — The global scope selector where custom properties are declared.
-- [Dark Mode](dark_mode.md) — Custom property theme swaps.
-
+- [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Overwriting variables inside media queries for responsive layouts.
+- [`:root` Pseudo-class](root_pseudo_class.md) — The global scope selector where custom properties are declared.
+- [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Custom property theme swaps.
+- [`calc()`](calc.md) — Related concept: `calc()`.
 ---
 
 ## 8. Key Takeaways

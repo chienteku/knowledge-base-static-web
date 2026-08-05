@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`#[repr(C)]`](../level_13/repr_c.md) — Standard C memory layout rules for structs.
-- [SIMD (`std::simd`)](../level_15/simd.md) — Hardware vector instructions requiring aligned memory buffers.
+
+- [SIMD (`std::simd`)](simd.md) — Hardware vector instructions requiring aligned memory buffers.
 - [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Creating standard references to unaligned memory fields causes UB.
 
 ---
@@ -479,8 +479,8 @@ High-performance SIMD vector instruction sets (such as Intel AVX2 256-bit operat
 
 ## 7. Related Terms
 
-- [`#[repr(C)]`](../level_13/repr_c.md) — Standard C memory layout rules for structs.
-- [SIMD (`std::simd`)](../level_15/simd.md) — Hardware vector instructions requiring `#[repr(align(32))]` or `align(64)`.
+
+- [SIMD (`std::simd`)](simd.md) — Hardware vector instructions requiring `#[repr(align(32))]` or `align(64)`.
 - [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Creating references `&T` to unaligned fields causes UB.
 - [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Unchecked pointers used with `read_unaligned`.
 

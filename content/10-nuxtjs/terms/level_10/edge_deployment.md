@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Edge-Side Rendering (ESR)](../level_09/esr.md) — The rendering logic that Edge Deployment runs.
 - [Nitro Engine](../level_01/nitro_engine.md) — The build engine that compiles edge targets.
-
 ---
 
 ## 2. Term Category
@@ -174,8 +173,8 @@ setHeader(event, 'Cache-Control', 'private, no-store'); // Prevents CDN edge cac
 
 ## 7. Related Terms
 - [Edge-Side Rendering (ESR)](../level_09/esr.md) — The architecture used to execute edge code.
-- [Standalone Build (Node server)](../level_10/standalone_build.md) — The centralized alternative to edge deployments.
-
+- [Standalone Build (Node server)](standalone_build.md) — The centralized alternative to edge deployments.
+- [Nitro Engine](../level_01/nitro_engine.md) — Related concept: Nitro Engine.
 ---
 
 ## 8. Key Takeaways

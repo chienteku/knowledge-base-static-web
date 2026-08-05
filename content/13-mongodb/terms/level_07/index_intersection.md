@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Compound Index](compound_index.md) — The optimal multi-field index.
 - [`explain()` Method](explain.md) — Verifying execution plan stages.
 
@@ -230,6 +231,7 @@ Use compound index { status: 1, createdAt: -1 } for query and sort coverage
 > **Explanation:** Compound indexes provide pre-sorted multi-field keys in a single B-Tree.
 
 ## 7. Related Terms
+
 - [Compound Index](compound_index.md) — The optimal multi-field index.
 - [`explain()` Method](explain.md) — The plan analyzer.
 

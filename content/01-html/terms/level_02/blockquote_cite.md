@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<p>` (Paragraph)](../level_02/p.md) — The fundamental block of text.
+- [`<p>` (Paragraph)](p.md) — The fundamental block of text.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Opening and closing tag boundaries.
 - [Attribute](../level_01/attribute.md) — Providing configuration keys.
-
 ---
 
 ## 2. Term Category
@@ -270,9 +269,8 @@ A simple nested blockquote showing visual indentation and attribution:
 > **Explanation:** `<q>` automatically adds language-appropriate quotation marks around inline quotes.
 
 ## 7. Related Terms
-- [`<p>` (Paragraph)](../level_02/p.md) — Standard text container, often nested inside `<blockquote>`.
-- [`<strong>` & `<em>`](../level_02/strong_em.md) — Inline emphasis tags that sit alongside `<cite>`.
-
+- [`<p>` (Paragraph)](p.md) — Standard text container, often nested inside `<blockquote>`.
+- [`<strong>` & `<em>`](strong_em.md) — Inline emphasis tags that sit alongside `<cite>`.
 ---
 
 ## 8. Key Takeaways

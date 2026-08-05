@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [tsconfig.json](../level_01/tsconfig.md) — The compiler configurations manager.
-- [ES Modules in TypeScript](../level_11/modules.md) — The syntax for imports and exports.
-
+- [`tsconfig.json`](../level_01/tsconfig.md) — The compiler configurations manager.
+- [ES Modules in TypeScript](modules.md) — The syntax for imports and exports.
 ---
 
 ## 2. Term Category
@@ -229,10 +228,9 @@ node -r tsconfig-paths/register dist/index.js # Resolves aliases at runtime!
 > **Explanation:** ESM Node.js standards mandate explicit relative file extensions in import specifiers.
 
 ## 7. Related Terms
-- [tsconfig.json](../level_01/tsconfig.md) — The compiler options file.
-- [ES Modules in TypeScript](../level_11/modules.md) — The modular loading specification.
-- [DefinitelyTyped](../level_11/definitely_typed.md) — The third-party modules type registry.
-
+- [`tsconfig.json`](../level_01/tsconfig.md) — The compiler options file.
+- [ES Modules in TypeScript](modules.md) — The modular loading specification.
+- [DefinitelyTyped](definitely_typed.md) — The third-party modules type registry.
 ---
 
 ## 8. Key Takeaways

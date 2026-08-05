@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Width / Height](../level_02/width_height.md) — Text alignment only works if the container is actually wider than the text itself.
-- [`<a>` (Anchor)](../../../01-html/terms/level_02/a.md) — The HTML element that most commonly uses `text-decoration`.
-
+- a — The HTML element that most commonly uses `text-decoration`.
 ---
 
 ## 2. Term Category
@@ -162,9 +161,8 @@ a {
 > **Explanation:** `text-decoration: none` removes default hyperlink underlines.
 
 ## 7. Related Terms
-- [`display: inline`](../level_04/display.md) — The display type that `text-align` affects.
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The display type that `text-align` affects.
 - [Margin](../level_02/margin.md) — The spacing property used to center boxes rather than inline text.
-
 ---
 
 ## 8. Key Takeaways

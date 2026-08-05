@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_04/components.md) — The building blocks of Vue layout.
+- [Components](components.md) — The building blocks of Vue layout.
 - [`v-bind`](../level_03/v_bind.md) — Dynamically passing attributes.
-
 ---
 
 ## 2. Term Category
@@ -281,10 +280,10 @@ const tagType = ref('p') // can be 'p', 'h1', or 'h2'
 ---
 
 ## 7. Related Terms
-- [Components](../level_04/components.md) — The fundamental Vue components.
+- [Components](components.md) — The fundamental Vue components.
 - [KeepAlive](../level_08/keepalive.md) — Caching dynamic component instances.
 - [Async Components](../level_08/async_components.md) — Lazily loading components only when they are rendered.
-
+- [Transitions & Animations](../level_10/transition.md) — Related concept: Transitions & Animations.
 ---
 
 ## 8. Key Takeaways

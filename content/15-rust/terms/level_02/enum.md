@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Struct](../level_02/struct.md) — While structs group data together, enums offer a choice between different types of data.
-- [`match`](../level_02/match.md) — The primary tool used to check which variant an Enum is currently holding and extract its data.
+
+- [Struct](struct.md) — While structs group data together, enums offer a choice between different types of data.
+- [`match`](match.md) — The primary tool used to check which variant an Enum is currently holding and extract its data.
 
 ---
 
@@ -769,9 +770,13 @@ Evaluation rules:
 
 ## 6. Related Terms
 
-- [`match`](../level_02/match.md) — The ultimate tool for safely verifying and extracting data out of an enum variant.
-- [`Option<T>`](../level_02/option_t.md) — The most famous built-in enum in Rust. It represents a value that might exist (`Some(T)`) or might not (`None`).
-- [`Result<T, E>`](../level_02/result_t_e.md) — Another famous built-in enum used for error handling (`Ok(T)` or `Err(E)`).
+
+- [`match`](match.md) — The ultimate tool for safely verifying and extracting data out of an enum variant.
+- [`Option<T>`](option_t.md) — The most famous built-in enum in Rust. It represents a value that might exist (`Some(T)`) or might not (`None`).
+- [`Result<T, E>`](result_t_e.md) — Another famous built-in enum used for error handling (`Ok(T)` or `Err(E)`).
+- [`Any` Trait / Downcasting](../level_04/any_trait_downcasting.md) — Related concept: `Any` Trait / Downcasting.
+- [`#[non_exhaustive]`](../level_07/non_exhaustive_attribute.md) — Related concept: `#[non_exhaustive]`.
+- [`Cow<'a, T>`](../level_11/cow_t.md) — Related concept: `Cow<'a, T>`.
 
 ---
 

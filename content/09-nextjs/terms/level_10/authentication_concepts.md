@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — The mechanism used to read session identifiers.
-
 ---
 
 ## 2. Term Category
@@ -188,8 +187,7 @@ export default function DashboardPage() {
 
 ## 7. Related Terms
 - [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — The server-side cookies reader API.
-- [Middleware (`middleware.ts`)](../level_10/middleware.md) — The global routing checkpoint.
-
+- [Middleware (`middleware.ts`)](middleware.md) — The global routing checkpoint.
 ---
 
 ## 8. Key Takeaways

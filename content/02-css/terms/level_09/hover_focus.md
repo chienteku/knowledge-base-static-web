@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../level_01/selectors.md) — These are special attachments you add to normal selectors.
+- [Selectors (Element, Class, ID)](../level_01/selectors.md) — These are special attachments you add to normal selectors.
 - [`outline`](outline.md) — The property most commonly tied to the `:focus` state.
-
 ---
 
 ## 2. Term Category
@@ -177,8 +176,9 @@ button:focus-visible {
 ## 7. Related Terms
 - [`transition`](../level_10/transition.md) — Making state adjustments smooth and animated.
 - [`cursor`](cursor.md) — Changing pointer graphics on hover states.
-- [Pseudo-elements](pseudo_elements.md) — Double-colon structural selectors.
-
+- [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Double-colon structural selectors.
+- [`outline`](outline.md) — Related concept: `outline`.
+- [Advanced Pseudo-classes](pseudo_classes_advanced.md) — Related concept: Advanced Pseudo-classes.
 ---
 
 ## 8. Key Takeaways

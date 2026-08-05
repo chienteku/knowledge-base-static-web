@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Modules (`import`/`export`)](../level_08/modules.md) — The ES standard for modular code sharing.
-- [Node.js](./node_js.md) — The runtime host environment.
-
+- [Modules (import/export)](../level_08/modules.md) — The ES standard for modular code sharing.
+- [Node.js](node_js.md) — The runtime host environment.
 ---
 
 ## 2. Term Category
@@ -224,9 +223,9 @@ module.exports = logger;
 ---
 
 ## 7. Related Terms
-- [`package.json`](./package_json.md) — The manifest file where `"type": "module"` is declared.
-- [Bundler](./bundler.md) — Tooling that bridges CJS/ESM modules for web browser targets.
-
+- [package.json](package_json.md) — The manifest file where `"type": "module"` is declared.
+- [Bundler](bundler.md) — Tooling that bridges CJS/ESM modules for web browser targets.
+- [Framework vs Library (React / Vue / Angular)](framework_vs_library.md) — Related concept: Framework vs Library (React / Vue / Angular).
 ---
 
 ## 8. Key Takeaways

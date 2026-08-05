@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<script>`](../level_08/script.md) — The element whose absence this tag handles.
+- [`<script>`](script.md) — The element whose absence this tag handles.
 - [`<body>`](../level_01/body.md) — The parent visual container.
-
 ---
 
 ## 2. Term Category
@@ -237,9 +236,9 @@ A simple warning banner in the body:
 > **Explanation:** `<noscript>` inside `<head>` can load fallback CSS stylesheets.
 
 ## 7. Related Terms
-- [`<script>`](../level_08/script.md) — The parent scripting element.
+- [`<script>`](script.md) — The parent scripting element.
 - [`<body>`](../level_01/body.md) — The visual wrapper hosting the warning tags.
-
+- [Content Security Policy (CSP) & HTML Security](../level_10/security.md) — Related concept: Content Security Policy (CSP) & HTML Security.
 ---
 
 ## 8. Key Takeaways

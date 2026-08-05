@@ -40,6 +40,11 @@
           "term": "options_api",
           "module": "07-vue",
           "description": "Related concept: Options API."
+        },
+        {
+          "module": "07-vue",
+          "term": "reactive_state",
+          "description": "Reactive state API."
         }
       ]
     },
@@ -98,6 +103,11 @@
           "term": "reactive_state",
           "module": "07-vue",
           "description": "What the `data()` option creates."
+        },
+        {
+          "module": "07-vue",
+          "term": "vue_instance",
+          "description": "Vue component instance."
         }
       ]
     },
@@ -132,6 +142,11 @@
           "term": "virtual_dom",
           "module": "07-vue",
           "description": "Related concept: Virtual DOM (Vue)."
+        },
+        {
+          "module": "07-vue",
+          "term": "v_if_show",
+          "description": "Related concept: `v-if` / `v-show`."
         }
       ]
     },
@@ -156,6 +171,11 @@
           "term": "virtual_dom",
           "module": "07-vue",
           "description": "The engine that the Vue instance boots up."
+        },
+        {
+          "module": "07-vue",
+          "term": "options_api",
+          "description": "Related concept: Options API."
         }
       ]
     },
@@ -288,6 +308,11 @@
           "term": "v_if_show",
           "module": "07-vue",
           "description": "Related concept: `v-if` / `v-show`."
+        },
+        {
+          "module": "07-vue",
+          "term": "composition_api",
+          "description": "Related concept: Composition API."
         }
       ]
     },
@@ -581,6 +606,16 @@
           "term": "modifiers",
           "module": "07-vue",
           "description": "Related concept: Event, Key & Form Modifiers."
+        },
+        {
+          "module": "07-vue",
+          "term": "v_if_show",
+          "description": "Related concept: `v-if` / `v-show`."
+        },
+        {
+          "module": "07-vue",
+          "term": "v_model",
+          "description": "Related concept: `v-model`."
         }
       ]
     },
@@ -747,6 +782,16 @@
           "term": "transition",
           "module": "07-vue",
           "description": "Related concept: Transitions & Animations."
+        },
+        {
+          "module": "07-vue",
+          "term": "directives",
+          "description": "Directives."
+        },
+        {
+          "module": "07-vue",
+          "term": "template_syntax",
+          "description": "Template syntax."
         }
       ]
     },
@@ -781,6 +826,11 @@
           "term": "modifiers",
           "module": "07-vue",
           "description": "Suffixes for input sync timing and parsing."
+        },
+        {
+          "module": "07-vue",
+          "term": "directives",
+          "description": "Built-in directives."
         }
       ]
     },
@@ -938,6 +988,16 @@
           "term": "vue_test_utils",
           "module": "07-vue",
           "description": "Related concept: Vue Test Utils."
+        },
+        {
+          "module": "07-vue",
+          "term": "slots",
+          "description": "Related concept: Slots."
+        },
+        {
+          "module": "07-vue",
+          "term": "provide_inject",
+          "description": "Related concept: Provide / Inject."
         }
       ]
     },
@@ -1197,6 +1257,11 @@
           "term": "typescript_vue",
           "module": "07-vue",
           "description": "Related concept: TypeScript with Vue."
+        },
+        {
+          "module": "07-vue",
+          "term": "sfc",
+          "description": "Related concept: Single-File Components (SFCs)."
         }
       ]
     },
@@ -1236,6 +1301,16 @@
           "term": "build_step",
           "module": "07-vue",
           "description": "Related concept: Build Step (Compilation)."
+        },
+        {
+          "module": "07-vue",
+          "term": "script_setup",
+          "description": "<script setup> compiler macro."
+        },
+        {
+          "module": "07-vue",
+          "term": "typescript_vue",
+          "description": "Related concept: TypeScript with Vue."
         }
       ]
     },
@@ -1319,6 +1394,11 @@
           "term": "pinia",
           "module": "07-vue",
           "description": "The ultimate solution for Global State."
+        },
+        {
+          "module": "07-vue",
+          "term": "components",
+          "description": "Component tree."
         }
       ]
     },
@@ -1377,6 +1457,11 @@
           "term": "props",
           "module": "07-vue",
           "description": "For passing JavaScript data instead of HTML structure."
+        },
+        {
+          "module": "07-vue",
+          "term": "components",
+          "description": "Component template insertion."
         }
       ]
     },
@@ -1713,6 +1798,11 @@
           "term": "csr",
           "module": "07-vue",
           "description": "Related concept: Client-Side Rendering (CSR)."
+        },
+        {
+          "module": "07-vue",
+          "term": "nuxt",
+          "description": "Related concept: Nuxt.js."
         }
       ]
     },
@@ -1922,6 +2012,11 @@
           "term": "dynamic_components",
           "module": "07-vue",
           "description": "Related concept: Dynamic Components (`<component :is>`)."
+        },
+        {
+          "module": "07-vue",
+          "term": "keepalive",
+          "description": "Related concept: KeepAlive."
         }
       ]
     },
@@ -1956,6 +2051,11 @@
           "term": "dynamic_components",
           "module": "07-vue",
           "description": "Dynamic swapping layouts that are commonly wrapped in `<KeepAlive>`."
+        },
+        {
+          "module": "07-vue",
+          "term": "async_components",
+          "description": "Async components."
         }
       ]
     },
@@ -2170,6 +2270,11 @@
           "term": "ssg",
           "module": "07-vue",
           "description": "The static build target option for Nuxt sites."
+        },
+        {
+          "module": "07-vue",
+          "term": "vue_router",
+          "description": "Vue Router."
         }
       ]
     },
@@ -2409,6 +2514,11 @@
           "term": "composables",
           "module": "07-vue",
           "description": "Type-safe reusable business functions."
+        },
+        {
+          "module": "07-vue",
+          "term": "sfc",
+          "description": "Single File Components with TypeScript."
         }
       ]
     },

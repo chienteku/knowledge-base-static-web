@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Documentation Comments](../level_07/documentation_comments.md) — Triple-slash `///` doc comments parsed by `docs.rs`.
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Local documentation generator (`cargo doc --open`).
+
+- [Documentation Comments (`///`, `//!`)](../level_07/documentation_comments.md) — Triple-slash `///` doc comments parsed by `docs.rs`.
+- [Cargo CLI](../level_07/cargo_cli.md) — Local documentation generator (`cargo doc --open`).
 
 ---
 
@@ -273,6 +274,14 @@ Implement the `TelemetryBuffer` struct with `#![no_std]` support, add conditiona
 > 3. **`Cargo.toml` `docs.rs` Metadata**:
 >    - `all-features = true`: Instructs `docs.rs` builders to pass `--all-features` during documentation builds so all feature-gated items and their badges are generated.
 >    - `rustdoc-args = ["--cfg", "docsrs"]`: Sets the `docsrs` cfg flag during the `docs.rs` build pipeline, activating the `#![cfg_attr(docsrs, ...)]` attribute.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [`crates.io`](crates_io.md) — The package registry whose crates are documented on `docs.rs`.
 
 ---
 

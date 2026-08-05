@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Router](../level_09/react_router.md) — Where you define these routes.
-- [`<Link>` Component](../level_09/link_component.md) — How you navigate to these routes.
-
+- [React Router](react_router.md) — Where you define these routes.
+- [`<Link>` Component](link_component.md) — How you navigate to these routes.
 ---
 
 ## 2. Term Category
@@ -169,9 +168,8 @@ What will `useParams()` return inside the `<BlogPost />` component?
 > **Explanation:** Colons (`:param`) denote dynamic placeholder parameters in route path definitions.
 
 ## 7. Related Terms
-- [React Router](../level_09/react_router.md) — The library that powers this.
+- [React Router](react_router.md) — The library that powers this.
 - [`useEffect` Hook](../level_03/use_effect.md) — You usually take the URL parameter and immediately use it inside `useEffect` to fetch data.
-
 ---
 
 ## 8. Key Takeaways

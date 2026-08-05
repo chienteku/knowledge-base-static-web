@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Vue Instance](../level_01/vue_instance.md) — What is usually running in the browser, but is now running on the server.
-- [Client-Side Rendering](../level_09/csr.md) — The default behavior that SSR is trying to fix.
-
+- [Client-Side Rendering (CSR)](csr.md) — The default behavior that SSR is trying to fix.
 ---
 
 ## 2. Term Category
@@ -156,11 +155,11 @@ onMounted(() => {
 ---
 
 ## 7. Related Terms
-- [Client-Side Rendering](../level_09/csr.md) — The opposite rendering strategy.
-- [Hydration](../level_09/hydration.md) — Step 5 of the SSR process.
-- [Nuxt.js](../level_09/nuxt.md) — The framework used to easily build SSR Vue apps.
-- [Static Site Generation (SSG)](../level_09/ssg.md) — Pre-rendering pages to static HTML at build time.
-
+- [Client-Side Rendering (CSR)](csr.md) — The opposite rendering strategy.
+- [Hydration (Vue)](hydration.md) — Step 5 of the SSR process.
+- [Nuxt.js](nuxt.md) — The framework used to easily build SSR Vue apps.
+- [Static Site Generation (SSG)](ssg.md) — Pre-rendering pages to static HTML at build time.
+- [Universal Code (Isomorphic)](universal_code.md) — Related concept: Universal Code (Isomorphic).
 ---
 
 ## 8. Key Takeaways

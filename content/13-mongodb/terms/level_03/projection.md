@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`find()` / `findOne()`](find.md) — The query methods that execute projections.
 
 ---
@@ -244,7 +245,10 @@ db.users.find({}, { name: 1, _id: 0 }); // Explicitly excludes _id
 > **Explanation:** `"array.$": 1` projects ONLY the first array element matching query filters.
 
 ## 7. Related Terms
+
 - [`find()` / `findOne()`](find.md) — The executing methods.
+- [`sort()` / `limit()` / `skip()`](sort_limit_skip.md) — Related concept: `sort()` / `limit()` / `skip()`.
+- [`$project` / `$addFields` Stages](../level_06/project_addfields.md) — Related concept: `$project` / `$addFields` Stages.
 
 ---
 

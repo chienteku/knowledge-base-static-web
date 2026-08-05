@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [The fetch() API](../level_05/fetch.md) — The network request builder.
 - [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — The response container wrapper.
-
 ---
 
 ## 2. Term Category
@@ -211,8 +210,7 @@ const reader = res.body.getReader(); // Stream chunked binary reader
 
 ## 7. Related Terms
 - [FormData & Multipart Uploads](../level_05/formdata.md) — The payload format used to send files back to the server.
-- [Binary vs Text Formats](./binary_vs_text_formats.md) — The network data serialization paradigms.
-
+- [Binary vs Text Formats](binary_vs_text_formats.md) — The network data serialization paradigms.
 ---
 
 ## 8. Key Takeaways

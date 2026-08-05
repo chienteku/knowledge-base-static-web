@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — A named binding used to store data.
+
+- [Variable](variable.md) — A named binding used to store data.
 
 ---
 
@@ -545,9 +546,10 @@ Rust's `char` scalar type is a 4-byte (32-bit) Unicode Scalar Value. When text i
 
 ## 6. Related Terms
 
-- [Compound Types](../level_01/compound_types.md) — How to group multiple scalar types together into a single construct (like Tuples or Arrays).
-- [Type Annotation](../level_01/type_annotation.md) — The syntax (`: type`) used to explicitly define a variable's scalar type.
-- [Type Inference](../level_01/type_inference.md) — How the compiler guesses you want an `i32` or `f64` if you don't provide a type annotation.
+
+- [Compound Types](compound_types.md) — How to group multiple scalar types together into a single construct (like Tuples or Arrays).
+- [Type Annotation](type_annotation.md) — The syntax (`: type`) used to explicitly define a variable's scalar type.
+- [Type Inference](type_inference.md) — How the compiler guesses you want an `i32` or `f64` if you don't provide a type annotation.
 
 ---
 

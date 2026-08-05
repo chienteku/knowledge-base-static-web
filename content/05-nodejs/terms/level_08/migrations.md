@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Relational vs NoSQL](../level_08/sql_vs_nosql.md) — Migrations are primarily used for Relational (SQL) databases because they have strict schemas.
-
+- [SQL vs NoSQL](sql_vs_nosql.md) — Migrations are primarily used for Relational (SQL) databases because they have strict schemas.
 ---
 
 ## 2. Term Category
@@ -145,8 +144,10 @@ node -e 'runMigrations()'
 > **Explanation:** `migrate dev` creates new migration files; `migrate deploy` applies pending migrations deterministically.
 
 ## 7. Related Terms
-- [ORMs & ODMs](../level_08/orms_odms.md) — ORMs like Prisma automatically generate these migration files for you based on your JavaScript code!
-
+- [ORMs & ODMs](orms_odms.md) — ORMs like Prisma automatically generate these migration files for you based on your JavaScript code!
+- [Database Transactions](db_transactions.md) — Related concept: Database Transactions.
+- [Prisma / Sequelize (SQL ORMs)](prisma_sequelize.md) — Related concept: Prisma / Sequelize (SQL ORMs).
+- [SQL vs NoSQL](sql_vs_nosql.md) — Related concept: SQL vs NoSQL.
 ---
 
 ## 8. Key Takeaways

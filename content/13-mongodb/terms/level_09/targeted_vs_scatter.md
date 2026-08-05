@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Shard Key](shard_key.md) — The routing index key.
 - [Config Servers & `mongos` Router](config_servers_mongos.md) — The query routing layer.
 
@@ -185,6 +186,7 @@ Classify these queries as either **Targeted** or **Scatter-Gather**:
 > **Explanation:** `SINGLE_SHARD` verifies that `mongos` routed the query to a single target shard.
 
 ## 7. Related Terms
+
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Hashed vs. Ranged Sharding](hashed_vs_ranged.md) — Distribution strategies.
 

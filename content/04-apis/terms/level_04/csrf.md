@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Session vs Token Authentication](./session_vs_token_auth.md) — The auth architectures utilizing cookies or tokens.
+- [Session vs Token Authentication](session_vs_token_auth.md) — The auth architectures utilizing cookies or tokens.
 - [Cookies](../level_09/cookies.md) — The browser storage mechanism that attaches credentials automatically.
-
 ---
 
 ## 2. Term Category
@@ -190,9 +189,10 @@ res.cookie('session', id, { sameSite: 'strict', httpOnly: true });
 ---
 
 ## 7. Related Terms
-- [XSS (Cross-Site Scripting)](./xss.md) — The script injection attack that can steal credentials directly.
+- [XSS (Cross-Site Scripting)](xss.md) — The script injection attack that can steal credentials directly.
 - [Cookies](../level_09/cookies.md) — The browser storage mechanism targeted by CSRF.
-
+- [Same-Origin Policy](same_origin_policy.md) — Related concept: Same-Origin Policy.
+- [Cookie Attributes (HttpOnly, Secure, SameSite)](../level_09/cookie_attributes.md) — Related concept: Cookie Attributes (HttpOnly, Secure, SameSite).
 ---
 
 ## 8. Key Takeaways

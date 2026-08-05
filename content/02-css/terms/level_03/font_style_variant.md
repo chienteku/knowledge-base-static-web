@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The baseline typography configuration tags.
-
+- [`font-size` & `font-weight`](font_size_weight.md) — The baseline typography configuration tags.
 ---
 
 ## 2. Term Category
@@ -243,9 +242,9 @@ span { font-variant: small-caps; }
 > **Explanation:** Italic is a distinct font design; Oblique is a slanting angle transformation.
 
 ## 7. Related Terms
-- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The parent typography properties.
+- [`font-size` & `font-weight`](font_size_weight.md) — The parent typography properties.
 - [`text-transform`](../level_07/text_transform.md) — Uppercase/lowercase formatting overrides (different from small-caps).
-
+- [`line-height`](line_height.md) — Related concept: `line-height`.
 ---
 
 ## 8. Key Takeaways

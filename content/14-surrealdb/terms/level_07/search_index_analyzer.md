@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
-- [SEARCH Index](../level_04/search_index.md) — Schema configuration overview.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
+- [`SEARCH` Index (Full-Text Search)](../level_04/search_index.md) — Schema configuration overview.
 
 ---
 
@@ -197,8 +198,10 @@ DEFINE ANALYZER custom_analyzer TOKENIZERS blank FILTERS lowercase, ascii;
 > **Explanation:** Custom analyzers normalize text tokens before inserting into BM25 search indexes.
 
 ## 7. Related Terms
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [`search::*` Functions & `@@` Operator](search_functions.md) — Querying full-text search.
+- [`SEARCH` Index (Full-Text Search)](../level_04/search_index.md) — Related concept: `SEARCH` Index (Full-Text Search).
 
 ---
 

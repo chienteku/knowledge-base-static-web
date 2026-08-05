@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Index (Concept in MongoDB)](index_concept.md) — The B-Tree structure.
 
 ---
@@ -216,8 +217,10 @@ db.users.createIndex({ email: 1, gender: 1 });
 > **Explanation:** High selectivity (approaching 1.0) maximizes index filtering speed.
 
 ## 7. Related Terms
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree structure.
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The query planner choices.
+- [The ESR Rule (Equality, Sort, Range)](esr_rule.md) — Related concept: The ESR Rule (Equality, Sort, Range).
 
 ---
 

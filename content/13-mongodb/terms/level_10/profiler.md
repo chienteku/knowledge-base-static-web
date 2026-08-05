@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`explain()` Method](../level_07/explain.md) — The single query analyzer.
-- [Database Diagnostics](server_diagnostics.md) — The parent monitoring tools.
+- [`serverStatus` / `currentOp` / `db.stats()`](server_diagnostics.md) — The parent monitoring tools.
 
 ---
 
@@ -194,8 +195,9 @@ Use MongoDB Database Profiler, Atlas Performance Advisor, or log aggregation too
 > **Explanation:** `system.profile` stores detailed execution stats for slow operations.
 
 ## 7. Related Terms
+
 - [`explain()` Method](../level_07/explain.md) — The single query analyzer.
-- [Database Diagnostics](server_diagnostics.md) — The parent monitoring tools.
+- [`serverStatus` / `currentOp` / `db.stats()`](server_diagnostics.md) — The parent monitoring tools.
 
 ---
 

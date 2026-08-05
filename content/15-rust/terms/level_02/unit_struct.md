@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Struct](../level_02/struct.md) — The parent concept; a standard struct contains named data fields.
-- [Tuple Struct](../level_02/tuple_struct.md) — A struct with unnamed data fields.
-- [`impl` Block](../level_02/impl_block.md) — (Future reference) This is where Unit Structs actually become useful, as it allows you to attach behavior to them.
+
+- [Struct](struct.md) — The parent concept; a standard struct contains named data fields.
+- [Tuple Struct](tuple_struct.md) — A struct with unnamed data fields.
+- [`impl` Block](impl_block.md) — (Future reference) This is where Unit Structs actually become useful, as it allows you to attach behavior to them.
 
 ---
 
@@ -520,9 +521,12 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Struct](../level_02/struct.md) — The standard version that requires you to name every field.
-- [Tuple Struct](../level_02/tuple_struct.md) — A struct with unnamed fields.
-- **[Unit Type `()`](../level_01/unit_type.md)** — The fundamental "nothing" type in Rust (which functions return when they have no explicit return value). This is where the "Unit Struct" gets its name.
+
+- [Struct](struct.md) — The standard version that requires you to name every field.
+- [Tuple Struct](tuple_struct.md) — A struct with unnamed fields.
+- [Unit Type (`()`)](../level_01/unit_type.md) — Related concept: Unit Type (`()`).
+- [Never Type (`!`)](../level_11/never_type.md) — Related concept: Never Type (`!`).
+- [`PhantomData<T>`](../level_11/phantomdata_t.md) — Related concept: `PhantomData<T>`.
 
 ---
 

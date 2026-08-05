@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The wrapper objects compiling PL/pgSQL.
-
 ---
 
 ## 2. Term Category
@@ -231,7 +230,8 @@ If the `denominator` is `0`, catch the exception using the PL/pgSQL `EXCEPTION W
 ## 7. Related Terms
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The compiling wrapper.
 - [`DO` Block (Anonymous Code Block)](do_block.md) — Running script loops on-the-fly.
-
+- [Stored Procedure (`CREATE PROCEDURE` / `CALL`)](stored_procedure.md) — Related concept: Stored Procedure (`CREATE PROCEDURE` / `CALL`).
+- [Trigger](trigger.md) — Related concept: Trigger.
 ---
 
 ## 8. Key Takeaways

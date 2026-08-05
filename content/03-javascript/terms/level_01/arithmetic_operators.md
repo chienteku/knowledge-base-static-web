@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Number](../level_01/number.md) — Represents both integer and floating-point numbers.
-- [Operator](../level_01/operator.md) — Symbol that performs an operation on operands.
-
+- [Number](number.md) — Represents both integer and floating-point numbers.
+- [Operator](operator.md) — Symbol that performs an operation on operands.
 ---
 
 ## 2. Term Category
@@ -221,10 +220,13 @@ if (isEven) {
 ---
 
 ## 7. Related Terms
-- [Type Coercion](../level_01/type_coercion.md) — Implicit conversion of values from one data type to another.
-- [Increment / Decrement (`++` / `--`)](../level_01/increment_decrement.md) — Operators to add or subtract exactly one.
-- [`NaN`](../level_01/nan.md) — The special "Not-a-Number" value returned by invalid mathematical operations.
-
+- [Type Coercion](type_coercion.md) — Implicit conversion of values from one data type to another.
+- [Increment / Decrement (++ / --)](increment_decrement.md) — Operators to add or subtract exactly one.
+- [NaN](nan.md) — The special "Not-a-Number" value returned by invalid mathematical operations.
+- [Assignment Operators](assignment_operators.md) — Related concept: Assignment Operators.
+- [Infinity / -Infinity](infinity.md) — Related concept: Infinity / -Infinity.
+- [Operator](operator.md) — Related concept: Operator.
+- [Operator Precedence & Associativity](operator_precedence.md) — Related concept: Operator Precedence & Associativity.
 ---
 
 ## 8. Key Takeaways

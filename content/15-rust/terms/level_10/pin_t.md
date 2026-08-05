@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — How we create self-referential futures.
-- [Smart Pointers (`Box`)](../level_03/box_t.md) — A common container for pinning (`Pin<Box<T>>`).
+
+- [`async fn`](async_fn.md) — How we create self-referential futures.
+- [`Box<T>`](../level_03/box_t.md) — A common container for pinning (`Pin<Box<T>>`).
 
 ---
 
@@ -418,15 +419,13 @@ Build a self-referential struct `SelfReferentialBuffer` using `PhantomPinned` an
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`Future` Trait](../level_10/future_trait.md) — The core trait whose `poll` method requires `Pin<&mut Self>`.
-> - [`async fn`](../level_10/async_fn.md) — Generates the self-referential futures that make `Pin` necessary.
-> - [`Box::pin`](../level_03/box_t.md) — The easiest, heap-allocated way to pin a Future.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`Future` Trait](future_trait.md) — The state machines that rely on `Pin`.
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`Pin`** anchors an object to a specific memory address so it can **never move again**.
 > - It exists specifically to make **self-referential futures** (created by `async`/`await`) safe.

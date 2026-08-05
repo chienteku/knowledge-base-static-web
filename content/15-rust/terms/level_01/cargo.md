@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-**None.** Cargo is the very first tool you interact with in Rust. No prior Rust knowledge is required — just a working Rust installation (via [Rustup](../level_16/rustup.md)).
+
+**None.**
 
 ---
 
@@ -1005,11 +1006,14 @@ Implement a `CargoProfileAuditor` compliance engine that:
 
 ## 6. Related Terms
 
-- [Crate](../level_01/crate.md) — the compilation unit that Cargo builds; every `cargo build` produces a crate
-- [Package](../level_01/package.md) — a Cargo concept: one or more crates bundled with a `Cargo.toml` manifest
+
+- [Crate](crate.md) — the compilation unit that Cargo builds; every `cargo build` produces a crate
+- [Package](package.md) — a Cargo concept: one or more crates bundled with a `Cargo.toml` manifest
 - [`Cargo.toml`](../level_07/cargo_toml.md) — the manifest file where you declare metadata, dependencies, and build settings
 - [`Cargo.lock`](../level_07/cargo_lock.md) — the auto-generated lock file that pins exact dependency versions
 - [Rustup](../level_16/rustup.md) — the toolchain manager that installs Cargo (and the Rust compiler) for you
+- [Module](module.md) — Related concept: Module.
+- [`[dependencies]`](../level_07/dependencies_section.md) — Related concept: `[dependencies]`.
 
 ---
 

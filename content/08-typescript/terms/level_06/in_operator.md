@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Type Narrowing](../level_06/type_narrowing.md) — The process this operator triggers.
+- [Type Narrowing](type_narrowing.md) — The process this operator triggers.
 - [Object Types](../level_03/object_types.md) — The structures being narrowed.
-
 ---
 
 ## 2. Term Category
@@ -168,9 +167,9 @@ function process(val: unknown) {
 > **Explanation:** `in` checks confirm property presence regardless of whether property value is optional.
 
 ## 7. Related Terms
-- [`typeof` & `instanceof` Guards](../level_06/typeof_instanceof.md) — The alternative guards for primitives and classes.
-- [Discriminated Unions](../level_06/discriminated_unions.md) — A more powerful pattern that often replaces the `in` operator.
-
+- [`typeof` & `instanceof` Guards](typeof_instanceof.md) — The alternative guards for primitives and classes.
+- [Discriminated Unions](discriminated_unions.md) — A more powerful pattern that often replaces the `in` operator.
+- [Custom Type Guards (`is`)](custom_type_guards.md) — Related concept: Custom Type Guards (`is`).
 ---
 
 ## 8. Key Takeaways

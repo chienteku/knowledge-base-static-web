@@ -7,9 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Allocator API](../level_15/allocator_api.md) — The `GlobalAlloc` trait framework configured by `#[global_allocator]`.
-- [`alloc` Library](../level_17/alloc_library.md) — The heap collection library powered by `#[global_allocator]`.
-- [`#![no_std]`](../level_17/no_std.md) — Bare-metal environment requiring a global allocator for heap usage.
+- [`alloc` Library](alloc_library.md) — The heap collection library powered by `#[global_allocator]`.
 
 ---
 
@@ -451,6 +451,14 @@ pub fn allocate_test() {
 
 ---
  
+---
+
+## 6. Related Terms
+
+**None.**
+
+---
+
 ## 7. Key Takeaways
  
 - `#[global_allocator]` registers the global memory allocator static instance.

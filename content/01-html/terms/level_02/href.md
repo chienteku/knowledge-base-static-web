@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — It is an attribute placed inside an opening tag.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — Since `href` values represent uniform resource locator web addresses.
-- [`<a>` (Anchor / Link)](../level_02/a.md) — The tag that almost exclusively relies on this attribute.
-
+- [`<a>` (Anchor / Link)](a.md) — The tag that almost exclusively relies on this attribute.
 ---
 
 ## 2. Term Category
@@ -240,10 +239,13 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 > **Explanation:** `download` attribute instructs browsers to save linked resources to disk.
 
 ## 7. Related Terms
-- [`<a>` (Anchor / Link)](../level_02/a.md) — The tag that utilizes the `href` attribute.
+- [`<a>` (Anchor / Link)](a.md) — The tag that utilizes the `href` attribute.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The web address standard links utilize.
 - [`<link>`](../level_08/link.md) — A different HTML tag that ALSO uses the `href` attribute, but for stylesheets instead of navigation.
-
+- [`<img>`](../level_03/img.md) — Related concept: `<img>`.
+- [`src` Attribute](../level_03/src.md) — Related concept: `src` Attribute.
+- [`<base>` Element](../level_08/base.md) — Related concept: `<base>` Element.
+- [`<map>` & `<area>` (Image Maps)](../level_10/map_area.md) — Related concept: `<map>` & `<area>` (Image Maps).
 ---
 
 ## 8. Key Takeaways

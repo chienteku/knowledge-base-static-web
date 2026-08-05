@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — The building blocks HOCs wrap.
-- [Higher-Order Functions](../../../03-javascript/terms/level_03/higher_order_function.md) — The JavaScript concept this pattern is named after.
-
+- higher_order_function — The JavaScript concept this pattern is named after.
 ---
 
 ## 2. Term Category

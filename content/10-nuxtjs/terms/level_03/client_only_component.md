@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The default rendering flow that `<ClientOnly>` purposely interrupts.
 - [Hydration](../level_01/hydration.md) — The client-side lifecycle hook that mounts client-only structures.
-
 ---
 
 ## 2. Term Category
@@ -187,7 +186,7 @@ If you have a component that should *never* be server-rendered anywhere in your 
 
 ## 7. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process this component skips.
-
+- [Hydration](../level_01/hydration.md) — Related concept: Hydration.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`WHERE` Clause](where.md) — The query filter used to target specific records.
-
 ---
 
 ## 2. Term Category
@@ -187,7 +186,6 @@ UPDATE users SET score = v.score FROM (VALUES (1, 10), (2, 20)) AS v(id, score) 
 ## 7. Related Terms
 - [`WHERE` Clause](where.md) — The update filter anchor.
 - [`RETURNING` Clause](returning.md) — Returning updated values instantly.
-
 ---
 
 ## 8. Key Takeaways

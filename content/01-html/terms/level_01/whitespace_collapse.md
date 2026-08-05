@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Element vs. Tag](../level_01/element_vs_tag.md) — The HTML nodes wrapping the text content.
-- [HTML](../level_01/html.md) — The standard markup language.
-
+- [Element vs. Tag](element_vs_tag.md) — The HTML nodes wrapping the text content.
+- [HTML (HyperText Markup Language)](html.md) — The standard markup language.
 ---
 
 ## 2. Term Category
@@ -204,9 +203,10 @@ Whitespace collapse demonstration showing different source formatting yielding t
 > **Explanation:** `white-space: pre-wrap` preserves source spaces and newlines while wrapping lines.
 
 ## 7. Related Terms
-- [Nesting](../level_01/nesting.md) — Proper tag structure which relies on source code indentation.
-- [HTML Entities](../../../08-typescript/terms/level_11/declaration_files.md) — Like `&nbsp;`, used to bypass the browser's default spacing rules.
-
+- [Nesting](nesting.md) — Proper tag structure which relies on source code indentation.
+- declaration_files — Like `&nbsp;`, used to bypass the browser's default spacing rules.
+- [`<pre>` & `<code>`](../level_02/pre_code.md) — Related concept: `<pre>` & `<code>`.
+- [HTML Entities](../level_09/html_entities.md) — Related concept: HTML Entities.
 ---
 
 ## 8. Key Takeaways

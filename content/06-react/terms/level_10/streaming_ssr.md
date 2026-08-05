@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR)](../level_10/ssr.md) — The static rendering foundation that streaming improves.
-- [Lazy Loading & Suspense](../level_08/suspense.md) — The boundary markers used to divide layout sections.
-
+- [Server-Side Rendering (SSR)](ssr.md) — The static rendering foundation that streaming improves.
+- [Suspense](../level_08/suspense.md) — The boundary markers used to divide layout sections.
 ---
 
 ## 2. Term Category
@@ -224,10 +223,9 @@ export default function LandingPage() {
 > **Explanation:** Server stream APIs stream HTML progressive chunks directly to client HTTP response streams.
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR)](../level_10/ssr.md) — The baseline server rendering pattern.
-- [Hydration](../level_10/hydration.md) — The process that links event handlers to static HTML.
+- [Server-Side Rendering (SSR)](ssr.md) — The baseline server rendering pattern.
+- [Hydration](hydration.md) — The process that links event handlers to static HTML.
 - [Concurrent Rendering](../level_08/concurrent_rendering.md) — The prioritizing engine supporting Selective Hydration.
-
 ---
 
 ## 8. Key Takeaways

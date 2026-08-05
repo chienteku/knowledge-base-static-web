@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Aggregation Variables (`$$ROOT`, `$$CURRENT`, etc.)](aggregation_variables.md) — Utilizing document pointers.
+- [Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`)](aggregation_variables.md) — Utilizing document pointers.
 
 ---
 
@@ -199,6 +200,7 @@ Write the aggregation pipeline containing a single `$replaceWith` stage to promo
 > **Explanation:** `$replaceWith` is a convenient alias stage for `$replaceRoot: { newRoot: expr }`.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$project` / `$addFields` Stages](project_addfields.md) — Reshaping alternatives.
 

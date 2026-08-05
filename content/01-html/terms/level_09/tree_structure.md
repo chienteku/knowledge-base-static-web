@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DOM (Document Object Model)](../level_09/dom.md) — The tree structure is how the DOM organizes itself.
+- [DOM (Document Object Model)](dom.md) — The tree structure is how the DOM organizes itself.
 - [Nesting](../level_01/nesting.md) — The HTML concept of putting tags inside of other tags.
-
 ---
 
 ## 2. Term Category
@@ -178,10 +177,9 @@ html (Root)
 > **Explanation:** `.parentElement` travels up one level in the DOM tree hierarchy.
 
 ## 7. Related Terms
-- [DOM (Document Object Model)](../level_09/dom.md) — The system that uses this tree structure.
+- [DOM (Document Object Model)](dom.md) — The system that uses this tree structure.
 - [Nesting](../level_01/nesting.md) — The act of writing the HTML code that generates this tree.
-- [Critical Rendering Path](../level_09/critical_rendering_path.md) — The browser compilation pipeline converting layout trees into visuals.
-
+- [Critical Rendering Path](critical_rendering_path.md) — The browser compilation pipeline converting layout trees into visuals.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [String](../level_01/string.md) — A sequence of characters representing text, enclosed in quotes.
-
 ---
 
 ## 2. Term Category
@@ -211,8 +210,10 @@ console.log(domainOnly);
 
 ## 7. Related Terms
 - [Template Literals](../level_08/template_literals.md) — Dynamic strings embedding expressions.
-- [Array Index & `.length`](../level_02/array_index_length.md) — Index access, which also applies to string characters (e.g. `str[0]`).
-
+- [Array Index & .length](array_index_length.md) — Index access, which also applies to string characters (e.g. `str[0]`).
+- [concat / join / split](../level_04/concat_join_split.md) — Related concept: concat / join / split.
+- [Tagged Template Literals](../level_08/tagged_template_literals.md) — Related concept: Tagged Template Literals.
+- [Regular Expressions (RegExp)](../level_09/regexp.md) — Related concept: Regular Expressions (RegExp).
 ---
 
 ## 8. Key Takeaways

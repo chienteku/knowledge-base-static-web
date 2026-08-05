@@ -7,9 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Rustup](../level_16/rustup.md) — Toolchain manager used to add target architectures (`rustup target add`).
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Invokes cross-compilation via `cargo build --target <target_triple>`.
-- [`#![no_std]`](../level_17/no_std.md) — Target environment for bare-metal cross-compilation.
+- [Cargo CLI](../level_07/cargo_cli.md) — Invokes cross-compilation via `cargo build --target <target_triple>`.
 
 ---
 
@@ -413,6 +413,14 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 > 1. **Conditional Compilation (`#[cfg(...)]`)**: Rust allows conditional compilation based on target properties such as `target_os = "none"` (bare metal), `target_arch = "x86_64"`, or `target_env = "gnu"`.
 > 2. **Hardware MMIO vs Host Mocking**: On real microcontrollers (`target_os = "none"`), registers are controlled via `core::ptr::write_volatile` and `core::ptr::read_volatile`. On host developer workstations, `#[cfg(not(target_os = "none"))]` stubs out MMIO using host memory, enabling `cargo test` execution without physical hardware.
 > 3. **Portable Drivers**: This pattern enables developing peripheral drivers that compile cleanly both when cross-compiled for ARM/RISC-V targets and when tested on x86_64 host machines.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

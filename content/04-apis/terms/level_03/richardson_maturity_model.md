@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [REST (Representational State Transfer)](./rest.md) — The base web service API standard.
-- [HATEOAS](./hateoas.md) — Hypermedia-guided API navigation.
-
+- [REST (Representational State Transfer)](rest.md) — The base web service API standard.
+- [HATEOAS](hateoas.md) — Hypermedia-guided API navigation.
 ---
 
 ## 2. Term Category
@@ -330,9 +329,10 @@ DELETE /users/5 HTTP/1.1 -> 204 No Content ; Level 2 REST compliance
 ---
 
 ## 7. Related Terms
-- [Endpoints & Resources](./endpoints_resources.md) — The resource URIs introduced in Level 1.
-- [CRUD Operations](./crud.md) — The HTTP-to-database actions standardized in Level 2.
-
+- [Endpoints & Resources](endpoints_resources.md) — The resource URIs introduced in Level 1.
+- [CRUD Operations](crud.md) — The HTTP-to-database actions standardized in Level 2.
+- [HATEOAS](hateoas.md) — Related concept: HATEOAS.
+- [REST (Representational State Transfer)](rest.md) — Related concept: REST (Representational State Transfer).
 ---
 
 ## 8. Key Takeaways

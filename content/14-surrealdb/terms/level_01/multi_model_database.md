@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Database (Concept - PostgreSQL)](../../../12-postgres/terms/level_01/database.md) — Relational database models.
-- [Database Context (MongoDB)](../../../13-mongodb/terms/level_01/database_context.md) — Document database models.
+
+- [Database](../../../12-postgres/terms/level_01/database.md) — Relational database models.
+- [Database (MongoDB Context)](../../../13-mongodb/terms/level_01/database_context.md) — Document database models.
 
 ---
 
@@ -199,8 +200,10 @@ UPDATE user:1 SET settings.theme = "dark"; // Native nested document field
 > **Explanation:** Record pointers allow direct memory address dereferencing during graph traversal.
 
 ## 7. Related Terms
+
 - [SurrealDB](surrealdb.md) — The Rust-based multi-model database.
 - [SurrealQL](surrealql.md) — The unified query language.
+- [SurrealDB vs. PostgreSQL vs. MongoDB](surrealdb_vs_postgres_mongo.md) — Related concept: SurrealDB vs. PostgreSQL vs. MongoDB.
 
 ---
 

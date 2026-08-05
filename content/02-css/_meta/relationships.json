@@ -54,6 +54,11 @@
           "term": "comments",
           "module": "02-css",
           "description": "Notes ignored by the browser parser."
+        },
+        {
+          "module": "02-css",
+          "term": "the_cascade",
+          "description": "The CSS Cascade."
         }
       ]
     },
@@ -210,6 +215,16 @@
           "term": "css",
           "module": "02-css",
           "description": "Related concept: CSS (Cascading Style Sheets)."
+        },
+        {
+          "module": "02-css",
+          "term": "combinators",
+          "description": "Selector combinators."
+        },
+        {
+          "module": "02-css",
+          "term": "attribute_selectors",
+          "description": "Attribute selectors."
         }
       ]
     },
@@ -342,6 +357,11 @@
           "term": "import",
           "module": "02-css",
           "description": "Related concept: `@import`."
+        },
+        {
+          "module": "02-css",
+          "term": "css",
+          "description": "Related concept: CSS (Cascading Style Sheets)."
         }
       ]
     },
@@ -1190,6 +1210,11 @@
           "term": "top_bottom_left_right",
           "module": "02-css",
           "description": "Related concept: `top`, `bottom`, `left`, `right`."
+        },
+        {
+          "module": "02-css",
+          "term": "stacking_context",
+          "description": "Stacking context."
         }
       ]
     },
@@ -1317,6 +1342,11 @@
           "term": "transform",
           "module": "02-css",
           "description": "Another visual trigger that creates a context."
+        },
+        {
+          "module": "02-css",
+          "term": "position_absolute_fixed",
+          "description": "Related concept: `position: absolute` vs `fixed`."
         }
       ]
     },
@@ -1447,6 +1477,11 @@
           "term": "flex_parent",
           "module": "02-css",
           "description": "Related concept: Flexbox (Concept) & `display: flex`."
+        },
+        {
+          "module": "02-css",
+          "term": "display_flex",
+          "description": "Related concept: `display: flex`."
         }
       ]
     },
@@ -1525,6 +1560,11 @@
           "term": "media_queries",
           "module": "02-css",
           "description": "Related concept: `@media` (Media Queries Basics)."
+        },
+        {
+          "module": "02-css",
+          "term": "display_flex",
+          "description": "Related concept: `display: flex`."
         }
       ]
     },
@@ -1632,6 +1672,11 @@
           "term": "align_content",
           "module": "02-css",
           "description": "Distributes multiple rows of wrapped items."
+        },
+        {
+          "module": "02-css",
+          "term": "display_flex",
+          "description": "Related concept: `display: flex`."
         }
       ]
     },
@@ -1671,6 +1716,11 @@
           "term": "flex_parent",
           "module": "02-css",
           "description": "Related concept: Flexbox (Concept) & `display: flex`."
+        },
+        {
+          "module": "02-css",
+          "term": "display_flex",
+          "description": "Flexbox parent container."
         }
       ]
     },
@@ -1836,6 +1886,11 @@
           "term": "fr_unit",
           "module": "02-css",
           "description": "The fractional grid track unit."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_template_areas",
+          "description": "Named grid areas."
         }
       ]
     },
@@ -1894,6 +1949,11 @@
           "term": "fr_unit",
           "module": "02-css",
           "description": "Related concept: `fr` Unit (Fractional Unit)."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_repeat",
+          "description": "repeat() function."
         }
       ]
     },
@@ -1923,6 +1983,11 @@
           "term": "grid_auto_fill_fit",
           "module": "02-css",
           "description": "Keywords used inside `repeat()` to automate responsive grid counts."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_minmax",
+          "description": "Related concept: `minmax()` Function."
         }
       ]
     },
@@ -2001,6 +2066,11 @@
           "term": "grid_item",
           "module": "02-css",
           "description": "Placing items manually."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_concept",
+          "description": "Related concept: CSS Grid (Concept) & `display: grid`."
         }
       ]
     },
@@ -2388,6 +2458,11 @@
           "term": "viewport_units",
           "module": "02-css",
           "description": "Sizing relative to the viewport."
+        },
+        {
+          "module": "02-css",
+          "term": "responsive_design",
+          "description": "Related concept: Responsive Design (Concept)."
         }
       ]
     },
@@ -2432,6 +2507,16 @@
           "term": "min_max_clamp",
           "module": "02-css",
           "description": "Related concept: `min()`, `max()`, `clamp()` (Responsive Functions)."
+        },
+        {
+          "module": "02-css",
+          "term": "rem_em",
+          "description": "Relative font units."
+        },
+        {
+          "module": "02-css",
+          "term": "viewport_units",
+          "description": "Viewport units (vw, vh)."
         }
       ]
     },
@@ -2461,6 +2546,11 @@
           "term": "max_width",
           "module": "02-css",
           "description": "Fluid constraints to pair with viewport heights."
+        },
+        {
+          "module": "02-css",
+          "term": "responsive_design",
+          "description": "Related concept: Responsive Design (Concept)."
         }
       ]
     },
@@ -3061,6 +3151,11 @@
           "term": "combinators",
           "module": "02-css",
           "description": "Target elements relative to parent-child tree layouts."
+        },
+        {
+          "module": "02-css",
+          "term": "selectors",
+          "description": "Related concept: Selectors (Element, Class, ID)."
         }
       ]
     },
@@ -3119,6 +3214,11 @@
           "term": "pseudo_classes_advanced",
           "module": "02-css",
           "description": "Positional structural styling hooks."
+        },
+        {
+          "module": "02-css",
+          "term": "selectors",
+          "description": "Related concept: Selectors (Element, Class, ID)."
         }
       ]
     },
@@ -3188,7 +3288,7 @@
     "import": {
       "level": 11,
       "file": "terms/level_11/import.md",
-      "display_name": "`@import`",
+      "display_name": "`@import` Rule",
       "prerequisites": [],
       "related": [
         {
@@ -3432,8 +3532,30 @@
         {
           "module": "02-css",
           "term": "float_clear"
+        },
+        {
+          "module": "02-css",
+          "term": "flex_direction",
+          "description": "flex-direction."
+        },
+        {
+          "module": "02-css",
+          "term": "justify_content",
+          "description": "justify-content."
+        },
+        {
+          "module": "02-css",
+          "term": "align_items",
+          "description": "align-items."
+        },
+        {
+          "module": "02-css",
+          "term": "flex_wrap",
+          "description": "flex-wrap."
         }
-      ]
+      ],
+      "display_name": "`display: flex`",
+      "level": 5
     }
   }
 }

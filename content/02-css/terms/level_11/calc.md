@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Responsive Units (`%`, `vw`, `rem`)](../level_08/percentages.md) — `calc()` is most powerful when mixing these relative units with fixed units like `px`.
-
+- [`%` (Percentages)](../level_08/percentages.md) — `calc()` is most powerful when mixing these relative units with fixed units like `px`.
 ---
 
 ## 2. Term Category
@@ -156,10 +155,9 @@ width: calc(10px * 2); /* Unitless multiplier */
 > **Explanation:** Parentheses inside `calc()` handle math operation grouping.
 
 ## 7. Related Terms
-- [Flexbox / Grid `gap`](../level_06/gap.md) — Calculating space widths between grid tracks.
-- [`var()`](var.md) — Evaluating custom variables inside math equations.
-- [`min()`, `max()`, `clamp()`](../level_08/min_max_clamp.md) — Advanced responsive scaling functions.
-
+- [`gap` (Grid Gap)](../level_06/gap.md) — Calculating space widths between grid tracks.
+- [`var()` (CSS Custom Properties)](var.md) — Evaluating custom variables inside math equations.
+- [`min()`, `max()`, `clamp()` (Responsive Functions)](../level_08/min_max_clamp.md) — Advanced responsive scaling functions.
 ---
 
 ## 8. Key Takeaways

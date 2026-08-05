@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The default rendering mode in Nuxt, which is the exact opposite of an SPA.
 - [Hydration](../level_01/hydration.md) — The client-side bootstrapping process.
-
 ---
 
 ## 2. Term Category
@@ -238,8 +237,8 @@ export default defineNuxtConfig({ ssr: true }); // Universal SSR for public page
 
 ## 7. Related Terms
 - [Route Rules Configuration](../level_08/route_rules.md) — How to enable SPA mode for only *specific* URLs instead of the whole app.
-- [Static Site Generation (SSG)](../level_09/ssg.md) — Another non-Node.js deployment strategy, but with perfect SEO.
-
+- [Static Site Generation (SSG)](ssg.md) — Another non-Node.js deployment strategy, but with perfect SEO.
+- [Hybrid Rendering](hybrid_rendering.md) — Related concept: Hybrid Rendering.
 ---
 
 ## 8. Key Takeaways

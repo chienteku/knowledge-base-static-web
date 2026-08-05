@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Function](../level_03/function.md) — A reusable block of code.
-- [Scope](../level_03/scope.md) — The current context of execution.
-
+- [Function](function.md) — A reusable block of code.
+- [Scope](scope.md) — The current context of execution.
 ---
 
 ## 2. Term Category
@@ -225,9 +224,15 @@ Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createG
 ---
 
 ## 7. Related Terms
-- [Scope](../level_03/scope.md) — The rules defining variable visibility.
-- [Higher-Order Function](../level_03/higher_order_function.md) — A function that returns another function.
-
+- [Scope](scope.md) — The rules defining variable visibility.
+- [Higher-Order Function](higher_order_function.md) — A function that returns another function.
+- [Lexical (Static) Scope / Environment](lexical_scope.md) — Related concept: Lexical (Static) Scope / Environment.
+- [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — Related concept: Reference vs Value (copy semantics).
+- [Currying](../level_09/currying.md) — Related concept: Currying.
+- [Debounce](../level_09/debounce.md) — Related concept: Debounce.
+- [Garbage Collection](../level_09/garbage_collection.md) — Related concept: Garbage Collection.
+- [Memoization](../level_09/memoization.md) — Related concept: Memoization.
+- [Throttle](../level_09/throttle.md) — Related concept: Throttle.
 ---
 
 ## 8. Key Takeaways

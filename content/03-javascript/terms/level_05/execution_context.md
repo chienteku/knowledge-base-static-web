@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Scope](../level_03/scope.md) — Closely related to the execution context.
-
 ---
 
 ## 2. Term Category

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Sharding (Horizontal Scaling)](sharding.md) — The parent cluster architecture.
 
 ---
@@ -179,6 +180,7 @@ Trace the physical path of this query across the cluster components (write the n
 > **Explanation:** Config servers maintain authoritative cluster routing metadata.
 
 ## 7. Related Terms
+
 - [Sharding (Horizontal Scaling)](sharding.md) — The parent partitioning concept.
 - [Chunks & Balancing](chunks_balancing.md) — The balancing logic.
 

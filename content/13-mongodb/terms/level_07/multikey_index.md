@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Array](../level_02/array_type.md) — The array structures indexed.
 - [Compound Index](compound_index.md) — Multi-field index parameters.
 
@@ -237,6 +238,7 @@ Identify which of the following index builds will fail (write **Succeed** or **F
 > **Explanation:** `isMultiKey: true` flags that an index indexes array element keys.
 
 ## 7. Related Terms
+
 - [Array](../level_02/array_type.md) — The data structure.
 - [Compound Index](compound_index.md) — Multi-field index parameters.
 

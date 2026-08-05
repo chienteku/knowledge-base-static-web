@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [Package](../level_01/package.md) — The container that can hold multiple targets of different kinds.
 - [Crate](../level_01/crate.md) — Each individual target compiles into its own separate crate.
 - [Integration Tests](../level_08/integration_tests.md) — The `tests/` directory, one of the target kinds covered here.
@@ -76,73 +77,41 @@ Run it with `cargo run --bin admin-tool`.
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Cargo Target Kinds Scoping and Lifecycle Rules
+### Mistake 1: Expecting Code in `examples/` or `tests/` to Access Private Library Members
 
-**The mistake:** Assuming Cargo Target Kinds instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Calling private (non-`pub`) functions or accessing private fields of `src/lib.rs` inside `examples/demo.rs` or `tests/integration_test.rs`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `examples/` and `tests/` targets are compiled as completely separate external crates that link against the main library via `use my_crate::*`. They can only access `pub` items.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("cargo_target_kinds_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+// inside tests/integration.rs
+use my_crate::internal_helper; // ❌ Error E0603: function `internal_helper` is private!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("cargo_target_kinds_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+// Test internal private helpers inside unit test modules inside src/lib.rs (`#[cfg(test)] mod tests`)!
 ```
 
-### Mistake 2: Mutating Cargo Target Kinds State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Assuming `cargo run` Works Without `--bin` when Multiple Binary Targets Exist
 
-**The mistake:** Attempting to mutate data associated with Cargo Target Kinds through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Executing `cargo run` in a package containing multiple binary targets (`src/main.rs`, `src/bin/tool.rs`).
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
-
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+**Why it is wrong:** Cargo cannot guess which binary target to execute and throws error `could not determine which binary to run`.
 
 *Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+```bash
+cargo run --bin tool # Specify target explicitly!
 ```
 
-### Mistake 3: Concurrent Access to Cargo Target Kinds Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Placing Production Executables in `examples/` Instead of `src/bin/`
 
-**The mistake:** Sharing non-thread-safe Cargo Target Kinds instances across OS threads via `std::thread::spawn`.
+**The mistake:** Placing production CLI binary tools inside `examples/` directory.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** `cargo install` only installs binaries declared in `src/main.rs` or `src/bin/`. Binaries inside `examples/` are ignored during package installation.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -229,10 +198,11 @@ Answer the following:
 
 ## 6. Related Terms
 
-- [Package](../level_01/package.md) / [Crate](../level_01/crate.md) — The container/unit relationship: one package, potentially many crate targets.
+
+- [Package](../level_01/package.md)
 - [Integration Tests](../level_08/integration_tests.md) — The dedicated deep-dive on the `tests/` target kind specifically.
 - [Benchmarking](../level_08/benchmarking.md) — The dedicated deep-dive on the `benches/` target kind.
-- [Workspace](../level_07/workspace.md) — The next layer up: multiple *packages* (each potentially with several targets) managed together.
+- [Workspace](workspace.md) — The next layer up: multiple *packages* (each potentially with several targets) managed together.
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The raw multi-threading tool that Rayon abstracts away.
+
+- [`std::thread::spawn`](std_thread_spawn.md) — The raw multi-threading tool that Rayon abstracts away.
 - [Iterator Adapters](../level_02/iterator_adapters.md) — The `.iter().map().filter()` chains that Rayon supercharges.
-- [Closure (`|...|`)](../level_06/closure.md) — The syntax used to pass logic into Rayon iterators.
+- [Closure](../level_06/closure.md) — The syntax used to pass logic into Rayon iterators.
 
 ---
 
@@ -547,8 +548,9 @@ Implement a parallel processing pipeline using Rayon's slice extensions:
 
 ## 6. Related Terms
 
+
 - [Iterator Adapters](../level_02/iterator_adapters.md) — Rayon provides parallel equivalents for all of these (`.map`, `.filter`, `.collect`).
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — What Rayon is actually doing under the hood!
+- [`std::thread::spawn`](std_thread_spawn.md) — What Rayon is actually doing under the hood!
 
 ---
 

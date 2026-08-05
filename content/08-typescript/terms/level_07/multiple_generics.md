@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Generics Overview](../level_07/generics.md) — The base syntax.
-- [Generic Constraints](../level_07/generic_constraints.md) — Often used to link multiple generics together.
-
+- [Generics Overview (`<T>`)](generics.md) — The base syntax.
+- [Generic Constraints (`extends`)](generic_constraints.md) — Often used to link multiple generics together.
 ---
 
 ## 2. Term Category
@@ -168,8 +167,7 @@ function simple<T, U>(input: ComplexInput<T, U>) {}
 
 ## 7. Related Terms
 - [`keyof` Operator](../level_09/keyof.md) — The operator used to link `K extends keyof T`.
-- [Generic Constraints](../level_07/generic_constraints.md) — How you relate `U` to `T`.
-
+- [Generic Constraints (`extends`)](generic_constraints.md) — How you relate `U` to `T`.
 ---
 
 ## 8. Key Takeaways

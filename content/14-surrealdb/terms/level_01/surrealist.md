@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Connection URI & Protocols](connection_uri.md) — Connect string setups.
+
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](connection_uri.md) — Connect string setups.
 
 ---
 
@@ -177,8 +178,11 @@ Identify which connection parameter panel input (**Endpoint**, **Namespace**, **
 > **Explanation:** Sandbox mode provides an instant, isolated testing environment inside Surrealist.
 
 ## 7. Related Terms
-- [Connection URI & Protocols](connection_uri.md) — Connect string setups.
+
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](connection_uri.md) — Connect string setups.
 - [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — Terminal commands.
+- [SurrealDB Cloud](../level_10/surrealdb_cloud.md) — Related concept: SurrealDB Cloud.
+- [SurrealQL](surrealql.md) — Related concept: SurrealQL.
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Static Site Generation (SSG)](../level_08/ssg.md) — The foundation of ISR.
-- [Time-based Revalidation](../level_05/revalidation.md) — The data-fetching concept that powers ISR.
-
+- [Static Site Generation (SSG)](ssg.md) — The foundation of ISR.
+- [Time-based Revalidation (`next.revalidate`)](../level_05/revalidation.md) — The data-fetching concept that powers ISR.
 ---
 
 ## 2. Term Category
@@ -229,9 +228,12 @@ export const revalidate = 300; // 5-minute timer + revalidateTag() for instant u
 ---
 
 ## 7. Related Terms
-- [Time-based Revalidation](../level_05/revalidation.md) — The exact same concept, applied to data fetching. ISR is what happens when that concept is applied to the page rendering level.
-- [On-Demand Revalidation](../level_06/on_demand_revalidation.md) — The alternative to time-based ISR for instant updates.
-
+- [Time-based Revalidation (`next.revalidate`)](../level_05/revalidation.md) — The exact same concept, applied to data fetching. ISR is what happens when that concept is applied to the page rendering level.
+- [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — The alternative to time-based ISR for instant updates.
+- [Static Site Generation (SSG)](ssg.md) — Related concept: Static Site Generation (SSG).
+- [Content Delivery Network (CDN) & Edge Cache](../level_10/cdn_edge.md) — Related concept: Content Delivery Network (CDN) & Edge Cache.
+- [Docker & Standalone Build](../level_10/standalone_build.md) — Related concept: Docker & Standalone Build.
+- [`generateStaticParams` Function](generate_static_params.md) — generateStaticParams.
 ---
 
 ## 8. Key Takeaways

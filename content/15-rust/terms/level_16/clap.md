@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Derive Macros (`#[derive(...)]`)](../level_12/derive_macros.md) — Procedural macros driving `clap` struct parsing.
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Building CLI utilities with `clap`.
+
+- [Cargo CLI](../level_07/cargo_cli.md) — Building CLI utilities with `clap`.
 
 ---
 
@@ -469,6 +469,14 @@ Build an API deployment CLI tool `deploy-cli` enforcing advanced operational con
 > 1. **Environment Variable Fallback (`env = "..."`)**: `clap` automatically inspects `std::env` if the flag is absent on the command line, enabling secure credential passing without hardcoding defaults.
 > 2. **Mutual Exclusivity (`conflicts_with`)**: Declaring argument conflicts forces `clap` to emit `ErrorKind::ArgumentConflict` whenever incompatible options are combined.
 > 3. **Conditional Requirements (`required_if_eq`)**: Dynamic validation constraints can enforce conditional inputs based on sibling flag values (e.g. requiring target deployment regions only in production runs).
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

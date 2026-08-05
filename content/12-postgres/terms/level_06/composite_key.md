@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Primary Key](../level_02/primary_key.md) — Standard single-column identifiers.
+- [`PRIMARY KEY`](../level_02/primary_key.md) — Standard single-column identifiers.
 - [Junction Table (Bridge / Pivot Table)](../level_05/junction_table.md) — The bridge tables where composite keys are most commonly used.
-
 ---
 
 ## 2. Term Category
@@ -197,10 +196,10 @@ Use surrogate id primary key alongside UNIQUE (col1, col2, col3, col4)
 > **Explanation:** B-Tree index prefix rules mandate filtering leading composite key fields.
 
 ## 7. Related Terms
-- [Primary Key](../level_02/primary_key.md) — The parent single-column key standard.
+- [`PRIMARY KEY`](../level_02/primary_key.md) — The parent single-column key standard.
 - [Junction Table (Bridge / Pivot Table)](../level_05/junction_table.md) — The primary target for composite keys.
 - [Second Normal Form (2NF)](second_normal_form.md) — Slicing composite key dependencies.
-
+- [Composite Index (Multi-column)](../level_07/composite_index.md) — Related concept: Composite Index (Multi-column).
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Document](../level_01/document.md) — The basic unit of storage.
 
 ---
@@ -208,6 +209,7 @@ Analyze which of the following states can exist on disk when the server boots ba
 > **Explanation:** `findOneAndUpdate()` atomically claims and updates queue documents.
 
 ## 7. Related Terms
+
 - [Multi-Document Transaction](multi_document_transaction.md) — Multi-collection ACID blocks.
 - [ACID vs BASE](acid_vs_base.md) — The consistency models.
 

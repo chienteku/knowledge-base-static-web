@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`RefCell<T>`](../level_03/refcell_t.md) — The heavy-duty tool that `Cell` is an optimization of.
-- [`Copy` Trait](../level_03/copy_trait.md) — The trait that allows `Cell` to be so incredibly fast.
+
+- [`RefCell<T>`](refcell_t.md) — The heavy-duty tool that `Cell` is an optimization of.
+- [`Copy` Trait](copy_trait.md) — The trait that allows `Cell` to be so incredibly fast.
 
 ---
 
@@ -580,8 +581,10 @@ Implement an `ArenaMetrics` telemetry system using `Cell<usize>` and `Cell<Alloc
 
 ## 6. Related Terms
 
-- [`RefCell<T>`](../level_03/refcell_t.md) — The heavy-duty version of `Cell` used for Heap data (like `String` and `Vec`).
-- [Interior Mutability](../level_03/interior_mutability.md) — The official name for the design pattern that both `Cell` and `RefCell` enable.
+
+- [`RefCell<T>`](refcell_t.md) — The heavy-duty version of `Cell` used for Heap data (like `String` and `Vec`).
+- [Interior Mutability](interior_mutability.md) — The official name for the design pattern that both `Cell` and `RefCell` enable.
+- [Mutability (`mut`)](../level_01/mutability_mut.md) — Related concept: Mutability (`mut`).
 
 ---
 

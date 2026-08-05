@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`Rc<T>`](../level_03/rc_t.md) — You must understand how basic Reference Counting works first.
-- [Ownership](../level_03/ownership.md) — The fundamental rule that both `Rc` and `Arc` are designed to bypass.
+
+- [`Rc<T>`](rc_t.md) — You must understand how basic Reference Counting works first.
+- [Ownership](ownership.md) — The fundamental rule that both `Rc` and `Arc` are designed to bypass.
 
 ---
 
@@ -575,9 +576,16 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`Rc<T>`](../level_03/rc_t.md) — The faster, single-threaded sibling.
+
+- [`Rc<T>`](rc_t.md) — The faster, single-threaded sibling.
 - [`Mutex<T>`](../level_09/mutex_t.md) — Often wrapped inside an `Arc` (as `Arc<Mutex<T>>`) to allow thread-safe mutation.
-- [`RefCell<T>`](../level_03/refcell_t.md) — The single-threaded way to mutate shared data (used with `Rc`).
+- [`RefCell<T>`](refcell_t.md) — The single-threaded way to mutate shared data (used with `Rc`).
+- [`Atomic` Types](../level_09/atomic_types.md) — Related concept: `Atomic` Types.
+- [`Condvar` & `Barrier`](../level_09/condvar_barrier.md) — Related concept: `Condvar` & `Barrier`.
+- [`RwLock<T>`](../level_09/rwlock_t.md) — Related concept: `RwLock<T>`.
+- [Scoped Threads (`std::thread::scope`)](../level_09/scoped_threads.md) — Related concept: Scoped Threads (`std::thread::scope`).
+- [`Send` Trait](../level_09/send_trait.md) — Related concept: `Send` Trait.
+- [Smart Pointers (`Box`, `Rc`, `Arc`)](../level_10/smart_pointers.md) — Related concept: Smart Pointers (`Box`, `Rc`, `Arc`).
 
 ---
 

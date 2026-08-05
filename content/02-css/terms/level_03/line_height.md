@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — `line-height` is calculated directly based on the font size.
-
+- [`font-size` & `font-weight`](font_size_weight.md) — `line-height` is calculated directly based on the font size.
 ---
 
 ## 2. Term Category
@@ -161,9 +160,8 @@ div { display: flex; align-items: center; min-height: 100px; }
 > **Explanation:** Matching line-height to explicit element height vertically centers single-line text.
 
 ## 7. Related Terms
-- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that `line-height` multiplies against.
-- [`font-style` & `font-variant`](../level_03/font_style_variant.md) — Text formatting variants.
-
+- [`font-size` & `font-weight`](font_size_weight.md) — The property that `line-height` multiplies against.
+- [`font-style` & `font-variant`](font_style_variant.md) — Text formatting variants.
 ---
 
 ## 8. Key Takeaways

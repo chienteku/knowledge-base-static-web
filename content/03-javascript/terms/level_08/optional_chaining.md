@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The structure being accessed.
-- [Undefined](../level_01/undefined.md) / [Null](../level_01/null.md) — The values this operator protects against.
-
+- [undefined](../level_01/undefined.md)
 ---
 
 ## 2. Term Category
@@ -205,9 +204,8 @@ const result = user?.profile?.score + expensiveFunction();
 ---
 
 ## 7. Related Terms
-- [Nullish Coalescing (`??`)](./nullish_coalescing.md) — The perfect companion to `?.` for providing default values.
-- [Undefined](../level_01/undefined.md) — What is returned when `?.` fails to find the property.
-
+- [Nullish Coalescing (??)](nullish_coalescing.md) — The perfect companion to `?.` for providing default values.
+- [undefined](../level_01/undefined.md) — What is returned when `?.` fails to find the property.
 ---
 
 ## 8. Key Takeaways

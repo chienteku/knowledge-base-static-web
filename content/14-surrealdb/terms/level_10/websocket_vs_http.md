@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Connection URI & Protocols](../level_01/connection_uri.md) — URI schemes.
+
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — URI schemes.
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Real-time subscription requirements.
 
 ---
@@ -205,9 +206,12 @@ Select the best protocol (WebSocket or HTTP) for each scenario:
 > **Explanation:** `wss://` encrypts WebSocket frames using TLS/SSL in production.
 
 ## 7. Related Terms
-- [Connection URI & Protocols](../level_01/connection_uri.md) — Connection strings.
+
+- [Connection URI & Protocols (`ws://`, `wss://`, `http://`)](../level_01/connection_uri.md) — Connection strings.
 - [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Live queries.
 - [JavaScript / TypeScript SDK](js_sdk.md) — SDK client configuration.
+- [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](sdk_connection.md) — Related concept: SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`).
+- [SDK Error Handling & Retry Patterns](sdk_error_handling.md) — Related concept: SDK Error Handling & Retry Patterns.
 
 ---
 

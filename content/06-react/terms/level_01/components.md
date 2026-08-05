@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [JSX](../level_01/jsx.md) — What components return.
-
+- [JSX (JavaScript XML)](jsx.md) — What components return.
 ---
 
 ## 2. Term Category
@@ -210,11 +209,15 @@ function Cup({ guest }) {
 > **Explanation:** Lowercase tags (`<button>`) evaluate to HTML string tags; uppercase tags (`<Button>`) evaluate to component functions.
 
 ## 7. Related Terms
-- [Render Purity](./render_purity.md) — The rule that components must be pure functions.
-- [Fragments](./fragments.md) — Grouping sibling elements without adding wrapper nodes.
-- [Props](../level_01/props.md) — How you pass data into these components to customize them.
-- [JSX](../level_01/jsx.md) — What the component returns.
-
+- [Render Purity](render_purity.md) — The rule that components must be pure functions.
+- [Fragments](fragments.md) — Grouping sibling elements without adding wrapper nodes.
+- [Props (Properties)](props.md) — How you pass data into these components to customize them.
+- [JSX (JavaScript XML)](jsx.md) — What the component returns.
+- [Custom Hooks](../level_04/custom_hooks.md) — Related concept: Custom Hooks.
+- [Rules of Hooks](../level_04/rules_of_hooks.md) — Related concept: Rules of Hooks.
+- [Testing: React Testing Library + Jest](../level_11/react_testing_library.md) — Related concept: Testing: React Testing Library + Jest.
+- [Styled Components / Emotion (CSS-in-JS)](../level_11/styled_components.md) — Related concept: Styled Components / Emotion (CSS-in-JS).
+- [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
 ---
 
 ## 8. Key Takeaways

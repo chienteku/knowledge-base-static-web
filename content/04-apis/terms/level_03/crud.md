@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Methods](../level_02/http_methods.md) — CRUD operations map directly to HTTP verbs.
-- [REST](../level_03/rest.md) — Building a REST API essentially means building a CRUD interface for your database.
-
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — CRUD operations map directly to HTTP verbs.
+- [REST (Representational State Transfer)](rest.md) — Building a REST API essentially means building a CRUD interface for your database.
 ---
 
 ## 2. Term Category
@@ -337,9 +336,11 @@ app.delete('/orders/:id', async (req, res) => {
 ---
 
 ## 7. Related Terms
-- [HTTP Methods](../level_02/http_methods.md) — The tools we use to execute CRUD over the network.
-- [REST](../level_03/rest.md) — The architecture that enforces this mapping.
-
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — The tools we use to execute CRUD over the network.
+- [REST (Representational State Transfer)](rest.md) — The architecture that enforces this mapping.
+- [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — Related concept: Idempotent vs Safe Methods.
+- [Resource Naming & URI Design](resource_naming.md) — Related concept: Resource Naming & URI Design.
+- [Richardson Maturity Model](richardson_maturity_model.md) — Related concept: Richardson Maturity Model.
 ---
 
 ## 8. Key Takeaways

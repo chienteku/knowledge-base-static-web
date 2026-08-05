@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Express.js](../level_07/express_js.md) — Middleware is the defining architectural feature of Express.
-
+- [Express.js](express_js.md) — Middleware is the defining architectural feature of Express.
 ---
 
 ## 2. Term Category
@@ -266,8 +265,12 @@ app.use((req, res, next) => {
 > **Explanation:** Express inspects function `length` property to identify 4-parameter error handlers.
 
 ## 7. Related Terms
-- [Routing](../level_07/routing.md) — Where the request goes after it survives the Middleware.
-
+- [Routing](routing.md) — Where the request goes after it survives the Middleware.
+- [Body Parsing (express.json())](body_parsing.md) — Related concept: Body Parsing (express.json()).
+- [Express.js](express_js.md) — Related concept: Express.js.
+- [The Middleware Chain & next()](middleware_chain.md) — Related concept: The Middleware Chain & next().
+- [CORS](../level_09/cors.md) — Related concept: CORS.
+- [Rate Limiting](../level_09/rate_limiting.md) — Related concept: Rate Limiting.
 ---
 
 ## 8. Key Takeaways

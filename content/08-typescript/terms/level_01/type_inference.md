@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Static Typing](../level_01/static_dynamic_typing.md) — The system that Inference is optimizing.
-- [The TypeScript Compiler (tsc)](../level_01/tsc.md) — The engine doing the guessing.
-
+- [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — The system that Inference is optimizing.
+- [The TypeScript Compiler (`tsc`)](tsc.md) — The engine doing the guessing.
 ---
 
 ## 2. Term Category
@@ -160,9 +159,14 @@ const action = "CLICK"; // Inferred as literal type "CLICK"
 > **Explanation:** Array literal initializers infer union element types `(T1 | T2)[]`.
 
 ## 7. Related Terms
-- [Static Typing](../level_01/static_dynamic_typing.md) — What is happening under the hood.
+- [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — What is happening under the hood.
 - [`any`](../level_02/any.md) — What happens when inference fails.
-
+- [Type Widening](type_widening.md) — Related concept: Type Widening.
+- [Primitive Types](../level_02/primitive_types.md) — Related concept: Primitive Types.
+- [Function Types](../level_04/function_types.md) — Related concept: Function Types.
+- [Literal Types](../level_05/literal_types.md) — Related concept: Literal Types.
+- [`ReturnType<T>`](../level_08/returntype.md) — Related concept: `ReturnType<T>`.
+- [`satisfies` Operator](../level_05/satisfies_operator.md) — satisfies operator.
 ---
 
 ## 8. Key Takeaways

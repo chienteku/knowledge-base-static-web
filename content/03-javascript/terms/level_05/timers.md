@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Callback Function](../level_03/callback_function.md) — A function passed into another function as an argument.
-- [`window` object / BOM](./window_bom.md) — The browser global context hosting timer methods.
-
+- [window object / BOM](window_bom.md) — The browser global context hosting timer methods.
 ---
 
 ## 2. Term Category
@@ -226,7 +225,7 @@ const welcomeTimer = setTimeout(() => {
 ## 7. Related Terms
 - [Macrotask Queue](../level_06/macrotask_queue.md) — The queue where timer callbacks wait to execute.
 - [Event Loop](../level_06/event_loop.md) — The orchestration loop that moves timer callbacks onto the stack.
-
+- [Date object](../level_02/date_object.md) — Related concept: Date object.
 ---
 
 ## 8. Key Takeaways

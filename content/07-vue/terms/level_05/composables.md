@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Composition API](../level_01/composition_api.md) — The foundation that makes Composables possible.
 - [Reactive State](../level_02/reactive_state.md) — What is being encapsulated inside the Composable.
-
 ---
 
 ## 2. Term Category
@@ -204,7 +203,10 @@ function useCounter() {
 - [Composition API](../level_01/composition_api.md) — The paradigm that enables this.
 - [Pinia](../level_07/pinia.md) — Used for sharing global State, whereas Composables share local Logic.
 - [VueUse](../level_10/vueuse.md) — The library containing hundreds of pre-written, open-source composables.
-
+- [Custom Directives (`v-*`)](../level_03/custom_directives.md) — Related concept: Custom Directives (`v-*`).
+- [Scoped Slots](scoped_slots.md) — Related concept: Scoped Slots.
+- [`<Suspense>` (Vue)](suspense.md) — Related concept: `<Suspense>` (Vue).
+- [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query language encapsulated by these interfaces.
-
 ---
 
 ## 2. Term Category
@@ -211,7 +210,6 @@ const [{ sum }] = await db.query('SELECT SUM(total) FROM orders');
 ## 7. Related Terms
 - [SQL Injection](sql_injection.md) — The vulnerability risk.
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — Secure raw query patterns.
-
 ---
 
 ## 8. Key Takeaways

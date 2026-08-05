@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [React Server Components (RSC)](../level_01/rsc.md) — The components that compile into this payload.
 - [Client Components (`"use client"`)](../level_01/client_components.md) — The placeholders defined inside this payload.
-
 ---
 
 ## 2. Term Category
@@ -245,9 +244,9 @@ return <ClientCard data={dto} />; // Lightweight RSC payload
 ---
 
 ## 7. Related Terms
-- [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — The system that caches the RSC Payload.
-- [Network Boundary / Serialization Boundary](../level_01/network_boundary.md) — The interface mapped by this format.
-
+- [The Next.js Cache (The Four Caches)](next_cache.md) — The system that caches the RSC Payload.
+- [Network Boundary](../level_01/network_boundary.md) — The interface mapped by this format.
+- [React Server Components (RSC)](../level_01/rsc.md) — Related concept: React Server Components (RSC).
 ---
 
 ## 8. Key Takeaways

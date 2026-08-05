@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Specificity](../level_01/specificity.md) — The point system that `!important` bypasses.
-- [The Cascade](../level_01/the_cascade.md) — The conflict resolution engine that `!important` alters.
-
+- [Specificity](specificity.md) — The point system that `!important` bypasses.
+- [The Cascade](the_cascade.md) — The conflict resolution engine that `!important` alters.
 ---
 
 ## 2. Term Category
@@ -245,10 +244,9 @@ p {
 > **Explanation:** Utility classes use `!important` to ensure state overrides apply regardless of component rules.
 
 ## 7. Related Terms
-- [Specificity](../level_01/specificity.md) — The point system overridden by the flag.
-- [The Cascade](../level_01/the_cascade.md) — The conflict resolver.
-- [Inheritance](../level_01/inheritance.md) — How properties fall back to parent element style selectors.
-
+- [Specificity](specificity.md) — The point system overridden by the flag.
+- [The Cascade](the_cascade.md) — The conflict resolver.
+- [Inheritance](inheritance.md) — How properties fall back to parent element style selectors.
 ---
 
 ## 8. Key Takeaways

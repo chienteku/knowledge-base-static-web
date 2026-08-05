@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
-
 ---
 
 ## 2. Term Category
@@ -225,7 +224,7 @@ console.log(point.printCoords()); // "Coordinates: 10, 20"
 
 ## 7. Related Terms
 - [Destructuring](../level_08/destructuring.md) — The matching syntax used to extract values from objects.
-
+- [Computed Property Names](computed_property_names.md) — Related concept: Computed Property Names.
 ---
 
 ## 8. Key Takeaways

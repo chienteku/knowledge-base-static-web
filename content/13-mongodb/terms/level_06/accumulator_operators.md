@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`$group` Stage](group_stage.md) — The pipeline stage where accumulators execute.
 
 ---
@@ -202,6 +203,7 @@ Write the aggregation pipeline containing a single `$group` stage that groups st
 > **Explanation:** `$addToSet` collects unique field values into an array within each group.
 
 ## 7. Related Terms
+
 - [`$group` Stage](group_stage.md) — The parent pipeline stage.
 
 ---

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [updateOne() / updateMany()](update.md) — The standard non-atomic updates.
-- [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — Differentiating results metrics from returned documents.
+
+- [`updateOne()` / `updateMany()`](update.md) — The standard non-atomic updates.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Differentiating results metrics from returned documents.
 
 ---
 
@@ -232,8 +233,9 @@ const seq = await db.seq.findOneAndUpdate({ _id: "id" }, { $inc: { val: 1 } }, {
 > **Explanation:** `findOneAndDelete()` atomically retrieves and removes queue documents.
 
 ## 7. Related Terms
-- [updateOne() / updateMany()](update.md) — Standard non-atomic modifications.
-- [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — Standard write outputs.
+
+- [`updateOne()` / `updateMany()`](update.md) — Standard non-atomic modifications.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Standard write outputs.
 
 ---
 

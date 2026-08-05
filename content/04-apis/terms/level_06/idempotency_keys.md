@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Idempotency](./idempotency.md) — The concept of safe request repetition.
+- [Idempotency](idempotency.md) — The concept of safe request repetition.
 - [Retry & Exponential Backoff](../level_05/retry_backoff.md) — The client-side request recovery loop.
-
 ---
 
 ## 2. Term Category
@@ -206,8 +205,7 @@ await redis.set(`idempotency:${key}`, JSON.stringify(response), 'EX', 86400);
 
 ## 7. Related Terms
 - [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — The HTTP safety definitions.
-- [Rate Limiting (429 Too Many Requests)](./rate_limiting.md) — The server protections that clients retry against.
-
+- [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — The server protections that clients retry against.
 ---
 
 ## 8. Key Takeaways

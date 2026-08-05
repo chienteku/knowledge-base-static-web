@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`?` Operator](../level_04/question_mark_operator.md) — The operator that secretly relies on these traits to work its magic.
-- [Custom Error Types](../level_04/custom_error_types.md) — The primary beneficiary of automatic conversions.
-- [Trait](../level_04/trait.md) — The mechanism defining shared behavior across types.
+
+- [`?` Operator](question_mark_operator.md) — The operator that secretly relies on these traits to work its magic.
+- [Custom Error Types](custom_error_types.md) — The primary beneficiary of automatic conversions.
+- [Trait](trait.md) — The mechanism defining shared behavior across types.
 
 ---
 
@@ -622,8 +623,14 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`?` Operator](../level_04/question_mark_operator.md) — The operator that secretly calls `.into()` under the hood when propagating errors.
-- [`TryFrom` / `TryInto`](../level_14/tryfrom_tryinto.md) — The fallible versions of these traits. You use these when a conversion *might fail* (like trying to convert a massive `i64` into a tiny `i8`). They return a `Result`.
+
+- [`?` Operator](question_mark_operator.md) — The operator that secretly calls `.into()` under the hood when propagating errors.
+- [`TryFrom` and `TryInto` Traits](../level_14/tryfrom_tryinto.md) — The fallible versions of these traits. You use these when a conversion *might fail* (like trying to convert a massive `i64` into a tiny `i8`). They return a `Result`.
+- [`as` Casting (Primitive Numeric Coercion)](../level_01/as_casting.md) — Related concept: `as` Casting (Primitive Numeric Coercion).
+- [Custom Error Types](custom_error_types.md) — Related concept: Custom Error Types.
+- [`FromStr` Trait & `.parse()`](fromstr_parse.md) — Related concept: `FromStr` Trait & `.parse()`.
+- [`TryFrom` / `TryInto`](../level_14/try_from_try_into.md) — Related concept: `TryFrom` / `TryInto`.
+- [From For Constructor Overloading](../level_18/from_for_constructor_overloading.md) — Related concept: From For Constructor Overloading.
 
 ---
 

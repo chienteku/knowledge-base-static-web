@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — Understanding how elements take up space.
-- [Nesting & Hierarchy](../../../01-html/terms/level_09/tree_structure.md) — Percentages rely entirely on the Parent-Child relationship.
-
+- [The Box Model (Concept)](../level_02/box_model.md) — Understanding how elements take up space.
+- tree_structure — Percentages rely entirely on the Parent-Child relationship.
 ---
 
 ## 2. Term Category
@@ -233,10 +232,9 @@ How many pixels wide is the Child on the screen?
 > **Explanation:** `flex-basis` defines initial main-axis item dimensions within Flexbox layout engines.
 
 ## 7. Related Terms
-- [`vw` / `vh`](viewport_units.md) — Sizing relative to the viewport instead of the parent container.
-- [`rem` and `em` units](rem_em.md) — Relative typography units.
-- [`max-width` & `min-height`](max_width.md) — Bounding limits for fluid elements.
-
+- [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport instead of the parent container.
+- [`rem` vs `em`](rem_em.md) — Relative typography units.
+- [`max-width` & `min-height` (Fluidity)](max_width.md) — Bounding limits for fluid elements.
 ---
 
 ## 8. Key Takeaways

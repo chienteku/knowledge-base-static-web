@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Read Concern](read_concern.md) — The read durability context.
 - [Read Preference](read_preference.md) — The routing of queries.
 - [`startSession()` / `session.withTransaction()`](session_transaction.md) — The sessions container.
@@ -216,6 +217,7 @@ Explain how MongoDB handles a query sent to a secondary node 10 milliseconds lat
 > **Explanation:** Causal sessions track cluster operations to ensure operations observe preceding writes.
 
 ## 7. Related Terms
+
 - [`startSession()` / `session.withTransaction()`](session_transaction.md) — The session containers.
 - [Read Preference](read_preference.md) — The routing of queries.
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- JavaScript — The language that Node.js executes.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -206,9 +205,12 @@ export default function StatusPage() {
 ---
 
 ## 7. Related Terms
-- [Next.js Overview](../level_01/nextjs.md) — The framework running on top of Node.js.
-- [React Server Components (RSC)](../level_01/rsc.md) — Components executing inside this runtime.
-
+- [Next.js Overview](nextjs.md) — The framework running on top of Node.js.
+- [React Server Components (RSC)](rsc.md) — Components executing inside this runtime.
+- [Node.js `path` Module](../level_04/path_module.md) — Related concept: Node.js `path` Module.
+- [Node.js Environment Variables (`process.env`)](../level_10/process_env.md) — Related concept: Node.js Environment Variables (`process.env`).
+- [Turbopack](../level_10/turbopack.md) — Related concept: Turbopack.
+- [V8 Engine](../level_10/v8_engine.md) — Related concept: V8 Engine.
 ---
 
 ## 8. Key Takeaways

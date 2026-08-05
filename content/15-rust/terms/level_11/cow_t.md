@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [Ownership](../level_03/ownership.md) — The fundamental difference between owning data and borrowing it.
-- [Borrowing (`&T`)](../level_03/borrowing.md) — Using data without taking ownership.
-- [Enums](../level_02/enum.md) — The underlying data structure that makes `Cow` possible.
+- [Borrowing (`&`)](../level_03/borrowing.md) — Using data without taking ownership.
+- [Enum](../level_02/enum.md) — The underlying data structure that makes `Cow` possible.
 
 ---
 
@@ -422,8 +423,11 @@ Write unit tests verifying both clean packet borrowing and escaped packet in-pla
 
 ## 6. Related Terms
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The most common types used inside a `Cow`.
-- [Enums](../level_02/enum.md) — What `Cow` actually is under the hood.
+
+- [String vs &str](../level_01/string_vs_&str.md) — The most common types used inside a `Cow`.
+- [Enum](../level_02/enum.md) — What `Cow` actually is under the hood.
+- [`OsString` / `OsStr`](../level_01/os_string_str.md) — Related concept: `OsString` / `OsStr`.
+- [Cow For Flexibility](../level_18/cow_for_flexibility.md) — Related concept: Cow For Flexibility.
 
 ---
 

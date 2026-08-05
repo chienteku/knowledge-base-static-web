@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`display: flex`](../level_05/flex_parent.md) — Must be applied to the parent container.
-
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — Must be applied to the parent container.
 ---
 
 ## 2. Term Category
@@ -156,9 +155,9 @@ Imagine typing a sentence in Microsoft Word.
 > **Explanation:** `flex-flow` combines `flex-direction` and `flex-wrap` properties.
 
 ## 7. Related Terms
-- [gap](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
-- [`align-content`](../level_05/align_content.md) — Distributes multiple rows of wrapped items.
-
+- [`gap` (Grid Gap)](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
+- [`align-content`](align_content.md) — Distributes multiple rows of wrapped items.
+- [`display: flex`](display_flex.md) — Related concept: `display: flex`.
 ---
 
 ## 8. Key Takeaways

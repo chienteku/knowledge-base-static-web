@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Array](../level_02/array_type.md) — The parent list data type.
 - [Query Filter (Filter Document)](../level_03/query_filter.md) — The parent query filters context.
 
@@ -201,6 +202,7 @@ Write the MongoDB queries to:
 > **Explanation:** `{ $size: N }` matches documents where array length equals N.
 
 ## 7. Related Terms
+
 - [Array](../level_02/array_type.md) — The data structure.
 - [Array Query Operators (`$elemMatch`, `$all`, `$size`)](array_query_operators.md) — Complex array filters.
 

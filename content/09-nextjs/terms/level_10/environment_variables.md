@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [React Server Components (RSC)](../level_01/rsc.md) — Essential for understanding the security boundaries of environment variables.
-- [Node.js Environment Variables (`process.env`)](../level_10/process_env.md) — The foundational concept.
-
+- [Node.js Environment Variables (`process.env`)](process_env.md) — The foundational concept.
 ---
 
 ## 2. Term Category
@@ -187,9 +186,9 @@ DB_PASS=supersecret // Private server-only variable
 ---
 
 ## 7. Related Terms
-- [Deployment (Vercel)](../level_10/vercel_deployment.md) — Where you configure production variables.
-- [Client Components](../level_01/client_components.md) — The environment that requires the `NEXT_PUBLIC_` prefix.
-
+- [Deployment (Vercel)](vercel_deployment.md) — Where you configure production variables.
+- [Client Components (`"use client"`)](../level_01/client_components.md) — The environment that requires the `NEXT_PUBLIC_` prefix.
+- [Node.js Environment Variables (`process.env`)](process_env.md) — Related concept: Node.js Environment Variables (`process.env`).
 ---
 
 ## 8. Key Takeaways

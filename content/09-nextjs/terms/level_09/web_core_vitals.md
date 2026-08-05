@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [SEO (Search Engine Optimization)](../level_01/seo.md) — The search engine indexing context that relies on these vitals.
-
 ---
 
 ## 2. Term Category
@@ -172,9 +171,10 @@ Next.js features map directly to these Core Vitals:
 ---
 
 ## 7. Related Terms
-- [`<Image>` Component](../level_09/next_image.md) — The optimization tool for LCP and CLS.
-- [`next/font` Optimization](../level_09/next_font.md) — The optimization tool for CLS.
-
+- [`<Image>` Component](next_image.md) — The optimization tool for LCP and CLS.
+- [`next/font` Optimization](next_font.md) — The optimization tool for CLS.
+- [HTML `<img>` Element](html_img.md) — Related concept: HTML `<img>` Element.
+- [HTML `<script>` Element](html_script.md) — Related concept: HTML `<script>` Element.
 ---
 
 ## 8. Key Takeaways

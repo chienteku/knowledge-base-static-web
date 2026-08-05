@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Borrow Checker](../level_03/borrow_checker.md) — The strict compile-time cop that `RefCell` bypasses.
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The "Golden Rule" (one writer OR many readers) that `RefCell` enforces.
-- [`Rc<T>`](../level_03/rc_t.md) — The smart pointer that is almost always paired with `RefCell`.
+
+- [Borrow Checker](borrow_checker.md) — The strict compile-time cop that `RefCell` bypasses.
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The "Golden Rule" (one writer OR many readers) that `RefCell` enforces.
+- [`Rc<T>`](rc_t.md) — The smart pointer that is almost always paired with `RefCell`.
 
 ---
 
@@ -566,9 +567,15 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`Rc<T>`](../level_03/rc_t.md) — The smart pointer almost *always* paired with `RefCell`. `Rc<RefCell<T>>` is the standard way to allow multiple owners to mutate shared data.
-- [`Cell<T>`](../level_03/cell_t.md) — The slightly faster, simpler sibling to `RefCell` that only works for simple `Copy` data.
-- [Interior Mutability](../level_03/interior_mutability.md) — The official name for the design pattern that `RefCell` enables.
+
+- [`Rc<T>`](rc_t.md) — The smart pointer almost *always* paired with `RefCell`. `Rc<RefCell<T>>` is the standard way to allow multiple owners to mutate shared data.
+- [`Cell<T>`](cell_t.md) — The slightly faster, simpler sibling to `RefCell` that only works for simple `Copy` data.
+- [Interior Mutability](interior_mutability.md) — The official name for the design pattern that `RefCell` enables.
+- [`Arc<T>`](arc_t.md) — Related concept: `Arc<T>`.
+- [Lifetime Variance](../level_05/lifetime_variance.md) — Related concept: Lifetime Variance.
+- [`Mutex<T>`](../level_09/mutex_t.md) — Related concept: `Mutex<T>`.
+- [`RwLock<T>`](../level_09/rwlock_t.md) — Related concept: `RwLock<T>`.
+- [`Weak<T>`](../level_11/weak_t.md) — Related concept: `Weak<T>`.
 
 ---
 

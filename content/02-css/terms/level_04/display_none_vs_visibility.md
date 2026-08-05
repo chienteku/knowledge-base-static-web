@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The parent display rules.
-- [The Box Model](../level_02/box_model.md) — The physical layout box that is hidden.
-
+- [`display: block` vs `inline` vs `inline-block`](display.md) — The parent display rules.
+- [The Box Model (Concept)](../level_02/box_model.md) — The physical layout box that is hidden.
 ---
 
 ## 2. Term Category
@@ -370,9 +369,8 @@ If this alert box sits between a heading (`<h1>`) and a paragraph (`<p>`), what 
 > **Explanation:** Combining `opacity` and `visibility` allows smooth fade transitions.
 
 ## 7. Related Terms
-- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The parent display rules.
+- [`display: block` vs `inline` vs `inline-block`](display.md) — The parent display rules.
 - [`opacity`](../level_09/opacity.md) — The styling property that adjusts visibility percentage from 0 to 100.
-
 ---
 
 ## 8. Key Takeaways

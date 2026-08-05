@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Event Bubbling](../level_05/event_bubbling.md) — The opposite phase (traveling upwards).
-- [Event Listener](../level_05/event_listener.md) — Waiting for events to occur.
-
+- [Event Bubbling](event_bubbling.md) — The opposite phase (traveling upwards).
+- [Event Listener](event_listener.md) — Waiting for events to occur.
 ---
 
 ## 2. Term Category
@@ -203,9 +202,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Event Bubbling](../level_05/event_bubbling.md) — The upward phase of event propagation.
-- [`event.stopPropagation()`](../level_05/event_stoppropagation.md) — Can be used during Capturing to stop the event from ever reaching the child target!
-
+- [Event Bubbling](event_bubbling.md) — The upward phase of event propagation.
+- [event.stopPropagation()](event_stoppropagation.md) — Can be used during Capturing to stop the event from ever reaching the child target!
 ---
 
 ## 8. Key Takeaways

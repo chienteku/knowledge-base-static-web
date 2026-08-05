@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Scope](../level_03/scope.md) — The current context of execution.
-- [Function Declaration](../level_03/function_declaration.md) — Defining a named function.
-
+- [Scope](scope.md) — The current context of execution.
+- [Function Declaration](function_declaration.md) — Defining a named function.
 ---
 
 ## 2. Term Category
@@ -211,10 +210,11 @@ function greet() {
 ---
 
 ## 7. Related Terms
-- [Function Declaration](../level_03/function_declaration.md) — Fully hoisted.
-- [Function Expression](../level_03/function_expression.md) — Not hoisted (only the variable declaration is).
-- [`var`](../level_01/var.md) — Hoisted and initialized with `undefined`.
-
+- [Function Declaration](function_declaration.md) — Fully hoisted.
+- [Function Expression](function_expression.md) — Not hoisted (only the variable declaration is).
+- [var](../level_01/var.md) — Hoisted and initialized with `undefined`.
+- [Lexical (Static) Scope / Environment](lexical_scope.md) — Related concept: Lexical (Static) Scope / Environment.
+- [Execution Context](../level_05/execution_context.md) — Related concept: Execution Context.
 ---
 
 ## 8. Key Takeaways

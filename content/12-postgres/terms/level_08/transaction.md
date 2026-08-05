@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The language statements grouped in transactions.
-
 ---
 
 ## 2. Term Category
@@ -192,8 +191,8 @@ Describe the state of the database after Query 3 fails, assuming no savepoints a
 
 ## 7. Related Terms
 - [`BEGIN` / `COMMIT` / `ROLLBACK`](begin_commit_rollback.md) — The control statements.
-- [ACID Properties](acid.md) -- The transactional guarantees.
-
+- [ACID Properties](acid.md) — - The transactional guarantees.
+- [MVCC (Multi-Version Concurrency Control)](mvcc.md) — Related concept: MVCC (Multi-Version Concurrency Control).
 ---
 
 ## 8. Key Takeaways

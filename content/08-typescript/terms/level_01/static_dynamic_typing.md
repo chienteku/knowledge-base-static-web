@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [TypeScript](../level_01/typescript.md) — The language that brings Static Typing to the web.
-
+- [TypeScript](typescript.md) — The language that brings Static Typing to the web.
 ---
 
 ## 2. Term Category
@@ -148,9 +147,8 @@ function isUser(obj: any): obj is User {
 > **Explanation:** Static type analyzers flag missing methods immediately during development.
 
 ## 7. Related Terms
-- [Type Inference](../level_01/type_inference.md) — How TypeScript gives you Static Typing without forcing you to manually type everything.
-- [TypeScript](../level_01/typescript.md) — The language implementation.
-
+- [Type Inference](type_inference.md) — How TypeScript gives you Static Typing without forcing you to manually type everything.
+- [TypeScript](typescript.md) — The language implementation.
 ---
 
 ## 8. Key Takeaways

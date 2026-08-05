@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- **Basic JavaScript Syntax** — You must know JS before you can run it on a server.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -158,9 +157,11 @@ app.get('/data', async (req, res, next) => {
 > **Explanation:** `process.env` stores runtime environment configuration keys.
 
 ## 7. Related Terms
-- [V8 Engine](../level_01/v8_engine.md) — The actual engine beating inside the heart of Node.js.
-- [NPM](../level_04/npm.md) — The package manager that made the Node.js ecosystem the largest in the world.
-
+- [V8 JavaScript Engine](v8_engine.md) — The actual engine beating inside the heart of Node.js.
+- [NPM (Node Package Manager)](../level_04/npm.md) — The package manager that made the Node.js ecosystem the largest in the world.
+- [Docker](../level_10/docker.md) — Related concept: Docker.
+- [The Event Loop & Libuv](event_loop.md) — Node.js Event Loop.
+- [Non-Blocking I/O](non_blocking_io.md) — Non-blocking I/O model.
 ---
 
 ## 8. Key Takeaways

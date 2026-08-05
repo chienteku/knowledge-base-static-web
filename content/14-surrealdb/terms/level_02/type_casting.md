@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -207,8 +208,12 @@ Write the equivalent query in SurrealQL, casting `price` to a `decimal` type.
 > **Explanation:** `<record>` converts record ID string representations into structured Record IDs.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
-- [Type Functions](../level_06/type_functions.md) — Introspection library.
+- [Type Functions (`type::*`)](../level_06/type_functions.md) — Introspection library.
+- [`bool`](bool.md) — Related concept: `bool`.
+- [`int` / `float` / `decimal`](number_types.md) — Related concept: `int` / `float` / `decimal`.
+- [`string`](string.md) — Related concept: `string`.
 
 ---
 

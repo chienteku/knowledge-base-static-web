@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Custom Error Types](../level_04/custom_error_types.md) — What implements this trait in practice.
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — What makes `Box<dyn Error>` possible.
-- [`anyhow` / `thiserror`](../level_04/anyhow_thiserror.md) — The crates built directly on top of this trait.
+
+- [Custom Error Types](custom_error_types.md) — What implements this trait in practice.
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — What makes `Box<dyn Error>` possible.
+- [`anyhow` / `thiserror`](anyhow_thiserror.md) — The crates built directly on top of this trait.
 
 ---
 
@@ -556,10 +557,11 @@ Build a telemetry error decorator system featuring:
 
 ## 6. Related Terms
 
-- [Custom Error Types](../level_04/custom_error_types.md) — The concrete types that implement `std::error::Error` in practice.
-- [`anyhow` / `thiserror`](../level_04/anyhow_thiserror.md) — `anyhow::Error` is essentially an ergonomically-improved `Box<dyn Error>`; `thiserror` generates `Error` impls via derive.
-- [`? ` Operator](../level_04/question_mark_operator.md) — Relies on `From` conversions into the function's error type, including the blanket conversion into `Box<dyn Error>`.
-- [`Debug` Trait](../level_04/debug_trait.md) / [`Display` Trait](../level_04/display_trait.md) — Both are supertrait requirements of `std::error::Error`.
+
+- [Custom Error Types](custom_error_types.md) — The concrete types that implement `std::error::Error` in practice.
+- [`anyhow` / `thiserror`](anyhow_thiserror.md) — `anyhow::Error` is essentially an ergonomically-improved `Box<dyn Error>`; `thiserror` generates `Error` impls via derive.
+- [`?` Operator](question_mark_operator.md) — Relies on `From` conversions into the function's error type, including the blanket conversion into `Box<dyn Error>`.
+- [`Debug` Trait](debug_trait.md)
 
 ---
 

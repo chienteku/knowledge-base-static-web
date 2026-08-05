@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Replica Set](../level_09/replica_set.md) — The cluster context.
 - [Oplog (Operations Log)](../level_09/oplog.md) — The event source.
 
@@ -220,6 +221,7 @@ const stream = collection.watch([], { resumeAfter: savedResumeToken });
 > **Explanation:** `fullDocument: 'updateLookup'` fetches the current post-update document snapshot.
 
 ## 7. Related Terms
+
 - [Replica Set](../level_09/replica_set.md) — The cluster context.
 - [Oplog (Operations Log)](../level_09/oplog.md) — The event source.
 

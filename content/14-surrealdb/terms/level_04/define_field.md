@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [Data Types (Overview)](../level_02/data_types.md) — The type definitions.
 
@@ -197,9 +198,14 @@ Write the SurrealQL commands to:
 > **Explanation:** `TYPE record<table>` enforces foreign record link pointers.
 
 ## 7. Related Terms
+
 - [`DEFINE TABLE`](define_table.md) — The parent schema context.
 - [`option<T>` (Optional Fields)](option_type.md) — Optional fields wrapper.
 - [Assertions (`ASSERT`)](field_assertions.md) — Custom field validation.
+- [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — Related concept: `SCHEMAFULL` vs `SCHEMALESS`.
+- [`VALUE` / `DEFAULT` / `READONLY` Clause](field_attributes.md) — Related concept: `VALUE` / `DEFAULT` / `READONLY` Clause.
+- [`SCHEMAFULL` Validation Assertion Patterns](schemafull_validation.md) — Related concept: `SCHEMAFULL` Validation Assertion Patterns.
+- [`OVERWRITE` Keyword](overwrite_keyword.md) — Related concept: `OVERWRITE` Keyword.
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<span>` (Inline container)](../level_02/span.md) — Unlike `<span>`, these tags have semantic meaning.
+- [`<span>` (Inline container)](span.md) — Unlike `<span>`, these tags have semantic meaning.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<strong>` and `<em>` are inline elements.
-
 ---
 
 ## 2. Term Category
@@ -230,10 +229,12 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 > **Explanation:** CSS controls visual appearance while HTML tags dictate semantic meaning.
 
 ## 7. Related Terms
-- [`<span>` (Inline container)](../level_02/span.md) — The non-semantic alternative for purely visual styling.
+- [`<span>` (Inline container)](span.md) — The non-semantic alternative for purely visual styling.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing text wrappers.
-- [`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`](../level_02/b_i_u_vs_strong_em.md) — The presentational vs semantic formatting comparison.
-
+- [`<b>`, `<i>`, `<u>` vs `<strong>`, `<em>`, `<ins>`](b_i_u_vs_strong_em.md) — The presentational vs semantic formatting comparison.
+- [`<blockquote>` & `<cite>`](blockquote_cite.md) — Related concept: `<blockquote>` & `<cite>`.
+- [`<sup>` & `<sub>`](sup_sub.md) — Related concept: `<sup>` & `<sub>`.
+- [`<mark>`](../level_06/mark.md) — Related concept: `<mark>`.
 ---
 
 ## 8. Key Takeaways

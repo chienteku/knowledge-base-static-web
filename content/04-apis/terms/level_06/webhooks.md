@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Webhooks completely flip who initiates this lifecycle.
-- [HTTP Methods](../level_02/http_methods.md) — Webhooks are almost always `POST` requests.
-
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — Webhooks are almost always `POST` requests.
 ---
 
 ## 2. Term Category
@@ -161,9 +160,12 @@ B) Register a Webhook URL in the GitHub repository settings.
 ---
 
 ## 7. Related Terms
-- [Rate Limiting](../level_06/rate_limiting.md) — Webhooks are the primary solution to avoid hitting Rate Limits caused by aggressive polling.
+- [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — Webhooks are the primary solution to avoid hitting Rate Limits caused by aggressive polling.
 - [WebSockets](../level_08/websockets.md) — A different real-time technology usually used for Client-to-Server, whereas Webhooks are Server-to-Server.
-
+- [Cache Invalidation](cache_invalidation.md) — Related concept: Cache Invalidation.
+- [Circuit Breaker](circuit_breaker.md) — Related concept: Circuit Breaker.
+- [Polling vs Long Polling](../level_08/polling.md) — Related concept: Polling vs Long Polling.
+- [Pub/Sub & Channels](../level_08/pub_sub_channels.md) — Related concept: Pub/Sub & Channels.
 ---
 
 ## 8. Key Takeaways

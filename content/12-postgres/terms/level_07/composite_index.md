@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [Composite Key](../level_06/composite_key.md) — Managing multi-column constraints.
-
 ---
 
 ## 2. Term Category
@@ -200,7 +199,7 @@ Which of the following queries will **successfully leverage** the index?
 ## 7. Related Terms
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [Composite Key](../level_06/composite_key.md) — Slicing multi-column constraints.
-
+- [Index (Concept)](index_concept.md) — Related concept: Index (Concept).
 ---
 
 ## 8. Key Takeaways

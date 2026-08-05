@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [API Versioning](../../../04-apis/terms/level_10/versioning.md) — The same concept, but applied to downloadable code packages.
-- [`package.json`](../level_04/package_json.md) — Where these numbers are heavily used.
-
+- versioning — The same concept, but applied to downloadable code packages.
+- [package.json](package_json.md) — Where these numbers are heavily used.
 ---
 
 ## 2. Term Category
@@ -152,8 +151,7 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 > **Explanation:** Tilde `~` locks MINOR version; Caret `^` locks MAJOR version.
 
 ## 7. Related Terms
-- [`package.json`](../level_04/package_json.md) — Where the SemVer ranges (using `^` and `~`) are stored.
-
+- [package.json](package_json.md) — Where the SemVer ranges (using `^` and `~`) are stored.
 ---
 
 ## 8. Key Takeaways

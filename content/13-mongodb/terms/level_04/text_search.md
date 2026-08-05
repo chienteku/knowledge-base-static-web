@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`$regex` (Regular Expressions)](regex.md) — The string search alternative.
 
 ---
@@ -195,7 +196,9 @@ db.posts.createIndex({ title: "text", body: "text" }); // Single multi-field tex
 > **Explanation:** `{ $meta: "textScore" }` projects and sorts search results by full-text relevance score.
 
 ## 7. Related Terms
+
 - [`$regex` (Regular Expressions)](regex.md) — Pattern searches.
+- [Text Index](../level_07/text_index.md) — Related concept: Text Index.
 
 ---
 

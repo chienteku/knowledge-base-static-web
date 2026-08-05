@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Event Loop](../level_01/event_loop.md) — Remember that Node.js runs on a Single Thread. PM2 fixes this limitation!
-- [Node.js](../level_01/nodejs.md) — How you usually run apps (`node server.js`).
-
+- [The Event Loop & Libuv](../level_01/event_loop.md) — Remember that Node.js runs on a Single Thread. PM2 fixes this limitation!
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — How you usually run apps (`node server.js`).
 ---
 
 ## 2. Term Category
@@ -140,8 +139,12 @@ pm2 reload my-app # Zero-downtime rolling reload
 > **Explanation:** `pm2 init` creates an `ecosystem.config.js` configuration file for managing app environments.
 
 ## 7. Related Terms
-- [Docker](../level_10/docker.md) — The modern alternative/companion to PM2. Docker also manages keeping processes alive and isolated.
-
+- [Docker](docker.md) — The modern alternative/companion to PM2. Docker also manages keeping processes alive and isolated.
+- [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.
+- [The cluster Module](cluster_module.md) — Related concept: The cluster Module.
+- [Graceful Shutdown & Process Signals](graceful_shutdown.md) — Related concept: Graceful Shutdown & Process Signals.
+- [Load Balancing](load_balancing.md) — Related concept: Load Balancing.
+- [Logging & Monitoring](logging_monitoring.md) — Related concept: Logging & Monitoring.
 ---
 
 ## 8. Key Takeaways

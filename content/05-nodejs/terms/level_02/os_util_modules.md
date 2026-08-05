@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Global Objects (global, __dirname, __filename)](./global_objects.md) — Built-in variables in the Node execution context.
-
+- [Global Objects (global, __dirname, __filename)](global_objects.md) — Built-in variables in the Node execution context.
 ---
 
 ## 2. Term Category
@@ -209,8 +208,7 @@ execute();
 
 ## 7. Related Terms
 - [Promisification (util.promisify)](../level_05/promisification.md) — The concept behind async callback conversion.
-- [Clustering](../level_10/pm2.md) — Multiple processes that scale dynamically based on CPU core counts.
-
+- [PM2 (Process Manager)](../level_10/pm2.md) — Multiple processes that scale dynamically based on CPU core counts.
 ---
 
 ## 8. Key Takeaways

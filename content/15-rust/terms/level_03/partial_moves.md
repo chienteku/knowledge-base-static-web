@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Move Semantics](../level_03/move_semantics.md) — The whole-value moving rule this concept specializes to individual fields.
-- [Ownership](../level_03/ownership.md) — What "partially moved" means for a struct's overall ownership state.
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The exclusivity rule that partial borrows specifically relax at the field level.
+
+- [Move Semantics](move_semantics.md) — The whole-value moving rule this concept specializes to individual fields.
+- [Ownership](ownership.md) — What "partially moved" means for a struct's overall ownership state.
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The exclusivity rule that partial borrows specifically relax at the field level.
 
 ---
 
@@ -574,9 +575,10 @@ Implement an Arena Node Recycler system that:
 
 ## 6. Related Terms
 
-- [Move Semantics](../level_03/move_semantics.md) / [Ownership](../level_03/ownership.md) — The whole-value rules that partial moves specialize down to the field level.
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The exclusivity rule partial borrows relax specifically for provably-disjoint fields.
-- [`std::mem` Utilities](../level_03/std_mem_utilities.md) — A common tool for working around cases where partial-borrow analysis can't see through a method call boundary.
+
+- [Move Semantics](move_semantics.md)
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The exclusivity rule partial borrows relax specifically for provably-disjoint fields.
+- [`std::mem` Utilities (`replace`, `take`, `swap`, `drop`)](std_mem_utilities.md) — A common tool for working around cases where partial-borrow analysis can't see through a method call boundary.
 - [Pattern Matching](../level_02/pattern_matching.md) — The destructuring syntax (`let Struct { a, b } = value;`) that commonly triggers partial moves.
 
 ---

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Router](../level_09/react_router.md) — The library that provides this hook.
-- [`<Link>` Component](../level_09/link_component.md) — The declarative alternative to this imperative hook.
-
+- [React Router](react_router.md) — The library that provides this hook.
+- [`<Link>` Component](link_component.md) — The declarative alternative to this imperative hook.
 ---
 
 ## 2. Term Category
@@ -184,9 +183,8 @@ navigate(-1) // Navigates 1 step back in browser history
 > **Explanation:** `replace: true` prevents users from back-navigating into completed authentication forms.
 
 ## 7. Related Terms
-- [`<Link>` Component](../level_09/link_component.md) — The declarative sibling.
+- [`<Link>` Component](link_component.md) — The declarative sibling.
 - [Side Effects](../level_03/side_effects.md) — You often use `useNavigate` inside a `useEffect` (e.g., "If user is not logged in, navigate to /login").
-
 ---
 
 ## 8. Key Takeaways

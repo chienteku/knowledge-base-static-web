@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in record access vs external JWT validation.
 
 ---
@@ -197,6 +198,7 @@ Write a `DEFINE ACCESS` statement named `custom_service` on the database level u
 > **Explanation:** `URL` fetches public JWKS verification keys for validating asymmetric RS256 JWTs.
 
 ## 7. Related Terms
+
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in database user registration.
 - [JWT Token-Based Auth](jwt_auth.md) — JWT structure and verification details.
 - [`$session` / `$token` Variables](session_token_variables.md) — Accessing token payload claims in SurrealQL.

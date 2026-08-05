@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Enum](../level_02/enum.md) — `Result` is a standard Enum built into the Rust standard library.
-- [`Option<T>`](../level_02/option_t.md) — The sister type to `Result`, used for *missing* data rather than *failed* operations.
-- [`match`](../level_02/match.md) — The primary tool used to check if a `Result` succeeded or failed.
+
+- [Enum](enum.md) — `Result` is a standard Enum built into the Rust standard library.
+- [`Option<T>`](option_t.md) — The sister type to `Result`, used for *missing* data rather than *failed* operations.
+- [`match`](match.md) — The primary tool used to check if a `Result` succeeded or failed.
 
 ---
 
@@ -654,9 +655,16 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`Option<T>`](../level_02/option_t.md) — The sister enum used for *missing* data, whereas Result is used for *failed* operations.
+
+- [`Option<T>`](option_t.md) — The sister enum used for *missing* data, whereas Result is used for *failed* operations.
 - [`?` Operator](../level_04/question_mark_operator.md) — (Future reference) The magical syntax sugar that makes working with `Result` incredibly easy by automatically returning errors up the chain.
 - [`unwrap()` / `expect()`](../level_04/unwrap_expect.md) — Aggressive methods that intentionally crash the program if a `Result` is an `Err`.
+- [Enum](enum.md) — Related concept: Enum.
+- [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — Related concept: `FromIterator` / `Extend` Traits.
+- [`FromStr` Trait & `.parse()`](../level_04/fromstr_parse.md) — Related concept: `FromStr` Trait & `.parse()`.
+- [`#[must_use]`](../level_07/must_use_attribute.md) — Related concept: `#[must_use]`.
+- [Type Alias](../level_11/type_alias.md) — Related concept: Type Alias.
+- [`TryFrom` / `TryInto`](../level_14/try_from_try_into.md) — Related concept: `TryFrom` / `TryInto`.
 
 ---
 

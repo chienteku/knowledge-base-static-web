@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`Result<T, E>`](../level_02/result_t_e.md) — The wrapper where our custom errors will live (the `E` part).
 - [Enum](../level_02/enum.md) — The primary data structure used to build custom errors.
-- [`?` Operator](../level_04/question_mark_operator.md) — The tool used to propagate these errors.
+- [`?` Operator](question_mark_operator.md) — The tool used to propagate these errors.
 
 ---
 
@@ -840,8 +841,11 @@ Build a complete configuration parsing error domain:
 
 ## 6. Related Terms
 
-- [`anyhow` / `thiserror`](../level_04/anyhow_thiserror.md) — The wildly popular crates that automatically write all the tedious `Display` and `Error` boilerplate for you!
-- [`From` / `Into` Traits](../level_04/from_into_traits.md) — The secret sauce that allows us to automatically convert standard library errors (like `io::Error`) into our Custom Error Types.
+
+- [`anyhow` / `thiserror`](anyhow_thiserror.md) — The wildly popular crates that automatically write all the tedious `Display` and `Error` boilerplate for you!
+- [`From` / `Into` Traits](from_into_traits.md) — The secret sauce that allows us to automatically convert standard library errors (like `io::Error`) into our Custom Error Types.
+- [`std::error::Error` Trait & `Box<dyn Error>`](error_trait_box_dyn_error.md) — Related concept: `std::error::Error` Trait & `Box<dyn Error>`.
+- [Error Handling Stack](../level_18/error_handling_stack.md) — Related concept: Error Handling Stack.
 
 ---
 

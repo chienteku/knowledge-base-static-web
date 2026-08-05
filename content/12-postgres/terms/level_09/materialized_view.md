@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [View](view.md) — The parent virtual table concept.
-
 ---
 
 ## 2. Term Category
@@ -210,7 +209,6 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY view_name;
 ## 7. Related Terms
 - [View](view.md) — The parent virtual view concept.
 - [Denormalization](../level_06/denormalization.md) — The caching design theory.
-
 ---
 
 ## 8. Key Takeaways

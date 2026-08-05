@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](../level_03/rest.md) — The resource-based architectural paradigm.
-- [Swagger / OpenAPI Specification](./openapi.md) — The language used to write machine-readable contracts.
-
+- [Swagger / OpenAPI Specification](openapi.md) — The language used to write machine-readable contracts.
 ---
 
 ## 2. Term Category
@@ -189,9 +188,10 @@ res.json({ id: "123" }); // ❌ Breaks clients expecting integer id: 123!
 ---
 
 ## 7. Related Terms
-- [Mocking APIs](./mocking.md) — The process of serving mock data derived directly from the API contract.
-- [API Versioning (v1, v2)](./versioning.md) — The process of releasing updates to a contract without breaking legacy systems.
-
+- [Mocking APIs](mocking.md) — The process of serving mock data derived directly from the API contract.
+- [API Versioning (v1, v2)](versioning.md) — The process of releasing updates to a contract without breaking legacy systems.
+- [Deprecation & Sunsetting](deprecation_sunsetting.md) — Related concept: Deprecation & Sunsetting.
+- [Swagger / OpenAPI Specification](openapi.md) — Related concept: Swagger / OpenAPI Specification.
 ---
 
 ## 8. Key Takeaways

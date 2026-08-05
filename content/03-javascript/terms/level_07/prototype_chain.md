@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Prototypal Inheritance](./prototypal_inheritance.md) — The concept of inheriting via prototypes.
+- [Prototypal Inheritance](prototypal_inheritance.md) — The concept of inheriting via prototypes.
 - [Object](../level_02/object.md) — The fundamental structure.
-
 ---
 
 ## 2. Term Category
@@ -209,9 +208,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Prototypal Inheritance](./prototypal_inheritance.md) — The process that relies on this chain.
+- [Prototypal Inheritance](prototypal_inheritance.md) — The process that relies on this chain.
 - [Object](../level_02/object.md) — Everything inherits from `Object.prototype` eventually.
-
+- [Prototype](prototype.md) — Related concept: Prototype.
 ---
 
 ## 8. Key Takeaways

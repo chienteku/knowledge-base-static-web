@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Props](../level_04/props.md) — Why Emits are necessary (because Props are read-only).
+- [Props](props.md) — Why Emits are necessary (because Props are read-only).
 - [`v-on`](../level_03/v_on.md) — How the Parent listens to the emitted events.
-
 ---
 
 ## 2. Term Category
@@ -180,10 +179,10 @@ emit('user-updated', user);
 ---
 
 ## 7. Related Terms
-- [Props](../level_04/props.md) — The Top-Down data flow (Props Down, Events Up).
+- [Props](props.md) — The Top-Down data flow (Props Down, Events Up).
 - [`v-on`](../level_03/v_on.md) — How the Parent listens to the emit.
-- [Fallthrough Attributes (`$attrs`)](../level_04/fallthrough_attributes.md) — How event listeners passed to components fall through to root elements.
-
+- [Fallthrough Attributes (`$attrs`)](fallthrough_attributes.md) — How event listeners passed to components fall through to root elements.
+- [`<script setup>` & Compiler Macros](script_setup.md) — Related concept: `<script setup>` & Compiler Macros.
 ---
 
 ## 8. Key Takeaways

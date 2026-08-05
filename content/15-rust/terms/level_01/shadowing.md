@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — The named bindings that are being re-declared.
-- [Mutability (`mut`)](../level_01/mutability_mut.md) — Shadowing is often used as a safer, cleaner alternative to mutability.
+
+- [Variable](variable.md) — The named bindings that are being re-declared.
+- [Mutability (`mut`)](mutability_mut.md) — Shadowing is often used as a safer, cleaner alternative to mutability.
 
 ---
 
@@ -543,8 +544,10 @@ Implement `process_auth_request(header_value: &str, log_output: &mut Vec<String>
 
 ## 6. Related Terms
 
-- [Mutability (`mut`)](../level_01/mutability_mut.md) — The alternative approach. Use `mut` when you want to change the *value* in a loop or over time. Use shadowing when you want to change the *type* or apply a one-time transformation.
-- [Variable](../level_01/variable.md) — The basic named binding that shadowing replaces.
+
+- [Mutability (`mut`)](mutability_mut.md) — The alternative approach. Use `mut` when you want to change the *value* in a loop or over time. Use shadowing when you want to change the *type* or apply a one-time transformation.
+- [Variable](variable.md) — The basic named binding that shadowing replaces.
+- [Scope and Shadowing](scope_and_shadowing.md) — Block scoping rules.
 
 ---
 

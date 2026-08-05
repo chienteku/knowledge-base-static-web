@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Understanding cross-language binary interfaces.
-- [`extern "C"`](../level_13/extern_c.md) — C ABI function signatures.
-- [`#[repr(C)]`](../level_13/repr_c.md) — C-compatible struct and enum memory representations.
-- [Build Scripts (`build.rs`)](../level_07/build_rs.md) — Cargo build scripts used to invoke `bindgen` automatically during compilation.
+
+- [FFI (Foreign Function Interface)](ffi.md) — Understanding cross-language binary interfaces.
+- [`extern "C"`](extern_c.md) — C ABI function signatures.
+- [`build.rs` (Build Scripts)](../level_07/build_rs.md) — Cargo build scripts used to invoke `bindgen` automatically during compilation.
 
 ---
 
@@ -666,10 +666,11 @@ Write a `#![no_std]` compatible Rust module that:
 
 ## 7. Related Terms
 
-- [`cbindgen`](../level_13/cbindgen.md) — The inverse tool (generates C headers from Rust code).
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — The cross-language interface framework.
-- [`#[repr(C)]`](../level_13/repr_c.md) — Attribute added by `bindgen` to generated structs.
-- [Build Scripts (`build.rs`)](../level_07/build_rs.md) — The Cargo build script mechanism driving `bindgen`.
+
+- [`cbindgen`](cbindgen.md) — The inverse tool (generates C headers from Rust code).
+- [FFI (Foreign Function Interface)](ffi.md) — The cross-language interface framework.
+- [`build.rs` (Build Scripts)](../level_07/build_rs.md) — The Cargo build script mechanism driving `bindgen`.
+- [Build Scripts (`build.rs`)](../level_07/build_scripts.md) — Related concept: Build Scripts (`build.rs`).
 
 ---
 

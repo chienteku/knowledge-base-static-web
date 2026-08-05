@@ -7,8 +7,6 @@
 
 ## 1. Prerequisites
 - [Auto-imports](../level_01/auto_imports.md) — How this composable is accessed.
-- Vue dependency injection ([`provide` / `inject`](../../../07-vue/terms/level_05/provide_inject.md)) — The underlying pattern Nuxt builds upon.
-
 ---
 
 ## 2. Term Category
@@ -209,7 +207,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 ## 7. Related Terms
 - [`plugins/` Directory](../level_08/plugins_directory.md) — Where these `$variables` are actually created and injected into the Nuxt app.
-
+- [Vue Plugins vs Nuxt Plugins](../level_08/vue_vs_nuxt_plugins.md) — Related concept: Vue Plugins vs Nuxt Plugins.
 ---
 
 ## 8. Key Takeaways

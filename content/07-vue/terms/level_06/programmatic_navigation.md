@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Vue Router](../level_06/vue_router.md) — The core routing library.
+- [Vue Router](vue_router.md) — The core routing library.
 - [Composition API](../level_01/composition_api.md) — The custom hook paradigm.
-- [Navigation Guards](../level_06/navigation_guards.md) — Routing middleware.
-
+- [Navigation Guards](navigation_guards.md) — Routing middleware.
 ---
 
 ## 2. Term Category
@@ -286,10 +285,9 @@ function goBack() {
 ---
 
 ## 7. Related Terms
-- [Vue Router](../level_06/vue_router.md) — The routing ecosystem package.
-- [Navigation Guards](../level_06/navigation_guards.md) — Global, per-route, or in-component middleware.
-- [Router View / Router Link](../level_06/router_view_link.md) — Template elements for displaying and declaring route links.
-
+- [Vue Router](vue_router.md) — The routing ecosystem package.
+- [Navigation Guards](navigation_guards.md) — Global, per-route, or in-component middleware.
+- [Router View / Router Link](router_view_link.md) — Template elements for displaying and declaring route links.
 ---
 
 ## 8. Key Takeaways

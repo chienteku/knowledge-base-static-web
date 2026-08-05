@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Query Filter (Filter Document)](query_filter.md) — The query syntax structure.
 
 ---
@@ -231,8 +232,9 @@ db.users.find({ age: { $gt: 18, $lt: 30 } }); // Correct single field object
 > **Explanation:** Combining implicit AND with `$in` creates concise multi-predicate filters.
 
 ## 7. Related Terms
+
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
-- [Logical Query Operators (`$and`, `$or`, etc.)](logical_operators.md) -- Explicit combining arrays.
+- [Logical Query Operators (`$and`, `$or`, `$not`, `$nor`)](logical_operators.md) — - Explicit combining arrays.
 
 ---
 

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The tag parameter syntax.
 - [`<button>`](../level_05/button.md) — A naturally interactive element that handles focus by default.
-
 ---
 
 ## 2. Term Category
@@ -228,8 +227,9 @@ Comparing focus properties:
 ## 7. Related Terms
 - [`<button>`](../level_05/button.md) — The standard focusable trigger.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Focusable navigation elements.
-- [`id` Attribute](../level_07/id.md) — Unique identifiers.
-
+- [`id` Attribute](id.md) — Unique identifiers.
+- [Accessibility (a11y) Fundamentals](../level_09/accessibility_fundamentals.md) — Related concept: Accessibility (a11y) Fundamentals.
+- [ARIA Attributes](../level_09/aria_attributes.md) — Related concept: ARIA Attributes.
 ---
 
 ## 8. Key Takeaways

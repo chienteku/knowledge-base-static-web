@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR)](../level_09/ssr.md) — Dynamic server pre-rendering.
-- [Universal Code](../level_09/universal_code.md) — JavaScript that runs on both server and client.
-- [Nuxt.js](../level_09/nuxt.md) — The Vue meta-framework that compiles SSG sites.
-
+- [Server-Side Rendering (SSR)](ssr.md) — Dynamic server pre-rendering.
+- [Universal Code (Isomorphic)](universal_code.md) — JavaScript that runs on both server and client.
+- [Nuxt.js](nuxt.md) — The Vue meta-framework that compiles SSG sites.
 ---
 
 ## 2. Term Category
@@ -240,10 +239,9 @@ const { data: doc } = await useAsyncData(
 ---
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR)](../level_09/ssr.md) — 
-- [Universal Code](../level_09/universal_code.md) — 
-- [Nuxt.js](../level_09/nuxt.md) — 
-
+- [Server-Side Rendering (SSR)](ssr.md)
+- [Universal Code (Isomorphic)](universal_code.md)
+- [Nuxt.js](nuxt.md)
 ---
 
 ## 8. Key Takeaways

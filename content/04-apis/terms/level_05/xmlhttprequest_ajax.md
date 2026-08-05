@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — The network request round-trip fundamentals.
-
 ---
 
 ## 2. Term Category
@@ -205,9 +204,9 @@ function sendData(data) {
 ---
 
 ## 7. Related Terms
-- [The fetch() API](./fetch.md) — The modern Promise-based request standard.
-- [Promises (in the context of networks)](./promises.md) — The asynchronous data container object returned by fetch.
-
+- [The fetch() API](fetch.md) — The modern Promise-based request standard.
+- [Promises (in the context of networks)](promises.md) — The asynchronous data container object returned by fetch.
+- [AbortController / Cancellation](abortcontroller.md) — Related concept: AbortController / Cancellation.
 ---
 
 ## 8. Key Takeaways

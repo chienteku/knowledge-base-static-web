@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Connection String URI](connection_string.md) — Configuring pool parameters.
 
 ---
@@ -204,6 +205,7 @@ Explain the likely cause of this connection inflation.
 > **Explanation:** Connection pooling reuses open TCP sockets efficiently across concurrent API requests.
 
 ## 7. Related Terms
+
 - [Connection String URI](connection_string.md) — Configuring pool parameters.
 - [MongoDB Node.js Driver](node_driver.md) — The driver interface.
 

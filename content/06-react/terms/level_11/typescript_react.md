@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Props](../level_01/props.md) — The parameters typed by TypeScript.
+- [Props (Properties)](../level_01/props.md) — The parameters typed by TypeScript.
 - [`useState` Hook](../level_02/use_state.md) — The state hook that utilizes TypeScript generics.
-
 ---
 
 ## 2. Term Category
@@ -251,9 +250,10 @@ export default function InputForm({ onSubmitLabel }: InputFormProps) {
 > **Explanation:** `React.ReactNode` represents any renderable React child element (JSX, strings, numbers, fragments).
 
 ## 7. Related Terms
-- [Props](../level_01/props.md) — The data structure typed by interfaces.
+- [Props (Properties)](../level_01/props.md) — The data structure typed by interfaces.
 - [`useState` Hook](../level_02/use_state.md) — The state manager utilizing generics.
-
+- [Components](../level_01/components.md) — Typed component props.
+- [Custom Hooks](../level_04/custom_hooks.md) — Typed custom hooks.
 ---
 
 ## 8. Key Takeaways

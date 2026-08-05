@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The general concept of tag parameters.
-- [`<img>`](../level_03/img.md) — The image tag that utilizes this attribute.
-
+- [`<img>`](img.md) — The image tag that utilizes this attribute.
 ---
 
 ## 2. Term Category
@@ -185,9 +184,11 @@ If an image is purely decorative and offers no semantic meaning, you MUST includ
 > **Explanation:** `alt=""` informs screen readers that the image is purely decorative and should be skipped.
 
 ## 7. Related Terms
-- [`<img>`](../level_03/img.md) — The element that requires the `alt` attribute.
-- [`<figure>` & `<figcaption>`](../level_03/figure_figcaption.md) — The semantic containers used to package images and captions.
-
+- [`<img>`](img.md) — The element that requires the `alt` attribute.
+- [`<figure>` & `<figcaption>`](figure_figcaption.md) — The semantic containers used to package images and captions.
+- [`title` Attribute](../level_07/title.md) — Related concept: `title` Attribute.
+- [`<picture>` & Responsive Images](picture_responsive.md) — Related concept: `<picture>` & Responsive Images.
+- [Accessibility (a11y) Fundamentals](../level_09/accessibility_fundamentals.md) — Related concept: Accessibility (a11y) Fundamentals.
 ---
 
 ## 8. Key Takeaways

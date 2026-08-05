@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — The named bindings that you attach type annotations to.
-- [Type Inference](../level_01/type_inference.md) — The compiler's automatic guessing of types, which annotations override.
+
+- [Variable](variable.md) — The named bindings that you attach type annotations to.
+- [Type Inference](type_inference.md) — The compiler's automatic guessing of types, which annotations override.
 
 ---
 
@@ -617,9 +618,12 @@ Implement `aggregate_metrics(records: &[&str]) -> Result<MetricsSummary, MetricP
 
 ## 6. Related Terms
 
-- [Type Inference](../level_01/type_inference.md) — The compiler's automatic behavior that type annotation manually overrides.
-- [`fn`](../level_01/fn.md) — Function declarations, the one place where type annotations are strictly mandatory.
-- [Scalar Types](../level_01/scalar_types.md) — The primitive types (like `i32`, `f64`, `bool`) you will frequently use in your annotations.
+
+- [Type Inference](type_inference.md) — The compiler's automatic behavior that type annotation manually overrides.
+- [`fn` (Functions)](fn.md) — Function declarations, the one place where type annotations are strictly mandatory.
+- [Scalar Types](scalar_types.md) — The primitive types (like `i32`, `f64`, `bool`) you will frequently use in your annotations.
+- [Constants (`const`)](constants_const.md) — Related concept: Constants (`const`).
+- [Variable](variable.md) — Related concept: Variable.
 
 ---
 

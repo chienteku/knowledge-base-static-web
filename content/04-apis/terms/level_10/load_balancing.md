@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Statelessness](../level_03/statelessness.md) — The architectural constraint making horizontal scaling simple.
-
 ---
 
 ## 2. Term Category
@@ -159,9 +158,9 @@ app.get('/healthz', (req, res) => res.status(200).send('OK'));
 ---
 
 ## 7. Related Terms
-- [API Gateway](./api_gateway.md) — The edge proxy that often integrates load balancing features.
+- [API Gateway](api_gateway.md) — The edge proxy that often integrates load balancing features.
 - [Session vs Token Authentication](../level_04/session_vs_token_auth.md) — The authentication models that determine whether server state is required.
-
+- [Microservices vs Monolith](microservices_monolith.md) — Related concept: Microservices vs Monolith.
 ---
 
 ## 8. Key Takeaways

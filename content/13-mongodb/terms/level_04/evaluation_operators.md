@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Query Filter (Filter Document)](../level_03/query_filter.md) — The parent query filters context.
 
 ---
@@ -204,6 +205,7 @@ Write the query to locate all users who have exceeded their budget (where `month
 > **Explanation:** `{ field: { $mod: [divisor, remainder] } }` evaluates modulo arithmetic operations.
 
 ## 7. Related Terms
+
 - [`$regex` (Regular Expressions)](regex.md) — String matching.
 
 ---

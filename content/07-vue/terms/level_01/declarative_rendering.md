@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Template Syntax](../level_01/template_syntax.md) — How you declare the UI in Vue.
-- [DOM Manipulation](../../../01-html/terms/level_09/dom.md) — The imperative approach that declarative rendering replaces.
-
+- [Template Syntax](template_syntax.md) — How you declare the UI in Vue.
+- dom — The imperative approach that declarative rendering replaces.
 ---
 
 ## 2. Term Category
@@ -169,8 +168,7 @@ function updateTitle(newTitle) {
 
 ## 7. Related Terms
 - [Reactive State](../level_02/reactive_state.md) — The data that powers declarative rendering.
-- [Template Syntax](../level_01/template_syntax.md) — The tool used to declare the UI.
-
+- [Template Syntax](template_syntax.md) — The tool used to declare the UI.
 ---
 
 ## 8. Key Takeaways

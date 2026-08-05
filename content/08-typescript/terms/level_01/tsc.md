@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [TypeScript](../level_01/typescript.md) — The language that `tsc` compiles.
-
+- [TypeScript](typescript.md) — The language that `tsc` compiles.
 ---
 
 ## 2. Term Category
@@ -140,9 +139,8 @@ $ tsc # Correct: Uses tsconfig.json settings
 > **Explanation:** `tsc --noEmit` validates type safety without writing files to disk.
 
 ## 7. Related Terms
-- [`tsconfig.json`](../level_01/tsconfig.md) — The configuration file that tells `tsc` exactly how to behave.
-- [TypeScript](../level_01/typescript.md) — The language syntax `tsc` parses.
-
+- [`tsconfig.json`](tsconfig.md) — The configuration file that tells `tsc` exactly how to behave.
+- [TypeScript](typescript.md) — The language syntax `tsc` parses.
 ---
 
 ## 8. Key Takeaways

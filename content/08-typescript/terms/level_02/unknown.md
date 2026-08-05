@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`any`](../level_02/any.md) — The dangerous type that `unknown` was designed to replace.
-
+- [`any`](any.md) — The dangerous type that `unknown` was designed to replace.
 ---
 
 ## 2. Term Category
@@ -161,9 +160,10 @@ if (typeof input === "number") {
 > **Explanation:** `unknown` enforces compile-time safety by requiring type narrowing before assignment.
 
 ## 7. Related Terms
-- [`any`](../level_02/any.md) — The chaotic equivalent of `unknown`.
+- [`any`](any.md) — The chaotic equivalent of `unknown`.
 - [Type Narrowing](../level_06/type_narrowing.md) — The process of unlocking an `unknown` variable.
-
+- [`void` & `never`](void_never.md) — Related concept: `void` & `never`.
+- [Type Assertions (`as`)](../level_05/type_assertions.md) — Related concept: Type Assertions (`as`).
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [WAL (Write-Ahead Log)](wal.md) — The transaction logs replayed during recovery.
 - [`pg_dump` / `pg_restore` (Backups)](pg_dump_restore.md) — The baseline logical backup tools.
-
 ---
 
 ## 2. Term Category
@@ -190,7 +189,7 @@ Inspect WAL logs or pgBackRest info before setting recovery_target_time
 ## 7. Related Terms
 - [WAL (Write-Ahead Log)](wal.md) — The physical log files.
 - [`pg_dump` / `pg_restore` (Backups)](pg_dump_restore.md) — Logical alternatives.
-
+- [Replication (Streaming / Logical)](replication.md) — Related concept: Replication (Streaming / Logical).
 ---
 
 ## 8. Key Takeaways

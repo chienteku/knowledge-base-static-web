@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Caching (ETag, Cache-Control)](./caching.md) — The fundamental mechanisms for storing response states.
-
+- [Caching (ETag, Cache-Control)](caching.md) — The fundamental mechanisms for storing response states.
 ---
 
 ## 2. Term Category
@@ -205,9 +204,8 @@ await redis.del(`product:${productId}`); // Target specific key deletion
 ---
 
 ## 7. Related Terms
-- [Caching (ETag, Cache-Control)](./caching.md) — The HTTP protocols utilizing cache validations.
-- [Webhooks](./webhooks.md) — The event push notifications that can trigger remote cache evictions.
-
+- [Caching (ETag, Cache-Control)](caching.md) — The HTTP protocols utilizing cache validations.
+- [Webhooks](webhooks.md) — The event push notifications that can trigger remote cache evictions.
 ---
 
 ## 8. Key Takeaways

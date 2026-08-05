@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Utility Types Overview](../level_08/utility_types.md) — The core concept.
+- [Utility Types Overview](utility_types.md) — The core concept.
 - [Function Types](../level_04/function_types.md) — The specific type of data this utility operates on.
-- [`typeof` Operator (Type Context)](../../../03-javascript/terms/level_01/typeof.md) — Often used in conjunction with this utility.
-
+- `typeof` Operator — Often used in conjunction with this utility.
 ---
 
 ## 2. Term Category
@@ -159,8 +158,8 @@ type Unwrapped = Awaited<ReturnType<typeof getData>>; // Yields number
 - [Function Types](../level_04/function_types.md) — What `ReturnType` analyzes.
 - [Type Inference](../level_01/type_inference.md) — The engine powering this utility. `ReturnType` extracts whatever the engine inferred.
 - [The `infer` Keyword](../level_09/infer.md) — The underlying syntax used to build `ReturnType`.
-- [Parameters / ConstructorParameters / Awaited](../level_08/parameters_awaited.md) — Sibling utilities that extract parameters and Promise contents.
-
+- [`Parameters` / `ConstructorParameters` / `Awaited`](parameters_awaited.md) — Sibling utilities that extract parameters and Promise contents.
+- [`typeof` Operator](../level_09/typeof.md) — typeof function return type.
 ---
 
 ## 8. Key Takeaways

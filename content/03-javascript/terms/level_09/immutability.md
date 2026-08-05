@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — How references link memory objects.
-- [`Object.freeze` / `Object.seal`](../level_07/object_freeze_seal.md) — Standard methods to lock object mutations.
-
+- [Object.freeze / Object.seal](../level_07/object_freeze_seal.md) — Standard methods to lock object mutations.
 ---
 
 ## 2. Term Category
@@ -235,7 +234,8 @@ console.log("Removed scores:", scoresMinusOne);
 ## 7. Related Terms
 - [Shallow Copy vs Deep Copy](../level_07/shallow_vs_deep_copy.md) — The copying mechanics that prevent reference leakage.
 - [Pure Function & Side Effects](../level_03/pure_function.md) — The function design pattern requiring immutable arguments.
-
+- [Mutating vs Non-mutating Methods](../level_04/mutating_vs_non_mutating.md) — Related concept: Mutating vs Non-mutating Methods.
+- [Object.freeze / Object.seal](../level_07/object_freeze_seal.md) — Related concept: Object.freeze / Object.seal.
 ---
 
 ## 8. Key Takeaways

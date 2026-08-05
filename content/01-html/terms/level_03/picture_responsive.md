@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<img>`](../level_03/img.md) — The image container that actually displays the pixels.
-- [`alt` Attribute](../level_03/alt.md) — The accessibility description.
-- [`<source>` Element](../level_03/source.md) — The tag used to list alternative media files.
-
+- [`<img>`](img.md) — The image container that actually displays the pixels.
+- [`alt` Attribute](alt.md) — The accessibility description.
+- [`<source>` Element](source.md) — The tag used to list alternative media files.
 ---
 
 ## 2. Term Category
@@ -204,10 +203,9 @@ Serving a desktop image versus a mobile image:
 > **Explanation:** `<picture>` supports structural art direction changes via media queries.
 
 ## 7. Related Terms
-- [`<img>`](../level_03/img.md) — The rendering image element.
-- [`<source>` Element](../level_03/source.md) — The sibling element specifying source lists.
-- [`alt` Attribute](../level_03/alt.md) — The required visual descriptor.
-
+- [`<img>`](img.md) — The rendering image element.
+- [`<source>` Element](source.md) — The sibling element specifying source lists.
+- [`alt` Attribute](alt.md) — The required visual descriptor.
 ---
 
 ## 8. Key Takeaways

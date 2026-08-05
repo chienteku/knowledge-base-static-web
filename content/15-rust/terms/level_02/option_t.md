@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Enum](../level_02/enum.md) — `Option` is just a standard Enum built into the Rust standard library!
-- [`match`](../level_02/match.md) — The safest way to handle both variants of an `Option`.
-- [`if let`](../level_02/if_let_while_let.md) — The cleanest way to handle an `Option` when you only care about the `Some` variant.
+
+- [Enum](enum.md) — `Option` is just a standard Enum built into the Rust standard library!
+- [`match`](match.md) — The safest way to handle both variants of an `Option`.
+- [`if let` / `while let`](if_let_while_let.md) — The cleanest way to handle an `Option` when you only care about the `Some` variant.
 
 ---
 
@@ -554,8 +555,15 @@ Implement an AST evaluator with hierarchical environment resolution:
 
 ## 6. Related Terms
 
-- [`Result<T, E>`](../level_02/result_t_e.md) — The other famous built-in enum, used for error handling (Success vs Failure) rather than missing values (Present vs Absent).
+
+- [`Result<T, E>`](result_t_e.md) — The other famous built-in enum, used for error handling (Success vs Failure) rather than missing values (Present vs Absent).
 - [`unwrap()` / `expect()`](../level_04/unwrap_expect.md) — Methods used to aggressively extract the value from an `Option`, intentionally crashing the program if it is `None`.
+- [Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`)](../level_01/integer_overflow.md) — Related concept: Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`).
+- [Enum](enum.md) — Related concept: Enum.
+- [`HashMap<K, V>`](hashmap_k_v.md) — Related concept: `HashMap<K, V>`.
+- [`Vec<T>`](vec_t.md) — Related concept: `Vec<T>`.
+- [`Default` Trait](../level_04/default_trait.md) — Related concept: `Default` Trait.
+- [`if let` / `while let`](if_let_while_let.md) — Related concept: `if let` / `while let`.
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Form Actions](../level_06/form_actions.md) — The action whose status we are tracking.
+- [Form Actions](form_actions.md) — The action whose status we are tracking.
 - [Client Components (`"use client"`)](../level_01/client_components.md) — Required to use this hook.
-
 ---
 
 ## 2. Term Category
@@ -197,9 +196,9 @@ import { useFormStatus } from 'react-dom'; // Correct import module
 ---
 
 ## 7. Related Terms
-- [`useFormState`](../level_06/use_form_state.md) — The hook for tracking the *result* of the form, while this tracks the *status* of the form.
-- [Form Actions](../level_06/form_actions.md) — The trigger for the pending state.
-
+- [`useFormState` Hook](use_form_state.md) — The hook for tracking the *result* of the form, while this tracks the *status* of the form.
+- [Form Actions](form_actions.md) — The trigger for the pending state.
+- [Server Actions Overview (`"use server"`)](server_actions.md) — Related concept: Server Actions Overview (`"use server"`).
 ---
 
 ## 8. Key Takeaways

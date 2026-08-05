@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -193,6 +194,7 @@ Select the queries below that will execute successfully and return documents whe
 > **Explanation:** Casting `<bool>` parses valid boolean representations into boolean primitives.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
 

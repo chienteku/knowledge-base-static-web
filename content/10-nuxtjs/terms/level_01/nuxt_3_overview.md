@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The core UI framework.
-- [Node.js Runtime](../../../05-nodejs/terms/level_01/nodejs.md) — The server runtime hosting the application.
-
+- nodejs — The server runtime hosting the application.
+- [Vue 3 Composition API Context](composition_api_context.md) — The core UI framework.
 ---
 
 ## 2. Term Category
@@ -183,9 +182,10 @@ export default defineNuxtConfig({
 ---
 
 ## 7. Related Terms
-- [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process Nuxt uses to render Vue on the server.
-- [Nitro Engine](../level_01/nitro_engine.md) — The backend engine powering Nuxt.
-
+- [Universal Rendering (SSR)](universal_rendering.md) — The process Nuxt uses to render Vue on the server.
+- [Nitro Engine](nitro_engine.md) — The backend engine powering Nuxt.
+- [Vue 3 Composition API Context](composition_api_context.md) — The core UI framework.
+- [Auto-imports](auto_imports.md) — Auto-import system.
 ---
 
 ## 8. Key Takeaways

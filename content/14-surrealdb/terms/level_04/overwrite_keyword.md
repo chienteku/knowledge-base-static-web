@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-_(none)_
+
+- [`DEFINE TABLE`](define_table.md) — DEFINE TABLE DDL statement.
 
 ---
 
@@ -29,7 +30,10 @@ _(none)_
 ---
 
 ## 5. Related Terms
-_(none)_
+
+- [Data Migrations in SurrealDB](../level_10/data_migrations.md)
+- [`DEFINE FIELD`](define_field.md) — DEFINE FIELD overwriting.
+- [Idempotent Schema Migration Scripts](idempotent_migrations.md) — Idempotent schema migrations.
 
 ---
 

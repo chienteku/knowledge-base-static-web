@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP / HTTPS](../level_01/http_https.md) — HTTP is the envelope; JSON is the letter inside the envelope.
-
+- [HTTP / HTTPS](http_https.md) — HTTP is the envelope; JSON is the letter inside the envelope.
 ---
 
 ## 2. Term Category
@@ -187,8 +186,12 @@ console.log(JSON.stringify(data)); // '{"name":"Bob","score":null}'
 
 ## 7. Related Terms
 - [Request Body & Payloads](../level_02/request_body.md) — JSON is the most common format placed inside the Body of an HTTP request.
-- [The `Response` Object](../level_05/response_object.md) — How we extract JSON out of a network response using `.json()`.
-
+- [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — How we extract JSON out of a network response using `.json()`.
+- [API (Application Programming Interface)](../level_03/api.md) — Related concept: API (Application Programming Interface).
+- [XML](../level_07/xml.md) — Related concept: XML.
+- [Serialization & Deserialization](../level_07/serialization.md) — JSON serialization.
+- [Content-Type & MIME Types](../level_02/content_type.md) — application/json Content-Type.
+- [GraphQL (The REST Alternative)](../level_07/graphql.md) — Related concept: GraphQL (The REST Alternative).
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Conditional Types](../level_09/conditional_types.md) — The type-level `if/else` checks.
-- [Generics](../level_07/generics.md) — Parametric type declarations.
-
+- [Conditional Types](conditional_types.md) — The type-level `if/else` checks.
+- [Generics Overview (`<T>`)](../level_07/generics.md) — Parametric type declarations.
 ---
 
 ## 2. Term Category
@@ -190,10 +189,9 @@ type Target = FirstParameter<Callback>; // Target should evaluate to number
 > **Explanation:** Pattern matching with `infer` extracts specific function parameter types.
 
 ## 7. Related Terms
-- [Conditional Types](../level_09/conditional_types.md) — The ternary structure that hosts `infer`.
-- [ReturnType](../level_08/returntype.md) — The utility type powered by `infer`.
-- [Parameters / ConstructorParameters / Awaited](../level_08/parameters_awaited.md) — Standard library utilities built using `infer`.
-
+- [Conditional Types](conditional_types.md) — The ternary structure that hosts `infer`.
+- [`ReturnType<T>`](../level_08/returntype.md) — The utility type powered by `infer`.
+- [`Parameters` / `ConstructorParameters` / `Awaited`](../level_08/parameters_awaited.md) — Standard library utilities built using `infer`.
 ---
 
 ## 8. Key Takeaways

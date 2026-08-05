@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Data Types (Overview)](../level_02/data_types.md) — The parent database typing standard.
 - [First Normal Form (1NF)](first_normal_form.md) — The database design rules that arrays technically violate.
-
 ---
 
 ## 2. Term Category
@@ -196,7 +195,7 @@ CREATE INDEX idx_tags_gin ON posts USING GIN (tags); -- Fast GIN array element i
 ## 7. Related Terms
 - [First Normal Form (1NF)](first_normal_form.md) — The relational atomicity standard.
 - [`JSON` / `JSONB` Type](json_jsonb.md) — Storing unstructured documents.
-
+- [GIN Index](../level_07/gin_index.md) — Related concept: GIN Index.
 ---
 
 ## 8. Key Takeaways

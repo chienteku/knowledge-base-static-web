@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [REST](../level_03/rest.md) — GraphQL was invented specifically to solve the inefficiencies of REST.
-- [JSON](../level_01/json.md) — The format GraphQL uses to return data.
-
+- [REST (Representational State Transfer)](../level_03/rest.md) — GraphQL was invented specifically to solve the inefficiencies of REST.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The format GraphQL uses to return data.
 ---
 
 ## 2. Term Category
@@ -170,8 +169,12 @@ Why is GraphQL a better choice here?
 ---
 
 ## 7. Related Terms
-- [REST](../level_03/rest.md) — The architecture GraphQL is slowly replacing in highly complex applications.
-
+- [REST (Representational State Transfer)](../level_03/rest.md) — The architecture GraphQL is slowly replacing in highly complex applications.
+- [Swagger / OpenAPI Specification](../level_10/openapi.md) — Related concept: Swagger / OpenAPI Specification.
+- [API Versioning (v1, v2)](../level_10/versioning.md) — Related concept: API Versioning (v1, v2).
+- [Over-fetching vs Under-fetching](overfetching_underfetching.md) — Solving over/under fetching.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — JSON query payloads.
+- [API (Application Programming Interface)](../level_03/api.md) — Related concept: API (Application Programming Interface).
 ---
 
 ## 8. Key Takeaways

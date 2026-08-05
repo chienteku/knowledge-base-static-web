@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Derive Macro](../level_04/derive_macro.md) — Another feature that uses the `#[...]` attribute syntax.
-- [Feature Flags](../level_07/feature_flags.md) — The custom toggles that `cfg` often looks for.
+- [Feature Flags](feature_flags.md) — The custom toggles that `cfg` often looks for.
 
 ---
 
@@ -89,73 +90,38 @@ fn advanced_linux_math() {}
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Cfg Attribute Scoping and Lifecycle Rules
+### Mistake 1: Confusing `#[cfg(...)]` (Compile-Time) with Runtime `if cfg!(...)`
 
-**The mistake:** Assuming Cfg Attribute instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Thinking `if cfg!(target_os = "windows") { ... }` completely deletes unused platform code from binary outputs.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `cfg!(...)` is a macro expanding to a boolean `true` or `false` at runtime. The non-matching code branch is still compiled into the final binary artifact. To completely strip non-matching code from compilation, use item attribute `#[cfg(...)]`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("cfg_attribute_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
+if cfg!(target_os = "windows") {
+    // Calling windows-only FFI functions here will FAIL on Linux compilation!
 }
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("cfg_attribute_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+#[cfg(target_os = "windows")]
+fn windows_only_ffi() { ... } // Completely stripped from Linux compilation!
 ```
 
-### Mistake 2: Mutating Cfg Attribute State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Missing Fallback Branch Implementation for Non-Matching Target OS Attributes
 
-**The mistake:** Attempting to mutate data associated with Cfg Attribute through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Providing `#[cfg(target_os = "linux")]` and `#[cfg(target_os = "windows")]` functions without a fallback `#[cfg(not(any(...)))]` implementation.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Compiling on macOS or BSD raises compiler error `E0425: cannot find function in this scope`.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Misspelling Feature Flag Names inside `#[cfg(feature = "...")]`
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Typo in feature string, such as `#[cfg(feature = "verboze")]`.
 
-### Mistake 3: Concurrent Access to Cfg Attribute Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Rust evaluates missing/misspelled feature conditions to `false` silently, stripping the target item without emitting a compilation warning.
 
-**The mistake:** Sharing non-thread-safe Cfg Attribute instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -249,8 +215,11 @@ Only one of the three must compile at a time (no duplicate function error).
 
 ## 6. Related Terms
 
-- [Feature Flags](../level_07/feature_flags.md) — The custom toggles you can check using `#[cfg(feature = "...")]`.
-- [Testing (`#[test]`)](../level_08/test_attribute.md) — An upcoming feature in Level 8 that relies entirely on `#[cfg(test)]` to keep tests out of production binaries.
+
+- [Feature Flags](feature_flags.md) — The custom toggles you can check using `#[cfg(feature = "...")]`.
+- [Build Scripts (`build.rs`)](build_scripts.md) — Related concept: Build Scripts (`build.rs`).
+- [Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`)](lint_control_attributes.md) — Related concept: Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`).
+- [`#[test]` Attribute](../level_08/test_attribute.md) — Related concept: `#[test]`.
 
 ---
 

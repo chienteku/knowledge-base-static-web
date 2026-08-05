@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`use` Statement](../level_07/use_statement.md) — The mechanism the prelude implicitly performs on your behalf.
+
+- [`use` Statement](use_statement.md) — The mechanism the prelude implicitly performs on your behalf.
 - [Module](../level_01/module.md) — The scope the prelude's names are injected into.
-- [The Standard Library (`std`)](../level_17/std_library.md) — Where the default prelude's contents come from.
+- [The Rust Standard Library (`std`)](../level_17/std_library.md) — Where the default prelude's contents come from.
 
 ---
 
@@ -64,73 +65,36 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Prelude Scoping and Lifecycle Rules
+### Mistake 1: Assuming All Standard Library Types Are Included in the Default Prelude
 
-**The mistake:** Assuming Prelude instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Calling `HashMap::new()` or `BTreeMap::new()` without writing `use std::collections::HashMap;`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** To avoid namespace bloat, only core types (`Option`, `Result`, `Vec`, `String`, `Box`) are included in the standard prelude. Collection types like `HashMap` must be explicitly imported via `use`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("prelude_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+let map = HashMap::<String, i32>::new(); // ❌ Error E0412: cannot find type `HashMap` in this scope!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("prelude_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+use std::collections::HashMap; // Correct!
+let map = HashMap::<String, i32>::new();
 ```
 
-### Mistake 2: Mutating Prelude State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Writing Unnecessary Redundant `use std::vec::Vec;` Imports
 
-**The mistake:** Attempting to mutate data associated with Prelude through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Explicitly writing `use std::vec::Vec;` or `use std::option::Option;` at the top of every file.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `Vec` and `Option` are already automatically imported into every module scope via the prelude. Redundant imports add clutter.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Overusing Wildcard Glob Imports (`use my_lib::prelude::*`) in Large Projects
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Importing custom library preludes with wildcard globs in every submodule file.
 
-### Mistake 3: Concurrent Access to Prelude Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Can lead to unexpected name shadowing or ambiguities when new items are added to custom preludes in future versions. Use explicit imports or scope preludes carefully.
 
-**The mistake:** Sharing non-thread-safe Prelude instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -246,9 +210,9 @@ Then write a program that uses all of the following **without any `use` statemen
 
 ## 6. Related Terms
 
-- [`use` Statement](../level_07/use_statement.md) — The exact mechanism the prelude implicitly invokes on your behalf for its curated set of names.
-- [The Standard Library (`std`)](../level_17/std_library.md) — The source of the default prelude's contents.
-- [`#![no_std]`](../level_17/no_std.md) — Switches to a different, smaller prelude sourced from `core` instead of `std`.
+
+- [`use` Statement](use_statement.md) — The exact mechanism the prelude implicitly invokes on your behalf for its curated set of names.
+- [The Rust Standard Library (`std`)](../level_17/std_library.md) — The source of the default prelude's contents.
 - [Module](../level_01/module.md) — The scope unit the prelude's implicit imports apply to, in every single file.
 
 ---

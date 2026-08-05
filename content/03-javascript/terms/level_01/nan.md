@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Number](../level_01/number.md) — Represents both integer and floating-point numbers.
-- [Type Coercion](../level_01/type_coercion.md) — Automatic or implicit conversion of types.
-
+- [Number](number.md) — Represents both integer and floating-point numbers.
+- [Type Coercion](type_coercion.md) — Automatic or implicit conversion of types.
 ---
 
 ## 2. Term Category
@@ -209,9 +208,10 @@ console.log(isValidScore("95"));
 ---
 
 ## 7. Related Terms
-- [Strict vs Loose Equality (`===` vs `==`)](../level_01/strict_vs_loose_equality.md) — Equality operations.
+- [Strict vs Loose Equality (=== vs ==)](strict_vs_loose_equality.md) — Equality operations.
 - [Number Methods & Parsing](../level_02/number_methods.md) — Methods like `parseInt` that can yield `NaN`.
-
+- [Arithmetic Operators](arithmetic_operators.md) — Related concept: Arithmetic Operators.
+- [Infinity / -Infinity](infinity.md) — Related concept: Infinity / -Infinity.
 ---
 
 ## 8. Key Takeaways

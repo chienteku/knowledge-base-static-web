@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Vector Search Index (ML/AI)](vector_search.md) — Vector search fundamentals.
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 
 ---
 
@@ -189,8 +190,10 @@ Write the SurrealQL statement to define an `HNSW` vector index named `idx_large_
 > **Explanation:** Vector distance metrics specify similarity scoring algorithms.
 
 ## 7. Related Terms
+
 - [Vector Search Index (ML/AI)](vector_search.md) — Vector search fundamentals.
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
+- [Vector Index (Overview)](../level_04/vector_index.md) — Related concept: Vector Index (Overview).
 
 ---
 

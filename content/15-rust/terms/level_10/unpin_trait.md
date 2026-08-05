@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`pin!`, `Pin<T>`, and `Unpin`](../level_10/pin_t.md) — The primary concept of memory pinning in Rust.
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that rely on pinning.
-- [Marker Traits](../level_04/trait.md) — Traits with no methods used to mark compiler capabilities.
+
+- [`Pin<T>`](pin_t.md) — The primary concept of memory pinning in Rust.
+- [`Future` Trait](future_trait.md) — The state machines that rely on pinning.
+- [Trait](../level_04/trait.md) — Traits with no methods used to mark compiler capabilities.
 
 ---
 
@@ -365,15 +366,13 @@ Demonstrate `Pin::into_inner` extraction for `Unpin` types.
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`pin!`, `Pin<T>`, and `Unpin`](../level_10/pin_t.md) — The parent memory pinning topic.
-> - [`Future` Trait](../level_10/future_trait.md) — Most futures are `!Unpin`.
-> - [Marker Traits](../level_04/trait.md) — `Unpin` is an auto-marker trait.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [Auto Traits](../level_09/auto_traits.md) — Related concept: Auto Traits.
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`Unpin`** is a marker trait indicating a type can be safely moved in memory even after being pinned.
 > - Almost **every standard type** in Rust (`i32`, `String`, `Vec`) implements `Unpin` automatically.

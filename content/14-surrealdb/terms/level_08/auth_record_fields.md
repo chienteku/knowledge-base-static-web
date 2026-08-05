@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`$auth` Variable](auth_variable.md) — The built-in authenticated user variable.
-- [PERMISSIONS Clause](permissions_clause.md) — Row-level security rules.
+- [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Row-level security rules.
 
 ---
 
@@ -201,8 +202,9 @@ Write a `PERMISSIONS` clause for an `invoice` table allowing `select` if `organi
 > **Explanation:** `crypto::argon2::compare(hash, password)` verifies plain passwords against stored Argon2 hashes.
 
 ## 7. Related Terms
+
 - [`$auth` Variable](auth_variable.md) — The parent authenticated user variable.
-- [PERMISSIONS Clause](permissions_clause.md) — Table and field level permission rules.
+- [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Table and field level permission rules.
 - [`$session` / `$token` Variables](session_token_variables.md) — Token and session attributes.
 
 ---

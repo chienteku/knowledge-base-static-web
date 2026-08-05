@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [updateOne() / updateMany()](update.md) — The partial update methods.
-- [replaceOne()](replace_one.md) — The whole-document replacement method.
+
+- [`updateOne()` / `updateMany()`](update.md) — The partial update methods.
+- [`replaceOne()`](replace_one.md) — The whole-document replacement method.
 
 ---
 
@@ -217,8 +218,9 @@ db.users.updateOne({ _id: id }, { $set: { lastLogin: new Date() } });
 > **Explanation:** `$set` with dot-notation updates specific nested fields cleanly.
 
 ## 7. Related Terms
-- [updateOne() / updateMany()](update.md) — Partial update methods.
-- [replaceOne()](replace_one.md) — Whole-document replacement.
+
+- [`updateOne()` / `updateMany()`](update.md) — Partial update methods.
+- [`replaceOne()`](replace_one.md) — Whole-document replacement.
 
 ---
 

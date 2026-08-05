@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Node.js](../level_01/nodejs.md) — Node was created before JavaScript had an official module system, so Ryan Dahl had to invent one.
-
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — Node was created before JavaScript had an official module system, so Ryan Dahl had to invent one.
 ---
 
 ## 2. Term Category
@@ -170,9 +169,9 @@ How does the `require` statement look different for Developer A vs Developer B?
 > **Explanation:** `require()` caches loaded module exports in `require.cache`; subsequent imports return the cached object.
 
 ## 7. Related Terms
-- [ES Modules](../level_03/es_modules.md) — The modern replacement for CommonJS.
-- [NPM](../level_04/npm.md) — NPM packages are historically distributed as CommonJS modules.
-
+- [ES Modules (import, export)](es_modules.md) — The modern replacement for CommonJS.
+- [NPM (Node Package Manager)](../level_04/npm.md) — NPM packages are historically distributed as CommonJS modules.
+- [Module Resolution](module_resolution.md) — Node.js module resolution.
 ---
 
 ## 8. Key Takeaways

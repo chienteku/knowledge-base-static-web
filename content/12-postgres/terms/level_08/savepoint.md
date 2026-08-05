@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`BEGIN` / `COMMIT` / `ROLLBACK`](begin_commit_rollback.md) — The parent transaction control commands.
-
 ---
 
 ## 2. Term Category
@@ -206,7 +205,6 @@ Write the complete SQL transaction script.
 
 ## 7. Related Terms
 - [`BEGIN` / `COMMIT` / `ROLLBACK`](begin_commit_rollback.md) — The parent transaction controls.
-
 ---
 
 ## 8. Key Takeaways

@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The system that Borrowing is designed to work alongside.
-- [Move Semantics](../level_03/move_semantics.md) — The destructive behavior that Borrowing successfully avoids.
+
+- [Ownership](ownership.md) — The system that Borrowing is designed to work alongside.
+- [Move Semantics](move_semantics.md) — The destructive behavior that Borrowing successfully avoids.
 - [String vs &str](../level_01/string_vs_&str.md) — We previously learned that `&str` is a string *reference*. Now we will learn exactly what that reference is!
 
 ---
@@ -570,8 +571,15 @@ Implement a telemetry dispatcher `TelemetryDispatcher<'a>` that broadcasts borro
 
 ## 6. Related Terms
 
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — How to let a function temporarily *modify* your data without taking ownership.
-- [Borrow Checker](../level_03/borrow_checker.md) — The strict compiler component that enforces all the rules of borrowing.
+
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — How to let a function temporarily *modify* your data without taking ownership.
+- [Borrow Checker](borrow_checker.md) — The strict compiler component that enforces all the rules of borrowing.
+- [String vs &str](../level_01/string_vs_&str.md) — Related concept: String vs &str.
+- [`Clone` Trait](clone_trait.md) — Related concept: `Clone` Trait.
+- [Move Semantics](move_semantics.md) — Related concept: Move Semantics.
+- [Ownership](ownership.md) — Related concept: Ownership.
+- [Slice (`&[T]`, `&str`)](slice.md) — Related concept: Slice (`&[T]`, `&str`).
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Related concept: References and Borrowing (`&`, `&mut`).
 
 ---
 

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Data Types (Overview)](../level_02/data_types.md) — The parent database typing system.
 - [Natural Key vs. Surrogate Key](../level_05/natural_vs_surrogate_key.md) — Primary key design choices.
-
 ---
 
 ## 2. Term Category
@@ -190,7 +189,7 @@ id UUID DEFAULT gen_random_uuid() -- Built-in native function in Postgres 13+
 ## 7. Related Terms
 - [Data Types (Overview)](../level_02/data_types.md) — The parent typing standard.
 - [Natural Key vs. Surrogate Key](../level_05/natural_vs_surrogate_key.md) — Key design patterns.
-
+- [Extensions (`CREATE EXTENSION`)](../level_10/extensions.md) — Related concept: Extensions (`CREATE EXTENSION`).
 ---
 
 ## 8. Key Takeaways

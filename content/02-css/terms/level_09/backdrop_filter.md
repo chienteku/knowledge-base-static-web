@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`filter`](filter.md) — The baseline visual filter functions.
 - [`opacity`](opacity.md) — Fading elements.
-
 ---
 
 ## 2. Term Category
@@ -256,8 +255,7 @@ Comparing `filter` vs `backdrop-filter`:
 ## 7. Related Terms
 - [`filter`](filter.md) — Applying filters to the element itself.
 - [`opacity`](opacity.md) — Sizing transparency values.
-- [`box-shadow`](box_shadow.md) — Card elevation.
-
+- [`box-shadow` (Card Shadows)](box_shadow.md) — Card elevation.
 ---
 
 ## 8. Key Takeaways

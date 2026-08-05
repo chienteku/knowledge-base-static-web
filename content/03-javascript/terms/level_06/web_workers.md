@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Asynchronous](./asynchronous.md) — Non-blocking code execution.
-- [Call Stack](./call_stack.md) — The single execution stack that tracks active function calls.
-- [`window` object / BOM](../level_05/window_bom.md) — The browser global context.
-
+- [Asynchronous](asynchronous.md) — Non-blocking code execution.
+- [Call Stack](call_stack.md) — The single execution stack that tracks active function calls.
+- [window object / BOM](../level_05/window_bom.md) — The browser global context.
 ---
 
 ## 2. Term Category
@@ -225,8 +224,7 @@ self.onmessage = function(event) {
 ---
 
 ## 7. Related Terms
-- [Event Loop](./event_loop.md) — The engine loop which remains unblocked by offloading calculations to workers.
-
+- [Event Loop](event_loop.md) — The engine loop which remains unblocked by offloading calculations to workers.
 ---
 
 ## 8. Key Takeaways

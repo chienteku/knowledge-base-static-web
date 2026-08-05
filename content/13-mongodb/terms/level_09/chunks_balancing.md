@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Shard Key](shard_key.md) — The partitioning keys.
 
 ---
@@ -198,6 +199,7 @@ sh.setBalancerWindow("01:00", "05:00"); // Restrict balancer to off-peak hours
 > **Explanation:** `sh.status()` reports shard distributions, chunk counts, and jumbo chunk warnings.
 
 ## 7. Related Terms
+
 - [Shard Key](shard_key.md) — The partitioning index key.
 - [Config Servers & `mongos` Router](config_servers_mongos.md) — Cluster infrastructure.
 

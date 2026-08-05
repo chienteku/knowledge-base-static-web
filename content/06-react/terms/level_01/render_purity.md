@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_01/components.md) — The functional units that must remain pure.
-- [Props](../level_01/props.md) — The read-only inputs passed to components.
-
+- [Components](components.md) — The functional units that must remain pure.
+- [Props (Properties)](props.md) — The read-only inputs passed to components.
 ---
 
 ## 2. Term Category
@@ -279,8 +278,10 @@ function SortedList({ numbers }) {
 ## 7. Related Terms
 - [Side Effects](../level_03/side_effects.md) — The operations that must be isolated from render execution.
 - [Strict Mode](../level_08/strict_mode.md) — A React utility that runs components twice in development to catch purity bugs.
-- [useEffect](../level_03/use_effect.md) — The React hook used to execute side effects safely.
-
+- [`useEffect` Hook](../level_03/use_effect.md) — The React hook used to execute side effects safely.
+- [Components](components.md) — Related concept: Components.
+- [Props (Properties)](props.md) — Related concept: Props (Properties).
+- [Derived State](../level_02/derived_state.md) — Related concept: Derived State.
 ---
 
 ## 8. Key Takeaways

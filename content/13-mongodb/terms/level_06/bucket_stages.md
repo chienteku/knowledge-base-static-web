@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [The Bucket Pattern](../level_05/bucket_pattern.md) — The storage-level bucketing concept.
 
@@ -211,6 +212,7 @@ boundaries: [0, 100], default: "Other"
 > **Explanation:** `$bucketAuto` automatically calculates bucket range boundaries to distribute documents evenly.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [The Bucket Pattern](../level_05/bucket_pattern.md) — The schema design equivalent.
 

@@ -9,7 +9,6 @@
 - [`<img>`](../level_03/img.md) — The target image containing the coordinate map.
 - [`href` Attribute](../level_02/href.md) — The destination hyperlink targets.
 - [Attribute](../level_01/attribute.md) — General tag parameters.
-
 ---
 
 ## 2. Term Category
@@ -304,8 +303,7 @@ Image map coordinates are declared in absolute pixels (e.g. `coords="100,100,50"
 ## 7. Related Terms
 - [`<img>`](../level_03/img.md) — The host image element.
 - [`href` Attribute](../level_02/href.md) — The destination hyperlink path.
-- [`<svg>`](../level_10/svg.md) — The modern vector-based responsive coordinate alternative.
-
+- [`<svg>` (Scalable Vector Graphics)](svg.md) — The modern vector-based responsive coordinate alternative.
 ---
 
 ## 8. Key Takeaways

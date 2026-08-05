@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CommonJS](../level_03/commonjs.md) — Uses the classic module resolution algorithm.
-- [NPM](../level_04/npm.md) — Resolution specifically looks for packages installed by NPM.
-
+- [CommonJS (require, module.exports)](commonjs.md) — Uses the classic module resolution algorithm.
+- [NPM (Node Package Manager)](../level_04/npm.md) — Resolution specifically looks for packages installed by NPM.
 ---
 
 ## 2. Term Category
@@ -161,9 +160,11 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 > **Explanation:** Folder module resolution checks `package.json` main field before falling back to `index` files.
 
 ## 7. Related Terms
-- [`node_modules`](../level_04/node_modules.md) — The folder the algorithm is desperately searching for.
-- [ES Modules](../level_03/es_modules.md) — ESM resolution is slightly stricter (e.g., forcing you to include the `.js` extension).
-
+- [node_modules](../level_04/node_modules.md) — The folder the algorithm is desperately searching for.
+- [ES Modules (import, export)](es_modules.md) — ESM resolution is slightly stricter (e.g., forcing you to include the `.js` extension).
+- [Circular Dependencies](circular_dependencies.md) — Related concept: Circular Dependencies.
+- [Built-in vs External Modules](module_types.md) — Related concept: Built-in vs External Modules.
+- [CommonJS (require, module.exports)](commonjs.md) — Related concept: CommonJS (require, module.exports).
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Event Bubbling](../level_05/event_bubbling.md) — The upward phase of event propagation.
-- [DOM](../level_05/dom.md) — The tree structure of the page.
-
+- [Event Bubbling](event_bubbling.md) — The upward phase of event propagation.
+- [DOM (Document Object Model)](dom.md) — The tree structure of the page.
 ---
 
 ## 2. Term Category
@@ -209,9 +208,12 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Event Bubbling](../level_05/event_bubbling.md) — The mechanical process that makes Delegation possible.
-- [`event.target`](../level_05/event_bubbling.md) — The property used to identify the specific child that fired the event.
-
+- [Event Bubbling](event_bubbling.md) — The mechanical process that makes Delegation possible.
+- [Event Bubbling](event_bubbling.md) — The property used to identify the specific child that fired the event.
+- [DOM Traversal](dom_traversal.md) — Related concept: DOM Traversal.
+- [Event object](event_object.md) — Related concept: Event object.
+- [event.target vs event.currentTarget](event_target_currenttarget.md) — Related concept: event.target vs event.currentTarget.
+- [Event Listener](event_listener.md) — Related concept: Event Listener.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Constants (`const`)](../level_01/constants_const.md) — The preferred way to define global read-only values.
+
+- [Constants (`const`)](constants_const.md) — The preferred way to define global read-only values.
 
 ---
 
@@ -568,8 +569,12 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Constants (`const`)](../level_01/constants_const.md) — The preferred alternative for read-only global values.
-- [Variable](../level_01/variable.md) — Standard bindings that live on the stack or heap, rather than in fixed global memory.
+
+- [Constants (`const`)](constants_const.md) — The preferred alternative for read-only global values.
+- [Variable](variable.md) — Standard bindings that live on the stack or heap, rather than in fixed global memory.
+- [`'static` Lifetime](../level_05/static_lifetime.md) — Related concept: `'static` Lifetime.
+- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](../level_09/oncelock_lazylock.md) — Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`.
+- [`thread_local!` Macro](../level_09/thread_local_macro.md) — Related concept: `thread_local!` Macro.
 
 ---
 

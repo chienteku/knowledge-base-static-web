@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR)](../level_10/ssr.md) — Hydration only happens after SSR or SSG.
+- [Server-Side Rendering (SSR)](ssr.md) — Hydration only happens after SSR or SSG.
 - [Virtual DOM](../level_01/virtual_dom.md) — Hydration is the process of building the initial Virtual DOM.
-
 ---
 
 ## 2. Term Category
@@ -154,9 +153,11 @@ function Clock() {
 > **Explanation:** `suppressHydrationWarning={true}` bypasses React dev warnings for intentional 1-level text mismatches.
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR)](../level_10/ssr.md) — The process that creates the "dry" HTML.
+- [Server-Side Rendering (SSR)](ssr.md) — The process that creates the "dry" HTML.
 - [Virtual DOM](../level_01/virtual_dom.md) — The data structure built during hydration.
-
+- [`useId` Hook](../level_04/use_id.md) — Related concept: `useId` Hook.
+- [React Server Components (RSC)](rsc.md) — Related concept: React Server Components (RSC).
+- [Streaming SSR](streaming_ssr.md) — Related concept: Streaming SSR.
 ---
 
 ## 8. Key Takeaways

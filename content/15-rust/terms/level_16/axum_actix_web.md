@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`tokio`](../level_16/tokio.md) — The underlying asynchronous runtime.
-- [`serde`](../level_16/serde.md) — Handles JSON request body deserialization and response serialization.
-- [Async / Await](../level_09/async_await.md) — Asynchronous handler functions.
+
+- [`tokio`](tokio.md) — The underlying asynchronous runtime.
+- [`serde`](serde.md) — Handles JSON request body deserialization and response serialization.
+- [`async` / `.await`](../level_09/async_await.md) — Asynchronous handler functions.
 
 ---
 
@@ -496,6 +497,14 @@ async fn main() -> std::io::Result<()> {
 > 1. **`FromRequestParts` Trait**: Allows implementing custom header/metadata extractors without consuming the request body stream.
 > 2. **Declarative Route Security**: Simply adding `claims: AuthClaims` to a route handler's parameters enforces authentication automatically. If validation fails, `axum` returns the rejection response before executing the handler.
 > 3. **Error Mapping**: Standard HTTP status code tuples `(StatusCode, &'static str)` implement `IntoResponse`, converting extractor failures cleanly into HTTP responses.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [The Context API](../level_06/context_api.md) — The global data provider that `use()` can consume.
-- [Lazy Loading & Suspense](../level_08/suspense.md) — The boundary system that catches pending promises.
-
+- [Suspense](../level_08/suspense.md) — The boundary system that catches pending promises.
 ---
 
 ## 2. Term Category
@@ -243,8 +242,8 @@ function ProfileCard({ dataPromise, isExpanded }) {
 
 ## 7. Related Terms
 - [The Context API](../level_06/context_api.md) — The data sharing mechanism read by `use()`.
-- [Lazy Loading & Suspense](../level_08/suspense.md) — The UI fallback catcher for pending promises.
-
+- [Suspense](../level_08/suspense.md) — The UI fallback catcher for pending promises.
+- [React Server Components (RSC)](rsc.md) — React Server Components.
 ---
 
 ## 8. Key Takeaways

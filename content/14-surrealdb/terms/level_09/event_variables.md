@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE EVENT`](define_event.md) — Server-side event triggers.
 - [`DEFINE FIELD`](../level_04/define_field.md) — Field definition clauses (`ASSERT`, `VALUE`).
 
@@ -227,6 +228,7 @@ c. Record state before the write occurred.
 > **Explanation:** Comparing `$before.field != $after.field` detects specific field mutations.
 
 ## 7. Related Terms
+
 - [`DEFINE EVENT`](define_event.md) — Server-side triggers.
 - [`ASSERT` Clause](../level_04/assert_clause.md) — Field constraint assertions.
 - [`$auth` Variable](../level_08/auth_variable.md) — Authenticated user variable.

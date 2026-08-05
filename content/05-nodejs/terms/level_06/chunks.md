@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Buffers](../level_06/buffers.md) — A chunk is literally just a Buffer object.
-- [Streams](../level_06/streams.md) — Streams produce these chunks.
-
+- [Buffers](buffers.md) — A chunk is literally just a Buffer object.
+- [Streams (General Concept)](streams.md) — Streams produce these chunks.
 ---
 
 ## 2. Term Category
@@ -150,9 +149,9 @@ stream.pipe(destination);
 > **Explanation:** Default highWaterMark specifies byte thresholds for binary buffers vs item count for object streams.
 
 ## 7. Related Terms
-- [Buffers](../level_06/buffers.md) — What a chunk actually is.
-- [Streams](../level_06/streams.md) — The system that produces chunks.
-
+- [Buffers](buffers.md) — What a chunk actually is.
+- [Streams (General Concept)](streams.md) — The system that produces chunks.
+- [Character Encoding & Buffer ↔ String](buffer_encoding.md) — Related concept: Character Encoding & Buffer ↔ String.
 ---
 
 ## 8. Key Takeaways

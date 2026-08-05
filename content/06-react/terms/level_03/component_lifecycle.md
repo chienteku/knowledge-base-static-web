@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — What the lifecycle applies to.
 - [Re-rendering](../level_02/re_rendering.md) — The "Updating" phase of the lifecycle.
-
 ---
 
 ## 2. Term Category
@@ -142,9 +141,9 @@ Model useEffect as state synchronization with external systems (DOM, WebSocket, 
 > **Explanation:** `useEffect` runs asynchronously AFTER the browser paints the screen.
 
 ## 7. Related Terms
-- [`useEffect` Hook](../level_03/use_effect.md) — The tool used to execute code during these specific phases.
-- [Cleanup Functions](../level_03/cleanup_functions.md) — Code that specifically runs during the Unmounting phase.
-
+- [`useEffect` Hook](use_effect.md) — The tool used to execute code during these specific phases.
+- [Cleanup Functions](cleanup_functions.md) — Code that specifically runs during the Unmounting phase.
+- [Error Boundaries](../level_07/error_boundaries.md) — Related concept: Error Boundaries.
 ---
 
 ## 8. Key Takeaways

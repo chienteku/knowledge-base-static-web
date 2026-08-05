@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Shared Borrowing (`&T`)](../level_03/borrowing.md) — The concept of unlimited read-only access.
-- [Mutable Borrowing (`&mut T`)](../level_03/mutable_borrowing.md) — The concept of exclusive write access.
-- [`Mutex<T>`](../level_09/mutex_t.md) — The simpler lock that `RwLock` seeks to optimize.
+
+- [Borrowing (`&`)](../level_03/borrowing.md) — The concept of unlimited read-only access.
+- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The concept of exclusive write access.
+- [`Mutex<T>`](mutex_t.md) — The simpler lock that `RwLock` seeks to optimize.
 
 ---
 
@@ -583,7 +584,8 @@ Implement a `ResilientMetrics` aggregator:
 
 ## 6. Related Terms
 
-- [`Mutex<T>`](../level_09/mutex_t.md) — The simpler lock that only allows one thread to access data at a time, period.
+
+- [`Mutex<T>`](mutex_t.md) — The simpler lock that only allows one thread to access data at a time, period.
 - [`Arc<T>`](../level_03/arc_t.md) — The smart pointer used to share the `RwLock` across threads (`Arc<RwLock<T>>`).
 - [`RefCell<T>`](../level_03/refcell_t.md) — The single-threaded equivalent of an `RwLock`. `RefCell` enforces the exact same borrowing rules at runtime, but without OS thread locks!
 

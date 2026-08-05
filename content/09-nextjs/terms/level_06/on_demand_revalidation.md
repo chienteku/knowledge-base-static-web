@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server Actions](../level_06/server_actions.md) — The environment where you trigger the revalidation.
-- [Data Caching (`force-cache`)](../level_05/data_caching.md) — The cache you are purging.
-
+- [Server Actions Overview (`"use server"`)](server_actions.md) — The environment where you trigger the revalidation.
+- [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — The cache you are purging.
 ---
 
 ## 2. Term Category
@@ -196,9 +195,11 @@ revalidateTag('comments'); // Targeted invalidation for comment feeds
 ---
 
 ## 7. Related Terms
-- [Data Caching](../level_05/data_caching.md) — The system being manipulated.
-- [`redirect()`](../level_04/redirect.md) — Often called immediately *after* `revalidatePath` in a Server Action.
-
+- [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — The system being manipulated.
+- [`redirect()` & `permanentRedirect()`](../level_04/redirect.md) — Often called immediately *after* `revalidatePath` in a Server Action.
+- [Time-based Revalidation (`next.revalidate`)](../level_05/revalidation.md) — Related concept: Time-based Revalidation (`next.revalidate`).
+- [Incremental Static Regeneration (ISR)](../level_08/isr.md) — Related concept: Incremental Static Regeneration (ISR).
+- [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — Related concept: The Next.js Cache (The Four Caches).
 ---
 
 ## 8. Key Takeaways

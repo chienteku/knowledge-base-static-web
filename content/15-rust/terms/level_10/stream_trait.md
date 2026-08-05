@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`Iterator` Trait](../level_05/iterator_trait.md) — The synchronous equivalent of `Stream`.
-- [`Future` Trait](../level_10/future_trait.md) — Yields a *single* value asynchronously; `Stream` yields *multiple* values asynchronously.
-- [`async fn`](../level_10/async_fn.md) — Asynchronous functions used alongside streams.
+
+- [The `Iterator` Trait](../level_05/iterator_trait.md) — The synchronous equivalent of `Stream`.
+- [`Future` Trait](future_trait.md) — Yields a *single* value asynchronously; `Stream` yields *multiple* values asynchronously.
+- [`async fn`](async_fn.md) — Asynchronous functions used alongside streams.
 
 ---
 
@@ -399,15 +400,13 @@ Construct a custom stream combinator adapter implementing `Stream`.
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`Iterator` Trait](../level_05/iterator_trait.md) — The synchronous version of `Stream`.
-> - [`Future` Trait](../level_10/future_trait.md) — Yields 1 value asynchronously; `Stream` yields $N$ values.
-> - [`tokio`](../level_10/tokio.md) — The runtime used to execute streams.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+**None.**
+
+---
+
+## 7. Key Takeaways
 > 
 > - A **`Stream`** is an asynchronous iterator.
 > - Unlike `Future` (which yields 1 result), a `Stream` yields **multiple values over time**.

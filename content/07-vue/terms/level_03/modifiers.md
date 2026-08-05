@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`v-on`](../level_03/v_on.md) — Listening to DOM events.
-- [`v-model`](../level_03/v_model.md) — Two-way data binding.
-
+- [`v-on`](v_on.md) — Listening to DOM events.
+- [`v-model`](v_model.md) — Two-way data binding.
 ---
 
 ## 2. Term Category
@@ -273,10 +272,9 @@ function handleSubmit() {
 ---
 
 ## 7. Related Terms
-- [Directives](../level_03/directives.md) — The directive system.
-- [`v-on`](../level_03/v_on.md) — Event listeners.
-- [`v-model`](../level_03/v_model.md) — Input binding.
-
+- [Directives](directives.md) — The directive system.
+- [`v-on`](v_on.md) — Event listeners.
+- [`v-model`](v_model.md) — Input binding.
 ---
 
 ## 8. Key Takeaways

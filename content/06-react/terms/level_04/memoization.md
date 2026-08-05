@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useMemo` Hook](../level_04/use_memo.md) — The primary hook implementing this concept for values.
-- [`useCallback` Hook](../level_04/use_callback.md) — The hook implementing this concept for function references.
-
+- [`useMemo` Hook](use_memo.md) — The primary hook implementing this concept for values.
+- [`useCallback` Hook](use_callback.md) — The hook implementing this concept for function references.
 ---
 
 ## 2. Term Category
@@ -196,10 +195,9 @@ const handleClick = useCallback(() => alert('hi'), []);
 > **Explanation:** React Compiler eliminates manual memoization boilerplate.
 
 ## 7. Related Terms
-- [`useMemo` Hook](../level_04/use_memo.md) — The hook implementation of value memoization.
-- [`useCallback` Hook](../level_04/use_callback.md) — The hook implementation of function reference memoization.
+- [`useMemo` Hook](use_memo.md) — The hook implementation of value memoization.
+- [`useCallback` Hook](use_callback.md) — The hook implementation of function reference memoization.
 - [React.memo](../level_08/react_memo.md) — Component render caching.
-
 ---
 
 ## 8. Key Takeaways

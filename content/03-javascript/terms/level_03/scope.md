@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
-- [Function](../level_03/function.md) — A reusable block of code.
-
+- [Function](function.md) — A reusable block of code.
 ---
 
 ## 2. Term Category
@@ -212,10 +211,12 @@ console.log(score);
 ---
 
 ## 7. Related Terms
-- [Global Scope](../level_03/global_scope.md) — The outermost scope.
-- [Local Scope](../level_03/local_scope.md) — Scope restricted to a function.
-- [Block Scope](../level_03/block_scope.md) — Scope restricted to `{ }` brackets (for `let` and `const`).
-
+- [Global Scope](global_scope.md) — The outermost scope.
+- [Local / Function Scope](local_scope.md) — Scope restricted to a function.
+- [Block Scope](block_scope.md) — Scope restricted to `{ }` brackets (for `let` and `const`).
+- [Closure](closure.md) — Related concept: Closure.
+- [Modules (import/export)](../level_08/modules.md) — Related concept: Modules (import/export).
+- [IIFE](../level_09/iife.md) — Related concept: IIFE.
 ---
 
 ## 8. Key Takeaways

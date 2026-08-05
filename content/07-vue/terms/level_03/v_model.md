@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`v-bind`](../level_03/v_bind.md) — Binds data from JS to HTML (One-way).
-- [`v-on`](../level_03/v_on.md) — Binds data from HTML to JS (One-way).
-
+- [`v-bind`](v_bind.md) — Binds data from JS to HTML (One-way).
+- [`v-on`](v_on.md) — Binds data from HTML to JS (One-way).
 ---
 
 ## 2. Term Category
@@ -170,10 +169,10 @@ const model = defineModel(); // Mutate model.value directly
 ---
 
 ## 7. Related Terms
-- [`v-bind`](../level_03/v_bind.md) — The one-way downward binding.
-- [`v-on`](../level_03/v_on.md) — The one-way upward event listening.
-- [Event, Key & Form Modifiers](../level_03/modifiers.md) — Suffixes for input sync timing and parsing.
-
+- [`v-bind`](v_bind.md) — The one-way downward binding.
+- [`v-on`](v_on.md) — The one-way upward event listening.
+- [Event, Key & Form Modifiers](modifiers.md) — Suffixes for input sync timing and parsing.
+- [Directives](directives.md) — Built-in directives.
 ---
 
 ## 8. Key Takeaways

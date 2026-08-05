@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_01/primitive_types.md) — The core, immutable data types in JavaScript.
 - [Object](../level_02/object.md) — The base key-value dictionary structure.
-
 ---
 
 ## 2. Term Category
@@ -258,9 +257,9 @@ console.log("Token value:", data[securityKey]); // "secured_token"
 ---
 
 ## 7. Related Terms
-- [Iterators & Iterables (protocol)](./iterators_iterables.md) — The looping contract built on `Symbol.iterator`.
-- [Private Class Fields (`#`)](../level_07/private_class_fields.md) — Enforces class encapsulation without relying on Symbol conventions.
-
+- [Iterators & Iterables (protocol)](iterators_iterables.md) — The looping contract built on `Symbol.iterator`.
+- [Private Class Fields (#)](../level_07/private_class_fields.md) — Enforces class encapsulation without relying on Symbol conventions.
+- [Computed Property Names](../level_07/computed_property_names.md) — Related concept: Computed Property Names.
 ---
 
 ## 8. Key Takeaways

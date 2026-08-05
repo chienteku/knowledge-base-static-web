@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [HAL (Hardware Abstraction Layer)](../level_17/hal.md) — Vendor HALs implement `embedded-hal` traits.
-- [Traits](../level_04/trait.md) — Interface trait contracts driving portable embedded code.
+
+- [HAL (Hardware Abstraction Layer)](hal.md) — Vendor HALs implement `embedded-hal` traits.
+- [Trait](../level_04/trait.md) — Interface trait contracts driving portable embedded code.
 
 ---
 
@@ -614,6 +615,16 @@ Implement `MockPin` and `MockDelay` test helpers, and write unit tests (`#[test]
 > 1. **Trait Composition**: `PulseGenerator` demonstrates composing multiple `embedded-hal` peripheral interfaces (`OutputPin` for GPIO control and `DelayNs` for precise timing).
 > 2. **Provided Trait Methods**: `DelayNs::delay_us` automatically delegates to `delay_ns`, illustrating how trait default implementations reduce boilerplate for peripheral implementers.
 > 3. **Integrated Hardware Mock Testing**: Combining `MockPin` and `MockDelay` ensures signal patterns and duration accumulation are validated simultaneously before flashing code onto real target hardware.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [HAL (Hardware Abstraction Layer)](hal.md) — Related concept: HAL (Hardware Abstraction Layer).
+- [`svd2rust`](svd2rust.md) — Related concept: `svd2rust`.
+- [PAC (Peripheral Access Crate)](pac.md) — Related concept: PAC (Peripheral Access Crate).
 
 ---
 

@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
-_(none)_
+
+- [Record Link (Concept)](record_link_concept.md) — Record link references.
+- [`array`](../level_02/array_type.md) — Array data types.
 
 ---
 
@@ -29,7 +31,10 @@ _(none)_
 ---
 
 ## 5. Related Terms
-_(none)_
+
+- [Indexing Record Link Fields](../level_07/indexing_record_links.md)
+- [`record` (Record Link Type)](../level_02/record_link_type.md) — Record link type specification.
+- [Record Link (Concept)](record_link_concept.md) — Related concept: Record Link (Concept).
 
 ---
 

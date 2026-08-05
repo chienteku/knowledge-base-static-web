@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 
 ---
@@ -219,6 +220,7 @@ Use user-defined variable names without system prefixes in $let blocks
 > **Explanation:** `$$NOW` provides the current UTC execution timestamp constant.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$lookup` Stage](lookup_stage.md) — The join stage using `let`.
 

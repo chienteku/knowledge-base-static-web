@@ -9,7 +9,6 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Tables are complex elements that require many nested child elements to function.
 - [Nesting](../level_01/nesting.md) — Since a table requires nested row and cell structures.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since tables are block-level display components.
-
 ---
 
 ## 2. Term Category
@@ -203,10 +202,11 @@ Tables are strictly for data. If you use a table for layout, screen readers will
 > **Explanation:** `border-collapse: collapse` eliminates double cell border spacing.
 
 ## 7. Related Terms
-- [`<tr>` (Table Row)](../level_04/tr.md) — The tag that defines a horizontal row inside the table.
-- [`<td>` (Table Data)](../level_04/td.md) — The tag that holds the actual data inside the row.
-- [`<caption>`](../level_04/caption.md) — The semantic title container for the table.
-
+- [`<tr>` (Table Row)](tr.md) — The tag that defines a horizontal row inside the table.
+- [`<td>` (Table Data)](td.md) — The tag that holds the actual data inside the row.
+- [`<caption>`](caption.md) — The semantic title container for the table.
+- [`<thead>`, `<tbody>`, `<tfoot>`](thead_tbody_tfoot.md) — Related concept: `<thead>`, `<tbody>`, `<tfoot>`.
+- [`<th>` (Table Header)](th.md) — Table header cells.
 ---
 
 ## 8. Key Takeaways

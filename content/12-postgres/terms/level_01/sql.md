@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Database](database.md) — Understanding the need for structured data storage.
-
 ---
 
 ## 2. Term Category
@@ -191,7 +190,7 @@ for (let i = 0; i < items.length; i++) {
 ## 7. Related Terms
 - [Database](database.md) — The query target.
 - [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — Core SQL DDL statements.
-
+- [Relational Database](relational_database.md) — Related concept: Relational Database.
 ---
 
 ## 8. Key Takeaways

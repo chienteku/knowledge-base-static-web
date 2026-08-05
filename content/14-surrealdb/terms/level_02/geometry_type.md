@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -208,6 +209,7 @@ Explain why the following Polygon coordinate insert query will fail to compile o
 > **Explanation:** `<inside>` tests if geometry points fall within polygon boundaries.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Geospatial Index](../level_07/geospatial_index.md) — Indexing spatial data.
 

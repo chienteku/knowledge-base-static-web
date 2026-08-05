@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Type Inference](../level_01/type_inference.md) — The system you are forcefully overriding.
-
 ---
 
 ## 2. Term Category
@@ -150,7 +149,12 @@ const el = evt.target as HTMLInputElement; // Standard assertion syntax
 ## 7. Related Terms
 - [`any`](../level_02/any.md) — The type you should never assert to.
 - [Type Narrowing](../level_06/type_narrowing.md) — The safe, runtime-checked alternative to blindly asserting types.
-
+- [Excess Property Checks](../level_03/excess_property_checks.md) — Related concept: Excess Property Checks.
+- [Non-null Assertion Operator (`!`)](non_null_assertion.md) — Related concept: Non-null Assertion Operator (`!`).
+- [`satisfies` Operator](satisfies_operator.md) — Related concept: `satisfies` Operator.
+- [Branded / Nominal Types](../level_09/branded_nominal_types.md) — Related concept: Branded / Nominal Types.
+- [Const Assertions (`as const`)](../level_11/const_assertions.md) — Related concept: Const Assertions (`as const`).
+- [`unknown`](../level_02/unknown.md) — Safely asserting unknown types.
 ---
 
 ## 8. Key Takeaways

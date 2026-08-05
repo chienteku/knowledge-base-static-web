@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTML](../level_01/html.md) — The language that uses these structures.
-
+- [HTML (HyperText Markup Language)](html.md) — The language that uses these structures.
 ---
 
 ## 2. Term Category
@@ -201,11 +200,13 @@ Identify the opening tag, the closing tag, the content, and the element.
 > **Explanation:** Void elements cannot enclose child content and do not have closing tags.
 
 ## 7. Related Terms
-- [Attribute](../level_01/attribute.md) — Extra information that is placed *inside* the opening tag.
-- [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behaviors of HTML elements.
-- [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Elements that do not have a separate closing tag.
-- [HTML](../level_01/html.md) — The language built from these tags and elements.
-
+- [Attribute](attribute.md) — Extra information that is placed *inside* the opening tag.
+- [Block-level vs Inline Elements](block_inline.md) — The display behaviors of HTML elements.
+- [Void Elements (Self-closing Tags)](void_elements.md) — Elements that do not have a separate closing tag.
+- [HTML (HyperText Markup Language)](html.md) — The language built from these tags and elements.
+- [Comments (<!-- -->)](comments.md) — Related concept: Comments (<!-- -->).
+- [Nesting](nesting.md) — Related concept: Nesting.
+- [HTML Entities](../level_09/html_entities.md) — Related concept: HTML Entities.
 ---
 
 ## 8. Key Takeaways

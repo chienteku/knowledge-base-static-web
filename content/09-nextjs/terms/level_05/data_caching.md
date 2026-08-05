@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-side Fetching](../level_05/fetch.md) — The extended API we are configuring.
-- [The Next.js Cache](../level_08/next_cache.md) — The underlying system where the data is stored.
-
+- [Server-side Fetching (Extended `fetch`)](fetch.md) — The extended API we are configuring.
+- [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — The underlying system where the data is stored.
 ---
 
 ## 2. Term Category
@@ -175,9 +174,14 @@ const getCachedUsers = unstable_cache(async () => prisma.user.findMany(), ['user
 ---
 
 ## 7. Related Terms
-- [Time-based Revalidation](../level_05/revalidation.md) — A middle ground between `force-cache` and `no-store`.
-- [Static Rendering (SSG)](../level_08/ssg.md) — The page-level result of using `force-cache`.
-
+- [Time-based Revalidation (`next.revalidate`)](revalidation.md) — A middle ground between `force-cache` and `no-store`.
+- [Static Site Generation (SSG)](../level_08/ssg.md) — The page-level result of using `force-cache`.
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — Related concept: Dynamic Rendering (SSR).
+- [Server-side Fetching (Extended `fetch`)](fetch.md) — Related concept: Server-side Fetching (Extended `fetch`).
+- [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — Related concept: On-Demand Revalidation (`revalidatePath`, `revalidateTag`).
+- [Caching Route Handlers](../level_07/caching_route_handlers.md) — Related concept: Caching Route Handlers.
+- [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — Related concept: The Next.js Cache (The Four Caches).
+- [`React.cache()` Function](react_cache.md) — React cache memoization.
 ---
 
 ## 8. Key Takeaways

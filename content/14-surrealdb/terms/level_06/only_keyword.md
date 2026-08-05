@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [SELECT](../level_03/select.md) — The query statement.
-- [Record ID](../level_01/record_id.md) — Direct record lookups.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
+- [Record ID (`table:id`)](../level_01/record_id.md) — Direct record lookups.
 
 ---
 
@@ -196,8 +197,9 @@ Write the SurrealQL query using the `ONLY` keyword to retrieve the `balance` and
 > **Explanation:** `ONLY VALUE` returns raw primitive values without array or object wrappers.
 
 ## 7. Related Terms
-- [SELECT](../level_03/select.md) — The query statement.
-- [SELECT VALUE](../level_03/select_value.md) — Flat value extraction.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
+- [`SELECT VALUE` (Single Field Extraction)](../level_03/select_value.md) — Flat value extraction.
 
 ---
 

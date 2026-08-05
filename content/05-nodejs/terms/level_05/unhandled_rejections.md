@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Promises](../../../04-apis/terms/level_05/promises.md) — The asynchronous objects that are failing.
-- [The `process` Object](../level_02/process_object.md) — How Node.js handles fatal crashes globally.
-
+- promises — The asynchronous objects that are failing.
+- [The process Object](../level_02/process_object.md) — How Node.js handles fatal crashes globally.
 ---
 
 ## 2. Term Category
@@ -172,9 +171,12 @@ fetchWeather();
 > **Explanation:** `--unhandled-rejections` mode flag sets rejection behavior (`strict`, `throw`, `warn`, `none`).
 
 ## 7. Related Terms
-- [Microtasks vs Macrotasks](../level_05/microtasks_macrotasks.md) — Promise rejections happen in the VIP Microtask queue.
-- [The `process` Object](../level_02/process_object.md) — The object that emits the `unhandledRejection` event.
-
+- [Microtasks vs Macrotasks](microtasks_macrotasks.md) — Promise rejections happen in the VIP Microtask queue.
+- [The process Object](../level_02/process_object.md) — The object that emits the `unhandledRejection` event.
+- [async / await in Node](async_await.md) — Related concept: async / await in Node.
+- [Async Error Handling (try/catch + .catch)](async_error_handling.md) — Related concept: Async Error Handling (try/catch + .catch).
+- [HTTP Status Codes](../level_09/status_codes.md) — Related concept: HTTP Status Codes.
+- [Event Emitter](event_emitter.md) — Related concept: Event Emitter.
 ---
 
 ## 8. Key Takeaways

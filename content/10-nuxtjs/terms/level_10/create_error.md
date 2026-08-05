@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [H3 Request Handlers (`defineEventHandler`)](../level_07/h3_handlers.md) — The underlying server engine that formats these errors.
-
 ---
 
 ## 2. Term Category
@@ -212,8 +211,7 @@ if (!data.value) throw createError({ statusCode: 404, statusMessage: 'Not Found'
 ---
 
 ## 7. Related Terms
-- [`error.vue`](../level_10/error_vue.md) — What the user sees when these functions are executed.
-
+- [`error.vue` & `useError`](error_vue.md) — What the user sees when these functions are executed.
 ---
 
 ## 8. Key Takeaways

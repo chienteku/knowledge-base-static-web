@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Compound Index](compound_index.md) — The target multi-key index.
+
+- [Compound Index](compound_index.md) — Compound index structure.
 - [Index Selectivity & Cardinality](index_selectivity.md) — Analyzing query selectivity.
 
 ---
@@ -244,6 +245,7 @@ Apply the ESR Rule to determine the optimal compound index key order. Write the 
 > **Explanation:** The ESR Rule defines optimal field ordering in compound B-Tree indexes.
 
 ## 7. Related Terms
+
 - [Compound Index](compound_index.md) — The parent index type.
 - [Index Selectivity & Cardinality](index_selectivity.md) — Index optimization rules.
 

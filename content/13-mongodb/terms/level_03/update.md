@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [insertOne() / insertMany()](insert.md) — Creating the documents edited.
+
+- [`insertOne()` / `insertMany()`](insert.md) — Creating the documents edited.
 - [Query Filter (Filter Document)](query_filter.md) — Specifying which records to target.
 
 ---
@@ -232,9 +233,14 @@ db.users.updateMany({ active: false }, { $set: { verified: false } });
 > **Explanation:** `$unset` deletes specified fields from target documents.
 
 ## 7. Related Terms
-- [Update Operators (`$set`, `$unset`, `$inc`, etc.)](update_operators.md) — The modification commands.
-- `$set` vs. Whole-Document Replacement](set_vs_replace.md) — The replacement gotcha.
-- [Upsert (`upsert: true`)](upsert.md) -- Dynamic insert on updates.
+
+- [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](update_operators.md) — The modification commands.
+- [Upsert (`upsert: true`)](upsert.md) — - Dynamic insert on updates.
+- [`bulkWrite()`](bulk_write.md) — Related concept: `bulkWrite()`.
+- [`findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`](find_and_modify.md) — Related concept: `findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`.
+- [`replaceOne()`](replace_one.md) — Related concept: `replaceOne()`.
+- [`$set` vs. Whole-Document Replacement](set_vs_replace.md) — Related concept: `$set` vs. Whole-Document Replacement.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Related concept: Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`).
 
 ---
 

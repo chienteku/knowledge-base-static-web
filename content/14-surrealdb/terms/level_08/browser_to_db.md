@@ -6,9 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — End-user record authentication.
-- [PERMISSIONS Clause](permissions_clause.md) — Table and field level security.
+- [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Table and field level security.
 
 ---
 
@@ -204,9 +205,12 @@ Determine whether the following application features should connect **Directly t
 > **Explanation:** Web browser clients subscribe to real-time WebSocket push updates directly from SurrealDB.
 
 ## 7. Related Terms
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Built-in end-user authentication.
-- [PERMISSIONS Clause](permissions_clause.md) — Row-level authorization.
+- [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Row-level authorization.
+- [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — Related concept: `LIVE SELECT` (Live Queries).
+- [Embedding SurrealDB (Rust / WASM)](../level_10/embedding.md) — Related concept: Embedding SurrealDB (Rust / WASM).
 
 ---
 

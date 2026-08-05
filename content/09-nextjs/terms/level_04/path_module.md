@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The environment that hosts this module.
-
 ---
 
 ## 2. Term Category
@@ -197,8 +196,7 @@ export default function AdminPage() {
 
 ## 7. Related Terms
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The parent execution runtime.
-- [Intercepting Routes (`(..)folder`)](../level_04/intercepting_routes.md) — The routing feature utilizing path navigation operators.
-
+- [Intercepting Routes (`(..)folder`)](intercepting_routes.md) — The routing feature utilizing path navigation operators.
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Document Size Limit](../level_05/document_size_limit.md) — The 16MB ceiling constraint.
+
+- [Document Size Limit (16 MB)](../level_05/document_size_limit.md) — The 16MB ceiling constraint.
 
 ---
 
@@ -207,7 +208,8 @@ const downloadStream = bucket.openDownloadStream(fileId);
 > **Explanation:** `fs.files` stores file metadata; `fs.chunks` stores binary chunk payloads.
 
 ## 7. Related Terms
-- [Document Size Limit](../level_05/document_size_limit.md) — The 16MB ceiling constraint.
+
+- [Document Size Limit (16 MB)](../level_05/document_size_limit.md) — The 16MB ceiling constraint.
 
 ---
 

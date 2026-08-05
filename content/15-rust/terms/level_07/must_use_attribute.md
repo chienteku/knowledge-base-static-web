@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`Result<T, E>`](../level_02/result_t_e.md) — The most famous type carrying this attribute in the standard library.
 - [Lazy Evaluation](../level_06/lazy_evaluation.md) — Why iterators are also marked `#[must_use]`.
-- [`fn`](../level_01/fn.md) — What this attribute can also be applied directly to, on the function itself.
+- [`fn` (Functions)](../level_01/fn.md) — What this attribute can also be applied directly to, on the function itself.
 
 ---
 
@@ -74,73 +75,37 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Must Use Attribute Scoping and Lifecycle Rules
+### Mistake 1: Reflexively Silencing Warnings with `let _ = ...;` Without Checking Errors
 
-**The mistake:** Assuming Must Use Attribute instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Blindly writing `let _ = risky_operation();` to silence `#[must_use]` warnings.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `#[must_use]` exists to warn developers of unhandled errors or side effects. Blindly discarding results via `let _ = ...` swallows errors without handling potential runtime panics or failures.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("must_use_attribute_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+let _ = std::fs::remove_file("config.json"); // ❌ Silently ignores deletion failures!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("must_use_attribute_data");
-    s // Ownership of the String is transferred directly to the caller
+if let Err(e) = std::fs::remove_file("config.json") {
+    eprintln!("Failed to remove config file: {e}");
 }
 ```
 
-### Mistake 2: Mutating Must Use Attribute State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Expecting `#[must_use]` to Produce a Compile Error Instead of a Warning
 
-**The mistake:** Attempting to mutate data associated with Must Use Attribute through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Expecting `#[must_use]` to stop `cargo build` with a hard compile error.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `#[must_use]` emits a compiler warning (`unused_must_use`), not a hard error. To turn it into a hard error in CI, use `#![deny(unused_must_use)]` or `RUSTFLAGS="-D unused_must_use"`.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Forgetting custom error messages in `#[must_use = "..."]`
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Annotating custom guard types with plain `#[must_use]`.
 
-### Mistake 3: Concurrent Access to Must Use Attribute Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Omitting descriptive messages leaves callers wondering *why* the return value must be used. Adding `#[must_use = "locks are released immediately if unassigned!"]` clarifies proper API usage.
 
-**The mistake:** Sharing non-thread-safe Must Use Attribute instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -208,9 +173,9 @@ fn main() {
 
 ## 6. Related Terms
 
-- [`Result<T, E>`](../level_02/result_t_e.md) / [`Option<T>`](../level_02/option_t.md) — The two most common standard-library types marked `#[must_use]`.
+
+- [`Result<T, E>`](../level_02/result_t_e.md)
 - [Lazy Evaluation](../level_06/lazy_evaluation.md) — Why `Iterator`-returning adapter methods are also `#[must_use]`: an unused iterator chain silently does nothing at all.
-- [`#[non_exhaustive]`](../level_07/non_exhaustive_attribute.md) — A sibling API-design attribute, addressing a different concern.
 - [`?` Operator](../level_04/question_mark_operator.md) — The most common, idiomatic way to properly "use" a `Result` that would otherwise trigger this warning.
 
 ---

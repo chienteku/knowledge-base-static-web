@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Generics (`<T>`)](../level_04/generics.md) — The feature that triggers this compiler mechanism.
+
+- [Generics (`<T>`)](generics.md) — The feature that triggers this compiler mechanism.
 - [`fn` (Functions)](../level_01/fn.md) — The primary place where this code duplication happens.
 
 ---
@@ -736,8 +737,11 @@ Design a zero-copy stack hardware serializer `FixedBufferSerializer<T: ZeroCopyE
 
 ## 6. Related Terms
 
-- [Generics (`<T>`)](../level_04/generics.md) — The language feature that triggers Monomorphization.
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The exact opposite of Monomorphization. Trait objects use dynamic dispatch at runtime. They save file size (no copy-pasting code) but cost runtime performance.
+
+- [Generics (`<T>`)](generics.md) — The language feature that triggers Monomorphization.
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — The exact opposite of Monomorphization. Trait objects use dynamic dispatch at runtime. They save file size (no copy-pasting code) but cost runtime performance.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Related concept: `ZSTs` (Zero-Sized Types).
+- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Related concept: Zero-Cost Abstractions.
 
 ---
 

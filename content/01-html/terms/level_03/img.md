@@ -9,8 +9,7 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tag structure rules.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Understanding that the `<img>` is a void element (no closing tag).
 - [Attribute](../level_01/attribute.md) — The `<img>` tag requires attributes to function.
-- [`src` Attribute](../level_03/src.md) — The attribute that points to the image resource location.
-
+- [`src` Attribute](src.md) — The attribute that points to the image resource location.
 ---
 
 ## 2. Term Category
@@ -182,12 +181,15 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 > **Explanation:** WebP and AVIF formats reduce file size by 30-50% while preserving image quality.
 
 ## 7. Related Terms
-- [`alt` Attribute](../level_03/alt.md) — The required accessibility attribute for images.
-- [`src` Attribute](../level_03/src.md) — The attribute used to define the image source URL.
-- [`<figure>` & `<figcaption>`](../level_03/figure_figcaption.md) — The semantic containers used to package images and captions.
+- [`alt` Attribute](alt.md) — The required accessibility attribute for images.
+- [`src` Attribute](src.md) — The attribute used to define the image source URL.
+- [`<figure>` & `<figcaption>`](figure_figcaption.md) — The semantic containers used to package images and captions.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The category of tags `<img>` belongs to.
 - [`href` Attribute](../level_02/href.md) — The anchor equivalent of `src`.
-
+- [`<iframe>`](iframe.md) — Related concept: `<iframe>`.
+- [`<picture>` & Responsive Images](picture_responsive.md) — Related concept: `<picture>` & Responsive Images.
+- [`<video>`](video.md) — Related concept: `<video>`.
+- [`<map>` & `<area>` (Image Maps)](../level_10/map_area.md) — Related concept: `<map>` & `<area>` (Image Maps).
 ---
 
 ## 8. Key Takeaways

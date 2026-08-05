@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Mapped Types](../level_09/mapped_types.md) — Iterating over object keys to create new types.
-- [Template Literal Types](../level_09/template_literal_types.md) — Rebuilding string patterns in type space.
-
+- [Mapped Types](mapped_types.md) — Iterating over object keys to create new types.
+- [Template Literal Types](template_literal_types.md) — Rebuilding string patterns in type space.
 ---
 
 ## 2. Term Category
@@ -242,10 +241,9 @@ type CleanSession = DataPropertiesOnly<UserSession>;
 > **Explanation:** Remapping mapped type keys to `never` removes matching property keys.
 
 ## 7. Related Terms
-- [Mapped Types](../level_09/mapped_types.md) — The loop mechanism that `as` extends.
-- [Template Literal Types](../level_09/template_literal_types.md) — Constructing the renamed key strings.
-- [Exclude / Extract / NonNullable](../level_08/exclude_extract_nonnullable.md) — The basic set operation logic.
-
+- [Mapped Types](mapped_types.md) — The loop mechanism that `as` extends.
+- [Template Literal Types](template_literal_types.md) — Constructing the renamed key strings.
+- [`Exclude` / `Extract` / `NonNullable`](../level_08/exclude_extract_nonnullable.md) — The basic set operation logic.
 ---
 
 ## 8. Key Takeaways

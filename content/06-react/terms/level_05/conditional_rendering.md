@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [JSX](../level_01/jsx.md) — Understanding how to embed JavaScript expressions using `{}`.
+- [JSX (JavaScript XML)](../level_01/jsx.md) — Understanding how to embed JavaScript expressions using `{}`.
 - [State](../level_02/state.md) — The boolean data that usually drives the condition.
-
 ---
 
 ## 2. Term Category
@@ -171,9 +170,9 @@ if (loading) return <Spinner />; // Or return null;
 > **Explanation:** React ignores boolean `false`, `null`, `undefined`, and `` while rendering numeric `0`.
 
 ## 7. Related Terms
-- [JSX](../level_01/jsx.md) — The syntax that allows us to inject JS operators.
+- [JSX (JavaScript XML)](../level_01/jsx.md) — The syntax that allows us to inject JS operators.
 - [Virtual DOM](../level_01/virtual_dom.md) — When a condition turns false, React removes that node from the Virtual DOM, destroying the component.
-
+- [Framer Motion](../level_11/framer_motion.md) — Related concept: Framer Motion.
 ---
 
 ## 8. Key Takeaways

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Primary / Secondary / Arbiter](primary_secondary_arbiter.md) — The cluster roles.
 
 ---
@@ -187,6 +188,7 @@ Explain:
 > **Explanation:** `rs.status()` details member node health, heartbeat latencies, and election states.
 
 ## 7. Related Terms
+
 - [Replica Set](replica_set.md) — The parent cluster architecture.
 - [Primary / Secondary / Arbiter](primary_secondary_arbiter.md) — Node roles.
 

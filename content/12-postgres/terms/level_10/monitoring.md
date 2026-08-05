@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Extensions (Overview)](extensions.md) — The packaging system used to enable `pg_stat_statements`.
+- [Extensions (`CREATE EXTENSION`)](extensions.md) — The packaging system used to enable `pg_stat_statements`.
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](../level_07/explain_analyze.md) — Analyzing the individual slow queries identified by monitoring.
-
 ---
 
 ## 2. Term Category
@@ -221,9 +220,8 @@ SET idle_in_transaction_session_timeout = '10s';
 > **Explanation:** `pg_stat_activity` monitors real-time active backend connection queries.
 
 ## 7. Related Terms
-- [Extensions (Overview)](extensions.md) — The packaging system.
+- [Extensions (`CREATE EXTENSION`)](extensions.md) — The packaging system.
 - [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — Setting preloads.
-
 ---
 
 ## 8. Key Takeaways

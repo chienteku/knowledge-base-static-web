@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Deployment (Vercel)](../level_10/vercel_deployment.md) — The platform you are choosing *not* to use.
+- [Deployment (Vercel)](vercel_deployment.md) — The platform you are choosing *not* to use.
 - [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — Important to understand when self-hosting.
-
 ---
 
 ## 2. Term Category
@@ -154,9 +153,9 @@ COPY --from=builder /app/public ./public
 ---
 
 ## 7. Related Terms
-- [Deployment (Vercel)](../level_10/vercel_deployment.md) — The zero-config alternative to self-hosting.
+- [Deployment (Vercel)](vercel_deployment.md) — The zero-config alternative to self-hosting.
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — The feature that breaks if your Docker cache isn't configured correctly.
-
+- [The Next.js Compiler (SWC)](swc.md) — Related concept: The Next.js Compiler (SWC).
 ---
 
 ## 8. Key Takeaways

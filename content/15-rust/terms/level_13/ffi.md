@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`unsafe` Block](../level_13/unsafe_block.md) — FFI function calls bypass Rust compiler checks and must be executed within `unsafe` blocks.
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Passing data pointers across language ABI boundaries.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Memory layout or ABI mismatches across FFI boundaries cause Undefined Behavior.
+
+- [`unsafe` Block](unsafe_block.md) — FFI function calls bypass Rust compiler checks and must be executed within `unsafe` blocks.
+- [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Passing data pointers across language ABI boundaries.
+- [Undefined Behavior (UB)](undefined_behavior.md) — Memory layout or ABI mismatches across FFI boundaries cause Undefined Behavior.
 
 ---
 
@@ -701,10 +702,19 @@ Write unit tests verifying layout offset accuracy, struct size, checksum calcula
 
 ## 8. Related Terms
 
-- [`extern "C"`](../level_13/extern_c.md) — The ABI specification keyword for declaring C calling conventions.
-- [`#[repr(C)]`](../level_13/repr_c.md) — The attribute forcing Rust structs to use C-compatible memory layout.
-- [`unsafe` Block](../level_13/unsafe_block.md) — The required block construct for invoking FFI functions.
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Pointers used to transfer data memory addresses across FFI boundaries.
+
+- [`extern "C"`](extern_c.md) — The ABI specification keyword for declaring C calling conventions.
+- [`unsafe` Block](unsafe_block.md) — The required block construct for invoking FFI functions.
+- [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Pointers used to transfer data memory addresses across FFI boundaries.
+- [`Function Pointers` (`fn()`)](../level_06/function_pointers.md) — Related concept: `Function Pointers` (`fn()`).
+- [Build Scripts (`build.rs`)](../level_07/build_scripts.md) — Related concept: Build Scripts (`build.rs`).
+- [`MaybeUninit<T>`](../level_11/maybeuninit_t.md) — Related concept: `MaybeUninit<T>`.
+- [`bindgen`](bindgen.md) — Related concept: `bindgen`.
+- [`cbindgen`](cbindgen.md) — Related concept: `cbindgen`.
+- [`#[repr(C)]`](repr_c.md) — Related concept: `#[repr(C)]`.
+- [Undefined Behavior (UB)](undefined_behavior.md) — Related concept: Undefined Behavior (UB).
+- [`unsafe fn`](unsafe_fn.md) — Related concept: `unsafe fn`.
+- [`CString` / `CStr`](cstring_cstr.md) — Related concept: `CString` / `CStr`.
 
 ---
 

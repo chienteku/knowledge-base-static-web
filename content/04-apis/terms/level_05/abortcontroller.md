@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The fetch() API](./fetch.md) — The network request handler.
-- [Promises (in the context of networks)](./promises.md) — The asynchronous response objects.
-
+- [The fetch() API](fetch.md) — The network request handler.
+- [Promises (in the context of networks)](promises.md) — The asynchronous response objects.
 ---
 
 ## 2. Term Category
@@ -222,9 +221,9 @@ function loadProfileComponent(userId) {
 ---
 
 ## 7. Related Terms
-- [Request Timeout](./request_timeout.md) — The timing pattern built on top of AbortController triggers.
-- [XMLHttpRequest / AJAX](./xmlhttprequest_ajax.md) — The legacy request API which supported request cancellation via `xhr.abort()`.
-
+- [Request Timeout](request_timeout.md) — The timing pattern built on top of AbortController triggers.
+- [XMLHttpRequest / AJAX](xmlhttprequest_ajax.md) — The legacy request API which supported request cancellation via `xhr.abort()`.
+- [The fetch() API](fetch.md) — Related concept: The fetch() API.
 ---
 
 ## 8. Key Takeaways

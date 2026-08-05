@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Constructor Function](./constructor_function.md) — The older, underlying logic Classes replace.
-- [Prototypal Inheritance](./prototypal_inheritance.md) — How Classes secretly share data.
-
+- [Constructor Function](constructor_function.md) — The older, underlying logic Classes replace.
+- [Prototypal Inheritance](prototypal_inheritance.md) — How Classes secretly share data.
 ---
 
 ## 2. Term Category
@@ -224,9 +223,14 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`extends`](./extends.md) — Used to create child classes.
-- [`super`](./super.md) — Used inside child classes to call the parent.
-
+- [extends](extends.md) — Used to create child classes.
+- [super](super.md) — Used inside child classes to call the parent.
+- [Constructor Function](constructor_function.md) — Related concept: Constructor Function.
+- [Getters & Setters](getters_setters.md) — Related concept: Getters & Setters.
+- [instanceof](instanceof.md) — Related concept: instanceof.
+- [new Keyword](new_keyword.md) — Related concept: new Keyword.
+- [Design Patterns (Module, Singleton, Observer, Factory)](../level_09/design_patterns.md) — Related concept: Design Patterns (Module, Singleton, Observer, Factory).
+- [Prototype](prototype.md) — Related concept: Prototype.
 ---
 
 ## 8. Key Takeaways

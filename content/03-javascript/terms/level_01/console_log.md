@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [String](../level_01/string.md) — A sequence of characters.
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [String](string.md) — A sequence of characters.
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 2. Term Category
@@ -195,8 +194,7 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 8. Key Takeaways

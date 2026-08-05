@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of providing extra information inside a starting tag.
-- [`class` Attribute](../level_07/class.md) — The preferred, external way to apply styles.
-
+- [`class` Attribute](class.md) — The preferred, external way to apply styles.
 ---
 
 ## 2. Term Category
@@ -171,10 +170,11 @@ button:hover { color: blue; }
 > **Explanation:** Inline styles excel at binding dynamic JavaScript runtime properties.
 
 ## 7. Related Terms
-- [`class` Attribute](../level_07/class.md) — The correct, maintainable way to apply CSS to elements.
-- [`id` Attribute](../level_07/id.md) — The unique identifier attribute.
-- [`data-*` Attributes](../level_07/data_attributes.md) — Custom metadata values often styled via CSS.
-
+- [`class` Attribute](class.md) — The correct, maintainable way to apply CSS to elements.
+- [`id` Attribute](id.md) — The unique identifier attribute.
+- [`data-*` Attributes](data_attributes.md) — Custom metadata values often styled via CSS.
+- [`<style>` Element](../level_08/style_tag.md) — Related concept: `<style>` Element.
+- [`<progress>` & `<meter>` Elements](../level_10/progress_meter.md) — Related concept: `<progress>` & `<meter>` Elements.
 ---
 
 ## 8. Key Takeaways

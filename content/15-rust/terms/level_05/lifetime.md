@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [Borrow Checker](../level_03/borrow_checker.md) — The static analysis engine that checks reference validity.
-- [Borrowing](../level_03/borrowing.md) — Creating references to existing data.
+- [Borrowing (`&`)](../level_03/borrowing.md) — Creating references to existing data.
 - [Dangling Reference](../level_03/dangling_reference.md) — The memory bug that lifetimes prevent.
 
 ---
@@ -235,10 +236,17 @@ fn first_three(s: &str) -> &str {
 
 ## 6. Related Terms
 
-- [Lifetime Elision](../level_05/lifetime_elision.md) — How Rust lets you omit `'a` in simple function signatures.
-- [`'static` Lifetime](../level_05/static_lifetime.md) — The special lifetime that lasts for the whole program execution.
-- [Struct Lifetimes](../level_05/struct_lifetimes.md) — Holding references inside structs.
+
+- [Lifetime Elision](lifetime_elision.md) — How Rust lets you omit `'a` in simple function signatures.
+- [`'static` Lifetime](static_lifetime.md) — The special lifetime that lasts for the whole program execution.
+- [Struct Lifetimes](struct_lifetimes.md) — Holding references inside structs.
 - [Borrow Checker](../level_03/borrow_checker.md) — The static verifier enforcing lifetime constraints.
+- [Dangling Reference](../level_03/dangling_reference.md) — Related concept: Dangling Reference.
+- [Higher-Ranked Trait Bounds (HRTB)](higher_ranked_trait_bounds.md) — Related concept: Higher-Ranked Trait Bounds (HRTB).
+- [Lifetime Bounds](lifetime_bounds.md) — Related concept: Lifetime Bounds.
+- [Lifetime Variance](lifetime_variance.md) — Related concept: Lifetime Variance.
+- [Non-Lexical Lifetimes (NLL)](non_lexical_lifetimes.md) — Related concept: Non-Lexical Lifetimes (NLL).
+- [GATs (Generic Associated Types)](../level_14/gats.md) — Related concept: GATs (Generic Associated Types).
 
 ---
 

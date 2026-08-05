@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Static Site Generation (SSG)](../level_08/ssg.md) — The caching mechanism that Draft Mode bypasses.
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — How you securely enable Draft Mode via an API endpoint.
-
 ---
 
 ## 2. Term Category
@@ -218,7 +217,6 @@ export async function GET() {
 ## 7. Related Terms
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The endpoints used to toggle Draft Mode.
 - [Static Site Generation (SSG)](../level_08/ssg.md) — The static caching layer being bypassed.
-
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,10 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The target server process.
 - [Surrealist (Web IDE)](surrealist.md) — The graphical counterpart.
+- [SurrealDB](surrealdb.md) — SurrealDB binary.
 
 ---
 
@@ -194,8 +196,14 @@ Admin credentials are `"admin"` / `"admin"`.
 > **Explanation:** `surreal version` outputs installed binary engine version metadata.
 
 ## 7. Related Terms
+
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The server process target.
 - [Connection Credentials (`USE NS ... DB ...`)](connection_credentials.md) — Connection parameters.
+- [Surrealist (Web IDE)](surrealist.md) — Related concept: Surrealist (Web IDE).
+- [Error Handling & Debugging](../level_10/error_handling.md) — Related concept: Error Handling & Debugging.
+- [`surreal export` / `surreal import` (Backups)](../level_10/export_import.md) — Related concept: `surreal export` / `surreal import` (Backups).
+- [`surreal validate` (Query Validation)](../level_10/surreal_validate.md) — Related concept: `surreal validate` (Query Validation).
+- [SurrealQL](surrealql.md) — Running SurrealQL queries.
 
 ---
 

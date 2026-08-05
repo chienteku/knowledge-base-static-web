@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Client-Server Model](../level_01/client_server_model.md) — The two actors in this lifecycle.
-- [HTTP / HTTPS](../level_01/http_https.md) — The language they are speaking.
-
+- [Client-Server Model](client_server_model.md) — The two actors in this lifecycle.
+- [HTTP / HTTPS](http_https.md) — The language they are speaking.
 ---
 
 ## 2. Term Category
@@ -161,8 +160,9 @@ if (!res.ok) {
 
 ## 7. Related Terms
 - [HTTP Status Codes](../level_02/status_codes.md) — How the Server communicates the result of the processing step back to the Client.
-- [The `fetch()` API](../level_05/fetch.md) — The JavaScript function used to trigger this lifecycle manually.
-
+- [The fetch() API](../level_05/fetch.md) — The JavaScript function used to trigger this lifecycle manually.
+- [HTTP / HTTPS](http_https.md) — Related concept: HTTP / HTTPS.
+- [Client-Server Model](client_server_model.md) — Related concept: Client-Server Model.
 ---
 
 ## 8. Key Takeaways

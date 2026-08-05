@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [updateOne() / updateMany()](update.md) — The parent update methods.
-- [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — Verifying upsertedId outputs.
+
+- [`updateOne()` / `updateMany()`](update.md) — The parent update methods.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Verifying upsertedId outputs.
 
 ---
 
@@ -235,8 +236,11 @@ db.users.updateOne({ email: "new@ex.com" }, { $set: { name: "New" } }, { upsert:
 > **Explanation:** `res.upsertedId` contains generated primary key IDs for upsert insertions.
 
 ## 7. Related Terms
-- [updateOne() / updateMany()](update.md) — The parent update methods.
-- [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — The query output indicators.
+
+- [`updateOne()` / `updateMany()`](update.md) — The parent update methods.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — The query output indicators.
+- [The Bucket Pattern](../level_05/bucket_pattern.md) — Related concept: The Bucket Pattern.
+- [`$out` / `$merge` Stages](../level_06/out_merge_stages.md) — Related concept: `$out` / `$merge` Stages.
 
 ---
 

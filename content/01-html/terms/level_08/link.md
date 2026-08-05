@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`<head>`](../level_01/head.md) — The `<link>` tag is almost exclusively placed inside the `<head>`.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<link>` tag is a void element (no closing tag).
-
 ---
 
 ## 2. Term Category
@@ -182,11 +181,15 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 > **Explanation:** `rel="canonical"` informs search engine crawlers of the primary authoritative URL.
 
 ## 7. Related Terms
-- [`<a>` (Anchor)](../level_02/a.md) — The clickable user navigation link (do not confuse with `<link>`).
+- [`<a>` (Anchor / Link)](../level_02/a.md) — The clickable user navigation link (do not confuse with `<link>`).
 - [`<head>`](../level_01/head.md) — The parent container where the `<link>` tag lives.
-- [Favicon](../level_08/favicon.md) — The visual browser tab icon loaded using a link tag.
-- [The `<base>` Element](../level_08/base.md) — The target element controlling relative path resolution roots.
-
+- [Favicon](favicon.md) — The visual browser tab icon loaded using a link tag.
+- [`<base>` Element](base.md) — The target element controlling relative path resolution roots.
+- [`href` Attribute](../level_02/href.md) — Related concept: `href` Attribute.
+- [`defer` & `async` (Script Loading Strategies)](defer_async.md) — Related concept: `defer` & `async` (Script Loading Strategies).
+- [`<script>`](script.md) — Related concept: `<script>`.
+- [`<style>` Element](style_tag.md) — Related concept: `<style>` Element.
+- [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
 ---
 
 ## 8. Key Takeaways

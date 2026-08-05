@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
-- [Array Type](../level_02/array_type.md) — Target iteration arrays.
+- [`array`](../level_02/array_type.md) — Target iteration arrays.
 
 ---
 
@@ -201,8 +202,9 @@ Write a SurrealQL script to:
 > **Explanation:** `FOR` block expressions aggregate returned loop iteration values into an array.
 
 ## 7. Related Terms
+
 - [`LET` Statement](let_statement.md) — Script variables.
-- [Array Type](../level_02/array_type.md) — Iteration target lists.
+- [`array`](../level_02/array_type.md) — Iteration target lists.
 - [`SPLIT` Clause](split_clause.md) — Unwinding arrays in SELECTs.
 
 ---

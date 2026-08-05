@@ -7,8 +7,6 @@
 
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — The specific units being tested.
-- Vitest / Jest — The test runners that actually execute the tests.
-
 ---
 
 ## 2. Term Category
@@ -179,9 +177,8 @@ expect(wrapper.text()).toContain('Count: 1');
 
 ## 7. Related Terms
 - [Components](../level_04/components.md) — What Vue Test Utils is designed to mount.
-- [Vite](../level_10/vite.md) — Vite powers **Vitest**, the modern testing framework that runs Vue Test Utils.
-- [Vitest (Unit Testing)](../level_10/vitest.md) — The test runner that executes spec scripts containing Vue Test Utils assertions.
-
+- [Vite](vite.md) — Vite powers **Vitest**, the modern testing framework that runs Vue Test Utils.
+- [Vitest (Unit Testing)](vitest.md) — The test runner that executes spec scripts containing Vue Test Utils assertions.
 ---
 
 ## 8. Key Takeaways

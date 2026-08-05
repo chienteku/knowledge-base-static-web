@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — The verbs describing request operations.
-- [Pagination (Offset vs. Cursor)](./pagination.md) — The concepts for navigating collection sets.
-
+- [Pagination (Offset vs. Cursor)](pagination.md) — The concepts for navigating collection sets.
 ---
 
 ## 2. Term Category
@@ -207,9 +206,8 @@ Should this batch endpoint be configured as **Transactional** (all or nothing) o
 ---
 
 ## 7. Related Terms
-- [Rate Limiting (429 Too Many Requests)](./rate_limiting.md) — The protection policies that batch requests help avoid triggering.
+- [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — The protection policies that batch requests help avoid triggering.
 - [JSON Methods (parse / stringify)](../level_07/json_methods.md) — The utility methods used to construct and parse batch payloads.
-
 ---
 
 ## 8. Key Takeaways

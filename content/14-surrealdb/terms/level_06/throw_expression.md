@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 - [`IF` / `ELSE` Expressions](if_else.md) — Conditional control flow.
 
@@ -189,8 +190,10 @@ Write an `IF` statement checking if `$stock = 0`. If true, execute a `THROW` wit
 > **Explanation:** `THROW` bubbles up custom error messages through function execution stacks.
 
 ## 7. Related Terms
+
 - [`IF` / `ELSE` Expressions](if_else.md) — Conditional control flow.
-- [RETURN Statement (in Functions / Blocks)](return_statement.md) — Early returns.
+- [`RETURN` Statement (in Functions / Blocks)](return_statement.md) — Early returns.
+- [Transactions (`BEGIN` / `COMMIT` / `CANCEL`)](../level_09/transactions.md) — Related concept: Transactions (`BEGIN` / `COMMIT` / `CANCEL`).
 
 ---
 

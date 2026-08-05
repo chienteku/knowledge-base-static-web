@@ -6,7 +6,7 @@
 ---
 
 ## 1. Prerequisites
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -229,9 +229,9 @@ button { margin-left: 15px; }
 > **Explanation:** `inset: 0` is shorthand for top, right, bottom, and left zero offsets.
 
 ## 7. Related Terms
-- [`position: absolute` vs `fixed`](../level_04/position_absolute_fixed.md) — The primary positioning properties.
-- [`position: sticky`](../level_04/position_sticky.md) — The hybrid boundary scrolling property.
-
+- [`position: absolute` vs `fixed`](position_absolute_fixed.md) — The primary positioning properties.
+- [`position: sticky`](position_sticky.md) — The hybrid boundary scrolling property.
+- [`position: static` vs `relative`](position_static_relative.md) — These four properties **do absolutely nothing** unless the element is positioned!
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [npm](./npm.md) — The default node package registry and CLI manager.
-- [`package.json`](./package_json.md) — The project manifest file containing project configuration and metadata.
-
+- [npm](npm.md) — The default node package registry and CLI manager.
+- [package.json](package_json.md) — The project manifest file containing project configuration and metadata.
 ---
 
 ## 2. Term Category
@@ -213,9 +212,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [npm](./npm.md) — The CLI engine executing dependency resolutions.
-- [`package.json`](./package_json.md) — The target metadata file defining SemVer ranges.
-
+- [npm](npm.md) — The CLI engine executing dependency resolutions.
+- [package.json](package_json.md) — The target metadata file defining SemVer ranges.
 ---
 
 ## 8. Key Takeaways

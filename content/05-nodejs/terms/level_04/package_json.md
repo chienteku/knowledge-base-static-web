@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [NPM](../level_04/npm.md) — The tool that automatically creates and edits this file.
-- [JSON](../../../04-apis/terms/level_01/json.md) — The syntax format of this file.
-
+- [NPM (Node Package Manager)](npm.md) — The tool that automatically creates and edits this file.
+- json — The syntax format of this file.
 ---
 
 ## 2. Term Category
@@ -171,9 +170,11 @@ This is one of the most powerful features. Instead of typing complex terminal co
 > **Explanation:** `engines` restricts runtime Node.js environment version requirements.
 
 ## 7. Related Terms
-- [`package-lock.json`](../level_04/package_lock.md) — The sister file to `package.json` that guarantees exact versions.
-- [`node_modules`](../level_04/node_modules.md) — The physical folder where the downloaded code is placed.
-
+- [package-lock.json & Deterministic Installs](package_lock.md) — The sister file to `package.json` that guarantees exact versions.
+- [node_modules](node_modules.md) — The physical folder where the downloaded code is placed.
+- [ES Modules (import, export)](../level_03/es_modules.md) — Related concept: ES Modules (import, export).
+- [NPM (Node Package Manager)](npm.md) — Related concept: NPM (Node Package Manager).
+- [Semantic Versioning (SemVer)](semantic_versioning.md) — Related concept: Semantic Versioning (SemVer).
 ---
 
 ## 8. Key Takeaways

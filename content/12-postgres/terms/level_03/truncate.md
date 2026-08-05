@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`DELETE`](delete.md) — The standard row deletion command.
-
 ---
 
 ## 2. Term Category
@@ -189,7 +188,6 @@ It takes over 2 minutes to execute, slowing down your deployment pipeline. Refac
 ## 7. Related Terms
 - [`DELETE`](delete.md) — The DML row-filtering deletion command.
 - [`CREATE TABLE` / `DROP TABLE`](../level_01/create_drop_table.md) — Managing table lifecycles.
-
 ---
 
 ## 8. Key Takeaways

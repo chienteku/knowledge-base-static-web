@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Typography & Colors](../level_03/font_size_weight.md) — Expanding on the basic text styling properties from Level 3.
-
+- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — Expanding on the basic text styling properties from Level 3.
 ---
 
 ## 2. Term Category
@@ -160,8 +159,9 @@ Imagine handing a normal, handwritten letter to an actor and telling them to scr
 > **Explanation:** `full-width` forces characters into full-width square grid alignment.
 
 ## 7. Related Terms
-- [`font-weight`](../level_03/font_size_weight.md) — Often combined with `uppercase` to create strong, bold headings.
-
+- [`font-size` & `font-weight`](../level_03/font_size_weight.md) — Often combined with `uppercase` to create strong, bold headings.
+- [`font-style` & `font-variant`](../level_03/font_style_variant.md) — Related concept: `font-style` & `font-variant`.
+- [`letter-spacing` & `word-spacing`](letter_word_spacing.md) — Related concept: `letter-spacing` & `word-spacing`.
 ---
 
 ## 8. Key Takeaways

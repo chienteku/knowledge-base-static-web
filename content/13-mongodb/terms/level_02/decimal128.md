@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — The parent numeric type family.
 
 ---
@@ -190,6 +191,7 @@ Explain why `NumberDecimal("45.90")` is correct, whereas `NumberDecimal(45.90)` 
 > **Explanation:** `Decimal128.fromString()` creates exact decimal objects in Node.js.
 
 ## 7. Related Terms
+
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — The parent types.
 
 ---

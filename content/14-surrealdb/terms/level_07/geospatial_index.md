@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [`geometry` (GeoJSON)](../level_02/geometry_type.md) — Geospatial data types.
 
 ---
@@ -191,8 +192,9 @@ Write the SurrealQL statements to:
 > **Explanation:** `<inside>` evaluates spatial polygon containment utilizing MTREE indexes.
 
 ## 7. Related Terms
+
 - [`geometry` (GeoJSON)](../level_02/geometry_type.md) — Geospatial data type.
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 
 ---
 

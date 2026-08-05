@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server startup flags.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Storage backends.
 
@@ -212,6 +213,7 @@ In the Docker flag `-p 8000:8000`, identify which number represents the host por
 > **Explanation:** Container environment variables configure initial root credentials.
 
 ## 7. Related Terms
+
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Startup configuration flags.
 - [SurrealDB Cloud](surrealdb_cloud.md) — Managed cloud alternative.
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Storage engine choices.

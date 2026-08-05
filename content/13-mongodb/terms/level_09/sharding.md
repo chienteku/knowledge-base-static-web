@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Replica Set](replica_set.md) — The high-availability replica node building blocks.
-- [Database (Concept - PostgreSQL)](../../../12-postgres/terms/level_01/database.md) — Relational database structures.
+
+- [Replica Set](replica_set.md) — Replica set cluster.
+- [Database](../../../12-postgres/terms/level_01/database.md) — Relational database structures.
 
 ---
 
@@ -178,8 +179,10 @@ Complete the comparative analysis by stating whether **Replication** or **Shardi
 > **Explanation:** `mongos` routes client requests using metadata from Config Servers to target Shards.
 
 ## 7. Related Terms
+
 - [Replica Set](replica_set.md) — The replica node building blocks.
 - [Shard Key](shard_key.md) — The partitioning index key.
+- [Config Servers & `mongos` Router](config_servers_mongos.md) — Related concept: Config Servers & `mongos` Router.
 
 ---
 

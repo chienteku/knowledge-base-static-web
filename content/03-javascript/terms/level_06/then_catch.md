@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Promise](./promise.md) — The object that these methods attach to.
+- [Promise](promise.md) — The object that these methods attach to.
 - [Callback Function](../level_03/callback_function.md) — Used inside `.then` and `.catch`.
-
 ---
 
 ## 2. Term Category
@@ -209,9 +208,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Promise](./promise.md) — The object that `.then` and `.catch` are attached to.
-- [`async` / `await`](./async_await.md) — An even newer, cleaner syntax that replaces `.then()` chains.
-
+- [Promise](promise.md) — The object that `.then` and `.catch` are attached to.
+- [async / await](async_await.md) — An even newer, cleaner syntax that replaces `.then()` chains.
+- [Promise.resolve / Promise.reject](promise_static.md) — Related concept: Promise.resolve / Promise.reject.
+- [try/catch with async/await](try_catch_async_await.md) — Related concept: try/catch with async/await.
 ---
 
 ## 8. Key Takeaways

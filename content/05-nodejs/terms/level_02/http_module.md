@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP / HTTPS](../../../04-apis/terms/level_01/http_https.md) — The protocol this module implements.
-- [Node.js](../level_01/nodejs.md) — This module is the primary reason Node.js became famous.
-
+- http_https — The protocol this module implements.
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — This module is the primary reason Node.js became famous.
 ---
 
 ## 2. Term Category
@@ -167,7 +166,10 @@ res.end();
 
 ## 7. Related Terms
 - [Express.js](../level_07/express_js.md) — The famous third-party framework that abstracts the native `http` module to make web development significantly easier.
-
+- [Event Emitter](../level_05/event_emitter.md) — Related concept: Event Emitter.
+- [Serving Static Files (express.static)](../level_07/static_files.md) — Related concept: Serving Static Files (express.static).
+- [The req & res Objects](../level_07/req_res.md) — Request & Response objects.
+- [The events Module](events_module.md) — EventEmitter in HTTP server.
 ---
 
 ## 8. Key Takeaways

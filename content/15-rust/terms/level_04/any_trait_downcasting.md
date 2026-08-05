@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The general mechanism `dyn Any` is a special case of.
+
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — The general mechanism `dyn Any` is a special case of.
 - [`'static` Lifetime](../level_05/static_lifetime.md) — A hard requirement for any type used with `Any`.
-- [`TryFrom` / `TryInto`](../level_14/tryfrom_tryinto.md) — A conceptually similar "might fail" conversion pattern.
+- [`TryFrom` and `TryInto` Traits](../level_14/tryfrom_tryinto.md) — A conceptually similar "might fail" conversion pattern.
 
 ---
 
@@ -702,9 +703,10 @@ Design a panic payload inspector and dynamic diagnostic context system:
 
 ## 6. Related Terms
 
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — `dyn Any` is exactly this same mechanism, applied to the specific `Any` trait.
+
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — `dyn Any` is exactly this same mechanism, applied to the specific `Any` trait.
 - [`'static` Lifetime](../level_05/static_lifetime.md) — The hard requirement every `Any`-compatible type must satisfy.
-- [`TryFrom` / `TryInto`](../level_14/tryfrom_tryinto.md) — A conceptually similar "might fail" conversion pattern, though for conversions rather than reflection.
+- [`TryFrom` and `TryInto` Traits](../level_14/tryfrom_tryinto.md) — A conceptually similar "might fail" conversion pattern, though for conversions rather than reflection.
 - [Enum](../level_02/enum.md) — Usually the better-suited, compile-time-checked alternative when the set of possible types is known in advance.
 
 ---

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The TypeScript Compiler (tsc)](../level_01/tsc.md) — The engine that reads this configuration file.
-
+- [The TypeScript Compiler (`tsc`)](tsc.md) — The engine that reads this configuration file.
 ---
 
 ## 2. Term Category
@@ -156,9 +155,11 @@ This is the single most important setting in TypeScript. By default, TypeScript 
 > **Explanation:** `outDir` specifies target folder location for compiled JavaScript artifacts.
 
 ## 7. Related Terms
-- [The TypeScript Compiler (tsc)](../level_01/tsc.md) — The tool that reads this file.
+- [The TypeScript Compiler (`tsc`)](tsc.md) — The tool that reads this file.
 - [Strict Mode](../level_11/strict_mode.md) — The specific flag that determines the quality of your entire project.
-
+- [Declaration Files (`.d.ts`)](../level_11/declaration_files.md) — Related concept: Declaration Files (`.d.ts`).
+- [DefinitelyTyped](../level_11/definitely_typed.md) — Related concept: DefinitelyTyped.
+- [Module Resolution & Path Aliases](../level_11/module_resolution.md) — Related concept: Module Resolution & Path Aliases.
 ---
 
 ## 8. Key Takeaways

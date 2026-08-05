@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Number](../level_01/number.md) — Represents both integer and floating-point numbers.
-
+- [Number](number.md) — Represents both integer and floating-point numbers.
 ---
 
 ## 2. Term Category
@@ -226,9 +225,8 @@ console.log("Is infinite:", isInfinite);
 ---
 
 ## 7. Related Terms
-- [`NaN`](../level_01/nan.md) — Not-a-Number, another mathematical sentinel.
-- [Arithmetic Operators](../level_01/arithmetic_operators.md) — Standard symbols used for math calculations.
-
+- [NaN](nan.md) — Not-a-Number, another mathematical sentinel.
+- [Arithmetic Operators](arithmetic_operators.md) — Standard symbols used for math calculations.
 ---
 
 ## 8. Key Takeaways

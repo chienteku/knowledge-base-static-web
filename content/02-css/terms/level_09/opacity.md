@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Parent/Child Hierarchy](../../../01-html/terms/level_09/tree_structure.md) — Because `opacity` aggressively affects the Parent and all of its Children!
-
+- tree_structure — Because `opacity` aggressively affects the Parent and all of its Children!
 ---
 
 ## 2. Term Category
@@ -161,11 +160,13 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 > **Explanation:** Alpha channel colors isolate transparency to a specific property.
 
 ## 7. Related Terms
-- [`rgba()` / Colors](../level_03/color_vs_background.md) — The much safer alternative if you only want to fade the background color, not the children.
-- [`display: none`](../level_04/display.md) — Used when you want an element to be completely removed from the layout.
+- [`color` vs `background-color`](../level_03/color_vs_background.md) — The much safer alternative if you only want to fade the background color, not the children.
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Used when you want an element to be completely removed from the layout.
 - [`filter`](filter.md) — Sizing visual filters.
 - [`backdrop-filter`](backdrop_filter.md) — Blurring backgrounds behind transparent containers.
-
+- [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — Related concept: Color Values (hex, rgb, rgba, hsl, named).
+- [`display: none` vs `visibility: hidden`](../level_04/display_none_vs_visibility.md) — Related concept: `display: none` vs `visibility: hidden`.
+- [Stacking Context](../level_04/stacking_context.md) — Related concept: Stacking Context.
 ---
 
 ## 8. Key Takeaways

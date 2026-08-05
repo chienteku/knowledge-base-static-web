@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The dynamic rendering mechanism that serverless functions execute.
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — The dynamic rendering mechanism that serverless functions execute.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The environment running inside a serverless container.
-
 ---
 
 ## 2. Term Category
@@ -158,9 +157,9 @@ await redis.incr('request_count'); // Persistent state in Redis
 ---
 
 ## 7. Related Terms
-- [Edge Runtime vs Node.js Runtime](../level_10/edge_runtime.md) — The edge-alternative to serverless computing.
-- [Deployment (Vercel)](../level_10/vercel_deployment.md) — The platform that handles serverless deployments automatically.
-
+- [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The edge-alternative to serverless computing.
+- [Deployment (Vercel)](vercel_deployment.md) — The platform that handles serverless deployments automatically.
+- [Content Delivery Network (CDN) & Edge Cache](cdn_edge.md) — Related concept: Content Delivery Network (CDN) & Edge Cache.
 ---
 
 ## 8. Key Takeaways

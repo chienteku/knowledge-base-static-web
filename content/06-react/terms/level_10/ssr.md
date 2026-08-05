@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Single Page Application (SPA)](../../../03-javascript/terms/level_10/spa.md) — The opposite of SSR (Client-Side Rendering).
-- [Next.js](../level_10/nextjs.md) — The framework that makes SSR easy in React.
-
+- Single Page Applications (SPA) — The opposite of SSR (Client-Side Rendering).
+- [Next.js](nextjs.md) — The framework that makes SSR easy in React.
 ---
 
 ## 2. Term Category
@@ -151,9 +150,12 @@ Which one is Server-Side Rendered?
 > **Explanation:** Matching HTML markup ensures seamless client hydration without layout shifts.
 
 ## 7. Related Terms
-- [Hydration](../level_10/hydration.md) — The process of attaching interactivity to the SSR HTML once it reaches the browser.
-- [Static Site Generation (SSG)](../level_10/ssg.md) — SSR's faster, pre-rendered cousin.
-
+- [Hydration](hydration.md) — The process of attaching interactivity to the SSR HTML once it reaches the browser.
+- [Static Site Generation (SSG)](ssg.md) — SSR's faster, pre-rendered cousin.
+- [Portals](../level_07/portals.md) — Related concept: Portals.
+- [Single Page Applications (SPA)](../level_09/spa.md) — Related concept: Single Page Applications (SPA).
+- [Next.js](nextjs.md) — Related concept: Next.js.
+- [Streaming SSR](streaming_ssr.md) — Related concept: Streaming SSR.
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`async fn`](../level_10/async_fn.md) — How we create futures that need an executor.
-- [`Future` Trait](../level_10/future_trait.md) — The state machines that the executor polls.
-- [`Tokio`](../level_10/tokio.md) — The most popular implementation of an executor runtime.
+
+- [`async fn`](async_fn.md) — How we create futures that need an executor.
+- [`Future` Trait](future_trait.md) — The state machines that the executor polls.
+- [`tokio`](../level_16/tokio.md) — The most popular implementation of an executor runtime.
 
 ---
 
@@ -457,15 +458,13 @@ Implement a custom minimal single-threaded executor `MiniExecutor` and a custom 
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`async fn`](../level_10/async_fn.md) — The language construct that creates Futures.
-> - [`Future` Trait](../level_10/future_trait.md) — The interface the Executor polls.
-> - [`Tokio`](../level_10/tokio.md) — The primary production Executor runtime in Rust.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`Waker` and `Context`](waker_context.md) — Related concept: `Waker` and `Context`.
+
+---
+
+## 7. Key Takeaways
 > 
 > - Futures in Rust are **completely lazy** — they do nothing unless polled by an **Executor**.
 > - Rust does **not** hardcode an Executor into the standard library, enabling extreme flexibility.

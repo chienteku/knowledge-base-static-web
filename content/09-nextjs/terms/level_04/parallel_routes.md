@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The foundation of Next.js folder routing.
 - [`layout.tsx`](../level_02/layout.md) — The file that receives and renders the parallel routes.
-
 ---
 
 ## 2. Term Category
@@ -199,8 +198,8 @@ export default function DashboardLayout({
 
 ## 7. Related Terms
 - [`layout.tsx`](../level_02/layout.md) — The file that orchestrates the slots.
-- [Intercepting Routes](../level_04/intercepting_routes.md) — Often combined with Parallel Routes to build modal windows.
-
+- [Intercepting Routes (`(..)folder`)](intercepting_routes.md) — Often combined with Parallel Routes to build modal windows.
+- [Route Groups (`(group)`)](../level_03/route_groups.md) — Related concept: Route Groups (`(group)`).
 ---
 
 ## 8. Key Takeaways

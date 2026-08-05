@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Vector Index (Overview)](../level_04/vector_index.md) — Schema configuration overview.
 
 ---
@@ -199,8 +200,10 @@ SELECT *, vector::similarity::cosine(embedding, $q) AS score FROM doc ORDER BY s
 > **Explanation:** `<~K,DIM~>` operator executes fast k-nearest neighbor (k-NN) vector index lookups.
 
 ## 7. Related Terms
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [`DEFINE INDEX ... HNSW` (Approximate Vector Search)](hnsw_index.md) — HNSW algorithm.
+- [Vector Index (Overview)](../level_04/vector_index.md) — Related concept: Vector Index (Overview).
 
 ---
 

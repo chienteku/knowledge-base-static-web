@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Boolean](../level_01/boolean.md) — A logical entity having two values: `true` or `false`.
-- [Operator](../level_01/operator.md) — Symbol that performs an operation on operands.
-
+- [Boolean](boolean.md) — A logical entity having two values: `true` or `false`.
+- [Operator](operator.md) — Symbol that performs an operation on operands.
 ---
 
 ## 2. Term Category
@@ -225,10 +224,11 @@ console.log("Eligible:", isEligibleForFreeShipping);
 ---
 
 ## 7. Related Terms
-- [Strict vs Loose Equality (`===` vs `==`)](../level_01/strict_vs_loose_equality.md) — Equality checking.
+- [Strict vs Loose Equality (=== vs ==)](strict_vs_loose_equality.md) — Equality checking.
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — How non-boolean values evaluate in conditions.
-- [`if` / `else`](../level_02/if_else.md) — Executing code blocks based on conditions.
-
+- [if / else](../level_02/if_else.md) — Executing code blocks based on conditions.
+- [Operator](operator.md) — Related concept: Operator.
+- [sort / reverse](../level_04/sort_reverse.md) — Related concept: sort / reverse.
 ---
 
 ## 8. Key Takeaways

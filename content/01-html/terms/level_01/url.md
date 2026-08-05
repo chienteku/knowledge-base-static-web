@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTML](../level_01/html.md) — The standard markup language.
-- [Attribute](../level_01/attribute.md) — How URLs are assigned to elements (like `href` and `src`).
-
+- [HTML (HyperText Markup Language)](html.md) — The standard markup language.
+- [Attribute](attribute.md) — How URLs are assigned to elements (like `href` and `src`).
 ---
 
 ## 2. Term Category
@@ -234,9 +233,10 @@ Absolute vs relative path attributes inside HTML:
 > **Explanation:** Absolute URLs specify full protocol/domain; relative URLs resolve relative to current host/path.
 
 ## 7. Related Terms
-- [Attribute](../level_01/attribute.md) — The HTML tag parameters that receive URLs as values.
+- [Attribute](attribute.md) — The HTML tag parameters that receive URLs as values.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The standard HTML link element utilizing `href`.
-
+- [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
+- [`href` Attribute](../level_02/href.md) — Related concept: `href` Attribute.
 ---
 
 ## 8. Key Takeaways

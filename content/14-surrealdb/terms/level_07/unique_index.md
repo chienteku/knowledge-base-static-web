@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Assertions (`ASSERT`)](../level_04/field_assertions.md) — Field-level validation rules.
 
 ---
@@ -182,7 +183,8 @@ Write the SurrealQL statement to create a composite unique index named `idx_one_
 > **Explanation:** Composite unique indexes enforce unique combinations across multiple fields.
 
 ## 7. Related Terms
-- [DEFINE INDEX (Deep Dive)](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
 - [Composite Index](composite_index.md) — Multi-column indexes.
 
 ---

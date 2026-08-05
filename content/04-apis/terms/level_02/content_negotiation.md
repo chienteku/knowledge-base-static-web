@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Headers](./http_headers.md) — The metadata wrapper sent with requests.
-- [Content-Type & MIME Types](./content_type.md) — The standard media type format representations.
-
+- [HTTP Headers](http_headers.md) — The metadata wrapper sent with requests.
+- [Content-Type & MIME Types](content_type.md) — The standard media type format representations.
 ---
 
 ## 2. Term Category
@@ -188,9 +187,9 @@ Content-Type: application/json
 ---
 
 ## 7. Related Terms
-- [Response Object](../level_05/response_object.md) — The resulting data container described by content negotiation.
-- [API Versioning](../level_10/versioning.md) — Sometimes implemented via custom MIME types inside the `Accept` header (e.g. `Accept: application/vnd.myapi.v2+json`).
-
+- [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — The resulting data container described by content negotiation.
+- [API Versioning (v1, v2)](../level_10/versioning.md) — Sometimes implemented via custom MIME types inside the `Accept` header (e.g. `Accept: application/vnd.myapi.v2+json`).
+- [HTTP Headers](http_headers.md) — Related concept: HTTP Headers.
 ---
 
 ## 8. Key Takeaways

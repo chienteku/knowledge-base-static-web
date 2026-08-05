@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../level_01/selectors.md) — Base class selectors.
-- [Pseudo-classes (`:hover` & `:focus`)](hover_focus.md) — Understanding single-colon states.
-
+- [Selectors (Element, Class, ID)](../level_01/selectors.md) — Base class selectors.
+- [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Understanding single-colon states.
 ---
 
 ## 2. Term Category
@@ -249,9 +248,9 @@ img::after { content: "Caption"; } /* ❌ Void elements cannot have pseudo-eleme
 > **Explanation:** Double colons (`::`) specify generated DOM sub-elements.
 
 ## 7. Related Terms
-- [Pseudo-classes (`:hover` & `:focus`)](hover_focus.md) — Interactive state selectors.
-- [`display`](../level_04/display.md) — Overriding default inline display constraints.
-
+- [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Interactive state selectors.
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Overriding default inline display constraints.
+- [Advanced Pseudo-classes](pseudo_classes_advanced.md) — Related concept: Advanced Pseudo-classes.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- None! This is the foundation of the web.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -182,13 +181,13 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 > **Explanation:** Minimal valid HTML5 document structure requires DOCTYPE, html, head with title, and body.
 
 ## 7. Related Terms
-- [Element vs. Tag](../level_01/element_vs_tag.md) — The fundamental building blocks used to write HTML.
-- [Block-level vs Inline Elements](../level_01/block_inline.md) — The two display behaviors of elements.
-- [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Tags that do not wrap content.
-- [Comments (`<!-- -->`)](../level_01/comments.md) — Notes within the source code.
-- [URL (Uniform Resource Locator)](../level_01/url.md) — The address system of the web.
-- [`<!DOCTYPE html>`](../level_01/doctype_html.md) — The declaration that tells the browser it is reading modern HTML.
-
+- [Element vs. Tag](element_vs_tag.md) — The fundamental building blocks used to write HTML.
+- [Block-level vs Inline Elements](block_inline.md) — The two display behaviors of elements.
+- [Void Elements (Self-closing Tags)](void_elements.md) — Tags that do not wrap content.
+- [Comments (<!-- -->)](comments.md) — Notes within the source code.
+- [URL (Uniform Resource Locator)](url.md) — The address system of the web.
+- [`<!DOCTYPE html>`](doctype_html.md) — The declaration that tells the browser it is reading modern HTML.
+- [`<html>`](html_tag.md) — Root <html> element.
 ---
 
 ## 8. Key Takeaways

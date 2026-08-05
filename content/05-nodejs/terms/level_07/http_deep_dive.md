@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The `http` Module (Level 2)](../level_02/http_module.md) — The basic introduction to this core module.
+- [The http Module](../level_02/http_module.md) — The basic introduction to this core module.
 - [Event Emitter](../level_05/event_emitter.md) — The `http.Server` class is actually just an Event Emitter!
-
 ---
 
 ## 2. Term Category
@@ -228,9 +227,8 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 > **Explanation:** `writeHead()` sets HTTP status code and response header key-values in a single call.
 
 ## 7. Related Terms
-- [Express.js](../level_07/express_js.md) — The framework that hides the ugly parts of the `http` module.
-- [The Request & Response Objects](../level_07/req_res.md) — What the `http` module passes into your callback.
-
+- [Express.js](express_js.md) — The framework that hides the ugly parts of the `http` module.
+- [The req & res Objects](req_res.md) — What the `http` module passes into your callback.
 ---
 
 ## 8. Key Takeaways

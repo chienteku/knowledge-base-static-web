@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Join Concept](../level_05/join_concept.md) — Standard non-correlated joins.
+- [`JOIN` (Concept)](../level_05/join_concept.md) — Standard non-correlated joins.
 - [Common Table Expression (CTE / `WITH`)](cte.md) — Subquery structures.
-
 ---
 
 ## 2. Term Category
@@ -227,9 +226,8 @@ Compare execution plans of LATERAL JOIN vs ROW_NUMBER() PARTITION BY
 > **Explanation:** `LATERAL` joins set-returning functions (`jsonb_array_elements`) directly to parent row attributes.
 
 ## 7. Related Terms
-- [Join Concept](../level_05/join_concept.md) — Standard non-correlated joins.
+- [`JOIN` (Concept)](../level_05/join_concept.md) — Standard non-correlated joins.
 - [Common Table Expression (CTE / `WITH`)](cte.md) — Subquery structures.
-
 ---
 
 ## 8. Key Takeaways

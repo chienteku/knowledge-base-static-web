@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`#[test]`](../level_08/test_attribute.md) — The attribute that must always accompany `#[should_panic]`.
-- [`panic!`](../level_04/panic.md) — The macro that triggers the behavior this attribute is looking for.
+
+- [`panic!` Macro](../level_04/panic.md) — The macro that triggers the behavior this attribute is looking for.
 
 ---
 
@@ -563,9 +563,9 @@ Implement:
 
 ## 6. Related Terms
 
-- [`#[test]`](../level_08/test_attribute.md) — The attribute that must always accompany `#[should_panic]`.
-- [`panic!`](../level_04/panic.md) — The macro that triggers the behavior this attribute looks for.
-- [`assert!`](../level_08/assert_macros.md) — The macros that are often used inside functions to intentionally trigger the panics you are testing.
+
+- [`panic!` Macro](../level_04/panic.md) — The macro that triggers the behavior this attribute looks for.
+- [`assert!` Macros](assert_macros.md) — The macros that are often used inside functions to intentionally trigger the panics you are testing.
 
 ---
 

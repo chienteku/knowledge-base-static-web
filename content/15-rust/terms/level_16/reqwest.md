@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`tokio`](../level_16/tokio.md) — Asynchronous runtime underlying `reqwest`.
-- [`serde`](../level_16/serde.md) — Used by `reqwest` for JSON response parsing (`.json::<T>()`).
-- [Async / Await](../level_09/async_await.md) — Asynchronous network request handling.
+
+- [`tokio`](tokio.md) — Asynchronous runtime underlying `reqwest`.
+- [`serde`](serde.md) — Used by `reqwest` for JSON response parsing (`.json::<T>()`).
+- [`async` / `.await`](../level_09/async_await.md) — Asynchronous network request handling.
 
 ---
 
@@ -378,6 +379,14 @@ let client = reqwest::Client::new();
 > 1. **Cheap `Client` Cloning (`Arc` Abstraction)**: `reqwest::Client` wraps an internal reference-counted handle (`Arc`). Cloning a client instance is an $O(1)$ operation that increments the reference counter without reallocating connection pools or socket state.
 > 2. **Concurrency with `tokio::spawn`**: Spawning tasks allows network requests to run concurrently across available Tokio worker threads, significantly reducing round-trip latency for batch operations.
 > 3. **Error Handling & Task Joining**: The outer loop waits on task `JoinHandle` instances, separating async task runtime panics from domain-specific HTTP/serialization errors.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

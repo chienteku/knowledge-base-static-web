@@ -8,8 +8,7 @@
 ## 1. Prerequisites
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The syntax used to write composables.
 - [Auto-imports](../level_01/auto_imports.md) — The mechanism that powers this directory.
-- [Vue Composables Overview](../../../07-vue/terms/level_05/composables.md) — The core Vue concept of composable state logic wrappers.
-
+- composables — The core Vue concept of composable state logic wrappers.
 ---
 
 ## 2. Term Category
@@ -204,9 +203,10 @@ export const useUser = () => useState('user-key', () => null);
 ---
 
 ## 7. Related Terms
-- [`useState` Hook](../level_04/use_state.md) — A Nuxt-specific composable often used *inside* your custom composables to create global state.
+- [`useState` Hook](use_state.md) — A Nuxt-specific composable often used *inside* your custom composables to create global state.
 - [`components/` Directory](../level_03/components_directory.md) — The visual equivalent to `composables/`.
-
+- [Auto-imports](../level_01/auto_imports.md) — Related concept: Auto-imports.
+- [Pinia State Management](pinia.md) — Related concept: Pinia State Management.
 ---
 
 ## 8. Key Takeaways

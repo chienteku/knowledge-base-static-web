@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Transaction](transaction.md) — The logical unit of work wrapper.
-
 ---
 
 ## 2. Term Category
@@ -230,9 +229,8 @@ Query the `accounts` table. Which names will exist in the database?
 > **Explanation:** `ROLLBACK` restores database state to the transaction start point.
 
 ## 7. Related Terms
-- [Transaction](transaction.md) -- The parent unit of work.
+- [Transaction](transaction.md) — - The parent unit of work.
 - [`SAVEPOINT` / `ROLLBACK TO`](savepoint.md) — Partial rollbacks.
-
 ---
 
 ## 8. Key Takeaways

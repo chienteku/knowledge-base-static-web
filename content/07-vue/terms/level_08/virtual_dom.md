@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DOM Manipulation](../../../01-html/terms/level_09/dom.md) — The slow, expensive API the Virtual DOM is trying to avoid.
+- dom — The slow, expensive API the Virtual DOM is trying to avoid.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The concept that the Virtual DOM enables.
-
 ---
 
 ## 2. Term Category
@@ -143,10 +142,13 @@ const vnode = h('div', 'New Text');
 ---
 
 ## 7. Related Terms
-- [Proxy Reactivity](../level_08/proxy_reactivity.md) — What triggers the Virtual DOM to create a new tree.
+- [Proxy Reactivity](proxy_reactivity.md) — What triggers the Virtual DOM to create a new tree.
 - [Template Syntax](../level_01/template_syntax.md) — What the compiler turns into the Virtual DOM.
 - [`v-for` (List Rendering) & `:key`](../level_03/v_for_key.md) — The loop directive that relies on keys for V-DOM diffing.
-
+- [Vue Instance](../level_01/vue_instance.md) — Related concept: Vue Instance.
+- [`shallowRef` / `markRaw`](../level_02/shallow_ref_mark_raw.md) — Related concept: `shallowRef` / `markRaw`.
+- [`nextTick`](../level_04/next_tick.md) — Related concept: `nextTick`.
+- [`v-once` & `v-memo`](v_once_memo.md) — Related concept: `v-once` & `v-memo`.
 ---
 
 ## 8. Key Takeaways

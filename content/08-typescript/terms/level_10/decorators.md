@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Classes](../level_10/classes.md) — The blueprints of object structures.
-- [Parameter Properties](../level_10/parameter_properties.md) — Declaring fields inside constructor arguments.
-
+- [Classes Overview](classes.md) — The blueprints of object structures.
+- [Parameter Properties](parameter_properties.md) — Declaring fields inside constructor arguments.
 ---
 
 ## 2. Term Category
@@ -312,10 +311,9 @@ Modify this `tsconfig.json` block to resolve the compiler warning.
 > **Explanation:** Decorators compose in right-to-left mathematical function composition order.
 
 ## 7. Related Terms
-- [Classes](../level_10/classes.md) — The structures decorated.
-- [Access Modifiers](../level_10/access_modifiers.md) — Visibility bounds of fields.
-- [Static Members](../level_10/static_members.md) — Class-level properties.
-
+- [Classes Overview](classes.md) — The structures decorated.
+- [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — Visibility bounds of fields.
+- [Static Members](static_members.md) — Class-level properties.
 ---
 
 ## 8. Key Takeaways

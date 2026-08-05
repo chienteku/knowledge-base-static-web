@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
-- [UPDATE](../level_03/update.md) — Bulk write statement.
+- [`UPDATE`](../level_03/update.md) — Bulk write statement.
 
 ---
 
@@ -185,8 +186,10 @@ Write the SurrealQL query to:
 > **Explanation:** Concurrent query execution utilizes multi-core CPU and I/O parallelism.
 
 ## 7. Related Terms
-- [UPDATE](../level_03/update.md) — Bulk write statement.
+
+- [`UPDATE`](../level_03/update.md) — Bulk write statement.
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server multi-threading context.
+- [Query Explanation & Performance](../level_07/query_explanation.md) — Related concept: Query Explanation & Performance.
 
 ---
 

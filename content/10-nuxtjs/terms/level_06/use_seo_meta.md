@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useHead`](../level_06/use_head.md) — The underlying tool that `useSeoMeta` simplifies.
+- [`useHead`](use_head.md) — The underlying tool that `useSeoMeta` simplifies.
 - [Search Engine Optimization (SEO)](../level_01/seo.md) — The core design requirement for dynamic indexing tags.
-
 ---
 
 ## 2. Term Category
@@ -194,8 +193,8 @@ useSeoMeta({ ogTitle: 'Title', ogDescription: 'Description' }); // Strongly type
 ---
 
 ## 7. Related Terms
-- [`useHead`](../level_06/use_head.md) — The tool used for scripts and stylesheets.
-
+- [`useHead`](use_head.md) — The tool used for scripts and stylesheets.
+- [Search Engine Optimization (SEO)](../level_01/seo.md) — SEO fundamentals.
 ---
 
 ## 8. Key Takeaways

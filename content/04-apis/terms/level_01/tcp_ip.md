@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [IP Address & Port](./ip_address_port.md) — The routing coordinates that identify network devices.
-
+- [IP Address & Port](ip_address_port.md) — The routing coordinates that identify network devices.
 ---
 
 ## 2. Term Category
@@ -179,9 +178,9 @@ ACK, SYN, SYN-ACK
 ---
 
 ## 7. Related Terms
-- [HTTP / HTTPS](./http_https.md) — The application protocols that utilize TCP connections to load web pages.
+- [HTTP / HTTPS](http_https.md) — The application protocols that utilize TCP connections to load web pages.
 - [WebSockets](../level_08/websockets.md) — The real-time connection protocol that rides directly on top of persistent TCP connections.
-
+- [WebSocket Handshake (Upgrade)](../level_08/websocket_handshake.md) — Related concept: WebSocket Handshake (Upgrade).
 ---
 
 ## 8. Key Takeaways

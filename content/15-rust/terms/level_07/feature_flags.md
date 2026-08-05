@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The file where Feature Flags are defined and requested.
-- [`[dependencies]`](../level_07/dependencies_section.md) — Where you activate features for external libraries.
+
+- [`Cargo.toml`](cargo_toml.md) — The file where Feature Flags are defined and requested.
 
 ---
 
@@ -91,73 +91,49 @@ pub fn solve_differential_equation() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Feature Flags Scoping and Lifecycle Rules
+### Mistake 1: Assuming Feature Flags Are Mutually Exclusive (Feature Additivity Violation)
 
-**The mistake:** Assuming Feature Flags instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Designing features assuming `feature = "backend_a"` and `feature = "backend_b"` can never be enabled simultaneously in the same dependency tree.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Cargo features are **additive**. If two downstream crates in a workspace activate different features of your crate, Cargo unifies them into a single build with *both* features enabled simultaneously.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("feature_flags_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+#[cfg(feature = "backend_a")]
+pub struct Backend;
+
+#[cfg(feature = "backend_b")]
+pub struct Backend; // ❌ Fails to compile when BOTH features are active!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("feature_flags_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+// Use distinct struct names or enum variants so features remain additive!
 ```
 
-### Mistake 2: Mutating Feature Flags State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Missing `default-features = false` When Opting Out of Heavy Defaults
 
-**The mistake:** Attempting to mutate data associated with Feature Flags through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Listing `features = ["json"]` for a crate hoping to save compile time, without adding `default-features = false`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Unless `default-features = false` is explicitly specified, Cargo compiles default features *in addition* to the newly listed features.
 
 *Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+```toml
+reqwest = { version = "0.11", features = ["json"] } # ❌ Still pulls default OpenSSL/native-tls dependencies!
 ```
 
 *Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+```toml
+reqwest = { version = "0.11", default-features = false, features = ["json"] } # Strips defaults!
 ```
 
-### Mistake 3: Concurrent Access to Feature Flags Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Creating Implicit Feature Name Pollution (Pre-Cargo 1.60 Syntax)
 
-**The mistake:** Sharing non-thread-safe Feature Flags instances across OS threads via `std::thread::spawn`.
+**The mistake:** Writing `json = ["serde_json"]` in `[features]` instead of `json = ["dep:serde_json"]`.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Omitting the `dep:` prefix exposes an implicit feature named `serde_json`, polluting the public feature API namespace.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -240,8 +216,9 @@ Write the complete `[features]` section in `Cargo.toml` for this crate, then ans
 
 ## 6. Related Terms
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — Where custom features are defined.
-- [`[dependencies]`](../level_07/dependencies_section.md) — Where features are activated for external crates.
+
+- [`Cargo.toml`](cargo_toml.md) — Where custom features are defined.
+- [`cfg` Attribute](cfg_attribute.md) — Related concept: `cfg` Attribute.
 
 ---
 

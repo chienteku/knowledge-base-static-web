@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Serialization & Deserialization](./serialization.md) — The core high-level data transport concepts.
-- [JSON Methods (parse / stringify)](./json_methods.md) — The standard JSON transformation methods.
-
+- [Serialization & Deserialization](serialization.md) — The core high-level data transport concepts.
+- [JSON Methods (parse / stringify)](json_methods.md) — The standard JSON transformation methods.
 ---
 
 ## 2. Term Category
@@ -198,9 +197,8 @@ app.post('/api/settings', (req, res) => {
 ---
 
 ## 7. Related Terms
-- [JSON Methods (parse / stringify)](./json_methods.md) — The functions executing standard serialization and deserialization in JavaScript.
-- [XML](./xml.md) — The alternative markup data format requiring parsing libraries.
-
+- [JSON Methods (parse / stringify)](json_methods.md) — The functions executing standard serialization and deserialization in JavaScript.
+- [XML](xml.md) — The alternative markup data format requiring parsing libraries.
 ---
 
 ## 8. Key Takeaways

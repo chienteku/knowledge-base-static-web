@@ -9,7 +9,6 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Headings are structural elements.
 - [`<body>`](../level_01/body.md) — Headings must be placed inside the body.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since headings are block-level elements.
-
 ---
 
 ## 2. Term Category
@@ -279,10 +278,10 @@ If you suddenly jumped from the title directly to a sub-sub-sub-topic (`<h5>`) w
 > **Explanation:** Heading tags dictate structural hierarchy; CSS dictates visual font size.
 
 ## 7. Related Terms
-- [`<p>` (Paragraph)](../level_02/p.md) — The text that usually follows a heading.
+- [`<p>` (Paragraph)](p.md) — The text that usually follows a heading.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing headings.
 - [Semantic HTML](../level_06/semantic_html.md) — The overarching concept of using tags for their structural meaning.
-
+- [Heading Hierarchy & Document Outline](../level_06/heading_hierarchy.md) — Related concept: Heading Hierarchy & Document Outline.
 ---
 
 ## 8. Key Takeaways

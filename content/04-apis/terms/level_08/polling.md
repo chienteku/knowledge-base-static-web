@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Polling exploits this lifecycle to simulate real-time behavior.
-- [Server-Sent Events (SSE)](../level_08/sse.md) — The modern replacement for these hacks.
-
+- [Server-Sent Events (SSE)](sse.md) — The modern replacement for these hacks.
 ---
 
 ## 2. Term Category
@@ -309,9 +308,9 @@ useEffect(() => {
 ---
 
 ## 7. Related Terms
-- [WebSockets](../level_08/websockets.md) — The technology that made Polling obsolete.
+- [WebSockets](websockets.md) — The technology that made Polling obsolete.
 - [Webhooks](../level_06/webhooks.md) — The Server-to-Server equivalent to eliminate polling.
-
+- [Socket.io (Ecosystem tool)](socket_io.md) — Related concept: Socket.io (Ecosystem tool).
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Server Components (RSC)](../level_01/rsc.md) — The server-only environment.
-- [Client Components](../level_01/client_components.md) — The client-side interactive environment.
-
+- [React Server Components (RSC)](rsc.md) — The server-only environment.
+- [Client Components (`"use client"`)](client_components.md) — The client-side interactive environment.
 ---
 
 ## 2. Term Category
@@ -222,9 +221,9 @@ export default function EventPage() {
 ---
 
 ## 7. Related Terms
-- [React Server Components (RSC)](../level_01/rsc.md) — The server side of the boundary.
-- [Client Components](../level_01/client_components.md) — The client side of the boundary.
-
+- [React Server Components (RSC)](rsc.md) — The server side of the boundary.
+- [Client Components (`"use client"`)](client_components.md) — The client side of the boundary.
+- [React Server Component Payload (RSC Payload)](../level_08/rsc_payload.md) — Related concept: React Server Component Payload (RSC Payload).
 ---
 
 ## 8. Key Takeaways

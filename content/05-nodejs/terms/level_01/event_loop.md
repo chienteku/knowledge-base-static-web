@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Single-Threaded Architecture](../level_01/single_threaded.md) — The Event Loop manages this single thread.
-- [Non-Blocking I/O](../level_01/non_blocking_io.md) — The Event Loop organizes the chaos created by Non-Blocking tasks.
-
+- [Single-Threaded Architecture](single_threaded.md) — The Event Loop manages this single thread.
+- [Non-Blocking I/O](non_blocking_io.md) — The Event Loop organizes the chaos created by Non-Blocking tasks.
 ---
 
 ## 2. Term Category
@@ -175,9 +174,16 @@ Promise.resolve().then(() => console.log('D'));
 > **Explanation:** `nextTick` (C) executes first, followed by microtask Promise (D), then macrotasks Timers/Check (A / B).
 
 ## 7. Related Terms
-- [Non-Blocking I/O](../level_01/non_blocking_io.md) — The tasks that get sent to the background.
-- [Callbacks](../level_05/callbacks.md) — The actual functions that the Event Loop pushes onto the main thread.
-
+- [Non-Blocking I/O](non_blocking_io.md) — The tasks that get sent to the background.
+- [Callbacks & Callback Hell](../level_05/callbacks.md) — The actual functions that the Event Loop pushes onto the main thread.
+- [Blocking the Event Loop](blocking_event_loop.md) — Related concept: Blocking the Event Loop.
+- [The Call Stack](call_stack.md) — Related concept: The Call Stack.
+- [Single-Threaded Architecture](single_threaded.md) — Related concept: Single-Threaded Architecture.
+- [The Thread Pool (libuv)](thread_pool.md) — Related concept: The Thread Pool (libuv).
+- [V8 JavaScript Engine](v8_engine.md) — Related concept: V8 JavaScript Engine.
+- [Microtasks vs Macrotasks](../level_05/microtasks_macrotasks.md) — Related concept: Microtasks vs Macrotasks.
+- [process.nextTick() vs setImmediate()](../level_05/nexttick_setimmediate.md) — Related concept: process.nextTick() vs setImmediate().
+- [Node.js (Runtime Environment)](nodejs.md) — Related concept: Node.js (Runtime Environment).
 ---
 
 ## 8. Key Takeaways

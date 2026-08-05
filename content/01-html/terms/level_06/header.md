@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Semantic HTML](../level_06/semantic_html.md) — The `<header>` is a core part of the HTML5 semantic specification.
+- [Semantic HTML](semantic_html.md) — The `<header>` is a core part of the HTML5 semantic specification.
 - [`<body>`](../level_01/body.md) — The `<header>` lives inside the body.
 - [Nesting](../level_01/nesting.md) — Since other tags (headings, links) are nested within headers.
-
 ---
 
 ## 2. Term Category
@@ -210,9 +209,9 @@ If you use a `<header>` inside a specific article, it's like the bold headline a
 
 ## 7. Related Terms
 - [`<head>`](../level_01/head.md) — The metadata container (do not confuse with `<header>`).
-- [`<footer>`](../level_06/footer.md) — The semantic opposite of the `<header>`.
-- [`<nav>`](../level_06/nav.md) — The navigation block commonly nested inside main headers.
-
+- [`<footer>`](footer.md) — The semantic opposite of the `<header>`.
+- [`<nav>`](nav.md) — The navigation block commonly nested inside main headers.
+- [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
 ---
 
 ## 8. Key Takeaways

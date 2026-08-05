@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Methods](../level_02/http_methods.md) — Not all methods are allowed to have a body!
-- [JSON](../level_01/json.md) — The most common format for a payload.
-
+- [HTTP Methods (Verbs)](http_methods.md) — Not all methods are allowed to have a body!
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The most common format for a payload.
 ---
 
 ## 2. Term Category
@@ -161,9 +160,11 @@ app.use(express.json({ limit: '100kb' }));
 ---
 
 ## 7. Related Terms
-- [HTTP Headers](../level_02/http_headers.md) — How you tell the server what format the body is in (e.g., `Content-Type`).
-- [JSON](../level_01/json.md) — The format you must convert your payload into.
-
+- [HTTP Headers](http_headers.md) — How you tell the server what format the body is in (e.g., `Content-Type`).
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The format you must convert your payload into.
+- [Content-Type & MIME Types](content_type.md) — Related concept: Content-Type & MIME Types.
+- [Query Parameters & Path Variables](query_params.md) — Related concept: Query Parameters & Path Variables.
+- [URL Encoding (Percent-Encoding)](url_encoding.md) — Related concept: URL Encoding (Percent-Encoding).
 ---
 
 ## 8. Key Takeaways

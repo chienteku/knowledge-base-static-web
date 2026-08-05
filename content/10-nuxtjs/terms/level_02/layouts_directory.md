@@ -6,12 +6,11 @@
 ---
 
 ## 1. Prerequisites
-- [`app.vue`](../level_02/app_vue.md) — Where the global layouts feature is initialized.
-- [`pages/` Directory](../level_02/pages_directory.md) — The content that gets wrapped by the layout.
-- [`<NuxtPage>` & `<NuxtLayout>` Components](../level_02/nuxt_page_layout.md) — The built-in components orchestrating layout loads.
-- [`definePageMeta` Compiler Macro](../level_02/define_page_meta.md) — The API used to override layout mappings.
-- [Vue Slots (`<slot />`)](../../../07-vue/terms/level_05/slots.md) — The Vue mechanism used to inject page templates.
-
+- [`app.vue`](app_vue.md) — Where the global layouts feature is initialized.
+- [`pages/` Directory](pages_directory.md) — The content that gets wrapped by the layout.
+- [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — The built-in components orchestrating layout loads.
+- [`definePageMeta` Compiler Macro](define_page_meta.md) — The API used to override layout mappings.
+- slots — The Vue mechanism used to inject page templates.
 ---
 
 ## 2. Term Category
@@ -234,8 +233,10 @@ definePageMeta({
 ---
 
 ## 7. Related Terms
-- [`app.vue`](../level_02/app_vue.md) — Where `<NuxtLayout>` is placed to activate the system.
-
+- [`app.vue`](app_vue.md) — Where `<NuxtLayout>` is placed to activate the system.
+- [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — Related concept: `<NuxtPage>` & `<NuxtLayout>` Components.
+- [`pages/` Directory](pages_directory.md) — pages/ directory.
+- [`definePageMeta` Compiler Macro](define_page_meta.md) — Related concept: `definePageMeta` Compiler Macro.
 ---
 
 ## 8. Key Takeaways

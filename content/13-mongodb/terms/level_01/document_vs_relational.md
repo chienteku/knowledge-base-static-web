@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Document](document.md) — The fundamental unit of the document model.
 - [Flexible Schema (Schema-on-Read)](flexible_schema.md) — The schema design contrast.
 
@@ -190,9 +191,11 @@ Denormalize essential user details (e.g. userName) directly into order documents
 > **Explanation:** Document databases eliminate ORM translation layers between code and tables.
 
 ## 7. Related Terms
+
 - [Document](document.md) — The basic unit of data.
 - [Collection](collection.md) — The logical container.
 - [Flexible Schema (Schema-on-Read)](flexible_schema.md) — The schema design contrast.
+- [NoSQL Databases (Overview)](nosql_databases.md) — Related concept: NoSQL Databases (Overview).
 
 ---
 

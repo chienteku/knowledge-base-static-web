@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-_(none)_
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -29,8 +28,12 @@ _(none)_
 ---
 
 ## 5. Related Terms
-_(none)_
-
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md)
+- [`float` & `clear` (Legacy context)](../level_04/float_clear.md)
+- [`flex-direction`](flex_direction.md) — flex-direction.
+- [`justify-content`](justify_content.md) — justify-content.
+- [`align-items`](align_items.md) — align-items.
+- [`flex-wrap`](flex_wrap.md) — flex-wrap.
 ---
 
 ## 6. Key Takeaways

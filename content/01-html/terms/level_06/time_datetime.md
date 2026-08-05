@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Semantic HTML](../level_06/semantic_html.md) — Understanding the focus on machine-readable code.
+- [Semantic HTML](semantic_html.md) — Understanding the focus on machine-readable code.
 - [Attribute](../level_01/attribute.md) — The parameter syntax used to configure tags.
-
 ---
 
 ## 2. Term Category
@@ -203,9 +202,8 @@ Basic date wrapping:
 > **Explanation:** ISO 8601 standard combines YYYY-MM-DD and T hh:mm.
 
 ## 7. Related Terms
-- [Semantic HTML](../level_06/semantic_html.md) — The parent layout context.
-- [`attribute.md`](../level_01/attribute.md) — The parameter concept.
-
+- [Semantic HTML](semantic_html.md) — The parent layout context.
+- [Attribute](../level_01/attribute.md) — The parameter concept.
 ---
 
 ## 8. Key Takeaways

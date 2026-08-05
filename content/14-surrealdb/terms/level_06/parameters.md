@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 - [Subqueries](subqueries.md) — Expression evaluation.
 
@@ -187,8 +188,13 @@ Write the SurrealQL statements to:
 > **Explanation:** Parameterized SDK queries prevent SQL injection vulnerabilities.
 
 ## 7. Related Terms
+
 - [`LET` Statement](let_statement.md) — Defining query-scoped variables.
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
+- [Subqueries](subqueries.md) — Related concept: Subqueries.
+- [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Related concept: SurrealQL Injection Prevention.
+- [`DEFINE PARAM`](../level_09/define_param.md) — Related concept: `DEFINE PARAM`.
+- [SDK `.query()` with Parameters](../level_10/sdk_query.md) — Related concept: SDK `.query()` with Parameters.
 
 ---
 

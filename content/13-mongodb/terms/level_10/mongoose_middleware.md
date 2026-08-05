@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Mongoose Schema & Model](mongoose_schema_model.md) — The parent modeling blueprint.
 
 ---
@@ -223,7 +224,9 @@ Write the `pre` middleware code block for the `articleSchema` using standard fun
 > **Explanation:** Post hooks execute after query operations complete to handle cascading cleanups.
 
 ## 7. Related Terms
+
 - [Mongoose Schema & Model](mongoose_schema_model.md) — The parent modeling blueprint.
+- [Mongoose (ODM)](mongoose.md) — Related concept: Mongoose (ODM).
 
 ---
 

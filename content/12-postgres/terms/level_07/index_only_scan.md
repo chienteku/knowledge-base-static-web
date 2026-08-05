@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — Scenting read routes.
-
 ---
 
 ## 2. Term Category
@@ -213,7 +212,6 @@ Write the SQL query to build an optimized covering index that allows this search
 ## 7. Related Terms
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — The baseline scan options.
 - [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — The maintenance tasks that clean visibility maps.
-
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [JSON](../../../04-apis/terms/level_01/json.md) — The data structure that powers NoSQL databases.
-- [Node.js](../level_01/nodejs.md) — The server that connects to these databases.
-
+- json — The data structure that powers NoSQL databases.
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — The server that connects to these databases.
 ---
 
 ## 2. Term Category
@@ -153,9 +152,9 @@ App B: A web scraper that collects arbitrary, constantly changing JSON metadata 
 > **Explanation:** Document schemas naturally accommodate varied product attribute structures per item.
 
 ## 7. Related Terms
-- [ORMs & ODMs](../level_08/orms_odms.md) — The tools Node.js uses to talk to these databases.
-- [Migrations](../level_08/migrations.md) — A concept that exists in SQL, but rarely in NoSQL.
-
+- [ORMs & ODMs](orms_odms.md) — The tools Node.js uses to talk to these databases.
+- [Migrations](migrations.md) — A concept that exists in SQL, but rarely in NoSQL.
+- [Mongoose (MongoDB ODM)](mongoose.md) — Related concept: Mongoose (MongoDB ODM).
 ---
 
 ## 8. Key Takeaways

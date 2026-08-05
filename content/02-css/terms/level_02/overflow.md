@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — The bounding box container.
-- [Width / Height](../level_02/width_height.md) — The size constraints that trigger overflow conflicts.
-
+- [The Box Model (Concept)](box_model.md) — The bounding box container.
+- [Width / Height](width_height.md) — The size constraints that trigger overflow conflicts.
 ---
 
 ## 2. Term Category
@@ -251,10 +250,15 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 > **Explanation:** Text ellipsis truncation requires disabling line wrap, hiding overflow, and setting `text-overflow: ellipsis`.
 
 ## 7. Related Terms
-- [Width / Height](../level_02/width_height.md) — The size triggers.
-- [Text Overflow](../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.
-- [Z-Index](../level_04/z_index.md) — Layers which can be clipped by overflow settings.
-
+- [Width / Height](width_height.md) — The size triggers.
+- [`text-overflow` & `overflow-wrap`](../level_07/text_overflow.md) — Adding ellipses (`...`) to clipped text.
+- [`z-index`](../level_04/z_index.md) — Layers which can be clipped by overflow settings.
+- [Border](border.md) — Related concept: Border.
+- [`box-sizing: border-box`](box_sizing.md) — Related concept: `box-sizing: border-box`.
+- [Padding](padding.md) — Related concept: Padding.
+- [`position: sticky`](../level_04/position_sticky.md) — Related concept: `position: sticky`.
+- [`max-width` & `min-height` (Fluidity)](../level_08/max_width.md) — Related concept: `max-width` & `min-height` (Fluidity).
+- [`scroll-behavior` & `scroll-snap`](../level_11/scroll_snap.md) — Related concept: `scroll-behavior` & `scroll-snap`.
 ---
 
 ## 8. Key Takeaways

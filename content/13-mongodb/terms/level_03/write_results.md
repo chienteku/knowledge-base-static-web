@@ -6,9 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [insertOne() / insertMany()](insert.md) — Insert methods returning write results.
-- [updateOne() / updateMany()](update.md) — Update methods returning write results.
-- [deleteOne() / deleteMany()](delete.md) — Delete methods returning write results.
+
+- [`insertOne()` / `insertMany()`](insert.md) — Insert methods returning write results.
+- [`updateOne()` / `updateMany()`](update.md) — Update methods returning write results.
+- [`deleteOne()` / `deleteMany()`](delete.md) — Delete methods returning write results.
 
 ---
 
@@ -240,9 +241,12 @@ if (res.acknowledged) { console.log('Write acknowledged by cluster'); }
 > **Explanation:** `res.deletedCount` reports the total number of documents deleted.
 
 ## 7. Related Terms
-- [insertOne() / insertMany()](insert.md) — The insert operations.
-- [updateOne() / updateMany()](update.md) — The modify operations.
-- [deleteOne() / deleteMany()](delete.md) — The delete operations.
+
+- [`insertOne()` / `insertMany()`](insert.md) — The insert operations.
+- [`updateOne()` / `updateMany()`](update.md) — The modify operations.
+- [`deleteOne()` / `deleteMany()`](delete.md) — The delete operations.
+- [`findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`](find_and_modify.md) — Related concept: `findOneAndUpdate()` / `findOneAndDelete()` / `findOneAndReplace()`.
+- [Upsert (`upsert: true`)](upsert.md) — Related concept: Upsert (`upsert: true`).
 
 ---
 

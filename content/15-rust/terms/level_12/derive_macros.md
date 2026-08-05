@@ -7,10 +7,11 @@
 
 ## 1. Prerequisites
 
-- [Procedural Macros](../level_12/procedural_macros.md) — Understanding compile-time host execution and procedural macro crate requirements.
-- [Traits](../level_04/trait.md) — Understanding trait definitions and explicit `impl Trait for Type` blocks.
-- [`syn` Crate](../level_12/syn_crate.md) — Parsing struct and enum definitions into `syn::DeriveInput` AST nodes.
-- [`quote` Crate](../level_12/quote_crate.md) — Quasi-quoting trait implementation code using `quote!`.
+
+- [Procedural Macros](procedural_macros.md) — Understanding compile-time host execution and procedural macro crate requirements.
+- [Trait](../level_04/trait.md) — Understanding trait definitions and explicit `impl Trait for Type` blocks.
+- [`syn` Crate](syn_crate.md) — Parsing struct and enum definitions into `syn::DeriveInput` AST nodes.
+- [`quote` Crate](quote_crate.md) — Quasi-quoting trait implementation code using `quote!`.
 
 ---
 
@@ -589,11 +590,12 @@ Write a complete, compilable-style Rust module containing the derive AST builder
 
 ## 7. Related Terms
 
-- [Procedural Macros](../level_12/procedural_macros.md) — The parent compile-time metaprogramming system.
-- [Attribute Macros](../level_12/attribute_macros.md) — Procedural macros that can rewrite or modify target items.
-- [`syn` Crate](../level_12/syn_crate.md) — Library used to parse `syn::DeriveInput` AST nodes.
-- [`quote` Crate](../level_12/quote_crate.md) — Library used to generate companion `impl` token streams.
-- [Traits](../level_04/trait.md) — The polymorphism interface system implemented by derive macros.
+
+- [Procedural Macros](procedural_macros.md) — The parent compile-time metaprogramming system.
+- [Attribute Macros](attribute_macros.md) — Procedural macros that can rewrite or modify target items.
+- [`syn` Crate](syn_crate.md) — Library used to parse `syn::DeriveInput` AST nodes.
+- [`quote` Crate](quote_crate.md) — Library used to generate companion `impl` token streams.
+- [Trait](../level_04/trait.md) — The polymorphism interface system implemented by derive macros.
 
 ---
 

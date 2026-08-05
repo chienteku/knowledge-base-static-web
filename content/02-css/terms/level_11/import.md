@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- None! This is purely about file organization and architecture.
-
+None (Entry-level term)
 ---
 
 ## 2. Term Category
@@ -156,9 +155,9 @@ body { color: red; }
 
 ## 7. Related Terms
 - [The Cascade](../level_01/the_cascade.md) — Because `@import` files are loaded first, any CSS you write *below* the imports in your master file will override the imported CSS (due to the cascade!).
-- [CSS Preprocessors](preprocessors.md) — Modern preprocessors compile imports before browser loading loops.
-- [CSS Reset](reset_normalize.md) — Resets are often loaded at the top of main files via `@import`.
-
+- [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Modern preprocessors compile imports before browser loading loops.
+- [CSS Reset vs. Normalize](reset_normalize.md) — Resets are often loaded at the top of main files via `@import`.
+- [`@font-face` & Web Fonts (Google Fonts)](../level_03/web_fonts.md) — Related concept: `@font-face` & Web Fonts (Google Fonts).
 ---
 
 ## 8. Key Takeaways

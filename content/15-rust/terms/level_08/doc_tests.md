@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
+
 - [Comments](../level_01/comments.md) — The `///` syntax used to write documentation for functions.
-- [`#[test]`](../level_08/test_attribute.md) — The standard testing tool that Doc Tests automatically hook into.
 
 ---
 
@@ -395,8 +395,9 @@ Requirements:
 
 ## 6. Related Terms
 
-- [`cargo doc`](../level_08/cargo_doc.md) — The command that actually generates the beautiful HTML website from these `///` comments.
-- [Integration Tests](../level_08/integration_tests.md) — Like Integration Tests, Doc Tests can only test the `pub` API of a Library crate.
+
+- [`cargo doc`](cargo_doc.md) — The command that actually generates the beautiful HTML website from these `///` comments.
+- [Integration Tests](integration_tests.md) — Like Integration Tests, Doc Tests can only test the `pub` API of a Library crate.
 
 ---
 

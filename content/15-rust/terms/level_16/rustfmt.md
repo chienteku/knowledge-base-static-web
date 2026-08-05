@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Invokes `rustfmt` via `cargo fmt`.
+
+- [Cargo CLI](../level_07/cargo_cli.md) — Invokes `rustfmt` via `cargo fmt`.
 
 ---
 
@@ -329,6 +330,14 @@ Write a `#![no_std]` compatible matrix transformation module containing:
 > 1. **The `ignore` Configuration Key**: Specifying glob patterns under `ignore` in `rustfmt.toml` stops `cargo fmt` from modifying auto-generated code, preventing unwanted diff noise or syntax error alerts on synthesized files.
 > 2. **CI Non-Destructive Enforcement**: `cargo fmt --check --all` inspects all workspace crates without touching files on disk. If any file violates formatting rules, `cargo fmt` returns a non-zero exit code (exit status 1), causing the CI job to fail cleanly.
 > 3. **Robust Unit Verification**: The Rust module demonstrates clean idiomatic layout formatted by `rustfmt`, validated with `assert_eq!` tests handling both success (`Ok(...)`) and error (`Err(...)`) pathways.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [Rustup](rustup.md) — Related concept: Rustup.
 
 ---
 

@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
-- [Reference vs Value (copy semantics)](./reference_vs_value.md) — Reference vs value storage.
-
+- [Reference vs Value (copy semantics)](reference_vs_value.md) — Reference vs value storage.
 ---
 
 ## 2. Term Category
@@ -235,9 +234,8 @@ console.log("baseUser keys count:", Object.keys(baseUser).length);
 ---
 
 ## 7. Related Terms
-- [Shallow Copy vs Deep Copy](./shallow_vs_deep_copy.md) — The copy behaviors defining reference replication.
-- [Spread Syntax](../level_08/spread_syntax.md) — The modern, alternative syntax used to copy and merge objects.
-
+- [Shallow Copy vs Deep Copy](shallow_vs_deep_copy.md) — The copy behaviors defining reference replication.
+- [Spread Syntax (...)](../level_08/spread_syntax.md) — The modern, alternative syntax used to copy and merge objects.
 ---
 
 ## 8. Key Takeaways

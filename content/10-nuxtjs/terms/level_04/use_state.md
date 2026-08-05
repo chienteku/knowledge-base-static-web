@@ -9,7 +9,6 @@
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The environment that makes `useState` necessary.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — Specifically, understanding how Vue's standard `ref()` works.
 - [Hydration](../level_01/hydration.md) — The synchronization process that relies on serialized state parameters.
-
 ---
 
 ## 2. Term Category
@@ -181,9 +180,10 @@ export const useUserState = () => useState('user-state', () => null);
 ---
 
 ## 7. Related Terms
-- [Pinia State Management](../level_04/pinia.md) — The heavy-duty alternative to `useState` for complex global state.
-- [`useCookie` Hook](../level_04/use_cookie.md) — Similar to `useState`, but persists the data in the browser cookies.
-
+- [Pinia State Management](pinia.md) — The heavy-duty alternative to `useState` for complex global state.
+- [`useCookie` Hook](use_cookie.md) — Similar to `useState`, but persists the data in the browser cookies.
+- [`composables/` Directory](composables_directory.md) — Related concept: `composables/` Directory.
+- [Nuxt Payload (SSR State Transfer)](nuxt_payload.md) — Related concept: Nuxt Payload (SSR State Transfer).
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Width / Height](../level_02/width_height.md) — Sizing the media element box.
 - [`background-size` (cover / contain)](background_size.md) — The background equivalent.
-
 ---
 
 ## 2. Term Category
@@ -262,9 +261,9 @@ img { object-fit: cover; }
 > **Explanation:** `object-position` shifts the alignment origin for cropped image content.
 
 ## 7. Related Terms
-- [`background-size` / `cover` / `contain`](background_size.md) — The background equivalent.
-- [`border-radius`](border_radius.md) — Cropping visual profiles.
-
+- [`background-size` (cover / contain)](background_size.md) — The background equivalent.
+- [`border-radius` (Rounded Corners)](border_radius.md) — Cropping visual profiles.
+- [`aspect-ratio`](../level_11/aspect_ratio.md) — Related concept: `aspect-ratio`.
 ---
 
 ## 8. Key Takeaways

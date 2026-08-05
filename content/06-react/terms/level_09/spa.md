@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Virtual DOM](../level_01/virtual_dom.md) — The technology React uses to rewrite the page so quickly.
-
 ---
 
 ## 2. Term Category

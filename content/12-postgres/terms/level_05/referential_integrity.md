@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Relational Database](../level_01/relational_database.md) — The relational structural philosophy.
 - [Table (Relation)](../level_01/table.md) — The data grid containers.
-
 ---
 
 ## 2. Term Category
@@ -251,8 +250,7 @@ What will happen, and why?
 
 ## 7. Related Terms
 - [`FOREIGN KEY`](foreign_key.md) — The physical constraint that enforces integrity.
-- [`ON DELETE` / `ON UPDATE` Actions](on_delete_update.md) — Automating cascades to preserve integrity.
-
+- [`ON DELETE` / `ON UPDATE` Actions (`CASCADE`, `SET NULL`, `RESTRICT`)](on_delete_update.md) — Automating cascades to preserve integrity.
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — The Rust package manager managed by `rustup`.
-- [Clippy](../level_16/clippy.md) — Rust linter component installed via `rustup`.
-- [Rustfmt](../level_16/rustfmt.md) — Code formatter component installed via `rustup`.
+
+- [Cargo CLI](../level_07/cargo_cli.md) — The Rust package manager managed by `rustup`.
+- [Rustfmt](rustfmt.md) — Code formatter component installed via `rustup`.
+- [Clippy](clippy.md) — Rust linter component installed via `rustup`.
 
 ---
 
@@ -598,10 +599,12 @@ Implement a `#![no_std]` toolchain capability dispatcher `RustupFeatureDispatche
 
 ## 7. Related Terms
 
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Build tool managed by `rustup`.
-- [Clippy](../level_16/clippy.md) — Linter component installed via `rustup`.
-- [Rustfmt](../level_16/rustfmt.md) — Code formatter component installed via `rustup`.
-- [`crates.io`](../level_16/crates_io.md) — Package registry.
+
+- [Cargo CLI](../level_07/cargo_cli.md) — Build tool managed by `rustup`.
+- [Clippy](clippy.md) — Linter component installed via `rustup`.
+- [Rustfmt](rustfmt.md) — Code formatter component installed via `rustup`.
+- [`crates.io`](crates_io.md) — Package registry.
+- [Cargo](../level_01/cargo.md) — Related concept: Cargo.
 
 ---
 

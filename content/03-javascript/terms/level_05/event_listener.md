@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Event](../level_05/event.md) — An action like a click or keypress.
-- [DOM](../level_05/dom.md) — The HTML elements we are attaching the listener to.
-
+- [Event](event.md) — An action like a click or keypress.
+- [DOM (Document Object Model)](dom.md) — The HTML elements we are attaching the listener to.
 ---
 
 ## 2. Term Category
@@ -206,9 +205,11 @@ Will they both fire, or will the second one overwrite the first?
 ---
 
 ## 7. Related Terms
-- [Event](../level_05/event.md) — The signal the listener is waiting for.
+- [Event](event.md) — The signal the listener is waiting for.
 - [Higher-Order Function](../level_03/higher_order_function.md) — `addEventListener` is a perfect example of an HOF.
-
+- [Event Bubbling](event_bubbling.md) — Event bubbling.
+- [Event Delegation](event_delegation.md) — Event delegation.
+- [DOM (Document Object Model)](dom.md) — Related concept: DOM (Document Object Model).
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Nitro Engine](../level_01/nitro_engine.md) — The engine responsible for building the server component of this directory.
 - [Static Site Generation (SSG)](../level_09/ssg.md) — The rendering strategy that outputs static files to a subfolder here.
-
 ---
 
 ## 2. Term Category
@@ -159,7 +158,7 @@ To deploy a Nuxt application to a standard Node.js server (like DigitalOcean or 
 ## 7. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that requires `.output/server/index.mjs` to run.
 - [Static Site Generation (SSG)](../level_09/ssg.md) — The process that only requires `.output/public/`.
-
+- [Standalone Build (Node server)](standalone_build.md) — Related concept: Standalone Build (Node server).
 ---
 
 ## 8. Key Takeaways

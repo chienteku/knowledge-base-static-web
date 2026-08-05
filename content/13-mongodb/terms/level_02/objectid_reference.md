@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`_id` Field & ObjectId](../level_01/objectid.md) — The unique identifier data type.
 - [Embedded Document (Subdocument)](embedded_document.md) — The nested alternative.
 
@@ -200,8 +201,10 @@ Ensure foreign key field types match primary key _id types (both ObjectId)
 > **Explanation:** Manual ObjectId references are lightweight and supported natively by `$lookup`.
 
 ## 7. Related Terms
+
 - [`_id` Field & ObjectId](../level_01/objectid.md) — The reference key type.
 - [Embedded Document (Subdocument)](embedded_document.md) — The nested alternative.
+- [Array](array_type.md) — Related concept: Array.
 
 ---
 

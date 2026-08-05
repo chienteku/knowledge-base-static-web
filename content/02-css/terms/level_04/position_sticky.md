@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`position: static` vs `relative`](../level_04/position_static_relative.md) — Sticky starts as a relative offset.
-- [`position: absolute` vs `fixed`](../level_04/position_absolute_fixed.md) — Sticky mimics fixed positioning during scroll locks.
-- [`top`, `bottom`, `left`, `right`](../level_04/top_bottom_left_right.md) — The required threshold coordinates.
-
+- [`position: static` vs `relative`](position_static_relative.md) — Sticky starts as a relative offset.
+- [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Sticky mimics fixed positioning during scroll locks.
+- [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — The required threshold coordinates.
 ---
 
 ## 2. Term Category
@@ -323,10 +322,10 @@ A navigation bar that sticks to the top of the browser:
 > **Explanation:** Sticky elements stop scrolling when reaching the bottom boundary of their parent container.
 
 ## 7. Related Terms
-- [`position: static` vs `relative`](../level_04/position_static_relative.md) — The parent relative settings.
-- [`position: absolute` vs `fixed`](../level_04/position_absolute_fixed.md) — Viewport locked layouts.
+- [`position: static` vs `relative`](position_static_relative.md) — The parent relative settings.
+- [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Viewport locked layouts.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent parameters that disable sticky positioning.
-
+- [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Related concept: `top`, `bottom`, `left`, `right`.
 ---
 
 ## 8. Key Takeaways

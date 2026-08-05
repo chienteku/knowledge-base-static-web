@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [CommonJS](../level_03/commonjs.md) — You must understand the legacy system to understand why we upgraded to ES Modules.
-
+- [CommonJS (require, module.exports)](commonjs.md) — You must understand the legacy system to understand why we upgraded to ES Modules.
 ---
 
 ## 2. Term Category
@@ -153,9 +152,9 @@ const { dynamicFn } = cjsPkg;
 > **Explanation:** ES Modules support Top-Level Await natively without wrapping code in `(async () => {})()`.
 
 ## 7. Related Terms
-- [CommonJS](../level_03/commonjs.md) — The legacy system that ESM is slowly replacing.
+- [CommonJS (require, module.exports)](commonjs.md) — The legacy system that ESM is slowly replacing.
 - [package.json](../level_04/package_json.md) — Where you configure Node to use `"type": "module"`.
-
+- [Module Resolution](module_resolution.md) — Related concept: Module Resolution.
 ---
 
 ## 8. Key Takeaways

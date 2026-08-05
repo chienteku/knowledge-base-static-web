@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — The unordered map this type mirrors in API but differs from in ordering and key requirements.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — The unordered map this type mirrors in API but differs from in ordering and key requirements.
 - [`PartialOrd` / `Ord`](../level_04/partialord_ord.md) — Required on the key type, instead of `Hash`.
-- [`for` / Range](../level_02/for_range.md) — What powers the efficient `.range()` queries.
+- [`for` / Range](for_range.md) — What powers the efficient `.range()` queries.
 
 ---
 
@@ -607,10 +608,11 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — The unordered sibling with the same core API but different internal structure and trait bounds.
-- [`BTreeSet<T>`](../level_02/hashset_btreeset.md) — The set counterpart, same underlying B-tree.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — The unordered sibling with the same core API but different internal structure and trait bounds.
+- [`HashSet<T>` / `BTreeSet<T>`](hashset_btreeset.md) — The set counterpart, same underlying B-tree.
 - [`PartialOrd` / `Ord`](../level_04/partialord_ord.md) — The required key-comparison trait.
-- [Entry API](../level_02/entry_api.md) — `BTreeMap` supports `.entry()` too, with identical semantics to `HashMap`.
+- [Entry API (`.entry(k).or_insert(...)`)](entry_api.md) — `BTreeMap` supports `.entry()` too, with identical semantics to `HashMap`.
 
 ---
 

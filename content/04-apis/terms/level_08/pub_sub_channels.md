@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [WebSockets](./websockets.md) — The real-time network transport.
-- [Socket.io (Ecosystem tool)](./socket_io.md) — The abstraction library utilizing room patterns.
-
+- [WebSockets](websockets.md) — The real-time network transport.
+- [Socket.io (Ecosystem tool)](socket_io.md) — The abstraction library utilizing room patterns.
 ---
 
 ## 2. Term Category
@@ -326,9 +325,8 @@ publisher.publish('events', JSON.stringify({ event: 'file_ready', url: s3Url }))
 ---
 
 ## 7. Related Terms
-- [Socket.io (Ecosystem tool)](./socket_io.md) — The Node.js real-time framework.
+- [Socket.io (Ecosystem tool)](socket_io.md) — The Node.js real-time framework.
 - [Webhooks](../level_06/webhooks.md) — The HTTP callback request alternative for server-to-server notifications.
-
 ---
 
 ## 8. Key Takeaways

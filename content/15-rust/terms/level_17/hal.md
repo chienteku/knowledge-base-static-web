@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [Type-State Pattern](../level_14/type_state_pattern.md) — Used by HALs to track GPIO pin modes at compile time.
 
 ---
@@ -434,6 +435,15 @@ pub fn init_hardware() {
 > 1. **Hardware Bitmask Trapping**: The HAL inspects hardware status registers (`SR`) before performing data register operations, preventing unbuffered data overwrites or reading invalid register values.
 > 2. **Error Recovery & Bit Clearing**: Hardware timing anomalies (such as bit alignment or missed bytes) are converted into structured Rust `UartError` variants while clearing status bits to restore serial line functionality.
 > 3. **High-Level Trait Bridging**: High-level abstractions like `send_str` map Rust slice primitives (`&str`) to low-level register writes using error propagation (`?`), illustrating the essential role of HAL crates in embedded software systems.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [`embedded-hal`](embedded_hal.md) — Standard embedded trait interfaces implemented by a HAL.
+- [PAC (Peripheral Access Crate)](pac.md) — Related concept: PAC (Peripheral Access Crate).
 
 ---
 

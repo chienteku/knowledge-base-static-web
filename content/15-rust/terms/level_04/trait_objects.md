@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Trait](../level_04/trait.md) — The shared behavior that groups the objects together.
-- [Monomorphization](../level_04/monomorphization.md) — The "static" system that Trait Objects exist to bypass.
+
+- [Trait](trait.md) — The shared behavior that groups the objects together.
+- [Monomorphization](monomorphization.md) — The "static" system that Trait Objects exist to bypass.
 - [`Box<T>`](../level_03/box_t.md) — The smart pointer almost universally used to store Trait Objects.
 
 ---
@@ -724,8 +725,16 @@ Design an object-safe storage backend system with dynamic type reflection downca
 
 ## 6. Related Terms
 
-- [Monomorphization](../level_04/monomorphization.md) — The static dispatch alternative to Trait Objects. It is much faster, but completely inflexible (you cannot mix types in a `Vec`).
+
+- [Monomorphization](monomorphization.md) — The static dispatch alternative to Trait Objects. It is much faster, but completely inflexible (you cannot mix types in a `Vec`).
 - [`Box<T>`](../level_03/box_t.md) — The smart pointer almost universally used to store Trait Objects on the heap so they all have a uniform size.
+- [`Any` Trait / Downcasting](any_trait_downcasting.md) — Related concept: `Any` Trait / Downcasting.
+- [`Object Safety` (dyn-Compatibility)](object_safety.md) — Related concept: `Object Safety` (dyn-Compatibility).
+- [`Read` / `Write` / `BufRead` Traits](read_write_bufread.md) — Related concept: `Read` / `Write` / `BufRead` Traits.
+- [Lifetime Bounds](../level_05/lifetime_bounds.md) — Related concept: Lifetime Bounds.
+- [Dynamically Sized Types (DSTs)](../level_11/dynamically_sized_types.md) — Related concept: Dynamically Sized Types (DSTs).
+- [Visitor Pattern](../level_18/visitor_pattern.md) — Related concept: Visitor Pattern.
+- [Enum Dispatch](../level_18/enum_dispatch.md) — Related concept: Enum Dispatch.
 
 ---
 

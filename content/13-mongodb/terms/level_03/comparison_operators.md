@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter parameter structure.
 
 ---
@@ -233,8 +234,9 @@ db.users.find({ status: { $in: ["active", "pending"] } });
 > **Explanation:** `$nin` matches documents whose field value is not contained in the specified array.
 
 ## 7. Related Terms
+
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter layout.
-- [Logical Query Operators (`$and`, `$or`, etc.)](logical_operators.md) -- Combining filters.
+- [Logical Query Operators (`$and`, `$or`, `$not`, `$nor`)](logical_operators.md) — - Combining filters.
 
 ---
 

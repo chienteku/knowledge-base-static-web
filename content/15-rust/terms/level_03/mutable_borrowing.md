@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Borrowing (`&`)](../level_03/borrowing.md) — The concept of passing references instead of Ownership.
+
+- [Borrowing (`&`)](borrowing.md) — The concept of passing references instead of Ownership.
 - [Mutability (`mut`)](../level_01/mutability_mut.md) — The keyword required to allow data to change.
-- [Expressions / Blocks](../level_01/expressions.md) — Knowing how `{}` scopes work is critical for managing how long a borrow lasts.
+- [Expressions](../level_01/expressions.md) — Knowing how `{}` scopes work is critical for managing how long a borrow lasts.
 
 ---
 
@@ -501,8 +502,14 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Borrow Checker](../level_03/borrow_checker.md) — The strict compiler component that enforces the "One Mutable Borrow" rule.
-- [Interior Mutability](../level_03/interior_mutability.md) — (Future reference) Advanced patterns that bypass these strict compile-time rules using runtime checks instead.
+
+- [Borrow Checker](borrow_checker.md) — The strict compiler component that enforces the "One Mutable Borrow" rule.
+- [Interior Mutability](interior_mutability.md) — (Future reference) Advanced patterns that bypass these strict compile-time rules using runtime checks instead.
+- [Borrowing (`&`)](borrowing.md) — Related concept: Borrowing (`&`).
+- [Partial Moves & Partial Borrows](partial_moves.md) — Related concept: Partial Moves & Partial Borrows.
+- [Reborrowing & Two-Phase Borrows](reborrowing.md) — Related concept: Reborrowing & Two-Phase Borrows.
+- [Lifetime Variance](../level_05/lifetime_variance.md) — Related concept: Lifetime Variance.
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Related concept: References and Borrowing (`&`, `&mut`).
 
 ---
 

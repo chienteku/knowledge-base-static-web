@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Event Loop](./event_loop.md) — The system that monitors this queue.
-- [Promise](./promise.md) — The objects that use this queue.
-
+- [Event Loop](event_loop.md) — The system that monitors this queue.
+- [Promise](promise.md) — The objects that use this queue.
 ---
 
 ## 2. Term Category
@@ -218,9 +217,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Event Loop](./event_loop.md) — The system that checks these queues.
-- [Macrotask Queue](./macrotask_queue.md) — The standard, lower-priority queue.
-
+- [Event Loop](event_loop.md) — The system that checks these queues.
+- [Macrotask Queue](macrotask_queue.md) — The standard, lower-priority queue.
 ---
 
 ## 8. Key Takeaways

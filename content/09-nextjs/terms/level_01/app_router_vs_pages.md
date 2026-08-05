@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Next.js Overview](../level_01/nextjs.md) — The framework itself.
-- [React Server Components (RSC)](../level_01/rsc.md) — The technology that necessitated the App Router.
-
+- [Next.js Overview](nextjs.md) — The framework itself.
+- [React Server Components (RSC)](rsc.md) — The technology that necessitated the App Router.
 ---
 
 ## 2. Term Category
@@ -151,9 +150,11 @@ import { useRouter } from 'next/navigation'; // Correct App Router import
 ---
 
 ## 7. Related Terms
-- [React Server Components (RSC)](../level_01/rsc.md) — The technology that powers the App Router.
+- [React Server Components (RSC)](rsc.md) — The technology that powers the App Router.
 - [`page.tsx`](../level_02/page.md) — The file that defines UI in the App Router.
-
+- [Client Components (`"use client"`)](client_components.md) — Related concept: Client Components (`"use client"`).
+- [File-System Routing](file_system_routing.md) — Related concept: File-System Routing.
+- [Next.js Overview](nextjs.md) — Related concept: Next.js Overview.
 ---
 
 ## 8. Key Takeaways

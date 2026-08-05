@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Table](../level_01/table.md) — The basic collection container.
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The validation modes.
 
@@ -191,9 +192,13 @@ DEFINE TABLE user PERMISSIONS FOR select WHERE id = $auth.id OR $auth.role = 'ad
 > **Explanation:** `REMOVE TABLE` drops specified table definitions and schema metadata.
 
 ## 7. Related Terms
+
 - [Table](../level_01/table.md) — The basic collection container.
 - [`SCHEMAFULL` vs `SCHEMALESS`](../level_01/schemafull_schemaless.md) — The validation modes.
 - [`DEFINE FIELD`](define_field.md) — Creating fields.
+- [`IF NOT EXISTS` / `IF EXISTS`](../level_03/if_not_exists.md) — Related concept: `IF NOT EXISTS` / `IF EXISTS`.
+- [`INFO FOR` (Introspection)](../level_03/info_for.md) — Related concept: `INFO FOR` (Introspection).
+- [`REMOVE` Statement](remove_statement.md) — Related concept: `REMOVE` Statement.
 
 ---
 

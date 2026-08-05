@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-
 ---
 
 ## 2. Term Category
@@ -209,10 +208,18 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Property](../level_02/property.md) — An association between a key and a value in an object.
-- [Method](../level_02/method.md) — A function that is stored as a property of an object.
-- [Array](../level_02/array.md) — A specialized list-like object.
-
+- [Property](property.md) — An association between a key and a value in an object.
+- [Method](method.md) — A function that is stored as a property of an object.
+- [Array](array.md) — A specialized list-like object.
+- [for...in](../level_04/for_in.md) — Related concept: for...in.
+- [Map](../level_08/map.md) — Related concept: Map.
+- [Prototype Chain](../level_07/prototype_chain.md) — Related concept: Prototype Chain.
+- [this Keyword](../level_07/this_keyword.md) — Related concept: this Keyword.
+- [Destructuring](../level_08/destructuring.md) — Related concept: Destructuring.
+- [Garbage Collection](../level_09/garbage_collection.md) — Related concept: Garbage Collection.
+- [Proxy](../level_09/proxy.md) — Related concept: Proxy.
+- [Property Access (dot vs bracket notation)](property_access.md) — Dot vs bracket notation.
+- [Prototype](../level_07/prototype.md) — Prototype chain.
 ---
 
 ## 8. Key Takeaways

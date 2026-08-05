@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [React Server Components (RSC)](../level_01/rsc.md) — The environment that popularized Server Actions.
 - [Client Components (`"use client"`)](../level_01/client_components.md) — The counterpart directive to `"use server"`.
-
 ---
 
 ## 2. Term Category
@@ -190,9 +189,11 @@ export async function deleteUser(id: string) {
 ---
 
 ## 7. Related Terms
-- [Form Actions](../level_06/form_actions.md) — How Server Actions are actually invoked.
+- [Form Actions](form_actions.md) — How Server Actions are actually invoked.
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The legacy way to handle mutations.
-
+- [`useFormState` Hook](use_form_state.md) — Related concept: `useFormState` Hook.
+- [Zod (Schema Validation)](zod_validation.md) — Related concept: Zod (Schema Validation).
+- [`useFormStatus` Hook](use_form_status.md) — useFormStatus hook.
 ---
 
 ## 8. Key Takeaways

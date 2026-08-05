@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-- [String](../level_01/string.md) — A sequence of characters.
-- [Number](../level_01/number.md) — Represents numerical values.
-
+- [Primitive Types](primitive_types.md) — Basic immutable data types.
+- [String](string.md) — A sequence of characters.
+- [Number](number.md) — Represents numerical values.
 ---
 
 ## 2. Term Category
@@ -199,9 +198,12 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Number](../level_01/number.md) — Represents numerical values.
-- [String](../level_01/string.md) — A sequence of characters representing text.
-
+- [Number](number.md) — Represents numerical values.
+- [String](string.md) — A sequence of characters representing text.
+- [Arithmetic Operators](arithmetic_operators.md) — Related concept: Arithmetic Operators.
+- [Dynamic & Weak Typing](dynamic_weak_typing.md) — Related concept: Dynamic & Weak Typing.
+- [null](null.md) — Related concept: null.
+- [Truthy / Falsy](../level_02/truthy_falsy.md) — Related concept: Truthy / Falsy.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Event Loop](../level_01/event_loop.md) — What manages the asynchronous nature of events.
-- [Callbacks](../level_05/callbacks.md) — What executes when an event is heard.
-
+- [The Event Loop & Libuv](../level_01/event_loop.md) — What manages the asynchronous nature of events.
+- [Callbacks & Callback Hell](callbacks.md) — What executes when an event is heard.
 ---
 
 ## 2. Term Category
@@ -169,9 +168,11 @@ emitter.on('data', (data) => {
 > **Explanation:** `setMaxListeners()` adjusts the threshold for `MaxListenersExceededWarning` alerts.
 
 ## 7. Related Terms
-- [Streams](../level_06/streams.md) — The most famous use-case of Event Emitters in Node.js.
-- [The `http` Module](../level_02/http_module.md) — Servers are Event Emitters under the hood.
-
+- [Streams (General Concept)](../level_06/streams.md) — The most famous use-case of Event Emitters in Node.js.
+- [The http Module](../level_02/http_module.md) — Servers are Event Emitters under the hood.
+- [The events Module](../level_02/events_module.md) — Related concept: The events Module.
+- [Callbacks & Callback Hell](callbacks.md) — Callbacks vs events.
+- [Unhandled Promise Rejections](unhandled_rejections.md) — Error events.
 ---
 
 ## 8. Key Takeaways

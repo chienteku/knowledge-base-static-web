@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Transaction](transaction.md) — The transaction boundaries managing the snapshots.
 - [`VACUUM` / `ANALYZE`](../level_07/vacuum_analyze.md) — The maintenance tasks that purge obsolete MVCC row versions.
-
 ---
 
 ## 2. Term Category
@@ -190,7 +189,8 @@ SELECT created_at, updated_at FROM users;
 - [Transaction](transaction.md) — The snapshot boundaries.
 - [`VACUUM` / `ANALYZE`](../level_07/vacuum_analyze.md) — Garbage collecting old row versions.
 - [Transaction Isolation Levels](isolation_levels.md) — Fine-tuning snapshot rules.
-
+- [ACID Properties](acid.md) — Related concept: ACID Properties.
+- [Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads)](concurrency_anomalies.md) — Related concept: Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads).
 ---
 
 ## 8. Key Takeaways

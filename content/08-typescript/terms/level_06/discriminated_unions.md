@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Union Types](../level_05/union_types.md) — The structure being narrowed.
+- [Union Types (`|`)](../level_05/union_types.md) — The structure being narrowed.
 - [Literal Types](../level_05/literal_types.md) — The properties used as the discriminant.
-
 ---
 
 ## 2. Term Category
@@ -186,7 +185,10 @@ type VariantB = { type: "B"; str: string };
 ## 7. Related Terms
 - [Literal Types](../level_05/literal_types.md) — The building blocks of the discriminant.
 - [`void` & `never`](../level_02/void_never.md) — `never` is used in the `default` case of a Discriminated Union switch statement for exhaustive checking.
-
+- [Exhaustiveness Checking (`never`)](exhaustiveness_checking.md) — Related concept: Exhaustiveness Checking (`never`).
+- [`in` Operator Narrowing](in_operator.md) — Related concept: `in` Operator Narrowing.
+- [Union Types (`|`)](../level_05/union_types.md) — Union types.
+- [Type Narrowing](type_narrowing.md) — Related concept: Type Narrowing.
 ---
 
 ## 8. Key Takeaways

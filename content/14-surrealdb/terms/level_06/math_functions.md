@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library context.
 - [`int` / `float` / `decimal`](../level_02/number_types.md) — Numeric types.
 
@@ -205,6 +206,7 @@ Write the SurrealQL query to:
 > **Explanation:** `math::sum(array)` returns the total sum of array element numbers.
 
 ## 7. Related Terms
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [`int` / `float` / `decimal`](../level_02/number_types.md) — Numeric types.
 - [Aggregate Functions](../level_03/aggregate_functions.md) — Grouping context.

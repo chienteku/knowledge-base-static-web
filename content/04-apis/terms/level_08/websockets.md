@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — WebSockets bypass this traditional lifecycle entirely.
 - [HTTP / HTTPS](../level_01/http_https.md) — WebSockets start as HTTP, but then "upgrade" to a completely different protocol.
-
 ---
 
 ## 2. Term Category
@@ -280,8 +279,12 @@ const ws = new WebSocket('wss://api.example.com');
 
 ## 7. Related Terms
 - [Webhooks](../level_06/webhooks.md) — Webhooks are Server-to-Server. WebSockets are usually Browser-to-Server.
-- [Socket.io](../level_08/socket_io.md) — The most popular library for working with WebSockets in Node.js.
-
+- [Socket.io (Ecosystem tool)](socket_io.md) — The most popular library for working with WebSockets in Node.js.
+- [TCP/IP (high-level)](../level_01/tcp_ip.md) — Related concept: TCP/IP (high-level).
+- [Polling vs Long Polling](polling.md) — Related concept: Polling vs Long Polling.
+- [Server-Sent Events (SSE)](sse.md) — Related concept: Server-Sent Events (SSE).
+- [gRPC (Remote Procedure Call)](../level_10/grpc.md) — Related concept: gRPC (Remote Procedure Call).
+- [WebSocket Handshake (Upgrade)](websocket_handshake.md) — WebSocket HTTP upgrade handshake.
 ---
 
 ## 8. Key Takeaways

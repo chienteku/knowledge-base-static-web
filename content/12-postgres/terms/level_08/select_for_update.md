@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Locking (Row-level, Table-level)](locking.md) — The lock types utilized.
-
 ---
 
 ## 2. Term Category
@@ -211,7 +210,8 @@ BEGIN; SELECT * FROM users WHERE id = 1 FOR UPDATE; /* update work */ COMMIT;
 ## 7. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
 - [Deadlock](deadlock.md) — Gridlocks caused by locking conflicts.
-
+- [Advisory Locks](advisory_locks.md) — Related concept: Advisory Locks.
+- [Optimistic vs. Pessimistic Locking](optimistic_pessimistic.md) — Related concept: Optimistic vs. Pessimistic Locking.
 ---
 
 ## 8. Key Takeaways

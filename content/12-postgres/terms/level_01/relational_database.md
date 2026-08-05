@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Database](database.md) — Why databases exist in software architecture.
-
 ---
 
 ## 2. Term Category
@@ -191,7 +190,9 @@ CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT );
 - [Table (Relation)](table.md) — The core storage grid.
 - [Row (Record / Tuple)](row.md) — The horizontal database entry.
 - [Column (Field / Attribute)](column.md) — The vertical data category.
-
+- [Database](database.md) — Related concept: Database.
+- [PostgreSQL (Postgres)](postgresql.md) — Related concept: PostgreSQL (Postgres).
+- [SQL (Structured Query Language)](sql.md) — SQL query language.
 ---
 
 ## 8. Key Takeaways

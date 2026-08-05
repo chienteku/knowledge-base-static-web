@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Search Index & `DEFINE ANALYZER`](search_index_analyzer.md) — Full-text search architecture.
 - [Operators in SurrealQL](../level_03/operators.md) — Query operators.
 
@@ -204,8 +205,10 @@ Write the SurrealQL query to:
 > **Explanation:** `search::highlight()` wraps matched search terms in HTML highlight tags.
 
 ## 7. Related Terms
+
 - [Search Index & `DEFINE ANALYZER`](search_index_analyzer.md) — Search architecture.
 - [Operators in SurrealQL](../level_03/operators.md) — Query operators.
+- [`SEARCH` Index (Full-Text Search)](../level_04/search_index.md) — Related concept: `SEARCH` Index (Full-Text Search).
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent properties that define the grid lines items place themselves against.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent properties that define the grid lines items place themselves against.
 ---
 
 ## 2. Term Category
@@ -329,9 +328,8 @@ Full-width header placement:
 > **Explanation:** `span N` specifies relative track span count.
 
 ## 7. Related Terms
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent coordinate blueprint.
-- [`grid-template-areas`](../level_06/grid_template_areas.md) — The visual name placement alternative.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
+- [`grid-template-areas`](grid_template_areas.md) — The visual name placement alternative.
 ---
 
 ## 8. Key Takeaways

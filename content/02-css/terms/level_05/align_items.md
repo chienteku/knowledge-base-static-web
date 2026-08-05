@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`justify-content`](../level_05/justify_content.md) — You must understand `justify-content` (Main Axis) to understand `align-items` (Cross Axis).
-
+- [`justify-content`](justify_content.md) — You must understand `justify-content` (Main Axis) to understand `align-items` (Cross Axis).
 ---
 
 ## 2. Term Category
@@ -159,11 +158,12 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 > **Explanation:** `align-items: baseline` aligns text baselines regardless of differing font sizes.
 
 ## 7. Related Terms
-- [`justify-content`](../level_05/justify_content.md) — The Main Axis sibling.
-- [`flex-direction`](../level_05/flex_direction.md) — Rotating the main layout axis.
-- [`align-self`](../level_05/align_self.md) — Overrides align-items for a single child item.
-- [`align-content`](../level_05/align_content.md) — Distributes multiple rows of flex items.
-
+- [`justify-content`](justify_content.md) — The Main Axis sibling.
+- [`flex-direction`](flex_direction.md) — Rotating the main layout axis.
+- [`align-self`](align_self.md) — Overrides align-items for a single child item.
+- [`align-content`](align_content.md) — Distributes multiple rows of flex items.
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
+- [`display: flex`](display_flex.md) — Related concept: `display: flex`.
 ---
 
 ## 8. Key Takeaways

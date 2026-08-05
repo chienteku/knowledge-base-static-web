@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The `fetch()` API](../level_05/fetch.md) — `fetch` is the most common function that generates a Promise.
+- [The fetch() API](fetch.md) — `fetch` is the most common function that generates a Promise.
 - [Request & Response Lifecycle](../level_01/request_response.md) — Promises exist to handle the "waiting" phase of this lifecycle.
-
 ---
 
 ## 2. Term Category
@@ -191,9 +190,10 @@ console.log("C");
 ---
 
 ## 7. Related Terms
-- [`async` / `await`](../level_05/async_await.md) — The modern, much cleaner syntax for handling Promises without using `.then()`.
-- [Error Handling](../level_05/error_handling.md) — How we handle "Rejected" promises.
-
+- [async / await](async_await.md) — The modern, much cleaner syntax for handling Promises without using `.then()`.
+- [Error Handling (try / catch)](error_handling.md) — How we handle "Rejected" promises.
+- [The fetch() API](fetch.md) — Related concept: The fetch() API.
+- [XMLHttpRequest / AJAX](xmlhttprequest_ajax.md) — Related concept: XMLHttpRequest / AJAX.
 ---
 
 ## 8. Key Takeaways

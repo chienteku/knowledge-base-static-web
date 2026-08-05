@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
-- [Record ID](../level_01/record_id.md) — The pointer formatting structure.
+- [Record ID (`table:id`)](../level_01/record_id.md) — The pointer formatting structure.
 
 ---
 
@@ -201,8 +202,12 @@ Assuming you have migrated this schema to SurrealDB where the `user` field on th
 > **Explanation:** `FETCH` automatically resolves and expands record link pointers in results.
 
 ## 7. Related Terms
-- [Record ID](../level_01/record_id.md) — The pointer formatting structure.
+
+- [Record ID (`table:id`)](../level_01/record_id.md) — The pointer formatting structure.
 - [Record Link (Concept)](../level_05/record_link_concept.md) — Traversing links.
+- [`SELECT` with Record Link Fetching (`FETCH`)](../level_03/select_fetch.md) — Related concept: `SELECT` with Record Link Fetching (`FETCH`).
+- [Array of Record Links (`array<record<table>>`)](../level_05/array_record_links.md) — Arrays of record links.
+- [Data Types (Overview)](data_types.md) — Related concept: Data Types (Overview).
 
 ---
 

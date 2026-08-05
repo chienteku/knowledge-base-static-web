@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [REST API Design](./rest_api.md) — The fundamental principles of API endpoint structures.
-
+- [REST API Design](rest_api.md) — The fundamental principles of API endpoint structures.
 ---
 
 ## 2. Term Category
@@ -256,8 +255,7 @@ app.get('/api/v1/user', (req, res) => {
 > **Explanation:** URI path is most explicit; headers keep URLs clean; query params are easy to test.
 
 ## 7. Related Terms
-- [REST API Design](./rest_api.md) — The structuring rules governing endpoints.
-
+- [REST API Design](rest_api.md) — The structuring rules governing endpoints.
 ---
 
 ## 8. Key Takeaways

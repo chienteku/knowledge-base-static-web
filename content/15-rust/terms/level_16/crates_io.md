@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Cargo CLI (`cargo`)](../level_07/cargo_cli.md) — Command-line interface for managing dependencies from `crates.io`.
-- [Crate (`crate`)](../level_01/crate.md) — Rust compilation unit packaged and published to `crates.io`.
-- [`docs.rs`](../level_16/docs_rs.md) — Auto-generated documentation platform for `crates.io`.
+
+- [Cargo CLI](../level_07/cargo_cli.md) — Command-line interface for managing dependencies from `crates.io`.
+- [Crate](../level_01/crate.md) — Rust compilation unit packaged and published to `crates.io`.
+- [`docs.rs`](docs_rs.md) — Auto-generated documentation platform for `crates.io`.
 
 ---
 
@@ -553,6 +554,15 @@ Design a Rust pre-publish verification engine `CratePublishValidator` that:
 > 2. **SemVer Compliance**: Semantic Versioning 2.0.0 standard (`MAJOR.MINOR.PATCH`) is parsed to ensure dependency resolution in Cargo remains strictly predictable.
 > 3. **Leak Protection**: File pattern matching safeguards project secrets (`.env`, SSH private keys, API credentials) from being inadvertently included in published archives.
 > 4. **Assertion-based Verification**: Host unit tests exercise validation routines across edge cases to enforce compliance before publishing.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [Rustup](rustup.md) — Related concept: Rustup.
+- [`docs.rs`](docs_rs.md) — Related concept: `docs.rs`.
 
 ---
 

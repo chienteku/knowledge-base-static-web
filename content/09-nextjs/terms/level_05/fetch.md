@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [React Server Components (RSC)](../level_01/rsc.md) — Where you execute the fetch.
-- [JavaScript Fetch API](../level_05/js_fetch.md) — The foundation of this extended API.
-
+- [JavaScript Fetch API](js_fetch.md) — The foundation of this extended API.
 ---
 
 ## 2. Term Category
@@ -172,9 +171,12 @@ const data = await res.json(); // Store parsed JSON in variable once
 ---
 
 ## 7. Related Terms
-- [Data Caching](../level_05/data_caching.md) — How to control how long the `fetch` result is stored.
+- [Data Caching (`force-cache`, `no-store`)](data_caching.md) — How to control how long the `fetch` result is stored.
 - [React Server Components (RSC)](../level_01/rsc.md) — The components that allow top-level `async/await`.
-
+- [Client-side Fetching (SWR / React Query)](client_fetching.md) — Related concept: Client-side Fetching (SWR / React Query).
+- [JavaScript Fetch API](js_fetch.md) — Related concept: JavaScript Fetch API.
+- [`React.cache()` Function](react_cache.md) — Related concept: `React.cache()` Function.
+- [Open Graph & Twitter Cards (`generateMetadata`)](../level_09/generate_metadata.md) — Related concept: Open Graph & Twitter Cards (`generateMetadata`).
 ---
 
 ## 8. Key Takeaways

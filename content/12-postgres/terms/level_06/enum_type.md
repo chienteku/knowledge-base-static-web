@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](../level_02/data_types.md) — The parent database typing standard.
-
 ---
 
 ## 2. Term Category
@@ -202,7 +201,6 @@ Use a lookup table with foreign key reference for dynamic category lists
 ## 7. Related Terms
 - [Data Types (Overview)](../level_02/data_types.md) — The parent typing system.
 - [`ALTER TABLE`](alter_table.md) — Editing schemas.
-
 ---
 
 ## 8. Key Takeaways

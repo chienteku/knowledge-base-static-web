@@ -6,9 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [State](../level_02/state.md) — You must understand what State is before you use this hook to create it.
-- Array Destructuring (ES6 JavaScript)
-
+- [State](state.md) — You must understand what State is before you use this hook to create it.
 ---
 
 ## 2. Term Category
@@ -180,9 +178,16 @@ const [data, setData] = useState(() => parseHeavyData()); // Lazy initial state
 > **Explanation:** Functional updaters receive the latest state snapshot (`prev`), guaranteeing safe concurrent state mutations.
 
 ## 7. Related Terms
-- [State](../level_02/state.md) — The concept that `useState` implements.
+- [State](state.md) — The concept that `useState` implements.
 - [Rules of Hooks](../level_04/rules_of_hooks.md) — Strict rules on where you are allowed to type `useState()`.
-
+- [Automatic Batching](automatic_batching.md) — Related concept: Automatic Batching.
+- [Immutability](immutability.md) — Related concept: Immutability.
+- [Data Fetching & Race Conditions](../level_03/data_fetching_race_conditions.md) — Related concept: Data Fetching & Race Conditions.
+- [`useRef` Hook](../level_04/use_ref.md) — Related concept: `useRef` Hook.
+- [`useReducer` Hook](../level_06/use_reducer.md) — Related concept: `useReducer` Hook.
+- [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
+- [Re-rendering](re_rendering.md) — Re-rendering triggered by state.
+- [Controlled Components](../level_05/controlled_components.md) — Related concept: Controlled Components.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — Sizing boxes that the flow algorithm arranges.
-
+- [The Box Model (Concept)](../level_02/box_model.md) — Sizing boxes that the flow algorithm arranges.
 ---
 
 ## 2. Term Category
@@ -339,10 +338,10 @@ Comparing flow styles:
 > **Explanation:** `display: flow-root` creates a BFC containing all internal floated children.
 
 ## 7. Related Terms
-- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — The fundamental flow markers.
-- [`position: static` vs `relative`](../level_04/position_static_relative.md) — In-flow positioning options.
-- [`position: absolute` vs `fixed`](../level_04/position_absolute_fixed.md) — Out-of-flow positioning options.
-
+- [`display: block` vs `inline` vs `inline-block`](display.md) — The fundamental flow markers.
+- [`position: static` vs `relative`](position_static_relative.md) — In-flow positioning options.
+- [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Out-of-flow positioning options.
+- [`float` & `clear` (Legacy context)](float_clear.md) — Related concept: `float` & `clear` (Legacy context).
 ---
 
 ## 8. Key Takeaways

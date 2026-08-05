@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Context API](../level_06/context_api.md) — You must understand how to Create and Provide Context before you can Consume it.
-
+- [The Context API](context_api.md) — You must understand how to Create and Provide Context before you can Consume it.
 ---
 
 ## 2. Term Category
@@ -179,9 +178,9 @@ Write a custom hook called `useTheme` that returns the `ThemeContext`.
 > **Explanation:** `useContext` can be called multiple times inside a component to consume independent contexts.
 
 ## 7. Related Terms
-- [The Context API](../level_06/context_api.md) — The system that powers this hook.
+- [The Context API](context_api.md) — The system that powers this hook.
 - [Custom Hooks](../level_04/custom_hooks.md) — Often used to wrap `useContext` for cleaner code.
-
+- [Prop Drilling](prop_drilling.md) — Solving prop drilling.
 ---
 
 ## 8. Key Takeaways

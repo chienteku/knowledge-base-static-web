@@ -6,10 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Object](../level_02/object.md) — A collection of key-value pairs.
-- [Property](../level_02/property.md) — An association between a key and a value in an object.
-- *Note: Familiarity with Functions is helpful, though they are fully covered in Level 3.*
-
+- [Object](object.md) — A collection of key-value pairs.
+- [Property](property.md) — An association between a key and a value in an object.
 ---
 
 ## 2. Term Category
@@ -215,10 +213,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Object](../level_02/object.md) — The container that holds the method.
-- [Property](../level_02/property.md) — A key-value pair (a method is just a property where the value is a function).
-- Function (Level 3) — A reusable block of code.
-
+- [Object](object.md) — The container that holds the method.
+- [Property](property.md) — A key-value pair (a method is just a property where the value is a function).
+- [Property Access (dot vs bracket notation)](property_access.md) — Related concept: Property Access (dot vs bracket notation).
+- [Arrow Function](../level_03/arrow_function.md) — Related concept: Arrow Function.
 ---
 
 ## 8. Key Takeaways

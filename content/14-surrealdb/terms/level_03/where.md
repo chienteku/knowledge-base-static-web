@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`SELECT`](select.md) — The query context.
 
 ---
@@ -191,8 +192,10 @@ Write the SurrealQL query to:
 > **Explanation:** `IS NOT NONE` filters records possessing valid assigned field keys.
 
 ## 7. Related Terms
+
 - [`SELECT`](select.md) — The parent query statement.
 - [Operators in SurrealQL](operators.md) — The logical check symbols.
+- [Graph Traversal Filtering (`WHERE` on edges)](../level_05/graph_filtering.md) — Related concept: Graph Traversal Filtering (`WHERE` on edges).
 
 ---
 

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Database (Concept - PostgreSQL)](../../../12-postgres/terms/level_01/database.md) — Relational paradigm.
-- [Database Context (MongoDB)](../level_01/database_context.md) — Document paradigm.
+
+- [Database](../../../12-postgres/terms/level_01/database.md) — Relational paradigm.
+- [Database (MongoDB Context)](../level_01/database_context.md) — Document paradigm.
 
 ---
 
@@ -185,8 +186,9 @@ Recommend the optimal database (**PostgreSQL** or **MongoDB**) for each requirem
 > **Explanation:** MongoDB includes built-in sharding routers and config servers for horizontal scaling.
 
 ## 7. Related Terms
-- [Database (Concept - PostgreSQL)](../../../12-postgres/terms/level_01/database.md) — Relational paradigm.
-- [Database Context (MongoDB)](../level_01/database_context.md) — Document paradigm.
+
+- [Database](../../../12-postgres/terms/level_01/database.md) — Relational paradigm.
+- [Database (MongoDB Context)](../level_01/database_context.md) — Document paradigm.
 
 ---
 

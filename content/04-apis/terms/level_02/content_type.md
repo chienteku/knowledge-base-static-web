@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Headers](./http_headers.md) — Metadata wrappers sent with HTTP payloads.
-
+- [HTTP Headers](http_headers.md) — Metadata wrappers sent with HTTP payloads.
 ---
 
 ## 2. Term Category
@@ -206,9 +205,11 @@ fetch('/upload', {
 ---
 
 ## 7. Related Terms
-- [Request Body & Payloads](./request_body.md) — The raw message payload described by Content-Type.
+- [Request Body & Payloads](request_body.md) — The raw message payload described by Content-Type.
 - [Serialization & Deserialization](../level_07/serialization.md) — The process of transforming objects into raw MIME formats.
-
+- [FormData & Multipart Uploads](../level_05/formdata.md) — Related concept: FormData & Multipart Uploads.
+- [HTTP Headers](http_headers.md) — Related concept: HTTP Headers.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — Related concept: JSON (JavaScript Object Notation).
 ---
 
 ## 8. Key Takeaways

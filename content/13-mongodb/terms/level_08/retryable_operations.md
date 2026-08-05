@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`WriteConcernError` / `WriteError`](write_errors.md) — The write failure context.
 - [Replica Set](../level_09/replica_set.md) — The distributed cluster.
 
@@ -192,6 +193,7 @@ Describe the step-by-step actions the driver will execute to resolve this query.
 > **Explanation:** Retryable writes utilize WiredTiger transaction logs to prevent duplicate executions.
 
 ## 7. Related Terms
+
 - [`WriteConcernError` / `WriteError`](write_errors.md) — The error formats.
 - [Replica Set](../level_09/replica_set.md) — The distributed cluster.
 

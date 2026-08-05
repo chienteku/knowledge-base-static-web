@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_01/components.md) — You pass props into components.
-
+- [Components](components.md) — You pass props into components.
 ---
 
 ## 2. Term Category
@@ -212,10 +211,12 @@ function Header({ title, onUpdate }) {
 
 
 ## 7. Related Terms
-- [Render Purity](./render_purity.md) — Why props must remain read-only snapshots during render.
+- [Render Purity](render_purity.md) — Why props must remain read-only snapshots during render.
 - [State](../level_02/state.md) — Unlike Props (which are read-only and passed down), State is data that the component owns and can mutate.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — The rule that Props only go down, never up.
-
+- [Components](components.md) — Related concept: Components.
+- [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
+- [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
 ---
 
 ## 8. Key Takeaways

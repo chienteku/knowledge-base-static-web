@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Vue Router](../level_06/vue_router.md) — The base routing system.
-- [Router View](../level_06/router_view_link.md) — The HTML tag required to make nesting work.
-
+- [Vue Router](vue_router.md) — The base routing system.
+- [Router View / Router Link](router_view_link.md) — The HTML tag required to make nesting work.
 ---
 
 ## 2. Term Category
@@ -205,9 +204,8 @@ What URL actually triggers the billing component?
 ---
 
 ## 7. Related Terms
-- [Router View](../level_06/router_view_link.md) — The `<RouterView>` component must be used in the parent to render the nested children.
-- [Vue Router](../level_06/vue_router.md) — The overarching library.
-
+- [Router View / Router Link](router_view_link.md) — The `<RouterView>` component must be used in the parent to render the nested children.
+- [Vue Router](vue_router.md) — The overarching library.
 ---
 
 ## 8. Key Takeaways

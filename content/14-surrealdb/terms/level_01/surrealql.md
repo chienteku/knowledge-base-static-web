@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB](surrealdb.md) — The parent database engine.
 
 ---
@@ -203,8 +204,15 @@ Write the equivalent query in SurrealQL.
 > **Explanation:** `<future>` expressions evaluate dynamic calculations on demand during query execution.
 
 ## 7. Related Terms
+
 - [SurrealDB](surrealdb.md) — The parent database engine.
 - [Record](record.md) — The fundamental data unit.
+- [Multi-Model Database](multi_model_database.md) — Related concept: Multi-Model Database.
+- [Built-in Functions Overview](../level_06/builtin_functions.md) — Related concept: Built-in Functions Overview.
+- [`IF` / `ELSE` Expressions](../level_06/if_else.md) — Related concept: `IF` / `ELSE` Expressions.
+- [Parameters (`$param`)](../level_06/parameters.md) — Related concept: Parameters (`$param`).
+- [SurrealDB CLI (`surreal sql`)](surreal_cli.md) — Surreal CLI query execution.
+- [Surrealist (Web IDE)](surrealist.md) — Surrealist GUI query editor.
 
 ---
 

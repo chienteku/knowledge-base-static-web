@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [RETURN Statement (in Functions / Blocks)](../level_06/return_statement.md) — Returning values from functions.
+
+- [`RETURN` Statement (in Functions / Blocks)](../level_06/return_statement.md) — Returning values from functions.
 - [Built-in Functions Overview](../level_06/builtin_functions.md) — Standard library functions.
 
 ---
@@ -199,9 +200,11 @@ Write a `DEFINE FUNCTION` statement named `fn::is_adult` that accepts an `$age: 
 > **Explanation:** Custom functions are called using `fn::func_name(args)` syntax.
 
 ## 7. Related Terms
-- [RETURN Statement (in Functions / Blocks)](../level_06/return_statement.md) — Flow-control return.
+
+- [`RETURN` Statement (in Functions / Blocks)](../level_06/return_statement.md) — Flow-control return.
 - [`DEFINE EVENT`](define_event.md) — Event triggers calling custom functions.
 - [Built-in Functions Overview](../level_06/builtin_functions.md) — Native function library.
+- [`DEFINE PARAM`](define_param.md) — Related concept: `DEFINE PARAM`.
 
 ---
 

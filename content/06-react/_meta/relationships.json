@@ -55,6 +55,11 @@
           "term": "styled_components",
           "module": "06-react",
           "description": "Related concept: Styled Components / Emotion (CSS-in-JS)."
+        },
+        {
+          "module": "06-react",
+          "term": "typescript_react",
+          "description": "Related concept: TypeScript with React."
         }
       ]
     },
@@ -244,6 +249,11 @@
           "term": "typescript_react",
           "module": "06-react",
           "description": "Related concept: TypeScript with React."
+        },
+        {
+          "module": "06-react",
+          "term": "lifting_state_up",
+          "description": "Related concept: Lifting State Up."
         }
       ]
     },
@@ -454,6 +464,11 @@
           "term": "render_purity",
           "module": "06-react",
           "description": "The rule that calculations during render must remain self-contained."
+        },
+        {
+          "module": "06-react",
+          "term": "state",
+          "description": "Related concept: State."
         }
       ]
     },
@@ -517,6 +532,16 @@
           "term": "context_api",
           "module": "06-react",
           "description": "The alternative state sharing mechanism for deeply nested trees."
+        },
+        {
+          "module": "06-react",
+          "term": "props",
+          "description": "Passing state down via props."
+        },
+        {
+          "module": "06-react",
+          "term": "state_management",
+          "description": "State management patterns."
         }
       ]
     },
@@ -571,6 +596,11 @@
           "term": "react_devtools",
           "module": "06-react",
           "description": "Related concept: React DevTools."
+        },
+        {
+          "module": "06-react",
+          "term": "use_state",
+          "description": "Related concept: `useState` Hook."
         }
       ]
     },
@@ -610,6 +640,16 @@
           "term": "props",
           "module": "06-react",
           "description": "Related concept: Props (Properties)."
+        },
+        {
+          "module": "06-react",
+          "term": "derived_state",
+          "description": "Derived state."
+        },
+        {
+          "module": "06-react",
+          "term": "unidirectional_flow",
+          "description": "Unidirectional data flow."
         }
       ]
     },
@@ -644,6 +684,11 @@
           "term": "controlled_components",
           "module": "06-react",
           "description": "Related concept: Controlled Components."
+        },
+        {
+          "module": "06-react",
+          "term": "state",
+          "description": "Related concept: State."
         }
       ]
     },
@@ -698,6 +743,16 @@
           "term": "typescript_react",
           "module": "06-react",
           "description": "Related concept: TypeScript with React."
+        },
+        {
+          "module": "06-react",
+          "term": "re_rendering",
+          "description": "Re-rendering triggered by state."
+        },
+        {
+          "module": "06-react",
+          "term": "controlled_components",
+          "description": "Related concept: Controlled Components."
         }
       ]
     },
@@ -771,6 +826,11 @@
           "term": "cleanup_functions",
           "module": "06-react",
           "description": "Code that specifically runs during the Unmounting phase."
+        },
+        {
+          "module": "06-react",
+          "term": "error_boundaries",
+          "description": "Related concept: Error Boundaries."
         }
       ]
     },
@@ -834,6 +894,11 @@
           "term": "use_effect",
           "module": "06-react",
           "description": "Related concept: `useEffect` Hook."
+        },
+        {
+          "module": "06-react",
+          "term": "stale_closures",
+          "description": "Stale closure bugs."
         }
       ]
     },
@@ -907,6 +972,11 @@
           "term": "use_callback",
           "module": "06-react",
           "description": "The hook for caching callback functions, prone to stale closures."
+        },
+        {
+          "module": "06-react",
+          "term": "dependency_array",
+          "description": "Related concept: Dependency Array."
         }
       ]
     },
@@ -1039,6 +1109,11 @@
           "term": "render_props",
           "module": "06-react",
           "description": "Related concept: Render Props."
+        },
+        {
+          "module": "06-react",
+          "term": "typescript_react",
+          "description": "Related concept: TypeScript with React."
         }
       ]
     },
@@ -1131,6 +1206,11 @@
           "term": "react_memo",
           "module": "06-react",
           "description": "The component rendering cache that relies on shallow reference equality."
+        },
+        {
+          "module": "06-react",
+          "term": "use_memo",
+          "description": "Related concept: `useMemo` Hook."
         }
       ]
     },
@@ -1287,6 +1367,11 @@
           "term": "memoization",
           "module": "06-react",
           "description": "Related concept: Memoization (the concept)."
+        },
+        {
+          "module": "06-react",
+          "term": "referential_equality",
+          "description": "Referential equality."
         }
       ]
     },
@@ -1394,6 +1479,16 @@
           "term": "unidirectional_flow",
           "module": "06-react",
           "description": "Controlled components perfectly demonstrate this concept."
+        },
+        {
+          "module": "06-react",
+          "term": "use_state",
+          "description": "useState for form inputs."
+        },
+        {
+          "module": "06-react",
+          "term": "synthetic_events",
+          "description": "Related concept: Synthetic Events."
         }
       ]
     },
@@ -1452,6 +1547,11 @@
           "term": "react_testing_library",
           "module": "06-react",
           "description": "Related concept: Testing: React Testing Library + Jest."
+        },
+        {
+          "module": "06-react",
+          "term": "controlled_components",
+          "description": "Form input events."
         }
       ]
     },
@@ -1569,6 +1669,11 @@
           "term": "unidirectional_flow",
           "module": "06-react",
           "description": "Related concept: Unidirectional Data Flow."
+        },
+        {
+          "module": "06-react",
+          "term": "use_context",
+          "description": "Related concept: `useContext` Hook."
         }
       ]
     },
@@ -1618,6 +1723,11 @@
           "term": "zustand",
           "module": "06-react",
           "description": "Related concept: Zustand."
+        },
+        {
+          "module": "06-react",
+          "term": "lifting_state_up",
+          "description": "Related concept: Lifting State Up."
         }
       ]
     },
@@ -1642,6 +1752,11 @@
           "term": "custom_hooks",
           "module": "06-react",
           "description": "Often used to wrap `useContext` for cleaner code."
+        },
+        {
+          "module": "06-react",
+          "term": "prop_drilling",
+          "description": "Solving prop drilling."
         }
       ]
     },
@@ -1773,6 +1888,11 @@
           "term": "children_prop",
           "module": "06-react",
           "description": "The JSX container that allows subcomponent markup structures."
+        },
+        {
+          "module": "06-react",
+          "term": "hoc",
+          "description": "Related concept: Higher-Order Components (HOC)."
         }
       ]
     },
@@ -1792,6 +1912,11 @@
           "term": "error",
           "module": "09-nextjs",
           "description": "The Next.js framework has built-in Error Boundaries disguised as simple files."
+        },
+        {
+          "module": "06-react",
+          "term": "component_lifecycle",
+          "description": "componentDidCatch lifecycle hook."
         }
       ]
     },
@@ -1821,6 +1946,16 @@
           "term": "composition_inheritance",
           "module": "06-react",
           "description": "Related concept: Composition over Inheritance."
+        },
+        {
+          "module": "06-react",
+          "term": "render_props",
+          "description": "Render props pattern."
+        },
+        {
+          "module": "06-react",
+          "term": "compound_components",
+          "description": "Compound components pattern."
         }
       ]
     },
@@ -1874,6 +2009,11 @@
           "term": "children_prop",
           "module": "06-react",
           "description": "Related concept: Children Prop."
+        },
+        {
+          "module": "06-react",
+          "term": "hoc",
+          "description": "Related concept: Higher-Order Components (HOC)."
         }
       ]
     },
@@ -2151,6 +2291,16 @@
           "term": "use_hook",
           "module": "06-react",
           "description": "Related concept: Suspense for Data Fetching & the `use()` Hook."
+        },
+        {
+          "module": "06-react",
+          "term": "use_transition",
+          "description": "useTransition hook."
+        },
+        {
+          "module": "06-react",
+          "term": "use_deferred_value",
+          "description": "useDeferredValue hook."
         }
       ]
     },
@@ -2180,6 +2330,11 @@
           "term": "concurrent_rendering",
           "module": "06-react",
           "description": "The engine architecture that enables deferred rendering."
+        },
+        {
+          "module": "06-react",
+          "term": "suspense",
+          "description": "Related concept: Suspense."
         }
       ]
     },
@@ -2209,6 +2364,11 @@
           "term": "use_deferred_value",
           "module": "06-react",
           "description": "Deferring updates when you do not control the state setter."
+        },
+        {
+          "module": "06-react",
+          "term": "suspense",
+          "description": "Related concept: Suspense."
         }
       ]
     },
@@ -2549,6 +2709,21 @@
           "term": "client_server_components",
           "module": "06-react",
           "description": "Related concept: Client vs Server Components & `\"use client\"`."
+        },
+        {
+          "module": "06-react",
+          "term": "server_actions",
+          "description": "Server Actions."
+        },
+        {
+          "module": "06-react",
+          "term": "use_action_state",
+          "description": "useActionState hook."
+        },
+        {
+          "module": "06-react",
+          "term": "use_hook",
+          "description": "Related concept: Suspense for Data Fetching & the `use()` Hook."
         }
       ]
     },
@@ -2578,6 +2753,11 @@
           "term": "use_action_state",
           "module": "06-react",
           "description": "The hook used to read the return status of a Server Action."
+        },
+        {
+          "module": "06-react",
+          "term": "rsc",
+          "description": "Related concept: React Server Components (RSC)."
         }
       ]
     },
@@ -2719,6 +2899,11 @@
           "term": "suspense",
           "module": "06-react",
           "description": "The UI fallback catcher for pending promises."
+        },
+        {
+          "module": "06-react",
+          "term": "rsc",
+          "description": "React Server Components."
         }
       ]
     },
@@ -2806,6 +2991,11 @@
           "term": "state_management",
           "module": "06-react",
           "description": "React Query acts as the global state manager specifically for API data."
+        },
+        {
+          "module": "06-react",
+          "term": "redux",
+          "description": "Related concept: Redux."
         }
       ]
     },
@@ -2869,6 +3059,11 @@
           "term": "zustand",
           "module": "06-react",
           "description": "Related concept: Zustand."
+        },
+        {
+          "module": "06-react",
+          "term": "react_query",
+          "description": "React Query server state."
         }
       ]
     },
@@ -2922,6 +3117,16 @@
           "term": "use_state",
           "module": "06-react",
           "description": "The state manager utilizing generics."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Typed component props."
+        },
+        {
+          "module": "06-react",
+          "term": "custom_hooks",
+          "description": "Typed custom hooks."
         }
       ]
     },
@@ -3000,8 +3205,15 @@
         {
           "module": "06-react",
           "term": "server_actions"
+        },
+        {
+          "module": "06-react",
+          "term": "rsc",
+          "description": "Related concept: React Server Components (RSC)."
         }
-      ]
+      ],
+      "display_name": "`useActionState` Hook",
+      "level": 10
     }
   }
 }

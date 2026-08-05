@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Marker Traits](../level_14/marker_traits.md) — Traits with empty bodies used to categorize types.
-- [Zero-Sized Types (ZSTs)](../level_11/zsts.md) — Types that occupy 0 bytes of memory used as state tags.
-- [Generics](../level_04/generics.md) — Generic parameters (`struct Machine<State>`).
+
+- [Marker Traits](marker_traits.md) — Traits with empty bodies used to categorize types.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Types that occupy 0 bytes of memory used as state tags.
+- [Generics (`<T>`)](../level_04/generics.md) — Generic parameters (`struct Machine<State>`).
 
 ---
 
@@ -585,10 +586,14 @@ Build a data-carrying typestate transaction engine:
 
 ## 7. Related Terms
 
-- [Marker Traits](../level_14/marker_traits.md) — Empty traits used as state bounds.
-- [Zero-Sized Types (ZSTs)](../level_11/zsts.md) — 0-byte state tag types.
-- [Generics](../level_04/generics.md) — Type parameters parameterizing states.
+
+- [Marker Traits](marker_traits.md) — Empty traits used as state bounds.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — 0-byte state tag types.
+- [Generics (`<T>`)](../level_04/generics.md) — Type parameters parameterizing states.
 - [Newtype Pattern](../level_11/newtype_pattern.md) — Domain wrapping pattern.
+- [GATs (Generic Associated Types)](gats.md) — Related concept: GATs (Generic Associated Types).
+- [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Related concept: Zero-Cost Abstractions.
+- [Builder Pattern](../level_18/builder_pattern.md) — Related concept: Builder Pattern.
 
 ---
 

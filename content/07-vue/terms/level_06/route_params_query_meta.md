@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Vue Router](../level_06/vue_router.md) — The router registration library.
-- [Dynamic Routing](../level_06/dynamic_routing.md) — Dynamic URL mapping.
-- [Programmatic Navigation](../level_06/programmatic_navigation.md) — Script-driven page navigation.
-
+- [Vue Router](vue_router.md) — The router registration library.
+- [Dynamic Routing](dynamic_routing.md) — Dynamic URL mapping.
+- [Programmatic Navigation (`useRouter` / `useRoute`)](programmatic_navigation.md) — Script-driven page navigation.
 ---
 
 ## 2. Term Category
@@ -273,10 +272,9 @@ router.beforeEach((to, from, next) => {
 ---
 
 ## 7. Related Terms
-- [Vue Router](../level_06/vue_router.md) — The routing system container.
-- [Dynamic Routing](../level_06/dynamic_routing.md) — Mapping paths containing colon variables.
-- [Navigation Guards](../level_06/navigation_guards.md) — Route middleware hooks.
-
+- [Vue Router](vue_router.md) — The routing system container.
+- [Dynamic Routing](dynamic_routing.md) — Mapping paths containing colon variables.
+- [Navigation Guards](navigation_guards.md) — Route middleware hooks.
 ---
 
 ## 8. Key Takeaways

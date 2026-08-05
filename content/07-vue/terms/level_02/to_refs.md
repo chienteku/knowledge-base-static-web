@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`reactive`](../level_02/reactive.md) — The reactivity API used to make objects reactive.
-- [`ref`](../level_02/ref.md) — The reactivity API for wrapping single values.
-
+- [`reactive`](reactive.md) — The reactivity API used to make objects reactive.
+- [`ref`](ref.md) — The reactivity API for wrapping single values.
 ---
 
 ## 2. Term Category
@@ -272,10 +271,9 @@ function promote() {
 ---
 
 ## 7. Related Terms
-- [`reactive`](../level_02/reactive.md) — The API for defining reactive objects.
-- [`ref`](../level_02/ref.md) — The API for defining single reactive values.
+- [`reactive`](reactive.md) — The API for defining reactive objects.
+- [`ref`](ref.md) — The API for defining single reactive values.
 - [Proxy Reactivity](../level_08/proxy_reactivity.md) — The underlying ES6 Proxy engine that makes `reactive` function.
-
 ---
 
 ## 8. Key Takeaways

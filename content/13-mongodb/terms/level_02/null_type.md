@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type system.
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The context of omitted fields.
 
@@ -185,8 +186,11 @@ db.users.find({ middleName: { $type: "null" } }); // Matches ONLY explicit BSON 
 > **Explanation:** `{ $exists: false }` checks whether a field key is absent from target documents.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON types.
 - [Flexible Schema (Schema-on-Read)](../level_01/flexible_schema.md) — The concept of dynamic layouts.
+- [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — Related concept: Element Query Operators (`$exists`, `$type`).
+- [Querying `null` and Missing Fields](../level_04/querying_null_missing.md) — Related concept: Querying `null` and Missing Fields.
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [JavaScript Data Types](../../../03-javascript/terms/level_01/primitive_types.md) — The runtime types these annotations protect.
-
+- Primitive Types — The runtime types these annotations protect.
 ---
 
 ## 2. Term Category
@@ -153,8 +152,8 @@ const sum = 10n + BigInt(5);
 
 ## 7. Related Terms
 - [Type Inference](../level_01/type_inference.md) — Why you rarely need to write primitive type annotations.
-- [Arrays & Tuples](../level_02/arrays_tuples.md) — How to group primitives together.
-
+- [Arrays & Tuples](arrays_tuples.md) — How to group primitives together.
+- [`null`, `undefined` & `strictNullChecks`](null_undefined_strict.md) — Related concept: `null`, `undefined` & `strictNullChecks`.
 ---
 
 ## 8. Key Takeaways

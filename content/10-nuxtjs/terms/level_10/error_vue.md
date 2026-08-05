@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`createError` & `showError`](../level_10/create_error.md) — The utility functions that trigger this page.
-- [`app.vue` Layout](../level_02/app_vue.md) — The root application instance `error.vue` completely replaces.
-
+- [`app.vue`](../level_02/app_vue.md) — The root application instance `error.vue` completely replaces.
+- [`createError`, `showError` & `clearError`](create_error.md) — The utility functions that trigger this page.
 ---
 
 ## 2. Term Category
@@ -193,8 +192,10 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 ---
 
 ## 7. Related Terms
-- [`<NuxtErrorBoundary>`](../level_10/nuxt_error_boundary.md) — How to handle non-fatal errors without destroying the whole page layout.
-
+- [`<NuxtErrorBoundary>` Component](nuxt_error_boundary.md) — How to handle non-fatal errors without destroying the whole page layout.
+- [Fetching Errors & `clearNuxtData`](../level_05/fetching_errors.md) — Related concept: Fetching Errors & `clearNuxtData`.
+- [`abortNavigation` Utility](../level_08/abort_navigation.md) — Related concept: `abortNavigation` Utility.
+- [`createError`, `showError` & `clearError`](create_error.md) — Related concept: `createError`, `showError` & `clearError`.
 ---
 
 ## 8. Key Takeaways

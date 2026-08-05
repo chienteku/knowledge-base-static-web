@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent blueprint properties where the `fr` unit is declared.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint properties where the `fr` unit is declared.
 ---
 
 ## 2. Term Category
@@ -304,9 +303,9 @@ What is the final width in pixels of the second column (the `1fr` column)?
 > **Explanation:** `fr` units handle layout gap math automatically.
 
 ## 7. Related Terms
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent blueprint.
-- [`minmax()`](../level_06/grid_minmax.md) — A function commonly used with `fr` units to set sizing caps.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
+- [`minmax()` Function](grid_minmax.md) — A function commonly used with `fr` units to set sizing caps.
+- [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Related concept: CSS Grid (Concept) & `display: grid`.
 ---
 
 ## 8. Key Takeaways

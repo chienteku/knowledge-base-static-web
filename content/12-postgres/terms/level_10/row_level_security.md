@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The roles bound by security policies.
-
 ---
 
 ## 2. Term Category
@@ -221,7 +220,6 @@ Write the SQL DDL queries to:
 ## 7. Related Terms
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The roles bound.
 - [View](../level_09/view.md) — Creating simple logical column masks.
-
 ---
 
 ## 8. Key Takeaways

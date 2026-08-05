@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The form is a master container that holds other input elements.
 - [Nesting](../level_01/nesting.md) — Since other form controls must nest inside this boundary tag.
-
 ---
 
 ## 2. Term Category
@@ -191,10 +190,11 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 > **Explanation:** `novalidate` bypasses native browser input validation popups.
 
 ## 7. Related Terms
-- [`action` & `method` Attributes](../level_05/action_method.md) — The destination and request details for form data.
-- [`<input>`](../level_05/input.md) — The text boxes and checkboxes that go *inside* the form.
-- [`<button>`](../level_05/button.md) — The trigger that actually submits the form.
-
+- [`action` & `method` Attributes](action_method.md) — The destination and request details for form data.
+- [`<input>`](input.md) — The text boxes and checkboxes that go *inside* the form.
+- [`<button>`](button.md) — The trigger that actually submits the form.
+- [`name` Attribute (in Form Fields)](name.md) — Related concept: `name` Attribute (in Form Fields).
+- [`<label>`](label.md) — Input label element.
 ---
 
 ## 8. Key Takeaways

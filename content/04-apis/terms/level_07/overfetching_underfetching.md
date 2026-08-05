@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](../level_03/rest.md) — The resource-based endpoint architectural design.
-- [GraphQL (The REST Alternative)](./graphql.md) — The query language designed to address REST constraints.
-
+- [GraphQL (The REST Alternative)](graphql.md) — The query language designed to address REST constraints.
 ---
 
 ## 2. Term Category
@@ -216,7 +215,7 @@ GET /api/users/5?embed=posts,comments ; Single request fetching nested sub-resou
 ## 7. Related Terms
 - [Resource Naming & URI Design](../level_03/resource_naming.md) — The design pattern governing REST routes.
 - [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — The methods of splitting large resource collections to prevent over-fetching.
-
+- [GraphQL (The REST Alternative)](graphql.md) — Related concept: GraphQL (The REST Alternative).
 ---
 
 ## 8. Key Takeaways

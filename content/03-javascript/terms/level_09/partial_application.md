@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Closure](../level_03/closure.md) — The mechanism preserving scope variables.
-- [`call` / `apply` / `bind`](../level_07/call_apply_bind.md) — Explicit context and argument binding.
-
+- [call / apply / bind](../level_07/call_apply_bind.md) — Explicit context and argument binding.
 ---
 
 ## 2. Term Category
@@ -219,8 +218,8 @@ fetchUsers({ method: "GET" });
 ---
 
 ## 7. Related Terms
-- [Currying](./currying.md) — The transformation of a function into a nested chain of single-argument functions.
-
+- [Currying](currying.md) — The transformation of a function into a nested chain of single-argument functions.
+- [Functional Programming & Composition](functional_programming.md) — Related concept: Functional Programming & Composition.
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Trait](../level_04/trait.md) — The contract being manually implemented.
+
+- [Trait](trait.md) — The contract being manually implemented.
 - [`println!` / `format!`](../level_01/println_format.md) — The macros that consume this trait.
-- [`Debug` Trait](../level_04/debug_trait.md) — The developer-facing counterpart.
+- [`Debug` Trait](debug_trait.md) — The developer-facing counterpart.
 
 ---
 
@@ -596,8 +597,10 @@ Requirements:
 
 ## 6. Related Terms
 
-- [`Debug` Trait](../level_04/debug_trait.md) — The developer-facing counterpart to `Display`.
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The type you magically get for free (via the `.to_string()` method) the moment you implement the `Display` trait.
+
+- [`Debug` Trait](debug_trait.md) — The developer-facing counterpart to `Display`.
+- [String vs &str](../level_01/string_vs_&str.md) — The type you magically get for free (via the `.to_string()` method) the moment you implement the `Display` trait.
+- [`println!` / `format!`](../level_01/println_format.md) — Related concept: `println!` / `format!`.
 
 ---
 

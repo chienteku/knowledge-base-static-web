@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Color & Background](../level_03/color_vs_background.md) — The parent container properties.
-
+- [`color` vs `background-color`](../level_03/color_vs_background.md) — The parent container properties.
 ---
 
 ## 2. Term Category
@@ -255,9 +254,8 @@ div {
 > **Explanation:** `radial-gradient` radiates outward from a center focal point.
 
 ## 7. Related Terms
-- [`background-size` / `cover` / `contain`](background_size.md) — Scaling backgrounds.
-- [Color & Background](../level_03/color_vs_background.md) — Base background declarations.
-
+- [`background-size` (cover / contain)](background_size.md) — Scaling backgrounds.
+- [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background declarations.
 ---
 
 ## 8. Key Takeaways

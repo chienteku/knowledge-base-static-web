@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [PM2 (Process Manager)](./pm2.md) — The process runner monitoring output logs.
-- [Environment Variables (dotenv)](./env_vars.md) — Configurations adjusting logging levels dynamically.
-
+- [PM2 (Process Manager)](pm2.md) — The process runner monitoring output logs.
+- [Environment Variables (dotenv)](env_vars.md) — Configurations adjusting logging levels dynamically.
 ---
 
 ## 2. Term Category
@@ -211,9 +210,8 @@ app.get('/health/ready', (req, res) => {
 > **Explanation:** RED metrics provide visibility into server throughput, error rates, and response latency.
 
 ## 7. Related Terms
-- [PM2 (Process Manager)](./pm2.md) — Captures stdout/stderr outputs and manages application logs.
-- [Graceful Shutdown & Process Signals](./graceful_shutdown.md) — Works with health probes to drain traffic before container termination.
-
+- [PM2 (Process Manager)](pm2.md) — Captures stdout/stderr outputs and manages application logs.
+- [Graceful Shutdown & Process Signals](graceful_shutdown.md) — Works with health probes to drain traffic before container termination.
 ---
 
 ## 8. Key Takeaways

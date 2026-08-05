@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Reactive State](../level_02/reactive_state.md) — How Vue detects data changes.
-- [Component Lifecycle](../level_04/component_lifecycle.md) — The timing phases of rendering.
-
+- [Component Lifecycle](component_lifecycle.md) — The timing phases of rendering.
 ---
 
 ## 2. Term Category
@@ -291,9 +290,8 @@ function startEdit() {
 
 ## 7. Related Terms
 - [Watchers](../level_02/watchers.md) — Listening for state changes to perform async tasks.
-- [Virtual DOM](../level_08/virtual_dom.md) — The lightweight in-memory tree that Vue updates before flushing changes to the screen.
-- [Component Lifecycle](../level_04/component_lifecycle.md) — The sequence of hooks coordinating component rendering.
-
+- [Virtual DOM (Vue)](../level_08/virtual_dom.md) — The lightweight in-memory tree that Vue updates before flushing changes to the screen.
+- [Component Lifecycle](component_lifecycle.md) — The sequence of hooks coordinating component rendering.
 ---
 
 ## 8. Key Takeaways

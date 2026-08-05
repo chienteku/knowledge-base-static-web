@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`Vec<T>`](../level_02/vec_t.md) — The single-ended growable array this type generalizes.
+
+- [`Vec<T>`](vec_t.md) — The single-ended growable array this type generalizes.
 - [`IntoIterator`](../level_06/intoiterator.md) — What lets a `VecDeque` be used in a `for` loop.
 
 ---
@@ -742,7 +743,8 @@ Implement an `OrderBookMatcher` trading engine:
 
 ## 6. Related Terms
 
-- [`Vec<T>`](../level_02/vec_t.md) — The single-ended sibling; `VecDeque` is the right choice specifically when front-end operations matter too.
+
+- [`Vec<T>`](vec_t.md) — The single-ended sibling; `VecDeque` is the right choice specifically when front-end operations matter too.
 - [`IntoIterator`](../level_06/intoiterator.md) — `VecDeque` implements this, so it works directly in `for` loops.
 - [Channel (`mpsc`)](../level_09/channel_mpsc.md) — Conceptually related: both model a FIFO queue, though `mpsc` adds cross-thread synchronization that a plain `VecDeque` does not have.
 

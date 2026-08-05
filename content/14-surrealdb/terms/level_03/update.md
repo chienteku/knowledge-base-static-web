@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 
 ---
@@ -192,8 +193,13 @@ Write the equivalent, optimized query in SurrealQL.
 > **Explanation:** `UPDATE table SET ... WHERE condition` updates records matching predicate criteria.
 
 ## 7. Related Terms
+
 - [`CREATE`](create.md) — The parent write statement.
-- [`UPDATE` Strategies](update_strategies.md) — Update payload options.
+- [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](update_strategies.md) — Update payload options.
+- [`DELETE`](delete.md) — Related concept: `DELETE`.
+- [`RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`)](return_clause.md) — Related concept: `RETURN` Clause (`RETURN NONE / BEFORE / AFTER / DIFF`).
+- [`UPSERT`](upsert.md) — Related concept: `UPSERT`.
+- [`PARALLEL` Keyword](../level_06/parallel_keyword.md) — Related concept: `PARALLEL` Keyword.
 
 ---
 

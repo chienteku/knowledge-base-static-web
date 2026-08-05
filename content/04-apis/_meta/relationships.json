@@ -19,6 +19,16 @@
           "term": "api",
           "module": "04-apis",
           "description": "The waiter in the restaurant metaphor."
+        },
+        {
+          "module": "04-apis",
+          "term": "request_response",
+          "description": "Request/Response model."
+        },
+        {
+          "module": "04-apis",
+          "term": "dns",
+          "description": "DNS resolution."
         }
       ]
     },
@@ -48,6 +58,11 @@
           "term": "ip_address_port",
           "module": "04-apis",
           "description": "Related concept: IP Address & Port."
+        },
+        {
+          "module": "04-apis",
+          "term": "client_server_model",
+          "description": "Related concept: Client-Server Model."
         }
       ]
     },
@@ -97,6 +112,11 @@
           "term": "tcp_ip",
           "module": "04-apis",
           "description": "Related concept: TCP/IP (high-level)."
+        },
+        {
+          "module": "04-apis",
+          "term": "grpc",
+          "description": "Related concept: gRPC (Remote Procedure Call)."
         }
       ]
     },
@@ -155,6 +175,21 @@
           "term": "xml",
           "module": "04-apis",
           "description": "Related concept: XML."
+        },
+        {
+          "module": "04-apis",
+          "term": "serialization",
+          "description": "JSON serialization."
+        },
+        {
+          "module": "04-apis",
+          "term": "content_type",
+          "description": "application/json Content-Type."
+        },
+        {
+          "module": "04-apis",
+          "term": "graphql",
+          "description": "Related concept: GraphQL (The REST Alternative)."
         }
       ]
     },
@@ -218,6 +253,11 @@
           "term": "http_https",
           "module": "04-apis",
           "description": "Related concept: HTTP / HTTPS."
+        },
+        {
+          "module": "04-apis",
+          "term": "client_server_model",
+          "description": "Related concept: Client-Server Model."
         }
       ]
     },
@@ -324,6 +364,11 @@
           "term": "versioning",
           "module": "04-apis",
           "description": "Sometimes implemented via custom MIME types inside the `Accept` header (e.g. `Accept: application/vnd.myapi.v2+json`)."
+        },
+        {
+          "module": "04-apis",
+          "term": "http_headers",
+          "description": "Related concept: HTTP Headers."
         }
       ]
     },
@@ -353,6 +398,16 @@
           "term": "formdata",
           "module": "04-apis",
           "description": "Related concept: FormData & Multipart Uploads."
+        },
+        {
+          "module": "04-apis",
+          "term": "http_headers",
+          "description": "Related concept: HTTP Headers."
+        },
+        {
+          "module": "04-apis",
+          "term": "json",
+          "description": "Related concept: JSON (JavaScript Object Notation)."
         }
       ]
     },
@@ -402,6 +457,16 @@
           "term": "sse",
           "module": "04-apis",
           "description": "Related concept: Server-Sent Events (SSE)."
+        },
+        {
+          "module": "04-apis",
+          "term": "content_type",
+          "description": "Content-Type header."
+        },
+        {
+          "module": "04-apis",
+          "term": "content_negotiation",
+          "description": "Content negotiation headers."
         }
       ]
     },
@@ -436,6 +501,16 @@
           "term": "cors",
           "module": "04-apis",
           "description": "Related concept: CORS (Cross-Origin Resource Sharing)."
+        },
+        {
+          "module": "04-apis",
+          "term": "idempotent_vs_safe_methods",
+          "description": "Safe and idempotent HTTP methods."
+        },
+        {
+          "module": "04-apis",
+          "term": "status_codes",
+          "description": "HTTP status codes."
         }
       ]
     },
@@ -465,6 +540,11 @@
           "term": "idempotency_keys",
           "module": "04-apis",
           "description": "Related concept: Idempotency Keys."
+        },
+        {
+          "module": "04-apis",
+          "term": "http_methods",
+          "description": "Related concept: HTTP Methods (Verbs)."
         }
       ]
     },
@@ -592,6 +672,16 @@
           "term": "rate_limiting",
           "module": "04-apis",
           "description": "Related concept: Rate Limiting (429 Too Many Requests)."
+        },
+        {
+          "module": "04-apis",
+          "term": "http_methods",
+          "description": "Status codes per HTTP method."
+        },
+        {
+          "module": "04-apis",
+          "term": "error_handling",
+          "description": "API error status codes."
         }
       ]
     },
@@ -650,6 +740,16 @@
           "term": "client_server_model",
           "module": "04-apis",
           "description": "Related concept: Client-Server Model."
+        },
+        {
+          "module": "04-apis",
+          "term": "graphql",
+          "description": "GraphQL APIs."
+        },
+        {
+          "module": "04-apis",
+          "term": "grpc",
+          "description": "gRPC APIs."
         }
       ]
     },
@@ -870,6 +970,16 @@
           "term": "openapi",
           "module": "04-apis",
           "description": "Related concept: Swagger / OpenAPI Specification."
+        },
+        {
+          "module": "04-apis",
+          "term": "statelessness",
+          "description": "Statelessness constraint."
+        },
+        {
+          "module": "04-apis",
+          "term": "richardson_maturity_model",
+          "description": "Richardson Maturity Model."
         }
       ]
     },
@@ -904,6 +1014,11 @@
           "term": "hateoas",
           "module": "04-apis",
           "description": "Related concept: HATEOAS."
+        },
+        {
+          "module": "04-apis",
+          "term": "rest",
+          "description": "Related concept: REST (Representational State Transfer)."
         }
       ]
     },
@@ -943,6 +1058,11 @@
           "term": "basic_bearer_auth",
           "module": "04-apis",
           "description": "Related concept: Basic & Bearer Authentication."
+        },
+        {
+          "module": "04-apis",
+          "term": "rest",
+          "description": "Related concept: REST (Representational State Transfer)."
         }
       ]
     },
@@ -1094,6 +1214,16 @@
           "term": "same_origin_policy",
           "module": "04-apis",
           "description": "Related concept: Same-Origin Policy."
+        },
+        {
+          "module": "04-apis",
+          "term": "preflight_request",
+          "description": "CORS preflight OPTIONS request."
+        },
+        {
+          "module": "04-apis",
+          "term": "cors_errors",
+          "description": "CORS errors handling."
         }
       ]
     },
@@ -1299,6 +1429,11 @@
           "term": "cors_errors",
           "module": "04-apis",
           "description": "Related concept: CORS Errors in the Browser."
+        },
+        {
+          "module": "04-apis",
+          "term": "cors",
+          "description": "Related concept: CORS (Cross-Origin Resource Sharing)."
         }
       ]
     },
@@ -1459,6 +1594,11 @@
           "term": "xmlhttprequest_ajax",
           "module": "04-apis",
           "description": "The legacy request API which supported request cancellation via `xhr.abort()`."
+        },
+        {
+          "module": "04-apis",
+          "term": "fetch",
+          "description": "Related concept: The fetch() API."
         }
       ]
     },
@@ -1488,6 +1628,11 @@
           "term": "promises",
           "module": "04-apis",
           "description": "Related concept: Promises (in the context of networks)."
+        },
+        {
+          "module": "04-apis",
+          "term": "fetch",
+          "description": "Related concept: The fetch() API."
         }
       ]
     },
@@ -1522,6 +1667,11 @@
           "term": "network_tab",
           "module": "04-apis",
           "description": "Related concept: DevTools Network Tab."
+        },
+        {
+          "module": "04-apis",
+          "term": "cors",
+          "description": "Related concept: CORS (Cross-Origin Resource Sharing)."
         }
       ]
     },
@@ -1561,6 +1711,11 @@
           "term": "rate_limiting",
           "module": "04-apis",
           "description": "Related concept: Rate Limiting (429 Too Many Requests)."
+        },
+        {
+          "module": "04-apis",
+          "term": "status_codes",
+          "description": "Related concept: HTTP Status Codes."
         }
       ]
     },
@@ -1615,6 +1770,16 @@
           "term": "api_clients",
           "module": "04-apis",
           "description": "Related concept: Postman / Insomnia (API Clients)."
+        },
+        {
+          "module": "04-apis",
+          "term": "abortcontroller",
+          "description": "Canceling fetch with AbortController."
+        },
+        {
+          "module": "04-apis",
+          "term": "async_await",
+          "description": "Async/await with fetch."
         }
       ]
     },
@@ -1940,6 +2105,16 @@
           "term": "cache_invalidation",
           "module": "04-apis",
           "description": "Related concept: Cache Invalidation."
+        },
+        {
+          "module": "04-apis",
+          "term": "rate_limiting",
+          "description": "Rate limiting."
+        },
+        {
+          "module": "04-apis",
+          "term": "circuit_breaker",
+          "description": "Circuit breaker pattern."
         }
       ]
     },
@@ -1969,6 +2144,11 @@
           "term": "webhooks",
           "module": "04-apis",
           "description": "Asynchronous push notifications that bypass synchronous HTTP waiting loops."
+        },
+        {
+          "module": "04-apis",
+          "term": "caching",
+          "description": "Related concept: Caching (ETag, Cache-Control)."
         }
       ]
     },
@@ -2110,6 +2290,16 @@
           "term": "webhooks",
           "module": "04-apis",
           "description": "Related concept: Webhooks."
+        },
+        {
+          "module": "04-apis",
+          "term": "caching",
+          "description": "Related concept: Caching (ETag, Cache-Control)."
+        },
+        {
+          "module": "04-apis",
+          "term": "api_gateway",
+          "description": "Related concept: API Gateway."
         }
       ]
     },
@@ -2363,6 +2553,21 @@
           "term": "versioning",
           "module": "04-apis",
           "description": "Related concept: API Versioning (v1, v2)."
+        },
+        {
+          "module": "04-apis",
+          "term": "overfetching_underfetching",
+          "description": "Solving over/under fetching."
+        },
+        {
+          "module": "04-apis",
+          "term": "json",
+          "description": "JSON query payloads."
+        },
+        {
+          "module": "04-apis",
+          "term": "api",
+          "description": "Related concept: API (Application Programming Interface)."
         }
       ]
     },
@@ -2441,6 +2646,11 @@
           "term": "pagination",
           "module": "04-apis",
           "description": "The methods of splitting large resource collections to prevent over-fetching."
+        },
+        {
+          "module": "04-apis",
+          "term": "graphql",
+          "description": "Related concept: GraphQL (The REST Alternative)."
         }
       ]
     },
@@ -2470,6 +2680,11 @@
           "term": "content_type",
           "module": "04-apis",
           "description": "Related concept: Content-Type & MIME Types."
+        },
+        {
+          "module": "04-apis",
+          "term": "json",
+          "description": "Related concept: JSON (JavaScript Object Notation)."
         }
       ]
     },
@@ -2766,6 +2981,11 @@
           "term": "websocket_api",
           "module": "04-apis",
           "description": "The browser interface that initiates the handshake."
+        },
+        {
+          "module": "04-apis",
+          "term": "websockets",
+          "description": "Related concept: WebSockets."
         }
       ]
     },
@@ -2815,6 +3035,11 @@
           "term": "grpc",
           "module": "04-apis",
           "description": "Related concept: gRPC (Remote Procedure Call)."
+        },
+        {
+          "module": "04-apis",
+          "term": "websocket_handshake",
+          "description": "WebSocket HTTP upgrade handshake."
         }
       ]
     },
@@ -2878,6 +3103,11 @@
           "term": "xss",
           "module": "04-apis",
           "description": "The injection vulnerability mitigated by HttpOnly."
+        },
+        {
+          "module": "04-apis",
+          "term": "cookies",
+          "description": "Related concept: Cookies."
         }
       ]
     },
@@ -2922,6 +3152,11 @@
           "term": "storage_serialization",
           "module": "04-apis",
           "description": "Related concept: Storage Serialization."
+        },
+        {
+          "module": "04-apis",
+          "term": "cookie_attributes",
+          "description": "SameSite, Secure, HttpOnly attributes."
         }
       ]
     },
@@ -3024,6 +3259,11 @@
           "term": "offline_first",
           "module": "04-apis",
           "description": "Related concept: Offline-First / PWA."
+        },
+        {
+          "module": "04-apis",
+          "term": "web_storage",
+          "description": "Web Storage."
         }
       ]
     },
@@ -3131,6 +3371,11 @@
           "term": "json_methods",
           "module": "04-apis",
           "description": "Related concept: JSON Methods (parse / stringify)."
+        },
+        {
+          "module": "04-apis",
+          "term": "service_workers",
+          "description": "Related concept: Service Workers."
         }
       ]
     },
@@ -3209,6 +3454,11 @@
           "term": "deprecation_sunsetting",
           "module": "04-apis",
           "description": "Related concept: Deprecation & Sunsetting."
+        },
+        {
+          "module": "04-apis",
+          "term": "openapi",
+          "description": "Related concept: Swagger / OpenAPI Specification."
         }
       ]
     },
@@ -3238,6 +3488,16 @@
           "term": "load_balancing",
           "module": "04-apis",
           "description": "The process of distributing routed traffic to scaled service instances."
+        },
+        {
+          "module": "04-apis",
+          "term": "rate_limiting",
+          "description": "Gateway rate limiting."
+        },
+        {
+          "module": "04-apis",
+          "term": "versioning",
+          "description": "API versioning at gateway."
         }
       ]
     },
@@ -3301,6 +3561,21 @@
           "term": "soap_xml_rpc",
           "module": "04-apis",
           "description": "Related concept: SOAP & XML-RPC (legacy)."
+        },
+        {
+          "module": "04-apis",
+          "term": "protocol_buffers",
+          "description": "Protocol Buffers."
+        },
+        {
+          "module": "04-apis",
+          "term": "http_https",
+          "description": "HTTP/2 transport."
+        },
+        {
+          "module": "04-apis",
+          "term": "api",
+          "description": "Related concept: API (Application Programming Interface)."
         }
       ]
     },
@@ -3461,6 +3736,16 @@
           "term": "mocking",
           "module": "04-apis",
           "description": "Related concept: Mocking APIs."
+        },
+        {
+          "module": "04-apis",
+          "term": "api_contract",
+          "description": "API Contract specification."
+        },
+        {
+          "module": "04-apis",
+          "term": "sdk",
+          "description": "Generating client SDKs."
         }
       ]
     },
@@ -3490,6 +3775,11 @@
           "term": "base64",
           "module": "04-apis",
           "description": "The text translation method used if binary bytes must travel over text channels."
+        },
+        {
+          "module": "04-apis",
+          "term": "grpc",
+          "description": "Related concept: gRPC (Remote Procedure Call)."
         }
       ]
     },
@@ -3519,6 +3809,11 @@
           "term": "api_clients",
           "module": "04-apis",
           "description": "External clients used to test API behaviors before installing SDK packages."
+        },
+        {
+          "module": "04-apis",
+          "term": "openapi",
+          "description": "Related concept: Swagger / OpenAPI Specification."
         }
       ]
     },
@@ -3597,6 +3892,11 @@
           "term": "deprecation_sunsetting",
           "module": "04-apis",
           "description": "Related concept: Deprecation & Sunsetting."
+        },
+        {
+          "module": "04-apis",
+          "term": "api_gateway",
+          "description": "Related concept: API Gateway."
         }
       ]
     }

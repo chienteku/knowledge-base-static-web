@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [MongoDB](mongodb.md) — The parent database engine system.
 
 ---
@@ -190,6 +191,7 @@ Which MongoDB client tool (**mongosh** or **Compass**) makes this task easier fo
 > **Explanation:** Compass provides visual stage editors for building `$match`, `$group`, `$project` pipelines.
 
 ## 7. Related Terms
+
 - [mongosh (MongoDB Shell)](mongosh.md) — The command-line client.
 - [MongoDB Atlas](atlas.md) — Cloud dashboard interfaces.
 

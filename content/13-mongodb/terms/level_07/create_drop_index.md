@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 
 ---
@@ -218,8 +219,14 @@ Execute index creation migration scripts separately in deployment pipelines
 > **Explanation:** `hideIndex()` hides an index from the query planner to safely test index removal impact.
 
 ## 7. Related Terms
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [Background / Rolling Index Builds](index_builds.md) — Index construction locks.
+- [Geospatial Index (`2dsphere` / `2d`)](geospatial_index.md) — Related concept: Geospatial Index (`2dsphere` / `2d`).
+- [Text Index](text_index.md) — Related concept: Text Index.
+- [TTL (Time-To-Live) Index](ttl_index.md) — Related concept: TTL (Time-To-Live) Index.
+- [Unique Index](unique_index.md) — Related concept: Unique Index.
+- [Wildcard Index](wildcard_index.md) — Related concept: Wildcard Index.
 
 ---
 

@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Type Assertions](../level_05/type_assertions.md) — Overriding default types.
-- [Literal Types](../level_05/literal_types.md) — Specific values as types.
+- [Type Assertions (`as`)](type_assertions.md) — Overriding default types.
+- [Literal Types](literal_types.md) — Specific values as types.
 - [Type Widening](../level_01/type_widening.md) — How types lose specific literal definitions.
-
 ---
 
 ## 2. Term Category
@@ -234,10 +233,10 @@ console.log(en.errors.notFound.toUpperCase());
 > **Explanation:** `satisfies` ensures object expressions fulfill all required interface contract fields.
 
 ## 7. Related Terms
-- [Type Assertions](../level_05/type_assertions.md) — Overriding default compile type checking.
-- [Const Assertions](../level_11/const_assertions.md) — Making object properties readonly literals.
+- [Type Assertions (`as`)](type_assertions.md) — Overriding default compile type checking.
+- [Const Assertions (`as const`)](../level_11/const_assertions.md) — Making object properties readonly literals.
 - [Type Widening](../level_01/type_widening.md) — The process that `satisfies` avoids.
-
+- [Type Inference](../level_01/type_inference.md) — Preserving inferred types.
 ---
 
 ## 8. Key Takeaways

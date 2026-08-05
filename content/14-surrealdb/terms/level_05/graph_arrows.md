@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 
 ---
@@ -247,8 +248,12 @@ Write the SurrealQL queries to:
 > **Explanation:** Parentheses inside arrow paths `->(table WHERE condition)` filter target graph nodes.
 
 ## 7. Related Terms
+
 - [`RELATE` Statement](relate.md) — The command creating the edges.
 - [Bidirectional Relationship Queries](bidirectional_queries.md) — Cross-referencing tables.
+- [Deep Graph Traversal (Chained arrows)](deep_graph_traversal.md) — Related concept: Deep Graph Traversal (Chained arrows).
+- [Graph Traversal vs. Relational JOINs](graph_vs_joins.md) — Related concept: Graph Traversal vs. Relational JOINs.
+- [Parallel Edge Traversals](parallel_edge_traversals.md) — Related concept: Parallel Edge Traversals.
 
 ---
 

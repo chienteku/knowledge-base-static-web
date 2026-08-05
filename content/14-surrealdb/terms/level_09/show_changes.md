@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Enabling changefeed recording on tables.
 - [`datetime` / `duration`](../level_02/datetime_duration.md) — ISO datetime formats.
 
@@ -194,6 +195,7 @@ Write a `SHOW CHANGES` query to retrieve changes for a table named `inventory` s
 > **Explanation:** `SINCE version_number` streams changefeed deltas relative to sequence offsets.
 
 ## 7. Related Terms
+
 - [Changefeed (`DEFINE TABLE ... CHANGEFEED`)](changefeed.md) — Enabling change logging.
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Real-time push streams.
 - [Time Functions (`time::*`)](../level_06/time_functions.md) — Date/time arithmetic.

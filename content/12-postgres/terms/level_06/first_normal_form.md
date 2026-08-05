@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Normalization](normalization.md) — The parent organizing process.
 - [Functional Dependency](functional_dependency.md) — Column determination mathematics.
-
 ---
 
 ## 2. Term Category
@@ -205,7 +204,8 @@ Write the SQL DDL queries to normalize this schema into 1NF.
 ## 7. Related Terms
 - [Normalization](normalization.md) — The parent process.
 - [Second Normal Form (2NF)](second_normal_form.md) — Eliminating partial key dependencies.
-
+- [`ARRAY` Type](array_type.md) — Related concept: `ARRAY` Type.
+- [Functional Dependency](functional_dependency.md) — Related concept: Functional Dependency.
 ---
 
 ## 8. Key Takeaways

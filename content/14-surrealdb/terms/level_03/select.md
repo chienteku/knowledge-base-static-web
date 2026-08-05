@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 
 ---
@@ -189,8 +190,16 @@ SELECT id, name, email FROM user; // Explicit column projection
 > **Explanation:** `SELECT * OMIT field` projects all fields except specified sensitive keys.
 
 ## 7. Related Terms
+
 - [`SELECT VALUE` (Single Field Extraction)](select_value.md) — Flattening query returns.
 - [`SELECT` with Record Link Fetching (`FETCH`)](select_fetch.md) — Resolving record links.
+- [`GROUP BY` / `GROUP ALL`](group_by.md) — Related concept: `GROUP BY` / `GROUP ALL`.
+- [`ORDER BY` / `LIMIT` / `START`](order_limit_start.md) — Related concept: `ORDER BY` / `LIMIT` / `START`.
+- [`WHERE` Clause](where.md) — Related concept: `WHERE` Clause.
+- [Destructuring & Object Notation in SELECT](../level_06/destructuring_select.md) — Related concept: Destructuring & Object Notation in SELECT.
+- [`ONLY` Keyword](../level_06/only_keyword.md) — Related concept: `ONLY` Keyword.
+- [`SPLIT` Clause](../level_06/split_clause.md) — Related concept: `SPLIT` Clause.
+- [Subqueries](../level_06/subqueries.md) — Related concept: Subqueries.
 
 ---
 

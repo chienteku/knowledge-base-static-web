@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Virtual DOM](../level_01/virtual_dom.md) — The visual tree structure represented by Fiber nodes.
-- [Reconciliation](./reconciliation.md) — The diffing process scheduled by the Fiber engine.
-
+- [Virtual DOM](virtual_dom.md) — The visual tree structure represented by Fiber nodes.
+- [Reconciliation](reconciliation.md) — The diffing process scheduled by the Fiber engine.
 ---
 
 ## 2. Term Category
@@ -217,10 +216,10 @@ function Timer() {
 > **Explanation:** Double-buffering prevents incomplete or flickering UI frames from being displayed to users.
 
 ## 7. Related Terms
-- [Reconciliation](./reconciliation.md) — The diffing process executed by Fiber nodes.
+- [Reconciliation](reconciliation.md) — The diffing process executed by Fiber nodes.
 - [Concurrent Rendering](../level_08/concurrent_rendering.md) — The feature set made possible by Fiber's interruptible pipeline.
 - [Suspense](../level_08/suspense.md) — Pausing component tree rendering while waiting for data.
-
+- [Virtual DOM](virtual_dom.md) — Related concept: Virtual DOM.
 ---
 
 ## 8. Key Takeaways

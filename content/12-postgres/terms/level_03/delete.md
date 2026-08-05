@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`WHERE` Clause](where.md) — The query filter used to target specific records.
-
 ---
 
 ## 2. Term Category
@@ -192,7 +191,7 @@ TRUNCATE TABLE logs; -- Fast DDL table truncation
 ## 7. Related Terms
 - [`WHERE` Clause](where.md) — The query target filter.
 - [`TRUNCATE`](truncate.md) — The high-speed table emptying alternative.
-
+- [`RETURNING` Clause](returning.md) — Related concept: `RETURNING` Clause.
 ---
 
 ## 8. Key Takeaways

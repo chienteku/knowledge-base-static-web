@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`$fetch` (ofetch)](../level_05/dollar_fetch.md) — The underlying HTTP client that `useFetch` uses.
+- [`$fetch` (ofetch)](dollar_fetch.md) — The underlying HTTP client that `useFetch` uses.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that `useFetch` optimizes.
 - [Nuxt Payload (SSR State Transfer)](../level_04/nuxt_payload.md) — The mechanism conveying server responses to client hydration cache pools.
-
 ---
 
 ## 2. Term Category
@@ -208,9 +207,12 @@ const { data } = await useFetch('/api/items', { query: { page }, watch: [page] }
 ---
 
 ## 7. Related Terms
-- [`useAsyncData`](../level_05/use_async_data.md) — The lower-level composable that powers `useFetch`.
-- [Caching Data](../level_05/caching_data.md) — How `useFetch` avoids refetching when navigating back and forth between pages.
-
+- [`useAsyncData`](use_async_data.md) — The lower-level composable that powers `useFetch`.
+- [Caching Data](caching_data.md) — How `useFetch` avoids refetching when navigating back and forth between pages.
+- [Dynamic Routes](../level_02/dynamic_routes.md) — Related concept: Dynamic Routes.
+- [`$fetch` (ofetch)](dollar_fetch.md) — Related concept: `$fetch` (ofetch).
+- [`useLazyFetch` & `useLazyAsyncData` Hooks](use_lazy_fetch.md) — Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks.
+- [Vue Suspense Integration](../level_09/vue_suspense.md) — Related concept: Vue Suspense Integration.
 ---
 
 ## 8. Key Takeaways

@@ -7,17 +7,16 @@
 
 ## 1. Prerequisites
 
+
 - [`Arc<T>`](../level_03/arc_t.md) — The thread-safe smart pointer that allows shared ownership.
-- [`Mutex<T>`](../level_09/mutex_t.md) — The lock that allows safe mutation.
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The function that creates the threads requiring this pattern!
+- [`Mutex<T>`](mutex_t.md) — The lock that allows safe mutation.
+- [`std::thread::spawn`](std_thread_spawn.md) — The function that creates the threads requiring this pattern!
 
 ---
 
 ## 2. Term Category
 
-**Rust-specific (the iconic duo)**: While `Arc` and `Mutex` are completely separate tools, they are combined so frequently in Rust that the phrase **`Arc<Mutex<T>>`** has become a singular, famous idiom. 
-
-If you go to a Rust forum and ask: *"How do I share a variable across 10 threads and let them all safely modify it?"*, the entire community will immediately answer in unison: *"Wrap it in an `Arc<Mutex<T>>`."*
+**Concurrency Pattern (Shared Mutable Thread-Safe State)**: `Arc<Mutex<T>>` is the canonical Rust pattern combining `Arc<T>` (Atomic Reference Counting for thread-safe shared ownership) with `Mutex<T>` (Mutual Exclusion for thread-safe interior mutability).
 
 ---
 
@@ -25,60 +24,36 @@ If you go to a Rust forum and ask: *"How do I share a variable across 10 threads
 
 ### (1) Design Motivation — "Why did we design this?"
 
-In Rust, the golden rule of Ownership is that a variable can only have *one* owner. If you spawn 10 threads, who owns the variable? 
+Rust enforces strict aliasing and ownership rules:
+- Data can have either multiple shared immutable references (`&T`) OR a single exclusive mutable reference (`&mut T`).
+- Across OS threads, shared access requires thread-safe reference counting (`Arc<T>`), but `Arc<T>` only grants immutable `&T` access to its payload.
+- To mutate shared data across threads without raw pointers or `unsafe`, Rust uses **composition**:
+  - `Arc<T>` provides shared, multi-thread ownership by atomically tracking reference counts.
+  - `Mutex<T>` provides thread-safe *interior mutability*, locking runtime access so only one thread can mutate `T` at a time.
 
-The standard answer is `Arc` (Atomic Reference Counted pointer). `Arc` allows 10 threads to share ownership of the data! But there's a massive catch: `Arc` only provides *immutable* shared access. What if the 10 threads need to actually *modify* the data? You can't have multiple mutable references in Rust!
-
-The solution is brilliant composition:
-1. You wrap the data in a `Mutex`, which provides safe *interior mutability* (the ability to mutate data even when you only have an immutable reference to the Mutex).
-2. You wrap that `Mutex` in an `Arc`. 
-
-The `Arc` shares the box; the `Mutex` protects the contents.
+Combining them into `Arc<Mutex<T>>` allows multiple threads to hold shared ownership of a mutex while safely acquiring exclusive mutable access (`MutexGuard<'a, T>`) on demand.
 
 ### (2) Reality Metaphor
 
-Imagine you have a single, highly confidential Company Ledger (the data). You have 10 accountants (the threads) who all need to read and update it. 
-
-- You can't just hand the Ledger to Accountant #1, because the other 9 couldn't access it.
-- So, you put the Ledger in a heavy steel Safe with a combination lock (**`Mutex`**). Only one accountant can open it at a time.
-- But how do all 10 accountants know where the Safe is? You bolt the Safe to the floor in the center of the office, and give all 10 accountants a map to its location (**`Arc`**). 
-
-Now, multiple people share access to the location of the safe (`Arc`), but only one person can mutate the ledger inside it at a time (`Mutex`).
+A secure office document safe:
+- **`Arc`**: The company badge and building pass given to 10 employees. Everyone holds an equivalent pass to enter the room where the safe lives.
+- **`Mutex`**: The single key to the document safe. Even though 10 employees can stand in the room (`Arc`), only one employee can hold the key (`Mutex.lock()`), open the safe, and edit the document at a time.
 
 ### (3) Rust Code Examples
 
-#### Short Snippet (The Declaration)
-You declare it by nesting the `new()` calls.
-
-```rust
-use std::sync::{Arc, Mutex};
-
-// A shared, mutable counter initialized to 0.
-let shared_state = Arc::new(Mutex::new(0));
-```
-
-#### Fuller Example (The Classic Counter)
-This is the "Hello World" of Rust concurrency. We spawn 10 threads that all safely increment the exact same number.
-
+#### Basic `Arc<Mutex<T>>` Counter across 10 Threads
 ```rust
 use std::sync::{Arc, Mutex};
 use std::thread;
 
 fn main() {
-    // 1. Create the iconic duo
     let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![];
 
     for _ in 0..10 {
-        // 2. We MUST clone the Arc to give a "map to the safe" to the new thread.
-        // This does NOT clone the data, it just increments the reference count!
         let counter_clone = Arc::clone(&counter);
-        
         let handle = thread::spawn(move || {
-            // 3. We use the map to find the safe, and lock it!
             let mut num = counter_clone.lock().unwrap();
-            
-            // 4. We mutate the data!
             *num += 1;
         });
         handles.push(handle);
@@ -88,8 +63,8 @@ fn main() {
         handle.join().unwrap();
     }
 
-    // Result is guaranteed to be 10!
-    println!("Final count: {}", *counter.lock().unwrap());
+    assert_eq!(*counter.lock().unwrap(), 10);
+    println!("Final counter value: {}", *counter.lock().unwrap());
 }
 ```
 
@@ -97,74 +72,51 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Arc Mutex T Scoping and Lifecycle Rules
+### Mistake 1: Holding a `MutexGuard` across Long-Running Tasks or `.await` Points
 
-**The mistake:** Assuming Arc Mutex T instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Holding the `MutexGuard` across expensive network requests, disk I/O, or async `.await` yield points.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Keeping the lock acquired blocks all other threads attempting to access the `Arc<Mutex<T>>`, creating severe performance bottlenecks and lock starvation. In async Rust (`tokio`), holding a `std::sync::MutexGuard` across `.await` points violates `Send` bounds or leads to deadlocks.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("arc_mutex_t_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+let mut guard = shared_data.lock().unwrap();
+do_expensive_network_io(); // ❌ Lock held during network wait! Blocks all other threads!
+*guard += 1;
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("arc_mutex_t_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+// Scope lock guard tightly to minimize critical section!
+{
+    let mut guard = shared_data.lock().unwrap();
+    *guard += 1;
+} // Guard dropped here!
+do_expensive_network_io(); // Non-blocking!
 ```
 
-### Mistake 2: Mutating Arc Mutex T State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Inconsistent Lock Acquisition Order Causing Deadlocks
 
-**The mistake:** Attempting to mutate data associated with Arc Mutex T through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Thread A locks `Mutex 1` then `Mutex 2`, while Thread B locks `Mutex 2` then `Mutex 1`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Results in classic thread deadlocks where Thread A waits for `Mutex 2` and Thread B waits for `Mutex 1`, stalling execution indefinitely.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+// Thread A: lock(m1) -> lock(m2)
+// Thread B: lock(m2) -> lock(m1) // ❌ Deadlock!
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+// Enforce a strict, global lock acquisition hierarchy across all thread entry points!
 ```
 
-### Mistake 3: Concurrent Access to Arc Mutex T Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Using Non-Thread-Safe Combinations like `Rc<Mutex<T>>` or `Arc<RefCell<T>>` across Threads
 
-**The mistake:** Sharing non-thread-safe Arc Mutex T instances across OS threads via `std::thread::spawn`.
+**The mistake:** Attempting to spawn threads with `Rc<Mutex<T>>` or `Arc<RefCell<T>>`.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-}
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+**Why it is wrong:** `Rc` does not implement `Send` or `Sync` (atomics are missing), and `RefCell` uses non-atomic reference counting for interior mutability. The Rust compiler blocks compilation with error `E0277` (`trait Send is not implemented`).
 
 ---
 
@@ -172,24 +124,21 @@ thread::spawn(move || {
 
 ### Exercise 1: Multi-Threaded In-Memory Cache with TTL
 
-**Problem:** In high-concurrency web applications, caching expensive database queries or session metadata in memory across multiple worker threads is a standard requirement. Design and implement a thread-safe `ConcurrentCache<K, V>` using `Arc<Mutex<HashMap<K, CacheEntry<V>>>>`.
+**Scenario:** In high-concurrency web applications, caching expensive database queries or session metadata in memory across multiple worker threads is a standard requirement. Implement a thread-safe `ConcurrentCache<K, V>` using `Arc<Mutex<HashMap<K, CacheEntry<V>>>>`.
 
-The cache must allow concurrent worker threads to insert key-value pairs with a Time-To-Live (TTL), retrieve valid non-expired entries, lazily evict expired entries upon lookup, and run a maintenance sweep function `cleanup_expired` to purge stale entries. Ensure lock guards are held for the minimal required scope to optimize throughput.
+**Requirements:**
+1. Implement `ConcurrentCache` with `set`, `get`, `cleanup_expired`, and `len` methods.
+2. Support TTL eviction logic.
+3. Write unit tests executing concurrent writes and reads across 10 threads.
 
 > [!check]- Answer
-> **Key Architectural Concepts:**
-> 1. **Shared Ownership & Interior Mutability:** Wrapping `HashMap` inside `Mutex` grants thread-safe interior mutability, while `Arc` allows multiple execution threads to hold shared ownership of the cache reference.
-> 2. **Lock Guard Scope Minimization:** Lock guards returned by `lock().unwrap()` must be dropped as soon as possible. Avoid executing long-running compute operations while holding the `MutexGuard` to prevent lock starvation across worker threads.
-> 3. **Dual Eviction Strategy:**
->    - **Lazy Eviction:** During `get()`, if an entry's `expires_at` timestamp is in the past, remove it immediately and return `None`.
->    - **Proactive Eviction:** `cleanup_expired()` iterates through the inner `HashMap` using `retain()` to prune stale entries in a single pass.
-> 4. **Auto-Trait Bounds:** Key `K` and Value `V` must implement `Send + 'static` to cross thread boundaries safely inside `Arc`.
+>
+> #### Implementation
 >
 > ```rust
 > use std::collections::HashMap;
 > use std::hash::Hash;
 > use std::sync::{Arc, Mutex};
-> use std::thread;
 > use std::time::{Duration, Instant};
 > 
 > #[derive(Clone, Debug, PartialEq)]
@@ -229,7 +178,6 @@ The cache must allow concurrent worker threads to insert key-value pairs with a 
 >                 return Some(entry.value.clone());
 >             }
 >         }
->         // Lazy cleanup of expired key
 >         guard.remove(key);
 >         None
 >     }
@@ -252,26 +200,16 @@ The cache must allow concurrent worker threads to insert key-value pairs with a 
 >     }
 > }
 > 
-> impl<K, V> Default for ConcurrentCache<K, V>
-> where
->     K: Eq + Hash + Clone + Send + 'static,
->     V: Clone + Send + 'static,
-> {
->     fn default() -> Self {
->         Self::new()
->     }
-> }
-> 
 > #[cfg(test)]
 > mod tests {
 >     use super::*;
+>     use std::thread;
 > 
 >     #[test]
 >     fn test_concurrent_cache_operations() {
 >         let cache = Arc::new(ConcurrentCache::new());
 >         let mut handles = vec![];
 > 
->         // Spawn 10 threads inserting items concurrently
 >         for i in 0..10 {
 >             let cache_clone = Arc::clone(&cache);
 >             handles.push(thread::spawn(move || {
@@ -287,274 +225,280 @@ The cache must allow concurrent worker threads to insert key-value pairs with a 
 >         assert_eq!(cache.get(&"session_0".to_string()), Some(0));
 >         assert_eq!(cache.get(&"session_5".to_string()), Some(5));
 > 
->         // Sleep past TTL to test lazy eviction and proactive cleanup
 >         thread::sleep(Duration::from_millis(200));
 > 
 >         assert_eq!(cache.get(&"session_0".to_string()), None);
 >         let evicted = cache.cleanup_expired();
->         assert_eq!(evicted, 9); // session_0 was lazily removed, remaining 9 swept
+>         assert_eq!(evicted, 9);
 >         assert_eq!(cache.len(), 0);
 >         assert!(cache.is_empty());
 >     }
 > }
 > ```
+>
+> #### Technical Explanation
+>
+> 1. `Arc` provides multi-thread shared ownership of the underlying `Mutex<HashMap<K, CacheEntry<V>>>`.
+> 2. `Mutex` grants safe interior mutability so concurrent threads can insert and mutate map entries safely.
+> 3. Lock guards are held for minimal scope during `get` and `set` operations to minimize thread lock contention.
+
+---
+
+### Exercise 2: Multi-Producer Multi-Consumer Thread-Safe Job Queue
+
+**Scenario:** Task processing engines require a thread-safe task queue where producer threads submit jobs and worker threads consume them. Implement `WorkDispatcher<T>` using `Arc<(Mutex<QueueInner<T>>, Condvar)>`.
+
+**Requirements:**
+1. Implement `push`, `pop`, and `shutdown` methods.
+2. Use `Condvar` to block worker threads efficiently when the queue is empty.
+3. Write unit tests with 4 worker threads consuming 100 producer tasks.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::collections::VecDeque;
+> use std::sync::{Arc, Condvar, Mutex};
+> use std::thread;
+> use std::time::Duration;
 > 
-> ---
+> struct QueueInner<T> {
+>     tasks: VecDeque<T>,
+>     is_shutdown: bool,
+> }
 > 
-> ### Exercise 2: Multi-Producer Multi-Consumer Thread-Safe Job Queue
+> pub struct WorkDispatcher<T> {
+>     shared: Arc<(Mutex<QueueInner<T>>, Condvar)>,
+> }
 > 
-> **Problem:** Task processing engines require a thread-safe task queue where producer threads submit jobs and worker threads consume them. Design `WorkDispatcher<T>` using `Arc<(Mutex<QueueInner<T>>, Condvar)>`.
+> impl<T: Send + 'static> WorkDispatcher<T> {
+>     pub fn new() -> Self {
+>         Self {
+>             shared: Arc::new((
+>                 Mutex::new(QueueInner {
+>                     tasks: VecDeque::new(),
+>                     is_shutdown: false,
+>                 }),
+>                 Condvar::new(),
+>             )),
+>         }
+>     }
 > 
-> The dispatcher must allow producers to enqueue tasks with `push`, worker threads to block efficiently on `pop` until a task is available without spin-locking, and administrators to invoke `shutdown()` to notify all waiting workers to wake up and exit gracefully.
+>     pub fn push(&self, task: T) -> Result<(), T> {
+>         let (lock, cvar) = &*self.shared;
+>         let mut inner = lock.lock().unwrap();
+>         if inner.is_shutdown {
+>             return Err(task);
+>         }
+>         inner.tasks.push_back(task);
+>         cvar.notify_one();
+>         Ok(())
+>     }
 > 
-> > [!check]- Answer
-> > **Key Architectural Concepts:**
-> > 1. **`Mutex` + `Condvar` Synchronization:** Combining `Mutex` and `Condvar` inside an `Arc` allows threads to sleep efficiently without busy-waiting (polling in a tight loop).
-> > 2. **Atomicity & Lock Release During Wait:** When a worker calls `condvar.wait(guard)`, Rust automatically unlocks the `MutexGuard`, suspends the current thread, and re-acquires the lock immediately upon being woken up by `notify_one()` or `notify_all()`.
-> > 3. **Graceful Shutdown Signaling:** `shutdown()` sets `is_shutdown = true` under lock and invokes `cvar.notify_all()`, waking all waiting worker threads so they evaluate the shutdown flag and break out of worker loops.
-> >
-> > ```rust
-> > use std::collections::VecDeque;
-> > use std::sync::{Arc, Condvar, Mutex};
-> > use std::thread;
-> > use std::time::Duration;
-> > 
-> > struct QueueInner<T> {
-> >     tasks: VecDeque<T>,
-> >     is_shutdown: bool,
-> > }
-> > 
-> > pub struct WorkDispatcher<T> {
-> >     shared: Arc<(Mutex<QueueInner<T>>, Condvar)>,
-> > }
-> > 
-> > impl<T: Send + 'static> WorkDispatcher<T> {
-> >     pub fn new() -> Self {
-> >         Self {
-> >             shared: Arc::new((
-> >                 Mutex::new(QueueInner {
-> >                     tasks: VecDeque::new(),
-> >                     is_shutdown: false,
-> >                 }),
-> >                 Condvar::new(),
-> >             )),
-> >         }
-> >     }
-> > 
-> >     pub fn push(&self, task: T) -> Result<(), T> {
-> >         let (lock, cvar) = &*self.shared;
-> >         let mut inner = lock.lock().unwrap();
-> >         if inner.is_shutdown {
-> >             return Err(task);
-> >         }
-> >         inner.tasks.push_back(task);
-> >         cvar.notify_one();
-> >         Ok(())
-> >     }
-> > 
-> >     pub fn pop(&self) -> Option<T> {
-> >         let (lock, cvar) = &*self.shared;
-> >         let mut inner = lock.lock().unwrap();
-> >         loop {
-> >             if let Some(task) = inner.tasks.pop_front() {
-> >                 return Some(task);
-> >             }
-> >             if inner.is_shutdown {
-> >                 return None;
-> >             }
-> >             inner = cvar.wait(inner).unwrap();
-> >         }
-> >     }
-> > 
-> >     pub fn shutdown(&self) {
-> >         let (lock, cvar) = &*self.shared;
-> >         let mut inner = lock.lock().unwrap();
-> >         inner.is_shutdown = true;
-> >         cvar.notify_all();
-> >     }
-> > }
-> > 
-> > impl<T: Send + 'static> Default for WorkDispatcher<T> {
-> >     fn default() -> Self {
-> >         Self::new()
-> >     }
-> > }
-> > 
-> > #[cfg(test)]
-> > mod tests {
-> >     use super::*;
-> > 
-> >     #[test]
-> >     fn test_work_dispatcher_pipeline() {
-> >         let dispatcher = Arc::new(WorkDispatcher::<u64>::new());
-> >         let mut worker_handles = vec![];
-> > 
-> >         // Spawn 4 consumer/worker threads
-> >         for _ in 0..4 {
-> >             let dispatcher_clone = Arc::clone(&dispatcher);
-> >             worker_handles.push(thread::spawn(move || {
-> >                 let mut local_sum = 0u64;
-> >                 while let Some(task) = dispatcher_clone.pop() {
-> >                     local_sum += task;
-> >                 }
-> >                 local_sum
-> >             }));
-> >         }
-> > 
-> >         // Push 100 tasks across producers
-> >         for i in 1..=100 {
-> >             assert!(dispatcher.push(i).is_ok());
-> >         }
-> > 
-> >         // Allow workers to process tasks before shutting down
-> >         thread::sleep(Duration::from_millis(50));
-> >         dispatcher.shutdown();
-> > 
-> >         // Ensure pushing after shutdown fails
-> >         assert!(dispatcher.push(999).is_err());
-> > 
-> >         // Collect and verify total sum processed across worker pool
-> >         let total_sum: u64 = worker_handles
-> >             .into_iter()
-> >             .map(|h| h.join().unwrap())
-> >             .sum();
-> > 
-> >         let expected_sum: u64 = (1..=100).sum();
-> >         assert_eq!(total_sum, expected_sum);
-> >     }
-> > }
-> > ```
+>     pub fn pop(&self) -> Option<T> {
+>         let (lock, cvar) = &*self.shared;
+>         let mut inner = lock.lock().unwrap();
+>         loop {
+>             if let Some(task) = inner.tasks.pop_front() {
+>                 return Some(task);
+>             }
+>             if inner.is_shutdown {
+>                 return None;
+>             }
+>             inner = cvar.wait(inner).unwrap();
+>         }
+>     }
 > 
-> ---
+>     pub fn shutdown(&self) {
+>         let (lock, cvar) = &*self.shared;
+>         let mut inner = lock.lock().unwrap();
+>         inner.is_shutdown = true;
+>         cvar.notify_all();
+>     }
+> }
 > 
-> ### Exercise 3: Thread-Safe Rate Limiter (Token Bucket Algorithm)
+> impl<T: Send + 'static> Default for WorkDispatcher<T> {
+>     fn default() -> Self {
+>         Self::new()
+>     }
+> }
 > 
-> **Problem:** API gateways require thread-safe rate limiters to throttle requests across incoming worker connections. Implement `SharedRateLimiter` wrapping `Arc<Mutex<TokenBucket>>` using the Token Bucket algorithm.
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
 > 
-> `TokenBucket` maintains `capacity`, `refill_rate` (tokens/sec), `tokens`, and `last_refill: Instant`. Concurrent handler threads invoke `allow_request(tokens)` to atomically compute elapsed refill tokens, check available balance, and consume requested tokens if sufficient.
+>     #[test]
+>     fn test_work_dispatcher_pipeline() {
+>         let dispatcher = Arc::new(WorkDispatcher::<u64>::new());
+>         let mut worker_handles = vec![];
 > 
-> > [!check]- Answer
-> > **Key Architectural Concepts:**
-> > 1. **Atomic State Refill inside Guard:** Time-based refill calculation (`elapsed * refill_rate`) must occur within the `MutexGuard` lock to ensure token balance and timestamp updates are strictly atomic across concurrent threads.
-> > 2. **Thread Safety via `Arc<Mutex<T>>`:** Sharing `SharedRateLimiter` across request handling threads via `Arc::clone` guarantees safe access without data races.
-> > 3. **Race Condition Prevention:** By serializing bucket refills and token deductions with `Mutex`, simultaneous requests cannot overdraw the token balance beyond max capacity.
-> >
-> > ```rust
-> > use std::sync::{Arc, Mutex};
-> > use std::thread;
-> > use std::time::{Duration, Instant};
-> > 
-> > #[derive(Debug)]
-> > pub struct TokenBucket {
-> >     capacity: f64,
-> >     refill_rate: f64, // tokens per second
-> >     tokens: f64,
-> >     last_refill: Instant,
-> > }
-> > 
-> > impl TokenBucket {
-> >     pub fn new(capacity: f64, refill_rate: f64) -> Self {
-> >         Self {
-> >             capacity,
-> >             refill_rate,
-> >             tokens: capacity,
-> >             last_refill: Instant::now(),
-> >         }
-> >     }
-> > 
-> >     fn refill(&mut self) {
-> >         let now = Instant::now();
-> >         let elapsed = now.duration_since(self.last_refill).as_secs_f64();
-> >         self.tokens = (self.tokens + elapsed * self.refill_rate).min(self.capacity);
-> >         self.last_refill = now;
-> >     }
-> > 
-> >     pub fn try_consume(&mut self, tokens: f64) -> bool {
-> >         self.refill();
-> >         if self.tokens >= tokens {
-> >             self.tokens -= tokens;
-> >             true
-> >         } else {
-> >             false
-> >         }
-> >     }
-> > 
-> >     pub fn remaining_tokens(&mut self) -> f64 {
-> >         self.refill();
-> >         self.tokens
-> >     }
-> > }
-> > 
-> > pub struct SharedRateLimiter {
-> >     limiter: Arc<Mutex<TokenBucket>>,
-> > }
-> > 
-> > impl SharedRateLimiter {
-> >     pub fn new(capacity: f64, refill_rate: f64) -> Self {
-> >         Self {
-> >             limiter: Arc::new(Mutex::new(TokenBucket::new(capacity, refill_rate))),
-> >         }
-> >     }
-> > 
-> >     pub fn allow_request(&self, tokens: f64) -> bool {
-> >         let mut guard = self.limiter.lock().unwrap();
-> >         guard.try_consume(tokens)
-> >     }
-> > 
-> >     pub fn available_tokens(&self) -> f64 {
-> >         let mut guard = self.limiter.lock().unwrap();
-> >         guard.remaining_tokens()
-> >     }
-> > }
-> > 
-> > #[cfg(test)]
-> > mod tests {
-> >     use super::*;
-> > 
-> >     #[test]
-> >     fn test_concurrent_rate_limiter() {
-> >         // Capacity: 5 tokens, refill: 10 tokens/sec
-> >         let rate_limiter = Arc::new(SharedRateLimiter::new(5.0, 10.0));
-> >         let mut handles = vec![];
-> > 
-> >         // 5 concurrent threads try to consume 1 token each
-> >         for _ in 0..5 {
-> >             let limiter_clone = Arc::clone(&rate_limiter);
-> >             handles.push(thread::spawn(move || {
-> >                 limiter_clone.allow_request(1.0)
-> >             }));
-> >         }
-> > 
-> >         let results: Vec<bool> = handles.into_iter().map(|h| h.join().unwrap()).collect();
-> >         assert_eq!(results.len(), 5);
-> >         assert!(results.iter().all(|&allowed| allowed));
-> > 
-> >         // Capacity exhausted, immediate 6th attempt fails
-> >         assert_eq!(rate_limiter.allow_request(1.0), false);
-> > 
-> >         // Sleep 200ms to allow refill of ~2 tokens (10 tokens/sec * 0.2s = 2 tokens)
-> >         thread::sleep(Duration::from_millis(200));
-> >         assert_eq!(rate_limiter.allow_request(1.0), true);
-> >         assert_eq!(rate_limiter.allow_request(1.0), true);
-> >         assert_eq!(rate_limiter.allow_request(1.0), false);
-> >     }
-> > }
-> > ```
+>         for _ in 0..4 {
+>             let dispatcher_clone = Arc::clone(&dispatcher);
+>             worker_handles.push(thread::spawn(move || {
+>                 let mut local_sum = 0u64;
+>                 while let Some(task) = dispatcher_clone.pop() {
+>                     local_sum += task;
+>                 }
+>                 local_sum
+>             }));
+>         }
 > 
-> ---
+>         for i in 1..=100 {
+>             assert!(dispatcher.push(i).is_ok());
+>         }
 > 
-> ## 6. Related Terms
+>         thread::sleep(Duration::from_millis(50));
+>         dispatcher.shutdown();
 > 
-> - [`Rc<T>`](../level_03/rc_t.md) / [`RefCell<T>`](../level_03/refcell_t.md) — The exact single-threaded equivalent of this pattern!
-> - [`RwLock<T>`](../level_09/rwlock_t.md) — Often swapped in to create `Arc<RwLock<T>>` for read-heavy applications.
+>         let total_sum: u64 = worker_handles
+>             .into_iter()
+>             .map(|h| h.join().unwrap())
+>             .sum();
 > 
-> ---
+>         let expected_sum: u64 = (1..=100).sum();
+>         assert_eq!(total_sum, expected_sum);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `Arc` shares the tuple containing the `Mutex` queue and `Condvar` condition variable across worker threads.
+> 2. `Condvar::wait` automatically unlocks the `Mutex` guard while sleeping to avoid CPU spinning.
+> 3. `shutdown` sets `is_shutdown` and broadcasts `notify_all` to cleanly exit worker threads.
+
+---
+
+### Exercise 3: Thread-Safe Token Bucket Rate Limiter
+
+**Scenario:** API gateways require thread-safe rate limiters to throttle requests across incoming worker connections. Implement `SharedRateLimiter` wrapping `Arc<Mutex<TokenBucket>>` using the Token Bucket algorithm.
+
+**Requirements:**
+1. Implement `SharedRateLimiter` with `allow_request` and `available_tokens` methods.
+2. Support refill calculations inside the mutex lock.
+3. Write unit tests validating thread safety across concurrent token consumption attempts.
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> use std::sync::{Arc, Mutex};
+> use std::thread;
+> use std::time::{Duration, Instant};
 > 
-> ## 7. Key Takeaways
+> #[derive(Debug)]
+> pub struct TokenBucket {
+>     capacity: f64,
+>     refill_rate: f64,
+>     tokens: f64,
+>     last_refill: Instant,
+> }
 > 
-> - **`Arc<Mutex<T>>`** is the standard Rust pattern for sharing mutable state across threads.
-> - **`Arc`** provides the shared ownership (giving every thread a pointer to the data).
-> - **`Mutex`** provides the thread-safe interior mutability (ensuring threads can safely modify the data one at a time).
-> - You must explicitly `Arc::clone(&variable)` to increment the reference count for each new thread you spawn.
-> - The `Arc` shares the box; the `Mutex` protects the contents!
+> impl TokenBucket {
+>     pub fn new(capacity: f64, refill_rate: f64) -> Self {
+>         Self {
+>             capacity,
+>             refill_rate,
+>             tokens: capacity,
+>             last_refill: Instant::now(),
+>         }
+>     }
 > 
+>     fn refill(&mut self) {
+>         let now = Instant::now();
+>         let elapsed = now.duration_since(self.last_refill).as_secs_f64();
+>         self.tokens = (self.tokens + elapsed * self.refill_rate).min(self.capacity);
+>         self.last_refill = now;
+>     }
+> 
+>     pub fn try_consume(&mut self, tokens: f64) -> bool {
+>         self.refill();
+>         if self.tokens >= tokens {
+>             self.tokens -= tokens;
+>             true
+>         } else {
+>             false
+>         }
+>     }
+> 
+>     pub fn remaining_tokens(&mut self) -> f64 {
+>         self.refill();
+>         self.tokens
+>     }
+> }
+> 
+> pub struct SharedRateLimiter {
+>     limiter: Arc<Mutex<TokenBucket>>,
+> }
+> 
+> impl SharedRateLimiter {
+>     pub fn new(capacity: f64, refill_rate: f64) -> Self {
+>         Self {
+>             limiter: Arc::new(Mutex::new(TokenBucket::new(capacity, refill_rate))),
+>         }
+>     }
+> 
+>     pub fn allow_request(&self, tokens: f64) -> bool {
+>         let mut guard = self.limiter.lock().unwrap();
+>         guard.try_consume(tokens)
+>     }
+> 
+>     pub fn available_tokens(&self) -> f64 {
+>         let mut guard = self.limiter.lock().unwrap();
+>         guard.remaining_tokens()
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_concurrent_rate_limiter() {
+>         let rate_limiter = Arc::new(SharedRateLimiter::new(5.0, 10.0));
+>         let mut handles = vec![];
+> 
+>         for _ in 0..5 {
+>             let limiter_clone = Arc::clone(&rate_limiter);
+>             handles.push(thread::spawn(move || {
+>                 limiter_clone.allow_request(1.0)
+>             }));
+>         }
+> 
+>         let results: Vec<bool> = handles.into_iter().map(|h| h.join().unwrap()).collect();
+>         assert_eq!(results.len(), 5);
+>         assert!(results.iter().all(|&allowed| allowed));
+> 
+>         assert_eq!(rate_limiter.allow_request(1.0), false);
+> 
+>         thread::sleep(Duration::from_millis(200));
+>         assert_eq!(rate_limiter.allow_request(1.0), true);
+>         assert_eq!(rate_limiter.allow_request(1.0), true);
+>         assert_eq!(rate_limiter.allow_request(1.0), false);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. Serializes token refill calculations and deductions inside `MutexGuard` to prevent race conditions.
+> 2. `Arc` enables sharing the rate limiter instance across multiple concurrent request handling threads.
+> 3. Token refills are computed lazily based on elapsed time inside the lock.
+
+---
+
+## 6. Related Terms
+
+- [Channel (`mpsc`)](channel_mpsc.md) — Related concept: Channel (`mpsc`).
+
+---
+
+## 7. Key Takeaways
+
+- `Arc<Mutex<T>>` is the canonical Rust pattern for sharing mutable state across OS threads.
+- `Arc` provides thread-safe shared ownership; `Mutex` provides thread-safe interior mutability.
+- Always scope `MutexGuard` locks tightly to prevent lock contention and deadlocks.
+- `Arc::clone(&pointer)` increments the atomic reference count for each spawned thread.
+- The `Arc` shares the box; the `Mutex` protects the contents!

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [Variable](variable.md) — A named container for storing data values.
 ---
 
 ## 2. Term Category
@@ -204,10 +203,16 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`typeof`](../level_01/typeof.md) — Operator that returns a string indicating the type.
-- [String](../level_01/string.md) — A sequence of characters.
-- [Number](../level_01/number.md) — Represents numerical values.
-
+- [typeof](typeof.md) — Operator that returns a string indicating the type.
+- [String](string.md) — A sequence of characters.
+- [Number](number.md) — Represents numerical values.
+- [BigInt](bigint.md) — Related concept: BigInt.
+- [Boolean](boolean.md) — Related concept: Boolean.
+- [Dynamic & Weak Typing](dynamic_weak_typing.md) — Related concept: Dynamic & Weak Typing.
+- [undefined](undefined.md) — Related concept: undefined.
+- [TypeScript](../level_10/typescript.md) — Related concept: TypeScript.
+- [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — Value vs reference semantics.
+- [ECMAScript](ecmascript.md) — Related concept: ECMAScript.
 ---
 
 ## 8. Key Takeaways

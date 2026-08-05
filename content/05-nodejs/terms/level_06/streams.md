@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Buffers](../level_06/buffers.md) — Streams are composed of flowing Buffers.
+- [Buffers](buffers.md) — Streams are composed of flowing Buffers.
 - [Event Emitter](../level_05/event_emitter.md) — Streams use events to announce when a new chunk arrives.
-
 ---
 
 ## 2. Term Category
@@ -150,9 +149,16 @@ Which scenario uses Streams?
 > **Explanation:** Readable streams are Async Iterables, consumable with `for await...of` loops.
 
 ## 7. Related Terms
-- [Readable & Writable Streams](../level_06/readable_writable.md) — The specific implementations of Streams in Node.js.
-- [Piping (`.pipe()`)](../level_06/piping.md) — How you connect two streams together.
-
+- [Readable & Writable Streams](readable_writable.md) — The specific implementations of Streams in Node.js.
+- [Piping (.pipe())](piping.md) — How you connect two streams together.
+- [The events Module](../level_02/events_module.md) — Related concept: The events Module.
+- [The fs Module (File System)](../level_02/fs_module.md) — Related concept: The fs Module (File System).
+- [stdin / stdout / stderr (Standard Streams)](../level_02/standard_streams.md) — Related concept: stdin / stdout / stderr (Standard Streams).
+- [Event Emitter](../level_05/event_emitter.md) — Related concept: Event Emitter.
+- [Buffers](buffers.md) — Related concept: Buffers.
+- [Data Chunks](chunks.md) — Related concept: Data Chunks.
+- [Body Parsing (express.json())](../level_07/body_parsing.md) — Related concept: Body Parsing (express.json()).
+- [Backpressure](backpressure.md) — Stream backpressure.
 ---
 
 ## 8. Key Takeaways

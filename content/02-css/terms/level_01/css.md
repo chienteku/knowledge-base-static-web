@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTML](../../../01-html/terms/level_01/html.md) — You must have an HTML structure before you can style it.
-
+- html — You must have an HTML structure before you can style it.
 ---
 
 ## 2. Term Category
@@ -196,10 +195,10 @@ h1 {
 > **Explanation:** Centralized stylesheets decouple visual design from HTML content markup.
 
 ## 7. Related Terms
-- [Selectors](../level_01/selectors.md) — How CSS finds the specific HTML elements to style.
-- [Ruleset](../level_01/ruleset.md) — The declaration format mapping selectors.
-- [CSS Comments (`/* */`)](../level_01/comments.md) — Notes ignored by the browser parser.
-
+- [Selectors (Element, Class, ID)](selectors.md) — How CSS finds the specific HTML elements to style.
+- [Ruleset (Declaration, Property, Value)](ruleset.md) — The declaration format mapping selectors.
+- [CSS Comments (`/* */`)](comments.md) — Notes ignored by the browser parser.
+- [The Cascade](the_cascade.md) — The CSS Cascade.
 ---
 
 ## 8. Key Takeaways

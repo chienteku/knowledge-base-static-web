@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useEffect` Hook](../level_03/use_effect.md) — Where the Dependency Array is used.
-- [Component Lifecycle](../level_03/component_lifecycle.md) — The array directly controls the Mounting and Updating phases.
-
+- [`useEffect` Hook](use_effect.md) — Where the Dependency Array is used.
+- [Component Lifecycle](component_lifecycle.md) — The array directly controls the Mounting and Updating phases.
 ---
 
 ## 2. Term Category
@@ -160,7 +159,8 @@ useEffect(() => { ... }, [options]);
 ## 7. Related Terms
 - [`useCallback` Hook](../level_04/use_callback.md) — Another hook that relies heavily on the Dependency Array.
 - [Immutability](../level_02/immutability.md) — Why React uses memory addresses to compare items in the dependency array.
-
+- [`useEffect` Hook](use_effect.md) — Related concept: `useEffect` Hook.
+- [Stale Closures](stale_closures.md) — Stale closure bugs.
 ---
 
 ## 8. Key Takeaways

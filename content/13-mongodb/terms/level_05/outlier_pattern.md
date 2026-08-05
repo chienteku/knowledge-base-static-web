@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling choice.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The physical boundary ceiling.
 
@@ -215,7 +216,10 @@ Write the pseudo-code logic steps (using `if/else` checks) to describe how your 
 
 ## 7. Related Terms
 
+
 - [MongoDB](../level_01/mongodb.md)
+- [Time-Series Collections](../level_10/time_series.md) — Related concept: Time-Series Collections.
+- [Document Size Limit (16 MB)](document_size_limit.md) — Related concept: Document Size Limit (16 MB).
 
 ---
 

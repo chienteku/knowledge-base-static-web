@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
 - [Boolean](../level_01/boolean.md) — `true` or `false`.
-
 ---
 
 ## 2. Term Category
@@ -197,9 +196,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`every()`](../level_04/every.md) — Checks if *all* elements pass the test (the strict sibling of `some`).
-- [`find()`](../level_04/find.md) — Stops at the first match, but returns the *item* instead of a boolean.
-
+- [every()](every.md) — Checks if *all* elements pass the test (the strict sibling of `some`).
+- [find()](find.md) — Stops at the first match, but returns the *item* instead of a boolean.
+- [indexOf / includes / findIndex](indexof_includes_findindex.md) — Related concept: indexOf / includes / findIndex.
 ---
 
 ## 8. Key Takeaways

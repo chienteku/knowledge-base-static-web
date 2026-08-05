@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`UPDATE`](update.md) — The write context.
 - [`DELETE`](delete.md) — The delete context.
 
@@ -192,8 +193,10 @@ DELETE user WHERE active = false RETURN BEFORE; // Returns array of deleted reco
 > **Explanation:** `RETURN field` projects specific fields from created or updated records.
 
 ## 7. Related Terms
+
 - [`UPDATE`](update.md) — The write context.
 - [`DELETE`](delete.md) — The delete context.
+- [`RETURN` Statement (in Functions / Blocks)](../level_06/return_statement.md) — Related concept: `RETURN` Statement (in Functions / Blocks).
 
 ---
 

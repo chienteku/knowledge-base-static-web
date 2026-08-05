@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Database Context (Running processes)](../level_01/database_context.md) — The `mongod` process.
-- [Roles & Permissions (PostgreSQL)](../../../12-postgres/terms/level_10/roles_permissions.md) — Relational security models.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The `mongod` process.
+- [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](../../../12-postgres/terms/level_10/roles_permissions.md) — Relational security models.
 
 ---
 
@@ -214,6 +215,7 @@ Use SCRAM-SHA-256 as default authentication mechanism
 > **Explanation:** Built-in roles enforce Role-Based Access Control (RBAC) security boundaries.
 
 ## 7. Related Terms
+
 - [Connection String URI](connection_string.md) — Authentication connection strings.
 - [NoSQL Injection](nosql_injection.md) — Input validation security.
 

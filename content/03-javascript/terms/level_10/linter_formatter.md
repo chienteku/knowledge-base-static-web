@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Node.js](./node_js.md) — The runtime engine hosting CLI build tooling.
-
+- [Node.js](node_js.md) — The runtime engine hosting CLI build tooling.
 ---
 
 ## 2. Term Category
@@ -238,9 +237,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Strict Mode (`"use strict"`)](../level_09/strict_mode.md) — The language runtime mode that flags undeclared variables at runtime.
-- [TypeScript](./typescript.md) — Extends linting concepts by adding strict static type checking.
-
+- [Strict Mode ("use strict")](../level_09/strict_mode.md) — The language runtime mode that flags undeclared variables at runtime.
+- [TypeScript](typescript.md) — Extends linting concepts by adding strict static type checking.
 ---
 
 ## 8. Key Takeaways

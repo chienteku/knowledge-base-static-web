@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Positioning (`relative`, `absolute`, `fixed`)](../level_04/position_static_relative.md) — Just like `top` and `left`, `z-index` **only works on positioned elements**.
-
+- [`position: static` vs `relative`](position_static_relative.md) — Just like `top` and `left`, `z-index` **only works on positioned elements**.
 ---
 
 ## 2. Term Category
@@ -244,9 +243,10 @@ Which box is visible on top?
 > **Explanation:** Flex and Grid specifications allow `z-index` directly on child items.
 
 ## 7. Related Terms
-- [`position: static` vs `relative`](../level_04/position_static_relative.md) — Required positioning properties.
-- [Stacking Context](../level_04/stacking_context.md) — The parent layer grouping logic that shapes z-index behaviors.
-
+- [`position: static` vs `relative`](position_static_relative.md) — Required positioning properties.
+- [Stacking Context](stacking_context.md) — The parent layer grouping logic that shapes z-index behaviors.
+- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Related concept: `overflow` (hidden, scroll, auto, visible).
+- [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Related concept: `position: absolute` vs `fixed`.
 ---
 
 ## 8. Key Takeaways

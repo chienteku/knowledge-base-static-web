@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Iterator](../level_02/iterator.md) — The lazy sequence of items that `collect()` consumes.
-- [`Vec<T>`](../level_02/vec_t.md) — The most common collection that we collect *into*.
+
+- [Iterator](iterator.md) — The lazy sequence of items that `collect()` consumes.
+- [`Vec<T>`](vec_t.md) — The most common collection that we collect *into*.
 - [Type Annotation](../level_01/type_annotation.md) — Required because `collect` can build many different things, so you must explicitly tell it what to build.
 
 ---
@@ -506,8 +507,14 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Iterator](../level_02/iterator.md) — The underlying system that makes `.collect()` possible.
-- [Closures](../level_06/closure.md) — The anonymous inline functions (like `|x| x * 2`) used inside `.map()` and `.filter()`.
+
+- [Iterator](iterator.md) — The underlying system that makes `.collect()` possible.
+- [Closure](../level_06/closure.md) — The anonymous inline functions (like `|x| x * 2`) used inside `.map()` and `.filter()`.
+- [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — Related concept: `FromIterator` / `Extend` Traits.
+- [Iterator Adapters](iterator_adapters.md) — Related concept: Iterator Adapters.
+- [`Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`)](iterator_consumers.md) — Related concept: `Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`).
+- [Lazy Evaluation](../level_06/lazy_evaluation.md) — Related concept: Lazy Evaluation.
+- [Turbofish (`::<>`)](../level_06/turbofish.md) — Related concept: Turbofish (`::<>`).
 
 ---
 

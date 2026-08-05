@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [Variable](../level_01/variable.md) — Understanding how to assign the result of an `if` expression to a variable.
 
 ---
@@ -643,8 +644,10 @@ High-throughput caching systems need to optimize buffer placement based on syste
 
 ## 6. Related Terms
 
-- [`match`](../level_02/match.md) — The more powerful, pattern-matching alternative to `if`. Usually preferred over long chains of `else if`.
-- [Expressions](../level_01/expressions.md) vs [Statements](../level_01/statements.md) — The core concept that allows `if` to return a value (Expressions return values, statements do not).
+
+- [`match`](match.md) — The more powerful, pattern-matching alternative to `if`. Usually preferred over long chains of `else if`.
+- [Expressions](../level_01/expressions.md)
+- [Statements](../level_01/statements.md) — Related concept: Statements.
 
 ---
 

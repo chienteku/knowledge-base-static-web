@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [HTML](../../../01-html/terms/level_01/html.md) — Vue templates are just extended HTML.
-
+- html — Vue templates are just extended HTML.
 ---
 
 ## 2. Term Category
@@ -179,7 +178,9 @@ D) `message.length`
 ## 7. Related Terms
 - [Directives](../level_03/directives.md) — The special `v-` attributes used in templates.
 - [Computed Properties](../level_02/computed_properties.md) — Where complex logic should live instead of the template.
-
+- [Declarative Rendering](declarative_rendering.md) — Related concept: Declarative Rendering.
+- [Virtual DOM (Vue)](../level_08/virtual_dom.md) — Related concept: Virtual DOM (Vue).
+- [`v-if` / `v-show`](../level_03/v_if_show.md) — Related concept: `v-if` / `v-show`.
 ---
 
 ## 8. Key Takeaways

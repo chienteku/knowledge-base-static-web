@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Standard trait definitions and implementations.
-- [Supertraits](../level_14/supertraits.md) — Declaring trait dependencies (`pub trait Sub: Super`).
-- [Visibility & Modules](../level_07/visibility_and_modules.md) — Private module item visibility rules (`mod private`, `pub(crate)`).
+
+- [Trait](../level_04/trait.md) — Standard trait definitions and implementations.
+- [Supertraits](supertraits.md) — Declaring trait dependencies (`pub trait Sub: Super`).
+- [Visibility and Modules (`pub`, `mod`)](../level_07/visibility_and_modules.md) — Private module item visibility rules (`mod private`, `pub(crate)`).
 
 ---
 
@@ -754,10 +755,12 @@ Implement an internal token sealed trait pattern for a Zero-Copy DMA Memory Buff
 
 ## 7. Related Terms
 
-- [Supertraits](../level_14/supertraits.md) — The trait prerequisite mechanism used to enforce sealing.
-- [Visibility & Modules](../level_07/visibility_and_modules.md) — Privacy rules governing `mod private`.
-- [Traits](../level_04/trait.md) — Standard Rust trait abstraction.
-- [Coherence](../level_14/coherence.md) — Global trait non-ambiguity guarantee.
+
+- [Supertraits](supertraits.md) — The trait prerequisite mechanism used to enforce sealing.
+- [Visibility and Modules (`pub`, `mod`)](../level_07/visibility_and_modules.md) — Privacy rules governing `mod private`.
+- [Trait](../level_04/trait.md) — Standard Rust trait abstraction.
+- [Coherence](coherence.md) — Global trait non-ambiguity guarantee.
+- [Marker Traits](marker_traits.md) — Related concept: Marker Traits.
 
 ---
 

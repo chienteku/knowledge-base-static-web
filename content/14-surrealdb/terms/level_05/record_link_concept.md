@@ -6,7 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [Record Link Type](../level_02/record_link_type.md) — The data type validation rules.
+
+- [`record` (Record Link Type)](../level_02/record_link_type.md) — The data type validation rules.
+- [Record ID (`table:id`)](../level_01/record_id.md) — Record IDs.
+- [Table](../level_01/table.md) — Table entities.
 
 ---
 
@@ -226,8 +229,12 @@ Write the SurrealQL commands to:
 > **Explanation:** `TYPE record<table>` enforces foreign record link pointer types.
 
 ## 7. Related Terms
-- [Record Link Type](../level_02/record_link_type.md) — The data type validation rules.
+
+- [`record` (Record Link Type)](../level_02/record_link_type.md) — The data type validation rules.
 - [Graph Connections (Overview: Nodes vs Edges)](graph_overview.md) — Bidirectional mappings.
+- [Indexing Record Link Fields](../level_07/indexing_record_links.md) — Related concept: Indexing Record Link Fields.
+- [`RELATE` Statement](relate.md) — RELATE statement.
+- [Array of Record Links (`array<record<table>>`)](array_record_links.md) — Array of record links.
 
 ---
 

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Evaluation Query Operators (`$regex`, `$expr`, `$mod`)](evaluation_operators.md) — The evaluation context.
 
 ---
@@ -190,6 +191,7 @@ db.posts.find({ $text: { $search: "mongodb" } }); // Fast text index search
 > **Explanation:** Leading text anchors allow B-Tree indexes to jump directly to matching prefix keys.
 
 ## 7. Related Terms
+
 - [Evaluation Query Operators (`$regex`, `$expr`, `$mod`)](evaluation_operators.md) — The parent context.
 - [Text Search (`$text` / `$search`)](text_search.md) — Large text indexing alternatives.
 

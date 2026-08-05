@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [SELECT](../level_03/select.md) — The primary query statement.
-- [WHERE Clause](../level_03/where.md) — Conditional filter contexts.
+
+- [`SELECT`](../level_03/select.md) — The primary query statement.
+- [`WHERE` Clause](../level_03/where.md) — Conditional filter contexts.
 
 ---
 
@@ -183,9 +184,11 @@ Write a SurrealQL query to retrieve all `orders` where the `customer` field (a `
 > **Explanation:** `WHERE field IN (subquery)` filters records matching subquery value sets.
 
 ## 7. Related Terms
-- [SELECT](../level_03/select.md) — The query statement.
-- [SELECT VALUE](../level_03/select_value.md) — Extracting flat arrays.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
+- [`SELECT VALUE` (Single Field Extraction)](../level_03/select_value.md) — Extracting flat arrays.
 - [Parameters (`$param`)](parameters.md) — Session variables.
+- [`LET` Statement](let_statement.md) — Related concept: `LET` Statement.
 
 ---
 

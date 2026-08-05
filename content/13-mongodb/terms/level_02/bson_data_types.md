@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON (Binary JSON)](../level_01/bson.md) — The parent binary serialization format.
 
 ---
@@ -187,9 +188,16 @@ Ensure field values are consistently typed using Schema Validation
 > **Explanation:** BSON type aliases provide human-readable names for BSON type codes.
 
 ## 7. Related Terms
+
 - [BSON (Binary JSON)](../level_01/bson.md) — The binary serialization.
 - [String](string.md) — The text type.
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — The numeric types.
+- [Field](../level_01/field.md) — Related concept: Field.
+- [`Binary` Data](binary_data.md) — Related concept: `Binary` Data.
+- [Boolean](boolean_type.md) — Related concept: Boolean.
+- [Date](date_type.md) — Related concept: Date.
+- [`null`](null_type.md) — Related concept: `null`.
+- [Schema Validation (`$jsonSchema`)](../level_05/schema_validation.md) — Related concept: Schema Validation (`$jsonSchema`).
 
 ---
 

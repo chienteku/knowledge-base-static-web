@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Literal Types](../level_05/literal_types.md) — The specific, exact types that `as const` generates.
-- [Enums](../level_11/enums.md) — The legacy feature that `as const` is rapidly replacing.
-
+- [Enums](enums.md) — The legacy feature that `as const` is rapidly replacing.
 ---
 
 ## 2. Term Category

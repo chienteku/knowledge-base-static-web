@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [Derive Macros (`#[derive(...)]`)](../level_12/derive_macros.md) — Procedural macros driving `serde` code generation.
+
 - [Zero-Cost Abstractions](../level_15/zero_cost_abstractions.md) — Compile-time serialization code generation without runtime reflection.
 
 ---
@@ -511,6 +511,14 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 > 1. **Adjacent Enum Tagging (`#[serde(tag = "...", content = "...")]`):** Encodes enum variants into structured JSON objects with a discriminator tag field (e.g. `"event_type": "telemetry"`) and a separate content key (`"data": { ... }`).
 > 2. **`#[serde(flatten)]`:** Inlines fields of nested structs or enums into the outer JSON object, allowing `event_type` and `data` to reside at the top-level of `EventEnvelope`.
 > 3. **`#[serde(default)]` Fallback:** When deserializing a struct with missing fields, Serde invokes the struct's `Default::default()` implementation to fill missing values without aborting deserialization with missing key errors.
+
+---
+
+---
+
+## 6. Related Terms
+
+**None.**
 
 ---
 

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Index (Concept in MongoDB)](index_concept.md) — The B-Tree structures analyzed.
 
 ---
@@ -237,8 +238,12 @@ Optimize compound index to cover sort order and eliminate in-memory SORT stage
 > **Explanation:** Ideal index scan ratio is 1 (or 0 for covered queries).
 
 ## 7. Related Terms
+
 - [Collection Scan vs Index Scan](collection_scan_vs_index.md) — The scan types.
 - [Covered Query](covered_query.md) — The optimal index scan.
+- [Index Intersection](index_intersection.md) — Related concept: Index Intersection.
+- [MongoDB Profiler (`db.setProfilingLevel()`)](../level_10/profiler.md) — Related concept: MongoDB Profiler (`db.setProfilingLevel()`).
+- [Index (Concept in MongoDB)](index_concept.md) — Related concept: Index (Concept in MongoDB).
 
 ---
 

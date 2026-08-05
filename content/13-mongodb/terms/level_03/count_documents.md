@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`find()` / `findOne()`](find.md) — The read query context.
 
 ---
@@ -215,6 +216,7 @@ await db.large.estimatedDocumentCount(); // Fast metadata count in milliseconds
 > **Explanation:** `estimatedDocumentCount()` returns collection metadata counts instantly without scanning.
 
 ## 7. Related Terms
+
 - [`find()` / `findOne()`](find.md) — The query basics.
 
 ---

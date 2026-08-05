@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Move Semantics](../level_03/move_semantics.md) — The default behavior of assignment that `Clone` allows you to bypass.
-- [`Copy` Trait](../level_03/copy_trait.md) — The implicit version of copying for small, simple Stack data.
-- [Traits](../level_04/trait.md) — (Future reference) The system used to define shared behaviors across types.
+
+- [Move Semantics](move_semantics.md) — The default behavior of assignment that `Clone` allows you to bypass.
+- [`Copy` Trait](copy_trait.md) — The implicit version of copying for small, simple Stack data.
+- [Trait](../level_04/trait.md) — (Future reference) The system used to define shared behaviors across types.
 
 ---
 
@@ -544,8 +545,11 @@ Write unit tests in `#[cfg(test)] mod tests` using `assert_eq!`, `assert!`, `ass
 
 ## 6. Related Terms
 
-- [`Copy` Trait](../level_03/copy_trait.md) — The implicit, cheap version of copying for stack-only data.
-- [Borrowing (`&`)](../level_03/borrowing.md) — The idiomatic way to avoid `.clone()` by just letting functions look at your data temporarily without taking ownership.
+
+- [`Copy` Trait](copy_trait.md) — The implicit, cheap version of copying for stack-only data.
+- [Borrowing (`&`)](borrowing.md) — The idiomatic way to avoid `.clone()` by just letting functions look at your data temporarily without taking ownership.
+- [Move Semantics](move_semantics.md) — Related concept: Move Semantics.
+- [Derive Macro](../level_04/derive_macro.md) — Related concept: Derive Macro.
 
 ---
 

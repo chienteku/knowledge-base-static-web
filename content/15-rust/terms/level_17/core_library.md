@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`#![no_std]`](../level_17/no_std.md) — The crate attribute that leaves only `core` active.
-- [`alloc` Library](../level_17/alloc_library.md) — The heap-allocating extension built on top of `core`.
+
+- [`alloc` Library](alloc_library.md) — The heap-allocating extension built on top of `core`.
 
 ---
 
@@ -219,6 +219,15 @@ pub fn safe_divide(numerator: u32, denominator: u32) -> Option<u32> {
 > **Explanation:** 
 > 1. Custom domain data structures implement `core::fmt::Display` using `write!` macro provided entirely by `core`.
 > 2. Implement `core::fmt::Write` on a stack-allocated byte array buffer (`ArrayString<N>`), enabling string formatting in embedded software without depending on `std::string::String` or heap allocation.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [`alloc` Library](alloc_library.md) — The heap-allocating extension built on top of `core`.
+- [The Rust Standard Library (`std`)](std_library.md) — Related concept: The Rust Standard Library (`std`).
 
 ---
 

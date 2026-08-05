@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The collection of key-value pairs.
-- [`Object.keys()`](./object_keys.md) — The sibling method.
-
+- [Object.keys()](object_keys.md) — The sibling method.
 ---
 
 ## 2. Term Category
@@ -199,9 +198,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`Object.keys()`](./object_keys.md) — Returns the keys instead of the values.
-- [`Object.entries()`](./object_entries.md) — Returns both!
-
+- [Object.keys()](object_keys.md) — Returns the keys instead of the values.
+- [Object.entries()](object_entries.md) — Returns both!
 ---
 
 ## 8. Key Takeaways

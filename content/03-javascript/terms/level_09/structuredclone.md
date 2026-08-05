@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — Reference vs value memory structures.
 - [Shallow Copy vs Deep Copy](../level_07/shallow_vs_deep_copy.md) — The copy strategies for nested data.
-
 ---
 
 ## 2. Term Category
@@ -237,8 +236,7 @@ console.log("Log method exists?", typeof result.log === "function");
 ---
 
 ## 7. Related Terms
-- [`JSON` / `JSON.stringify` / `JSON.parse`](../level_07/json.md) — The legacy string serialization copy alternative.
-
+- [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — The legacy string serialization copy alternative.
 ---
 
 ## 8. Key Takeaways

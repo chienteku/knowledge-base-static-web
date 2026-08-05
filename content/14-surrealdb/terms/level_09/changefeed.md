@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE TABLE`](../level_04/define_table.md) — Table definition context.
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Real-time live subscriptions vs historical change feeds.
 
@@ -193,6 +194,7 @@ Write a `DEFINE TABLE` statement for a `user_profile` table with `SCHEMAFULL` mo
 > **Explanation:** `SHOW CHANGES FOR TABLE ... SINCE` retrieves record mutation history.
 
 ## 7. Related Terms
+
 - [`SHOW CHANGES FOR TABLE ... SINCE ...`](show_changes.md) — Querying recorded changefeed logs.
 - [`DEFINE EVENT`](define_event.md) — Real-time server-side triggers.
 - [`LIVE SELECT` (Live Queries)](live_select.md) — Live push subscriptions vs changefeeds.

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Node.js](../level_01/nodejs.md) — NPM comes bundled automatically when you install Node.js.
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — NPM comes bundled automatically when you install Node.js.
 - [Built-in vs External Modules](../level_03/module_types.md) — NPM is the tool used to download External Modules.
-
 ---
 
 ## 2. Term Category
@@ -141,9 +140,12 @@ What is the difference in how you install them?
 > **Explanation:** `npm audit` checks dependency versions against known CVE vulnerability databases.
 
 ## 7. Related Terms
-- [`package.json`](../level_04/package_json.md) — The configuration file that NPM reads and writes to.
-- [`node_modules`](../level_04/node_modules.md) — Where NPM physically places the downloaded code.
-
+- [package.json](package_json.md) — The configuration file that NPM reads and writes to.
+- [node_modules](node_modules.md) — Where NPM physically places the downloaded code.
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — Related concept: Node.js (Runtime Environment).
+- [CommonJS (require, module.exports)](../level_03/commonjs.md) — Related concept: CommonJS (require, module.exports).
+- [Built-in vs External Modules](../level_03/module_types.md) — Related concept: Built-in vs External Modules.
+- [package-lock.json & Deterministic Installs](package_lock.md) — package-lock.json lockfile.
 ---
 
 ## 8. Key Takeaways

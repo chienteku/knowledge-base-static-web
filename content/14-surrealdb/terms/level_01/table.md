@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Record](record.md) — The individual data units stored.
 
 ---
@@ -199,8 +200,13 @@ State whether the following query will succeed or fail, and explain why:
 > **Explanation:** `DELETE table` deletes all record data while keeping `DEFINE TABLE` schemas intact.
 
 ## 7. Related Terms
+
 - [Record](record.md) — The individual data units stored.
 - [`SCHEMAFULL` vs `SCHEMALESS`](schemafull_schemaless.md) — The schema modes.
+- [Namespace & Database](namespace_database.md) — Related concept: Namespace & Database.
+- [Record ID (`table:id`)](record_id.md) — Related concept: Record ID (`table:id`).
+- [`IF NOT EXISTS` / `IF EXISTS`](../level_03/if_not_exists.md) — Related concept: `IF NOT EXISTS` / `IF EXISTS`.
+- [`DEFINE TABLE`](../level_04/define_table.md) — Related concept: `DEFINE TABLE`.
 
 ---
 

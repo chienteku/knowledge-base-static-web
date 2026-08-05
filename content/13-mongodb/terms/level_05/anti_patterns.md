@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The core design choices.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The physical boundary constraint.
@@ -201,8 +202,9 @@ The metric is logged every second.
 > **Explanation:** Converting dynamic field keys to array objects enables indexing and query filtering.
 
 ## 7. Related Terms
+
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The design choice.
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The design choice.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The size constraint.
 
 ---

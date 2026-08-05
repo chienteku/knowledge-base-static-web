@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Pinia](../level_07/pinia.md) — The library that powers the Store.
+- [Pinia](pinia.md) — The library that powers the Store.
 - [Composition API](../level_01/composition_api.md) — Stores are written using Composition API syntax.
-
 ---
 
 ## 2. Term Category
@@ -190,9 +189,9 @@ defineStore('counter', () => {
 ---
 
 ## 7. Related Terms
-- [State & Getters](../level_07/state_getters.md) — The data inside the store.
-- [Actions](../level_07/actions.md) — The functions inside the store.
-
+- [State & Getters (Pinia)](state_getters.md) — The data inside the store.
+- [Actions (Pinia)](actions.md) — The functions inside the store.
+- [Pinia](pinia.md) — Related concept: Pinia.
 ---
 
 ## 8. Key Takeaways

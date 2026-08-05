@@ -6,6 +6,8 @@
 ---
 
 ## 1. Prerequisites
+
+- [Index (Concept in MongoDB)](index_concept.md) — Index fundamentals.
 - [Single-Field Index](single_field_index.md) — The parent index type.
 - [Index Selectivity & Cardinality](index_selectivity.md) — Determining index suitability.
 
@@ -248,8 +250,13 @@ Analyze if the index can optimize these queries (answer **Yes** or **No**):
 > **Explanation:** Compound indexes support queries matching leading field prefix subsets.
 
 ## 7. Related Terms
+
 - [Single-Field Index](single_field_index.md) — The parent index type.
 - [The ESR Rule (Equality, Sort, Range)](esr_rule.md) — Ordering compound keys.
+- [Covered Query](covered_query.md) — Related concept: Covered Query.
+- [Index Intersection](index_intersection.md) — Related concept: Index Intersection.
+- [Multikey Index](multikey_index.md) — Related concept: Multikey Index.
+- [Index (Concept in MongoDB)](index_concept.md) — Related concept: Index (Concept in MongoDB).
 
 ---
 

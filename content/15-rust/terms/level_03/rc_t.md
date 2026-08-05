@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The fundamental rule ("One Owner") that `Rc` is designed to safely bypass.
-- [`Drop` Trait](../level_03/drop_trait.md) — How Rust cleans up memory. `Rc` manipulates exactly *when* the `Drop` trait is allowed to trigger.
+
+- [Ownership](ownership.md) — The fundamental rule ("One Owner") that `Rc` is designed to safely bypass.
+- [`Drop` Trait](drop_trait.md) — How Rust cleans up memory. `Rc` manipulates exactly *when* the `Drop` trait is allowed to trigger.
 
 ---
 
@@ -631,9 +632,14 @@ fn main() {
 
 ## 6. Related Terms
 
-- [`Arc<T>`](../level_03/arc_t.md) — The thread-safe sibling to `Rc` (Atomic Reference Counted).
-- [`RefCell<T>`](../level_03/refcell_t.md) — A tool often wrapped *inside* an `Rc` to allow you to mutate the shared data safely.
-- [Ownership](../level_03/ownership.md) — The strict "One Owner" rule that `Rc` safely bends.
+
+- [`Arc<T>`](arc_t.md) — The thread-safe sibling to `Rc` (Atomic Reference Counted).
+- [`RefCell<T>`](refcell_t.md) — A tool often wrapped *inside* an `Rc` to allow you to mutate the shared data safely.
+- [Ownership](ownership.md) — The strict "One Owner" rule that `Rc` safely bends.
+- [`Box<T>`](box_t.md) — Related concept: `Box<T>`.
+- [Memory Leaks & Reference Cycles](../level_11/memory_leaks.md) — Related concept: Memory Leaks & Reference Cycles.
+- [`Weak<T>`](../level_11/weak_t.md) — Related concept: `Weak<T>`.
+- [Smart Pointers (`Box`, `Rc`, `Arc`)](../level_10/smart_pointers.md) — Related concept: Smart Pointers (`Box`, `Rc`, `Arc`).
 
 ---
 

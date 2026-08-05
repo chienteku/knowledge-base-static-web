@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [`null` vs `NONE`](../level_02/null_none.md) — The absent data states.
 
@@ -200,8 +201,10 @@ State whether each query will **Succeed** or **Fail**, and explain why:
 > **Explanation:** `option<record<table>>` permits optional foreign record pointers.
 
 ## 7. Related Terms
+
 - [`DEFINE FIELD`](define_field.md) — The field declaration context.
 - [`null` vs `NONE`](../level_02/null_none.md) — The absent data states.
+- [`SCHEMAFULL` Validation Assertion Patterns](schemafull_validation.md) — Related concept: `SCHEMAFULL` Validation Assertion Patterns.
 
 ---
 

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`SELECT`](select.md) — The baseline query command.
-
 ---
 
 ## 2. Term Category
@@ -209,7 +208,10 @@ SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) > 5;
 - [`SELECT`](select.md) — Sourcing data.
 - [Comparison & Logical Operators](operators.md) — The parameters used to write conditions.
 - [`IS NULL` / `IS NOT NULL`](is_null.md) — Handling missing data filters.
-
+- [`DELETE`](delete.md) — Related concept: `DELETE`.
+- [`UPDATE`](update.md) — Related concept: `UPDATE`.
+- [`EXISTS` / `NOT EXISTS`](../level_04/exists.md) — Related concept: `EXISTS` / `NOT EXISTS`.
+- [`HAVING`](../level_04/having.md) — Related concept: `HAVING`.
 ---
 
 ## 8. Key Takeaways

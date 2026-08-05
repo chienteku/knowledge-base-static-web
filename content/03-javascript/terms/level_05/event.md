@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DOM](../level_05/dom.md) — The tree structure representing the HTML document.
+- [DOM (Document Object Model)](dom.md) — The tree structure representing the HTML document.
 - [Callback Function](../level_03/callback_function.md) — A function executed at a later time.
-
 ---
 
 ## 2. Term Category
@@ -195,9 +194,9 @@ window.addEventListener("scroll", () => {
 ---
 
 ## 7. Related Terms
-- [Event Listener](../level_05/event_listener.md) — The method used to wait for these events.
+- [Event Listener](event_listener.md) — The method used to wait for these events.
 - [Callback Function](../level_03/callback_function.md) — The code that runs when the event happens.
-
+- [DOM (Document Object Model)](dom.md) — Related concept: DOM (Document Object Model).
 ---
 
 ## 8. Key Takeaways

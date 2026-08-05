@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`DEFINE FIELD`](define_field.md) — The parent schema context.
 - [Operators in SurrealQL](../level_03/operators.md) — The logical check symbols.
 
@@ -200,8 +201,10 @@ Write the SurrealQL commands to:
 > **Explanation:** `is::url($value)` validates URL string formats.
 
 ## 7. Related Terms
+
 - [`DEFINE FIELD`](define_field.md) — The parent schema context.
 - [`VALUE` / `DEFAULT` / `READONLY` Clause](field_attributes.md) — Value modification attributes.
+- [`ASSERT` Clause](assert_clause.md) — Related concept: `ASSERT` Clause.
 
 ---
 

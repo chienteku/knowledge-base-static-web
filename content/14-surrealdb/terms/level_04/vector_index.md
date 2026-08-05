@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [DEFINE INDEX](define_index.md) — The parent index context.
+
+- [`DEFINE INDEX` (Deep Dive)](../level_07/define_index.md) — The parent index context.
 
 ---
 
@@ -191,8 +192,10 @@ Write the SurrealQL query to define a vector index named `image_similarity` usin
 > **Explanation:** `vector::similarity::cosine()` calculates similarity scores for vector ranking.
 
 ## 7. Related Terms
-- [DEFINE INDEX](define_index.md) — The parent index context.
-- [Vector Search](../level_07/vector_search.md) — Querying vectors.
+
+- [`DEFINE INDEX` (Deep Dive)](../level_07/define_index.md) — The parent index context.
+- [Vector Search Index (ML/AI)](../level_07/vector_search.md) — Querying vectors.
+- [`DEFINE INDEX ... HNSW` (Approximate Vector Search)](../level_07/hnsw_index.md) — HNSW vector indexing.
 
 ---
 

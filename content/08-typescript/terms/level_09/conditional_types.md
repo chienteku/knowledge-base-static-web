@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Generics Overview](../level_07/generics.md) — Conditional Types are almost exclusively used with Generics.
-- [Generic Constraints](../level_07/generic_constraints.md) — The `extends` keyword is used as the evaluation condition.
-
+- [Generics Overview (`<T>`)](../level_07/generics.md) — Conditional Types are almost exclusively used with Generics.
+- [Generic Constraints (`extends`)](../level_07/generic_constraints.md) — The `extends` keyword is used as the evaluation condition.
 ---
 
 ## 2. Term Category
@@ -162,9 +161,12 @@ type AbsNumber<T> = T extends number ? number : T; // Type-level conditional eva
 
 ## 7. Related Terms
 - [Utility Types Overview](../level_08/utility_types.md) — Many advanced utilities (`Exclude`, `Extract`, `ReturnType`) are built entirely on Conditional Types.
-- [Generics Overview](../level_07/generics.md) — The inputs to a Conditional Type.
-- [The `infer` Keyword](../level_09/infer.md) — Capturing dynamic types inside conditional statements.
-
+- [Generics Overview (`<T>`)](../level_07/generics.md) — The inputs to a Conditional Type.
+- [The `infer` Keyword](infer.md) — Capturing dynamic types inside conditional statements.
+- [`Exclude` / `Extract` / `NonNullable`](../level_08/exclude_extract_nonnullable.md) — Related concept: `Exclude` / `Extract` / `NonNullable`.
+- [`Parameters` / `ConstructorParameters` / `Awaited`](../level_08/parameters_awaited.md) — Related concept: `Parameters` / `ConstructorParameters` / `Awaited`.
+- [Template Literal Types](template_literal_types.md) — Template literal types.
+- [Mapped Types](mapped_types.md) — Mapped types.
 ---
 
 ## 8. Key Takeaways

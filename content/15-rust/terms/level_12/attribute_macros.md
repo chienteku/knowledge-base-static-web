@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Procedural Macros](../level_12/procedural_macros.md) — Understanding compile-time Rust code transformation function definitions and proc-macro crate requirements.
-- [Token Stream](../level_12/token_stream.md) — The input (`attr` and `item`) and output token sequences (`proc_macro::TokenStream`) manipulated by procedural attribute macros.
-- [Attributes](../level_07/attributes.md) — Basic syntax and mechanics of built-in attributes like `#[inline]`, `#[test]`, and `#[allow(...)]`.
+
+- [Procedural Macros](procedural_macros.md) — Understanding compile-time Rust code transformation function definitions and proc-macro crate requirements.
+- [Token Stream](token_stream.md) — The input (`attr` and `item`) and output token sequences (`proc_macro::TokenStream`) manipulated by procedural attribute macros.
+- [Attributes (`#[...]`)](../level_07/attributes.md) — Basic syntax and mechanics of built-in attributes like `#[inline]`, `#[test]`, and `#[allow(...)]`.
 
 ---
 
@@ -549,11 +550,12 @@ Provide the macro AST generation design, full compilable Rust code simulating me
 
 ## 7. Related Terms
 
-- [Procedural Macros](../level_12/procedural_macros.md) — The parent macro category encompassing attribute, derive, and function-like macros.
-- [Derive Macros](../level_12/derive_macros.md) — Append-only procedural macros for auto-implementing traits on structs/enums.
-- [Function-like Macros](../level_12/function_like_macros.md) — Procedural macros invoked like function calls using bang syntax (`!`).
-- [Token Stream](../level_12/token_stream.md) — Compiler token stream representations processed by macro functions.
-- [Attributes](../level_07/attributes.md) — Standard Rust outer and inner attribute metadata system.
+
+- [Procedural Macros](procedural_macros.md) — The parent macro category encompassing attribute, derive, and function-like macros.
+- [Derive Macros](derive_macros.md) — Append-only procedural macros for auto-implementing traits on structs/enums.
+- [Function-like Macros](function_like_macros.md) — Procedural macros invoked like function calls using bang syntax (`!`).
+- [Token Stream](token_stream.md) — Compiler token stream representations processed by macro functions.
+- [Attributes (`#[...]`)](../level_07/attributes.md) — Standard Rust outer and inner attribute metadata system.
 
 ---
 

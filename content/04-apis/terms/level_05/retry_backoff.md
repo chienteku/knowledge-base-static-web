@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Error Handling (`try` / `catch`)](./error_handling.md) — The core structure for trapping query failures.
+- [Error Handling (try / catch)](error_handling.md) — The core structure for trapping query failures.
 - [Rate Limiting (429 Too Many Requests)](../level_06/rate_limiting.md) — The server-side restriction policy.
-
 ---
 
 ## 2. Term Category
@@ -188,8 +187,7 @@ await new Promise(r => setTimeout(r, delay));
 
 ## 7. Related Terms
 - [Idempotency](../level_06/idempotency.md) — The server property that makes repeating requests safe.
-- [Request Timeout](./request_timeout.md) — The client-side cancel condition that often triggers a retry loop.
-
+- [Request Timeout](request_timeout.md) — The client-side cancel condition that often triggers a retry loop.
 ---
 
 ## 8. Key Takeaways

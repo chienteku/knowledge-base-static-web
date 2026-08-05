@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [tsconfig.json](../level_01/tsconfig.md) — The configuration file where this flag is enabled.
-
+- [`tsconfig.json`](../level_01/tsconfig.md) — The configuration file where this flag is enabled.
 ---
 
 ## 2. Term Category

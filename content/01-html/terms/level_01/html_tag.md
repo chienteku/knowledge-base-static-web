@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<!DOCTYPE html>`](../level_01/doctype_html.md) — The declaration that precedes the `<html>` tag.
-- [Nesting](../level_01/nesting.md) — Since the root element acts as the top-level parent container wrapping all child nodes.
-
+- [`<!DOCTYPE html>`](doctype_html.md) — The declaration that precedes the `<html>` tag.
+- [Nesting](nesting.md) — Since the root element acts as the top-level parent container wrapping all child nodes.
 ---
 
 ## 2. Term Category
@@ -171,9 +170,11 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 > **Explanation:** The `lang` attribute can be applied to inline elements to override document language for screen readers.
 
 ## 7. Related Terms
-- [`<head>`](../level_01/head.md) — The first child of the `<html>` element.
-- [`<body>`](../level_01/body.md) — The second child of the `<html>` element.
-
+- [`<head>`](head.md) — The first child of the `<html>` element.
+- [`<body>`](body.md) — The second child of the `<html>` element.
+- [`<!DOCTYPE html>`](doctype_html.md) — Related concept: `<!DOCTYPE html>`.
+- [`lang` Attribute](../level_07/lang.md) — Related concept: `lang` Attribute.
+- [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
 ---
 
 ## 8. Key Takeaways

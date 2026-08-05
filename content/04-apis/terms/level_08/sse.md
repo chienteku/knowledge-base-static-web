@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [WebSockets](../level_08/websockets.md) — SSE solves a very specific problem that WebSockets are overkill for.
+- [WebSockets](websockets.md) — SSE solves a very specific problem that WebSockets are overkill for.
 - [HTTP / HTTPS](../level_01/http_https.md) — Unlike WebSockets, SSE strictly remains HTTP.
-
 ---
 
 ## 2. Term Category
@@ -324,9 +323,8 @@ B) Server-Sent Events
 ---
 
 ## 7. Related Terms
-- [WebSockets](../level_08/websockets.md) — The two-way alternative.
+- [WebSockets](websockets.md) — The two-way alternative.
 - [HTTP Headers](../level_02/http_headers.md) — SSE relies on `Content-Type: text/event-stream`.
-
 ---
 
 ## 8. Key Takeaways

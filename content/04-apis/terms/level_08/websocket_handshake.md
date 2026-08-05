@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [WebSockets](./websockets.md) — The real-time, bi-directional protocol concept.
-- [HTTP Headers (General)](../level_02/http_headers.md) — The metadata packets used to negotiate requests.
-
+- [WebSockets](websockets.md) — The real-time, bi-directional protocol concept.
+- [HTTP Headers](../level_02/http_headers.md) — The metadata packets used to negotiate requests.
 ---
 
 ## 2. Term Category
@@ -335,8 +334,8 @@ Sec-WebSocket-Version: 13
 
 ## 7. Related Terms
 - [TCP/IP (high-level)](../level_01/tcp_ip.md) — The protocol layer that keeps the network connection open.
-- [The WebSocket API (Client-side)](./websocket_api.md) — The browser interface that initiates the handshake.
-
+- [The WebSocket API (Client-side)](websocket_api.md) — The browser interface that initiates the handshake.
+- [WebSockets](websockets.md) — Related concept: WebSockets.
 ---
 
 ## 8. Key Takeaways

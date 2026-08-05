@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS Selectors](../level_01/selectors.md) — Base element and class matching.
+- [Selectors (Element, Class, ID)](../level_01/selectors.md) — Base element and class matching.
 - [Specificity](../level_01/specificity.md) — How selectors accumulate matching priorities.
-
 ---
 
 ## 2. Term Category
@@ -243,7 +242,7 @@ a[href$=".pdf" i] { ... } /* Case-insensitive attribute matching */
 
 ## 7. Related Terms
 - [Combinator Selectors](combinators.md) — Target elements relative to parent-child tree layouts.
-
+- [Selectors (Element, Class, ID)](../level_01/selectors.md) — Related concept: Selectors (Element, Class, ID).
 ---
 
 ## 8. Key Takeaways

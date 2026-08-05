@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The process Object](./process_object.md) — Standard streams are accessed as properties of `process`.
-
+- [The process Object](process_object.md) — Standard streams are accessed as properties of `process`.
 ---
 
 ## 2. Term Category
@@ -202,8 +201,7 @@ logMessage('ERROR', 'Failed to connect to database');
 
 ## 7. Related Terms
 - [Streams (General Concept)](../level_06/streams.md) — The core concepts behind readable and writable data channels.
-- [The process Object](./process_object.md) — The parent process object managing these streams.
-
+- [The process Object](process_object.md) — The parent process object managing these streams.
 ---
 
 ## 8. Key Takeaways

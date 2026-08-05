@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Table (Relation)](../level_01/table.md) — The data grid where rows are stored.
 - [`SELECT`](../level_03/select.md) — The read statements optimized by indexes.
-
 ---
 
 ## 2. Term Category
@@ -174,7 +173,10 @@ Maintain targeted composite indexes using ESR rule
 ## 7. Related Terms
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — The SQL commands.
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — Scenting read routes.
-
+- [B-tree Index](btree_index.md) — Related concept: B-tree Index.
+- [Table Partitioning](../level_10/table_partitioning.md) — Related concept: Table Partitioning.
+- [Composite Index (Multi-column)](composite_index.md) — Multi-column indexes.
+- [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — Query execution plan analysis.
 ---
 
 ## 8. Key Takeaways

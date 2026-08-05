@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`INSERT`](insert.md) — The parent write statement.
 
 ---
@@ -189,6 +190,7 @@ INSERT INTO user { id: user:1, name: "New" } ON DUPLICATE KEY UPDATE name = $inp
 > **Explanation:** `$input` binds incoming insert values during duplicate key resolution.
 
 ## 7. Related Terms
+
 - [`INSERT`](insert.md) — The parent write statement.
 - [`UPSERT`](upsert.md) — The native standalone upsert statement.
 

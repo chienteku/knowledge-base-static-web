@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Pluggable storage architecture.
 - [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Snapshot isolation.
 
@@ -201,6 +202,7 @@ What CNCF-graduated distributed key-value engine does SurrealDB use to achieve h
 > **Explanation:** TiKV enables unlimited horizontal scale and high availability for SurrealDB clusters.
 
 ## 7. Related Terms
+
 - [Storage Backends (Memory, RocksDB, TiKV)](../level_01/storage_backends.md) — Storage backend overview.
 - [SurrealDB Server (`surreal start`)](../level_01/surreal_start.md) — Server startup flags.
 - [SurrealDB Cloud](surrealdb_cloud.md) — Managed distributed cloud instances.

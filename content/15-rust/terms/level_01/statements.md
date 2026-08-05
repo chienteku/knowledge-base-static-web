@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Variable](../level_01/variable.md) — Declaring a variable (`let x = 5;`) is the most common example of a statement.
+
+- [Variable](variable.md) — Declaring a variable (`let x = 5;`) is the most common example of a statement.
 
 ---
 
@@ -718,8 +719,11 @@ By contrast, reading hardware values into driver state relies on **expressions**
 
 ## 6. Related Terms
 
-- [Expressions](../level_01/expressions.md) — The exact opposite. Expressions *evaluate* to a value, and they do not end with a semicolon.
+
+- [Expressions](expressions.md) — The exact opposite. Expressions *evaluate* to a value, and they do not end with a semicolon.
 - [`if` / `else`](../level_02/if_else.md) — In many languages, `if` is a statement. In Rust, it is an expression.
+- [Unit Type (`()`)](unit_type.md) — Related concept: Unit Type (`()`).
+- [Expressions vs. Statements](expression_vs_statement.md) — Related concept: Expressions vs. Statements.
 
 ---
 

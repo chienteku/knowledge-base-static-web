@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [console.log](../level_01/console_log.md) — The standard basic output printing helper.
+- [console.log()](../level_01/console_log.md) — The standard basic output printing helper.
 - [JavaScript Engine](../level_05/javascript_engine.md) — The browser engine executing the code.
-
 ---
 
 ## 2. Term Category
@@ -217,7 +216,6 @@ async function processData() {
 
 ## 7. Related Terms
 - [Error object & Error Types](../level_06/error_object.md) — The error models that generate call stack traces for debugging.
-
 ---
 
 ## 8. Key Takeaways

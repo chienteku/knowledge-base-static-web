@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
+
 - [`Result<T, E>`](../level_02/result_t_e.md) — The tool for *recoverable* errors.
-- [`unwrap()` / `expect()`](../level_04/unwrap_expect.md) — The methods that secretly trigger a `panic!` when they fail.
+- [`unwrap()` / `expect()`](unwrap_expect.md) — The methods that secretly trigger a `panic!` when they fail.
 - [Macros](../level_01/macros.md) — Code that writes code; `panic!` is a macro, denoted by the `!`.
 
 ---
@@ -539,8 +540,14 @@ Design an FFI-safe exception boundary function `ffi_exception_guard` that:
 
 ## 6. Related Terms
 
-- [`unwrap()` / `expect()`](../level_04/unwrap_expect.md) — The methods that actively choose to trigger a `panic!` if a `Result` is an error.
+
+- [`unwrap()` / `expect()`](unwrap_expect.md) — The methods that actively choose to trigger a `panic!` if a `Result` is an error.
 - [`Drop` Trait](../level_03/drop_trait.md) — The cleanup method that is rapidly executed as the stack unwinds during a panic.
+- [Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`)](../level_01/integer_overflow.md) — Related concept: Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`).
+- [Macros](../level_01/macros.md) — Related concept: Macros.
+- [`todo!` / `unimplemented!` / `unreachable!`](todo_unimplemented_unreachable.md) — Related concept: `todo!` / `unimplemented!` / `unreachable!`.
+- [`#[should_panic]` Attribute](../level_08/should_panic.md) — Related concept: `#[should_panic]`.
+- [Never Type (`!`)](../level_11/never_type.md) — Related concept: Never Type (`!`).
 
 ---
 

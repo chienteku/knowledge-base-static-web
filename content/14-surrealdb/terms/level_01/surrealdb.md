@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Multi-Model Database](multi_model_database.md) — The parent paradigm concept.
 
 ---
@@ -180,8 +181,12 @@ Identify which database engine (**PostgreSQL**, **MongoDB**, or **SurrealDB**) s
 > **Explanation:** SurrealDB can be compiled directly into Rust applications as an embedded library.
 
 ## 7. Related Terms
+
 - [Multi-Model Database](multi_model_database.md) — The parent paradigm concept.
 - [SurrealQL](surrealql.md) — The query language.
+- [SurrealDB vs. PostgreSQL vs. MongoDB](surrealdb_vs_postgres_mongo.md) — Related concept: SurrealDB vs. PostgreSQL vs. MongoDB.
+- [`object`](../level_02/object_type.md) — Related concept: `object`.
+- [`DEFINE SCOPE` (Auth Scopes Overview)](../level_04/define_scope.md) — Related concept: `DEFINE SCOPE` (Auth Scopes Overview).
 
 ---
 

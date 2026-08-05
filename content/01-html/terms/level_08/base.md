@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`<head>`](../level_01/head.md) — The parent container where `<base>` is hosted.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — Defining absolute vs. relative paths.
-
 ---
 
 ## 2. Term Category
@@ -227,7 +226,7 @@ What is the absolute URL the browser will navigate to when the user clicks the "
 - [`<head>`](../level_01/head.md) — The parent metadata container.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — Elements impacted by base target modifications.
 - [`href` Attribute](../level_02/href.md) — The path target attribute.
-
+- [`<link>`](link.md) — Related concept: `<link>`.
 ---
 
 ## 8. Key Takeaways

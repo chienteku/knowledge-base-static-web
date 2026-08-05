@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — Storing data.
 - [Function](../level_03/function.md) — A reusable block of code.
-
 ---
 
 ## 2. Term Category
@@ -207,9 +206,8 @@ sayHi();
 ---
 
 ## 7. Related Terms
-- [Asynchronous](./asynchronous.md) — The opposite! Non-blocking code.
-- [Call Stack](./call_stack.md) — The mechanism that keeps track of synchronous execution.
-
+- [Asynchronous](asynchronous.md) — The opposite! Non-blocking code.
+- [Call Stack](call_stack.md) — The mechanism that keeps track of synchronous execution.
 ---
 
 ## 8. Key Takeaways

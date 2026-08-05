@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Cursor](cursor.md) — The query result pointer modified by these methods.
 
 ---
@@ -241,8 +242,10 @@ MongoDB engine always applies sort -> skip -> limit internally
 > **Explanation:** Range-based pagination avoids expensive `skip()` offsets by using index predicates.
 
 ## 7. Related Terms
+
 - [Cursor](cursor.md) — The parent pointer modified.
 - [Projection](projection.md) — The column filtering argument.
+- [`$sort` / `$limit` / `$skip` Stages](../level_06/sort_limit_skip_stages.md) — Related concept: `$sort` / `$limit` / `$skip` Stages.
 
 ---
 

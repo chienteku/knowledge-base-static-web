@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-- [`let`](../level_01/let.md) — Block-scoped variable declaration.
-
+- [Variable](variable.md) — A named container for storing data values.
+- [let](let.md) — Block-scoped variable declaration.
 ---
 
 ## 2. Term Category
@@ -188,9 +187,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`let`](../level_01/let.md) — Block-scoped variable declaration that allows reassignment.
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-
+- [let](let.md) — Block-scoped variable declaration that allows reassignment.
+- [Variable](variable.md) — A named container for storing data values.
+- [Assignment Operators](assignment_operators.md) — Related concept: Assignment Operators.
+- [Object.freeze / Object.seal](../level_07/object_freeze_seal.md) — Related concept: Object.freeze / Object.seal.
 ---
 
 ## 8. Key Takeaways

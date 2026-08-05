@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Trigger](../level_09/trigger.md) — Automating notify events on table writes.
-
 ---
 
 ## 2. Term Category
@@ -222,7 +221,6 @@ NOTIFY channel, '{"entity_id": 123}'; -- Send small ID payload
 
 ## 7. Related Terms
 - [Trigger](../level_09/trigger.md) — Automating notifications.
-
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTML](../level_01/html.md) — It declares the version of this language.
-- [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Understanding that declarations stand alone and do not close.
-
+- [HTML (HyperText Markup Language)](html.md) — It declares the version of this language.
+- [Void Elements (Self-closing Tags)](void_elements.md) — Understanding that declarations stand alone and do not close.
 ---
 
 ## 2. Term Category
@@ -154,9 +153,9 @@ The `<!DOCTYPE html>` is like a giant stamp on the very first page of the bluepr
 > **Explanation:** `<!DOCTYPE html>`, `<!doctype html>`, and `<!DoCtYpE hTmL>` are all valid HTML5 declarations.
 
 ## 7. Related Terms
-- [`<html>`](../level_01/html_tag.md) — The tag that immediately follows the DOCTYPE declaration.
-- [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Like the DOCTYPE declaration, void elements stand as single declarations without closing pairs.
-
+- [`<html>`](html_tag.md) — The tag that immediately follows the DOCTYPE declaration.
+- [Void Elements (Self-closing Tags)](void_elements.md) — Like the DOCTYPE declaration, void elements stand as single declarations without closing pairs.
+- [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Ownership](../level_03/ownership.md) — The rule that data is dropped when its owner goes out of scope.
-- [Borrowing (`&`)](../level_03/borrowing.md) — The act of passing a reference instead of ownership.
-- [Borrow Checker](../level_03/borrow_checker.md) — The strict cop that ensures a reference never outlives its data.
+
+- [Ownership](ownership.md) — The rule that data is dropped when its owner goes out of scope.
+- [Borrowing (`&`)](borrowing.md) — The act of passing a reference instead of ownership.
+- [Borrow Checker](borrow_checker.md) — The strict cop that ensures a reference never outlives its data.
 
 ---
 
@@ -559,8 +560,9 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Lifetimes](../level_05/lifetime.md) — The underlying system the Borrow Checker uses to mathematically prove that a reference isn't dangling.
-- [Borrow Checker](../level_03/borrow_checker.md) — The compiler component that throws the "returns a reference to data owned by the current function" error.
+
+- [Lifetime (`'a`)](../level_05/lifetime.md) — The underlying system the Borrow Checker uses to mathematically prove that a reference isn't dangling.
+- [Borrow Checker](borrow_checker.md) — The compiler component that throws the "returns a reference to data owned by the current function" error.
 
 ---
 

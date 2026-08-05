@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The text you are converting *from*.
+
+- [String vs &str](../level_01/string_vs_&str.md) — The text you are converting *from*.
 - [`Result<T, E>`](../level_02/result_t_e.md) — Parsing is fallible, so it always returns a `Result`.
-- [`From` / `Into` Traits](../level_04/from_into_traits.md) — `FromStr` is the text-specific sibling of this conversion-trait family.
+- [`From` / `Into` Traits](from_into_traits.md) — `FromStr` is the text-specific sibling of this conversion-trait family.
 
 ---
 
@@ -776,10 +777,11 @@ Implement `FromStr` for a `Money` type that parses strings like `"$1,234.56 USD"
 
 ## 6. Related Terms
 
-- [`?` Operator](../level_04/question_mark_operator.md) — The idiomatic way to propagate a `.parse()` failure out of a function.
+
+- [`?` Operator](question_mark_operator.md) — The idiomatic way to propagate a `.parse()` failure out of a function.
 - [`Result<T, E>`](../level_02/result_t_e.md) — The type every `FromStr::from_str` implementation must return.
-- [`From` / `Into` Traits](../level_04/from_into_traits.md) — The infallible-conversion sibling family; `FromStr` is specifically for the fallible, text-parsing case.
-- [`TryFrom` / `TryInto`](../level_14/tryfrom_tryinto.md) — The general-purpose fallible-conversion trait; `FromStr` is effectively `TryFrom<&str>` with a dedicated name and `.parse()` sugar.
+- [`From` / `Into` Traits](from_into_traits.md) — The infallible-conversion sibling family; `FromStr` is specifically for the fallible, text-parsing case.
+- [`TryFrom` and `TryInto` Traits](../level_14/tryfrom_tryinto.md) — The general-purpose fallible-conversion trait; `FromStr` is effectively `TryFrom<&str>` with a dedicated name and `.parse()` sugar.
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [Monomorphization](../level_04/monomorphization.md) — The compile-time generic instantiation process that enables zero-cost static dispatch.
-- [Iterator (`Iterator`)](../level_02/iterator.md) — High-level functional iterator pipelines that compile down to optimized raw loops.
-- [Zero-Sized Types (ZSTs)](../level_11/zsts.md) — Type-level markers that take 0 bytes of memory at runtime.
+- [Iterator](../level_02/iterator.md) — High-level functional iterator pipelines that compile down to optimized raw loops.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Type-level markers that take 0 bytes of memory at runtime.
 
 ---
 
@@ -532,11 +533,16 @@ Implement the `PacketSerializer` trait alongside two serializer implementations 
 
 ## 7. Related Terms
 
+
 - [Monomorphization](../level_04/monomorphization.md) — The compile-time generic specialization mechanism.
-- [Zero-Sized Types (ZSTs)](../level_11/zsts.md) — Marker types with 0 byte footprint.
-- [Iterator (`Iterator`)](../level_02/iterator.md) — High-level functional iterator trait.
+- [`ZSTs` (Zero-Sized Types)](../level_11/zsts.md) — Marker types with 0 byte footprint.
+- [Iterator](../level_02/iterator.md) — High-level functional iterator trait.
 - [Type-State Pattern](../level_14/type_state_pattern.md) — Zero-cost compile-time state machine pattern.
-- [Release Profile](../level_15/release_profile.md) — Cargo build mode enabling full compiler optimizations.
+- [Release Profile](release_profile.md) — Cargo build mode enabling full compiler optimizations.
+- [Inlining (`#[inline]`)](inlining.md) — Related concept: Inlining (`#[inline]`).
+- [Link-Time Optimization (LTO)](link_time_optimization.md) — Related concept: Link-Time Optimization (LTO).
+- [`perf` / `flamegraph`](perf_flamegraph.md) — Related concept: `perf` / `flamegraph`.
+- [SIMD (`std::simd`)](simd.md) — Related concept: SIMD (`std::simd`).
 
 ---
 

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Index (Concept)](index_concept.md) — The performance structures being diagnosed.
 - [SQL (Structured Query Language)](../level_01/sql.md) — The parent language.
-
 ---
 
 ## 2. Term Category
@@ -203,7 +202,7 @@ Seq Scan on product_catalog  (cost=0.00..355.00 rows=10000 width=45)
 ## 7. Related Terms
 - [Query Planner / Optimizer](query_planner.md) — The engine generating the plans.
 - [Sequential Scan vs. Index Scan](seq_scan_vs_index_scan.md) — The two scan behaviors.
-
+- [Index (Concept)](index_concept.md) — Related concept: Index (Concept).
 ---
 
 ## 8. Key Takeaways

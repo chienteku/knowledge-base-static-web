@@ -6,9 +6,10 @@
 ---
 
 ## 1. Prerequisites
-- [insertOne() / insertMany()](insert.md) — The insert operation.
-- [updateOne() / updateMany()](update.md) — The update operation.
-- [deleteOne() / deleteMany()](delete.md) — The delete operation.
+
+- [`insertOne()` / `insertMany()`](insert.md) — The insert operation.
+- [`updateOne()` / `updateMany()`](update.md) — The update operation.
+- [`deleteOne()` / `deleteMany()`](delete.md) — The delete operation.
 
 ---
 
@@ -235,9 +236,10 @@ Use ordered: false to allow non-blocking continuation on write errors
 > **Explanation:** `{ ordered: false }` continues executing remaining write operations even if an earlier write fails.
 
 ## 7. Related Terms
-- [insertOne() / insertMany()](insert.md) — Standard inserts.
-- [updateOne() / updateMany()](update.md) — Standard updates.
-- [deleteOne() / deleteMany()](delete.md) — Standard deletes.
+
+- [`insertOne()` / `insertMany()`](insert.md) — Standard inserts.
+- [`updateOne()` / `updateMany()`](update.md) — Standard updates.
+- [`deleteOne()` / `deleteMany()`](delete.md) — Standard deletes.
 
 ---
 

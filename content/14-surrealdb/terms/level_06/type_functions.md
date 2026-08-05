@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library context.
 - [Type Casting & Coercion](../level_02/type_casting.md) — Explicit casting.
 
@@ -199,9 +200,10 @@ Write the SurrealQL expression using `type::*` to dynamically construct a Record
 > **Explanation:** `type::is::*` functions inspect and validate value formats.
 
 ## 7. Related Terms
+
 - [Built-in Functions Overview](builtin_functions.md) — The parent library.
 - [Type Casting & Coercion](../level_02/type_casting.md) — Explicit casting.
-- [Record ID](../level_01/record_id.md) — Record ID format.
+- [Record ID (`table:id`)](../level_01/record_id.md) — Record ID format.
 
 ---
 

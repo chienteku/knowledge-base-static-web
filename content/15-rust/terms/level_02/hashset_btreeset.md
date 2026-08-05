@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — `HashSet<T>` is implemented internally as `HashMap<T, ()>`.
-- [`Hash` Trait](../level_02/hash_trait.md) — Required for `HashSet` elements.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — `HashSet<T>` is implemented internally as `HashMap<T, ()>`.
+- [`Hash` Trait](hash_trait.md) — Required for `HashSet` elements.
 - [`PartialOrd` / `Ord`](../level_04/partialord_ord.md) — Required for `BTreeSet` elements.
 
 ---
@@ -539,11 +540,12 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — `HashSet<T>` is literally `HashMap<T, ()>` internally.
-- [`BTreeMap<K, V>`](../level_02/btreemap_k_v.md) — `BTreeSet<T>`'s map counterpart, same sorted-tree structure.
-- [`Hash` Trait](../level_02/hash_trait.md) — Required on `T` for `HashSet<T>`.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — `HashSet<T>` is literally `HashMap<T, ()>` internally.
+- [`BTreeMap<K, V>`](btreemap_k_v.md) — `BTreeSet<T>`'s map counterpart, same sorted-tree structure.
+- [`Hash` Trait](hash_trait.md) — Required on `T` for `HashSet<T>`.
 - [`PartialOrd` / `Ord`](../level_04/partialord_ord.md) — Required on `T` for `BTreeSet<T>`.
-- [`FromIterator` / `Extend` Traits](../level_02/fromiterator_extend_traits.md) — What powers `.collect::<HashSet<_>>()` and `.extend()`.
+- [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — What powers `.collect::<HashSet<_>>()` and `.extend()`.
 
 ---
 

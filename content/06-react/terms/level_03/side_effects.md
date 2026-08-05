@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [State](../level_02/state.md) — The internal data that should NOT be modified by a side effect directly during a render.
 - [Declarative Programming](../level_01/declarative_programming.md) — Side effects are the imperative actions that must be carefully managed.
-
 ---
 
 ## 2. Term Category
@@ -147,9 +146,11 @@ const handleSubmit = async () => { await postFormData(); }; // Trigger in event 
 > **Explanation:** User event intentions should trigger imperative side-effects directly inside event handlers.
 
 ## 7. Related Terms
-- [`useEffect` Hook](../level_03/use_effect.md) — The official tool React gives you to safely execute Side Effects.
-- [Cleanup Functions](../level_03/cleanup_functions.md) — How you manage Side Effects that need to be turned off.
-
+- [`useEffect` Hook](use_effect.md) — The official tool React gives you to safely execute Side Effects.
+- [Cleanup Functions](cleanup_functions.md) — How you manage Side Effects that need to be turned off.
+- [Render Purity](../level_01/render_purity.md) — Related concept: Render Purity.
+- [Strict Mode](../level_08/strict_mode.md) — Related concept: Strict Mode.
+- [`useNavigate` Hook](../level_09/use_navigate.md) — Related concept: `useNavigate` Hook.
 ---
 
 ## 8. Key Takeaways

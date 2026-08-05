@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The heavy, OS-level concurrency we used in Level 9.
-- [Functions (`fn`)](../level_01/fn.md) — The standard, synchronous way to run code.
-- [Trait (`Future`)](../level_04/trait.md) — The core interface that powers async Rust under the hood.
+- [`fn` (Functions)](../level_01/fn.md) — The standard, synchronous way to run code.
+- [Trait](../level_04/trait.md) — The core interface that powers async Rust under the hood.
 
 ---
 
@@ -577,15 +578,14 @@ Write an async pipeline that validates and transforms incoming telemetry batches
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [`await`](../level_10/await.md) — The magic keyword that actually runs the `Future` returned by `async fn`.
-> - [`Future` Trait](../level_10/future_trait.md) — The trait that powers this entire system under the hood.
-> - [`tokio`](../level_10/tokio.md) — The most popular Async Runtime in Rust, used to execute the Futures.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+- [`async` / `.await`](../level_09/async_await.md) — Related concept: `async` / `.await`.
+- [Generators Coroutines](../level_19/generators_coroutines.md) — Related concept: Generators Coroutines.
+
+---
+
+## 7. Key Takeaways
 > 
 > - **`async fn`** declares an asynchronous function.
 > - It does **NOT** execute when called! It is perfectly lazy.

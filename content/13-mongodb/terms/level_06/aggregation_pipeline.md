@@ -6,6 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
+- [`find()` / `findOne()`](../level_03/find.md) — Basic find query filtering.
+- [Document](../level_01/document.md) — BSON document structure.
 - [Cursor](../level_03/cursor.md) — The query results cursor wrapper.
 
 ---
@@ -211,8 +214,21 @@ Arrange these actions as a list of three MongoDB aggregation stage names in the 
 > **Explanation:** `{ allowDiskUse: true }` allows memory-intensive stages to spill over to disk.
 
 ## 7. Related Terms
+
 - [`$match` Stage](match_stage.md) — The filtering stage.
 - [`$group` Stage](group_stage.md) — The grouping stage.
+- [Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`)](aggregation_variables.md) — Related concept: Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`).
+- [`$bucket` / `$bucketAuto` Stages](bucket_stages.md) — Related concept: `$bucket` / `$bucketAuto` Stages.
+- [Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`)](expression_operators.md) — Related concept: Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`).
+- [`$facet` Stage](facet_stage.md) — Related concept: `$facet` Stage.
+- [`$lookup` Stage](lookup_stage.md) — Related concept: `$lookup` Stage.
+- [`$out` / `$merge` Stages](out_merge_stages.md) — Related concept: `$out` / `$merge` Stages.
+- [`$project` / `$addFields` Stages](project_addfields.md) — Related concept: `$project` / `$addFields` Stages.
+- [`$replaceRoot` / `$replaceWith` Stages](replace_root.md) — Related concept: `$replaceRoot` / `$replaceWith` Stages.
+- [`$sort` / `$limit` / `$skip` Stages](sort_limit_skip_stages.md) — Related concept: `$sort` / `$limit` / `$skip` Stages.
+- [`$unwind` Stage](unwind_stage.md) — Related concept: `$unwind` Stage.
+- [Atlas Search](../level_10/atlas_search.md) — Related concept: Atlas Search.
+- [Views](../level_10/views.md) — Related concept: Views.
 
 ---
 

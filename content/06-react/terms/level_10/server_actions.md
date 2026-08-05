@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Server Components (RSC)](../level_10/rsc.md) — The environment where actions execute.
-- [Client vs Server Components & `"use client"`](../level_10/client_server_components.md) — The boundary separating client triggers from server code.
-
+- [React Server Components (RSC)](rsc.md) — The environment where actions execute.
+- [Client vs Server Components & `"use client"`](client_server_components.md) — The boundary separating client triggers from server code.
 ---
 
 ## 2. Term Category
@@ -257,9 +256,9 @@ export default function ProductItem({ product }) {
 > **Explanation:** `useFormStatus` tracks parent form Server Action submission pending states.
 
 ## 7. Related Terms
-- [Client vs Server Components & `"use client"`](../level_10/client_server_components.md) — The environment boundaries separating code.
-- [`useActionState` (formerly `useFormState`)](../level_10/use_action_state.md) — The hook used to read the return status of a Server Action.
-
+- [Client vs Server Components & `"use client"`](client_server_components.md) — The environment boundaries separating code.
+- [`useActionState` Hook](use_action_state.md) — The hook used to read the return status of a Server Action.
+- [React Server Components (RSC)](rsc.md) — Related concept: React Server Components (RSC).
 ---
 
 ## 8. Key Takeaways

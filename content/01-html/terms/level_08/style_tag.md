@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`<head>`](../level_01/head.md) — The parent container where `<style>` blocks are hosted.
 - [`style` Attribute](../level_07/style.md) — The inline visual formatting attribute that contrasts with the style tag.
-
 ---
 
 ## 2. Term Category
@@ -237,9 +236,8 @@ A simple internal CSS block:
 
 ## 7. Related Terms
 - [`style` Attribute](../level_07/style.md) — The inline styling attribute.
-- [`<link>`](../level_08/link.md) — The element used to connect external CSS.
+- [`<link>`](link.md) — The element used to connect external CSS.
 - [`class` Attribute](../level_07/class.md) — The category naming selector.
-
 ---
 
 ## 8. Key Takeaways

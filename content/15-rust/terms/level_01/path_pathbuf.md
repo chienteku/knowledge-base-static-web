@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The owned/borrowed split `PathBuf`/`Path` directly mirrors.
-- [`AsRef` / `AsMut`](../level_14/as_ref.md) — What lets `Path`-accepting APIs take `&str`, `String`, or `PathBuf` interchangeably.
+
+- [String vs &str](string_vs_&str.md) — The owned/borrowed split `PathBuf`/`Path` directly mirrors.
+- [`AsRef<T>` Trait](../level_14/as_ref.md) — What lets `Path`-accepting APIs take `&str`, `String`, or `PathBuf` interchangeably.
 
 ---
 
@@ -512,10 +513,12 @@ The function must:
 
 ## 6. Related Terms
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The owned/borrowed pattern `PathBuf`/`Path` directly mirrors.
-- [`AsRef` / `AsMut`](../level_14/as_ref.md) — What lets path-accepting functions be generic over `&str`/`String`/`PathBuf` via `impl AsRef<Path>`.
-- [`OsString` / `OsStr`](../level_01/os_string_str.md) — What `Path`/`PathBuf` are internally built on, since filenames aren't always valid UTF-8.
-- [The Standard Library (`std`)](../level_17/std_library.md) — `Path`/`PathBuf` are part of the OS-integration layer.
+
+- [String vs &str](string_vs_&str.md) — The owned/borrowed pattern `PathBuf`/`Path` directly mirrors.
+- [`AsRef<T>` Trait](../level_14/as_ref.md) — What lets path-accepting functions be generic over `&str`/`String`/`PathBuf` via `impl AsRef<Path>`.
+- [`OsString` / `OsStr`](os_string_str.md) — What `Path`/`PathBuf` are internally built on, since filenames aren't always valid UTF-8.
+- [The Rust Standard Library (`std`)](../level_17/std_library.md) — `Path`/`PathBuf` are part of the OS-integration layer.
+- [`File`, `BufReader`, `BufWriter`](../level_04/file_bufreadwriter.md) — File IO operations.
 
 ---
 

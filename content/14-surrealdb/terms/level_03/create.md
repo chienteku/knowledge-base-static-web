@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](../level_01/surrealql.md) — The query language context.
 
 ---
@@ -189,8 +190,11 @@ CREATE user SET name = "Alice"; // Specifies target table 'user'
 > **Explanation:** `CREATE table CONTENT [ ... ]` inserts multiple records in a single statement.
 
 ## 7. Related Terms
+
 - [`CREATE` with Content (`SET` vs `CONTENT`)](create_set_content.md) — Create syntax variants.
 - [`INSERT`](insert.md) — The SQL-compatible alternative.
+- [`IF NOT EXISTS` / `IF EXISTS`](if_not_exists.md) — Related concept: `IF NOT EXISTS` / `IF EXISTS`.
+- [`UPDATE`](update.md) — Related concept: `UPDATE`.
 
 ---
 

@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Same-Origin Policy](./same_origin_policy.md) — The browser sandbox isolating domains.
-- [CORS (Cross-Origin Resource Sharing)](./cors.md) — The mechanism relaxing same-origin restrictions.
+- [Same-Origin Policy](same_origin_policy.md) — The browser sandbox isolating domains.
+- [CORS (Cross-Origin Resource Sharing)](cors.md) — The mechanism relaxing same-origin restrictions.
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — The verbs defining request actions.
-
 ---
 
 ## 2. Term Category
@@ -184,9 +183,10 @@ Access-Control-Max-Age: 86400 ; Caches preflight approval for 24 hours
 ---
 
 ## 7. Related Terms
-- [Same-Origin Policy](./same_origin_policy.md) — The browser security wall that necessitates CORS and preflight probes.
+- [Same-Origin Policy](same_origin_policy.md) — The browser security wall that necessitates CORS and preflight probes.
 - [HTTP Headers](../level_02/http_headers.md) — The metadata lines negotiating CORS parameters.
-
+- [CORS Errors in the Browser](../level_05/cors_errors.md) — Related concept: CORS Errors in the Browser.
+- [CORS (Cross-Origin Resource Sharing)](cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
 ---
 
 ## 8. Key Takeaways

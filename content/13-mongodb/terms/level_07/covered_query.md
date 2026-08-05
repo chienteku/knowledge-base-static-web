@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [`explain()` Method](explain.md) — Verifying execution plan stages.
-- [Projection (CRUD)](../level_03/projection.md) — Limiting returned fields.
+- [Projection](../level_03/projection.md) — Limiting returned fields.
 
 ---
 
@@ -239,6 +240,7 @@ Analyze why the following queries are **Not Covered** by the index, and state th
 > **Explanation:** `totalDocsExamined: 0` proves that zero collection disk documents were read.
 
 ## 7. Related Terms
+
 - [`explain()` Method](explain.md) — The plan analyzer.
 - [Compound Index](compound_index.md) — The target multi-key index.
 

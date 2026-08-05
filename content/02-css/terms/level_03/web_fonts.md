@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`font-family`](../level_03/font_family.md) — The styling property that utilizes these custom typefaces.
-
+- [`font-family`](font_family.md) — The styling property that utilizes these custom typefaces.
 ---
 
 ## 2. Term Category
@@ -245,9 +244,8 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 > **Explanation:** `rel="preload"` with `crossorigin` initiates high-priority early font network fetches.
 
 ## 7. Related Terms
-- [`font-family`](../level_03/font_family.md) — The styling property that applies these fonts.
-- [`@import`](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
-
+- [`font-family`](font_family.md) — The styling property that applies these fonts.
+- [`@import` Rule](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
 ---
 
 ## 8. Key Takeaways

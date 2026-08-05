@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`page.tsx`](../level_02/page.md) — The file that receives the dynamic parameter.
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — Understanding folder-based routing.
-
 ---
 
 ## 2. Term Category
@@ -188,9 +187,11 @@ export default async function Page({
 ---
 
 ## 7. Related Terms
-- [Catch-all Segments (`[...slug]`)](../level_03/catch_all_segments.md) — The advanced version of Dynamic Routes that catches multiple slashes.
 - [`page.tsx`](../level_02/page.md) — The file that receives the `params`.
-
+- [Catch-all Segments (`[...slug]`)](catch_all_segments.md) — Catch-all route segments.
+- [`generateStaticParams` Function](../level_08/generate_static_params.md) — generateStaticParams for SSG.
+- [JavaScript Rest Parameters (`...`)](rest_parameters.md) — Related concept: JavaScript Rest Parameters (`...`).
+- [Intercepting Routes (`(..)folder`)](../level_04/intercepting_routes.md) — Related concept: Intercepting Routes (`(..)folder`).
 ---
 
 ## 8. Key Takeaways

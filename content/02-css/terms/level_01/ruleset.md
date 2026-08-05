@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Selectors](../level_01/selectors.md) — A ruleset always begins with a selector.
-
+- [Selectors (Element, Class, ID)](selectors.md) — A ruleset always begins with a selector.
 ---
 
 ## 2. Term Category
@@ -198,10 +197,11 @@ div {
 > **Explanation:** Comma-separated selectors apply a single declaration block to multiple targets.
 
 ## 7. Related Terms
-- [Selectors](../level_01/selectors.md) — The first part of the ruleset.
-- [The Cascade](../level_01/the_cascade.md) — How the browser decides which ruleset wins if two rulesets conflict.
-- [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — Formatting style parameters compactly.
-
+- [Selectors (Element, Class, ID)](selectors.md) — The first part of the ruleset.
+- [The Cascade](the_cascade.md) — How the browser decides which ruleset wins if two rulesets conflict.
+- [Shorthand vs Longhand Properties](shorthand_longhand.md) — Formatting style parameters compactly.
+- [CSS Comments (`/* */`)](comments.md) — Related concept: CSS Comments (`/* */`).
+- [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
 ---
 
 ## 8. Key Takeaways

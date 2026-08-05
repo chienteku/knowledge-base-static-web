@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-- [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
-- [`undefined`](../level_01/undefined.md) — A variable that has not yet been assigned a value.
-
+- [Variable](variable.md) — A named container for storing data values.
+- [Primitive Types](primitive_types.md) — Basic immutable data types.
+- [undefined](undefined.md) — A variable that has not yet been assigned a value.
 ---
 
 ## 2. Term Category
@@ -212,9 +211,9 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`undefined`](../level_01/undefined.md) — A variable that has not yet been assigned a value.
-- [Type Coercion](../level_01/type_coercion.md) — Automatic conversion of values from one data type to another.
-
+- [undefined](undefined.md) — A variable that has not yet been assigned a value.
+- [Type Coercion](type_coercion.md) — Automatic conversion of values from one data type to another.
+- [typeof](typeof.md) — Related concept: typeof.
 ---
 
 ## 8. Key Takeaways

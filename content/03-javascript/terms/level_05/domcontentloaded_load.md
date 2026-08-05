@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Event](./event.md) — An action or occurrence recognized by browser software.
-- [Event Listener](./event_listener.md) — A procedure that waits for events to occur on an element.
-- [`document` object](./document_object.md) — The entry point gateway to the DOM tree.
-
+- [Event](event.md) — An action or occurrence recognized by browser software.
+- [Event Listener](event_listener.md) — A procedure that waits for events to occur on an element.
+- [document object](document_object.md) — The entry point gateway to the DOM tree.
 ---
 
 ## 2. Term Category
@@ -227,9 +226,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`window` object / BOM](./window_bom.md) — The global object hosting the `load` event.
-- [`document` object](./document_object.md) — The webpage gateway hosting the `DOMContentLoaded` event.
-
+- [window object / BOM](window_bom.md) — The global object hosting the `load` event.
+- [document object](document_object.md) — The webpage gateway hosting the `DOMContentLoaded` event.
 ---
 
 ## 8. Key Takeaways

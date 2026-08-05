@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Client-Side Routing](../level_09/client_side_routing.md) — Code splitting is almost always done at the Route level.
-- [Suspense](../level_08/suspense.md) — The UI boundary used to show a loading state while the split code downloads.
-
+- [Suspense](suspense.md) — The UI boundary used to show a loading state while the split code downloads.
 ---
 
 ## 2. Term Category
@@ -175,9 +174,9 @@ function App() { return <Suspense fallback={<Spinner />}><LazyComp /></Suspense>
 > **Explanation:** Dynamic `import()` enables programmatic asynchronous module loading.
 
 ## 7. Related Terms
-- [Suspense](../level_08/suspense.md) — The UI boundary that catches the loading state of the code split.
+- [Suspense](suspense.md) — The UI boundary that catches the loading state of the code split.
 - [React Router](../level_09/react_router.md) — The primary place where Code Splitting is implemented.
-
+- [Bundler & Tree-Shaking](bundler_tree_shaking.md) — Related concept: Bundler & Tree-Shaking.
 ---
 
 ## 8. Key Takeaways

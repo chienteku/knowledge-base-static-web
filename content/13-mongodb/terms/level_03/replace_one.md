@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [updateOne() / updateMany()](update.md) — The partial update alternatives.
+
+- [`updateOne()` / `updateMany()`](update.md) — The partial update alternatives.
 
 ---
 
@@ -227,7 +228,8 @@ Write the correct MongoDB query using the appropriate method.
 > **Explanation:** `{ upsert: true }` inserts the replacement document if no matching document exists.
 
 ## 7. Related Terms
-- [updateOne() / updateMany()](update.md) — Partial update methods.
+
+- [`updateOne()` / `updateMany()`](update.md) — Partial update methods.
 - [`$set` vs. Whole-Document Replacement](set_vs_replace.md) — Comparative rules.
 
 ---

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Reactive State](../level_02/reactive_state.md) — The dependencies that computed properties rely on.
+- [Reactive State](reactive_state.md) — The dependencies that computed properties rely on.
 - [Template Syntax](../level_01/template_syntax.md) — Why complex logic shouldn't be put directly in the HTML.
-
 ---
 
 ## 2. Term Category
@@ -180,10 +179,12 @@ const double = computed({
 ---
 
 ## 7. Related Terms
-- [Watchers](../level_02/watchers.md) — The tool you should use instead if you need to perform side effects.
-- [`ref`](../level_02/ref.md) — A computed property actually returns a special, read-only `ref` object under the hood!
-- [`watchEffect`](../level_02/watch_effect.md) — Auto-tracking reactivity watcher.
-
+- [Watchers](watchers.md) — The tool you should use instead if you need to perform side effects.
+- [`ref`](ref.md) — A computed property actually returns a special, read-only `ref` object under the hood!
+- [`watchEffect`](watch_effect.md) — Auto-tracking reactivity watcher.
+- [Template Syntax](../level_01/template_syntax.md) — Related concept: Template Syntax.
+- [State & Getters (Pinia)](../level_07/state_getters.md) — Related concept: State & Getters (Pinia).
+- [`v-once` & `v-memo`](../level_08/v_once_memo.md) — Related concept: `v-once` & `v-memo`.
 ---
 
 ## 8. Key Takeaways

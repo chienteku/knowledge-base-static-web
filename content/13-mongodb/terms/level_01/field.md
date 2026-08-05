@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Document](document.md) — The parent records containing fields.
 
 ---
@@ -194,8 +195,10 @@ metrics: [{ date: "2026-01-01", count: 100 }, { date: "2026-01-02", count: 200 }
 > **Explanation:** `"array.0"` indexes specific positional array elements in field paths.
 
 ## 7. Related Terms
+
 - [Document](document.md) — The parent container.
 - [BSON Data Types (Overview)](../level_02/bson_data_types.md) — The types of values fields can store.
+- [`_id` Field & ObjectId](objectid.md) — Related concept: `_id` Field & ObjectId.
 
 ---
 

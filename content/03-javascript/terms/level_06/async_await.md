@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Promise](./promise.md) — The underlying technology `async/await` interacts with.
-- [Synchronous](./synchronous.md) — The style of code `async/await` mimics.
-
+- [Promise](promise.md) — The underlying technology `async/await` interacts with.
+- [Synchronous](synchronous.md) — The style of code `async/await` mimics.
 ---
 
 ## 2. Term Category
@@ -223,9 +222,12 @@ function getJoke() {
 ---
 
 ## 7. Related Terms
-- [Promise](./promise.md) — What `async/await` is secretly working with under the hood.
-- [`.then()` / `.catch()`](./then_catch.md) — The older syntax that `async/await` replaces.
-
+- [Promise](promise.md) — What `async/await` is secretly working with under the hood.
+- [.then() / .catch()](then_catch.md) — The older syntax that `async/await` replaces.
+- [Callback Hell](callback_hell.md) — Related concept: Callback Hell.
+- [Fetch API](fetch_api.md) — Related concept: Fetch API.
+- [Promise Chaining](promise_chaining.md) — Related concept: Promise Chaining.
+- [Promise.all / allSettled / race / any](promise_combinators.md) — Related concept: Promise.all / allSettled / race / any.
 ---
 
 ## 8. Key Takeaways

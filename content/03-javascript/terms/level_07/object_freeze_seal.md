@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
-
 ---
 
 ## 2. Term Category
@@ -252,8 +251,7 @@ try {
 
 ## 7. Related Terms
 - [Immutability](../level_09/immutability.md) — The design philosophy of preventing data mutation.
-- [`const`](../level_01/const.md) — The variable binding keyword that prevents variable reassignment.
-
+- [const](../level_01/const.md) — The variable binding keyword that prevents variable reassignment.
 ---
 
 ## 8. Key Takeaways

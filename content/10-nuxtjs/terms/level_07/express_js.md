@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Nitro Engine](../level_01/nitro_engine.md) — The modern Nuxt server engine that replaces traditional Express setups.
-- [Node.js Runtime](../../../05-nodejs/terms/level_01/nodejs.md) — The execution host for standard Express servers.
-
+- nodejs — The execution host for standard Express servers.
 ---
 
 ## 2. Term Category
@@ -189,8 +188,7 @@ export default defineEventHandler((event) => { return 'OK'; }); // Correct H3 ev
 
 ## 7. Related Terms
 - [Nitro Engine](../level_01/nitro_engine.md) — The modern server compiler powering Nuxt.
-- [H3 Request Handlers](../level_07/h3_handlers.md) — The modern event-driven API engine replacing Express routes in Nuxt.
-
+- [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The modern event-driven API engine replacing Express routes in Nuxt.
 ---
 
 ## 8. Key Takeaways

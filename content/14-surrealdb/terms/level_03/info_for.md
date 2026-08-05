@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Namespace & Database](../level_01/namespace_database.md) — The database structure context.
-- [SurrealDB CLI](../level_01/surreal_cli.md) — The execution console context.
+- [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — The execution console context.
 
 ---
 
@@ -214,8 +215,9 @@ Write the SurrealQL commands to:
 > **Explanation:** `INFO FOR DB` returns active database scope definition metadata.
 
 ## 7. Related Terms
+
 - [Namespace & Database](../level_01/namespace_database.md) — The database structure context.
-- [Define Table](../level_04/define_table.md) — Creating tables.
+- [`DEFINE TABLE`](../level_04/define_table.md) — Creating tables.
 
 ---
 

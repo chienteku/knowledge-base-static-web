@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Prop Drilling](../level_06/prop_drilling.md) — The exact problem that the Context API was created to solve.
-
+- [Prop Drilling](prop_drilling.md) — The exact problem that the Context API was created to solve.
 ---
 
 ## 2. Term Category
@@ -184,9 +183,13 @@ Can the `<Footer />` access the "dark" theme?
 > **Explanation:** Providing default values in `createContext()` provides fallback values during testing.
 
 ## 7. Related Terms
-- [`useContext` Hook](../level_06/use_context.md) — How the Child actually grabs the data out of the Context.
-- [Prop Drilling](../level_06/prop_drilling.md) — What Context prevents.
-
+- [`useContext` Hook](use_context.md) — How the Child actually grabs the data out of the Context.
+- [Prop Drilling](prop_drilling.md) — What Context prevents.
+- [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
+- [State Management (Redux / Zustand)](state_management.md) — Related concept: State Management (Redux / Zustand).
+- [Compound Components](../level_07/compound_components.md) — Related concept: Compound Components.
+- [Suspense for Data Fetching & the `use()` Hook](../level_10/use_hook.md) — Related concept: Suspense for Data Fetching & the `use()` Hook.
+- [Redux](../level_11/redux.md) — Related concept: Redux.
 ---
 
 ## 8. Key Takeaways

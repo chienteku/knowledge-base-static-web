@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`font-family`](../level_03/font_family.md) — It helps to know how to select the font before you resize it.
-
+- [`font-family`](font_family.md) — It helps to know how to select the font before you resize it.
 ---
 
 ## 2. Term Category
@@ -170,10 +169,11 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 > **Explanation:** Numeric font-weights map standard typographic font thickness grades.
 
 ## 7. Related Terms
-- [`font-family`](../level_03/font_family.md) — Defines the actual typeface.
-- [`font-style` & `font-variant`](../level_03/font_style_variant.md) — Styling and small-caps variations.
-- [`rem` and `em`](../level_08/rem_em.md) — Responsive typography units.
-
+- [`font-family`](font_family.md) — Defines the actual typeface.
+- [`font-style` & `font-variant`](font_style_variant.md) — Styling and small-caps variations.
+- [`rem` vs `em`](../level_08/rem_em.md) — Responsive typography units.
+- [`line-height`](line_height.md) — Related concept: `line-height`.
+- [`text-transform`](../level_07/text_transform.md) — Related concept: `text-transform`.
 ---
 
 ## 8. Key Takeaways

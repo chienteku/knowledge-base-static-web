@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [ES Modules in TypeScript](../level_11/modules.md) — How code files load each other.
-- [Declaration Files](../level_11/declaration_files.md) — The type signatures separation.
-
+- [ES Modules in TypeScript](modules.md) — How code files load each other.
+- [Declaration Files (`.d.ts`)](declaration_files.md) — The type signatures separation.
 ---
 
 ## 2. Term Category
@@ -200,10 +199,9 @@ export type { AppUser };
 > **Explanation:** `export type` ensures exported type contracts emit zero runtime JavaScript export code.
 
 ## 7. Related Terms
-- [ES Modules in TypeScript](../level_11/modules.md) — The baseline module loading specification.
-- [Declaration Files](../level_11/declaration_files.md) — The type files that circular imports are often fetched from.
-- [Strict Mode](../level_11/strict_mode.md) — Configuring compiler constraints.
-
+- [ES Modules in TypeScript](modules.md) — The baseline module loading specification.
+- [Declaration Files (`.d.ts`)](declaration_files.md) — The type files that circular imports are often fetched from.
+- [Strict Mode](strict_mode.md) — Configuring compiler constraints.
 ---
 
 ## 8. Key Takeaways

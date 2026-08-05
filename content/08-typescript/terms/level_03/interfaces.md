@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Object Types](../level_03/object_types.md) — The concept that Interfaces abstract.
-
+- [Object Types](object_types.md) — The concept that Interfaces abstract.
 ---
 
 ## 2. Term Category
@@ -167,9 +166,18 @@ interface B extends A { b: string } // Interface inheritance
 > **Explanation:** Interfaces offer better compiler caching and extension semantics for object types.
 
 ## 7. Related Terms
-- [Type Aliases](../level_05/type_aliases.md) — The alternative way to name a type.
-- [`implements`](../level_10/implements.md) — How Classes use Interfaces to enforce their own shape.
-
+- [Type Aliases (`type`)](../level_05/type_aliases.md) — The alternative way to name a type.
+- [`implements` Keyword](../level_10/implements.md) — How Classes use Interfaces to enforce their own shape.
+- [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Related concept: Structural Typing / Duck Typing.
+- [Declaration Merging](declaration_merging.md) — Related concept: Declaration Merging.
+- [Index Signatures](index_signatures.md) — Related concept: Index Signatures.
+- [Object Types](object_types.md) — Related concept: Object Types.
+- [Optional Properties (`?`)](optional_properties.md) — Related concept: Optional Properties (`?`).
+- [Readonly Properties (`readonly`)](readonly.md) — Related concept: Readonly Properties (`readonly`).
+- [`this` Typing in Functions](../level_04/this_typing.md) — Related concept: `this` Typing in Functions.
+- [Intersection Types (`&`)](../level_05/intersection_types.md) — Related concept: Intersection Types (`&`).
+- [Abstract Classes](../level_10/abstract_classes.md) — Related concept: Abstract Classes.
+- [Declaration Files (`.d.ts`)](../level_11/declaration_files.md) — Related concept: Declaration Files (`.d.ts`).
 ---
 
 ## 8. Key Takeaways

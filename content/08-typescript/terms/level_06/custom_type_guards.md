@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Type Narrowing](../level_06/type_narrowing.md) — What this custom guard achieves.
+- [Type Narrowing](type_narrowing.md) — What this custom guard achieves.
 - [Function Types](../level_04/function_types.md) — Where the `is` keyword is placed.
-
 ---
 
 ## 2. Term Category
@@ -181,9 +180,9 @@ function isStr(val: any): val is string { return typeof val === "string"; }
 > **Explanation:** Type predicate syntax binds parameter narrowing to boolean return values.
 
 ## 7. Related Terms
-- [Type Narrowing](../level_06/type_narrowing.md) — What this function achieves.
-- [`in` Operator](../level_06/in_operator.md) — Often used inside the body of a Custom Type Guard.
-
+- [Type Narrowing](type_narrowing.md) — What this function achieves.
+- [`in` Operator Narrowing](in_operator.md) — Often used inside the body of a Custom Type Guard.
+- [Assertion Functions (`asserts`)](assertion_functions.md) — Related concept: Assertion Functions (`asserts`).
 ---
 
 ## 8. Key Takeaways

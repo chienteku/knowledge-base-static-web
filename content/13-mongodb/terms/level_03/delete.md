@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Query Filter (Filter Document)](query_filter.md) — Defining which records are deleted.
 
 ---
@@ -230,8 +231,10 @@ db.users.deleteMany({ status: "inactive" }); // Deletes all matching documents
 > **Explanation:** `deleteMany(filter)` deletes all documents satisfying filter criteria.
 
 ## 7. Related Terms
+
 - [Query Filter (Filter Document)](query_filter.md) — The target filters.
-- [Write Result Objects (insertedId, modifiedCount, acknowledged)](write_results.md) — The outputs containing deleted counts.
+- [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — The outputs containing deleted counts.
+- [`bulkWrite()`](bulk_write.md) — Related concept: `bulkWrite()`.
 
 ---
 

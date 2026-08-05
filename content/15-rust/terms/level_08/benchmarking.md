@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-- [`#[test]`](../level_08/test_attribute.md) — The correctness counterpart to benchmarking.
+
 - [Cargo](../level_01/cargo.md) — The build system used to run benchmarks via `cargo bench`.
 
 ---
@@ -459,8 +459,8 @@ Requirements:
 
 ## 6. Related Terms
 
-- [`[dependencies]`](../level_07/dependencies_section.md) — The file where `criterion` must be added under `[dev-dependencies]`.
-- [`#[test]`](../level_08/test_attribute.md) — The correctness counterpart to benchmarking.
+
+- [Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)](../level_07/cargo_target_kinds.md) — Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`).
 
 ---
 

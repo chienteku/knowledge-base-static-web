@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Function Types](../level_04/function_types.md) — The syntax these modify.
-- [Optional Properties](../level_03/optional_properties.md) — The exact same `?` syntax, but for interfaces.
-
+- [Function Types](function_types.md) — The syntax these modify.
+- [Optional Properties (`?`)](../level_03/optional_properties.md) — The exact same `?` syntax, but for interfaces.
 ---
 
 ## 2. Term Category
@@ -162,9 +161,9 @@ function count(step: number = 1) {} // Automatically optional with default
 > **Explanation:** `undefined` triggers default parameter initializers at runtime.
 
 ## 7. Related Terms
-- [Function Types](../level_04/function_types.md) — The parent topic.
-- [Optional Properties](../level_03/optional_properties.md) — How `?` works inside objects.
-
+- [Function Types](function_types.md) — The parent topic.
+- [Optional Properties (`?`)](../level_03/optional_properties.md) — How `?` works inside objects.
+- [Generic Default Types (`=`)](../level_07/default_generics.md) — Related concept: Generic Default Types (`=`).
 ---
 
 ## 8. Key Takeaways

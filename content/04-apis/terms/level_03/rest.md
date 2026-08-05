@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Methods](../level_02/http_methods.md) — REST is entirely built around mapping operations to GET, POST, PUT, and DELETE.
-- [URL / URI](../level_01/url_uri.md) — REST dictates exactly how URLs should be formatted.
-
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — REST is entirely built around mapping operations to GET, POST, PUT, and DELETE.
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — REST dictates exactly how URLs should be formatted.
 ---
 
 ## 2. Term Category
@@ -353,9 +352,18 @@ POST /api/transactions HTTP/1.1 ; RESTful resource endpoint style
 ---
 
 ## 7. Related Terms
-- [Endpoints & Resources](../level_03/endpoints_resources.md) — The nouns that REST APIs are built around.
-- [GraphQL](../level_07/graphql.md) — The modern alternative to REST, which abandons HTTP methods entirely in favor of a single `/graphql` endpoint.
-
+- [Endpoints & Resources](endpoints_resources.md) — The nouns that REST APIs are built around.
+- [GraphQL (The REST Alternative)](../level_07/graphql.md) — The modern alternative to REST, which abandons HTTP methods entirely in favor of a single `/graphql` endpoint.
+- [HTTP / HTTPS](../level_01/http_https.md) — Related concept: HTTP / HTTPS.
+- [Query Parameters & Path Variables](../level_02/query_params.md) — Related concept: Query Parameters & Path Variables.
+- [API (Application Programming Interface)](api.md) — Related concept: API (Application Programming Interface).
+- [CRUD Operations](crud.md) — Related concept: CRUD Operations.
+- [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — Related concept: Pagination (Offset vs. Cursor).
+- [XML](../level_07/xml.md) — Related concept: XML.
+- [gRPC (Remote Procedure Call)](../level_10/grpc.md) — Related concept: gRPC (Remote Procedure Call).
+- [Swagger / OpenAPI Specification](../level_10/openapi.md) — Related concept: Swagger / OpenAPI Specification.
+- [Statelessness](statelessness.md) — Statelessness constraint.
+- [Richardson Maturity Model](richardson_maturity_model.md) — Richardson Maturity Model.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Single-Threaded Architecture](./single_threaded.md) — JavaScript runs on exactly one call stack.
-
+- [Single-Threaded Architecture](single_threaded.md) — JavaScript runs on exactly one call stack.
 ---
 
 ## 2. Term Category
@@ -218,9 +217,8 @@ first();
 > **Explanation:** `setImmediate` queues callback on event loop, unwinding the V8 stack on each recursion step.
 
 ## 7. Related Terms
-- [The Event Loop & Libuv](./event_loop.md) — The coordinator that pushes callbacks onto the Call Stack once it is empty.
-- [V8 JavaScript Engine](./v8_engine.md) — The engine that allocates and runs the Call Stack.
-
+- [The Event Loop & Libuv](event_loop.md) — The coordinator that pushes callbacks onto the Call Stack once it is empty.
+- [V8 JavaScript Engine](v8_engine.md) — The engine that allocates and runs the Call Stack.
 ---
 
 ## 8. Key Takeaways

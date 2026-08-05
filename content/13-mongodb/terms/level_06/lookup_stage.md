@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
+
+- [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — Aggregation pipeline overview.
+- [`ObjectId` as a Manual Reference](../level_02/objectid_reference.md) — ObjectId reference fields.
 - [Embedding vs. Referencing](../level_05/embedding_vs_referencing.md) — The relational data modeling context.
 
 ---
@@ -252,8 +254,12 @@ Write the aggregation pipeline containing:
 > **Explanation:** Pipeline `$lookup` executes complex correlated subqueries on joined collections.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$unwind` Stage](unwind_stage.md) — The array flattening tool.
+- [Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`)](aggregation_variables.md) — Related concept: Aggregation Variables (`$$ROOT`, `$$CURRENT`, `$$NOW`, `let`).
+- [`$graphLookup` Stage](graph_lookup.md) — Related concept: `$graphLookup` Stage.
+- [Embedding vs. Referencing](../level_05/embedding_vs_referencing.md) — Referencing documents.
 
 ---
 

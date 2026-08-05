@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Token Stream](../level_12/token_stream.md) — Understanding `proc_macro::TokenStream` and `proc_macro2::TokenStream` as raw lexical token input sequences.
-- [Procedural Macros](../level_12/procedural_macros.md) — Proc macro architecture and execution during compilation.
-- [Structs](../level_02/struct.md) / [Enums](../level_02/enum.md) — Rust algebraic data types used by `syn` to represent AST nodes (`syn::ItemStruct`, `syn::DeriveInput`, `syn::Expr`).
+
+- [Token Stream](token_stream.md) — Understanding `proc_macro::TokenStream` and `proc_macro2::TokenStream` as raw lexical token input sequences.
+- [Procedural Macros](procedural_macros.md) — Proc macro architecture and execution during compilation.
+- [Struct](../level_02/struct.md)
 
 ---
 
@@ -608,10 +609,11 @@ Provide comprehensive unit tests parsing function definitions with `syn::parse_s
 
 ## 7. Related Terms
 
-- [`quote` Crate](../level_12/quote_crate.md) — The complementary crate used to convert parsed AST structs back into `TokenStream` code.
-- [Token Stream](../level_12/token_stream.md) — The input data format (`proc_macro::TokenStream`) parsed by `syn`.
-- [Procedural Macros](../level_12/procedural_macros.md) — The metaprogramming system that uses `syn` for syntax parsing.
-- [Derive Macros](../level_12/derive_macros.md) — Primary use case for `syn::DeriveInput` parsing.
+
+- [`quote` Crate](quote_crate.md) — The complementary crate used to convert parsed AST structs back into `TokenStream` code.
+- [Token Stream](token_stream.md) — The input data format (`proc_macro::TokenStream`) parsed by `syn`.
+- [Procedural Macros](procedural_macros.md) — The metaprogramming system that uses `syn` for syntax parsing.
+- [Derive Macros](derive_macros.md) — Primary use case for `syn::DeriveInput` parsing.
 
 ---
 

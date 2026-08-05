@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The server runtime built on top of this engine.
-
 ---
 
 ## 2. Term Category
@@ -172,9 +171,8 @@ const nums = [1, 2, 3, 4]; // Homogeneous integer array for maximum V8 speed
 ---
 
 ## 7. Related Terms
-- [Edge Runtime vs Node.js Runtime](../level_10/edge_runtime.md) — The Next.js runtimes powered by V8.
+- [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The Next.js runtimes powered by V8.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The traditional server environment built on V8.
-
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Server Components (RSC)](../level_10/rsc.md) — The server-only architecture that serves as the default.
-- [Hydration](../level_10/hydration.md) — The process that client components undergo to become interactive.
-
+- [React Server Components (RSC)](rsc.md) — The server-only architecture that serves as the default.
+- [Hydration](hydration.md) — The process that client components undergo to become interactive.
 ---
 
 ## 2. Term Category
@@ -239,9 +238,8 @@ export default async function Page() {
 > **Explanation:** Children composition props allow nesting Server Components inside Client Component boundaries.
 
 ## 7. Related Terms
-- [React Server Components (RSC)](../level_10/rsc.md) — The default server-side rendering architecture.
-- [Server Actions & `"use server"`](../level_10/server_actions.md) — Calling server-side database handlers from client-side buttons.
-
+- [React Server Components (RSC)](rsc.md) — The default server-side rendering architecture.
+- [Server Actions & `"use server"`](server_actions.md) — Calling server-side database handlers from client-side buttons.
 ---
 
 ## 8. Key Takeaways

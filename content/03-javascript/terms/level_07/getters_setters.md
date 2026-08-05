@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
-- [Property Access](../level_02/property_access.md) — Reading and writing object properties.
-
+- [Property Access (dot vs bracket notation)](../level_02/property_access.md) — Reading and writing object properties.
 ---
 
 ## 2. Term Category
@@ -262,9 +261,9 @@ console.log("Celsius:", thermometer._celsius); // should be 0
 ---
 
 ## 7. Related Terms
-- [Class](./class.md) — Constructor syntax that heavily employs getter/setter accessors.
-- [Computed Property Names](./computed_property_names.md) — Dynamic object keys.
-
+- [Class](class.md) — Constructor syntax that heavily employs getter/setter accessors.
+- [Computed Property Names](computed_property_names.md) — Dynamic object keys.
+- [Private Class Fields (#)](private_class_fields.md) — Related concept: Private Class Fields (#).
 ---
 
 ## 8. Key Takeaways

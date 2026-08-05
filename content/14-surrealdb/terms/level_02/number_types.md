@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -203,8 +204,10 @@ LET $val = 9223372036854775808dec; // Arbitrary precision decimal
 > **Explanation:** `<int>` parses string representations into integer numbers.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
+- [Math Functions (`math::*`)](../level_06/math_functions.md) — Related concept: Math Functions (`math::*`).
 
 ---
 

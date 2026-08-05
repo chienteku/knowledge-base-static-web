@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Cascade](../level_01/the_cascade.md) — The priority engine that resolves style values.
-- [Selectors](../level_01/selectors.md) — The patterns used to target nodes.
-
+- [The Cascade](the_cascade.md) — The priority engine that resolves style values.
+- [Selectors (Element, Class, ID)](selectors.md) — The patterns used to target nodes.
 ---
 
 ## 2. Term Category
@@ -265,10 +264,10 @@ Which of these four styling values will apply to a `<p>` tag nested inside the c
 > **Explanation:** Keyword values override natural property inheritance behavior.
 
 ## 7. Related Terms
-- [The Cascade](../level_01/the_cascade.md) — The parent priority engine.
-- [Specificity](../level_01/specificity.md) — Selector point weights.
-- [`!important` Declaration](../level_01/important.md) — Priority overrides.
-
+- [The Cascade](the_cascade.md) — The parent priority engine.
+- [Specificity](specificity.md) — Selector point weights.
+- [`!important` Declaration](important.md) — Priority overrides.
+- [Selectors (Element, Class, ID)](selectors.md) — Related concept: Selectors (Element, Class, ID).
 ---
 
 ## 8. Key Takeaways

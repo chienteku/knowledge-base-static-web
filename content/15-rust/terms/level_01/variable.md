@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-None.
+
+**None.**
 
 ---
 
@@ -644,10 +645,15 @@ You must build a thread-safe configuration processing system using `std::sync::A
 
 ## 6. Related Terms
 
-- [Mutability (`mut`)](../level_01/mutability_mut.md) — How to explicitly allow a variable to be changed.
-- [Type Inference](../level_01/type_inference.md) — How Rust automatically determines a variable's type.
-- [Shadowing](../level_01/shadowing.md) — Reusing a variable name in the same scope to create a new binding.
-- [Constants (`const`)](../level_01/constants_const.md) — Values that are inherently immutable and evaluated at compile time.
+
+- [Mutability (`mut`)](mutability_mut.md) — How to explicitly allow a variable to be changed.
+- [Type Inference](type_inference.md) — How Rust automatically determines a variable's type.
+- [Shadowing](shadowing.md) — Reusing a variable name in the same scope to create a new binding.
+- [Constants (`const`)](constants_const.md) — Values that are inherently immutable and evaluated at compile time.
+- [Compound Types](compound_types.md) — Related concept: Compound Types.
+- [`fn` (Functions)](fn.md) — Related concept: fn.
+- [Static (`static`)](static_static.md) — Related concept: Static (`static`).
+- [Type Annotation](type_annotation.md) — Specifying variable types.
 
 ---
 

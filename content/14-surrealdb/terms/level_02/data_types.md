@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Record](../level_01/record.md) — The storage context.
+- [SurrealDB](../level_01/surrealdb.md) — SurrealDB core concepts.
 
 ---
 
@@ -215,8 +217,18 @@ Map these SurrealDB type declarations to their closest equivalent in **PostgreSQ
 > **Explanation:** `type::of()` returns the SurrealDB data type string of any value.
 
 ## 7. Related Terms
-- [Record ID](../level_01/record_id.md) — The composite identifier.
+
+- [Record ID (`table:id`)](../level_01/record_id.md) — The composite identifier.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
+- [`array`](array_type.md) — Related concept: `array`.
+- [`bool`](bool.md) — Related concept: `bool`.
+- [`datetime` / `duration`](datetime_duration.md) — Related concept: `datetime` / `duration`.
+- [`geometry` (GeoJSON)](geometry_type.md) — Related concept: `geometry` (GeoJSON).
+- [`int` / `float` / `decimal`](number_types.md) — Related concept: `int` / `float` / `decimal`.
+- [`set`](set_type.md) — Related concept: `set`.
+- [`string`](string.md) — Related concept: `string`.
+- [`uuid`](uuid_type.md) — Related concept: `uuid`.
+- [`record` (Record Link Type)](record_link_type.md) — Record link types.
 
 ---
 

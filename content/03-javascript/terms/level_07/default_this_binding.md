@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`this` Keyword](./this_keyword.md) — The dynamic execution context reference.
-- [`call` / `apply` / `bind`](./call_apply_bind.md) — Explicit context override methods.
-
+- [this Keyword](this_keyword.md) — The dynamic execution context reference.
+- [call / apply / bind](call_apply_bind.md) — Explicit context override methods.
 ---
 
 ## 2. Term Category
@@ -261,9 +260,9 @@ machine.run.call(customMachine);
 ---
 
 ## 7. Related Terms
-- [Constructor Function](./constructor_function.md) — The constructor object pattern invoked with `new`.
-- [`call` / `apply` / `bind`](./call_apply_bind.md) — Explicit override methods.
-
+- [Constructor Function](constructor_function.md) — The constructor object pattern invoked with `new`.
+- [call / apply / bind](call_apply_bind.md) — Explicit override methods.
+- [this Keyword](this_keyword.md) — Related concept: this Keyword.
 ---
 
 ## 8. Key Takeaways

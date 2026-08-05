@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Event](./event.md) — An action or occurrence recognized by browser software.
-- [Event Listener](./event_listener.md) — A procedure that waits for an event to occur on a specific element.
-
+- [Event](event.md) — An action or occurrence recognized by browser software.
+- [Event Listener](event_listener.md) — A procedure that waits for an event to occur on a specific element.
 ---
 
 ## 2. Term Category
@@ -223,9 +222,8 @@ if (typeof document !== "undefined") {
 ---
 
 ## 7. Related Terms
-- [`event.target` vs `event.currentTarget`](./event_target_currenttarget.md) — The distinction between the origin of the event and the listener host.
-- [Event Delegation](./event_delegation.md) — A pattern that relies on checking properties of the event object to handle multiple child events.
-
+- [event.target vs event.currentTarget](event_target_currenttarget.md) — The distinction between the origin of the event and the listener host.
+- [Event Delegation](event_delegation.md) — A pattern that relies on checking properties of the event object to handle multiple child events.
 ---
 
 ## 8. Key Takeaways

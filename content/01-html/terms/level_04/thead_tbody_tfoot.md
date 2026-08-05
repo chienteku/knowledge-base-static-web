@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<table>`](../level_04/table.md) — These tags are placed directly inside the table element.
+- [`<table>`](table.md) — These tags are placed directly inside the table element.
 - [Nesting](../level_01/nesting.md) — Since these section wrappers must nest inside the parent `<table>` tag.
-
 ---
 
 ## 2. Term Category
@@ -203,9 +202,8 @@ However, in HTML5, this rule was changed to make the code more readable. Today, 
 > **Explanation:** Semantic table headers and footers persist across printed page breaks.
 
 ## 7. Related Terms
-- [`<table>`](../level_04/table.md) — The master container that holds these semantic groups.
-- [`<tr>` (Table Row)](../level_04/tr.md) — The horizontal row elements nested inside these group containers.
-
+- [`<table>`](table.md) — The master container that holds these semantic groups.
+- [`<tr>` (Table Row)](tr.md) — The horizontal row elements nested inside these group containers.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [ES Modules (JavaScript)](../../../03-javascript/terms/level_08/modules.md) — The fundamental standard that TypeScript is built upon.
-
+- ES Modules in TypeScript — The fundamental standard that TypeScript is built upon.
 ---
 
 ## 2. Term Category

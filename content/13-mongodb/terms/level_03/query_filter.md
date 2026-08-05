@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`find()` / `findOne()`](find.md) — The methods that accept query filters.
 
 ---
@@ -229,8 +230,13 @@ db.users.updateMany({ lastLogin: { $lt: date } }, { $set: { status: "inactive" }
 > **Explanation:** `$elemMatch` guarantees multiple predicate conditions match the SAME array element.
 
 ## 7. Related Terms
+
 - [Implicit `$eq` & Combining Conditions](implicit_eq_combining.md) — How fields are combined.
-- [Comparison Query Operators (`$eq`, `$ne`, `$gt`, etc.)](comparison_operators.md) — The value comparison codes.
+- [Comparison Query Operators (`$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$nin`)](comparison_operators.md) — The value comparison codes.
+- [`deleteOne()` / `deleteMany()`](delete.md) — Related concept: `deleteOne()` / `deleteMany()`.
+- [`find()` / `findOne()`](find.md) — Related concept: `find()` / `findOne()`.
+- [Logical Query Operators (`$and`, `$or`, `$not`, `$nor`)](logical_operators.md) — Related concept: Logical Query Operators (`$and`, `$or`, `$not`, `$nor`).
+- [NoSQL Injection](../level_10/nosql_injection.md) — Related concept: NoSQL Injection.
 
 ---
 

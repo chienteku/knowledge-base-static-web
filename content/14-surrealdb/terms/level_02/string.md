@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -197,8 +198,10 @@ Line 3";
 > **Explanation:** `~` performs case-insensitive regex or substring matching.
 
 ## 7. Related Terms
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 - [Type Casting & Coercion](type_casting.md) — Converting between types.
+- [String Functions (`string::*`)](../level_06/string_functions.md) — Related concept: String Functions (`string::*`).
 
 ---
 

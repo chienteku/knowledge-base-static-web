@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`JOIN` (Concept)](join_concept.md) — The parent table combination mechanics.
 - [Aliases (`AS`)](../level_04/aliases.md) — The renaming system required to differentiate self-references.
-
 ---
 
 ## 2. Term Category
@@ -232,7 +231,7 @@ SELECT e.name, m.name FROM employees e LEFT JOIN employees m ON e.manager_id = m
 ## 7. Related Terms
 - [`JOIN` (Concept)](join_concept.md) — The parent operation.
 - [Aliases (`AS`)](../level_04/aliases.md) — The alias renaming syntax.
-
+- [`CROSS JOIN`](cross_join.md) — Related concept: `CROSS JOIN`.
 ---
 
 ## 8. Key Takeaways

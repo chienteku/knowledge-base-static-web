@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [localStorage & sessionStorage](./web_storage.md) — The lightweight key-value browser stores.
-- [Cache API](./cache_api.md) — The response caching mechanism.
-
+- [localStorage & sessionStorage](web_storage.md) — The lightweight key-value browser stores.
+- [Cache API](cache_api.md) — The response caching mechanism.
 ---
 
 ## 2. Term Category
@@ -193,9 +192,8 @@ Explain why this happened and how to handle it.
 ---
 
 ## 7. Related Terms
-- [IndexedDB](./indexeddb.md) — The browser-native transactional database.
-- [Cache API](./cache_api.md) — The network response storage API.
-
+- [IndexedDB](indexeddb.md) — The browser-native transactional database.
+- [Cache API](cache_api.md) — The network response storage API.
 ---
 
 ## 8. Key Takeaways

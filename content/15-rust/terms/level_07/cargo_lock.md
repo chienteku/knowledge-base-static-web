@@ -7,8 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The human-written file that tells Cargo what to put in the lockfile.
-- [`[dependencies]`](../level_07/dependencies_section.md) — The specific section that triggers the lockfile to be populated.
+
+- [`Cargo.toml`](cargo_toml.md) — The human-written file that tells Cargo what to put in the lockfile.
 
 ---
 
@@ -82,73 +82,46 @@ cargo update -p rand
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Cargo Lock Scoping and Lifecycle Rules
+### Mistake 1: Manually Editing `Cargo.lock` in a Code Editor
 
-**The mistake:** Assuming Cargo Lock instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Trying to hand-edit dependency versions or SHA-256 checksum hashes directly inside `Cargo.lock`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `Cargo.lock` is a machine-generated file containing strict cryptographic checksums. Manually modifying text causes checksum verification panics during `cargo build` (`checksum mismatch`).
 
 *Incorrect:*
-```rust
-fn get_ref() -> &str {
-    let s = String::from("cargo_lock_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+```toml
+# Manually changing version = "0.8.5" to "0.8.6" inside Cargo.lock!
 ```
 
 *Fix:*
-```rust
-fn get_string() -> String {
-    let s = String::from("cargo_lock_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+```bash
+$ cargo update -p rand # Run cargo update command to re-resolve lockfile entries!
 ```
 
-### Mistake 2: Mutating Cargo Lock State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Adding `Cargo.lock` to `.gitignore` in Application Binary Repositories
 
-**The mistake:** Attempting to mutate data associated with Cargo Lock through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Adding `Cargo.lock` to `.gitignore` in application binaries (web servers, CLI tools, services).
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Ignores locked dependency versions across CI/CD environments and developer machines, leading to "works on my machine" bugs when new transitive dependencies publish breaking changes.
 
 *Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+```text
+# .gitignore
+Cargo.lock # ❌ Wrong for application binaries!
 ```
 
 *Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+```text
+# Always commit Cargo.lock for binary applications; ignore only for published libraries!
 ```
 
-### Mistake 3: Concurrent Access to Cargo Lock Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Running Blind `cargo update` Without Running Automated Test Suites
 
-**The mistake:** Sharing non-thread-safe Cargo Lock instances across OS threads via `std::thread::spawn`.
+**The mistake:** Running `cargo update` on production systems without re-testing application suites.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Upgrades all compatible minor/patch dependencies to latest registry releases. Subtle breaking changes or upstream regressions in transitive crates can break builds.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -223,8 +196,9 @@ The rule "commit for binaries, don't commit for libraries" has important nuance.
 
 ## 6. Related Terms
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The human-written recipe that generates the lockfile.
-- [`[dependencies]`](../level_07/dependencies_section.md) — The section that triggers the massive web of sub-dependencies to be written into the lockfile.
+
+- [`Cargo.toml`](cargo_toml.md) — The human-written recipe that generates the lockfile.
+- [Cargo](../level_01/cargo.md) — Related concept: Cargo.
 
 ---
 

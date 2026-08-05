@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`Result<T, E>`](../level_02/result_t_e.md) — The success/error wrapper these methods act upon.
 - [`Option<T>`](../level_02/option_t.md) — The some/none wrapper these methods can also act upon.
-- [`?` Operator](../level_04/question_mark_operator.md) — The safe, preferred alternative to these methods.
+- [`?` Operator](question_mark_operator.md) — The safe, preferred alternative to these methods.
 
 ---
 
@@ -644,8 +645,11 @@ Implement:
 
 ## 6. Related Terms
 
-- [`panic!`](../level_04/panic.md) — The macro that is secretly executed when `unwrap` or `expect` encounters an error.
-- [`?` Operator](../level_04/question_mark_operator.md) — The safe, preferred alternative to `unwrap`.
+
+- [`panic!` Macro](panic.md) — The macro that is secretly executed when `unwrap` or `expect` encounters an error.
+- [`?` Operator](question_mark_operator.md) — The safe, preferred alternative to `unwrap`.
+- [`Option<T>`](../level_02/option_t.md) — Related concept: `Option<T>`.
+- [`Result<T, E>`](../level_02/result_t_e.md) — Related concept: `Result<T, E>`.
 
 ---
 

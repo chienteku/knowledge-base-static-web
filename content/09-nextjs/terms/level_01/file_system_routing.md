@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Next.js Overview](../level_01/nextjs.md) — The framework that uses this routing architecture.
-
+- [Next.js Overview](nextjs.md) — The framework that uses this routing architecture.
 ---
 
 ## 2. Term Category
@@ -187,9 +186,8 @@ app/
 ---
 
 ## 7. Related Terms
-- [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The shift from page-based routing to folder-based routing.
-- [nextjs.md](../level_01/nextjs.md) — The parent framework.
-
+- [App Router vs Pages Router](app_router_vs_pages.md) — The shift from page-based routing to folder-based routing.
+- [Next.js Overview](nextjs.md) — The parent framework.
 ---
 
 ## 8. Key Takeaways

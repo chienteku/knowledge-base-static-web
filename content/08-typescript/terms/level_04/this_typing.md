@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Function Types](../level_04/function_types.md) — The parent topic.
-- [JavaScript `this`](../../../03-javascript/terms/level_07/this_keyword.md) — The notoriously confusing JS feature being typed.
-
+- [Function Types](function_types.md) — The parent topic.
+- this_keyword — The notoriously confusing JS feature being typed.
 ---
 
 ## 2. Term Category
@@ -165,9 +164,8 @@ function log(this: Context) {} // Use standard function declaration
 > **Explanation:** The `this` parameter is a compile-time directive and emits zero JS parameters.
 
 ## 7. Related Terms
-- [Function Types](../level_04/function_types.md) — Standard function typing.
+- [Function Types](function_types.md) — Standard function typing.
 - [Interfaces](../level_03/interfaces.md) — What you usually bind `this` to.
-
 ---
 
 ## 8. Key Takeaways

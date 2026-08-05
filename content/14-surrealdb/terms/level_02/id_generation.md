@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Record ID](../level_01/record_id.md) — The composite identifier format.
-- [`uuid` Type](uuid_type.md) — The binary unique hash.
+
+- [Record ID (`table:id`)](../level_01/record_id.md) — The composite identifier format.
+- [`uuid`](uuid_type.md) — The binary unique hash.
 
 ---
 
@@ -206,8 +207,9 @@ CREATE log:ulid(); // Time-ordered sequential insertion in index
 > **Explanation:** `CREATE table:ulid()` generates a time-sortable ULID Record ID.
 
 ## 7. Related Terms
-- [Record ID](../level_01/record_id.md) — The composite identifier format.
-- [`uuid` Type](uuid_type.md) — The binary unique hash.
+
+- [Record ID (`table:id`)](../level_01/record_id.md) — The composite identifier format.
+- [`uuid`](uuid_type.md) — The binary unique hash.
 
 ---
 

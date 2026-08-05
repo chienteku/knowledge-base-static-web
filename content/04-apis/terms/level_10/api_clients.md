@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [HTTP Methods](../level_02/http_methods.md) — These tools are essentially graphical interfaces for building complex HTTP requests.
-- [JSON](../level_01/json.md) — The primary format used to test payloads in these tools.
-
+- [HTTP Methods (Verbs)](../level_02/http_methods.md) — These tools are essentially graphical interfaces for building complex HTTP requests.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The primary format used to test payloads in these tools.
 ---
 
 ## 2. Term Category
@@ -142,9 +141,11 @@ const res = await fetch(`${process.env.API_BASE_URL}/users`);
 ---
 
 ## 7. Related Terms
-- [Swagger / OpenAPI](../level_10/openapi.md) — While Postman is for *testing* APIs, Swagger is for *documenting* them.
-- [The `fetch()` API](../level_05/fetch.md) — What Postman is essentially replacing during the testing phase.
-
+- [Swagger / OpenAPI Specification](openapi.md) — While Postman is for *testing* APIs, Swagger is for *documenting* them.
+- [The fetch() API](../level_05/fetch.md) — What Postman is essentially replacing during the testing phase.
+- [Mocking APIs](mocking.md) — Related concept: Mocking APIs.
+- [DevTools Network Tab](network_tab.md) — Related concept: DevTools Network Tab.
+- [SDK / Client Library](sdk.md) — Related concept: SDK / Client Library.
 ---
 
 ## 8. Key Takeaways

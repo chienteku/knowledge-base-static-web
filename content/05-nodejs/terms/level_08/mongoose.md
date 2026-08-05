@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [ORMs & ODMs](./orms_odms.md) — The theoretical concept behind mapping data objects.
-- [SQL vs NoSQL](./sql_vs_nosql.md) — Understanding document-based MongoDB storage.
-
+- [ORMs & ODMs](orms_odms.md) — The theoretical concept behind mapping data objects.
+- [SQL vs NoSQL](sql_vs_nosql.md) — Understanding document-based MongoDB storage.
 ---
 
 ## 2. Term Category
@@ -215,9 +214,8 @@ const Product = mongoose.model('Product', ProductSchema);
 > **Explanation:** `.populate()` replaces ObjectId references with actual referenced document data.
 
 ## 7. Related Terms
-- [ORMs & ODMs](./orms_odms.md) — The general concept of bridging databases to object logic.
-- [SQL vs NoSQL](./sql_vs_nosql.md) — The database engines mapped by Mongoose.
-
+- [ORMs & ODMs](orms_odms.md) — The general concept of bridging databases to object logic.
+- [SQL vs NoSQL](sql_vs_nosql.md) — The database engines mapped by Mongoose.
 ---
 
 ## 8. Key Takeaways

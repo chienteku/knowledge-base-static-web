@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Record authentication.
 
 ---
@@ -198,9 +199,12 @@ Write a `DEFINE FIELD` statement for a `task` table named `created_by` of type `
 > **Explanation:** Access permissions evaluate `$auth` record fields dynamically.
 
 ## 7. Related Terms
-- [PERMISSIONS Clause](permissions_clause.md) — Table and field level security.
-- [`$auth.id` vs `$auth.*`](auth_record_fields.md) — Accessing specific properties of `$auth`.
+
+- [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Table and field level security.
+- [`$auth.id` vs `$auth.*` (Accessing Auth Record Fields)](auth_record_fields.md) — Accessing specific properties of `$auth`.
 - [`$session` / `$token` Variables](session_token_variables.md) — Contextual session metadata.
+- [`SIGNUP` / `SIGNIN` Clauses](signup_signin.md) — Related concept: `SIGNUP` / `SIGNIN` Clauses.
+- [`$before` / `$after` / `$event` / `$value` Variables (in Events)](../level_09/event_variables.md) — Related concept: `$before` / `$after` / `$event` / `$value` Variables (in Events).
 
 ---
 

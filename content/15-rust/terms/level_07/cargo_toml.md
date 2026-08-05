@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 
+
 - [Cargo](../level_01/cargo.md) — The build system that actually reads and executes this file.
 - [Crate](../level_01/crate.md) — The compilation unit that this file describes.
 
@@ -81,73 +82,49 @@ strip = true
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Cargo Toml Scoping and Lifecycle Rules
+### Mistake 1: Using Spaces or Invalid Characters in Package Names
 
-**The mistake:** Assuming Cargo Toml instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Setting `name = "my awesome app"` in `Cargo.toml`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Cargo package names can only contain ASCII letters, numbers, `-`, and `_`. Spaces trigger manifest parsing errors and publishing rejections on `crates.io`.
 
 *Incorrect:*
-```rust
-fn get_ref() -> &str {
-    let s = String::from("cargo_toml_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+```toml
+[package]
+name = "my awesome app" # ❌ Invalid package name!
 ```
 
 *Fix:*
-```rust
-fn get_string() -> String {
-    let s = String::from("cargo_toml_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+```toml
+[package]
+name = "my-awesome-app" # Correct!
 ```
 
-### Mistake 2: Mutating Cargo Toml State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Specifying Over-Generic 0.x Dependency Version Ranges
 
-**The mistake:** Attempting to mutate data associated with Cargo Toml through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Declaring `reqwest = "0"` in `[dependencies]`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `0.x` pre-stable releases allow breaking API changes on every minor bump (`0.11` vs `0.12`). `reqwest = "0"` allows Cargo to resolve breaking pre-release updates.
 
 *Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+```toml
+[dependencies]
+reqwest = "0" # ❌ Too loose! Vulnerable to breaking 0.x API changes
 ```
 
 *Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+```toml
+[dependencies]
+reqwest = "0.11" # Locks within compatible 0.11.x minor series
 ```
 
-### Mistake 3: Concurrent Access to Cargo Toml Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Forgetting `package` Key When Renaming Dependencies
 
-**The mistake:** Sharing non-thread-safe Cargo Toml instances across OS threads via `std::thread::spawn`.
+**The mistake:** Renaming a dependency key `serde2 = "2.0"` without specifying the upstream package name.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Cargo looks for a crate named `serde2` on `crates.io`. If you are aliasing a crate named `serde`, you must use `{ package = "serde", version = "2.0" }`.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -253,8 +230,16 @@ Do the following:
 
 ## 6. Related Terms
 
-- [`[dependencies]`](../level_07/dependencies_section.md) — The most frequently edited section of this file.
-- [Workspace](../level_07/workspace.md) — How you use `Cargo.toml` to manage multiple separate crates inside a single mega-project repository.
+
+- [Workspace](workspace.md) — How you use `Cargo.toml` to manage multiple separate crates inside a single mega-project repository.
+- [Cargo](../level_01/cargo.md) — Related concept: Cargo.
+- [Crate](../level_01/crate.md) — Related concept: Crate.
+- [Build Scripts (`build.rs`)](build_scripts.md) — Related concept: Build Scripts (`build.rs`).
+- [`Cargo.lock`](cargo_lock.md) — Related concept: `Cargo.lock`.
+- [`[dependencies]`](dependencies_section.md) — Related concept: `[dependencies]`.
+- [Edition](edition.md) — Related concept: Edition.
+- [Feature Flags](feature_flags.md) — Related concept: Feature Flags.
+- [Package](../level_01/package.md) — Related concept: Package.
 
 ---
 

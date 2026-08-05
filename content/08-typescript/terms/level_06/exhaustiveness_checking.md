@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Discriminated Unions](../level_06/discriminated_unions.md) — Objects with a shared literal tag.
-- [void & never](../level_02/void_never.md) — The type representing unreachable states.
-
+- [Discriminated Unions](discriminated_unions.md) — Objects with a shared literal tag.
+- [`void` & `never`](../level_02/void_never.md) — The type representing unreachable states.
 ---
 
 ## 2. Term Category
@@ -259,10 +258,9 @@ function handlePayment(state: PaymentState) {
 > **Explanation:** TS flags unhandled variants because non-never types cannot be assigned to `never`.
 
 ## 7. Related Terms
-- [Discriminated Unions](../level_06/discriminated_unions.md) — The type format that exhaustiveness checks protect.
-- [void & never](../level_02/void_never.md) — The structural types representing emptiness.
-- [Type Narrowing](../level_06/type_narrowing.md) — The process of reducing union types.
-
+- [Discriminated Unions](discriminated_unions.md) — The type format that exhaustiveness checks protect.
+- [`void` & `never`](../level_02/void_never.md) — The structural types representing emptiness.
+- [Type Narrowing](type_narrowing.md) — The process of reducing union types.
 ---
 
 ## 8. Key Takeaways

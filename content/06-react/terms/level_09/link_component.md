@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Router](../level_09/react_router.md) — The library that provides this component.
-- [Client-Side Routing](../level_09/client_side_routing.md) — Why we cannot use `<a>` tags.
-
+- [React Router](react_router.md) — The library that provides this component.
+- [Client-Side Routing](client_side_routing.md) — Why we cannot use `<a>` tags.
 ---
 
 ## 2. Term Category
@@ -155,9 +154,9 @@ If you are currently on the `/about` URL, the `<NavLink to="/about">` will autom
 > **Explanation:** Relative link targets (`to=".."`) resolve relative to the current route segment location.
 
 ## 7. Related Terms
-- [`useNavigate` Hook](../level_09/use_navigate.md) — The imperative alternative to `<Link>`. (Used for buttons and redirects).
-- [Client-Side Routing](../level_09/client_side_routing.md) — The core concept powering this.
-
+- [`useNavigate` Hook](use_navigate.md) — The imperative alternative to `<Link>`. (Used for buttons and redirects).
+- [Client-Side Routing](client_side_routing.md) — The core concept powering this.
+- [React Router](react_router.md) — Related concept: React Router.
 ---
 
 ## 8. Key Takeaways

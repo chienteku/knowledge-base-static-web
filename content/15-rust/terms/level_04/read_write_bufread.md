@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [`Result<T, E>`](../level_02/result_t_e.md) — Every I/O operation can fail, so every method here returns `io::Result<T>`.
-- [`?` Operator](../level_04/question_mark_operator.md) — The idiomatic way to propagate I/O errors.
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — `Box<dyn Read>`/`Box<dyn Write>` are common ways to abstract over I/O sources.
+- [`?` Operator](question_mark_operator.md) — The idiomatic way to propagate I/O errors.
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — `Box<dyn Read>`/`Box<dyn Write>` are common ways to abstract over I/O sources.
 
 ---
 
@@ -628,10 +629,11 @@ Implement `StreamTransformPipeline` handling dynamic trait object streams.
 
 ## 6. Related Terms
 
-- [`?` Operator](../level_04/question_mark_operator.md) — The idiomatic propagation tool for the `io::Result<T>` every method here returns.
-- [The Standard Library (`std`)](../level_17/std_library.md) — `Read`/`Write`/`BufRead` are specifically part of the OS-integration layer that only `std` (not `core`/`alloc`) provides.
-- [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — `Box<dyn Read>`/`&mut dyn Write` are common ways to store a heterogeneous I/O source/sink.
-- [Tokio](../level_10/tokio.md) — The async counterpart (`AsyncRead`/`AsyncWrite`) for non-blocking I/O.
+
+- [`?` Operator](question_mark_operator.md) — The idiomatic propagation tool for the `io::Result<T>` every method here returns.
+- [The Rust Standard Library (`std`)](../level_17/std_library.md) — `Read`/`Write`/`BufRead` are specifically part of the OS-integration layer that only `std` (not `core`/`alloc`) provides.
+- [Trait Objects (`dyn Trait`)](trait_objects.md) — `Box<dyn Read>`/`&mut dyn Write` are common ways to store a heterogeneous I/O source/sink.
+- [`tokio`](../level_16/tokio.md) — The async counterpart (`AsyncRead`/`AsyncWrite`) for non-blocking I/O.
 
 ---
 

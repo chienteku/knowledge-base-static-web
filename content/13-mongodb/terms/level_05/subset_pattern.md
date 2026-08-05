@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling rules.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The size constraint solved.
 
@@ -213,7 +214,8 @@ db.products.updateOne({ _id: pId }, { $push: { recentReviews: { $each: [newRevie
 > **Explanation:** Subset Pattern optimizes working set RAM by storing only frequently accessed subset data.
 
 ## 7. Related Terms
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The parent modeling rules.
+
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling rules.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The physical boundary constraint.
 
 ---

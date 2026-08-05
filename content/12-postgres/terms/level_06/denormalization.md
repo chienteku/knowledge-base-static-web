@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Third Normal Form (3NF)](third_normal_form.md) — The clean relational design standard.
-
 ---
 
 ## 2. Term Category
@@ -195,7 +194,8 @@ Create AFTER UPDATE trigger on users to synchronize denormalized order_email fie
 
 ## 7. Related Terms
 - [Third Normal Form (3NF)](third_normal_form.md) — The parent clean design target.
-
+- [Materialized View](../level_09/materialized_view.md) — Related concept: Materialized View.
+- [Normalization](normalization.md) — Related concept: Normalization.
 ---
 
 ## 8. Key Takeaways

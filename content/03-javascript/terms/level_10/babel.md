@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [ECMAScript](../level_01/ecmascript.md) — The standard that defines the "versions" of JS (ES5, ES6).
-- [Bundler](./bundler.md) — Babel is almost always used as a plugin inside a Bundler.
-
+- [Bundler](bundler.md) — Babel is almost always used as a plugin inside a Bundler.
 ---
 
 ## 2. Term Category
@@ -185,8 +184,11 @@ async function processData() {
 
 ## 7. Related Terms
 - [ECMAScript](../level_01/ecmascript.md) — Babel allows you to use the newest ECMAScript versions immediately.
-- [Polyfill](./polyfill.md) — The tool that adds missing features, while Babel translates missing syntax.
-
+- [Polyfill](polyfill.md) — The tool that adds missing features, while Babel translates missing syntax.
+- [JSX](jsx.md) — Related concept: JSX.
+- [Minification & Source Maps](minification_source_maps.md) — Related concept: Minification & Source Maps.
+- [Transpiler vs Compiler](transpiler_vs_compiler.md) — Related concept: Transpiler vs Compiler.
+- [TypeScript](typescript.md) — Related concept: TypeScript.
 ---
 
 ## 8. Key Takeaways

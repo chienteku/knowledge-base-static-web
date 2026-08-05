@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`text-shadow`](../level_07/text_shadow.md) — `box-shadow` uses the exact same syntax, but applies to the Box Model instead of the text inside it!
-
 ---
 
 ## 2. Term Category
@@ -163,10 +162,11 @@ input { box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); } /* Inner inset shadow */
 > **Explanation:** Layering multiple box shadows creates realistic lighting depth.
 
 ## 7. Related Terms
-- [`border`](../level_02/border.md) — Sizing layouts with structural boundaries.
-- [`border-radius`](border_radius.md) — Card rounding properties which crop shadow layouts.
+- [Border](../level_02/border.md) — Sizing layouts with structural boundaries.
+- [`border-radius` (Rounded Corners)](border_radius.md) — Card rounding properties which crop shadow layouts.
 - [`filter`](filter.md) — Image processing filters that include `drop-shadow()`.
-
+- [`text-shadow`](../level_07/text_shadow.md) — Related concept: `text-shadow`.
+- [`backdrop-filter`](backdrop_filter.md) — Related concept: `backdrop-filter`.
 ---
 
 ## 8. Key Takeaways

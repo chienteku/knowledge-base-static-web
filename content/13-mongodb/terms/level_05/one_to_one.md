@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The syntax for nesting objects.
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The comparative design framework.
 
@@ -219,8 +220,9 @@ Write the equivalent MongoDB document schema structure for a user named Alice (`
 > **Explanation:** Isolating large or secret 1-to-1 fields keeps primary collection documents compact.
 
 ## 7. Related Terms
+
 - [Embedded Document (Subdocument)](../level_02/embedded_document.md) — The nested structure.
-- [Embedding vs Referencing](embedding_vs_referencing.md) — The general pattern comparison.
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — The general pattern comparison.
 
 ---
 

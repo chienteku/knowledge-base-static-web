@@ -44,8 +44,8 @@
       "display_name": "BSON (Binary JSON)",
       "prerequisites": [
         {
-          "term": "objectid",
           "module": "13-mongodb",
+          "term": "objectid",
           "description": "The binary ObjectId type introduced by BSON."
         }
       ],
@@ -190,8 +190,8 @@
       "display_name": "Document",
       "prerequisites": [
         {
-          "term": "mongodb",
           "module": "13-mongodb",
+          "term": "mongodb",
           "description": "The parent database engine."
         }
       ],
@@ -263,8 +263,8 @@
       "display_name": "Field",
       "prerequisites": [
         {
-          "term": "document",
           "module": "13-mongodb",
+          "term": "document",
           "description": "The parent records containing fields."
         }
       ],
@@ -336,8 +336,8 @@
       "display_name": "JSON vs. BSON",
       "prerequisites": [
         {
-          "term": "bson",
           "module": "13-mongodb",
+          "term": "bson",
           "description": "The binary-encoded database format."
         }
       ],
@@ -370,6 +370,11 @@
           "term": "atlas",
           "module": "13-mongodb",
           "description": "The cloud hosted alternative to local daemons."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "mongodb",
+          "description": "Related concept: MongoDB."
         }
       ]
     },
@@ -379,9 +384,9 @@
       "display_name": "MongoDB",
       "prerequisites": [
         {
-          "term": "nosql_databases",
           "module": "13-mongodb",
-          "description": "The parent non-relational database family."
+          "term": "nosql_databases",
+          "description": "NoSQL database paradigm."
         }
       ],
       "related": [
@@ -409,6 +414,11 @@
           "term": "outlier_pattern",
           "module": "13-mongodb",
           "description": "Related concept: The Outlier Pattern."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "mongod",
+          "description": "MongoDB server daemon."
         }
       ]
     },
@@ -465,8 +475,8 @@
       "display_name": "`_id` Field & ObjectId",
       "prerequisites": [
         {
-          "term": "field",
           "module": "13-mongodb",
+          "term": "field",
           "description": "The key-value structure of document attributes."
         }
       ],
@@ -1494,6 +1504,11 @@
           "term": "set_unset_stages",
           "module": "13-mongodb",
           "description": "Related concept: `$set` / `$unset` Pipeline Stages."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "array_filters",
+          "description": "Related concept: `arrayFilters` Option."
         }
       ]
     },
@@ -1589,12 +1604,28 @@
       "level": 4,
       "file": "terms/level_04/array_filters.md",
       "display_name": "`arrayFilters` Option",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "13-mongodb",
+          "term": "positional_operators",
+          "description": "Array positional update operators ($[])."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "querying_arrays",
+          "description": "Querying array elements."
+        }
+      ],
       "related": [
         {
           "term": "positional_operators",
           "module": "13-mongodb",
           "description": "Related concept: Positional Operators (`$`, `$[]`, `$[<identifier>]`)."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "update_operators",
+          "description": "Array update operators."
         }
       ]
     },
@@ -2010,13 +2041,13 @@
       "display_name": "Document Size Limit (16 MB)",
       "prerequisites": [
         {
-          "term": "bson",
           "module": "13-mongodb",
+          "term": "bson",
           "description": "The binary format that is sized."
         },
         {
-          "term": "embedding_vs_referencing",
           "module": "13-mongodb",
+          "term": "embedding_vs_referencing",
           "description": "The design decision driven."
         }
       ],
@@ -2055,6 +2086,11 @@
           "term": "gridfs",
           "module": "13-mongodb",
           "description": "Related concept: GridFS."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "outlier_pattern",
+          "description": "Outlier pattern for size limits."
         }
       ]
     },
@@ -2064,13 +2100,13 @@
       "display_name": "Embedding vs. Referencing",
       "prerequisites": [
         {
-          "term": "schema_design",
           "module": "13-mongodb",
-          "description": "The parent modeling paradigm."
+          "term": "schema_design",
+          "description": "Schema design fundamentals."
         },
         {
-          "term": "objectid_reference",
           "module": "13-mongodb",
+          "term": "objectid_reference",
           "description": "The referencing implementation."
         }
       ],
@@ -2114,6 +2150,11 @@
           "term": "subset_pattern",
           "module": "13-mongodb",
           "description": "Related concept: The Subset Pattern."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "lookup_stage",
+          "description": "Related concept: `$lookup` Stage."
         }
       ]
     },
@@ -2264,6 +2305,11 @@
           "term": "time_series",
           "module": "13-mongodb",
           "description": "Related concept: Time-Series Collections."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "document_size_limit",
+          "description": "Related concept: Document Size Limit (16 MB)."
         }
       ]
     },
@@ -2302,13 +2348,18 @@
       "display_name": "Schema Design (Document Modeling)",
       "prerequisites": [
         {
-          "term": "flexible_schema",
           "module": "13-mongodb",
-          "description": "The dynamic structure context."
+          "term": "document",
+          "description": "BSON document structure."
         },
         {
-          "term": "embedded_document",
           "module": "13-mongodb",
+          "term": "flexible_schema",
+          "description": "Flexible schema-on-read paradigm."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "embedded_document",
           "description": "Nested document modeling."
         }
       ],
@@ -2443,8 +2494,18 @@
       "display_name": "Aggregation Pipeline (Concept)",
       "prerequisites": [
         {
-          "term": "cursor",
           "module": "13-mongodb",
+          "term": "find",
+          "description": "Basic find query filtering."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "document",
+          "description": "BSON document structure."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "cursor",
           "description": "The query results cursor wrapper."
         }
       ],
@@ -2696,13 +2757,18 @@
       "display_name": "`$lookup` Stage",
       "prerequisites": [
         {
-          "term": "aggregation_pipeline",
           "module": "13-mongodb",
-          "description": "The parent pipeline framework."
+          "term": "aggregation_pipeline",
+          "description": "Aggregation pipeline overview."
         },
         {
-          "term": "embedding_vs_referencing",
           "module": "13-mongodb",
+          "term": "objectid_reference",
+          "description": "ObjectId reference fields."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "embedding_vs_referencing",
           "description": "The relational data modeling context."
         }
       ],
@@ -2726,6 +2792,11 @@
           "term": "graph_lookup",
           "module": "13-mongodb",
           "description": "Related concept: `$graphLookup` Stage."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "embedding_vs_referencing",
+          "description": "Referencing documents."
         }
       ]
     },
@@ -2992,13 +3063,18 @@
       "display_name": "Compound Index",
       "prerequisites": [
         {
-          "term": "single_field_index",
           "module": "13-mongodb",
+          "term": "index_concept",
+          "description": "Index fundamentals."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "single_field_index",
           "description": "The parent index type."
         },
         {
-          "term": "index_selectivity",
           "module": "13-mongodb",
+          "term": "index_selectivity",
           "description": "Determining index suitability."
         }
       ],
@@ -3027,6 +3103,11 @@
           "term": "multikey_index",
           "module": "13-mongodb",
           "description": "Related concept: Multikey Index."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "index_concept",
+          "description": "Related concept: Index (Concept in MongoDB)."
         }
       ]
     },
@@ -3114,13 +3195,13 @@
       "display_name": "The ESR Rule (Equality, Sort, Range)",
       "prerequisites": [
         {
-          "term": "compound_index",
           "module": "13-mongodb",
-          "description": "The target multi-key index."
+          "term": "compound_index",
+          "description": "Compound index structure."
         },
         {
-          "term": "index_selectivity",
           "module": "13-mongodb",
+          "term": "index_selectivity",
           "description": "Analyzing query selectivity."
         }
       ],
@@ -3168,6 +3249,11 @@
           "term": "profiler",
           "module": "13-mongodb",
           "description": "Related concept: MongoDB Profiler (`db.setProfilingLevel()`)."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "index_concept",
+          "description": "Related concept: Index (Concept in MongoDB)."
         }
       ]
     },
@@ -3235,13 +3321,13 @@
       "display_name": "Index (Concept in MongoDB)",
       "prerequisites": [
         {
-          "term": "collection",
           "module": "13-mongodb",
+          "term": "collection",
           "description": "The collection where indexes are built."
         },
         {
-          "term": "index_concept",
           "module": "12-postgres",
+          "term": "index_concept",
           "description": "Relational index conceptual foundations."
         }
       ],
@@ -3265,6 +3351,16 @@
           "term": "single_field_index",
           "module": "13-mongodb",
           "description": "Related concept: Single-Field Index."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "compound_index",
+          "description": "Compound indexes."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "explain",
+          "description": "Explain execution plan."
         }
       ]
     },
@@ -3569,8 +3665,13 @@
       "display_name": "ACID vs BASE",
       "prerequisites": [
         {
-          "term": "multi_document_transaction",
           "module": "13-mongodb",
+          "term": "mongodb",
+          "description": "MongoDB architecture."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "multi_document_transaction",
           "description": "MongoDB's ACID feature."
         }
       ],
@@ -3840,13 +3941,18 @@
       "display_name": "Write Concern",
       "prerequisites": [
         {
-          "term": "multi_document_transaction",
           "module": "13-mongodb",
+          "term": "insert",
+          "description": "Write operations."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "multi_document_transaction",
           "description": "The transaction context."
         },
         {
-          "term": "replica_set",
           "module": "13-mongodb",
+          "term": "replica_set",
           "description": "The distributed cluster context."
         }
       ],
@@ -4057,8 +4163,13 @@
       "display_name": "Replica Set",
       "prerequisites": [
         {
-          "term": "database_context",
           "module": "13-mongodb",
+          "term": "mongod",
+          "description": "MongoDB server daemon."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "database_context",
           "description": "The single `mongod` process."
         }
       ],
@@ -4145,9 +4256,9 @@
       "display_name": "Shard Key",
       "prerequisites": [
         {
-          "term": "sharding",
           "module": "13-mongodb",
-          "description": "The parent partitioning concept."
+          "term": "sharding",
+          "description": "Sharding architecture."
         }
       ],
       "related": [
@@ -4179,13 +4290,13 @@
       "display_name": "Sharding (Horizontal Scaling)",
       "prerequisites": [
         {
-          "term": "replica_set",
           "module": "13-mongodb",
-          "description": "The high-availability replica node building blocks."
+          "term": "replica_set",
+          "description": "Replica set cluster."
         },
         {
-          "term": "database",
           "module": "12-postgres",
+          "term": "database",
           "description": "Relational database structures."
         }
       ],
@@ -4492,9 +4603,9 @@
       "display_name": "Mongoose (ODM)",
       "prerequisites": [
         {
-          "term": "node_driver",
           "module": "13-mongodb",
-          "description": "The low-level driver wrapped."
+          "term": "node_driver",
+          "description": "Official Node.js driver."
         }
       ],
       "related": [
@@ -4507,6 +4618,11 @@
           "term": "mongoose_schema_model",
           "module": "13-mongodb",
           "description": "The core concepts."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "mongoose_middleware",
+          "description": "Mongoose pre/post middleware."
         }
       ]
     },
@@ -4526,6 +4642,11 @@
           "term": "mongoose_schema_model",
           "module": "13-mongodb",
           "description": "The parent modeling blueprint."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "mongoose",
+          "description": "Related concept: Mongoose (ODM)."
         }
       ]
     },

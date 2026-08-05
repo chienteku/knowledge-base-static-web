@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
 - [BSON Data Types (Overview)](../level_02/bson_data_types.md) — The target types validated.
 
@@ -223,8 +224,10 @@ Write the `db.createCollection` command.
 > **Explanation:** `collMod` updates validator rules on active collections without dropping data.
 
 ## 7. Related Terms
+
 - [BSON Data Types (Overview)](../level_02/bson_data_types.md) — The target types.
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
+- [Database Migrations (MongoDB)](../level_10/database_migrations.md) — Related concept: Database Migrations (MongoDB).
 
 ---
 

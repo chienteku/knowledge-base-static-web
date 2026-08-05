@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [React Components](../level_01/react_components.md) — The form components that gather user input.
-
 ---
 
 ## 2. Term Category
@@ -231,9 +230,9 @@ export const ProductSchema = z.object({
 ---
 
 ## 7. Related Terms
-- [Server Actions Overview (`"use server"`)](../level_06/server_actions.md) — The backend functions validated by Zod schemas.
-- [`useFormState` Hook](../level_06/use_form_state.md) — How validation errors are displayed.
-
+- [Server Actions Overview (`"use server"`)](server_actions.md) — The backend functions validated by Zod schemas.
+- [`useFormState` Hook](use_form_state.md) — How validation errors are displayed.
+- [Form Actions](form_actions.md) — Related concept: Form Actions.
 ---
 
 ## 8. Key Takeaways

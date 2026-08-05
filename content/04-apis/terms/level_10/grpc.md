@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [REST](../level_03/rest.md) — gRPC completely abandons the REST philosophy.
-- [JSON](../level_01/json.md) — gRPC famously hates JSON and replaces it with Protocol Buffers.
-
+- [REST (Representational State Transfer)](../level_03/rest.md) — gRPC completely abandons the REST philosophy.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — gRPC famously hates JSON and replaces it with Protocol Buffers.
 ---
 
 ## 2. Term Category
@@ -158,9 +157,13 @@ Where do you use REST, and where do you use gRPC?
 ---
 
 ## 7. Related Terms
-- [REST](../level_03/rest.md) — The architecture gRPC replaces in backend microservices.
+- [REST (Representational State Transfer)](../level_03/rest.md) — The architecture gRPC replaces in backend microservices.
 - [WebSockets](../level_08/websockets.md) — gRPC also natively supports bi-directional streaming!
-
+- [Binary vs Text Formats](../level_07/binary_vs_text_formats.md) — Related concept: Binary vs Text Formats.
+- [SOAP & XML-RPC (legacy)](soap_xml_rpc.md) — Related concept: SOAP & XML-RPC (legacy).
+- [Protocol Buffers (protobuf)](protocol_buffers.md) — Protocol Buffers.
+- [HTTP / HTTPS](../level_01/http_https.md) — HTTP/2 transport.
+- [API (Application Programming Interface)](../level_03/api.md) — Related concept: API (Application Programming Interface).
 ---
 
 ## 8. Key Takeaways

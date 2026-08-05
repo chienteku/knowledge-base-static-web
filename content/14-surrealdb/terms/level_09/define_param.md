@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Parameters (`$param`)](../level_06/parameters.md) — Query-level parameter syntax.
 - [`LET` Statement](../level_06/let_statement.md) — Query-scoped session variables vs global database params.
 
@@ -209,6 +210,7 @@ Write a `DEFINE PARAM` statement that sets a persistent global string parameter 
 > **Explanation:** `REMOVE PARAM` drops global schema parameter definitions.
 
 ## 7. Related Terms
+
 - [Parameters (`$param`)](../level_06/parameters.md) — Query-level parameter syntax.
 - [`LET` Statement](../level_06/let_statement.md) — Transient session variables.
 - [`DEFINE FUNCTION`](define_function.md) — Reusable server-side functions.

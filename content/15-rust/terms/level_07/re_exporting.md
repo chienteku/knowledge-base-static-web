@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`use` Statement](../level_07/use_statement.md) — The standard way to create shortcuts, which `pub use` builds upon.
-- [`pub` Visibility](../level_07/pub_visibility.md) — The keyword that makes things visible to the outside world.
-- [`mod` Declaration](../level_07/mod_declaration.md) — The internal tree structure that `pub use` helps hide from users.
+
+- [`use` Statement](use_statement.md) — The standard way to create shortcuts, which `pub use` builds upon.
+- [`pub` Visibility](pub_visibility.md) — The keyword that makes things visible to the outside world.
+- [`mod` Declaration](mod_declaration.md) — The internal tree structure that `pub use` helps hide from users.
 
 ---
 
@@ -78,73 +79,35 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Re Exporting Scoping and Lifecycle Rules
+### Mistake 1: Confusing Private `use` with Public `pub use` Re-Exports
 
-**The mistake:** Assuming Re Exporting instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Writing `use internal::Engine;` at top-level `lib.rs` expecting callers of the crate to access `my_crate::Engine`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** `use` brings an item into the local scope of that single file. Callers outside the crate cannot access it. To expose the item publicly at the crate root, write `pub use internal::Engine;`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("re_exporting_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+use internal::Engine; // Private local alias only!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("re_exporting_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+pub use internal::Engine; // Re-exports Engine to crate public API!
 ```
 
-### Mistake 2: Mutating Re Exporting State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Re-Exporting Items from Private Submodules without `pub` Access
 
-**The mistake:** Attempting to mutate data associated with Re Exporting through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Writing `pub use internal::Secret;` when `struct Secret` inside `internal.rs` is private (`struct Secret`).
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** `pub use` cannot grant access to items that are not visible to the re-exporting module. `Secret` must be marked `pub` or `pub(crate)`.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+### Mistake 3: Creating Ambiguous Double Re-Exports of Colliding Symbol Names
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
+**The mistake:** Re-exporting `pub use backend_a::Config;` and `pub use backend_b::Config;` into the same root namespace.
 
-### Mistake 3: Concurrent Access to Re Exporting Across Threads Without `Send` / `Sync` Guards
+**Why it is wrong:** Downstream callers writing `use my_crate::Config` encounter ambiguity compiler errors (`error: `Config` is ambiguous`). Re-export with aliases via `pub use backend_a::Config as ConfigA;`.
 
-**The mistake:** Sharing non-thread-safe Re Exporting instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -271,8 +234,9 @@ Write:
 
 ## 6. Related Terms
 
-- [`use` Statement](../level_07/use_statement.md) — The private version of this keyword, which only creates a shortcut for your own internal file.
-- [`pub` Visibility](../level_07/pub_visibility.md) — The requirement for the item being re-exported.
+
+- [`use` Statement](use_statement.md) — The private version of this keyword, which only creates a shortcut for your own internal file.
+- [`pub` Visibility](pub_visibility.md) — The requirement for the item being re-exported.
 
 ---
 

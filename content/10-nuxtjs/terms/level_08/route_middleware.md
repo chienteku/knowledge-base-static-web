@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Server Middleware](../level_07/server_middleware.md) — It is critical to understand that Route Middleware is fundamentally different from Server Middleware.
 - [`pages/` Directory](../level_02/pages_directory.md) — The destinations that Route Middleware protects.
-
 ---
 
 ## 2. Term Category
@@ -220,9 +219,12 @@ export default defineNuxtRouteMiddleware((to) => {
 ---
 
 ## 7. Related Terms
-- [Global vs Named Middleware](../level_08/global_vs_named_middleware.md) — The two ways to apply these functions.
+- [Global vs Named Middleware](global_vs_named_middleware.md) — The two ways to apply these functions.
 - [`pages/` Directory](../level_02/pages_directory.md) — Where middleware is applied via `definePageMeta`.
-
+- [`definePageMeta` Compiler Macro](../level_02/define_page_meta.md) — Related concept: `definePageMeta` Compiler Macro.
+- [`useRoute` & `useRouter` Hooks](../level_02/use_route_router.md) — Related concept: `useRoute` & `useRouter` Hooks.
+- [Server Middleware](../level_07/server_middleware.md) — Related concept: Server Middleware.
+- [`abortNavigation` Utility](abort_navigation.md) — Related concept: `abortNavigation` Utility.
 ---
 
 ## 8. Key Takeaways

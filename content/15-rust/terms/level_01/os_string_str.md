@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The UTF-8-guaranteed types this pair is the non-UTF-8-safe counterpart to.
-- [`Path` / `PathBuf`](../level_01/path_pathbuf.md) — What `OsString`/`OsStr` are internally used to build.
+
+- [String vs &str](string_vs_&str.md) — The UTF-8-guaranteed types this pair is the non-UTF-8-safe counterpart to.
+- [`Path` / `PathBuf`](path_pathbuf.md) — What `OsString`/`OsStr` are internally used to build.
 
 ---
 
@@ -675,8 +676,9 @@ Implement a subprocess argument pipeline `OsCommandPipeline`:
 
 ## 6. Related Terms
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The UTF-8-guaranteed pair `OsString`/`OsStr` mirrors in structure (owned/borrowed) but relaxes in guarantee.
-- [`Path` / `PathBuf`](../level_01/path_pathbuf.md) — Built directly on top of `OsString`/`OsStr` internally, since filenames share the same "might not be UTF-8" reality.
+
+- [String vs &str](string_vs_&str.md) — The UTF-8-guaranteed pair `OsString`/`OsStr` mirrors in structure (owned/borrowed) but relaxes in guarantee.
+- [`Path` / `PathBuf`](path_pathbuf.md) — Built directly on top of `OsString`/`OsStr` internally, since filenames share the same "might not be UTF-8" reality.
 - [`Cow<'a, T>`](../level_11/cow_t.md) — The return type of `.to_string_lossy()`, since it only allocates a new owned `String` when a lossy replacement was actually needed.
 
 ---

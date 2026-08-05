@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — What you are styling.
-- [Props](../level_01/props.md) — How CSS-in-JS conditionally changes styles.
-
+- [Props (Properties)](../level_01/props.md) — How CSS-in-JS conditionally changes styles.
 ---
 
 ## 2. Term Category
@@ -176,8 +175,6 @@ const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`;
 
 ## 7. Related Terms
 - [Components](../level_01/components.md) — Styled Components are just React Components that render a specific HTML tag with injected CSS.
-- Tailwind CSS — The modern competitor to CSS-in-JS that uses utility classes instead of writing custom CSS strings.
-
 ---
 
 ## 8. Key Takeaways

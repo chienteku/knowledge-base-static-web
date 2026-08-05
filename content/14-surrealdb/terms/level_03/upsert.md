@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [`UPDATE`](update.md) — The update write statement.
 - [`INSERT ... ON DUPLICATE KEY UPDATE`](insert_on_duplicate.md) — The insert-based upsert alternative.
 
@@ -204,6 +205,7 @@ UPSERT user:alice SET name = "Alice";
 > **Explanation:** `UPSERT table SET ... WHERE condition` upserts records matching criteria.
 
 ## 7. Related Terms
+
 - [`UPDATE`](update.md) — The update write statement.
 - [`INSERT ... ON DUPLICATE KEY UPDATE`](insert_on_duplicate.md) — The insert-based upsert alternative.
 

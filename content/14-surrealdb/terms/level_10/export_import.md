@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — CLI binary basics.
 - [Namespace & Database](../level_01/namespace_database.md) — Database boundaries.
 
@@ -204,6 +205,7 @@ b. `surreal import`
 > **Explanation:** `surreal import` restores database schemas and data records from SQL files.
 
 ## 7. Related Terms
+
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — Interactive CLI console.
 - [`surreal validate` (Query Validation)](surreal_validate.md) — Pre-flight syntax validation.
 - [Data Migrations in SurrealDB](data_migrations.md) — Schema evolution strategies.

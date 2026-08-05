@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — The commands used to inspect table scan choices.
-
 ---
 
 ## 2. Term Category
@@ -180,7 +179,7 @@ CREATE INDEX idx_users_email ON users (email);
 ## 7. Related Terms
 - [`EXPLAIN` / `EXPLAIN ANALYZE`](explain_analyze.md) — Measuring scan plans.
 - [Index-Only Scan (Covering Index)](index_only_scan.md) — The fastest possible read path.
-
+- [Index (Concept)](index_concept.md) — Related concept: Index (Concept).
 ---
 
 ## 8. Key Takeaways

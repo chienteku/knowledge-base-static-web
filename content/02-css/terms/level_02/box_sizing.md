@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — You must understand the default behavior before you understand how this fixes it.
-- [Width / Height](../level_02/width_height.md) — This property changes how `width` and `height` calculate size.
-
+- [The Box Model (Concept)](box_model.md) — You must understand the default behavior before you understand how this fixes it.
+- [Width / Height](width_height.md) — This property changes how `width` and `height` calculate size.
 ---
 
 ## 2. Term Category
@@ -168,9 +167,11 @@ border-box width: 200px (content shrinks to 150px)
 > **Explanation:** `border-box` absorbs padding and border into the specified width.
 
 ## 7. Related Terms
-- [The Box Model](../level_02/box_model.md) — The fundamental math system this property modifies.
-- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — How content behaves when forced into constrained borders.
-
+- [The Box Model (Concept)](box_model.md) — The fundamental math system this property modifies.
+- [`overflow` (hidden, scroll, auto, visible)](overflow.md) — How content behaves when forced into constrained borders.
+- [Padding](padding.md) — Related concept: Padding.
+- [Width / Height](width_height.md) — Related concept: Width / Height.
+- [CSS Reset vs. Normalize](../level_11/reset_normalize.md) — Related concept: CSS Reset vs. Normalize.
 ---
 
 ## 8. Key Takeaways

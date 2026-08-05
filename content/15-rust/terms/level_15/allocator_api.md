@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Stack vs Heap](../level_15/stack_vs_heap.md) — Understanding dynamic heap memory allocation trade-offs.
+
+- [Stack vs Heap](stack_vs_heap.md) — Understanding dynamic heap memory allocation trade-offs.
 - [`unsafe` Block](../level_13/unsafe_block.md) — Raw memory allocation traits require `unsafe fn` implementations.
 - [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Allocators return and free raw byte pointers.
 
@@ -595,10 +596,11 @@ Implement a custom `GlobalAlloc` wrapper struct (`BudgetedAllocator`) that:
 
 ## 7. Related Terms
 
-- [Stack vs Heap](../level_15/stack_vs_heap.md) — Heap memory region managed by the Allocator API.
+
+- [Stack vs Heap](stack_vs_heap.md) — Heap memory region managed by the Allocator API.
 - [`unsafe` Block](../level_13/unsafe_block.md) — `GlobalAlloc` implementation methods are `unsafe fn`.
 - [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Allocators return and free `*mut u8` pointers.
-- [Release Profile](../level_15/release_profile.md) — Profile where custom allocator performance improvements take effect.
+- [Release Profile](release_profile.md) — Profile where custom allocator performance improvements take effect.
 
 ---
 

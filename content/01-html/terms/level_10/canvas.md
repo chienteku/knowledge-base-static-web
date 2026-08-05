@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`<script>`](../level_08/script.md) — The canvas element does absolutely nothing without JavaScript to control it.
 - [DOM (Document Object Model)](../level_09/dom.md) — JavaScript interacts with the Canvas object in the DOM to draw pixels.
-
 ---
 
 ## 2. Term Category
@@ -235,9 +234,9 @@ JavaScript is the painter holding the paintbrush. Without the painter, the canva
 > **Explanation:** Canvas renders pixels procedurally; SVG manages XML vector DOM node trees.
 
 ## 7. Related Terms
-- [`<svg>`](../level_10/svg.md) — The alternative way to draw graphics on the web (Vector vs. Raster).
-- [`<progress>` & `<meter>`](../level_10/progress_meter.md) — Semantic gauges for loading states and scalars.
-
+- [`<svg>` (Scalable Vector Graphics)](svg.md) — The alternative way to draw graphics on the web (Vector vs. Raster).
+- [`<progress>` & `<meter>` Elements](progress_meter.md) — Semantic gauges for loading states and scalars.
+- [Web Components](web_components.md) — Related concept: Web Components.
 ---
 
 ## 8. Key Takeaways

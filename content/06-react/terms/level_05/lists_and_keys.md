@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [JSX](../level_01/jsx.md) — Understanding that JSX elements can be stored in arrays.
+- [JSX (JavaScript XML)](../level_01/jsx.md) — Understanding that JSX elements can be stored in arrays.
 - [Virtual DOM](../level_01/virtual_dom.md) — How React diffs arrays of elements to find changes.
-
 ---
 
 ## 2. Term Category
@@ -177,7 +176,8 @@ Use persistent unique item data IDs: key={item.id}
 
 ## 7. Related Terms
 - [Virtual DOM](../level_01/virtual_dom.md) — The system that requires the Keys to perform efficient diffing.
-
+- [Fragments](../level_01/fragments.md) — Related concept: Fragments.
+- [Reconciliation](../level_01/reconciliation.md) — Related concept: Reconciliation.
 ---
 
 ## 8. Key Takeaways

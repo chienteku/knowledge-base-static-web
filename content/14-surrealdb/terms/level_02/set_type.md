@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Array Type](array_type.md) — The non-unique list context.
+
+- [`array`](array_type.md) — The non-unique list context.
 
 ---
 
@@ -202,8 +203,10 @@ Predict the exact JSON array output returned for the `tags` field under these tw
 > **Explanation:** Sets automatically discard duplicate element values upon insertion.
 
 ## 7. Related Terms
-- [Array Type](array_type.md) — The non-unique list context.
+
+- [`array`](array_type.md) — The non-unique list context.
 - [Data Types (Overview)](data_types.md) — The parent type system.
+- [Array Functions (`array::*`)](../level_06/array_functions.md) — Related concept: Array Functions (`array::*`).
 
 ---
 

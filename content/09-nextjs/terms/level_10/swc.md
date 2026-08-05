@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The framework powered by this compiler.
-- [Turbopack](../level_10/turbopack.md) — The development bundler that operates in tandem with SWC compilation.
-
+- [Turbopack](turbopack.md) — The development bundler that operates in tandem with SWC compilation.
 ---
 
 ## 2. Term Category
@@ -159,9 +158,8 @@ module.exports = {
 ---
 
 ## 7. Related Terms
-- [Turbopack](../level_10/turbopack.md) — The Rust-based development bundler.
-- [Docker & Standalone Build](../level_10/standalone_build.md) — Where the compiled assets are packaged.
-
+- [Turbopack](turbopack.md) — The Rust-based development bundler.
+- [Docker & Standalone Build](standalone_build.md) — Where the compiled assets are packaged.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-None.
+
+**None.**
 
 ---
 
@@ -668,9 +669,12 @@ Implement an event dispatcher system:
 
 ## 6. Related Terms
 
-- [Variable](../level_01/variable.md) — Functions often declare variables locally or accept them as parameters.
-- [Type Annotation](../level_01/type_annotation.md) — Function signatures mandate explicit type annotations for inputs and outputs.
-- [Module](../level_01/module.md) — Functions are typically grouped and organized within modules.
+
+- [Variable](variable.md) — Functions often declare variables locally or accept them as parameters.
+- [Type Annotation](type_annotation.md) — Function signatures mandate explicit type annotations for inputs and outputs.
+- [Module](module.md) — Functions are typically grouped and organized within modules.
+- [Comments](comments.md) — Related concept: Comments.
+- [Functions (`fn`)](function.md) — Functions declared with fn.
 
 ---
 

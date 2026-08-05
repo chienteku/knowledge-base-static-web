@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
-- [Database (Concept - PostgreSQL)](../../../12-postgres/terms/level_01/database.md) — Relational SQL JOIN engines.
+- [Database](../../../12-postgres/terms/level_01/database.md) — Relational SQL JOIN engines.
 
 ---
 
@@ -223,8 +224,11 @@ Explain how the execution time of these two queries changes as the user count sc
 > **Explanation:** SurrealQL arrow paths replace relational JOIN tables and foreign keys.
 
 ## 7. Related Terms
+
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — The query traversal operators.
-- [Deep Graph Traversal](deep_graph_traversal.md) — Chaining arrow paths.
+- [Deep Graph Traversal (Chained arrows)](deep_graph_traversal.md) — Chaining arrow paths.
+- [Bidirectional Relationship Queries](bidirectional_queries.md) — Related concept: Bidirectional Relationship Queries.
+- [Graph Connections (Overview: Nodes vs Edges)](graph_overview.md) — Related concept: Graph Connections (Overview: Nodes vs Edges).
 
 ---
 

@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [`<input>`](../level_05/input.md) — The single-line sibling to the textarea.
+- [`<input>`](input.md) — The single-line sibling to the textarea.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Notice that `<textarea>` is NOT a void element!
 - [Nesting](../level_01/nesting.md) — Since default text values are nested between the opening and closing tags.
-
 ---
 
 ## 2. Term Category
@@ -186,12 +185,11 @@ textarea {
 > **Explanation:** `white-space: pre-wrap` preserves newlines and wraps text output.
 
 ## 7. Related Terms
-- [`<input>`](../level_05/input.md) — The single-line equivalent for short data.
-- [`placeholder` Attribute](../level_05/placeholder.md) — The visual cue comparison.
-- [`value` Attribute (in Form Fields)](../level_05/value.md) — The value differences from textareas.
-- [`name` Attribute (in Form Fields)](../level_05/name.md) — The textarea key name parameter.
-- [`<label>`](../level_05/label.md) — The associated text label.
-
+- [`<input>`](input.md) — The single-line equivalent for short data.
+- [`placeholder` Attribute](placeholder.md) — The visual cue comparison.
+- [`value` Attribute (in Form Fields)](value.md) — The value differences from textareas.
+- [`name` Attribute (in Form Fields)](name.md) — The textarea key name parameter.
+- [`<label>`](label.md) — The associated text label.
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — The versioning snapshot manager.
-
 ---
 
 ## 2. Term Category
@@ -174,7 +173,6 @@ SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 ## 7. Related Terms
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — The version snapshot driver.
 - [Transaction Isolation Levels](isolation_levels.md) — The settings used to block anomalies.
-
 ---
 
 ## 8. Key Takeaways

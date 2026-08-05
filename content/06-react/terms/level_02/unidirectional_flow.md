@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Props](../level_01/props.md) — The vehicle that carries the data down.
-- [State](../level_02/state.md) — The source of the data.
-
+- [Props (Properties)](../level_01/props.md) — The vehicle that carries the data down.
+- [State](state.md) — The source of the data.
 ---
 
 ## 2. Term Category
@@ -163,9 +162,10 @@ Consolidate state update logic into a single parent handler or reducer
 > **Explanation:** Parent passes data down (`value`), child sends events up (`onChange`).
 
 ## 7. Related Terms
-- [Props](../level_01/props.md) — The water flowing down the waterfall.
+- [Props (Properties)](../level_01/props.md) — The water flowing down the waterfall.
 - [Prop Drilling](../level_06/prop_drilling.md) — The dark side of Unidirectional flow (when the waterfall is 20 components deep).
-
+- [Controlled Components](../level_05/controlled_components.md) — Related concept: Controlled Components.
+- [State](state.md) — Related concept: State.
 ---
 
 ## 8. Key Takeaways

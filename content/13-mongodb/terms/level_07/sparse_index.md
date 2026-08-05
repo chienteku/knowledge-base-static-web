@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Unique Index](unique_index.md) — The parent constraint.
-- [Element Operators (`$exists`)](../level_03/element_operators.md) — Checking field presence.
+- [Element Query Operators (`$exists`, `$type`)](../level_03/element_operators.md) — Checking field presence.
 
 ---
 
@@ -231,6 +232,7 @@ State whether the index is **Used** or **Ignored** in these queries:
 > **Explanation:** Sparse indexes save RAM by omitting documents lacking the target field.
 
 ## 7. Related Terms
+
 - [Unique Index](unique_index.md) — The parent constraint.
 - [Partial Index](partial_index.md) — The modern alternative.
 

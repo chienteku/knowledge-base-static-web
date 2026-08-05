@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The server process listening.
 
 ---
@@ -202,8 +203,12 @@ Select the optimal connection protocol (**ws://**, **wss://**, or **http://**) f
 > **Explanation:** `mem://` creates volatile in-memory database instances for fast unit testing.
 
 ## 7. Related Terms
+
 - [SurrealDB Server (`surreal start`)](surreal_start.md) — The server process listening.
-- [`LIVE SELECT`](../level_09/live_select.md) — The real-time queries.
+- [`LIVE SELECT` (Live Queries)](../level_09/live_select.md) — The real-time queries.
+- [Surrealist (Web IDE)](surrealist.md) — Related concept: Surrealist (Web IDE).
+- [`KILL` (Stopping Live Queries)](../level_09/kill_live_query.md) — Related concept: `KILL` (Stopping Live Queries).
+- [WebSocket vs HTTP Connection](../level_10/websocket_vs_http.md) — Related concept: WebSocket vs HTTP Connection.
 
 ---
 

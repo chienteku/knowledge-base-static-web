@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Object Types](../level_03/object_types.md) — The structures you are accessing properties from.
-
 ---
 
 ## 2. Term Category

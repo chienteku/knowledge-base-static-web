@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Statements](../level_01/statements.md) — Understanding the difference between doing an action (Statements) and returning a value (Expressions).
-- [Variable](../level_01/variable.md) — Variables are assigned the values that expressions evaluate to.
+
+- [Statements](statements.md) — Understanding the difference between doing an action (Statements) and returning a value (Expressions).
+- [Variable](variable.md) — Variables are assigned the values that expressions evaluate to.
 
 ---
 
@@ -835,8 +836,13 @@ Requirements:
 
 ## 6. Related Terms
 
-- [Statements](../level_01/statements.md) — The exact opposite. Statements perform actions, do not return values, and usually end with semicolons.
+
+- [Statements](statements.md) — The exact opposite. Statements perform actions, do not return values, and usually end with semicolons.
 - [`if` / `else`](../level_02/if_else.md) — A prime example of how Rust turns traditional statements into powerful expressions that return values.
+- [`dbg!` Macro](dbg_macro.md) — Related concept: `dbg!` Macro.
+- [`loop`](../level_02/loop.md) — Related concept: `loop`.
+- [Expressions vs. Statements](expression_vs_statement.md) — Related concept: Expressions vs. Statements.
+- [Functions (`fn`)](function.md) — Related concept: Functions (`fn`).
 
 ---
 

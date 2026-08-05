@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<html>`](../level_01/html_tag.md) — The parent root container element.
-- [Nesting](../level_01/nesting.md) — Specifically, understanding how `<head>` nests inside the `<html>` root parent container.
-
+- [`<html>`](html_tag.md) — The parent root container element.
+- [Nesting](nesting.md) — Specifically, understanding how `<head>` nests inside the `<html>` root parent container.
 ---
 
 ## 2. Term Category
@@ -183,9 +182,16 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 > **Explanation:** `<head>` contents are non-rendered document metadata.
 
 ## 7. Related Terms
-- [`<body>`](../level_01/body.md) — The sibling to `<head>` that handles all visible content.
-- [`<title>`](../level_01/title.md) — The most important tag that lives inside the `<head>`.
-
+- [`<body>`](body.md) — The sibling to `<head>` that handles all visible content.
+- [`title` Attribute](../level_07/title.md) — The most important tag that lives inside the `<head>`.
+- [`<html>`](html_tag.md) — Related concept: `<html>`.
+- [`<header>`](../level_06/header.md) — Related concept: `<header>`.
+- [`<base>` Element](../level_08/base.md) — Related concept: `<base>` Element.
+- [Character Encoding (`charset`)](../level_08/character_encoding.md) — Related concept: Character Encoding (`charset`).
+- [Favicon](../level_08/favicon.md) — Related concept: Favicon.
+- [`<link>`](../level_08/link.md) — Related concept: `<link>`.
+- [`<meta>`](../level_08/meta.md) — Related concept: `<meta>`.
+- [Open Graph Tags (`og:`)](../level_08/open_graph.md) — Related concept: Open Graph Tags (`og:`).
 ---
 
 ## 8. Key Takeaways

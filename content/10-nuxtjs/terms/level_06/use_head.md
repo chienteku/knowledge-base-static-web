@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that ensures these `<head>` tags are actually visible to search engines on initial load.
 - [Search Engine Optimization (SEO)](../level_01/seo.md) — The core design requirement for dynamic indexing tags.
-
 ---
 
 ## 2. Term Category
@@ -215,8 +214,8 @@ useHead({ script: [{ key: 'my-script', children: 'console.log(1)' }] }); // Key 
 ---
 
 ## 7. Related Terms
-- [`useSeoMeta`](../level_06/use_seo_meta.md) — A specialized version of `useHead` strictly for Open Graph and Twitter meta tags.
-
+- [`useSeoMeta`](use_seo_meta.md) — A specialized version of `useHead` strictly for Open Graph and Twitter meta tags.
+- [Search Engine Optimization (SEO)](../level_01/seo.md) — Related concept: Search Engine Optimization (SEO).
 ---
 
 ## 8. Key Takeaways

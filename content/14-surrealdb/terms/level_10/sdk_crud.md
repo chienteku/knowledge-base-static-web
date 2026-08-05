@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [JavaScript / TypeScript SDK](js_sdk.md) — The `surrealdb` client package.
-- [SDK Connection Lifecycle](sdk_connection.md) — Connection setup sequence.
+- [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](sdk_connection.md) — Connection setup sequence.
 
 ---
 
@@ -227,6 +228,7 @@ c. `db.create()`
 > **Explanation:** `db.merge(id, patch)` performs shallow object merging without replacing records.
 
 ## 7. Related Terms
+
 - [JavaScript / TypeScript SDK](js_sdk.md) — SDK package overview.
 - [SDK `.query()` with Parameters](sdk_query.md) — Executing complex raw queries.
 - [`UPDATE` Strategies (`SET` / `CONTENT` / `MERGE` / `PATCH`)](../level_03/update_strategies.md) — Update operations semantics.

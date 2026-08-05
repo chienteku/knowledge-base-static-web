@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Collecting (`.collect()`)](../level_02/collecting.md) — The method whose implementation this trait defines.
-- [Iterator](../level_02/iterator.md) — The source `.collect()`/`.extend()` consume.
+
+- [Collecting](collecting.md) — The method whose implementation this trait defines.
+- [Iterator](iterator.md) — The source `.collect()`/`.extend()` consume.
 - [Turbofish (`::<>`)](../level_06/turbofish.md) — How you tell `.collect()` which `FromIterator` implementation to use.
 
 ---
@@ -580,10 +581,12 @@ Network daemons parse routing configurations from file or wire formats where ind
 
 ## 6. Related Terms
 
-- [Collecting (`.collect()`)](../level_02/collecting.md) — The method that's just a thin wrapper around `FromIterator::from_iter`.
-- [Iterator](../level_02/iterator.md) — The trait every `FromIterator` implementation consumes.
-- [`Result<T, E>`](../level_02/result_t_e.md) — Notably implements `FromIterator`, enabling the short-circuiting collect pattern above.
-- [`HashSet<T>` / `BTreeSet<T>`](../level_02/hashset_btreeset.md), [`VecDeque<T>`](../level_02/vecdeque_t.md) — All implement both `FromIterator` and `Extend`.
+
+- [Collecting](collecting.md) — The method that's just a thin wrapper around `FromIterator::from_iter`.
+- [Iterator](iterator.md) — The trait every `FromIterator` implementation consumes.
+- [`Result<T, E>`](result_t_e.md) — Notably implements `FromIterator`, enabling the short-circuiting collect pattern above.
+- [`HashSet<T>` / `BTreeSet<T>`](hashset_btreeset.md)
+- [`Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`)](iterator_consumers.md) — Related concept: `Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`).
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [Macros](../level_01/macros.md) — The meta-programming tools that write code for you.
-- [Structs](../level_02/struct.md) / [Enums](../level_02/enum.md) — The custom types you will be deriving traits for.
-- [Trait](../level_04/trait.md) — The contracts being implemented.
+- [Struct](../level_02/struct.md)
+- [Trait](trait.md) — The contracts being implemented.
 
 ---
 
@@ -578,8 +579,14 @@ Simulate the architectural output of a procedural derive macro for hierarchical 
 
 ## 6. Related Terms
 
-- [`Debug` Trait](../level_04/debug_trait.md) — The most common trait you will ever derive (allows you to print objects to the console for debugging).
+
+- [`Debug` Trait](debug_trait.md) — The most common trait you will ever derive (allows you to print objects to the console for debugging).
 - [`Clone` Trait](../level_03/clone_trait.md) — Another incredibly common trait you will derive (allows you to duplicate data).
+- [`Hash` Trait](../level_02/hash_trait.md) — Related concept: `Hash` Trait.
+- [`Default` Trait](default_trait.md) — Related concept: `Default` Trait.
+- [`PartialEq` / `Eq`](partialeq_eq.md) — Related concept: `PartialEq` / `Eq`.
+- [`PartialOrd` / `Ord`](partialord_ord.md) — Related concept: `PartialOrd` / `Ord`.
+- [Auto Traits](../level_09/auto_traits.md) — Related concept: Auto Traits.
 
 ---
 

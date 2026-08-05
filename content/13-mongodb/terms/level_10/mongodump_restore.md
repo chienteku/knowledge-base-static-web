@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Database Context (Running processes)](../level_01/database_context.md) — The target database process connection.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The target database process connection.
 
 ---
 
@@ -179,7 +180,8 @@ Write the terminal command to execute this, using gzip compression.
 > **Explanation:** `mongorestore` restores BSON data dumps into target database collections.
 
 ## 7. Related Terms
-- [Database Context (Running processes)](../level_01/database_context.md) — The single `mongod` process.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The single `mongod` process.
 
 ---
 

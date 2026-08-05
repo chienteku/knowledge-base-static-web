@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Scalar Types](../level_01/scalar_types.md) — The fundamental, single-value data types (integers, floats, booleans, chars) that make up compound types.
+
+- [Scalar Types](scalar_types.md) — The fundamental, single-value data types (integers, floats, booleans, chars) that make up compound types.
 
 ---
 
@@ -519,10 +520,12 @@ Implement position translation and regional safety risk evaluation:
 
 ## 6. Related Terms
 
-- [Scalar Types](../level_01/scalar_types.md) — The individual primitive values that are placed inside compound types.
-- [Variable](../level_01/variable.md) — You bind compound types to variables just like scalar types.
+
+- [Scalar Types](scalar_types.md) — The individual primitive values that are placed inside compound types.
+- [Variable](variable.md) — You bind compound types to variables just like scalar types.
 - [Struct](../level_02/struct.md) — A more advanced way to group multiple values together using named fields instead of numbered indices.
 - [`Vec<T>`](../level_02/vec_t.md) — The heap-allocated, dynamic version of an array that *can* grow and shrink.
+- [Arrays and Slices (`[T; N]`, `&[T]`)](array_and_slice.md) — Fixed-size arrays.
 
 ---
 

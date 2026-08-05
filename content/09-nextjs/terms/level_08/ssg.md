@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The dynamic alternative to SSG.
+- [Dynamic Rendering (SSR)](ssr.md) — The dynamic alternative to SSG.
 - [React Server Components (RSC)](../level_01/rsc.md) — The components being rendered statically.
-- [`generateStaticParams` Function](../level_08/generate_static_params.md) — How dynamic paths are pre-compiled statically.
-
+- [`generateStaticParams` Function](generate_static_params.md) — How dynamic paths are pre-compiled statically.
 ---
 
 ## 2. Term Category
@@ -270,9 +269,13 @@ export const dynamic = 'force-static'; // Ensure static pre-rendering
 ---
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR) Overview](../level_01/ssr.md) — The dynamic alternative.
-- [Incremental Static Regeneration (ISR)](../level_08/isr.md) — The solution to updating SSG pages without rebuilding the whole app.
-
+- [Dynamic Rendering (SSR)](ssr.md) — The dynamic alternative.
+- [Incremental Static Regeneration (ISR)](isr.md) — The solution to updating SSG pages without rebuilding the whole app.
+- [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — Related concept: Data Caching (`force-cache`, `no-store`).
+- [`generateStaticParams` Function](generate_static_params.md) — Related concept: `generateStaticParams` Function.
+- [The Next.js Cache (The Four Caches)](next_cache.md) — Related concept: The Next.js Cache (The Four Caches).
+- [Partial Prerendering (PPR)](ppr.md) — Related concept: Partial Prerendering (PPR).
+- [Draft Mode](../level_10/draft_mode.md) — Related concept: Draft Mode.
 ---
 
 ## 8. Key Takeaways

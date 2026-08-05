@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`useMemo` Hook](../level_04/use_memo.md) — `useCallback` is basically identical, but exclusively for Functions.
+- [`useMemo` Hook](use_memo.md) — `useCallback` is basically identical, but exclusively for Functions.
 - [React.memo](../level_08/react_memo.md) — The primary reason `useCallback` exists.
-
 ---
 
 ## 2. Term Category
@@ -170,9 +169,12 @@ const handleSearch = useCallback(() => sendData(query), [query]);
 > **Explanation:** `useCallback` is a specialized `useMemo` helper for memoizing function references.
 
 ## 7. Related Terms
-- [`useMemo` Hook](../level_04/use_memo.md) — The sister hook for caching values instead of functions.
+- [`useMemo` Hook](use_memo.md) — The sister hook for caching values instead of functions.
 - [React.memo](../level_08/react_memo.md) — The primary reason you need `useCallback`.
-
+- [Dependency Array](../level_03/dependency_array.md) — Related concept: Dependency Array.
+- [Stale Closures](../level_03/stale_closures.md) — Related concept: Stale Closures.
+- [Memoization (the concept)](memoization.md) — Related concept: Memoization (the concept).
+- [Referential Equality](referential_equality.md) — Related concept: Referential Equality.
 ---
 
 ## 8. Key Takeaways

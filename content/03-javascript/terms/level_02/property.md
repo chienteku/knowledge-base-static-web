@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Object](../level_02/object.md) — A collection of key-value pairs.
-
+- [Object](object.md) — A collection of key-value pairs.
 ---
 
 ## 2. Term Category
@@ -198,9 +197,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Object](../level_02/object.md) — The container that holds properties.
-- [Method](../level_02/method.md) — A specific type of property where the value is a function.
-
+- [Object](object.md) — The container that holds properties.
+- [Method](method.md) — A specific type of property where the value is a function.
 ---
 
 ## 8. Key Takeaways

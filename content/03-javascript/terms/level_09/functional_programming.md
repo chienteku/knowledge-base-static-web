@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Pure Function & Side Effects](../level_03/pure_function.md) — The function design pattern requiring immutability and no side-effects.
-
 ---
 
 ## 2. Term Category
@@ -233,9 +232,9 @@ console.log(typeof mathPipeline(12)); // "string"
 ---
 
 ## 7. Related Terms
-- [Currying](./currying.md) — Splitting parameters to prepare functions for composition.
-- [Partial Application](./partial_application.md) — Pre-filling function parameters.
-
+- [Currying](currying.md) — Splitting parameters to prepare functions for composition.
+- [Partial Application](partial_application.md) — Pre-filling function parameters.
+- [Pure Function & Side Effects](../level_03/pure_function.md) — Related concept: Pure Function & Side Effects.
 ---
 
 ## 8. Key Takeaways

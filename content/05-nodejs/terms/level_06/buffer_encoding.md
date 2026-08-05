@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Buffers](./buffers.md) — The raw binary memory arrays undergoing translation.
-
+- [Buffers](buffers.md) — The raw binary memory arrays undergoing translation.
 ---
 
 ## 2. Term Category
@@ -207,9 +206,8 @@ function decodeHexFile(filePath) {
 > **Explanation:** `StringDecoder` buffers partial multi-byte UTF-8 bytes to prevent text corruption.
 
 ## 7. Related Terms
-- [Buffers](./buffers.md) — The raw byte structure translated by encodings.
-- [Data Chunks](./chunks.md) — The chunk payloads that risk character boundary corruption.
-
+- [Buffers](buffers.md) — The raw byte structure translated by encodings.
+- [Data Chunks](chunks.md) — The chunk payloads that risk character boundary corruption.
 ---
 
 ## 8. Key Takeaways

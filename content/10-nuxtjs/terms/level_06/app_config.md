@@ -7,8 +7,6 @@
 
 ## 1. Prerequisites
 - [Auto-imports](../level_01/auto_imports.md) — How the app config is exposed to components.
-- Vue Reactivity ([`ref` / `reactive`](../../../07-vue/terms/level_02/ref.md)) — Understanding dynamic reactive objects.
-
 ---
 
 ## 2. Term Category
@@ -192,9 +190,8 @@ export default defineAppConfig({
 ---
 
 ## 7. Related Terms
-- [Runtime Config (`useRuntimeConfig`)](../level_06/runtime_config.md) — The secure alternative used for private API keys and `.env` variables.
-- [`nuxt.config.ts`](../level_06/nuxt_config.md) — The build-time framework configuration file.
-
+- [Runtime Config (`useRuntimeConfig`)](runtime_config.md) — The secure alternative used for private API keys and `.env` variables.
+- [`nuxt.config.ts`](nuxt_config.md) — The build-time framework configuration file.
 ---
 
 ## 8. Key Takeaways

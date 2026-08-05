@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [JavaScript / TypeScript SDK](js_sdk.md) — The `surrealdb` client package.
 - [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Parameterized query security.
 - [Parameters (`$param`)](../level_06/parameters.md) — Parameter binding syntax.
@@ -226,6 +227,7 @@ Write a `.query()` call that fetches all records from table `invoice` where `amo
 > **Explanation:** `db.query()` returns array elements corresponding to each semicolon-separated statement.
 
 ## 7. Related Terms
+
 - [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Security protections.
 - [SDK CRUD Methods (`.select()` / `.create()` / `.update()` / `.delete()`)](sdk_crud.md) — High-level CRUD alternative.
 - [Parameters (`$param`)](../level_06/parameters.md) — Parameter syntax details.

@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [API (Application Programming Interface)](../level_03/api.md) — The core interface connection concepts.
 - [REST (Representational State Transfer)](../level_03/rest.md) — The resource-focused communication style.
-
 ---
 
 ## 2. Term Category
@@ -171,9 +170,8 @@ Imagine tools used for repair.
 ---
 
 ## 7. Related Terms
-- [API Gateway](./api_gateway.md) — The routing entry point used to coordinate microservices traffic.
-- [Load Balancing](./load_balancing.md) — The process of distributing incoming requests to scaled service instances.
-
+- [API Gateway](api_gateway.md) — The routing entry point used to coordinate microservices traffic.
+- [Load Balancing](load_balancing.md) — The process of distributing incoming requests to scaled service instances.
 ---
 
 ## 8. Key Takeaways

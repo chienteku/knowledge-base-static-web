@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`String` vs `&str`](../level_01/string_vs_&str.md) — The most famous example of a fixed vs dynamic type.
+
+- [String vs &str](../level_01/string_vs_&str.md) — The most famous example of a fixed vs dynamic type.
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The other incredibly common DST.
 
 ---
@@ -523,8 +524,10 @@ By default, generic functions in Rust implicitly bound type parameters with `T: 
 
 ## 6. Related Terms
 
-- [`Sized` Trait](../level_11/sized_trait.md) — The invisible auto-trait the compiler uses to track if a type is fixed-size or a DST.
+
+- [`Sized` Trait](sized_trait.md) — The invisible auto-trait the compiler uses to track if a type is fixed-size or a DST.
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — The most common DST other than strings and slices.
+- [Stack vs Heap](../level_15/stack_vs_heap.md) — Related concept: Stack vs Heap.
 
 ---
 

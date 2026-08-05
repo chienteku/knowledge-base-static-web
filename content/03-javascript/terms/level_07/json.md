@@ -9,7 +9,6 @@
 - [Object](../level_02/object.md) — The base key-value data structure.
 - [Array](../level_02/array.md) — Ordered list structures.
 - [String](../level_01/string.md) — Plain-text characters representing data.
-
 ---
 
 ## 2. Term Category
@@ -241,10 +240,11 @@ console.log(result);
 ---
 
 ## 7. Related Terms
-- [Web Storage (`localStorage` / `sessionStorage`)](../level_05/web_storage.md) — Persistent storage APIs that only accept string values, relying on JSON for objects.
-- [Shallow Copy vs Deep Copy](./shallow_vs_deep_copy.md) — The copy behaviors that often use JSON serialization as a quick deep-cloning mechanism.
+- [Web Storage (localStorage / sessionStorage)](../level_05/web_storage.md) — Persistent storage APIs that only accept string values, relying on JSON for objects.
+- [Shallow Copy vs Deep Copy](shallow_vs_deep_copy.md) — The copy behaviors that often use JSON serialization as a quick deep-cloning mechanism.
 - [Fetch API](../level_06/fetch_api.md) — The network client request API that frequently parses response streams using `.json()`.
-
+- [Date object](../level_02/date_object.md) — Related concept: Date object.
+- [structuredClone](../level_09/structuredclone.md) — Related concept: structuredClone.
 ---
 
 ## 8. Key Takeaways

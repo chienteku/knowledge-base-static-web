@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [State](../level_02/state.md) — The dynamic data being shared.
-- [Props](../level_01/props.md) — The vehicle used to pass state and setters down.
-- [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — The top-down data flow rules.
-
+- [State](state.md) — The dynamic data being shared.
+- [Props (Properties)](../level_01/props.md) — The vehicle used to pass state and setters down.
+- [Unidirectional Data Flow](unidirectional_flow.md) — The top-down data flow rules.
 ---
 
 ## 2. Term Category
@@ -242,7 +241,8 @@ function SyncParent() {
 ## 7. Related Terms
 - [Prop Drilling](../level_06/prop_drilling.md) — The code maintainability cost of lifting state too high.
 - [The Context API](../level_06/context_api.md) — The alternative state sharing mechanism for deeply nested trees.
-
+- [Props (Properties)](../level_01/props.md) — Passing state down via props.
+- [State Management (Redux / Zustand)](../level_06/state_management.md) — State management patterns.
 ---
 
 ## 8. Key Takeaways

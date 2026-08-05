@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Class](./class.md) — Syntactic sugar blueprint over prototypal inheritance.
+- [Class](class.md) — Syntactic sugar blueprint over prototypal inheritance.
 - [Closure](../level_03/closure.md) — The function scope scope pattern that enables data encapsulation.
-
 ---
 
 ## 2. Term Category
@@ -241,8 +240,8 @@ console.log("Unlock correct:", lock.unlock("secret123")); // true
 ---
 
 ## 7. Related Terms
-- [Getters & Setters](./getters_setters.md) — Properties used to control private backing field reads and writes.
-
+- [Getters & Setters](getters_setters.md) — Properties used to control private backing field reads and writes.
+- [Symbol](../level_08/symbol.md) — Related concept: Symbol.
 ---
 
 ## 8. Key Takeaways

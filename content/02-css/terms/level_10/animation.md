@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [`transition`](transition.md) — The baseline two-state animation tool.
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The visual coordinates manipulated by animations.
-
 ---
 
 ## 2. Term Category
@@ -345,7 +344,6 @@ Single slide-in loading overlay:
 ## 7. Related Terms
 - [`transition`](transition.md) — Two-state animated shifts.
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The positioning multipliers.
-
 ---
 
 ## 8. Key Takeaways

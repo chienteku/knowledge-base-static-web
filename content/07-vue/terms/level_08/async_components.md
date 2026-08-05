@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — What is being loaded.
 - [Vite](../level_10/vite.md) — The build tools that split the code into chunks.
-
 ---
 
 ## 2. Term Category
@@ -179,10 +178,11 @@ const AsyncComp = defineAsyncComponent({
 ---
 
 ## 7. Related Terms
-- [`v-if`](../level_03/v_if_show.md) — Used to trigger the rendering (and downloading) of the async component.
+- [`v-if` / `v-show`](../level_03/v_if_show.md) — Used to trigger the rendering (and downloading) of the async component.
 - [Vue Router](../level_06/vue_router.md) — The most common place lazy loading is used.
 - [`<Suspense>` (Vue)](../level_05/suspense.md) — The wrapper component that coordinates loading states for async components.
-
+- [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Related concept: Dynamic Components (`<component :is>`).
+- [KeepAlive](keepalive.md) — Related concept: KeepAlive.
 ---
 
 ## 8. Key Takeaways

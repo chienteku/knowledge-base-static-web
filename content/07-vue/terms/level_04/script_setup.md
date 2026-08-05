@@ -7,9 +7,8 @@
 
 ## 1. Prerequisites
 - [Composition API](../level_01/composition_api.md) — The functional state-management model.
-- [Components](../level_04/components.md) — The visual units of a Vue application.
-- [SFCs](../level_04/sfc.md) — Single-File Components (`.vue` files).
-
+- [Components](components.md) — The visual units of a Vue application.
+- [Single-File Components (SFCs)](sfc.md) — Single-File Components (`.vue` files).
 ---
 
 ## 2. Term Category
@@ -304,9 +303,10 @@ export default {
 
 ## 7. Related Terms
 - [Composition API](../level_01/composition_api.md) — The underlying reactivity paradigm.
-- [Props](../level_04/props.md) — Custom configuration values passed into components.
-- [Emitting Events](../level_04/emit.md) — Raising custom DOM and application triggers.
-
+- [Props](props.md) — Custom configuration values passed into components.
+- [Emitting Events (`defineEmits`)](emit.md) — Raising custom DOM and application triggers.
+- [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
+- [Single-File Components (SFCs)](sfc.md) — Related concept: Single-File Components (SFCs).
 ---
 
 ## 8. Key Takeaways

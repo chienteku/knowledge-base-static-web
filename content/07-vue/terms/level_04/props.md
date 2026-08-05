@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Components](../level_04/components.md) — The entities passing data to each other.
+- [Components](components.md) — The entities passing data to each other.
 - [`v-bind`](../level_03/v_bind.md) — The directive used to pass dynamic variables as props.
-
 ---
 
 ## 2. Term Category
@@ -189,10 +188,15 @@ defineProps({
 ---
 
 ## 7. Related Terms
-- [Emitting Events](../level_04/emit.md) — The opposite of Props. (Props go down, Events go up).
+- [Emitting Events (`defineEmits`)](emit.md) — The opposite of Props. (Props go down, Events go up).
 - [`v-bind`](../level_03/v_bind.md) — The directive used to pass reactive variables as props.
-- [Fallthrough Attributes (`$attrs`)](../level_04/fallthrough_attributes.md) — How undeclared attributes pass through components.
-
+- [Fallthrough Attributes (`$attrs`)](fallthrough_attributes.md) — How undeclared attributes pass through components.
+- [Components](components.md) — Related concept: Components.
+- [`<script setup>` & Compiler Macros](script_setup.md) — Related concept: `<script setup>` & Compiler Macros.
+- [Provide / Inject](../level_05/provide_inject.md) — Related concept: Provide / Inject.
+- [Slots](../level_05/slots.md) — Related concept: Slots.
+- [State Management](../level_07/state_management.md) — Related concept: State Management.
+- [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
 ---
 
 ## 8. Key Takeaways

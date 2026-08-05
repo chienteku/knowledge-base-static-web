@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<audio>`](../level_03/audio.md) — The video tag works almost exactly like the audio tag.
-- [`src` Attribute](../level_03/src.md) — The source loader used to point to the video file resource.
-
+- [`<audio>`](audio.md) — The video tag works almost exactly like the audio tag.
+- [`src` Attribute](src.md) — The source loader used to point to the video file resource.
 ---
 
 ## 2. Term Category
@@ -167,11 +166,10 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 > **Explanation:** `poster` specifies image preview displayed before video playback begins.
 
 ## 7. Related Terms
-- [`src` Attribute](../level_03/src.md) — The attribute defining the video source.
-- [`<source>` Element](../level_03/source.md) — The child element used for multi-format video sources.
-- [`<audio>`](../level_03/audio.md) — The sound-only sibling to the video tag.
-- [`<img>`](../level_03/img.md) — The image tag related to the `poster` thumbnail.
-
+- [`src` Attribute](src.md) — The attribute defining the video source.
+- [`<source>` Element](source.md) — The child element used for multi-format video sources.
+- [`<audio>`](audio.md) — The sound-only sibling to the video tag.
+- [`<img>`](img.md) — The image tag related to the `poster` thumbnail.
 ---
 
 ## 8. Key Takeaways

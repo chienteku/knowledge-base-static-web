@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [NPM](../level_04/npm.md) — Express is an external module, so you must download it.
-- [The `http` Module](../level_07/http_deep_dive.md) — The core Node.js module that Express wraps and improves.
-
+- [NPM (Node Package Manager)](../level_04/npm.md) — Express is an external module, so you must download it.
+- [The http Module Deep Dive](http_deep_dive.md) — The core Node.js module that Express wraps and improves.
 ---
 
 ## 2. Term Category
@@ -262,9 +261,12 @@ app.get('/data', async (req, res, next) => {
 > **Explanation:** Express 5 natively catches rejected async promises automatically.
 
 ## 7. Related Terms
-- [Routing](../level_07/routing.md) — The feature Express uses `app.get` and `app.post` for.
-- [Middleware](../level_07/middleware.md) — The most powerful feature of the Express framework.
-
+- [Routing](routing.md) — The feature Express uses `app.get` and `app.post` for.
+- [Middleware](middleware.md) — The most powerful feature of the Express framework.
+- [The http Module](../level_02/http_module.md) — Related concept: The http Module.
+- [The http Module Deep Dive](http_deep_dive.md) — Related concept: The http Module Deep Dive.
+- [The req & res Objects](req_res.md) — Request and Response parameters.
+- [CORS](../level_09/cors.md) — Related concept: CORS.
 ---
 
 ## 8. Key Takeaways

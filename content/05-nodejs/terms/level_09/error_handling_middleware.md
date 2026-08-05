@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [The Middleware Chain & next()](../level_07/middleware_chain.md) — The routing conveyor belt.
-- [Async Error Handling](../level_05/async_error_handling.md) — Trapping async errors before forwarding them.
-
+- [Async Error Handling (try/catch + .catch)](../level_05/async_error_handling.md) — Trapping async errors before forwarding them.
 ---
 
 ## 2. Term Category
@@ -311,8 +310,8 @@ app.use((err, req, res, next) => {
 
 ## 7. Related Terms
 - [The Middleware Chain & next()](../level_07/middleware_chain.md) — The middleware queue structure.
-- [Async Error Handling](../level_05/async_error_handling.md) — Catching async errors to pass them to `next(err)`.
-
+- [Async Error Handling (try/catch + .catch)](../level_05/async_error_handling.md) — Catching async errors to pass them to `next(err)`.
+- [Controllers & Services](controllers_services.md) — Related concept: Controllers & Services.
 ---
 
 ## 8. Key Takeaways

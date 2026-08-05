@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Database Context (Running processes)](../level_01/database_context.md) — The target `mongod` port.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The target `mongod` port.
 - [Authentication & Authorization (SCRAM, RBAC)](auth.md) — Credentials validation.
 
 ---
@@ -203,8 +204,10 @@ mongodb+srv://user:pass@cluster0.mongodb.net/app // Correct SRV scheme for Atlas
 > **Explanation:** Connection URI query string parameters set driver configuration flags.
 
 ## 7. Related Terms
+
 - [Authentication & Authorization (SCRAM, RBAC)](auth.md) — Credentials validation.
 - [MongoDB Node.js Driver](node_driver.md) — The executing driver.
+- [Connection Pooling](connection_pooling.md) — Related concept: Connection Pooling.
 
 ---
 

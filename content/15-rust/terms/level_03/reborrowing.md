@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The exclusivity rule reborrowing and two-phase borrows both interact with.
+
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The exclusivity rule reborrowing and two-phase borrows both interact with.
 - [Non-Lexical Lifetimes (NLL)](../level_05/non_lexical_lifetimes.md) — A closely related borrow-checker precision improvement from the same era.
 - [Method](../level_02/method.md) — The call-site shape (`vec.push(...)`) where two-phase borrows matter most.
 
@@ -705,7 +706,8 @@ Implement a const-generic `RingBuffer<T, const N: usize>` struct supporting `pus
 
 ## 6. Related Terms
 
-- [Mutable Borrowing (`&mut`)](../level_03/mutable_borrowing.md) — The exclusivity rule both of these features carefully refine without weakening.
+
+- [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — The exclusivity rule both of these features carefully refine without weakening.
 - [Non-Lexical Lifetimes (NLL)](../level_05/non_lexical_lifetimes.md) — A sibling borrow-checker precision improvement from the same 2018-edition era.
 - [Method](../level_02/method.md) — The `receiver.method(args)` call shape where two-phase borrows specifically apply.
 

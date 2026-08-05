@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Replica Set](replica_set.md) — The parent cluster architecture.
 
 ---
@@ -195,6 +196,7 @@ Deploy at most 1 Arbiter per replica set cluster
 > **Explanation:** Node roles define data replication responsibilities and election voting rights.
 
 ## 7. Related Terms
+
 - [Replica Set](replica_set.md) — The parent cluster architecture.
 - [Automatic Failover & Elections](failover_elections.md) — The election process.
 

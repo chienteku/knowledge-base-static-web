@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Authentication Architecture](auth_architecture.md) — The 4-tier security hierarchy.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The 4-tier security hierarchy.
 - [Namespace & Database](../level_01/namespace_database.md) — Logical database boundary isolation.
 
 ---
@@ -197,7 +198,8 @@ Write a `DEFINE USER` statement that creates a database user named `support_agen
 > **Explanation:** Built-in system roles specify administrative privilege levels.
 
 ## 7. Related Terms
-- [Authentication Architecture](auth_architecture.md) — The overall 4-tier security system.
+
+- [Authentication Architecture (Root, Namespace, Database, Record)](auth_architecture.md) — The overall 4-tier security system.
 - [Record Access (`DEFINE ACCESS ... TYPE RECORD`)](define_access_record.md) — Contrast with end-user table authentication.
 - [SurrealQL Injection Prevention](injection_prevention.md) — Security best practices.
 

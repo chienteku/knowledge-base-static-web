@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`while` Loop](../level_02/while_loop.md) — A loop that executes as long as a condition is true.
-
+- [while Loop](while_loop.md) — A loop that executes as long as a condition is true.
 ---
 
 ## 2. Term Category
@@ -211,9 +210,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`while` Loop](../level_02/while_loop.md) — The standard while loop that checks the condition first.
-- [`for` Loop](../level_02/for_loop.md) — A loop for iterating a specific number of times.
-
+- [while Loop](while_loop.md) — The standard while loop that checks the condition first.
+- [for Loop](for_loop.md) — A loop for iterating a specific number of times.
 ---
 
 ## 8. Key Takeaways

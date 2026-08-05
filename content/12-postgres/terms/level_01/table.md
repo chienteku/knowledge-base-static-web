@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Relational Database](relational_database.md) — The parent database model.
-
 ---
 
 ## 2. Term Category
@@ -180,7 +179,10 @@ ALTER TABLE heavy_table ADD COLUMN new_col INT DEFAULT 0;
 - [Row (Record / Tuple)](row.md) — The horizontal table entries.
 - [Column (Field / Attribute)](column.md) — The vertical table columns.
 - [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — The table lifecycle SQL commands.
-
+- [Relational Database](relational_database.md) — Related concept: Relational Database.
+- [Schema](schema.md) — Related concept: Schema.
+- [`INSERT INTO`](../level_03/insert_into.md) — Related concept: `INSERT INTO`.
+- [Foreign Data Wrappers (`postgres_fdw`)](../level_10/foreign_data_wrappers.md) — Related concept: Foreign Data Wrappers (`postgres_fdw`).
 ---
 
 ## 8. Key Takeaways

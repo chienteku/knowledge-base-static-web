@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Union Types](../level_05/union_types.md) — The exact opposite concept.
+- [Union Types (`|`)](union_types.md) — The exact opposite concept.
 - [Object Types](../level_03/object_types.md) — What Intersection Types are almost exclusively used for.
-
 ---
 
 ## 2. Term Category
@@ -164,9 +163,9 @@ type AB = A & B; // Compatible property types merge safely
 > **Explanation:** Intersecting function types creates an overloaded function signature.
 
 ## 7. Related Terms
-- [Union Types](../level_05/union_types.md) — The OR operator.
+- [Union Types (`|`)](union_types.md) — The OR operator.
 - [Interfaces](../level_03/interfaces.md) — The alternative way to combine object shapes (using `extends`).
-
+- [Branded / Nominal Types](../level_09/branded_nominal_types.md) — Related concept: Branded / Nominal Types.
 ---
 
 ## 8. Key Takeaways

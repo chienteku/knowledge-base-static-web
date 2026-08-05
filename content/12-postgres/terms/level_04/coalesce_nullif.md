@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [NULL](../level_02/null.md) — The absent state we are validating.
-
+- [`NULL`](../level_02/null.md) — The absent state we are validating.
 ---
 
 ## 2. Term Category
@@ -204,9 +203,9 @@ SELECT COALESCE(created_at::TEXT, 'N/A') FROM users;
 > **Explanation:** `COALESCE()` evaluates arguments sequentially, returning the first non-null value.
 
 ## 7. Related Terms
-- [NULL](../level_02/null.md) — The parent absent state.
+- [`NULL`](../level_02/null.md) — The parent absent state.
 - [Type Casting (`CAST` / `::`)](type_casting.md) — Converting data types inside functions.
-
+- [`NULL` Behavior in Expressions & Aggregates](null_in_aggregates.md) — Related concept: `NULL` Behavior in Expressions & Aggregates.
 ---
 
 ## 8. Key Takeaways

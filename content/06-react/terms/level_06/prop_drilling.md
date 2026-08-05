@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Props](../level_01/props.md) — The vehicle being drilled.
+- [Props (Properties)](../level_01/props.md) — The vehicle being drilled.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — The strict rule that forces Prop Drilling to exist in the first place.
-
 ---
 
 ## 2. Term Category
@@ -164,9 +163,11 @@ Which components are the "middlemen" suffering from prop drilling?
 > **Explanation:** Deep prop chains complicate refactoring and pollute intermediate component APIs.
 
 ## 7. Related Terms
-- [The Context API](../level_06/context_api.md) — The official React feature designed to bypass Prop Drilling.
-- [State Management](../level_06/state_management.md) — Third-party libraries (Zustand/Redux) designed to solve this exact problem at scale.
-
+- [The Context API](context_api.md) — The official React feature designed to bypass Prop Drilling.
+- [State Management (Redux / Zustand)](state_management.md) — Third-party libraries (Zustand/Redux) designed to solve this exact problem at scale.
+- [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
+- [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — Related concept: Unidirectional Data Flow.
+- [`useContext` Hook](use_context.md) — Related concept: `useContext` Hook.
 ---
 
 ## 8. Key Takeaways

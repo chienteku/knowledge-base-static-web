@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The unscoped thread-creation function this feature extends.
+
+- [`std::thread::spawn`](std_thread_spawn.md) — The unscoped thread-creation function this feature extends.
 - [`'static` Lifetime](../level_05/static_lifetime.md) — The requirement scoped threads specifically relax.
 - [`Arc<T>`](../level_03/arc_t.md) — The workaround scoped threads often let you avoid entirely.
 
@@ -547,10 +548,11 @@ Implement `run_scoped_pipeline(data: &[DataPoint], lookup: &HashMap<String, u64>
 
 ## 6. Related Terms
 
-- [`std::thread::spawn`](../level_09/std_thread_spawn.md) — The unscoped primitive this API builds on and relaxes the `'static` requirement of.
+
+- [`std::thread::spawn`](std_thread_spawn.md) — The unscoped primitive this API builds on and relaxes the `'static` requirement of.
 - [`'static` Lifetime](../level_05/static_lifetime.md) — The specific constraint scoped threads let you bypass.
 - [`Arc<T>`](../level_03/arc_t.md) — The common (now often unnecessary) workaround for sharing data with unscoped threads.
-- [RAII](../level_18/raii.md) — The `scope` function's "block until all threads join" behavior is itself an RAII-style guarantee, enforced by the API's structure rather than a `Drop` impl.
+- [RAII (Resource Acquisition Is Initialization)](../level_18/raii.md) — The `scope` function's "block until all threads join" behavior is itself an RAII-style guarantee, enforced by the API's structure rather than a `Drop` impl.
 
 ---
 

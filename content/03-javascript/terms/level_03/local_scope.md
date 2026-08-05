@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Scope](../level_03/scope.md) — The current context of execution.
-- [Function](../level_03/function.md) — A reusable block of code.
-
+- [Scope](scope.md) — The current context of execution.
+- [Function](function.md) — A reusable block of code.
 ---
 
 ## 2. Term Category
@@ -218,9 +217,9 @@ function processData(price) {
 ---
 
 ## 7. Related Terms
-- [Scope](../level_03/scope.md) — The general concept of variable visibility.
-- [Global Scope](../level_03/global_scope.md) — The outermost scope.
-
+- [Scope](scope.md) — The general concept of variable visibility.
+- [Global Scope](global_scope.md) — The outermost scope.
+- [Block Scope](block_scope.md) — Related concept: Block Scope.
 ---
 
 ## 8. Key Takeaways

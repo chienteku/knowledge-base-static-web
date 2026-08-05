@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Trait](../level_04/trait.md) — The contract being implemented.
-- [Derive Macro](../level_04/derive_macro.md) — How you get these traits for free 99% of the time.
-- [Expressions (`==`)](../level_01/expressions.md) — The operators that these traits unlock.
+
+- [Trait](trait.md) — The contract being implemented.
+- [Derive Macro](derive_macro.md) — How you get these traits for free 99% of the time.
+- [Expressions](../level_01/expressions.md) — The operators that these traits unlock.
 
 ---
 
@@ -532,8 +533,12 @@ To enable dynamic equality checking across trait objects:
 
 ## 6. Related Terms
 
-- [`PartialOrd` / `Ord`](../level_04/partialord_ord.md) — The sister traits used for Greater Than (`>`) and Less Than (`<`) operators.
-- [Derive Macro](../level_04/derive_macro.md) — How you get `PartialEq` and `Eq` for free 99% of the time.
+
+- [`PartialOrd` / `Ord`](partialord_ord.md) — The sister traits used for Greater Than (`>`) and Less Than (`<`) operators.
+- [Derive Macro](derive_macro.md) — How you get `PartialEq` and `Eq` for free 99% of the time.
+- [`Hash` Trait](../level_02/hash_trait.md) — Related concept: `Hash` Trait.
+- [`matches!` Macro](../level_02/matches_macro.md) — Related concept: `matches!` Macro.
+- [`assert!` Macros](../level_08/assert_macros.md) — Related concept: `assert!` / `assert_eq!` / `assert_ne!`.
 
 ---
 

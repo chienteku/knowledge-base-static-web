@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Embedding vs. Referencing](embedding_vs_referencing.md) — The parent modeling framework.
 - [Array](../level_02/array_type.md) — Nested collection arrays.
 
@@ -204,8 +205,10 @@ Embed addresses array directly inside user document: { addresses: [{ street, cit
 > **Explanation:** Child documents store parent ObjectIds to support unbounded 1-to-Many relationships.
 
 ## 7. Related Terms
-- [Embedding vs Referencing](embedding_vs_referencing.md) — Core pattern framework.
+
+- [Embedding vs. Referencing](embedding_vs_referencing.md) — Core pattern framework.
 - [Document Size Limit (16 MB)](document_size_limit.md) — The critical size ceiling.
+- [Many-to-Many Relationship](many_to_many.md) — Related concept: Many-to-Many Relationship.
 
 ---
 

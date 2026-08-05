@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
+
 - [Associated Types](../level_04/associated_types.md) — Standard associated types in traits (`type Item`).
-- [Lifetime](../level_05/lifetime.md) — Understanding lifetime parameters (`'a`), reference borrowing, and scope relationships.
-- [Iterator (`Iterator`)](../level_02/iterator.md) — Standard Rust iterator abstraction.
+- [Lifetime (`'a`)](../level_05/lifetime.md) — Understanding lifetime parameters (`'a`), reference borrowing, and scope relationships.
+- [Iterator](../level_02/iterator.md) — Standard Rust iterator abstraction.
 
 ---
 
@@ -523,10 +524,11 @@ Implement a `LendingIterator` trait utilizing a Generic Associated Type (GAT) li
 
 ## 7. Related Terms
 
+
 - [Associated Types](../level_04/associated_types.md) — Standard non-generic associated types in traits.
-- [Lifetime](../level_05/lifetime.md) — Scope duration parameters used in GAT definitions.
-- [Iterator (`Iterator`)](../level_02/iterator.md) — Standard iterator trait contrasted against GAT lending iterators.
-- [Type-State Pattern](../level_14/type_state_pattern.md) — Advanced type system design pattern.
+- [Lifetime (`'a`)](../level_05/lifetime.md) — Scope duration parameters used in GAT definitions.
+- [Iterator](../level_02/iterator.md) — Standard iterator trait contrasted against GAT lending iterators.
+- [Type-State Pattern](type_state_pattern.md) — Advanced type system design pattern.
 
 ---
 

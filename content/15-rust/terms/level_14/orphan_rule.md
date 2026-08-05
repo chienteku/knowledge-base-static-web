@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Standard trait definitions and `impl Trait for Type` blocks.
+
+- [Trait](../level_04/trait.md) — Standard trait definitions and `impl Trait for Type` blocks.
 - [Newtype Pattern](../level_11/newtype_pattern.md) — The primary design pattern used to bypass the Orphan Rule.
 
 ---
@@ -533,10 +534,11 @@ Directly attempting `impl std::fmt::Display for std::time::Duration` triggers co
 
 ## 7. Related Terms
 
-- [Coherence](../level_14/coherence.md) — The global non-ambiguity guarantee enforced by the Orphan Rule.
+
+- [Coherence](coherence.md) — The global non-ambiguity guarantee enforced by the Orphan Rule.
 - [Newtype Pattern](../level_11/newtype_pattern.md) — The idiomatic tuple struct wrapper used to bypass Orphan Rule restrictions.
-- [Blanket Implementation](../level_14/blanket_implementation.md) — Generic trait implementations governed by coherence and orphan rules.
-- [Traits](../level_04/trait.md) — The interface abstraction system governed by coherence.
+- [Blanket Implementation](blanket_implementation.md) — Generic trait implementations governed by coherence and orphan rules.
+- [Trait](../level_04/trait.md) — The interface abstraction system governed by coherence.
 
 ---
 

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Serialization / Deserialization](../level_07/serialization.md) — The theoretical concepts these methods execute.
-- [JSON](../level_01/json.md) — The text format these methods work with.
-
+- [Serialization & Deserialization](serialization.md) — The theoretical concepts these methods execute.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The text format these methods work with.
 ---
 
 ## 2. Term Category
@@ -165,8 +164,12 @@ console.log(stringified);
 ---
 
 ## 7. Related Terms
-- [Web Storage (localStorage)](../level_09/web_storage.md) — A browser API that can ONLY store strings, making `JSON.stringify` mandatory when saving objects.
-
+- [localStorage & sessionStorage](../level_09/web_storage.md) — A browser API that can ONLY store strings, making `JSON.stringify` mandatory when saving objects.
+- [Bulk / Batch Requests](../level_06/batch_requests.md) — Related concept: Bulk / Batch Requests.
+- [Binary vs Text Formats](binary_vs_text_formats.md) — Related concept: Binary vs Text Formats.
+- [Deserialization / Parsing](deserialization.md) — Related concept: Deserialization / Parsing.
+- [Serialization & Deserialization](serialization.md) — Related concept: Serialization & Deserialization.
+- [Storage Serialization](../level_09/storage_serialization.md) — Related concept: Storage Serialization.
 ---
 
 ## 8. Key Takeaways

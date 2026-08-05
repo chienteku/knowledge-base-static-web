@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Data Types (Overview)](data_types.md) — The parent type system.
 
 ---
@@ -201,7 +202,9 @@ Write the SurrealQL query to retrieve only the `name` and the nested `office` ph
 
 ## 7. Related Terms
 
+
 - [SurrealDB](../level_01/surrealdb.md)
+- [Destructuring & Object Notation in SELECT](../level_06/destructuring_select.md) — Related concept: Destructuring & Object Notation in SELECT.
 
 ---
 

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Async / Await](../level_09/async_await.md) — Rust's async language primitives.
-- [Future Trait](../level_10/future_trait.md) — The core asynchronous trait polled by `tokio`'s reactor.
-- [Channels (mpsc/oneshot)](../level_09/channels_mpsc_oneshot.md) — Asynchronous synchronization primitives.
+
+- [`async` / `.await`](../level_09/async_await.md) — Rust's async language primitives.
+- [`Future` Trait](../level_10/future_trait.md) — The core asynchronous trait polled by `tokio`'s reactor.
+- [Channels (`mpsc`, `oneshot`)](../level_09/channels_mpsc_oneshot.md) — Asynchronous synchronization primitives.
 
 ---
 
@@ -445,6 +446,14 @@ Implement a service where:
 > 1. **`tokio::task::spawn_blocking`:** Delegates CPU-bound or synchronous blocking tasks to a separate OS thread pool managed by Tokio, preserving reactor threads for non-blocking I/O.
 > 2. **`tokio::sync::watch` Channel:** Efficient single-producer, multi-consumer state broadcast channel where receivers observe state change notifications without queuing historical values.
 > 3. **`rx.changed().await` & `rx.borrow()`:** `changed()` yields asynchronously when a new value is sent, while `borrow()` provides zero-copy read access to the current shared state.
+
+---
+
+---
+
+## 6. Related Terms
+
+- [`Read` / `Write` / `BufRead` Traits](../level_04/read_write_bufread.md) — Related concept: `Read` / `Write` / `BufRead` Traits.
 
 ---
 

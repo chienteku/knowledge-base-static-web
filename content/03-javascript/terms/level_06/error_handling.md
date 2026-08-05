@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
 - [Function](../level_03/function.md) — A reusable block of code designed to perform a task.
-
 ---
 
 ## 2. Term Category
@@ -262,10 +261,9 @@ console.log("Result:", processedInput);
 ---
 
 ## 7. Related Terms
-- [`throw` statement](./throw_statement.md) — The keyword used to raise exceptions.
-- [`Error` object & Error Types](./error_object.md) — The metadata wrapper representing runtime failures.
-- [`try/catch` with `async/await`](./try_catch_async_await.md) — Handling asynchronous errors in synchronous-looking code.
-
+- [throw statement](throw_statement.md) — The keyword used to raise exceptions.
+- [Error object & Error Types](error_object.md) — The metadata wrapper representing runtime failures.
+- [try/catch with async/await](try_catch_async_await.md) — Handling asynchronous errors in synchronous-looking code.
 ---
 
 ## 8. Key Takeaways

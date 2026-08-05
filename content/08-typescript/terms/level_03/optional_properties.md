@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Interfaces](../level_03/interfaces.md) — Where optional properties are usually defined.
-
+- [Interfaces](interfaces.md) — Where optional properties are usually defined.
 ---
 
 ## 2. Term Category
@@ -169,9 +168,11 @@ function logBio(u: User) { return u.bio?.toUpperCase(); }
 > **Explanation:** Destructuring default initializers handle missing optional properties gracefully.
 
 ## 7. Related Terms
-- [Interfaces](../level_03/interfaces.md) — The parent structure.
+- [Interfaces](interfaces.md) — The parent structure.
 - [Type Narrowing](../level_06/type_narrowing.md) — How you safely interact with an optional property.
-
+- [Object Types](object_types.md) — Related concept: Object Types.
+- [Optional & Default Parameters](../level_04/optional_default_parameters.md) — Related concept: Optional & Default Parameters.
+- [`Partial<T>` & `Required<T>`](../level_08/partial_required.md) — Related concept: `Partial<T>` & `Required<T>`.
 ---
 
 ## 8. Key Takeaways

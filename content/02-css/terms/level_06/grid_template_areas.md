@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — The parent track properties that establish the grid cell structure.
-- [`grid-column` / `grid-row` (Grid Item Placement)](../level_06/grid_item.md) — Understanding the child-level placement system it overrides.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent track properties that establish the grid cell structure.
+- [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Understanding the child-level placement system it overrides.
 ---
 
 ## 2. Term Category
@@ -362,9 +361,9 @@ grid-template-areas:
 > **Explanation:** Period `.` tokens represent empty grid cell slots.
 
 ## 7. Related Terms
-- [`grid-template-columns` / `grid-template-rows`](../level_06/grid_template.md) — Sizing the track grid.
-- [`grid-column` / `grid-row`](../level_06/grid_item.md) — Placing items manually.
-
+- [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Sizing the track grid.
+- [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Placing items manually.
+- [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Related concept: CSS Grid (Concept) & `display: grid`.
 ---
 
 ## 8. Key Takeaways

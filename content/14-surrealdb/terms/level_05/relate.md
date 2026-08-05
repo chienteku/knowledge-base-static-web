@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Graph Connections (Overview: Nodes vs Edges)](graph_overview.md) — The parent paradigm.
+- [Record Link (Concept)](record_link_concept.md) — Record link concept.
 
 ---
 
@@ -238,8 +240,11 @@ Write the SurrealQL statement to relate a customer record (`customer:alice`) to 
 > **Explanation:** Subqueries inside `RELATE` create graph edges in bulk across record sets.
 
 ## 7. Related Terms
+
 - [Graph Connections (Overview: Nodes vs Edges)](graph_overview.md) — The parent paradigm.
 - [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — Querying relationships.
+- [Edge Properties](edge_properties.md) — Related concept: Edge Properties.
+- [Record Link (Concept)](record_link_concept.md) — Related concept: Record Link (Concept).
 
 ---
 

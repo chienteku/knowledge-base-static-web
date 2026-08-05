@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Color & Background](../level_03/color_vs_background.md) — Setting background image sources.
+- [`color` vs `background-color`](../level_03/color_vs_background.md) — Setting background image sources.
 - [Responsive Design (Concept)](../level_08/responsive_design.md) — Sizing layout blocks relative to device size.
-
 ---
 
 ## 2. Term Category
@@ -247,9 +246,9 @@ div { background-size: cover; }
 > **Explanation:** `position / size` syntax defines background size in shorthand rules.
 
 ## 7. Related Terms
-- [Color & Background](../level_03/color_vs_background.md) — Base background settings.
+- [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background settings.
 - [`object-fit` & `object-position`](object_fit.md) — Sizing content media tags.
-
+- [`linear-gradient` & `radial-gradient` (Gradients)](gradients.md) — Related concept: `linear-gradient` & `radial-gradient` (Gradients).
 ---
 
 ## 8. Key Takeaways

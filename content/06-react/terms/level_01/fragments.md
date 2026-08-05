@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [JSX](../level_01/jsx.md) — The XML-like syntax that compiles to elements.
-- [Components](../level_01/components.md) — React's reusable building blocks.
-
+- [JSX (JavaScript XML)](jsx.md) — The XML-like syntax that compiles to elements.
+- [Components](components.md) — React's reusable building blocks.
 ---
 
 ## 2. Term Category
@@ -340,7 +339,8 @@ function TableBody({ rows }) {
 ## 7. Related Terms
 - [Lists & Keys](../level_05/lists_and_keys.md) — Managing render loops using key tags.
 - [Children Prop](../level_07/children_prop.md) — Passing elements down component nesting lines.
-
+- [Components](components.md) — Related concept: Components.
+- [JSX (JavaScript XML)](jsx.md) — Related concept: JSX (JavaScript XML).
 ---
 
 ## 8. Key Takeaways

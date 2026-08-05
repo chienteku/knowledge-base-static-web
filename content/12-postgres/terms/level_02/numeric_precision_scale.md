@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`](numeric_types.md) — The parent exact numeric type.
-
 ---
 
 ## 2. Term Category
@@ -187,7 +186,6 @@ val NUMERIC(10, 2) -- Allows up to 8 digits before decimal point
 
 ## 7. Related Terms
 - [`NUMERIC` / `DECIMAL` / `REAL` / `DOUBLE PRECISION`](numeric_types.md) — The parent exact numeric type.
-
 ---
 
 ## 8. Key Takeaways

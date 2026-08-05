@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`panic!`](../level_04/panic.md) — The mechanism all three of these macros are built on.
+
+- [`panic!` Macro](panic.md) — The mechanism all three of these macros are built on.
 - [Never Type (`!`)](../level_11/never_type.md) — The type that lets these macros type-check anywhere a value is expected.
 - [`match`](../level_02/match.md) — Where `unreachable!()` is most commonly used, in a provably-impossible arm.
 
@@ -633,7 +634,8 @@ Write unit tests in `#[cfg(test)] mod tests` verifying all three backends and th
 
 ## 6. Related Terms
 
-- [`panic!`](../level_04/panic.md) — The underlying mechanism all three macros are thin, intent-communicating wrappers around.
+
+- [`panic!` Macro](panic.md) — The underlying mechanism all three macros are thin, intent-communicating wrappers around.
 - [Never Type (`!`)](../level_11/never_type.md) — What lets these macros type-check as *any* expected return type or match-arm value.
 - [`match`](../level_02/match.md) — Where `unreachable!()` is most commonly and appropriately used.
 - [`dbg!` Macro](../level_01/dbg_macro.md) — A different kind of development-time macro (for inspection rather than stubbing).

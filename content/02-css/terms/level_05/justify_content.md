@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`flex-direction`](../level_05/flex_direction.md) — `justify-content` always follows the direction of the Main Axis!
-
+- [`flex-direction`](flex_direction.md) — `justify-content` always follows the direction of the Main Axis!
 ---
 
 ## 2. Term Category
@@ -178,10 +177,12 @@ Imagine three people sitting on a long bench.
 > **Explanation:** `justify-content` controls main axis flex item distribution.
 
 ## 7. Related Terms
-- [`align-items`](../level_05/align_items.md) — The sister property that aligns things on the *opposite* (Cross) axis.
-- [`align-content`](../level_05/align_content.md) — Distribution of rows in multi-line flex containers.
-- [`align-self`](../level_05/align_self.md) — Child item alignment overrides.
-
+- [`align-items`](align_items.md) — The sister property that aligns things on the *opposite* (Cross) axis.
+- [`align-content`](align_content.md) — Distribution of rows in multi-line flex containers.
+- [`align-self`](align_self.md) — Child item alignment overrides.
+- [`flex-direction`](flex_direction.md) — Related concept: `flex-direction`.
+- [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
+- [`display: flex`](display_flex.md) — Flexbox parent container.
 ---
 
 ## 8. Key Takeaways

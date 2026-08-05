@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Single Page Application (SPA)](../../../03-javascript/terms/level_10/spa.md) — The architecture that requires Client-Side routing.
-- [DOM Manipulation](../../../01-html/terms/level_09/dom.md) — What routing is actually doing under the hood.
-
+- Single Page Applications (SPA) — The architecture that requires Client-Side routing.
+- dom — What routing is actually doing under the hood.
 ---
 
 ## 2. Term Category
@@ -135,9 +134,10 @@ Nginx config: try_files $uri $uri/ /index.html; -- Fallback to SPA root index.ht
 > **Explanation:** `pushState()` and `replaceState()` update the browser URL path without triggering server page fetches.
 
 ## 7. Related Terms
-- [React Router](../level_09/react_router.md) — The most popular library used to implement Client-Side Routing in React.
-- [Single Page Application (SPA)](../../../03-javascript/terms/level_10/spa.md) — The parent architecture.
-
+- [React Router](react_router.md) — The most popular library used to implement Client-Side Routing in React.
+- Single Page Applications (SPA) — The parent architecture.
+- [`<Link>` Component](link_component.md) — Related concept: `<Link>` Component.
+- [Single Page Applications (SPA)](spa.md) — Related concept: Single Page Applications (SPA).
 ---
 
 ## 8. Key Takeaways

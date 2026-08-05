@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [CSS](../level_01/css.md) — It's right in the name: *Cascading* Style Sheets!
-- [Ruleset](../level_01/ruleset.md) — The cascade resolves conflicts between multiple rulesets.
-
+- [CSS (Cascading Style Sheets)](css.md) — It's right in the name: *Cascading* Style Sheets!
+- [Ruleset (Declaration, Property, Value)](ruleset.md) — The cascade resolves conflicts between multiple rulesets.
 ---
 
 ## 2. Term Category
@@ -175,10 +174,12 @@ h1 { color: pink; }
 > **Explanation:** `@layer` grants explicit architecture control over cascade precedence.
 
 ## 7. Related Terms
-- [Specificity](../level_01/specificity.md) — The only thing that can override the Rule of Source Order. If a rule is more "specific", it wins even if it comes first in the file!
-- [`!important` Declaration](../level_01/important.md) — The global cascading priority flag.
-- [Inheritance](../level_01/inheritance.md) — The cascade's baseline target resolution mechanism.
-
+- [Specificity](specificity.md) — The only thing that can override the Rule of Source Order. If a rule is more "specific", it wins even if it comes first in the file!
+- [`!important` Declaration](important.md) — The global cascading priority flag.
+- [Inheritance](inheritance.md) — The cascade's baseline target resolution mechanism.
+- [Ruleset (Declaration, Property, Value)](ruleset.md) — Related concept: Ruleset (Declaration, Property, Value).
+- [`@import` Rule](../level_11/import.md) — Related concept: `@import`.
+- [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
 ---
 
 ## 8. Key Takeaways

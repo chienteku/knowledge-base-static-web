@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [Query Filter (Filter Document)](../level_03/query_filter.md) — The identical syntax schema.
 
@@ -223,6 +224,7 @@ db.orders.aggregate([{ $match: { $expr: { $gt: ["$spent", "$budget"] } } }]);
 > **Explanation:** `$expr` enables evaluating aggregation expressions inside `$match` stages.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
 - [`$group` Stage](group_stage.md) — The grouping stage.
 

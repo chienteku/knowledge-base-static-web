@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Directives](../level_03/directives.md) — The category these belong to.
+- [Directives](directives.md) — The category these belong to.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The philosophy of hiding things via state rather than `display: none`.
-
 ---
 
 ## 2. Term Category
@@ -168,7 +167,12 @@ If you write `<Dashboard v-show="isLoggedIn" />`, what terrible thing happens?
 ## 7. Related Terms
 - [Component Lifecycle](../level_04/component_lifecycle.md) — `v-if` triggers the Mount/Unmount lifecycles. `v-show` does not.
 - [Reactive State](../level_02/reactive_state.md) — The boolean data that controls these directives.
-
+- [`v-for` (List Rendering) & `:key`](v_for_key.md) — Related concept: `v-for` (List Rendering) & `:key`.
+- [Async Components](../level_08/async_components.md) — Related concept: Async Components.
+- [KeepAlive](../level_08/keepalive.md) — Related concept: KeepAlive.
+- [Transitions & Animations](../level_10/transition.md) — Related concept: Transitions & Animations.
+- [Directives](directives.md) — Directives.
+- [Template Syntax](../level_01/template_syntax.md) — Template syntax.
 ---
 
 ## 8. Key Takeaways

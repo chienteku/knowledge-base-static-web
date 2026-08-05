@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Closures (`Fn`, `FnMut`, `FnOnce`)](../level_05/closures.md) — Standard synchronous closures in Rust.
-- [`async fn`](../level_10/async_fn.md) — Asynchronous functions.
-- [`Future` Trait](../level_10/future_trait.md) — The return type of async closure calls.
+
+- [Closures (`|args| body`)](../level_05/closures.md) — Standard synchronous closures in Rust.
+- [`async fn`](async_fn.md) — Asynchronous functions.
+- [`Future` Trait](future_trait.md) — The return type of async closure calls.
 
 ---
 
@@ -393,15 +394,13 @@ Build a dynamic async event router with timeout enforcement.
 > 
 > ---
 > 
-> ## 6. Related Terms
-> 
-> - [Closures](../level_05/closures.md) — Synchronous closures in Rust.
-> - [`async fn`](../level_10/async_fn.md) — Asynchronous functions.
-> - [`Future` Trait](../level_10/future_trait.md) — The type returned by async closures.
-> 
-> ---
-> 
-> ## 7. Key Takeaways
+## 6. Related Terms
+
+**None.**
+
+---
+
+## 7. Key Takeaways
 > 
 > - **Async Closures** are closures that return a `Future` or use `async move` blocks internally.
 > - They allow passing asynchronous callbacks into higher-order functions like stream combinators and route handlers.

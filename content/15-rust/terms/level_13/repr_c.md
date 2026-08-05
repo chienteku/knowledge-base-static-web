@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Understanding binary data exchange across language boundaries.
-- [`extern "C"`](../level_13/extern_c.md) — C ABI calling conventions for foreign functions.
-- [Structs](../level_02/struct.md) — Rust composite data structure definitions.
+
+- [FFI (Foreign Function Interface)](ffi.md) — Understanding binary data exchange across language boundaries.
+- [`extern "C"`](extern_c.md) — C ABI calling conventions for foreign functions.
+- [Struct](../level_02/struct.md) — Rust composite data structure definitions.
 
 ---
 
@@ -549,10 +550,11 @@ struct UARTConfig {
 
 ## 8. Related Terms
 
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — The cross-language interface requiring `#[repr(C)]` data layouts.
-- [`extern "C"`](../level_13/extern_c.md) — Function calling convention string paired with `#[repr(C)]` structs.
-- [`Union`](../level_13/union.md) — C-compatible untagged union memory type.
-- [Undefined Behavior (UB)](../level_13/undefined_behavior.md) — Result of field layout mismatches across FFI boundaries.
+
+- [FFI (Foreign Function Interface)](ffi.md) — The cross-language interface requiring `#[repr(C)]` data layouts.
+- [`extern "C"`](extern_c.md) — Function calling convention string paired with `#[repr(C)]` structs.
+- [`union`](union.md) — C-compatible untagged union memory type.
+- [Undefined Behavior (UB)](undefined_behavior.md) — Result of field layout mismatches across FFI boundaries.
 
 ---
 

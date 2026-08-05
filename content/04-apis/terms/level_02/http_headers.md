@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Headers are attached to both halves of this cycle.
-- [JSON](../level_01/json.md) — The server uses Headers to announce that the data is JSON.
-
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — The server uses Headers to announce that the data is JSON.
 ---
 
 ## 2. Term Category
@@ -166,9 +165,14 @@ res.setHeader('User-Token', sanitizedInput);
 ---
 
 ## 7. Related Terms
-- [Request Body & Payloads](../level_02/request_body.md) — The data that the Headers are describing.
-- [JWT & Authentication](../level_04/jwt.md) — Tokens are placed inside the `Authorization` header.
-
+- [Request Body & Payloads](request_body.md) — The data that the Headers are describing.
+- [JWT (JSON Web Tokens)](../level_04/jwt.md) — Tokens are placed inside the `Authorization` header.
+- [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
+- [Preflight Request (OPTIONS)](../level_04/preflight_request.md) — Related concept: Preflight Request (OPTIONS).
+- [Caching (ETag, Cache-Control)](../level_06/caching.md) — Related concept: Caching (ETag, Cache-Control).
+- [Server-Sent Events (SSE)](../level_08/sse.md) — Related concept: Server-Sent Events (SSE).
+- [Content-Type & MIME Types](content_type.md) — Content-Type header.
+- [Content Negotiation (Accept)](content_negotiation.md) — Content negotiation headers.
 ---
 
 ## 8. Key Takeaways

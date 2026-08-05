@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Parameters (`$param`)](../level_06/parameters.md) — Parameter syntax in SurrealQL.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — SDK query methods.
 
@@ -210,9 +211,12 @@ Refactor the following unsafe query string to use safe SurrealQL parameter bindi
 > **Explanation:** Parameter bindings separate SQL execution code from untrusted data payloads.
 
 ## 7. Related Terms
+
 - [Parameters (`$param`)](../level_06/parameters.md) — SurrealQL query variables.
 - [JavaScript / TypeScript SDK](../level_10/js_sdk.md) — SDK query methods.
-- [PERMISSIONS Clause](permissions_clause.md) — Row-level authorization.
+- [`PERMISSIONS` Clause (Table & Field Level)](permissions_clause.md) — Row-level authorization.
+- [System Users (`DEFINE USER`)](define_user.md) — Related concept: System Users (`DEFINE USER`).
+- [SDK `.query()` with Parameters](../level_10/sdk_query.md) — Related concept: SDK `.query()` with Parameters.
 
 ---
 

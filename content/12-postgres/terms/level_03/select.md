@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Relational Database](../level_01/relational_database.md) — The storage philosophy.
 - [SQL (Structured Query Language)](../level_01/sql.md) — Declarative query syntax standards.
-
 ---
 
 ## 2. Term Category
@@ -190,9 +189,16 @@ SELECT first_name || ' ' || last_name AS full_name FROM users;
 > **Explanation:** PostgreSQL permits `SELECT` statements without `FROM` clauses to evaluate expressions.
 
 ## 7. Related Terms
-- [`SELECT *` vs Column List](select_star_vs_columns.md) — Sizing selection scopes.
+- [`SELECT *` vs. Column List](select_star_vs_columns.md) — Sizing selection scopes.
 - [`WHERE` Clause](where.md) — Filtering query results.
-
+- [Multi-row `INSERT` / `INSERT ... SELECT`](multi_row_insert.md) — Related concept: Multi-row `INSERT` / `INSERT ... SELECT`.
+- [`ORDER BY`](order_by.md) — Related concept: `ORDER BY`.
+- [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](../level_04/aggregate_functions.md) — Related concept: Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`).
+- [Aliases (`AS`)](../level_04/aliases.md) — Related concept: Aliases (`AS`).
+- [`CASE` Expression](../level_04/case_expression.md) — Related concept: `CASE` Expression.
+- [`DISTINCT`](../level_04/distinct.md) — Related concept: `DISTINCT`.
+- [Subquery (Nested Query)](../level_04/subquery.md) — Related concept: Subquery (Nested Query).
+- [`UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`](../level_09/set_operations.md) — Related concept: `UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`.
 ---
 
 ## 8. Key Takeaways

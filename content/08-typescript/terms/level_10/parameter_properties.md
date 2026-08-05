@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Classes Overview](../level_10/classes.md) — The standard, verbose way of initializing properties.
-- [Access Modifiers](../level_10/access_modifiers.md) — The keywords required to trigger this shorthand.
-
+- [Classes Overview](classes.md) — The standard, verbose way of initializing properties.
+- [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — The keywords required to trigger this shorthand.
 ---
 
 ## 2. Term Category
@@ -280,9 +279,8 @@ class User {
 > **Explanation:** TS compiler expands parameter property shorthand into explicit constructor assignments.
 
 ## 7. Related Terms
-- [Classes Overview](../level_10/classes.md) — The parent topic.
-- [Access Modifiers](../level_10/access_modifiers.md) — The trigger for this feature.
-
+- [Classes Overview](classes.md) — The parent topic.
+- [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — The trigger for this feature.
 ---
 
 ## 8. Key Takeaways

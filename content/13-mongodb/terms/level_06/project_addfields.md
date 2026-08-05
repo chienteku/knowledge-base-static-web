@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Projection (Concept in CRUD)](../level_03/projection.md) — The whitelisting rules.
+- [Projection](../level_03/projection.md) — The whitelisting rules.
 
 ---
 
@@ -205,8 +206,12 @@ db.users.aggregate([{ $project: { name: 1, _id: 0 } }]);
 > **Explanation:** `$project` reshapes output documents and renames field paths.
 
 ## 7. Related Terms
+
 - [Aggregation Pipeline (Concept)](aggregation_pipeline.md) — The parent pipeline framework.
-- [Projection (Concept in CRUD)](../level_03/projection.md) — The whitelisting rules.
+- [Projection](../level_03/projection.md) — The whitelisting rules.
+- [Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`)](expression_operators.md) — Related concept: Expression Operators in Aggregation (`$cond`, `$ifNull`, `$switch`, `$concat`, `$dateToString`).
+- [`$replaceRoot` / `$replaceWith` Stages](replace_root.md) — Related concept: `$replaceRoot` / `$replaceWith` Stages.
+- [`$set` / `$unset` Pipeline Stages](set_unset_stages.md) — Related concept: `$set` / `$unset` Pipeline Stages.
 
 ---
 

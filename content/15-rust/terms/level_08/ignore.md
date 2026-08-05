@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`#[test]`](../level_08/test_attribute.md) — The attribute that makes a function a test in the first place.
+
+**None.**
 
 ---
 
@@ -581,7 +582,8 @@ Design a schema migration engine:
 
 ## 6. Related Terms
 
-- [`#[test]`](../level_08/test_attribute.md) — The attribute that makes a function a test in the first place.
+
+**None.**
 
 ---
 

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Promise](./promise.md) — An object representing the eventual completion (or failure) of an asynchronous operation.
-
+- [Promise](promise.md) — An object representing the eventual completion (or failure) of an asynchronous operation.
 ---
 
 ## 2. Term Category
@@ -232,9 +231,8 @@ getMockProduct().then(product => console.log("Product:", product.name));
 ---
 
 ## 7. Related Terms
-- [`.then()` / `.catch()`](./then_catch.md) — Methods used to handle settled values.
-- [`Promise.all` / `allSettled` / `race` / `any`](./promise_combinators.md) — Parallel promise combinators that consume collections of promises.
-
+- [.then() / .catch()](then_catch.md) — Methods used to handle settled values.
+- [Promise.all / allSettled / race / any](promise_combinators.md) — Parallel promise combinators that consume collections of promises.
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [CREATE](../level_03/create.md) — Record creation syntax.
-- [UPDATE](../level_03/update.md) — Record modification syntax.
+
+- [`CREATE`](../level_03/create.md) — Record creation syntax.
+- [`UPDATE`](../level_03/update.md) — Record modification syntax.
 
 ---
 
@@ -228,9 +229,11 @@ Write a SurrealQL block that starts a transaction, deletes record `product:old`,
 > **Explanation:** `CANCEL TRANSACTION` rolls back all mutations executed within the transaction block.
 
 ## 7. Related Terms
+
 - [Transaction Isolation & Atomicity Semantics](transaction_isolation.md) — Snapshot isolation & concurrency.
 - [`THROW` Expression](../level_06/throw_expression.md) — Raising errors in transactions.
 - [`IF` / `ELSE` Expressions](../level_06/if_else.md) — Conditional logic inside transactions.
+- [`SLEEP` Statement](../level_10/sleep.md) — Related concept: `SLEEP` Statement.
 
 ---
 

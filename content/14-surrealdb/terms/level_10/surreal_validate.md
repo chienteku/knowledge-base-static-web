@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — CLI binary overview.
 - [`surreal export` / `surreal import` (Backups)](export_import.md) — Working with `.surql` files.
 
@@ -202,9 +203,11 @@ c. It benchmarks query execution speed.
 > **Explanation:** Static validation prevents partial migration failures caused by syntax typos.
 
 ## 7. Related Terms
+
 - [SurrealDB CLI (`surreal sql`)](../level_01/surreal_cli.md) — CLI binary tools.
 - [`surreal export` / `surreal import` (Backups)](export_import.md) — Export and import utilities.
 - [Data Migrations in SurrealDB](data_migrations.md) — Schema migration strategies.
+- [Error Handling & Debugging](error_handling.md) — Related concept: Error Handling & Debugging.
 
 ---
 

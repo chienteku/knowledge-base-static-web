@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The DDL/DML written inside dump files.
-
 ---
 
 ## 2. Term Category
@@ -184,7 +183,6 @@ psql -d dbname -f backup.sql -- Use psql for plain text SQL dumps
 ## 7. Related Terms
 - [WAL (Write-Ahead Log)](wal.md) — The physical log alternative.
 - [Point-in-Time Recovery (PITR)](pitr.md) — Advanced transaction-level recovery.
-
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Database Context (Running processes)](../level_01/database_context.md) — The target `mongod` port.
+
+- [Database (MongoDB Context)](../level_01/database_context.md) — The target `mongod` port.
 
 ---
 
@@ -214,8 +215,10 @@ Assume you have the `products` collection collection variable.
 > **Explanation:** `npm install mongodb` installs the official MongoDB Node.js driver.
 
 ## 7. Related Terms
+
 - [Connection String URI](connection_string.md) — The connection configurations.
 - [Mongoose (ODM)](mongoose.md) — The schema wrapper library.
+- [Connection Pooling](connection_pooling.md) — Related concept: Connection Pooling.
 
 ---
 

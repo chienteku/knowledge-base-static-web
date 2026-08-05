@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [SELECT](../level_03/select.md) — The query statement.
-- [Object Type](../level_02/object_type.md) — Nested structures.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
+- [`object`](../level_02/object_type.md) — Nested structures.
 
 ---
 
@@ -184,8 +185,9 @@ Write the SurrealQL query to retrieve the company `name` along with only the `ph
 > **Explanation:** Dot-notation path projection extracts specific properties across nested objects.
 
 ## 7. Related Terms
-- [SELECT](../level_03/select.md) — The query statement.
-- [Object Type](../level_02/object_type.md) — Nested structures.
+
+- [`SELECT`](../level_03/select.md) — The query statement.
+- [`object`](../level_02/object_type.md) — Nested structures.
 
 ---
 

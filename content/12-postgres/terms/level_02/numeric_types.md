@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding database column typing.
-
 ---
 
 ## 2. Term Category
@@ -186,7 +185,6 @@ amount NUMERIC(12, 2), currency VARCHAR(3) -- Explicit numeric amount and ISO cu
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`NUMERIC` Precision & Scale](numeric_precision_scale.md) — Configuring exact decimal limits.
-
 ---
 
 ## 8. Key Takeaways

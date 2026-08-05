@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Custom Error Types](../level_04/custom_error_types.md) — The boilerplate-heavy manual errors that these crates replace.
-- [`From` / `Into` Traits](../level_04/from_into_traits.md) — The conversion logic that these crates automate.
-- [`?` Operator](../level_04/question_mark_operator.md) — The tool used to propagate the errors these crates generate.
+
+- [Custom Error Types](custom_error_types.md) — The boilerplate-heavy manual errors that these crates replace.
+- [`From` / `Into` Traits](from_into_traits.md) — The conversion logic that these crates automate.
+- [`?` Operator](question_mark_operator.md) — The tool used to propagate the errors these crates generate.
 
 ---
 
@@ -805,7 +806,10 @@ Implement a library-to-application error handling boundary:
 
 ## 6. Related Terms
 
-- [Custom Error Types](../level_04/custom_error_types.md) — What `thiserror` is automating behind the scenes.
+
+- [Custom Error Types](custom_error_types.md) — What `thiserror` is automating behind the scenes.
+- [`std::error::Error` Trait & `Box<dyn Error>`](error_trait_box_dyn_error.md) — Related concept: `std::error::Error` Trait & `Box<dyn Error>`.
+- [Error Handling Stack](../level_18/error_handling_stack.md) — Related concept: Error Handling Stack.
 
 ---
 

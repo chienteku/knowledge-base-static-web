@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — The network request round-trip fundamentals.
-- [HTTP Headers (General)](../level_02/http_headers.md) — The metadata packets attached to requests.
-
+- [HTTP Headers](../level_02/http_headers.md) — The metadata packets attached to requests.
 ---
 
 ## 2. Term Category
@@ -173,9 +172,8 @@ Click on the `search?q=query` request to open the inspector panel:
 ---
 
 ## 7. Related Terms
-- [Postman / Insomnia (API Clients)](./api_clients.md) — External tools used to test endpoints in isolation.
+- [Postman / Insomnia (API Clients)](api_clients.md) — External tools used to test endpoints in isolation.
 - [CORS Errors in the Browser](../level_05/cors_errors.md) — The console blocks diagnosed using the Network tab.
-
 ---
 
 ## 8. Key Takeaways

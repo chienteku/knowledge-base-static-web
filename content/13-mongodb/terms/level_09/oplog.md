@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Replica Set](replica_set.md) — The parent cluster context.
 
 ---
@@ -201,8 +202,11 @@ Write the idempotent update payload (`"o"` object) that MongoDB will write to th
 > **Explanation:** `replSetResizeOplog` dynamically resizes capped Oplog collections without server restarts.
 
 ## 7. Related Terms
+
 - [Replica Set](replica_set.md) — The parent cluster context.
 - [Replication Lag](replication_lag.md) — The sync delay.
+- [Capped Collections](../level_10/capped_collections.md) — Related concept: Capped Collections.
+- [Change Streams](../level_10/change_streams.md) — Related concept: Change Streams.
 
 ---
 

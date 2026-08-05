@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Understanding the basic building blocks of HTML.
 - [`<div>` (Block container)](../level_02/div.md) — The tag that Semantic HTML was designed to replace.
-
 ---
 
 ## 2. Term Category
@@ -167,11 +166,21 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 > **Explanation:** Eliminate redundant wrapper divs by using native semantic containers.
 
 ## 7. Related Terms
-- [`<main>`](../level_06/main.md) — The most important semantic tag, denoting the primary content.
-- [`<article>` & `<section>`](../level_06/article_section.md) — Semantic tags used to break up large blocks of text.
-- [`<aside>`](../level_06/aside.md) — Non-essential sidebar or sidebar callout container.
-- [`<details>` & `<summary>`](../level_06/details_summary.md) — Interactive disclosure widgets without script logic.
-
+- [`<main>`](main.md) — The most important semantic tag, denoting the primary content.
+- [`<article>` and `<section>`](article_section.md) — Semantic tags used to break up large blocks of text.
+- [`<aside>`](aside.md) — Non-essential sidebar or sidebar callout container.
+- [`<details>` & `<summary>`](details_summary.md) — Interactive disclosure widgets without script logic.
+- [`<div>` (Block container)](../level_02/div.md) — Related concept: `<div>` (Block container).
+- [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — Related concept: Headings (`<h1>` to `<h6>`).
+- [Heading Hierarchy & Document Outline](heading_hierarchy.md) — Related concept: Heading Hierarchy & Document Outline.
+- [`<time>` & `datetime` Attribute](time_datetime.md) — Related concept: `<time>` & `datetime` Attribute.
+- [Accessibility (a11y) Fundamentals](../level_09/accessibility_fundamentals.md) — Related concept: Accessibility (a11y) Fundamentals.
+- [ARIA Attributes](../level_09/aria_attributes.md) — Related concept: ARIA Attributes.
+- [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Related concept: SEO Fundamentals for HTML.
+- [`<nav>`](nav.md) — Navigation container.
+- [`<header>`](header.md) — Header element.
+- [`<footer>`](footer.md) — Footer element.
+- [`<body>`](../level_01/body.md) — Related concept: `<body>`.
 ---
 
 ## 8. Key Takeaways

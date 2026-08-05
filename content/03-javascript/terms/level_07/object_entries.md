@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The fundamental structure.
-- [`Object.keys()`](./object_keys.md) / [`Object.values()`](./object_values.md) — The individual extraction methods.
-
+- [Object.keys()](object_keys.md)
 ---
 
 ## 2. Term Category
@@ -210,9 +209,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`Object.keys()`](./object_keys.md) — Extracts only the first half.
-- [`Object.values()`](./object_values.md) — Extracts only the second half.
-
+- [Object.keys()](object_keys.md) — Extracts only the first half.
+- [Object.values()](object_values.md) — Extracts only the second half.
 ---
 
 ## 8. Key Takeaways

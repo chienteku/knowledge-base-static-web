@@ -8,7 +8,6 @@
 ## 1. Prerequisites
 - [Number](../level_01/number.md) — Represents both integer and floating-point numbers.
 - [Type Coercion](../level_01/type_coercion.md) — Automatic or implicit conversion of types.
-
 ---
 
 ## 2. Term Category
@@ -223,9 +222,8 @@ console.log(finalOutput);
 ---
 
 ## 7. Related Terms
-- [`NaN`](../level_01/nan.md) — Sentinels returned when parsing completely invalid inputs.
-- [`Math` object](../level_02/math_object.md) — Built-in object for more advanced math operations.
-
+- [NaN](../level_01/nan.md) — Sentinels returned when parsing completely invalid inputs.
+- [Math object](math_object.md) — Built-in object for more advanced math operations.
 ---
 
 ## 8. Key Takeaways

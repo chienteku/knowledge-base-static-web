@@ -7,9 +7,8 @@
 
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The default rendering strategy.
-- [Single Page Application (SPA)](../level_09/spa.md) — The strategy that skips the server.
-- [Static Site Generation (SSG)](../level_09/ssg.md) — The strategy that pre-builds HTML.
-
+- [Single Page Application (SPA) Mode](spa.md) — The strategy that skips the server.
+- [Static Site Generation (SSG)](ssg.md) — The strategy that pre-builds HTML.
 ---
 
 ## 2. Term Category
@@ -273,7 +272,10 @@ routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for liv
 
 ## 7. Related Terms
 - [Route Rules Configuration](../level_08/route_rules.md) — The syntax used to configure Hybrid Rendering.
-
+- [Edge-Side Rendering (ESR)](esr.md) — Related concept: Edge-Side Rendering (ESR).
+- [Static Site Generation (SSG)](ssg.md) — Static site generation.
+- [Single Page Application (SPA) Mode](spa.md) — Single page app mode.
+- [Universal Rendering (SSR)](../level_01/universal_rendering.md) — Related concept: Universal Rendering (SSR).
 ---
 
 ## 8. Key Takeaways

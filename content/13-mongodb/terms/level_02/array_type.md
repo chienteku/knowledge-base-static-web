@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [BSON Data Types (Overview)](bson_data_types.md) — The parent BSON type lists.
 - [Embedded Document (Subdocument)](embedded_document.md) — Arrays frequently hold nested subdocuments.
 
@@ -197,8 +198,14 @@ Write the MongoDB query to select all products that belong to the `'electronics'
 > **Explanation:** `{ $size: N }` matches documents where array length equals N.
 
 ## 7. Related Terms
+
 - [Embedded Document (Subdocument)](embedded_document.md) — Nested document lists.
 - [`ObjectId` as a Manual Reference](objectid_reference.md) — Referencing alternatives.
+- [Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)](../level_03/array_update_operators.md) — Related concept: Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`).
+- [Array Query Operators (`$elemMatch`, `$all`, `$size`)](../level_04/array_query_operators.md) — Related concept: Array Query Operators (`$elemMatch`, `$all`, `$size`).
+- [Querying Arrays](../level_04/querying_arrays.md) — Related concept: Querying Arrays.
+- [`$unwind` Stage](../level_06/unwind_stage.md) — Related concept: `$unwind` Stage.
+- [Multikey Index](../level_07/multikey_index.md) — Related concept: Multikey Index.
 
 ---
 

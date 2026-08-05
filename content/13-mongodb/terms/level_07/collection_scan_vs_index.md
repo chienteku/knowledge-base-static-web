@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [`explain()` Method](explain.md) — The query plan analyzer.
 
@@ -221,8 +222,10 @@ If the collection size increases from `1,000` documents to `1,000,000` documents
 > **Explanation:** An index scan targets only matching documents, avoiding un-necessary document reads.
 
 ## 7. Related Terms
+
 - [Index (Concept in MongoDB)](index_concept.md) — The parent B-Tree index theory.
 - [`explain()` Method](explain.md) — The query planner analyzer.
+- [Index Selectivity & Cardinality](index_selectivity.md) — Related concept: Index Selectivity & Cardinality.
 
 ---
 

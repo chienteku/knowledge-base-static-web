@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Primitive Types](../level_02/primitive_types.md) — Literal types are ultra-specific versions of primitives.
-- [Union Types](../level_05/union_types.md) — Literal types are almost always combined using Unions.
-
+- [Union Types (`|`)](union_types.md) — Literal types are almost always combined using Unions.
 ---
 
 ## 2. Term Category
@@ -161,9 +160,12 @@ req(verb); // Explicit literal union type annotation
 > **Explanation:** Template literal types distribute over unions to construct dynamic combinations.
 
 ## 7. Related Terms
-- [Union Types](../level_05/union_types.md) — The glue that makes Literal Types useful.
+- [Union Types (`|`)](union_types.md) — The glue that makes Literal Types useful.
 - [Type Inference](../level_01/type_inference.md) — How TS decides between a string and a literal string.
-
+- [Type Widening](../level_01/type_widening.md) — Related concept: Type Widening.
+- [Discriminated Unions](../level_06/discriminated_unions.md) — Related concept: Discriminated Unions.
+- [Template Literal Types](../level_09/template_literal_types.md) — Related concept: Template Literal Types.
+- [Enums](../level_11/enums.md) — Related concept: Enums.
 ---
 
 ## 8. Key Takeaways

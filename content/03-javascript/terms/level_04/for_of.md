@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
-- [`for` Loop](../level_02/for_loop.md) — The traditional counting loop.
-
+- [for Loop](../level_02/for_loop.md) — The traditional counting loop.
 ---
 
 ## 2. Term Category
@@ -211,9 +210,11 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`for...in`](../level_04/for_in.md) — Used for iterating over the *keys* of an Object.
-- [`forEach()`](../level_04/for_each.md) — An array method that cannot be stopped with `break`.
-
+- [for...in](for_in.md) — Used for iterating over the *keys* of an Object.
+- [forEach()](for_each.md) — An array method that cannot be stopped with `break`.
+- [querySelectorAll & NodeList](../level_05/queryselectorall_nodelist.md) — Related concept: querySelectorAll & NodeList.
+- [for await...of / Async Iterators](../level_06/for_await_of.md) — Related concept: for await...of / Async Iterators.
+- [Iterators & Iterables (protocol)](../level_08/iterators_iterables.md) — Related concept: Iterators & Iterables (protocol).
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [`typeof` Operator (JavaScript)](../../../03-javascript/terms/level_01/typeof.md) — The runtime version of this keyword.
-
+- `typeof` Operator — The runtime version of this keyword.
 ---
 
 ## 2. Term Category

@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Record](record.md) — The fundamental unit identified.
 - [Table](table.md) — The collection namespace.
 
@@ -209,8 +210,13 @@ CREATE user:[alice@example.com];
 > **Explanation:** Generator functions create cryptographically random, ULID, or UUID Record IDs.
 
 ## 7. Related Terms
+
 - [Record](record.md) — The fundamental unit identified.
 - [Table](table.md) — The collection namespace.
+- [Data Types (Overview)](../level_02/data_types.md) — Related concept: Data Types (Overview).
+- [ID Generation Strategies (`ulid()`, `uuid()`, `rand::*`, String, Numeric)](../level_02/id_generation.md) — Related concept: ID Generation Strategies (`ulid()`, `uuid()`, `rand::*`, String, Numeric).
+- [`record` (Record Link Type)](../level_02/record_link_type.md) — Related concept: `record` (Record Link Type).
+- [Type Functions (`type::*`)](../level_06/type_functions.md) — Related concept: Type Functions (`type::*`).
 
 ---
 

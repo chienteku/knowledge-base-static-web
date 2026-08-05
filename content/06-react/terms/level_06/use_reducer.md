@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [`useState` Hook](../level_02/use_state.md) — `useReducer` is just a more powerful version of `useState`.
-- [State Management (Redux)](../level_06/state_management.md) — `useReducer` perfectly implements the Redux pattern, just locally.
-
+- [State Management (Redux / Zustand)](state_management.md) — `useReducer` perfectly implements the Redux pattern, just locally.
 ---
 
 ## 2. Term Category
@@ -185,9 +184,9 @@ const handleFetch = async () => {
 > **Explanation:** `useReducer` returns current state and `dispatch(action)` function to trigger state updates.
 
 ## 7. Related Terms
-- [State Management (Redux)](../level_06/state_management.md) — Redux uses this exact same pattern, but on a global scale.
+- [State Management (Redux / Zustand)](state_management.md) — Redux uses this exact same pattern, but on a global scale.
 - [`useState` Hook](../level_02/use_state.md) — Under the hood, React actually uses `useReducer` to build `useState`!
-
+- [Redux](../level_11/redux.md) — Related concept: Redux.
 ---
 
 ## 8. Key Takeaways

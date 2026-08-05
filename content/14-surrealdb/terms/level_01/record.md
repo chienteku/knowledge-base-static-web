@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [SurrealQL](surrealql.md) — The query language used to fetch records.
 
 ---
@@ -191,8 +192,10 @@ UPSERT user:alice CONTENT { name: "Alice" }; // Safely creates or updates record
 > **Explanation:** `CREATE table:id` explicitly assigns primary key Record IDs.
 
 ## 7. Related Terms
+
 - [Table](table.md) — The parent records collection.
 - [Record ID (`table:id`)](record_id.md) — The unique identifier.
+- [SurrealQL](surrealql.md) — Related concept: SurrealQL.
 
 ---
 

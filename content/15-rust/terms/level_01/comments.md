@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-None.
+
+**None.**
 
 ---
 
@@ -831,8 +832,10 @@ Build a `DocTestExtractor` tool for an IDE documentation plugin or CI linter tha
 
 ## 6. Related Terms
 
-- [`fn`](../level_01/fn.md) — Functions are the most common items that receive `///` doc comments.
-- **[Cargo](../level_01/cargo.md)** — (From Term #1) Cargo includes the `cargo doc --open` command which reads your `///` comments and instantly opens them as a website in your browser.
+
+- [`fn` (Functions)](fn.md) — Functions are the most common items that receive `///` doc comments.
+- [`//!` (Inner Doc Comment)](../level_08/inner_doc_comment.md) — Related concept: `//!` (Inner Doc Comment).
+- [Documentation Comments (`///`, `//!`)](../level_07/documentation_comments.md) — Doc comments for rustdoc.
 
 ---
 

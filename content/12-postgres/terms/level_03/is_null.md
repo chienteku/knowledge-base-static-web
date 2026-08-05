@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [NULL](../level_02/null.md) — Understanding the absent state.
+- [`NULL`](../level_02/null.md) — Understanding the absent state.
 - [Comparison & Logical Operators](operators.md) — How basic SQL comparisons work.
-
 ---
 
 ## 2. Term Category
@@ -193,9 +192,9 @@ However, the dashboard displays an empty list. Fix the query so that it successf
 > **Explanation:** `IS DISTINCT FROM` treats NULL as a distinct value without returning Unknown.
 
 ## 7. Related Terms
-- [NULL](../level_02/null.md) — The parent absent state.
+- [`NULL`](../level_02/null.md) — The parent absent state.
 - [`WHERE` Clause](where.md) — The query filter wrapper.
-
+- [Comparison & Logical Operators](operators.md) — Related concept: Comparison & Logical Operators.
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Object Types](../level_03/object_types.md) — Enforcing structural requirements.
-- [Interfaces](../level_03/interfaces.md) — Extensible type contracts.
-
+- [Object Types](object_types.md) — Enforcing structural requirements.
+- [Interfaces](interfaces.md) — Extensible type contracts.
 ---
 
 ## 2. Term Category
@@ -241,10 +240,10 @@ const myCar: Car = {
 > **Explanation:** Index signatures explicitly allow dynamic additional properties.
 
 ## 7. Related Terms
-- [Object Types](../level_03/object_types.md) — Base objects structures.
-- [Index Signatures](../level_03/index_signatures.md) — Defining interfaces with dynamic key contracts.
-- [Type Assertions](../level_05/type_assertions.md) — Overriding compiler type decisions.
-
+- [Object Types](object_types.md) — Base objects structures.
+- [Index Signatures](index_signatures.md) — Defining interfaces with dynamic key contracts.
+- [Type Assertions (`as`)](../level_05/type_assertions.md) — Overriding compiler type decisions.
+- [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Structural typing.
 ---
 
 ## 8. Key Takeaways

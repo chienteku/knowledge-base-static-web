@@ -6,10 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- [Document Flow (Normal Flow)](../level_04/document_flow.md) — The baseline page parsing sequence.
-- [The Box Model](../level_02/box_model.md) — The `display` property determines how this box interacts with the boxes around it.
+- [Document Flow (Normal Flow)](document_flow.md) — The baseline page parsing sequence.
+- [The Box Model (Concept)](../level_02/box_model.md) — The `display` property determines how this box interacts with the boxes around it.
 - [Width / Height](../level_02/width_height.md) — The `display` property completely changes how width and height behave!
-
 ---
 
 ## 2. Term Category
@@ -237,10 +236,13 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 > **Explanation:** Multi-keyword `display` specifies outer layout flow and inner container context.
 
 ## 7. Related Terms
-- [`display: none` vs `visibility: hidden`](../level_04/display_none_vs_visibility.md) — Hiding elements.
+- [`display: none` vs `visibility: hidden`](display_none_vs_visibility.md) — Hiding elements.
 - [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.
 - [Margin](../level_02/margin.md) — Visual box margins.
-
+- [`text-align` & `text-decoration`](../level_03/text_align_decoration.md) — Related concept: `text-align` & `text-decoration`.
+- [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
+- [`opacity`](../level_09/opacity.md) — Related concept: `opacity`.
+- [`::before` & `::after` (Pseudo-elements)](../level_09/pseudo_elements.md) — Related concept: `::before` & `::after` (Pseudo-elements).
 ---
 
 ## 8. Key Takeaways

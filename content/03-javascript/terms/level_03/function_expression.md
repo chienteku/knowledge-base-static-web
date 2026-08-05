@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Function](../level_03/function.md) — A reusable block of code.
+- [Function](function.md) — A reusable block of code.
 - [Variable](../level_01/variable.md) — A named container for storing data values.
-
 ---
 
 ## 2. Term Category
@@ -205,9 +204,10 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Function Declaration](../level_03/function_declaration.md) — The traditional way to define a function (which is hoisted).
-- [Arrow Function](../level_03/arrow_function.md) — A modern, shorter syntax for writing Function Expressions.
-
+- [Function Declaration](function_declaration.md) — The traditional way to define a function (which is hoisted).
+- [Arrow Function](arrow_function.md) — A modern, shorter syntax for writing Function Expressions.
+- [Hoisting](hoisting.md) — Related concept: Hoisting.
+- [Function](function.md) — Related concept: Function.
 ---
 
 ## 8. Key Takeaways

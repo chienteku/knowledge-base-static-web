@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Smart Pointers (`Box<T>`, `Rc<T>`)](../level_10/smart_pointers.md) — Smart pointer wrapper types that use `Deref` to expose inner values.
-- [References & Borrowing](../level_01/references_and_borrowing.md) — Borrowing mechanics (`&T` and `&mut T`).
+
+- [Smart Pointers (`Box`, `Rc`, `Arc`)](../level_10/smart_pointers.md) — Smart pointer wrapper types that use `Deref` to expose inner values.
+- [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Borrowing mechanics (`&T` and `&mut T`).
 
 ---
 
@@ -479,10 +480,13 @@ impl<T> MySmartVec<T> {
 
 ## 7. Related Terms
 
-- [Smart Pointers (`Box<T>`, `Rc<T>`)](../level_10/smart_pointers.md) — Wrapper types that rely heavily on `Deref`.
-- [Operator Overloading](../level_14/operator_overloading.md) — Customizing built-in operators via `std::ops`.
-- [`AsRef` / `AsMut`](../level_14/as_ref_as_mut.md) — Explicit reference conversion traits (contrasted with implicit `Deref`).
-- [`Borrow` / `BorrowMut`](../level_14/borrow_borrow_mut.md) — Consistency-guaranteed reference conversion traits.
+
+- [Smart Pointers (`Box`, `Rc`, `Arc`)](../level_10/smart_pointers.md) — Wrapper types that rely heavily on `Deref`.
+- [Operator Overloading](operator_overloading.md) — Customizing built-in operators via `std::ops`.
+- [`AsRef` / `AsMut`](as_ref_as_mut.md) — Explicit reference conversion traits (contrasted with implicit `Deref`).
+- [`Borrow` / `BorrowMut`](borrow_borrow_mut.md) — Consistency-guaranteed reference conversion traits.
+- [`Deref` and `DerefMut` Traits](deref_trait.md) — Related concept: `Deref` and `DerefMut` Traits.
+- [Deref Coercion](deref_coercion.md) — Related concept: Deref Coercion.
 
 ---
 

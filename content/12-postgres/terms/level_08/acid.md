@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Transaction](transaction.md) — The unit of work context where ACID properties are applied.
-
 ---
 
 ## 2. Term Category
@@ -183,9 +182,9 @@ Check status or use idempotent request keys before retrying failed commits
 > **Explanation:** Enclosing updates in `BEGIN...COMMIT` guarantees atomic all-or-nothing execution.
 
 ## 7. Related Terms
-- [Transaction](transaction.md) -- The parent unit of work.
+- [Transaction](transaction.md) — - The parent unit of work.
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — The mechanism enforcing Isolation in Postgres.
-
+- [WAL (Write-Ahead Log)](../level_10/wal.md) — Related concept: WAL (Write-Ahead Log).
 ---
 
 ## 8. Key Takeaways

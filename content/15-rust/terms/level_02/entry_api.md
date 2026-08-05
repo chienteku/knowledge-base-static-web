@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — The collection this API is a method on.
+
+- [`HashMap<K, V>`](hashmap_k_v.md) — The collection this API is a method on.
 - [Closure](../level_06/closure.md) — Used by the lazy `or_insert_with` variant.
 - [`Default` Trait](../level_04/default_trait.md) — Used by `or_default`.
 
@@ -556,10 +557,12 @@ Implement `SymbolTable` using the Entry API. Write unit tests with assertions (`
 
 ## 6. Related Terms
 
-- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) / [`BTreeMap<K, V>`](../level_02/btreemap_k_v.md) — Both expose `.entry()`.
+
+- [`HashMap<K, V>`](hashmap_k_v.md)
 - [`Default` Trait](../level_04/default_trait.md) — Powers `.or_default()`.
 - [Closure](../level_06/closure.md) — What `.or_insert_with()` and `.and_modify()` accept.
 - [Ownership](../level_03/ownership.md) — Why a naive two-lookup pattern is even a problem worth solving — `Entry` holds onto the located slot so you don't re-borrow the map twice.
+- [`BTreeMap<K, V>`](btreemap_k_v.md) — Related concept: `BTreeMap<K, V>`.
 
 ---
 

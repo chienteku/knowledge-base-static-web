@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Readable & Writable Streams](../level_06/readable_writable.md) — You are connecting these two exact things.
-
+- [Readable & Writable Streams](readable_writable.md) — You are connecting these two exact things.
 ---
 
 ## 2. Term Category
@@ -159,8 +158,10 @@ stream.pipe(res); // Pipe before ending response
 > **Explanation:** Stream piping chains multiple transformation steps efficiently.
 
 ## 7. Related Terms
-- [Readable & Writable Streams](../level_06/readable_writable.md) — The two ends of the pipe.
-
+- [Readable & Writable Streams](readable_writable.md) — The two ends of the pipe.
+- [Backpressure](backpressure.md) — Related concept: Backpressure.
+- [Duplex & Transform Streams](duplex_transform_streams.md) — Related concept: Duplex & Transform Streams.
+- [Streams (General Concept)](streams.md) — Related concept: Streams (General Concept).
 ---
 
 ## 8. Key Takeaways

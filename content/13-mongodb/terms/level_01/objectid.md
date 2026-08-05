@@ -6,6 +6,7 @@
 ---
 
 ## 1. Prerequisites
+
 - [Field](field.md) — The key-value structure of document attributes.
 
 ---
@@ -191,8 +192,10 @@ Write the `mongosh` shell command to extract and view the exact year and date th
 > **Explanation:** ObjectId components guarantee distributed uniqueness without central coordination.
 
 ## 7. Related Terms
+
 - [Field](field.md) — The parent attribute structure.
 - [BSON (Binary JSON)](bson.md) — The serialization format.
+- [`ObjectId` as a Manual Reference](../level_02/objectid_reference.md) — Related concept: `ObjectId` as a Manual Reference.
 
 ---
 

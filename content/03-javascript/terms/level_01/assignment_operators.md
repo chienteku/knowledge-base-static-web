@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Variable](../level_01/variable.md) — A named container for storing data values.
-- [Operator](../level_01/operator.md) — Symbol that performs an operation on operands.
-
+- [Variable](variable.md) — A named container for storing data values.
+- [Operator](operator.md) — Symbol that performs an operation on operands.
 ---
 
 ## 2. Term Category
@@ -218,10 +217,11 @@ let cartTotal = 0;
 ---
 
 ## 7. Related Terms
-- [`let`](../level_01/let.md) — Variable declaration that allows reassignment.
-- [`const`](../level_01/const.md) — Variable declaration that forbids reassignment.
-- [Arithmetic Operators](../level_01/arithmetic_operators.md) — Mathematical operations.
-
+- [let](let.md) — Variable declaration that allows reassignment.
+- [const](const.md) — Variable declaration that forbids reassignment.
+- [Arithmetic Operators](arithmetic_operators.md) — Mathematical operations.
+- [Increment / Decrement (++ / --)](increment_decrement.md) — Related concept: Increment / Decrement (++ / --).
+- [Operator](operator.md) — Related concept: Operator.
 ---
 
 ## 8. Key Takeaways

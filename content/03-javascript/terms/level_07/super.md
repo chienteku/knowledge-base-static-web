@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Class](./class.md) — The ES6 blueprint.
-- [`extends`](./extends.md) — Used to create the parent-child relationship.
-
+- [Class](class.md) — The ES6 blueprint.
+- [extends](extends.md) — Used to create the parent-child relationship.
 ---
 
 ## 2. Term Category
@@ -233,9 +232,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [`extends`](./extends.md) — The keyword that creates the relationship requiring `super`.
-- [Class](./class.md) — The parent structure.
-
+- [extends](extends.md) — The keyword that creates the relationship requiring `super`.
+- [Class](class.md) — The parent structure.
 ---
 
 ## 8. Key Takeaways

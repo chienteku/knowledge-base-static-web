@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 
-- [Newtype Pattern](../level_11/newtype_pattern.md) — The strict, safe alternative to Type Aliases.
-- [Result Enum](../level_02/result_t_e.md) — The most common place Type Aliases are used in the standard library.
+
+- [Newtype Pattern](newtype_pattern.md) — The strict, safe alternative to Type Aliases.
+- [`Result<T, E>`](../level_02/result_t_e.md) — The most common place Type Aliases are used in the standard library.
 
 ---
 
@@ -561,8 +562,9 @@ Implement a thread-safe `ConcurrentCache<V>` using nested type aliases:
 
 ## 6. Related Terms
 
-- [Newtype Pattern](../level_11/newtype_pattern.md) — The strict, safe alternative to a Type Alias.
-- [Result Enum](../level_02/result_t_e.md) — The most common place type aliases are used in the standard library (`std::io::Result`).
+
+- [Newtype Pattern](newtype_pattern.md) — The strict, safe alternative to a Type Alias.
+- [`Result<T, E>`](../level_02/result_t_e.md) — The most common place type aliases are used in the standard library (`std::io::Result`).
 
 ---
 

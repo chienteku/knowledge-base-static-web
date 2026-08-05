@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Suspense](../level_02/react_suspense.md) — The core React feature that powers this file under the hood.
+- [React Suspense](react_suspense.md) — The core React feature that powers this file under the hood.
 - [React Server Components (RSC)](../level_01/rsc.md) — The components doing the `async` data fetching.
-
 ---
 
 ## 2. Term Category
@@ -168,9 +167,11 @@ export default function Loading() {
 ---
 
 ## 7. Related Terms
-- [React Suspense](../../../06-react/terms/level_08/suspense.md) — The underlying React technology.
-- [`error.tsx`](../level_02/error.md) — The sister file that handles when the `await` fails instead of succeeds.
-
+- suspense — The underlying React technology.
+- [`error.tsx` & `global-error.tsx`](error.md) — The sister file that handles when the `await` fails instead of succeeds.
+- [React Suspense](react_suspense.md) — Related concept: React Suspense.
+- [Streaming with `<Suspense>`](../level_05/streaming.md) — Related concept: Streaming with `<Suspense>`.
+- [`page.tsx`](page.md) — Page component.
 ---
 
 ## 8. Key Takeaways

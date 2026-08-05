@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
+
 - [Schema Design (Document Modeling)](schema_design.md) — The parent modeling rules.
-- [Date Type](../level_02/date_type.md) — The required time parameters.
+- [Date](../level_02/date_type.md) — The required time parameters.
 
 ---
 
@@ -196,8 +197,10 @@ The documents do not delete after 60 seconds.
 > **Explanation:** `collMod` updates index parameters without dropping and re-building indexes.
 
 ## 7. Related Terms
-- [Date Type](../level_02/date_type.md) — The data type.
+
+- [Date](../level_02/date_type.md) — The data type.
 - [Schema Design (Document Modeling)](schema_design.md) — Modeling rules.
+- [TTL (Time-To-Live) Index](../level_07/ttl_index.md) — Related concept: TTL (Time-To-Live) Index.
 
 ---
 

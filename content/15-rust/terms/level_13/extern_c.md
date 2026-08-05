@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — Understanding cross-language binary interoperability.
-- [`unsafe` Block](../level_13/unsafe_block.md) — Understanding why calling foreign `extern "C"` functions requires an `unsafe` block.
-- [Functions](../level_01/function.md) — Standard function declaration and call semantics in Rust.
+
+- [FFI (Foreign Function Interface)](ffi.md) — Understanding cross-language binary interoperability.
+- [`unsafe` Block](unsafe_block.md) — Understanding why calling foreign `extern "C"` functions requires an `unsafe` block.
+- [Functions (`fn`)](../level_01/function.md) — Standard function declaration and call semantics in Rust.
 
 ---
 
@@ -490,10 +491,14 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 
 ## 7. Related Terms
 
-- [FFI (Foreign Function Interface)](../level_13/ffi.md) — The parent topic covering cross-language interoperability.
-- [`#[repr(C)]`](../level_13/repr_c.md) — The attribute ensuring struct memory layouts match C layout rules.
-- [`unsafe` Block](../level_13/unsafe_block.md) — Block required to invoke imported `extern "C"` functions.
-- [Raw Pointers (`*const T`, `*mut T`)](../level_13/raw_pointers.md) — Memory pointers passed across `extern "C"` functions.
+
+- [FFI (Foreign Function Interface)](ffi.md) — The parent topic covering cross-language interoperability.
+- [`unsafe` Block](unsafe_block.md) — Block required to invoke imported `extern "C"` functions.
+- [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Memory pointers passed across `extern "C"` functions.
+- [`cbindgen`](cbindgen.md) — Related concept: `cbindgen`.
+- [`#[repr(C)]`](repr_c.md) — Related concept: `#[repr(C)]`.
+- [`union`](union.md) — Related concept: `union`.
+- [`CString` / `CStr`](cstring_cstr.md) — Related concept: `CString` / `CStr`.
 
 ---
 

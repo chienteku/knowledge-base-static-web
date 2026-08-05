@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [Declaration Files](../level_11/declaration_files.md) — The `.d.ts` files that DefinitelyTyped provides.
-
+- [Declaration Files (`.d.ts`)](declaration_files.md) — The `.d.ts` files that DefinitelyTyped provides.
 ---
 
 ## 2. Term Category

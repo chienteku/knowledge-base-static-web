@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The configuration file where you declare your Edition.
+
+- [`Cargo.toml`](cargo_toml.md) — The configuration file where you declare your Edition.
 - [Cargo](../level_01/cargo.md) — The build system that enforces the Edition rules.
 
 ---
@@ -80,73 +81,25 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Edition Scoping and Lifecycle Rules
+### Mistake 1: Believing Different Editions inside a Workspace Cannot Link Together
 
-**The mistake:** Assuming Edition instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Assuming an edition 2018 library crate cannot be imported by an edition 2021 binary crate.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Editions only change compiler parsing rules for source code files within a single crate. `rustc` compiles crates independently, allowing crates of different editions (2015, 2018, 2021, 2024) to interoperate seamlessly.
 
-*Incorrect:*
-```rust
-fn get_ref() -> &str {
-    let s = String::from("edition_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
-```
+### Mistake 2: Thinking New Editions Require Downloading an Older Rust Compiler
 
-*Fix:*
-```rust
-fn get_string() -> String {
-    let s = String::from("edition_data");
-    s // Ownership of the String is transferred directly to the caller
-}
-```
+**The mistake:** Installing an ancient Rust compiler version to compile an edition 2015 crate.
 
-### Mistake 2: Mutating Edition State Without Exclusive Ownership or `mut` Borrowing
+**Why it is wrong:** Modern `rustc` compilers support all editions simultaneously. A current compiler (e.g. 1.80+) compiles edition 2015, 2018, 2021, and 2024 natively.
 
-**The mistake:** Attempting to mutate data associated with Edition through an immutable reference `&T` or without specifying `mut` in variable declarations.
+### Mistake 3: Manually Upgrading Edition Strings without Running `cargo fix --edition`
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**The mistake:** Changing `edition = "2021"` in `Cargo.toml` without running automated migration tools first.
 
-*Incorrect:*
-```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
-```
+**Why it is wrong:** Editions reserve new keywords (`async`, `await`, `try`) and adjust prelude import rules. Changing `Cargo.toml` manually without `cargo fix --edition` triggers unexpected compilation errors.
 
-*Fix:*
-```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
-```
-
-### Mistake 3: Concurrent Access to Edition Across Threads Without `Send` / `Sync` Guards
-
-**The mistake:** Sharing non-thread-safe Edition instances across OS threads via `std::thread::spawn`.
-
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
-
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -238,8 +191,11 @@ You have a large 2018-edition crate and want to upgrade to 2021. Answer the foll
 
 ## 6. Related Terms
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — Where the edition is declared.
-- [Workspace](../level_07/workspace.md) — Where you often see multiple crates living side-by-side with completely different Editions!
+
+- [`Cargo.toml`](cargo_toml.md) — Where the edition is declared.
+- [Workspace](workspace.md) — Where you often see multiple crates living side-by-side with completely different Editions!
+- [Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`)](lint_control_attributes.md) — Related concept: Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`).
+- [`#[non_exhaustive]`](non_exhaustive_attribute.md) — Related concept: `#[non_exhaustive]`.
 
 ---
 

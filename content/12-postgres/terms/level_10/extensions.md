@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query context.
-- [UUID Type](../level_06/uuid_type.md) — Custom types historically enabled by extensions.
-
+- [`UUID` Type](../level_06/uuid_type.md) — Custom types historically enabled by extensions.
 ---
 
 ## 2. Term Category
@@ -191,8 +190,8 @@ Audit extension security and superuser permissions before deployment
 
 ## 7. Related Terms
 - [`pg_stat_statements` / Monitoring](monitoring.md) — The monitoring metrics extension.
-- [UUID Type](../level_06/uuid_type.md) — Custom types historically enabled by extensions.
-
+- [`UUID` Type](../level_06/uuid_type.md) — Custom types historically enabled by extensions.
+- [Foreign Data Wrappers (`postgres_fdw`)](foreign_data_wrappers.md) — Related concept: Foreign Data Wrappers (`postgres_fdw`).
 ---
 
 ## 8. Key Takeaways

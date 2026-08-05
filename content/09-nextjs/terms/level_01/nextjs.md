@@ -6,9 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- React — The UI library that Next.js is built on top of.
-- [Node.js Runtime](../level_01/nodejs_runtime.md) — The runtime environment that powers the backend of Next.js.
-
+- [Node.js Runtime](nodejs_runtime.md) — The runtime environment that powers the backend of Next.js.
 ---
 
 ## 2. Term Category
@@ -143,9 +141,14 @@ import Image from 'next/image';
 ---
 
 ## 7. Related Terms
-- [Server-Side Rendering (SSR)](../level_01/ssr.md) — The core performance feature of Next.js.
-- [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The two different architectures of Next.js.
-
+- [Dynamic Rendering (SSR)](../level_08/ssr.md) — The core performance feature of Next.js.
+- [App Router vs Pages Router](app_router_vs_pages.md) — The two different architectures of Next.js.
+- [Client-Side Rendering (CSR) / SPA](csr_spa.md) — Related concept: Client-Side Rendering (CSR) / SPA.
+- [File-System Routing](file_system_routing.md) — Related concept: File-System Routing.
+- [Node.js Runtime](nodejs_runtime.md) — Related concept: Node.js Runtime.
+- [SEO (Search Engine Optimization)](seo.md) — Related concept: SEO (Search Engine Optimization).
+- [`next.config.mjs`](../level_02/next_config.md) — Related concept: `next.config.mjs`.
+- [React Server Components (RSC)](rsc.md) — React Server Components architecture.
 ---
 
 ## 8. Key Takeaways

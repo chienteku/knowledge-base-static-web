@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-- [Associated Types](../level_04/associated_types.md) — The sibling "associated item" this generalizes the idea from.
+
+- [Associated Types](associated_types.md) — The sibling "associated item" this generalizes the idea from.
 - [Associated Function](../level_02/associated_function.md) — The other sibling.
 - [Constants (`const`)](../level_01/constants_const.md) — The underlying `const` mechanism being attached to a trait/type.
 
@@ -569,9 +570,10 @@ thread::spawn(move || {
 
 ## 6. Related Terms
 
-- [Associated Types](../level_04/associated_types.md) — The type-level sibling of this value-level associated item.
+
+- [Associated Types](associated_types.md) — The type-level sibling of this value-level associated item.
 - [Associated Function](../level_02/associated_function.md) — The behavior-level sibling.
-- [Object Safety](../level_04/object_safety.md) — What associated constants are documented as breaking.
+- [`Object Safety` (dyn-Compatibility)](object_safety.md) — What associated constants are documented as breaking.
 - [Constants (`const`)](../level_01/constants_const.md) — The base mechanism associated constants attach to traits/impls.
 
 ---

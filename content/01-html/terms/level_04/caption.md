@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [`<table>`](../level_04/table.md) — The parent element that holds the caption.
+- [`<table>`](table.md) — The parent element that holds the caption.
 - [Nesting](../level_01/nesting.md) — Understanding element hierarchies.
-
 ---
 
 ## 2. Term Category
@@ -244,9 +243,9 @@ A simple table with a caption:
 > **Explanation:** `caption-side: bottom` positions table caption below table data while preserving HTML structure.
 
 ## 7. Related Terms
-- [`<table>`](../level_04/table.md) — The parent container that holds the caption.
-- [`<th>` (Table Header)](../level_04/th.md) — The header cell tag inside rows.
-
+- [`<table>`](table.md) — The parent container that holds the caption.
+- [`<th>` (Table Header)](th.md) — The header cell tag inside rows.
+- [`scope` Attribute (in `<th>`)](scope.md) — Related concept: `scope` Attribute (in `<th>`).
 ---
 
 ## 8. Key Takeaways

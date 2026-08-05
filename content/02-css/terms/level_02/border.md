@@ -6,8 +6,7 @@
 ---
 
 ## 1. Prerequisites
-- [The Box Model](../level_02/box_model.md) — Border is the third layer of the Box Model.
-
+- [The Box Model (Concept)](box_model.md) — Border is the third layer of the Box Model.
 ---
 
 ## 2. Term Category
@@ -176,11 +175,14 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 > **Explanation:** Pre-allocating transparent borders prevents dynamic layout shifts.
 
 ## 7. Related Terms
-- [Padding](../level_02/padding.md) — The space directly inside the border.
-- [Margin](../level_02/margin.md) — The space directly outside the border.
-- [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Spilling content boundaries.
-- [`border-radius`](../level_09/border_radius.md) — A later Level 8 property used to curve the corners of the border.
-
+- [Padding](padding.md) — The space directly inside the border.
+- [Margin](margin.md) — The space directly outside the border.
+- [`overflow` (hidden, scroll, auto, visible)](overflow.md) — Spilling content boundaries.
+- [`border-radius` (Rounded Corners)](../level_09/border_radius.md) — A later Level 8 property used to curve the corners of the border.
+- [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — Related concept: Shorthand vs Longhand Properties.
+- [The Box Model (Concept)](box_model.md) — Related concept: The Box Model (Concept).
+- [`box-shadow` (Card Shadows)](../level_09/box_shadow.md) — Related concept: `box-shadow` (Card Shadows).
+- [`outline`](../level_09/outline.md) — Related concept: `outline`.
 ---
 
 ## 8. Key Takeaways

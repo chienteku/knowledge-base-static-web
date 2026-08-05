@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [`ALTER TABLE`](../level_06/alter_table.md) — The DDL queries executed during migrations.
-
 ---
 
 ## 2. Term Category
@@ -199,7 +198,7 @@ Expand-contract migration pattern across zero-downtime releases
 
 ## 7. Related Terms
 - [`ALTER TABLE`](../level_06/alter_table.md) — The DDL queries.
-
+- [Managed PostgreSQL Services (Supabase, Neon, AWS RDS)](managed_services.md) — Related concept: Managed PostgreSQL Services (Supabase, Neon, AWS RDS).
 ---
 
 ## 8. Key Takeaways

@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [URL / URI](../level_01/url_uri.md) — The string structure describing resource locations.
-- [Query Parameters & Path Variables](./query_params.md) — The parameters appended to URL query strings.
-
+- [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — The string structure describing resource locations.
+- [Query Parameters & Path Variables](query_params.md) — The parameters appended to URL query strings.
 ---
 
 ## 2. Term Category
@@ -209,9 +208,8 @@ console.log("Encoded Path:", target);
 ---
 
 ## 7. Related Terms
-- [Query Parameters & Path Variables](./query_params.md) — The URL data inputs escaped by percent-encoding.
-- [Request Body & Payloads](./request_body.md) — Un-encoded data payloads that do not require URL character escaping.
-
+- [Query Parameters & Path Variables](query_params.md) — The URL data inputs escaped by percent-encoding.
+- [Request Body & Payloads](request_body.md) — Un-encoded data payloads that do not require URL character escaping.
 ---
 
 ## 8. Key Takeaways

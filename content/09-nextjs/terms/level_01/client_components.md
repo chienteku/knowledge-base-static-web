@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [React Server Components (RSC)](../level_01/rsc.md) — The default component type you are opting out of.
-- [React Hooks](../level_01/react_hooks.md) — Functions like `useState` and `useEffect` that are only available in Client Components.
-
+- [React Server Components (RSC)](rsc.md) — The default component type you are opting out of.
+- [React Hooks](react_hooks.md) — Functions like `useState` and `useEffect` that are only available in Client Components.
 ---
 
 ## 2. Term Category
@@ -175,9 +174,13 @@ import ServerComponent from './ServerComponent'; // Will this work?
 ---
 
 ## 7. Related Terms
-- [React Server Components (RSC)](../level_01/rsc.md) — The default component type.
-- [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The architecture where this distinction matters.
-
+- [React Server Components (RSC)](rsc.md) — The default component type.
+- [App Router vs Pages Router](app_router_vs_pages.md) — The architecture where this distinction matters.
+- [Hydration](hydration.md) — Related concept: Hydration.
+- [Network Boundary](network_boundary.md) — Related concept: Network Boundary.
+- [React Components](react_components.md) — Related concept: React Components.
+- [React Hooks](react_hooks.md) — Related concept: React Hooks.
+- [Environment Variables (`.env.local`)](../level_10/environment_variables.md) — Related concept: Environment Variables (`.env.local`).
 ---
 
 ## 8. Key Takeaways

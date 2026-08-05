@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Element vs. Tag](../level_01/element_vs_tag.md) — Understanding the start and end tag boundaries.
-- [HTML](../level_01/html.md) — The standard markup language.
-
+- [Element vs. Tag](element_vs_tag.md) — Understanding the start and end tag boundaries.
+- [HTML (HyperText Markup Language)](html.md) — The standard markup language.
 ---
 
 ## 2. Term Category
@@ -201,9 +200,11 @@ Nesting layout elements to create a profile card:
 > **Explanation:** HTML5 expanded `<a>` element flow content model to wrap block elements.
 
 ## 7. Related Terms
-- [Element vs. Tag](../level_01/element_vs_tag.md) — The building blocks that are nested.
-- [Block-level vs Inline Elements](../level_01/block_inline.md) — Nesting rules differ based on display properties (e.g., inline elements cannot contain block elements).
-
+- [Element vs. Tag](element_vs_tag.md) — The building blocks that are nested.
+- [Block-level vs Inline Elements](block_inline.md) — Nesting rules differ based on display properties (e.g., inline elements cannot contain block elements).
+- [Comments (<!-- -->)](comments.md) — Related concept: Comments (<!-- -->).
+- [Whitespace Collapse](whitespace_collapse.md) — Related concept: Whitespace Collapse.
+- [The Tree Structure](../level_09/tree_structure.md) — Related concept: The Tree Structure.
 ---
 
 ## 8. Key Takeaways

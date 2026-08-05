@@ -7,8 +7,7 @@
 
 ## 1. Prerequisites
 - [`useState` Hook](../level_02/use_state.md) — The mechanism used to control the input.
-- [Synthetic Events](../level_05/synthetic_events.md) — Specifically `onChange`, which captures keystrokes.
-
+- [Synthetic Events](synthetic_events.md) — Specifically `onChange`, which captures keystrokes.
 ---
 
 ## 2. Term Category
@@ -167,9 +166,10 @@ const [val, setVal] = useState(data.name || ''); // Default empty string
 > **Explanation:** Checkboxes use boolean `checked` props instead of string `value` props.
 
 ## 7. Related Terms
-- [Uncontrolled Components](../level_05/uncontrolled_components.md) — The alternative way to handle forms without tying every keystroke to state.
+- [Uncontrolled Components](uncontrolled_components.md) — The alternative way to handle forms without tying every keystroke to state.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — Controlled components perfectly demonstrate this concept.
-
+- [`useState` Hook](../level_02/use_state.md) — useState for form inputs.
+- [Synthetic Events](synthetic_events.md) — Related concept: Synthetic Events.
 ---
 
 ## 8. Key Takeaways

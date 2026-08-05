@@ -7,7 +7,6 @@
 
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The HTML tags you type are converted into "Objects" in the DOM.
-
 ---
 
 ## 2. Term Category
@@ -158,9 +157,11 @@ document.body.appendChild(fragment); // Single DOM reflow!
 > **Explanation:** `getElementById` performs optimized direct ID hash lookups.
 
 ## 7. Related Terms
-- [The Tree Structure](../level_09/tree_structure.md) — How the DOM organizes all of these objects in memory.
-- [Critical Rendering Path](../level_09/critical_rendering_path.md) — The browser pipeline that compiles DOM into pixels.
-
+- [The Tree Structure](tree_structure.md) — How the DOM organizes all of these objects in memory.
+- [Critical Rendering Path](critical_rendering_path.md) — The browser pipeline that compiles DOM into pixels.
+- [`<dialog>` Element](../level_10/dialog.md) — Related concept: `<dialog>` Element.
+- [Drag & Drop API](../level_10/drag_drop.md) — Related concept: Drag & Drop API.
+- [Web Components](../level_10/web_components.md) — Related concept: Web Components.
 ---
 
 ## 8. Key Takeaways

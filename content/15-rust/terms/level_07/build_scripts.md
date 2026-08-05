@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [`Cargo.toml`](../level_07/cargo_toml.md) — The manifest that references and configures a build script.
+
+- [`Cargo.toml`](cargo_toml.md) — The manifest that references and configures a build script.
 - [Package](../level_01/package.md) — The unit a build script belongs to and runs on behalf of.
-- [`cfg` Attribute](../level_07/cfg_attribute.md) — One of the mechanisms a build script can programmatically control.
+- [`cfg` Attribute](cfg_attribute.md) — One of the mechanisms a build script can programmatically control.
 
 ---
 
@@ -79,73 +80,47 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Build Scripts Scoping and Lifecycle Rules
+### Mistake 1: Writing Output Files Directly to `src/` Instead of `$OUT_DIR`
 
-**The mistake:** Assuming Build Scripts instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Generating Rust source files inside the `src/` directory (e.g. `src/generated.rs`) from `build.rs`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Dirties version control git status and causes build failures when compiling packages installed in read-only file systems or published Cargo crates. Generated code must always be written to the scratch path provided by `std::env::var("OUT_DIR")`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("build_scripts_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
-}
+fs::write("src/bindings.rs", generated_code); // ❌ Dirties git repository and breaks published crate builds!
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("build_scripts_data");
-    s // Ownership of the String is transferred directly to the caller
-}
+let out_dir = std::env::var("OUT_DIR").unwrap();
+let dest = std::path::Path::new(&out_dir).join("bindings.rs");
+fs::write(dest, generated_code); // Correct!
 ```
 
-### Mistake 2: Mutating Build Scripts State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Missing `cargo:rerun-if-changed` Directives for Input Dependencies
 
-**The mistake:** Attempting to mutate data associated with Build Scripts through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Reading input schema files (`schema.proto`, `wrapper.h`) inside `build.rs` without telling Cargo to track them via `cargo:rerun-if-changed`.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Cargo cannot track files outside `src/`. Modifying `schema.proto` will not trigger `build.rs` re-execution, resulting in stale, out-of-date build artifacts.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
-}
+// Reads wrapper.h but prints no rerun directive!
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
-}
+println!("cargo:rerun-if-changed=c_src/wrapper.h"); // Instructs Cargo to watch file mtime!
 ```
 
-### Mistake 3: Concurrent Access to Build Scripts Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Printing Arbitrary Unprefixed Text to `stdout`
 
-**The mistake:** Sharing non-thread-safe Build Scripts instances across OS threads via `std::thread::spawn`.
+**The mistake:** Using `println!("Building C library...");` to log progress during `build.rs` execution.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Cargo captures standard output to parse `cargo:key=value` directives. Printing raw text pollutes Cargo's directive parser. Use `eprintln!` to print debug logs to standard error.
 
-*Incorrect:*
-```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
-```
-
-*Fix:*
-```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
-```
+---
 
 ## 5. Practice Exercises
 
@@ -292,10 +267,11 @@ Then answer: **why must generated files go to `OUT_DIR` and not directly to `src
 
 ## 6. Related Terms
 
+
 - [`bindgen`](../level_13/bindgen.md) — The most common reason to write a build script: auto-generating Rust FFI bindings from a C header during the build.
 - [FFI (Foreign Function Interface)](../level_13/ffi.md) — The broader C-interop problem build scripts frequently solve (linking, codegen).
-- [`cfg` Attribute](../level_07/cfg_attribute.md) — What a build script can programmatically set via `cargo:rustc-cfg`.
-- [`Cargo.toml`](../level_07/cargo_toml.md) — Where you can add `build = "build.rs"` explicitly (though Cargo auto-detects the default filename).
+- [`cfg` Attribute](cfg_attribute.md) — What a build script can programmatically set via `cargo:rustc-cfg`.
+- [`Cargo.toml`](cargo_toml.md) — Where you can add `build = "build.rs"` explicitly (though Cargo auto-detects the default filename).
 
 ---
 

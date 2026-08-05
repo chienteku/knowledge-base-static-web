@@ -6,9 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- [Serialization](../level_07/serialization.md) — Base64 is essentially a form of serialization specifically for binary files.
-- [JSON](../level_01/json.md) — JSON can only hold text, so if you want to put an image in JSON, you must Base64 encode it.
-
+- [Serialization & Deserialization](serialization.md) — Base64 is essentially a form of serialization specifically for binary files.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — JSON can only hold text, so if you want to put an image in JSON, you must Base64 encode it.
 ---
 
 ## 2. Term Category
@@ -136,9 +135,11 @@ GET /api/verify?token=abc-def_123 HTTP/1.1 ; Safe Base64URL encoding
 ---
 
 ## 7. Related Terms
-- [Basic Authentication](../level_04/basic_bearer_auth.md) — Basic Auth literally uses Base64 to combine the username and password into the header.
-- [JWT](../level_04/jwt.md) — The Header and Payload of a JSON Web Token are Base64 encoded (which is why anyone can read them!).
-
+- [Basic & Bearer Authentication](../level_04/basic_bearer_auth.md) — Basic Auth literally uses Base64 to combine the username and password into the header.
+- [JWT (JSON Web Tokens)](../level_04/jwt.md) — The Header and Payload of a JSON Web Token are Base64 encoded (which is why anyone can read them!).
+- [FormData & Multipart Uploads](../level_05/formdata.md) — Related concept: FormData & Multipart Uploads.
+- [Character Encoding (UTF-8)](character_encoding.md) — Related concept: Character Encoding (UTF-8).
+- [Protocol Buffers (protobuf)](../level_10/protocol_buffers.md) — Related concept: Protocol Buffers (protobuf).
 ---
 
 ## 8. Key Takeaways

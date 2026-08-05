@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 
-- [Traits](../level_04/trait.md) — Trait definitions and implementation mechanics (`impl Trait for Type`).
-- [Orphan Rule](../level_14/orphan_rule.md) — The specific crate-boundary rule that enforces global coherence.
-- [Blanket Implementation](../level_14/blanket_implementation.md) — Generic trait implementations governed by coherence constraints.
+
+- [Trait](../level_04/trait.md) — Trait definitions and implementation mechanics (`impl Trait for Type`).
+- [Orphan Rule](orphan_rule.md) — The specific crate-boundary rule that enforces global coherence.
+- [Blanket Implementation](blanket_implementation.md) — Generic trait implementations governed by coherence constraints.
 
 ---
 
@@ -549,10 +550,12 @@ pub trait DebugSummary { fn summarize_debug(&self); }
 
 ## 7. Related Terms
 
-- [Orphan Rule](../level_14/orphan_rule.md) — The crate-boundary policy enforcing global coherence across Cargo dependencies.
-- [Blanket Implementation](../level_14/blanket_implementation.md) — Generic trait implementations governed by coherence constraints.
-- [Traits](../level_04/trait.md) — The fundamental abstraction system governed by coherence.
+
+- [Orphan Rule](orphan_rule.md) — The crate-boundary policy enforcing global coherence across Cargo dependencies.
+- [Blanket Implementation](blanket_implementation.md) — Generic trait implementations governed by coherence constraints.
+- [Trait](../level_04/trait.md) — The fundamental abstraction system governed by coherence.
 - [Newtype Pattern](../level_11/newtype_pattern.md) — Design pattern used to create disjoint types that resolve coherence conflicts.
+- [Sealed Trait Pattern](sealed_trait_pattern.md) — Related concept: Sealed Trait Pattern.
 
 ---
 

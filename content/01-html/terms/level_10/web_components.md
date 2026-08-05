@@ -9,7 +9,6 @@
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent structure manipulated by component lifecycle triggers.
 - [`<script>`](../level_08/script.md) — The programming block used to define component classes.
 - [`data-*` Attributes](../level_07/data_attributes.md) — Used to pass configuration inputs to elements.
-
 ---
 
 ## 2. Term Category
@@ -324,9 +323,8 @@ customElementInstance.shadowRoot.querySelector('.shadow-btn');
 
 ## 7. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent document object model.
-- [`<canvas>`](../level_10/canvas.md) — Programmatic visual boards.
-- [`<svg>`](../level_10/svg.md) — XML-based scalable vector assets.
-
+- [`<canvas>`](canvas.md) — Programmatic visual boards.
+- [`<svg>` (Scalable Vector Graphics)](svg.md) — XML-based scalable vector assets.
 ---
 
 ## 8. Key Takeaways
