@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Headers are attached to both halves of this cycle.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The server uses Headers to announce that the data is JSON.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ res.setHeader('User-Token', sanitizedInput);
 - [Server-Sent Events (SSE)](../level_08/sse.md) — Related concept: Server-Sent Events (SSE).
 - [Content-Type & MIME Types](content_type.md) — Content-Type header.
 - [Content Negotiation (Accept)](content_negotiation.md) — Content negotiation headers.
+
 ---
 
 ## 8. Key Takeaways

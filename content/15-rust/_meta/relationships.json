@@ -47,7 +47,13 @@
       "level": 1,
       "file": "terms/level_01/cargo.md",
       "display_name": "Cargo",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "tokens",
+          "description": "Basic syntactic units of Rust code and configurations."
+        }
+      ],
       "related": [
         {
           "term": "crate",
@@ -83,6 +89,16 @@
           "term": "dependencies_section",
           "module": "15-rust",
           "description": "Related concept: `[dependencies]`."
+        },
+        {
+          "module": "15-rust",
+          "term": "clap",
+          "description": "Related concept: `clap`."
+        },
+        {
+          "module": "15-rust",
+          "term": "rust_analyzer",
+          "description": "Related concept: `rust-analyzer`."
         }
       ]
     },
@@ -90,7 +106,13 @@
       "level": 1,
       "file": "terms/level_01/comments.md",
       "display_name": "Comments",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "tokens",
+          "description": "Lexical elements processed by the compiler lexer."
+        }
+      ],
       "related": [
         {
           "term": "fn",
@@ -343,7 +365,18 @@
       "level": 1,
       "file": "terms/level_01/fn.md",
       "display_name": "`fn` (Functions)",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "variable",
+          "description": "Variables passed as parameters or declared within functions."
+        },
+        {
+          "module": "15-rust",
+          "term": "type_annotation",
+          "description": "Input parameter types and return type annotations."
+        }
+      ],
       "related": [
         {
           "term": "variable",
@@ -1040,7 +1073,13 @@
       "level": 1,
       "file": "terms/level_01/variable.md",
       "display_name": "Variable",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "tokens",
+          "description": "Basic lexical units representing identifiers and keywords."
+        }
+      ],
       "related": [
         {
           "term": "mutability_mut",
@@ -1355,6 +1394,11 @@
           "term": "intoiterator",
           "module": "15-rust",
           "description": "Related concept: `IntoIterator`."
+        },
+        {
+          "module": "15-rust",
+          "term": "labeled_loops",
+          "description": "Related concept: Labeled Loops."
         }
       ]
     },
@@ -1742,6 +1786,11 @@
           "term": "zero_cost_abstractions",
           "module": "15-rust",
           "description": "Related concept: Zero-Cost Abstractions."
+        },
+        {
+          "module": "15-rust",
+          "term": "iterator_trait",
+          "description": "Related concept: The `Iterator` Trait."
         }
       ]
     },
@@ -1903,6 +1952,11 @@
           "term": "expressions",
           "module": "15-rust",
           "description": "The concept that allows `loop` to return a value."
+        },
+        {
+          "module": "15-rust",
+          "term": "labeled_loops",
+          "description": "Related concept: Labeled Loops."
         }
       ]
     },
@@ -1957,6 +2011,11 @@
           "term": "declarative_macros_macro_rules",
           "module": "15-rust",
           "description": "Related concept: Declarative Macros (`macro_rules!`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "pattern_features",
+          "description": "Related concept: Pattern Features."
         }
       ]
     },
@@ -2104,6 +2163,11 @@
           "term": "if_let_while_let",
           "module": "15-rust",
           "description": "Related concept: `if let` / `while let`."
+        },
+        {
+          "module": "15-rust",
+          "term": "result_option_combinators",
+          "description": "Related concept: `Result` and `Option` Combinators."
         }
       ]
     },
@@ -2158,6 +2222,11 @@
           "term": "partial_moves",
           "module": "15-rust",
           "description": "Related concept: Partial Moves & Partial Borrows."
+        },
+        {
+          "module": "15-rust",
+          "term": "pattern_features",
+          "description": "Related concept: Pattern Features."
         }
       ]
     },
@@ -2227,6 +2296,11 @@
           "term": "try_from_try_into",
           "module": "15-rust",
           "description": "Related concept: `TryFrom` / `TryInto`."
+        },
+        {
+          "module": "15-rust",
+          "term": "result_option_combinators",
+          "description": "Related concept: `Result` and `Option` Combinators."
         }
       ]
     },
@@ -3770,6 +3844,11 @@
           "term": "assert_macros",
           "module": "15-rust",
           "description": "Related concept: `assert!` / `assert_eq!` / `assert_ne!`."
+        },
+        {
+          "module": "15-rust",
+          "term": "formatting_traits",
+          "description": "Related concept: Formatting Traits (`std::fmt`)."
         }
       ]
     },
@@ -3878,6 +3957,11 @@
           "term": "auto_traits",
           "module": "15-rust",
           "description": "Related concept: Auto Traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "serde",
+          "description": "Related concept: `serde`."
         }
       ]
     },
@@ -3917,6 +4001,11 @@
           "module": "15-rust",
           "term": "println_format",
           "description": "Related concept: `println!` / `format!`."
+        },
+        {
+          "module": "15-rust",
+          "term": "formatting_traits",
+          "description": "Related concept: Formatting Traits (`std::fmt`)."
         }
       ]
     },
@@ -5295,6 +5384,11 @@
           "term": "oncelock_lazylock",
           "module": "15-rust",
           "description": "Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_closures",
+          "description": "Related concept: Async Closures."
         }
       ]
     },
@@ -5422,6 +5516,11 @@
           "term": "vecdeque_t",
           "module": "15-rust",
           "description": "Related concept: `VecDeque<T>`."
+        },
+        {
+          "module": "15-rust",
+          "term": "iterator_trait",
+          "description": "Related concept: The `Iterator` Trait."
         }
       ]
     },
@@ -5456,6 +5555,11 @@
           "term": "closure",
           "module": "15-rust",
           "description": "The tiny anonymous functions you are passing into `map()` and `filter()`."
+        },
+        {
+          "module": "15-rust",
+          "term": "iterator_trait",
+          "description": "Related concept: The `Iterator` Trait."
         }
       ]
     },
@@ -5685,6 +5789,11 @@
           "term": "workspace",
           "module": "15-rust",
           "description": "The next layer up: multiple *packages* (each potentially with several targets) managed together."
+        },
+        {
+          "module": "15-rust",
+          "term": "cross_compilation",
+          "description": "Related concept: Cross-Compilation."
         }
       ]
     },
@@ -6413,8 +6522,30 @@
       "level": 8,
       "file": "terms/level_08/ignore.md",
       "display_name": "`#[ignore]` Attribute",
-      "prerequisites": [],
-      "related": []
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "test_attribute",
+          "description": "The #[test] attribute for unit tests."
+        },
+        {
+          "module": "15-rust",
+          "term": "attributes",
+          "description": "Attribute syntax #[ignore]."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "test_attribute",
+          "description": "The #[test] attribute for unit tests."
+        },
+        {
+          "module": "15-rust",
+          "term": "should_panic",
+          "description": "Test panic assertions."
+        }
+      ]
     },
     "inner_doc_comment": {
       "level": 8,
@@ -6500,6 +6631,16 @@
           "term": "assert_macros",
           "module": "15-rust",
           "description": "The macros that are often used inside functions to intentionally trigger the panics you are testing."
+        },
+        {
+          "module": "15-rust",
+          "term": "ignore",
+          "description": "Related concept: `#[ignore]` Attribute."
+        },
+        {
+          "module": "15-rust",
+          "term": "panic_handling",
+          "description": "Related concept: Panic Handling (`panic!`)."
         }
       ]
     },
@@ -6529,6 +6670,11 @@
           "term": "cfg_attribute",
           "module": "15-rust",
           "description": "Used in conjunction with tests to hide the test module from the compiler."
+        },
+        {
+          "module": "15-rust",
+          "term": "ignore",
+          "description": "Related concept: `#[ignore]` Attribute."
         }
       ]
     },
@@ -7116,6 +7262,11 @@
           "module": "15-rust",
           "term": "thread_spawn",
           "description": "Related concept: `thread::spawn`."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio_spawn",
+          "description": "Related concept: `tokio::spawn`."
         }
       ]
     },
@@ -7198,7 +7349,7 @@
       "display_name": "Async Closures",
       "prerequisites": [
         {
-          "term": "closures",
+          "term": "closure",
           "module": "15-rust",
           "description": "Standard synchronous closures in Rust."
         },
@@ -7213,7 +7364,23 @@
           "description": "The return type of async closure calls."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "closure",
+          "description": "Standard synchronous closures."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Asynchronous execution model."
+        },
+        {
+          "module": "15-rust",
+          "term": "future_trait",
+          "description": "Return type of async closure calls."
+        }
+      ]
     },
     "async_fn": {
       "level": 10,
@@ -7304,6 +7471,11 @@
           "module": "15-rust",
           "term": "waker_context",
           "description": "Related concept: `Waker` and `Context`."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio_spawn",
+          "description": "Related concept: `tokio::spawn`."
         }
       ]
     },
@@ -7343,6 +7515,16 @@
           "module": "15-rust",
           "term": "waker_context",
           "description": "Related concept: `Waker` and `Context`."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_closures",
+          "description": "Related concept: Async Closures."
+        },
+        {
+          "module": "15-rust",
+          "term": "stream_trait",
+          "description": "Related concept: `Stream` Trait."
         }
       ]
     },
@@ -7444,7 +7626,23 @@
           "description": "Asynchronous functions used alongside streams."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "iterator_trait",
+          "description": "Asynchronous equivalent of the synchronous Iterator trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "future_trait",
+          "description": "Item polling futures."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Asynchronous streams."
+        }
+      ]
     },
     "tokio": {
       "level": 16,
@@ -7472,6 +7670,26 @@
           "term": "read_write_bufread",
           "module": "15-rust",
           "description": "Related concept: `Read` / `Write` / `BufRead` Traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "axum_actix_web",
+          "description": "Related concept: `axum` / `actix-web`."
+        },
+        {
+          "module": "15-rust",
+          "term": "reqwest",
+          "description": "Related concept: `reqwest`."
+        },
+        {
+          "module": "15-rust",
+          "term": "sqlx",
+          "description": "Related concept: `sqlx`."
+        },
+        {
+          "module": "15-rust",
+          "term": "tracing",
+          "description": "Related concept: `tracing`."
         }
       ]
     },
@@ -7496,7 +7714,23 @@
           "description": "The functions that are passed to `spawn`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "std_thread_spawn",
+          "description": "Async task spawning vs native OS thread spawning."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Spawning asynchronous green tasks."
+        },
+        {
+          "module": "15-rust",
+          "term": "executor_runtime",
+          "description": "The async event loop runtime."
+        }
+      ]
     },
     "unpin_trait": {
       "level": 10,
@@ -10242,7 +10476,23 @@
           "description": "Asynchronous handler functions."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Asynchronous HTTP web server frameworks."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio",
+          "description": "Async runtime powering web frameworks."
+        },
+        {
+          "module": "15-rust",
+          "term": "serde",
+          "description": "JSON request/response serialization."
+        }
+      ]
     },
     "clap": {
       "level": 16,
@@ -10255,7 +10505,18 @@
           "description": "Building CLI utilities with `clap`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "cargo_cli",
+          "description": "Command-line interface argument parsing."
+        },
+        {
+          "module": "15-rust",
+          "term": "cargo",
+          "description": "CLI tool execution with Cargo."
+        }
+      ]
     },
     "clippy": {
       "level": 16,
@@ -10312,6 +10573,11 @@
           "term": "docs_rs",
           "module": "15-rust",
           "description": "Related concept: `docs.rs`."
+        },
+        {
+          "module": "15-rust",
+          "term": "serde",
+          "description": "Related concept: `serde`."
         }
       ]
     },
@@ -10360,7 +10626,23 @@
           "description": "Asynchronous network request handling."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Asynchronous HTTP client library."
+        },
+        {
+          "module": "15-rust",
+          "term": "serde",
+          "description": "JSON request and response body parsing."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio",
+          "description": "Async network I/O execution."
+        }
+      ]
     },
     "rust_analyzer": {
       "level": 16,
@@ -10378,7 +10660,18 @@
           "description": "Macros expanded live in the editor by `rust-analyzer`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "cargo",
+          "description": "IDE language server protocol support for Cargo projects."
+        },
+        {
+          "module": "15-rust",
+          "term": "rustup",
+          "description": "Toolchain manager integrating rust-analyzer."
+        }
+      ]
     },
     "rustfmt": {
       "level": 16,
@@ -10445,6 +10738,11 @@
           "term": "cargo",
           "module": "15-rust",
           "description": "Related concept: Cargo."
+        },
+        {
+          "module": "15-rust",
+          "term": "rust_analyzer",
+          "description": "Related concept: `rust-analyzer`."
         }
       ]
     },
@@ -10459,7 +10757,33 @@
           "description": "Compile-time serialization code generation without runtime reflection."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "derive_macro",
+          "description": "Procedural derive macros Serialize and Deserialize."
+        },
+        {
+          "module": "15-rust",
+          "term": "crates_io",
+          "description": "De facto serialization framework on crates.io."
+        },
+        {
+          "module": "15-rust",
+          "term": "axum_actix_web",
+          "description": "Related concept: `axum` / `actix-web`."
+        },
+        {
+          "module": "15-rust",
+          "term": "reqwest",
+          "description": "Related concept: `reqwest`."
+        },
+        {
+          "module": "15-rust",
+          "term": "sqlx",
+          "description": "Related concept: `sqlx`."
+        }
+      ]
     },
     "sqlx": {
       "level": 16,
@@ -10482,7 +10806,23 @@
           "description": "Asynchronous database query execution."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "async_await",
+          "description": "Asynchronous compile-time checked SQL database client."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio",
+          "description": "Async connection pool handling."
+        },
+        {
+          "module": "15-rust",
+          "term": "serde",
+          "description": "Mapping database rows to structs."
+        }
+      ]
     },
     "tracing": {
       "level": 16,
@@ -10500,7 +10840,18 @@
           "description": "Asynchronous control flow tracked via `tracing::instrument`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "documentation_comments",
+          "description": "Structured application logging and diagnostic telemetry."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio",
+          "description": "Async span context propagation."
+        }
+      ]
     },
     "alloc_library": {
       "level": 17,
@@ -10523,6 +10874,11 @@
           "module": "15-rust",
           "term": "std_library",
           "description": "Related concept: The Rust Standard Library (`std`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "global_allocator",
+          "description": "Related concept: `global_allocator`."
         }
       ]
     },
@@ -10566,7 +10922,18 @@
           "description": "Invokes cross-compilation via `cargo build --target <target_triple>`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "cargo_target_kinds",
+          "description": "Compiling Rust binaries for foreign target architectures."
+        },
+        {
+          "module": "15-rust",
+          "term": "linker_script",
+          "description": "Target linker configuration."
+        }
+      ]
     },
     "embedded_hal": {
       "level": 17,
@@ -10618,7 +10985,18 @@
           "description": "The heap collection library powered by `#[global_allocator]`."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "no_std",
+          "description": "Memory allocation in embedded and bare-metal environments."
+        },
+        {
+          "module": "15-rust",
+          "term": "alloc_library",
+          "description": "Global heap memory allocation."
+        }
+      ]
     },
     "hal": {
       "level": 17,
@@ -10655,7 +11033,18 @@
           "description": "Target compilation using custom linker scripts."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "no_main",
+          "description": "Hardware memory layout and symbol placement for embedded binaries."
+        },
+        {
+          "module": "15-rust",
+          "term": "cross_compilation",
+          "description": "Target linker script configuration."
+        }
+      ]
     },
     "no_main": {
       "level": 17,
@@ -10668,7 +11057,18 @@
           "description": "Controls hardware memory layout and entry point addresses."
         }
       ],
-      "related": []
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "linker_script",
+          "description": "Custom entry point definition _start without standard main."
+        },
+        {
+          "module": "15-rust",
+          "term": "no_std",
+          "description": "Bare-metal firmware and kernel entry point setup."
+        }
+      ]
     },
     "no_std": {
       "level": 17,
@@ -10696,6 +11096,16 @@
           "module": "15-rust",
           "term": "std_library",
           "description": "Related concept: The Rust Standard Library (`std`)."
+        },
+        {
+          "module": "15-rust",
+          "term": "global_allocator",
+          "description": "Related concept: `global_allocator`."
+        },
+        {
+          "module": "15-rust",
+          "term": "no_main",
+          "description": "Related concept: `#![no_main]`."
         }
       ]
     },
@@ -10909,21 +11319,47 @@
     },
     "panic_handling": {
       "file": "terms/level_04/panic_handling.md",
-      "prerequisites": [],
-      "related": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "panic",
+          "description": "The panic! macro for unrecoverable errors."
+        },
+        {
+          "module": "15-rust",
+          "term": "result_t_e",
+          "description": "Recoverable Result errors vs unrecoverable panics."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "result_option_combinators",
+          "description": "Unrecoverable panics vs recoverable error handling."
+        },
+        {
+          "module": "15-rust",
+          "term": "should_panic",
+          "description": "Test panic assertions."
+        }
+      ],
       "display_name": "Panic Handling (`panic!`)",
       "level": 4
     },
-    "closures": {
-      "file": "terms/level_05/closures.md",
-      "prerequisites": [],
-      "related": [],
-      "display_name": "Closures (`|args| body`)",
-      "level": 5
-    },
     "hashmap_and_hashset": {
       "file": "terms/level_05/hashmap_and_hashset.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "hashmap_k_v",
+          "description": "Standard library HashMap collection."
+        },
+        {
+          "module": "15-rust",
+          "term": "hash_trait",
+          "description": "The Hash trait required for keys in hash maps."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10935,14 +11371,52 @@
     },
     "iterator_trait": {
       "file": "terms/level_05/iterator_trait.md",
-      "prerequisites": [],
-      "related": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "iterator",
+          "description": "Core sequence iteration concept in Rust."
+        },
+        {
+          "module": "15-rust",
+          "term": "trait",
+          "description": "Trait mechanism enabling sequence iteration."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "iterator_chains",
+          "description": "Adapter methods on Iterator."
+        },
+        {
+          "module": "15-rust",
+          "term": "intoiterator",
+          "description": "Converting collections into iterators."
+        },
+        {
+          "module": "15-rust",
+          "term": "iterator",
+          "description": "Core iteration traits."
+        },
+        {
+          "module": "15-rust",
+          "term": "stream_trait",
+          "description": "Related concept: `Stream` Trait."
+        }
+      ],
       "display_name": "The `Iterator` Trait",
       "level": 5
     },
     "attributes": {
       "file": "terms/level_07/attributes.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "tokens",
+          "description": "Syntactic attribute tokens #[...] and #![...]."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10954,7 +11428,18 @@
     },
     "build_rs": {
       "file": "terms/level_07/build_rs.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "cargo_toml",
+          "description": "Manifest configuring build = 'build.rs'."
+        },
+        {
+          "module": "15-rust",
+          "term": "cargo_cli",
+          "description": "Cargo build execution."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10966,7 +11451,18 @@
     },
     "cargo_cli": {
       "file": "terms/level_07/cargo_cli.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "cargo",
+          "description": "Core build system and package manager."
+        },
+        {
+          "module": "15-rust",
+          "term": "cargo_toml",
+          "description": "Package configuration manifest."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -10980,6 +11476,11 @@
           "module": "15-rust",
           "term": "miri_ub_detector",
           "description": "Related concept: Miri (UB Detector)."
+        },
+        {
+          "module": "15-rust",
+          "term": "clap",
+          "description": "Related concept: `clap`."
         }
       ],
       "display_name": "Cargo CLI",
@@ -10987,12 +11488,28 @@
     },
     "documentation_comments": {
       "file": "terms/level_07/documentation_comments.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "comments",
+          "description": "Standard comments vs doc comments /// and //!."
+        },
+        {
+          "module": "15-rust",
+          "term": "attributes",
+          "description": "Doc comments desugar to #[doc = '...'] attributes."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
           "term": "comments",
           "description": "Related concept: Comments."
+        },
+        {
+          "module": "15-rust",
+          "term": "tracing",
+          "description": "Related concept: `tracing`."
         }
       ],
       "display_name": "Documentation Comments (`///`, `//!`)",
@@ -11000,7 +11517,18 @@
     },
     "visibility_and_modules": {
       "file": "terms/level_07/visibility_and_modules.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "mod_declaration",
+          "description": "Module creation and hierarchy."
+        },
+        {
+          "module": "15-rust",
+          "term": "pub_visibility",
+          "description": "Public and private item visibility."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -11034,6 +11562,36 @@
           "module": "15-rust",
           "term": "await",
           "description": "Await syntax."
+        },
+        {
+          "module": "15-rust",
+          "term": "async_closures",
+          "description": "Related concept: Async Closures."
+        },
+        {
+          "module": "15-rust",
+          "term": "stream_trait",
+          "description": "Related concept: `Stream` Trait."
+        },
+        {
+          "module": "15-rust",
+          "term": "tokio_spawn",
+          "description": "Related concept: `tokio::spawn`."
+        },
+        {
+          "module": "15-rust",
+          "term": "axum_actix_web",
+          "description": "Related concept: `axum` / `actix-web`."
+        },
+        {
+          "module": "15-rust",
+          "term": "reqwest",
+          "description": "Related concept: `reqwest`."
+        },
+        {
+          "module": "15-rust",
+          "term": "sqlx",
+          "description": "Related concept: `sqlx`."
         }
       ],
       "display_name": "`async` / `.await`",
@@ -11963,21 +12521,76 @@
     },
     "labeled_loops": {
       "file": "terms/level_02/labeled_loops.md",
-      "prerequisites": [],
-      "related": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "loop",
+          "description": "The loop keyword for basic infinite loops."
+        },
+        {
+          "module": "15-rust",
+          "term": "for_range",
+          "description": "Range-based for loops."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "loop",
+          "description": "Loop execution control."
+        },
+        {
+          "module": "15-rust",
+          "term": "for_range",
+          "description": "Iterating over ranges in loops."
+        }
+      ],
       "display_name": "Labeled Loops",
       "level": 2
     },
     "pattern_features": {
       "file": "terms/level_02/pattern_features.md",
-      "prerequisites": [],
-      "related": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "pattern_matching",
+          "description": "Core pattern matching concept."
+        },
+        {
+          "module": "15-rust",
+          "term": "match",
+          "description": "Control flow with match expressions."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "pattern_matching",
+          "description": "Advanced destructuring and pattern matching features."
+        },
+        {
+          "module": "15-rust",
+          "term": "match",
+          "description": "Match arm pattern guards."
+        }
+      ],
       "display_name": "Pattern Features",
       "level": 2
     },
     "file_bufreadwriter": {
       "file": "terms/level_04/file_bufreadwriter.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "result_t_e",
+          "description": "Fallible file system operations returning std::io::Result."
+        },
+        {
+          "module": "15-rust",
+          "term": "formatting_traits",
+          "description": "Formatting output streams."
+        }
+      ],
       "related": [
         {
           "module": "15-rust",
@@ -12009,15 +12622,64 @@
     },
     "formatting_traits": {
       "file": "terms/level_04/formatting_traits.md",
-      "prerequisites": [],
-      "related": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "display_trait",
+          "description": "The Display trait for user-facing formatting."
+        },
+        {
+          "module": "15-rust",
+          "term": "debug_trait",
+          "description": "The Debug trait for developer-facing formatting."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "display_trait",
+          "description": "Format traits for Display."
+        },
+        {
+          "module": "15-rust",
+          "term": "debug_trait",
+          "description": "Format traits for Debug."
+        }
+      ],
       "display_name": "Formatting Traits (`std::fmt`)",
       "level": 4
     },
     "result_option_combinators": {
       "file": "terms/level_04/result_option_combinators.md",
-      "prerequisites": [],
-      "related": [],
+      "prerequisites": [
+        {
+          "module": "15-rust",
+          "term": "result_t_e",
+          "description": "The Result<T, E> enum for recoverable error handling."
+        },
+        {
+          "module": "15-rust",
+          "term": "option_t",
+          "description": "The Option<T> enum for optional value handling."
+        }
+      ],
+      "related": [
+        {
+          "module": "15-rust",
+          "term": "result_t_e",
+          "description": "The Result<T, E> type."
+        },
+        {
+          "module": "15-rust",
+          "term": "option_t",
+          "description": "The Option<T> type."
+        },
+        {
+          "module": "15-rust",
+          "term": "panic_handling",
+          "description": "Related concept: Panic Handling (`panic!`)."
+        }
+      ],
       "display_name": "`Result` and `Option` Combinators",
       "level": 4
     },

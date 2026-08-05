@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<head>`](../level_01/head.md) — The `<link>` tag is almost exclusively placed inside the `<head>`.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<link>` tag is a void element (no closing tag).
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ Without the link, you have all the pieces but no idea how to arrange them or wha
 - [`<script>`](script.md) — Related concept: `<script>`.
 - [`<style>` Element](style_tag.md) — Related concept: `<style>` Element.
 - [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
+
 ---
 
 ## 8. Key Takeaways

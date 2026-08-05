@@ -9,6 +9,7 @@
 - [Middleware vs Route Handlers](../level_07/middleware_vs_route_handlers.md) — The conceptual difference between these two systems.
 - [`NextRequest` & `NextResponse`](../level_07/next_request_response.md) — The core API used within this file.
 - [Authentication & Session Management](authentication_concepts.md) — The primary purpose of route checkpointing.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ export const config = {
 - [Authentication & Session Management](authentication_concepts.md) — Related concept: Authentication & Session Management.
 - [Internationalization (i18n)](i18n.md) — Related concept: Internationalization (i18n).
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — Route Handlers.
+
 ---
 
 ## 8. Key Takeaways

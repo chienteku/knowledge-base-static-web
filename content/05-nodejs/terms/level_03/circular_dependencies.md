@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [CommonJS (require, module.exports)](commonjs.md)
+
 ---
 
 ## 2. Term Category
@@ -155,6 +156,7 @@ If `Child` imports `Parent` to get `formatName()`, you will cause a Circular Dep
 
 ## 7. Related Terms
 - [Module Resolution](module_resolution.md) — The process that gets trapped in the infinite loop.
+
 ---
 
 ## 8. Key Takeaways

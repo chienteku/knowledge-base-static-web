@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The process Object](../level_02/process_object.md) — The process wrapper capturing OS signals.
 - [Docker](docker.md) — The container container environments that emit shutdown signals during updates.
+
 ---
 
 ## 2. Term Category
@@ -223,6 +224,7 @@ process.on('SIGINT', async () => {
 - [PM2 (Process Manager)](pm2.md) — Automatically sends SIGINT and awaits graceful shutdowns during updates.
 - [Docker](docker.md) — Relies on SIGTERM handling to shut down containers cleanly.
 - [Logging & Monitoring](logging_monitoring.md) — Related concept: Logging & Monitoring.
+
 ---
 
 ## 8. Key Takeaways

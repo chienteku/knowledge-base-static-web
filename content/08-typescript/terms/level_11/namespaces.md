@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [ES Modules in TypeScript](modules.md) — The modern standard that has largely replaced Namespaces.
+
 ---
 
 ## 2. Term Category
@@ -172,6 +173,7 @@ import { Runner } from './feature';
 > **Explanation:** ES Modules are standardized JavaScript module specifications supported natively by modern runtimes.
 
 ## 7. Related Terms
-- [Declaration Files](../level_11/declaration_files.md) — The main place where you will still see the `namespace` keyword used heavily today.
+- [Declaration Files (`.d.ts`)](declaration_files.md) — The main place where you will still see the `namespace` keyword used heavily today.
 
 ---
+

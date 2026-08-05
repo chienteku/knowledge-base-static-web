@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Side Effects](side_effects.md) — The actions you execute inside this hook.
 - [Component Lifecycle](component_lifecycle.md) — When this hook actually runs.
+
 ---
 
 ## 2. Term Category
@@ -177,6 +178,7 @@ function App() {
 - [`useLayoutEffect` Hook](use_layout_effect.md) — Related concept: `useLayoutEffect` Hook.
 - [Dynamic Segments (URL Parameters)](../level_09/dynamic_segments.md) — Related concept: Dynamic Segments (URL Parameters).
 - [React Query (TanStack Query) / SWR](../level_11/react_query.md) — Related concept: React Query (TanStack Query) / SWR.
+
 ---
 
 ## 8. Key Takeaways

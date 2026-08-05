@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [CPU-bound vs I/O-bound](../level_01/cpu_vs_io.md) — The types of heavy computations that require parallel threads.
 - [Blocking the Event Loop](../level_01/blocking_event_loop.md) — The performance bottleneck resolved by threading.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ parentPort.on('message', (text) => {
 ## 7. Related Terms
 - [Child Processes (child_process)](child_processes.md) — Multi-process concurrency with isolated memories.
 - [The cluster Module](cluster_module.md) — Spawning multiple instances of a Node server process.
+
 ---
 
 ## 8. Key Takeaways

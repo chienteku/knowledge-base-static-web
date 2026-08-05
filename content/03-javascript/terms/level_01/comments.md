@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -208,6 +209,7 @@ async function processData() {
 
 ## 7. Related Terms
 - [Automatic Semicolon Insertion (ASI)](asi.md) — Related concept: Automatic Semicolon Insertion (ASI).
+
 ---
 
 ## 8. Key Takeaways

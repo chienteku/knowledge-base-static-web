@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -158,6 +159,7 @@ body { color: red; }
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Modern preprocessors compile imports before browser loading loops.
 - [CSS Reset vs. Normalize](reset_normalize.md) — Resets are often loaded at the top of main files via `@import`.
 - [`@font-face` & Web Fonts (Google Fonts)](../level_03/web_fonts.md) — Related concept: `@font-face` & Web Fonts (Google Fonts).
+
 ---
 
 ## 8. Key Takeaways

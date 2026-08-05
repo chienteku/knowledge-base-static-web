@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props](../level_04/props.md) — The local way of passing state, which breaks down at scale.
 - [Emitting Events (`defineEmits`)](../level_04/emit.md) — The local way of mutating state, which also breaks down at scale.
+
 ---
 
 ## 2. Term Category
@@ -153,6 +154,7 @@ In modern Vue 3, the official tool is **[Pinia](../level_07/pinia.md)**.
 ## 7. Related Terms
 - [Pinia](pinia.md) — The specific tool Vue uses to implement State Management.
 - [Props](../level_04/props.md) — The tool for Local State Management.
+
 ---
 
 ## 8. Key Takeaways

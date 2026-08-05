@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Type Inference](../level_01/type_inference.md) — The system you are forcefully overriding.
+
 ---
 
 ## 2. Term Category
@@ -155,6 +156,7 @@ const el = evt.target as HTMLInputElement; // Standard assertion syntax
 - [Branded / Nominal Types](../level_09/branded_nominal_types.md) — Related concept: Branded / Nominal Types.
 - [Const Assertions (`as const`)](../level_11/const_assertions.md) — Related concept: Const Assertions (`as const`).
 - [`unknown`](../level_02/unknown.md) — Safely asserting unknown types.
+
 ---
 
 ## 8. Key Takeaways

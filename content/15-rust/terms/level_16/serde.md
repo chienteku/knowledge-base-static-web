@@ -518,7 +518,7 @@ Implement a `PacketHeader<'a>` struct borrowing `source_ip: &'a str` and `endpoi
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

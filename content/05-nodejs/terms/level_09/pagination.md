@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST API Design](rest_api.md) — This is a standard requirement for all production GET requests.
 - [ORMs & ODMs](../level_08/orms_odms.md) — You use these tools to enforce the pagination on the database level.
+
 ---
 
 ## 2. Term Category
@@ -232,6 +233,7 @@ How many items should the database `skip` (OFFSET)?
 ## 7. Related Terms
 - [ORMs & ODMs](../level_08/orms_odms.md) — The tools that execute the `take` and `skip` commands.
 - [The req & res Objects](../level_07/req_res.md) — You extract the page numbers from `req.query`.
+
 ---
 
 ## 8. Key Takeaways

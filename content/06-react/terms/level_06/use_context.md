@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The Context API](context_api.md) — You must understand how to Create and Provide Context before you can Consume it.
+
 ---
 
 ## 2. Term Category
@@ -181,6 +182,7 @@ Write a custom hook called `useTheme` that returns the `ThemeContext`.
 - [The Context API](context_api.md) — The system that powers this hook.
 - [Custom Hooks](../level_04/custom_hooks.md) — Often used to wrap `useContext` for cleaner code.
 - [Prop Drilling](prop_drilling.md) — Solving prop drilling.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
 - [if / else](if_else.md) — Conditional branching.
+
 ---
 
 ## 2. Term Category
@@ -239,6 +240,7 @@ Caution
 ## 7. Related Terms
 - [if / else](if_else.md) — The more flexible alternative for conditional branching.
 - [break / continue](break_continue.md) — Related concept: break / continue.
+
 ---
 
 ## 8. Key Takeaways

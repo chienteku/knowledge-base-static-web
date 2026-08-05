@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP Headers](../level_02/http_headers.md) — These authentication schemes dictate exactly how to format the `Authorization` header.
+
 ---
 
 ## 2. Term Category
@@ -152,6 +153,7 @@ Authorization: Bearer eyJhbGciOi... ; Standard OAuth2 Bearer token header
 - [OAuth 2.0](oauth.md) — Related concept: OAuth 2.0.
 - [Secrets & Environment Variables](secrets_env.md) — Related concept: Secrets & Environment Variables.
 - [Base64 Encoding](../level_07/base64.md) — Related concept: Base64 Encoding.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [NPM (Node Package Manager)](npm.md) — The tool that automatically creates and edits this file.
-- json — The syntax format of this file.
+- [JSON (JavaScript Object Notation)](../../../04-apis/terms/level_01/json.md) — The syntax format of this file.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ This is one of the most powerful features. Instead of typing complex terminal co
 - [ES Modules (import, export)](../level_03/es_modules.md) — Related concept: ES Modules (import, export).
 - [NPM (Node Package Manager)](npm.md) — Related concept: NPM (Node Package Manager).
 - [Semantic Versioning (SemVer)](semantic_versioning.md) — Related concept: Semantic Versioning (SemVer).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Expression](../level_01/expression.md) — JSX evaluates to JavaScript expressions.
 - [Babel](babel.md) — The tool required to translate JSX into real JavaScript.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ async function processData() {
 - [Babel](babel.md) — The transpiler that converts JSX into `React.createElement()`.
 - [Template Literals](../level_08/template_literals.md) — A native JS feature that allows embedding expressions in strings, often compared to JSX.
 - [SPA](spa.md) — Related concept: SPA.
+
 ---
 
 ## 8. Key Takeaways

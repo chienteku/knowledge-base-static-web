@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [ES Modules in TypeScript](modules.md) — How code files load each other.
 - [Declaration Files (`.d.ts`)](declaration_files.md) — The type signatures separation.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ export type { AppUser };
 - [ES Modules in TypeScript](modules.md) — The baseline module loading specification.
 - [Declaration Files (`.d.ts`)](declaration_files.md) — The type files that circular imports are often fetched from.
 - [Strict Mode](strict_mode.md) — Configuring compiler constraints.
+
 ---
 
 ## 8. Key Takeaways

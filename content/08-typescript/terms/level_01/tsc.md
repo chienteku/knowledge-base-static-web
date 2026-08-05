@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [TypeScript](typescript.md) — The language that `tsc` compiles.
+
 ---
 
 ## 2. Term Category
@@ -141,6 +142,7 @@ $ tsc # Correct: Uses tsconfig.json settings
 ## 7. Related Terms
 - [`tsconfig.json`](tsconfig.md) — The configuration file that tells `tsc` exactly how to behave.
 - [TypeScript](typescript.md) — The language syntax `tsc` parses.
+
 ---
 
 ## 8. Key Takeaways

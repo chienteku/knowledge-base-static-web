@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [React Hooks](../level_01/react_hooks.md) — The system governing hook executions.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ export default function WindowTracker() {
 ## 7. Related Terms
 - [React Hooks](../level_01/react_hooks.md) — The parent hook mechanism.
 - [`template.tsx`](template.md) — The Next.js UI file that intentionally re-triggers effects on page navigations.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The http Module](../level_02/http_module.md) — The basic introduction to this core module.
 - [Event Emitter](../level_05/event_emitter.md) — The `http.Server` class is actually just an Event Emitter!
+
 ---
 
 ## 2. Term Category
@@ -229,6 +230,7 @@ server.keepAliveTimeout = 65000; // Exceed proxy 60s timeout
 ## 7. Related Terms
 - [Express.js](express_js.md) — The framework that hides the ugly parts of the `http` module.
 - [The req & res Objects](req_res.md) — What the `http` module passes into your callback.
+
 ---
 
 ## 8. Key Takeaways

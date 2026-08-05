@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The fs Module (File System)](../level_02/fs_module.md) — What returns a Buffer when you forget to specify `utf8`.
+
 ---
 
 ## 2. Term Category
@@ -153,6 +154,7 @@ res.send(buf);
 - [Character Encoding & Buffer ↔ String](buffer_encoding.md) — Related concept: Character Encoding & Buffer ↔ String.
 - [Data Chunks](chunks.md) — Related concept: Data Chunks.
 - [Memory Leaks & Garbage Collection](../level_10/memory_leaks.md) — Related concept: Memory Leaks & Garbage Collection.
+
 ---
 
 ## 8. Key Takeaways

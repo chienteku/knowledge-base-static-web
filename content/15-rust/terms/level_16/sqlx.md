@@ -617,7 +617,7 @@ Implement an async user search service using `sqlx::QueryBuilder` in Rust for SQ
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

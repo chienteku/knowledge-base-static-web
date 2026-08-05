@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Normalization](normalization.md) — The schema cleanup process that uses dependencies to split tables.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ ightarrow B$ denotes that attribute A uniquely determines attribute B.
 ## 7. Related Terms
 - [Normalization](normalization.md) — The parent organization process.
 - [First Normal Form (1NF)](first_normal_form.md) — The atomic standard.
+
 ---
 
 ## 8. Key Takeaways

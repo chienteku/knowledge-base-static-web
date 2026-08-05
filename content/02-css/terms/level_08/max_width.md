@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Width / Height](../level_02/width_height.md) — The core dimensions of the Box Model.
 - [Responsive Design (Concept)](responsive_design.md) — Sizing layout blocks relative to device size.
+
 ---
 
 ## 2. Term Category
@@ -334,6 +335,7 @@ Fluid image scaling constraint:
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The property that handles clips if fixed sizing bounds are breached.
 - [`%` (Percentages)](percentages.md) — Related concept: `%` (Percentages).
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Related concept: `vw` / `vh` (Viewport Units).
+
 ---
 
 ## 8. Key Takeaways

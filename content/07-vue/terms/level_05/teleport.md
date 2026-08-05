@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — Understanding the strict hierarchy of the Component Tree.
-- dom — The physical HTML structure we are breaking out of.
+- [DOM (Document Object Model)](../../../01-html/terms/level_09/dom.md) — The physical HTML structure we are breaking out of.
+
 ---
 
 ## 2. Term Category
@@ -162,6 +163,7 @@ Even though the Modal HTML is physically rendered inside the `<body>` tag, Vue s
 - [Components](../level_04/components.md) — What Teleport allows you to escape.
 - [Single-File Components (SFCs)](../level_04/sfc.md) — Scoped styling still works with Teleport!
 - [`<Suspense>` (Vue)](suspense.md) — Related concept: `<Suspense>` (Vue).
+
 ---
 
 ## 8. Key Takeaways

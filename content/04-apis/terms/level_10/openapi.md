@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](../level_03/rest.md) — OpenAPI is specifically designed to document REST APIs.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The OpenAPI blueprint is written in JSON (or YAML).
+
 ---
 
 ## 2. Term Category
@@ -169,6 +170,7 @@ nullable: true
 - [Mocking APIs](mocking.md) — Related concept: Mocking APIs.
 - [API Contract / Schema-First Design](api_contract.md) — API Contract specification.
 - [SDK / Client Library](sdk.md) — Generating client SDKs.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Vue Router](vue_router.md) — The library that provides these guards.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ router.beforeEach((to) => {
 - [Component Lifecycle](../level_04/component_lifecycle.md) — Navigation Guards happen *before* the component lifecycle even begins.
 - [Route Params, Query & Meta](route_params_query_meta.md) — Custom properties read by guards to manage access levels.
 - [Programmatic Navigation (`useRouter` / `useRoute`)](programmatic_navigation.md) — Related concept: Programmatic Navigation (`useRouter` / `useRoute`).
+
 ---
 
 ## 8. Key Takeaways

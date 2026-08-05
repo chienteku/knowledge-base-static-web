@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [JWT (JSON Web Tokens)](jwt.md) — The token format commonly stored on clients.
 - [Cookies](../level_09/cookies.md) — The browser storage mechanism that can be secured using HttpOnly.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ const clean = DOMPurify.sanitize(input); // Robust HTML sanitization
 - [CSRF (Cross-Site Request Forgery)](csrf.md) — The complementary session-riding exploit.
 - [localStorage & sessionStorage](../level_09/web_storage.md) — The client-side Web Storage APIs vulnerable to XSS theft.
 - [Cookie Attributes (HttpOnly, Secure, SameSite)](../level_09/cookie_attributes.md) — Related concept: Cookie Attributes (HttpOnly, Secure, SameSite).
+
 ---
 
 ## 8. Key Takeaways

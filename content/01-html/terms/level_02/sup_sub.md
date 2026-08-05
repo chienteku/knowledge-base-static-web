@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Opening and closing tag boundaries.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since these elements flow inline within paragraphs.
+
 ---
 
 ## 2. Term Category
@@ -265,6 +266,7 @@ sup, sub { line-height: 0; position: relative; vertical-align: baseline; }
 ## 7. Related Terms
 - [`<strong>` & `<em>`](strong_em.md) — Standard inline formatting tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container.
+
 ---
 
 ## 8. Key Takeaways

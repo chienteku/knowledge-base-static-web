@@ -555,7 +555,6 @@ Provide the macro AST generation design, full compilable Rust code simulating me
 - [Derive Macros](derive_macros.md) — Append-only procedural macros for auto-implementing traits on structs/enums.
 - [Function-like Macros](function_like_macros.md) — Procedural macros invoked like function calls using bang syntax (`!`).
 - [Token Stream](token_stream.md) — Compiler token stream representations processed by macro functions.
-- [Attributes (`#[...]`)](../level_07/attributes.md) — Standard Rust outer and inner attribute metadata system.
 
 ---
 

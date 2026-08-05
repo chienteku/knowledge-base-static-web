@@ -539,7 +539,6 @@ Implement the `PacketSerializer` trait alongside two serializer implementations 
 - [Iterator](../level_02/iterator.md) — High-level functional iterator trait.
 - [Type-State Pattern](../level_14/type_state_pattern.md) — Zero-cost compile-time state machine pattern.
 - [Release Profile](release_profile.md) — Cargo build mode enabling full compiler optimizations.
-- [Inlining (`#[inline]`)](inlining.md) — Related concept: Inlining (`#[inline]`).
 - [Link-Time Optimization (LTO)](link_time_optimization.md) — Related concept: Link-Time Optimization (LTO).
 - [`perf` / `flamegraph`](perf_flamegraph.md) — Related concept: `perf` / `flamegraph`.
 - [SIMD (`std::simd`)](simd.md) — Related concept: SIMD (`std::simd`).

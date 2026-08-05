@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-**None.**
+- [Tokens](tokens.md) — Basic lexical units representing identifiers and keywords.
 
 ---
 

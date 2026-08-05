@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The cluster Module](cluster_module.md) — The process clustering system matching this network architecture.
 - [JWT (JSON Web Tokens)](jwt.md) — The stateless token strategy enabling distributed routing.
+
 ---
 
 ## 2. Term Category
@@ -186,6 +187,7 @@ Client ──> [ Load Balancer ] ──> [ Server A or B ] ──> [ Shared Redi
 - [Reverse Proxy (Nginx)](reverse_proxy.md) — The gateway server that frequently performs load balancing.
 - [PM2 (Process Manager)](pm2.md) — Manages local process clusters under server-wide load balancers.
 - [The cluster Module](cluster_module.md) — Related concept: The cluster Module.
+
 ---
 
 ## 8. Key Takeaways

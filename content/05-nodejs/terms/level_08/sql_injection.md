@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The req & res Objects](../level_07/req_res.md) — Where the malicious user input comes from (`req.body`).
 - [ORMs & ODMs](orms_odms.md) — The tools that automatically protect against this attack.
+
 ---
 
 ## 2. Term Category
@@ -163,6 +164,7 @@ const data = await pool.query(`SELECT * FROM cars WHERE color = '${color}'`);
 - [ORMs & ODMs](orms_odms.md) — The best way to never worry about SQL Injection again.
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — Related concept: Parameterized Queries / Prepared Statements.
 - [Input Validation (joi / zod)](../level_09/input_validation.md) — Related concept: Input Validation (joi / zod).
+
 ---
 
 ## 8. Key Takeaways

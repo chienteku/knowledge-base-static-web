@@ -9,6 +9,7 @@
 - [State](state.md) — The variables being modified.
 - [Re-rendering](re_rendering.md) — The UI update cycle triggered by state changes.
 - [`useState` Hook](use_state.md) — The hook used to trigger state updates.
+
 ---
 
 ## 2. Term Category
@@ -239,6 +240,7 @@ function RenderCounter() {
 ## 7. Related Terms
 - [Re-rendering](re_rendering.md) — The UI update cycle triggered by state changes.
 - [`useState` Hook](use_state.md) — The hook used to define and trigger state updates.
+
 ---
 
 ## 8. Key Takeaways

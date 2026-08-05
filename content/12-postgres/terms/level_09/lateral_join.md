@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`JOIN` (Concept)](../level_05/join_concept.md) — Standard non-correlated joins.
 - [Common Table Expression (CTE / `WITH`)](cte.md) — Subquery structures.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ Compare execution plans of LATERAL JOIN vs ROW_NUMBER() PARTITION BY
 ## 7. Related Terms
 - [`JOIN` (Concept)](../level_05/join_concept.md) — Standard non-correlated joins.
 - [Common Table Expression (CTE / `WITH`)](cte.md) — Subquery structures.
+
 ---
 
 ## 8. Key Takeaways

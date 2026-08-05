@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL vs NoSQL](sql_vs_nosql.md) — Migrations are primarily used for Relational (SQL) databases because they have strict schemas.
+
 ---
 
 ## 2. Term Category
@@ -148,6 +149,7 @@ node -e 'runMigrations()'
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.
 - [Prisma / Sequelize (SQL ORMs)](prisma_sequelize.md) — Related concept: Prisma / Sequelize (SQL ORMs).
 - [SQL vs NoSQL](sql_vs_nosql.md) — Related concept: SQL vs NoSQL.
+
 ---
 
 ## 8. Key Takeaways

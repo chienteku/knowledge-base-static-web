@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — What is being loaded.
 - [Vite](../level_10/vite.md) — The build tools that split the code into chunks.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ const AsyncComp = defineAsyncComponent({
 - [`<Suspense>` (Vue)](../level_05/suspense.md) — The wrapper component that coordinates loading states for async components.
 - [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Related concept: Dynamic Components (`<component :is>`).
 - [KeepAlive](keepalive.md) — Related concept: KeepAlive.
+
 ---
 
 ## 8. Key Takeaways

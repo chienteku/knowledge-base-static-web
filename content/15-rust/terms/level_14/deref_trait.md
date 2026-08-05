@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Smart Pointer Trait**: `std::ops::Deref` and `DerefMut` for customized dereferencing operator behavior (`*`).
@@ -311,7 +310,6 @@ Return reference to underlying field: fn deref(&self) -> &Inner { &self.inner }
 - [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Deref/DerefMut traits.
 
 ---
-
 
 ## 7. Key Takeaways
 

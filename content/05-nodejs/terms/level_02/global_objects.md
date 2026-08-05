@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — Node strips out browser APIs and replaces them with its own Globals.
+
 ---
 
 ## 2. Term Category
@@ -157,6 +158,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 - [The process Object](process_object.md) — The most powerful global object in Node.js.
 - [The path Module](path_module.md) — The module you use in conjunction with `__dirname` to build file paths safely.
 - [The Node.js REPL](repl.md) — Related concept: The Node.js REPL.
+
 ---
 
 ## 8. Key Takeaways

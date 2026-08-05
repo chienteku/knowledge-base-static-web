@@ -249,8 +249,6 @@ You are building a monorepo for a platform with three crates: `core_lib`, `api_s
 
 - [`Cargo.toml`](cargo_toml.md) — The file that defines the workspace.
 - [Crate](../level_01/crate.md) — The individual packages that make up the workspace.
-- [Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)](cargo_target_kinds.md) — Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`).
-- [`[dependencies]`](dependencies_section.md) — Related concept: `[dependencies]`.
 - [Edition](edition.md) — Related concept: Edition.
 - [Package](../level_01/package.md) — Related concept: Package.
 

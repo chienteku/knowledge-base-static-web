@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [new Keyword](new_keyword.md) — The constructor instantiation operator.
 - [Prototype Chain](prototype_chain.md) — The linked series of prototypes resolving properties and identities.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ try {
 - [typeof](../level_01/typeof.md) — The operator used to check primitive types.
 - [Class](class.md) — ES6 syntax that maps prototype chains under class definitions.
 - [Reflect](../level_09/reflect.md) — Related concept: Reflect.
+
 ---
 
 ## 8. Key Takeaways

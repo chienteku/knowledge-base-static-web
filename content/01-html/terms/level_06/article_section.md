@@ -9,6 +9,7 @@
 - [Semantic HTML](semantic_html.md) — Understanding that these replace generic `<div>` elements.
 - [`<main>`](main.md) — These tags are almost always placed inside the `<main>` container.
 - [Nesting](../level_01/nesting.md) — Since sections and nested articles represent structural hierarchies.
+
 ---
 
 ## 2. Term Category
@@ -227,6 +228,7 @@ The **`<section>`** is the "Sports Page" or the "Classifieds". If you cut out ju
 - [`<footer>`](footer.md) — Related concept: `<footer>`.
 - [Heading Hierarchy & Document Outline](heading_hierarchy.md) — Related concept: Heading Hierarchy & Document Outline.
 - [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
+
 ---
 
 ## 8. Key Takeaways

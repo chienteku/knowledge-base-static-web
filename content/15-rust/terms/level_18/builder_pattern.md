@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Design Pattern**: The Builder pattern for constructing complex objects step-by-step.
@@ -379,7 +378,6 @@ struct Client { a: i32 } struct ClientBuilder { a: i32 }
 - [`Default` Trait](../level_04/default_trait.md) — Default values.
 
 ---
-
 
 ## 7. Key Takeaways
 

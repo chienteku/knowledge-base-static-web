@@ -9,6 +9,7 @@
 - [`useAsyncData`](use_async_data.md) — The string key used here is the foundation of the cache.
 - [`useFetch`](use_fetch.md) — The URL acts as the cache key here automatically.
 - [Nuxt Payload (SSR State Transfer)](../level_04/nuxt_payload.md) — The payload data cache containing server responses.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ const { data } = await useFetch(() => `/api/user?id=${id.value}`); // Dynamic fu
 - [Fetching Errors & `clearNuxtData`](fetching_errors.md) — How to manually delete items from this cache.
 - [`useAsyncData`](use_async_data.md) — Related concept: `useAsyncData`.
 - [`useFetch`](use_fetch.md) — Related concept: `useFetch`.
+
 ---
 
 ## 8. Key Takeaways

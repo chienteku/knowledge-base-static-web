@@ -9,6 +9,7 @@
 
 - [Vector Search Index (ML/AI)](vector_search.md) — Vector search fundamentals.
 - [`DEFINE INDEX` (Deep Dive)](define_index.md) — The parent index context.
+- [Vector Index (Overview)](../level_04/vector_index.md) — Vector index architecture overview.
 
 ---
 

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Interfaces](interfaces.md) — The structure this syntax is used within.
+- [Object Types](object_types.md) — Defining dynamic object key-value properties.
+
 ---
 
 ## 2. Term Category
@@ -174,6 +176,7 @@ interface Good {
 - [Utility Types Overview](../level_08/utility_types.md) — The `Record` type is the generic equivalent of this.
 - [Excess Property Checks](excess_property_checks.md) — Related concept: Excess Property Checks.
 - [`Record<Keys, Type>`](../level_08/record.md) — Related concept: `Record<Keys, Type>`.
+
 ---
 
 ## 8. Key Takeaways

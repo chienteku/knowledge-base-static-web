@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`%` (Percentages)](../level_08/percentages.md) — `calc()` is most powerful when mixing these relative units with fixed units like `px`.
+
 ---
 
 ## 2. Term Category
@@ -158,6 +159,7 @@ width: calc(10px * 2); /* Unitless multiplier */
 - [`gap` (Grid Gap)](../level_06/gap.md) — Calculating space widths between grid tracks.
 - [`var()` (CSS Custom Properties)](var.md) — Evaluating custom variables inside math equations.
 - [`min()`, `max()`, `clamp()` (Responsive Functions)](../level_08/min_max_clamp.md) — Advanced responsive scaling functions.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<meta>`](meta.md) — The tag used to declare encoding parameters.
 - [`<head>`](../level_01/head.md) — The parent metadata container.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ Correct placement of the charset tag:
 - [`<meta>`](meta.md) — The parent tag containing the charset key.
 - [`<head>`](../level_01/head.md) — The container housing the charset definition.
 - [HTML Entities](../level_09/html_entities.md) — A legacy way to display special characters when UTF-8 encoding is unavailable.
+
 ---
 
 ## 8. Key Takeaways

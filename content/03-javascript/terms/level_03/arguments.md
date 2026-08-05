@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
 - [Parameters](parameters.md) — The named variables listed in the function definition.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ async function processData() {
 ## 7. Related Terms
 - [Parameters](parameters.md) — The placeholders in the function definition.
 - [Function](function.md) — The block of code being executed.
+
 ---
 
 ## 8. Key Takeaways

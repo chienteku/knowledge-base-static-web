@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [DOM (Document Object Model)](dom.md) — The structured tree API of HTML nodes.
 - [Node](node.md) — A single point in the DOM tree.
+
 ---
 
 ## 2. Term Category
@@ -232,6 +233,7 @@ if (typeof document !== "undefined") {
 
 ## 7. Related Terms
 - [Event Delegation](event_delegation.md) — An event pattern that heavily relies on `.closest()` to identify event sources.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event Listener](event_listener.md) — Waiting for events to occur.
 - [DOM (Document Object Model)](dom.md) — The nested tree structure of HTML.
+
 ---
 
 ## 2. Term Category
@@ -208,6 +209,7 @@ If a user clicks on the `<p>` tag, in what exact order will the click event trav
 - [Event Delegation](event_delegation.md) — A powerful technique that *relies* on bubbling.
 - [event.target vs event.currentTarget](event_target_currenttarget.md) — Related concept: event.target vs event.currentTarget.
 - [Event Listener](event_listener.md) — Related concept: Event Listener.
+
 ---
 
 ## 8. Key Takeaways

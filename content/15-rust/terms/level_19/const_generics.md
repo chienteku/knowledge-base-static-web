@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Type System**: Generic parameters over constant values (`struct Matrix<T, const N: usize>`).
@@ -303,7 +302,6 @@ process(&[0; 5]); // Coerces array to slice!
 - [Const Evaluation Ctfe](const_evaluation_ctfe.md) — Compile-time evaluation.
 
 ---
-
 
 ## 7. Key Takeaways
 

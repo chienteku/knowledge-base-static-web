@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`z-index`](z_index.md) — The Z-axis priority system.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Properties that commonly trigger stacking context generation.
+
 ---
 
 ## 2. Term Category
@@ -313,6 +314,7 @@ Even though the sheet in Folder A has a score of `9999`, it is trapped inside Fo
 - [`opacity`](../level_09/opacity.md) — One of the visual triggers that creates a context.
 - [`transform` (Scale, Translate, Rotate)](../level_10/transform.md) — Another visual trigger that creates a context.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Related concept: `position: absolute` vs `fixed`.
+
 ---
 
 ## 8. Key Takeaways

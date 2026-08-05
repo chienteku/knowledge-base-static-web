@@ -10,6 +10,7 @@
 - [Set](set.md) — Collections storing unique values.
 - [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — The nature of object heap storage pointers.
 - [Garbage Collection](../level_09/garbage_collection.md) — The automated memory reclamation system.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ console.log("Connected?", isConnected(clientA)); // true
 
 ## 7. Related Terms
 - [Garbage Collection](../level_09/garbage_collection.md) — The automated memory reclamation pipeline.
+
 ---
 
 ## 8. Key Takeaways

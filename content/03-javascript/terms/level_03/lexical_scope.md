@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Scope](scope.md) — The context in which values and expressions are visible.
 - [Block Scope](block_scope.md) — Variables declared inside a `{ }` block, accessible only within that block.
+
 ---
 
 ## 2. Term Category
@@ -248,6 +249,7 @@ stepTwo();
 - [Closure](closure.md) — The mechanism where a function retains access to its lexical scope even when executed outside that scope.
 - [Hoisting](hoisting.md) — The compiler behavior of moving declarations to the top of their lexical scopes.
 - [Arrow Function](arrow_function.md) — Functions that lack their own `this` binding, resolving it lexically.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — The header policy relaxing domain restrictions.
 - [The fetch() API](fetch.md) — The browser API used to trigger network queries.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ fetch('https://api.com/data', {
 - [Preflight Request (OPTIONS)](../level_04/preflight_request.md) — The pre-request probe that often triggers CORS errors if it fails.
 - [DevTools Network Tab](../level_10/network_tab.md) — Related concept: DevTools Network Tab.
 - [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
+
 ---
 
 ## 8. Key Takeaways

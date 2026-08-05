@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
+
 ---
 
 ## 2. Term Category
@@ -195,6 +196,7 @@ async function processData() {
 - [Function Expression](function_expression.md) — A function assigned to a variable (which is *not* hoisted).
 - [Hoisting](hoisting.md) — The behavior of moving declarations to the top of the scope.
 - [Function](function.md) — Related concept: Function.
+
 ---
 
 ## 8. Key Takeaways

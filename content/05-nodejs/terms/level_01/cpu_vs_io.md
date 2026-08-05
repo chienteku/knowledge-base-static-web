@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Single-Threaded Architecture](single_threaded.md) — The single-threaded context affected by processing bottlenecks.
 - [The Event Loop & Libuv](event_loop.md) — The loop managing task scheduling.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ const users = await db.query('SELECT * FROM users');
 - [Blocking the Event Loop](blocking_event_loop.md) — The consequence of running CPU-bound code on the main thread.
 - [Single-Threaded Architecture](single_threaded.md) — The core design constraint behind Node's CPU limits.
 - [Non-Blocking I/O](non_blocking_io.md) — Related concept: Non-Blocking I/O.
+
 ---
 
 ## 8. Key Takeaways

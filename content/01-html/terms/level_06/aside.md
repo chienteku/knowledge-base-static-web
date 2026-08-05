@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Semantic HTML](semantic_html.md) — The core layout philosophy.
 - [`<main>`](main.md) — Defining the primary content block.
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ A simple blog post alongside a tangential ad banner:
 - [`<div>` (Block container)](../level_02/div.md) — The non-semantic block container.
 - [`<nav>`](nav.md) — Related concept: `<nav>`.
 - [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
+
 ---
 
 ## 8. Key Takeaways

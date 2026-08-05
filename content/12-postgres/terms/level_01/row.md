@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Table (Relation)](table.md) — The parent container grid where rows live.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ How many rows will the query return?
 - [Table (Relation)](table.md) — The parent container.
 - [Column (Field / Attribute)](column.md) — The vertical data parameters.
 - [Relational Database](relational_database.md) — Related concept: Relational Database.
+
 ---
 
 ## 8. Key Takeaways

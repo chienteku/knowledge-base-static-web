@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Table (Relation)](../level_01/table.md) — The target structural grid we are modifying.
+
 ---
 
 ## 2. Term Category
@@ -209,6 +210,7 @@ Upgrade to PostgreSQL 11+ or add column without default first, then populate in 
 - [`ENUM` Type](enum_type.md) — Related concept: `ENUM` Type.
 - [Database Migrations](../level_10/database_migrations.md) — Related concept: Database Migrations.
 - [Table Partitioning](../level_10/table_partitioning.md) — Related concept: Table Partitioning.
+
 ---
 
 ## 8. Key Takeaways

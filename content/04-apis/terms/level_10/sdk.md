@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The fetch() API](../level_05/fetch.md) — The core networking protocol engine.
 - [Swagger / OpenAPI Specification](openapi.md) — The schema descriptions used to generate client code.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ class UserServiceSDK {
 - [Secrets & Environment Variables](../level_04/secrets_env.md) — The system configurations used to secure keys injected into SDK constructors.
 - [Postman / Insomnia (API Clients)](api_clients.md) — External clients used to test API behaviors before installing SDK packages.
 - [Swagger / OpenAPI Specification](openapi.md) — Related concept: Swagger / OpenAPI Specification.
+
 ---
 
 ## 8. Key Takeaways

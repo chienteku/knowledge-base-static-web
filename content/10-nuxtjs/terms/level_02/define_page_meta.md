@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`pages/` Directory](pages_directory.md) — The folder where pages containing this macro reside.
 - [File-based Routing](file_based_routing.md) — The router config updated by this compiler macro.
+
 ---
 
 ## 2. Term Category
@@ -223,6 +224,7 @@ definePageMeta({
 - [`pages/` Directory](pages_directory.md) — The folder where pages containing this macro reside.
 - [Route Middleware](../level_08/route_middleware.md) — The middleware handlers attached via this macro.
 - [`layouts/` Directory](layouts_directory.md) — Custom layout selection.
+
 ---
 
 ## 8. Key Takeaways

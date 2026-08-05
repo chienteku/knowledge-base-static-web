@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](components.md) — What is going through the lifecycle.
 - [`v-if` / `v-show`](../level_03/v_if_show.md) — `v-if` physically triggers the Mount/Unmount lifecycles!
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ onUnmounted(() => {
 - [Navigation Guards](../level_06/navigation_guards.md) — Related concept: Navigation Guards.
 - [KeepAlive](../level_08/keepalive.md) — Related concept: KeepAlive.
 - [Universal Code (Isomorphic)](../level_09/universal_code.md) — Related concept: Universal Code (Isomorphic).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](element_vs_tag.md) — The difference between tag markers and complete elements.
 - [HTML (HyperText Markup Language)](html.md) — The standard markup language.
+
 ---
 
 ## 2. Term Category
@@ -232,6 +233,7 @@ Void elements in action alongside standard container elements:
 - [`<br>` & `<hr>`](../level_02/br_hr.md) — Related concept: `<br>` & `<hr>`.
 - [`<img>`](../level_03/img.md) — Related concept: `<img>`.
 - [`<source>` Element](../level_03/source.md) — Related concept: `<source>` Element.
+
 ---
 
 ## 8. Key Takeaways

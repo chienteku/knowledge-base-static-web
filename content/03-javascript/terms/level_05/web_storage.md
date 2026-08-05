@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [window object / BOM](window_bom.md) — The browser global context hosting storage APIs.
 - [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — Text format used for data exchange and serialization.
+
 ---
 
 ## 2. Term Category
@@ -239,6 +240,7 @@ if (typeof localStorage !== "undefined") {
 ## 7. Related Terms
 - [JSON / JSON.stringify / JSON.parse](../level_07/json.md) — The JavaScript Object Notation parser used for encoding/decoding objects to strings.
 - [window object / BOM](window_bom.md) — Related concept: window object / BOM.
+
 ---
 
 ## 8. Key Takeaways

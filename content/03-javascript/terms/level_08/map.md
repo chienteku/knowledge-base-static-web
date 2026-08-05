@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The traditional key-value structure `Map` improves upon.
 - [Array](../level_02/array.md) — Maps are Iterable, just like Arrays.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ console.log(map.get([1, 2, 3]));
 - [flat / flatMap](../level_04/flat_flatmap.md) — Related concept: flat / flatMap.
 - [forEach()](../level_04/for_each.md) — Related concept: forEach().
 - [reduce()](../level_04/reduce.md) — Related concept: reduce().
+
 ---
 
 ## 8. Key Takeaways

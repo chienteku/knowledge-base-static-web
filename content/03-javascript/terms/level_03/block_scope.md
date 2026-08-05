@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Scope](scope.md) — The current context of execution.
 - [let](../level_01/let.md)
+
 ---
 
 ## 2. Term Category
@@ -222,6 +223,7 @@ console.log(b);
 - [Local / Function Scope](local_scope.md) — Scope restricted to a full function.
 - [Scope](scope.md) — Related concept: Scope.
 - [let](../level_01/let.md) — Related concept: let.
+
 ---
 
 ## 8. Key Takeaways

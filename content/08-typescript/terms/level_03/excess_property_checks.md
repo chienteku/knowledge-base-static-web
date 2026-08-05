@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object Types](object_types.md) — Enforcing structural requirements.
 - [Interfaces](interfaces.md) — Extensible type contracts.
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ const myCar: Car = {
 - [Index Signatures](index_signatures.md) — Defining interfaces with dynamic key contracts.
 - [Type Assertions (`as`)](../level_05/type_assertions.md) — Overriding compiler type decisions.
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Structural typing.
+
 ---
 
 ## 8. Key Takeaways

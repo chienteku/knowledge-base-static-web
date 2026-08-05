@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`loop`](loop.md) — The loop keyword for basic infinite loops.
+- [`for` / Range](for_range.md) — Range-based for loops.
 
 ---
-
 
 ## 2. Term Category
 
@@ -262,10 +262,9 @@ Use iterator combinators (.any(), .find()) or break logic into smaller functions
 
 ## 5. Related Terms
 
-**None.**
+- None!
 
 ---
-
 
 ## 7. Key Takeaways
 

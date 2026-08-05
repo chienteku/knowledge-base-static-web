@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of providing extra information inside a starting tag.
 - [`id` Attribute](id.md) — The unique identifier that contrasts with `class`.
+
 ---
 
 ## 2. Term Category
@@ -168,6 +169,7 @@ The `class` is the category. A shirt might have the class "mens-wear", "summer-c
 - [`style` Attribute](style.md) — Another global attribute used to apply CSS directly to an element.
 - [`data-*` Attributes](data_attributes.md) — Custom metadata values often styled alongside classes.
 - [`<style>` Element](../level_08/style_tag.md) — Related concept: `<style>` Element.
+
 ---
 
 ## 8. Key Takeaways

@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Compiler Architecture**: LLVM code generation and optimization backend.
@@ -229,7 +228,6 @@ Rustc guarantees safety before LLVM lowering; invalid LLVM IR causes undefined b
 - [Link-Time Optimization (LTO)](../level_15/link_time_optimization.md) — Link time optimization.
 
 ---
-
 
 ## 7. Key Takeaways
 

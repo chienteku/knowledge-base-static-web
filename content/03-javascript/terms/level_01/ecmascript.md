@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -186,3 +187,4 @@ async function processData() {
 - [JavaScript Engine](../level_05/javascript_engine.md) — The software that reads and executes your ECMAScript code.
 
 ---
+

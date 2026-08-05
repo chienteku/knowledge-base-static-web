@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Window Function](window_function.md) — The calculation engine running ranking window clauses.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ If there is a tie for the highest salary in a department, return **both** tied e
 - [Window Function](window_function.md) — The parent calculation engine.
 - [`LAG()` / `LEAD()`](lag_lead.md) — Offset window functions.
 - [`OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)](window_clause.md) — Related concept: `OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause).
+
 ---
 
 ## 8. Key Takeaways

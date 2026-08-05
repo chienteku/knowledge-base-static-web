@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — The concept of external data stores.
 - [Rules of Hooks](../level_04/rules_of_hooks.md) — The usage guidelines governing hook execution.
+
 ---
 
 ## 2. Term Category
@@ -252,6 +253,7 @@ export default function CounterComponent() {
 ## 7. Related Terms
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — The global state container architectures.
 - [Zustand](zustand.md) — The state library that uses this hook under the hood.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — `process` is a global object, available in every file automatically.
+
 ---
 
 ## 2. Term Category
@@ -158,6 +159,7 @@ process.on('unhandledRejection', (reason, promise) => {
 - [The Node.js REPL](repl.md) — Related concept: The Node.js REPL.
 - [stdin / stdout / stderr (Standard Streams)](standard_streams.md) — Related concept: stdin / stdout / stderr (Standard Streams).
 - [Unhandled Promise Rejections](../level_05/unhandled_rejections.md) — Related concept: Unhandled Promise Rejections.
+
 ---
 
 ## 8. Key Takeaways

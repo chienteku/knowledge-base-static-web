@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Vue 3 Composition API Context](composition_api_context.md) — The APIs that are heavily auto-imported.
-- modules — The manual ES module imports system being bypassed.
+- [Modules (import/export)](../../../03-javascript/terms/level_08/modules.md) — The manual ES module imports system being bypassed.
+
 ---
 
 ## 2. Term Category
@@ -187,6 +188,7 @@ const double = computed(() => count.value * 2);
 - [`composables/` Directory](../level_04/composables_directory.md) — Where your custom auto-imported logic lives.
 - [Vue 3 Composition API Context](composition_api_context.md) — Related concept: Vue 3 Composition API Context.
 - [Nuxt 3 Overview](nuxt_3_overview.md) — Related concept: Nuxt 3 Overview.
+
 ---
 
 ## 8. Key Takeaways

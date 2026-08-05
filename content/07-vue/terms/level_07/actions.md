@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [State & Getters (Pinia)](state_getters.md) — The data that Actions are modifying.
 - [Store (Pinia)](store.md) — Where Actions live.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ async function load() {
 ## 7. Related Terms
 - [Store (Pinia)](store.md) — The container for Actions.
 - [State & Getters (Pinia)](state_getters.md) — What the Actions manipulate.
+
 ---
 
 ## 8. Key Takeaways

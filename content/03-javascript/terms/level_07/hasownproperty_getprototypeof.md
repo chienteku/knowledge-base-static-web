@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
 - [Prototype Chain](prototype_chain.md) — The linked series of prototypes resolving property searches.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ console.log("Own keys count:", countOwnProperties(child));
 ## 7. Related Terms
 - [for...in](../level_04/for_in.md) — The loop statement that traverses both own and inherited properties.
 - [Prototypal Inheritance](prototypal_inheritance.md) — The inheritance mechanism that creates the distinction between own and inherited keys.
+
 ---
 
 ## 8. Key Takeaways

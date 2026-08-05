@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — The shadow needs a color value.
+- [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — Applying drop shadows to text elements.
+
 ---
 
 ## 2. Term Category
@@ -160,6 +162,7 @@ h1 { text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); } /* Casts shadow behind text 
 
 ## 7. Related Terms
 - [`box-shadow` (Card Shadows)](../level_09/box_shadow.md) — The exact same concept, but applied to the entire Box Model container instead of just the text inside it!
+
 ---
 
 ## 8. Key Takeaways

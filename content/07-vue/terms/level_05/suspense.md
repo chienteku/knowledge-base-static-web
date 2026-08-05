@@ -9,6 +9,7 @@
 - [Async Components](../level_08/async_components.md) — Components loaded lazily over the network.
 - [Composables](composables.md) — Asynchronous state logic.
 - [Teleport](teleport.md) — Moving elements outside the component DOM hierarchy.
+
 ---
 
 ## 2. Term Category
@@ -308,6 +309,7 @@ onErrorCaptured((err) => { logError(err); return true; });
 - [Async Components](../level_08/async_components.md) — The dynamic loading pattern.
 - [Composables](composables.md) — Custom business logic controllers.
 - [Teleport](teleport.md) — Renders component templates elsewhere in the DOM.
+
 ---
 
 ## 8. Key Takeaways

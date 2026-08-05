@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Discriminated Unions](discriminated_unions.md) — Objects with a shared literal tag.
 - [`void` & `never`](../level_02/void_never.md) — The type representing unreachable states.
+
 ---
 
 ## 2. Term Category
@@ -261,6 +262,7 @@ function handlePayment(state: PaymentState) {
 - [Discriminated Unions](discriminated_unions.md) — The type format that exhaustiveness checks protect.
 - [`void` & `never`](../level_02/void_never.md) — The structural types representing emptiness.
 - [Type Narrowing](type_narrowing.md) — The process of reducing union types.
+
 ---
 
 ## 8. Key Takeaways

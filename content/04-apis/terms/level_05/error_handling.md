@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [async / await](async_await.md) — `try/catch` is the standard way to handle errors in async functions.
 - [HTTP Status Codes](../level_02/status_codes.md) — The primary source of errors we are trying to catch.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ async function doMath() {
 - [Promises (in the context of networks)](promises.md) — Related concept: Promises (in the context of networks).
 - [Rate Limiting (429 Too Many Requests)](../level_06/rate_limiting.md) — Related concept: Rate Limiting (429 Too Many Requests).
 - [HTTP Status Codes](../level_02/status_codes.md) — Related concept: HTTP Status Codes.
+
 ---
 
 ## 8. Key Takeaways

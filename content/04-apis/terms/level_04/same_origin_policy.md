@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — The address containing protocol, host, and port parts.
 - [Client-Server Model](../level_01/client_server_model.md) — The network request-response architecture.
+
 ---
 
 ## 2. Term Category
@@ -181,6 +182,7 @@ Imagine a high-security hotel.
 - [CSRF (Cross-Site Request Forgery)](csrf.md) — The session-riding exploit that bypasses SOP write-blindness.
 - [Preflight Request (OPTIONS)](preflight_request.md) — Related concept: Preflight Request (OPTIONS).
 - [CORS Errors in the Browser](../level_05/cors_errors.md) — Related concept: CORS Errors in the Browser.
+
 ---
 
 ## 8. Key Takeaways

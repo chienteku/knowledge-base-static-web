@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Table (Relation)](../level_01/table.md) — The target container grid where data is stored.
 - [SQL (Structured Query Language)](../level_01/sql.md) — Declarative query syntax standards.
+
 ---
 
 ## 2. Term Category
@@ -208,6 +209,7 @@ CREATE TABLE system_logs (
 - [Multi-row `INSERT` / `INSERT ... SELECT`](multi_row_insert.md) — Bulk insert optimizations.
 - [`RETURNING` Clause](returning.md) — Returning data immediately after inserts.
 - [`UPSERT` (`ON CONFLICT`)](upsert.md) — Related concept: `UPSERT` (`ON CONFLICT`).
+
 ---
 
 ## 8. Key Takeaways

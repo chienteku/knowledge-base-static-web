@@ -9,6 +9,7 @@
 - [Accessibility (a11y) Fundamentals](accessibility_fundamentals.md) — The parent accessibility concepts.
 - [Semantic HTML](../level_06/semantic_html.md) — Knowing which native tags are available.
 - [Attribute](../level_01/attribute.md) — Tag configuration parameters.
+
 ---
 
 ## 2. Term Category
@@ -234,6 +235,7 @@ If you use a `<div>` with `role="button"`, the browser only maps mouse clicks na
 - [Semantic HTML](../level_06/semantic_html.md) — The native layout element list.
 - [`tabindex` Attribute](../level_07/tabindex.md) — Managing keyboard focus.
 - [`<dialog>` Element](../level_10/dialog.md) — Related concept: `<dialog>` Element.
+
 ---
 
 ## 8. Key Takeaways

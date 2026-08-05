@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Client Components (`"use client"`)](../level_01/client_components.md) — The environment where this takes place.
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The default fetching method you are opting out of.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ const { data, error } = useSWR(`/api/search?q=${query}`, fetcher);
 ## 7. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The default and preferred fetching method.
 - [Route Handlers (`route.ts`)](../level_07/route_handlers.md) — The Next.js API endpoints that client-side `fetch` usually calls.
+
 ---
 
 ## 8. Key Takeaways

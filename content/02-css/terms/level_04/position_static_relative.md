@@ -9,6 +9,7 @@
 - [Document Flow (Normal Flow)](document_flow.md) — The baseline layout algorithm.
 - [`display: block` vs `inline` vs `inline-block`](display.md) — The normal layout flow that we are about to manipulate.
 - [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — The properties used to move positioned elements.
+
 ---
 
 ## 2. Term Category
@@ -232,6 +233,7 @@ p { margin-top: 20px; } /* Adjusts normal flow position without leaving empty ga
 - [`z-index`](z_index.md) — Overlapping stacking layer values.
 - [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
 - [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Related concept: `top`, `bottom`, `left`, `right`.
+
 ---
 
 ## 8. Key Takeaways

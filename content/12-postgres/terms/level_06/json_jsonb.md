@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](../level_02/data_types.md) — The parent database typing system.
+
 ---
 
 ## 2. Term Category
@@ -209,6 +210,7 @@ SELECT * FROM t WHERE (data->>'age')::INT = 30; -- Extract text and cast to int
 - [`ARRAY` Type](array_type.md) — Storing flat text arrays.
 - [Expression Index (Functional Index)](../level_07/expression_index.md) — Related concept: Expression Index (Functional Index).
 - [GIN Index](../level_07/gin_index.md) — Related concept: GIN Index.
+
 ---
 
 ## 8. Key Takeaways

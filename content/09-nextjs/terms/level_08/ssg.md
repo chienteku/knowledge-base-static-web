@@ -9,6 +9,7 @@
 - [Dynamic Rendering (SSR)](ssr.md) — The dynamic alternative to SSG.
 - [React Server Components (RSC)](../level_01/rsc.md) — The components being rendered statically.
 - [`generateStaticParams` Function](generate_static_params.md) — How dynamic paths are pre-compiled statically.
+
 ---
 
 ## 2. Term Category
@@ -276,6 +277,7 @@ export const dynamic = 'force-static'; // Ensure static pre-rendering
 - [The Next.js Cache (The Four Caches)](next_cache.md) — Related concept: The Next.js Cache (The Four Caches).
 - [Partial Prerendering (PPR)](ppr.md) — Related concept: Partial Prerendering (PPR).
 - [Draft Mode](../level_10/draft_mode.md) — Related concept: Draft Mode.
+
 ---
 
 ## 8. Key Takeaways

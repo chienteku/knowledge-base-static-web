@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- html — You must have an HTML structure before you can style it.
+- [HTML (HyperText Markup Language)](../../../01-html/terms/level_01/html.md) — You must have an HTML structure before you can style it.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ h1 {
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The declaration format mapping selectors.
 - [CSS Comments (`/* */`)](comments.md) — Notes ignored by the browser parser.
 - [The Cascade](the_cascade.md) — The CSS Cascade.
+
 ---
 
 ## 8. Key Takeaways

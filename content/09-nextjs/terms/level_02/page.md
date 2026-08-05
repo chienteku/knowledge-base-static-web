@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The routing architecture.
 - [React Server Components (RSC)](../level_01/rsc.md) — What a `page.tsx` is by default.
+
 ---
 
 ## 2. Term Category
@@ -189,13 +190,13 @@ export default async function Page({
 
 ## 7. Related Terms
 - [`layout.tsx`](layout.md) — The UI wrapper that wraps around `page.tsx`.
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — How the `params` prop gets populated.
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — Related concept: App Router vs Pages Router.
 - [`template.tsx`](template.md) — Related concept: `template.tsx`.
 - [`<Link>` Component](../level_03/link.md) — Related concept: `<Link>` Component.
 - [`usePathname` & `useSearchParams`](../level_04/use_pathname.md) — Related concept: `usePathname` & `useSearchParams`.
 - [`loading.tsx`](loading.md) — Loading UI.
 - [`error.tsx` & `global-error.tsx`](error.md) — Related concept: `error.tsx` & `global-error.tsx`.
+
 ---
 
 ## 8. Key Takeaways

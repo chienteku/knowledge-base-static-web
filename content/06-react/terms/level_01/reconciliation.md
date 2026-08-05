@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Virtual DOM](virtual_dom.md) — The in-memory tree structures compared by this algorithm.
+
 ---
 
 ## 2. Term Category
@@ -225,6 +226,7 @@ function FormApp() {
 - [Re-rendering](../level_02/re_rendering.md) — The process that generates the Virtual DOM tree for diffing.
 - [Lists & Keys](../level_05/lists_and_keys.md) — The developer control hook for reconciliation.
 - [Virtual DOM](virtual_dom.md) — Related concept: Virtual DOM.
+
 ---
 
 ## 8. Key Takeaways

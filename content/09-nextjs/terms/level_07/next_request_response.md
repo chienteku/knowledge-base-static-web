@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Route Handlers (`route.ts`)](route_handlers.md) — The primary place these objects are used.
 - [JavaScript Fetch API](../level_05/js_fetch.md) — The standard interface being extended.
+
 ---
 
 ## 2. Term Category
@@ -194,6 +195,7 @@ return NextResponse.json({ status: 'ok' }); // Sets headers & serializes JSON au
 - [Route Handlers (`route.ts`)](route_handlers.md) — Where these objects are used.
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — The other Next.js feature that heavily relies on `NextRequest` and `NextResponse`.
 - [HTTP Methods (GET, POST, PUT, DELETE)](http_methods.md) — Related concept: HTTP Methods (GET, POST, PUT, DELETE).
+
 ---
 
 ## 8. Key Takeaways

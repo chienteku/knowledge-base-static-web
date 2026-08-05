@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [npm](npm.md) — The tool that creates and reads this file.
 - [Object](../level_02/object.md) — The format of this file is JSON, which looks exactly like a JS Object.
+
 ---
 
 ## 2. Term Category
@@ -197,6 +198,7 @@ async function processData() {
 - [Node.js](node_js.md) — The environment that relies on this file.
 - [CommonJS vs ES Modules (require vs import)](commonjs_vs_esm.md) — Related concept: CommonJS vs ES Modules (require vs import).
 - [Semantic Versioning & Lockfiles](semver_lockfiles.md) — Related concept: Semantic Versioning & Lockfiles.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — WebSockets bypass this traditional lifecycle entirely.
 - [HTTP / HTTPS](../level_01/http_https.md) — WebSockets start as HTTP, but then "upgrade" to a completely different protocol.
+
 ---
 
 ## 2. Term Category
@@ -285,6 +286,7 @@ const ws = new WebSocket('wss://api.example.com');
 - [Server-Sent Events (SSE)](sse.md) — Related concept: Server-Sent Events (SSE).
 - [gRPC (Remote Procedure Call)](../level_10/grpc.md) — Related concept: gRPC (Remote Procedure Call).
 - [WebSocket Handshake (Upgrade)](websocket_handshake.md) — WebSocket HTTP upgrade handshake.
+
 ---
 
 ## 8. Key Takeaways

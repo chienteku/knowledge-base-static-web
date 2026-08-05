@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](nextjs.md) — The framework designed to optimize SEO for React apps.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ export const metadata = {
 - [Next.js Overview](nextjs.md) — The parent framework.
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The server-rendering strategy that makes SEO possible.
 - [Metadata API (`metadata`)](../level_09/metadata_api.md) — Related concept: Metadata API (`metadata`).
+
 ---
 
 ## 8. Key Takeaways

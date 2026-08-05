@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useEffect` Hook](../level_03/use_effect.md) — Custom hooks are usually just a combination of these built-in hooks.
 - [Rules of Hooks](rules_of_hooks.md) — The rules apply strictly to your custom hooks.
+
 ---
 
 ## 2. Term Category
@@ -187,6 +188,7 @@ Use Context API or state management store if shared state across components is r
 - [Higher-Order Components (HOC)](../level_07/hoc.md) — Related concept: Higher-Order Components (HOC).
 - [Render Props](../level_07/render_props.md) — Related concept: Render Props.
 - [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
+
 ---
 
 ## 8. Key Takeaways

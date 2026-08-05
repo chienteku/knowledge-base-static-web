@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](ssr.md) — SSG is essentially SSR, but done ahead of time.
 - [Next.js](nextjs.md) — The framework that popularized SSG.
+
 ---
 
 ## 2. Term Category
@@ -140,6 +141,7 @@ Which rendering strategy (SSR or SSG) should you use for each?
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](ssr.md) — Rendering on-demand per request.
 - [Next.js](nextjs.md) — Next.js allows you to mix SSG and SSR in the exact same application on a per-page basis!
+
 ---
 
 ## 8. Key Takeaways

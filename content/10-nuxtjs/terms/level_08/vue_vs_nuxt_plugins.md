@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`plugins/` Directory](plugins_directory.md) — The folder where both types of plugins are initialized.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The standard Vue application environment.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 ## 7. Related Terms
 - [`plugins/` Directory](plugins_directory.md) — The folder where these files must be placed.
 - [`useNuxtApp` Context](../level_04/use_nuxt_app.md) — The parent object that holds `.vueApp`.
+
 ---
 
 ## 8. Key Takeaways

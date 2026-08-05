@@ -252,7 +252,6 @@ Write the MongoDB query to update a single user where the `username` is `"design
 
 - [Array](../level_02/array_type.md) — The data structure.
 - [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](update_operators.md) — The parent update operators.
-- [Positional Operators (`$`, `$[]`, `$[<identifier>]`)](../level_04/positional_operators.md) — Related concept: Positional Operators (`$`, `$[]`, `$[<identifier>]`).
 
 ---
 

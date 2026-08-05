@@ -9,6 +9,7 @@
 - [Composition API](../level_01/composition_api.md) — The functional state-management model.
 - [Components](components.md) — The visual units of a Vue application.
 - [Single-File Components (SFCs)](sfc.md) — Single-File Components (`.vue` files).
+
 ---
 
 ## 2. Term Category
@@ -307,6 +308,7 @@ export default {
 - [Emitting Events (`defineEmits`)](emit.md) — Raising custom DOM and application triggers.
 - [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
 - [Single-File Components (SFCs)](sfc.md) — Related concept: Single-File Components (SFCs).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Client Components (`"use client"`)](../level_01/client_components.md) — Required to use these hooks.
+- [File-System Routing](../level_01/file_system_routing.md) — Reading current URL pathname in App Router.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +215,7 @@ const searchParams = useSearchParams(); // searchParams.get('q')
 ## 7. Related Terms
 - [`useRouter` Hook](../level_03/use_router.md) — Used in conjunction with these hooks to update the URL.
 - [`page.tsx`](../level_02/page.md) — The server-side equivalent that receives `searchParams` as a prop.
+
 ---
 
 ## 8. Key Takeaways

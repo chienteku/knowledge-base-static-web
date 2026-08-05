@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ useHead({
 - [Universal Rendering (SSR)](universal_rendering.md) — The process that produces the structured HTML.
 - [`useHead`](../level_06/use_head.md) — The composable helper used to write head properties.
 - [`useSeoMeta`](../level_06/use_seo_meta.md) — useSeoMeta composable.
+
 ---
 
 ## 8. Key Takeaways

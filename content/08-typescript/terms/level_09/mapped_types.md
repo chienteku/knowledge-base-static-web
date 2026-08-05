@@ -9,6 +9,7 @@
 - [`keyof` Operator](keyof.md) — The iterator used to pull the keys.
 - [Index Signatures](../level_03/index_signatures.md) — The base syntax of a Mapped Type.
 - [Utility Types Overview](../level_08/utility_types.md) — The output of Mapped Types.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ type MakeRequired<T> = { [K in keyof T]-?: T[K] }; // Correct: Strips '?' option
 - [Template Literal Types](template_literal_types.md) — Related concept: Template Literal Types.
 - [Indexed Access Types](indexed_access.md) — Indexed access types.
 - [Conditional Types](conditional_types.md) — Related concept: Conditional Types.
+
 ---
 
 ## 8. Key Takeaways

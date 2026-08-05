@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Debounce](debounce.md) — The sister technique that is often confused with Throttle.
 - [Closure](../level_03/closure.md) — Used to remember the "cooling down" state.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ async function processData() {
 ## 7. Related Terms
 - [Debounce](debounce.md) — Waits for total silence before firing.
 - [Closure](../level_03/closure.md) — The mechanic holding the `inThrottle` boolean.
+
 ---
 
 ## 8. Key Takeaways

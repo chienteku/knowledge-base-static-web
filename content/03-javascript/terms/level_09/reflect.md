@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Proxy](proxy.md) — The object interception API.
 - [Object](../level_02/object.md) — The base key-value data structure.
+
 ---
 
 ## 2. Term Category
@@ -238,6 +239,7 @@ console.log(loggerProxy.name);
 ## 7. Related Terms
 - [Proxy](proxy.md) — The interception wrapper that mirrors Reflect method hooks.
 - [instanceof](../level_07/instanceof.md) — The constructor check operator mirrored by `Reflect.construct()`.
+
 ---
 
 ## 8. Key Takeaways

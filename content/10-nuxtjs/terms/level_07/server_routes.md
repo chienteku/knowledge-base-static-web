@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`server/api/` Routes](server_api_routes.md) — The standard directory for JSON APIs.
 - [Express.js (Legacy Node Server Context)](express_js.md) — The server routing structure that Nitro/H3 replaces.
+
 ---
 
 ## 2. Term Category
@@ -182,6 +183,7 @@ export default defineEventHandler((event) => {
 - [`server/api/` Routes](server_api_routes.md) — The standard directory for JSON APIs.
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The utilities used to parse incoming webhooks in these routes.
 - [Nitro Engine](../level_01/nitro_engine.md) — Related concept: Nitro Engine.
+
 ---
 
 ## 8. Key Takeaways

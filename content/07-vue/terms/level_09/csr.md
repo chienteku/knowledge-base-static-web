@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Vue Instance](../level_01/vue_instance.md) — What takes over the browser in CSR.
 - [Vue Router](../level_06/vue_router.md) — The mechanism that handles navigation entirely in the browser.
+
 ---
 
 ## 2. Term Category
@@ -160,6 +161,7 @@ Instead of asking the server for new HTML pages, the server just sends one empty
 ## 7. Related Terms
 - [Server-Side Rendering (SSR)](ssr.md) — The alternative strategy designed to fix CSR's flaws.
 - [Vue Router](../level_06/vue_router.md) — The tool that makes CSR routing possible without page refreshes.
+
 ---
 
 ## 8. Key Takeaways

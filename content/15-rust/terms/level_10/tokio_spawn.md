@@ -456,7 +456,7 @@ Construct a task spawning pool that limits active concurrent tasks and supports 
 > 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

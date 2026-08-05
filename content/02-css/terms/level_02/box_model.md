@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [CSS (Cascading Style Sheets)](../level_01/css.md) — The Box Model is how CSS calculates the size of elements.
-- element_vs_tag — It doesn't matter if the element is a tiny `<span>` or a massive `<div>`, they are all boxes.
+- [Element vs. Tag](../../../01-html/terms/level_01/element_vs_tag.md) — It doesn't matter if the element is a tiny `<span>` or a massive `<div>`, they are all boxes.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ Margin, Content, Border, Padding
 - [Margin Collapse](margin_collapse.md) — How adjacent margins merge visually.
 - [`box-sizing: border-box`](box_sizing.md) — Related concept: `box-sizing: border-box`.
 - [`background` Shorthand & `background-image`](../level_03/background_shorthand.md) — Related concept: `background` Shorthand & `background-image`.
+
 ---
 
 ## 8. Key Takeaways

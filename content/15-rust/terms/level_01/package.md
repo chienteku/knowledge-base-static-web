@@ -919,7 +919,6 @@ You are tasked with implementing a `FeatureGraph` engine that registers feature 
 - [Cargo](cargo.md) — The tool that manages packages
 - [Crate](crate.md) — The building blocks contained within a package
 - [Module](module.md) — How you organize code *inside* a single crate
-- [Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)](../level_07/cargo_target_kinds.md) — Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`).
 - [`Cargo.toml`](../level_07/cargo_toml.md) — Cargo package manifest.
 - [Workspace](../level_07/workspace.md) — Multi-package workspace.
 

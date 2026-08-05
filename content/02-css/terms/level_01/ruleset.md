@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Selectors (Element, Class, ID)](selectors.md) — A ruleset always begins with a selector.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ div {
 - [Shorthand vs Longhand Properties](shorthand_longhand.md) — Formatting style parameters compactly.
 - [CSS Comments (`/* */`)](comments.md) — Related concept: CSS Comments (`/* */`).
 - [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
+
 ---
 
 ## 8. Key Takeaways

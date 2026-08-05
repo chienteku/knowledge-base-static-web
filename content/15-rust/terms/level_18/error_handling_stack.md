@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Architecture Pattern**: Layered error handling using `thiserror` for libraries and `anyhow` for applications.
@@ -280,7 +279,6 @@ impl From<std::io::Error> for MyError { ... }
 - [Custom Error Types](../level_04/custom_error_types.md) — Custom error types.
 
 ---
-
 
 ## 7. Key Takeaways
 

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL Injection](sql_injection.md) — The critical security vulnerability blocked.
+
 ---
 
 ## 2. Term Category
@@ -200,6 +201,7 @@ Refactor this into a secure parameterized query structure using Postgres placeho
 ## 7. Related Terms
 - [SQL Injection](sql_injection.md) — The vulnerability blocked.
 - [ORM vs. Query Builder vs. Raw SQL](orm_vs_raw.md) — Related concept: ORM vs. Query Builder vs. Raw SQL.
+
 ---
 
 ## 8. Key Takeaways

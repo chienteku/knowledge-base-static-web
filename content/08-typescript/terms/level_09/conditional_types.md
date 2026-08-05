@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Generics Overview (`<T>`)](../level_07/generics.md) — Conditional Types are almost exclusively used with Generics.
 - [Generic Constraints (`extends`)](../level_07/generic_constraints.md) — The `extends` keyword is used as the evaluation condition.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ type AbsNumber<T> = T extends number ? number : T; // Type-level conditional eva
 - [`Parameters` / `ConstructorParameters` / `Awaited`](../level_08/parameters_awaited.md) — Related concept: `Parameters` / `ConstructorParameters` / `Awaited`.
 - [Template Literal Types](template_literal_types.md) — Template literal types.
 - [Mapped Types](mapped_types.md) — Mapped types.
+
 ---
 
 ## 8. Key Takeaways

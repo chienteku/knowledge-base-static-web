@@ -9,6 +9,7 @@
 - [Document Flow (Normal Flow)](document_flow.md) — The baseline page parsing sequence.
 - [The Box Model (Concept)](../level_02/box_model.md) — The `display` property determines how this box interacts with the boxes around it.
 - [Width / Height](../level_02/width_height.md) — The `display` property completely changes how width and height behave!
+
 ---
 
 ## 2. Term Category
@@ -243,6 +244,7 @@ span { display: inline-block; width: 200px; } /* Respects width dimensions */
 - [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
 - [`opacity`](../level_09/opacity.md) — Related concept: `opacity`.
 - [`::before` & `::after` (Pseudo-elements)](../level_09/pseudo_elements.md) — Related concept: `::before` & `::after` (Pseudo-elements).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Middleware](middleware.md) — The fundamental concept of intercepting requests.
+
 ---
 
 ## 2. Term Category
@@ -300,6 +301,7 @@ app.use(m3);
 - [Middleware](middleware.md) — The core design pattern.
 - [The req & res Objects](req_res.md) — The shared state containers passed down the chain.
 - [Error Handling Middleware](../level_09/error_handling_middleware.md) — Related concept: Error Handling Middleware.
+
 ---
 
 ## 8. Key Takeaways

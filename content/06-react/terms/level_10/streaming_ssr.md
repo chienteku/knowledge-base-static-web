@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](ssr.md) — The static rendering foundation that streaming improves.
 - [Suspense](../level_08/suspense.md) — The boundary markers used to divide layout sections.
+
 ---
 
 ## 2. Term Category
@@ -226,6 +227,7 @@ export default function LandingPage() {
 - [Server-Side Rendering (SSR)](ssr.md) — The baseline server rendering pattern.
 - [Hydration](hydration.md) — The process that links event handlers to static HTML.
 - [Concurrent Rendering](../level_08/concurrent_rendering.md) — The prioritizing engine supporting Selective Hydration.
+
 ---
 
 ## 8. Key Takeaways

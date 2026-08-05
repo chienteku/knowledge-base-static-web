@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Type Coercion](type_coercion.md) — Automatic or implicit conversion of values from one data type to another by the JavaScript engine.
 - [Boolean](boolean.md) — A logical entity having two values: `true` or `false`.
+
 ---
 
 ## 2. Term Category
@@ -222,6 +223,7 @@ console.log([] === false);
 - [Comparison Operators](comparison_operators.md) — Relational inequality checks.
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — Evaluation of non-boolean values in conditional contexts.
 - [NaN](nan.md) — A special value that is not strictly equal to itself.
+
 ---
 
 ## 8. Key Takeaways

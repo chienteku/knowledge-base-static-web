@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
 - [String](../level_01/string.md) — A sequence of characters representing text.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ const rawTags = "coding, web , javascript";
 ## 7. Related Terms
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Alternative way to merge arrays: `[...arrA, ...arrB]`.
 - [String Methods](../level_02/string_methods.md) — Generic text helper methods.
+
 ---
 
 ## 8. Key Takeaways

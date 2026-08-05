@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Second Normal Form (2NF)](second_normal_form.md) — The prerequisite partial dependency check.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ The primary key is `id`.
 - [Second Normal Form (2NF)](second_normal_form.md) — The prerequisite standard.
 - [Denormalization](denormalization.md) — Intentionally breaking 3NF for speed.
 - [Normalization](normalization.md) — Related concept: Normalization.
+
 ---
 
 ## 8. Key Takeaways

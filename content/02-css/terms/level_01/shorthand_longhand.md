@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — Understanding properties, values, and declarations.
 - [Selectors (Element, Class, ID)](selectors.md) — Custom styling targets.
+
 ---
 
 ## 2. Term Category
@@ -270,6 +271,7 @@ padding: 10px 20px 30px 40px;
 - [Border](../level_02/border.md) — The frame border utilizing shorthand properties.
 - [`background` Shorthand & `background-image`](../level_03/background_shorthand.md) — Related concept: `background` Shorthand & `background-image`.
 - [`flex-grow` / `flex-shrink` / `flex-basis`](../level_05/flex_properties.md) — Related concept: `flex-grow` / `flex-shrink` / `flex-basis`.
+
 ---
 
 ## 8. Key Takeaways

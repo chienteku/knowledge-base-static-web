@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — The routing system.
 - [HTTP Methods (GET, POST, PUT, DELETE)](http_methods.md) — GET, POST, PUT, DELETE.
+
 ---
 
 ## 2. Term Category
@@ -184,6 +185,7 @@ export async function POST(req: Request) {
 - [Edge Runtime vs Node.js Runtime](../level_10/edge_runtime.md) — Related concept: Edge Runtime vs Node.js Runtime.
 - [Caching Route Handlers](caching_route_handlers.md) — Caching Route Handlers.
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — Related concept: Middleware (`middleware.ts`).
+
 ---
 
 ## 8. Key Takeaways

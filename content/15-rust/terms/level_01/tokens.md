@@ -7,10 +7,9 @@
 
 ## 1. Prerequisites
 
-**None.**
+- None!
 
 ---
-
 
 ## 2. Term Category
 
@@ -220,7 +219,6 @@ let r#type = "admin"; // Raw identifier token syntax!
 - [Token Stream](../level_12/token_stream.md) — Stream of compiler tokens.
 
 ---
-
 
 ## 7. Key Takeaways
 

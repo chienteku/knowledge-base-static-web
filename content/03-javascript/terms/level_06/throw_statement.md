@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Error Handling (try/catch/finally)](error_handling.md) — Structured exception handling flow.
+
 ---
 
 ## 2. Term Category
@@ -258,6 +259,7 @@ try {
 - [Error object & Error Types](error_object.md) — The constructor object containing message and stack trace info.
 - [Call Stack](call_stack.md) — The stack of executions that unwinds when an error is thrown.
 - [Error Handling (try/catch/finally)](error_handling.md) — Related concept: Error Handling (try/catch/finally).
+
 ---
 
 ## 8. Key Takeaways

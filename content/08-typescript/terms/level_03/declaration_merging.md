@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Interfaces](interfaces.md) — The fundamental contract for object shapes.
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — Creating names for custom union/intersection shapes.
+
 ---
 
 ## 2. Term Category
@@ -221,6 +222,7 @@ window.analytics.logEvent('login_clicked');
 - [Interfaces](interfaces.md) — The extensible objects contract.
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — Non-mergable type naming structures.
 - [Namespaces](../level_11/namespaces.md) — Extensible namespace scopes.
+
 ---
 
 ## 8. Key Takeaways

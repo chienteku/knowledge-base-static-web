@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — The file where modules are registered.
 - [Vue Plugins vs Nuxt Plugins](../level_08/vue_vs_nuxt_plugins.md) — The difference between simple plugins and Nuxt Modules.
+
 ---
 
 ## 2. Term Category
@@ -277,6 +278,7 @@ export default defineNuxtModule({
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where modules are registered.
 - [Pinia State Management](../level_04/pinia.md) — An example of a tool that is installed via a Nuxt Module.
 - [`plugins/` Directory](../level_08/plugins_directory.md) — Plugin registration.
+
 ---
 
 ## 8. Key Takeaways

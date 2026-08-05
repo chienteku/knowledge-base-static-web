@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
 - [some()](some.md) — Tests if *at least one* element passes the test.
+
 ---
 
 ## 2. Term Category
@@ -200,6 +201,7 @@ async function processData() {
 ## 7. Related Terms
 - [some()](some.md) — The lenient sibling. Returns true if *at least one* passes.
 - [filter()](filter.md) — Actually extracts the elements that pass, rather than just returning true/false.
+
 ---
 
 ## 8. Key Takeaways

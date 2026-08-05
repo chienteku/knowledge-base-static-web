@@ -9,6 +9,7 @@
 - [Variable](variable.md) — A named container for storing data values.
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [undefined](undefined.md) — A variable that has not yet been assigned a value.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ async function processData() {
 - [undefined](undefined.md) — A variable that has not yet been assigned a value.
 - [Type Coercion](type_coercion.md) — Automatic conversion of values from one data type to another.
 - [typeof](typeof.md) — Related concept: typeof.
+
 ---
 
 ## 8. Key Takeaways

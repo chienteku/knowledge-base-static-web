@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Box Model (Concept)](../level_02/box_model.md) — Every HTML element is inherently a sharp, rectangular box.
 - [`rem` vs `em`](../level_08/rem_em.md) — Units used to measure the rounding.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ img.avatar { width: 100px; height: 100px; border-radius: 50%; /* Perfect circle 
 - [Border](../level_02/border.md) — The physical border boundaries.
 - [`box-shadow` (Card Shadows)](box_shadow.md) — Shadow rings which follow the border radius boundaries.
 - [`object-fit` & `object-position`](object_fit.md) — Standard scaling property for images cropped by border radius.
+
 ---
 
 ## 8. Key Takeaways

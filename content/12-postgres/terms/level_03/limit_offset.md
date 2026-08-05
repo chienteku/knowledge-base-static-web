@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [`ORDER BY`](order_by.md) — The sorting clause required for stable pagination.
+- [`SELECT`](select.md) — Paginating SELECT query results with LIMIT and OFFSET.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +191,7 @@ Calculate the correct SQL `LIMIT` and `OFFSET` parameters to query the database.
 
 ## 7. Related Terms
 - [`ORDER BY`](order_by.md) — The sorting anchor for pagination stability.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Scope](scope.md) — The current context of execution.
 - [Variable](../level_01/variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ const d = 4;
 ## 7. Related Terms
 - [Scope](scope.md) — The general concept of variable visibility.
 - [Local / Function Scope](local_scope.md) — Scope restricted to a function.
+
 ---
 
 ## 8. Key Takeaways

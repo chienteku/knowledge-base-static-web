@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [B-tree Index](btree_index.md) — The default balancing structure type.
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The logical uniqueness constraint.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ Write the SQL query to enforce that `listing_code` must be unique **only** for a
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The logical database rule.
 - [Partial Index](partial_index.md) — Indexes filtering subsets of rows.
 - [B-tree Index](btree_index.md) — Related concept: B-tree Index.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [throw statement](throw_statement.md) — The keyword used to raise runtime exceptions.
 - [extends](../level_07/extends.md) — The inheritance model used to build custom error classes.
+
 ---
 
 ## 2. Term Category
@@ -258,6 +259,7 @@ try {
 - [extends](../level_07/extends.md) — The syntax mechanism used to create custom subclasses.
 - [throw statement](throw_statement.md) — Related concept: throw statement.
 - [Browser DevTools & Debugging](../level_10/browser_devtools.md) — Related concept: Browser DevTools & Debugging.
+
 ---
 
 ## 8. Key Takeaways

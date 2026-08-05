@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- http_https — The protocol this module implements.
+- [HTTP / HTTPS](../../../04-apis/terms/level_01/http_https.md) — The protocol this module implements.
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — This module is the primary reason Node.js became famous.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +171,7 @@ res.end();
 - [Serving Static Files (express.static)](../level_07/static_files.md) — Related concept: Serving Static Files (express.static).
 - [The req & res Objects](../level_07/req_res.md) — Request & Response objects.
 - [The events Module](events_module.md) — EventEmitter in HTTP server.
+
 ---
 
 ## 8. Key Takeaways

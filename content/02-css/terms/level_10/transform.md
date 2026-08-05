@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Box Model (Concept)](../level_02/box_model.md) — Normal properties like `margin` push other boxes around. `transform` ignores them!
 - [`transition`](transition.md) — Transforms are almost always animated on `:hover`.
+
 ---
 
 ## 2. Term Category
@@ -245,6 +246,7 @@ Which option will look perfectly smooth on a cheap 5-year-old smartphone?
 - [`transition`](transition.md) — Without a transition, a transform just instantly snaps to its new shape/position.
 - [`@keyframes` & `animation`](animation.md) — Complex animations that often chain multiple transforms together.
 - [Stacking Context](../level_04/stacking_context.md) — Related concept: Stacking Context.
+
 ---
 
 ## 8. Key Takeaways

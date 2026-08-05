@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Node](node.md) — A single point in the DOM tree.
+
 ---
 
 ## 2. Term Category
@@ -238,6 +239,7 @@ if (typeof document !== "undefined") {
 
 ## 7. Related Terms
 - [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — Structural element modifications.
+
 ---
 
 ## 8. Key Takeaways

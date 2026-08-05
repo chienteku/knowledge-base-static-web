@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Declarative Programming](../level_01/declarative_programming.md) — Next.js is just a framework *for* React.
 - [Client-Side Routing](../level_09/client_side_routing.md) — Next.js provides its own alternative to React Router.
+
 ---
 
 ## 2. Term Category
@@ -149,6 +150,7 @@ export default function Page() {
 - [React Server Components (RSC)](rsc.md) — The cutting-edge React architecture that Next.js 13+ is built around.
 - [Bundler & Tree-Shaking](../level_08/bundler_tree_shaking.md) — Related concept: Bundler & Tree-Shaking.
 - [Static Site Generation (SSG)](ssg.md) — Related concept: Static Site Generation (SSG).
+
 ---
 
 ## 8. Key Takeaways

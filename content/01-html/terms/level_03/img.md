@@ -10,6 +10,7 @@
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Understanding that the `<img>` is a void element (no closing tag).
 - [Attribute](../level_01/attribute.md) — The `<img>` tag requires attributes to function.
 - [`src` Attribute](src.md) — The attribute that points to the image resource location.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ The `src` (source) attribute is the set of instructions you give to an assistant
 - [`<picture>` & Responsive Images](picture_responsive.md) — Related concept: `<picture>` & Responsive Images.
 - [`<video>`](video.md) — Related concept: `<video>`.
 - [`<map>` & `<area>` (Image Maps)](../level_10/map_area.md) — Related concept: `<map>` & `<area>` (Image Maps).
+
 ---
 
 ## 8. Key Takeaways

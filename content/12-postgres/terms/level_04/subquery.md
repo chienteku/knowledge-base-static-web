@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The baseline query command.
 - [`WHERE` Clause](../level_03/where.md) — The parent filter context where subqueries are commonly nested.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ Use JOIN: SELECT u.name, o.total FROM users u JOIN orders o ON u.id = o.user_id;
 ## 7. Related Terms
 - [`SELECT`](../level_03/select.md) — The query starter.
 - [`EXISTS` / `NOT EXISTS`](exists.md) — Testing subquery row matching.
+
 ---
 
 ## 8. Key Takeaways

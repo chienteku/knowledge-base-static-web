@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function Types](function_types.md) — The context where rest parameters are used.
 - [Arrays & Tuples](../level_02/arrays_tuples.md) — The type you must apply to a rest parameter.
+
 ---
 
 ## 2. Term Category
@@ -162,6 +163,7 @@ function log(msg: string, ...tags: string[]) {} // Correct position
 ## 7. Related Terms
 - [Arrays & Tuples](../level_02/arrays_tuples.md) — The type required for Rest parameters.
 - [Function Types](function_types.md) — The parent topic.
+
 ---
 
 ## 8. Key Takeaways

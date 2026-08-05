@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Comparison & Logical Operators](../level_03/operators.md) — The baseline query comparison symbols.
+- [`WHERE` Clause](../level_03/where.md) — Pattern matching text filtering with LIKE and ILIKE.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +190,7 @@ CREATE INDEX idx_trgm_title ON posts USING GIN (title gin_trgm_ops);
 ## 7. Related Terms
 - [Comparison & Logical Operators](../level_03/operators.md) — The parent comparison standard.
 - [String Functions (`CONCAT`, `LENGTH`, `UPPER`, `LOWER`, `TRIM`, `SUBSTRING`, `REPLACE`)](string_functions.md) — Text manipulation utilities.
+
 ---
 
 ## 8. Key Takeaways

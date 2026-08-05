@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`INTEGER` / `BIGINT` / `SMALLINT`](integer_types.md) — The numeric types assigned to identity columns.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ INSERT INTO users (id, name) OVERRIDING SYSTEM VALUE VALUES (10, 'Alice');
 ## 7. Related Terms
 - [`INTEGER` / `BIGINT` / `SMALLINT`](integer_types.md) — The underlying types.
 - [`PRIMARY KEY`](primary_key.md) — The constraint typically bound to identity columns.
+
 ---
 
 ## 8. Key Takeaways

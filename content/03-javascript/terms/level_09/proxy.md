@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — What the Proxy wraps around.
 - [Class](../level_07/class.md) — The Proxy is a built-in class.
+
 ---
 
 ## 2. Term Category
@@ -230,6 +231,7 @@ async function processData() {
 - [Object](../level_02/object.md) — The entity being proxied.
 - [Reflect](reflect.md) — Related concept: Reflect.
 - [Garbage Collection](garbage_collection.md) — WeakMap & GC.
+
 ---
 
 ## 8. Key Takeaways

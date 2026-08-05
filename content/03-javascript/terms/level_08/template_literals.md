@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [String](../level_01/string.md) — The standard text data type.
 - [Expression](../level_01/expression.md) — The type of code you can embed inside them.
+
 ---
 
 ## 2. Term Category
@@ -245,6 +246,7 @@ const sentence = `I am feeling ${getMood().toUpperCase()} today.`;
 - [Expression](../level_01/expression.md) — What you put inside the `${}`.
 - [String Methods](../level_02/string_methods.md) — Related concept: String Methods.
 - [JSX](../level_10/jsx.md) — Related concept: JSX.
+
 ---
 
 ## 8. Key Takeaways

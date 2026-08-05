@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Semantic Versioning (SemVer)](semantic_versioning.md) — The `^` symbol in `package.json` creates a massive vulnerability that the lock file fixes.
 - [node_modules](node_modules.md) — The lock file records exactly what goes into this folder.
+
 ---
 
 ## 2. Term Category
@@ -137,6 +138,7 @@ git checkout --ours package-lock.json && npm install # Regenerates clean lockfil
 ## 7. Related Terms
 - [package.json](package_json.md) — The human-readable blueprint. (The lock file is the machine-readable exact receipt).
 - [NPM (Node Package Manager)](npm.md) — Related concept: NPM (Node Package Manager).
+
 ---
 
 ## 8. Key Takeaways

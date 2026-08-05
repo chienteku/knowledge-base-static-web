@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`WHERE` Clause](../level_03/where.md) — The individual row filtering clause.
 - [`GROUP BY`](group_by.md) — The clause that builds categories.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ SELECT category, COUNT(*) FROM products WHERE status = 'active' GROUP BY categor
 ## 7. Related Terms
 - [`WHERE` Clause](../level_03/where.md) — The pre-grouping filter.
 - [`GROUP BY`](group_by.md) — The grouping engine.
+
 ---
 
 ## 8. Key Takeaways

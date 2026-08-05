@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [async / await in Node](async_await.md) — The control flow syntax utilizing Promises.
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The consequence of failing to handle async errors.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ app.get('/user/:id', async (req, res, next) => {
 - [Callbacks & Callback Hell](callbacks.md) — The error-first callback style of handling errors.
 - [async / await in Node](async_await.md) — Related concept: async / await in Node.
 - [Error Handling Middleware](../level_09/error_handling_middleware.md) — Related concept: Error Handling Middleware.
+
 ---
 
 ## 8. Key Takeaways

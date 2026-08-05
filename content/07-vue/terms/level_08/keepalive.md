@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Component Lifecycle](../level_04/component_lifecycle.md) — `KeepAlive` fundamentally alters the standard lifecycle.
 - [`v-if` / `v-show`](../level_03/v_if_show.md) — `KeepAlive` is the bridge between `v-if` (destruction) and `v-show` (hiding).
+
 ---
 
 ## 2. Term Category
@@ -174,6 +175,7 @@ defineOptions({ name: 'UserTab' });
 - [Component Lifecycle](../level_04/component_lifecycle.md) — The baseline behavior `KeepAlive` alters.
 - [Dynamic Components (`<component :is>`)](../level_04/dynamic_components.md) — Dynamic swapping layouts that are commonly wrapped in `<KeepAlive>`.
 - [Async Components](async_components.md) — Async components.
+
 ---
 
 ## 8. Key Takeaways

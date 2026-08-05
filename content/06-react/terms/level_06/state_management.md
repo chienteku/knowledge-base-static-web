@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Context API](context_api.md) — State managers are the heavy-duty alternative to the built-in Context API.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — State managers use tricks to bypass this safely.
+
 ---
 
 ## 2. Term Category
@@ -162,6 +163,7 @@ Which global tool should you use for each?
 - [`useSyncExternalStore` Hook](../level_11/use_sync_external_store.md) — Related concept: `useSyncExternalStore` Hook.
 - [Zustand](../level_11/zustand.md) — Related concept: Zustand.
 - [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
+
 ---
 
 ## 8. Key Takeaways

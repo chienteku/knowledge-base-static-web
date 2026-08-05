@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`](../level_02/date_time_types.md) — The temporal data types.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ SELECT EXTRACT(YEAR FROM NOW())::INT AS year_num;
 
 ## 7. Related Terms
 - [`DATE` / `TIME` / `TIMESTAMP` / `TIMESTAMPTZ`](../level_02/date_time_types.md) — The parent temporal types.
+
 ---
 
 ## 8. Key Takeaways

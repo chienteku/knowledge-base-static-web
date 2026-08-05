@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [JavaScript Engine](../level_05/javascript_engine.md) — The interpreter that reads and executes code at runtime.
+
 ---
 
 ## 2. Term Category
@@ -229,6 +230,7 @@ async function processData() {
 ## 7. Related Terms
 - [Transpiler vs Compiler](transpiler_vs_compiler.md) — The tools that process compile-time transformations.
 - [TypeScript](typescript.md) — The static typing language that operates strictly at compile time.
+
 ---
 
 ## 8. Key Takeaways

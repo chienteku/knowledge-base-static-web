@@ -194,8 +194,6 @@ You have a large 2018-edition crate and want to upgrade to 2021. Answer the foll
 
 - [`Cargo.toml`](cargo_toml.md) — Where the edition is declared.
 - [Workspace](workspace.md) — Where you often see multiple crates living side-by-side with completely different Editions!
-- [Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`)](lint_control_attributes.md) — Related concept: Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`).
-- [`#[non_exhaustive]`](non_exhaustive_attribute.md) — Related concept: `#[non_exhaustive]`.
 
 ---
 

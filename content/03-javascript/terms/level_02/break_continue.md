@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [for Loop](for_loop.md) — A loop that repeats until a specified condition evaluates to false.
 - [while Loop](while_loop.md) — A loop that executes a block of code as long as the specified condition evaluates to true.
+
 ---
 
 ## 2. Term Category
@@ -256,6 +257,7 @@ console.log("First even number:", firstEven);
 - [for Loop](for_loop.md) — Repetitive block executing a specific number of times.
 - [while Loop](while_loop.md) — Repetitive block executing as long as a condition holds true.
 - [switch](switch.md) — Conditional branch that also relies on the `break` statement.
+
 ---
 
 ## 8. Key Takeaways

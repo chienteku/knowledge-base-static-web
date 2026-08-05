@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Readable & Writable Streams](readable_writable.md) — The source reader and target writer classes.
 - [Piping (.pipe())](piping.md) — The stream linking method that manages backpressure.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ app.get('/download-good', (req, res) => {
 - [Piping (.pipe())](piping.md) — The abstraction layer that automates backpressure handling.
 - [Readable & Writable Streams](readable_writable.md) — The components that exchange flow-control signals.
 - [Streams (General Concept)](streams.md) — Related concept: Streams (General Concept).
+
 ---
 
 ## 8. Key Takeaways

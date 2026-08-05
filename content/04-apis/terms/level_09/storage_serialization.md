@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [localStorage & sessionStorage](web_storage.md) — The browser storage engines.
 - [Serialization & Deserialization](../level_07/serialization.md) — The data-flattening concepts.
+
 ---
 
 ## 2. Term Category
@@ -227,6 +228,7 @@ function getCart() {
 ## 7. Related Terms
 - [JSON Methods (parse / stringify)](../level_07/json_methods.md) — The core utilities executing JavaScript storage serialization.
 - [Cookies](cookies.md) — The header-based storage strings that also require custom parsing mechanisms.
+
 ---
 
 ## 8. Key Takeaways

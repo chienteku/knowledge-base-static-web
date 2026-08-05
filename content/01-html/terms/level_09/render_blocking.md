@@ -9,6 +9,7 @@
 - [Critical Rendering Path](critical_rendering_path.md) — The rendering stages impacted by blocking.
 - [`<link>`](../level_08/link.md) — The tag primarily used to import CSS.
 - [`<script>`](../level_08/script.md) — The tag primarily used to import JS.
+
 ---
 
 ## 2. Term Category
@@ -227,6 +228,7 @@ Which of the two files (`modal-widget.js` or `custom-theme.css`) is blocking the
 - [`<link>`](../level_08/link.md) — The stylesheet wrapper.
 - [`<script>`](../level_08/script.md) — The script wrapper.
 - [`defer` & `async` (Script Loading Strategies)](../level_08/defer_async.md) — The attributes used to make script loading non-blocking.
+
 ---
 
 ## 8. Key Takeaways

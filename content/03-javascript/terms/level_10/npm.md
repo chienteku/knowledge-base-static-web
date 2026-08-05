@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Node.js](node_js.md) — npm is installed automatically when you install Node.js.
 - [Modules (import/export)](../level_08/modules.md) — The format these packages are written in.
+
 ---
 
 ## 2. Term Category
@@ -191,6 +192,7 @@ async function processData() {
 - [Node.js](node_js.md) — The runtime environment npm belongs to.
 - [Bundler](bundler.md) — Related concept: Bundler.
 - [Semantic Versioning & Lockfiles](semver_lockfiles.md) — Related concept: Semantic Versioning & Lockfiles.
+
 ---
 
 ## 8. Key Takeaways

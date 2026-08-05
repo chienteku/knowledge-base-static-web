@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [HTML (HyperText Markup Language)](html.md) — The language that uses these structures.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ Identify the opening tag, the closing tag, the content, and the element.
 - [Comments (<!-- -->)](comments.md) — Related concept: Comments (<!-- -->).
 - [Nesting](nesting.md) — Related concept: Nesting.
 - [HTML Entities](../level_09/html_entities.md) — Related concept: HTML Entities.
+
 ---
 
 ## 8. Key Takeaways

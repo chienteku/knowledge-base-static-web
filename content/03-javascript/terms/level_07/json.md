@@ -9,6 +9,7 @@
 - [Object](../level_02/object.md) — The base key-value data structure.
 - [Array](../level_02/array.md) — Ordered list structures.
 - [String](../level_01/string.md) — Plain-text characters representing data.
+
 ---
 
 ## 2. Term Category
@@ -245,6 +246,7 @@ console.log(result);
 - [Fetch API](../level_06/fetch_api.md) — The network client request API that frequently parses response streams using `.json()`.
 - [Date object](../level_02/date_object.md) — Related concept: Date object.
 - [structuredClone](../level_09/structuredclone.md) — Related concept: structuredClone.
+
 ---
 
 ## 8. Key Takeaways

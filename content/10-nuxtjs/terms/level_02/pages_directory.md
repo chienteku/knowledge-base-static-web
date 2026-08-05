@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [File-based Routing](file_based_routing.md) — The concept that powers this directory.
 - [`app.vue`](app_vue.md) — The entry point that renders these pages.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ definePageMeta({
 - [Route Middleware](../level_08/route_middleware.md) — Related concept: Route Middleware.
 - [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — NuxtPage component.
 - [`layouts/` Directory](layouts_directory.md) — layouts/ directory.
+
 ---
 
 ## 8. Key Takeaways

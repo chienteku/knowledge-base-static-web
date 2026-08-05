@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Metadata API (`metadata`)](metadata_api.md) — The static version of this feature.
 - [Server-side Fetching (Extended `fetch`)](../level_05/fetch.md) — How we fetch the data for the metadata.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ const getItem = cache(async (id: string) => db.item.findUnique({ where: { id } }
 ## 7. Related Terms
 - [Metadata API (`metadata`)](metadata_api.md) — The static equivalent.
 - [Server-side Fetching (Extended `fetch`)](../level_05/fetch.md) — The mechanism used to deduplicate the API calls made in this function.
+
 ---
 
 ## 8. Key Takeaways

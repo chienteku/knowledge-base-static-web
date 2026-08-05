@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — A collection of key-value pairs.
 - [Function](../level_03/function.md) — Reusable blocks of code.
+
 ---
 
 ## 2. Term Category
@@ -230,6 +231,7 @@ dog.bark();
 - [Strict Mode ("use strict")](../level_09/strict_mode.md) — Related concept: Strict Mode ("use strict").
 - [call / apply / bind](call_apply_bind.md) — call, apply, bind.
 - [Default this Binding Rules](default_this_binding.md) — This binding rules.
+
 ---
 
 ## 8. Key Takeaways

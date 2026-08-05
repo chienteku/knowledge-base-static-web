@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Column (Field / Attribute)](../level_01/column.md) — Understanding table structures.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ balance NUMERIC(12, 2) -- Exact fixed-point decimal precision
 - [`ENUM` Type](../level_06/enum_type.md) — Related concept: `ENUM` Type.
 - [`JSON` / `JSONB` Type](../level_06/json_jsonb.md) — Related concept: `JSON` / `JSONB` Type.
 - [`UUID` Type](../level_06/uuid_type.md) — Related concept: `UUID` Type.
+
 ---
 
 ## 8. Key Takeaways

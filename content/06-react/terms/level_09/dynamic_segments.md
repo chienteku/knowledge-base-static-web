@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React Router](react_router.md) — Where you define these routes.
 - [`<Link>` Component](link_component.md) — How you navigate to these routes.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +171,7 @@ What will `useParams()` return inside the `<BlogPost />` component?
 ## 7. Related Terms
 - [React Router](react_router.md) — The library that powers this.
 - [`useEffect` Hook](../level_03/use_effect.md) — You usually take the URL parameter and immediately use it inside `useEffect` to fetch data.
+
 ---
 
 ## 8. Key Takeaways

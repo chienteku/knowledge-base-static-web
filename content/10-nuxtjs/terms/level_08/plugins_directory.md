@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useNuxtApp` Context](../level_04/use_nuxt_app.md) — The composable used to access the helpers injected by these plugins.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The Vue context hosting plugin initialization blocks.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ window.analytics.init(); // ❌ ReferenceError on server SSR!
 - [Vue Plugins vs Nuxt Plugins](vue_vs_nuxt_plugins.md) — Understanding how to specifically attach standard Vue plugins.
 - [`useNuxtApp` Context](../level_04/use_nuxt_app.md) — How you retrieve the provided `$helpers`.
 - [Nuxt Modules System](../level_09/nuxt_modules.md) — Related concept: Nuxt Modules System.
+
 ---
 
 ## 8. Key Takeaways

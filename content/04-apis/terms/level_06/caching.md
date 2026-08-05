@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Caching intercepts this lifecycle to skip the server processing step.
 - [HTTP Headers](../level_02/http_headers.md) — Caching is entirely controlled by specific HTTP headers.
+
 ---
 
 ## 2. Term Category
@@ -153,6 +154,7 @@ A major breaking news event happens at noon. Your journalists publish the story 
 - [Cache Invalidation](cache_invalidation.md) — Related concept: Cache Invalidation.
 - [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — Rate limiting.
 - [Circuit Breaker](circuit_breaker.md) — Circuit breaker pattern.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`align-items`](align_items.md) — The parent property that `align-self` overrides.
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ If you want to push a single child item to the far-right, use the margin trick: 
 - [`justify-content`](justify_content.md) — The main axis spacing controller.
 - [`order`](order.md) — The visual child ordering property.
 - [`flex-direction`](flex_direction.md) — Related concept: `flex-direction`.
+
 ---
 
 ## 8. Key Takeaways

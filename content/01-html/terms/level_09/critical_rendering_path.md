@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [DOM (Document Object Model)](dom.md) — The interactive, in-memory representation.
 - [The Tree Structure](tree_structure.md) — The hierarchical parent-child format.
+
 ---
 
 ## 2. Term Category
@@ -225,6 +226,7 @@ Layout, DOM Construction, Paint, CSSOM Construction, Render Tree Construction
 - [DOM (Document Object Model)](dom.md) — The foundational node representation.
 - [The Tree Structure](tree_structure.md) — The parent-child layout hierarchy.
 - [Render-Blocking Resources](render_blocking.md) — Files that pause this pipeline.
+
 ---
 
 ## 8. Key Takeaways

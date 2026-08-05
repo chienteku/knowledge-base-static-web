@@ -9,6 +9,7 @@
 - [Vue Router](vue_router.md) — The router registration library.
 - [Dynamic Routing](dynamic_routing.md) — Dynamic URL mapping.
 - [Programmatic Navigation (`useRouter` / `useRoute`)](programmatic_navigation.md) — Script-driven page navigation.
+
 ---
 
 ## 2. Term Category
@@ -275,6 +276,7 @@ router.beforeEach((to, from, next) => {
 - [Vue Router](vue_router.md) — The routing system container.
 - [Dynamic Routing](dynamic_routing.md) — Mapping paths containing colon variables.
 - [Navigation Guards](navigation_guards.md) — Route middleware hooks.
+
 ---
 
 ## 8. Key Takeaways

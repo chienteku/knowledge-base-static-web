@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<input>`](input.md) — The input controls containing the name parameter.
 - [`<form>`](form.md) — The container compiling the key-value packages.
+
 ---
 
 ## 2. Term Category
@@ -235,6 +236,7 @@ Form payload fields declaring names:
 - [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Related concept: `<input type="radio">` & `<input type="checkbox">`.
 - [`<select>` and `<option>`](select_option.md) — Related concept: `<select>` and `<option>`.
 - [`<textarea>`](textarea.md) — Related concept: `<textarea>`.
+
 ---
 
 ## 8. Key Takeaways

@@ -9,6 +9,7 @@
 - [`<input>`](input.md) — The input element that these types configure.
 - [`name` Attribute (in Form Fields)](name.md) — Crucial for grouping selectors.
 - [`value` Attribute (in Form Fields)](value.md) — Defining the submitted choice code data.
+
 ---
 
 ## 2. Term Category
@@ -253,6 +254,7 @@ Basic selector templates:
 - [`<label>`](label.md) — The text label companion.
 - [`name` Attribute (in Form Fields)](name.md) — Essential grouping parameter.
 - [`value` Attribute (in Form Fields)](value.md) — Choice values.
+
 ---
 
 ## 8. Key Takeaways

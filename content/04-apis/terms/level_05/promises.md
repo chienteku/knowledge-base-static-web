@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The fetch() API](fetch.md) — `fetch` is the most common function that generates a Promise.
 - [Request & Response Lifecycle](../level_01/request_response.md) — Promises exist to handle the "waiting" phase of this lifecycle.
+
 ---
 
 ## 2. Term Category
@@ -194,6 +195,7 @@ console.log("C");
 - [Error Handling (try / catch)](error_handling.md) — How we handle "Rejected" promises.
 - [The fetch() API](fetch.md) — Related concept: The fetch() API.
 - [XMLHttpRequest / AJAX](xmlhttprequest_ajax.md) — Related concept: XMLHttpRequest / AJAX.
+
 ---
 
 ## 8. Key Takeaways

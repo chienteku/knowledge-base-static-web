@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTTP Status Codes](../level_02/status_codes.md) — Rate limiting uses a very specific 4xx status code.
 - [API Keys](../level_04/api_keys.md) — How the server knows exactly *who* is making the requests.
+
 ---
 
 ## 2. Term Category
@@ -153,6 +154,7 @@ X-RateLimit-Reset: 1700000060
 - [Webhooks](webhooks.md) — Related concept: Webhooks.
 - [Caching (ETag, Cache-Control)](caching.md) — Related concept: Caching (ETag, Cache-Control).
 - [API Gateway](../level_10/api_gateway.md) — Related concept: API Gateway.
+
 ---
 
 ## 8. Key Takeaways

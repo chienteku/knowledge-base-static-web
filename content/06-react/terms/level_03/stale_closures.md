@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useEffect` Hook](use_effect.md) — The hook where stale closures commonly manifest.
 - [Dependency Array](dependency_array.md) — The array used to refresh closure snapshots.
+
 ---
 
 ## 2. Term Category
@@ -260,6 +261,7 @@ function AlertButton() {
 - [Rules of Hooks](../level_04/rules_of_hooks.md) — The guidelines ensuring dependencies match usage.
 - [`useCallback` Hook](../level_04/use_callback.md) — The hook for caching callback functions, prone to stale closures.
 - [Dependency Array](dependency_array.md) — Related concept: Dependency Array.
+
 ---
 
 ## 8. Key Takeaways

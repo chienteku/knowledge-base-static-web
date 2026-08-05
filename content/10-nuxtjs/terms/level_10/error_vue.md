@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`app.vue`](../level_02/app_vue.md) — The root application instance `error.vue` completely replaces.
 - [`createError`, `showError` & `clearError`](create_error.md) — The utility functions that trigger this page.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ You **must** use the `clearError()` utility. This function wipes the fatal error
 - [Fetching Errors & `clearNuxtData`](../level_05/fetching_errors.md) — Related concept: Fetching Errors & `clearNuxtData`.
 - [`abortNavigation` Utility](../level_08/abort_navigation.md) — Related concept: `abortNavigation` Utility.
 - [`createError`, `showError` & `clearError`](create_error.md) — Related concept: `createError`, `showError` & `clearError`.
+
 ---
 
 ## 8. Key Takeaways

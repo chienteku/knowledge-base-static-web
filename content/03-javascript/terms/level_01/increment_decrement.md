@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Number](number.md) — Represents both integer and floating-point numbers.
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ const result = a++ + --b;
 - [Arithmetic Operators](arithmetic_operators.md) — General mathematical operators.
 - [Assignment Operators](assignment_operators.md) — Shorthand operators to update variable values.
 - [for Loop](../level_02/for_loop.md) — Repetitive execution blocks that typically rely on increment counters.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<input>`](input.md) — The input controls hosting the placeholder.
 - [Attribute](../level_01/attribute.md) — The parameter syntax injected into tags.
+
 ---
 
 ## 2. Term Category
@@ -222,6 +223,7 @@ Correct usage pairing a label with an example placeholder:
 - [`<label>`](label.md) — The mandatory companion tag for accessibility.
 - [`<textarea>`](textarea.md) — Multi-line text inputs that also support placeholders.
 - [`<select>` and `<option>`](select_option.md) — Related concept: `<select>` and `<option>`.
+
 ---
 
 ## 8. Key Takeaways

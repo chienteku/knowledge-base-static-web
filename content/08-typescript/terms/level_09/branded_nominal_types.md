@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — The default shape-matching system.
 - [Intersection Types (`&`)](../level_05/intersection_types.md) — Combining multiple type shapes together.
+
 ---
 
 ## 2. Term Category
@@ -248,6 +249,7 @@ chargeCard(walletUSD); // Should compile successfully
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — The default matching system that branding limits.
 - [Intersection Types (`&`)](../level_05/intersection_types.md) — The operator used to combine the primitive and the brand.
 - [Type Assertions (`as`)](../level_05/type_assertions.md) — The casting syntax used to brand values.
+
 ---
 
 ## 8. Key Takeaways

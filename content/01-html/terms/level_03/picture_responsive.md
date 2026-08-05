@@ -9,6 +9,7 @@
 - [`<img>`](img.md) — The image container that actually displays the pixels.
 - [`alt` Attribute](alt.md) — The accessibility description.
 - [`<source>` Element](source.md) — The tag used to list alternative media files.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ Serving a desktop image versus a mobile image:
 - [`<img>`](img.md) — The rendering image element.
 - [`<source>` Element](source.md) — The sibling element specifying source lists.
 - [`alt` Attribute](alt.md) — The required visual descriptor.
+
 ---
 
 ## 8. Key Takeaways

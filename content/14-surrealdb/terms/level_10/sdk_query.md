@@ -10,6 +10,7 @@
 - [JavaScript / TypeScript SDK](js_sdk.md) — The `surrealdb` client package.
 - [SurrealQL Injection Prevention](../level_08/injection_prevention.md) — Parameterized query security.
 - [Parameters (`$param`)](../level_06/parameters.md) — Parameter binding syntax.
+- [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](sdk_connection.md) — Executing raw SurrealQL queries via SDKs.
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event Bubbling](event_bubbling.md) — The upward phase of event propagation.
 - [DOM (Document Object Model)](dom.md) — The tree structure of the page.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ async function processData() {
 - [Event object](event_object.md) — Related concept: Event object.
 - [event.target vs event.currentTarget](event_target_currenttarget.md) — Related concept: event.target vs event.currentTarget.
 - [Event Listener](event_listener.md) — Related concept: Event Listener.
+
 ---
 
 ## 8. Key Takeaways

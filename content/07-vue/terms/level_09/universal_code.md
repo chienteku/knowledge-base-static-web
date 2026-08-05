@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](ssr.md) — The architecture that demands Universal Code.
 - [Hydration (Vue)](hydration.md) — The process that relies on Universal Code matching perfectly.
+
 ---
 
 ## 2. Term Category
@@ -177,6 +178,7 @@ onMounted(() => {
 - [Component Lifecycle](../level_04/component_lifecycle.md) — Understanding that `onMounted` is your escape hatch for browser-only code.
 - [Hydration (Vue)](hydration.md) — Related concept: Hydration (Vue).
 - [Static Site Generation (SSG)](ssg.md) — Related concept: Static Site Generation (SSG).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The Box Model (Concept)](box_model.md) — Border is the third layer of the Box Model.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ button:focus-visible { outline: 2px solid blue; } /* Outlines do not take layout
 - [The Box Model (Concept)](box_model.md) — Related concept: The Box Model (Concept).
 - [`box-shadow` (Card Shadows)](../level_09/box_shadow.md) — Related concept: `box-shadow` (Card Shadows).
 - [`outline`](../level_09/outline.md) — Related concept: `outline`.
+
 ---
 
 ## 8. Key Takeaways

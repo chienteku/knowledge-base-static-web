@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [Cargo](../level_01/cargo.md) — Core build system and package manager.
+- [`Cargo.toml`](cargo_toml.md) — Package configuration manifest.
 
 ---
 

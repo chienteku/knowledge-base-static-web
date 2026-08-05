@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The crypto Module](../level_02/crypto_module.md) — While Node has built-in crypto, Bcrypt is a specialized, third-party tool specifically for passwords.
+
 ---
 
 ## 2. Term Category
@@ -160,6 +161,7 @@ Will their Bcrypt hashes in the database look identical?
 ## 7. Related Terms
 - [JWT (JSON Web Tokens)](jwt.md) — You use Bcrypt to verify the password, and if it matches, you generate a JWT!
 - [The crypto Module](../level_02/crypto_module.md) — Related concept: The crypto Module.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Statelessness](../level_03/statelessness.md) — The REST constraint relating to request context.
+- [JWT (JSON Web Tokens)](jwt.md) — JSON Web Token (JWT) vs session cookie authentication.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +185,7 @@ if (await redis.sismember('blacklisted_tokens', jti)) return res.status(401).sen
 - [JWT (JSON Web Tokens)](jwt.md) — The standard format for stateless tokens.
 - [Cookies](../level_09/cookies.md) — The browser storage mechanism typically used to store session IDs.
 - [Load Balancing](../level_10/load_balancing.md) — Related concept: Load Balancing.
+
 ---
 
 ## 8. Key Takeaways

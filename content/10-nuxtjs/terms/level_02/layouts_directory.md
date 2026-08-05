@@ -10,7 +10,8 @@
 - [`pages/` Directory](pages_directory.md) — The content that gets wrapped by the layout.
 - [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — The built-in components orchestrating layout loads.
 - [`definePageMeta` Compiler Macro](define_page_meta.md) — The API used to override layout mappings.
-- slots — The Vue mechanism used to inject page templates.
+- [Slots](../../../07-vue/terms/level_05/slots.md) — The Vue mechanism used to inject page templates.
+
 ---
 
 ## 2. Term Category
@@ -237,6 +238,7 @@ definePageMeta({
 - [`<NuxtPage>` & `<NuxtLayout>` Components](nuxt_page_layout.md) — Related concept: `<NuxtPage>` & `<NuxtLayout>` Components.
 - [`pages/` Directory](pages_directory.md) — pages/ directory.
 - [`definePageMeta` Compiler Macro](define_page_meta.md) — Related concept: `definePageMeta` Compiler Macro.
+
 ---
 
 ## 8. Key Takeaways

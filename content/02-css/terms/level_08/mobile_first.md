@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Responsive Design (Concept)](responsive_design.md) — The adaptation philosophy.
 - [`@media` (Media Queries Basics)](media_queries.md) — The conditional rules tool.
+
 ---
 
 ## 2. Term Category
@@ -379,6 +380,7 @@ Alternative layouts:
 - [`@media` (Media Queries Basics)](media_queries.md) — The query container.
 - [Responsive Design (Concept)](responsive_design.md) — The core philosophy.
 - [Breakpoints](breakpoints.md) — The layout shift markers.
+
 ---
 
 ## 8. Key Takeaways

@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Unsafe / Systems**: `core::arch::asm!` macro for inserting raw machine assembly instructions directly into Rust code inside `unsafe` blocks.
@@ -272,7 +271,6 @@ unsafe { asm!("add {0}, 1", inout(reg) val, options(nomem, nostack)); }
 - [`unsafe` Block](unsafe_block.md) — Unsafe blocks.
 
 ---
-
 
 ## 7. Key Takeaways
 

@@ -10,6 +10,7 @@
 - [`title` Attribute](../level_07/title.md) — The webpage tab title.
 - [Semantic HTML](../level_06/semantic_html.md) — The structural layout tags.
 - [Heading Hierarchy & Document Outline](../level_06/heading_hierarchy.md) — The sequential outline rules.
+
 ---
 
 ## 2. Term Category
@@ -240,6 +241,7 @@ How would you improve the `<title>` tag to target local keywords like "dog groom
 - [Semantic HTML](../level_06/semantic_html.md) — Structural layout tags crawled by spiders.
 - [Heading Hierarchy & Document Outline](../level_06/heading_hierarchy.md) — Nesting rules for document indices.
 - [Open Graph Tags (`og:`)](../level_08/open_graph.md) — Metadata tags used for social media shared preview cards.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,9 +7,10 @@
 
 ## 1. Prerequisites
 - [Nuxt 3 Overview](nuxt_3_overview.md) — The orchestrator of this process.
-- component_lifecycle — Understanding when component setups run.
+- [Component Lifecycle](../../../07-vue/terms/level_04/component_lifecycle.md) — Understanding when component setups run.
 - [Search Engine Optimization (SEO)](seo.md) — The core driver for SSR.
 - [Hydration](hydration.md) — The bridge mechanism between server HTML and client interactivity.
+
 ---
 
 ## 2. Term Category
@@ -198,6 +199,7 @@ routeRules: { '/admin/**': { ssr: false } }
 - [Nuxt Server Components (Islands)](../level_09/nuxt_server_components.md) — Related concept: Nuxt Server Components (Islands).
 - [`.output/` Directory](../level_10/output_directory.md) — Related concept: `.output/` Directory.
 - [Hybrid Rendering](../level_09/hybrid_rendering.md) — Hybrid rendering modes.
+
 ---
 
 ## 8. Key Takeaways

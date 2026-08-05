@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Object Types](object_types.md) — The concept that Interfaces abstract.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ interface B extends A { b: string } // Interface inheritance
 - [Intersection Types (`&`)](../level_05/intersection_types.md) — Related concept: Intersection Types (`&`).
 - [Abstract Classes](../level_10/abstract_classes.md) — Related concept: Abstract Classes.
 - [Declaration Files (`.d.ts`)](../level_11/declaration_files.md) — Related concept: Declaration Files (`.d.ts`).
+
 ---
 
 ## 8. Key Takeaways

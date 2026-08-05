@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Compile-Time Functions**: Functions marked with `const fn` executable in compile-time contexts.
@@ -260,7 +259,6 @@ Validate inputs inside const fn using conditional guards or Option/Result!
 - [Const Evaluation Ctfe](const_evaluation_ctfe.md) — Compile-time evaluation.
 
 ---
-
 
 ## 7. Key Takeaways
 

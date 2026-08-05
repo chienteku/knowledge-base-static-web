@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Express.js](express_js.md) — Middleware is the defining architectural feature of Express.
+
 ---
 
 ## 2. Term Category
@@ -271,6 +272,7 @@ app.use((req, res, next) => {
 - [The Middleware Chain & next()](middleware_chain.md) — Related concept: The Middleware Chain & next().
 - [CORS](../level_09/cors.md) — Related concept: CORS.
 - [Rate Limiting](../level_09/rate_limiting.md) — Related concept: Rate Limiting.
+
 ---
 
 ## 8. Key Takeaways

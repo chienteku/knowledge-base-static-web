@@ -9,6 +9,7 @@
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The default rendering strategy.
 - [Single Page Application (SPA) Mode](spa.md) — The strategy that skips the server.
 - [Static Site Generation (SSG)](ssg.md) — The strategy that pre-builds HTML.
+
 ---
 
 ## 2. Term Category
@@ -276,6 +277,7 @@ routeRules: { '/live-chat': { ssr: false } } // Dynamic client execution for liv
 - [Static Site Generation (SSG)](ssg.md) — Static site generation.
 - [Single Page Application (SPA) Mode](spa.md) — Single page app mode.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — Related concept: Universal Rendering (SSR).
+
 ---
 
 ## 8. Key Takeaways

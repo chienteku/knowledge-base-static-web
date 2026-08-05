@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Index Signatures](../level_03/index_signatures.md) — The raw syntax that `Record` abstracts away.
 - [Literal Types](../level_05/literal_types.md) — Often used as the `Keys` in a Record.
+
 ---
 
 ## 2. Term Category
@@ -172,6 +173,7 @@ type Good = Record<string, string>; // Valid PropertyKey type
 - [Union Types (`|`)](../level_05/union_types.md) — What you pass into `Record` to enforce specific keys.
 - [Mapped Types](../level_09/mapped_types.md) — Related concept: Mapped Types.
 - [Utility Types Overview](utility_types.md) — Related concept: Utility Types Overview.
+
 ---
 
 ## 8. Key Takeaways

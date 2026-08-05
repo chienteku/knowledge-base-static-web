@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Promise](promise.md) — The underlying technology `async/await` interacts with.
 - [Synchronous](synchronous.md) — The style of code `async/await` mimics.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ function getJoke() {
 - [Fetch API](fetch_api.md) — Related concept: Fetch API.
 - [Promise Chaining](promise_chaining.md) — Related concept: Promise Chaining.
 - [Promise.all / allSettled / race / any](promise_combinators.md) — Related concept: Promise.all / allSettled / race / any.
+
 ---
 
 ## 8. Key Takeaways

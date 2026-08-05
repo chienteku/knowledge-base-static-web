@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base color value properties.
+- [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — Styling native form controls with accent-color.
+
 ---
 
 ## 2. Term Category
@@ -272,6 +274,7 @@ input[type="radio"] { accent-color: #005fcc; } /* High contrast accessibility ti
 
 ## 7. Related Terms
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — `:checked` and `:disabled` form selectors.
+
 ---
 
 ## 8. Key Takeaways

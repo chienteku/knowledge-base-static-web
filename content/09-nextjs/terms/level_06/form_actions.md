@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The functions that form actions execute.
-- form — The standard Web API this builds upon.
+- [`<form>`](../../../01-html/terms/level_05/form.md) — The standard Web API this builds upon.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ console.log(age + 5); // 30
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The target of the Form Action.
 - [`useFormStatus` Hook](use_form_status.md) — How to show a loading spinner while the action is running.
 - [Zod (Schema Validation)](zod_validation.md) — Zod schema validation.
+
 ---
 
 ## 8. Key Takeaways

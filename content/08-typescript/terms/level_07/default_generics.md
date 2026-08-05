@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Generic Interfaces & Classes](generic_interfaces_classes.md) — Where defaults are most commonly used.
 - [Optional & Default Parameters](../level_04/optional_default_parameters.md) — The exact same concept, but for data instead of Types.
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ const s: State = { data: "default string" }; // Omitting type uses default 'stri
 - [Optional & Default Parameters](../level_04/optional_default_parameters.md) — The runtime equivalent of this compile-time feature.
 - [Generic Constraints (`extends`)](generic_constraints.md) — The other modifier applied inside `<...>`.
 - [Generics Overview (`<T>`)](generics.md) — Related concept: Generics Overview (`<T>`).
+
 ---
 
 ## 8. Key Takeaways

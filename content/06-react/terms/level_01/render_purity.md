@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](components.md) — The functional units that must remain pure.
 - [Props (Properties)](props.md) — The read-only inputs passed to components.
+
 ---
 
 ## 2. Term Category
@@ -282,6 +283,7 @@ function SortedList({ numbers }) {
 - [Components](components.md) — Related concept: Components.
 - [Props (Properties)](props.md) — Related concept: Props (Properties).
 - [Derived State](../level_02/derived_state.md) — Related concept: Derived State.
+
 ---
 
 ## 8. Key Takeaways

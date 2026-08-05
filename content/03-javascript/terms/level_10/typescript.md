@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_01/primitive_types.md) — The core concept TypeScript is enforcing.
 - [Babel](babel.md)
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ async function processData() {
 - [Linter (ESLint) & Formatter (Prettier)](linter_formatter.md) — Related concept: Linter (ESLint) & Formatter (Prettier).
 - [Runtime vs Compile Time](runtime_vs_compile_time.md) — Related concept: Runtime vs Compile Time.
 - [ECMAScript](../level_01/ecmascript.md) — ECMAScript static typing.
+
 ---
 
 ## 8. Key Takeaways

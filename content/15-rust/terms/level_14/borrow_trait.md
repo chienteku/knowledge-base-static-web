@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Borrowing Trait**: `std::borrow::Borrow` for abstraction over owned and borrowed data with hash equality invariants.
@@ -295,7 +294,6 @@ use std::borrow::BorrowMut; let b: &mut str = item.borrow_mut();
 - [`Borrow` / `BorrowMut`](borrow_borrow_mut.md) — Borrow trait family.
 
 ---
-
 
 ## 7. Key Takeaways
 

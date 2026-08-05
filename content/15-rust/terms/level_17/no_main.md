@@ -515,7 +515,7 @@ Implement a C-ABI compliant `BootInformation` header structure with magic header
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

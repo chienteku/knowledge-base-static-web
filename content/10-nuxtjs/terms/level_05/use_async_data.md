@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [`useFetch`](use_fetch.md) — The syntactic sugar built directly on top of `useAsyncData`.
-- promise — The underlying asynchronous callback runtime wrapper.
+- [Promise](../../../03-javascript/terms/level_06/promise.md) — The underlying asynchronous callback runtime wrapper.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ const { data } = await useAsyncData('key', async () => 'plain string');
 - [Fetching Errors & `clearNuxtData`](fetching_errors.md) — Related concept: Fetching Errors & `clearNuxtData`.
 - [`useFetch`](use_fetch.md) — Related concept: `useFetch`.
 - [`useLazyFetch` & `useLazyAsyncData` Hooks](use_lazy_fetch.md) — Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks.
+
 ---
 
 ## 8. Key Takeaways

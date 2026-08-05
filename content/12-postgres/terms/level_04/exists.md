@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Subquery (Nested Query)](subquery.md) — The query format evaluated by the operator.
+- [`SELECT`](../level_03/select.md) — Testing subquery row existence using EXISTS.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +206,7 @@ EXISTS (SELECT 1 FROM ...) is idiomatic, but SELECT * has zero performance penal
 ## 7. Related Terms
 - [Subquery (Nested Query)](subquery.md) — The query container.
 - [`WHERE` Clause](../level_03/where.md) — The parent filter wrapper.
+
 ---
 
 ## 8. Key Takeaways

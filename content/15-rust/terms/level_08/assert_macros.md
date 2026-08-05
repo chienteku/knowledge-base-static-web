@@ -585,8 +585,6 @@ You are developing a high-throughput telemetry ingestion service. Packet frames 
 
 - [`PartialEq` / `Eq`](../level_04/partialeq_eq.md) — The mathematical trait required to compare two items in `assert_eq!`.
 - [`Debug` Trait](../level_04/debug_trait.md) — The formatting trait required to print the failure messages to the terminal.
-- [`#[should_panic]` Attribute](should_panic.md) — Related concept: `#[should_panic]`.
-- [`#[test]` Attribute](test_attribute.md) — Related concept: `#[test]`.
 
 ---
 

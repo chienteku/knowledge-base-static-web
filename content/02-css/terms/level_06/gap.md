@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — `gap` only works if the parent container is a Grid or a Flexbox!
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — Row and column spacing in Grid and Flexbox containers.
+
 ---
 
 ## 2. Term Category
@@ -245,6 +247,7 @@ Why is Option B better?
 - [Flexbox (Concept) & `display: flex`](../level_05/flex_parent.md) — The parent Flex layout container.
 - [`flex-wrap`](../level_05/flex_wrap.md) — Related concept: `flex-wrap`.
 - [`calc()`](../level_11/calc.md) — Related concept: `calc()`.
+
 ---
 
 ## 8. Key Takeaways

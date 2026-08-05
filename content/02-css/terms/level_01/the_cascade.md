@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [CSS (Cascading Style Sheets)](css.md) — It's right in the name: *Cascading* Style Sheets!
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The cascade resolves conflicts between multiple rulesets.
+
 ---
 
 ## 2. Term Category
@@ -180,6 +181,7 @@ h1 { color: pink; }
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — Related concept: Ruleset (Declaration, Property, Value).
 - [`@import` Rule](../level_11/import.md) — Related concept: `@import`.
 - [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`justify-content`](justify_content.md) — You must understand `justify-content` (Main Axis) to understand `align-items` (Cross Axis).
+
 ---
 
 ## 2. Term Category
@@ -164,6 +165,7 @@ Before Flexbox, perfectly centering a `<div>` both horizontally and vertically w
 - [`align-content`](align_content.md) — Distributes multiple rows of flex items.
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
 - [`display: flex`](display_flex.md) — Related concept: `display: flex`.
+
 ---
 
 ## 8. Key Takeaways

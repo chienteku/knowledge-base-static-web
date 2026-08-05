@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_02/primitive_types.md) — Literal types are ultra-specific versions of primitives.
 - [Union Types (`|`)](union_types.md) — Literal types are almost always combined using Unions.
+
 ---
 
 ## 2. Term Category
@@ -166,6 +167,7 @@ req(verb); // Explicit literal union type annotation
 - [Discriminated Unions](../level_06/discriminated_unions.md) — Related concept: Discriminated Unions.
 - [Template Literal Types](../level_09/template_literal_types.md) — Related concept: Template Literal Types.
 - [Enums](../level_11/enums.md) — Related concept: Enums.
+
 ---
 
 ## 8. Key Takeaways

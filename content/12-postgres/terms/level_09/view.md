@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The query statement saved inside the view.
 - [Table (Relation)](../level_01/table.md) — The underlying base tables.
+
 ---
 
 ## 2. Term Category
@@ -209,6 +210,7 @@ Create INSTEAD OF UPDATE trigger on view to route updates to base tables
 - [Materialized View](materialized_view.md) — The cached database view.
 - [Common Table Expression (CTE / `WITH`)](cte.md) — Temporary query abstractions.
 - [Row-Level Security (RLS)](../level_10/row_level_security.md) — Related concept: Row-Level Security (RLS).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`pages/` Directory](pages_directory.md) — Where these dynamic files are created.
 - [`useRoute` & `useRouter` Hooks](use_route_router.md) — The composables used to access parameter values.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ const userId = computed(() => route.params.id); // Reactive computed property up
 - [File-based Routing](file_based_routing.md) — Related concept: File-based Routing.
 - [`pages/` Directory](pages_directory.md) — Related concept: `pages/` Directory.
 - [`useRoute` & `useRouter` Hooks](use_route_router.md) — Related concept: `useRoute` & `useRouter` Hooks.
+
 ---
 
 ## 8. Key Takeaways

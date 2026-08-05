@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- versioning — The same concept, but applied to downloadable code packages.
+- [API Versioning (v1, v2)](../../../04-apis/terms/level_10/versioning.md) — The same concept, but applied to downloadable code packages.
 - [package.json](package_json.md) — Where these numbers are heavily used.
+
 ---
 
 ## 2. Term Category
@@ -152,6 +153,7 @@ Use exact version string '1.2.3' (no prefix) or package-lock.json for absolute l
 
 ## 7. Related Terms
 - [package.json](package_json.md) — Where the SemVer ranges (using `^` and `~`) are stored.
+
 ---
 
 ## 8. Key Takeaways

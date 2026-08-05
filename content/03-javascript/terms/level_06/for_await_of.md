@@ -10,6 +10,7 @@
 - [for...of](../level_04/for_of.md) — Synchronous iterable loop statement.
 - [Iterators & Iterables (protocol)](../level_08/iterators_iterables.md) — Interface protocols for sequential data retrieval.
 - [Generator (function*)](../level_09/generator.md) — Functions that can pause and yield multiple values.
+
 ---
 
 ## 2. Term Category
@@ -260,6 +261,7 @@ sumStream();
 ## 7. Related Terms
 - [for...of](../level_04/for_of.md) — The synchronous loop statement.
 - [Generator (function*)](../level_09/generator.md) — The function design used to construct iterators.
+
 ---
 
 ## 8. Key Takeaways

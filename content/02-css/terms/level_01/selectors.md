@@ -7,8 +7,9 @@
 
 ## 1. Prerequisites
 - [CSS (Cascading Style Sheets)](css.md) — Selectors are the foundation of writing CSS.
-- id — The HTML attribute targeted by ID selectors.
-- class — The HTML attribute targeted by Class selectors.
+- [`id` Attribute](../../../01-html/terms/level_07/id.md) — The HTML attribute targeted by ID selectors.
+- [`class` Attribute](../../../01-html/terms/level_07/class.md) — The HTML attribute targeted by Class selectors.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ div p { color: blue; } /* Selects all descendant paragraphs at any depth */
 - [CSS (Cascading Style Sheets)](css.md) — Related concept: CSS (Cascading Style Sheets).
 - [Combinator Selectors](../level_11/combinators.md) — Selector combinators.
 - [Attribute Selectors](../level_11/attribute_selectors.md) — Attribute selectors.
+
 ---
 
 ## 8. Key Takeaways

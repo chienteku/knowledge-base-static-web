@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](select.md) — The baseline query command.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ SELECT category, COUNT(*) FROM products GROUP BY category HAVING COUNT(*) > 5;
 - [`UPDATE`](update.md) — Related concept: `UPDATE`.
 - [`EXISTS` / `NOT EXISTS`](../level_04/exists.md) — Related concept: `EXISTS` / `NOT EXISTS`.
 - [`HAVING`](../level_04/having.md) — Related concept: `HAVING`.
+
 ---
 
 ## 8. Key Takeaways

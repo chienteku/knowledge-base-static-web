@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query language structure manipulated.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ Write the final SQL query compiled by the database, and explain why the password
 - [Parameterized Queries / Prepared Statements](parameterized_queries.md) — The defense standard.
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — - Securing role limits.
 - [ORM vs. Query Builder vs. Raw SQL](orm_vs_raw.md) — Related concept: ORM vs. Query Builder vs. Raw SQL.
+
 ---
 
 ## 8. Key Takeaways

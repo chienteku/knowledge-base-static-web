@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Object Types](../level_03/object_types.md) — The structures you are accessing properties from.
+- [`keyof` Operator](keyof.md) — Extracting property keys using keyof operator.
+
 ---
 
 ## 2. Term Category
@@ -177,6 +179,7 @@ type Element = StrArray[number]; // Idiomatic array element extraction
 > **Explanation:** Indexing with a union of keys produces a union of corresponding property value types.
 
 ## 7. Related Terms
-- [`keyof` Operator](../level_09/keyof.md) — Often used inside the brackets of an Indexed Access Type to dynamically grab all property types (e.g., `User[keyof User]`).
+- [`keyof` Operator](keyof.md) — Often used inside the brackets of an Indexed Access Type to dynamically grab all property types (e.g., `User[keyof User]`).
 
 ---
+

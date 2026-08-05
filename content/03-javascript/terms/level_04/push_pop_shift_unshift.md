@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
 - [Array Index & .length](../level_02/array_index_length.md) — Zero-based positional access and size of an array.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ console.log("Final tasks:", tasks);
 - [Mutating vs Non-mutating Methods](mutating_vs_non_mutating.md) — The distinction between changing arrays in-place or returning new ones.
 - [slice / splice](slice_splice.md) — Index-based sub-array slicing and splicing.
 - [Array](../level_02/array.md) — Related concept: Array.
+
 ---
 
 ## 8. Key Takeaways

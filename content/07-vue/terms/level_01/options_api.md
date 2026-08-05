@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — The building blocks you are writing.
 - [Declarative Rendering](declarative_rendering.md) — What the Options API manages.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ export default {
 - [Composition API](composition_api.md) — The modern replacement for the Options API.
 - [Reactive State](../level_02/reactive_state.md) — What the `data()` option creates.
 - [Vue Instance](vue_instance.md) — Vue component instance.
+
 ---
 
 ## 8. Key Takeaways

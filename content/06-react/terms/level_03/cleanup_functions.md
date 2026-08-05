@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useEffect` Hook](use_effect.md) — You return the cleanup function from inside `useEffect`.
 - [Component Lifecycle](component_lifecycle.md) — Cleanup happens during the "Unmounting" phase.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ Ensure cleanup logic safely handles frequent re-executions when dependencies upd
 - [Data Fetching & Race Conditions](data_fetching_race_conditions.md) — Related concept: Data Fetching & Race Conditions.
 - [Side Effects](side_effects.md) — Related concept: Side Effects.
 - [Strict Mode](../level_08/strict_mode.md) — Related concept: Strict Mode.
+
 ---
 
 ## 8. Key Takeaways

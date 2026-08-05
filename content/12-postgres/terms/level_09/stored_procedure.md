@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [PL/pgSQL](plpgsql.md) — The language used to write trigger handlers.
+
 ---
 
 ## 2. Term Category
@@ -211,6 +212,7 @@ CALL my_procedure(); -- Correct procedure invocation
 ## 7. Related Terms
 - [Stored Function (`CREATE FUNCTION`)](stored_function.md) — The transaction-locked inline alternative.
 - [PL/pgSQL](plpgsql.md) — The programming language block wrapper.
+
 ---
 
 ## 8. Key Takeaways

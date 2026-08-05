@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Interfaces](../level_03/interfaces.md) — What you are usually modifying.
 - [Generics Overview (`<T>`)](../level_07/generics.md) — The `<T>` syntax used to pass inputs into Utility Types.
+
 ---
 
 ## 2. Term Category
@@ -163,6 +164,7 @@ type Good = Required<Pick<User, "id">>; // id is explicitly required
 - [`Exclude` / `Extract` / `NonNullable`](exclude_extract_nonnullable.md) — Related concept: `Exclude` / `Extract` / `NonNullable`.
 - [Conditional Types](../level_09/conditional_types.md) — Related concept: Conditional Types.
 - [`Record<Keys, Type>`](record.md) — Record utility type.
+
 ---
 
 ## 8. Key Takeaways

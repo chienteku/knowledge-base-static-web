@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- tree_structure — Because `opacity` aggressively affects the Parent and all of its Children!
+- [The Tree Structure](../../../01-html/terms/level_09/tree_structure.md) — Because `opacity` aggressively affects the Parent and all of its Children!
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ Furthermore, you cannot "fix" the child by giving it `opacity: 1`. The child is 
 - [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — Related concept: Color Values (hex, rgb, rgba, hsl, named).
 - [`display: none` vs `visibility: hidden`](../level_04/display_none_vs_visibility.md) — Related concept: `display: none` vs `visibility: hidden`.
 - [Stacking Context](../level_04/stacking_context.md) — Related concept: Stacking Context.
+
 ---
 
 ## 8. Key Takeaways

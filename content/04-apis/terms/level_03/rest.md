@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — REST is entirely built around mapping operations to GET, POST, PUT, and DELETE.
 - [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — REST dictates exactly how URLs should be formatted.
+
 ---
 
 ## 2. Term Category
@@ -364,6 +365,7 @@ POST /api/transactions HTTP/1.1 ; RESTful resource endpoint style
 - [Swagger / OpenAPI Specification](../level_10/openapi.md) — Related concept: Swagger / OpenAPI Specification.
 - [Statelessness](statelessness.md) — Statelessness constraint.
 - [Richardson Maturity Model](richardson_maturity_model.md) — Richardson Maturity Model.
+
 ---
 
 ## 8. Key Takeaways

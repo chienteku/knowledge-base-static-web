@@ -9,6 +9,7 @@
 
 - [`updateOne()` / `updateMany()`](update.md) — The standard non-atomic updates.
 - [Write Result Objects (`insertedId`, `modifiedCount`, `acknowledged`)](write_results.md) — Differentiating results metrics from returned documents.
+- [`find()` / `findOne()`](find.md) — Finding and modifying documents atomically.
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<table>`](table.md) — The parent element that holds the caption.
 - [Nesting](../level_01/nesting.md) — Understanding element hierarchies.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ A simple table with a caption:
 - [`<table>`](table.md) — The parent container that holds the caption.
 - [`<th>` (Table Header)](th.md) — The header cell tag inside rows.
 - [`scope` Attribute (in `<th>`)](scope.md) — Related concept: `scope` Attribute (in `<th>`).
+
 ---
 
 ## 8. Key Takeaways

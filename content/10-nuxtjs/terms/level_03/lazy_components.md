@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`components/` Directory](components_directory.md) — Where your components are stored.
 - [Auto-imports](../level_01/auto_imports.md) — How Lazy Components are automatically triggered.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ Do not make *everything* lazy. If a component is visible immediately on the scre
 - [`components/` Directory](components_directory.md) — The directory that auto-generates these Lazy versions.
 - [Nuxt Server Components (Islands)](../level_09/nuxt_server_components.md) — Related concept: Nuxt Server Components (Islands).
 - [NuxtLink Component](nuxtlink_component.md) — NuxtLink prefetching.
+
 ---
 
 ## 8. Key Takeaways

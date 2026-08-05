@@ -537,8 +537,6 @@ Configure a production release profile `[profile.release]` that preserves DWARF 
 - [Cargo CLI](../level_07/cargo_cli.md) — Cargo command-line interface.
 - [Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`)](../level_01/integer_overflow.md) — Related concept: Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`).
 - [Allocator API](allocator_api.md) — Related concept: Allocator API.
-- [`#[cold]` / `#[hot]`](cold_hot_attributes.md) — Related concept: `#[cold]` / `#[hot]`.
-- [Inlining (`#[inline]`)](inlining.md) — Related concept: Inlining (`#[inline]`).
 - [`perf` / `flamegraph`](perf_flamegraph.md) — Related concept: `perf` / `flamegraph`.
 - [SIMD (`std::simd`)](simd.md) — Related concept: SIMD (`std::simd`).
 

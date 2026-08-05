@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](rest.md) — The architectural style for web services.
 - [Endpoints & Resources](endpoints_resources.md) — The entry points representing data.
+
 ---
 
 ## 2. Term Category
@@ -335,6 +336,7 @@ Accept: application/json ; Content negotiation header
 - [CRUD Operations](crud.md) — The database actions that align with RESTful resource endpoints.
 - [API Versioning (v1, v2)](../level_10/versioning.md) — The strategy of prefixing paths with versions (e.g. `/v1/users`).
 - [Over-fetching vs Under-fetching](../level_07/overfetching_underfetching.md) — Related concept: Over-fetching vs Under-fetching.
+
 ---
 
 ## 8. Key Takeaways

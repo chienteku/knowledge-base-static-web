@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ console.log(score);
 ## 7. Related Terms
 - [Expression](expression.md) — Any valid unit of code that resolves to a single value.
 - [Automatic Semicolon Insertion (ASI)](asi.md) — Related concept: Automatic Semicolon Insertion (ASI).
+
 ---
 
 ## 8. Key Takeaways

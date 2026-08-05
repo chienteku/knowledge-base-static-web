@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [PostgreSQL (Postgres)](postgresql.md) — The database server process.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ Explain what this error means in terms of the client-server model, and what you 
 - [Connection String / DSN](connection_string.md) — The client connection guide.
 - [`psql` (Interactive Terminal)](psql.md) — Related concept: `psql` (Interactive Terminal).
 - [Connection Pooling](../level_10/connection_pooling.md) — Related concept: Connection Pooling.
+
 ---
 
 ## 8. Key Takeaways

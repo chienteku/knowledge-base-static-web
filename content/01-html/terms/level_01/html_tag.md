@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<!DOCTYPE html>`](doctype_html.md) — The declaration that precedes the `<html>` tag.
 - [Nesting](nesting.md) — Since the root element acts as the top-level parent container wrapping all child nodes.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ The `<html>` element is the physical cardboard box itself. Everything you are sh
 - [`<!DOCTYPE html>`](doctype_html.md) — Related concept: `<!DOCTYPE html>`.
 - [`lang` Attribute](../level_07/lang.md) — Related concept: `lang` Attribute.
 - [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
+
 ---
 
 ## 8. Key Takeaways

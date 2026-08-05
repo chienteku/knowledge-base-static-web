@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Vue Instance](../level_01/vue_instance.md) — The root that holds all components.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The logic components use internally.
+
 ---
 
 ## 2. Term Category
@@ -169,6 +170,7 @@ import Child from './Child.vue'; // Automatically registered and ready to use in
 - [Vue Test Utils](../level_10/vue_test_utils.md) — Related concept: Vue Test Utils.
 - [Slots](../level_05/slots.md) — Related concept: Slots.
 - [Provide / Inject](../level_05/provide_inject.md) — Related concept: Provide / Inject.
+
 ---
 
 ## 8. Key Takeaways

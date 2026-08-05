@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Table (Relation)](../level_01/table.md) — The data grids partitioned.
 - [`ALTER TABLE`](../level_06/alter_table.md) — Attaching or detaching partitions.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ CREATE TABLE logs_default PARTITION OF logs DEFAULT;
 ## 7. Related Terms
 - [`ALTER TABLE`](../level_06/alter_table.md) — Managing table states.
 - [Index (Concept)](../level_07/index_concept.md) — Balancing indexing scales.
+
 ---
 
 ## 8. Key Takeaways

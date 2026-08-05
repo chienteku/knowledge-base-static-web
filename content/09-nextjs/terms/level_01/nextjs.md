@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Node.js Runtime](nodejs_runtime.md) — The runtime environment that powers the backend of Next.js.
+
 ---
 
 ## 2. Term Category
@@ -149,6 +150,7 @@ import Image from 'next/image';
 - [SEO (Search Engine Optimization)](seo.md) — Related concept: SEO (Search Engine Optimization).
 - [`next.config.mjs`](../level_02/next_config.md) — Related concept: `next.config.mjs`.
 - [React Server Components (RSC)](rsc.md) — React Server Components architecture.
+
 ---
 
 ## 8. Key Takeaways

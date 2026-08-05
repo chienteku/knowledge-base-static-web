@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Ownership Model**: References (`&T` shared, `&mut T` exclusive) and borrowing rules preventing data races at compile time.
@@ -227,7 +226,6 @@ Collect indices or mutate after iteration finishes!
 - [Mutability (`mut`)](mutability_mut.md) — Related concept: Mutability (`mut`).
 
 ---
-
 
 ## 7. Key Takeaways
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [ECMAScript](../level_01/ecmascript.md) — The official specification defining the core JavaScript language standards.
 - [JavaScript Engine](../level_05/javascript_engine.md) — The interpreter executing JS code.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ async function processData() {
 ## 7. Related Terms
 - [window object / BOM](../level_05/window_bom.md) — The browser host global wrapper object.
 - [DOM (Document Object Model)](../level_05/dom.md) — The browser page tree representation host API.
+
 ---
 
 ## 8. Key Takeaways

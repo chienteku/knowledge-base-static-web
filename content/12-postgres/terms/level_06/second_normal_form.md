@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [First Normal Form (1NF)](first_normal_form.md) — The atomic row standard.
 - [Composite Key](composite_key.md) — Forward reference: keys containing multiple columns.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ The primary key is `(order_id, product_id)`.
 - [Third Normal Form (3NF)](third_normal_form.md) — Eliminating indirect (transitive) dependencies.
 - [Composite Key](composite_key.md) — Forward reference: multi-column keys.
 - [Normalization](normalization.md) — Related concept: Normalization.
+
 ---
 
 ## 8. Key Takeaways

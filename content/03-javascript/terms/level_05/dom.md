@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — A collection of key-value pairs.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ async function processData() {
 - [Web APIs vs the Language](../level_10/web_apis_vs_language.md) — Related concept: Web APIs vs the Language.
 - [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — DOM manipulation.
 - [Event Listener](event_listener.md) — Event listeners.
+
 ---
 
 ## 8. Key Takeaways

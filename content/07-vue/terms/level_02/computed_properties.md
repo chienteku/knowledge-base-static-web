@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Reactive State](reactive_state.md) — The dependencies that computed properties rely on.
 - [Template Syntax](../level_01/template_syntax.md) — Why complex logic shouldn't be put directly in the HTML.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ const double = computed({
 - [Template Syntax](../level_01/template_syntax.md) — Related concept: Template Syntax.
 - [State & Getters (Pinia)](../level_07/state_getters.md) — Related concept: State & Getters (Pinia).
 - [`v-once` & `v-memo`](../level_08/v_once_memo.md) — Related concept: `v-once` & `v-memo`.
+
 ---
 
 ## 8. Key Takeaways

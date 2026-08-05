@@ -9,6 +9,7 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — This is a parent/child relationship, much like lists (`<ul>` and `<li>`).
 - [Nesting](../level_01/nesting.md) — Since `<option>` tags must nest directly inside a parent `<select>` block.
 - [`<form>`](form.md) — Dropdowns are used to collect data for forms.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ The `<option>` tags are the bubbles (A, B, C, D) that you are allowed to fill in
 - [`value` Attribute (in Form Fields)](value.md) — The option value parameters.
 - [`name` Attribute (in Form Fields)](name.md) — The select key name used during form submission.
 - [`<label>`](label.md) — The tag used to describe the `<select>` element.
+
 ---
 
 ## 8. Key Takeaways

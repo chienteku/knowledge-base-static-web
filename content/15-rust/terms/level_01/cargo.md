@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-**None.**
+- [Tokens](tokens.md) — Basic syntactic units of Rust code and configurations.
 
 ---
 
@@ -1013,7 +1013,6 @@ Implement a `CargoProfileAuditor` compliance engine that:
 - [`Cargo.lock`](../level_07/cargo_lock.md) — the auto-generated lock file that pins exact dependency versions
 - [Rustup](../level_16/rustup.md) — the toolchain manager that installs Cargo (and the Rust compiler) for you
 - [Module](module.md) — Related concept: Module.
-- [`[dependencies]`](../level_07/dependencies_section.md) — Related concept: `[dependencies]`.
 
 ---
 

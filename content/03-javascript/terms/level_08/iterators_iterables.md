@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
 - [Symbol](symbol.md) — Unique primitive identifiers used to hook into language internals.
+
 ---
 
 ## 2. Term Category
@@ -271,6 +272,7 @@ console.log([...evens]);
 - [for...of](../level_04/for_of.md) — The loop statement that automatically consumes iterables.
 - [Generator (function*)](../level_09/generator.md) — Syntax sugar simplifying custom iterator creation.
 - [Symbol](symbol.md) — Related concept: Symbol.
+
 ---
 
 ## 8. Key Takeaways

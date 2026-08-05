@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — The system that Inference is optimizing.
 - [The TypeScript Compiler (`tsc`)](tsc.md) — The engine doing the guessing.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ const action = "CLICK"; // Inferred as literal type "CLICK"
 - [Literal Types](../level_05/literal_types.md) — Related concept: Literal Types.
 - [`ReturnType<T>`](../level_08/returntype.md) — Related concept: `ReturnType<T>`.
 - [`satisfies` Operator](../level_05/satisfies_operator.md) — satisfies operator.
+
 ---
 
 ## 8. Key Takeaways

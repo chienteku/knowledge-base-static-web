@@ -455,7 +455,7 @@ pub fn allocate_test() {
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

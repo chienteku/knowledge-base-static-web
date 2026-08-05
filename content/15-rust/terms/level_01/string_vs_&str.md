@@ -471,7 +471,6 @@ A financial compliance audit engine generates SQL query strings dynamically from
 - [`println!` / `format!`](println_format.md) — Related concept: `println!` / `format!`.
 - [`Display` Trait](../level_04/display_trait.md) — Related concept: `Display` Trait.
 - [`Cow<'a, T>`](../level_11/cow_t.md) — Related concept: `Cow<'a, T>`.
-- [Slice (`&[T]`, `&str`)](../level_03/slice.md) — Contiguous sequence slice views.
 - [`ToOwned` Trait](../level_11/toowned_trait.md) — ToOwned conversion from &str to String.
 
 ---

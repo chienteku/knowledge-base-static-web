@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Auto-imports](../level_01/auto_imports.md) — The mechanism that powers this directory.
 - [`pages/` Directory](../level_02/pages_directory.md) — Where you actually use these components.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +171,7 @@ If you have a deeply nested folder structure (e.g., `components/ui/forms/inputs/
 - [`pages/` Directory](../level_02/pages_directory.md) — The files that consume these components.
 - [Auto-imports](../level_01/auto_imports.md) — Related concept: Auto-imports.
 - [`composables/` Directory](../level_04/composables_directory.md) — Related concept: `composables/` Directory.
+
 ---
 
 ## 8. Key Takeaways

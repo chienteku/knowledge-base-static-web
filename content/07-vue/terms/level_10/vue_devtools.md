@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — What you are inspecting.
 - [Reactive State](../level_02/reactive_state.md) — What you are modifying via the DevTools.
+
 ---
 
 ## 2. Term Category
@@ -149,6 +150,7 @@ define: { __VUE_PROD_DEVTOOLS__: false }
 ## 7. Related Terms
 - [Pinia](../level_07/pinia.md) — DevTools tracks all Pinia state changes.
 - [Components](../level_04/components.md) — What the DevTools visualizes perfectly.
+
 ---
 
 ## 8. Key Takeaways

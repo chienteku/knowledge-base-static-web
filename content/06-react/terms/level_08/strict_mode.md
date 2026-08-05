@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Component Lifecycle](../level_03/component_lifecycle.md) — What Strict Mode is manipulating.
 - [Side Effects](../level_03/side_effects.md) — What Strict Mode is trying to expose.
+
 ---
 
 ## 2. Term Category
@@ -150,6 +151,7 @@ useEffect(() => {
 - [Side Effects](../level_03/side_effects.md) — What Strict Mode audits.
 - [Cleanup Functions](../level_03/cleanup_functions.md) — The specific thing Strict Mode is checking for.
 - [Render Purity](../level_01/render_purity.md) — Related concept: Render Purity.
+
 ---
 
 ## 8. Key Takeaways

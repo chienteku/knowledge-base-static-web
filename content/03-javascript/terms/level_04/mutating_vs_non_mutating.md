@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object for storing an ordered collection.
 - [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — Primitives copy by value; objects/arrays by reference.
+
 ---
 
 ## 2. Term Category
@@ -242,6 +243,7 @@ items.reverse();
 - [Array Index & .length](../level_02/array_index_length.md) — Related concept: Array Index & .length.
 - [push / pop / shift / unshift](push_pop_shift_unshift.md) — Related concept: push / pop / shift / unshift.
 - [sort / reverse](sort_reverse.md) — Related concept: sort / reverse.
+
 ---
 
 ## 8. Key Takeaways

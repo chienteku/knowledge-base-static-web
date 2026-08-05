@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [DOM (Document Object Model)](../level_09/dom.md) — Web Storage is accessed via JavaScript through the global `window` object.
 - [`<script>`](../level_08/script.md) — You must use JavaScript to read and write to Web Storage.
+
 ---
 
 ## 2. Term Category
@@ -239,6 +240,7 @@ localStorage.setItem('user', JSON.stringify({ id: 1 }));
 - [`<script>`](../level_08/script.md) — Web Storage is an API accessed entirely through JavaScript.
 - [Content Security Policy (CSP) & HTML Security](security.md) — Securing local database structures against injection exploits.
 - [Geolocation API](geolocation.md) — Related concept: Geolocation API.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — The building blocks HOCs wrap.
-- higher_order_function — The JavaScript concept this pattern is named after.
+- [Higher-Order Function](../../../03-javascript/terms/level_03/higher_order_function.md) — The JavaScript concept this pattern is named after.
+
 ---
 
 ## 2. Term Category
@@ -183,3 +184,4 @@ import hoistNonReactStatics from 'hoist-non-react-statics'; hoistNonReactStatics
 - [Custom Hooks](../level_04/custom_hooks.md) — The modern React feature that effectively killed the widespread use of HOCs.
 
 ---
+

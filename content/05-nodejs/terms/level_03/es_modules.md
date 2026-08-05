@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [CommonJS (require, module.exports)](commonjs.md) — You must understand the legacy system to understand why we upgraded to ES Modules.
+
 ---
 
 ## 2. Term Category
@@ -155,6 +156,7 @@ const { dynamicFn } = cjsPkg;
 - [CommonJS (require, module.exports)](commonjs.md) — The legacy system that ESM is slowly replacing.
 - [package.json](../level_04/package_json.md) — Where you configure Node to use `"type": "module"`.
 - [Module Resolution](module_resolution.md) — Related concept: Module Resolution.
+
 ---
 
 ## 8. Key Takeaways

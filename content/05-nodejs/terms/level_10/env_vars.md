@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The process Object](../level_02/process_object.md) — Where these variables actually live inside Node.js (`process.env`).
+
 ---
 
 ## 2. Term Category
@@ -152,6 +153,7 @@ const port = parseInt(process.env.PORT || '3000', 10);
 - [JWT (JSON Web Tokens)](jwt.md) — The JWT signature secret MUST be stored in an Environment Variable.
 - [Docker](docker.md) — Docker relies heavily on Environment Variables to configure containers dynamically.
 - [The process Object](../level_02/process_object.md) — Related concept: The process Object.
+
 ---
 
 ## 8. Key Takeaways

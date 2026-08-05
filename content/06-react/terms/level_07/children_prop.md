@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props (Properties)](../level_01/props.md) — The mechanism `children` uses.
 - [Components](../level_01/components.md) — Where this prop is passed.
+
 ---
 
 ## 2. Term Category
@@ -198,6 +199,7 @@ function Wrapper({ children }) {
 > **Explanation:** `React.cloneElement` injects props into child elements while preserving original props.
 
 ## 7. Related Terms
-- [Render Props](../level_07/render_props.md) — An advanced pattern where the `children` prop is explicitly a function instead of JSX.
+- [Render Props](render_props.md) — An advanced pattern where the `children` prop is explicitly a function instead of JSX.
 
 ---
+

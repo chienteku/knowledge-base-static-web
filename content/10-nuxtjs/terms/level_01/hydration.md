@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Vue 3 Composition API Context](composition_api_context.md) — The paradigm defining the interactive components.
+
 ---
 
 ## 2. Term Category
@@ -227,6 +228,7 @@ onMounted(() => {
 - [Universal Rendering (SSR)](universal_rendering.md) — The process that produces the HTML target.
 - [ClientOnly Component](../level_03/client_only_component.md) — A component wrapper designed to completely skip hydration validation by rendering only on the client.
 - [Nuxt Payload (SSR State Transfer)](../level_04/nuxt_payload.md) — Related concept: Nuxt Payload (SSR State Transfer).
+
 ---
 
 ## 8. Key Takeaways

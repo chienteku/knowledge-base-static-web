@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Function](function.md) — A reusable block of code.
+
 ---
 
 ## 2. Term Category
@@ -217,6 +218,7 @@ console.log(score);
 - [Closure](closure.md) — Related concept: Closure.
 - [Modules (import/export)](../level_08/modules.md) — Related concept: Modules (import/export).
 - [IIFE](../level_09/iife.md) — Related concept: IIFE.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Route Handlers (`route.ts`)](route_handlers.md) — The endpoints being cached.
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — Similar caching concepts, but applied to the entire API route rather than a single `fetch`.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ export async function GET(request: Request) {
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — Caching individual fetches rather than whole routes.
 - [Dynamic Route Handlers](dynamic_route_handlers.md) — Routes that are automatically dynamic by default.
 - [Route Handlers (`route.ts`)](route_handlers.md) — Related concept: Route Handlers (`route.ts`).
+
 ---
 
 ## 8. Key Takeaways

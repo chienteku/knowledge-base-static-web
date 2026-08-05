@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Number](number.md) — Represents both integer and floating-point numbers.
 - [Type Coercion](type_coercion.md) — Automatic or implicit conversion of types.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ console.log(isValidScore("95"));
 - [Number Methods & Parsing](../level_02/number_methods.md) — Methods like `parseInt` that can yield `NaN`.
 - [Arithmetic Operators](arithmetic_operators.md) — Related concept: Arithmetic Operators.
 - [Infinity / -Infinity](infinity.md) — Related concept: Infinity / -Infinity.
+
 ---
 
 ## 8. Key Takeaways

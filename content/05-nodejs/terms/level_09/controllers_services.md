@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — The folder layout organizing data and logic.
 - [Routing](../level_07/routing.md) — Directing URL endpoints to code handlers.
+
 ---
 
 ## 2. Term Category
@@ -329,6 +330,7 @@ exports.createPost = async (req, res, next) => {
 - [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — The parent application layout pattern.
 - [Error Handling Middleware](error_handling_middleware.md) — Receives errors bubble-passed by controllers and services.
 - [REST API Design](rest_api.md) — Related concept: REST API Design.
+
 ---
 
 ## 8. Key Takeaways

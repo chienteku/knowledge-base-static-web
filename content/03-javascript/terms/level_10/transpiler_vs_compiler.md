@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Babel](babel.md) — The standard JavaScript syntax transpilation tool.
 - [Runtime vs Compile Time](runtime_vs_compile_time.md) — The two phases of application development.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ async function processData() {
 - [Babel](babel.md) — The primary JavaScript transpiler.
 - [Polyfill](polyfill.md) — The library code that supplements transpilers by injecting missing global APIs.
 - [Runtime vs Compile Time](runtime_vs_compile_time.md) — Related concept: Runtime vs Compile Time.
+
 ---
 
 ## 8. Key Takeaways

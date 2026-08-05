@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Flexbox (Concept) & `display: flex`](../level_05/flex_parent.md) — Grid uses similar concepts (like Parent/Child relationships and `gap`), but takes them to the next level.
+- [`display: block` vs `inline` vs `inline-block`](../level_04/display.md) — CSS Grid two-dimensional layout model.
+
 ---
 
 ## 2. Term Category
@@ -254,6 +256,7 @@ nav { display: flex; gap: 20px; }
 - [`gap` (Grid Gap)](gap.md) — Spacing between cells.
 - [`fr` Unit (Fractional Unit)](fr_unit.md) — The fractional grid track unit.
 - [`grid-template-areas`](grid_template_areas.md) — Named grid areas.
+
 ---
 
 ## 8. Key Takeaways

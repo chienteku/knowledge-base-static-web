@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding table columns setup.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ However, you notice that Alice (whose phone is `NULL`) is missing from the outpu
 - [`IS NULL` / `IS NOT NULL`](../level_03/is_null.md) — Related concept: `IS NULL` / `IS NOT NULL`.
 - [`COALESCE` / `NULLIF`](../level_04/coalesce_nullif.md) — Related concept: `COALESCE` / `NULLIF`.
 - [`NULL` Behavior in Expressions & Aggregates](../level_04/null_in_aggregates.md) — Related concept: `NULL` Behavior in Expressions & Aggregates.
+
 ---
 
 ## 8. Key Takeaways

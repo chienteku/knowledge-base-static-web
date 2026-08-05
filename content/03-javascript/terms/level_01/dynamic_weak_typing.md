@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Type Coercion](type_coercion.md) — Automatic or implicit conversion of types.
 - [typeof](typeof.md) — Checking type of values.
+
 ---
 
 ## 2. Term Category
@@ -224,8 +225,8 @@ console.log(true + 1);
 ## 7. Related Terms
 - [Primitive Types](primitive_types.md) — Foundational data types.
 - [Type Coercion](type_coercion.md) — The mechanism enabling weak typing.
-- TypeScript — Statically typed superset of JavaScript.
 - [ECMAScript](ecmascript.md) — Related concept: ECMAScript.
+
 ---
 
 ## 8. Key Takeaways

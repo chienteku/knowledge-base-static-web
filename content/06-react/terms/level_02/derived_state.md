@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [State](state.md) — The source variables from which data is derived.
 - [Re-rendering](re_rendering.md) — The render execution loop that recalculates variables.
+
 ---
 
 ## 2. Term Category
@@ -257,6 +258,7 @@ function SearchList({ users }) {
 - [`useMemo` Hook](../level_04/use_memo.md) — Optimization hook used to cache heavy derived state calculations.
 - [Render Purity](../level_01/render_purity.md) — The rule that calculations during render must remain self-contained.
 - [State](state.md) — Related concept: State.
+
 ---
 
 ## 8. Key Takeaways

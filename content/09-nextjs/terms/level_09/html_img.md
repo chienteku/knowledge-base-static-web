@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics that image loading directly impacts.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ import Image from 'next/image';
 ## 7. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics that image loading directly impacts.
 - [`<Image>` Component](next_image.md) — Next.js's optimized wrapper.
+
 ---
 
 ## 8. Key Takeaways

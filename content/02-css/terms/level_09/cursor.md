@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ button:disabled {
 ## 7. Related Terms
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Changing the cursor is almost always paired with changing the styling properties on `:hover`.
 - [`outline`](outline.md) — Visual ring for keyboard selection focuses.
+
 ---
 
 ## 8. Key Takeaways

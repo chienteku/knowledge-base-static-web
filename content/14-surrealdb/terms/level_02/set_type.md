@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [`array`](array_type.md) — The non-unique list context.
+- [Data Types (Overview)](data_types.md) — SurrealDB data types overview.
 
 ---
 

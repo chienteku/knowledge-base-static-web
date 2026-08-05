@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [Evaluation Query Operators (`$regex`, `$expr`, `$mod`)](evaluation_operators.md) — The evaluation context.
+- [`find()` / `findOne()`](../level_03/find.md) — Pattern matching document string fields with regular expressions.
 
 ---
 

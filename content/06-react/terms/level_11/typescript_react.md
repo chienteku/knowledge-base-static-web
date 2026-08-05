@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props (Properties)](../level_01/props.md) — The parameters typed by TypeScript.
 - [`useState` Hook](../level_02/use_state.md) — The state hook that utilizes TypeScript generics.
+
 ---
 
 ## 2. Term Category
@@ -254,6 +255,7 @@ export default function InputForm({ onSubmitLabel }: InputFormProps) {
 - [`useState` Hook](../level_02/use_state.md) — The state manager utilizing generics.
 - [Components](../level_01/components.md) — Typed component props.
 - [Custom Hooks](../level_04/custom_hooks.md) — Typed custom hooks.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport conditional queries.
 - [Responsive Design (Concept)](../level_08/responsive_design.md) — Sizing layout blocks dynamically.
+
 ---
 
 ## 2. Term Category
@@ -319,6 +320,7 @@ Container-relative unit values:
 ## 7. Related Terms
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Viewport-based responsive queries.
 - [`@supports` (Feature Queries)](supports.md) — Browser feature detection at-rules.
+
 ---
 
 ## 8. Key Takeaways

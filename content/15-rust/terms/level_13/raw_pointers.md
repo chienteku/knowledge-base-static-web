@@ -567,7 +567,6 @@ Write unit tests verifying pointer linkage, payload swapping, and structural int
 - [`extern "C"`](extern_c.md) — Related concept: `extern "C"`.
 - [`unsafe fn`](unsafe_fn.md) — Related concept: `unsafe fn`.
 - [Allocator API](../level_15/allocator_api.md) — Related concept: Allocator API.
-- [`#[repr(packed)]` / `#[repr(align)]`](../level_15/repr_packed_align.md) — Related concept: `#[repr(packed)]` / `#[repr(align)]`.
 
 ---
 

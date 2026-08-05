@@ -9,6 +9,7 @@
 - [Static Site Generation (SSG)](ssg.md) — The static shell.
 - [Dynamic Rendering (SSR)](ssr.md) — The dynamic holes.
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — The mechanism that glues them together.
+
 ---
 
 ## 2. Term Category
@@ -252,6 +253,7 @@ module.exports = {
 - [Static Site Generation (SSG)](ssg.md) — The strategy used for the "shell."
 - [React Server Components (RSC)](../level_01/rsc.md) — React Server Components.
 - [React Suspense](../level_02/react_suspense.md) — Partial Prerendering suspense boundaries.
+
 ---
 
 ## 8. Key Takeaways

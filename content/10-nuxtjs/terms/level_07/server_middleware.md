@@ -9,6 +9,7 @@
 - [Nitro Engine](../level_01/nitro_engine.md) — The server engine that intercepts these requests.
 - [`server/api/` Routes](server_api_routes.md) — The endpoints that middleware often protects.
 - [Express.js (Legacy Node Server Context)](express_js.md) — The legacy request-intercepting middleware pattern Nitro replaces.
+
 ---
 
 ## 2. Term Category
@@ -197,6 +198,7 @@ export default defineEventHandler((event) => {
 ## 7. Related Terms
 - [Route Middleware](../level_08/route_middleware.md) — The frontend equivalent that runs during Vue router navigation (do not confuse the two!).
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The utility `defineEventHandler` used to write the middleware.
+
 ---
 
 ## 8. Key Takeaways

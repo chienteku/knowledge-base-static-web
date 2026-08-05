@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Semantic HTML](semantic_html.md) — Semantic structures.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Basic nesting.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ An FAQ section for a service:
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [`<div>` (Block container)](../level_02/div.md) — The non-interactive equivalent.
 - [`<dialog>` Element](../level_10/dialog.md) — Related concept: `<dialog>` Element.
+
 ---
 
 ## 8. Key Takeaways

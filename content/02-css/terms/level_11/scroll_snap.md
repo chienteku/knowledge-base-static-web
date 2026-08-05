@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — Creating scrollable parent containers.
+
 ---
 
 ## 2. Term Category
@@ -286,6 +287,7 @@ Vertical snap layout:
 
 ## 7. Related Terms
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent scrolling trigger.
+
 ---
 
 ## 8. Key Takeaways

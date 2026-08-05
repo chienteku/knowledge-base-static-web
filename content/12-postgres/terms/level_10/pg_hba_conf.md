@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The login roles validated by pg_hba.conf.
+- [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — PostgreSQL server configuration files.
+
 ---
 
 ## 2. Term Category
@@ -191,6 +193,7 @@ Write the exact line that you must append to `pg_hba.conf` to authorize this con
 ## 7. Related Terms
 - [Roles & Permissions (`CREATE ROLE`, `GRANT`, `REVOKE`)](roles_permissions.md) — The login roles checked.
 - [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — General connection settings.
+
 ---
 
 ## 8. Key Takeaways

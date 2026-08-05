@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **FFI / Systems**: Nul-terminated string types for safely passing text data across the C FFI boundary: `CString` (owned) and `CStr` (borrowed view).
@@ -261,7 +260,6 @@ let s = unsafe { CStr::from_ptr(raw_c_ptr) }.to_string_lossy(); // Safe lossy co
 - [`extern "C"`](extern_c.md) — C calling convention.
 
 ---
-
 
 ## 7. Key Takeaways
 

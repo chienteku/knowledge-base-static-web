@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Time Measurement**: `std::time::Duration` representing elapsed time spans and `std::time::Instant` for monotonic clock timing.
@@ -262,7 +261,6 @@ let d = Duration::from_millis(5); // Clean explicit constructor!
 - [`std::thread::spawn`](../level_09/std_thread_spawn.md) — Thread sleep and timing operations.
 
 ---
-
 
 ## 7. Key Takeaways
 

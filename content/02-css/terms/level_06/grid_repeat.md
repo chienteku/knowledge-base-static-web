@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint properties where `repeat()` is declared.
 - [`fr` Unit (Fractional Unit)](fr_unit.md) — The dynamic unit commonly repeated.
+
 ---
 
 ## 2. Term Category
@@ -303,6 +304,7 @@ Simplify this layout blueprint line using the `repeat()` function.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`auto-fill` / `auto-fit`](grid_auto_fill_fit.md) — Keywords used inside `repeat()` to automate responsive grid counts.
 - [`minmax()` Function](grid_minmax.md) — Related concept: `minmax()` Function.
+
 ---
 
 ## 8. Key Takeaways

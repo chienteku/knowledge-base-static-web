@@ -386,7 +386,7 @@ let client = reqwest::Client::new();
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

@@ -2,7 +2,7 @@
 
 > Auto-generated from `_meta/relationships.json`. **Do not edit manually** — run `sync_zero_hero.js --apply` to regenerate.
 
-Total terms: **310**
+Total terms: **309**
 
 ---
 
@@ -154,17 +154,16 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 117 | `closures` | `terms/level_05/closures.md` |
-| 118 | `hashmap_and_hashset` | `terms/level_05/hashmap_and_hashset.md` |
-| 119 | `higher_ranked_trait_bounds` | `terms/level_05/higher_ranked_trait_bounds.md` |
-| 120 | `iterator_trait` | `terms/level_05/iterator_trait.md` |
-| 121 | `lifetime` | `terms/level_05/lifetime.md` |
-| 122 | `lifetime_bounds` | `terms/level_05/lifetime_bounds.md` |
-| 123 | `lifetime_elision` | `terms/level_05/lifetime_elision.md` |
-| 124 | `lifetime_variance` | `terms/level_05/lifetime_variance.md` |
-| 125 | `non_lexical_lifetimes` | `terms/level_05/non_lexical_lifetimes.md` |
-| 126 | `static_lifetime` | `terms/level_05/static_lifetime.md` |
-| 127 | `struct_lifetimes` | `terms/level_05/struct_lifetimes.md` |
+| 117 | `hashmap_and_hashset` | `terms/level_05/hashmap_and_hashset.md` |
+| 118 | `higher_ranked_trait_bounds` | `terms/level_05/higher_ranked_trait_bounds.md` |
+| 119 | `iterator_trait` | `terms/level_05/iterator_trait.md` |
+| 120 | `lifetime` | `terms/level_05/lifetime.md` |
+| 121 | `lifetime_bounds` | `terms/level_05/lifetime_bounds.md` |
+| 122 | `lifetime_elision` | `terms/level_05/lifetime_elision.md` |
+| 123 | `lifetime_variance` | `terms/level_05/lifetime_variance.md` |
+| 124 | `non_lexical_lifetimes` | `terms/level_05/non_lexical_lifetimes.md` |
+| 125 | `static_lifetime` | `terms/level_05/static_lifetime.md` |
+| 126 | `struct_lifetimes` | `terms/level_05/struct_lifetimes.md` |
 
 ---
 
@@ -172,14 +171,14 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 128 | `closure` | `terms/level_06/closure.md` |
-| 129 | `fn_traits` | `terms/level_06/fn_traits.md` |
-| 130 | `function_pointers` | `terms/level_06/function_pointers.md` |
-| 131 | `intoiterator` | `terms/level_06/intoiterator.md` |
-| 132 | `iterator_chains` | `terms/level_06/iterator_chains.md` |
-| 133 | `lazy_evaluation` | `terms/level_06/lazy_evaluation.md` |
-| 134 | `move_closure` | `terms/level_06/move_closure.md` |
-| 135 | `turbofish` | `terms/level_06/turbofish.md` |
+| 127 | `closure` | `terms/level_06/closure.md` |
+| 128 | `fn_traits` | `terms/level_06/fn_traits.md` |
+| 129 | `function_pointers` | `terms/level_06/function_pointers.md` |
+| 130 | `intoiterator` | `terms/level_06/intoiterator.md` |
+| 131 | `iterator_chains` | `terms/level_06/iterator_chains.md` |
+| 132 | `lazy_evaluation` | `terms/level_06/lazy_evaluation.md` |
+| 133 | `move_closure` | `terms/level_06/move_closure.md` |
+| 134 | `turbofish` | `terms/level_06/turbofish.md` |
 
 ---
 
@@ -187,29 +186,29 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 136 | `attributes` | `terms/level_07/attributes.md` |
-| 137 | `build_rs` | `terms/level_07/build_rs.md` |
-| 138 | `build_scripts` | `terms/level_07/build_scripts.md` |
-| 139 | `cargo_cli` | `terms/level_07/cargo_cli.md` |
-| 140 | `cargo_lock` | `terms/level_07/cargo_lock.md` |
-| 141 | `cargo_target_kinds` | `terms/level_07/cargo_target_kinds.md` |
-| 142 | `cargo_toml` | `terms/level_07/cargo_toml.md` |
-| 143 | `cfg_attribute` | `terms/level_07/cfg_attribute.md` |
-| 144 | `dependencies_section` | `terms/level_07/dependencies_section.md` |
-| 145 | `documentation_comments` | `terms/level_07/documentation_comments.md` |
-| 146 | `edition` | `terms/level_07/edition.md` |
-| 147 | `feature_flags` | `terms/level_07/feature_flags.md` |
-| 148 | `lint_control_attributes` | `terms/level_07/lint_control_attributes.md` |
-| 149 | `mod_declaration` | `terms/level_07/mod_declaration.md` |
-| 150 | `must_use_attribute` | `terms/level_07/must_use_attribute.md` |
-| 151 | `non_exhaustive_attribute` | `terms/level_07/non_exhaustive_attribute.md` |
-| 152 | `prelude` | `terms/level_07/prelude.md` |
-| 153 | `pub_crate_super` | `terms/level_07/pub_crate_super.md` |
-| 154 | `pub_visibility` | `terms/level_07/pub_visibility.md` |
-| 155 | `re_exporting` | `terms/level_07/re_exporting.md` |
-| 156 | `use_statement` | `terms/level_07/use_statement.md` |
-| 157 | `visibility_and_modules` | `terms/level_07/visibility_and_modules.md` |
-| 158 | `workspace` | `terms/level_07/workspace.md` |
+| 135 | `attributes` | `terms/level_07/attributes.md` |
+| 136 | `build_rs` | `terms/level_07/build_rs.md` |
+| 137 | `build_scripts` | `terms/level_07/build_scripts.md` |
+| 138 | `cargo_cli` | `terms/level_07/cargo_cli.md` |
+| 139 | `cargo_lock` | `terms/level_07/cargo_lock.md` |
+| 140 | `cargo_target_kinds` | `terms/level_07/cargo_target_kinds.md` |
+| 141 | `cargo_toml` | `terms/level_07/cargo_toml.md` |
+| 142 | `cfg_attribute` | `terms/level_07/cfg_attribute.md` |
+| 143 | `dependencies_section` | `terms/level_07/dependencies_section.md` |
+| 144 | `documentation_comments` | `terms/level_07/documentation_comments.md` |
+| 145 | `edition` | `terms/level_07/edition.md` |
+| 146 | `feature_flags` | `terms/level_07/feature_flags.md` |
+| 147 | `lint_control_attributes` | `terms/level_07/lint_control_attributes.md` |
+| 148 | `mod_declaration` | `terms/level_07/mod_declaration.md` |
+| 149 | `must_use_attribute` | `terms/level_07/must_use_attribute.md` |
+| 150 | `non_exhaustive_attribute` | `terms/level_07/non_exhaustive_attribute.md` |
+| 151 | `prelude` | `terms/level_07/prelude.md` |
+| 152 | `pub_crate_super` | `terms/level_07/pub_crate_super.md` |
+| 153 | `pub_visibility` | `terms/level_07/pub_visibility.md` |
+| 154 | `re_exporting` | `terms/level_07/re_exporting.md` |
+| 155 | `use_statement` | `terms/level_07/use_statement.md` |
+| 156 | `visibility_and_modules` | `terms/level_07/visibility_and_modules.md` |
+| 157 | `workspace` | `terms/level_07/workspace.md` |
 
 ---
 
@@ -217,15 +216,15 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 159 | `assert_macros` | `terms/level_08/assert_macros.md` |
-| 160 | `benchmarking` | `terms/level_08/benchmarking.md` |
-| 161 | `cargo_doc` | `terms/level_08/cargo_doc.md` |
-| 162 | `doc_tests` | `terms/level_08/doc_tests.md` |
-| 163 | `ignore` | `terms/level_08/ignore.md` |
-| 164 | `inner_doc_comment` | `terms/level_08/inner_doc_comment.md` |
-| 165 | `integration_tests` | `terms/level_08/integration_tests.md` |
-| 166 | `should_panic` | `terms/level_08/should_panic.md` |
-| 167 | `test_attribute` | `terms/level_08/test_attribute.md` |
+| 158 | `assert_macros` | `terms/level_08/assert_macros.md` |
+| 159 | `benchmarking` | `terms/level_08/benchmarking.md` |
+| 160 | `cargo_doc` | `terms/level_08/cargo_doc.md` |
+| 161 | `doc_tests` | `terms/level_08/doc_tests.md` |
+| 162 | `ignore` | `terms/level_08/ignore.md` |
+| 163 | `inner_doc_comment` | `terms/level_08/inner_doc_comment.md` |
+| 164 | `integration_tests` | `terms/level_08/integration_tests.md` |
+| 165 | `should_panic` | `terms/level_08/should_panic.md` |
+| 166 | `test_attribute` | `terms/level_08/test_attribute.md` |
 
 ---
 
@@ -233,25 +232,25 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 168 | `arc_mutex_t` | `terms/level_09/arc_mutex_t.md` |
-| 169 | `async_await` | `terms/level_09/async_await.md` |
-| 170 | `atomic_types` | `terms/level_09/atomic_types.md` |
-| 171 | `auto_traits` | `terms/level_09/auto_traits.md` |
-| 172 | `channel_mpsc` | `terms/level_09/channel_mpsc.md` |
-| 173 | `channels_mpsc_oneshot` | `terms/level_09/channels_mpsc_oneshot.md` |
-| 174 | `condvar_barrier` | `terms/level_09/condvar_barrier.md` |
-| 175 | `data_race` | `terms/level_09/data_race.md` |
-| 176 | `memory_ordering` | `terms/level_09/memory_ordering.md` |
-| 177 | `mutex_t` | `terms/level_09/mutex_t.md` |
-| 178 | `oncelock_lazylock` | `terms/level_09/oncelock_lazylock.md` |
-| 179 | `rayon` | `terms/level_09/rayon.md` |
-| 180 | `rwlock_t` | `terms/level_09/rwlock_t.md` |
-| 181 | `scoped_threads` | `terms/level_09/scoped_threads.md` |
-| 182 | `send_trait` | `terms/level_09/send_trait.md` |
-| 183 | `std_thread_spawn` | `terms/level_09/std_thread_spawn.md` |
-| 184 | `sync_trait` | `terms/level_09/sync_trait.md` |
-| 185 | `thread_local_macro` | `terms/level_09/thread_local_macro.md` |
-| 186 | `thread_spawn` | `terms/level_09/thread_spawn.md` |
+| 167 | `arc_mutex_t` | `terms/level_09/arc_mutex_t.md` |
+| 168 | `async_await` | `terms/level_09/async_await.md` |
+| 169 | `atomic_types` | `terms/level_09/atomic_types.md` |
+| 170 | `auto_traits` | `terms/level_09/auto_traits.md` |
+| 171 | `channel_mpsc` | `terms/level_09/channel_mpsc.md` |
+| 172 | `channels_mpsc_oneshot` | `terms/level_09/channels_mpsc_oneshot.md` |
+| 173 | `condvar_barrier` | `terms/level_09/condvar_barrier.md` |
+| 174 | `data_race` | `terms/level_09/data_race.md` |
+| 175 | `memory_ordering` | `terms/level_09/memory_ordering.md` |
+| 176 | `mutex_t` | `terms/level_09/mutex_t.md` |
+| 177 | `oncelock_lazylock` | `terms/level_09/oncelock_lazylock.md` |
+| 178 | `rayon` | `terms/level_09/rayon.md` |
+| 179 | `rwlock_t` | `terms/level_09/rwlock_t.md` |
+| 180 | `scoped_threads` | `terms/level_09/scoped_threads.md` |
+| 181 | `send_trait` | `terms/level_09/send_trait.md` |
+| 182 | `std_thread_spawn` | `terms/level_09/std_thread_spawn.md` |
+| 183 | `sync_trait` | `terms/level_09/sync_trait.md` |
+| 184 | `thread_local_macro` | `terms/level_09/thread_local_macro.md` |
+| 185 | `thread_spawn` | `terms/level_09/thread_spawn.md` |
 
 ---
 
@@ -259,19 +258,19 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 187 | `async_closures` | `terms/level_10/async_closures.md` |
-| 188 | `async_fn` | `terms/level_10/async_fn.md` |
-| 189 | `await` | `terms/level_10/await.md` |
-| 190 | `executor_runtime` | `terms/level_10/executor_runtime.md` |
-| 191 | `future_trait` | `terms/level_10/future_trait.md` |
-| 192 | `join_macro` | `terms/level_10/join_macro.md` |
-| 193 | `pin_t` | `terms/level_10/pin_t.md` |
-| 194 | `select_macro` | `terms/level_10/select_macro.md` |
-| 195 | `smart_pointers` | `terms/level_10/smart_pointers.md` |
-| 196 | `stream_trait` | `terms/level_10/stream_trait.md` |
-| 197 | `tokio_spawn` | `terms/level_10/tokio_spawn.md` |
-| 198 | `unpin_trait` | `terms/level_10/unpin_trait.md` |
-| 199 | `waker_context` | `terms/level_10/waker_context.md` |
+| 186 | `async_closures` | `terms/level_10/async_closures.md` |
+| 187 | `async_fn` | `terms/level_10/async_fn.md` |
+| 188 | `await` | `terms/level_10/await.md` |
+| 189 | `executor_runtime` | `terms/level_10/executor_runtime.md` |
+| 190 | `future_trait` | `terms/level_10/future_trait.md` |
+| 191 | `join_macro` | `terms/level_10/join_macro.md` |
+| 192 | `pin_t` | `terms/level_10/pin_t.md` |
+| 193 | `select_macro` | `terms/level_10/select_macro.md` |
+| 194 | `smart_pointers` | `terms/level_10/smart_pointers.md` |
+| 195 | `stream_trait` | `terms/level_10/stream_trait.md` |
+| 196 | `tokio_spawn` | `terms/level_10/tokio_spawn.md` |
+| 197 | `unpin_trait` | `terms/level_10/unpin_trait.md` |
+| 198 | `waker_context` | `terms/level_10/waker_context.md` |
 
 ---
 
@@ -279,19 +278,19 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 200 | `cow_t` | `terms/level_11/cow_t.md` |
-| 201 | `dynamically_sized_types` | `terms/level_11/dynamically_sized_types.md` |
-| 202 | `fat_pointers` | `terms/level_11/fat_pointers.md` |
-| 203 | `maybeuninit_t` | `terms/level_11/maybeuninit_t.md` |
-| 204 | `memory_leaks` | `terms/level_11/memory_leaks.md` |
-| 205 | `never_type` | `terms/level_11/never_type.md` |
-| 206 | `newtype_pattern` | `terms/level_11/newtype_pattern.md` |
-| 207 | `phantomdata_t` | `terms/level_11/phantomdata_t.md` |
-| 208 | `sized_trait` | `terms/level_11/sized_trait.md` |
-| 209 | `toowned_trait` | `terms/level_11/toowned_trait.md` |
-| 210 | `type_alias` | `terms/level_11/type_alias.md` |
-| 211 | `weak_t` | `terms/level_11/weak_t.md` |
-| 212 | `zsts` | `terms/level_11/zsts.md` |
+| 199 | `cow_t` | `terms/level_11/cow_t.md` |
+| 200 | `dynamically_sized_types` | `terms/level_11/dynamically_sized_types.md` |
+| 201 | `fat_pointers` | `terms/level_11/fat_pointers.md` |
+| 202 | `maybeuninit_t` | `terms/level_11/maybeuninit_t.md` |
+| 203 | `memory_leaks` | `terms/level_11/memory_leaks.md` |
+| 204 | `never_type` | `terms/level_11/never_type.md` |
+| 205 | `newtype_pattern` | `terms/level_11/newtype_pattern.md` |
+| 206 | `phantomdata_t` | `terms/level_11/phantomdata_t.md` |
+| 207 | `sized_trait` | `terms/level_11/sized_trait.md` |
+| 208 | `toowned_trait` | `terms/level_11/toowned_trait.md` |
+| 209 | `type_alias` | `terms/level_11/type_alias.md` |
+| 210 | `weak_t` | `terms/level_11/weak_t.md` |
+| 211 | `zsts` | `terms/level_11/zsts.md` |
 
 ---
 
@@ -299,16 +298,16 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 213 | `attribute_macros` | `terms/level_12/attribute_macros.md` |
-| 214 | `declarative_macros` | `terms/level_12/declarative_macros.md` |
-| 215 | `declarative_macros_macro_rules` | `terms/level_12/declarative_macros_macro_rules.md` |
-| 216 | `derive_macros` | `terms/level_12/derive_macros.md` |
-| 217 | `function_like_macros` | `terms/level_12/function_like_macros.md` |
-| 218 | `hygiene` | `terms/level_12/hygiene.md` |
-| 219 | `procedural_macros` | `terms/level_12/procedural_macros.md` |
-| 220 | `quote_crate` | `terms/level_12/quote_crate.md` |
-| 221 | `syn_crate` | `terms/level_12/syn_crate.md` |
-| 222 | `token_stream` | `terms/level_12/token_stream.md` |
+| 212 | `attribute_macros` | `terms/level_12/attribute_macros.md` |
+| 213 | `declarative_macros` | `terms/level_12/declarative_macros.md` |
+| 214 | `declarative_macros_macro_rules` | `terms/level_12/declarative_macros_macro_rules.md` |
+| 215 | `derive_macros` | `terms/level_12/derive_macros.md` |
+| 216 | `function_like_macros` | `terms/level_12/function_like_macros.md` |
+| 217 | `hygiene` | `terms/level_12/hygiene.md` |
+| 218 | `procedural_macros` | `terms/level_12/procedural_macros.md` |
+| 219 | `quote_crate` | `terms/level_12/quote_crate.md` |
+| 220 | `syn_crate` | `terms/level_12/syn_crate.md` |
+| 221 | `token_stream` | `terms/level_12/token_stream.md` |
 
 ---
 
@@ -316,20 +315,20 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 223 | `bindgen` | `terms/level_13/bindgen.md` |
-| 224 | `cbindgen` | `terms/level_13/cbindgen.md` |
-| 225 | `cstring_cstr` | `terms/level_13/cstring_cstr.md` |
-| 226 | `extern_c` | `terms/level_13/extern_c.md` |
-| 227 | `ffi` | `terms/level_13/ffi.md` |
-| 228 | `inline_assembly` | `terms/level_13/inline_assembly.md` |
-| 229 | `miri_ub_detector` | `terms/level_13/miri_ub_detector.md` |
-| 230 | `raw_pointers` | `terms/level_13/raw_pointers.md` |
-| 231 | `repr_c` | `terms/level_13/repr_c.md` |
-| 232 | `undefined_behavior` | `terms/level_13/undefined_behavior.md` |
-| 233 | `union` | `terms/level_13/union.md` |
-| 234 | `unsafe_block` | `terms/level_13/unsafe_block.md` |
-| 235 | `unsafe_fn` | `terms/level_13/unsafe_fn.md` |
-| 236 | `unsafe_trait` | `terms/level_13/unsafe_trait.md` |
+| 222 | `bindgen` | `terms/level_13/bindgen.md` |
+| 223 | `cbindgen` | `terms/level_13/cbindgen.md` |
+| 224 | `cstring_cstr` | `terms/level_13/cstring_cstr.md` |
+| 225 | `extern_c` | `terms/level_13/extern_c.md` |
+| 226 | `ffi` | `terms/level_13/ffi.md` |
+| 227 | `inline_assembly` | `terms/level_13/inline_assembly.md` |
+| 228 | `miri_ub_detector` | `terms/level_13/miri_ub_detector.md` |
+| 229 | `raw_pointers` | `terms/level_13/raw_pointers.md` |
+| 230 | `repr_c` | `terms/level_13/repr_c.md` |
+| 231 | `undefined_behavior` | `terms/level_13/undefined_behavior.md` |
+| 232 | `union` | `terms/level_13/union.md` |
+| 233 | `unsafe_block` | `terms/level_13/unsafe_block.md` |
+| 234 | `unsafe_fn` | `terms/level_13/unsafe_fn.md` |
+| 235 | `unsafe_trait` | `terms/level_13/unsafe_trait.md` |
 
 ---
 
@@ -337,25 +336,25 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 237 | `as_ref` | `terms/level_14/as_ref.md` |
-| 238 | `as_ref_as_mut` | `terms/level_14/as_ref_as_mut.md` |
-| 239 | `blanket_implementation` | `terms/level_14/blanket_implementation.md` |
-| 240 | `borrow_borrow_mut` | `terms/level_14/borrow_borrow_mut.md` |
-| 241 | `borrow_trait` | `terms/level_14/borrow_trait.md` |
-| 242 | `coherence` | `terms/level_14/coherence.md` |
-| 243 | `deref_coercion` | `terms/level_14/deref_coercion.md` |
-| 244 | `deref_deref_mut_traits` | `terms/level_14/deref_deref_mut_traits.md` |
-| 245 | `deref_trait` | `terms/level_14/deref_trait.md` |
-| 246 | `gats` | `terms/level_14/gats.md` |
-| 247 | `index_indexmut_traits` | `terms/level_14/index_indexmut_traits.md` |
-| 248 | `marker_traits` | `terms/level_14/marker_traits.md` |
-| 249 | `operator_overloading` | `terms/level_14/operator_overloading.md` |
-| 250 | `orphan_rule` | `terms/level_14/orphan_rule.md` |
-| 251 | `sealed_trait_pattern` | `terms/level_14/sealed_trait_pattern.md` |
-| 252 | `supertraits` | `terms/level_14/supertraits.md` |
-| 253 | `try_from_try_into` | `terms/level_14/try_from_try_into.md` |
-| 254 | `tryfrom_tryinto` | `terms/level_14/tryfrom_tryinto.md` |
-| 255 | `type_state_pattern` | `terms/level_14/type_state_pattern.md` |
+| 236 | `as_ref` | `terms/level_14/as_ref.md` |
+| 237 | `as_ref_as_mut` | `terms/level_14/as_ref_as_mut.md` |
+| 238 | `blanket_implementation` | `terms/level_14/blanket_implementation.md` |
+| 239 | `borrow_borrow_mut` | `terms/level_14/borrow_borrow_mut.md` |
+| 240 | `borrow_trait` | `terms/level_14/borrow_trait.md` |
+| 241 | `coherence` | `terms/level_14/coherence.md` |
+| 242 | `deref_coercion` | `terms/level_14/deref_coercion.md` |
+| 243 | `deref_deref_mut_traits` | `terms/level_14/deref_deref_mut_traits.md` |
+| 244 | `deref_trait` | `terms/level_14/deref_trait.md` |
+| 245 | `gats` | `terms/level_14/gats.md` |
+| 246 | `index_indexmut_traits` | `terms/level_14/index_indexmut_traits.md` |
+| 247 | `marker_traits` | `terms/level_14/marker_traits.md` |
+| 248 | `operator_overloading` | `terms/level_14/operator_overloading.md` |
+| 249 | `orphan_rule` | `terms/level_14/orphan_rule.md` |
+| 250 | `sealed_trait_pattern` | `terms/level_14/sealed_trait_pattern.md` |
+| 251 | `supertraits` | `terms/level_14/supertraits.md` |
+| 252 | `try_from_try_into` | `terms/level_14/try_from_try_into.md` |
+| 253 | `tryfrom_tryinto` | `terms/level_14/tryfrom_tryinto.md` |
+| 254 | `type_state_pattern` | `terms/level_14/type_state_pattern.md` |
 
 ---
 
@@ -363,16 +362,16 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 256 | `allocator_api` | `terms/level_15/allocator_api.md` |
-| 257 | `cold_hot_attributes` | `terms/level_15/cold_hot_attributes.md` |
-| 258 | `inlining` | `terms/level_15/inlining.md` |
-| 259 | `link_time_optimization` | `terms/level_15/link_time_optimization.md` |
-| 260 | `perf_flamegraph` | `terms/level_15/perf_flamegraph.md` |
-| 261 | `release_profile` | `terms/level_15/release_profile.md` |
-| 262 | `repr_packed_align` | `terms/level_15/repr_packed_align.md` |
-| 263 | `simd` | `terms/level_15/simd.md` |
-| 264 | `stack_vs_heap` | `terms/level_15/stack_vs_heap.md` |
-| 265 | `zero_cost_abstractions` | `terms/level_15/zero_cost_abstractions.md` |
+| 255 | `allocator_api` | `terms/level_15/allocator_api.md` |
+| 256 | `cold_hot_attributes` | `terms/level_15/cold_hot_attributes.md` |
+| 257 | `inlining` | `terms/level_15/inlining.md` |
+| 258 | `link_time_optimization` | `terms/level_15/link_time_optimization.md` |
+| 259 | `perf_flamegraph` | `terms/level_15/perf_flamegraph.md` |
+| 260 | `release_profile` | `terms/level_15/release_profile.md` |
+| 261 | `repr_packed_align` | `terms/level_15/repr_packed_align.md` |
+| 262 | `simd` | `terms/level_15/simd.md` |
+| 263 | `stack_vs_heap` | `terms/level_15/stack_vs_heap.md` |
+| 264 | `zero_cost_abstractions` | `terms/level_15/zero_cost_abstractions.md` |
 
 ---
 
@@ -380,19 +379,19 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 266 | `axum_actix_web` | `terms/level_16/axum_actix_web.md` |
-| 267 | `clap` | `terms/level_16/clap.md` |
-| 268 | `clippy` | `terms/level_16/clippy.md` |
-| 269 | `crates_io` | `terms/level_16/crates_io.md` |
-| 270 | `docs_rs` | `terms/level_16/docs_rs.md` |
-| 271 | `reqwest` | `terms/level_16/reqwest.md` |
-| 272 | `rust_analyzer` | `terms/level_16/rust_analyzer.md` |
-| 273 | `rustfmt` | `terms/level_16/rustfmt.md` |
-| 274 | `rustup` | `terms/level_16/rustup.md` |
-| 275 | `serde` | `terms/level_16/serde.md` |
-| 276 | `sqlx` | `terms/level_16/sqlx.md` |
-| 277 | `tokio` | `terms/level_16/tokio.md` |
-| 278 | `tracing` | `terms/level_16/tracing.md` |
+| 265 | `axum_actix_web` | `terms/level_16/axum_actix_web.md` |
+| 266 | `clap` | `terms/level_16/clap.md` |
+| 267 | `clippy` | `terms/level_16/clippy.md` |
+| 268 | `crates_io` | `terms/level_16/crates_io.md` |
+| 269 | `docs_rs` | `terms/level_16/docs_rs.md` |
+| 270 | `reqwest` | `terms/level_16/reqwest.md` |
+| 271 | `rust_analyzer` | `terms/level_16/rust_analyzer.md` |
+| 272 | `rustfmt` | `terms/level_16/rustfmt.md` |
+| 273 | `rustup` | `terms/level_16/rustup.md` |
+| 274 | `serde` | `terms/level_16/serde.md` |
+| 275 | `sqlx` | `terms/level_16/sqlx.md` |
+| 276 | `tokio` | `terms/level_16/tokio.md` |
+| 277 | `tracing` | `terms/level_16/tracing.md` |
 
 ---
 
@@ -400,18 +399,18 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 279 | `alloc_library` | `terms/level_17/alloc_library.md` |
-| 280 | `core_library` | `terms/level_17/core_library.md` |
-| 281 | `cross_compilation` | `terms/level_17/cross_compilation.md` |
-| 282 | `embedded_hal` | `terms/level_17/embedded_hal.md` |
-| 283 | `global_allocator` | `terms/level_17/global_allocator.md` |
-| 284 | `hal` | `terms/level_17/hal.md` |
-| 285 | `linker_script` | `terms/level_17/linker_script.md` |
-| 286 | `no_main` | `terms/level_17/no_main.md` |
-| 287 | `no_std` | `terms/level_17/no_std.md` |
-| 288 | `pac` | `terms/level_17/pac.md` |
-| 289 | `std_library` | `terms/level_17/std_library.md` |
-| 290 | `svd2rust` | `terms/level_17/svd2rust.md` |
+| 278 | `alloc_library` | `terms/level_17/alloc_library.md` |
+| 279 | `core_library` | `terms/level_17/core_library.md` |
+| 280 | `cross_compilation` | `terms/level_17/cross_compilation.md` |
+| 281 | `embedded_hal` | `terms/level_17/embedded_hal.md` |
+| 282 | `global_allocator` | `terms/level_17/global_allocator.md` |
+| 283 | `hal` | `terms/level_17/hal.md` |
+| 284 | `linker_script` | `terms/level_17/linker_script.md` |
+| 285 | `no_main` | `terms/level_17/no_main.md` |
+| 286 | `no_std` | `terms/level_17/no_std.md` |
+| 287 | `pac` | `terms/level_17/pac.md` |
+| 288 | `std_library` | `terms/level_17/std_library.md` |
+| 289 | `svd2rust` | `terms/level_17/svd2rust.md` |
 
 ---
 
@@ -419,15 +418,15 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 291 | `builder_pattern` | `terms/level_18/builder_pattern.md` |
-| 292 | `cow_for_flexibility` | `terms/level_18/cow_for_flexibility.md` |
-| 293 | `dependency_injection` | `terms/level_18/dependency_injection.md` |
-| 294 | `enum_dispatch` | `terms/level_18/enum_dispatch.md` |
-| 295 | `error_handling_stack` | `terms/level_18/error_handling_stack.md` |
-| 296 | `extension_trait` | `terms/level_18/extension_trait.md` |
-| 297 | `from_for_constructor_overloading` | `terms/level_18/from_for_constructor_overloading.md` |
-| 298 | `raii` | `terms/level_18/raii.md` |
-| 299 | `visitor_pattern` | `terms/level_18/visitor_pattern.md` |
+| 290 | `builder_pattern` | `terms/level_18/builder_pattern.md` |
+| 291 | `cow_for_flexibility` | `terms/level_18/cow_for_flexibility.md` |
+| 292 | `dependency_injection` | `terms/level_18/dependency_injection.md` |
+| 293 | `enum_dispatch` | `terms/level_18/enum_dispatch.md` |
+| 294 | `error_handling_stack` | `terms/level_18/error_handling_stack.md` |
+| 295 | `extension_trait` | `terms/level_18/extension_trait.md` |
+| 296 | `from_for_constructor_overloading` | `terms/level_18/from_for_constructor_overloading.md` |
+| 297 | `raii` | `terms/level_18/raii.md` |
+| 298 | `visitor_pattern` | `terms/level_18/visitor_pattern.md` |
 
 ---
 
@@ -435,15 +434,15 @@ Total terms: **310**
 
 | # | Key | File |
 |---|-----|------|
-| 300 | `const_evaluation_ctfe` | `terms/level_19/const_evaluation_ctfe.md` |
-| 301 | `const_fn` | `terms/level_19/const_fn.md` |
-| 302 | `const_generics` | `terms/level_19/const_generics.md` |
-| 303 | `generators_coroutines` | `terms/level_19/generators_coroutines.md` |
-| 304 | `hir_high_level_ir` | `terms/level_19/hir_high_level_ir.md` |
-| 305 | `llvm_codegen_backend` | `terms/level_19/llvm_codegen_backend.md` |
-| 306 | `mir_mid_level_ir` | `terms/level_19/mir_mid_level_ir.md` |
-| 307 | `nightly_compiler` | `terms/level_19/nightly_compiler.md` |
-| 308 | `polonius` | `terms/level_19/polonius.md` |
-| 309 | `specialization` | `terms/level_19/specialization.md` |
-| 310 | `tait_type_alias_impl_trait` | `terms/level_19/tait_type_alias_impl_trait.md` |
+| 299 | `const_evaluation_ctfe` | `terms/level_19/const_evaluation_ctfe.md` |
+| 300 | `const_fn` | `terms/level_19/const_fn.md` |
+| 301 | `const_generics` | `terms/level_19/const_generics.md` |
+| 302 | `generators_coroutines` | `terms/level_19/generators_coroutines.md` |
+| 303 | `hir_high_level_ir` | `terms/level_19/hir_high_level_ir.md` |
+| 304 | `llvm_codegen_backend` | `terms/level_19/llvm_codegen_backend.md` |
+| 305 | `mir_mid_level_ir` | `terms/level_19/mir_mid_level_ir.md` |
+| 306 | `nightly_compiler` | `terms/level_19/nightly_compiler.md` |
+| 307 | `polonius` | `terms/level_19/polonius.md` |
+| 308 | `specialization` | `terms/level_19/specialization.md` |
+| 309 | `tait_type_alias_impl_trait` | `terms/level_19/tait_type_alias_impl_trait.md` |
 

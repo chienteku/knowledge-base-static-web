@@ -403,7 +403,7 @@ Using linker script symbols `_stack_start` (top of stack) and `_stack_end` (bott
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [CSS (Cascading Style Sheets)](css.md) — The language stylesheet where comments are written.
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ button { color: red; } /* Valid CSS comment */
 ## 7. Related Terms
 - [CSS (Cascading Style Sheets)](css.md) — The parent language.
 - [Ruleset (Declaration, Property, Value)](ruleset.md) — The container syntax holding comments.
+
 ---
 
 ## 8. Key Takeaways

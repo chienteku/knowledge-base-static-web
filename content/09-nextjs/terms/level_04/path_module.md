@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The environment that hosts this module.
+- [File-System Routing](../level_01/file_system_routing.md) — Path string manipulation for file-system routing.
+
 ---
 
 ## 2. Term Category
@@ -197,6 +199,7 @@ export default function AdminPage() {
 ## 7. Related Terms
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The parent execution runtime.
 - [Intercepting Routes (`(..)folder`)](intercepting_routes.md) — The routing feature utilizing path navigation operators.
+
 ---
 
 ## 8. Key Takeaways

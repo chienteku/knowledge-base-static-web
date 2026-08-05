@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Declarative Programming](declarative_programming.md)
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ function Header() {
 - [Virtual DOM](virtual_dom.md) — What those `React.createElement` calls actually produce.
 - [Conditional Rendering](../level_05/conditional_rendering.md) — Related concept: Conditional Rendering.
 - [Synthetic Events](../level_05/synthetic_events.md) — Related concept: Synthetic Events.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [JSX (JavaScript XML)](jsx.md) — What components return.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ function Cup({ guest }) {
 - [Testing: React Testing Library + Jest](../level_11/react_testing_library.md) — Related concept: Testing: React Testing Library + Jest.
 - [Styled Components / Emotion (CSS-in-JS)](../level_11/styled_components.md) — Related concept: Styled Components / Emotion (CSS-in-JS).
 - [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
+
 ---
 
 ## 8. Key Takeaways

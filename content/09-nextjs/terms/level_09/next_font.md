@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Specifically Cumulative Layout Shift (CLS).
+- [Next.js Overview](../level_01/nextjs.md) — Automatic font optimization in Next.js.
+
 ---
 
 ## 2. Term Category
@@ -200,6 +202,7 @@ export default function Page() { return <div className={inter.className}>Text</d
 - [`layout.tsx`](../level_02/layout.md) — The best place to inject a global font.
 - [`<Script>` Component](next_script.md) — Related concept: `<Script>` Component.
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Related concept: Web Core Vitals (FCP, LCP, CLS, TTFB).
+
 ---
 
 ## 8. Key Takeaways

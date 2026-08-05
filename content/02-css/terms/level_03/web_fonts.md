@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`font-family`](font_family.md) — The styling property that utilizes these custom typefaces.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ src: url('font.woff2') format('woff2'), url('font.woff') format('woff');
 ## 7. Related Terms
 - [`font-family`](font_family.md) — The styling property that applies these fonts.
 - [`@import` Rule](../level_11/import.md) — The CSS at-rule used to import stylesheets (including fonts) into CSS directly.
+
 ---
 
 ## 8. Key Takeaways

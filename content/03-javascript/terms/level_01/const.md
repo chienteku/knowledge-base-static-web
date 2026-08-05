@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](variable.md) — A named container for storing data values.
 - [let](let.md) — Block-scoped variable declaration.
+
 ---
 
 ## 2. Term Category
@@ -191,6 +192,7 @@ async function processData() {
 - [Variable](variable.md) — A named container for storing data values.
 - [Assignment Operators](assignment_operators.md) — Related concept: Assignment Operators.
 - [Object.freeze / Object.seal](../level_07/object_freeze_seal.md) — Related concept: Object.freeze / Object.seal.
+
 ---
 
 ## 8. Key Takeaways

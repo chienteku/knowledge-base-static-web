@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](variable.md) — A named container for storing data values.
 - [Operator](operator.md) — Symbol that performs an operation on operands.
+
 ---
 
 ## 2. Term Category
@@ -222,6 +223,7 @@ let cartTotal = 0;
 - [Arithmetic Operators](arithmetic_operators.md) — Mathematical operations.
 - [Increment / Decrement (++ / --)](increment_decrement.md) — Related concept: Increment / Decrement (++ / --).
 - [Operator](operator.md) — Related concept: Operator.
+
 ---
 
 ## 8. Key Takeaways

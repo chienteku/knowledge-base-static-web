@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
 - [Array Index & .length](../level_02/array_index_length.md) — Zero-based positional access.
+
 ---
 
 ## 2. Term Category
@@ -225,6 +226,7 @@ console.log(metals);
 ## 7. Related Terms
 - [push / pop / shift / unshift](push_pop_shift_unshift.md) — Adding/removing elements at boundaries.
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Alternative syntax to copy sections of arrays.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — Node was created before JavaScript had an official module system, so Ryan Dahl had to invent one.
+
 ---
 
 ## 2. Term Category
@@ -172,6 +173,7 @@ How does the `require` statement look different for Developer A vs Developer B?
 - [ES Modules (import, export)](es_modules.md) — The modern replacement for CommonJS.
 - [NPM (Node Package Manager)](../level_04/npm.md) — NPM packages are historically distributed as CommonJS modules.
 - [Module Resolution](module_resolution.md) — Node.js module resolution.
+
 ---
 
 ## 8. Key Takeaways

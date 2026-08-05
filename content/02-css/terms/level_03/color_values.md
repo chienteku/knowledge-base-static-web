@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Ruleset (Declaration, Property, Value)](../level_01/ruleset.md) — Properties accept color value targets.
+
 ---
 
 ## 2. Term Category
@@ -261,6 +262,7 @@ div { color: #ff0000; } /* Valid 6-digit hex color */
 ## 7. Related Terms
 - [`color` vs `background-color`](color_vs_background.md) — The parent properties using these colors.
 - [`opacity`](../level_09/opacity.md) — The alternative way to manage element transparency.
+
 ---
 
 ## 8. Key Takeaways

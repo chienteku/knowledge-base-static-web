@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ async function processData() {
 - [Variable](variable.md) — A named container for storing data values.
 - [Block Scope](../level_03/block_scope.md) — Related concept: Block Scope.
 - [Hoisting](../level_03/hoisting.md) — Related concept: Hoisting.
+
 ---
 
 ## 8. Key Takeaways

@@ -9,6 +9,7 @@
 - [`<form>`](form.md) — Inputs should generally be placed inside a form.
 - [Attribute](../level_01/attribute.md) — The behavior of an `<input>` changes entirely based on its attributes.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Since `<input>` is a void element with no closing tag.
+
 ---
 
 ## 2. Term Category
@@ -187,6 +188,7 @@ By itself, it's just a blob. But if you stamp it with the `type="checkbox"` mold
 - [`<form>`](form.md) — The container that packages the input's data.
 - [`<select>` and `<option>`](select_option.md) — Related concept: `<select>` and `<option>`.
 - [`<textarea>`](textarea.md) — Related concept: `<textarea>`.
+
 ---
 
 ## 8. Key Takeaways

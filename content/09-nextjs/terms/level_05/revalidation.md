@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — The two extreme ends of caching (`force-cache` vs `no-store`).
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The API we are modifying.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ revalidateTag('comments'); // Targeted cache purge for specific tag
 - [Data Caching (`force-cache`, `no-store`)](data_caching.md) — The alternative caching strategies.
 - [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — Updating the cache via a button click rather than a timer.
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — Related concept: Incremental Static Regeneration (ISR).
+
 ---
 
 ## 8. Key Takeaways

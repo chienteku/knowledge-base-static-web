@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](element_vs_tag.md) — The fundamental unit of HTML.
 - [HTML (HyperText Markup Language)](html.md) — The standard markup language.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ div > span -- Block container wrapping inline child
 - [`<td>` (Table Data)](../level_04/td.md) — Related concept: `<td>` (Table Data).
 - [`<tr>` (Table Row)](../level_04/tr.md) — Related concept: `<tr>` (Table Row).
 - [`<body>`](body.md) — Related concept: `<body>`.
+
 ---
 
 ## 8. Key Takeaways

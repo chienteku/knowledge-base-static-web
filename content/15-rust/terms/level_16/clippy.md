@@ -523,7 +523,6 @@ fn main() {
 
 ## 6. Related Terms
 
-- [Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`)](../level_07/lint_control_attributes.md) — Related concept: Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`).
 - [Rustup](rustup.md) — Related concept: Rustup.
 
 ---

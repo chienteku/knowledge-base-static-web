@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Single-Threaded Architecture](single_threaded.md) — JavaScript runs on exactly one call stack.
+- [V8 JavaScript Engine](v8_engine.md) — V8 JavaScript execution engine and call stack.
+
 ---
 
 ## 2. Term Category
@@ -219,6 +221,7 @@ first();
 ## 7. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The coordinator that pushes callbacks onto the Call Stack once it is empty.
 - [V8 JavaScript Engine](v8_engine.md) — The engine that allocates and runs the Call Stack.
+
 ---
 
 ## 8. Key Takeaways

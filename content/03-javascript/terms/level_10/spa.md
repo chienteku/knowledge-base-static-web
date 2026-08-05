@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [DOM (Document Object Model)](../level_05/dom.md) — The structure that SPAs constantly manipulate.
 - [Fetch API](../level_06/fetch_api.md) — How SPAs get new data without reloading.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ async function processData() {
 ## 7. Related Terms
 - [DOM (Document Object Model)](../level_05/dom.md) — The canvas that the SPA constantly redraws.
 - [JSX](jsx.md) — The syntax React uses to make drawing SPA interfaces easier.
+
 ---
 
 ## 8. Key Takeaways

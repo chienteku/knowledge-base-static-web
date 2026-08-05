@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — Extracting from arrays.
 - [Object](../level_02/object.md) — Extracting from objects.
+
 ---
 
 ## 2. Term Category
@@ -208,6 +209,7 @@ async function processData() {
 - [Shorthand Properties & Methods](../level_07/shorthand_properties_methods.md) — Related concept: Shorthand Properties & Methods.
 - [Default Parameters](default_parameters.md) — Related concept: Default Parameters.
 - [Spread Syntax (...)](spread_syntax.md) — Related concept: Spread Syntax (...).
+
 ---
 
 ## 8. Key Takeaways

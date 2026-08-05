@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Class](class.md) — The blueprint syntax used in ES6.
 - [Prototypal Inheritance](prototypal_inheritance.md) — What `extends` is secretly doing under the hood.
+
 ---
 
 ## 2. Term Category
@@ -225,6 +226,7 @@ async function processData() {
 - [super](super.md) — The keyword required inside a child class's constructor.
 - [Error object & Error Types](../level_06/error_object.md) — Related concept: Error object & Error Types.
 - [Static Methods & Properties](static_methods_properties.md) — Related concept: Static Methods & Properties.
+
 ---
 
 ## 8. Key Takeaways

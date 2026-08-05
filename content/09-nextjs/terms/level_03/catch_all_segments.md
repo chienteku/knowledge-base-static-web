@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [JavaScript Rest Parameters (`...`)](rest_parameters.md) — The JS syntax that inspired this folder naming convention.
+
 ---
 
 ## 2. Term Category
@@ -179,7 +180,7 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 ## 7. Related Terms
 - [Route Groups (`(group)`)](route_groups.md) — Another special folder naming convention that modifies routing behavior.
 - [JavaScript Rest Parameters (`...`)](rest_parameters.md) — Related concept: JavaScript Rest Parameters (`...`).
-- [Dynamic Routes (`[slug]`)](dynamic_routes.md) — Related concept: Dynamic Routes (`[slug]`).
+
 ---
 
 ## 8. Key Takeaways

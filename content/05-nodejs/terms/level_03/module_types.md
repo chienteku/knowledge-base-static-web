@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- [Node.js (Runtime Environment)](../level_01/nodejs.md) — Node.js module system architecture.
+
 ---
 
 ## 2. Term Category
@@ -171,6 +172,7 @@ import data from './data.json' with { type: 'json' }; // Import attribute for JS
 - [NPM (Node Package Manager)](../level_04/npm.md) — The registry where you download all External Modules.
 - [node_modules](../level_04/node_modules.md) — The folder where External Modules physically live on your hard drive once downloaded.
 - [Module Resolution](module_resolution.md) — How Node finds these modules.
+
 ---
 
 ## 8. Key Takeaways

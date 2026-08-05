@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Single-Threaded Architecture](single_threaded.md) — The Event Loop manages this single thread.
 - [Non-Blocking I/O](non_blocking_io.md) — The Event Loop organizes the chaos created by Non-Blocking tasks.
+
 ---
 
 ## 2. Term Category
@@ -184,6 +185,7 @@ Promise.resolve().then(() => console.log('D'));
 - [Microtasks vs Macrotasks](../level_05/microtasks_macrotasks.md) — Related concept: Microtasks vs Macrotasks.
 - [process.nextTick() vs setImmediate()](../level_05/nexttick_setimmediate.md) — Related concept: process.nextTick() vs setImmediate().
 - [Node.js (Runtime Environment)](nodejs.md) — Related concept: Node.js (Runtime Environment).
+
 ---
 
 ## 8. Key Takeaways

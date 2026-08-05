@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [NPM (Node Package Manager)](../level_04/npm.md) — Express is an external module, so you must download it.
 - [The http Module Deep Dive](http_deep_dive.md) — The core Node.js module that Express wraps and improves.
+
 ---
 
 ## 2. Term Category
@@ -267,6 +268,7 @@ app.get('/data', async (req, res, next) => {
 - [The http Module Deep Dive](http_deep_dive.md) — Related concept: The http Module Deep Dive.
 - [The req & res Objects](req_res.md) — Request and Response parameters.
 - [CORS](../level_09/cors.md) — Related concept: CORS.
+
 ---
 
 ## 8. Key Takeaways

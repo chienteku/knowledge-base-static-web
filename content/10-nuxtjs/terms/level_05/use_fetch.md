@@ -9,6 +9,7 @@
 - [`$fetch` (ofetch)](dollar_fetch.md) — The underlying HTTP client that `useFetch` uses.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that `useFetch` optimizes.
 - [Nuxt Payload (SSR State Transfer)](../level_04/nuxt_payload.md) — The mechanism conveying server responses to client hydration cache pools.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ const { data } = await useFetch('/api/items', { query: { page }, watch: [page] }
 - [`$fetch` (ofetch)](dollar_fetch.md) — Related concept: `$fetch` (ofetch).
 - [`useLazyFetch` & `useLazyAsyncData` Hooks](use_lazy_fetch.md) — Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks.
 - [Vue Suspense Integration](../level_09/vue_suspense.md) — Related concept: Vue Suspense Integration.
+
 ---
 
 ## 8. Key Takeaways

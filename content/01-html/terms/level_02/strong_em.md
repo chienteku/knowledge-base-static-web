@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<span>` (Inline container)](span.md) — Unlike `<span>`, these tags have semantic meaning.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<strong>` and `<em>` are inline elements.
+
 ---
 
 ## 2. Term Category
@@ -235,6 +236,7 @@ If the script has `<strong>` and `<em>`, the actor changes their *voice*. They s
 - [`<blockquote>` & `<cite>`](blockquote_cite.md) — Related concept: `<blockquote>` & `<cite>`.
 - [`<sup>` & `<sub>`](sup_sub.md) — Related concept: `<sup>` & `<sub>`.
 - [`<mark>`](../level_06/mark.md) — Related concept: `<mark>`.
+
 ---
 
 ## 8. Key Takeaways

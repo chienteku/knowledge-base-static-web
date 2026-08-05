@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Element vs. Tag](element_vs_tag.md) — Attributes are always placed inside the opening tag.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ But the factory needs more specific instructions. An Attribute is an adjective o
 - [`<audio>`](../level_03/audio.md) — Related concept: `<audio>`.
 - [`src` Attribute](../level_03/src.md) — Related concept: `src` Attribute.
 - [`<time>` & `datetime` Attribute](../level_06/time_datetime.md) — Related concept: `<time>` & `datetime` Attribute.
+
 ---
 
 ## 8. Key Takeaways

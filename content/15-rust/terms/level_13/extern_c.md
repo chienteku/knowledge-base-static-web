@@ -496,7 +496,6 @@ pub extern "C" fn process_data(ptr: *const c_char, len: usize) { ... }
 - [`unsafe` Block](unsafe_block.md) — Block required to invoke imported `extern "C"` functions.
 - [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Memory pointers passed across `extern "C"` functions.
 - [`cbindgen`](cbindgen.md) — Related concept: `cbindgen`.
-- [`#[repr(C)]`](repr_c.md) — Related concept: `#[repr(C)]`.
 - [`union`](union.md) — Related concept: `union`.
 - [`CString` / `CStr`](cstring_cstr.md) — Related concept: `CString` / `CStr`.
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function Types](function_types.md) — The standard way to type functions.
 - [Union Types (`|`)](../level_05/union_types.md) — The underlying mechanic that handles the implementation.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ function parse(x: string | number): any {} // Accepts all overload variants
 ## 7. Related Terms
 - [Function Types](function_types.md) — What you are overloading.
 - [Union Types (`|`)](../level_05/union_types.md) — What you use inside the implementation body.
+
 ---
 
 ## 8. Key Takeaways

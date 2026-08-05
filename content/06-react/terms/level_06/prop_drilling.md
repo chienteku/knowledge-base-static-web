@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props (Properties)](../level_01/props.md) — The vehicle being drilled.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — The strict rule that forces Prop Drilling to exist in the first place.
+
 ---
 
 ## 2. Term Category
@@ -168,6 +169,7 @@ Which components are the "middlemen" suffering from prop drilling?
 - [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — Related concept: Unidirectional Data Flow.
 - [`useContext` Hook](use_context.md) — Related concept: `useContext` Hook.
+
 ---
 
 ## 8. Key Takeaways

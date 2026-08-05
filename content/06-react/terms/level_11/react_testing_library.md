@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — The visual units being tested.
 - [Synthetic Events](../level_05/synthetic_events.md) — The simulated interactions triggered during tests.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ test('dismisses the warning message', () => {
 ## 7. Related Terms
 - [Components](../level_01/components.md) — The visual units being tested.
 - [Synthetic Events](../level_05/synthetic_events.md) — The event framework simulated in testing environments.
+
 ---
 
 ## 8. Key Takeaways

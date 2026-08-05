@@ -9,6 +9,7 @@
 
 - [JavaScript / TypeScript SDK](js_sdk.md) — Client SDK package.
 - [Transaction Isolation & Atomicity Semantics](../level_09/transaction_isolation.md) — Write conflicts in snapshot isolation.
+- [SDK Connection Lifecycle (`connect` / `use` / `signin` / `close`)](sdk_connection.md) — Handling network and query errors in SDKs.
 
 ---
 

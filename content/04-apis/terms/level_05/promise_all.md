@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Promises (in the context of networks)](promises.md) — The async data wrapper objects.
 - [async / await](async_await.md) — The syntax used to orchestrate Promise resolutions.
+
 ---
 
 ## 2. Term Category
@@ -219,6 +220,7 @@ async function getAccountData() {
 ## 7. Related Terms
 - [The fetch() API](fetch.md) — The network request builder.
 - [Latency & Bandwidth](../level_01/latency_bandwidth.md) — The physical network constraints optimized by parallel connections.
+
 ---
 
 ## 8. Key Takeaways

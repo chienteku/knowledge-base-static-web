@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [PL/pgSQL](plpgsql.md) — The procedural language code compiled inside the block.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ The script should check if the table `test_accounts` contains more than 10 rows.
 
 ## 7. Related Terms
 - [PL/pgSQL](plpgsql.md) — The parent procedural language.
+
 ---
 
 ## 8. Key Takeaways

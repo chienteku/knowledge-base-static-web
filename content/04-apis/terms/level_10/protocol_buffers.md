@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Serialization & Deserialization](../level_07/serialization.md) — The concepts of formatting objects for transmission.
 - [gRPC (Remote Procedure Call)](grpc.md) — The network protocol designed on top of Protocol Buffers.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ message Product {
 - [Binary vs Text Formats](../level_07/binary_vs_text_formats.md) — The serialization format comparisons.
 - [Base64 Encoding](../level_07/base64.md) — The text translation method used if binary bytes must travel over text channels.
 - [gRPC (Remote Procedure Call)](grpc.md) — Related concept: gRPC (Remote Procedure Call).
+
 ---
 
 ## 8. Key Takeaways

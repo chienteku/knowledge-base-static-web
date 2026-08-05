@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — What you are styling.
 - [Props (Properties)](../level_01/props.md) — How CSS-in-JS conditionally changes styles.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ const Btn = styled.button`color: ${props => props.$isActive ? 'red' : 'blue'};`;
 
 ## 7. Related Terms
 - [Components](../level_01/components.md) — Styled Components are just React Components that render a specific HTML tag with injected CSS.
+
 ---
 
 ## 8. Key Takeaways

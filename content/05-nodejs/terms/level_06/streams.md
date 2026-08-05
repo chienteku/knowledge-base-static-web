@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Buffers](buffers.md) — Streams are composed of flowing Buffers.
 - [Event Emitter](../level_05/event_emitter.md) — Streams use events to announce when a new chunk arrives.
+
 ---
 
 ## 2. Term Category
@@ -159,6 +160,7 @@ Which scenario uses Streams?
 - [Data Chunks](chunks.md) — Related concept: Data Chunks.
 - [Body Parsing (express.json())](../level_07/body_parsing.md) — Related concept: Body Parsing (express.json()).
 - [Backpressure](backpressure.md) — Stream backpressure.
+
 ---
 
 ## 8. Key Takeaways

@@ -9,6 +9,7 @@
 - [Middleware](middleware.md) — The interception pipeline.
 - [The req & res Objects](req_res.md) — The request structure populated by parsed inputs.
 - [Streams (General Concept)](../level_06/streams.md) — Under the hood, the request is a Readable Stream.
+
 ---
 
 ## 2. Term Category
@@ -311,6 +312,7 @@ app.post('/submit', (req, res) => {
 - [Middleware](middleware.md) — The pipeline routing pattern.
 - [Streams (General Concept)](../level_06/streams.md) — The underlying network stream technology.
 - [Input Validation (joi / zod)](../level_09/input_validation.md) — Related concept: Input Validation (joi / zod).
+
 ---
 
 ## 8. Key Takeaways

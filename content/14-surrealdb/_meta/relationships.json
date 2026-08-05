@@ -948,6 +948,11 @@
           "term": "array_type",
           "module": "14-surrealdb",
           "description": "The non-unique list context."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "data_types",
+          "description": "SurrealDB data types overview."
         }
       ],
       "related": [
@@ -1069,6 +1074,11 @@
           "term": "group_by",
           "module": "14-surrealdb",
           "description": "The aggregation context."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "select",
+          "description": "Executing SELECT queries before aggregating results."
         }
       ],
       "related": [
@@ -1272,6 +1282,11 @@
           "term": "create",
           "module": "14-surrealdb",
           "description": "The native write equivalent."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "table",
+          "description": "Inserting records into defined or dynamic tables."
         }
       ],
       "related": [
@@ -2361,6 +2376,11 @@
           "term": "where",
           "module": "14-surrealdb",
           "description": "The query filter context."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "graph_arrows",
+          "description": "Graph arrow operators for traversal filtering."
         }
       ],
       "related": [
@@ -3271,6 +3291,11 @@
           "term": "define_index",
           "module": "14-surrealdb",
           "description": "The parent index context."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "vector_index",
+          "description": "Vector index architecture overview."
         }
       ],
       "related": [
@@ -4597,6 +4622,11 @@
           "term": "transaction_isolation",
           "module": "14-surrealdb",
           "description": "Write conflicts in snapshot isolation."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "sdk_connection",
+          "description": "Handling network and query errors in SDKs."
         }
       ],
       "related": [
@@ -4670,6 +4700,11 @@
           "term": "parameters",
           "module": "14-surrealdb",
           "description": "Parameter binding syntax."
+        },
+        {
+          "module": "14-surrealdb",
+          "term": "sdk_connection",
+          "description": "Executing raw SurrealQL queries via SDKs."
         }
       ],
       "related": [

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Controlled Components](controlled_components.md) — You must understand the standard way to handle forms to understand the alternative.
 - [`useRef` Hook](../level_04/use_ref.md) — The hook used to grab data from Uncontrolled Components.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ Use useRef for uncontrolled forms or useState for controlled forms
 ## 7. Related Terms
 - [Controlled Components](controlled_components.md) — The standard, React-centric way to handle forms.
 - [`useRef` Hook](../level_04/use_ref.md) — The mechanism used to interact with uncontrolled inputs.
+
 ---
 
 ## 8. Key Takeaways

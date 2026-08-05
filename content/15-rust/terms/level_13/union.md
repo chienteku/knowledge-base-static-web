@@ -622,7 +622,6 @@ Construct a bit inspection overlay using a `#[repr(C)]` union:
 ## 7. Related Terms
 
 
-- [`#[repr(C)]`](repr_c.md) — C-compatible struct and union layout alignment.
 - [`unsafe` Block](unsafe_block.md) — Unsafe block semantics and memory safety contracts.
 - [`extern "C"`](extern_c.md) — Foreign function interaction.
 - [Undefined Behavior (UB)](undefined_behavior.md) — Memory safety violations to avoid when reading union fields.

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Virtual DOM](../level_01/virtual_dom.md) — Re-rendering is the process of generating a new Virtual DOM.
 - [State](state.md) — Changing state is the primary trigger for a re-render.
+
 ---
 
 ## 2. Term Category
@@ -163,6 +164,7 @@ const options = useMemo(() => ({ theme: 'dark' }), []);
 - [State](state.md) — Related concept: State.
 - [React DevTools](../level_08/react_devtools.md) — Related concept: React DevTools.
 - [`useState` Hook](use_state.md) — Related concept: `useState` Hook.
+
 ---
 
 ## 8. Key Takeaways

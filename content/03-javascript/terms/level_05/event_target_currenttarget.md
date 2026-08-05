@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event object](event_object.md) — The metadata object passed automatically to listener callbacks.
 - [Event Delegation](event_delegation.md) — A pattern of attaching a listener to a parent to handle nested child events.
+
 ---
 
 ## 2. Term Category
@@ -247,6 +248,7 @@ async function processData() {
 - [Event Bubbling](event_bubbling.md) — The process where events propagate up through ancestor elements, enabling the divergence of target and currentTarget.
 - [Event Delegation](event_delegation.md) — The architectural design pattern of handling multiple children events using parent listener properties.
 - [Event object](event_object.md) — Related concept: Event object.
+
 ---
 
 ## 8. Key Takeaways

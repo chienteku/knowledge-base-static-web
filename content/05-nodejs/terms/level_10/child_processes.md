@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The process Object](../level_02/process_object.md) — The parent process managing the OS lifecycle.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The single-threaded context we want to avoid blocking.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ child.on('message', (result) => {
 ## 7. Related Terms
 - [Worker Threads](worker_threads.md) — Multi-threading inside a single OS process.
 - [The cluster Module](cluster_module.md) — Forking duplicate server instances across CPU cores.
+
 ---
 
 ## 8. Key Takeaways

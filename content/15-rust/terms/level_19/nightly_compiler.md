@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Compiler Toolchain**: The Rust Nightly release channel (`rustup default nightly`).
@@ -228,7 +227,6 @@ toolchain: nightly-2026-08-01
 - [Generators Coroutines](generators_coroutines.md) — Unstable coroutines.
 
 ---
-
 
 ## 7. Key Takeaways
 

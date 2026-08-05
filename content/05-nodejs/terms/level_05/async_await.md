@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Callbacks & Callback Hell](callbacks.md) — The original nesting problem.
 - [Promisification (util.promisify)](promisification.md) — The bridge converting callbacks into Promise handles.
+
 ---
 
 ## 2. Term Category
@@ -235,6 +236,7 @@ async function getAssetsParallel(urls) {
 - [Unhandled Promise Rejections](unhandled_rejections.md) — The errors triggered if you fail to handle async await exceptions.
 - [Async Error Handling (try/catch + .catch)](async_error_handling.md) — The mechanisms used to capture errors during await.
 - [Promisification (util.promisify)](promisification.md) — Promisifying callbacks.
+
 ---
 
 ## 8. Key Takeaways

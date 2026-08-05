@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [GIN Index](../level_07/gin_index.md) — The parent multi-value index type used to speed up text search.
+
 ---
 
 ## 2. Term Category
@@ -208,7 +209,7 @@ Write the SQL query to search for and select the `title` of all articles where t
 ## 7. Related Terms
 - [GIN Index](../level_07/gin_index.md) — The parent performance index.
 - [Expression Index (Functional Index)](../level_07/expression_index.md) — Indexing function calculations.
-- search_index
+
 ---
 
 ## 8. Key Takeaways

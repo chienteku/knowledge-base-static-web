@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Response Object (res.json(), res.ok)](../level_05/response_object.md) — The exact object this API is designed to store.
 - [Service Workers](service_workers.md) — The primary technology that controls the Cache API.
+
 ---
 
 ## 2. Term Category
@@ -144,6 +145,7 @@ const CACHE_NAME = 'app-cache-v2'; // Versioned cache name for invalidation
 - [Service Workers](service_workers.md) — The scripts that actively use the Cache API to intercept network requests.
 - [IndexedDB](indexeddb.md) — The complementary database used for JSON, while the Cache API handles Files.
 - [Storage Limits & Eviction](storage_limits.md) — Related concept: Storage Limits & Eviction.
+
 ---
 
 ## 8. Key Takeaways

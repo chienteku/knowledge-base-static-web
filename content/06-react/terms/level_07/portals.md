@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Virtual DOM](../level_01/virtual_dom.md) — Portals allow you to escape the root node of the React tree.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ Add Escape key listener and use react-focus-lock for modal accessibility
 > **Explanation:** Global keyboard listeners close portal modals on `Escape` key events.
 
 ## 7. Related Terms
-- [Client-Side Rendering (CSR)](../level_10/ssr.md) — Portals are strictly a client-side feature since they require direct DOM manipulation.
+- [Server-Side Rendering (SSR)](../level_10/ssr.md) — Portals are strictly a client-side feature since they require direct DOM manipulation.
 
 ---
+

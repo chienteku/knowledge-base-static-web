@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The fetch() API](fetch.md) — This is what generates the Response object.
 - [HTTP Status Codes](../level_02/status_codes.md) — The Response object allows us to check these codes.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ const type = res.headers.get('content-type'); // Correct Headers.get() method
 - [Content Negotiation (Accept)](../level_02/content_negotiation.md) — Related concept: Content Negotiation (Accept).
 - [HTTP Status Codes](../level_02/status_codes.md) — Related concept: HTTP Status Codes.
 - [The fetch() API](fetch.md) — Related concept: The fetch() API.
+
 ---
 
 ## 8. Key Takeaways

@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Standard Library**: The `std` library providing OS primitives, collections, I/O, networking, and concurrency.
@@ -295,10 +294,8 @@ Use tokio::sync::Mutex or limit std::sync::Mutex lock scope to a short synchrono
 - [Prelude](../level_07/prelude.md)
 - [`core` Library](core_library.md) — Core dependency.
 - [`alloc` Library](alloc_library.md) — Alloc dependency.
-- [`#![no_std]`](no_std.md) — #![no_std] environment.
 
 ---
-
 
 ## 7. Key Takeaways
 

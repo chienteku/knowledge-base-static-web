@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<link>`](link.md) — The tag used to connect external assets.
 - [`<head>`](../level_01/head.md) — The metadata head container.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ A robust configuration supporting legacy browsers, modern high-res screens, and 
 - [`<link>`](link.md) — The resource connection element.
 - [`<head>`](../level_01/head.md) — The parent container.
 - [Open Graph Tags (`og:`)](open_graph.md) — Social media preview properties.
+
 ---
 
 ## 8. Key Takeaways

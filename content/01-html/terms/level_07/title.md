@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The syntax mechanism for writing values inside tags.
+
 ---
 
 ## 2. Term Category
@@ -209,6 +210,7 @@ Hover tooltips on different elements:
 - [`<head>`](../level_01/head.md) — Related concept: `<head>`.
 - [`<meta>`](../level_08/meta.md) — Related concept: `<meta>`.
 - [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Related concept: SEO Fundamentals for HTML.
+
 ---
 
 ## 8. Key Takeaways

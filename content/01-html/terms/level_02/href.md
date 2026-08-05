@@ -9,6 +9,7 @@
 - [Attribute](../level_01/attribute.md) — It is an attribute placed inside an opening tag.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — Since `href` values represent uniform resource locator web addresses.
 - [`<a>` (Anchor / Link)](a.md) — The tag that almost exclusively relies on this attribute.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ The `href` attribute is the dial where you type in the exact latitude and longit
 - [`src` Attribute](../level_03/src.md) — Related concept: `src` Attribute.
 - [`<base>` Element](../level_08/base.md) — Related concept: `<base>` Element.
 - [`<map>` & `<area>` (Image Maps)](../level_10/map_area.md) — Related concept: `<map>` & `<area>` (Image Maps).
+
 ---
 
 ## 8. Key Takeaways

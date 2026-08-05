@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`HashMap<K, V>`](../level_02/hashmap_k_v.md) — Standard library HashMap collection.
+- [`Hash` Trait](../level_02/hash_trait.md) — The Hash trait required for keys in hash maps.
 
 ---
 

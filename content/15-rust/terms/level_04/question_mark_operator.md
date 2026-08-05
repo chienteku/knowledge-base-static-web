@@ -749,7 +749,6 @@ thread::spawn(move || {
 - [`std::error::Error` Trait & `Box<dyn Error>`](error_trait_box_dyn_error.md) — Related concept: `std::error::Error` Trait & `Box<dyn Error>`.
 - [`FromStr` Trait & `.parse()`](fromstr_parse.md) — Related concept: `FromStr` Trait & `.parse()`.
 - [`Read` / `Write` / `BufRead` Traits](read_write_bufread.md) — Related concept: `Read` / `Write` / `BufRead` Traits.
-- [`#[must_use]`](../level_07/must_use_attribute.md) — Related concept: `#[must_use]`.
 
 ---
 

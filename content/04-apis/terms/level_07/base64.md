@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Serialization & Deserialization](serialization.md) — Base64 is essentially a form of serialization specifically for binary files.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — JSON can only hold text, so if you want to put an image in JSON, you must Base64 encode it.
+
 ---
 
 ## 2. Term Category
@@ -140,6 +141,7 @@ GET /api/verify?token=abc-def_123 HTTP/1.1 ; Safe Base64URL encoding
 - [FormData & Multipart Uploads](../level_05/formdata.md) — Related concept: FormData & Multipart Uploads.
 - [Character Encoding (UTF-8)](character_encoding.md) — Related concept: Character Encoding (UTF-8).
 - [Protocol Buffers (protobuf)](../level_10/protocol_buffers.md) — Related concept: Protocol Buffers (protobuf).
+
 ---
 
 ## 8. Key Takeaways

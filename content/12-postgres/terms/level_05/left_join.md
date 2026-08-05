@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`INNER JOIN`](inner_join.md) — The default matching join behavior.
+
 ---
 
 ## 2. Term Category
@@ -254,6 +255,7 @@ Keep primary entity table on LHS of LEFT JOIN: FROM users u LEFT JOIN orders o
 - [`INNER JOIN`](inner_join.md) — The matching-only join.
 - [`RIGHT JOIN` / `FULL OUTER JOIN`](right_full_join.md) — Reversing sides or joining everything.
 - [`JOIN` (Concept)](join_concept.md) — Related concept: `JOIN` (Concept).
+
 ---
 
 ## 8. Key Takeaways

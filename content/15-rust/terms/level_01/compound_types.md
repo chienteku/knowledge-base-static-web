@@ -525,7 +525,6 @@ Implement position translation and regional safety risk evaluation:
 - [Variable](variable.md) — You bind compound types to variables just like scalar types.
 - [Struct](../level_02/struct.md) — A more advanced way to group multiple values together using named fields instead of numbered indices.
 - [`Vec<T>`](../level_02/vec_t.md) — The heap-allocated, dynamic version of an array that *can* grow and shrink.
-- [Arrays and Slices (`[T; N]`, `&[T]`)](array_and_slice.md) — Fixed-size arrays.
 
 ---
 

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Database](../level_01/database.md) — The core database service hosted.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ Should they host PostgreSQL on a self-managed virtual machine or use a managed s
 ## 7. Related Terms
 - [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — Hardware tuning configurations.
 - [Database Migrations](database_migrations.md) — Coordinating schema code updates.
+
 ---
 
 ## 8. Key Takeaways

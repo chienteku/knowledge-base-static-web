@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads)](concurrency_anomalies.md) — The read errors blocked by isolation levels.
+
 ---
 
 ## 2. Term Category
@@ -194,6 +195,7 @@ What is the lowest PostgreSQL isolation level that guarantees this?
 - [Concurrency Anomalies (Dirty, Non-Repeatable, Phantom Reads)](concurrency_anomalies.md) — The target consistency errors.
 - [Locking (Row-level, Table-level)](locking.md) — The physical blocking mechanisms.
 - [MVCC (Multi-Version Concurrency Control)](mvcc.md) — Related concept: MVCC (Multi-Version Concurrency Control).
+
 ---
 
 ## 8. Key Takeaways

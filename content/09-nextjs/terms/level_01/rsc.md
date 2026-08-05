@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Next.js Overview](nextjs.md) — The framework that implements RSCs.
 - [React Components](react_components.md) — The standard UI building blocks.
+
 ---
 
 ## 2. Term Category
@@ -186,6 +187,7 @@ const [user, posts] = await Promise.all([fetchUser(), fetchPosts()]);
 - [React Server Component Payload (RSC Payload)](../level_08/rsc_payload.md) — RSC Payload.
 - [Next.js Overview](nextjs.md) — Related concept: Next.js Overview.
 - [Partial Prerendering (PPR)](../level_08/ppr.md) — Related concept: Partial Prerendering (PPR).
+
 ---
 
 ## 8. Key Takeaways

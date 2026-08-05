@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The Box Model (Concept)](../level_02/box_model.md) — Sizing boxes that the flow algorithm arranges.
+
 ---
 
 ## 2. Term Category
@@ -342,6 +343,7 @@ Comparing flow styles:
 - [`position: static` vs `relative`](position_static_relative.md) — In-flow positioning options.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Out-of-flow positioning options.
 - [`float` & `clear` (Legacy context)](float_clear.md) — Related concept: `float` & `clear` (Legacy context).
+
 ---
 
 ## 8. Key Takeaways

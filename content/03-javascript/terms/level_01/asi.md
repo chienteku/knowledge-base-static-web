@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Statement](statement.md) — An instruction that performs an action.
+
 ---
 
 ## 2. Term Category
@@ -223,6 +224,7 @@ let y = x
 ## 7. Related Terms
 - [Statement](statement.md) — The individual actions separated by delimiters.
 - [Comments](comments.md) — Text ignored by the engine, which does not affect ASI.
+
 ---
 
 ## 8. Key Takeaways

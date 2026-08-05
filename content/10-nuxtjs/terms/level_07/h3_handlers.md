@@ -9,6 +9,7 @@
 - [Nitro Engine](../level_01/nitro_engine.md) — Nitro is built entirely on top of H3.
 - [`server/api/` Routes](server_api_routes.md) — Where H3 handlers are primarily used.
 - [Express.js (Legacy Node Server Context)](express_js.md) — The request/response routing pattern H3 abstracts and replaces.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ export default defineEventHandler((event) => {
 - [`server/api/` Routes](server_api_routes.md) — Related concept: `server/api/` Routes.
 - [`server/routes/`](server_routes.md) — Related concept: `server/routes/`.
 - [Nitro Engine](../level_01/nitro_engine.md) — Nitro server engine.
+
 ---
 
 ## 8. Key Takeaways

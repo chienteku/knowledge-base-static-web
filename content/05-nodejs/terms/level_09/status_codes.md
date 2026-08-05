@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST API Design](rest_api.md) — REST dictates that you must use these codes correctly.
 - [The req & res Objects](../level_07/req_res.md) — Where you set the code (`res.status(404)`).
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ res.status(401).json({ error: 'Unauthorized' }); // Correct 401 status
 - [Unhandled Promise Rejections](../level_05/unhandled_rejections.md) — When this happens, the server usually fails to even send a 500 error!
 - [The req & res Objects](../level_07/req_res.md) — Related concept: The req & res Objects.
 - [Rate Limiting](rate_limiting.md) — Related concept: Rate Limiting.
+
 ---
 
 ## 8. Key Takeaways

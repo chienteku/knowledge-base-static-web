@@ -546,7 +546,6 @@ Design an FFI-safe exception boundary function `ffi_exception_guard` that:
 - [Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`)](../level_01/integer_overflow.md) — Related concept: Integer Overflow Semantics (`checked_` / `wrapping_` / `saturating_` / `overflowing_`).
 - [Macros](../level_01/macros.md) — Related concept: Macros.
 - [`todo!` / `unimplemented!` / `unreachable!`](todo_unimplemented_unreachable.md) — Related concept: `todo!` / `unimplemented!` / `unreachable!`.
-- [`#[should_panic]` Attribute](../level_08/should_panic.md) — Related concept: `#[should_panic]`.
 - [Never Type (`!`)](../level_11/never_type.md) — Related concept: Never Type (`!`).
 
 ---

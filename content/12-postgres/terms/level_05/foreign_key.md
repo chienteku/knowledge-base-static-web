@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Referential Integrity](referential_integrity.md) — The logical consistency standard.
 - [`PRIMARY KEY`](../level_02/primary_key.md) — The parent unique identifier targeted by references.
+
 ---
 
 ## 2. Term Category
@@ -250,6 +251,7 @@ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 - [Junction Table (Bridge / Pivot Table)](junction_table.md) — Junction tables.
 - [`PRIMARY KEY`](../level_02/primary_key.md) — Related concept: `PRIMARY KEY`.
 - [`INNER JOIN`](inner_join.md) — Related concept: `INNER JOIN`.
+
 ---
 
 ## 8. Key Takeaways

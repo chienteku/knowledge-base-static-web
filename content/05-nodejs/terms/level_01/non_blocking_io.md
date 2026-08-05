@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Single-Threaded Architecture](single_threaded.md) — Non-Blocking I/O is the *only* reason a Single-Threaded app doesn't instantly freeze.
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ console.log("3. Done.");
 - [Blocking the Event Loop](blocking_event_loop.md) — Blocking vs non-blocking code.
 - [CPU-bound vs I/O-bound](cpu_vs_io.md) — CPU vs I/O intensive tasks.
 - [Node.js (Runtime Environment)](nodejs.md) — Related concept: Node.js (Runtime Environment).
+
 ---
 
 ## 8. Key Takeaways

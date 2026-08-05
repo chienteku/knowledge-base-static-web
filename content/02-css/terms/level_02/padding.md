@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The Box Model (Concept)](box_model.md) — Padding is the second layer of the Box Model, sitting between the content and the border.
+
 ---
 
 ## 2. Term Category
@@ -174,6 +175,7 @@ span {
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — Related concept: Shorthand vs Longhand Properties.
 - [The Box Model (Concept)](box_model.md) — Related concept: The Box Model (Concept).
 - [Margin Collapse](margin_collapse.md) — Related concept: Margin Collapse.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Interfaces](../level_03/interfaces.md) — The alternative to Classes for defining object shapes.
-- class — The runtime feature TypeScript is building upon.
+- [Class](../../../03-javascript/terms/level_07/class.md) — The runtime feature TypeScript is building upon.
+
 ---
 
 ## 2. Term Category
@@ -303,6 +304,7 @@ class User {
 - [Decorators](decorators.md) — Related concept: Decorators.
 - [Parameter Properties](parameter_properties.md) — Related concept: Parameter Properties.
 - [Abstract Classes](abstract_classes.md) — Abstract classes.
+
 ---
 
 ## 8. Key Takeaways

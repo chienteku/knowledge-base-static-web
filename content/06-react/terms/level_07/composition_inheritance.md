@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — The modular elements being combined.
 - [Children Prop](children_prop.md) — The primary mechanism enabling element nesting.
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ function ProductCard({ product }) {
 ## 7. Related Terms
 - [Children Prop](children_prop.md) — The property that enables nesting components.
 - [Higher-Order Components (HOC)](hoc.md) — An alternative pattern for component wrapper logic.
+
 ---
 
 ## 8. Key Takeaways

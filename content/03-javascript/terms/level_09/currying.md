@@ -9,6 +9,7 @@
 - [Function](../level_03/function.md) — The structure being transformed.
 - [Closure](../level_03/closure.md) — The fundamental mechanic that makes Currying possible.
 - [First-Class Function](../level_03/first_class_function.md) — Returning functions from functions.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ async function processData() {
 - [Arrow Function](../level_03/arrow_function.md) — The cleanest syntax for writing curried functions.
 - [Functional Programming & Composition](functional_programming.md) — Related concept: Functional Programming & Composition.
 - [Partial Application](partial_application.md) — Related concept: Partial Application.
+
 ---
 
 ## 8. Key Takeaways

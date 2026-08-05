@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTML `<script>` Element](html_script.md) — The standard element this improves.
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — Specifically First Input Delay (FID) and Time to Interactive (TTI).
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ Often, you need to run some code *after* a third-party script has successfully l
 - [`<Image>` Component](next_image.md) — Optimization for visual assets.
 - [`next/font` Optimization](next_font.md) — Optimization for typography.
 - [HTML `<script>` Element](html_script.md) — Related concept: HTML `<script>` Element.
+
 ---
 
 ## 8. Key Takeaways

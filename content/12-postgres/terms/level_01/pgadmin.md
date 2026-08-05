@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Client-Server Model (in Databases)](client_server_model.md) — Understanding that visual tools are clients connecting to a background server.
+- [PostgreSQL (Postgres)](postgresql.md) — PostgreSQL database server management tool.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +172,7 @@ Use psql CLI COPY command for large dataset exports
 ## 7. Related Terms
 - [`psql` (Interactive Terminal)](psql.md) — The command-line alternative.
 - [Connection String / DSN](connection_string.md) — The parameters used by GUIs to connect.
+
 ---
 
 ## 8. Key Takeaways

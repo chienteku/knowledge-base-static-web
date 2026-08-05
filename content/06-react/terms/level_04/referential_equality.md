@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Immutability](../level_02/immutability.md) — Modifying reference variables requires creating copy instances.
 - [`useMemo` Hook](use_memo.md) — The hook used to preserve reference identities.
+
 ---
 
 ## 2. Term Category
@@ -233,6 +234,7 @@ function ThemeDisplay() {
 - [`useCallback` Hook](use_callback.md) — The hook designed to preserve function reference identities.
 - [React.memo](../level_08/react_memo.md) — The component rendering cache that relies on shallow reference equality.
 - [`useMemo` Hook](use_memo.md) — Related concept: `useMemo` Hook.
+
 ---
 
 ## 8. Key Takeaways

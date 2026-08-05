@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Custom Type Guards (`is`)](custom_type_guards.md) — Narrowing types via boolean checks (`is`).
 - [Type Narrowing](type_narrowing.md) — The process of refining union types inside code blocks.
+
 ---
 
 ## 2. Term Category
@@ -253,6 +254,7 @@ function assertHasTheme(obj: any): asserts obj is Config {
 - [Custom Type Guards (`is`)](custom_type_guards.md) — The boolean version of type narrowing.
 - [Type Narrowing](type_narrowing.md) — The core process of refining types.
 - [Non-null Assertion Operator (`!`)](../level_05/non_null_assertion.md) — Direct, line-level null type bypass.
+
 ---
 
 ## 8. Key Takeaways

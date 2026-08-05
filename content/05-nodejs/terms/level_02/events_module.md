@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Global Objects (global, __dirname, __filename)](global_objects.md) — The global namespace containing built-in primitives.
+- [The process Object](process_object.md) — Node.js core modules and event emitter architecture.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +214,7 @@ emitter.emit('error', new Error('Timeout error'));            // Ignored
 - [Event Emitter](../level_05/event_emitter.md) — The conceptual implementation of this architecture.
 - [Streams (General Concept)](../level_06/streams.md) — Data-flow streams that inherit directly from `EventEmitter`.
 - [The http Module](http_module.md) — HTTP server events.
+
 ---
 
 ## 8. Key Takeaways

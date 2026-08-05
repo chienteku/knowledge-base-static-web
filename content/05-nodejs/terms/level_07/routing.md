@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Express.js](express_js.md) — The framework that makes Routing clean and manageable.
 - [REST API Design](../level_09/rest_api.md) — The design philosophy that dictates how routes should be named.
+
 ---
 
 ## 2. Term Category
@@ -265,6 +266,7 @@ app.use('/users', userRouter);
 - [The req & res Objects](req_res.md) — Related concept: The req & res Objects.
 - [Route Parameters & Query Strings](route_parameters.md) — Related concept: Route Parameters & Query Strings.
 - [Serving Static Files (express.static)](static_files.md) — Related concept: Serving Static Files (express.static).
+
 ---
 
 ## 8. Key Takeaways

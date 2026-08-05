@@ -8,6 +8,8 @@
 ## 1. Prerequisites
 - [`useFetch`](../level_05/use_fetch.md) — The asynchronous composables that Suspense listens to.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — Specifically, the use of top-level `await` inside `<script setup>`.
+- [Hydration](../level_01/hydration.md) — Asynchronous component resolution during client hydration.
+
 ---
 
 ## 2. Term Category
@@ -310,6 +312,7 @@ Which of these two requests actually causes the Nuxt Suspense boundary to pause 
 
 ## 7. Related Terms
 - [`useFetch`](../level_05/use_fetch.md) — The tool used to interact with the Suspense boundary.
+
 ---
 
 ## 8. Key Takeaways

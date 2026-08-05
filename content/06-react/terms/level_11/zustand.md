@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — The global state container concept.
 - [`useReducer` Hook](../level_06/use_reducer.md) — The state-update logic pattern.
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ function ThemeToggleButton() {
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — The architectural patterns for application data.
 - [Redux](redux.md) — The traditional, action-reducer global state manager.
 - [`useSyncExternalStore` Hook](use_sync_external_store.md) — The built-in React 18 hook that integrates stores with React state.
+
 ---
 
 ## 8. Key Takeaways

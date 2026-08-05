@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](ssr.md) — Hydration is the required second half of the SSR process.
 - [Reactive State](../level_02/reactive_state.md) — What is being "attached" to the HTML.
+
 ---
 
 ## 2. Term Category
@@ -158,6 +159,7 @@ Why will this cause a Hydration Mismatch in an SSR app?
 - [Server-Side Rendering (SSR)](ssr.md) — The process that necessitates Hydration.
 - [Universal Code (Isomorphic)](universal_code.md) — Writing code that avoids Hydration mismatches.
 - [Nuxt.js](nuxt.md) — Related concept: Nuxt.js.
+
 ---
 
 ## 8. Key Takeaways

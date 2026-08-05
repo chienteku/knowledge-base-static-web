@@ -142,6 +142,11 @@
           "term": "atlas",
           "module": "13-mongodb",
           "description": "Cloud dashboard interfaces."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "mongodb",
+          "description": "MongoDB server instance management."
         }
       ]
     },
@@ -215,6 +220,21 @@
           "term": "field",
           "module": "13-mongodb",
           "description": "Related concept: Field."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "json_vs_bson",
+          "description": "Related concept: JSON vs. BSON."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "nosql_databases",
+          "description": "Related concept: NoSQL Databases (Overview)."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "objectid",
+          "description": "Related concept: `_id` Field & ObjectId."
         }
       ]
     },
@@ -346,6 +366,11 @@
           "term": "bson",
           "module": "13-mongodb",
           "description": "The parent binary structure."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "document",
+          "description": "BSON document structure."
         }
       ]
     },
@@ -419,6 +444,11 @@
           "module": "13-mongodb",
           "term": "mongod",
           "description": "MongoDB server daemon."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "compass",
+          "description": "Related concept: MongoDB Compass."
         }
       ]
     },
@@ -431,6 +461,11 @@
           "term": "mongod",
           "module": "13-mongodb",
           "description": "The background server database engine connected to."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "mongodb",
+          "description": "MongoDB database instance overview."
         }
       ],
       "related": [
@@ -466,6 +501,11 @@
           "term": "document_vs_relational",
           "module": "13-mongodb",
           "description": "Comparing SQL and NoSQL paradigms."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "document",
+          "description": "Document-oriented data model."
         }
       ]
     },
@@ -495,6 +535,11 @@
           "term": "objectid_reference",
           "module": "13-mongodb",
           "description": "Related concept: `ObjectId` as a Manual Reference."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "document",
+          "description": "The _id document field."
         }
       ]
     },
@@ -697,6 +742,11 @@
           "term": "number_types",
           "module": "13-mongodb",
           "description": "The parent numeric type family."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "bson_data_types",
+          "description": "BSON data types overview."
         }
       ],
       "related": [
@@ -988,6 +1038,11 @@
           "term": "query_filter",
           "module": "13-mongodb",
           "description": "The parent filter parameter structure."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "find",
+          "description": "Finding documents using comparison filters."
         }
       ],
       "related": [
@@ -1012,6 +1067,11 @@
           "term": "find",
           "module": "13-mongodb",
           "description": "The read query context."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "collection",
+          "description": "Counting document items inside collections."
         }
       ],
       "related": [
@@ -1019,6 +1079,11 @@
           "term": "find",
           "module": "13-mongodb",
           "description": "The query basics."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "cursor",
+          "description": "Iterating query result sets."
         }
       ]
     },
@@ -1043,6 +1108,11 @@
           "term": "sort_limit_skip",
           "module": "13-mongodb",
           "description": "Cursor pagination methods."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "count_documents",
+          "description": "Related concept: `countDocuments()` / `estimatedDocumentCount()`."
         }
       ]
     },
@@ -1167,6 +1237,11 @@
           "term": "write_results",
           "module": "13-mongodb",
           "description": "Differentiating results metrics from returned documents."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "find",
+          "description": "Finding and modifying documents atomically."
         }
       ],
       "related": [
@@ -1191,6 +1266,11 @@
           "term": "query_filter",
           "module": "13-mongodb",
           "description": "The query syntax structure."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "find",
+          "description": "Query filter composition in find queries."
         }
       ],
       "related": [
@@ -1701,6 +1781,11 @@
           "term": "query_filter",
           "module": "13-mongodb",
           "description": "The parent query filters context."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "find",
+          "description": "Evaluating complex query expression operators."
         }
       ],
       "related": [
@@ -1744,6 +1829,11 @@
           "term": "array_update_operators",
           "module": "13-mongodb",
           "description": "The parent array update operations."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "querying_arrays",
+          "description": "Updating array elements using positional operators."
         }
       ],
       "related": [
@@ -1855,6 +1945,11 @@
           "term": "evaluation_operators",
           "module": "13-mongodb",
           "description": "The evaluation context."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "find",
+          "description": "Pattern matching document string fields with regular expressions."
         }
       ],
       "related": [
@@ -1879,6 +1974,11 @@
           "term": "regex",
           "module": "13-mongodb",
           "description": "The string search alternative."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "find",
+          "description": "Executing full-text search queries against text indexes."
         }
       ],
       "related": [
@@ -3477,6 +3577,11 @@
           "term": "unique_index",
           "module": "13-mongodb",
           "description": "The constraint model."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "ttl_index",
+          "description": "Related concept: TTL (Time-To-Live) Index."
         }
       ]
     },
@@ -3598,6 +3703,11 @@
           "term": "data_lifecycle",
           "module": "13-mongodb",
           "description": "The parent modeling rules."
+        },
+        {
+          "module": "13-mongodb",
+          "term": "partial_index",
+          "description": "Partial indexes vs TTL document expiration indexes."
         }
       ]
     },

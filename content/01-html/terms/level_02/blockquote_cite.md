@@ -9,6 +9,7 @@
 - [`<p>` (Paragraph)](p.md) — The fundamental block of text.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Opening and closing tag boundaries.
 - [Attribute](../level_01/attribute.md) — Providing configuration keys.
+
 ---
 
 ## 2. Term Category
@@ -271,6 +272,7 @@ A simple nested blockquote showing visual indentation and attribution:
 ## 7. Related Terms
 - [`<p>` (Paragraph)](p.md) — Standard text container, often nested inside `<blockquote>`.
 - [`<strong>` & `<em>`](strong_em.md) — Inline emphasis tags that sit alongside `<cite>`.
+
 ---
 
 ## 8. Key Takeaways

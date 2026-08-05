@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Operator Overloading**: `Index` and `IndexMut` traits for subscript indexing syntax `container[index]`.
@@ -310,10 +309,8 @@ impl IndexMut<usize> for Grid { fn index_mut(&mut self, idx: usize) -> &mut i32 
 ## 5. Related Terms
 
 - [Operator Overloading](operator_overloading.md) — Operator overloading.
-- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Slice indexing.
 
 ---
-
 
 ## 7. Key Takeaways
 

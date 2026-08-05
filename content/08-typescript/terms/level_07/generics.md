@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function Types](../level_04/function_types.md) — Generics are most often used to make functions dynamic.
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — The structures that often receive Generics.
+
 ---
 
 ## 2. Term Category
@@ -171,6 +172,7 @@ function parse(json: string): unknown { return JSON.parse(json); } // Safer unkn
 - [Conditional Types](../level_09/conditional_types.md) — Related concept: Conditional Types.
 - [Generic Default Types (`=`)](default_generics.md) — Default generic parameters.
 - [Generic Interfaces & Classes](generic_interfaces_classes.md) — Generic interfaces and classes.
+
 ---
 
 ## 8. Key Takeaways

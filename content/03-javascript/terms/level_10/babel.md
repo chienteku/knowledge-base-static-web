@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [ECMAScript](../level_01/ecmascript.md) — The standard that defines the "versions" of JS (ES5, ES6).
 - [Bundler](bundler.md) — Babel is almost always used as a plugin inside a Bundler.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ async function processData() {
 - [Minification & Source Maps](minification_source_maps.md) — Related concept: Minification & Source Maps.
 - [Transpiler vs Compiler](transpiler_vs_compiler.md) — Related concept: Transpiler vs Compiler.
 - [TypeScript](typescript.md) — Related concept: TypeScript.
+
 ---
 
 ## 8. Key Takeaways

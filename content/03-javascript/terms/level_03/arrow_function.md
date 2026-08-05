@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Function Expression](function_expression.md) — A function assigned to a variable.
+- [Function](function.md) — Function expressions and arrow syntax.
+
 ---
 
 ## 2. Term Category
@@ -217,6 +219,7 @@ A valid ES6 arrow function.
 - [return Statement](return_statement.md) — Related concept: return Statement.
 - [this Keyword](../level_07/this_keyword.md) — Related concept: this Keyword.
 - [Currying](../level_09/currying.md) — Related concept: Currying.
+
 ---
 
 ## 8. Key Takeaways

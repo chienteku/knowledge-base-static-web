@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent track properties that establish the grid cell structure.
 - [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Understanding the child-level placement system it overrides.
+
 ---
 
 ## 2. Term Category
@@ -364,6 +365,7 @@ grid-template-areas:
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — Sizing the track grid.
 - [`grid-column` / `grid-row` (Grid Item Placement)](grid_item.md) — Placing items manually.
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Related concept: CSS Grid (Concept) & `display: grid`.
+
 ---
 
 ## 8. Key Takeaways

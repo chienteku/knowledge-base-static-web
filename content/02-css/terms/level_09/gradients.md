@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — The parent container properties.
+- [Color Values (hex, rgb, rgba, hsl, named)](../level_03/color_values.md) — Linear and radial color gradients.
+
 ---
 
 ## 2. Term Category
@@ -256,6 +258,7 @@ div {
 ## 7. Related Terms
 - [`background-size` (cover / contain)](background_size.md) — Scaling backgrounds.
 - [`color` vs `background-color`](../level_03/color_vs_background.md) — Base background declarations.
+
 ---
 
 ## 8. Key Takeaways

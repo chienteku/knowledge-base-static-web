@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [ECMAScript](../level_01/ecmascript.md) — The rulebook the engine is programmed to follow.
 - [Execution Context](execution_context.md) — What the engine creates to run your code.
+
 ---
 
 ## 2. Term Category
@@ -185,3 +186,4 @@ async function processData() {
 - [Node.js](../level_10/node_js.md) — A server runtime built by ripping the V8 engine out of Chrome and giving it file system access.
 
 ---
+

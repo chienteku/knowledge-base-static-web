@@ -1,12 +1,11 @@
-# Closure
+# Closures (`|args| body`)
 
-> **Level 6 — Closures & Functional Patterns**
-> An anonymous function that captures variables from its enclosing scope.
+> **Level 5 — Rust**
+> Anonymous functions that capture variables from their surrounding scope by reference or by value, implementing the `Fn`, `FnMut`, or `FnOnce` traits.
 
 ---
 
 ## 1. Prerequisites
-
 
 - [`fn` (Functions)](../level_01/fn.md) — The standard, named functions that closures provide a lightweight alternative to.
 - [Borrowing (`&`)](../level_03/borrowing.md) — The mechanism closures use behind the scenes to read variables from their environment.
@@ -16,7 +15,7 @@
 
 ## 2. Term Category
 
-**Rust-specific (the inline function)**: A closure is essentially an anonymous function that you define "inline" (right in the middle of another function). The key difference between a standard `fn` and a Closure is that Closures can "capture" variables from the environment they were created in.
+**Functional Language Feature**: Closures (`|args| expr`) are anonymous functions that capture state from their surrounding lexical scope. Rust closures automatically infer parameter and return types, implement one or more closure marker traits (`Fn`, `FnMut`, `FnOnce`), and compile into zero-cost, stack-allocated anonymous struct types created by `rustc`.
 
 ---
 
@@ -24,55 +23,59 @@
 
 ### (1) Design Motivation — "Why did we design this?"
 
-Sometimes you need to pass a tiny piece of logic into another function. For example, sorting a list of numbers: `vec.sort_by(...)`. If you had to define a full, named `fn` somewhere else in the file just to tell Rust how to sort the vector, your code would quickly become bloated and hard to read. Closures let you define that logic inline, right exactly where it is used.
+Standard functions declared with `fn` are items in Rust that cannot access local variables from their surrounding lexical environment without explicitly declaring struct fields and passing them manually.
 
-Furthermore, standard functions are completely isolated. If your sorting logic needed to know the user's `current_location`, a standard `fn` couldn't access that variable unless you explicitly passed it in as an argument. A Closure, however, can magically "capture" `current_location` from the surrounding code and use it directly.
+Closures solve this by creating lightweight inline functions capable of **capturing environment state**:
+1. **Automatic Type & Capture Inference**: The compiler infers parameter types, return types, and the least restrictive capture mechanism (shared reference `&T`, mutable reference `&mut T`, or move `T`) based on how captured variables are evaluated within the closure body.
+2. **Desugaring to Anonymous Structs**: Under the hood, `rustc` constructs an anonymous, unnamed struct for each closure instance. Captured variables become fields of this struct.
+3. **Zero-Cost Abstraction**: Monomorphization inline expands generic calls like `fn process<F: Fn(i32)>(f: F)`, completely eliminating function pointer overhead and enabling aggressive compiler optimizations like inlining.
 
-### (2) Reality Metaphor
+### (2) Deep Dive — The Three Closure Traits
 
-Imagine a **standard Function (`fn`)** as a Freelance Contractor. They show up, you hand them exactly the tools they need (Arguments), they do the job, and they leave. They know nothing else about your company.
+Every closure automatically implements one or more of three traits based on how it handles captured environment variables:
 
-A **Closure** is like hiring an In-House Employee. They work right inside your office. They don't just use the tools you explicitly hand them; they can reach over and grab the stapler right off your desk (capturing the environment).
+| Trait | Receives `self` as | Capture Semantics | Reusability |
+|---|---|---|---|
+| **`Fn`** | `&self` | Shared reference `&T` | Callable infinitely without mutating captured state |
+| **`FnMut`** | `&mut self` | Mutable reference `&mut T` | Callable repeatedly, can mutate captured state |
+| **`FnOnce`** | `self` | Takes ownership `T` | Callable **only once**, because calling it consumes/moves captured variables |
 
-### (3) Rust Code Examples
+> [!NOTE]
+> **Trait Hierarchy**: All `Fn` closures implement `FnMut`, and all `FnMut` closures implement `FnOnce` (`Fn` $\subseteq$ `FnMut` $\subseteq$ `FnOnce`). A function taking `FnOnce` accepts any closure.
 
-#### Short Snippet (Syntax Comparison)
-Closures use vertical pipes `|args|` instead of parentheses `(args)` for their arguments. They often omit curly braces `{}` if the logic is just a single line.
+### (3) The `move` Keyword and `fn` Pointer Coercion
 
+- **`move` Closures**: Adding `move` before parameters (`move |x| ...`) forces the closure to take full ownership of captured variables by moving them into the generated closure struct fields, rather than capturing references. This is essential when returning closures or passing them across thread boundaries (`thread::spawn`).
+- **Function Pointer Coercion**: A closure that captures **no variables** from its environment can be coerced to a raw function pointer `fn(A) -> B`.
+
+### (4) Reality Metaphor
+
+- **`Fn` (Shared Read)**: A Security Camera feeds video to multiple monitors. Watching the video feed doesn't alter or consume the camera.
+- **`FnMut` (Mutable Write)**: A Digital Tally Counter button. Clicking the button increments the internal counter state repeatedly.
+- **`FnOnce` (One-Shot Action)**: A Rocket Launch Trigger. Pressing the button consumes the rocket fuel and launches the missile; the button cannot be pressed a second time.
+
+### (5) Rust Code Examples
+
+#### Short Snippet (Capturing Environment)
 ```rust
-// 1. A standard function
-fn add_one_fn(x: i32) -> i32 {
-    x + 1
-}
-
-fn main() {
-    // 2. A Closure doing the exact same thing! 
-    // Notice we don't even need to declare the types (i32), 
-    // the compiler usually infers them for closures automatically!
-    let add_one_closure = |x| x + 1;
-    
-    println!("Function: {}", add_one_fn(5));
-    println!("Closure: {}", add_one_closure(5));
-}
+let factor = 2;
+let double = |x: i32| x * factor; // Borrow `factor` immutably (Fn)
+assert_eq!(double(5), 10);
 ```
 
-#### Fuller Example (Capturing the Environment)
-This is the true superpower of closures. The closure uses a variable (`threshold`) that was not passed into it as an argument!
-
+#### `FnMut` State Accumulator & `move` Closure
 ```rust
-fn main() {
-    // A variable sitting in the main function's scope.
-    let threshold = 10; 
-
-    // We define a closure inline. 
-    // Notice it reaches out and grabs `threshold` from the environment!
-    let is_above_threshold = |number| number > threshold;
-
-    let test_value = 15;
+pub fn run_accumulator() {
+    let mut total = 0;
     
-    if is_above_threshold(test_value) {
-        println!("It passed!");
-    }
+    // Captures `total` by mutable reference (&mut total)
+    let mut accumulator = |val: i32| {
+        total += val;
+        total
+    };
+
+    assert_eq!(accumulator(10), 10);
+    assert_eq!(accumulator(20), 30);
 }
 ```
 
@@ -80,166 +83,243 @@ fn main() {
 
 ## 4. Common Mistakes & Pitfalls
 
-### Mistake 1: Misunderstanding Closure Scoping and Lifecycle Rules
+### Mistake 1: Forgetting `move` Keyword when Spawning Threads or Returning Closures
 
-**The mistake:** Assuming Closure instances remain valid beyond their declaring scope block or across asynchronous boundaries without explicit lifetime tracking.
+**The mistake:** Returning a closure that references local stack variables without specifying `move`.
 
-**Why it's wrong:** Rust strictly enforces lexical scope boundaries and non-lexical lifetimes (NLL) at compile time. Accessing dropped values or failing to handle variable drop order results in compiler errors such as `E0597` or `E0382`.
+**Why it is wrong:** Closures borrow environment variables by reference by default. Returning a borrowing closure leaves references to dropped stack frames, causing compiler error `E0373` or `E0597`.
 
 *Incorrect:*
 ```rust
-fn get_ref() -> &str {
-    let s = String::from("closure_data");
-    &s // ❌ Error E0106/E0515: returns a reference to data owned by the current function
+fn make_adder(x: i32) -> impl Fn(i32) -> i32 {
+    |y| x + y // ❌ Error E0373: closure may outlive the current function!
 }
 ```
 
 *Fix:*
 ```rust
-fn get_string() -> String {
-    let s = String::from("closure_data");
-    s // Ownership of the String is transferred directly to the caller
+fn make_adder(x: i32) -> impl Fn(i32) -> i32 {
+    move |y| x + y // Correct: moves ownership of `x` into closure struct!
 }
 ```
 
-### Mistake 2: Mutating Closure State Without Exclusive Ownership or `mut` Borrowing
+### Mistake 2: Attempting to Call an `FnOnce` Closure Multiple Times
 
-**The mistake:** Attempting to mutate data associated with Closure through an immutable reference `&T` or without specifying `mut` in variable declarations.
+**The mistake:** Invoking a closure that takes ownership of captured values inside a loop or multiple times in a function.
 
-**Why it's wrong:** Rust's aliasing XOR mutability rule (`&T` for shared immutable access, `&mut T` for exclusive mutable access) prohibits mutating state through shared references unless interior mutability patterns (e.g. `RefCell`, `Mutex`) are explicitly used.
+**Why it is wrong:** Calling an `FnOnce` closure moves captured values out of the closure struct on the first call. Subsequent calls attempt to use moved/dropped values, causing `E0382`.
 
 *Incorrect:*
 ```rust
-fn update_val(data: &i32) {
-    // *data += 1; // ❌ Error E0594: cannot assign to `*data`, which is behind a `&` reference
+fn execute_twice<F: FnOnce()>(f: F) {
+    f();
+    // f(); // ❌ Error E0382: use of moved value `f`
 }
 ```
 
 *Fix:*
 ```rust
-fn update_val(data: &mut i32) {
-    *data += 1; // Correct: exclusive mutable reference permits mutation
+fn execute_twice<F: FnMut()>(mut f: F) { // Constrain to FnMut or Fn if repeated calls are needed!
+    f();
+    f();
 }
 ```
 
-### Mistake 3: Concurrent Access to Closure Across Threads Without `Send` / `Sync` Guards
+### Mistake 3: Confusing Function Pointers (`fn`) with Closure Trait Bounds (`Fn`)
 
-**The mistake:** Sharing non-thread-safe Closure instances across OS threads via `std::thread::spawn`.
+**The mistake:** Specifying a function signature requiring a raw function pointer `fn(i32) -> i32` when passing a closure that captures environment variables.
 
-**Why it's wrong:** Types that do not implement `Send` or `Sync` marker traits cannot safely cross thread boundaries. The compiler prevents data races by raising compile errors `E0277` (`trait Send is not implemented`).
+**Why it is wrong:** Raw function pointers `fn` carry zero environment state. Capturing closures generate anonymous structs with internal fields and cannot coerce to raw `fn`.
 
 *Incorrect:*
 ```rust
-use std::rc::Rc;
-use std::thread;
-
-let rc = Rc::new(42);
-// thread::spawn(move || { println!("{}", rc); }); // ❌ Error E0277: `Rc` cannot be sent between threads safely
+let offset = 10;
+let f: fn(i32) -> i32 = |x| x + offset; // ❌ Error E0308: expected fn pointer, found capturing closure
 ```
 
 *Fix:*
 ```rust
-use std::sync::Arc;
-use std::thread;
-
-let arc = Arc::new(42);
-thread::spawn(move || {
-    println!("{}", arc); // Correct: `Arc` implements `Send` and `Sync`
-});
+let offset = 10;
+let f = |x: i32| x + offset;
+fn apply<F: Fn(i32) -> i32>(closure: F, val: i32) -> i32 { closure(val) }
+assert_eq!(apply(f, 5), 15);
 ```
+
+---
 
 ## 5. Practice Exercises
 
-### Exercise 1: The Inline Conversion
+### Exercise 1: Real-Time Event-Driven Telemetry Filter & Callback Dispatcher
 
-**Problem:** Convert the standard `multiply` function below into a closure assigned to a variable named `multiplier`.
+**Scenario:** Implement an event notification pipeline `TelemetryPipeline` where listeners register `FnMut(&TelemetryEvent)` closures to log, filter, and track system metrics.
 
-```rust
-fn multiply(a: i32, b: i32) -> i32 {
-    a * b
-}
-
-fn main() {
-    // TODO: Write a closure that does the exact same thing as `multiply`
-    // let multiplier = ...
-    
-    // println!("{}", multiplier(5, 10)); // Should print 50
-}
-```
+**Requirements:**
+1. Define struct `TelemetryEvent { pub topic: String, pub payload: u64 }`.
+2. Define struct `TelemetryPipeline` holding `Vec<Box<dyn FnMut(&TelemetryEvent)>>`.
+3. Add method `register<F>(&mut self, listener: F) where F: FnMut(&TelemetryEvent) + 'static`.
+4. Add method `dispatch(&mut self, event: &TelemetryEvent)`.
+5. Write unit tests registering closures that increment atomic counters upon event dispatch.
 
 > [!check]- Answer
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     // We use |pipes| for arguments. Type inference usually handles the rest!
->     let multiplier = |a, b| a * b;
->     
->     println!("{}", multiplier(5, 10));
+> pub struct TelemetryEvent {
+>     pub topic: String,
+>     pub payload: u64,
 > }
-> ```
-
----
-
-### Exercise 2: Capturing Environment Variables by Reference
-
-**Problem:** Write a closure capturing `factor = 3` by reference to multiply input numbers.
-
-**Expected output:**
-> [!check]- Answer
-> ```
-> Result: 15
-> ```
-> ```rust
-> fn main() {
->     let factor = 3;
->     let mult = |x: i32| x * factor;
->     println!("Result: {}", mult(5));
+> 
+> pub struct TelemetryPipeline {
+>     listeners: Vec<Box<dyn FnMut(&TelemetryEvent)>>,
+> }
+> 
+> impl TelemetryPipeline {
+>     pub fn new() -> Self {
+>         Self { listeners: Vec::new() }
+>     }
+> 
+>     pub fn register<F>(&mut self, listener: F)
+>     where
+>         F: FnMut(&TelemetryEvent) + 'static,
+>     {
+>         self.listeners.push(Box::new(listener));
+>     }
+> 
+>     pub fn dispatch(&mut self, event: &TelemetryEvent) {
+>         for listener in self.listeners.iter_mut() {
+>             listener(event);
+>         }
+>     }
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+>     use std::sync::atomic::{AtomicU64, Ordering};
+>     use std::sync::Arc;
+> 
+>     #[test]
+>     fn test_telemetry_pipeline_closures() {
+>         let mut pipeline = TelemetryPipeline::new();
+>         let total_payload = Arc::new(AtomicU64::new(0));
+>         
+>         let counter_clone = total_payload.clone();
+>         pipeline.register(move |evt| {
+>             if evt.topic == "METRICS" {
+>                 counter_clone.fetch_add(evt.payload, Ordering::SeqCst);
+>             }
+>         });
+>         
+>         pipeline.dispatch(&TelemetryEvent { topic: "METRICS".into(), payload: 100 });
+>         pipeline.dispatch(&TelemetryEvent { topic: "METRICS".into(), payload: 50 });
+>         
+>         assert_eq!(total_payload.load(Ordering::SeqCst), 150);
+>     }
 > }
 > ```
 >
-> **Explanation:** Closures automatically infer environment variable capture modes (`&`, `&mut`, or move) based on body usage.
+> #### Technical Explanation
+>
+> 1. `FnMut(&TelemetryEvent)` allows listener closures to mutate captured environment state (like modifying atomic counters or internal collections).
+> 2. `Box<dyn FnMut(...) + 'static>` permits storing heterogeneous closure types inside a uniform `Vec`.
+> 3. `move` captures `counter_clone` by value into the closure struct.
 
 ---
 
-### Exercise 3: Mutable Closure State
+### Exercise 2: Atomic Transaction Rollback via `FnOnce`
 
-**Problem:** Create a `mut` closure `let mut accumulator = || ...` incrementing a local total count.
+**Scenario:** Implement an atomic transaction runner `run_transaction<T, F>(payload: T, action: F)` that accepts a single-use `FnOnce(T) -> Result<T, String>` closure. If the action succeeds, return the updated payload; if it fails, trigger an atomic rollback.
 
-**Expected output:**
+**Requirements:**
+1. Function `run_transaction<T, F>(payload: T, action: F) -> Result<T, String> where F: FnOnce(T) -> Result<T, String>`.
+2. Write unit tests passing closures that consume payload ownership.
+
 > [!check]- Answer
-> ```
-> Total: 3
-> ```
+>
+> #### Implementation
+>
 > ```rust
-> fn main() {
->     let mut count = 0;
->     let mut inc = || count += 1;
->     inc(); inc(); inc();
->     println!("Total: {}", count);
+> pub fn run_transaction<T, F>(payload: T, action: F) -> Result<T, String>
+> where
+>     F: FnOnce(T) -> Result<T, String>,
+> {
+>     action(payload)
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_fn_once_transaction() {
+>         let db_state = String::from("initial_state");
+>         
+>         let res = run_transaction(db_state, |mut state| {
+>             state.push_str("_committed");
+>             Ok(state)
+>         });
+>         
+>         assert_eq!(res, Ok(String::from("initial_state_committed")));
+>     }
 > }
 > ```
 >
-> **Explanation:** Closures modifying captured environment variables implement `FnMut` and require `mut` bindings.
+> #### Technical Explanation
+>
+> 1. `FnOnce(T) -> Result<T, String>` takes full ownership of `payload` and consumes closure state on invocation.
+> 2. Guarantees that the atomic transformation executes strictly once without re-invocation risks.
 
 ---
 
-## 6. Related Terms
+### Exercise 3: Configurable Multiplier Factory Returning `impl Fn(f64) -> f64`
 
+**Scenario:** Create a higher-order function `make_multiplier(factor: f64) -> impl Fn(f64) -> f64` that constructs reusable calculation closures.
 
-- [`Fn` / `FnMut` / `FnOnce`](fn_traits.md) — The behind-the-scenes traits that actually define exactly *how* a closure captures its environment (by immutable reference, by mutable reference, or by consuming ownership).
-- [`move` Closure](move_closure.md) — A keyword you add to force a closure to take full Ownership of the environment variables instead of just borrowing them.
-- [Collecting](../level_02/collecting.md) — Related concept: Collecting.
-- [Entry API (`.entry(k).or_insert(...)`)](../level_02/entry_api.md) — Related concept: Entry API (`.entry(k).or_insert(...)`).
-- [Iterator](../level_02/iterator.md) — Related concept: Iterator.
-- [Higher-Ranked Trait Bounds (HRTB)](../level_05/higher_ranked_trait_bounds.md) — Related concept: Higher-Ranked Trait Bounds (HRTB).
-- [`Function Pointers` (`fn()`)](function_pointers.md) — Related concept: `Function Pointers` (`fn()`).
-- [Iterator Chains](iterator_chains.md) — Related concept: Iterator Chains.
-- [`OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`](../level_09/oncelock_lazylock.md) — Related concept: `OnceCell` / `OnceLock` / `LazyLock` / `LazyCell`.
+**Requirements:**
+1. Return `move |val| val * factor`.
+2. Write unit tests creating multiple multiplier instances (`double`, `triple`).
+
+> [!check]- Answer
+>
+> #### Implementation
+>
+> ```rust
+> pub fn make_multiplier(factor: f64) -> impl Fn(f64) -> f64 {
+>     move |val| val * factor
+> }
+> 
+> #[cfg(test)]
+> mod tests {
+>     use super::*;
+> 
+>     #[test]
+>     fn test_multiplier_factory() {
+>         let double = make_multiplier(2.0);
+>         let triple = make_multiplier(3.0);
+>         
+>         assert_eq!(double(10.0), 20.0);
+>         assert_eq!(triple(10.0), 30.0);
+>     }
+> }
+> ```
+>
+> #### Technical Explanation
+>
+> 1. `move` forces moving `factor` into the generated closure struct.
+> 2. `impl Fn(f64) -> f64` enables unboxed, zero-cost monomorphized function return types.
+
+---
+
+## 5. Related Terms
+
+- None!
 
 ---
 
 ## 7. Key Takeaways
 
-- Closures are anonymous functions defined using **`|args| body`** syntax.
-- They are primarily used for short, inline operations (like defining sorting logic or filtering iterators).
-- Unlike standard functions, closures can **"capture"** variables from their surrounding scope without you having to pass them in as arguments.
-- Capturing variables is still governed strictly by the Borrow Checker. The closure secretly borrows (`&` or `&mut`) the data it needs!
+- Closures capture variables from their surrounding lexical scope automatically.
+- `Fn` captures shared references (`&T`), `FnMut` captures mutable references (`&mut T`), and `FnOnce` takes ownership (`T`).
+- Use the `move` keyword to force transferring ownership of environment variables into the closure struct.
+- Non-capturing closures can coerce to raw function pointers (`fn`).

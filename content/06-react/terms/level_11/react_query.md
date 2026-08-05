@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Side Effects](../level_03/side_effects.md) — These libraries are the modern replacement for manual side effects.
 - [`useEffect` Hook](../level_03/use_effect.md) — What these libraries allow you to delete.
+
 ---
 
 ## 2. Term Category
@@ -169,6 +170,7 @@ useMutation({
 - [`useEffect` Hook](../level_03/use_effect.md) — The manual tool that React Query makes obsolete for data fetching.
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — React Query acts as the global state manager specifically for API data.
 - [Redux](redux.md) — Related concept: Redux.
+
 ---
 
 ## 8. Key Takeaways

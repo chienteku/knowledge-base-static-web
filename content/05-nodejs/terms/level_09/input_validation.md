@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Body Parsing (express.json())](../level_07/body_parsing.md) — Extracting payload data into JavaScript objects.
 - [HTTP Status Codes](status_codes.md) — Utilizing standard client error responses (`400 Bad Request`).
+
 ---
 
 ## 2. Term Category
@@ -295,6 +296,7 @@ const postSchema = z.object({
 ## 7. Related Terms
 - [Body Parsing (express.json())](../level_07/body_parsing.md) — The parser feeding data to the validation schemas.
 - [SQL Injection](../level_08/sql_injection.md) — Database query vulnerabilities prevented by parameterized inputs and edge validation.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useMemo` Hook](use_memo.md) — `useCallback` is basically identical, but exclusively for Functions.
 - [React.memo](../level_08/react_memo.md) — The primary reason `useCallback` exists.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ const handleSearch = useCallback(() => sendData(query), [query]);
 - [Stale Closures](../level_03/stale_closures.md) — Related concept: Stale Closures.
 - [Memoization (the concept)](memoization.md) — Related concept: Memoization (the concept).
 - [Referential Equality](referential_equality.md) — Related concept: Referential Equality.
+
 ---
 
 ## 8. Key Takeaways

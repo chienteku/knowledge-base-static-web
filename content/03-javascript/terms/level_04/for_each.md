@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
 - [Callback Function](../level_03/callback_function.md) — A function passed into another function.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ async function processData() {
 - [for Loop](../level_02/for_loop.md) — The traditional, imperative way to loop.
 - [for...of](for_of.md) — Related concept: for...of.
 - [querySelectorAll & NodeList](../level_05/queryselectorall_nodelist.md) — Related concept: querySelectorAll & NodeList.
+
 ---
 
 ## 8. Key Takeaways

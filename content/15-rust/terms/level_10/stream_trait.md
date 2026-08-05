@@ -402,7 +402,7 @@ Construct a custom stream combinator adapter implementing `Stream`.
 > 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

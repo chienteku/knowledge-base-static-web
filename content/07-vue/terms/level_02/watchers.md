@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Reactive State](reactive_state.md) — The data you are watching.
 - [Computed Properties](computed_properties.md) — The tool you use for deriving data (which Watchers should NOT be used for).
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ watch(() => state.count, (newVal, oldVal) => {
 - [`nextTick`](../level_04/next_tick.md) — Awaiting the next DOM update flush.
 - [Component Lifecycle](../level_04/component_lifecycle.md) — Related concept: Component Lifecycle.
 - [Dynamic Routing](../level_06/dynamic_routing.md) — Related concept: Dynamic Routing.
+
 ---
 
 ## 8. Key Takeaways

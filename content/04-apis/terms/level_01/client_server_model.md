@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -154,6 +155,7 @@ fetch('https://api.example.com/users/45/data');
 - [API (Application Programming Interface)](../level_03/api.md) — The waiter in the restaurant metaphor.
 - [Request & Response Lifecycle](request_response.md) — Request/Response model.
 - [DNS (Domain Name System)](dns.md) — DNS resolution.
+
 ---
 
 ## 8. Key Takeaways

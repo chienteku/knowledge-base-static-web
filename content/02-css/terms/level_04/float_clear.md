@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Box Model (Concept)](../level_02/box_model.md) — Floats drastically alter how boxes behave.
 - [Document Flow (Normal Flow)](document_flow.md) — The normal document layout flow that floats disrupt.
+
 ---
 
 ## 2. Term Category
@@ -242,6 +243,7 @@ If you float an image, but you want the *next* paragraph to start cleanly *below
 ## 7. Related Terms
 - [`display: flex`](../level_05/display_flex.md) — The modern Flexbox layout container.
 - [Document Flow (Normal Flow)](document_flow.md) — The layout engine disrupted by floats.
+
 ---
 
 ## 8. Key Takeaways

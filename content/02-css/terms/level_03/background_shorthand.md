@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`color` vs `background-color`](color_vs_background.md) — Knowing how background colors interact with text.
 - [The Box Model (Concept)](../level_02/box_model.md) — Background shapes are defined by the elements' box layouts.
+
 ---
 
 ## 2. Term Category
@@ -250,6 +251,7 @@ div { background: url('img1.png'), url('img2.png') red; } /* Color on last layer
 - [`color` vs `background-color`](color_vs_background.md) — The color properties.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The syntax concept.
 - [The Box Model (Concept)](../level_02/box_model.md) — The visual frame boundaries.
+
 ---
 
 ## 8. Key Takeaways

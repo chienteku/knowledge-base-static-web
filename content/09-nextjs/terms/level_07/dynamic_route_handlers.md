@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Route Handlers (`route.ts`)](route_handlers.md) — The foundation of the API.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 ## 7. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — The file utilizing the parameters.
 - [Caching Route Handlers](caching_route_handlers.md) — Related concept: Caching Route Handlers.
+
 ---
 
 ## 8. Key Takeaways

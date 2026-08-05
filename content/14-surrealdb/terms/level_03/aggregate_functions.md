@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [`GROUP BY` / `GROUP ALL`](group_by.md) — The aggregation context.
+- [`SELECT`](select.md) — Executing SELECT queries before aggregating results.
 
 ---
 

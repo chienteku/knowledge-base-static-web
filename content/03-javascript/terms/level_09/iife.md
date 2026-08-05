@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — The core structure.
 - [Scope](../level_03/scope.md) — The problem IIFEs solve.
+
 ---
 
 ## 2. Term Category
@@ -226,6 +227,7 @@ async function processData() {
 - [Scope](../level_03/scope.md) — What an IIFE creates to protect variables.
 - [Modules (import/export)](../level_08/modules.md) — The modern ES6 feature that largely replaced the need for IIFEs.
 - [Anonymous Function](../level_03/anonymous_function.md) — Related concept: Anonymous Function.
+
 ---
 
 ## 8. Key Takeaways

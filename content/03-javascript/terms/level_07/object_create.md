@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
 - [Prototype](prototype.md) — The internal object container from which other objects inherit features.
+
 ---
 
 ## 2. Term Category
@@ -226,6 +227,7 @@ console.log("Full Name:", child.firstName, child.familyName);
 ## 7. Related Terms
 - [Prototypal Inheritance](prototypal_inheritance.md) — The mechanism enabling objects to inherit features.
 - [new Keyword](new_keyword.md) — The constructor instantiation operator.
+
 ---
 
 ## 8. Key Takeaways

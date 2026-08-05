@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Table (Relation)](../level_01/table.md) — The data grids mapped from external servers.
 - [Extensions (`CREATE EXTENSION`)](extensions.md) — The packaging system used to install the FDW module.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ Write the SQL DDL command to create the foreign server object named `remote_user
 ## 7. Related Terms
 - [Extensions (`CREATE EXTENSION`)](extensions.md) — The packaging system.
 - [Table (Relation)](../level_01/table.md) — The base data grid.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Interfaces](../level_03/interfaces.md) — The other way to name types.
 - [Union Types (`|`)](union_types.md) — A structure that `type` can handle, but `interface` cannot.
+
 ---
 
 ## 2. Term Category
@@ -158,6 +159,7 @@ type Node = { children: Node[] }; // Safe container recursive type
 - [Declaration Merging](../level_03/declaration_merging.md) — Related concept: Declaration Merging.
 - [Generic Interfaces & Classes](../level_07/generic_interfaces_classes.md) — Related concept: Generic Interfaces & Classes.
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Related concept: Structural Typing / Duck Typing.
+
 ---
 
 ## 8. Key Takeaways

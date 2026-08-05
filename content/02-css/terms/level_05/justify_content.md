@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`flex-direction`](flex_direction.md) — `justify-content` always follows the direction of the Main Axis!
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ Imagine three people sitting on a long bench.
 - [`flex-direction`](flex_direction.md) — Related concept: `flex-direction`.
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
 - [`display: flex`](display_flex.md) — Flexbox parent container.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<div>` (Block container)](div.md) — The block-level sibling to the `<span>`.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<span>` is an inline container.
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ A `<span>` is like taking a yellow highlighter and highlighting one specific wor
 - [`<pre>` & `<code>`](pre_code.md) — Related concept: `<pre>` & `<code>`.
 - [`<sup>` & `<sub>`](sup_sub.md) — Related concept: `<sup>` & `<sub>`.
 - [`<mark>`](../level_06/mark.md) — Related concept: `<mark>`.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Declaration Files (`.d.ts`)](declaration_files.md) — The `.d.ts` files that DefinitelyTyped provides.
+- [`tsconfig.json`](../level_01/tsconfig.md) — Configuring type declaration resolution in tsconfig.json.
+
 ---
 
 ## 2. Term Category
@@ -155,6 +157,7 @@ $ npm install lodash@4 @types/lodash@4 # Matching major versions
 > **Explanation:** TS checks package `types` field first, falling back to `@types/pkg`.
 
 ## 7. Related Terms
-- [tsconfig.json](../level_01/tsconfig.md) — The `typeRoots` and `types` compiler options control how TypeScript searches for these `@types` packages.
+- [`tsconfig.json`](../level_01/tsconfig.md) — The `typeRoots` and `types` compiler options control how TypeScript searches for these `@types` packages.
 
 ---
+

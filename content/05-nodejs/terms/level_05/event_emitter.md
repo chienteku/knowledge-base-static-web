@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Event Loop & Libuv](../level_01/event_loop.md) — What manages the asynchronous nature of events.
 - [Callbacks & Callback Hell](callbacks.md) — What executes when an event is heard.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ emitter.on('data', (data) => {
 - [The events Module](../level_02/events_module.md) — Related concept: The events Module.
 - [Callbacks & Callback Hell](callbacks.md) — Callbacks vs events.
 - [Unhandled Promise Rejections](unhandled_rejections.md) — Error events.
+
 ---
 
 ## 8. Key Takeaways

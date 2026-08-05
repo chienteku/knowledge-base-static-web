@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useEffect` Hook](use_effect.md) — Where the Dependency Array is used.
 - [Component Lifecycle](component_lifecycle.md) — The array directly controls the Mounting and Updating phases.
+
 ---
 
 ## 2. Term Category
@@ -161,6 +162,7 @@ useEffect(() => { ... }, [options]);
 - [Immutability](../level_02/immutability.md) — Why React uses memory addresses to compare items in the dependency array.
 - [`useEffect` Hook](use_effect.md) — Related concept: `useEffect` Hook.
 - [Stale Closures](stale_closures.md) — Stale closure bugs.
+
 ---
 
 ## 8. Key Takeaways

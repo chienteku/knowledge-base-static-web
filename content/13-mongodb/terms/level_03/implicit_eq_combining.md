@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [Query Filter (Filter Document)](query_filter.md) — The query syntax structure.
+- [`find()` / `findOne()`](find.md) — Query filter composition in find queries.
 
 ---
 

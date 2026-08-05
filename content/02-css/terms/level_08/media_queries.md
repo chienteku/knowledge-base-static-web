@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`%` (Percentages)](percentages.md) — While fluid units handle small adjustments, Media Queries handle massive structural changes.
+
 ---
 
 ## 2. Term Category
@@ -247,6 +248,7 @@ A user views the site on an iPad that is `800px` wide. What size is the button t
 - [Dark Mode (`prefers-color-scheme`)](../level_11/dark_mode.md) — Related concept: Dark Mode (`prefers-color-scheme`).
 - [`@supports` (Feature Queries)](../level_11/supports.md) — Related concept: `@supports` (Feature Queries).
 - [`var()` (CSS Custom Properties)](../level_11/var.md) — Related concept: `var()` (CSS Custom Properties).
+
 ---
 
 ## 8. Key Takeaways

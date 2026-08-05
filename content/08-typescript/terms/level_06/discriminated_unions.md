@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Union Types (`|`)](../level_05/union_types.md) — The structure being narrowed.
 - [Literal Types](../level_05/literal_types.md) — The properties used as the discriminant.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ type VariantB = { type: "B"; str: string };
 - [`in` Operator Narrowing](in_operator.md) — Related concept: `in` Operator Narrowing.
 - [Union Types (`|`)](../level_05/union_types.md) — Union types.
 - [Type Narrowing](type_narrowing.md) — Related concept: Type Narrowing.
+
 ---
 
 ## 8. Key Takeaways

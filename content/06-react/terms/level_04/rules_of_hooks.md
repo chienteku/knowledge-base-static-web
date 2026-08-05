@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — Hooks must be used inside them.
 - [`useState` Hook](../level_02/use_state.md) — The most common hook that follows these rules.
+
 ---
 
 ## 2. Term Category
@@ -176,6 +177,7 @@ function Checkout() {
 - [`useState` Hook](../level_02/use_state.md) — Related concept: `useState` Hook.
 - [Stale Closures](../level_03/stale_closures.md) — Related concept: Stale Closures.
 - [`useId` Hook](use_id.md) — Related concept: `useId` Hook.
+
 ---
 
 ## 8. Key Takeaways

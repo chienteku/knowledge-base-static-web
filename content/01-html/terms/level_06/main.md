@@ -9,6 +9,7 @@
 - [Semantic HTML](semantic_html.md) — The core philosophy behind the `<main>` tag.
 - [`<body>`](../level_01/body.md) — The `<main>` tag is always a child of the `<body>`.
 - [Nesting](../level_01/nesting.md) — Since primary text blocks, sections, and articles nest inside this main wrapper.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ The `<main>` is chapters 1 through 10. It is the reason you actually opened the 
 - [`<article>` and `<section>`](article_section.md) — The tags that usually live *inside* the `<main>` tag to break up the content.
 - [`<aside>`](aside.md) — The tangential layout block placed outside main content boundaries.
 - [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
+
 ---
 
 ## 8. Key Takeaways

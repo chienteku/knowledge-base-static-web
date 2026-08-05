@@ -7,7 +7,7 @@
 
 ## 1. Prerequisites
 
-**None.**
+- None!
 
 ---
 

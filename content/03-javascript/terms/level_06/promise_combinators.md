@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Promise](promise.md) — An object representing the eventual completion of an asynchronous operation.
 - [.then() / .catch()](then_catch.md) — Core methods used to resolve or reject Promises.
+
 ---
 
 ## 2. Term Category
@@ -233,6 +234,7 @@ const p3 = Promise.resolve(30);
 - [Fetch API](fetch_api.md) — The network request API often executed in parallel.
 - [async / await](async_await.md) — Syntactic sugar used to resolve combinator promises.
 - [Promise.resolve / Promise.reject](promise_static.md) — Related concept: Promise.resolve / Promise.reject.
+
 ---
 
 ## 8. Key Takeaways

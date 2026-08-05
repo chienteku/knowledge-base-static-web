@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — Understanding how folders equal routes.
 - [`layout.tsx`](../level_02/layout.md) — The primary reason Route Groups exist.
+
 ---
 
 ## 2. Term Category
@@ -162,7 +163,7 @@ app/
 ## 7. Related Terms
 - [`layout.tsx`](../level_02/layout.md) — The file that leverages Route Groups the most.
 - [Parallel Routes (`@folder`)](../level_04/parallel_routes.md) — Another special folder convention that does not affect the URL string.
-- [Catch-all Segments (`[...slug]`)](catch_all_segments.md) — Related concept: Catch-all Segments (`[...slug]`).
+
 ---
 
 ## 8. Key Takeaways

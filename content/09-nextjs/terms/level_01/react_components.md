@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](nextjs.md) — The framework that uses React components as its primary building block.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ export default function Button({ label }: ButtonProps) {
 - [React Hooks](react_hooks.md) — Related concept: React Hooks.
 - [React Children Prop](../level_02/children_prop.md) — Related concept: React Children Prop.
 - [React Error Boundaries](../level_02/error_boundaries.md) — Related concept: React Error Boundaries.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — The basic block of code we are treating as a value.
 - [Variable](../level_01/variable.md) — The container we assign the function to.
+
 ---
 
 ## 2. Term Category
@@ -200,7 +201,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Higher-Order Function](../level_03/higher_order_function.md) — The specific term for a function that *accepts* or *returns* a first-class function.
-- [Callback Function](../level_03/callback_function.md) — A function that is passed as an argument, made possible by first-class functions.
+- [Higher-Order Function](higher_order_function.md) — The specific term for a function that *accepts* or *returns* a first-class function.
+- [Callback Function](callback_function.md) — A function that is passed as an argument, made possible by first-class functions.
 
 ---
+

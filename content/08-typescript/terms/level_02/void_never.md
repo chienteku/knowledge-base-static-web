@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- [Primitive Types](primitive_types.md) — TypeScript primitive types overview.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ function area(s: Shape) {
 - [Exhaustiveness Checking (`never`)](../level_06/exhaustiveness_checking.md) — Related concept: Exhaustiveness Checking (`never`).
 - [`unknown`](unknown.md) — unknown type.
 - [`any`](any.md) — any type.
+
 ---
 
 ## 8. Key Takeaways

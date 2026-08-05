@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [PostgreSQL (Postgres)](postgresql.md) — The host server where databases are created.
 - [SQL (Structured Query Language)](sql.md) — The language schema query syntax.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ SELECT 'CREATE DATABASE app' WHERE NOT EXISTS (SELECT FROM pg_database WHERE dat
 ## 7. Related Terms
 - [Database](database.md) — The target logical container.
 - [`CREATE TABLE` / `DROP TABLE`](create_drop_table.md) — Managing structures inside the database.
+
 ---
 
 ## 8. Key Takeaways

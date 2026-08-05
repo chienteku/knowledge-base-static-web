@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](ssr.md) — SSR is about rendering initial HTML. RSC is about *staying* on the server permanently.
 - [Hydration](hydration.md) — RSCs completely skip the Hydration process!
+
 ---
 
 ## 2. Term Category
@@ -164,6 +165,7 @@ import 'server-only'; // Enforces server-only execution guard at build time
 - [Server Actions & `"use server"`](server_actions.md) — Server Actions.
 - [`useActionState` Hook](use_action_state.md) — useActionState hook.
 - [Suspense for Data Fetching & the `use()` Hook](use_hook.md) — Related concept: Suspense for Data Fetching & the `use()` Hook.
+
 ---
 
 ## 8. Key Takeaways

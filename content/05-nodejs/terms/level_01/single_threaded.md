@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [V8 JavaScript Engine](v8_engine.md) — V8 is inherently single-threaded.
+
 ---
 
 ## 2. Term Category
@@ -148,6 +149,7 @@ Which product should use Node.js, and which should use a multi-threaded language
 - [Blocking the Event Loop](blocking_event_loop.md) — Related concept: Blocking the Event Loop.
 - [CPU-bound vs I/O-bound](cpu_vs_io.md) — Related concept: CPU-bound vs I/O-bound.
 - [The Thread Pool (libuv)](thread_pool.md) — Related concept: The Thread Pool (libuv).
+
 ---
 
 ## 8. Key Takeaways

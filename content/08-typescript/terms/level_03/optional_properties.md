@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Interfaces](interfaces.md) — Where optional properties are usually defined.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ function logBio(u: User) { return u.bio?.toUpperCase(); }
 - [Object Types](object_types.md) — Related concept: Object Types.
 - [Optional & Default Parameters](../level_04/optional_default_parameters.md) — Related concept: Optional & Default Parameters.
 - [`Partial<T>` & `Required<T>`](../level_08/partial_required.md) — Related concept: `Partial<T>` & `Required<T>`.
+
 ---
 
 ## 8. Key Takeaways

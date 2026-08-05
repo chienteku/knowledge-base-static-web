@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Hydration](../level_01/hydration.md) — The process that consumes this payload package to achieve page interactivity.
 - [`useState` Hook](use_state.md) — The global state container whose data is transferred via this payload.
+
 ---
 
 ## 2. Term Category
@@ -176,6 +177,7 @@ const { data } = await useFetch('/api/user'); // Serializes data into payload, p
 ## 7. Related Terms
 - [Hydration](../level_01/hydration.md) — The process that uses this payload to align client components.
 - [`useState` Hook](use_state.md) — The state mechanism serialized inside the payload.
+
 ---
 
 ## 8. Key Takeaways

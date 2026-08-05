@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Statement](statement.md) — An instruction that performs an action.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ async function processData() {
 - [Statement](statement.md) — An instruction that performs an action.
 - [Operator Precedence & Associativity](operator_precedence.md) — Related concept: Operator Precedence & Associativity.
 - [Template Literals](../level_08/template_literals.md) — Related concept: Template Literals.
+
 ---
 
 ## 8. Key Takeaways

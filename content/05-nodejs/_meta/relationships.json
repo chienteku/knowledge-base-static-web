@@ -57,6 +57,11 @@
           "term": "single_threaded",
           "module": "05-nodejs",
           "description": "JavaScript runs on exactly one call stack."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "v8_engine",
+          "description": "V8 JavaScript execution engine and call stack."
         }
       ],
       "related": [
@@ -205,6 +210,11 @@
           "module": "05-nodejs",
           "term": "non_blocking_io",
           "description": "Non-blocking I/O model."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "repl",
+          "description": "Related concept: The Node.js REPL."
         }
       ]
     },
@@ -317,6 +327,11 @@
           "term": "single_threaded",
           "module": "05-nodejs",
           "description": "The architecture protected from blocking by the Thread Pool."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "worker_threads",
+          "description": "Libuv thread pool vs explicit Worker Threads."
         }
       ]
     },
@@ -382,6 +397,11 @@
           "term": "global_objects",
           "module": "05-nodejs",
           "description": "The global namespace containing built-in primitives."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "process_object",
+          "description": "Node.js core modules and event emitter architecture."
         }
       ],
       "related": [
@@ -523,6 +543,11 @@
           "term": "global_objects",
           "module": "05-nodejs",
           "description": "Built-in variables in the Node execution context."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "process_object",
+          "description": "Node.js OS and utility core modules."
         }
       ],
       "related": [
@@ -632,6 +657,11 @@
           "term": "process_object",
           "module": "05-nodejs",
           "description": "The system environment configurations checked via the REPL."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "nodejs",
+          "description": "Interactive REPL shell for Node.js."
         }
       ]
     },
@@ -675,6 +705,11 @@
           "term": "module_resolution",
           "module": "05-nodejs",
           "description": "The process that gets trapped in the infinite loop."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "commonjs",
+          "description": "Handling circular module dependencies in CommonJS."
         }
       ]
     },
@@ -704,6 +739,11 @@
           "module": "05-nodejs",
           "term": "module_resolution",
           "description": "Node.js module resolution."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "circular_dependencies",
+          "description": "Related concept: Circular Dependencies."
         }
       ]
     },
@@ -784,7 +824,13 @@
       "level": 3,
       "file": "terms/level_03/module_types.md",
       "display_name": "Built-in vs External Modules",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "05-nodejs",
+          "term": "nodejs",
+          "description": "Node.js module system architecture."
+        }
+      ],
       "related": [
         {
           "term": "npm",
@@ -2023,6 +2069,11 @@
           "term": "migrations",
           "module": "05-nodejs",
           "description": "Schema updates executed within transactions to prevent partial updates."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "parameterized_queries",
+          "description": "Preventing SQL injection in transactional queries."
         }
       ]
     },
@@ -2179,6 +2230,11 @@
           "term": "orms_odms",
           "module": "05-nodejs",
           "description": "Object mappers that automatically implement query parameterization."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "db_transactions",
+          "description": "Related concept: Database Transactions."
         }
       ]
     },
@@ -3028,6 +3084,11 @@
           "term": "cluster_module",
           "module": "05-nodejs",
           "description": "Spawning multiple instances of a Node server process."
+        },
+        {
+          "module": "05-nodejs",
+          "term": "thread_pool",
+          "description": "Related concept: The Thread Pool (libuv)."
         }
       ]
     }

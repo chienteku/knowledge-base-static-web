@@ -668,7 +668,6 @@ Design an arena-based graph architecture `ArenaGraph<T>` that replaces pointer r
 - [Borrowing (`&`)](borrowing.md) — Related concept: Borrowing (`&`).
 - [`Drop Check` (dropck)](drop_check.md) — Related concept: `Drop Check` (dropck).
 - [Mutable Borrowing (`&mut`)](mutable_borrowing.md) — Related concept: Mutable Borrowing (`&mut`).
-- [Slice (`&[T]`, `&str`)](slice.md) — Related concept: Slice (`&[T]`, `&str`).
 - [Non-Lexical Lifetimes (NLL)](../level_05/non_lexical_lifetimes.md) — Related concept: Non-Lexical Lifetimes (NLL).
 - [Polonius](../level_19/polonius.md) — Related concept: Polonius.
 

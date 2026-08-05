@@ -14,7 +14,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Advanced Lifetimes**: Higher-Ranked Trait Bounds (`for<'a>`) specifying that a trait bound or closure must hold universally for *all* possible reference lifetimes `'a`.
@@ -271,7 +270,6 @@ Return owned data (String) or pass references to caller-owned buffers!
 - [Lifetime Elision](lifetime_elision.md) — Related concept: Lifetime Elision.
 
 ---
-
 
 ## 7. Key Takeaways
 

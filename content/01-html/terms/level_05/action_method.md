@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<form>`](form.md) — The form tag containing these attributes.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The address standard used to locate destination pages.
+
 ---
 
 ## 2. Term Category
@@ -242,6 +243,7 @@ Comparing GET and POST form definitions:
 ## 7. Related Terms
 - [`<form>`](form.md) — The parent container wrapper.
 - [`<button>`](button.md) — The button element which acts as the submission trigger.
+
 ---
 
 ## 8. Key Takeaways

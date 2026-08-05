@@ -9,6 +9,7 @@
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [String](string.md) — A sequence of characters.
 - [Number](number.md) — Represents numerical values.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ async function processData() {
 - [Dynamic & Weak Typing](dynamic_weak_typing.md) — Related concept: Dynamic & Weak Typing.
 - [null](null.md) — Related concept: null.
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — Related concept: Truthy / Falsy.
+
 ---
 
 ## 8. Key Takeaways

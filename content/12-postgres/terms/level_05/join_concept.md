@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The baseline query command.
 - [`FOREIGN KEY`](foreign_key.md) — The column relationships enabling joins.
+
 ---
 
 ## 2. Term Category
@@ -230,6 +231,7 @@ SELECT * FROM u LEFT JOIN o ON u.id = o.user_id AND o.status = 'completed';
 - [`CROSS JOIN`](cross_join.md) — Related concept: `CROSS JOIN`.
 - [Self-Join](self_join.md) — Related concept: Self-Join.
 - [`LATERAL` Join](../level_09/lateral_join.md) — Related concept: `LATERAL` Join.
+
 ---
 
 ## 8. Key Takeaways

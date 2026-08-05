@@ -9,6 +9,7 @@
 - [`position: static` vs `relative`](position_static_relative.md) — Sticky starts as a relative offset.
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Sticky mimics fixed positioning during scroll locks.
 - [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — The required threshold coordinates.
+
 ---
 
 ## 2. Term Category
@@ -326,6 +327,7 @@ A navigation bar that sticks to the top of the browser:
 - [`position: absolute` vs `fixed`](position_absolute_fixed.md) — Viewport locked layouts.
 - [`overflow` (hidden, scroll, auto, visible)](../level_02/overflow.md) — The parent parameters that disable sticky positioning.
 - [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Related concept: `top`, `bottom`, `left`, `right`.
+
 ---
 
 ## 8. Key Takeaways

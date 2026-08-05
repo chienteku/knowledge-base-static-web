@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](rest.md) — The fundamental web service architecture style.
 - [Statelessness](statelessness.md) — The rule requiring requests to hold complete context.
+
 ---
 
 ## 2. Term Category
@@ -388,6 +389,7 @@ const depositUrl = account._links.deposit.href;
 ## 7. Related Terms
 - [Endpoints & Resources](endpoints_resources.md) — The target nodes navigated via hypermedia links.
 - [Richardson Maturity Model](richardson_maturity_model.md) — The grading scale where HATEOAS represents the highest level of REST design.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useFetch`](use_fetch.md) — The standard, blocking data-fetching hook.
 - [`useAsyncData`](use_async_data.md) — The lower-level custom promise-fetching composable.
+
 ---
 
 ## 2. Term Category
@@ -230,6 +231,7 @@ watch(post, (newPost) => {
 ## 7. Related Terms
 - [`useFetch`](use_fetch.md) — The blocking sibling composable.
 - [`useAsyncData`](use_async_data.md) — The core promise wrapping composable.
+
 ---
 
 ## 8. Key Takeaways

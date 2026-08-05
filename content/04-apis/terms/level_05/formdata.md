@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Request Body & Payloads](../level_02/request_body.md) — The request message container formats.
 - [The fetch() API](fetch.md) — The network query tool.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ fetch('/api/doc', { method: 'POST', body: form });
 - [Content-Type & MIME Types](../level_02/content_type.md) — The media type descriptors.
 - [Base64 Encoding](../level_07/base64.md) — The alternative text-based binary transport encoding method.
 - [Blob & ArrayBuffer](../level_07/blob_arraybuffer.md) — Related concept: Blob & ArrayBuffer.
+
 ---
 
 ## 8. Key Takeaways

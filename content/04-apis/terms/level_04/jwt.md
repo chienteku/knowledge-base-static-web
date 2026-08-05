@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Statelessness](../level_03/statelessness.md) — The entire reason JWTs exist is because servers cannot remember who is logged in.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The format the token is built upon.
+
 ---
 
 ## 2. Term Category
@@ -169,6 +170,7 @@ jwt.verify(token, key, { algorithms: ['HS256'] });
 - [Session vs Token Authentication](session_vs_token_auth.md) — Related concept: Session vs Token Authentication.
 - [Base64 Encoding](../level_07/base64.md) — Related concept: Base64 Encoding.
 - [Cookies](../level_09/cookies.md) — Related concept: Cookies.
+
 ---
 
 ## 8. Key Takeaways

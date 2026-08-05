@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Client-Server Model](../level_01/client_server_model.md) — The fundamental reason data must travel.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The most common text format used for Serialization.
+
 ---
 
 ## 2. Term Category
@@ -153,6 +154,7 @@ JSON.stringify({ socketId: activeSocket.id }); // Serialize primitive identifier
 - [JSON Methods (parse / stringify)](json_methods.md) — The actual JavaScript functions used to execute this concept.
 - [Content-Type & MIME Types](../level_02/content_type.md) — Related concept: Content-Type & MIME Types.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — Related concept: JSON (JavaScript Object Notation).
+
 ---
 
 ## 8. Key Takeaways

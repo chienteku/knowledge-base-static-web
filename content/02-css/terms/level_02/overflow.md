@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Box Model (Concept)](box_model.md) — The bounding box container.
 - [Width / Height](width_height.md) — The size constraints that trigger overflow conflicts.
+
 ---
 
 ## 2. Term Category
@@ -259,6 +260,7 @@ div { overflow: auto; } /* Scrollbars appear dynamically on overflow */
 - [`position: sticky`](../level_04/position_sticky.md) — Related concept: `position: sticky`.
 - [`max-width` & `min-height` (Fluidity)](../level_08/max_width.md) — Related concept: `max-width` & `min-height` (Fluidity).
 - [`scroll-behavior` & `scroll-snap`](../level_11/scroll_snap.md) — Related concept: `scroll-behavior` & `scroll-snap`.
+
 ---
 
 ## 8. Key Takeaways

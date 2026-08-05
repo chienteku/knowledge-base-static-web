@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Table (Relation)](table.md) — The parent container grid where columns are defined.
+
 ---
 
 ## 2. Term Category
@@ -184,6 +185,7 @@ CREATE TABLE users ( first_name VARCHAR(50) ); -- Idiomatic snake_case column na
 - [Table (Relation)](table.md) — The parent container.
 - [Row (Record / Tuple)](row.md) — The horizontal record unit.
 - [Relational Database](relational_database.md) — Related concept: Relational Database.
+
 ---
 
 ## 8. Key Takeaways

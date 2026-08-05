@@ -172,6 +172,11 @@
           "module": "10-nuxtjs",
           "term": "standalone_build",
           "description": "Related concept: Standalone Build (Node server)."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "storage_layer",
+          "description": "Related concept: Nitro Storage Layer (unstorage)."
         }
       ]
     },
@@ -678,6 +683,11 @@
           "term": "hydration",
           "module": "10-nuxtjs",
           "description": "Related concept: Hydration."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "vue_suspense",
+          "description": "Related concept: Vue Suspense Integration."
         }
       ]
     },
@@ -928,6 +938,11 @@
           "term": "auto_imports",
           "module": "10-nuxtjs",
           "description": "How this composable is accessed."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "composition_api_context",
+          "description": "Nuxt runtime context and composables overview."
         }
       ],
       "related": [
@@ -1130,6 +1145,11 @@
           "term": "use_lazy_fetch",
           "module": "10-nuxtjs",
           "description": "Related concept: `useLazyFetch` & `useLazyAsyncData` Hooks."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "vue_suspense",
+          "description": "Related concept: Vue Suspense Integration."
         }
       ]
     },
@@ -1225,6 +1245,11 @@
           "term": "auto_imports",
           "module": "10-nuxtjs",
           "description": "How the app config is exposed to components."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "nuxt_config",
+          "description": "Configuring application-level reactive constants."
         }
       ],
       "related": [
@@ -1568,6 +1593,11 @@
           "module": "10-nuxtjs",
           "term": "nitro_engine",
           "description": "Related concept: Nitro Engine."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "storage_layer",
+          "description": "Related concept: Nitro Storage Layer (unstorage)."
         }
       ]
     },
@@ -1592,6 +1622,16 @@
           "term": "server_api_routes",
           "module": "10-nuxtjs",
           "description": "Where `useStorage` is typically executed."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "nitro_engine",
+          "description": "Nitro server engine unstorage driver layer."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "server_routes",
+          "description": "Accessing storage in Nitro API routes."
         }
       ]
     },
@@ -2037,6 +2077,11 @@
           "term": "composition_api_context",
           "module": "10-nuxtjs",
           "description": "Specifically, the use of top-level `await` inside `<script setup>`."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "hydration",
+          "description": "Asynchronous component resolution during client hydration."
         }
       ],
       "related": [
@@ -2044,6 +2089,16 @@
           "term": "use_fetch",
           "module": "10-nuxtjs",
           "description": "The tool used to interact with the Suspense boundary."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "use_async_data",
+          "description": "Resolving async data dependencies before component rendering."
+        },
+        {
+          "module": "10-nuxtjs",
+          "term": "client_only_component",
+          "description": "Bypassing SSR suspense for client-only components."
         }
       ]
     },

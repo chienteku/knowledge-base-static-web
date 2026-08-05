@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [`find()` / `findOne()`](find.md) — The read query context.
+- [Collection](../level_01/collection.md) — Counting document items inside collections.
 
 ---
 

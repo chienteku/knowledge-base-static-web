@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
 - [Callback Function](../level_03/callback_function.md) — A function passed into another function.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ async function processData() {
 - [Map](../level_08/map.md) — Returns an array of the same length, rather than a single accumulated value.
 - [filter()](filter.md) — Returns a shorter array, rather than a single accumulated value.
 - [flat / flatMap](flat_flatmap.md) — Related concept: flat / flatMap.
+
 ---
 
 ## 8. Key Takeaways

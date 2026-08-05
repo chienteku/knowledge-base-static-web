@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`ref`](ref.md) — The fundamental reactive reference.
 - [Watchers](watchers.md) — The base tracking mechanism that monitors changes.
+
 ---
 
 ## 2. Term Category
@@ -257,6 +258,7 @@ const settings = reactive({
 - [Watchers](watchers.md) — The explicit tracking mechanism.
 - [Computed Properties](computed_properties.md) — Track dependencies to compute a new cached value rather than executing a side effect.
 - [VueUse](../level_10/vueuse.md) — Related concept: VueUse.
+
 ---
 
 ## 8. Key Takeaways

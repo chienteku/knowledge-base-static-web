@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Streams (General Concept)](streams.md) — You must understand what a stream is before using these specific classes.
 - [Event Emitter](../level_05/event_emitter.md) — These streams inherit from `EventEmitter`.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ writable.on('finish', () => console.log('Write complete'));
 - [Backpressure](backpressure.md) — Related concept: Backpressure.
 - [Duplex & Transform Streams](duplex_transform_streams.md) — Related concept: Duplex & Transform Streams.
 - [Streams (General Concept)](streams.md) — Related concept: Streams (General Concept).
+
 ---
 
 ## 8. Key Takeaways

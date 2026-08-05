@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
+
 ---
 
 ## 2. Term Category
@@ -208,6 +209,7 @@ async function processData() {
 - [Generator (function*)](../level_09/generator.md) — Related concept: Generator (function*).
 - [Function Declaration](function_declaration.md) — Function declaration.
 - [Function Expression](function_expression.md) — Function expression.
+
 ---
 
 ## 8. Key Takeaways

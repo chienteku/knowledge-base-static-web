@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [Pattern Matching](pattern_matching.md) — Core pattern matching concept.
+- [`match`](match.md) — Control flow with match expressions.
 
 ---
-
 
 ## 2. Term Category
 
@@ -245,10 +245,9 @@ Use exactly one `..` rest pattern per slice match: [first, .., last]
 
 ## 5. Related Terms
 
-**None.**
+- None!
 
 ---
-
 
 ## 7. Key Takeaways
 

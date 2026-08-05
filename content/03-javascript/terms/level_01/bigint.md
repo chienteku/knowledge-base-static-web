@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [Number](number.md) — Represents both integer and floating-point numbers.
+
 ---
 
 ## 2. Term Category
@@ -211,6 +212,7 @@ console.log(result);
 - [Number](number.md) — Double-precision floating-point number.
 - [Primitive Types](primitive_types.md) — Foundational immutable types.
 - [typeof](typeof.md) — Operator to check type of values.
+
 ---
 
 ## 8. Key Takeaways

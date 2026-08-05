@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Build Step (Compilation)](build_step.md) — Vite is the tool that executes the Build Step.
+
 ---
 
 ## 2. Term Category
@@ -149,6 +150,7 @@ VITE_API_URL=https://api.com # Prefixed variables are exposed to import.meta.env
 - [Single-File Components (SFCs)](../level_04/sfc.md) — Related concept: Single-File Components (SFCs).
 - [Vitest (Unit Testing)](vitest.md) — Related concept: Vitest (Unit Testing).
 - [Vue Test Utils](vue_test_utils.md) — Related concept: Vue Test Utils.
+
 ---
 
 ## 8. Key Takeaways

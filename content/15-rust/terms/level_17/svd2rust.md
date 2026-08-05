@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Embedded Tooling**: `svd2rust` generator for Peripheral Access Crates (PACs).
@@ -319,7 +318,6 @@ Call Peripherals::take() once at startup in main() and pass peripherals to tasks
 - [`embedded-hal`](embedded_hal.md) — Embedded HAL traits.
 
 ---
-
 
 ## 7. Key Takeaways
 

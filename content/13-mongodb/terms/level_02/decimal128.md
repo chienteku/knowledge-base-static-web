@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [Number Types (`Int32`, `Int64` / `Long`, `Double`, `Decimal128`)](number_types.md) — The parent numeric type family.
+- [BSON Data Types (Overview)](bson_data_types.md) — BSON data types overview.
 
 ---
 

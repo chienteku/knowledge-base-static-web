@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — The structure `Set` is most often compared to.
 - [Map](map.md) — The sister data structure to Set.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ console.log(mySet.size);
 - [Map](map.md) — Uses the exact same strict equality rules, but stores key-value pairs.
 - [Array](../level_02/array.md) — The structure often converted to and from a Set.
 - [Array.from / Array.of / Array.isArray](../level_04/array_from_of_isarray.md) — Related concept: Array.from / Array.of / Array.isArray.
+
 ---
 
 ## 8. Key Takeaways

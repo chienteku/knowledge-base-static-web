@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Service workers literally hijack this lifecycle before it hits the internet.
+
 ---
 
 ## 2. Term Category
@@ -150,6 +151,7 @@ Cache-Control: no-cache, no-store
 - [IndexedDB](indexeddb.md) — The database the Service Worker uses to store the offline JSON data.
 - [Offline-First / PWA](offline_first.md) — Related concept: Offline-First / PWA.
 - [localStorage & sessionStorage](web_storage.md) — Web Storage.
+
 ---
 
 ## 8. Key Takeaways

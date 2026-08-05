@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The concept that relies entirely on reactive state.
+
 ---
 
 ## 2. Term Category
@@ -154,6 +155,7 @@ export const globalState = reactive({ user: null }); // ❌ Shared state leak ac
 - [Options API](../level_01/options_api.md) — Related concept: Options API.
 - [`v-if` / `v-show`](../level_03/v_if_show.md) — Related concept: `v-if` / `v-show`.
 - [Composition API](../level_01/composition_api.md) — Related concept: Composition API.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Modules (import/export)](modules.md) — The standard way to organize and share code between JavaScript files.
+
 ---
 
 ## 2. Term Category
@@ -223,6 +224,7 @@ logInfo("Logger initialized.");
 ## 7. Related Terms
 - [Dynamic import()](dynamic_import.md) — Promise-based module loader.
 - [Modules (import/export)](modules.md) — Related concept: Modules (import/export).
+
 ---
 
 ## 8. Key Takeaways

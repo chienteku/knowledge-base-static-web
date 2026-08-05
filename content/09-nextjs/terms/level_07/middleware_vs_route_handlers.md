@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Route Handlers (`route.ts`)](route_handlers.md) — Specific API endpoints.
 - [Next.js Overview](../level_01/nextjs.md) — Understanding the full-stack nature of Next.js.
+
 ---
 
 ## 2. Term Category
@@ -155,6 +156,7 @@ export async function middleware() {
 ## 7. Related Terms
 - [Middleware (`middleware.ts`)](../level_10/middleware.md) — A deep dive into the syntax of `middleware.ts` (Level 10).
 - [Route Handlers (`route.ts`)](route_handlers.md) — The specific endpoints.
+
 ---
 
 ## 8. Key Takeaways

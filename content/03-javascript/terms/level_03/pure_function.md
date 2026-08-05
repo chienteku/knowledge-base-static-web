@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code designed to perform a particular task.
 - [Parameters](parameters.md) — The named variables listed in the function definition.
+
 ---
 
 ## 2. Term Category
@@ -260,6 +261,7 @@ function getMidnightTime() {
 - [Functional Programming & Composition](../level_09/functional_programming.md) — A coding paradigm built on pure functions.
 - [Method Chaining](../level_04/method_chaining.md) — Related concept: Method Chaining.
 - [Unit Testing (Jest / Vitest)](../level_10/unit_testing.md) — Related concept: Unit Testing (Jest / Vitest).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ async function processData() {
 - [Function](function.md) — The block of code that the `return` statement exits.
 - [Arrow Function](arrow_function.md) — Has a feature called "implicit return" where the `return` keyword can be omitted.
 - [Recursion](recursion.md) — Related concept: Recursion.
+
 ---
 
 ## 8. Key Takeaways

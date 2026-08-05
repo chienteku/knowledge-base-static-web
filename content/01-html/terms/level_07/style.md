@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of providing extra information inside a starting tag.
 - [`class` Attribute](class.md) — The preferred, external way to apply styles.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ button:hover { color: blue; }
 - [`data-*` Attributes](data_attributes.md) — Custom metadata values often styled via CSS.
 - [`<style>` Element](../level_08/style_tag.md) — Related concept: `<style>` Element.
 - [`<progress>` & `<meter>` Elements](../level_10/progress_meter.md) — Related concept: `<progress>` & `<meter>` Elements.
+
 ---
 
 ## 8. Key Takeaways

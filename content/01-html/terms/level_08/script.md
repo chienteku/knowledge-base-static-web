@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<body>`](../level_01/body.md)
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<script>` tag is NOT a void element; it must have a closing tag, even if it is empty!
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ The `<script>` tag is the computer chip you plug into the robot's head that actu
 - [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
 - [Geolocation API](../level_10/geolocation.md) — Related concept: Geolocation API.
 - [Web Storage (Local/Session Storage)](../level_10/web_storage.md) — Related concept: Web Storage (Local/Session Storage).
+
 ---
 
 ## 8. Key Takeaways

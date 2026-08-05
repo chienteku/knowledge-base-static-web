@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [API Versioning (v1, v2)](versioning.md) — The methods of releasing new endpoint versions.
+
 ---
 
 ## 2. Term Category
@@ -176,6 +177,7 @@ Deprecation: @1700000000
 ## 7. Related Terms
 - [API Versioning (v1, v2)](versioning.md) — The process of releasing new API versions.
 - [API Contract / Schema-First Design](api_contract.md) — The interface definitions that outline version upgrades.
+
 ---
 
 ## 8. Key Takeaways

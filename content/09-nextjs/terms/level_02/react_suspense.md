@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React Components](../level_01/react_components.md) — The visual units wrapped inside the boundary.
 - [React Server Components (RSC)](../level_01/rsc.md) — The asynchronous server components caught by Suspense.
+
 ---
 
 ## 2. Term Category
@@ -231,6 +232,7 @@ export default function Page() {
 - [React Server Components (RSC)](../level_01/rsc.md) — The async components caught by Suspense.
 - [Streaming with `<Suspense>`](../level_05/streaming.md) — Related concept: Streaming with `<Suspense>`.
 - [Partial Prerendering (PPR)](../level_08/ppr.md) — Related concept: Partial Prerendering (PPR).
+
 ---
 
 ## 8. Key Takeaways

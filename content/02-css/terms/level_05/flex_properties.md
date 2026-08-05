@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Must be applied to the parent container.
 - [`flex-direction`](flex_direction.md) — Dictates which axis (width or height) the sizing math applies to.
+
 ---
 
 ## 2. Term Category
@@ -263,6 +264,7 @@ How many pixels wide will Box A be on the screen?
 ## 7. Related Terms
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent container.
 - [Shorthand vs Longhand Properties](../level_01/shorthand_longhand.md) — The combined syntax layout.
+
 ---
 
 ## 8. Key Takeaways

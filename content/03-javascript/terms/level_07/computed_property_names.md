@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The base key-value data structure.
 - [Property Access (dot vs bracket notation)](../level_02/property_access.md) — Using bracket notation to read/write properties.
+
 ---
 
 ## 2. Term Category
@@ -240,6 +241,7 @@ console.log("Active count:", stats.active_users);
 - [Shorthand Properties & Methods](shorthand_properties_methods.md) — Structural object syntax updates.
 - [Property Access (dot vs bracket notation)](../level_02/property_access.md) — Related concept: Property Access (dot vs bracket notation).
 - [Getters & Setters](getters_setters.md) — Related concept: Getters & Setters.
+
 ---
 
 ## 8. Key Takeaways

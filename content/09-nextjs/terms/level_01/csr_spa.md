@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](nextjs.md) — The framework designed to solve CSR performance limitations.
+- [React Components](react_components.md) — React client-side rendering components.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +169,7 @@ export default async function Page() {
 ## 7. Related Terms
 - [Next.js Overview](nextjs.md) — The full-stack solution to CSR limitations.
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — A rendering strategy where HTML is pre-assembled on the server.
+
 ---
 
 ## 8. Key Takeaways

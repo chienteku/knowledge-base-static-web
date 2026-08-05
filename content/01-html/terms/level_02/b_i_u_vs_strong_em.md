@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<strong>` & `<em>`](strong_em.md) — The standard semantic emphasis elements.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since all of these are inline phrasing elements.
+
 ---
 
 ## 2. Term Category
@@ -289,6 +290,7 @@ Semantic vs presentational markup comparison:
 - [`<strong>` & `<em>`](strong_em.md) — The baseline semantic text tags.
 - [`<span>` (Inline container)](span.md) — The non-semantic inline container used for visual formatting with CSS.
 - [`<mark>`](../level_06/mark.md) — Related concept: `<mark>`.
+
 ---
 
 ## 8. Key Takeaways

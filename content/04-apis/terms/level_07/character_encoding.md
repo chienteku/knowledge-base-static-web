@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Serialization & Deserialization](serialization.md) — The concepts of formatting objects for transmission.
+- [JSON (JavaScript Object Notation)](../level_01/json.md) — UTF-8 text encoding for JSON data serialization.
+
 ---
 
 ## 2. Term Category
@@ -184,6 +186,7 @@ Content-Type: text/html; charset=utf-8
 ## 7. Related Terms
 - [Base64 Encoding](base64.md) — The binary-to-text format that translates raw bytes back into printable ASCII characters.
 - [Binary vs Text Formats](binary_vs_text_formats.md) — The architectural trade-off between sending byte-streams vs character-encoded text.
+
 ---
 
 ## 8. Key Takeaways

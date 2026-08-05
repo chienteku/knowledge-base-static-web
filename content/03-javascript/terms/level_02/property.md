@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Object](object.md) — A collection of key-value pairs.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ async function processData() {
 ## 7. Related Terms
 - [Object](object.md) — The container that holds properties.
 - [Method](method.md) — A specific type of property where the value is a function.
+
 ---
 
 ## 8. Key Takeaways

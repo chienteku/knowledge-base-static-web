@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event Bubbling](event_bubbling.md) — Events traveling up the DOM tree.
 - [Event Capturing](event_capturing.md) — Events traveling down the DOM tree.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ async function processData() {
 - [event.preventDefault()](event_preventdefault.md) — Stops default browser behaviors, but doesn't stop bubbling.
 - [Event Bubbling](event_bubbling.md) — The process that `stopPropagation` is designed to halt.
 - [Event Capturing](event_capturing.md) — Related concept: Event Capturing.
+
 ---
 
 ## 8. Key Takeaways

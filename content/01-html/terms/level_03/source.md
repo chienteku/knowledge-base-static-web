@@ -9,6 +9,7 @@
 - [`<audio>`](audio.md) — Sound media player containers.
 - [`<video>`](video.md) — Video media player containers.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Since `<source>` is a self-closing element.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ Nesting alternative sources inside a video container:
 - [`<video>`](video.md) — The video container element.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The general category of single-tag elements.
 - [`<picture>` & Responsive Images](picture_responsive.md) — Related concept: `<picture>` & Responsive Images.
+
 ---
 
 ## 8. Key Takeaways

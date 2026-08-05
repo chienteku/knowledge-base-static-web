@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Locking (Row-level, Table-level)](locking.md) — The blocking locks that cause deadlocks.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ Rewrite the steps of Transaction 2 to prevent deadlocks.
 ## 7. Related Terms
 - [Locking (Row-level, Table-level)](locking.md) — The locking basics.
 - [`SELECT ... FOR UPDATE`](select_for_update.md) — Query locks.
+
 ---
 
 ## 8. Key Takeaways

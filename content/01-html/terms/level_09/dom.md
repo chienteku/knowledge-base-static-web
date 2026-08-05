@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The HTML tags you type are converted into "Objects" in the DOM.
+- [HTML (HyperText Markup Language)](../level_01/html.md) — Browser Document Object Model tree structure representation.
+
 ---
 
 ## 2. Term Category
@@ -162,6 +164,7 @@ document.body.appendChild(fragment); // Single DOM reflow!
 - [`<dialog>` Element](../level_10/dialog.md) — Related concept: `<dialog>` Element.
 - [Drag & Drop API](../level_10/drag_drop.md) — Related concept: Drag & Drop API.
 - [Web Components](../level_10/web_components.md) — Related concept: Web Components.
+
 ---
 
 ## 8. Key Takeaways

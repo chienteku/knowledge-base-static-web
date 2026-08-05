@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Single-File Components (SFCs)](../level_04/sfc.md) — The primary file type that requires a build step.
 - [Virtual DOM (Vue)](../level_08/virtual_dom.md) — The Build Step optimizes the HTML template for the Virtual DOM.
+
 ---
 
 ## 2. Term Category
@@ -147,6 +148,7 @@ import cloneDeep from 'lodash-es/cloneDeep'; // Tree-shakable ES module import
 - [Vite](vite.md) — The tool that actually performs the build step in modern Vue.
 - [Vitest (Unit Testing)](vitest.md) — Related concept: Vitest (Unit Testing).
 - [Vue CLI (Webpack)](vue_cli.md) — Related concept: Vue CLI (Webpack).
+
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- head — The tags being generated.
+- [`<head>`](../../../01-html/terms/level_01/head.md) — The tags being generated.
 - [React Server Components (RSC)](../level_01/rsc.md) — The environment required to export this Metadata.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ export const metadata = {
 - [Open Graph & Twitter Cards (`generateMetadata`)](generate_metadata.md) — The dynamic version of the Metadata API.
 - [`layout.tsx`](../level_02/layout.md) — The best place to establish your base metadata templates.
 - [SEO (Search Engine Optimization)](../level_01/seo.md) — SEO optimizations.
+
 ---
 
 ## 8. Key Takeaways

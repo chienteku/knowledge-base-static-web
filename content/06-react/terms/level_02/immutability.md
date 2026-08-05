@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [State](state.md) — This rule strictly applies to how you update React State.
+- [Virtual DOM](../level_01/virtual_dom.md) — Virtual DOM reconciliation and state immutability.
+
 ---
 
 ## 2. Term Category
@@ -176,6 +178,7 @@ Write the `setPerson` code to change her city to 'LA' without mutating the origi
 - [`useState` Hook](use_state.md) — The function that requires you to follow this rule.
 - [Re-rendering](re_rendering.md) — What fails to happen if you break the rule of Immutability.
 - [Dependency Array](../level_03/dependency_array.md) — Related concept: Dependency Array.
+
 ---
 
 ## 8. Key Takeaways

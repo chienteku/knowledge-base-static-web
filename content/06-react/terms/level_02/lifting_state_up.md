@@ -9,6 +9,7 @@
 - [State](state.md) — The dynamic data being shared.
 - [Props (Properties)](../level_01/props.md) — The vehicle used to pass state and setters down.
 - [Unidirectional Data Flow](unidirectional_flow.md) — The top-down data flow rules.
+
 ---
 
 ## 2. Term Category
@@ -243,6 +244,7 @@ function SyncParent() {
 - [The Context API](../level_06/context_api.md) — The alternative state sharing mechanism for deeply nested trees.
 - [Props (Properties)](../level_01/props.md) — Passing state down via props.
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — State management patterns.
+
 ---
 
 ## 8. Key Takeaways

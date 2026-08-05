@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Classes Overview](classes.md) — The standard, verbose way of initializing properties.
 - [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — The keywords required to trigger this shorthand.
+
 ---
 
 ## 2. Term Category
@@ -281,6 +282,7 @@ class User {
 ## 7. Related Terms
 - [Classes Overview](classes.md) — The parent topic.
 - [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — The trigger for this feature.
+
 ---
 
 ## 8. Key Takeaways

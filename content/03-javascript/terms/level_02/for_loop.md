@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Statement](../level_01/statement.md) — An instruction that performs an action.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ async function processData() {
 - [break / continue](break_continue.md) — Related concept: break / continue.
 - [do...while](do_while.md) — Related concept: do...while.
 - [forEach()](../level_04/for_each.md) — Related concept: forEach().
+
 ---
 
 ## 8. Key Takeaways

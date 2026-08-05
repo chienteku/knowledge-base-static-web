@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Conversion Trait**: `std::convert::AsRef` for cheap reference-to-reference conversions.
@@ -264,7 +263,6 @@ let opt_ref: Option<&str> = opt.as_deref();
 - [`AsRef` / `AsMut`](as_ref_as_mut.md) — AsRef/AsMut pair.
 
 ---
-
 
 ## 7. Key Takeaways
 

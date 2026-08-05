@@ -9,6 +9,7 @@
 - [`<form>`](form.md) — Buttons are the primary way to submit a form.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Unlike `<input>`, the `<button>` is NOT a void element; it has opening and closing tags.
 - [Nesting](../level_01/nesting.md) — Since buttons can contain nested tags like text, spans, or images.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ The `<button>` element is the physical plastic square you push. The `type` attri
 - [`action` & `method` Attributes](action_method.md) — The parameters that govern form submission when `type="submit"` is pressed.
 - [`<a>` (Anchor / Link)](../level_02/a.md) — The navigation element that is often confused with a button.
 - [`tabindex` Attribute](../level_07/tabindex.md) — Related concept: `tabindex` Attribute.
+
 ---
 
 ## 8. Key Takeaways

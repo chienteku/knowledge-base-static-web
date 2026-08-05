@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — `$fetch` operates seamlessly across both environments.
-- async_await — For asynchronous control flow.
+- [async / await](../../../03-javascript/terms/level_06/async_await.md) — For asynchronous control flow.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ await $fetch('/api/save', {
 ## 7. Related Terms
 - [`useFetch`](use_fetch.md) — The SSR-safe wrapper around `$fetch`.
 - [`useAsyncData`](use_async_data.md) — The underlying composable that handles SSR serialization.
+
 ---
 
 ## 8. Key Takeaways

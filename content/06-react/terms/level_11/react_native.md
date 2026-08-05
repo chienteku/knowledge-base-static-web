@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Declarative Programming](../level_01/declarative_programming.md) — React Native uses the exact same React Hooks, State, and architecture.
 - [Virtual DOM](../level_01/virtual_dom.md) — The engine that powers React Native.
+
 ---
 
 ## 2. Term Category
@@ -187,6 +188,7 @@ function Button() {
 ## 7. Related Terms
 - [Declarative Programming](../level_01/declarative_programming.md) — The parent library.
 - [Virtual DOM](../level_01/virtual_dom.md) — The abstract layer that makes React Native possible.
+
 ---
 
 ## 8. Key Takeaways

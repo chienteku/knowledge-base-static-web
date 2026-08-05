@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`error.tsx` & `global-error.tsx`](../level_02/error.md) — The general error boundary. `not-found` is a specific version of this.
 - [React Server Components (RSC)](../level_01/rsc.md) — The environment where the `notFound()` function is executed.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ export default function NotFound() {
 ## 7. Related Terms
 - [`error.tsx` & `global-error.tsx`](../level_02/error.md) — Used for unexpected runtime crashes, not missing data.
 - [`redirect()` & `permanentRedirect()`](redirect.md) — Another server-side function that stops execution and manipulates routing.
+
 ---
 
 ## 8. Key Takeaways

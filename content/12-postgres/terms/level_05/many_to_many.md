@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [One-to-Many Relationship](one_to_many.md) — The single-direction parent-child default pattern.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ student_id INT REFERENCES students(id) ON DELETE CASCADE
 ## 7. Related Terms
 - [One-to-Many Relationship](one_to_many.md) — The single-direction default pattern.
 - [Junction Table (Bridge / Pivot Table)](junction_table.md) — The physical implementation table.
+
 ---
 
 ## 8. Key Takeaways

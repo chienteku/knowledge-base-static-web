@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Writing target classes.
 - [Specificity](../level_01/specificity.md) — Understanding the danger of selector matching weight.
+
 ---
 
 ## 2. Term Category
@@ -234,6 +235,7 @@ Created by Jonathan Snook, SMACSS categorizes CSS rules into 5 distinct categori
 ## 7. Related Terms
 - [CSS Preprocessors (Sass & SCSS)](preprocessors.md) — Tools that help organize BEM naming modules.
 - [CSS Reset vs. Normalize](reset_normalize.md) — Base architecture configs.
+
 ---
 
 ## 8. Key Takeaways

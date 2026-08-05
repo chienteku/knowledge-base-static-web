@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The baseline data retrieval statement.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ SELECT name AS "User Name" FROM users; -- Double quotes for spaces in aliases
 ## 7. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [Self-Join](../level_05/self_join.md) — Related concept: Self-Join.
+
 ---
 
 ## 8. Key Takeaways

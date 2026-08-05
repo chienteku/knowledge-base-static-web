@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Type System**: Trait specialization allowing specialized implementations for specific types.
@@ -259,7 +258,6 @@ Rust requires explicit default impl annotations for specialization!
 - [Nightly Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.
 
 ---
-
 
 ## 7. Key Takeaways
 

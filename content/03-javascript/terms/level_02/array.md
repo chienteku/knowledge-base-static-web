@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
+
 ---
 
 ## 2. Term Category
@@ -195,6 +196,7 @@ async function processData() {
 - [Array Index & .length](array_index_length.md) — Related concept: Array Index & .length.
 - [Set](../level_08/set.md) — Related concept: Set.
 - [push / pop / shift / unshift](../level_04/push_pop_shift_unshift.md) — Mutating methods.
+
 ---
 
 ## 8. Key Takeaways

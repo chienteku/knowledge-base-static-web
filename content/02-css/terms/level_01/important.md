@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Specificity](specificity.md) — The point system that `!important` bypasses.
 - [The Cascade](the_cascade.md) — The conflict resolution engine that `!important` alters.
+
 ---
 
 ## 2. Term Category
@@ -247,6 +248,7 @@ p {
 - [Specificity](specificity.md) — The point system overridden by the flag.
 - [The Cascade](the_cascade.md) — The conflict resolver.
 - [Inheritance](inheritance.md) — How properties fall back to parent element style selectors.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md)
 - [Scope](../level_03/scope.md) — Modules create their own file-level scope.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ async function processData() {
 - [Bundler](../level_10/bundler.md) — Related concept: Bundler.
 - [Named vs Default Exports](named_vs_default_exports.md) — Exports syntax.
 - [Dynamic import()](dynamic_import.md) — Dynamic import()
+
 ---
 
 ## 8. Key Takeaways

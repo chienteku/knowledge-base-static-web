@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Generics Overview (`<T>`)](generics.md) — The base syntax being constrained.
 - [Interfaces](../level_03/interfaces.md) — What is usually used to define the constraint shape.
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ function getProp<T, K extends keyof T>(obj: T, key: K) { return obj[key]; }
 - [Structural Typing / Duck Typing](../level_01/structural_typing.md) — Related concept: Structural Typing / Duck Typing.
 - [Generic Default Types (`=`)](default_generics.md) — Related concept: Generic Default Types (`=`).
 - [`keyof` Operator](../level_09/keyof.md) — keyof constraints.
+
 ---
 
 ## 8. Key Takeaways

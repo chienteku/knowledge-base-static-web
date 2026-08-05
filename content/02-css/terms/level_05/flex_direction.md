@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — This property does absolutely nothing unless the element is a Flex Container!
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ The chunks of meat (the children) don't change, only the direction the stick is 
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Related concept: Flexbox (Concept) & `display: flex`.
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Related concept: `@media` (Media Queries Basics).
 - [`display: flex`](display_flex.md) — Related concept: `display: flex`.
+
 ---
 
 ## 8. Key Takeaways

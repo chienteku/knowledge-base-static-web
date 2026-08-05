@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Compiler Magic**: Automatic Deref coercion converting `&T` to `&U` when `T: Deref<Target = U>`.
@@ -260,7 +259,6 @@ let len = boxed_str.len(); // Automatic method deref!
 - [`Deref` / `DerefMut` Traits](deref_deref_mut_traits.md) — Deref traits.
 
 ---
-
 
 ## 7. Key Takeaways
 

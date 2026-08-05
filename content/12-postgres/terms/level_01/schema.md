@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Relational Database](relational_database.md) — The parent system housing tables.
 - [Table (Relation)](table.md) — The database objects grouped by schemas.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ Postgres returns an error saying "relation 'tokens' does not exist." Why did thi
 ## 7. Related Terms
 - [Database](database.md) — The parent container.
 - [Table (Relation)](table.md) — The child object.
+
 ---
 
 ## 8. Key Takeaways

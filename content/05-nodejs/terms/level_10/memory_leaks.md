@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The execution context running code scopes.
 - [Buffers](../level_06/buffers.md) — The heavy binary chunks stored in memory.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ app.get('/status', (req, res) => {
 ## 7. Related Terms
 - [Blocking the Event Loop](../level_01/blocking_event_loop.md) — Freezing the main execution thread.
 - [Buffers](../level_06/buffers.md) — High-memory byte allocations that require garbage collection.
+
 ---
 
 ## 8. Key Takeaways

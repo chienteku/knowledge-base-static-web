@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Conditional Rendering](../level_05/conditional_rendering.md) — What Suspense aims to replace.
+- [Components](../level_01/components.md) — Handling async component loading with React Suspense.
+
 ---
 
 ## 2. Term Category
@@ -159,11 +161,11 @@ The `<Widget>` component is lazy-loaded and says "I am not ready!". What happens
 
 ## 7. Related Terms
 - [Code Splitting & Lazy Loading](code_splitting.md) — The most common reason a component suspends.
-- React Server Components (RSC) — The modern React architecture that relies heavily on Suspense for data fetching.
 - [The Fiber Architecture](../level_01/fiber_architecture.md) — Related concept: The Fiber Architecture.
 - [Suspense for Data Fetching & the `use()` Hook](../level_10/use_hook.md) — Related concept: Suspense for Data Fetching & the `use()` Hook.
 - [`useTransition` Hook](use_transition.md) — useTransition hook.
 - [`useDeferredValue` Hook](use_deferred_value.md) — useDeferredValue hook.
+
 ---
 
 ## 8. Key Takeaways

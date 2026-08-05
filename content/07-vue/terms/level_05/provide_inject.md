@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props](../level_04/props.md) — The standard way of passing data, which suffers from "Prop Drilling".
 - [Components](../level_04/components.md) — Understanding the hierarchy of Vue apps.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ provide(themeKey, state);
 - [Props](../level_04/props.md) — The alternative that causes Prop Drilling.
 - [Pinia](../level_07/pinia.md) — The ultimate solution for Global State.
 - [Components](../level_04/components.md) — Component tree.
+
 ---
 
 ## 8. Key Takeaways

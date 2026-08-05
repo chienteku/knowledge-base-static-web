@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<input>`](input.md) — The primary interactive elements using value.
 - [Attribute](../level_01/attribute.md) — The standard syntax keys inside tags.
+
 ---
 
 ## 2. Term Category
@@ -236,6 +237,7 @@ If the user clicks "Submit" immediately without changing the dropdown, what key-
 - [`name` Attribute (in Form Fields)](name.md) — Related concept: `name` Attribute (in Form Fields).
 - [`<input type="radio">` & `<input type="checkbox">`](radio_checkbox.md) — Related concept: `<input type="radio">` & `<input type="checkbox">`.
 - [`<progress>` & `<meter>` Elements](../level_10/progress_meter.md) — Related concept: `<progress>` & `<meter>` Elements.
+
 ---
 
 ## 8. Key Takeaways

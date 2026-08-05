@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — An ordered list of values.
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — Values that evaluate to boolean true or false.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ async function processData() {
 - [find()](find.md) — Similar to `filter`, but stops and returns only the *first* item that passes the test.
 - [every()](every.md) — Related concept: every().
 - [reduce()](reduce.md) — Related concept: reduce().
+
 ---
 
 ## 8. Key Takeaways

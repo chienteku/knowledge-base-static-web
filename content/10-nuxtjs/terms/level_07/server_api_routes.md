@@ -9,6 +9,7 @@
 - [Nitro Engine](../level_01/nitro_engine.md) — The server engine that hosts these files.
 - [`$fetch` (ofetch)](../level_05/dollar_fetch.md) — The primary way to consume these API endpoints from the frontend.
 - [Express.js (Legacy Node Server Context)](express_js.md) — The server pattern Nitro/H3 API routes replace.
+
 ---
 
 ## 2. Term Category
@@ -194,6 +195,7 @@ export default defineEventHandler((event) => {
 - [H3 Request Handlers (`defineEventHandler`)](h3_handlers.md) — The utility (`defineEventHandler`) used inside these files.
 - [Nitro Engine](../level_01/nitro_engine.md) — Related concept: Nitro Engine.
 - [Nitro Storage Layer (unstorage)](storage_layer.md) — Related concept: Nitro Storage Layer (unstorage).
+
 ---
 
 ## 8. Key Takeaways

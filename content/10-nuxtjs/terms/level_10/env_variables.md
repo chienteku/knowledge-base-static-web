@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Runtime Config (`useRuntimeConfig`)](../level_06/runtime_config.md) — The only secure way to access the variables defined in this `.env` file.
 - [Standalone Build (Node server)](standalone_build.md) — Understanding how environment variables inject configurations at runtime.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ What is the exact name of the environment variable you must place in your `.env`
 ## 7. Related Terms
 - [Runtime Config (`useRuntimeConfig`)](../level_06/runtime_config.md) — The feature that consumes the `.env` file.
 - [Standalone Build (Node server)](standalone_build.md) — Related concept: Standalone Build (Node server).
+
 ---
 
 ## 8. Key Takeaways

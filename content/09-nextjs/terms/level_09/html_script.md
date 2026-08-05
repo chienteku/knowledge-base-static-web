@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics impacted by script execution.
+
 ---
 
 ## 2. Term Category
@@ -169,6 +170,7 @@ import Script from 'next/script';
 ## 7. Related Terms
 - [Web Core Vitals (FCP, LCP, CLS, TTFB)](web_core_vitals.md) — The performance metrics impacted by script execution.
 - [`<Script>` Component](next_script.md) — The Next.js wrapper.
+
 ---
 
 ## 8. Key Takeaways

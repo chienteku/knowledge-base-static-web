@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ async function processData() {
 - [TypeScript](../level_10/typescript.md) — Related concept: TypeScript.
 - [Reference vs Value (copy semantics)](../level_07/reference_vs_value.md) — Value vs reference semantics.
 - [ECMAScript](ecmascript.md) — Related concept: ECMAScript.
+
 ---
 
 ## 8. Key Takeaways

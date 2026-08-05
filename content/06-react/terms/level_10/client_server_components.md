@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React Server Components (RSC)](rsc.md) — The server-only architecture that serves as the default.
 - [Hydration](hydration.md) — The process that client components undergo to become interactive.
+
 ---
 
 ## 2. Term Category
@@ -240,6 +241,7 @@ export default async function Page() {
 ## 7. Related Terms
 - [React Server Components (RSC)](rsc.md) — The default server-side rendering architecture.
 - [Server Actions & `"use server"`](server_actions.md) — Calling server-side database handlers from client-side buttons.
+
 ---
 
 ## 8. Key Takeaways

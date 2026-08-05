@@ -176,6 +176,11 @@
           "module": "07-vue",
           "term": "options_api",
           "description": "Related concept: Options API."
+        },
+        {
+          "module": "07-vue",
+          "term": "vue_devtools",
+          "description": "Related concept: Vue DevTools."
         }
       ]
     },
@@ -1564,6 +1569,11 @@
           "term": "route_params_query_meta",
           "module": "07-vue",
           "description": "Related concept: Route Params, Query & Meta."
+        },
+        {
+          "module": "07-vue",
+          "term": "nested_routes",
+          "description": "Related concept: Nested Routes."
         }
       ]
     },
@@ -1627,6 +1637,11 @@
           "term": "vue_router",
           "module": "07-vue",
           "description": "The overarching library."
+        },
+        {
+          "module": "07-vue",
+          "term": "dynamic_routing",
+          "description": "Configuring nested router views and dynamic route params."
         }
       ]
     },
@@ -2655,6 +2670,11 @@
           "term": "components",
           "module": "07-vue",
           "description": "What the DevTools visualizes perfectly."
+        },
+        {
+          "module": "07-vue",
+          "term": "vue_instance",
+          "description": "Debugging Vue component state and Pinia stores in Vue Devtools."
         }
       ]
     },

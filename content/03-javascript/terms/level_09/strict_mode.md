@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — Variables behave differently in strict mode.
 - [Scope](../level_03/scope.md) — Scope rules are tightened.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ async function processData() {
 - [this Keyword](../level_07/this_keyword.md) — Behaves differently in strict mode.
 - [Modules (import/export)](../level_08/modules.md) — Automatically enforce strict mode.
 - [Linter (ESLint) & Formatter (Prettier)](../level_10/linter_formatter.md) — Related concept: Linter (ESLint) & Formatter (Prettier).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The server-rendering execution pipeline used to build these static nodes.
 - [Lazy Components](../level_03/lazy_components.md) — Understanding dynamic import patterns for bundles.
+
 ---
 
 ## 2. Term Category
@@ -303,6 +304,7 @@ onMounted(() => { ... }); // ❌ Never executes in .server.vue components!
 ## 7. Related Terms
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The process that compiles server components.
 - [Lazy Components](../level_03/lazy_components.md) — Dynamic code-splitting for interactive components.
+
 ---
 
 ## 8. Key Takeaways

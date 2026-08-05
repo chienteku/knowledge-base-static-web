@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Number](number.md) — Represents both integer and floating-point numbers.
 - [Operator](operator.md) — Symbol that performs an operation on operands.
+
 ---
 
 ## 2. Term Category
@@ -227,6 +228,7 @@ if (isEven) {
 - [Infinity / -Infinity](infinity.md) — Related concept: Infinity / -Infinity.
 - [Operator](operator.md) — Related concept: Operator.
 - [Operator Precedence & Associativity](operator_precedence.md) — Related concept: Operator Precedence & Associativity.
+
 ---
 
 ## 8. Key Takeaways

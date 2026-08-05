@@ -615,7 +615,6 @@ Implement `LogEntryScanner::parse<'a>(line: &'a str) -> Result<LogRecord<'a>, Lo
 
 - [Borrowing (`&`)](borrowing.md) — The fundamental mechanism that makes Slices memory-safe.
 - [Borrow Checker](borrow_checker.md) — The compiler cop that ensures you don't mutate the original collection while a slice is actively looking at it.
-- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Related concept: Arrays and Slices (`[T; N]`, `&[T]`).
 - [String vs &str](../level_01/string_vs_&str.md) — Related concept: String vs &str.
 
 ---

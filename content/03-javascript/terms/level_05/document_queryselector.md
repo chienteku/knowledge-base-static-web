@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [DOM (Document Object Model)](dom.md) — The tree structure representing the HTML document.
+
 ---
 
 ## 2. Term Category
@@ -201,6 +202,7 @@ async function processData() {
 - [document object](document_object.md) — Related concept: document object.
 - [getElementById / getElementsByClassName](getelementbyid_legacy.md) — Related concept: getElementById / getElementsByClassName.
 - [Node](node.md) — Related concept: Node.
+
 ---
 
 ## 8. Key Takeaways

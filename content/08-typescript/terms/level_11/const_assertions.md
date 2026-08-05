@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Literal Types](../level_05/literal_types.md) — The specific, exact types that `as const` generates.
 - [Enums](enums.md) — The legacy feature that `as const` is rapidly replacing.
+
 ---
 
 ## 2. Term Category
@@ -184,6 +185,7 @@ read(nums); // Readonly parameter permits const asserted arrays
 > **Explanation:** `as const` prevents property type widening to general primitive types.
 
 ## 7. Related Terms
-- [Type Assertions](../level_05/type_assertions.md) — `as const` is a specialized form of the standard `as Type` syntax.
+- [Type Assertions (`as`)](../level_05/type_assertions.md) — `as const` is a specialized form of the standard `as Type` syntax.
 
 ---
+

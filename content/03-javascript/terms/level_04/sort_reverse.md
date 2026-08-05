@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
 - [Callback Function](../level_03/callback_function.md) — A function passed as an argument to be executed later.
+
 ---
 
 ## 2. Term Category
@@ -229,6 +230,7 @@ console.log("Sorted Descending:", sortedDesc);
 ## 7. Related Terms
 - [Comparison Operators](../level_01/comparison_operators.md) — The mathematical relations used inside comparators.
 - [Mutating vs Non-mutating Methods](mutating_vs_non_mutating.md) — The core behavior classification that sort belongs to.
+
 ---
 
 ## 8. Key Takeaways

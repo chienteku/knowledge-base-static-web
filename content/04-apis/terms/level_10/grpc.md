@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](../level_03/rest.md) — gRPC completely abandons the REST philosophy.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — gRPC famously hates JSON and replaces it with Protocol Buffers.
+
 ---
 
 ## 2. Term Category
@@ -164,6 +165,7 @@ Where do you use REST, and where do you use gRPC?
 - [Protocol Buffers (protobuf)](protocol_buffers.md) — Protocol Buffers.
 - [HTTP / HTTPS](../level_01/http_https.md) — HTTP/2 transport.
 - [API (Application Programming Interface)](../level_03/api.md) — Related concept: API (Application Programming Interface).
+
 ---
 
 ## 8. Key Takeaways

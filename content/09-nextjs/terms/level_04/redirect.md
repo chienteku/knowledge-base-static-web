@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useRouter` Hook](../level_03/use_router.md) — The client-side equivalent for navigation.
 - [Server Actions Overview (`"use server"`)](../level_06/server_actions.md) — The most common place `redirect` is used.
+
 ---
 
 ## 2. Term Category
@@ -191,6 +192,7 @@ import { redirect } from 'next/navigation'; // Correct App Router import
 - [`useRouter` Hook](../level_03/use_router.md) — Used for redirecting in Client Components.
 - [`not-found.tsx` & `notFound()`](not_found.md) — The sister function used for 404s instead of 307s.
 - [On-Demand Revalidation (`revalidatePath`, `revalidateTag`)](../level_06/on_demand_revalidation.md) — Related concept: On-Demand Revalidation (`revalidatePath`, `revalidateTag`).
+
 ---
 
 ## 8. Key Takeaways

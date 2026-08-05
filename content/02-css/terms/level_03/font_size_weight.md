@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`font-family`](font_family.md) — It helps to know how to select the font before you resize it.
+
 ---
 
 ## 2. Term Category
@@ -174,6 +175,7 @@ h2 { font-weight: 700; } /* Use explicitly imported font weight */
 - [`rem` vs `em`](../level_08/rem_em.md) — Responsive typography units.
 - [`line-height`](line_height.md) — Related concept: `line-height`.
 - [`text-transform`](../level_07/text_transform.md) — Related concept: `text-transform`.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [Array Update Operators (`$push`, `$pull`, `$addToSet`, `$pop`, `$each`)](../level_03/array_update_operators.md) — The parent array update operations.
+- [Querying Arrays](querying_arrays.md) — Updating array elements using positional operators.
 
 ---
 

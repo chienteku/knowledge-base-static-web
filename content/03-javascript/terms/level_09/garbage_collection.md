@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The things that take up memory.
 - [Call Stack](../level_06/call_stack.md) — Determines when things are no longer needed.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ family = null;
 - [Object](../level_02/object.md) — The primary consumers of heap memory.
 - [WeakMap / WeakSet](../level_08/weakmap_weakset.md) — Related concept: WeakMap / WeakSet.
 - [Proxy](proxy.md) — Related concept: Proxy.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — This is an extension of how URLs are structured.
 - [HTTP Methods (Verbs)](http_methods.md) — This is primarily used for `GET` requests, which cannot have bodies.
+
 ---
 
 ## 2. Term Category
@@ -174,6 +175,7 @@ fetch('/api/search?' + params.toString()); // Resolves to ?q=C%2B%2B+%26+Java
 - [URL Encoding (Percent-Encoding)](url_encoding.md) — Related concept: URL Encoding (Percent-Encoding).
 - [Endpoints & Resources](../level_03/endpoints_resources.md) — Related concept: Endpoints & Resources.
 - [Pagination (Offset vs. Cursor)](../level_06/pagination.md) — Related concept: Pagination (Offset vs. Cursor).
+
 ---
 
 ## 8. Key Takeaways

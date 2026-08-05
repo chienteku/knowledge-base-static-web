@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Compiler Architecture**: Mid-Level Intermediate Representation (MIR) in `rustc`.
@@ -254,7 +253,6 @@ Proc macros transform AST TokenStream; MIR is generated internally by rustc!
 - [Miri (UB Detector)](../level_13/miri_ub_detector.md) — Miri execution engine.
 
 ---
-
 
 ## 7. Key Takeaways
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Store (Pinia)](store.md) — The container where State and Getters live.
 - [Computed Properties](../level_02/computed_properties.md) — Getters are literally just Computed Properties!
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ getters: {
 - [Computed Properties](../level_02/computed_properties.md) — The underlying technology of Getters.
 - [Actions (Pinia)](actions.md) — The tool used to actually mutate the State.
 - [Store (Pinia)](store.md) — Related concept: Store (Pinia).
+
 ---
 
 ## 8. Key Takeaways

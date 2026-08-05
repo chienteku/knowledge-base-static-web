@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useState` Hook](use_state.md) — Similar hook patterns.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The rendering strategy where cookies enable server-accessible state configuration.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ const token = useCookie('token', {
 ## 7. Related Terms
 - [`useState` Hook](use_state.md) — The non-persistent alternative to `useCookie`.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — Why reading cookies on the server is so important.
+
 ---
 
 ## 8. Key Takeaways

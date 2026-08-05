@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](aggregate_functions.md) — The summaries calculated per group.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ Group by category or dimensional status columns
 - [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](aggregate_functions.md) — The math engines inside groups.
 - [`HAVING`](having.md) — Filtering grouped outputs.
 - [`DISTINCT`](distinct.md) — Related concept: `DISTINCT`.
+
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ CREATE SCHEMA tenant_123; -- Isolated schemas inside shared database
 - [`CREATE DATABASE` / `DROP DATABASE`](create_drop_database.md) — Related concept: `CREATE DATABASE` / `DROP DATABASE`.
 - [Schema](schema.md) — Related concept: Schema.
 - [SQL (Structured Query Language)](sql.md) — Related concept: SQL (Structured Query Language).
+
 ---
 
 ## 8. Key Takeaways

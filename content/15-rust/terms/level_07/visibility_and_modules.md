@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`mod` Declaration](mod_declaration.md) — Module creation and hierarchy.
+- [`pub` Visibility](pub_visibility.md) — Public and private item visibility.
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Directives](directives.md) — The category `v-bind` belongs to.
 - [Reactive State](../level_02/reactive_state.md) — The data `v-bind` listens to.
+
 ---
 
 ## 2. Term Category
@@ -166,6 +167,7 @@ They write: `<VideoPlayer speed="2" />`
 - [Custom Directives (`v-*`)](custom_directives.md) — Related concept: Custom Directives (`v-*`).
 - [`v-model`](v_model.md) — Related concept: `v-model`.
 - [`v-on`](v_on.md) — Related concept: `v-on`.
+
 ---
 
 ## 8. Key Takeaways

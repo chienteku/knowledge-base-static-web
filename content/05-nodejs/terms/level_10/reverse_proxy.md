@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Docker](docker.md) — The container environment where proxies are typically deployed.
 - [The http Module](../level_02/http_module.md) — The underlying server module that the proxy shields.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ Public Internet ──(Port 443 HTTPS)──> [ Nginx Proxy ]
 ## 7. Related Terms
 - [Load Balancing](load_balancing.md) — The routing system often combined with reverse proxies.
 - [Docker](docker.md) — The container architecture used to isolate proxies from application servers.
+
 ---
 
 ## 8. Key Takeaways

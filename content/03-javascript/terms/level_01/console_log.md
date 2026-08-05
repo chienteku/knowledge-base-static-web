@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [String](string.md) — A sequence of characters.
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -195,6 +196,7 @@ async function processData() {
 
 ## 7. Related Terms
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 8. Key Takeaways

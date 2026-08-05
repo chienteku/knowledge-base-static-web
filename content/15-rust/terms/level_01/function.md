@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Core Syntax**: Functions declared via `fn` keywords with explicit argument types and return signatures.
@@ -233,7 +232,6 @@ fn print_val(s: &str) { println!("{s}"); } // Take reference!
 - [Expressions](expressions.md) — Function body tail expressions.
 
 ---
-
 
 ## 7. Key Takeaways
 

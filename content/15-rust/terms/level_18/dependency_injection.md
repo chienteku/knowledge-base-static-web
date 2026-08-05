@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Architecture Pattern**: Dependency Injection via generics and trait bounds.
@@ -305,7 +304,6 @@ Decouple shared state into a third shared repository or event channel!
 - [Trait Bound](../level_04/trait_bound.md) — Trait bound constraints.
 
 ---
-
 
 ## 7. Key Takeaways
 

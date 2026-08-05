@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Constructor Function](constructor_function.md) — The function that `new` invokes.
 - [this Keyword](this_keyword.md) — The context `new` binds.
+
 ---
 
 ## 2. Term Category
@@ -200,6 +201,7 @@ async function processData() {
 - [Class](class.md) — The modern ES6 syntax, which *strictly requires* the `new` keyword to be used.
 - [Object.create](object_create.md) — Related concept: Object.create.
 - [Static Methods & Properties](static_methods_properties.md) — Related concept: Static Methods & Properties.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The `<audio>` tag relies on several specific attributes like `controls`.
 - [`src` Attribute](src.md) — The source loader used to point to the audio file resource.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ Imagine the `<audio>` tag as a built-in record player that comes pre-installed i
 - [`<source>` Element](source.md) — The child element used for multi-format audio sources.
 - [`<video>`](video.md) — The visual equivalent of the audio tag.
 - [Attribute](../level_01/attribute.md) — The concept of tag configuration parameters.
+
 ---
 
 ## 8. Key Takeaways

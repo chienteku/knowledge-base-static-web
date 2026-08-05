@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query language inside the function.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ Implement UI business logic in application code; use functions for heavy DB comp
 - [Stored Procedure (`CREATE PROCEDURE` / `CALL`)](stored_procedure.md) — The transaction-managing alternative.
 - [PL/pgSQL](plpgsql.md) — The procedural language layout.
 - [Trigger](trigger.md) — Related concept: Trigger.
+
 ---
 
 ## 8. Key Takeaways

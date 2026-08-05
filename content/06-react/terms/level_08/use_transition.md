@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Concurrent Rendering](concurrent_rendering.md) — The engine mode that powers transitions.
 - [`useState` Hook](../level_02/use_state.md) — The hook creating the states being updated.
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ function SearchResults() {
 - [Concurrent Rendering](concurrent_rendering.md) — The rendering mode that supports transitions.
 - [`useDeferredValue` Hook](use_deferred_value.md) — Deferring updates when you do not control the state setter.
 - [Suspense](suspense.md) — Related concept: Suspense.
+
 ---
 
 ## 8. Key Takeaways

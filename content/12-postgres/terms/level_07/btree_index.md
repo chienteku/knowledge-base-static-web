@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Index (Concept)](index_concept.md) — The parent performance concept.
+
 ---
 
 ## 2. Term Category
@@ -198,6 +199,7 @@ Drop duplicate indexes using DROP INDEX
 - [Expression Index (Functional Index)](expression_index.md) — Related concept: Expression Index (Functional Index).
 - [Partial Index](partial_index.md) — Related concept: Partial Index.
 - [Unique Index](unique_index.md) — Unique index.
+
 ---
 
 ## 8. Key Takeaways

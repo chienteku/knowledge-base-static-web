@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — Status codes are the core feature of the Response phase.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ Should you spend the next hour debugging your React code, or call the backend en
 - [Rate Limiting (429 Too Many Requests)](../level_06/rate_limiting.md) — Related concept: Rate Limiting (429 Too Many Requests).
 - [HTTP Methods (Verbs)](http_methods.md) — Status codes per HTTP method.
 - [Error Handling (try / catch)](../level_05/error_handling.md) — API error status codes.
+
 ---
 
 ## 8. Key Takeaways

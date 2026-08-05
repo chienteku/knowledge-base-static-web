@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Readable & Writable Streams](readable_writable.md) — The fundamental unidirectional stream classes.
 - [Piping (.pipe())](piping.md) — The pipeline chaining mechanisms.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ process.stdin.pipe(upperCaseTransform).pipe(process.stdout);
 ## 7. Related Terms
 - [Piping (.pipe())](piping.md) — The method used to link readable, transform, and writable streams together.
 - [Readable & Writable Streams](readable_writable.md) — The base classes for unidirectional data streams.
+
 ---
 
 ## 8. Key Takeaways

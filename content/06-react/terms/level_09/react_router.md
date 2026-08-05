@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Client-Side Routing](client_side_routing.md) — The concept this library implements.
 - [Components](../level_01/components.md) — React Router uses components to define routes.
+
 ---
 
 ## 2. Term Category
@@ -191,6 +192,7 @@ React Router excels at "Nested Routing". You can have a persistent `<DashboardLa
 - [Dynamic Segments (URL Parameters)](dynamic_segments.md) — How you handle URLs like `/users/123`.
 - [Code Splitting & Lazy Loading](../level_08/code_splitting.md) — Related concept: Code Splitting & Lazy Loading.
 - [Client-Side Routing](client_side_routing.md) — Related concept: Client-Side Routing.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Event Loop & Libuv](event_loop.md) — The loop mechanism that must be kept free.
 - [CPU-bound vs I/O-bound](cpu_vs_io.md) — The workloads that lead to thread blocking.
+
 ---
 
 ## 2. Term Category
@@ -231,6 +232,7 @@ app.post('/import-data', (req, res) => {
 - [CPU-bound vs I/O-bound](cpu_vs_io.md) — Related concept: CPU-bound vs I/O-bound.
 - [Memory Leaks & Garbage Collection](../level_10/memory_leaks.md) — Related concept: Memory Leaks & Garbage Collection.
 - [Non-Blocking I/O](non_blocking_io.md) — Related concept: Non-Blocking I/O.
+
 ---
 
 ## 8. Key Takeaways

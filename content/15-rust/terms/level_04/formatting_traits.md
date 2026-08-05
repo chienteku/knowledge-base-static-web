@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`Display` Trait](display_trait.md) — The Display trait for user-facing formatting.
+- [`Debug` Trait](debug_trait.md) — The Debug trait for developer-facing formatting.
 
 ---
-
 
 ## 2. Term Category
 
@@ -266,10 +266,9 @@ Use #[derive(Debug)] for structural metadata!
 
 ## 5. Related Terms
 
-**None.**
+- None!
 
 ---
-
 
 ## 7. Key Takeaways
 

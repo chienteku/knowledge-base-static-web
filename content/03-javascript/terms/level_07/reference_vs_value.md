@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_01/primitive_types.md) — The basic, immutable data types in JavaScript.
 - [Object](../level_02/object.md) — The base key-value dictionary structure.
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ console.log("num1 value:", num1);
 - [Shallow Copy vs Deep Copy](shallow_vs_deep_copy.md) — Solutions to duplicate objects safely.
 - [Closure](../level_03/closure.md) — Preserving variable access scopes.
 - [Primitive Types](../level_01/primitive_types.md) — Related concept: Primitive Types.
+
 ---
 
 ## 8. Key Takeaways

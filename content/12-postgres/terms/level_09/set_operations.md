@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The parent query syntax whose outputs are combined.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ SELECT name, email FROM contacts;
 
 ## 7. Related Terms
 - [`SELECT`](../level_03/select.md) — The query basics.
+
 ---
 
 ## 8. Key Takeaways

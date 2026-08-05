@@ -564,7 +564,6 @@ Requirements:
 - [`HashMap<K, V>`](hashmap_k_v.md) — Related concept: `HashMap<K, V>`.
 - [`VecDeque<T>`](vecdeque_t.md) — Related concept: `VecDeque<T>`.
 - [`Box<T>`](../level_03/box_t.md) — Related concept: `Box<T>`.
-- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Related concept: Arrays and Slices (`[T; N]`, `&[T]`).
 
 ---
 

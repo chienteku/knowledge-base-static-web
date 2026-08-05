@@ -9,6 +9,7 @@
 - [DOM (Document Object Model)](dom.md) — An interface representing the HTML document as a tree of nodes.
 - [Node](node.md) — A single point in the DOM tree (element, text, comment, etc.).
 - [window object / BOM](window_bom.md) — The browser global object container.
+
 ---
 
 ## 2. Term Category
@@ -217,6 +218,7 @@ if (typeof document !== "undefined") {
 - [DOM (Document Object Model)](dom.md) — The structured tree API of HTML nodes.
 - [document.querySelector()](document_queryselector.md) — The primary document selection method.
 - [DOMContentLoaded / load events](domcontentloaded_load.md) — Related concept: DOMContentLoaded / load events.
+
 ---
 
 ## 8. Key Takeaways

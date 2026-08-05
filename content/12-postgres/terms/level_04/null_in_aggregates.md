@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`NULL`](../level_02/null.md) — Understanding the absent state.
 - [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](aggregate_functions.md) — Standard summary calculations.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ Calculate the output numbers of the following two queries:
 - [`NULL`](../level_02/null.md) — The parent absent state.
 - [Aggregate Functions (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`)](aggregate_functions.md) — Standard calculations.
 - [`COALESCE` / `NULLIF`](coalesce_nullif.md) — Swapping NULLs for safe defaults.
+
 ---
 
 ## 8. Key Takeaways

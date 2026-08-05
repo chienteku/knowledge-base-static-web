@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Design Pattern**: Constructor polymorphism using `From` and `Into` traits.
@@ -263,7 +262,6 @@ impl From<&str> for Person
 - [`From` / `Into` Traits](../level_04/from_into_traits.md) — From trait conversions.
 
 ---
-
 
 ## 7. Key Takeaways
 

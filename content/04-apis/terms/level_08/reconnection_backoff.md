@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [WebSockets](websockets.md) — The real-time connection protocol.
 - [Retry & Exponential Backoff](../level_05/retry_backoff.md) — The mathematical delay concepts for network retries.
+
 ---
 
 ## 2. Term Category
@@ -383,6 +384,7 @@ Calculate the backoff delay (excluding jitter) for **Attempt 4** (the 5th retry 
 ## 7. Related Terms
 - [Heartbeat / Ping-Pong](heartbeat_ping_pong.md) — The diagnostic frame checks that alert the client of a silent disconnect.
 - [The WebSocket API (Client-side)](websocket_api.md) — The browser object interface.
+
 ---
 
 ## 8. Key Takeaways

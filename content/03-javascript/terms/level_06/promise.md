@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Asynchronous](asynchronous.md) — Operations that take time to complete.
 - [Callback Hell](callback_hell.md) — The problem Promises were invented to solve.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ async function processData() {
 - [Callback Hell](callback_hell.md) — Related concept: Callback Hell.
 - [Fetch API](fetch_api.md) — Related concept: Fetch API.
 - [Event Loop](event_loop.md) — Microtask queue.
+
 ---
 
 ## 8. Key Takeaways

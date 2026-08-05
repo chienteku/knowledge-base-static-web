@@ -578,7 +578,6 @@ Implement a telemetry dispatcher `TelemetryDispatcher<'a>` that broadcasts borro
 - [`Clone` Trait](clone_trait.md) — Related concept: `Clone` Trait.
 - [Move Semantics](move_semantics.md) — Related concept: Move Semantics.
 - [Ownership](ownership.md) — Related concept: Ownership.
-- [Slice (`&[T]`, `&str`)](slice.md) — Related concept: Slice (`&[T]`, `&str`).
 - [References and Borrowing (`&`, `&mut`)](../level_01/references_and_borrowing.md) — Related concept: References and Borrowing (`&`, `&mut`).
 
 ---

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props (Properties)](../level_01/props.md) — The mechanism being used.
 - [Higher-Order Components (HOC)](hoc.md) — The alternative pattern that Render Props competed against before Hooks.
+
 ---
 
 ## 2. Term Category
@@ -190,3 +191,4 @@ Use custom hooks to unwrap state values sequentially without nesting
 - [Custom Hooks](../level_04/custom_hooks.md) — Just like HOCs, the Render Props pattern was largely replaced by Custom Hooks, which achieve the same logic-sharing much cleaner.
 
 ---
+

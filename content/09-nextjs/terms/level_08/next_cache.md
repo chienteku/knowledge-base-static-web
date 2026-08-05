@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Static Site Generation (SSG)](ssg.md) — Another layer of this cache.
+- [React Server Components (RSC)](../level_01/rsc.md) — Caching data fetches in React Server Components.
+
 ---
 
 ## 2. Term Category
@@ -249,6 +251,7 @@ export const dynamic = 'force-dynamic'; // ❌ Disables caching globally for ent
 - [Static Site Generation (SSG)](ssg.md) — Essentially Layer 3.
 - [React Server Component Payload (RSC Payload)](rsc_payload.md) — Related concept: React Server Component Payload (RSC Payload).
 - [Data Caching (`force-cache`, `no-store`)](../level_05/data_caching.md) — One layer of this cache.
+
 ---
 
 ## 8. Key Takeaways

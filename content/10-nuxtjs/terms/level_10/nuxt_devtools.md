@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — The configuration file where DevTools is enabled or disabled.
 - [Auto-imports](../level_01/auto_imports.md) — DevTools maps out all active imports to assist code inspection.
+
 ---
 
 ## 2. Term Category
@@ -180,6 +181,7 @@ export default defineNuxtConfig({
 ## 7. Related Terms
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — The central configuration hub.
 - [Nitro Engine](../level_01/nitro_engine.md) — The server engine that DevTools monitors.
+
 ---
 
 ## 8. Key Takeaways

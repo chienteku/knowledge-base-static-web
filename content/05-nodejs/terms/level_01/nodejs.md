@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -162,6 +163,7 @@ app.get('/data', async (req, res, next) => {
 - [Docker](../level_10/docker.md) — Related concept: Docker.
 - [The Event Loop & Libuv](event_loop.md) — Node.js Event Loop.
 - [Non-Blocking I/O](non_blocking_io.md) — Non-blocking I/O model.
+
 ---
 
 ## 8. Key Takeaways

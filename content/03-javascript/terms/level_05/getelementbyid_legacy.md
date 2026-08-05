@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [DOM (Document Object Model)](dom.md) — An object-oriented interface representing HTML pages as nodes.
 - [Node](node.md) — A single point in the DOM tree.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ if (typeof document !== "undefined") {
 
 ## 7. Related Terms
 - [document.querySelector()](document_queryselector.md) — The modern, standard, selector-based selection method.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Must be applied to the parent container.
+
 ---
 
 ## 2. Term Category
@@ -158,6 +159,7 @@ Imagine typing a sentence in Microsoft Word.
 - [`gap` (Grid Gap)](../level_06/gap.md) — When items wrap to a new line, you need a way to put space between the rows.
 - [`align-content`](align_content.md) — Distributes multiple rows of wrapped items.
 - [`display: flex`](display_flex.md) — Related concept: `display: flex`.
+
 ---
 
 ## 8. Key Takeaways

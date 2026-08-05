@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [REST (Representational State Transfer)](../level_03/rest.md) — The architecture where versioning is most heavily debated.
 - [Endpoints & Resources](../level_03/endpoints_resources.md) — The URLs that get versioned.
+
 ---
 
 ## 2. Term Category
@@ -157,6 +158,7 @@ Are the following changes Breaking (requires `v2`) or Non-Breaking (keep `v1`)?
 - [API Contract / Schema-First Design](api_contract.md) — Related concept: API Contract / Schema-First Design.
 - [Deprecation & Sunsetting](deprecation_sunsetting.md) — Related concept: Deprecation & Sunsetting.
 - [API Gateway](api_gateway.md) — Related concept: API Gateway.
+
 ---
 
 ## 8. Key Takeaways

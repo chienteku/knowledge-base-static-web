@@ -218,8 +218,6 @@ Only one of the three must compile at a time (no duplicate function error).
 
 - [Feature Flags](feature_flags.md) — The custom toggles you can check using `#[cfg(feature = "...")]`.
 - [Build Scripts (`build.rs`)](build_scripts.md) — Related concept: Build Scripts (`build.rs`).
-- [Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`)](lint_control_attributes.md) — Related concept: Lint Control Attributes (`#[allow]` / `#[warn]` / `#[deny]` / `#[forbid]`).
-- [`#[test]` Attribute](../level_08/test_attribute.md) — Related concept: `#[test]`.
 
 ---
 

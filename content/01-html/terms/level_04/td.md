@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<tr>` (Table Row)](tr.md) — The `<td>` element MUST be placed inside a `<tr>`.
 - [Nesting](../level_01/nesting.md) — Since table data cells must nest directly inside a parent table row container.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ Alternatively, in an Excel spreadsheet, a `<td>` is a single rectangular cell (l
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing table data.
 - [`<table>`](table.md) — Related concept: `<table>`.
 - [`<tr>` (Table Row)](tr.md) — Related concept: `<tr>` (Table Row).
+
 ---
 
 ## 8. Key Takeaways

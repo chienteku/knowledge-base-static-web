@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Relational Database](../level_01/relational_database.md) — The storage philosophy.
 - [SQL (Structured Query Language)](../level_01/sql.md) — Declarative query syntax standards.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ SELECT first_name || ' ' || last_name AS full_name FROM users;
 - [`DISTINCT`](../level_04/distinct.md) — Related concept: `DISTINCT`.
 - [Subquery (Nested Query)](../level_04/subquery.md) — Related concept: Subquery (Nested Query).
 - [`UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`](../level_09/set_operations.md) — Related concept: `UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`.
+
 ---
 
 ## 8. Key Takeaways

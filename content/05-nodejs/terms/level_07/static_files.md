@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Express.js](express_js.md) — The parent framework hosting the middleware.
 - [Middleware](middleware.md) — The request processing pipeline.
+
 ---
 
 ## 2. Term Category
@@ -273,6 +274,7 @@ app.use('/static', express.static(assetsPath));
 ## 7. Related Terms
 - [Routing](routing.md) — The system matching URL structures.
 - [The http Module](../level_02/http_module.md) — The underlying HTTP server layer.
+
 ---
 
 ## 8. Key Takeaways

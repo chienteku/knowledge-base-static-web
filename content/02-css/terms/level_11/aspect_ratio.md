@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Width / Height](../level_02/width_height.md) — Base HTML sizing properties.
 - [Responsive Design (Concept)](../level_08/responsive_design.md) — Sizing layout blocks dynamically.
+
 ---
 
 ## 2. Term Category
@@ -263,6 +264,7 @@ Alternative layouts:
 
 ## 7. Related Terms
 - [`object-fit` & `object-position`](../level_09/object_fit.md) — Standard scaling for cropped media contents inside locked boxes.
+
 ---
 
 ## 8. Key Takeaways

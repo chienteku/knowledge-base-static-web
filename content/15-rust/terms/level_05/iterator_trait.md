@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [Iterator](../level_02/iterator.md) — Core sequence iteration concept in Rust.
+- [Trait](../level_04/trait.md) — Trait mechanism enabling sequence iteration.
 
 ---
 
@@ -393,7 +394,7 @@ let result: Vec<_> = data.iter().filter(|&&x| x > 0).map(|&x| x * 2).collect(); 
 
 ## 5. Related Terms
 
-**None.**
+- None!
 
 ---
 

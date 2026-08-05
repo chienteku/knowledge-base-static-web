@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- Single Page Applications (SPA) — The opposite of SSR (Client-Side Rendering).
+- [SPA](../../../03-javascript/terms/level_10/spa.md) — The opposite of SSR (Client-Side Rendering).
 - [Next.js](nextjs.md) — The framework that makes SSR easy in React.
+
 ---
 
 ## 2. Term Category
@@ -156,6 +157,7 @@ Which one is Server-Side Rendered?
 - [Single Page Applications (SPA)](../level_09/spa.md) — Related concept: Single Page Applications (SPA).
 - [Next.js](nextjs.md) — Related concept: Next.js.
 - [Streaming SSR](streaming_ssr.md) — Related concept: Streaming SSR.
+
 ---
 
 ## 8. Key Takeaways

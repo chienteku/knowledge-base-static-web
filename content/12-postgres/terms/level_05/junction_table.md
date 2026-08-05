@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Many-to-Many Relationship](many_to_many.md) — The logical relationship model.
 - [`PRIMARY KEY`](../level_02/primary_key.md) — Standard unique row identifiers.
+
 ---
 
 ## 2. Term Category
@@ -267,6 +268,7 @@ Write the SQL query to create a junction table named `order_items` that links th
 - [Composite Key](../level_06/composite_key.md) — Forward reference: keys composed of multiple columns.
 - [Entity-Relationship Diagram (ERD)](../level_06/erd.md) — Related concept: Entity-Relationship Diagram (ERD).
 - [`FOREIGN KEY`](foreign_key.md) — Related concept: `FOREIGN KEY`.
+
 ---
 
 ## 8. Key Takeaways

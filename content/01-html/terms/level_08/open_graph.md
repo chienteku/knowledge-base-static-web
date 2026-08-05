@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<meta>`](meta.md) — The parent element used to structure meta keys.
 - [`<head>`](../level_01/head.md) — The metadata head container.
+
 ---
 
 ## 2. Term Category
@@ -219,6 +220,7 @@ The Open Graph standard explicitly dictates the use of the `property` attribute:
 - [`<head>`](../level_01/head.md) — The folder container holding the tags.
 - [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Structural layouts that impact search indexers.
 - [Favicon](favicon.md) — Related concept: Favicon.
+
 ---
 
 ## 8. Key Takeaways

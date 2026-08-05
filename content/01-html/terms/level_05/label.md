@@ -9,6 +9,7 @@
 - [`<input>`](input.md) — The tag that the label describes.
 - [Attribute](../level_01/attribute.md) — The label relies on the `for` attribute to function.
 - [Nesting](../level_01/nesting.md) — Since input controls can optionally nest inside label containers.
+
 ---
 
 ## 2. Term Category
@@ -195,6 +196,7 @@ The `for` attribute is a piece of string that ties the sticky note directly to t
 - [`<textarea>`](textarea.md) — Related concept: `<textarea>`.
 - [Accessibility (a11y) Fundamentals](../level_09/accessibility_fundamentals.md) — Related concept: Accessibility (a11y) Fundamentals.
 - [`<form>`](form.md) — Related concept: `<form>`.
+
 ---
 
 ## 8. Key Takeaways

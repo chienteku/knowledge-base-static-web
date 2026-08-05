@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [`$regex` (Regular Expressions)](regex.md) — The string search alternative.
+- [`find()` / `findOne()`](../level_03/find.md) — Executing full-text search queries against text indexes.
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Service Workers](service_workers.md) — The network interceptor threads.
 - [Cache API](cache_api.md) — The storage for asset request states.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ catch (err) { setItems(prevItems); } // Rollback to previous state on sync error
 ## 7. Related Terms
 - [Service Workers](service_workers.md) — The background scripts that orchestrate PWA caching.
 - [IndexedDB](indexeddb.md) — The browser-native database used for offline data storage.
+
 ---
 
 ## 8. Key Takeaways

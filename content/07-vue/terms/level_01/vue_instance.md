@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- dom — What the Vue Instance is ultimately controlling.
+- [DOM (Document Object Model)](../../../01-html/terms/level_09/dom.md) — What the Vue Instance is ultimately controlling.
+
 ---
 
 ## 2. Term Category
@@ -168,6 +169,7 @@ app2.mount('#app-two'); // Mount to distinct DOM containers
 - [Components](../level_04/components.md) — What the Vue Instance actually renders.
 - [Virtual DOM (Vue)](../level_08/virtual_dom.md) — The engine that the Vue instance boots up.
 - [Options API](options_api.md) — Related concept: Options API.
+
 ---
 
 ## 8. Key Takeaways

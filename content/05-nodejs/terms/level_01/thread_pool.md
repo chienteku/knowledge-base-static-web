@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Non-Blocking I/O](non_blocking_io.md) — The concept of offloading work.
 - [The Event Loop & Libuv](event_loop.md) — The engine coordinating asynchronous callbacks.
+
 ---
 
 ## 2. Term Category
@@ -187,6 +188,7 @@ Explain why this happens, and how to configure the system to resolve the bottlen
 ## 7. Related Terms
 - [The Event Loop & Libuv](event_loop.md) — The loop that collects tasks finished by the Thread Pool.
 - [Single-Threaded Architecture](single_threaded.md) — The architecture protected from blocking by the Thread Pool.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Child Processes (child_process)](child_processes.md) — The process-spawning concepts used under the hood.
 - [Single-Threaded Architecture](../level_01/single_threaded.md) — The single-core limitation that clustering resolves.
+
 ---
 
 ## 2. Term Category
@@ -223,6 +224,7 @@ if (numCPUs > 1 && cluster.isPrimary) {
 - [Load Balancing](load_balancing.md) — The networking architecture distributing traffic across server instances.
 - [Child Processes (child_process)](child_processes.md) — Related concept: Child Processes (child_process).
 - [Worker Threads](worker_threads.md) — Related concept: Worker Threads.
+
 ---
 
 ## 8. Key Takeaways

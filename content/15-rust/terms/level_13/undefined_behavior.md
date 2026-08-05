@@ -588,10 +588,8 @@ Include unit tests with `assert_eq!` verifying interior mutability, volatile rea
 - [Raw Pointers (`*const T`, `*mut T`)](raw_pointers.md) — Unchecked pointers whose misuse frequently causes UB.
 - [`unsafe fn`](unsafe_fn.md) — Functions whose caller preconditions prevent UB.
 - [FFI (Foreign Function Interface)](ffi.md) — Language boundaries where UB can occur across C/Rust boundaries.
-- [`#[repr(C)]`](repr_c.md) — Related concept: `#[repr(C)]`.
 - [`union`](union.md) — Related concept: `union`.
 - [`unsafe trait` / `unsafe impl`](unsafe_trait.md) — Related concept: `unsafe trait` / `unsafe impl`.
-- [`#[repr(packed)]` / `#[repr(align)]`](../level_15/repr_packed_align.md) — Related concept: `#[repr(packed)]` / `#[repr(align)]`.
 - [Miri (UB Detector)](miri_ub_detector.md) — Related concept: Miri (UB Detector).
 
 ---

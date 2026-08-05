@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — The extended API we are configuring.
 - [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — The underlying system where the data is stored.
+
 ---
 
 ## 2. Term Category
@@ -182,6 +183,7 @@ const getCachedUsers = unstable_cache(async () => prisma.user.findMany(), ['user
 - [Caching Route Handlers](../level_07/caching_route_handlers.md) — Related concept: Caching Route Handlers.
 - [The Next.js Cache (The Four Caches)](../level_08/next_cache.md) — Related concept: The Next.js Cache (The Four Caches).
 - [`React.cache()` Function](react_cache.md) — React cache memoization.
+
 ---
 
 ## 8. Key Takeaways

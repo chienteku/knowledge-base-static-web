@@ -662,7 +662,6 @@ thread::spawn(move || {
 - [Enum](enum.md) — Related concept: Enum.
 - [`FromIterator` / `Extend` Traits](fromiterator_extend_traits.md) — Related concept: `FromIterator` / `Extend` Traits.
 - [`FromStr` Trait & `.parse()`](../level_04/fromstr_parse.md) — Related concept: `FromStr` Trait & `.parse()`.
-- [`#[must_use]`](../level_07/must_use_attribute.md) — Related concept: `#[must_use]`.
 - [Type Alias](../level_11/type_alias.md) — Related concept: Type Alias.
 - [`TryFrom` / `TryInto`](../level_14/try_from_try_into.md) — Related concept: `TryFrom` / `TryInto`.
 

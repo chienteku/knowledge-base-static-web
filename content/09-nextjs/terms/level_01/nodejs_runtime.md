@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -211,6 +212,7 @@ export default function StatusPage() {
 - [Node.js Environment Variables (`process.env`)](../level_10/process_env.md) — Related concept: Node.js Environment Variables (`process.env`).
 - [Turbopack](../level_10/turbopack.md) — Related concept: Turbopack.
 - [V8 Engine](../level_10/v8_engine.md) — Related concept: V8 Engine.
+
 ---
 
 ## 8. Key Takeaways

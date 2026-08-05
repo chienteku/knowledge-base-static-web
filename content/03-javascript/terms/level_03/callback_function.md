@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
 - [Higher-Order Function](higher_order_function.md) — A function that accepts other functions as arguments.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ async function processData() {
 - [First-Class Function](first_class_function.md) — Related concept: First-Class Function.
 - [Event](../level_05/event.md) — Related concept: Event.
 - [Callback Hell](../level_06/callback_hell.md) — Related concept: Callback Hell.
+
 ---
 
 ## 8. Key Takeaways

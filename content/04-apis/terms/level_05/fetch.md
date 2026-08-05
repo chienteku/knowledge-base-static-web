@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Request & Response Lifecycle](../level_01/request_response.md) — `fetch()` is how you manually trigger this lifecycle in code.
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — `fetch()` defaults to GET, but can be configured for POST, PUT, DELETE.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ fetch('https://api.example.com/me', {
 - [Postman / Insomnia (API Clients)](../level_10/api_clients.md) — Related concept: Postman / Insomnia (API Clients).
 - [AbortController / Cancellation](abortcontroller.md) — Canceling fetch with AbortController.
 - [async / await](async_await.md) — Async/await with fetch.
+
 ---
 
 ## 8. Key Takeaways

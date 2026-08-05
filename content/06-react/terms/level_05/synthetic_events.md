@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Declarative Programming](../level_01/declarative_programming.md) — You use Synthetic events instead of `addEventListener`.
+- [JSX (JavaScript XML)](../level_01/jsx.md) — Handling synthetic DOM events in JSX templates.
+
 ---
 
 ## 2. Term Category
@@ -163,6 +165,7 @@ const handleSubmit = async (e) => {
 - [JSX (JavaScript XML)](../level_01/jsx.md) — Where you attach these event handlers using camelCase.
 - [Testing: React Testing Library + Jest](../level_11/react_testing_library.md) — Related concept: Testing: React Testing Library + Jest.
 - [Controlled Components](controlled_components.md) — Form input events.
+
 ---
 
 ## 8. Key Takeaways

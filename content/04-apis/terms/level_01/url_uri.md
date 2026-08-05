@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP / HTTPS](http_https.md) — URLs almost always start with this protocol.
+
 ---
 
 ## 2. Term Category
@@ -154,6 +155,7 @@ fetch('https://api.example.com/data'); // Absolute URL with scheme
 ## 7. Related Terms
 - [Query Parameters & Path Variables](../level_02/query_params.md) — How we pass dynamic data directly inside the URL.
 - [DNS (Domain Name System)](dns.md) — Related concept: DNS (Domain Name System).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](components.md) — You pass props into components.
+
 ---
 
 ## 2. Term Category
@@ -217,6 +218,7 @@ function Header({ title, onUpdate }) {
 - [Components](components.md) — Related concept: Components.
 - [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
 - [Lifting State Up](../level_02/lifting_state_up.md) — Related concept: Lifting State Up.
+
 ---
 
 ## 8. Key Takeaways

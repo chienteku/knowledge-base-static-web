@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Build Step (Compilation)](build_step.md) — The process the Vue CLI managed.
 - [Vite](vite.md) — The modern replacement.
+
 ---
 
 ## 2. Term Category
@@ -146,6 +147,7 @@ module.exports = {
 ## 7. Related Terms
 - [Vite](vite.md) — The tool you should actually be using.
 - [Build Step (Compilation)](build_step.md) — What these tools do.
+
 ---
 
 ## 8. Key Takeaways

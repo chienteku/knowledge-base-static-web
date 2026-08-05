@@ -342,7 +342,7 @@ In early Rust tooling (like legacy `rls`), IDE completion was slow, crashed on c
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

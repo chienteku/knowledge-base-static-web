@@ -9,6 +9,7 @@
 - [`<script>`](../level_08/script.md) — The script loading tag that carries security risks.
 - [`<iframe>`](../level_03/iframe.md) — The frame element containing external websites.
 - [HTML Entities](../level_09/html_entities.md) — The escaping syntax used to neutralize input strings.
+
 ---
 
 ## 2. Term Category
@@ -290,6 +291,7 @@ div.textContent = userInput; // Safe text-only assignment
 - [`<noscript>`](../level_08/noscript.md) — Fallbacks displayed when scripting is turned off.
 - [Web Storage (Local/Session Storage)](web_storage.md) — Storage blocks vulnerable to XSS data theft.
 - [Geolocation API](geolocation.md) — Related concept: Geolocation API.
+
 ---
 
 ## 8. Key Takeaways

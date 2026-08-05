@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — Where route rules are defined.
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — The default rendering mode that Route Rules can override.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ routeRules: { '/live-ticker': { ssr: false } } // Disable SSR for real-time clie
 - [Static Site Generation (SSG)](../level_09/ssg.md) — The `prerender: true` rule.
 - [Single Page Application (SPA) Mode](../level_09/spa.md) — Related concept: Single Page Application (SPA) Mode.
 - [`nuxt.config.ts`](../level_06/nuxt_config.md) — nuxt.config.ts configuration.
+
 ---
 
 ## 8. Key Takeaways

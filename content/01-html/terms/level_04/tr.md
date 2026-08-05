@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<table>`](table.md) — The parent container for all rows.
 - [Nesting](../level_01/nesting.md) — Since table rows must nest directly inside a parent table container.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ The `<tr>` is a single horizontal wooden shelf. You can't put a book directly on
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing table rows.
 - [`<th>` (Table Header)](th.md) — Related concept: `<th>` (Table Header).
 - [`<thead>`, `<tbody>`, `<tfoot>`](thead_tbody_tfoot.md) — Related concept: `<thead>`, `<tbody>`, `<tfoot>`.
+
 ---
 
 ## 8. Key Takeaways

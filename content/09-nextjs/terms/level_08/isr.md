@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Static Site Generation (SSG)](ssg.md) — The foundation of ISR.
 - [Time-based Revalidation (`next.revalidate`)](../level_05/revalidation.md) — The data-fetching concept that powers ISR.
+
 ---
 
 ## 2. Term Category
@@ -234,6 +235,7 @@ export const revalidate = 300; // 5-minute timer + revalidateTag() for instant u
 - [Content Delivery Network (CDN) & Edge Cache](../level_10/cdn_edge.md) — Related concept: Content Delivery Network (CDN) & Edge Cache.
 - [Docker & Standalone Build](../level_10/standalone_build.md) — Related concept: Docker & Standalone Build.
 - [`generateStaticParams` Function](generate_static_params.md) — generateStaticParams.
+
 ---
 
 ## 8. Key Takeaways

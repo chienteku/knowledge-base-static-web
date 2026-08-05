@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — The collection of key-value pairs.
 - [Array](../level_02/array.md) — The data structure this method returns.
+
 ---
 
 ## 2. Term Category
@@ -200,6 +201,7 @@ async function processData() {
 ## 7. Related Terms
 - [Object.values()](object_values.md) — Returns the values instead of the keys.
 - [Object.entries()](object_entries.md) — Returns both!
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — You must understand how to target elements to understand the `:root` selector.
 - [The Cascade](../level_01/the_cascade.md) — Variables respect the cascade, meaning they can be overwritten!
+
 ---
 
 ## 2. Term Category
@@ -164,6 +165,7 @@ color: var(--undefined-color, #005fcc); /* Fallback color provided */
 - [`:root` Pseudo-class](root_pseudo_class.md) — The global scope selector where custom properties are declared.
 - [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Custom property theme swaps.
 - [`calc()`](calc.md) — Related concept: `calc()`.
+
 ---
 
 ## 8. Key Takeaways

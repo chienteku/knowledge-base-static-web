@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Base element and class matching.
 - [Specificity](../level_01/specificity.md) — How selectors accumulate matching priorities.
+
 ---
 
 ## 2. Term Category
@@ -246,6 +247,7 @@ h2 ~ p { color: blue; } /* Targets ALL subsequent sibling paragraphs */
 - [Attribute Selectors](attribute_selectors.md) — Selective attribute matching.
 - [Advanced Pseudo-classes](../level_09/pseudo_classes_advanced.md) — Positional structural styling hooks.
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Related concept: Selectors (Element, Class, ID).
+
 ---
 
 ## 8. Key Takeaways

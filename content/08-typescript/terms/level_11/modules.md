@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- ES Modules in TypeScript — The fundamental standard that TypeScript is built upon.
+- [Modules (import/export)](../../../03-javascript/terms/level_08/modules.md) — The fundamental standard that TypeScript is built upon.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +168,7 @@ mod.add(1, 2); // Correct: Awaited module instance
 > **Explanation:** Barrel files use `export * from` to aggregate multiple sub-module exports.
 
 ## 7. Related Terms
-- [Namespaces](../level_11/namespaces.md) — TypeScript's outdated, legacy module system that was used before ES Modules became the standard.
+- [Namespaces](namespaces.md) — TypeScript's outdated, legacy module system that was used before ES Modules became the standard.
 
 ---
+

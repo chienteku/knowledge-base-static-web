@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`font-size` & `font-weight`](font_size_weight.md) — `line-height` is calculated directly based on the font size.
+
 ---
 
 ## 2. Term Category
@@ -162,6 +163,7 @@ div { display: flex; align-items: center; min-height: 100px; }
 ## 7. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — The property that `line-height` multiplies against.
 - [`font-style` & `font-variant`](font_style_variant.md) — Text formatting variants.
+
 ---
 
 ## 8. Key Takeaways

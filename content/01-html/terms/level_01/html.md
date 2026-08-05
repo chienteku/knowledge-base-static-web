@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ HTML is the blueprint and the raw wooden frame. It defines where the walls are, 
 - [URL (Uniform Resource Locator)](url.md) — The address system of the web.
 - [`<!DOCTYPE html>`](doctype_html.md) — The declaration that tells the browser it is reading modern HTML.
 - [`<html>`](html_tag.md) — Root <html> element.
+
 ---
 
 ## 8. Key Takeaways

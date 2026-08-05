@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — Must be applied to the parent container.
+
 ---
 
 ## 2. Term Category
@@ -252,6 +253,7 @@ In what visual order (from left to right) will they render on the screen?
 - [Flexbox (Concept) & `display: flex`](flex_parent.md) — The parent layout engine.
 - [`flex-direction`](flex_direction.md) — Dictates whether visual ordering flows vertically or horizontally.
 - [`align-self`](align_self.md) — Related concept: `align-self`.
+
 ---
 
 ## 8. Key Takeaways

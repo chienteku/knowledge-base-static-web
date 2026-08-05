@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Promise](promise.md) — An object representing the eventual completion of an asynchronous operation.
 - [.then() / .catch()](then_catch.md) — Methods chained to handle Promise completion.
+
 ---
 
 ## 2. Term Category
@@ -243,6 +244,7 @@ Promise.resolve(10)
 ## 7. Related Terms
 - [Callback Hell](callback_hell.md) — The nested pattern that Promise Chaining replaces.
 - [async / await](async_await.md) — A cleaner syntax built on top of Promise chains.
+
 ---
 
 ## 8. Key Takeaways

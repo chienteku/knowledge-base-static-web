@@ -498,7 +498,6 @@ Implement an optimized iterative dynamic programming version `fibonacci_iterativ
 
 - [Release Profile](release_profile.md) — Cargo build profile configured with `debug = true` for profiling.
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — Core performance philosophy verified via profiling tools.
-- [`#[cold]` / `#[hot]`](cold_hot_attributes.md) — Related concept: `#[cold]` / `#[hot]`.
 - [SIMD (`std::simd`)](simd.md) — Related concept: SIMD (`std::simd`).
 
 ---

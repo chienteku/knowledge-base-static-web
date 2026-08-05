@@ -211,6 +211,11 @@
           "term": "client_server_model",
           "module": "12-postgres",
           "description": "Understanding that visual tools are clients connecting to a background server."
+        },
+        {
+          "module": "12-postgres",
+          "term": "postgresql",
+          "description": "PostgreSQL database server management tool."
         }
       ],
       "related": [
@@ -269,6 +274,11 @@
           "term": "client_server_model",
           "module": "12-postgres",
           "description": "Understanding that `psql` is a client connecting to a server process."
+        },
+        {
+          "module": "12-postgres",
+          "term": "postgresql",
+          "description": "PostgreSQL interactive terminal CLI client."
         }
       ],
       "related": [
@@ -405,6 +415,11 @@
           "term": "database",
           "module": "12-postgres",
           "description": "Understanding the need for structured data storage."
+        },
+        {
+          "module": "12-postgres",
+          "term": "relational_database",
+          "description": "Relational database querying language."
         }
       ],
       "related": [
@@ -670,6 +685,11 @@
           "term": "text_types",
           "module": "12-postgres",
           "description": "Related concept: `TEXT` / `VARCHAR` / `CHAR`."
+        },
+        {
+          "module": "12-postgres",
+          "term": "numeric_precision_scale",
+          "description": "Related concept: `NUMERIC` Precision & Scale."
         }
       ]
     },
@@ -767,6 +787,11 @@
           "term": "numeric_types",
           "module": "12-postgres",
           "description": "The parent exact numeric type."
+        },
+        {
+          "module": "12-postgres",
+          "term": "integer_types",
+          "description": "Integer data types comparison."
         }
       ]
     },
@@ -939,6 +964,11 @@
           "term": "where",
           "module": "12-postgres",
           "description": "The query filter used to target specific records."
+        },
+        {
+          "module": "12-postgres",
+          "term": "table",
+          "description": "Deleting table rows."
         }
       ],
       "related": [
@@ -1041,6 +1071,11 @@
           "term": "order_by",
           "module": "12-postgres",
           "description": "The sorting clause required for stable pagination."
+        },
+        {
+          "module": "12-postgres",
+          "term": "select",
+          "description": "Paginating SELECT query results with LIMIT and OFFSET."
         }
       ],
       "related": [
@@ -1288,6 +1323,11 @@
           "term": "where",
           "module": "12-postgres",
           "description": "The query filter used to target specific records."
+        },
+        {
+          "module": "12-postgres",
+          "term": "table",
+          "description": "Updating table column values."
         }
       ],
       "related": [
@@ -1539,6 +1579,11 @@
           "term": "subquery",
           "module": "12-postgres",
           "description": "The query format evaluated by the operator."
+        },
+        {
+          "module": "12-postgres",
+          "term": "select",
+          "description": "Testing subquery row existence using EXISTS."
         }
       ],
       "related": [
@@ -1621,6 +1666,11 @@
           "term": "operators",
           "module": "12-postgres",
           "description": "The baseline query comparison symbols."
+        },
+        {
+          "module": "12-postgres",
+          "term": "where",
+          "description": "Pattern matching text filtering with LIKE and ILIKE."
         }
       ],
       "related": [
@@ -4166,6 +4216,11 @@
           "term": "roles_permissions",
           "module": "12-postgres",
           "description": "The login roles validated by pg_hba.conf."
+        },
+        {
+          "module": "12-postgres",
+          "term": "postgresql_conf",
+          "description": "PostgreSQL server configuration files."
         }
       ],
       "related": [

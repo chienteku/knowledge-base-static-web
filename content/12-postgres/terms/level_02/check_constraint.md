@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding table columns setup.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ Use triggers or application layer validation for dynamic date checks
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The typing foundation.
 - [`NOT NULL` Constraint](not_null.md) — Often paired with check rules.
+
 ---
 
 ## 8. Key Takeaways

@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- rest — JWTs are what allow REST APIs to remain "Stateless".
-- json — The entire token is just encoded JSON data.
+- [REST (Representational State Transfer)](../../../04-apis/terms/level_03/rest.md) — JWTs are what allow REST APIs to remain "Stateless".
+- [JSON (JavaScript Object Notation)](../../../04-apis/terms/level_01/json.md) — The entire token is just encoded JSON data.
+
 ---
 
 ## 2. Term Category
@@ -146,6 +147,7 @@ res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' })
 ## 7. Related Terms
 - [Environment Variables (dotenv)](env_vars.md) — Where you store the Secret Password used to sign the JWTs.
 - [Bcrypt (Password Hashing)](bcrypt.md) — The tool used to check the user's password *before* giving them the JWT.
+
 ---
 
 ## 8. Key Takeaways

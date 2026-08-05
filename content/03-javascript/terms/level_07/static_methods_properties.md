@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Class](class.md) — Syntactic sugar blueprint over prototypal inheritance.
+
 ---
 
 ## 2. Term Category
@@ -228,6 +229,7 @@ console.log("Result:", Calculator.add(5, 10));
 ## 7. Related Terms
 - [new Keyword](new_keyword.md) — The operator that instantiates objects, triggering class constructors.
 - [extends](extends.md) — Class inheritance, which also inherits static properties.
+
 ---
 
 ## 8. Key Takeaways

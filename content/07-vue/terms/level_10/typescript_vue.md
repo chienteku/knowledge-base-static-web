@@ -9,6 +9,7 @@
 - [Props](../level_04/props.md) — Declaring data variables passed to components.
 - [Single-File Components (SFCs)](../level_04/sfc.md) — Single-File Components.
 - [`<script setup>` & Compiler Macros](../level_04/script_setup.md) — Compiler directives.
+
 ---
 
 ## 2. Term Category
@@ -311,6 +312,7 @@ function addSearch() {
 - [`<script setup>` & Compiler Macros](../level_04/script_setup.md) — The sugar compilation syntax.
 - [Composables](../level_05/composables.md) — Type-safe reusable business functions.
 - [Single-File Components (SFCs)](../level_04/sfc.md) — Single File Components with TypeScript.
+
 ---
 
 ## 8. Key Takeaways

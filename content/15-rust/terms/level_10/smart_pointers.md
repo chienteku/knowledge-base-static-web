@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Pointer Abstraction**: Smart pointers (`Box<T>`, `Rc<T>`, `Arc<T>`, `RefCell<T>`) providing memory allocation and ownership semantics.
@@ -282,7 +281,6 @@ Scope borrows tightly or use .try_borrow() / .try_borrow_mut()!
 - [`Arc<T>`](../level_03/arc_t.md) — Atomic reference counted pointer.
 
 ---
-
 
 ## 7. Key Takeaways
 

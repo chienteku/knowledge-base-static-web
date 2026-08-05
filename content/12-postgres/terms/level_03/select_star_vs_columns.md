@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](select.md) — The baseline data retrieval statement.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ SELECT id, name, email FROM users; -- Immutable explicit column list
 
 ## 7. Related Terms
 - [`SELECT`](select.md) — The parent query command.
+
 ---
 
 ## 8. Key Takeaways

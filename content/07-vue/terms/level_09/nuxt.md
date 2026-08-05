@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Server-Side Rendering (SSR)](ssr.md) — The primary architecture Nuxt simplifies.
 - [Vue Router](../level_06/vue_router.md) — Nuxt completely automates this.
+
 ---
 
 ## 2. Term Category
@@ -164,6 +165,7 @@ const count = ref(0);
 - [Hydration (Vue)](hydration.md) — The process Nuxt manages between the server and client.
 - [Static Site Generation (SSG)](ssg.md) — The static build target option for Nuxt sites.
 - [Vue Router](../level_06/vue_router.md) — Vue Router.
+
 ---
 
 ## 8. Key Takeaways

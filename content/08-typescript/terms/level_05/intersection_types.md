@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Union Types (`|`)](union_types.md) — The exact opposite concept.
 - [Object Types](../level_03/object_types.md) — What Intersection Types are almost exclusively used for.
+
 ---
 
 ## 2. Term Category
@@ -166,6 +167,7 @@ type AB = A & B; // Compatible property types merge safely
 - [Union Types (`|`)](union_types.md) — The OR operator.
 - [Interfaces](../level_03/interfaces.md) — The alternative way to combine object shapes (using `extends`).
 - [Branded / Nominal Types](../level_09/branded_nominal_types.md) — Related concept: Branded / Nominal Types.
+
 ---
 
 ## 8. Key Takeaways

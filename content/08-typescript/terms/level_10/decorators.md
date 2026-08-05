@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Classes Overview](classes.md) — The blueprints of object structures.
 - [Parameter Properties](parameter_properties.md) — Declaring fields inside constructor arguments.
+
 ---
 
 ## 2. Term Category
@@ -314,6 +315,7 @@ Modify this `tsconfig.json` block to resolve the compiler warning.
 - [Classes Overview](classes.md) — The structures decorated.
 - [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — Visibility bounds of fields.
 - [Static Members](static_members.md) — Class-level properties.
+
 ---
 
 ## 8. Key Takeaways

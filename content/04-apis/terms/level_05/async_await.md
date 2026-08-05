@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Promises (in the context of networks)](promises.md) — `async/await` is just a prettier way of writing `.then()`.
 - [The fetch() API](fetch.md) — The primary reason we need `async/await`.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ fetch('/api/user')
 - [Error Handling (try / catch)](error_handling.md) — Because we no longer use `.catch()`, we need a new way to handle errors with `async/await`.
 - [Promises (in the context of networks)](promises.md) — Related concept: Promises (in the context of networks).
 - [The fetch() API](fetch.md) — Related concept: The fetch() API.
+
 ---
 
 ## 8. Key Takeaways

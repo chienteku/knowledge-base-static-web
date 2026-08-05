@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Directives](directives.md) — The built-in directive system.
 - [Component Lifecycle](../level_04/component_lifecycle.md) — Component lifecycle phases.
+
 ---
 
 ## 2. Term Category
@@ -278,6 +279,7 @@ const vFocus = { mounted(el) { el.focus(); } }; // Correct vFocus camelCase nami
 - [Composables](../level_05/composables.md) — The mechanism for reusing stateful JavaScript logic.
 - [Component Lifecycle](../level_04/component_lifecycle.md) — The hooks that manage the life cycle of the component.
 - [Directives](directives.md) — Related concept: Directives.
+
 ---
 
 ## 8. Key Takeaways

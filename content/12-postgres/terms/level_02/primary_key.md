@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Columns typing.
 - [`NOT NULL` Constraint](not_null.md) — The requirement of non-empty fields.
+
 ---
 
 ## 2. Term Category
@@ -231,6 +232,7 @@ Which row will fail, and why?
 - [Natural Key vs. Surrogate Key](../level_05/natural_vs_surrogate_key.md) — Related concept: Natural Key vs. Surrogate Key.
 - [Composite Key](../level_06/composite_key.md) — Related concept: Composite Key.
 - [`FOREIGN KEY`](../level_05/foreign_key.md) — Foreign key references.
+
 ---
 
 ## 8. Key Takeaways

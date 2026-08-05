@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<script>`](script.md) — The parent tag hosting these attributes.
 - [`<head>`](../level_01/head.md) — The location where script loading strategies are configured.
+
 ---
 
 ## 2. Term Category
@@ -239,6 +240,7 @@ Comparing script tags in `<head>`:
 - [`<script>`](script.md) — The parent script container element.
 - [`<link>`](link.md) — The element used to connect stylesheets (which are also render-blocking).
 - [Render-Blocking Resources](../level_09/render_blocking.md) — Related concept: Render-Blocking Resources.
+
 ---
 
 ## 8. Key Takeaways

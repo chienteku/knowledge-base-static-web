@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Asynchronous Runtime**: `std::task::Waker` and `Context` for notifying executors when asynchronous tasks become ready.
@@ -334,7 +333,6 @@ Always update saved wakers: self.waker = Some(cx.waker().clone());
 - [Executor / Runtime](executor_runtime.md) — Task executors.
 
 ---
-
 
 ## 7. Key Takeaways
 

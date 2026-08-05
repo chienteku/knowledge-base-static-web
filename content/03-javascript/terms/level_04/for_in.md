@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — A collection of key-value pairs.
 - [for...of](for_of.md) — Iterates over iterable values.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ async function processData() {
 - [for...of](for_of.md) — Used for iterating over the *values* of Arrays and Strings.
 - [Object](../level_02/object.md) — The data structure that `for...in` is designed for.
 - [hasOwnProperty / Object.getPrototypeOf](../level_07/hasownproperty_getprototypeof.md) — Related concept: hasOwnProperty / Object.getPrototypeOf.
+
 ---
 
 ## 8. Key Takeaways

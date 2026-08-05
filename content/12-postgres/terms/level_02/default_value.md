@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding database column typing.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ id UUID PRIMARY KEY DEFAULT gen_random_uuid() -- Generates new UUID per row
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The typing foundation.
 - [`NOT NULL` Constraint](not_null.md) — Often paired with defaults.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [SPA](spa.md) — Single Page Application architecture.
 - [JSX](jsx.md) — The XML-like syntax extension representing templates.
+
 ---
 
 ## 2. Term Category
@@ -215,6 +216,7 @@ async function processData() {
 ## 7. Related Terms
 - [Bundler](bundler.md) — The builder tools that package components for deployment.
 - [CommonJS vs ES Modules (require vs import)](commonjs_vs_esm.md) — The module standards used to import libraries and framework components.
+
 ---
 
 ## 8. Key Takeaways

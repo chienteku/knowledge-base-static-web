@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTTP Headers](../level_02/http_headers.md) — Cookies are transmitted entirely via headers.
 - [Statelessness](../level_03/statelessness.md) — Cookies were the original invention to solve HTTP's amnesia.
+
 ---
 
 ## 2. Term Category
@@ -144,6 +145,7 @@ console.log(cookie.value);
 - [Session vs Token Authentication](../level_04/session_vs_token_auth.md) — Related concept: Session vs Token Authentication.
 - [Storage Serialization](storage_serialization.md) — Related concept: Storage Serialization.
 - [Cookie Attributes (HttpOnly, Secure, SameSite)](cookie_attributes.md) — SameSite, Secure, HttpOnly attributes.
+
 ---
 
 ## 8. Key Takeaways

@@ -9,6 +9,7 @@
 - [Function](function.md) — A reusable block of code designed to perform a particular task.
 - [return Statement](return_statement.md) — Ends function execution and specifies a value to be returned to the caller.
 - [Call Stack](../level_06/call_stack.md) — A LIFO (Last In, First Out) stack that keeps track of function calls.
+
 ---
 
 ## 2. Term Category
@@ -272,6 +273,7 @@ console.log(factorial(5));
 - [Call Stack](../level_06/call_stack.md) — The engine's internal tracker for active function calls.
 - [Higher-Order Function](higher_order_function.md) — Functions operating on other functions.
 - [return Statement](return_statement.md) — The keyword used to terminate recursive execution and pass values back.
+
 ---
 
 ## 8. Key Takeaways

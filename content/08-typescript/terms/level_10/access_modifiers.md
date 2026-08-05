@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Classes Overview](classes.md) — The structure these modifiers attach to.
-- class — The runtime equivalent of `private`.
+- [Class](../../../03-javascript/terms/level_07/class.md) — The runtime equivalent of `private`.
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ class Child extends Base { getId() { return this.id; } } // Accessible inside su
 - [Parameter Properties](parameter_properties.md) — A shorthand trick using these exact keywords.
 - [Decorators](decorators.md) — Related concept: Decorators.
 - [Static Members](static_members.md) — Related concept: Static Members.
+
 ---
 
 ## 8. Key Takeaways

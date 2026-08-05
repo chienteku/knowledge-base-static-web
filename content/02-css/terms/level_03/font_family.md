@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Ruleset (Declaration, Property, Value)](../level_01/ruleset.md) — Used inside a standard declaration block.
+
 ---
 
 ## 2. Term Category
@@ -169,6 +170,7 @@ body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 ## 7. Related Terms
 - [`font-size` & `font-weight`](font_size_weight.md) — Properties used to adjust the size and thickness of the chosen font family.
 - [`@font-face` & Web Fonts (Google Fonts)](web_fonts.md) — Loading custom external typefaces.
+
 ---
 
 ## 8. Key Takeaways

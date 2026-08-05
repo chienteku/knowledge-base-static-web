@@ -271,7 +271,6 @@ items.iter().for_each(|x| println!("{x}")); // Correct!
 - [Collecting](../level_02/collecting.md) — The most common way to force a lazy iterator to finally do its work.
 - [Iterator Chains](iterator_chains.md) — The pipelines that benefit most from this optimization.
 - [`Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`)](../level_02/iterator_consumers.md) — Related concept: `Iterator` Consumers (`fold`, `reduce`, `sum`, `product`, `count`, `any`, `all`, `find`, `position`).
-- [`#[must_use]`](../level_07/must_use_attribute.md) — Related concept: `#[must_use]`.
 
 ---
 

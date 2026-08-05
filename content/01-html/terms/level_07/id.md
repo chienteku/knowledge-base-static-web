@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of providing extra information inside a starting tag.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ The `id` attribute is the **License Plate Number**. No two cars in the garage ca
 - [`data-*` Attributes](data_attributes.md) — Custom data values that can reside next to IDs for scripting.
 - [`name` Attribute (in Form Fields)](../level_05/name.md) — Related concept: `name` Attribute (in Form Fields).
 - [`tabindex` Attribute](tabindex.md) — Related concept: `tabindex` Attribute.
+
 ---
 
 ## 8. Key Takeaways

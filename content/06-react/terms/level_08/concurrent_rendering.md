@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Fiber Architecture](../level_01/fiber_architecture.md) — The cooperative scheduling engine enabling chunking.
 - [Render Purity](../level_01/render_purity.md) — Crucial because paused rendering cycles can be run multiple times before committing.
+
 ---
 
 ## 2. Term Category
@@ -186,6 +187,7 @@ onChange={e => {
 - [`useTransition` Hook](use_transition.md) — The hook used to mark state updates as interruptible transitions.
 - [`useDeferredValue` Hook](use_deferred_value.md) — Related concept: `useDeferredValue` Hook.
 - [Streaming SSR](../level_10/streaming_ssr.md) — Related concept: Streaming SSR.
+
 ---
 
 ## 8. Key Takeaways

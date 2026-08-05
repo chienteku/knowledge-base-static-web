@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Callback Function](../level_03/callback_function.md) — A function passed as an argument.
 - [Asynchronous](asynchronous.md) — Non-blocking code execution.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ async function processData() {
 - [Promise](promise.md) — The modern solution to flatten the pyramid.
 - [async / await](async_await.md) — The ultimate modern solution for readable async code.
 - [Promise Chaining](promise_chaining.md) — Related concept: Promise Chaining.
+
 ---
 
 ## 8. Key Takeaways

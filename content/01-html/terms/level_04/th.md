@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<tr>` (Table Row)](tr.md) — The parent element that holds the `<th>`.
 - [Nesting](../level_01/nesting.md) — Since table header cells must nest directly inside a parent table row container.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ Usually, you type your column names there and make the text bold so it stands ou
 - [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.
 - [`<caption>`](caption.md) — Related concept: `<caption>`.
 - [`<table>`](table.md) — Related concept: `<table>`.
+
 ---
 
 ## 8. Key Takeaways

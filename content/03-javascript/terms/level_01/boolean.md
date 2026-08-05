@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ async function processData() {
 ## 7. Related Terms
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [Truthy / Falsy](../level_02/truthy_falsy.md) — Values that evaluate to true or false in a boolean context.
+
 ---
 
 ## 8. Key Takeaways

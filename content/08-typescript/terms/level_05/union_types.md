@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_02/primitive_types.md) — The building blocks often used inside Unions.
 - [Type Narrowing](../level_06/type_narrowing.md) — How you safely interact with a Union Type.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ let val: string | number; // Represents a value that can be either string or num
 - [`Pick<T>` & `Omit<T>`](../level_08/pick_omit.md) — Related concept: `Pick<T>` & `Omit<T>`.
 - [`Record<Keys, Type>`](../level_08/record.md) — Related concept: `Record<Keys, Type>`.
 - [Discriminated Unions](../level_06/discriminated_unions.md) — Discriminated unions.
+
 ---
 
 ## 8. Key Takeaways

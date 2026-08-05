@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](select.md) — The baseline query command.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ CREATE INDEX idx_logs_created_at ON logs (created_at DESC);
 ## 7. Related Terms
 - [`SELECT`](select.md) — The query starter.
 - [`LIMIT` / `OFFSET`](limit_offset.md) — Restricting sorted output counts.
+
 ---
 
 ## 8. Key Takeaways

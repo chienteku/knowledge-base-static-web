@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Variable Lifetimes**: Lexical scope `{}` bounds and variable shadowing (`let x = x + 1`).
@@ -237,7 +236,6 @@ let mut total = 0; for x in vec { total += x; }
 - [Shadowing](shadowing.md) — Re-declaring variables in scope.
 
 ---
-
 
 ## 7. Key Takeaways
 

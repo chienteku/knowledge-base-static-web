@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`var()` (CSS Custom Properties)](var.md) — Dynamic browser variables.
 - [`@import` Rule](import.md) — Bundling modular styles.
+
 ---
 
 ## 2. Term Category
@@ -254,6 +255,7 @@ $primary-color: #ff007f;
 ## 7. Related Terms
 - [`@import` Rule](import.md) — Bundling modular styles.
 - [CSS Methodologies (BEM, OOCSS, SMACSS)](methodologies.md) — Component naming schemes.
+
 ---
 
 ## 8. Key Takeaways

@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Smart Pointer**: `std::borrow::Cow` (Copy-On-Write) for opportunistic borrowing.
@@ -280,7 +279,6 @@ fn always_transform(s: &str) -> String { s.to_uppercase() }
 - [`ToOwned` Trait](../level_11/toowned_trait.md) — ToOwned trait.
 
 ---
-
 
 ## 7. Key Takeaways
 

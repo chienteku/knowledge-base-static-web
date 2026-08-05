@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Prop Drilling](prop_drilling.md) — The exact problem that the Context API was created to solve.
+- [Components](../level_01/components.md) — Passing data through component trees without prop drilling.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +192,7 @@ Can the `<Footer />` access the "dark" theme?
 - [Compound Components](../level_07/compound_components.md) — Related concept: Compound Components.
 - [Suspense for Data Fetching & the `use()` Hook](../level_10/use_hook.md) — Related concept: Suspense for Data Fetching & the `use()` Hook.
 - [Redux](../level_11/redux.md) — Related concept: Redux.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [State](state.md) — You must understand what State is before you use this hook to create it.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ const [data, setData] = useState(() => parseHeavyData()); // Lazy initial state
 - [TypeScript with React](../level_11/typescript_react.md) — Related concept: TypeScript with React.
 - [Re-rendering](re_rendering.md) — Re-rendering triggered by state.
 - [Controlled Components](../level_05/controlled_components.md) — Related concept: Controlled Components.
+
 ---
 
 ## 8. Key Takeaways

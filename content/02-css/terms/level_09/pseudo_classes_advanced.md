@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — The baseline element and class selectors.
 - [`:hover` & `:focus` (Pseudo-classes)](hover_focus.md) — Understanding active selectors.
+
 ---
 
 ## 2. Term Category
@@ -282,6 +283,7 @@ p:nth-of-type(2) { color: red; } /* Matches <p>Para 2</p> (2nd paragraph element
 - [`::before` & `::after` (Pseudo-elements)](pseudo_elements.md) — Virtual node generators.
 - [`accent-color`](../level_11/accent_color.md) — Related concept: `accent-color`.
 - [Combinator Selectors](../level_11/combinators.md) — Related concept: Combinator Selectors.
+
 ---
 
 ## 8. Key Takeaways

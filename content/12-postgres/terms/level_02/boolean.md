@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding database column typing.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ WHERE is_verified = TRUE AND marketing_consent = FALSE;
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [`NULL`](null.md) — The unset boolean state.
+
 ---
 
 ## 8. Key Takeaways

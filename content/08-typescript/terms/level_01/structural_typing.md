@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [TypeScript](typescript.md) — The language introduction.
 - [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — The difference between compile-time and runtime checks.
+
 ---
 
 ## 2. Term Category
@@ -248,6 +249,7 @@ const myDog: Dog = new Cat();
 - [Type Aliases (`type`)](../level_05/type_aliases.md) — Type aliases.
 - [Excess Property Checks](../level_03/excess_property_checks.md) — Excess property checks.
 - [TypeScript](typescript.md) — Related concept: TypeScript.
+
 ---
 
 ## 8. Key Takeaways

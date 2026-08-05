@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [OAuth 2.0](oauth.md) — The authorization framework defining client access.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ app.post('/items', verifyToken, requireScope('write:items'), (req, res) => {
 ## 7. Related Terms
 - [API Keys](api_keys.md) — Simple tokens that usually grant full access without fine-grained scope limitations.
 - [JWT (JSON Web Tokens)](jwt.md) — The token format where OAuth scopes are typically stored in the payload (often under the `scp` or `scope` claims).
+
 ---
 
 ## 8. Key Takeaways

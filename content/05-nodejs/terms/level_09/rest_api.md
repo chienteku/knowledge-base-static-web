@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-- json — The language REST APIs speak.
+- [JSON (JavaScript Object Notation)](../../../04-apis/terms/level_01/json.md) — The language REST APIs speak.
+
 ---
 
 ## 2. Term Category
@@ -238,6 +239,7 @@ app.patch('/users/:id', (req, res) => { ... }); // Partial update via PATCH
 - [CORS](cors.md) — Related concept: CORS.
 - [Controllers & Services](controllers_services.md) — Controllers and Services architecture.
 - [MVC Pattern (Model–View–Controller)](mvc_pattern.md) — MVC pattern.
+
 ---
 
 ## 8. Key Takeaways

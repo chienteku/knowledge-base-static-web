@@ -11,7 +11,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Fallible Conversion Traits**: `TryFrom` and `TryInto` for conversions that can fail.
@@ -277,7 +276,6 @@ let SmallVal = u8::try_from(big_int)?; // Checked bounds conversion!
 - [`TryFrom` / `TryInto`](try_from_try_into.md) — TryFrom/TryInto family.
 
 ---
-
 
 ## 7. Key Takeaways
 

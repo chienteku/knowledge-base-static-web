@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP Headers](http_headers.md) — Metadata wrappers sent with HTTP payloads.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ fetch('/upload', {
 - [FormData & Multipart Uploads](../level_05/formdata.md) — Related concept: FormData & Multipart Uploads.
 - [HTTP Headers](http_headers.md) — Related concept: HTTP Headers.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — Related concept: JSON (JavaScript Object Notation).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Cookies](cookies.md) — The header-based browser storage state.
 - [Session vs Token Authentication](../level_04/session_vs_token_auth.md) — The authentication paradigms utilizing cookies.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ Set-Cookie: token=xyz; SameSite=None; Secure
 - [CSRF (Cross-Site Request Forgery)](../level_04/csrf.md) — The cross-origin vulnerability mitigated by SameSite attributes.
 - [XSS (Cross-Site Scripting)](../level_04/xss.md) — The injection vulnerability mitigated by HttpOnly.
 - [Cookies](cookies.md) — Related concept: Cookies.
+
 ---
 
 ## 8. Key Takeaways

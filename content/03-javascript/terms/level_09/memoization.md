@@ -9,6 +9,7 @@
 - [Function](../level_03/function.md) — The process being optimized.
 - [Closure](../level_03/closure.md) — Used to keep the "cache" hidden and persistent.
 - [Object](../level_02/object.md)
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ async function processData() {
 ## 7. Related Terms
 - [Closure](../level_03/closure.md) — The mechanic that keeps the cache alive without making it a global variable.
 - [Higher-Order Function](../level_03/higher_order_function.md) — `memoize()` takes a function and returns a new function.
+
 ---
 
 ## 8. Key Takeaways

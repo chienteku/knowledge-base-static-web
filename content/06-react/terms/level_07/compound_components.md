@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Context API](../level_06/context_api.md) — The state-sharing mechanism used under the hood.
 - [Children Prop](children_prop.md) — The property enabling flexible subcomponent layout structures.
+
 ---
 
 ## 2. Term Category
@@ -298,6 +299,7 @@ function App() {
 - [The Context API](../level_06/context_api.md) — The state transport vehicle used by compound parent-child pairings.
 - [Children Prop](children_prop.md) — The JSX container that allows subcomponent markup structures.
 - [Higher-Order Components (HOC)](hoc.md) — Related concept: Higher-Order Components (HOC).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The parent framework that extends this native API.
+- [React Server Components (RSC)](../level_01/rsc.md) — Server-side data fetching inside React Server Components.
+
 ---
 
 ## 2. Term Category
@@ -226,6 +228,7 @@ export async function fetchUser(userId: string) {
 ## 7. Related Terms
 - [Server-side Fetching (Extended `fetch`)](fetch.md) — How Next.js builds on this native API.
 - [`cookies()` and `headers()` from `next/headers`](cookies_headers.md) — Accessing HTTP headers.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent properties that define the grid lines items place themselves against.
+- [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Placing grid items inside CSS Grid containers.
+
 ---
 
 ## 2. Term Category
@@ -330,6 +332,7 @@ Full-width header placement:
 ## 7. Related Terms
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent coordinate blueprint.
 - [`grid-template-areas`](grid_template_areas.md) — The visual name placement alternative.
+
 ---
 
 ## 8. Key Takeaways

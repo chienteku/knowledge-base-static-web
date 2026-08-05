@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The concept of injecting configuration into opening tags.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — The address standard used to locate files.
+
 ---
 
 ## 2. Term Category
@@ -213,6 +214,7 @@ Different elements using `src` to load resources:
 - [`<audio>`](audio.md) — Related concept: `<audio>`.
 - [`<iframe>`](iframe.md) — Related concept: `<iframe>`.
 - [`<video>`](video.md) — Related concept: `<video>`.
+
 ---
 
 ## 8. Key Takeaways

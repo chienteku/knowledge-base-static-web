@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -143,6 +144,7 @@ function greet(name) {
 - [The TypeScript Compiler (`tsc`)](tsc.md) — The engine that strips the types away.
 - [Static Typing vs Dynamic Typing](static_dynamic_typing.md) — The fundamental difference between TS and JS.
 - [Structural Typing / Duck Typing](structural_typing.md) — Structural type system.
+
 ---
 
 ## 8. Key Takeaways

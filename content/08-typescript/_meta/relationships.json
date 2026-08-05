@@ -445,7 +445,13 @@
       "level": 2,
       "file": "terms/level_02/void_never.md",
       "display_name": "`void` & `never`",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "08-typescript",
+          "term": "primitive_types",
+          "description": "TypeScript primitive types overview."
+        }
+      ],
       "related": [
         {
           "term": "function_types",
@@ -566,6 +572,11 @@
           "term": "interfaces",
           "module": "08-typescript",
           "description": "The structure this syntax is used within."
+        },
+        {
+          "module": "08-typescript",
+          "term": "object_types",
+          "description": "Defining dynamic object key-value properties."
         }
       ],
       "related": [
@@ -2133,6 +2144,11 @@
           "term": "object_types",
           "module": "08-typescript",
           "description": "The structures you are accessing properties from."
+        },
+        {
+          "module": "08-typescript",
+          "term": "keyof",
+          "description": "Extracting property keys using keyof operator."
         }
       ],
       "related": [
@@ -2382,6 +2398,11 @@
           "term": "typeof",
           "module": "03-javascript",
           "description": "The runtime version of this keyword."
+        },
+        {
+          "module": "08-typescript",
+          "term": "type_aliases",
+          "description": "Creating type aliases from JavaScript values."
         }
       ],
       "related": [
@@ -2521,6 +2542,11 @@
           "module": "08-typescript",
           "term": "abstract_classes",
           "description": "Abstract classes."
+        },
+        {
+          "module": "08-typescript",
+          "term": "static_members",
+          "description": "Related concept: Static Members."
         }
       ]
     },
@@ -2647,6 +2673,11 @@
           "term": "decorators",
           "module": "08-typescript",
           "description": "Related concept: Decorators."
+        },
+        {
+          "module": "08-typescript",
+          "term": "classes",
+          "description": "Static class members vs instance properties."
         }
       ]
     },
@@ -2742,6 +2773,11 @@
           "term": "declaration_files",
           "module": "08-typescript",
           "description": "The `.d.ts` files that DefinitelyTyped provides."
+        },
+        {
+          "module": "08-typescript",
+          "term": "tsconfig",
+          "description": "Configuring type declaration resolution in tsconfig.json."
         }
       ],
       "related": [
@@ -2776,6 +2812,11 @@
           "term": "union_types",
           "module": "08-typescript",
           "description": "Usually combined with Literal Types to replace Enums."
+        },
+        {
+          "module": "08-typescript",
+          "term": "primitive_types",
+          "description": "TypeScript numeric and string enum declarations."
         }
       ],
       "related": [

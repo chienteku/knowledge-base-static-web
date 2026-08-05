@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [CommonJS (require, module.exports)](commonjs.md) — Uses the classic module resolution algorithm.
 - [NPM (Node Package Manager)](../level_04/npm.md) — Resolution specifically looks for packages installed by NPM.
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ List the exact directory paths Node.js will check in order, looking for `lodash`
 - [Circular Dependencies](circular_dependencies.md) — Related concept: Circular Dependencies.
 - [Built-in vs External Modules](module_types.md) — Related concept: Built-in vs External Modules.
 - [CommonJS (require, module.exports)](commonjs.md) — Related concept: CommonJS (require, module.exports).
+
 ---
 
 ## 8. Key Takeaways

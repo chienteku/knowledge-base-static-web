@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React Server Components (RSC)](rsc.md) — The default component type you are opting out of.
 - [React Hooks](react_hooks.md) — Functions like `useState` and `useEffect` that are only available in Client Components.
+
 ---
 
 ## 2. Term Category
@@ -181,6 +182,7 @@ import ServerComponent from './ServerComponent'; // Will this work?
 - [React Components](react_components.md) — Related concept: React Components.
 - [React Hooks](react_hooks.md) — Related concept: React Hooks.
 - [Environment Variables (`.env.local`)](../level_10/environment_variables.md) — Related concept: Environment Variables (`.env.local`).
+
 ---
 
 ## 8. Key Takeaways

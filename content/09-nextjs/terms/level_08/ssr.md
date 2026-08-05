@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React Server Components (RSC)](../level_01/rsc.md) — The mechanism Next.js uses to perform SSR in the App Router.
 - [Client-Side Rendering (CSR) / SPA](../level_01/csr_spa.md) — The opposite of SSR, where rendering happens entirely in the browser.
+
 ---
 
 ## 2. Term Category
@@ -285,6 +286,7 @@ export default async function Page({ params }) {
 - [React Server Components (RSC)](../level_01/rsc.md) — Related concept: React Server Components (RSC).
 - [SEO (Search Engine Optimization)](../level_01/seo.md) — Related concept: SEO (Search Engine Optimization).
 - [`cookies()` and `headers()` from `next/headers`](../level_05/cookies_headers.md) — Related concept: `cookies()` and `headers()` from `next/headers`.
+
 ---
 
 ## 8. Key Takeaways

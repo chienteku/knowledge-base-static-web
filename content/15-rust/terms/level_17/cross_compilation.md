@@ -420,7 +420,7 @@ rustflags = ["-C", "link-arg=-Tlink.x"]
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](../level_01/variable.md) — A named container for storing data values.
 - [Primitive Types](../level_01/primitive_types.md) — Basic immutable data types.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ async function processData() {
 - [Proxy](../level_09/proxy.md) — Related concept: Proxy.
 - [Property Access (dot vs bracket notation)](property_access.md) — Dot vs bracket notation.
 - [Prototype](../level_07/prototype.md) — Prototype chain.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Modules (import/export)](modules.md) — The static ES module sharing syntax.
 - [Promise](../level_06/promise.md) — Asynchronous result container objects.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ calculate(10, 20).then(result => console.log("Result:", result));
 - [Bundler](../level_10/bundler.md) — Tooling that automates code splitting via dynamic imports.
 - [Tree Shaking & Code Splitting](../level_10/tree_shaking_code_splitting.md) — Related concept: Tree Shaking & Code Splitting.
 - [Modules (import/export)](modules.md) — Related concept: Modules (import/export).
+
 ---
 
 ## 8. Key Takeaways

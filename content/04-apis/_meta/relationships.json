@@ -335,6 +335,11 @@
           "term": "dns",
           "module": "04-apis",
           "description": "Related concept: DNS (Domain Name System)."
+        },
+        {
+          "module": "04-apis",
+          "term": "url_encoding",
+          "description": "Percent-encoding special characters inside URLs."
         }
       ]
     },
@@ -408,6 +413,11 @@
           "module": "04-apis",
           "term": "json",
           "description": "Related concept: JSON (JavaScript Object Notation)."
+        },
+        {
+          "module": "04-apis",
+          "term": "character_encoding",
+          "description": "Related concept: Character Encoding (UTF-8)."
         }
       ]
     },
@@ -711,6 +721,11 @@
           "term": "request_body",
           "module": "04-apis",
           "description": "Un-encoded data payloads that do not require URL character escaping."
+        },
+        {
+          "module": "04-apis",
+          "term": "url_uri",
+          "description": "Related concept: URL / URI (Uniform Resource Identifier)."
         }
       ]
     },
@@ -1485,6 +1500,11 @@
           "term": "api_keys",
           "module": "04-apis",
           "description": "The credential strings requiring protection."
+        },
+        {
+          "module": "04-apis",
+          "term": "api",
+          "description": "API key and secret credentials protection."
         }
       ],
       "related": [
@@ -1514,6 +1534,11 @@
           "term": "statelessness",
           "module": "04-apis",
           "description": "The REST constraint relating to request context."
+        },
+        {
+          "module": "04-apis",
+          "term": "jwt",
+          "description": "JSON Web Token (JWT) vs session cookie authentication."
         }
       ],
       "related": [
@@ -2178,6 +2203,11 @@
           "term": "retry_backoff",
           "module": "04-apis",
           "description": "Related concept: Retry & Exponential Backoff."
+        },
+        {
+          "module": "04-apis",
+          "term": "idempotency_keys",
+          "description": "Related concept: Idempotency Keys."
         }
       ]
     },
@@ -2207,6 +2237,11 @@
           "term": "rate_limiting",
           "module": "04-apis",
           "description": "The server protections that clients retry against."
+        },
+        {
+          "module": "04-apis",
+          "term": "idempotency",
+          "description": "Ensuring safe retries using unique idempotency request keys."
         }
       ]
     },
@@ -2478,6 +2513,11 @@
           "term": "serialization",
           "module": "04-apis",
           "description": "The concepts of formatting objects for transmission."
+        },
+        {
+          "module": "04-apis",
+          "term": "json",
+          "description": "UTF-8 text encoding for JSON data serialization."
         }
       ],
       "related": [
@@ -2490,6 +2530,11 @@
           "term": "binary_vs_text_formats",
           "module": "04-apis",
           "description": "The architectural trade-off between sending byte-streams vs character-encoded text."
+        },
+        {
+          "module": "04-apis",
+          "term": "content_type",
+          "description": "Specifying charset parameter in Content-Type header."
         }
       ]
     },

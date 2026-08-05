@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](primitive_types.md) — The basic values of JavaScript.
 - [`void` & `never`](void_never.md) — Representing no return or unreachable code.
+
 ---
 
 ## 2. Term Category
@@ -215,6 +216,7 @@ function getLength(str: string | undefined): number {
 - [`void` & `never`](void_never.md) — The other non-value types.
 - [Strict Mode](../level_11/strict_mode.md) — The setting that turns on strict null checking.
 - [Non-null Assertion Operator (`!`)](../level_05/non_null_assertion.md) — Related concept: Non-null Assertion Operator (`!`).
+
 ---
 
 ## 8. Key Takeaways

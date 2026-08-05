@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ async function processData() {
 - [undefined](undefined.md) — The uninitialized state.
 - [BigInt](bigint.md) — Related concept: BigInt.
 - [instanceof](../level_07/instanceof.md) — Related concept: instanceof.
+
 ---
 
 ## 8. Key Takeaways

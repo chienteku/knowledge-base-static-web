@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTTP / HTTPS](../level_01/http_https.md) — Methods are the very first word in every HTTP request.
 - [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — You use a Method to tell the server *what* to do with the URL.
+
 ---
 
 ## 2. Term Category
@@ -181,6 +182,7 @@ PATCH /users/5 HTTP/1.1
 - [CORS (Cross-Origin Resource Sharing)](../level_04/cors.md) — Related concept: CORS (Cross-Origin Resource Sharing).
 - [Idempotent vs Safe Methods](idempotent_vs_safe_methods.md) — Safe and idempotent HTTP methods.
 - [HTTP Status Codes](status_codes.md) — HTTP status codes.
+
 ---
 
 ## 8. Key Takeaways

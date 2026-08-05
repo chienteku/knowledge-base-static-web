@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Client-Server Model](client_server_model.md) — The two actors in this lifecycle.
 - [HTTP / HTTPS](http_https.md) — The language they are speaking.
+
 ---
 
 ## 2. Term Category
@@ -163,6 +164,7 @@ if (!res.ok) {
 - [The fetch() API](../level_05/fetch.md) — The JavaScript function used to trigger this lifecycle manually.
 - [HTTP / HTTPS](http_https.md) — Related concept: HTTP / HTTPS.
 - [Client-Server Model](client_server_model.md) — Related concept: Client-Server Model.
+
 ---
 
 ## 8. Key Takeaways

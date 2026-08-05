@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Base tag syntax.
 - [`value` Attribute (in Form Fields)](../level_05/value.md) — The attribute used to declare current values.
+
 ---
 
 ## 2. Term Category
@@ -299,6 +300,7 @@ Basic progress and meter tags:
 - [`<output>` Element](../level_05/output.md) — The semantic tag displaying calculation results.
 - [`style` Attribute](../level_07/style.md) — Used for overriding default progress styles.
 - [`<canvas>`](canvas.md) — Related concept: `<canvas>`.
+
 ---
 
 ## 8. Key Takeaways

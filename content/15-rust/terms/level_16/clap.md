@@ -476,7 +476,7 @@ Build an API deployment CLI tool `deploy-cli` enforcing advanced operational con
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

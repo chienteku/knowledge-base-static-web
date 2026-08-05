@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Literal Types](../level_05/literal_types.md) — Base primitive values as types.
 - [Union Types (`|`)](../level_05/union_types.md) — Iterative collections of options.
+
 ---
 
 ## 2. Term Category
@@ -211,6 +212,7 @@ const fetchApi = (route: ApiRoute) => { ... };
 - [`keyof` Operator](keyof.md) — Extracting keys to feed into template transformations.
 - [Key Remapping in Mapped Types (`as`)](key_remapping_mapped_types.md) — Related concept: Key Remapping in Mapped Types (`as`).
 - [Conditional Types](conditional_types.md) — Related concept: Conditional Types.
+
 ---
 
 ## 8. Key Takeaways

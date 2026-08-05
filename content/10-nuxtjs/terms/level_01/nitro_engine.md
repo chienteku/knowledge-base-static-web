@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](universal_rendering.md) — The process that Nitro performs to generate HTML on the server.
-- nodejs — The traditional execution host Nitro abstractly runs on or replaces.
+- [Node.js (Runtime Environment)](../../../05-nodejs/terms/level_01/nodejs.md) — The traditional execution host Nitro abstractly runs on or replaces.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ export default defineEventHandler((event) => { return { status: 'ok' }; });
 - [`server/routes/`](../level_07/server_routes.md) — Nitro server routes.
 - [H3 Request Handlers (`defineEventHandler`)](../level_07/h3_handlers.md) — H3 event handlers.
 - [Standalone Build (Node server)](../level_10/standalone_build.md) — Related concept: Standalone Build (Node server).
+
 ---
 
 ## 8. Key Takeaways

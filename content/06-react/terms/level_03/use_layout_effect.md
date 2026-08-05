@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useEffect` Hook](use_effect.md) — The asynchronous counterpart to this hook.
 - [Component Lifecycle](component_lifecycle.md) — The rendering stages where effects are scheduled.
+
 ---
 
 ## 2. Term Category
@@ -222,6 +223,7 @@ Use useEffect for SSR components or fallback to useEffect on server
 ## 7. Related Terms
 - [`useEffect` Hook](use_effect.md) — The standard asynchronous hook for side effects.
 - [`useRef` Hook](../level_04/use_ref.md) — The hook used to reference DOM nodes for layout measurement.
+
 ---
 
 ## 8. Key Takeaways

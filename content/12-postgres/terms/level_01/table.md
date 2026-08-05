@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Relational Database](relational_database.md) — The parent database model.
+
 ---
 
 ## 2. Term Category
@@ -183,6 +184,7 @@ ALTER TABLE heavy_table ADD COLUMN new_col INT DEFAULT 0;
 - [Schema](schema.md) — Related concept: Schema.
 - [`INSERT INTO`](../level_03/insert_into.md) — Related concept: `INSERT INTO`.
 - [Foreign Data Wrappers (`postgres_fdw`)](../level_10/foreign_data_wrappers.md) — Related concept: Foreign Data Wrappers (`postgres_fdw`).
+
 ---
 
 ## 8. Key Takeaways

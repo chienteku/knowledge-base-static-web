@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The fundamental concept of parameters in tags.
+
 ---
 
 ## 2. Term Category
@@ -244,6 +245,7 @@ What are the corresponding JavaScript keys to read these values from the element
 - [`<script>`](../level_08/script.md) — Used to execute the JavaScript that extracts dataset properties.
 - [`style` Attribute](style.md) — Related concept: `style` Attribute.
 - [Drag & Drop API](../level_10/drag_drop.md) — Related concept: Drag & Drop API.
+
 ---
 
 ## 8. Key Takeaways

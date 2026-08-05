@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -34,6 +35,7 @@ None (Entry-level term)
 - [`justify-content`](justify_content.md) — justify-content.
 - [`align-items`](align_items.md) — align-items.
 - [`flex-wrap`](flex_wrap.md) — flex-wrap.
+
 ---
 
 ## 6. Key Takeaways

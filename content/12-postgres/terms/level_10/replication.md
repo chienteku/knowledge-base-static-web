@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [WAL (Write-Ahead Log)](wal.md) — The transaction logs used to synchronize replicas.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ Route write-after-read queries to Primary database node
 ## 7. Related Terms
 - [WAL (Write-Ahead Log)](wal.md) — The sync fuel.
 - [Point-in-Time Recovery (PITR)](pitr.md) — - Offline WAL replaying.
+
 ---
 
 ## 8. Key Takeaways

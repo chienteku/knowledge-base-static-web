@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<th>` (Table Header)](th.md) — The tag that utilizes this attribute.
 - [Attribute](../level_01/attribute.md) — The general concept of injecting options into elements.
+
 ---
 
 ## 2. Term Category
@@ -235,6 +236,7 @@ Using row and column header scopes in the same table:
 - [`<th>` (Table Header)](th.md) — The tag that hosts the `scope` attribute.
 - [`<caption>`](caption.md) — The table title helper.
 - [`colspan` & `rowspan` Attributes](colspan_rowspan.md) — Attributes used to merge table cells.
+
 ---
 
 ## 8. Key Takeaways

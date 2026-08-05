@@ -228,7 +228,6 @@ Write the update query to locate cart `105` and reduce the `price` of all cart i
 
 ## 7. Related Terms
 
-- [Positional Operators (`$`, `$[]`, `$[<identifier>]`)](positional_operators.md) — Related concept: Positional Operators (`$`, `$[]`, `$[<identifier>]`).
 - [Update Operators (`$set`, `$unset`, `$inc`, `$rename`, `$currentDate`)](../level_03/update_operators.md) — Array update operators.
 
 ---

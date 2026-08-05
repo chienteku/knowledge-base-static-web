@@ -9,6 +9,7 @@
 
 - [Edge Properties](edge_properties.md) — The metadata on edges.
 - [`WHERE` Clause](../level_03/where.md) — The query filter context.
+- [Graph Arrow Operators (`->`, `<-`)](graph_arrows.md) — Graph arrow operators for traversal filtering.
 
 ---
 

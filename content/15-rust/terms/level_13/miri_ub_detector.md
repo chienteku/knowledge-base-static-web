@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Undefined Behavior Diagnostic**: The Miri interpreter for detecting Undefined Behavior (UB).
@@ -250,7 +249,6 @@ Ensure pointer arithmetic remains strictly within valid array bounds!
 - [Mir Mid Level Ir](../level_19/mir_mid_level_ir.md) — Related concept: Mir Mid Level Ir.
 
 ---
-
 
 ## 7. Key Takeaways
 

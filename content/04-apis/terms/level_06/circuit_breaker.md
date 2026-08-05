@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Error Handling (try / catch)](../level_05/error_handling.md) — The structure used to catch request errors.
 - [Retry & Exponential Backoff](../level_05/retry_backoff.md) — The client-side request recovery loop.
+
 ---
 
 ## 2. Term Category
@@ -239,6 +240,7 @@ const breaker = new CircuitBreaker(fn, {
 - [Rate Limiting (429 Too Many Requests)](rate_limiting.md) — The server defense policy that client circuit breakers help mitigate.
 - [Webhooks](webhooks.md) — Asynchronous push notifications that bypass synchronous HTTP waiting loops.
 - [Caching (ETag, Cache-Control)](caching.md) — Related concept: Caching (ETag, Cache-Control).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`FOREIGN KEY`](foreign_key.md) — The constraint used to implement the relationship.
+
 ---
 
 ## 2. Term Category
@@ -245,6 +246,7 @@ Write the SQL schema query for the comment table.
 - [`FOREIGN KEY`](foreign_key.md) — The linking constraint.
 - [One-to-One Relationship](one_to_one.md) — Linking exactly two rows.
 - [Many-to-Many Relationship](many_to_many.md) — Linking multiple rows on both sides.
+
 ---
 
 ## 8. Key Takeaways

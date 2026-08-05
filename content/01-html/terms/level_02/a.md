@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — The anchor tag is useless without its primary attribute.
 - [URL (Uniform Resource Locator)](../level_01/url.md) — Since hyperlinks point to absolute or relative resource addresses.
+
 ---
 
 ## 2. Term Category
@@ -249,6 +250,7 @@ You can view all of our options on the <a href="pricing.html">pricing page</a>.
 - [`tabindex` Attribute](../level_07/tabindex.md) — Related concept: `tabindex` Attribute.
 - [`<base>` Element](../level_08/base.md) — Related concept: `<base>` Element.
 - [`<link>`](../level_08/link.md) — Related concept: `<link>`.
+
 ---
 
 ## 8. Key Takeaways

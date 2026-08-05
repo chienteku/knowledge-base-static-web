@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Bundler](bundler.md) — The asset compilation manager.
 - [Modules (import/export)](../level_08/modules.md) — The static ES Module standard.
+
 ---
 
 ## 2. Term Category
@@ -219,6 +220,7 @@ async function processData() {
 - [Dynamic import()](../level_08/dynamic_import.md) — The programming syntax that establishes code-splitting boundaries.
 - [Minification & Source Maps](minification_source_maps.md) — The compression processes applied to bundles.
 - [Specific Bundlers (Webpack / Vite / Rollup / esbuild)](specific_bundlers.md) — Related concept: Specific Bundlers (Webpack / Vite / Rollup / esbuild).
+
 ---
 
 ## 8. Key Takeaways

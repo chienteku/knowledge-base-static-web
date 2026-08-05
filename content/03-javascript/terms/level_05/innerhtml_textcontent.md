@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Node](node.md) — A single point in the DOM tree.
 - [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — The processes of creating, inserting, and deleting nodes.
+
 ---
 
 ## 2. Term Category
@@ -216,6 +217,7 @@ if (typeof document !== "undefined") {
 
 ## 7. Related Terms
 - [DOM Manipulation (createElement, appendChild, remove)](dom_manipulation.md) — Structural node actions.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Directives](directives.md) — The category these belong to.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The philosophy of hiding things via state rather than `display: none`.
+
 ---
 
 ## 2. Term Category
@@ -173,6 +174,7 @@ If you write `<Dashboard v-show="isLoggedIn" />`, what terrible thing happens?
 - [Transitions & Animations](../level_10/transition.md) — Related concept: Transitions & Animations.
 - [Directives](directives.md) — Directives.
 - [Template Syntax](../level_01/template_syntax.md) — Template syntax.
+
 ---
 
 ## 8. Key Takeaways

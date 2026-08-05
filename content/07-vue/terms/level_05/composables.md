@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Composition API](../level_01/composition_api.md) — The foundation that makes Composables possible.
 - [Reactive State](../level_02/reactive_state.md) — What is being encapsulated inside the Composable.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ function useCounter() {
 - [Scoped Slots](scoped_slots.md) — Related concept: Scoped Slots.
 - [`<Suspense>` (Vue)](suspense.md) — Related concept: `<Suspense>` (Vue).
 - [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
+
 ---
 
 ## 8. Key Takeaways

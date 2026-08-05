@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Conditional CSS at-rules.
 - [`var()` (CSS Custom Properties)](var.md) — Theme custom variables.
+
 ---
 
 ## 2. Term Category
@@ -281,6 +282,7 @@ By structuring your styles this way, the browser swaps every single element's ba
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — Baseline responsive queries.
 - [`var()` (CSS Custom Properties)](var.md) — Dynamic color variables.
 - [`:root` Pseudo-class](root_pseudo_class.md) — Variable scopes.
+
 ---
 
 ## 8. Key Takeaways

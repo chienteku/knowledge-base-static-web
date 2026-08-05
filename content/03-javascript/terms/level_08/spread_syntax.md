@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — Often spread into a new array.
 - [Object](../level_02/object.md) — Often spread into a new object.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ async function processData() {
 - [slice / splice](../level_04/slice_splice.md) — Related concept: slice / splice.
 - [Object.assign](../level_07/object_assign.md) — Related concept: Object.assign.
 - [Shallow Copy vs Deep Copy](../level_07/shallow_vs_deep_copy.md) — Related concept: Shallow Copy vs Deep Copy.
+
 ---
 
 ## 8. Key Takeaways

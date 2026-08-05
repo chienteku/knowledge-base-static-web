@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useFetch`](use_fetch.md) — The composable that generates these errors.
 - [Caching Data](caching_data.md) — The cache that `clearNuxtData` interacts with.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ if (error.value) {
 - [`error.vue` & `useError`](../level_10/error_vue.md) — How to trigger a full-page error instead of an inline component error.
 - [`useAsyncData`](use_async_data.md) — Works exactly the same way with `error` and `clearNuxtData`.
 - [Caching Data](caching_data.md) — Related concept: Caching Data.
+
 ---
 
 ## 8. Key Takeaways

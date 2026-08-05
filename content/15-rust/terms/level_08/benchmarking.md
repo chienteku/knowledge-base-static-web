@@ -460,7 +460,7 @@ Requirements:
 ## 6. Related Terms
 
 
-- [Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)](../level_07/cargo_target_kinds.md) — Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`).
+- None!
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React Router](react_router.md) — The library that provides this component.
 - [Client-Side Routing](client_side_routing.md) — Why we cannot use `<a>` tags.
+
 ---
 
 ## 2. Term Category
@@ -157,6 +158,7 @@ If you are currently on the `/about` URL, the `<NavLink to="/about">` will autom
 - [`useNavigate` Hook](use_navigate.md) — The imperative alternative to `<Link>`. (Used for buttons and redirects).
 - [Client-Side Routing](client_side_routing.md) — The core concept powering this.
 - [React Router](react_router.md) — Related concept: React Router.
+
 ---
 
 ## 8. Key Takeaways

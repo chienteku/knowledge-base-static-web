@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useEffect` Hook](use_effect.md) — The hook containing asynchronous data fetches.
 - [Cleanup Functions](cleanup_functions.md) — The function used to discard out-of-date responses.
+
 ---
 
 ## 2. Term Category
@@ -264,6 +265,7 @@ function SearchAutoComplete() {
 ## 7. Related Terms
 - [Cleanup Functions](cleanup_functions.md) — The lifecycle hooks used to execute fetch cancelations.
 - [`useState` Hook](../level_02/use_state.md) — The state variables updated by fetch results.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Utility Types Overview](utility_types.md) — The baseline standard utility overview.
 - [Union Types (`|`)](../level_05/union_types.md) — Custom combined type options.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ const getHandler = (method: SafeMethod) => { ... };
 - [Utility Types Overview](utility_types.md) — The collection of standard helper definitions.
 - [Conditional Types](../level_09/conditional_types.md) — The type checking logic that powers union filtering.
 - [Key Remapping in Mapped Types (`as`)](../level_09/key_remapping_mapped_types.md) — Related concept: Key Remapping in Mapped Types (`as`).
+
 ---
 
 ## 8. Key Takeaways

@@ -6,7 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- `typeof` Operator — The runtime version of this keyword.
+- [typeof](../../../03-javascript/terms/level_01/typeof.md) — The runtime version of this keyword.
+- [Type Aliases (`type`)](../level_05/type_aliases.md) — Creating type aliases from JavaScript values.
+
 ---
 
 ## 2. Term Category
@@ -174,6 +176,7 @@ type InstType = User; // Type of User instance
 > **Explanation:** `typeof` extracts function parameter and return signatures from function implementations.
 
 ## 7. Related Terms
-- [`keyof` Operator](../level_09/keyof.md) — Often combined with `typeof` to extract a union of all keys from a JavaScript object (`type Keys = keyof typeof myConfig`).
+- [`keyof` Operator](keyof.md) — Often combined with `typeof` to extract a union of all keys from a JavaScript object (`type Keys = keyof typeof myConfig`).
 
 ---
+

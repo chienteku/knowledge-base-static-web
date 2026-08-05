@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Directives](directives.md) — The foundation of Vue's template attributes.
 - [Template Syntax](../level_01/template_syntax.md) — The rules for writing Vue templates.
+
 ---
 
 ## 2. Term Category
@@ -265,6 +266,7 @@ const players = ref([
 - [`v-if` / `v-show`](v_if_show.md) — Conditional rendering directives.
 - [`v-once` & `v-memo`](../level_08/v_once_memo.md) — Performance directives for static and memoized list sections.
 - [Virtual DOM (Vue)](../level_08/virtual_dom.md) — The engine that diffs keys to perform updates.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [React Components](../level_01/react_components.md) — The visual units wrapped inside the boundary.
+
 ---
 
 ## 2. Term Category
@@ -226,6 +227,7 @@ async function handleClick() {
 ## 7. Related Terms
 - [`error.tsx` & `global-error.tsx`](error.md) — Next.js's wrapper that creates Error Boundaries automatically.
 - [React Components](../level_01/react_components.md) — The components wrapped by boundaries.
+
 ---
 
 ## 8. Key Takeaways

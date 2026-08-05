@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Routing](routing.md) — Defining the matching pathways.
 - [The req & res Objects](req_res.md) — The incoming request wrappers housing parameters.
+
 ---
 
 ## 2. Term Category
@@ -299,6 +300,7 @@ app.get('/api/products/:category', (req, res) => {
 ## 7. Related Terms
 - [Routing](routing.md) — The routing system matching URL structures.
 - [The req & res Objects](req_res.md) — The HTTP wrapper structures holding incoming parameters.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
 - [Variable](../level_01/variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ async function processData() {
 ## 7. Related Terms
 - [Arguments](arguments.md) — The actual values passed to the function when it is invoked.
 - [Function](function.md) — The block of code that parameters belong to.
+
 ---
 
 ## 8. Key Takeaways

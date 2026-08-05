@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event Loop](event_loop.md) — The system that coordinates these queues.
 - [Microtask Queue](microtask_queue.md) — The high-priority queue.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ async function processData() {
 - [Microtask Queue](microtask_queue.md) — The VIP queue that always cuts in front of Macrotasks.
 - [Event Loop](event_loop.md) — The system that manages this queue.
 - [Timers (setTimeout / setInterval / clearTimeout)](../level_05/timers.md) — Related concept: Timers (setTimeout / setInterval / clearTimeout).
+
 ---
 
 ## 8. Key Takeaways

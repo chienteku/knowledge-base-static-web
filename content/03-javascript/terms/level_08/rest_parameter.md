@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — Where parameters are defined.
 - [Spread Syntax (...)](spread_syntax.md) — The visual twin of Rest.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ const [primary, ...others] = colors;
 ## 7. Related Terms
 - [Spread Syntax (...)](spread_syntax.md) — Uses the same `...` symbol but dumps things *out* instead of packing them *in*.
 - [Destructuring](destructuring.md) — Rest is often used here to grab leftover properties.
+
 ---
 
 ## 8. Key Takeaways

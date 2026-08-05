@@ -9,6 +9,7 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tag syntax rules.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — Since `<br>` and `<hr>` are void elements with no closing tags.
 - [`<p>` (Paragraph)](p.md) — Understand how paragraphs naturally break lines.
+
 ---
 
 ## 2. Term Category
@@ -241,6 +242,7 @@ An `<hr>` is like drawing a solid black line across your notebook paper to indic
 - [`<p>` (Paragraph)](p.md) — The tag that creates natural block spacing.
 - [Void Elements (Self-closing Tags)](../level_01/void_elements.md) — The general concept that `<br>` and `<hr>` fall under.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since `<br>` acts as an inline break and `<hr>` behaves like a block-level break.
+
 ---
 
 ## 8. Key Takeaways

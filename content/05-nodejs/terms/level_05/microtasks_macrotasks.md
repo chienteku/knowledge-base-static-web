@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The Event Loop & Libuv](../level_01/event_loop.md) — This is a deep dive into exactly how the Event Loop prioritizes work.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ console.log('4');
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The manager of these two queues.
 - [process.nextTick() vs setImmediate()](nexttick_setimmediate.md) — Related concept: process.nextTick() vs setImmediate().
 - [Unhandled Promise Rejections](unhandled_rejections.md) — Related concept: Unhandled Promise Rejections.
+
 ---
 
 ## 8. Key Takeaways

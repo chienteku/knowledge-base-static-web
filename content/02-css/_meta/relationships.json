@@ -465,6 +465,16 @@
           "term": "background_shorthand",
           "module": "02-css",
           "description": "Related concept: `background` Shorthand & `background-image`."
+        },
+        {
+          "module": "02-css",
+          "term": "list_style",
+          "description": "Related concept: `list-style`."
+        },
+        {
+          "module": "02-css",
+          "term": "cursor",
+          "description": "Related concept: `cursor`."
         }
       ]
     },
@@ -802,6 +812,16 @@
           "term": "opacity",
           "module": "02-css",
           "description": "The alternative way to manage element transparency."
+        },
+        {
+          "module": "02-css",
+          "term": "gradients",
+          "description": "Related concept: `linear-gradient` & `radial-gradient` (Gradients)."
+        },
+        {
+          "module": "02-css",
+          "term": "accent_color",
+          "description": "Related concept: `accent-color`."
         }
       ]
     },
@@ -909,6 +929,11 @@
           "term": "text_transform",
           "module": "02-css",
           "description": "Related concept: `text-transform`."
+        },
+        {
+          "module": "02-css",
+          "term": "letter_word_spacing",
+          "description": "Related concept: `letter-spacing` & `word-spacing`."
         }
       ]
     },
@@ -1762,6 +1787,11 @@
           "term": "grid_template",
           "module": "02-css",
           "description": "The parent blueprint properties where the `fr` unit is declared."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_concept",
+          "description": "Fractional fr unit in CSS Grid layout."
         }
       ],
       "related": [
@@ -1791,6 +1821,11 @@
           "term": "grid_concept",
           "module": "02-css",
           "description": "`gap` only works if the parent container is a Grid or a Flexbox!"
+        },
+        {
+          "module": "02-css",
+          "term": "display",
+          "description": "Row and column spacing in Grid and Flexbox containers."
         }
       ],
       "related": [
@@ -1864,6 +1899,11 @@
           "term": "flex_parent",
           "module": "02-css",
           "description": "Grid uses similar concepts (like Parent/Child relationships and `gap`), but takes them to the next level."
+        },
+        {
+          "module": "02-css",
+          "term": "display",
+          "description": "CSS Grid two-dimensional layout model."
         }
       ],
       "related": [
@@ -1891,6 +1931,11 @@
           "module": "02-css",
           "term": "grid_template_areas",
           "description": "Named grid areas."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_item",
+          "description": "Related concept: `grid-column` / `grid-row` (Grid Item Placement)."
         }
       ]
     },
@@ -1903,6 +1948,11 @@
           "term": "grid_template",
           "module": "02-css",
           "description": "The parent properties that define the grid lines items place themselves against."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_concept",
+          "description": "Placing grid items inside CSS Grid containers."
         }
       ],
       "related": [
@@ -1915,6 +1965,11 @@
           "term": "grid_template_areas",
           "module": "02-css",
           "description": "The visual name placement alternative."
+        },
+        {
+          "module": "02-css",
+          "term": "grid_concept",
+          "description": "Positioning items inside CSS Grid containers."
         }
       ]
     },
@@ -2083,6 +2138,11 @@
           "term": "line_height",
           "module": "02-css",
           "description": "If `line-height` is vertical spacing for text, these are the horizontal equivalents."
+        },
+        {
+          "module": "02-css",
+          "term": "font_size_weight",
+          "description": "Text spacing relative to font sizing."
         }
       ],
       "related": [
@@ -2090,6 +2150,11 @@
           "term": "text_transform",
           "module": "02-css",
           "description": "The property most commonly paired with `letter-spacing`."
+        },
+        {
+          "module": "02-css",
+          "term": "font_size_weight",
+          "description": "Micro-typography spacing adjustments."
         }
       ]
     },
@@ -2109,6 +2174,11 @@
           "term": "lists",
           "module": "01-html",
           "description": "The HTML elements this applies to."
+        },
+        {
+          "module": "02-css",
+          "term": "box_model",
+          "description": "Styling list bullet markers and padding."
         }
       ]
     },
@@ -2121,6 +2191,11 @@
           "term": "white_space",
           "module": "02-css",
           "description": "`text-overflow` relies entirely on `white-space: nowrap` to work!"
+        },
+        {
+          "module": "02-css",
+          "term": "overflow",
+          "description": "Handling text overflow with text-overflow: ellipsis."
         }
       ],
       "related": [
@@ -2145,6 +2220,11 @@
           "term": "color_vs_background",
           "module": "02-css",
           "description": "The shadow needs a color value."
+        },
+        {
+          "module": "02-css",
+          "term": "color_values",
+          "description": "Applying drop shadows to text elements."
         }
       ],
       "related": [
@@ -2710,6 +2790,11 @@
           "term": "outline",
           "module": "02-css",
           "description": "Visual ring for keyboard selection focuses."
+        },
+        {
+          "module": "02-css",
+          "term": "box_model",
+          "description": "Hover and pointer state cursor feedback."
         }
       ]
     },
@@ -2751,6 +2836,11 @@
           "term": "color_vs_background",
           "module": "02-css",
           "description": "The parent container properties."
+        },
+        {
+          "module": "02-css",
+          "term": "color_values",
+          "description": "Linear and radial color gradients."
         }
       ],
       "related": [
@@ -2763,6 +2853,11 @@
           "term": "color_vs_background",
           "module": "02-css",
           "description": "Base background declarations."
+        },
+        {
+          "module": "02-css",
+          "term": "color_values",
+          "description": "Combining multi-color gradients."
         }
       ]
     },
@@ -3096,6 +3191,11 @@
           "term": "color_vs_background",
           "module": "02-css",
           "description": "Base color value properties."
+        },
+        {
+          "module": "02-css",
+          "term": "color_values",
+          "description": "Styling native form controls with accent-color."
         }
       ],
       "related": [
@@ -3103,6 +3203,11 @@
           "term": "pseudo_classes_advanced",
           "module": "02-css",
           "description": "`:checked` and `:disabled` form selectors."
+        },
+        {
+          "module": "02-css",
+          "term": "color_values",
+          "description": "Customizing form control accent colors."
         }
       ]
     },

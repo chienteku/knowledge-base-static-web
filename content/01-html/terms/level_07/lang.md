@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Attribute](../level_01/attribute.md) — Tag configuration options.
 - [`<html>`](../level_01/html_tag.md) — The root tag where `lang` is primarily declared.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ Root declaration on the HTML tag:
 ## 7. Related Terms
 - [`<html>`](../level_01/html_tag.md) — The parent container where `lang` is declared.
 - [`<meta>`](../level_08/meta.md) — Metadata tags used for other page settings.
+
 ---
 
 ## 8. Key Takeaways

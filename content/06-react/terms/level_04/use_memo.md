@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Re-rendering](../level_02/re_rendering.md) — You must understand that component functions run repeatedly.
 - [Dependency Array](../level_03/dependency_array.md) — `useMemo` uses this exact same array to know when to recalculate.
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ const sorted = useMemo(() => [...items].sort(), [items]); // Pure sorted copy
 - [Derived State](../level_02/derived_state.md) — Related concept: Derived State.
 - [Memoization (the concept)](memoization.md) — Related concept: Memoization (the concept).
 - [Referential Equality](referential_equality.md) — Referential equality.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Boolean](../level_01/boolean.md) — The fundamental `true` or `false` values these operators work with.
 - [Truthy / Falsy](truthy_falsy.md) — How JavaScript interprets non-boolean values in logical operations.
+
 ---
 
 ## 2. Term Category
@@ -199,7 +200,8 @@ async function processData() {
 ---
 
 ## 7. Related Terms
-- [Nullish Coalescing (`??`)](../level_08/nullish_coalescing.md) — A newer operator designed to safely handle default values better than `||`.
-- [`if` / `else`](../level_02/if_else.md) — The primary control structures that rely on logical operators.
+- [Nullish Coalescing (??)](../level_08/nullish_coalescing.md) — A newer operator designed to safely handle default values better than `||`.
+- [if / else](if_else.md) — The primary control structures that rely on logical operators.
 
 ---
+

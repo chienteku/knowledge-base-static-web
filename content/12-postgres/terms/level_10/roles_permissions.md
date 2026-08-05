@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query language context.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ GRANT SELECT ON users TO app_role;
 - [`pg_hba.conf` (Host-Based Authentication)](pg_hba_conf.md) — Remote connection security configurations.
 - [Row-Level Security (RLS)](row_level_security.md) — Finer security filters.
 - [SQL Injection](sql_injection.md) — Related concept: SQL Injection.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-- [Closures (`|args| body`)](../level_05/closures.md) — Standard synchronous closures in Rust.
+- [Closure](../level_06/closure.md) — Standard synchronous closures in Rust.
 - [`async fn`](async_fn.md) — Asynchronous functions.
 - [`Future` Trait](future_trait.md) — The return type of async closure calls.
 
@@ -396,7 +396,7 @@ Build a dynamic async event router with timeout enforcement.
 > 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

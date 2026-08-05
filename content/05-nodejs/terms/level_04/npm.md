@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — NPM comes bundled automatically when you install Node.js.
 - [Built-in vs External Modules](../level_03/module_types.md) — NPM is the tool used to download External Modules.
+
 ---
 
 ## 2. Term Category
@@ -146,6 +147,7 @@ What is the difference in how you install them?
 - [CommonJS (require, module.exports)](../level_03/commonjs.md) — Related concept: CommonJS (require, module.exports).
 - [Built-in vs External Modules](../level_03/module_types.md) — Related concept: Built-in vs External Modules.
 - [package-lock.json & Deterministic Installs](package_lock.md) — package-lock.json lockfile.
+
 ---
 
 ## 8. Key Takeaways

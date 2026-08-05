@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [SQL vs NoSQL](sql_vs_nosql.md) — ORMs are for SQL, ODMs are for NoSQL.
 - [Connection Pooling](connection_pools.md) — ORMs manage these automatically.
+
 ---
 
 ## 2. Term Category
@@ -172,6 +173,7 @@ const posts = await Post.findAll({ include: 'author' }); // Eager load in single
 - [SQL vs NoSQL](sql_vs_nosql.md) — Related concept: SQL vs NoSQL.
 - [MVC Pattern (Model–View–Controller)](../level_09/mvc_pattern.md) — Related concept: MVC Pattern (Model–View–Controller).
 - [Pagination](../level_09/pagination.md) — Related concept: Pagination.
+
 ---
 
 ## 8. Key Takeaways

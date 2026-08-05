@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Synchronous](synchronous.md) — Execution that blocks the thread.
 - [Callback Function](../level_03/callback_function.md) — Passing a function to be run later.
+
 ---
 
 ## 2. Term Category
@@ -231,6 +232,7 @@ console.log("C");
 - [Event Loop](event_loop.md) — The system that coordinates async tasks.
 - [Promise](promise.md) — The modern way to handle async data.
 - [Synchronous](synchronous.md) — Related concept: Synchronous.
+
 ---
 
 ## 8. Key Takeaways

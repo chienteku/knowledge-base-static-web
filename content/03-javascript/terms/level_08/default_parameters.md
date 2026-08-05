@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — The structure that uses parameters.
 - [undefined](../level_01/undefined.md) — The value that triggers the default fallback.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ makeGreeting("Bob");
 ## 7. Related Terms
 - [undefined](../level_01/undefined.md) — The *only* value that triggers a default parameter.
 - [Destructuring](destructuring.md) — You can also use default parameters inside destructuring assignments!
+
 ---
 
 ## 8. Key Takeaways

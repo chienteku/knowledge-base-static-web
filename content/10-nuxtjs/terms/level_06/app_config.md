@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Auto-imports](../level_01/auto_imports.md) — How the app config is exposed to components.
+- [`nuxt.config.ts`](nuxt_config.md) — Configuring application-level reactive constants.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +194,7 @@ export default defineAppConfig({
 ## 7. Related Terms
 - [Runtime Config (`useRuntimeConfig`)](runtime_config.md) — The secure alternative used for private API keys and `.env` variables.
 - [`nuxt.config.ts`](nuxt_config.md) — The build-time framework configuration file.
+
 ---
 
 ## 8. Key Takeaways

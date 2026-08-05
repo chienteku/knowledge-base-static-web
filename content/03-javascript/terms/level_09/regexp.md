@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [String](../level_01/string.md) — The sequence of characters text type.
 - [String Methods](../level_02/string_methods.md) — Text manipulation helpers.
+
 ---
 
 ## 2. Term Category
@@ -221,6 +222,7 @@ console.log("Zip Codes:", extractZipCodes(input));
 ## 7. Related Terms
 - [String Methods](../level_02/string_methods.md) — RegExp string methods.
 - [Tagged Template Literals](../level_08/tagged_template_literals.md) — String manipulation.
+
 ---
 
 ## 8. Key Takeaways

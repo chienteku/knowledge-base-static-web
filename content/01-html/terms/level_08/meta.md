@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<head>`](../level_01/head.md) — The `<meta>` tag MUST be placed inside the `<head>` of the document.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The `<meta>` tag is a void element (no closing tag).
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ The `<meta>` tags are the stickers slapped on the *outside* of the crate: "Fragi
 - [Open Graph Tags (`og:`)](open_graph.md) — Specialized meta properties for social indexing.
 - [`lang` Attribute](../level_07/lang.md) — Related concept: `lang` Attribute.
 - [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Related concept: SEO Fundamentals for HTML.
+
 ---
 
 ## 8. Key Takeaways

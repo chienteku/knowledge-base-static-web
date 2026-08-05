@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Client-Server Model](client_server_model.md) — The core network communication concept.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ app.listen(8080);
 ## 7. Related Terms
 - [DNS (Domain Name System)](dns.md) — The phonebook system mapping user domains to IP addresses.
 - [HTTP / HTTPS](http_https.md) — The application layer protocols routing through ports `80` and `443`.
+
 ---
 
 ## 8. Key Takeaways

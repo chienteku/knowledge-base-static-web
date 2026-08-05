@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Cascade](../level_01/the_cascade.md) — Overwriting default rules.
 - [`box-sizing: border-box`](../level_02/box_sizing.md) — The core layout adjustment.
+
 ---
 
 ## 2. Term Category
@@ -234,6 +235,7 @@ HTML structure index file loading order:
 - [`@import` Rule](import.md) — Loading modular sheets.
 - [`box-sizing: border-box`](../level_02/box_sizing.md) — Sizing layouts easily.
 - [CSS Methodologies (BEM, OOCSS, SMACSS)](methodologies.md) — Related concept: CSS Methodologies (BEM, OOCSS, SMACSS).
+
 ---
 
 ## 8. Key Takeaways

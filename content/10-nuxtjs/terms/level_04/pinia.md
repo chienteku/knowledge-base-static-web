@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useState` Hook](use_state.md) — The lightweight Nuxt alternative that Pinia improves upon for large-scale applications.
 - [Vue 3 Composition API Context](../level_01/composition_api_context.md) — The syntax used to write modern Pinia stores.
+
 ---
 
 ## 2. Term Category
@@ -230,6 +231,7 @@ export const useAuthStore = defineStore('auth', () => {
 - [`composables/` Directory](composables_directory.md) — Pinia stores are essentially super-powered composables.
 - [`useState` Hook](use_state.md) — Related concept: `useState` Hook.
 - [Nuxt Modules System](../level_09/nuxt_modules.md) — Related concept: Nuxt Modules System.
+
 ---
 
 ## 8. Key Takeaways

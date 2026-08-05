@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<audio>`](audio.md) — The video tag works almost exactly like the audio tag.
 - [`src` Attribute](src.md) — The source loader used to point to the video file resource.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +171,7 @@ If you want to use a video as a silent, looping background (like a cool hero hea
 - [`<source>` Element](source.md) — The child element used for multi-format video sources.
 - [`<audio>`](audio.md) — The sound-only sibling to the video tag.
 - [`<img>`](img.md) — The image tag related to the `poster` thumbnail.
+
 ---
 
 ## 8. Key Takeaways

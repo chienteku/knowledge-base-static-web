@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)](window_clause.md) — The prerequisite window definition syntax.
+
 ---
 
 ## 2. Term Category
@@ -219,6 +220,7 @@ Use GROUP BY if collapsing rows is desired; use OVER (PARTITION BY) to retain in
 - [`OVER()` / `PARTITION BY` / `ORDER BY` (Window Clause)](window_clause.md) — The parent window definition syntax.
 - [`ROW_NUMBER()` / `RANK()` / `DENSE_RANK()`](row_number_rank.md) — Positional window functions.
 - [`LAG()` / `LEAD()`](lag_lead.md) — Related concept: `LAG()` / `LEAD()`.
+
 ---
 
 ## 8. Key Takeaways

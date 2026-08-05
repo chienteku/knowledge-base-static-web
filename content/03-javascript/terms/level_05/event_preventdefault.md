@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event](event.md) — The object automatically passed into an event listener.
 - [DOM (Document Object Model)](dom.md) — The HTML elements that trigger these events.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ async function processData() {
 
 ## 7. Related Terms
 - [event.stopPropagation()](event_stoppropagation.md) — Stops the event from bubbling up, but does *not* stop default browser behaviors.
+
 ---
 
 ## 8. Key Takeaways

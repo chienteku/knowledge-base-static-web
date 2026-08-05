@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Columns typing.
 - [`NULL`](null.md) — Understanding the missing state representation.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ CREATE UNIQUE INDEX idx_users_lower_email ON users (LOWER(email));
 - [`UPSERT` (`ON CONFLICT`)](../level_03/upsert.md) — Related concept: `UPSERT` (`ON CONFLICT`).
 - [One-to-One Relationship](../level_05/one_to_one.md) — Related concept: One-to-One Relationship.
 - [Unique Index](../level_07/unique_index.md) — Related concept: Unique Index.
+
 ---
 
 ## 8. Key Takeaways

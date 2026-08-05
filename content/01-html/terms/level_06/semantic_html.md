@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Understanding the basic building blocks of HTML.
 - [`<div>` (Block container)](../level_02/div.md) — The tag that Semantic HTML was designed to replace.
+
 ---
 
 ## 2. Term Category
@@ -181,6 +182,7 @@ Semantic HTML is like building the kitchen with actual tile floors, an oven, and
 - [`<header>`](header.md) — Header element.
 - [`<footer>`](footer.md) — Footer element.
 - [`<body>`](../level_01/body.md) — Related concept: `<body>`.
+
 ---
 
 ## 8. Key Takeaways

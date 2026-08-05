@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [React DevTools](react_devtools.md) — The browser extension containing the Profiler tool interface.
 - [Re-rendering](../level_02/re_rendering.md) — What the Profiler measures.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ Why is `<ItemList>` re-rendering, and how would you resolve the issue?
 ## 7. Related Terms
 - [React DevTools](react_devtools.md) — The parent browser utility containing the Profiler interface.
 - [React.memo](react_memo.md) — The caching HOC verified using the Profiler.
+
 ---
 
 ## 8. Key Takeaways

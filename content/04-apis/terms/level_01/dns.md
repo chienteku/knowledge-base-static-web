@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [IP Address & Port](ip_address_port.md) — The network numbering addressing system.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ Top-Level Domain (TLD) Server, Recursive Resolver, Root Name Server, Authoritati
 - [HTTP / HTTPS](http_https.md) — The web protocols initiated immediately after DNS resolves the destination IP address.
 - [IP Address & Port](ip_address_port.md) — Related concept: IP Address & Port.
 - [Client-Server Model](client_server_model.md) — Related concept: Client-Server Model.
+
 ---
 
 ## 8. Key Takeaways

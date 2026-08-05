@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ btn.addEventListener('click', () => {
 - [`useRef` Hook](../level_04/use_ref.md) — Related concept: `useRef` Hook.
 - [Framer Motion](../level_11/framer_motion.md) — Related concept: Framer Motion.
 - [React Native](../level_11/react_native.md) — Related concept: React Native.
+
 ---
 
 ## 8. Key Takeaways

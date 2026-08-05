@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Re-rendering](../level_02/re_rendering.md) — The default behavior that `React.memo` stops.
 - [`useMemo` Hook](../level_04/use_memo.md) — The hooks required to make `React.memo` actually work properly.
+
 ---
 
 ## 2. Term Category
@@ -161,6 +162,7 @@ React.memo(Comp, (prev, next) => prev.id === next.id); // Return true when equal
 - [Memoization (the concept)](../level_04/memoization.md) — Related concept: Memoization (the concept).
 - [Referential Equality](../level_04/referential_equality.md) — Related concept: Referential Equality.
 - [The React Profiler](react_profiler.md) — Related concept: The React Profiler.
+
 ---
 
 ## 8. Key Takeaways

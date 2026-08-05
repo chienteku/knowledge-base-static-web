@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The process Object](process_object.md) — Like `crypto`, this is built directly into Node.js.
+
 ---
 
 ## 2. Term Category
@@ -174,7 +175,8 @@ if (buf1.length === buf2.length && crypto.timingSafeEqual(buf1, buf2)) {}
 > **Explanation:** `crypto.timingSafeEqual` executes in constant time regardless of byte match positions.
 
 ## 7. Related Terms
-- [Bcrypt](../level_10/bcrypt.md) — A specialized third-party library designed specifically for securely hashing passwords, often preferred over native `crypto` methods for that specific use case.
+- [Bcrypt (Password Hashing)](../level_10/bcrypt.md) — A specialized third-party library designed specifically for securely hashing passwords, often preferred over native `crypto` methods for that specific use case.
 - [Buffers](../level_06/buffers.md) — Many `crypto` functions return or expect data in the form of Buffers.
 
 ---
+

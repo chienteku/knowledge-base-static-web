@@ -10,6 +10,7 @@
 - [Dynamic Rendering (SSR)](../level_08/ssr.md) — The other output Vercel hosts (Serverless Functions).
 - [Content Delivery Network (CDN) & Edge Cache](cdn_edge.md) — The global edge distribution layer.
 - [Serverless Functions](serverless_functions.md) — The dynamic compute containers.
+
 ---
 
 ## 2. Term Category
@@ -144,6 +145,7 @@ One of Vercel's most powerful features. Whenever you open a Pull Request on GitH
 - [Docker & Standalone Build](standalone_build.md) — The alternative to Vercel for self-hosting.
 - [Environment Variables (`.env.local`)](environment_variables.md) — Must be configured in the Vercel Dashboard.
 - [Serverless Functions](serverless_functions.md) — Related concept: Serverless Functions.
+
 ---
 
 ## 8. Key Takeaways

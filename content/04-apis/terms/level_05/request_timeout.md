@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The fetch() API](fetch.md) — The network request API.
 - [Promises (in the context of networks)](promises.md) — The async data wrapper objects.
+
 ---
 
 ## 2. Term Category
@@ -196,6 +197,7 @@ function timeoutRace(networkPromise, timeoutMs = 2000) {
 ## 7. Related Terms
 - [AbortController / Cancellation](abortcontroller.md) — The browser API used to terminate active requests.
 - [Retry & Exponential Backoff](retry_backoff.md) — The recovery patterns triggered after a request timeout occurs.
+
 ---
 
 ## 8. Key Takeaways

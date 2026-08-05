@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Language Syntax**: Expressions (evaluating to values) versus Statements (executing instructions ending in `;`).
@@ -249,7 +248,6 @@ Omit final block semicolon to yield value: 1 => { println!("1"); 10 }
 - [Expressions](expressions.md) — Value-producing expressions.
 
 ---
-
 
 ## 7. Key Takeaways
 

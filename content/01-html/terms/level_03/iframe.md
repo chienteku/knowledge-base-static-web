@@ -9,6 +9,7 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Understand basic HTML structures.
 - [Attribute](../level_01/attribute.md) — Iframes rely heavily on attributes.
 - [`src` Attribute](src.md) — The media source loader attribute.
+
 ---
 
 ## 2. Term Category
@@ -177,6 +178,7 @@ The `<iframe>` is the glass porthole. It allows you to look safely outside at th
 ## 7. Related Terms
 - [`src` Attribute](src.md) — The attribute defining the iframe source URL.
 - [`<img>`](img.md) — Another tag that embeds external content (images) by fetching a source URL.
+
 ---
 
 ## 8. Key Takeaways

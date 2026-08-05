@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Semantic HTML](semantic_html.md) — Understanding the focus on machine-readable code.
 - [Attribute](../level_01/attribute.md) — The parameter syntax used to configure tags.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ Basic date wrapping:
 ## 7. Related Terms
 - [Semantic HTML](semantic_html.md) — The parent layout context.
 - [Attribute](../level_01/attribute.md) — The parameter concept.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function Expression](function_expression.md) — A function assigned to a variable (not hoisted).
 - [Callback Function](callback_function.md) — A function passed into another function as an argument to be executed later.
+
 ---
 
 ## 2. Term Category
@@ -223,6 +224,7 @@ async function processData() {
 - [Arrow Function](arrow_function.md) — Syntactic sugar for creating short anonymous functions.
 - [IIFE](../level_09/iife.md) — Immediately Invoked Function Expressions, which are usually anonymous.
 - [Method Chaining](../level_04/method_chaining.md) — Related concept: Method Chaining.
+
 ---
 
 ## 8. Key Takeaways

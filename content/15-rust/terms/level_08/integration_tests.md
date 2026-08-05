@@ -751,7 +751,6 @@ Integration tests often need to verify transaction boundaries and fault toleranc
 
 
 - [Crate](../level_01/crate.md) — Every file in the `tests/` folder is compiled as its own independent crate!
-- [Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`)](../level_07/cargo_target_kinds.md) — Related concept: Cargo Target Kinds (`[lib]`, `[[bin]]`, `examples/`, `benches/`, `tests/`).
 - [Doc Tests](doc_tests.md) — Related concept: Doc Tests.
 
 ---

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — The core blocks of execution code.
 - [npm](npm.md) — Node's package manager used to install test framework libraries.
+
 ---
 
 ## 2. Term Category
@@ -221,6 +222,7 @@ describe("User utilities", () => {
 
 ## 7. Related Terms
 - [Pure Function & Side Effects](../level_03/pure_function.md) — Functions that are easy to unit test because they have no side-effects.
+
 ---
 
 ## 8. Key Takeaways

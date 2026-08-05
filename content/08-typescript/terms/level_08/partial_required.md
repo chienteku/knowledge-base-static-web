@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Utility Types Overview](utility_types.md) — The core concept.
 - [Optional Properties (`?`)](../level_03/optional_properties.md) — The `?` syntax these utilities add or remove.
+
 ---
 
 ## 2. Term Category
@@ -178,6 +179,7 @@ type StrictUser = { [K in keyof User]-?: NonNullable<User[K]> }; // Strips optio
 - [`Pick<T>` & `Omit<T>`](pick_omit.md) — The other half of the object utility toolkit.
 - [Utility Types Overview](utility_types.md) — Related concept: Utility Types Overview.
 - [Mapped Types](../level_09/mapped_types.md) — Related concept: Mapped Types.
+
 ---
 
 ## 8. Key Takeaways

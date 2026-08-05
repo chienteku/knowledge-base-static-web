@@ -711,7 +711,6 @@ Write unit tests verifying layout offset accuracy, struct size, checksum calcula
 - [`MaybeUninit<T>`](../level_11/maybeuninit_t.md) — Related concept: `MaybeUninit<T>`.
 - [`bindgen`](bindgen.md) — Related concept: `bindgen`.
 - [`cbindgen`](cbindgen.md) — Related concept: `cbindgen`.
-- [`#[repr(C)]`](repr_c.md) — Related concept: `#[repr(C)]`.
 - [Undefined Behavior (UB)](undefined_behavior.md) — Related concept: Undefined Behavior (UB).
 - [`unsafe fn`](unsafe_fn.md) — Related concept: `unsafe fn`.
 - [`CString` / `CStr`](cstring_cstr.md) — Related concept: `CString` / `CStr`.

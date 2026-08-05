@@ -9,6 +9,7 @@
 - [Semantic HTML](../level_06/semantic_html.md) — The foundation of visual layout meaning.
 - [`alt` Attribute](../level_03/alt.md) — The alternate text standard for media.
 - [`<label>`](../level_05/label.md) — Form field associations.
+
 ---
 
 ## 2. Term Category
@@ -236,6 +237,7 @@ button:focus-visible {
 - [`<label>`](../level_05/label.md) — Accessible form associations.
 - [`tabindex` Attribute](../level_07/tabindex.md) — Managing keyboard focus sequences.
 - [ARIA Attributes](aria_attributes.md) — Advanced accessibility extensions.
+
 ---
 
 ## 8. Key Takeaways

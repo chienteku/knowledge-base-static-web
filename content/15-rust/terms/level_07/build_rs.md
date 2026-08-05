@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`Cargo.toml`](cargo_toml.md) — Manifest configuring build = 'build.rs'.
+- [Cargo CLI](cargo_cli.md) — Cargo build execution.
 
 ---
 

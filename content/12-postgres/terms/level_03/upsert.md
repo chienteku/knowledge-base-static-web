@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`INSERT INTO`](insert_into.md) — The baseline write command.
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The database rule that triggers conflict intercepts.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name; -- Sets name to proposed ne
 ## 7. Related Terms
 - [`INSERT INTO`](insert_into.md) — The parent write statement.
 - [`UNIQUE` Constraint](../level_02/unique_constraint.md) — The trigger rule for conflicts.
+
 ---
 
 ## 8. Key Takeaways

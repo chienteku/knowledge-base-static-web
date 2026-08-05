@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`flex-wrap`](flex_wrap.md) — `align-content` has **no effect** unless items wrap into multiple lines!
 - [`align-items`](align_items.md) — Understanding single-row alignment.
+
 ---
 
 ## 2. Term Category
@@ -257,6 +258,7 @@ To center elements inside a single row vertically, you must use **`align-items: 
 - [`flex-wrap`](flex_wrap.md) — The required prerequisite.
 - [`align-items`](align_items.md) — Single-line vertical alignment.
 - [`justify-content`](justify_content.md) — Horizontal main axis alignment.
+
 ---
 
 ## 8. Key Takeaways

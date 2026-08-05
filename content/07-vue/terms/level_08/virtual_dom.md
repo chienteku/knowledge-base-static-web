@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- dom — The slow, expensive API the Virtual DOM is trying to avoid.
+- [DOM (Document Object Model)](../../../01-html/terms/level_09/dom.md) — The slow, expensive API the Virtual DOM is trying to avoid.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The concept that the Virtual DOM enables.
+
 ---
 
 ## 2. Term Category
@@ -149,6 +150,7 @@ const vnode = h('div', 'New Text');
 - [`shallowRef` / `markRaw`](../level_02/shallow_ref_mark_raw.md) — Related concept: `shallowRef` / `markRaw`.
 - [`nextTick`](../level_04/next_tick.md) — Related concept: `nextTick`.
 - [`v-once` & `v-memo`](v_once_memo.md) — Related concept: `v-once` & `v-memo`.
+
 ---
 
 ## 8. Key Takeaways

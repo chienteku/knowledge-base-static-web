@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Selectors (Element, Class, ID)](../level_01/selectors.md) — Target elements in the document.
 - [`var()` (CSS Custom Properties)](var.md) — The variables stored inside `:root`.
+
 ---
 
 ## 2. Term Category
@@ -251,6 +252,7 @@ html { --color: red; } /* (0-0-1) LOSES to :root (0-1-0) */
 ## 7. Related Terms
 - [`var()` (CSS Custom Properties)](var.md) — The variables stored inside `:root`.
 - [Dark Mode (`prefers-color-scheme`)](dark_mode.md) — Overwriting `:root` values.
+
 ---
 
 ## 8. Key Takeaways

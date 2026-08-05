@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTML (HyperText Markup Language)](html.md) — The standard markup language.
 - [Element vs. Tag](element_vs_tag.md) — Understanding standard tag indicators.
+
 ---
 
 ## 2. Term Category
@@ -221,6 +222,7 @@ Leaving documentation notes and hiding code:
 - [Element vs. Tag](element_vs_tag.md) — Standard nodes that comments can wrap.
 - [Nesting](nesting.md) — Comments must be nested correctly and not overlap with other active tags.
 - [HTML (HyperText Markup Language)](html.md) — Related concept: HTML (HyperText Markup Language).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Array](../level_02/array.md) — A high-level, list-like object.
 - [Iterators & Iterables (protocol)](../level_08/iterators_iterables.md) — Objects that define their iteration behavior (like strings, arrays, or Sets).
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ console.log(sortedNames);
 ## 7. Related Terms
 - [Spread Syntax (...)](../level_08/spread_syntax.md) — Shorthand to convert certain iterables: `[...mySet]`.
 - [Set](../level_08/set.md) — Unique value collection structure.
+
 ---
 
 ## 8. Key Takeaways

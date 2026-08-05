@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [JSX (JavaScript XML)](jsx.md) — The syntax that creates the Virtual DOM nodes.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ If React compares these two trees, how many changes will it make to the real Bro
 - [React DevTools](../level_08/react_devtools.md) — Related concept: React DevTools.
 - [Hydration](../level_10/hydration.md) — Related concept: Hydration.
 - [React Native](../level_11/react_native.md) — Related concept: React Native.
+
 ---
 
 ## 8. Key Takeaways

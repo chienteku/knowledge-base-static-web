@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Boolean](../level_01/boolean.md) — A logical entity having two values: `true` or `false`.
 - [Type Coercion](../level_01/type_coercion.md) — Implicit conversion of values from one data type to another.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ async function processData() {
 - [Strict vs Loose Equality (=== vs ==)](../level_01/strict_vs_loose_equality.md) — Related concept: Strict vs Loose Equality (=== vs ==).
 - [Ternary / Conditional Operator (? :)](../level_01/ternary_operator.md) — Related concept: Ternary / Conditional Operator (? :).
 - [if / else](if_else.md) — Related concept: if / else.
+
 ---
 
 ## 8. Key Takeaways

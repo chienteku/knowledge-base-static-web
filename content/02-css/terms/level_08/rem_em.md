@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`font-size` & `font-weight`](../level_03/font_size_weight.md) — The property that these units multiply against.
+
 ---
 
 ## 2. Term Category
@@ -243,6 +244,7 @@ html { font-size: 100%; } /* Preserves user-agent 16px base font scaling */
 - [`%` (Percentages)](percentages.md) — Sizing relative to parent containers.
 - [`vw` / `vh` (Viewport Units)](viewport_units.md) — Sizing relative to the viewport.
 - [Responsive Design (Concept)](responsive_design.md) — Related concept: Responsive Design (Concept).
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Client-Server Model](../level_01/client_server_model.md) — The API is the bridge between these two entities.
+
 ---
 
 ## 2. Term Category
@@ -312,6 +313,7 @@ res.json({ user_name: user.name }); // ❌ Breaks clients expecting { name: '...
 - [Client-Server Model](../level_01/client_server_model.md) — Related concept: Client-Server Model.
 - [GraphQL (The REST Alternative)](../level_07/graphql.md) — GraphQL APIs.
 - [gRPC (Remote Procedure Call)](../level_10/grpc.md) — gRPC APIs.
+
 ---
 
 ## 8. Key Takeaways

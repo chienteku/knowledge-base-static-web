@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [App Router vs Pages Router](../level_01/app_router_vs_pages.md) — How routes are structured.
 - [React Components](../level_01/react_components.md) — The syntax of using a React component.
+
 ---
 
 ## 2. Term Category
@@ -175,6 +176,7 @@ By the time the user actually moves their mouse and clicks the link, the destina
 - [`useRouter` Hook](use_router.md) — How to navigate programmatically without a clickable link.
 - [`page.tsx`](../level_02/page.md) — The file that the `<Link>` ultimately resolves to.
 - [Intercepting Routes (`(..)folder`)](../level_04/intercepting_routes.md) — Related concept: Intercepting Routes (`(..)folder`).
+
 ---
 
 ## 8. Key Takeaways

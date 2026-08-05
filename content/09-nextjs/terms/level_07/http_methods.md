@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The parent framework that routes these actions.
+
 ---
 
 ## 2. Term Category
@@ -194,6 +195,7 @@ export async function OPTIONS() {
 ## 7. Related Terms
 - [Route Handlers (`route.ts`)](route_handlers.md) — The Next.js API endpoints that export these methods.
 - [`NextRequest` & `NextResponse`](next_request_response.md) — The HTTP transaction objects.
+
 ---
 
 ## 8. Key Takeaways

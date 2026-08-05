@@ -9,6 +9,7 @@
 - [Components](components.md) — Reusable HTML layouts.
 - [Props](props.md) — Explicit component inputs.
 - [Emitting Events (`defineEmits`)](emit.md) — Communicating triggers up to parent scopes.
+
 ---
 
 ## 2. Term Category
@@ -276,6 +277,7 @@ defineOptions({
 - [Props](props.md) — The explicit input channel for components.
 - [Emitting Events (`defineEmits`)](emit.md) — The channel to notify parent scopes.
 - [Components](components.md) — Modular templates.
+
 ---
 
 ## 8. Key Takeaways

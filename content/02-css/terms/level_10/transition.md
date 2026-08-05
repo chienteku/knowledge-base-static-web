@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`:hover` & `:focus` (Pseudo-classes)](../level_09/hover_focus.md) — Transitions are almost exclusively used to animate the change between the default state and a hover/focus state.
+
 ---
 
 ## 2. Term Category
@@ -258,6 +259,7 @@ With `transition: 1s`, it's a dimmer switch. The browser slowly turns the dial, 
 - [`transform` (Scale, Translate, Rotate)](transform.md) — The most common property to animate (e.g., smoothly scaling a button up to be 10% larger on hover).
 - [`@keyframes` & `animation`](animation.md) — The multi-step alternative for complex, non-interactive animation loops.
 - [`:hover` & `:focus` (Pseudo-classes)](../level_09/hover_focus.md) — Related concept: `:hover` & `:focus` (Pseudo-classes).
+
 ---
 
 ## 8. Key Takeaways

@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Type System**: Type Alias Impl Trait (TAIT) for naming `impl Trait` return types.
@@ -258,7 +257,6 @@ Use Box<dyn Trait> for heterogeneous runtime collections!
 - [`impl Trait`](../level_04/impl_trait.md) — Opaque return types.
 
 ---
-
 
 ## 7. Key Takeaways
 

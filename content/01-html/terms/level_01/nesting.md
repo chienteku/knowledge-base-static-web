@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](element_vs_tag.md) — Understanding the start and end tag boundaries.
 - [HTML (HyperText Markup Language)](html.md) — The standard markup language.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ Nesting layout elements to create a profile card:
 - [Comments (<!-- -->)](comments.md) — Related concept: Comments (<!-- -->).
 - [Whitespace Collapse](whitespace_collapse.md) — Related concept: Whitespace Collapse.
 - [The Tree Structure](../level_09/tree_structure.md) — Related concept: The Tree Structure.
+
 ---
 
 ## 8. Key Takeaways

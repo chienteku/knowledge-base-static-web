@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The WebSocket API (Client-side)](websocket_api.md) — Socket.io is essentially a massive upgrade to this native API.
 - [Polling vs Long Polling](polling.md) — Socket.io uses this as a secret backup plan!
+
 ---
 
 ## 2. Term Category
@@ -313,6 +314,7 @@ io.adapter(createAdapter(pubClient, subClient)); // Redis adapter syncs rooms ac
 - [Polling vs Long Polling](polling.md) — The HTTP fallback that Socket.io uses if WebSockets are blocked.
 - [Pub/Sub & Channels](pub_sub_channels.md) — Related concept: Pub/Sub & Channels.
 - [WebSockets](websockets.md) — Related concept: WebSockets.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Scope](../level_03/scope.md) — Closely related to the execution context.
+- [Call Stack](../level_06/call_stack.md) — Managing JavaScript function execution contexts.
+
 ---
 
 ## 2. Term Category
@@ -189,3 +191,4 @@ async function processData() {
 - [Hoisting](../level_03/hoisting.md) — A behavior that occurs during the "Creation Phase" of an Execution Context.
 
 ---
+

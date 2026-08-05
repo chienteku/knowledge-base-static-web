@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Event](event.md) — An action like a click or keypress.
 - [DOM (Document Object Model)](dom.md) — The HTML elements we are attaching the listener to.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ Will they both fire, or will the second one overwrite the first?
 - [Event Bubbling](event_bubbling.md) — Event bubbling.
 - [Event Delegation](event_delegation.md) — Event delegation.
 - [DOM (Document Object Model)](dom.md) — Related concept: DOM (Document Object Model).
+
 ---
 
 ## 8. Key Takeaways

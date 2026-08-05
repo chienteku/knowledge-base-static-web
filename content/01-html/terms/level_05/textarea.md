@@ -9,6 +9,7 @@
 - [`<input>`](input.md) — The single-line sibling to the textarea.
 - [Element vs. Tag](../level_01/element_vs_tag.md) — Notice that `<textarea>` is NOT a void element!
 - [Nesting](../level_01/nesting.md) — Since default text values are nested between the opening and closing tags.
+
 ---
 
 ## 2. Term Category
@@ -190,6 +191,7 @@ textarea {
 - [`value` Attribute (in Form Fields)](value.md) — The value differences from textareas.
 - [`name` Attribute (in Form Fields)](name.md) — The textarea key name parameter.
 - [`<label>`](label.md) — The associated text label.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,7 @@
 ## 1. Prerequisites
 
 
-**None.**
+- [Tokens](tokens.md) — Lexical elements processed by the compiler lexer.
 
 ---
 

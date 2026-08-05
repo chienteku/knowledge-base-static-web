@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Design Pattern**: Visitor pattern for traversing hierarchical AST data structures.
@@ -289,7 +288,6 @@ Provide default empty method implementations: `fn visit_a(&mut self) {}`!
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — Dynamic trait objects.
 
 ---
-
 
 ## 7. Key Takeaways
 

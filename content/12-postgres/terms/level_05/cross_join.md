@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`JOIN` (Concept)](join_concept.md) — The parent table combination mechanics.
+
 ---
 
 ## 2. Term Category
@@ -221,6 +222,7 @@ SELECT * FROM users JOIN orders ON users.id = orders.user_id;
 ## 7. Related Terms
 - [`JOIN` (Concept)](join_concept.md) — The parent operation.
 - [Self-Join](self_join.md) — Joining a table to itself.
+
 ---
 
 ## 8. Key Takeaways

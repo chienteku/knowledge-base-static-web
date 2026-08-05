@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Classes Overview](classes.md) — The standard class structure.
 - [Interfaces](../level_03/interfaces.md) — A similar concept used for blueprinting.
+
 ---
 
 ## 2. Term Category
@@ -276,6 +277,7 @@ class Child extends Base { render() { /* Concrete implementation */ } }
 - [Interfaces](../level_03/interfaces.md) — The zero-cost alternative for pure shape blueprinting.
 - [`implements` Keyword](implements.md) — How you apply an Interface to a class (similar to how you `extends` an abstract class).
 - [Classes Overview](classes.md) — Related concept: Classes Overview.
+
 ---
 
 ## 8. Key Takeaways

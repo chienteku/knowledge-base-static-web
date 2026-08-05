@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [Query Filter (Filter Document)](../level_03/query_filter.md) — The parent query filters context.
+- [`find()` / `findOne()`](../level_03/find.md) — Evaluating complex query expression operators.
 
 ---
 

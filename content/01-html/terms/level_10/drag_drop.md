@@ -9,6 +9,7 @@
 - [DOM (Document Object Model)](../level_09/dom.md) — Drag events are captured and handled via JavaScript DOM listeners.
 - [`<script>`](../level_08/script.md) — The programming blocks that run the drag-drop logic.
 - [Attribute](../level_01/attribute.md) — The parameters used to toggle draggability.
+
 ---
 
 ## 2. Term Category
@@ -334,6 +335,7 @@ function allowDrop(ev) {
 ## 7. Related Terms
 - [DOM (Document Object Model)](../level_09/dom.md) — The parent interface hierarchy.
 - [`data-*` Attributes](../level_07/data_attributes.md) — Used to store custom metadata identifiers on dragged items.
+
 ---
 
 ## 8. Key Takeaways

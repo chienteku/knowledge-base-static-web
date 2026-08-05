@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — A reusable block of code.
 - [Synchronous](synchronous.md) — Execution of code sequentially.
+
 ---
 
 ## 2. Term Category
@@ -227,6 +228,7 @@ async function processData() {
 - [Execution Context](../level_05/execution_context.md) — Related concept: Execution Context.
 - [JavaScript Engine](../level_05/javascript_engine.md) — Related concept: JavaScript Engine.
 - [throw statement](throw_statement.md) — Related concept: throw statement.
+
 ---
 
 ## 8. Key Takeaways

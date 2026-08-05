@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Variable](variable.md) — A named container for storing data values.
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
+
 ---
 
 ## 2. Term Category
@@ -191,6 +192,7 @@ async function processData() {
 - [typeof](typeof.md) — Related concept: typeof.
 - [Default Parameters](../level_08/default_parameters.md) — Related concept: Default Parameters.
 - [Optional Chaining (?.)](../level_08/optional_chaining.md) — Related concept: Optional Chaining (?.).
+
 ---
 
 ## 8. Key Takeaways

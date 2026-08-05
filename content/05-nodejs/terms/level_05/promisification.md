@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Callbacks & Callback Hell](callbacks.md) — The legacy system you are trying to escape.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ function get() {
 - [The fs Module (File System)](../level_02/fs_module.md) — The most common module that was historically Promisified.
 - [The os & util Modules](../level_02/os_util_modules.md) — Related concept: The os & util Modules.
 - [async / await in Node](async_await.md) — Related concept: async / await in Node.
+
 ---
 
 ## 8. Key Takeaways

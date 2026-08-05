@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — What the Router is swapping in and out.
 - [Vue Instance](../level_01/vue_instance.md) — Where the Router is registered as a plugin.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ const router = createRouter({
 - [Async Components](../level_08/async_components.md) — Related concept: Async Components.
 - [Client-Side Rendering (CSR)](../level_09/csr.md) — Related concept: Client-Side Rendering (CSR).
 - [Nuxt.js](../level_09/nuxt.md) — Related concept: Nuxt.js.
+
 ---
 
 ## 8. Key Takeaways

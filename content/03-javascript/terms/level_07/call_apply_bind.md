@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [this Keyword](this_keyword.md) — The dynamic reference pointing to execution context.
 - [Function](../level_03/function.md) — Reusable blocks of execution code.
+
 ---
 
 ## 2. Term Category
@@ -229,6 +230,7 @@ console.log("Book Title:", getTitle());
 ## 7. Related Terms
 - [Default this Binding Rules](default_this_binding.md) — The core precedence rules governing how JavaScript binds the execution context.
 - [this Keyword](this_keyword.md) — Related concept: this Keyword.
+
 ---
 
 ## 8. Key Takeaways

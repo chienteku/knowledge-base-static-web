@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](../level_02/data_types.md) — The database typing system.
+
 ---
 
 ## 2. Term Category
@@ -193,6 +194,7 @@ Use val::text for concise Postgres casting or CAST(val AS text) for ANSI SQL com
 - [Data Types (Overview)](../level_02/data_types.md) — The parent typing framework.
 - [`CASE` Expression](case_expression.md) — Related concept: `CASE` Expression.
 - [`COALESCE` / `NULLIF`](coalesce_nullif.md) — Related concept: `COALESCE` / `NULLIF`.
+
 ---
 
 ## 8. Key Takeaways

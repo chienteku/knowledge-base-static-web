@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](../level_01/components.md) — State lives inside components.
 - [Props (Properties)](../level_01/props.md) — The read-only counterpart to State.
+
 ---
 
 ## 2. Term Category
@@ -154,6 +155,7 @@ Use React Query (useQuery) for server cache state management
 - [Props (Properties)](../level_01/props.md) — Related concept: Props (Properties).
 - [Derived State](derived_state.md) — Derived state.
 - [Unidirectional Data Flow](unidirectional_flow.md) — Unidirectional data flow.
+
 ---
 
 ## 8. Key Takeaways

@@ -236,7 +236,6 @@ Do the following:
 - [Crate](../level_01/crate.md) — Related concept: Crate.
 - [Build Scripts (`build.rs`)](build_scripts.md) — Related concept: Build Scripts (`build.rs`).
 - [`Cargo.lock`](cargo_lock.md) — Related concept: `Cargo.lock`.
-- [`[dependencies]`](dependencies_section.md) — Related concept: `[dependencies]`.
 - [Edition](edition.md) — Related concept: Edition.
 - [Feature Flags](feature_flags.md) — Related concept: Feature Flags.
 - [Package](../level_01/package.md) — Related concept: Package.

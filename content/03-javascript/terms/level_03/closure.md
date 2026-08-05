@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
 - [Scope](scope.md) — The current context of execution.
+
 ---
 
 ## 2. Term Category
@@ -233,6 +234,7 @@ Create two greeters: `sayHello = createGreeter("Hello")` and `sayHowdy = createG
 - [Garbage Collection](../level_09/garbage_collection.md) — Related concept: Garbage Collection.
 - [Memoization](../level_09/memoization.md) — Related concept: Memoization.
 - [Throttle](../level_09/throttle.md) — Related concept: Throttle.
+
 ---
 
 ## 8. Key Takeaways

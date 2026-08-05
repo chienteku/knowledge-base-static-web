@@ -6,8 +6,9 @@
 ---
 
 ## 1. Prerequisites
-- nodejs — The server runtime hosting the application.
+- [Node.js (Runtime Environment)](../../../05-nodejs/terms/level_01/nodejs.md) — The server runtime hosting the application.
 - [Vue 3 Composition API Context](composition_api_context.md) — The core UI framework.
+
 ---
 
 ## 2. Term Category
@@ -186,6 +187,7 @@ export default defineNuxtConfig({
 - [Nitro Engine](nitro_engine.md) — The backend engine powering Nuxt.
 - [Vue 3 Composition API Context](composition_api_context.md) — The core UI framework.
 - [Auto-imports](auto_imports.md) — Auto-import system.
+
 ---
 
 ## 8. Key Takeaways

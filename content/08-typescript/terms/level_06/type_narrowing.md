@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`unknown`](../level_02/unknown.md) — Another broad type that strictly requires narrowing before use.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ function printNum(n: number | null) {
 - [Custom Type Guards (`is`)](custom_type_guards.md) — Related concept: Custom Type Guards (`is`).
 - [Exhaustiveness Checking (`never`)](exhaustiveness_checking.md) — Related concept: Exhaustiveness Checking (`never`).
 - [Discriminated Unions](discriminated_unions.md) — Discriminated union narrowing.
+
 ---
 
 ## 8. Key Takeaways

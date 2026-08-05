@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Static Site Generation (SSG)](../level_08/ssg.md) — The rendering strategy designed to produce CDN-cacheable files.
 - [Edge Runtime vs Node.js Runtime](edge_runtime.md) — The runtime that runs code at these edge locations.
+
 ---
 
 ## 2. Term Category
@@ -150,6 +151,7 @@ res.headers.set('Cache-Control', 'private, no-store'); // Prevents public CDN ca
 ## 7. Related Terms
 - [Incremental Static Regeneration (ISR)](../level_08/isr.md) — The hybrid cache strategy managed by CDNs.
 - [Serverless Functions](serverless_functions.md) — The centralized handlers that compile dynamic pages.
+
 ---
 
 ## 8. Key Takeaways

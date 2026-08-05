@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Template Syntax](../level_01/template_syntax.md) — The HTML structure where directives are used.
 - [Declarative Rendering](../level_01/declarative_rendering.md) — The core philosophy directives implement.
+
 ---
 
 ## 2. Term Category
@@ -171,6 +172,7 @@ const attributeName = ref('href'); // Dynamic attribute name
 - [Event, Key & Form Modifiers](modifiers.md) — Related concept: Event, Key & Form Modifiers.
 - [`v-if` / `v-show`](v_if_show.md) — Related concept: `v-if` / `v-show`.
 - [`v-model`](v_model.md) — Related concept: `v-model`.
+
 ---
 
 ## 8. Key Takeaways

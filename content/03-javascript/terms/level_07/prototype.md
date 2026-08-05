@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Object](../level_02/object.md) — A collection of properties and methods.
 - [this Keyword](this_keyword.md) — Refers to the current object.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ async function processData() {
 - [Prototype Chain](prototype_chain.md) — The series of links connecting objects to multiple prototypes.
 - [Class](class.md) — ES6 Classes.
 - [Object](../level_02/object.md) — Related concept: Object.
+
 ---
 
 ## 8. Key Takeaways

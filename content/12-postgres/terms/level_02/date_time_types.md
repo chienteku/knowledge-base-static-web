@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Data Types (Overview)](data_types.md) — Understanding database column typing.
+
 ---
 
 ## 2. Term Category
@@ -203,6 +204,7 @@ Store timezone name string in separate column if original timezone name is requi
 ## 7. Related Terms
 - [Data Types (Overview)](data_types.md) — The parent typing framework.
 - [Date/Time Functions (`NOW()`, `CURRENT_DATE`, `AGE()`, `EXTRACT`, `DATE_TRUNC`, `INTERVAL`)](../level_04/date_time_functions.md) — Related concept: Date/Time Functions (`NOW()`, `CURRENT_DATE`, `AGE()`, `EXTRACT`, `DATE_TRUNC`, `INTERVAL`).
+
 ---
 
 ## 8. Key Takeaways

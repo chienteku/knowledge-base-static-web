@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [SQL (Structured Query Language)](../level_01/sql.md) — The query execution context.
+
 ---
 
 ## 2. Term Category
@@ -220,6 +221,7 @@ Explain why this setup will crash under heavy traffic.
 ## 7. Related Terms
 - [`postgresql.conf` (Server Configuration)](postgresql_conf.md) — Setting connection thresholds.
 - [Client-Server Model (in Databases)](../level_01/client_server_model.md) — Client connections.
+
 ---
 
 ## 8. Key Takeaways

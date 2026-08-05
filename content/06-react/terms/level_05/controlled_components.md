@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useState` Hook](../level_02/use_state.md) — The mechanism used to control the input.
 - [Synthetic Events](synthetic_events.md) — Specifically `onChange`, which captures keystrokes.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +171,7 @@ const [val, setVal] = useState(data.name || ''); // Default empty string
 - [Unidirectional Data Flow](../level_02/unidirectional_flow.md) — Controlled components perfectly demonstrate this concept.
 - [`useState` Hook](../level_02/use_state.md) — useState for form inputs.
 - [Synthetic Events](synthetic_events.md) — Related concept: Synthetic Events.
+
 ---
 
 ## 8. Key Takeaways

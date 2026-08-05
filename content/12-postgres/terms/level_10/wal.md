@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [ACID Properties](../level_08/acid.md) — The Durability guarantee powered by WAL.
 - [`pg_dump` / `pg_restore` (Backups)](pg_dump_restore.md) — Understanding the differences between logical and write-ahead backups.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ Explain the step-by-step actions the database engine takes upon rebooting to rec
 - [Point-in-Time Recovery (PITR)](pitr.md) — - Restoring database state using WAL archives.
 - [Replication (Streaming / Logical)](replication.md) — Using WAL to sync replica databases.
 - [`pg_dump` / `pg_restore` (Backups)](pg_dump_restore.md) — Related concept: `pg_dump` / `pg_restore` (Backups).
+
 ---
 
 ## 8. Key Takeaways

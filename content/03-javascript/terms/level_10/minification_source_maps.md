@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Bundler](bundler.md) — The compiler tool that packages code assets.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ async function processData() {
 ## 7. Related Terms
 - [Babel](babel.md) — The compiler that generates source map coordinates during syntax transformation.
 - [Tree Shaking & Code Splitting](tree_shaking_code_splitting.md) — Related concept: Tree Shaking & Code Splitting.
+
 ---
 
 ## 8. Key Takeaways

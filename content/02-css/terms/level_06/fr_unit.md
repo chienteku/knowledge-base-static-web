@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint properties where the `fr` unit is declared.
+- [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Fractional fr unit in CSS Grid layout.
+
 ---
 
 ## 2. Term Category
@@ -306,6 +308,7 @@ What is the final width in pixels of the second column (the `1fr` column)?
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The parent blueprint.
 - [`minmax()` Function](grid_minmax.md) — A function commonly used with `fr` units to set sizing caps.
 - [CSS Grid (Concept) & `display: grid`](grid_concept.md) — Related concept: CSS Grid (Concept) & `display: grid`.
+
 ---
 
 ## 8. Key Takeaways

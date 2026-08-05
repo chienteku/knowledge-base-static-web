@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Client-Server Model](../level_01/client_server_model.md) — This dictates how the two sides interact.
 - [REST (Representational State Transfer)](rest.md) — Statelessness is the "ST" in Representational State Transfer.
+
 ---
 
 ## 2. Term Category
@@ -296,6 +297,7 @@ POST /api/checkout/step2 HTTP/1.1
 - [Idempotent vs Safe Methods](../level_02/idempotent_vs_safe_methods.md) — Related concept: Idempotent vs Safe Methods.
 - [Basic & Bearer Authentication](../level_04/basic_bearer_auth.md) — Related concept: Basic & Bearer Authentication.
 - [REST (Representational State Transfer)](rest.md) — Related concept: REST (Representational State Transfer).
+
 ---
 
 ## 8. Key Takeaways

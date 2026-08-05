@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Client-Server Model](client_server_model.md) — HTTP is the language these two entities use to talk.
+
 ---
 
 ## 2. Term Category
@@ -156,6 +157,7 @@ fetch('https://api.example.com/data');
 - [SSL/TLS & the Handshake](ssl_tls_handshake.md) — Related concept: SSL/TLS & the Handshake.
 - [TCP/IP (high-level)](tcp_ip.md) — Related concept: TCP/IP (high-level).
 - [gRPC (Remote Procedure Call)](../level_10/grpc.md) — Related concept: gRPC (Remote Procedure Call).
+
 ---
 
 ## 8. Key Takeaways

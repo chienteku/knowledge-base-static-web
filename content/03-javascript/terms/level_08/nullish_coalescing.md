@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [null](../level_01/null.md)
 - [Logical Operators](../level_02/logical_operators.md) — The older `||` operator this often replaces.
+
 ---
 
 ## 2. Term Category
@@ -208,6 +209,7 @@ async function processData() {
 - [Optional Chaining (?.)](optional_chaining.md) — Usually chained directly into `??`.
 - [Logical Operators](../level_02/logical_operators.md) — The `||` operator that `??` improves upon.
 - [Logical Assignment (??=, ||=, &&=)](logical_assignment.md) — Related concept: Logical Assignment (??=, ||=, &&=).
+
 ---
 
 ## 8. Key Takeaways

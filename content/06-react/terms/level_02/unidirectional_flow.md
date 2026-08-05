@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Props (Properties)](../level_01/props.md) — The vehicle that carries the data down.
 - [State](state.md) — The source of the data.
+
 ---
 
 ## 2. Term Category
@@ -166,6 +167,7 @@ Consolidate state update logic into a single parent handler or reducer
 - [Prop Drilling](../level_06/prop_drilling.md) — The dark side of Unidirectional flow (when the waterfall is 20 components deep).
 - [Controlled Components](../level_05/controlled_components.md) — Related concept: Controlled Components.
 - [State](state.md) — Related concept: State.
+
 ---
 
 ## 8. Key Takeaways

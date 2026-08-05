@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Component Lifecycle](../level_03/component_lifecycle.md) — Error Boundaries rely on specific, class-based lifecycle methods.
+- [Components](../level_01/components.md) — Catching JavaScript errors anywhere in component trees.
+
 ---
 
 ## 2. Term Category
@@ -211,6 +213,7 @@ class ErrorBoundary extends React.Component { componentDidCatch(error) { ... } }
 > **Explanation:** Resetting Error Boundary state allows users to recover from transient component errors.
 
 ## 7. Related Terms
-- [`error.tsx` (Next.js)](../../../09-nextjs/terms/level_02/error.md) — The Next.js framework has built-in Error Boundaries disguised as simple files.
+- [`error.tsx` & `global-error.tsx`](../../../09-nextjs/terms/level_02/error.md) — The Next.js framework has built-in Error Boundaries disguised as simple files.
 
 ---
+

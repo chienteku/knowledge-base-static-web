@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The form is a master container that holds other input elements.
 - [Nesting](../level_01/nesting.md) — Since other form controls must nest inside this boundary tag.
+
 ---
 
 ## 2. Term Category
@@ -195,6 +196,7 @@ When you hand it to the clerk (clicking submit), the whole envelope goes togethe
 - [`<button>`](button.md) — The trigger that actually submits the form.
 - [`name` Attribute (in Form Fields)](name.md) — Related concept: `name` Attribute (in Form Fields).
 - [`<label>`](label.md) — Input label element.
+
 ---
 
 ## 8. Key Takeaways

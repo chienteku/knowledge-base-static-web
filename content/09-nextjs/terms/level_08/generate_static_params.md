@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — Dynamic route segments [id] in App Router.
+
 ---
 
 ## 2. Term Category
@@ -294,8 +295,8 @@ export async function generateStaticParams() {
 
 ## 7. Related Terms
 - [Static Site Generation (SSG)](ssg.md) — The output target.
-- [Dynamic Routes (`[slug]`)](../level_03/dynamic_routes.md) — Related concept: Dynamic Routes (`[slug]`).
 - [Incremental Static Regeneration (ISR)](isr.md) — Related concept: Incremental Static Regeneration (ISR).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Headings (`<h1>` to `<h6>`)](../level_02/headings.md) — The visual header tags.
 - [Semantic HTML](semantic_html.md) — Document organization theory.
+
 ---
 
 ## 2. Term Category
@@ -255,6 +256,7 @@ A simple outline schema:
 - [Semantic HTML](semantic_html.md) — The concept framework.
 - [`<article>` and `<section>`](article_section.md) — Containers that enclose outline sections.
 - [SEO Fundamentals for HTML](../level_09/seo_fundamentals.md) — Related concept: SEO Fundamentals for HTML.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Constructor Function](constructor_function.md) — The older, underlying logic Classes replace.
 - [Prototypal Inheritance](prototypal_inheritance.md) — How Classes secretly share data.
+
 ---
 
 ## 2. Term Category
@@ -231,6 +232,7 @@ async function processData() {
 - [new Keyword](new_keyword.md) — Related concept: new Keyword.
 - [Design Patterns (Module, Singleton, Observer, Factory)](../level_09/design_patterns.md) — Related concept: Design Patterns (Module, Singleton, Observer, Factory).
 - [Prototype](prototype.md) — Related concept: Prototype.
+
 ---
 
 ## 8. Key Takeaways

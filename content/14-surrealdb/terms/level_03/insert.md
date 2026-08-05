@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [`CREATE`](create.md) — The native write equivalent.
+- [Table](../level_01/table.md) — Inserting records into defined or dynamic tables.
 
 ---
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<html>`](html_tag.md) — The parent root container element.
 - [Nesting](nesting.md) — Specifically, understanding how `<head>` nests inside the `<html>` root parent container.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ The `<body>` is the actual stage where the actors perform for the audience to se
 - [`<link>`](../level_08/link.md) — Related concept: `<link>`.
 - [`<meta>`](../level_08/meta.md) — Related concept: `<meta>`.
 - [Open Graph Tags (`og:`)](../level_08/open_graph.md) — Related concept: Open Graph Tags (`og:`).
+
 ---
 
 ## 8. Key Takeaways

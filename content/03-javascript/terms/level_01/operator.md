@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Statement](statement.md) — An instruction that performs an action.
 - [Expression](expression.md) — Any valid unit of code that resolves to a value.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ async function processData() {
 - [Arithmetic Operators](arithmetic_operators.md) — Operators used to perform mathematical calculations.
 - [Assignment Operators](assignment_operators.md) — Operators used to store or update values in variables.
 - [Comparison Operators](comparison_operators.md) — Operators used to compare two values.
+
 ---
 
 ## 8. Key Takeaways

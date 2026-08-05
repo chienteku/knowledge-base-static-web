@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP / HTTPS](http_https.md) — The web protocols requiring encryption.
+
 ---
 
 ## 2. Term Category
@@ -164,6 +165,7 @@ const agent = new https.Agent({ keepAlive: true });
 ## 7. Related Terms
 - [HTTP / HTTPS](http_https.md) — The application protocols secured by SSL/TLS.
 - [API Keys](../level_04/api_keys.md) — Authentication tokens that must be sent over HTTPS to prevent interception.
+
 ---
 
 ## 8. Key Takeaways

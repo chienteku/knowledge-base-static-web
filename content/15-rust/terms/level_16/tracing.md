@@ -416,7 +416,7 @@ Implement a structured diagnostic sweep function `perform_hardware_sweep(sweep_i
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

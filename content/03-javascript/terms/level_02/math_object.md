@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Number](../level_01/number.md) — Represents both integer and floating-point numbers.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ console.log(getRandomRange(1, 10));
 ## 7. Related Terms
 - [Number](../level_01/number.md) — The data type `Math` operates on.
 - [Number Methods & Parsing](number_methods.md) — Standard methods for type parsing.
+
 ---
 
 ## 8. Key Takeaways

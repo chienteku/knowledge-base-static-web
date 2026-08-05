@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [JSON Methods (parse / stringify)](../level_07/json_methods.md) — Web Storage only stores strings, so you must use these methods to save Objects.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ function render() { useTheme(theme); requestAnimationFrame(render); }
 - [XSS (Cross-Site Scripting)](../level_04/xss.md) — Related concept: XSS (Cross-Site Scripting).
 - [JSON Methods (parse / stringify)](../level_07/json_methods.md) — Related concept: JSON Methods (parse / stringify).
 - [Service Workers](service_workers.md) — Related concept: Service Workers.
+
 ---
 
 ## 8. Key Takeaways

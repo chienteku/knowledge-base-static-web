@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`position: static` vs `relative`](position_static_relative.md) — Absolute positioning heavily relies on relative positioning to work correctly!
 - [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Used to set the exact coordinates.
+
 ---
 
 ## 2. Term Category
@@ -293,6 +294,7 @@ To place an absolute element exactly where you want it inside a container, you M
 - [Document Flow (Normal Flow)](document_flow.md) — Related concept: Document Flow (Normal Flow).
 - [`top`, `bottom`, `left`, `right`](top_bottom_left_right.md) — Related concept: `top`, `bottom`, `left`, `right`.
 - [Stacking Context](stacking_context.md) — Stacking context.
+
 ---
 
 ## 8. Key Takeaways

@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Compiler Internals**: Low-level coroutines and generator state machines.
@@ -317,7 +316,6 @@ Iterate or invoke .resume() inside an executor loop!
 - [Nightly Compiler](nightly_compiler.md) — Related concept: Nightly Compiler.
 
 ---
-
 
 ## 7. Key Takeaways
 

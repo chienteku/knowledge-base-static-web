@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Route Middleware](route_middleware.md) — The routing context where this utility is exclusively invoked.
 - [`pages/` Directory](../level_02/pages_directory.md) — The routing layouts guarded by this check.
+
 ---
 
 ## 2. Term Category
@@ -212,6 +213,7 @@ export default defineNuxtRouteMiddleware((to) => {
 ## 7. Related Terms
 - [Route Middleware](route_middleware.md) — The routing context where this utility is used.
 - [`error.vue` & `useError`](../level_10/error_vue.md) — The global page layout that renders aborted error objects.
+
 ---
 
 ## 8. Key Takeaways

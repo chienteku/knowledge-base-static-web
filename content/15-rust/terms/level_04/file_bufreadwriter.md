@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`Result<T, E>`](../level_02/result_t_e.md) — Fallible file system operations returning std::io::Result.
+- [Formatting Traits (`std::fmt`)](formatting_traits.md) — Formatting output streams.
 
 ---
-
 
 ## 2. Term Category
 
@@ -294,7 +294,6 @@ let mut buf = String::new(); while reader.read_line(&mut buf)? > 0 { process(&bu
 - [`Path` / `PathBuf`](../level_01/path_pathbuf.md) — Related concept: `Path` / `PathBuf`.
 
 ---
-
 
 ## 7. Key Takeaways
 

@@ -9,6 +9,7 @@
 - [`<td>` (Table Data)](td.md) — The standard table cell.
 - [`<th>` (Table Header)](th.md) — The header cell.
 - [`<table>`](table.md) — The master table grid.
+
 ---
 
 ## 2. Term Category
@@ -243,6 +244,7 @@ A calendar schedule using both column and row spans:
 - [`<td>` (Table Data)](td.md) — The tag that receives span attributes.
 - [`<th>` (Table Header)](th.md) — Header cells which frequently span across categories.
 - [`scope` Attribute (in `<th>`)](scope.md) — Used alongside spans to clarify multi-cell header authority.
+
 ---
 
 ## 8. Key Takeaways

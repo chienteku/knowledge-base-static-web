@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The fetch() API](../level_05/fetch.md) — The frontend code that calls the mock.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The hardcoded data returned by the mock.
+
 ---
 
 ## 2. Term Category
@@ -143,6 +144,7 @@ if (process.env.NODE_ENV === 'development') return MOCK_DATA; // ❌ Risky produ
 - [Swagger / OpenAPI Specification](openapi.md) — You can actually feed an OpenAPI file into a mocking tool, and it will automatically generate the fake API for you!
 - [Postman / Insomnia (API Clients)](api_clients.md) — Postman has built-in Mock Server capabilities.
 - [API Contract / Schema-First Design](api_contract.md) — Related concept: API Contract / Schema-First Design.
+
 ---
 
 ## 8. Key Takeaways

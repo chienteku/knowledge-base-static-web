@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The baseline data retrieval statement.
+
 ---
 
 ## 2. Term Category
@@ -199,6 +200,7 @@ SELECT COUNT(*) FROM users; -- Counts total rows including NULLs
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [`NULL` Behavior in Expressions & Aggregates](null_in_aggregates.md) — How missing values affect summaries.
 - [`GROUP BY`](group_by.md) — Slicing aggregates into categories.
+
 ---
 
 ## 8. Key Takeaways

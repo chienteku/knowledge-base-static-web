@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [The Event Loop & Libuv](../level_01/event_loop.md) — Node handles thousands of requests, requiring an efficient database strategy.
 - [SQL vs NoSQL](sql_vs_nosql.md) — Connection pools apply to almost all database types.
+
 ---
 
 ## 2. Term Category
@@ -174,6 +175,7 @@ try {
 ## 7. Related Terms
 - [ORMs & ODMs](orms_odms.md) — ORMs manage the Connection Pool for you automatically.
 - [Database Transactions](db_transactions.md) — Related concept: Database Transactions.
+
 ---
 
 ## 8. Key Takeaways

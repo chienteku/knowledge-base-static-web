@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](../level_02/primitive_types.md) — What is usually passed into functions.
 - [`void` & `never`](../level_02/void_never.md) — Specific return types for functions.
+
 ---
 
 ## 2. Term Category
@@ -172,6 +173,7 @@ function exec(cb: (a: number, b: number) => void) { cb(1, 2); }
 - [Rest Parameters (`...`)](rest_parameters.md) — Related concept: Rest Parameters (`...`).
 - [`this` Typing in Functions](this_typing.md) — Related concept: `this` Typing in Functions.
 - [`ReturnType<T>`](../level_08/returntype.md) — Related concept: `ReturnType<T>`.
+
 ---
 
 ## 8. Key Takeaways

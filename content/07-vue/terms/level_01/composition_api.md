@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Options API](options_api.md) — Understanding the limitations of the old way helps explain why the Composition API exists.
 - [Declarative Rendering](declarative_rendering.md) — The core principle Vue operates on.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ export default {
 - [`<script setup>` & Compiler Macros](../level_04/script_setup.md) — The standard compilation sugar for Composition API.
 - [Options API](options_api.md) — Related concept: Options API.
 - [Reactive State](../level_02/reactive_state.md) — Reactive state API.
+
 ---
 
 ## 8. Key Takeaways

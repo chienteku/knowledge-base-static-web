@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Static Typing vs Dynamic Typing](../level_01/static_dynamic_typing.md) — `any` reverts the code back to Dynamic Typing.
+
 ---
 
 ## 2. Term Category
@@ -154,6 +155,7 @@ const val = getRawData(); // Forces caller to narrow type safely
 - [Type Assertions (`as`)](../level_05/type_assertions.md) — Related concept: Type Assertions (`as`).
 - [Strict Mode](../level_11/strict_mode.md) — Related concept: Strict Mode.
 - [`void` & `never`](void_never.md) — Related concept: `void` & `never`.
+
 ---
 
 ## 8. Key Takeaways

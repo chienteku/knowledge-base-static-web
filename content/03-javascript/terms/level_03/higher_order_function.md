@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](function.md) — A reusable block of code.
 - [Arguments](arguments.md) — Values passed to a function.
+
 ---
 
 ## 2. Term Category
@@ -224,6 +225,7 @@ async function processData() {
 - [Recursion](recursion.md) — Related concept: Recursion.
 - [Event Listener](../level_05/event_listener.md) — Related concept: Event Listener.
 - [Memoization](../level_09/memoization.md) — Related concept: Memoization.
+
 ---
 
 ## 8. Key Takeaways

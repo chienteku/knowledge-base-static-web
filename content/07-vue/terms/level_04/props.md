@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Components](components.md) — The entities passing data to each other.
 - [`v-bind`](../level_03/v_bind.md) — The directive used to pass dynamic variables as props.
+
 ---
 
 ## 2. Term Category
@@ -197,6 +198,7 @@ defineProps({
 - [Slots](../level_05/slots.md) — Related concept: Slots.
 - [State Management](../level_07/state_management.md) — Related concept: State Management.
 - [TypeScript with Vue](../level_10/typescript_vue.md) — Related concept: TypeScript with Vue.
+
 ---
 
 ## 8. Key Takeaways

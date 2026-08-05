@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`<html>`](html_tag.md) — The parent root container element.
 - [Nesting](nesting.md) — Specifically, understanding how `<body>` nests inside the `<html>` root parent container.
+
 ---
 
 ## 2. Term Category
@@ -186,6 +187,7 @@ The `<body>` is the physical stage itself. If an actor (a paragraph) or a prop (
 - [`<noscript>`](../level_08/noscript.md) — Related concept: `<noscript>`.
 - [Block-level vs Inline Elements](block_inline.md) — Block vs inline elements.
 - [Semantic HTML](../level_06/semantic_html.md) — Semantic HTML layout.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Entity-Relationship Diagram (ERD)](erd.md) — Visual schema blueprints.
+
 ---
 
 ## 2. Term Category
@@ -200,6 +201,7 @@ Identify:
 - [Second Normal Form (2NF)](second_normal_form.md) — 2NF.
 - [Third Normal Form (3NF)](third_normal_form.md) — 3NF.
 - [Denormalization](denormalization.md) — Strategic denormalization.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [HTTP / HTTPS](http_https.md) — HTTP is the envelope; JSON is the letter inside the envelope.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ console.log(JSON.stringify(data)); // '{"name":"Bob","score":null}'
 - [Serialization & Deserialization](../level_07/serialization.md) — JSON serialization.
 - [Content-Type & MIME Types](../level_02/content_type.md) — application/json Content-Type.
 - [GraphQL (The REST Alternative)](../level_07/graphql.md) — Related concept: GraphQL (The REST Alternative).
+
 ---
 
 ## 8. Key Takeaways

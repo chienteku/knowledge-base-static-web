@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Non-Blocking I/O](../level_01/non_blocking_io.md) — Callbacks are the original mechanism Node.js used to handle Non-Blocking I/O.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — The loop pushes callbacks back onto the main thread.
+
 ---
 
 ## 2. Term Category
@@ -180,12 +181,12 @@ function fetchUser(callback) {
 > **Explanation:** Checking `if (err)` first enforces Node.js error-first safety checks.
 
 ## 7. Related Terms
-- promises — The modern solution that completely eliminated Callback Hell.
 - [Promisification (util.promisify)](promisification.md) — How you convert old callback code into modern Promise code.
 - [The Event Loop & Libuv](../level_01/event_loop.md) — Related concept: The Event Loop & Libuv.
 - [Non-Blocking I/O](../level_01/non_blocking_io.md) — Related concept: Non-Blocking I/O.
 - [Async Error Handling (try/catch + .catch)](async_error_handling.md) — Related concept: Async Error Handling (try/catch + .catch).
 - [Event Emitter](event_emitter.md) — Related concept: Event Emitter.
+
 ---
 
 ## 8. Key Takeaways

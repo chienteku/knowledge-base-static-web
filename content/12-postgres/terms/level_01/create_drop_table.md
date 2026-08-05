@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Table (Relation)](table.md) — The logical data grid being managed.
 - [SQL (Structured Query Language)](sql.md) — The declarative syntax standard.
+
 ---
 
 ## 2. Term Category
@@ -189,6 +190,7 @@ CREATE TABLE IF NOT EXISTS users ( id INT PRIMARY KEY ); -- Safe idempotent crea
 - [SQL (Structured Query Language)](sql.md) — Related concept: SQL (Structured Query Language).
 - [`TRUNCATE`](../level_03/truncate.md) — Related concept: `TRUNCATE`.
 - [`ALTER TABLE`](../level_06/alter_table.md) — Related concept: `ALTER TABLE`.
+
 ---
 
 ## 8. Key Takeaways

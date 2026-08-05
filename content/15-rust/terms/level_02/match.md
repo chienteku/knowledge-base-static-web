@@ -890,7 +890,6 @@ Requirements:
 - [`if` / `else`](if_else.md) — Related concept: `if` / `else`.
 - [`matches!` Macro](matches_macro.md) — Related concept: `matches!` Macro.
 - [`todo!` / `unimplemented!` / `unreachable!`](../level_04/todo_unimplemented_unreachable.md) — Related concept: `todo!` / `unimplemented!` / `unreachable!`.
-- [`#[non_exhaustive]`](../level_07/non_exhaustive_attribute.md) — Related concept: `#[non_exhaustive]`.
 - [Declarative Macros (`macro_rules!`)](../level_12/declarative_macros_macro_rules.md) — Related concept: Declarative Macros (`macro_rules!`).
 
 ---

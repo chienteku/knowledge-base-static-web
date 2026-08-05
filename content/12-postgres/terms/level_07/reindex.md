@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — The lifecycle index DDL.
 - [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — The parent table cleaning concepts.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ Monitor index bloat via pgstatindex before executing REINDEX CONCURRENTLY
 ## 7. Related Terms
 - [`CREATE INDEX` / `DROP INDEX`](create_drop_index.md) — Sourcing indexes.
 - [`VACUUM` / `ANALYZE`](vacuum_analyze.md) — Table slot cleanup.
+
 ---
 
 ## 8. Key Takeaways

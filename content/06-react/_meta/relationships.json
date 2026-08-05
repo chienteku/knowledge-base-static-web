@@ -60,6 +60,11 @@
           "module": "06-react",
           "term": "typescript_react",
           "description": "Related concept: TypeScript with React."
+        },
+        {
+          "module": "06-react",
+          "term": "error_boundaries",
+          "description": "Related concept: Error Boundaries."
         }
       ]
     },
@@ -210,6 +215,11 @@
           "term": "synthetic_events",
           "module": "06-react",
           "description": "Related concept: Synthetic Events."
+        },
+        {
+          "module": "06-react",
+          "term": "styled_components",
+          "description": "Related concept: Styled Components / Emotion (CSS-in-JS)."
         }
       ]
     },
@@ -401,6 +411,11 @@
           "term": "react_native",
           "module": "06-react",
           "description": "Related concept: React Native."
+        },
+        {
+          "module": "06-react",
+          "term": "portals",
+          "description": "Related concept: Portals."
         }
       ]
     },
@@ -481,6 +496,11 @@
           "term": "state",
           "module": "06-react",
           "description": "This rule strictly applies to how you update React State."
+        },
+        {
+          "module": "06-react",
+          "term": "virtual_dom",
+          "description": "Virtual DOM reconciliation and state immutability."
         }
       ],
       "related": [
@@ -1036,6 +1056,11 @@
           "term": "react_query",
           "module": "06-react",
           "description": "Related concept: React Query (TanStack Query) / SWR."
+        },
+        {
+          "module": "06-react",
+          "term": "synthetic_events",
+          "description": "Related concept: Synthetic Events."
         }
       ]
     },
@@ -1316,6 +1341,11 @@
           "term": "rules_of_hooks",
           "module": "06-react",
           "description": "The usage guidelines governing hook invocations."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Generating unique accessible IDs for components."
         }
       ],
       "related": [
@@ -1328,6 +1358,11 @@
           "term": "rules_of_hooks",
           "module": "06-react",
           "description": "The structural laws governing hook calls."
+        },
+        {
+          "module": "06-react",
+          "term": "use_ref",
+          "description": "Comparing unique DOM IDs with useRef."
         }
       ]
     },
@@ -1372,6 +1407,11 @@
           "module": "06-react",
           "term": "referential_equality",
           "description": "Referential equality."
+        },
+        {
+          "module": "06-react",
+          "term": "react_profiler",
+          "description": "Related concept: The React Profiler."
         }
       ]
     },
@@ -1416,6 +1456,11 @@
           "term": "uncontrolled_components",
           "module": "06-react",
           "description": "Related concept: Uncontrolled Components."
+        },
+        {
+          "module": "06-react",
+          "term": "use_id",
+          "description": "Related concept: `useId` Hook."
         }
       ]
     },
@@ -1535,6 +1580,11 @@
           "term": "declarative_programming",
           "module": "06-react",
           "description": "You use Synthetic events instead of `addEventListener`."
+        },
+        {
+          "module": "06-react",
+          "term": "jsx",
+          "description": "Handling synthetic DOM events in JSX templates."
         }
       ],
       "related": [
@@ -1552,6 +1602,11 @@
           "module": "06-react",
           "term": "controlled_components",
           "description": "Form input events."
+        },
+        {
+          "module": "06-react",
+          "term": "use_effect",
+          "description": "Cleaning up native vs synthetic event listeners."
         }
       ]
     },
@@ -1593,6 +1648,11 @@
           "term": "prop_drilling",
           "module": "06-react",
           "description": "The exact problem that the Context API was created to solve."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Passing data through component trees without prop drilling."
         }
       ],
       "related": [
@@ -1905,6 +1965,11 @@
           "term": "component_lifecycle",
           "module": "06-react",
           "description": "Error Boundaries rely on specific, class-based lifecycle methods."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Catching JavaScript errors anywhere in component trees."
         }
       ],
       "related": [
@@ -1917,6 +1982,16 @@
           "module": "06-react",
           "term": "component_lifecycle",
           "description": "componentDidCatch lifecycle hook."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Wrapping component subtrees with Error Boundaries."
+        },
+        {
+          "module": "06-react",
+          "term": "suspense",
+          "description": "Combining Error Boundaries with React Suspense."
         }
       ]
     },
@@ -1980,6 +2055,11 @@
           "term": "forward_ref",
           "module": "06-react",
           "description": "Related concept: `forwardRef` & `useImperativeHandle`."
+        },
+        {
+          "module": "06-react",
+          "term": "virtual_dom",
+          "description": "Rendering modal dialogs and tooltips via React Portals."
         }
       ]
     },
@@ -2026,6 +2106,11 @@
           "term": "code_splitting",
           "module": "06-react",
           "description": "The process of splitting bundle outputs."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Bundling and tree-shaking React component modules."
         }
       ],
       "related": [
@@ -2223,6 +2308,11 @@
           "term": "react_memo",
           "module": "06-react",
           "description": "The caching HOC verified using the Profiler."
+        },
+        {
+          "module": "06-react",
+          "term": "use_memo",
+          "description": "Measuring component render performance and memoization impact."
         }
       ]
     },
@@ -2269,6 +2359,11 @@
           "term": "conditional_rendering",
           "module": "06-react",
           "description": "What Suspense aims to replace."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Handling async component loading with React Suspense."
         }
       ],
       "related": [
@@ -2301,6 +2396,11 @@
           "module": "06-react",
           "term": "use_deferred_value",
           "description": "useDeferredValue hook."
+        },
+        {
+          "module": "06-react",
+          "term": "error_boundaries",
+          "description": "Related concept: Error Boundaries."
         }
       ]
     },
@@ -2522,6 +2622,11 @@
           "term": "virtual_dom",
           "module": "06-react",
           "description": "The technology React uses to rewrite the page so quickly."
+        },
+        {
+          "module": "06-react",
+          "term": "components",
+          "description": "Building Single Page Applications with React components."
         }
       ],
       "related": [
@@ -3088,6 +3193,11 @@
           "term": "components",
           "module": "06-react",
           "description": "Styled Components are just React Components that render a specific HTML tag with injected CSS."
+        },
+        {
+          "module": "06-react",
+          "term": "jsx",
+          "description": "CSS-in-JS styling for React JSX components."
         }
       ]
     },

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`ref`](ref.md) — The standard reactive wrapper.
 - [`reactive`](reactive.md) — The API that makes objects recursively reactive.
+
 ---
 
 ## 2. Term Category
@@ -254,6 +255,7 @@ function addLog(message) {
 - [`ref`](ref.md) — The standard reactive wrapper.
 - [`reactive`](reactive.md) — The deep reactive object wrapper.
 - [Virtual DOM (Vue)](../level_08/virtual_dom.md) — The virtual representation of the DOM that Vue updates when reactive variables change.
+
 ---
 
 ## 8. Key Takeaways

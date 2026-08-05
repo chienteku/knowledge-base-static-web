@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [XML](../level_07/xml.md) — The tag-based markup language used for legacy payloads.
 - [HTTP Methods (Verbs)](../level_02/http_methods.md) — The network action keywords.
+
 ---
 
 ## 2. Term Category
@@ -180,6 +181,7 @@ Imagine mailing a document.
 ## 7. Related Terms
 - [gRPC (Remote Procedure Call)](grpc.md) — The modern binary remote procedure call alternative.
 - [XML](../level_07/xml.md) — The data format that structures SOAP messages.
+
 ---
 
 ## 8. Key Takeaways

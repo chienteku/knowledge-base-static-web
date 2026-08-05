@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Connection Pooling](connection_pooling.md) — Managing connection caps tuned in postgresql.conf.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ work_mem = 64MB -- Global setting; set higher per session for specific heavy que
 - [Connection Pooling](connection_pooling.md) — Managing connection caps.
 - [Managed PostgreSQL Services (Supabase, Neon, AWS RDS)](managed_services.md) — Related concept: Managed PostgreSQL Services (Supabase, Neon, AWS RDS).
 - [`pg_stat_statements` / Monitoring](monitoring.md) — Related concept: `pg_stat_statements` / Monitoring.
+
 ---
 
 ## 8. Key Takeaways

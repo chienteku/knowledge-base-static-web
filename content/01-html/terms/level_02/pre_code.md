@@ -9,6 +9,7 @@
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The browser behavior these tags modify or bypass.
 - [`<p>` (Paragraph)](p.md) — Standard paragraph text blocks.
 - [Nesting](../level_01/nesting.md) — Combining block and inline nodes.
+
 ---
 
 ## 2. Term Category
@@ -270,6 +271,7 @@ fruits.forEach((fruit) => {
 ## 7. Related Terms
 - [Whitespace Collapse](../level_01/whitespace_collapse.md) — The default browser behavior that `<pre>` overrides.
 - [`<span>` (Inline container)](span.md) — A generic inline container that does not enforce monospacing.
+
 ---
 
 ## 8. Key Takeaways

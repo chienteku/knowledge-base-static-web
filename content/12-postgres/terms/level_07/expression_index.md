@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [String Functions (`CONCAT`, `LENGTH`, `UPPER`, `LOWER`, `TRIM`, `SUBSTRING`, `REPLACE`)](../level_04/string_functions.md) — The functions commonly indexed.
+
 ---
 
 ## 2. Term Category
@@ -195,6 +196,7 @@ CREATE INDEX idx_date ON events ((created_at AT TIME ZONE 'UTC'));
 - [B-tree Index](btree_index.md) — The parent sorted tree structure.
 - [`JSON` / `JSONB` Type](../level_06/json_jsonb.md) — Storing nested documents.
 - [Full-Text Search (`tsvector`, `tsquery`)](../level_10/full_text_search.md) — Related concept: Full-Text Search (`tsvector`, `tsquery`).
+
 ---
 
 ## 8. Key Takeaways

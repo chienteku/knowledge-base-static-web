@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`useState` Hook](../level_02/use_state.md) — `useRef` is the "silent" cousin of `useState`.
 - [Re-rendering](../level_02/re_rendering.md) — What `useRef` intentionally avoids.
+
 ---
 
 ## 2. Term Category
@@ -188,6 +189,7 @@ Which one should use `useState`, and which should use `useRef`?
 - [`useLayoutEffect` Hook](../level_03/use_layout_effect.md) — Related concept: `useLayoutEffect` Hook.
 - [`forwardRef` & `useImperativeHandle`](forward_ref.md) — Related concept: `forwardRef` & `useImperativeHandle`.
 - [Uncontrolled Components](../level_05/uncontrolled_components.md) — Related concept: Uncontrolled Components.
+
 ---
 
 ## 8. Key Takeaways

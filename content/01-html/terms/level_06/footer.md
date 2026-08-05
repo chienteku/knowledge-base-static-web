@@ -9,6 +9,7 @@
 - [Semantic HTML](semantic_html.md) — The `<footer>` is the closing semantic landmark of a document.
 - [`<header>`](header.md) — The semantic opposite of the footer.
 - [Nesting](../level_01/nesting.md) — Since concluding tags, links, and text are nested inside the footer wrapper.
+
 ---
 
 ## 2. Term Category
@@ -210,6 +211,7 @@ The `<footer>` is the copyright page at the very back of the book, listing the p
 - [`<article>` and `<section>`](article_section.md) — Often contains its own specific `<footer>`.
 - [`<address>`](address.md) — The semantic tag for contact info, typically hosted in page footers.
 - [Semantic HTML](semantic_html.md) — Related concept: Semantic HTML.
+
 ---
 
 ## 8. Key Takeaways

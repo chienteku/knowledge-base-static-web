@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Serialization & Deserialization](serialization.md) — The processes of preparing data for network transit.
 - [Base64 Encoding](base64.md) — The mechanism that wraps binary data inside text strings.
+
 ---
 
 ## 2. Term Category
@@ -207,6 +208,7 @@ console.log("JSON Size:", Buffer.byteLength(jsonString), "bytes"); // Output: 47
 - [Blob & ArrayBuffer](blob_arraybuffer.md) — Related concept: Blob & ArrayBuffer.
 - [Character Encoding (UTF-8)](character_encoding.md) — Related concept: Character Encoding (UTF-8).
 - [Protocol Buffers (protobuf)](../level_10/protocol_buffers.md) — Related concept: Protocol Buffers (protobuf).
+
 ---
 
 ## 8. Key Takeaways

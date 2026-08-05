@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Vue Instance](../level_01/vue_instance.md) — What is usually running in the browser, but is now running on the server.
 - [Client-Side Rendering (CSR)](csr.md) — The default behavior that SSR is trying to fix.
+
 ---
 
 ## 2. Term Category
@@ -160,6 +161,7 @@ onMounted(() => {
 - [Nuxt.js](nuxt.md) — The framework used to easily build SSR Vue apps.
 - [Static Site Generation (SSG)](ssg.md) — Pre-rendering pages to static HTML at build time.
 - [Universal Code (Isomorphic)](universal_code.md) — Related concept: Universal Code (Isomorphic).
+
 ---
 
 ## 8. Key Takeaways

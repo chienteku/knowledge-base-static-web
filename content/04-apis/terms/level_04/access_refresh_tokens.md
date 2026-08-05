@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Session vs Token Authentication](session_vs_token_auth.md) — The core stateful/stateless auth structures.
 - [JWT (JSON Web Tokens)](jwt.md) — The signed token data format.
+
 ---
 
 ## 2. Term Category
@@ -218,6 +219,7 @@ api.interceptors.response.use(
 ## 7. Related Terms
 - [Basic & Bearer Authentication](basic_bearer_auth.md) — The HTTP headers formatting access tokens.
 - [OAuth 2.0](oauth.md) — The authorization framework standardizing access and refresh flows.
+
 ---
 
 ## 8. Key Takeaways

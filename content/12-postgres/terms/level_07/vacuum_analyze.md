@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Query Planner / Optimizer](query_planner.md) — The cost-calculation engine.
 - [Index-Only Scan (Covering Index)](index_only_scan.md) — The scans that rely on Visibility Maps cleaned by vacuum.
+
 ---
 
 ## 2. Term Category
@@ -206,6 +207,7 @@ Keep autovacuum = on enabled globally and tune scale factors for busy tables
 - [Index-Only Scan (Covering Index)](index_only_scan.md) — The scans that require clean visibility maps.
 - [`REINDEX`](reindex.md) — Related concept: `REINDEX`.
 - [MVCC (Multi-Version Concurrency Control)](../level_08/mvcc.md) — Related concept: MVCC (Multi-Version Concurrency Control).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Virtual DOM (Vue)](virtual_dom.md) — The diffing process that these directives try to skip.
 - [Directives](../level_03/directives.md) — What these are.
+
 ---
 
 ## 2. Term Category
@@ -160,6 +161,7 @@ Introduced in Vue 3.2, `v-memo` is the ultimate loop optimization tool. You pass
 - [Virtual DOM (Vue)](virtual_dom.md) — What `v-once` and `v-memo` are explicitly optimizing.
 - [Computed Properties](../level_02/computed_properties.md) — The JavaScript equivalent of caching derived logic.
 - [`v-for` (List Rendering) & `:key`](../level_03/v_for_key.md) — Related concept: `v-for` (List Rendering) & `:key`.
+
 ---
 
 ## 8. Key Takeaways

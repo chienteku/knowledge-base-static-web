@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- [`<form>`](form.md) — Form element calculation output display.
+
 ---
 
 ## 2. Term Category
@@ -29,6 +30,7 @@ None (Entry-level term)
 
 ## 5. Related Terms
 - [`<progress>` & `<meter>` Elements](../level_10/progress_meter.md)
+
 ---
 
 ## 6. Key Takeaways

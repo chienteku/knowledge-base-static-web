@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Responsive Design (Concept)](responsive_design.md) — Adapting layout scales to viewports.
 - [`calc()`](../level_11/calc.md) — Evaluating runtime mathematical equations.
+
 ---
 
 ## 2. Term Category
@@ -310,6 +311,7 @@ If a user opens the page on a mobile device where the viewport width is `300px`,
 ## 7. Related Terms
 - [Responsive Design (Concept)](responsive_design.md) — The adaptation philosophy.
 - [`calc()`](../level_11/calc.md) — Basic CSS math.
+
 ---
 
 ## 8. Key Takeaways

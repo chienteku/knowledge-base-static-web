@@ -9,6 +9,7 @@
 - [Vue Test Utils](vue_test_utils.md) — The library for mounting and interacting with Vue components.
 - [Vite](vite.md) — The development server and bundler.
 - [Build Step (Compilation)](build_step.md) — How code compilation pipelines operate.
+
 ---
 
 ## 2. Term Category
@@ -273,6 +274,7 @@ describe('TitleCard', () => {
 - [Vue Test Utils](vue_test_utils.md) — The utility suite for mounting and checking Vue components.
 - [Vite](vite.md) — The underlying transformer engine and bundler.
 - [Build Step (Compilation)](build_step.md) — The compilation pipeline.
+
 ---
 
 ## 8. Key Takeaways

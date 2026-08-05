@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Next.js Overview](../level_01/nextjs.md) — The framework powered by this bundler.
+
 ---
 
 ## 2. Term Category
@@ -157,6 +158,7 @@ next dev --turbo # Fast development server powered by Turbopack
 - [The Next.js Compiler (SWC)](swc.md) — The file compilation system.
 - [Node.js Runtime](../level_01/nodejs_runtime.md) — The execution host.
 - [`next.config.mjs`](../level_02/next_config.md) — next.config.js.
+
 ---
 
 ## 8. Key Takeaways

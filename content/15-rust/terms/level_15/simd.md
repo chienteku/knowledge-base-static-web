@@ -520,8 +520,6 @@ for x in slice.iter_mut() {
 - [Zero-Cost Abstractions](zero_cost_abstractions.md) — How auto-vectorization transforms high-level iterators into SIMD.
 - [Release Profile](release_profile.md) — Optimization profile driving SIMD code generation.
 - [`perf` / `flamegraph`](perf_flamegraph.md) — Profiling tools used to detect un-vectorized loop bottlenecks.
-- [Arrays and Slices (`[T; N]`, `&[T]`)](../level_01/array_and_slice.md) — Contiguous memory buffers required for SIMD vector loading.
-- [`#[repr(packed)]` / `#[repr(align)]`](repr_packed_align.md) — Related concept: `#[repr(packed)]` / `#[repr(align)]`.
 
 ---
 

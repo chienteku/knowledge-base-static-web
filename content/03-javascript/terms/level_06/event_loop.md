@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Synchronous](synchronous.md)
 - [Call Stack](call_stack.md) — The queue of synchronous tasks.
+
 ---
 
 ## 2. Term Category
@@ -204,6 +205,7 @@ console.log("C");
 - [Macrotask Queue](macrotask_queue.md) — Related concept: Macrotask Queue.
 - [Web Workers](web_workers.md) — Related concept: Web Workers.
 - [Promise](promise.md) — Related concept: Promise.
+
 ---
 
 ## 8. Key Takeaways

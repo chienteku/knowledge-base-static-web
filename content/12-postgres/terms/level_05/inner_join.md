@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`JOIN` (Concept)](join_concept.md) — The parent table combination mechanics.
+
 ---
 
 ## 2. Term Category
@@ -231,6 +232,7 @@ Join on indexed primary and foreign key columns: ON u.id = o.user_id
 - [`LEFT JOIN` (`LEFT OUTER JOIN`)](left_join.md) — Sourcing unmatched left-side elements.
 - [`RIGHT JOIN` / `FULL OUTER JOIN`](right_full_join.md) — Related concept: `RIGHT JOIN` / `FULL OUTER JOIN`.
 - [`FOREIGN KEY`](foreign_key.md) — Joining on foreign key columns.
+
 ---
 
 ## 8. Key Takeaways

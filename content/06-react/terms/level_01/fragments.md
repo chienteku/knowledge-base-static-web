@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [JSX (JavaScript XML)](jsx.md) — The XML-like syntax that compiles to elements.
 - [Components](components.md) — React's reusable building blocks.
+
 ---
 
 ## 2. Term Category
@@ -341,6 +342,7 @@ function TableBody({ rows }) {
 - [Children Prop](../level_07/children_prop.md) — Passing elements down component nesting lines.
 - [Components](components.md) — Related concept: Components.
 - [JSX (JavaScript XML)](jsx.md) — Related concept: JSX (JavaScript XML).
+
 ---
 
 ## 8. Key Takeaways

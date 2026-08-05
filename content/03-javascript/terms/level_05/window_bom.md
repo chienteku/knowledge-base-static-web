@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Global Scope](../level_03/global_scope.md) — The outermost execution scope in which variables are defined.
 - [JavaScript Engine](javascript_engine.md) — The program (like V8) that parses, compiles, and executes JavaScript code.
+
 ---
 
 ## 2. Term Category
@@ -211,6 +212,7 @@ if (typeof window !== "undefined") {
 - [Web Storage (localStorage / sessionStorage)](web_storage.md) — Persistent key-value storage hosted on the window object.
 - [DOMContentLoaded / load events](domcontentloaded_load.md) — Related concept: DOMContentLoaded / load events.
 - [Web APIs vs the Language](../level_10/web_apis_vs_language.md) — Related concept: Web APIs vs the Language.
+
 ---
 
 ## 8. Key Takeaways

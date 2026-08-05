@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [State Management (Redux / Zustand)](../level_06/state_management.md) — Redux is the implementation of this concept.
 - [`useReducer` Hook](../level_06/use_reducer.md) — React's built-in version of the Redux pattern.
+
 ---
 
 ## 2. Term Category
@@ -168,6 +169,7 @@ const userName = useSelector(state => state.user.name); // Granular selector
 - [The Context API](../level_06/context_api.md) — The built-in alternative for simpler global state.
 - [Zustand](zustand.md) — Related concept: Zustand.
 - [React Query (TanStack Query) / SWR](react_query.md) — React Query server state.
+
 ---
 
 ## 8. Key Takeaways

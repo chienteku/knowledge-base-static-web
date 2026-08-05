@@ -504,7 +504,7 @@ async fn main() -> std::io::Result<()> {
 
 ## 6. Related Terms
 
-**None.**
+- None!
 
 ---
 

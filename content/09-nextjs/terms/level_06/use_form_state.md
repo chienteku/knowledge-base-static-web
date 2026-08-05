@@ -9,6 +9,7 @@
 - [Form Actions](form_actions.md) — The mechanism being enhanced.
 - [Client Components (`"use client"`)](../level_01/client_components.md) — Required to use this hook.
 - [Zod (Schema Validation)](zod_validation.md) — How the error data structure is validated.
+
 ---
 
 ## 2. Term Category
@@ -205,6 +206,7 @@ const [state, formAction] = useActionState(action, null);
 - [Server Actions Overview (`"use server"`)](server_actions.md) — The function providing the state.
 - [`useFormStatus` Hook](use_form_status.md) — The sister hook used for loading indicators.
 - [Zod (Schema Validation)](zod_validation.md) — Related concept: Zod (Schema Validation).
+
 ---
 
 ## 8. Key Takeaways

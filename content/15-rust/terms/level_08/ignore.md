@@ -8,7 +8,8 @@
 ## 1. Prerequisites
 
 
-**None.**
+- [`#[test]` Attribute](test_attribute.md) — The #[test] attribute for unit tests.
+- [Attributes (`#[...]`)](../level_07/attributes.md) — Attribute syntax #[ignore].
 
 ---
 
@@ -583,7 +584,7 @@ Design a schema migration engine:
 ## 6. Related Terms
 
 
-**None.**
+- None!
 
 ---
 

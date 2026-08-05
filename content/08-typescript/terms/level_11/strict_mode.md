@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`tsconfig.json`](../level_01/tsconfig.md) — The configuration file where this flag is enabled.
+
 ---
 
 ## 2. Term Category
@@ -165,6 +166,7 @@ function process(data: unknown) {} // Explicit parameter type annotation
 > **Explanation:** `strictBindCallApply` checks function invocation methods for argument parameter compatibility.
 
 ## 7. Related Terms
-- [any](../level_02/any.md) — The dangerous "escape hatch" type that `strict` mode actively tries to prevent you from falling into accidentally.
+- [`any`](../level_02/any.md) — The dangerous "escape hatch" type that `strict` mode actively tries to prevent you from falling into accidentally.
 
 ---
+

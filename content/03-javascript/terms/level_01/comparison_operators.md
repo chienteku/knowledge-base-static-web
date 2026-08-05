@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Boolean](boolean.md) — A logical entity having two values: `true` or `false`.
 - [Operator](operator.md) — Symbol that performs an operation on operands.
+
 ---
 
 ## 2. Term Category
@@ -229,6 +230,7 @@ console.log("Eligible:", isEligibleForFreeShipping);
 - [if / else](../level_02/if_else.md) — Executing code blocks based on conditions.
 - [Operator](operator.md) — Related concept: Operator.
 - [sort / reverse](../level_04/sort_reverse.md) — Related concept: sort / reverse.
+
 ---
 
 ## 8. Key Takeaways

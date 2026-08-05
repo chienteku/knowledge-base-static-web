@@ -775,7 +775,6 @@ Evaluation rules:
 - [`Option<T>`](option_t.md) — The most famous built-in enum in Rust. It represents a value that might exist (`Some(T)`) or might not (`None`).
 - [`Result<T, E>`](result_t_e.md) — Another famous built-in enum used for error handling (`Ok(T)` or `Err(E)`).
 - [`Any` Trait / Downcasting](../level_04/any_trait_downcasting.md) — Related concept: `Any` Trait / Downcasting.
-- [`#[non_exhaustive]`](../level_07/non_exhaustive_attribute.md) — Related concept: `#[non_exhaustive]`.
 - [`Cow<'a, T>`](../level_11/cow_t.md) — Related concept: `Cow<'a, T>`.
 
 ---

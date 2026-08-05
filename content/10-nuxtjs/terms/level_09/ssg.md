@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Universal Rendering (SSR)](../level_01/universal_rendering.md) — SSR renders HTML on-demand. SSG renders HTML ahead of time.
 - [Hydration](../level_01/hydration.md) — The client-side bootstrapping process that still runs after loading static HTML.
+
 ---
 
 ## 2. Term Category
@@ -251,6 +252,7 @@ const headers = useRequestHeaders(); // ❌ Undefined during nuxi generate stati
 - [Route Rules Configuration](../level_08/route_rules.md) — How to apply `prerender: true` to specific routes instead of the whole app.
 - [`.output/` Directory](../level_10/output_directory.md) — Related concept: `.output/` Directory.
 - [Hybrid Rendering](hybrid_rendering.md) — Related concept: Hybrid Rendering.
+
 ---
 
 ## 8. Key Takeaways

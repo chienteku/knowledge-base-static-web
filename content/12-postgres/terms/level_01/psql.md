@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Client-Server Model (in Databases)](client_server_model.md) — Understanding that `psql` is a client connecting to a server process.
+- [PostgreSQL (Postgres)](postgresql.md) — PostgreSQL interactive terminal CLI client.
+
 ---
 
 ## 2. Term Category
@@ -187,6 +189,7 @@ SELECT * FROM users; -- Terminate SQL statements with semicolon
 - [pgAdmin & GUI Tools](pgadmin.md) — The graphical client alternative.
 - [Connection String / DSN](connection_string.md) — Related concept: Connection String / DSN.
 - [PostgreSQL (Postgres)](postgresql.md) — Related concept: PostgreSQL (Postgres).
+
 ---
 
 ## 8. Key Takeaways

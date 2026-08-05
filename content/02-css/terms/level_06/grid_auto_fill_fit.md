@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`repeat()` Function](grid_repeat.md) — These keywords are used exclusively inside `repeat()`.
 - [`grid-template-columns` / `grid-template-rows`](grid_template.md) — The properties they configure.
+
 ---
 
 ## 2. Term Category
@@ -326,6 +327,7 @@ Which keyword (`auto-fill` or `auto-fit`) do you use for Option A, and which for
 - [`repeat()` Function](grid_repeat.md) — The loop container.
 - [`minmax()` Function](grid_minmax.md) — The required track bounds function.
 - [`@media` (Media Queries Basics)](../level_08/media_queries.md) — The legacy responsive breakpoint method.
+
 ---
 
 ## 8. Key Takeaways

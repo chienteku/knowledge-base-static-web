@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [Query Filter (Filter Document)](query_filter.md) — The parent filter parameter structure.
+- [`find()` / `findOne()`](find.md) — Finding documents using comparison filters.
 
 ---
 

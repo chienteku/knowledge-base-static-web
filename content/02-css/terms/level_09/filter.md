@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`opacity`](opacity.md) — Fading elements.
+
 ---
 
 ## 2. Term Category
@@ -263,6 +264,7 @@ img.logo { filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.5)); } /* Traces PNG 
 - [`box-shadow` (Card Shadows)](box_shadow.md) — The rectangular alternative.
 - [`backdrop-filter`](backdrop_filter.md) — Applying filters behind an element.
 - [`opacity`](opacity.md) — Fading elements.
+
 ---
 
 ## 8. Key Takeaways

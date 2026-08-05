@@ -9,6 +9,7 @@
 - [Element vs. Tag](../level_01/element_vs_tag.md) — The tag syntax rules.
 - [Nesting](../level_01/nesting.md) — Understanding how `<li>` elements nest inside parent `<ul>` or `<ol>` elements.
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — Since list containers and list items are block-level elements.
+
 ---
 
 ## 2. Term Category
@@ -306,6 +307,7 @@ In both cases, each individual line on the paper is a List Item (`<li>`).
 ## 7. Related Terms
 - [Block-level vs Inline Elements](../level_01/block_inline.md) — The display behavior governing lists.
 - [`<nav>`](../level_06/nav.md) — Unordered lists are very commonly used inside `<nav>` elements to build website navigation menus.
+
 ---
 
 ## 8. Key Takeaways

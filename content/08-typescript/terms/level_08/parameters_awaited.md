@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Utility Types Overview](utility_types.md) — The baseline standard utility overview.
 - [`ReturnType<T>`](returntype.md) — Extracting return types from functions.
+
 ---
 
 ## 2. Term Category
@@ -214,6 +215,7 @@ type ConfigData = Awaited<PromiseReturn>;
 - [`ReturnType<T>`](returntype.md) — Extracting outputs of functions.
 - [The `infer` Keyword](../level_09/infer.md) — The mechanism enabling parameter capture.
 - [Conditional Types](../level_09/conditional_types.md) — The underlying type branching logic.
+
 ---
 
 ## 8. Key Takeaways

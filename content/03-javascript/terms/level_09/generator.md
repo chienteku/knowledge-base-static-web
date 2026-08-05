@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Function](../level_03/function.md) — The base concept.
 - [Object](../level_02/object.md) — What a generator returns.
+
 ---
 
 ## 2. Term Category
@@ -217,6 +218,7 @@ async function processData() {
 - [Function](../level_03/function.md) — The standard run-to-completion equivalent.
 - [for await...of / Async Iterators](../level_06/for_await_of.md) — Related concept: for await...of / Async Iterators.
 - [Iterators & Iterables (protocol)](../level_08/iterators_iterables.md) — Related concept: Iterators & Iterables (protocol).
+
 ---
 
 ## 8. Key Takeaways

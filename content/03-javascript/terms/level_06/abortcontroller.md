@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Fetch API](fetch_api.md) — The promise-based HTTP request client interface.
 - [Event object](../level_05/event_object.md) — The metadata object representing standard browser event targets.
+
 ---
 
 ## 2. Term Category
@@ -251,6 +252,7 @@ fetch("https://jsonplaceholder.typicode.com/posts", {
 
 ## 7. Related Terms
 - [Promise](promise.md) — The asynchronous wrapper rejected when fetches are aborted.
+
 ---
 
 ## 8. Key Takeaways

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Scope](scope.md) — The current context of execution.
 - [Function Declaration](function_declaration.md) — Defining a named function.
+
 ---
 
 ## 2. Term Category
@@ -215,6 +216,7 @@ function greet() {
 - [var](../level_01/var.md) — Hoisted and initialized with `undefined`.
 - [Lexical (Static) Scope / Environment](lexical_scope.md) — Related concept: Lexical (Static) Scope / Environment.
 - [Execution Context](../level_05/execution_context.md) — Related concept: Execution Context.
+
 ---
 
 ## 8. Key Takeaways

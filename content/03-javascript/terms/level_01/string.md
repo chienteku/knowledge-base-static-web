@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Primitive Types](primitive_types.md) — Basic immutable data types.
 - [Variable](variable.md) — A named container for storing data values.
+
 ---
 
 ## 2. Term Category
@@ -202,6 +203,7 @@ async function processData() {
 - [Number](number.md) — Related concept: Number.
 - [Type Coercion](type_coercion.md) — Related concept: Type Coercion.
 - [Template Literals](../level_08/template_literals.md) — Related concept: Template Literals.
+
 ---
 
 ## 8. Key Takeaways

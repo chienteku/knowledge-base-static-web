@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Non-Blocking I/O](../level_01/non_blocking_io.md) — The `fs` module is the classic example of why Non-Blocking I/O is critical.
 - [Node.js (Runtime Environment)](../level_01/nodejs.md) — This module is impossible in the browser for security reasons.
+
 ---
 
 ## 2. Term Category
@@ -162,6 +163,7 @@ try {
 - [Streams (General Concept)](../level_06/streams.md) — If a file is 10 Gigabytes, `fs.readFile` will crash your RAM. You must use `fs.createReadStream` instead.
 - [The path Module](path_module.md) — Related concept: The path Module.
 - [Promisification (util.promisify)](../level_05/promisification.md) — Related concept: Promisification (util.promisify).
+
 ---
 
 ## 8. Key Takeaways

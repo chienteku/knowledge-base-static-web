@@ -7,7 +7,8 @@
 
 ## 1. Prerequisites
 - [Express.js](express_js.md) — This article focuses specifically on the Express-enhanced versions of these objects.
-- json — How you usually send data back using `res`.
+- [JSON (JavaScript Object Notation)](../../../04-apis/terms/level_01/json.md) — How you usually send data back using `res`.
+
 ---
 
 ## 2. Term Category
@@ -245,6 +246,7 @@ Inside your route `app.post('/api/users/:id/update')`, how do you extract the `9
 - [Pagination](../level_09/pagination.md) — Related concept: Pagination.
 - [The http Module](../level_02/http_module.md) — Related concept: The http Module.
 - [Express.js](express_js.md) — Related concept: Express.js.
+
 ---
 
 ## 8. Key Takeaways

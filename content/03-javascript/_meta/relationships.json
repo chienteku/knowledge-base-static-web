@@ -475,6 +475,11 @@
           "term": "arithmetic_operators",
           "module": "03-javascript",
           "description": "Standard symbols used for math calculations."
+        },
+        {
+          "module": "03-javascript",
+          "term": "number",
+          "description": "Checking Division by zero producing Infinity."
         }
       ]
     },
@@ -636,6 +641,16 @@
           "term": "math_object",
           "module": "03-javascript",
           "description": "Related concept: Math object."
+        },
+        {
+          "module": "03-javascript",
+          "term": "infinity",
+          "description": "Related concept: Infinity / -Infinity."
+        },
+        {
+          "module": "03-javascript",
+          "term": "date_object",
+          "description": "Related concept: Date object."
         }
       ]
     },
@@ -1238,6 +1253,11 @@
           "term": "json",
           "module": "03-javascript",
           "description": "Text data representation (Note: JSON has no date type, so Date objects are serialized to strings)."
+        },
+        {
+          "module": "03-javascript",
+          "term": "number",
+          "description": "Date timestamps represented as milliseconds since epoch."
         }
       ]
     },
@@ -1854,6 +1874,11 @@
           "term": "function_expression",
           "module": "03-javascript",
           "description": "A function assigned to a variable."
+        },
+        {
+          "module": "03-javascript",
+          "term": "function",
+          "description": "Function expressions and arrow syntax."
         }
       ],
       "related": [
@@ -3420,6 +3445,11 @@
           "term": "event_delegation",
           "module": "03-javascript",
           "description": "An event pattern that heavily relies on `.closest()` to identify event sources."
+        },
+        {
+          "module": "03-javascript",
+          "term": "node",
+          "description": "Traversing parentNode, childNodes, and nextElementSibling."
         }
       ]
     },
@@ -3683,6 +3713,11 @@
           "term": "event_delegation",
           "module": "03-javascript",
           "description": "A pattern that relies on checking properties of the event object to handle multiple child events."
+        },
+        {
+          "module": "03-javascript",
+          "term": "event_preventdefault",
+          "description": "Related concept: event.preventDefault()."
         }
       ]
     },
@@ -3707,6 +3742,11 @@
           "term": "event_stoppropagation",
           "module": "03-javascript",
           "description": "Stops the event from bubbling up, but does *not* stop default browser behaviors."
+        },
+        {
+          "module": "03-javascript",
+          "term": "event_object",
+          "description": "Canceling default browser action with event.preventDefault()."
         }
       ]
     },
@@ -3787,6 +3827,11 @@
           "term": "scope",
           "module": "03-javascript",
           "description": "Closely related to the execution context."
+        },
+        {
+          "module": "03-javascript",
+          "term": "call_stack",
+          "description": "Managing JavaScript function execution contexts."
         }
       ],
       "related": [
@@ -3915,6 +3960,11 @@
           "term": "document_queryselector",
           "module": "03-javascript",
           "description": "The primary method used to find Element Nodes in the tree."
+        },
+        {
+          "module": "03-javascript",
+          "term": "dom_traversal",
+          "description": "Related concept: DOM Traversal."
         }
       ]
     },
@@ -4563,6 +4613,11 @@
           "module": "03-javascript",
           "term": "event_loop",
           "description": "Microtask queue."
+        },
+        {
+          "module": "03-javascript",
+          "term": "promise_static",
+          "description": "Related concept: Promise.resolve / Promise.reject."
         }
       ]
     },
@@ -4650,6 +4705,11 @@
           "term": "promise_combinators",
           "module": "03-javascript",
           "description": "Parallel promise combinators that consume collections of promises."
+        },
+        {
+          "module": "03-javascript",
+          "term": "promise",
+          "description": "Combining asynchronous Promises with Promise.all and Promise.allSettled."
         }
       ]
     },

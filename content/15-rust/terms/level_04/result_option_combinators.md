@@ -7,10 +7,10 @@
 
 ## 1. Prerequisites
 
-**None.**
+- [`Result<T, E>`](../level_02/result_t_e.md) — The Result<T, E> enum for recoverable error handling.
+- [`Option<T>`](../level_02/option_t.md) — The Option<T> enum for optional value handling.
 
 ---
-
 
 ## 2. Term Category
 
@@ -237,10 +237,9 @@ let val = parse().ok().and_then(|p| p.get());
 
 ## 5. Related Terms
 
-**None.**
+- None!
 
 ---
-
 
 ## 7. Key Takeaways
 

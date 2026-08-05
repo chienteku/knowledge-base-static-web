@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Serialization & Deserialization](serialization.md) — The theoretical concepts these methods execute.
 - [JSON (JavaScript Object Notation)](../level_01/json.md) — The text format these methods work with.
+
 ---
 
 ## 2. Term Category
@@ -170,6 +171,7 @@ console.log(stringified);
 - [Deserialization / Parsing](deserialization.md) — Related concept: Deserialization / Parsing.
 - [Serialization & Deserialization](serialization.md) — Related concept: Serialization & Deserialization.
 - [Storage Serialization](../level_09/storage_serialization.md) — Related concept: Storage Serialization.
+
 ---
 
 ## 8. Key Takeaways

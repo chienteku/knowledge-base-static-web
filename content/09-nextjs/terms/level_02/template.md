@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [`layout.tsx`](layout.md) — The standard wrapper file that Templates emulate.
 - [React `useEffect` Hook](use_effect.md) — Often used inside Templates to trigger animations on navigation.
+
 ---
 
 ## 2. Term Category
@@ -185,6 +186,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
 - [`layout.tsx`](layout.md) — The state-preserving default wrapper.
 - [`page.tsx`](page.md) — The child UI being wrapped.
 - [React `useEffect` Hook](use_effect.md) — Related concept: React `useEffect` Hook.
+
 ---
 
 ## 8. Key Takeaways

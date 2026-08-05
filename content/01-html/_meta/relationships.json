@@ -818,6 +818,11 @@
           "term": "strong_em",
           "module": "01-html",
           "description": "Inline emphasis tags that sit alongside `<cite>`."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Citing sources with blockquote and cite tags."
         }
       ]
     },
@@ -1053,6 +1058,11 @@
           "term": "nav",
           "module": "01-html",
           "description": "Unordered lists are very commonly used inside `<nav>` elements to build website navigation menus."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Organizing content with ordered and unordered lists."
         }
       ]
     },
@@ -1131,6 +1141,11 @@
           "term": "span",
           "module": "01-html",
           "description": "A generic inline container that does not enforce monospacing."
+        },
+        {
+          "module": "01-html",
+          "term": "semantic_html",
+          "description": "Formatting code blocks with pre and code tags."
         }
       ]
     },
@@ -2103,6 +2118,11 @@
           "module": "01-html",
           "term": "label",
           "description": "Input label element."
+        },
+        {
+          "module": "01-html",
+          "term": "output",
+          "description": "Related concept: `<output>` Element."
         }
       ]
     },
@@ -3024,6 +3044,21 @@
           "module": "01-html",
           "term": "body",
           "description": "Related concept: `<body>`."
+        },
+        {
+          "module": "01-html",
+          "term": "blockquote_cite",
+          "description": "Related concept: `<blockquote>` & `<cite>`."
+        },
+        {
+          "module": "01-html",
+          "term": "lists",
+          "description": "Related concept: `<ul>`, `<ol>`, and `<li>` (Lists)."
+        },
+        {
+          "module": "01-html",
+          "term": "pre_code",
+          "description": "Related concept: `<pre>` & `<code>`."
         }
       ]
     },
@@ -3846,6 +3881,11 @@
           "term": "element_vs_tag",
           "module": "01-html",
           "description": "The HTML tags you type are converted into \"Objects\" in the DOM."
+        },
+        {
+          "module": "01-html",
+          "term": "html",
+          "description": "Browser Document Object Model tree structure representation."
         }
       ],
       "related": [
@@ -4409,11 +4449,22 @@
     },
     "output": {
       "file": "terms/level_05/output.md",
-      "prerequisites": [],
+      "prerequisites": [
+        {
+          "module": "01-html",
+          "term": "form",
+          "description": "Form element calculation output display."
+        }
+      ],
       "related": [
         {
           "module": "01-html",
           "term": "progress_meter"
+        },
+        {
+          "module": "01-html",
+          "term": "form",
+          "description": "Displaying dynamic form calculation results."
         }
       ],
       "display_name": "`<output>` Element",

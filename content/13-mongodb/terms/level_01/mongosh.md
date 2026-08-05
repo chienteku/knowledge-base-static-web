@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 
 - [`mongod` (MongoDB Server Daemon)](mongod.md) — The background server database engine connected to.
+- [MongoDB](mongodb.md) — MongoDB database instance overview.
 
 ---
 

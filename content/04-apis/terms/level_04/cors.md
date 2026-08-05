@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [HTTP Headers](../level_02/http_headers.md) — CORS relies entirely on specific HTTP headers to work.
 - [URL / URI (Uniform Resource Identifier)](../level_01/url_uri.md) — A "Origin" is just the Domain/Port part of a URL.
+
 ---
 
 ## 2. Term Category
@@ -156,6 +157,7 @@ app.use(cors({ origin: 'https://app.example.com' }));
 - [Same-Origin Policy](same_origin_policy.md) — Related concept: Same-Origin Policy.
 - [Preflight Request (OPTIONS)](preflight_request.md) — CORS preflight OPTIONS request.
 - [CORS Errors in the Browser](../level_05/cors_errors.md) — CORS errors handling.
+
 ---
 
 ## 8. Key Takeaways

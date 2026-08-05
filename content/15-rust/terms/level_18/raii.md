@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Resource Management**: Resource Acquisition Is Initialization (RAII) via `Drop` trait.
@@ -283,7 +282,6 @@ let _guard = lock.lock().unwrap(); // Held until end of block scope!
 - [`Mutex<T>`](../level_09/mutex_t.md) — RAII mutex guard locking.
 
 ---
-
 
 ## 7. Key Takeaways
 

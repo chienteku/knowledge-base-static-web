@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Vue Router](vue_router.md) — The plugin that provides these components globally.
 - [Components](../level_04/components.md) — Understanding that these are globally registered components.
+
 ---
 
 ## 2. Term Category
@@ -176,6 +177,7 @@ Now, if the URL path changes in the router config, every single link in your ent
 - [Nested Routes](nested_routes.md) — Requires multiple `<RouterView>` tags nested inside each other.
 - [Vue Router](vue_router.md) — The engine that powers these tags.
 - [Programmatic Navigation (`useRouter` / `useRoute`)](programmatic_navigation.md) — Related concept: Programmatic Navigation (`useRouter` / `useRoute`).
+
 ---
 
 ## 8. Key Takeaways

@@ -8,7 +8,8 @@
 ## 1. Prerequisites
 
 
-**None.**
+- [Variable](variable.md) — Variables passed as parameters or declared within functions.
+- [Type Annotation](type_annotation.md) — Input parameter types and return type annotations.
 
 ---
 

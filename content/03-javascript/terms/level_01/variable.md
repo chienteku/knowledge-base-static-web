@@ -6,7 +6,8 @@
 ---
 
 ## 1. Prerequisites
-None (Entry-level term)
+- None!
+
 ---
 
 ## 2. Term Category
@@ -200,6 +201,7 @@ async function processData() {
 - [var](var.md) — The legacy way to declare variables.
 - [console.log()](console_log.md) — Related concept: console.log().
 - [ECMAScript](ecmascript.md) — Related concept: ECMAScript.
+
 ---
 
 ## 8. Key Takeaways

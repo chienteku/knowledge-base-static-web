@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Performance Architecture**: Polymorphism via enum dispatch instead of dynamic trait objects (`dyn Trait`).
@@ -287,7 +286,6 @@ Use macros or `enum_dispatch` crate to automatically generate variant delegation
 - [Trait Objects (`dyn Trait`)](../level_04/trait_objects.md) — Trait objects vs static enum dispatch.
 
 ---
-
 
 ## 7. Key Takeaways
 

@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Margin](margin.md) — The outer spacing property that collapses.
 - [The Box Model (Concept)](box_model.md) — The system regulating outer margins.
+
 ---
 
 ## 2. Term Category
@@ -243,6 +244,7 @@ p.second { margin-top: 30px; } /* Collapses to 30px gap! */
 - [Margin](margin.md) — The parent spacing property.
 - [Padding](padding.md) — The inner spacing used to block margin leakage.
 - [The Box Model (Concept)](box_model.md) — The parent model framework.
+
 ---
 
 ## 8. Key Takeaways

@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Classes Overview](classes.md) — The foundation of Object-Oriented Programming.
+
 ---
 
 ## 2. Term Category
@@ -317,6 +318,7 @@ class User {
 > **Explanation:** Derived classes inherit static properties from parent class constructors.
 
 ## 7. Related Terms
-- [Access Modifiers](../level_10/access_modifiers.md) — Used alongside `static` to control who can view or modify the static data.
+- [Access Modifiers (`public`, `private`, `protected`)](access_modifiers.md) — Used alongside `static` to control who can view or modify the static data.
 
 ---
+

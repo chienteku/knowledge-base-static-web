@@ -8,6 +8,8 @@
 ## 1. Prerequisites
 - [Literal Types](../level_05/literal_types.md) — The modern alternative to Enums.
 - [Union Types (`|`)](../level_05/union_types.md) — Usually combined with Literal Types to replace Enums.
+- [Primitive Types](../level_02/primitive_types.md) — TypeScript numeric and string enum declarations.
+
 ---
 
 ## 2. Term Category
@@ -167,6 +169,7 @@ type Direction = "Up" | "Down"; // Zero JS runtime code overhead
 ## 7. Related Terms
 - [Literal Types](../level_05/literal_types.md) — The modern replacement for Enums.
 - [Const Assertions (`as const`)](const_assertions.md) — Used with standard JS objects to replace Enums.
+
 ---
 
 ## 8. Key Takeaways

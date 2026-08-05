@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [`SELECT`](../level_03/select.md) — The baseline data retrieval statement.
+
 ---
 
 ## 2. Term Category
@@ -192,6 +193,7 @@ SELECT DISTINCT ON (category) name, price FROM products ORDER BY category, price
 ## 7. Related Terms
 - [`SELECT`](../level_03/select.md) — The parent query command.
 - [`GROUP BY`](group_by.md) — Another way to collapse duplicate rows.
+
 ---
 
 ## 8. Key Takeaways

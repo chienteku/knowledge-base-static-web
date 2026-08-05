@@ -12,7 +12,6 @@
 
 ---
 
-
 ## 2. Term Category
 
 **Design Pattern**: Extension traits for augmenting external standard types.
@@ -253,7 +252,6 @@ Choose explicit, non-overlapping extension method names (e.g. `fn word_count(&se
 - [Blanket Implementation](../level_14/blanket_implementation.md) — Blanket trait implementations.
 
 ---
-
 
 ## 7. Key Takeaways
 

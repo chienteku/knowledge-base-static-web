@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [DOM (Document Object Model)](dom.md) — The tree structure is how the DOM organizes itself.
 - [Nesting](../level_01/nesting.md) — The HTML concept of putting tags inside of other tags.
+
 ---
 
 ## 2. Term Category
@@ -180,6 +181,7 @@ html (Root)
 - [DOM (Document Object Model)](dom.md) — The system that uses this tree structure.
 - [Nesting](../level_01/nesting.md) — The act of writing the HTML code that generates this tree.
 - [Critical Rendering Path](critical_rendering_path.md) — The browser compilation pipeline converting layout trees into visuals.
+
 ---
 
 ## 8. Key Takeaways

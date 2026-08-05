@@ -8,6 +8,7 @@
 ## 1. Prerequisites
 - [Buffers](buffers.md) — A chunk is literally just a Buffer object.
 - [Streams (General Concept)](streams.md) — Streams produce these chunks.
+
 ---
 
 ## 2. Term Category
@@ -152,6 +153,7 @@ stream.pipe(destination);
 - [Buffers](buffers.md) — What a chunk actually is.
 - [Streams (General Concept)](streams.md) — The system that produces chunks.
 - [Character Encoding & Buffer ↔ String](buffer_encoding.md) — Related concept: Character Encoding & Buffer ↔ String.
+
 ---
 
 ## 8. Key Takeaways

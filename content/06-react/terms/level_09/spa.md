@@ -7,6 +7,8 @@
 
 ## 1. Prerequisites
 - [Virtual DOM](../level_01/virtual_dom.md) — The technology React uses to rewrite the page so quickly.
+- [Components](../level_01/components.md) — Building Single Page Applications with React components.
+
 ---
 
 ## 2. Term Category
@@ -163,7 +165,8 @@ Use Next.js SSR/SSG for public SEO marketing pages
 > **Explanation:** Updating `document.title` in route components maintains browser tab context in SPAs.
 
 ## 7. Related Terms
-- [Client-Side Routing](../level_09/client_side_routing.md) — The mechanism used to make an SPA feel like a multi-page site.
+- [Client-Side Routing](client_side_routing.md) — The mechanism used to make an SPA feel like a multi-page site.
 - [Server-Side Rendering (SSR)](../level_10/ssr.md) — The modern alternative to pure SPAs to fix the SEO and initial load time issues.
 
 ---
+

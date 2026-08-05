@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [Components](../level_04/components.md) — The specific units being tested.
+
 ---
 
 ## 2. Term Category
@@ -179,6 +180,7 @@ expect(wrapper.text()).toContain('Count: 1');
 - [Components](../level_04/components.md) — What Vue Test Utils is designed to mount.
 - [Vite](vite.md) — Vite powers **Vitest**, the modern testing framework that runs Vue Test Utils.
 - [Vitest (Unit Testing)](vitest.md) — The test runner that executes spec scripts containing Vue Test Utils assertions.
+
 ---
 
 ## 8. Key Takeaways

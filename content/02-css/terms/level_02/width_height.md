@@ -7,6 +7,7 @@
 
 ## 1. Prerequisites
 - [The Box Model (Concept)](box_model.md) — Width and Height control the very center layer: the Content.
+
 ---
 
 ## 2. Term Category
@@ -166,6 +167,7 @@ If you later decide to add thick brick walls (border) or a patio (padding), that
 - [Margin](margin.md) — Surrounds the calculated width and height.
 - [`overflow` (hidden, scroll, auto, visible)](overflow.md) — Handling content that overflows the width and height box.
 - [`max-width` & `min-height` (Fluidity)](../level_08/max_width.md) — Related concept: `max-width` & `min-height` (Fluidity).
+
 ---
 
 ## 8. Key Takeaways
